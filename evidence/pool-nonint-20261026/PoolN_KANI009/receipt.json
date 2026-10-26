@@ -1,0 +1,64 @@
+{
+  "attempt": "PoolN_KANI009",
+  "kind": "kani",
+  "source_revision": "670e4822526975c345f8122b3cd970f7f1133973",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolN_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolN_kani_target",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,no-entrypoint",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "PoolN_allocate_",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolN_processor_harness.rs",
+    "PoolN_forest_harness.rs",
+    "PoolN_misc_harness.rs",
+    "PoolN_source-pins.json"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Two length/owner classes on actual unchanged source. allocate_"
+  },
+  "expected_time": "Optimized actual-source allocate_ guard/handler pair;192-byte Pool ASC8 and1768-byte foreign verifier CP. Exact errors/frames, no intended arithmetic or CPI.",
+  "exit_status": 0,
+  "wall_seconds": 8.425829703977797,
+  "peak_rss_kib": "754348",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r11e7e1a9ee1e459e9456886a3f473cb1.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "714313728",
+  "source_hashes": {
+    "PoolN_processor_harness.rs": "34509cd694b93b90228e8023d6777a7f98aeb00f1f3562fe2d61b4b1cf9fa620",
+    "PoolN_forest_harness.rs": "383d61c17785a9d83a0a7b333115bb717930f00acbe021eb93d7bf74e9156ed3",
+    "PoolN_misc_harness.rs": "477c614da9e443a714cacf88514c3885ef0e14362f821291323142a79df32694",
+    "PoolN_source-pins.json": "0e0b3ea33d283e78806143ad92cd9726a6b0d745c2cbf4eee3552cf356a21d59"
+  },
+  "print_axioms": "N/A: kani"
+}

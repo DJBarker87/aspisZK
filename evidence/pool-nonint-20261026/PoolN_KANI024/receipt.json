@@ -1,0 +1,72 @@
+{
+  "attempt": "PoolN_KANI024",
+  "kind": "kani",
+  "source_revision": "670e4822526975c345f8122b3cd970f7f1133973",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolN_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolN_kani_target",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,no-entrypoint",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "PoolN_ASPT_prefix_",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolN_processor_harness.rs",
+    "PoolN_forest_harness.rs",
+    "PoolN_misc_harness.rs",
+    "PoolN_source-pins.json",
+    "PoolN_processor_prefixes.rs",
+    "PoolN_pair_forest_prefixes.rs",
+    "PoolN_prefix-manifest.json",
+    "PoolN_fixture.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Literal contiguous actual-source prefix on canonical instruction fixture, arbitrary checkpoint bytes and signer/writable flags; first-byte and balance frames plus reachability covers. This is a primary-role fixture class, not arbitrary instruction or all-role closure."
+  },
+  "expected_time": "Optimized prefix ASPT; no intended arithmetic, CPI or suffix execution;192/1768 pairs. Canonical fixture eliminates symbolic parser search, after KANI023 timeout; no cap/timeout increase.",
+  "exit_status": 1,
+  "wall_seconds": 1.2225614439812489,
+  "peak_rss_kib": "261260",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r23b061cbb1474c9e9932aea626970078.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "208683008",
+  "source_hashes": {
+    "PoolN_processor_harness.rs": "34509cd694b93b90228e8023d6777a7f98aeb00f1f3562fe2d61b4b1cf9fa620",
+    "PoolN_forest_harness.rs": "383d61c17785a9d83a0a7b333115bb717930f00acbe021eb93d7bf74e9156ed3",
+    "PoolN_misc_harness.rs": "477c614da9e443a714cacf88514c3885ef0e14362f821291323142a79df32694",
+    "PoolN_source-pins.json": "0e0b3ea33d283e78806143ad92cd9726a6b0d745c2cbf4eee3552cf356a21d59",
+    "PoolN_processor_prefixes.rs": "e37a89939595f815840ac4f593c004b010b94a35681956e9102b305863f0dfe5",
+    "PoolN_pair_forest_prefixes.rs": "43e994c61aba652f53e1d04676707b3ada1162a4c0f8bdaeee9e0cacb50cc584",
+    "PoolN_prefix-manifest.json": "531078ef08a1694428e79784f69059926ba18335eeb8cf80caad89aaa1b9571d",
+    "PoolN_fixture.rs": "1fb90c8b622e4258f612eb919810825dbe6c8d3359b6fccdcc662d33adcd8517"
+  },
+  "print_axioms": "N/A: kani"
+}
