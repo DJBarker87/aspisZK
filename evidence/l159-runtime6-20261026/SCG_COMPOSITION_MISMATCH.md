@@ -53,3 +53,10 @@ proof obligation, not proposed trust. Requiring it as a new CleanTransport
 premise in SCG_Top would merely bundle the missing conclusion; no such top is
 installed here. The current account accepted flag and arbitrary project/select
 arguments must not be presented as already encoding all these guards.
+
+The native-direction diagnostic does not exclude an alternate proof directly
+from ideal wrapper acceptance: invert those wrappers, derive SAME ideal
+source cuts, then establish the checkpoint association under a correctly
+game-indexed experiment. That route still has to prove the physical/source
+sublog, collision projection and recovery cuts. No theorem here says the
+whole desired composition is mathematically impossible.

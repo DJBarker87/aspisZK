@@ -1,0 +1,49 @@
+{"attempt": "SCG_063", "exit_status": 0, "wall_seconds": 4.131385316024534, "peak_rss_kib": "5483672", "swaps": "0", "print_axioms": []}
+structure AspisR1.S2W_ExpandedChildren.ChildConeJoin (E : Type) (ops : AdapterRw.Ops) : Type 1
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.execute : {A : Type} →
+      AspisR1.S2W_Trace.Call A → Aeneas.Std.Result (A × List (AspisR1.S2W_ExpandedTrace.Event E))
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.erasure : ∀ {A : Type} (call : AspisR1.S2W_Trace.Call A),
+      (AspisR1.S2W_Trace.thenResult (self.execute call) fun answer => Aeneas.Std.Result.ok answer.1) =
+        AspisR1.S2W_Trace.invoke ops call
+constructor:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.mk {E : Type} {ops : AdapterRw.Ops}
+    (execute : {A : Type} → AspisR1.S2W_Trace.Call A → Aeneas.Std
+...
+irstMarks.source : ∀ (event : AspisR1.S2W_Trace.Event),
+      AspisR1.S2W_OuterOccurrences.mark event = Option.some Bool.false →
+        ∃ fs,
+          List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+            AspisR1.S2W_SiteSchedule.firstTrace fs
+constructor:
+  AspisR1.S2W_TraceSplice.FirstMarks.mk {E : Type} {ops : AdapterRw.Ops}
+    {port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops}
+    (source :
+      ∀ (event : AspisR1.S2W_Trace.Event),
+        AspisR1.S2W_OuterOccurrences.mark event = Option.some Bool.false →
+          ∃ fs,
+            List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+              AspisR1.S2W_SiteSchedule.firstTrace fs) :
+    AspisR1.S2W_TraceSplice.FirstMarks port
+structure AspisR1.S2W_TraceSplice.SecondMarks {E : Type} {ops : AdapterRw.Ops}
+  (port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.SecondMarks.source : ∀ (event : AspisR1.S2W_Trace.Event),
+      AspisR1.S2W_OuterOccurrences.mark event = Option.some Bool.true →
+        ∃ ss,
+          List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+            AspisR1.S2W_SiteSchedule.secondTrace ss
+constructor:
+  AspisR1.S2W_TraceSplice.SecondMarks.mk {E : Type} {ops : AdapterRw.Ops}
+    {port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops}
+    (source :
+      ∀ (event : AspisR1.S2W_Trace.Event),
+        AspisR1.S2W_OuterOccurrences.mark event = Option.some Bool.true →
+          ∃ ss,
+            List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+              AspisR1.S2W_SiteSchedule.secondTrace ss) :
+    AspisR1.S2W_TraceSplice.SecondMarks port
+
+Running as unit: run-r43c9992edaca49888e060b3c4d2506dd.scope; invocation ID: 0c535ec844bf4650b200a64c003985f2
