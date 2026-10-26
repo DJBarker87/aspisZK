@@ -1,0 +1,129 @@
+{
+  "before_revision": "5090b732a0",
+  "endpoint_byte_unchanged": true,
+  "endpoint_sha256": "5a35a8eee0f2fa0dcd2d55a5b412440c6db7bdce8ea7bb3a6ae394f65dd74a37",
+  "reviewed_native_data_parameters": {
+    "before": [
+      "runtime",
+      "boundary"
+    ],
+    "after": [
+      "runtime",
+      "boundary"
+    ],
+    "counts": [
+      2,
+      2
+    ],
+    "scope": "the two native data binders singled out by lead; not all mathematical/typeclass binders"
+  },
+  "prop_fields": {
+    "counts": [
+      8,
+      8
+    ],
+    "retained": {
+      "source_V045": "(\u2200 w : (h).Instance, (h).public w = x.1 \u2192\n      PV_RunJoin_UnifiedRetry.BodySourceLaw (boundary.sourceBody h x w) (runtime.body h x w)) \u2227\n    (\u2200 (s : State) k nonce next,\n      runtime.account.call_mut s k = .ok (nonce,next) \u2192 next.provider = s.provider) \u2227\n    (\u2200 (w : (h).Instance), (h).public w = x.1 \u2192 \u2200 secret (s next : State) status,\n      runtime.body h x w secret s = .ok (status,next) \u2192 next.provider = s.provider)",
+      "E1_V329": "ProverCommitPublicNonce40.E1 boundary.law",
+      "native_fill_V336": "\u2200 (p : ProverRwRngCaller.Tape), p.used.val < p.replies.val.length \u2192\n    boundary.draw.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8) =\n      ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8)",
+      "native_ledger_V337": "\u2200 (w : (h).Instance), (h).public w = x.1 \u2192\n    \u2200 secret (s next : State) status, runtime.body h x w secret s = .ok (status,next) \u2192\n      boundary.ledger next =\n        match boundary.reservation secret s with\n        | none => boundary.ledger s\n        | some path => (ProverCommitLedger36.reserve boundary.schedule boundary.unix path (boundary.ledger s)).2",
+      "byte_blind_V338": "(\u2200 secret (s : State) kind,\n      boundary.fault secret s kind = boundary.schedule (boundary.ledger s).history.length kind (boundary.ledger s).history) \u2227\n    (\u2200 t u rest, boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (t,rest))) =\n      boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (u,rest)))) \u2227\n    (\u2200 (i : Fin 128) (t u : Fin 128 \u2192 ProverCommitPublicNonce40.Raw) (rest : Rest), (\u2200 j : Fin 128, j.val < i.val \u2192 t j = u j) \u2192\n      boundary.frame i (t,rest) = boundary.frame i (u,rest))",
+      "kernels_V339": "\u2200 c, boundary.nativeWeight c =\n    PV_RunJoin_E1Joint.weight 128 boundary.law boundary.frame boundary.coordinates c",
+      "disclosed_V038": "\u2200 (adv : (rust).Adversary) (w : (h).Instance), (h).public w = x.1 \u2192\n    \u2200 r : World, \u00ac (\u2203 i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) \u2192\n      ((rust).real h B outputs adv x w r).disclosed =\n        ((source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1).disclosed",
+      "observerOracle_V038": "\u2200 (adv : (rust).Adversary) (w : (h).Instance), (h).public w = x.1 \u2192\n    \u2200 r : World, \u00ac (\u2203 i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) \u2192\n      ((rust).real h B outputs adv x w r).observerOracle =\n        ((source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1).observerOracle"
+    },
+    "removed": [],
+    "added": []
+  },
+  "whole_ledger_rows_closed": [],
+  "after_revision_before_final_audit": "7024cd5f6f6a8cc6e903035679a0be35c6addb8d",
+  "partial_source_specialization": {
+    "theorem": "PV_RunJoin_SourceEndpoint.privacy_headline_from_source_inputs",
+    "is_concrete_native_endpoint": false,
+    "free_data_inputs": [
+      "world",
+      "policy",
+      "inputs",
+      "disclosed",
+      "oracle",
+      "ideal",
+      "boundaryData"
+    ],
+    "remaining_proof_fields": [
+      "E1_V329",
+      "native_ledger_V337",
+      "byte_blind_V338",
+      "kernels_V339",
+      "disclosed_V038",
+      "observerOracle_V038"
+    ],
+    "proved_partial_constructor_equations": [
+      "source_V045",
+      "native_fill_V336"
+    ],
+    "native_whole_rows_removed": [],
+    "candidate_ledger_control": "Full source/header projection and common public reservation proved in this resume; native IO/model association and E2 remain."
+  },
+  "record_fields": {
+    "runtime": [
+      "world",
+      "account",
+      "body",
+      "disclosed",
+      "observerOracle",
+      "ideal"
+    ],
+    "boundary": [
+      "sourceBody",
+      "draw",
+      "law",
+      "frame",
+      "coordinates",
+      "nativeWeight",
+      "ledger",
+      "reservation",
+      "schedule",
+      "unix",
+      "fault"
+    ]
+  },
+  "new_assumptions_adopted": [],
+  "model_changes_adopted": [],
+  "target_established": false,
+  "resume_entry_revision": "4148e0e59c",
+  "resume_original_counts": {
+    "residual": [
+      6,
+      6
+    ],
+    "runtime_boundary": [
+      2,
+      2
+    ],
+    "premise_fields": [
+      8,
+      8
+    ],
+    "whole_native_rows_removed": []
+  },
+  "candidate_history_boundary": {
+    "module": "R1Z.PV_RunJoin_LedgerEndpoint",
+    "residual_fields": 5,
+    "additional_explicit_obligations": [
+      "op12 identity (proved for selected dictionary)",
+      "common public ops/pub/hash equality (InstalledFamily.public_common under PublicBinding)"
+    ],
+    "installed_native_endpoint": false
+  },
+  "new_interfaces": [
+    "R1Z.PV_RunJoin_NativeSelectedInputs",
+    "R1Z.PV_RunJoin_InstalledFamily",
+    "R1Z.PV_RunJoin_SourceSelectionContract",
+    "R1Z.PV_RunJoin_SelectedAdmission",
+    "R1Z.PV_RunJoin_InstalledTransport"
+  ],
+  "new_native_world_fields_module": "R1Z.PV_RunJoin_NativeEffectInterface.Identity",
+  "endpoint_sha256_file": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_Endpoint.lean",
+  "headline_sha256": "0374f534aaadcfcf3855dc9402feaae176f93f11687b0fab7773b075599e7b42",
+  "both_endpoint_files_unchanged_from_resume_entry": true
+}

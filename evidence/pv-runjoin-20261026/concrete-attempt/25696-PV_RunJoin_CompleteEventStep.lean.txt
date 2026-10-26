@@ -1,0 +1,51 @@
+import R1Z.PV_RunJoin_ConsumedEvent
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_CompleteEventStep
+open PV_RunJoin_OsWorld PV_RunJoin_OsTrace
+variable {E File Reply Time Worker : Type} [DecidableEq File]
+
+theorem file_consumed (request : Request File) (world next : World E File Reply Time Worker)
+    (reply : Reply) (run : fileStep request world = some (reply,next)) :
+    ∃ event, world.files[world.fileUsed]? = some event ∧ event.request = request ∧
+      event.reply = reply ∧ consumed next =
+        {consumed world with files := (consumed world).files ++ [event]} := by
+  unfold fileStep at run
+  cases position : world.files[world.fileUsed]? with
+  | none => simp [position] at run
+  | some event =>
+    simp only [position] at run
+    dsimp only [Bind.bind,Option.bind] at run
+    split at run
+    next matches =>
+      cases Option.some.inj run
+      exact ⟨event,position,matches,rfl,PV_RunJoin_ConsumedEvent.file_append world event position⟩
+    next => contradiction
+
+theorem time_consumed (world next : World E File Reply Time Worker)
+    (outcome : Time) (run : timeStep world = some (outcome,next)) :
+    consumed next = {consumed world with times := (consumed world).times ++ [outcome]} := by
+  unfold timeStep at run
+  cases position : world.time[world.timeUsed]? with
+  | none => simp [position] at run
+  | some value =>
+    simp only [position] at run
+    dsimp only [Bind.bind,Option.bind] at run
+    cases Option.some.inj run
+    exact PV_RunJoin_ConsumedEvent.time_append world value position
+
+theorem worker_consumed (world next : World E File Reply Time Worker)
+    (outcome : Worker) (run : workerStep world = some (outcome,next)) :
+    consumed next = {consumed world with workers := (consumed world).workers ++ [outcome]} := by
+  unfold workerStep at run
+  cases position : world.workers[world.workerUsed]? with
+  | none => simp [position] at run
+  | some value =>
+    simp only [position] at run
+    dsimp only [Bind.bind,Option.bind] at run
+    cases Option.some.inj run
+    exact PV_RunJoin_ConsumedEvent.worker_append world value position
+
+#print axioms file_consumed
+#print axioms time_consumed
+#print axioms worker_consumed
+end R1Z.PV_RunJoin_CompleteEventStep
