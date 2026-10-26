@@ -61,3 +61,11 @@ pub fn terminal(public:aspis_statement::pool_v1::pair_forest_semantic_terminal::
 pub fn evaluate_polynomial(p:&[aspis_core::field::QM31;28],challenge:aspis_core::field::QM31)->aspis_core::field::QM31 {
  aspis_core::state_only_sumcheck::evaluate_state_only_polynomial(p,challenge)
 }
+// Resume op223: extract the unchanged function as current-crate built MIR.
+#[cfg(kani)]
+#[path = "../source/crates/aspis-statement/src/logup.rs"]
+pub mod logup;
+#[cfg(kani)]
+pub fn compress_tagged_tuple(tag:aspis_core::field::M31,values:&[aspis_core::field::M31],lambda:aspis_core::field::QM31)->aspis_core::field::QM31 {
+    logup::compress_tagged_tuple(tag,values,lambda)
+}
