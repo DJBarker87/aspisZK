@@ -1,12 +1,12 @@
 # Ordered module and selected-source resolution
 
-Exact ordered paths are in RPz4_resolution-full.json; full object/source hashes, pin basis and excluded candidates are in RPz4_resolution-table.json. All 23 original names are listed first. No candidate is selected because it happens to compile. The two circle source snapshots require fresh validation; an unfilled external template is excluded.
+Exact ordered paths are in RPz4_resolution-full.json. Full hashes, pin basis and excluded candidates are in RPz4_resolution-table.json. The first 23 rows are the original unresolved names. The wrapper row now uses the exact emission-packet source/object pairing; the earlier co-located policy snapshot was never compiled and is explicitly superseded. No unfilled external template is selected. Source replay remains required; an object lookup is not a full top or release result.
 
 | Module | Selected source | Object SHA256 | Source SHA256 |
 |---|---|---|---|
 | AspisR1CanonicalDotFinish.Funs | docs/research/100bit-spend-path-20261013/lean-candidates/s9-retained-finish-declaration-dedup-v1-20261023/original/AspisR1CanonicalDotFinish/Funs.lean | 8a319fb2bc7f4489f14e74ae3f520666aa1670bc6ac273349c70f9390eb2912a | ee5f56752986231a14bc8b8f1d7b2ce33b773fa0e7a45628f5e96ff156a87303 |
 | AspisR1CircleFallback.RawCircleFallbackOutputBridge | evidence/replay-dry5-20261026/RPz4_FallbackBridge.lean | 866b31c56e11705a18e5b5fbb20ba458074965c02f7ea6fd088d1e0703e9ed95 | 790ca5e22e033aa946f07d515268dfb3b7a7b85c315288475362e09698f272b6 |
-| AspisR1CircleSampleWrapper.Funs | evidence/replay-dry5-20261026/RPz4_CircleWrapperFuns.lean | 7abf97410a440730bfc40ad253cd5d3c2bb01c4a1cd09e4f4bfd89086cd09e9d | 976d536148b2f2e310d77d857fb0b245c30f9ee59f749a8eed5c90d37d252af2 |
+| AspisR1CircleSampleWrapper.Funs | evidence/replay-dry5-20261026/RPz4_CircleWrapperSelectedFuns.lean | 7abf97410a440730bfc40ad253cd5d3c2bb01c4a1cd09e4f4bfd89086cd09e9d | 5d1b131ed8be869faa5814712dd46e684b205abe512a90c0272c41e957b4eed6 |
 | AspisR1FinishDotReturnedDeltaDecodeV1 | docs/research/100bit-spend-path-20261013/evidence/s5-current-repin-20261020/finish-dot-product-trace-sum-v2/upstream/field-product-v2/FinishDotReturnedDeltaDecodeV1.lean | 62d96b10783de1548a6c0a71b2aa7a0c18f229ed896180ef13c66da4d5a8021e | e7e16ecaf464b5c327962b1cf3d6be1428f16b0a9b950408ad770e15f8e349b7 |
 | AspisR1FinishRelationCurrent.Types | docs/research/100bit-spend-path-20261013/lean-candidates/finish-relation-source-candidate-20261019/sources/AspisR1FinishRelationCurrent/Types.lean | dc2790f031b33bd70a749bec13b96bf2c3709a7c8f09268785bf1bcb68da95f9 | 0f2e09a56e8d868d21f17430aa61792456d5eee0ed50d61cc4f334c99ea24d12 |
 | AspisR1SelectedMaskProbe.Funs | evidence/replay-dry5-20261026/RPz4_SelectedMaskFuns.lean | 8d2e596692dba2366d0fc6a62ce1047ac3e4a54d8cca320e467d57039460177b | 4aa955ab74e6db926d02bdbee7dd9cdf5f755b019311dd3c67599bd8d97aa395 |

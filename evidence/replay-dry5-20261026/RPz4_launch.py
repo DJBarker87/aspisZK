@@ -13,7 +13,14 @@ def collect(name):
 plan=json.loads((E/'RPz4_source-plan.json').read_text());rows=[]
 for m in plan['order']:
  x=plan['modules'][m];rows.append(dict(module=m,imports=x['imports'],repository_source=x['source'],source='RPz4_sources/'+m.replace('.','/')+'.lean',object='RPz4_objects/'+m.replace('.','/')+'.olean'))
-rows.sort(key=lambda r:(r['module'] not in ['ImportUnionNamedDiscriminant','R1NaturalProjection','AspisR1SemanticCallExtraction.Types','R1LiteralTranscript'], -plan['distance_to_top'].get(r['module'],0)))
+focus=set(json.loads((E.parents[1]/'evidence/replay-dry4-20261026/RPz3_source-plan.json').read_text())['unresolved']) | {'R1NaturalProjection','ImportUnionNamedDiscriminant','AspisR1SemanticCallExtraction.Types','R1LiteralTranscript','AspisR1CircleSampleWrapper.Types','AspisR1CircleSampleWrapper.FunsExternal','AspisR1CircleFallback.Types','AspisR1CircleFallback.FunsExternal','AspisR1CircleFallback.Funs'}
+focus_closure=set()
+def focus_visit(m):
+ if m in focus_closure:return
+ focus_closure.add(m)
+ for n in plan['modules'].get(m,{}).get('imports',[]):focus_visit(n)
+for m in focus:focus_visit(m)
+rows.sort(key=lambda r:(r['module'] not in focus_closure,r['module'] not in focus,-plan['distance_to_top'].get(r['module'],0)))
 state=json.loads((E/'RPz4_reuse.json').read_text())['state'];state={m:v for m,v in state.items() if v in ['passed','failed']};attempt=0;blocked=[]
 if (E/'RPz4_state.json').exists():
  prior=json.loads((E/'RPz4_state.json').read_text());state.update({m:v for m,v in prior['state'].items() if v in ['passed','failed']});attempt=max(prior['attempts'],max([int(f.parent.name.split('_')[1]) for f in E.glob('RPz4_*/receipt.json')],default=0))
