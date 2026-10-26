@@ -1,0 +1,139 @@
+import GSScalarOperandEnvelopeM10
+import ActualLongDivisionTotalCostV2
+
+/-! Coefficient-operation accounting for the maintained square/multiply/rem
+binaryRec backend. Actual operands feed both multiplication budgets and the
+exact monic-division mirror. Neither Raw.pow nor its different schedule is
+substituted. Inversion/element operations have fixed field tariffs elsewhere. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSBinaryModPowerFieldWorkM10
+open CompPoly Polynomial ActualRawPowCoefficientBudget GSScalarOperandEnvelopeM10
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [Fintype K]
+
+def step (a m : CPolynomial K) (b : Bool) (z : CPolynomial K × Nat) :
+    CPolynomial K × Nat :=
+  let square := z.1*z.1
+  let c := if b then a else 1
+  let product := square*c
+  let division := ActualRawLongDivisionCostV2.divModByMonicAuxWithCost
+    product.val.size product.val m.val
+  (product.modByMonic m, z.2+rawMulCoefficientBudget z.1.val z.1.val+
+    rawMulCoefficientBudget square.val c.val+division.2)
+
+def eval (a m : CPolynomial K) : Nat → CPolynomial K × Nat :=
+  Nat.binaryRec (1,0) (fun b _ z => step a m b z)
+
+theorem value (a m : CPolynomial K) (e : Nat) :
+    (eval a m e).1 = CompPolyPolynomialBackendBridge.modPower a m e := by
+  refine Nat.binaryRec (motive := fun e =>
+    (eval a m e).1 = CompPolyPolynomialBackendBridge.modPower a m e) rfl ?_ e
+  intro b n ih
+  by_cases hz : Nat.bit b n = 0
+  · rw [hz]; rfl
+  · have hc : n = 0 → b = true := by
+      intro hn
+      subst n
+      cases b with
+      | false => exact False.elim (hz rfl)
+      | true => rfl
+    unfold eval CompPolyPolynomialBackendBridge.modPower
+    rw [Nat.binaryRec_eq b n (Or.inr hc), Nat.binaryRec_eq b n (Or.inr hc)]
+    change ((eval a m n).1*(eval a m n).1*(if b then a else 1)).modByMonic m = _
+    rw [ih]
+    rfl
+
+theorem mul_budget (p q : CPolynomial.Raw K) (N : Nat)
+    (hp : p.size ≤ N) (hq : q.size ≤ N) :
+    rawMulCoefficientBudget p q ≤ 3*N*N+2*N := by
+  have h1 := Nat.mul_le_mul hp hq
+  have h2 := Nat.mul_le_mul hp (Nat.add_le_add hp hq)
+  unfold rawMulCoefficientBudget
+  nlinarith
+
+theorem monic_raw (m : CPolynomial K) (hm : m.toPoly.Monic) :
+    m.val.trim = m.val ∧ m.val.leadingCoeff = 1 ∧ 0 < m.val.size := by
+  have ht := CPolynomial.Raw.Trim.trim_eq_of_isCanonical m.property
+  have hb := (CPolynomial.monic_toPoly_iff m).mpr hm
+  have hl : m.leadingCoeff = 1 := by
+    have hbeq : m.leadingCoeff == 1 := by simpa [CPolynomial.monic] using hb
+    exact beq_iff_eq.mp hbeq
+  have hr : m.val.leadingCoeff = 1 := by
+    simpa [CPolynomial.leadingCoeff, CPolynomial.Raw.leadingCoeff, ht] using hl
+  refine ⟨ht,hr,?_⟩
+  by_contra hn
+  have hz : m.val.size = 0 := by omega
+  have he : (0 : K) = 1 := by
+    simpa [CPolynomial.leadingCoeff, Array.getLastD, hz] using hl
+  exact zero_ne_one he
+
+def stepBudget (D : Nat) : Nat :=
+  let N := 3*D+1
+  2*(3*N*N+2*N)+N*(100*(N+4)*(N+4))
+
+theorem step_work (a m z : CPolynomial K) (b : Bool) (w D : Nat)
+    (ha : a.toPoly.natDegree ≤ D) (hz : z.toPoly.natDegree ≤ D)
+    (hm : m.toPoly.Monic) :
+    (step a m b (z,w)).2 ≤ w+stepBudget D := by
+  let c : CPolynomial K := if b then a else 1
+  have hc : c.toPoly.natDegree ≤ D := by
+    cases b <;> simp only [c, Bool.false_eq_true, if_false, if_true,
+      CPolynomial.toPoly_one, Polynomial.natDegree_one]
+    · exact Nat.zero_le _
+    · exact ha
+  have hs : (z*z).toPoly.natDegree ≤ 2*D := by
+    rw [CPolynomial.toPoly_mul]
+    exact (Polynomial.natDegree_mul_le).trans (by omega)
+  have hp : (z*z*c).toPoly.natDegree ≤ 3*D := by
+    rw [CPolynomial.toPoly_mul]
+    exact (Polynomial.natDegree_mul_le).trans (by omega)
+  have sz := stored_size_of_degree z (3*D) (by omega)
+  have ss := stored_size_of_degree (z*z) (3*D) (by omega)
+  have sc := stored_size_of_degree c (3*D) (by omega)
+  have sp := stored_size_of_degree (z*z*c) (3*D) hp
+  have hmul1 := mul_budget z.val z.val (3*D+1) sz sz
+  have hmul2 := mul_budget (z*z).val c.val (3*D+1) ss sc
+  have hmr := monic_raw m hm
+  have hpr := CPolynomial.Raw.Trim.trim_eq_of_isCanonical (z*z*c).property
+  have hdiv := ActualLongDivisionTotalCostV1.public_division_total_cost
+    (z*z*c).val m.val hpr hmr.1 hmr.2.1 hmr.2.2
+  have hshift : (z*z*c).val.size+4 ≤ 3*D+1+4 := Nat.add_le_add_right sp 4
+  have hdiv' := hdiv.trans (Nat.mul_le_mul sp
+    (Nat.mul_le_mul (Nat.mul_le_mul_left 100 hshift) hshift))
+  change w+_+_+_ ≤ w+stepBudget D
+  dsimp only [stepBudget]
+  change _ ≤ _ at hmul1 hmul2
+  dsimp only [c] at hmul2 hdiv'
+  omega
+
+theorem work (a m : CPolynomial K) (e D : Nat)
+    (ha : a.toPoly.natDegree ≤ D) (hm : m.toPoly.Monic)
+    (hd : m.toPoly.natDegree ≤ D) : (eval a m e).2 ≤ e*stepBudget D := by
+  refine Nat.binaryRec (motive := fun e => (eval a m e).2 ≤ e*stepBudget D) ?_ ?_ e
+  · simp only [eval, Nat.binaryRec_zero, Nat.zero_mul, Nat.le_refl]
+  · intro b n ih
+    by_cases hz : Nat.bit b n = 0
+    · rw [hz]; exact Nat.zero_le _
+    · have hc : n = 0 → b = true := by
+        intro hn
+        subst n
+        cases b with
+        | false => exact False.elim (hz rfl)
+        | true => rfl
+      have hp : (eval a m n).1.toPoly.natDegree ≤ D := by
+        rw [value]
+        exact (power_degree a m n hm).trans hd
+      have hs := step_work a m (eval a m n).1 b (eval a m n).2 D ha hp hm
+      have hn : n+1 ≤ Nat.bit b n := by cases b <;> simp_all [Nat.bit] <;> omega
+      unfold eval
+      rw [Nat.binaryRec_eq b n (Or.inr hc)]
+      exact hs.trans ((Nat.add_le_add_right ih _).trans (by
+        simpa only [Nat.add_mul, Nat.one_mul] using Nat.mul_le_mul_right (stepBudget D) hn))
+
+#print axioms value
+#print axioms mul_budget
+#print axioms monic_raw
+#print axioms step_work
+#print axioms work
+end AspisR1.GSBinaryModPowerFieldWorkM10
+end

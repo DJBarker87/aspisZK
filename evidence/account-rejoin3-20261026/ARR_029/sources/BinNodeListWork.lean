@@ -1,0 +1,93 @@
+import BinLeafListWork
+import BinMerkleNodeCodec
+
+/-! Bounded node decoding, including rejected overlong inputs. Every list
+inspection, copied cell and byte comparison is charged. The retained child
+list avoids re-reading the input through a function-valued result. -/
+set_option autoImplicit false
+namespace AspisR1.BinNodeListWork
+open BinMerkle32Path
+
+def get : List Byte → Nat → Byte × Nat
+  | [], _ => (0, 1)
+  | x :: _, 0 => (x, 1)
+  | _ :: xs, n + 1 => let r := get xs n; (r.1, r.2 + 1)
+
+theorem get_value (xs : List Byte) (n : Nat) :
+    (get xs n).1 = (xs[n]?).getD 0 := by
+  induction xs generalizing n with
+  | nil => rfl
+  | cons x xs ih => cases n <;> simp only [get, List.getElem?_cons_zero,
+      List.getElem?_cons_succ, Option.getD_some, ih]
+
+theorem get_work (xs : List Byte) (n : Nat) : (get xs n).2 ≤ n + 1 := by
+  induction xs generalizing n with
+  | nil => exact Nat.succ_le_succ (Nat.zero_le _)
+  | cons x xs ih =>
+    cases n with
+    | zero => exact Nat.le_refl _
+    | succ n => exact Nat.add_le_add_right (ih n) 1
+
+def read (input : List Byte) : List Byte × Nat :=
+  let entries := List.ofFn (fun i : Fin 64 => get input (1 + i.val))
+  (entries.map Prod.fst, (entries.map Prod.snd).sum + 128)
+
+def children (table : List Byte) : Children :=
+  fun c b => (table[c.val * 32 + b.val]?).getD 0
+
+theorem read_value (input : List Byte) :
+    children (read input).1 = BinMerkleNodeCodec.readChildren input := by
+  funext c b
+  have hi : c.val * 32 + b.val < 64 := by omega
+  simp only [children, read, List.map_ofFn, List.getElem?_ofFn, dif_pos hi,
+    Function.comp_apply, Option.getD_some, get_value, BinMerkleNodeCodec.readChildren]
+  congr 2
+  omega
+
+theorem sum_bound (xs : List Nat) (c : Nat) (h : ∀ x ∈ xs, x ≤ c) :
+    xs.sum ≤ xs.length * c := by
+  induction xs with
+  | nil => simp
+  | cons x xs ih =>
+    have hh := h x List.mem_cons_self
+    have ht := ih (fun y hy => h y (List.mem_cons_of_mem _ hy))
+    simp only [List.sum_cons, List.length_cons, Nat.add_mul, Nat.one_mul]
+    omega
+
+theorem read_work (input : List Byte) : (read input).2 ≤ 4352 := by
+  have hs := sum_bound ((List.ofFn (fun i : Fin 64 => get input (1 + i.val))).map
+    Prod.snd) 66 (by
+      intro x hx
+      obtain ⟨y, hy, rfl⟩ := List.mem_map.mp hx
+      obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hy
+      exact (get_work input (1 + i.val)).trans (by omega))
+  simp only [List.length_map, List.length_ofFn] at hs
+  change _ + 128 ≤ _
+  omega
+
+def parse (input : List Byte) : Option Children × Nat :=
+  let r := read input
+  let cs := children r.1
+  let eq := BinLeafListWork.equal (nodeInput cs) input
+  (if eq.1 then some cs else none, r.2 + 66 + eq.2 + 3)
+
+theorem parse_value (input : List Byte) :
+    (parse input).1 = BinMerkleNodeCodec.parse input := by
+  simp only [parse, read_value, BinLeafListWork.equal_value,
+    BinMerkleNodeCodec.parse, decide_eq_true_eq]
+
+theorem parse_work (input : List Byte) : (parse input).2 ≤ 4552 := by
+  have hr := read_work input
+  have he := BinLeafListWork.equal_work (nodeInput (children (read input).1)) input
+  rw [nodeInput_length] at he
+  change _ + 66 + _ + 3 ≤ _
+  omega
+
+#print axioms get_value
+#print axioms get_work
+#print axioms read_value
+#print axioms sum_bound
+#print axioms read_work
+#print axioms parse_value
+#print axioms parse_work
+end AspisR1.BinNodeListWork
