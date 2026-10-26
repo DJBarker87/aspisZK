@@ -10456,3 +10456,30 @@ initial-ledger independence and extracted-trace refinement. Stream A confirms th
 missing extracted objects (R1CertBuild) and will revisit SimCostOuterRetry6/EventsR1P2 once the objects
 are coherent; the SimCost module falls to Stream B if its final audit still flags it. Six slots: cb3,
 join, cb4, srcid4, rw19, runjoin8. Rows removed outright: 0. Privacy target not yet established.
+
+## D223 (Stream B) 2026-10-26 21:55 UTC: pv-join exhausted; the "31 callbacks remain" count corrected; join2 launched
+
+pv-join (`codex/pv-join-20261026`, head c9d2b33137; 100/100 Lean = 85 passed / 15 failed-terminated, peak
+RSS 3.64 GB, no swap, no Kani, no crates/programs change, no forbidden tokens; 55 new theorem axiom
+reports all standard; the final audit module exited 1 because it omitted the headline import and its
+corrected draft is uncompiled). Correction accepted by the lead: `ProverRwP6BodyData.refinement_of_data`
+has an `ExternalFuns` value parameter, a reservation equation and the whole proof/audit data equation,
+NOT a 31-element list of callback hypotheses (exact statement in evidence/pv-join-20261026/local/
+26500-out.log). The "35 remain / 31 remain" figures of D187–D208 are the successful-body source-callback
+inventory (success-next/final-state.json minus the P6/P7/P8 installs), and proving an already-selected
+entry equal to a newly supplied source body is source correspondence, not a decrement of that
+inventory. Only op229 overlapped: inventory 31 → 30 through PV_CB_Op229Source.op229_source with caller
+independence proved. The aggregate caller now consumes 26 named source laws; the privacy headline
+imports neither refinement_of_data nor any callback law, so no row receives headline join credit. Two
+dictionary mismatches are real obligations, not naming: op81 (PV_CB_Borrow.selected vs
+ProverRwSuccessBodyInterpretation.selected on the entries actually read) and op229 (PV_CB_Op229Transport
+carrier vs CB3's op20 carrier). Both fixture non-vacuity obligations open. Consequence for the ledger:
+rows V169–V267 "CLOSED-ON-CANDIDATE" in recount 2 remain correct as source equations, but the recount-3
+column "enters headline closure" must be derived from refinement_of_data's data equation, not from the
+inventory count. Launched pv-join2 (same branch; IDs from the flag file, range 35300-35599 planned):
+corrected final audit, the two dictionary bridges and pending 71/100/101/110/51/120 bridges, then prove
+the proof/audit data equation for both fixtures from the installed source laws (the V163 data equality,
+read-only coordination with rw19), and name exactly which of the 30 inventory entries lack a source law.
+Stream A agreed Stream B's env-J range 35000-39999 (runjoin8 35000-35299, join2 35300-35599); host
+scopes still wait for the restoration message. Six slots: cb3, cb4, srcid4, rw19, runjoin8, join2. Rows
+removed outright: 0. Privacy target not yet established.
