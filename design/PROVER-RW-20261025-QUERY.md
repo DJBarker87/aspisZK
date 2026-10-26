@@ -881,3 +881,23 @@ complete axioms are in `success-install`. Existing stricter5G/7G scopes,swap0,
 Tasks64 and-M7000 unchanged. Authorized launcher edit adds only12400–12799;
 its exact one-line diff/hashes are recorded. No ELF rebuild/pin change.
 Budget this continuation:3/100 Lean compiles, native Kani work in progress.
+
+## Successful-body selector stage 2 (12403–12410)
+
+`ProverRwSuccessBorrow.selected` now selects96 entries (22 added in this
+continuation, all referenced by the successful body). Literal retained QM31
+parser and generic phi_inverse owners are checked by new --check generators.
+The parser retains slicing failures, Option propagation and canonicality guards.
+`ProverRwSuccessPhiReads.reads_total` removes all four input-read success
+obligations, retaining the ordered, arbitrary arithmetic callbacks. Leaf and
+binary-parent frames preserve the hash callback and every Result constructor;
+parent tag is the actual0x12. Generic default/take, point cloning, transparent
+new/deref/AsRef and delegated zeroization preserve their callbacks. The last
+is a value-level callback equation, not physical Drop/extractor adequacy.
+No allocator, IO or trace placeholder was selected. Native source/library,
+ABI/feature and destructor association remain explicit; root premises removed0.
+
+Eight focused compiles:7pass,1retained selector-layout/parser failure fixed by
+splitting the record field layout. Standard axioms only in accepted reports.
+Section6 receipts and immutable inputs are in success-install; caps unchanged.
+This continuation has used11/100 Lean compiles; Kani is still in progress.
