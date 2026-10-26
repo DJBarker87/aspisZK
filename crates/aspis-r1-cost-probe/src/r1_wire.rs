@@ -1160,3 +1160,128 @@ mod pdict_options_contracts {
         assert_eq!(empty.size(),0); assert_eq!(empty.align(),align);
     }
 }
+
+#[cfg(kani)]
+mod pdict_resume_contracts {
+    #[kani::proof]
+    fn generic_array32_native_order() {
+        let input: [u8;32] = kani::any();
+        let native: sha2::digest::generic_array::GenericArray<u8,sha2::digest::consts::U32> = input.into();
+        let output: [u8;32] = native.into();
+        assert!(output == input);
+    }
+
+    #[kani::proof]
+    fn formatter_preserves_sink_error() {
+        use std::fmt::{self,Write};
+        struct Probe;
+        impl fmt::Debug for Probe {
+            fn fmt(&self, f:&mut fmt::Formatter<'_>)->fmt::Result { f.write_str("x") }
+        }
+        struct Sink { fail:bool, called:bool }
+        impl Write for Sink {
+            fn write_str(&mut self,s:&str)->fmt::Result {
+                assert!(s=="x"); self.called=true;
+                if self.fail {Err(fmt::Error)} else {Ok(())}
+            }
+        }
+        let fail:bool=kani::any();
+        let mut sink=Sink{fail,called:false};
+        let result=write!(&mut sink,"{:?}",Probe);
+        assert!(sink.called);
+        assert!(result.is_err()==fail);
+    }
+
+    #[kani::proof]
+    fn io_error_simple_roundtrip() {
+        use std::io::{Error,ErrorKind};
+        let choice:bool=kani::any();
+        let kind=if choice {ErrorKind::AlreadyExists} else {ErrorKind::Other};
+        let error=Error::from(kind);
+        assert!(error.kind()==kind);
+        assert!(error.raw_os_error().is_none());
+        assert!(error.get_ref().is_none());
+    }
+}
+
+#[cfg(kani)]
+mod pdict_array_fields {
+    #[repr(C)]
+    #[derive(Clone,Copy)]
+    struct Even<U> { parent1:U,parent2:U }
+    #[repr(C)]
+    #[derive(Clone,Copy)]
+    struct Odd { parent1:[u8;0],parent2:[u8;0],data:u8 }
+    type Fields = Even<Even<Even<Even<Even<Odd>>>>>;
+    #[kani::proof]
+    fn native_conversion_matches_extracted_fields() {
+        use sha2::digest::{generic_array::GenericArray,consts::U32};
+        let input:[u8;32]=kani::any();
+        let native:GenericArray<u8,U32>=input.into();
+        // Both layouts are pinned repr(C), scalar-only, size32/alignment1.
+        // Every possible bit pattern is initialized and valid for both types.
+        let fields:Fields=unsafe{core::mem::transmute(native.clone())};
+        let index:usize=kani::any();kani::assume(index<32);
+        let f=if index<16{fields.parent1}else{fields.parent2};
+        let f=if index%16<8{f.parent1}else{f.parent2};
+        let f=if index%8<4{f.parent1}else{f.parent2};
+        let f=if index%4<2{f.parent1}else{f.parent2};
+        let f=if index%2==0{f.parent1}else{f.parent2};
+        let output:[u8;32]=native.into();
+        assert!(output[index]==f.data);
+        assert!(output[index]==input[index]);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_resource_diagnostics {
+    #[kani::proof]
+    fn file_is_owned_resource_not_plain_integer() {
+        use std::fs::File;
+        use std::os::fd::RawFd;
+        assert!(core::mem::size_of::<File>()==core::mem::size_of::<RawFd>());
+        assert!(core::mem::align_of::<File>()==core::mem::align_of::<RawFd>());
+        assert!(core::mem::needs_drop::<File>());
+        assert!(!core::mem::needs_drop::<RawFd>());
+    }
+    #[kani::proof]
+    fn io_error_all_os_codes() {
+        let code:i32=kani::any();
+        let error=std::io::Error::from_raw_os_error(code);
+        assert!(error.raw_os_error()==Some(code));
+        assert!(error.get_ref().is_none());
+    }
+    #[kani::proof]
+    fn io_custom_payload_and_drop() {
+        use std::{io::Error,sync::atomic::{AtomicUsize,Ordering}};
+        static DROPS:AtomicUsize=AtomicUsize::new(0);
+        #[derive(Debug)] struct Payload(i32);
+        impl core::fmt::Display for Payload {
+            fn fmt(&self,f:&mut core::fmt::Formatter<'_>)->core::fmt::Result {f.write_str("payload")}
+        }
+        impl std::error::Error for Payload {}
+        impl Drop for Payload {fn drop(&mut self){DROPS.fetch_add(1,Ordering::SeqCst);}}
+        DROPS.store(0,Ordering::SeqCst);
+        let value:i32=kani::any();
+        let error=Error::other(Payload(value));
+        assert!(error.raw_os_error().is_none());
+        assert!(error.get_ref().unwrap().downcast_ref::<Payload>().unwrap().0==value);
+        assert!(DROPS.load(Ordering::SeqCst)==0);
+        drop(error);
+        assert!(DROPS.load(Ordering::SeqCst)==1);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_salt_clear {
+    #[kani::proof]
+    fn complete_cell_zero_and_frame() {
+        struct Frame { before:u64,cell:[u8;32],after:u64 }
+        let before:u64=kani::any();let after:u64=kani::any();
+        let mut frame=Frame{before,cell:kani::any(),after};
+        crate::host_commitment::clear_private_salt(&mut frame.cell);
+        assert!(frame.cell==[0;32]);
+        assert!(frame.before==before);
+        assert!(frame.after==after);
+    }
+}
