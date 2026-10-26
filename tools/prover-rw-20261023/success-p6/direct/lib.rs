@@ -6,3 +6,5 @@ pub fn boundary_sum(p:&[QM31;28])->QM31 { aspis_core::state_only_sumcheck::state
 pub fn eval_poly(p:&[QM31;28], x:QM31)->QM31 { aspis_core::state_only_sumcheck::evaluate_state_only_polynomial(p,x) }
 pub fn multi(q:&[QM31], p:&[QM31;10])->Option<QM31> { aspis_statement::constraints_v4::multilinear_evaluate_qm31(q,p) }
 pub fn copy_sum(q:&[QM31])->Option<QM31> { aspis_statement::state_only_semantic::state_only_copy_helper_sum(q) }
+pub fn transition(p:aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>)->&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1 { p.transition() }
+pub fn late_eq(a:&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1,b:&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1)->bool { a==b }

@@ -25,3 +25,67 @@ its before/after/diff are retained. Other host ranges and limits are unchanged.
 No shipped source, frozen artifact, key, root theorem or security contract changed.
 No full-manifest replay. Native ABI/compiler/feature association, concrete body
 and prefix contracts, E1/E2, ordered ROM/TLS and real RunJoin remain open.
+
+## Mandatory reservation stop and final boundary
+
+`success-p6-flat-pole-001/reservation-at-barrier.json` records **60,532,195,328
+bytes (56.375GiB)** reserved against **59,055,800,320 bytes (55GiB)** safe limit,
+`allowed=false`, at 2026-10-26 06:23:59 UTC. No target ran in that scope. This
+was not FileNotFoundError and the owner explicitly requires stopping on every
+other barrier failure. No retry, cap increase, repair or later launch followed
+observation of the refusal.14004 was already submitted before that tool result
+was observed; it finished successfully. All own in-flight processes have exited.
+
+Validation completed:5 Lean compiles14000–14004 (3passes,2changed elaboration
+failures),8 Kani commands including the CLI rejection (3successful invocations,
+4successful harnesses,3timeouts,1unwind rejection,1CLI rejection). The denied
+ninth launch ran no Kani command and consumes no Kani run. **65/70 Lean and7/15
+Kani remain**, next unused env-J14005. No budget exhaustion is claimed.
+
+Exact positive native results: `serialization-split-001` proves the shipped
+serializer equals the indexed reference for every value constructed by native
+WideExact::new from arbitrary raw QM31 limbs. `boundary28-001` proves the whole
+native28-coefficient boundary sum equals its scalar reference for arbitrary raw
+limbs. `owned-helpers-001` proves both after factoring the owned word-writer and
+scalar-sum update helpers. All use actual native methods, optimized compilation,
+no stubs, bounded loops and enabled unwinding assertions. Their exact Rust
+reference snapshots are hash-checked in `final-state.json`. These helpers have
+no entropy, oracle or TLS effects; their equality does not establish whole
+prover effect adequacy. Constructor/representation/compiler/feature/artifact
+association is still open. The final flat serializer and pole harness **did not
+run**; their current source is pending only.
+
+Aeneas still rejects both indexed serializer loop forms (InterpBorrows.ml2731)
+and the initial scalar boundary loop (known collapse Not_found). The owned-step
+boundary version has passing Kani but has not yet been extracted. None supplies
+an installed entry. Compression's variable-length, fixed-array and split-scalar
+Kani forms each timed out at240s; no larger timeout/cap or unchanged input retry.
+
+Current transition225 extraction succeeds after explicitly including the actual
+SemanticPublic and CompiledVariant carriers. `ProverRwP6TransitionSource` compiles
+at14004 with exact emitted bodies and raw payment/public carriers. Its transport
+to Full's opaque payment types and dictionary installation are still unproved.
+No theorem is claimed from the failed14003 elaboration.
+
+Source/artifact assessment: new proof/evidence files only, source base
+`e1804622780375b9eb206f2505fa4dc83be5939c`; native receipts keep their stale raw
+host revision labels while exact source hashes identify all inputs. Critical
+field, wide, sumcheck, compression and pole hashes match this worktree. Proof
+crate features are r0/ct-host-prover; dev opt-level3 and release overflow checks
+false are pinned in Cargo.toml. No shipped feature, parameter, wire format,
+production Rust, frozen ELF or existing proved module changed. No historical
+native/frozen-artifact evidence is attributed to a new implementation.
+
+`final.py` validates every accepted Lean source against its successful snapshot,
+all successful native reference snapshots against preflight hashes, and both
+security roots against the starting revision. Four new top theorem axioms were
+checked at14002, standard axioms only. This is focused development evidence,
+not a coherent final release replay. **New entries installed0; remaining39;
+conjunct1/headline premises removed0; target not established.**
+
+Next concrete work, after lead resolves the reservation stop: finish transition225
+opaque-type transport; extract the owned scalar boundary step; extract the flat
+serializer then run its denied Kani check; split compression into smaller proved
+source transitions. Continue pole/Vec through owned P6 references. Native effects,
+whole proof/audit model equality, PrefixContract/BodyContract, E1/E2, ordered
+ROM/TLS, real RunJoin and frozen artifact association remain unchanged and open.

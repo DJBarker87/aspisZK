@@ -1367,3 +1367,44 @@ proved under inherited primitive bindings, not whole native execution adequacy.
 Actual security-model proof/audit equality, concrete PrefixContract/BodyContract,
 E1/E2/Drop/effects,physical ordered ROM/TLS and real RunJoin are unchanged and
 open. Root/headline premises removed0; target not established.
+
+## P6 continuation and mandatory reservation stop (14000–14004)
+
+Checkpoint continues e180462278 on the unmerged candidate. New
+`ProverRwP6CompressControl.compress_finite` proves finite control of an owned
+indexed compression reference for arbitrary slices and primitive outcomes;
+it does not assert shipped equivalence. Current transition225 source extraction
+also compiles, retaining its raw payment/Public/SemanticPublic carriers; opaque
+Full input transport and installation remain open. No old proved module changed.
+
+Three optimized native Kani invocations pass (four harnesses): serialization and
+full28-coefficient boundary-sum equality, including a successor with owned helper
+factoring. No stubs; unwinding assertions enabled. Exact source snapshots and
+native primitive pins are retained. These do not close entries: serializer and
+boundary reference extraction still fail on loop borrow/context collapse;
+the flat serializer and owned boundary successor remain next extraction targets.
+Compression's variable-length/fixed/split-scalar checks each timeout240s; no
+unchanged rerun or cap/timeout increase. The pole/flat check never started.
+
+Mandatory stop:2026-10-26 06:23:59 UTC reservation barrier refused the pole/flat
+launch, recording56.375GiB capped reservations against55GiB safe limit. This is
+not the permitted vanished-cgroup race; the owner's explicit ruling requires
+stop/report. No launches after observing the refusal, no infrastructure repair.
+Already-submitted14004 finished0; all own native jobs have exited. The only
+launcher edit adds assigned14000–14399 to the existing selector, preserving every
+other byte/range/cap; before/after/diff are retained.
+
+Evidence:`evidence/prover-rw-20261023/success-p6/{README.md,final-state.json}`.
+Five Lean attempts(3pass,2changed elaboration failures),all four new top theorem
+axioms standard; eight Kani commands including one CLI rejection(3pass,3timeout,
+1unwind failure,1CLI failure). Initial missing PATH/unstable-option mistakes are
+retained, not backend evidence.65Lean/7Kani remain,nextunused14005. No budget
+exhaustion,full replay,artifact rebuild,adoption,push or merge is claimed.
+
+**Installed entries0/39;root/headline premises removed0;target not established.**
+New source-only/P6 facts remain development results. Next:transition225 nominal
+transport and installation,owned boundary-step extraction,flat serializer
+extraction plus its denied native check,smaller compression transition proofs;
+then remaining39 entries. Whole native effects,actual security-model proof/audit
+equality,PrefixContract/BodyContract,E1/E2,ordered ROM/TLS,real RunJoin and frozen
+artifact association remain open and unchanged.
