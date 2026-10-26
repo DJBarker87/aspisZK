@@ -1,12 +1,15 @@
 //! Unstubbed P6 obligations. This module is reachable only through cfg(kani).
-//! Both sides execute the shipped pair_empty_roots helper. No arbitrary table,
+//! The shipped side executes pair_empty_roots; the reference uses the pinned
+//! frozen table checked by the retained 21 unstubbed fixed-input leaves. No arbitrary table,
 //! function replacement, assumption of output equality, or disabled unwind gate.
 use super::*;
 
 fn actual_and_reference() -> (RW, RP, RW, RP) {
     let (input, out, recipient, change, snapshot, asset) = arbitrary_inputs();
     let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
-    let (v, q) = records_reference(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let empty = super::empty_roots::pv_srcid3_frozen_roots();
+    let (v, q) = super::super::records_reference::records_reference_with_roots(
+        input, out, recipient, change, snapshot, asset, empty);
     (w, p, v, q)
 }
 

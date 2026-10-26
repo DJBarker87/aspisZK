@@ -192,3 +192,6 @@ fn empty_root_call_trace() {
     assert_eq!(unsafe { CALLS },21);
     for l in 0..21 { for i in 0..8 { assert_eq!(actual[l][i].0,ROOTS[l][i]); } }
 }
+
+// Accessor for the new unstubbed full-mapper certificate; cfg(kani) module only.
+pub(super) fn pv_srcid3_frozen_roots() -> [Digest; 21] { ROOTS.map(|r| r.map(M31)) }

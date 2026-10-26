@@ -12,7 +12,9 @@ confirmed from successful Kani codegen metadata before charging verification:
 
 No stubs or verified_stubs are allowed. Unwinding assertions remain enabled.
 The mapper bound is 33; external bound 17. Inputs are arbitrary raw words;
-assume statements only bound the projection's array indices. Time is expected
+assume statements only bound the projection's array indices. The full mapper compares to the extracted owned reference on the pinned
+frozen table, whose 21 historical leaf/source hashes are retained. The shipped
+side still executes its actual helper with no stub. Time is expected
 in proof compilation and CBMC simplification/checking, particularly two actual
 empty-root computations. No debug arithmetic release gate is launched.
 One own scope at a time; fixed quiet hold until 18:15; fresh host reservation.
