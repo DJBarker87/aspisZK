@@ -1,0 +1,61 @@
+F3P_ClaimField.lean:30:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑finish - ↑start
+in the target expression
+  FoldedLeafCodec.decodeWide
+      (MultiproofConeCanonical.bytesOf (List.take (↑finish - 32 * ↑i) (List.drop (32 * ↑i) ↑bytes))) =
+    some (Concrete.decode (ClaimParser.fromFinish (AspisR1CurrentWide.Proof.recordWideToFinish record)))
+
+bytes : Slice U8
+i : Usize
+value : ClaimParser.E
+success :
+  (do
+      let x ← AspisR1CurrentWide.Proof.finishField bytes i
+      ok (ClaimParser.fromFinish x)) =
+    ok value
+finished : AspisR1CurrentWide.Proof.FinishE
+fieldCall :
+  (do
+      let value ←
+        AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i
+      ok (AspisR1CurrentWide.Proof.recordWideToFinish value)) =
+    ok finished
+same : ok (ClaimParser.fromFinish finished) = ok value
+record : AspisR1RecordParser.field.wide_exact.WideExact
+recordCall :
+  AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i =
+    ok record
+finishEq : ok (AspisR1CurrentWide.Proof.recordWideToFinish record) = ok finished
+start next finish : UScalar UScalarTy.Usize
+selected : Slice U8
+startEq : i * 32#usize = ok start
+nextEq : i + 1#usize = ok next
+finishPos : next * 32#usize = ok finish
+selectedCall :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+      { start := start, «end» := finish } =
+    ok selected
+decoded : AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected = ok (some record)
+numeric :
+  FoldedLeafCodec.decodeWide
+      (MultiproofConeCanonical.bytesOf (List.take (↑finish - 32 * ↑i) (List.drop (32 * ↑i) ↑bytes))) =
+    some (Concrete.decode (ClaimParser.fromFinish (AspisR1CurrentWide.Proof.recordWideToFinish record)))
+startVal : ↑start = ↑i * ↑32#usize
+nextVal : ↑next = ↑i + ↑1#usize
+finishVal : ↑finish = ↑next * ↑32#usize
+data : ↑selected = List.take (↑finish - ↑start) (List.drop ↑start ↑bytes)
+pos : ↑start = 32 * ↑i ∧ ↑finish - ↑start = 32
+⊢ FoldedLeafCodec.decodeWide (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑bytes) (32 * ↑i) 32) =
+    some (Concrete.decode value)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+'AspisR1.F3P_ClaimField.parsed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
