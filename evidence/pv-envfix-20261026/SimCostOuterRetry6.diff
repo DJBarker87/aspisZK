@@ -1,0 +1,26 @@
+--- rebuilt/R1Z/SimCostOuterRetry6.lean
++++ research/R1Z/SimCostOuterRetry6.lean
+@@ -28,7 +28,7 @@
+     cases hb : (checks 0).1 with
+     | true =>
+       simp only [↓reduceIte]
+-      exact ⟨hb, fun i hi => False.elim (by omega)⟩
++      exact ⟨hb, fun i hi => False.elim (Fin.not_lt_zero i hi)⟩
+     | false =>
+       simp only [Bool.false_eq_true, ↓reduceIte, erase_bind]
+       have ht := ih (fun i => checks i.succ)
+@@ -43,12 +43,12 @@
+         intro i hi
+         refine Fin.cases ?_ (fun j hj => ?_) i hi
+         · intro _; exact hb
+-        · exact ht.2 j (by omega)
++        · exact ht.2 j (Fin.succ_lt_succ_iff.mp hj)
+ 
+ theorem scan_bound (n C : Nat) (checks : Fin n → Costed Bool)
+     (hc : ∀ i, (checks i).2 ≤ C) : (scan n checks).2 ≤ n*(C+2)+1 := by
+   induction n with
+-  | zero => exact Nat.le_refl _
++  | zero => simp only [scan, Nat.zero_mul, Nat.zero_add, le_refl]
+   | succ n ih =>
+     have h0 := hc 0
+     have ht := ih (fun i => checks i.succ) (fun i => hc i.succ)
