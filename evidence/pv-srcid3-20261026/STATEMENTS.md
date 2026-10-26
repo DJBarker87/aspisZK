@@ -148,3 +148,12 @@ and `.withdrawal` now derive Checked from successful extracted validate_common
 calls plus actual public-wrapper value guards/conservation. The named pair/value
 identities avoid evaluating fixture hashes. Both standard-axiom proofs compile;
 this does not assert successful full forest compilation or installed transport.
+
+Frozen-reference family (25362,25365–25366,25368–25371): canonical snapshot
+and frozen root interfaces, words and full publicCorr compile; SelectedThree
+fills the unchanged original5 fields from3 (compile_call, admission, row_call).
+ThreeConsumer compiles against unchanged BuilderPremises. FrozenStages proves
+all canonical carriers survive record/word/bank stages; publicCorr is conditional
+on the retained original compiler-success premise. These are explicit fixed-root
+Records/owned ExternalLinear dictionaries, not installed shipped equality.
+Native deployed count remains5. Selected fixed-root reference count is5→3.
