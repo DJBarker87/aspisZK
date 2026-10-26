@@ -1,0 +1,287 @@
+SCH_OuterSecondIdentity.lean:16:54: error: unsolved goals
+F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+H : Bytes → State
+id : S2W_ExtractionBoundary.Program
+accounts : S2W_ExtractionBoundary.Accounts
+data : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+⊢ (if (Slice.len accounts != 7#usize) = true then
+      pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+    else do
+      let o ← liftM (core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize })
+      let s ←
+        liftM
+            (core.array.Array.index
+              (core.ops.index.IndexSlice
+                (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice
+                  (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+                    c.boundaries c.std)
+                  U8))
+              AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ())
+      let b ←
+        liftM
+            (core.cmp.PartialEq.ne.trait_default
+              (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption
+                (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+                  c.std)
+                (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+              o (some s))
+      if b = true then pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+        else do
+          let r ←
+            liftM
+                (AdapterRw.r1_pool_adapter.owned.validate_asq8
+                  (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+                    c.boundaries c.std)
+                  id accounts data slot)
+          let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let oa ← liftM (Slice.index_usize accounts 0#usize)
+              let r1 ←
+                liftM
+                    (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                      (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+                        c.boundaries c.std)
+                      oa)
+              let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let oa1 ← liftM (Slice.index_usize accounts 6#usize)
+                  let r2 ←
+                    liftM
+                        (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                          (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+                            c.boundaries c.std)
+                          oa1)
+                  let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let proof_start ←
+                        liftM
+                            (AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                              (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query
+                                c.geometry c.boundaries c.std))
+                      let o1 ← liftM (lift (proof_start.checked_add val.proof_length))
+                      let r3 ←
+                        liftM
+                            (AdapterRw.core.option.Option.ok_or o1
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                      let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val3 =>
+                          if (val1.len != val3) = true then
+                            pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                          else do
+                            let r4 ← S2W_Outer.traceEffects.op22 val.statement
+                            let r5 ←
+                              liftM
+                                  (AdapterRw.core.result.Result.map_err
+                                    AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                    r4 ())
+                            let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                            match cf4 with
+                              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                let s1 ← liftM (lift val4.to_slice)
+                                let i3 ←
+                                  liftM
+                                      (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+                                        (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query
+                                          c.geometry c.boundaries c.std))
+                                if (s1.len != i3) = true then
+                                    pure
+                                      (core.result.Result.Err
+                                        AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+                                  else do
+                                    let s2 ← liftM (lift val4.to_slice)
+                                    let s3 ←
+                                      liftM
+                                          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                            val1 { start := proof_start, «end» := val3 })
+                                    let o2 ←
+                                      liftM
+                                          (AdapterRw.observer
+                                            (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved
+                                              c.query c.geometry c.boundaries c.std))
+                                    let r6 ←
+                                      S2W_Outer.traceEffects.op11
+                                          (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                            (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved
+                                              c.query c.geometry c.boundaries c.std))
+                                          s2 s3 val2 () o2
+                                    let r7 ← S2W_Outer.mapError S2W_Outer.traceEffects.op44 r6
+                                    let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                    match cf5 with
+                                      | core.ops.control_flow.ControlFlow.Continue a =>
+                                        S2W_Outer.traceEffects.op53 val.statement
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                            residual)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)) =
+    if (Slice.len accounts != 7#usize) = true then
+      pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+    else do
+      let o ← liftM (core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize })
+      let s ←
+        liftM
+            (core.array.Array.index
+              (core.ops.index.IndexSlice
+                (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice
+                  (SCH_IdealSdk.dictionary c hashv H) U8))
+              AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ())
+      let b ←
+        liftM
+            (core.cmp.PartialEq.ne.trait_default
+              (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption
+                (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+                  c.std)
+                (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+              o (some s))
+      if b = true then pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+        else do
+          let r ←
+            liftM
+                (AdapterRw.r1_pool_adapter.owned.validate_asq8
+                  (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+                    c.boundaries c.std)
+                  id accounts data slot)
+          let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let oa ← liftM (Slice.index_usize accounts 0#usize)
+              let r1 ←
+                liftM
+                    (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                      (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+                        c.boundaries c.std)
+                      oa)
+              let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let oa1 ← liftM (Slice.index_usize accounts 6#usize)
+                  let r2 ←
+                    liftM
+                        (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                          (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+                            c.boundaries c.std)
+                          oa1)
+                  let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let proof_start ←
+                        liftM
+                            (AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                              (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query
+                                c.geometry c.boundaries c.std))
+                      let o1 ← liftM (lift (proof_start.checked_add val.proof_length))
+                      let r3 ←
+                        liftM
+                            (AdapterRw.core.option.Option.ok_or o1
+                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                      let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val3 =>
+                          if (val1.len != val3) = true then
+                            pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                          else do
+                            let r4 ← S2W_Outer.traceEffects.op22 val.statement
+                            let r5 ←
+                              liftM
+                                  (AdapterRw.core.result.Result.map_err
+                                    AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                    r4 ())
+                            let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                            match cf4 with
+                              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                let s1 ← liftM (lift val4.to_slice)
+                                let i3 ←
+                                  liftM
+                                      (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+                                        (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query
+                                          c.geometry c.boundaries c.std))
+                                if (s1.len != i3) = true then
+                                    pure
+                                      (core.result.Result.Err
+                                        AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+                                  else do
+                                    let s2 ← liftM (lift val4.to_slice)
+                                    let s3 ←
+                                      liftM
+                                          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                            val1 { start := proof_start, «end» := val3 })
+                                    let o2 ←
+                                      liftM
+                                          (AdapterRw.observer
+                                            (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved
+                                              c.query c.geometry c.boundaries c.std))
+                                    let r6 ←
+                                      S2W_Outer.traceEffects.op11
+                                          (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                            (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved
+                                              c.query c.geometry c.boundaries c.std))
+                                          s2 s3 val2 () o2
+                                    let r7 ← S2W_Outer.mapError S2W_Outer.traceEffects.op44 r6
+                                    let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                    match cf5 with
+                                      | core.ops.control_flow.ControlFlow.Continue a =>
+                                        S2W_Outer.traceEffects.op53 val.statement
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                            residual)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+SCH_OuterSecondIdentity.lean:17:61: warning: This simp argument is unused:
+  SCH_SdkSecond.range
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵2̵W̵_̵O̵u̵t̵e̵r̵.̵s̵t̵a̵g̵e̵2̵_̵o̵w̵n̵e̵d̵,̵S̵C̵H̵_̵S̵d̵k̵S̵e̵c̵o̵n̵d̵.̵v̵a̵l̵i̵d̵a̵t̵i̵o̵n̵,̵S̵C̵H̵_̵S̵d̵k̵S̵e̵c̵o̵n̵d̵.̵r̵a̵n̵g̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵S̵C̵H̵_̵S̵d̵k̵S̵e̵c̵o̵n̵d̵.̵o̵p̵t̵i̵o̵n̵_̵e̵q̵,̵S̵C̵H̵_̵S̵d̵k̵S̵e̵c̵o̵n̵d̵.̵s̵t̵a̵t̵e̵m̵e̵n̵t̵_̵b̵y̵t̵e̵s̵,̵S̵C̵H̵_̵S̵d̵k̵P̵u̵r̵e̵.̵d̵a̵t̵a̵,̵
+  ̵ ̵ ̵ ̵ ̵S̵C̵H̵_̵S̵d̵k̵P̵u̵r̵e̵.̵p̵r̵e̵f̵i̵x̵_̵b̵y̵t̵e̵s̵,̵S̵C̵H̵_̵S̵d̵k̵P̵u̵r̵e̵.̵d̵i̵g̵e̵s̵t̵,̵S̵C̵H̵_̵S̵d̵k̵P̵u̵r̵e̵.̵o̵b̵s̵e̵r̵v̵e̵r̵]̵[̲S̲2̲W̲_̲O̲u̲t̲e̲r̲.̲s̲t̲a̲g̲e̲2̲_̲o̲w̲n̲e̲d̲,̲ ̲S̲C̲H̲_̲S̲d̲k̲S̲e̲c̲o̲n̲d̲.̲v̲a̲l̲i̲d̲a̲t̲i̲o̲n̲,̲ ̲S̲C̲H̲_̲S̲d̲k̲S̲e̲c̲o̲n̲d̲.̲o̲p̲t̲i̲o̲n̲_̲e̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲S̲C̲H̲_̲S̲d̲k̲S̲e̲c̲o̲n̲d̲.̲s̲t̲a̲t̲e̲m̲e̲n̲t̲_̲b̲y̲t̲e̲s̲,̲ ̲S̲C̲H̲_̲S̲d̲k̲P̲u̲r̲e̲.̲d̲a̲t̲a̲,̲ ̲S̲C̲H̲_̲S̲d̲k̲P̲u̲r̲e̲.̲p̲r̲e̲f̲i̲x̲_̲b̲y̲t̲e̲s̲,̲ ̲S̲C̲H̲_̲S̲d̲k̲P̲u̲r̲e̲.̲d̲i̲g̲e̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲S̲C̲H̲_̲S̲d̲k̲P̲u̲r̲e̲.̲o̲b̲s̲e̲r̲v̲e̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SCH_OuterSecondIdentity.code' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
