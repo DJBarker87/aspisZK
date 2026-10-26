@@ -47,25 +47,25 @@ mod checks {
         assert_eq!(super::sampler::gamma_sample(&block),super::reference::gamma(block));
     }
     #[kani::proof]
-    #[kani::unwind(10)]
+    #[kani::unwind(65)]
     fn gamma_words_split() {
         let block:[u8;32]=kani::any();
         assert_eq!(super::source_fragments::words(&block),super::reference_split::words(block));
     }
     #[kani::proof]
-    #[kani::unwind(10)]
+    #[kani::unwind(65)]
     fn gamma_pass_split() {
         let rank:[u32;8]=kani::any();
         assert_eq!(super::source_fragments::pass(rank),super::reference_split::pass(rank));
     }
     #[kani::proof]
-    #[kani::unwind(10)]
+    #[kani::unwind(65)]
     fn gamma_carry_split() {
         let digits:[u32;8]=kani::any();let add:u32=kani::any();
         assert_eq!(super::source_fragments::carry(digits,add),super::reference_split::carry(digits,add));
     }
     #[kani::proof]
-    #[kani::unwind(10)]
+    #[kani::unwind(65)]
     fn gamma_split() {
         let block:[u8;32]=kani::any();
         assert_eq!(super::sampler::gamma_sample(&block),super::reference_split::gamma(block));
