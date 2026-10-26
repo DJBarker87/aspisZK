@@ -1,0 +1,98 @@
+JFo_Resume.lean:37:4: error: Tactic `rfl` failed: The left-hand side
+  (↑1768#usize + (UScalar.size UScalarTy.Usize - ↑32#usize)) % UScalar.size UScalarTy.Usize
+is not definitionally equal to the right-hand side
+  ↑1736#usize
+
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+proofHash : D.digest hash (Array.make 1#usize [JFx_NativeBytes.proof] ⋯).to_slice = ok JFo_AuthBytes.proofHash
+publicHash : D.digest hash (Array.make 1#usize [JFx_NativeBytes.publicInput] ⋯).to_slice = ok JFo_AuthBytes.publicHash
+checksumHash :
+  D.digest hash
+      (Array.make 2#usize
+          [(Array.make 22#usize
+                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8,
+                  101#u8, 99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                ⋯).to_slice,
+            JFq_Range.segment 0 1736 ⋯]
+          ⋯).to_slice =
+    ok JFo_AuthBytes.checksum
+size : JFx_NativeBytes.checkpoint.len = 1768#usize
+proofRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.checkpoint
+      { start := 16#usize, «end» := 48#usize } =
+    ok (JFq_Range.segment (↑16#usize) (↑48#usize - ↑16#usize) ⋯)
+publicRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.checkpoint
+      { start := 48#usize, «end» := 80#usize } =
+    ok (JFq_Range.segment (↑48#usize) (↑80#usize - ↑48#usize) ⋯)
+neProof : CheckpointBytes4Ops.ne core.cmp.PartialEqU8 (JFq_Range.segment 16 32 ⋯) JFo_AuthBytes.proofHash = ok false
+nePublic : CheckpointBytes4Ops.ne core.cmp.PartialEqU8 (JFq_Range.segment 48 32 ⋯) JFo_AuthBytes.publicHash = ok false
+suffix :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) JFx_NativeBytes.checkpoint
+      { start := 1736#usize } =
+    ok (JFq_Range.segment 1736 32 ⋯)
+selectedPrefix :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) JFx_NativeBytes.checkpoint
+      { «end» := 1736#usize } =
+    ok (JFq_Range.segment 0 1736 ⋯)
+⊢ (↑1768#usize + (UScalar.size UScalarTy.Usize - ↑32#usize)) % UScalar.size UScalarTy.Usize = ↑1736#usize
+JFo_Resume.lean:46:8: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+JFo_Resume.lean:41:53: warning: This simp argument is unused:
+  JFo_Header.magic
+
+Hint: Omit it from the simp argument list.
+  simp only [̵T̵2̵N̵a̵t̵_̵R̵e̵s̵u̵m̵e̵P̵r̵e̵f̵i̵x̵.̵b̵o̵d̵y̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵4̵O̵p̵s̵.̵o̵p̵s̵,̵s̵i̵z̵e̵,̵T̵2̵N̵a̵t̵_̵R̵e̵a̵d̵e̵r̵N̵o̵n̵v̵a̵c̵u̵i̵t̵y̵.̵s̵i̵z̵e̵_̵s̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵J̵F̵o̵_̵A̵u̵t̵h̵B̵y̵t̵e̵s̵.̵p̵r̵e̵f̵i̵x̵_̵r̵e̵a̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵s̵l̵i̵c̵e̵P̵a̵r̵t̵i̵a̵l̵E̵q̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵m̵a̵g̵i̵c̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵4̵O̵p̵s̵.̵t̵a̵g̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵c̵u̵r̵s̵o̵r̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵v̵e̵r̵s̵i̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵r̵e̵s̵e̵r̵v̵e̵d̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵i̵t̵e̵r̵a̵t̵o̵r̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵s̵c̵a̵n̵n̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵p̵r̵o̵o̵f̵R̵e̵a̵d̵,̵p̵u̵b̵l̵i̵c̵R̵e̵a̵d̵,̵p̵r̵o̵o̵f̵H̵a̵s̵h̵,̵p̵u̵b̵l̵i̵c̵H̵a̵s̵h̵,̵n̵e̵P̵r̵o̵o̵f̵,̵n̵e̵P̵u̵b̵l̵i̵c̵,̵s̵u̵f̵f̵i̵x̵,̵s̵e̵l̵e̵c̵t̵e̵d̵P̵r̵e̵f̵i̵x̵,̵c̵h̵e̵c̵k̵s̵u̵m̵H̵a̵s̵h̵,̵e̵n̵d̵e̵q̵,̵n̵e̵x̵t̵B̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵l̵i̵f̵t̵]̵[̲T̲2̲N̲a̲t̲_̲R̲e̲s̲u̲m̲e̲P̲r̲e̲f̲i̲x̲.̲b̲o̲d̲y̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲4̲O̲p̲s̲.̲o̲p̲s̲,̲ ̲s̲i̲z̲e̲,̲ ̲T̲2̲N̲a̲t̲_̲R̲e̲a̲d̲e̲r̲N̲o̲n̲v̲a̲c̲u̲i̲t̲y̲.̲s̲i̲z̲e̲_̲s̲2̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲J̲F̲o̲_̲A̲u̲t̲h̲B̲y̲t̲e̲s̲.̲p̲r̲e̲f̲i̲x̲_̲r̲e̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲s̲l̲i̲c̲e̲P̲a̲r̲t̲i̲a̲l̲E̲q̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲t̲a̲g̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲4̲O̲p̲s̲.̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲c̲u̲r̲s̲o̲r̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲i̲t̲e̲r̲a̲t̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲s̲c̲a̲n̲n̲e̲d̲,̲ ̲p̲r̲o̲o̲f̲R̲e̲a̲d̲,̲ ̲p̲u̲b̲l̲i̲c̲R̲e̲a̲d̲,̲ ̲p̲r̲o̲o̲f̲H̲a̲s̲h̲,̲ ̲p̲u̲b̲l̲i̲c̲H̲a̲s̲h̲,̲ ̲n̲e̲P̲r̲o̲o̲f̲,̲ ̲n̲e̲P̲u̲b̲l̲i̲c̲,̲ ̲s̲u̲f̲f̲i̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲e̲l̲e̲c̲t̲e̲d̲P̲r̲e̲f̲i̲x̲,̲ ̲c̲h̲e̲c̲k̲s̲u̲m̲H̲a̲s̲h̲,̲ ̲e̲n̲d̲e̲q̲,̲ ̲n̲e̲x̲t̲B̲o̲u̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFo_Resume.lean:44:46: warning: This simp argument is unused:
+  neProof
+
+Hint: Omit it from the simp argument list.
+  simp only [̵T̵2̵N̵a̵t̵_̵R̵e̵s̵u̵m̵e̵P̵r̵e̵f̵i̵x̵.̵b̵o̵d̵y̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵4̵O̵p̵s̵.̵o̵p̵s̵,̵s̵i̵z̵e̵,̵T̵2̵N̵a̵t̵_̵R̵e̵a̵d̵e̵r̵N̵o̵n̵v̵a̵c̵u̵i̵t̵y̵.̵s̵i̵z̵e̵_̵s̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵J̵F̵o̵_̵A̵u̵t̵h̵B̵y̵t̵e̵s̵.̵p̵r̵e̵f̵i̵x̵_̵r̵e̵a̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵s̵l̵i̵c̵e̵P̵a̵r̵t̵i̵a̵l̵E̵q̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵m̵a̵g̵i̵c̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵4̵O̵p̵s̵.̵t̵a̵g̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵c̵u̵r̵s̵o̵r̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵v̵e̵r̵s̵i̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵r̵e̵s̵e̵r̵v̵e̵d̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵i̵t̵e̵r̵a̵t̵o̵r̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵s̵c̵a̵n̵n̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵p̵r̵o̵o̵f̵R̵e̵a̵d̵,̵p̵u̵b̵l̵i̵c̵R̵e̵a̵d̵,̵p̵r̵o̵o̵f̵H̵a̵s̵h̵,̵p̵u̵b̵l̵i̵c̵H̵a̵s̵h̵,̵n̵e̵P̵r̵o̵o̵f̵,̵n̵e̵P̵u̵b̵l̵i̵c̵,̵s̵u̵f̵f̵i̵x̵,̵s̵e̵l̵e̵c̵t̵e̵d̵P̵r̵e̵f̵i̵x̵,̵c̵h̵e̵c̵k̵s̵u̵m̵H̵a̵s̵h̵,̵e̵n̵d̵e̵q̵,̵n̵e̵x̵t̵B̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵l̵i̵f̵t̵]̵[̲T̲2̲N̲a̲t̲_̲R̲e̲s̲u̲m̲e̲P̲r̲e̲f̲i̲x̲.̲b̲o̲d̲y̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲4̲O̲p̲s̲.̲o̲p̲s̲,̲ ̲s̲i̲z̲e̲,̲ ̲T̲2̲N̲a̲t̲_̲R̲e̲a̲d̲e̲r̲N̲o̲n̲v̲a̲c̲u̲i̲t̲y̲.̲s̲i̲z̲e̲_̲s̲2̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲J̲F̲o̲_̲A̲u̲t̲h̲B̲y̲t̲e̲s̲.̲p̲r̲e̲f̲i̲x̲_̲r̲e̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲s̲l̲i̲c̲e̲P̲a̲r̲t̲i̲a̲l̲E̲q̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲m̲a̲g̲i̲c̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲4̲O̲p̲s̲.̲t̲a̲g̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲c̲u̲r̲s̲o̲r̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲r̲e̲s̲e̲r̲v̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲i̲t̲e̲r̲a̲t̲o̲r̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲s̲c̲a̲n̲n̲e̲d̲,̲ ̲p̲r̲o̲o̲f̲R̲e̲a̲d̲,̲ ̲p̲u̲b̲l̲i̲c̲R̲e̲a̲d̲,̲ ̲p̲r̲o̲o̲f̲H̲a̲s̲h̲,̲ ̲p̲u̲b̲l̲i̲c̲H̲a̲s̲h̲,̲ ̲n̲e̲P̲u̲b̲l̲i̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲u̲f̲f̲i̲x̲,̲ ̲s̲e̲l̲e̲c̲t̲e̲d̲P̲r̲e̲f̲i̲x̲,̲ ̲c̲h̲e̲c̲k̲s̲u̲m̲H̲a̲s̲h̲,̲ ̲e̲n̲d̲e̲q̲,̲ ̲n̲e̲x̲t̲B̲o̲u̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFo_Resume.lean:44:54: warning: This simp argument is unused:
+  nePublic
+
+Hint: Omit it from the simp argument list.
+  simp only [̵T̵2̵N̵a̵t̵_̵R̵e̵s̵u̵m̵e̵P̵r̵e̵f̵i̵x̵.̵b̵o̵d̵y̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵4̵O̵p̵s̵.̵o̵p̵s̵,̵s̵i̵z̵e̵,̵T̵2̵N̵a̵t̵_̵R̵e̵a̵d̵e̵r̵N̵o̵n̵v̵a̵c̵u̵i̵t̵y̵.̵s̵i̵z̵e̵_̵s̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵J̵F̵o̵_̵A̵u̵t̵h̵B̵y̵t̵e̵s̵.̵p̵r̵e̵f̵i̵x̵_̵r̵e̵a̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵s̵l̵i̵c̵e̵P̵a̵r̵t̵i̵a̵l̵E̵q̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵m̵a̵g̵i̵c̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵4̵O̵p̵s̵.̵t̵a̵g̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵c̵u̵r̵s̵o̵r̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵v̵e̵r̵s̵i̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵r̵e̵s̵e̵r̵v̵e̵d̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵i̵t̵e̵r̵a̵t̵o̵r̵,̵J̵F̵o̵_̵H̵e̵a̵d̵e̵r̵.̵s̵c̵a̵n̵n̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵p̵r̵o̵o̵f̵R̵e̵a̵d̵,̵p̵u̵b̵l̵i̵c̵R̵e̵a̵d̵,̵p̵r̵o̵o̵f̵H̵a̵s̵h̵,̵p̵u̵b̵l̵i̵c̵H̵a̵s̵h̵,̵n̵e̵P̵r̵o̵o̵f̵,̵n̵e̵P̵u̵b̵l̵i̵c̵,̵s̵u̵f̵f̵i̵x̵,̵s̵e̵l̵e̵c̵t̵e̵d̵P̵r̵e̵f̵i̵x̵,̵c̵h̵e̵c̵k̵s̵u̵m̵H̵a̵s̵h̵,̵e̵n̵d̵e̵q̵,̵n̵e̵x̵t̵B̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵l̵i̵f̵t̵]̵[̲T̲2̲N̲a̲t̲_̲R̲e̲s̲u̲m̲e̲P̲r̲e̲f̲i̲x̲.̲b̲o̲d̲y̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲4̲O̲p̲s̲.̲o̲p̲s̲,̲ ̲s̲i̲z̲e̲,̲ ̲T̲2̲N̲a̲t̲_̲R̲e̲a̲d̲e̲r̲N̲o̲n̲v̲a̲c̲u̲i̲t̲y̲.̲s̲i̲z̲e̲_̲s̲2̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲J̲F̲o̲_̲A̲u̲t̲h̲B̲y̲t̲e̲s̲.̲p̲r̲e̲f̲i̲x̲_̲r̲e̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲s̲l̲i̲c̲e̲P̲a̲r̲t̲i̲a̲l̲E̲q̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲m̲a̲g̲i̲c̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲4̲O̲p̲s̲.̲t̲a̲g̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲c̲u̲r̲s̲o̲r̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲r̲e̲s̲e̲r̲v̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲i̲t̲e̲r̲a̲t̲o̲r̲,̲ ̲J̲F̲o̲_̲H̲e̲a̲d̲e̲r̲.̲s̲c̲a̲n̲n̲e̲d̲,̲ ̲p̲r̲o̲o̲f̲R̲e̲a̲d̲,̲ ̲p̲u̲b̲l̲i̲c̲R̲e̲a̲d̲,̲ ̲p̲r̲o̲o̲f̲H̲a̲s̲h̲,̲ ̲p̲u̲b̲l̲i̲c̲H̲a̲s̲h̲,̲ ̲n̲e̲P̲r̲o̲o̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲u̲f̲f̲i̲x̲,̲ ̲s̲e̲l̲e̲c̲t̲e̲d̲P̲r̲e̲f̲i̲x̲,̲ ̲c̲h̲e̲c̲k̲s̲u̲m̲H̲a̲s̲h̲,̲ ̲e̲n̲d̲e̲q̲,̲ ̲n̲e̲x̲t̲B̲o̲u̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFo_Resume.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
