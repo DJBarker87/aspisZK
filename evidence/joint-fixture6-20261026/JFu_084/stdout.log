@@ -1,0 +1,14 @@
+JFu_TranscriptLength.lean:10:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+bytes : Slice U8
+size : bytes.length = 1455
+out : core.result.Result U32 core.num.error.TryFromIntError
+_ : [> let out ← core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from bytes.len <]
+out_post1 : ↑bytes.len ≤ U32.max → ∃ x, out = core.result.Result.Ok x ∧ ↑x = ↑bytes.len
+out_post2 : U32.max < ↑bytes.len → out = core.result.Result.Err ()
+⊢ out = core.result.Result.Ok 1455#u32
+'AspisR1.JFu_TranscriptLength.converted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

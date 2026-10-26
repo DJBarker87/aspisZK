@@ -1,0 +1,38 @@
+{"attempt": "JFu_013", "exit_status": 1, "wall_seconds": 2.8055806339834817, "peak_rss_kib": "5349540", "swaps": "0", "print_axioms": ["'AspisR1.JFu_DigestSlice.digest' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFu_DigestSlice.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFu_DigestSlice.lean:17:92: error: unsolved goals
+bytes : Slice U8
+size : bytes.length = 32
+canon : canonical (bytesOf ↑bytes)
+converted : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError
+_ : [> let converted ← core.array.TryFromSharedArraySlice.try_from 32#usize bytes <]
+converted_post :
+  match converted with
+  | core.result.Result.Ok array => ↑array = ↑bytes ∧ bytes.length = 32
+  | core.result.Result.Err a => bytes.length ≠ 32
+⊢ (do
+      let array ← atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Std.Array U8 32#usize)) converted
+      atomic_statement.decode_digest_canonical array) ⦃
+    out => ∃ q, out = core.result.Result.Ok q ⦄
+'AspisR1.JFu_
+...
+JFu_DigestSlice.lean:17:92: error: unsolved goals
+bytes : Slice U8
+size : bytes.length = 32
+canon : canonical (bytesOf ↑bytes)
+converted : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError
+_ : [> let converted ← core.array.TryFromSharedArraySlice.try_from 32#usize bytes <]
+converted_post :
+  match converted with
+  | core.result.Result.Ok array => ↑array = ↑bytes ∧ bytes.length = 32
+  | core.result.Result.Err a => bytes.length ≠ 32
+⊢ (do
+      let array ← atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Std.Array U8 32#usize)) converted
+      atomic_statement.decode_digest_canonical array) ⦃
+    out => ∃ q, out = core.result.Result.Ok q ⦄
+'AspisR1.JFu_DigestSlice.digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFu_DigestSlice.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+def Aeneas.Std.core.array.TryFromSharedArraySlice.try_from : {T : Type} →
+  (N : Usize) → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N s => if h : s.len = N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())
+
+Running as unit: run-r2b4806b8ba1d42b4b243763961e71db6.scope; invocation ID: 34842d8c19074a6999b73efa1f78a2a9
