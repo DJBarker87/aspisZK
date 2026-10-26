@@ -3,6 +3,7 @@ import json,shlex,subprocess,sys
 from pathlib import Path
 root=Path(__file__).resolve().parents[2]
 op,entry,include=sys.argv[1:4]
+project=sys.argv[6] if len(sys.argv)>6 else ('source-proof' if int(op)>=71 else 'proof')
 base='/home/dombarker/project-offloads/codex-pv-cb-20261026'
 scanner='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/reservation.py'
 charon='/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon'
@@ -16,10 +17,10 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
  (local/'reservation-transport.log').write_text(out.stdout)
  if out.returncode:print(name,'reservation refused',out.returncode);sys.exit(out.returncode)
  if stage=='charon':
-  args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built','--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry]
+  args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built',*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract'] if project in ['source-proof','proof'] else []),'--sysroot','default','--start-from',entry]
   if include:
    for pattern in include.split('+'):args+=['--include',pattern]
-  args+=['--dest-file',f'{base}/PV_CB_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{"source-proof" if int(op)>=71 else "proof"}/Cargo.toml','--release','--offline','--lib','--jobs','4']
+  args+=['--dest-file',f'{base}/PV_CB_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{project}/Cargo.toml','--release','--offline','--lib','--jobs','4',*(['--features','r0'] if project.startswith('source/crates/') else [])]
  else:
   assert ssh(f'mkdir -p {base}/shipped-op{op}-generated').returncode==0
   args=['timeout','120',aeneas,'-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',f'PV_CB_ShippedOp{op}','-dest',f'{base}/shipped-op{op}-generated','-split-files','-emit-json',f'{base}/PV_CB_ShippedOp{op}.llbc']

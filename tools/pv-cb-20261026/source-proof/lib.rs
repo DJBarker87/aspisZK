@@ -83,3 +83,26 @@ pub fn active_rows()->Result<Vec<u16>,aspis_statement::pool_v1::pair_tree_hiding
 pub fn row_masks()->Result<[u16;64],aspis_statement::pool_v1::pair_tree_hiding::PoolV1PairHidingLayoutErrorV1> {
  aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_row_masks_v1()
 }
+
+#[cfg(kani)]
+pub fn sha_final(x:sha2::Sha256)->[u8;32] { use sha2::Digest; x.finalize().into() }
+
+#[cfg(kani)]
+pub fn sha_blocks(mut state:sha2::Sha256VarCore, blocks:&[sha2::digest::core_api::Block<sha2::Sha256VarCore>])->sha2::Sha256VarCore {
+ use sha2::digest::core_api::UpdateCore; state.update_blocks(blocks); state
+}
+#[cfg(kani)]
+pub fn sha_update(mut state:sha2::Sha256, input:&[u8])->sha2::Sha256 {
+ use sha2::Digest; state.update(input); state
+}
+#[cfg(kani)]
+pub fn sha_default()->sha2::Sha256 {Default::default()}
+
+#[cfg(kani)]
+pub fn default_core<T>() -> sha2::digest::core_api::CoreWrapper<T>
+where
+ T:sha2::digest::core_api::BufferKindUser+Default,
+ T::BlockSize:sha2::digest::typenum::IsLess<sha2::digest::typenum::U256>+Default,
+ T::BufferKind:Default,
+ sha2::digest::typenum::Le<T::BlockSize,sha2::digest::typenum::U256>:sha2::digest::typenum::NonZero,
+ { Default::default() }
