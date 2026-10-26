@@ -13,6 +13,8 @@ mod reference_split;
 mod source_fragments;
 #[cfg(kani)]
 mod reference_p6;
+#[cfg(kani)]
+mod reference_polynomial;
 #[cfg(all(kani,not(pv_cb_extract)))]
 mod checks {
     use aspis_core::field::{QM31, CM31, M31};
@@ -33,6 +35,17 @@ mod checks {
         for i in 0..28 {p[i]=q(raw[i]);}
         let a=aspis_core::state_only_sumcheck::state_only_boundary_sum(&p);
         let b=super::reference_p6::boundary_flat(&p);
+        assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);
+        assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn polynomial_flat28() {
+        let raw:[[u32;4];28]=kani::any();let mut p=[QM31::ZERO;28];
+        for i in 0..28 {p[i]=q(raw[i]);}
+        let challenge=q(kani::any());
+        let a=aspis_core::state_only_sumcheck::evaluate_state_only_polynomial(&p,challenge);
+        let b=super::reference_polynomial::evaluate(&p,challenge);
         assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);
         assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
     }
