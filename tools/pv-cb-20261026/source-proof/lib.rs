@@ -146,3 +146,8 @@ pub fn qm_inv(x:aspis_core::field::QM31)->Option<aspis_core::field::QM31> {aspis
 pub fn wide_inv(x:aspis_core::field::WideExact)->Option<aspis_core::field::WideExact> {aspis_core::r0::CodeField::try_inv(x)}
 #[cfg(kani)]
 pub fn statement_points(x:&[aspis_core::field::QM31;10])->[[aspis_core::field::QM31;10];3] {aspis_core::state_only_prefix::r0::statement_points(x)}
+
+#[cfg(kani)]
+pub fn circle_sample(block:&[u8;32],row:aspis_core::r0_transcript::CircleRow)->aspis_core::circle::SecureCirclePoint {
+    aspis_r1_cost_probe::sampler::circle_sample(block,row)
+}

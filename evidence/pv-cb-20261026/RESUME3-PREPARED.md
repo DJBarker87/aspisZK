@@ -36,6 +36,7 @@ source theorems and all 18 joint projections. It is not yet run.
 |107|V212|PARTIAL, fresh provenance pending|`PV_CB_Op107Exact.op107_source`|`RESUME3-SIBLING-PREPARATION.json`; fresh `qm_inv` extraction, nominal field bijection, exact complete Result/Option law required|
 |109|V213|PARTIAL, fresh provenance pending|`PV_CB_Op109Exact.op109_source`|same sibling evidence; fresh `wide_inv` extraction and bijective WideExact carrier required|
 |118|V218|PARTIAL, fresh provenance pending|`PV_CB_Op118Exact.op118_source`|same sibling evidence; fresh `statement_points` extraction, array transport and full Result law required|
+|259|V265|OPEN, wrapper/carriers/statement PREPARED|`PV_CB_Op259Exact.op259_source`|`RESUME3-OP259-PREPARED.json`; no sibling source theorem at checked revision; after 107/109/118, extract actual sampler including success and both row-specific fallback cases|
 
 The three older `PV_CB_Op{107,109,118}Source.opN_source` statements and files
 are byte-identical to resume HEAD. New Exact modules add interfaces. Emitted
@@ -94,6 +95,10 @@ the receipt target, current source SHA and qualified theorem/standard axioms
 before writing an accepted row. No row was rewritten by this change. The
 dictionary generator has groups for future accepted ops 105/107/109/118 and
 rejects any accepted row lacking a group. Its current 18-row `--check` passes.
+The same preparation now includes op259's group and explicit row/point carrier
+names. Source inspection confirmed public visibility of the sampler module,
+the two CircleRow constructors and both SecureCirclePoint coordinates. Fresh
+generated names, carrier bijections and full Result law remain unchecked.
 
 Next concrete deliverable: host receipt for corrected op105 Funs, followed
 by its exact current-candidate source equation. Until the flag appears,
