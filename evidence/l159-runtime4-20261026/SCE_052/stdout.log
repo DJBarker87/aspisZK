@@ -1,0 +1,21 @@
+SCE_ReplayTable.lean:25:2: error: Tactic `rfl` failed: The left-hand side
+  (@ite (Option State) (a ∈ List.map Prod.fst prior)
+        (@List.instDecidableMemOfLawfulBEq Bytes List.instBEq ⋯ a (List.map Prod.fst prior)) (some (H a)) none).getD
+    default
+is not definitionally equal to the right-hand side
+  (@ite (Option State) (a ∈ List.map Prod.fst prior)
+        (@List.instDecidableMemOfLawfulBEq Bytes instBEqOfDecidableEq ⋯ a (List.map Prod.fst prior)) (some (H a))
+        none).getD
+    default
+
+H : Bytes → State
+prior suffix : List (Bytes × State)
+consistent : ∀ q ∈ prior ++ suffix, q.2 = H q.1
+known : ∀ a ∈ List.map Prod.fst suffix, a ∈ List.map Prod.fst prior
+a : Bytes
+before : ∀ q ∈ prior, q.2 = H q.1
+member : a ∈ List.map Prod.fst (prior ++ suffix) ↔ a ∈ List.map Prod.fst prior
+⊢ (if a ∈ List.map Prod.fst prior then some (H a) else none).getD default =
+    (if a ∈ List.map Prod.fst prior then some (H a) else none).getD default
+'AspisR1.SCE_ReplayTable.oracle_known_suffix' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SCE_ReplayTable.cut_append' depends on axioms: [propext]
