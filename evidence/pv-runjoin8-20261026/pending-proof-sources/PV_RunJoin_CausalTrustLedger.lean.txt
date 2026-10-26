@@ -1,4 +1,4 @@
-import R1Z.PV_RunJoin_InstalledTrustLedger
+import R1Z.PV_RunJoin_TrustLedger
 import R1Z.PV_RunJoin_CausalPrefix
 set_option autoImplicit false
 noncomputable section
@@ -55,8 +55,7 @@ local notation "source" => ProverCommitReencode16.experiment W Pr 8 eight_pos
   ProverCommitReencode16.encode
 
 abbrev ModelCoins := (((source).RealRand × OracleAnswer) × ProverCommitFuelJoin22.Tape)
-variable (baseTypes : ProverRwFull.ExternalTypes)
-local instance : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native baseTypes
+variable [ProverRwFull.ExternalTypes]
 local instance : ProverRwRngCaller.NativeTypes := PV_RunJoin_CallerWorld.nativeTypes
 local instance : ProverRwRngCaller.ErasureFns := ⟨fun _ value => .ok value,fun _ value => .ok value⟩
 variable {N Client Context Rest : Type} [Fintype Rest]
@@ -76,13 +75,9 @@ variable    (policy : ProverRwEffectCallback.Account N)
       Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) → List (Bytes × OracleAnswer))
     (ideal : (Challenges K → R0Z.JointView.Tape K F → View K CommitHandle Aux R1Bat) →
       R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat)
-variable (ops : PV_RunJoin_NativeSelectedInputs.LedgerState baseTypes N Client →
-    @ProverRwFull.ExternalFuns (PDict_CodecDictionary.native baseTypes))
-    (hash : Statement K CommitHandle → Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
-      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
-    (selected : PV_RunJoin_SourceSelectionContract.Data (CommitHandle := CommitHandle))
-local notation "inputs" => PV_RunJoin_InstalledFamily.inputs baseTypes ops hash selected.selection
-local notation "common" => PV_RunJoin_InstalledFamily.common baseTypes ops hash selected.selection
+variable (inputs : (honest : HonestProver K) → (statement : Statement K CommitHandle) → honest.Instance →
+      PV_RunJoin_LedgerBody.Inputs N Client)
+    (common : Statement K CommitHandle → PV_RunJoin_LedgerBody.Inputs N Client)
 local notation "runtime" => PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle ideal
 variable (boundaryData : PV_RunJoin_Boundary.Data
   (PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle ideal) Context Rest)

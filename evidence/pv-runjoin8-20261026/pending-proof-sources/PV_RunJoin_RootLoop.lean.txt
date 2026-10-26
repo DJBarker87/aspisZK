@@ -1,4 +1,3 @@
-import R1Z.PV_Src_CanonicalRoots
 import R1Z.PV_Src_Forest_BankRange
 import R1Z.BuilderRecordsArray
 set_option autoImplicit false
@@ -78,12 +77,12 @@ theorem roots (target : Roots)
   rw [pair_trace.pair_empty_roots,aspis_core.field.M31.ZERO,initial]
   simp only [bind_tc_ok]
   rw [update_gen _ 0#usize _ (by decide)]
-  simp only [bind_tc_ok,pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH]
+  simp only [bind_tc_ok,format.POOL_V1_TREE_DEPTH,pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH]
   apply loop target parent _ _ rfl (by simp)
   intro j hj hn
   have hj0 : j = 0 := by simp at hj;omega
   subst j
-  rw [set_get _ _ _ _ (by decide),if_pos rfl]
+  rw [BuilderRecordsArray.set_get _ _ _ _ (by decide),if_pos (show 0 = (0#usize : Usize).val by simp)]
 
 #print axioms step
 #print axioms loop
