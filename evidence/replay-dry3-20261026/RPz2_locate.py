@@ -1,7 +1,7 @@
 """Read-only locate retained source/object associations for unresolved modules."""
 import os,json,sys,hashlib
 from pathlib import Path
-x=json.load(sys.stdin);g=x['plan'];old=x['historical'];wanted={m:m.replace('.','/')+'.lean' for m in g['unresolved']};names={Path(p).name for p in wanted.values()};matches={};root=Path('/home/dombarker/project-offloads');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();skip={'target','.git','node_modules','RPz_sources','RPz2_sources','RPz_objects','RPz_trusted','objects','objects-S','merged-objects','lib','incremental','deps'}
+x=json.load(sys.stdin);g=x['plan'];old=x['historical'];wanted={m:m.replace('.','/')+'.lean' for m in g['unresolved']};names={Path(p).name for p in wanted.values()};matches={};root=Path('/home/dombarker/project-offloads');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();skip={'target','.git','node_modules','RPz_sources','RPz2_sources','RPz_objects','RPz_trusted','objects','objects-S','merged-objects','lib','incremental','deps','Mathlib','mathlib','Lean','Init','Std','Aeneas','AeneasMeta','Batteries','Qq','Aesop','ProofWidgets','ImportGraph','LeanSearchClient','Plausible','Cli','.lake'}
 for base,dirs,files in os.walk(root):
  dirs[:]=[d for d in dirs if d not in skip and not d.endswith('.scope')]
  for f in names.intersection(files):

@@ -1,6 +1,6 @@
 from pathlib import Path
-import json
-E=Path(__file__).resolve().parent;g=json.loads((E/'RPz2_source-plan.json').read_text());r=json.loads((E/'RPz2_host-recovery.json').read_text());new=[]
+import json,sys
+E=Path(__file__).resolve().parent;g=json.loads((E/'RPz2_source-plan.json').read_text());r=json.loads((E/(sys.argv[1] if len(sys.argv)>1 else 'RPz2_host-recovery.json')).read_text());new=[]
 for m,x in r['recovered'].items():
  if m=='R1NaturalProjection':continue
  text=x.pop('text');x.update(source=x['host_source'],snapshot=str((E/'RPz2_recovered'/Path(m.replace('.','/')+'.lean')).relative_to(E.parents[1])),recovery_pin={'revision':'retained-host-source-snapshot','sha256':x['sha256'],'path':x['host_source']})
@@ -15,7 +15,7 @@ def visit(m):
  active.add(m)
  for n in x['imports']:visit(n)
  active.remove(m);order.append(m)
-visit('Rc7_Top');g['order']=order;g['unresolved']=sorted(m for m in seen if g['modules'][m]['kind']=='unresolved');g['host_recovered']=new
+visit('Rc7_Top');g['order']=order;g['unresolved']=sorted(m for m in seen if g['modules'][m]['kind']=='unresolved');g['host_recovered']=list(dict.fromkeys(g.get('host_recovered',[])+new))
 D={}
 def distance(m,d):
  if D.get(m,-1)>=d:return
