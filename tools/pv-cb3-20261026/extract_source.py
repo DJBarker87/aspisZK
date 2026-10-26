@@ -20,7 +20,7 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
   (local/'refusal.json').write_text(json.dumps(dict(target=entry,exit=out.returncode,attempt_charged=False,lean_attempts=0,kani_runs=0,reason=out.stdout,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()),indent=2)+'\n')
   print(name,'reservation refused',out.returncode);sys.exit(out.returncode)
  if stage=='charon':
-  args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built',*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract'] if project in ['source-proof','proof'] else []),'--sysroot','default','--start-from',entry]
+  args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built',*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract'] if project in ['source-proof','proof','kani-proof'] else []),'--sysroot','default','--start-from',entry]
   if include:
    for pattern in include.split('+'):args+=['--include',pattern]
   args+=['--dest-file',f'{base}/PV_CB3_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{project}/Cargo.toml','--release','--offline','--lib','--jobs','4',*(['--features','r0'] if project.startswith('source/crates/') else [])]
@@ -32,7 +32,7 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
  cmd=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',f'{dest}/time.log',*args]
  out=ssh(f'{shlex.join(cmd)} > {dest}/output.log 2>&1')
  (local/'transport.log').write_text(out.stdout)
- subprocess.run([sys.executable,str(root/'tools/pv-cb3-20261026/collect_native.py'),name,f'PV_CB3_ShippedOp{op}.llbc',f'shipped-op{op}-generated/Funs.lean',f'shipped-op{op}-generated/Types.lean',f'shipped-op{op}-generated/translation.json','source-proof/lib.rs','source-proof/Cargo.toml','source-proof/Cargo.lock'],check=True)
+ subprocess.run([sys.executable,str(root/'tools/pv-cb3-20261026/collect_native.py'),name,f'PV_CB3_ShippedOp{op}.llbc',f'shipped-op{op}-generated/Funs.lean',f'shipped-op{op}-generated/Types.lean',f'shipped-op{op}-generated/translation.json','source-proof/lib.rs','source-proof/Cargo.toml','source-proof/Cargo.lock',*(['kani-proof/lib.rs','kani-proof/reference.rs','kani-proof/Cargo.toml','kani-proof/Cargo.lock'] if project=='kani-proof' else [])],check=True)
  receipt=json.loads((local/'collected-receipt.json').read_text());receipt.update(target)
  (local/'collected-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
  print(name,'exit',receipt['exit'])
