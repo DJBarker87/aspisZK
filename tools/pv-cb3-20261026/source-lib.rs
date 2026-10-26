@@ -69,3 +69,7 @@ pub mod logup;
 pub fn compress_tagged_tuple(tag:aspis_core::field::M31,values:&[aspis_core::field::M31],lambda:aspis_core::field::QM31)->aspis_core::field::QM31 {
     logup::compress_tagged_tuple(tag,values,lambda)
 }
+
+#[cfg(kani)]
+#[path = "../kani-proof/reference_split.rs"]
+pub mod staged_reference;

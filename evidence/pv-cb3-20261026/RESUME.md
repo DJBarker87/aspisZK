@@ -44,3 +44,43 @@ Op223 next extraction changes the MIR context: include the original unedited
 logup.rs under cfg(kani) in the current extraction crate, rather than extract
 its dependency optimized MIR. This is a source/graph change, not an unchanged
 failed Aeneas replay or a shipped implementation modification.
+
+## Op51 complete unrestricted-carrier gate
+
+`kani-wide-arbitrary-001`: exit0, 7.22s wall,694744KiB peakRSS,swap0;
+170 checks,0 failed, safety and unwinding retained. Optimized compilation4.86s;
+verification0.88171685s. Direct private fields cover all eight u32 components;
+no canonicalization, assumption, stubs, or desired-output premise.
+
+35601 rebuilt unchanged ProverRwDictionaryBytesSource against restored objects:
+exit0,1.41s,2638908KiB,swap0. 35600 was an uncharged sent-entry refusal; its ID
+is retired. 35602 op51 source: exit0,1.37s,2639240KiB,swap0;35603 arbitrary carrier
+law: exit0,1.13s,2628916KiB,swap0. Exact source revisions/import provenance and
+axioms are in numbered receipts. carrier_complete has no axioms; source law
+uses only propext,Classical.choice,Quot.sound. No old statement was changed.
+
+V195 is ROW-DISCHARGED(candidate): callback selection equals the retained
+extracted flat reference over arbitrary carriers; native shipped/reference
+correspondence is supplied by the new complete P6 gate. Extraction body and
+source hashes are recorded in resume-op51-provenance.json. The cfg(kani)
+append was removed from the host snapshot before extracting op223, restoring
+the original shipped hash. The passing instrumented hash is retained.
+
+Counts excluding sibling changes: this worker4→5; candidate44→45;
+OPEN106→105; independentOPEN47→46. Endpoint premises removed0.
+
+Op223 built-context runs: Charon passed at857b02fb24,45.21s optimized compilation
+(target metrics in charon-source-op223-built-resume/collected-receipt.json).
+Aeneas exit2 before symbolic extraction: retained executable identifies itself
+as ProverRwRngExtractor006 and refuses escaping reference outputs without loan
+validation. Guard not bypassed; no alternative weaker tool selected. V240 OPEN.
+
+35604 byte primitive inspection passed. It confirms Array/Slice are bounded
+lists and Array.index_usize preserves arrayOutOfBounds; U32.to_le_bytes uses
+BitVec.toLEBytes. This is diagnostic evidence, not another discharged row.
+
+Next useful source work: extract the staged by-value sampler reference; unlike
+the inherited reference with indexed mutable loops, it uses named straight-line
+word/pass/carry stages. This has no borrowed output and is a genuinely changed
+P6 extraction graph. Its full native correspondence remains OPEN: inherited
+whole-sampler Kani timed out and will not be rerun unchanged.
