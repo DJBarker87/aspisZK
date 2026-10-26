@@ -71,3 +71,21 @@ The op110 draft was simplified further after finding the existing arbitrary
 raw-word normalization transport ProverRwSuccessNativeNormalize.transport.
 EmbeddingWord now reuses it rather than reproving canonical-word arithmetic.
 All new drafts are still uncompiled. Static forbidden-feature scan is clear.
+
+## Restored-host validation begins
+
+Flag observed at 22:08:53 UTC; join2 IDs 35300-35599. Four auxiliary legacy
+reservation checks (35300-35303) launched no compiler and charge zero. The
+restored EJR_build_host.py explicitly uses S2X_reservation.py; that unchanged
+canonical gate admits 35304. The exact flag and all diagnostic receipts remain.
+
+35304 runs the corrected full audit first and exits 1 on the missing headline
+object. Focused missing-dependency replays 35305-35310 and 35312-35323 pass.
+35311 is an uncharged source-selection guard: the restored HeadlineV2 has a
+redundant rfl absent from the existing branch source. The restored variant is
+snapshotted before installing the exact current source; its statement is
+unchanged. All needed dependent headline modules are then rebuilt. 35323 audits
+PrivacyR1HeadlineDeployedReal with standard axioms. This is not a green combined
+join audit, a coherent full release replay, or removal of any headline premise.
+19/100 charged attempts, no Kani. New primitive parser transport is split from
+the P6 import closure for focused checking before the dependent bridge.
