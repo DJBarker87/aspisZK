@@ -281,3 +281,22 @@ Root/headline premises removed0; target not yet established. Whole proof/audit
 data equality, compression correspondence,33 callbacks and native/experiment
 adequacy remain open. No source, artifact, key, security-contract change, push
 or merge occurred.
+
+
+## Automatic capacity resume7: admission conflict remains unresolved
+
+Read-only SSH verification confirms unchanged launcher SHA-256
+`e6979aa097a0ebc34642608a594dfce081b40fdb814f526163dca1f69069661d`,
+the existing73-byte out-14835 marker and absent time-14835.log. The marker
+and sent-input guards still precede admission, with the sent triple recorded
+before admission. The prior permitted retry failed exit65,
+`attempt 14835 already used`. Local-lean rule5 requires stop/report; the
+vanished-cgroup exception does not cover this error. Lead resolution is still
+required. No proof/native launch, infrastructure edit, marker deletion, guard
+bypass or replacement-ID substitution occurred. Receipt:capacity-resume-7.json.
+
+All interrupted attempts remain counted:35/100 Lean and3/15 Kani used;
+65Lean/12Kani remain, next unused14836. Budget is not exhausted. Root/headline
+premises removed0; target not yet established. Whole proof/audit data equality,
+compression correspondence,33 callbacks and native/experiment adequacy remain
+open. No source, artifact, key, security-contract change, push or merge occurred.
