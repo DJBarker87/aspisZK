@@ -23,5 +23,5 @@ No implementation or release pin changed. Target not yet established.
 |---:|---|---|---|---|
 '''+''.join(f"|{x['op']}|{x['row']}|{x['status']}|{x.get('theorem','—')}|{x.get('receipt','—')}|\n" for x in rows))
 lean=[json.loads(x.read_text()) for x in p.glob('24[789][0-9][0-9].json')]
-(p/'budget.json').write_text(json.dumps(dict(lean_compiles=len(lean),lean_passes=sum(x['exit']==0 for x in lean),lean_remaining=100-len(lean),kani_runs=0,kani_remaining=20),indent=2)+'\n')
+(p/'budget.json').write_text(json.dumps(dict(lean_compiles=len(lean),lean_passes=sum(x['exit']==0 for x in lean),lean_remaining=100-len(lean),kani_runs=sum(1 for x in p.glob('kani-*/collected-receipt.json') if json.loads(x.read_text()).get('attempt_charged')),kani_remaining=20-sum(1 for x in p.glob('kani-*/collected-receipt.json') if json.loads(x.read_text()).get('attempt_charged'))),indent=2)+'\n')
 print(count,'rows credited;',len(lean),'Lean compiles')

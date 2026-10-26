@@ -20,9 +20,9 @@ No implementation or release pin changed. Target not yet established.
 |227|V244|OPEN: builtin-copy extraction failure; P6 pending|—|aeneas-source-op227-001/collected-receipt.json|
 |226|V243|OPEN: branch-context extraction failure; P6 pending|—|aeneas-source-op226-004/collected-receipt.json|
 |225|V242|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op225Source.op225_source|24711.json|
-|224|V241|OPEN|—|—|
-|223|V240|OPEN|—|—|
-|222|V239|OPEN|—|—|
+|224|V241|OPEN: sibling extraction failure reused; P6 pending|—|op224-reused-obstruction.json|
+|223|V240|OPEN: sibling extraction failure reused; P6 pending|—|op223-reused-obstruction.json|
+|222|V239|OPEN: sibling extraction failure reused; P6 pending|—|op222-reused-obstruction.json|
 |219|V238|OPEN|—|—|
 |217|V237|OPEN|—|—|
 |216|V236|OPEN|—|—|

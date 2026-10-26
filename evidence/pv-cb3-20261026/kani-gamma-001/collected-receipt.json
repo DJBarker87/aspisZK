@@ -1,0 +1,78 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_NET_OFFLINE=true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "checks::gamma",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "cb32017c92ec3a00096776a97f721769b7e98ba4",
+  "source_identity": "post-run read-only input snapshot; mutable proof inputs need retained per-run snapshots, not attribution to current files. Shipped snapshot is verified against base 09df2340e24cdcc86fe4ef272eed9994562fcda9; see source-identity.json (782 matching tracked files)",
+  "exit": "124",
+  "wall": "3:00.00",
+  "peak_rss_kib": "15468",
+  "swap": "0",
+  "print_axioms": "N/A native P6 equivalence gate; extracted reference Lean law still required",
+  "attempt_charged": true,
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "inputs": {
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml": {
+      "sha256": "a7cdaf95ee79e877ce237e502607877aec1e3787d3a8113e189262f4f2b18f54",
+      "size": 325
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/lib.rs": {
+      "sha256": "6ca6cfac606060d9dc378876fac214de60bcd0e2b9c15a8d85a8cad640b54030",
+      "size": 1716
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/reference.rs": {
+      "sha256": "06c226754006e3d4b30a3d7598242206876ab238f85b6e0e6fafa2e9592dc5ef",
+      "size": 1842
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.lock": {
+      "sha256": "22672bcb4edb78ba3b293ff6222cea8e69946341ffde19b400bc94dbe989444b",
+      "size": 240
+    }
+  },
+  "dependency_fingerprint": "283c034790a955a38d7cf7e68d15f4fe0dbec0d9c833a00563e17c98ddc3fa89",
+  "admissions": {
+    "admission-before.json": {
+      "schema": "ProverRwNativeEntropy-reservation-v1",
+      "utc": "2026-10-26T18:11:10.653662+00:00",
+      "requested_bytes": 8589934592,
+      "safe_limit_bytes": 59055800320,
+      "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+      "print_axioms": "N/A: read-only resource gate",
+      "allowed": true,
+      "bounded_reserved_bytes": 43352326144,
+      "projected_reserved_bytes": 51942260736
+    }
+  },
+  "expected_phase": "Optimized cached compilation, then full gamma_sample = owned gamma reference for all32-byte blocks, with no assumptions/stubs and loop unwind10."
+}

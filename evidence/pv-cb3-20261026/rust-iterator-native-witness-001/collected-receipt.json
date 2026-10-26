@@ -1,0 +1,54 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_NET_OFFLINE=true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "checks::iterator_back_frame8",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "23c61cb4b9f83eee532c00072d68d0654865f3a2",
+  "source_identity": "post-run read-only input snapshot; mutable proof inputs need retained per-run snapshots, not attribution to current files. Shipped snapshot is verified against base 09df2340e24cdcc86fe4ef272eed9994562fcda9; see source-identity.json (782 matching tracked files)",
+  "exit": "0",
+  "wall": "0:00.25",
+  "peak_rss_kib": "107184",
+  "swap": "0",
+  "print_axioms": "N/A native P6 equivalence gate; extracted reference Lean law still required",
+  "attempt_charged": true,
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "inputs": {
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/iterator-native-witness.rs": {
+      "sha256": "47438810f3629a89325fc03b10c60f4b8eebfb27f968ffe0356244dc45bf7f7c",
+      "size": 1566
+    }
+  },
+  "dependency_fingerprint": "6152f4e6c8cd288d0f8fb94021f2a41006e8e03831a95e36513c550d0c9e9cb1",
+  "admissions": {},
+  "expected_phase": "Optimized native Rust replay of exact concrete witness; expected compilation below one second and constant-size execution."
+}
