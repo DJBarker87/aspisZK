@@ -80,3 +80,106 @@ Validation through25913:13 charged Lean checks,10 passes/3 elaboration failures;
 all accepted axiom reports are standard. 10/20 Kani gates pass so far, with
 no failing comparison and no timeout. Full individual receipts are retained.
 The final cached manifest/axioms audit will run once after the source stages.
+
+## Stage 2: actual fixture measurements and consumed data criterion
+
+The optimized native fixture comparison passed in `pv-rw18-fixtures-004`:
+816 comparisons for transfer and816 for withdrawal, each over136 original
+copy-registry links, producer/consumer tuples, and three lambdas. The driver
+compares the actual shipped compression, the immutable literal snapshot,
+the indexed owned reference and the emitted combined transition; it also checks
+all16 active steps, empty terminal iterator and the final power. Nonzero tuples:
+270 transfer and264 withdrawal. This is finite native measurement, not a
+universal source proof or a proof-byte/audit security-model comparison.
+
+`ProverRw18FixtureSamples` reifies one measured tuple for each fixture and
+uses named symbolic general theorems for equality and nonempty output.
+It does not evaluate the large recurrence in the kernel. The generator has
+`--check`, and records both stdout and generated-source hashes.
+`ProverRw18ContextCaller.caller` consumes the context join through the full
+caller. `ProverRw18ContextData.refinement` consumes the proved writeback,
+but retains source_law, context_identity, proof_bytes and audit_data explicitly.
+The before/after for V163 is unchanged: neither actual data comparison is
+proved, and no arbitrary model is defined as the actual body output.
+`ProverRw18ContextErrors` checks that even the final multiplication failure or
+divergence remains observable. `ProverRw18ArithmeticBounds` proves raw scalar,
+canonical scalar and unreduced complex-product width bounds symbolically.
+
+The first fixture compile failed because the diagnostic fixture module was
+feature-gated; only the proof-local manifest was corrected. Both earlier
+admission refusals and that exact failed source are retained. No shipped
+source or feature definition was edited. The fixture flag is explicitly
+`insecure-spend-fixture` and supplies deterministic diagnostic witnesses.
+
+## Original source extraction probes
+
+`extract-original.py` targets the actual `aspis_statement::logup` function in
+the frozen crate, not the proof-local snapshot. Charon optimized-MIR probe001
+succeeded (16.46s,653436KiB RSS,zero swap). Its333893-byte LLBC root is the
+original function at logup.rs75–83; SHA256
+`74113d7473e504860141ea6f017f35c35bf7d6b840453d0d55c4463975af67be`.
+
+Aeneas001 (strict joins) and002 (forced Std loop with branch duplication)
+both fail at `InterpReduceCollapse.collapse_ctx_following_sequence` line1991
+with Not_found before an original helper definition is accepted. Probe003r1
+is a CLI rejection: the Lean backend does not support `-use-fuel`; it is not
+an extraction or a theorem. Probe004, forced recursive extraction without
+fuel, again fails at the same symbolic loop-context join. No emitted failed
+root or external axiom template is imported. The installed backend and shared
+infrastructure are untouched. A monomorphized frontend probe is planned to
+isolate the generic iterator context; its first admission was refused.
+
+Kani014, `canonical_scalar_mul`, times out240s on its tightened canonical
+input domain. It supplies no certificate and will not be rerun unchanged.
+The original scope is gone; no orphaned scope is deliberately overlapped.
+
+Native receipts pin ambient unrelated files too. `native-source-validation.json`
+asserts equality only for the actual task crates and proof-local dependencies;
+it does not claim equality of unrelated cost-probe source or rw17's unused
+Cargo.lock, nor a coherent release/dependency build. Kani's bundled compiler
+identity is not inferred from the receipt's ambient `rustc -Vv` field.
+
+### Per-step cadence deviation
+
+Kani012 `zero_lambda_16` checks a restricted whole-helper arity16 execution.
+Although it completed in6.93s and is not used as the universal correspondence
+certificate, this exceeded the user's **per-step-only Kani** instruction.
+It remains charged and retained as a procedural deviation; it is not relabelled
+as a per-step proof. No remaining planned Kani harness executes more than one
+arithmetic source step. The optimized native fixture differential is separately
+classified as measurement and does not consume a Kani source-association claim.
+
+### Pinned frontend disappeared
+
+The partial-monomorphization probe `pv-rw18-original-mut-charon-001` did not
+invoke Charon: Python raises FileNotFoundError for the previously used pinned
+`/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon`.
+No replacement tool, rebuild, launcher repair or cap change is attempted.
+Per local-lean rule5 the lead owns infrastructure repair. Local proof work
+continues; this bootstrap failure is not a source counterexample or a charged
+Lean/Kani run. The earlier LLBC/emissions/receipts remain the evidence inputs.
+
+## Checked arithmetic/model and source-initializer continuation
+
+`ProverRw18FieldMeaning`/`FieldStep`/`FieldFold` derive the field value and
+canonical state of the closed source loop. `FieldCompression.owned` and
+`FieldReference.closed` prove equality to a polynomial plus a canonical
+coordinate encoder, rather than assuming a returned-output equation.
+`FieldStateReference.combined` includes the complete accumulator/power state.
+The field-value domain is explicit: canonical initial registers and lambda;
+compression additionally needs tag<P. Tuple elements remain arbitrary raw U32.
+These extra conditions belong to the additional mathematical value theorem;
+the earlier unrestricted source/reference Result equality is unchanged.
+The component reference is not V163's whole proof/audit model.
+
+The isolated actual logup::lift initializer extracted successfully through
+Charon and Aeneas. `ProverRw18OriginalLift.initial` uses the existing selected
+constructor meanings; `ProverRw18LiftTyped.transport` additionally retains the
+literal emitted nominal type definitions and proves the explicit Full-carrier
+transport, including primitive failure/divergence. Four nominal round trips
+have no axioms. No external axiom template is imported. The original full
+for-loop extraction and op223 source law remain open.
+
+The complete Kani allocation is now20/20:16 passes and4 timeouts
+(014,015,016,020). No counterexample, timeout promotion or unchanged timed-out
+rerun. No further Kani invocation is authorized in this allocation.
