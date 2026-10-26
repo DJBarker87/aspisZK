@@ -1,0 +1,18 @@
+Six planned new unstubbed harness names (listed before any Kani charge):
+pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid5_transfer_fields
+pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid5_transfer_path
+pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid5_transfer_public
+pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid5_withdrawal_fields
+pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid5_withdrawal_path
+pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid5_withdrawal_public
+
+Each is a new variant-and-component split, not an unchanged retry of a timed
+out harness. Each executes the actual records and dynamic reference, including
+the pure empty-root helper; stubs=[]; unwind33; unwinding assertions enabled.
+Path cells are universally symbolic under level<24 and lane<8, covering all
+bits and sibling cells of the two 24-level arrays. Fields cover every remaining
+private field; public covers every public field including actual empty roots.
+Only six successes plus a valid composition would establish the full equality.
+Timeouts establish no equality. Expected heavy time: optimized Kani compilation
+on the removed cache followed by CBMC symbolic verification; no arithmetic
+release gate is run with a debug profile.
