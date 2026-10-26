@@ -1,0 +1,89 @@
+@AspisR1.Rc7_Event.single : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (w : AspisR1.CanonicalCutEnrichedTranscript.Words)
+  (P : AspisR1.F3T_ByteCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀
+      (select :
+        AspisR1.F3X_Projection.Output → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q + 2965)
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Hiq_RecordedJoint.program
+                  (AspisR1.F3X_Account.program (AspisR1.Rc5_Install.configuration err c r) hashv P)
+                  AspisR1.F3X_Projection.project select)) ∨
+            AspisR1.R9PoolRuntimeBinding.P2Prime H
+              (select
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.F3X_Account.program (AspisR1.Rc5_Install.configuration err c r) hashv P)).2).1
+              (select
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.F3X_Account.program (AspisR1.Rc5_Install.configuration err c r) hashv P)).2).2) ∧
+        AspisR1.F3T_AccountCharge.mass (AspisR1.F3X_Account.program (AspisR1.Rc5_Install.configuration err c r) hashv P)
+            AspisR1.F3X_Projection.project select Q ≤
+          6 * ↑(Q + 2965) ^ 2 / 2 ^ 256
+def AspisR1.F3T_AccountCharge.mass : {A : Type} →
+  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A →
+    (A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)) →
+      (A → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs) → ℕ → ℚ :=
+fun {A} source project select Q =>
+  AspisV8R19.MemoizedProgramLaw.lazyMean (AspisR1.Hiq_RecordedJoint.program source project select) FS.emptyTable
+    fun v =>
+    AspisV8R19.CausalFirstHitUnionBound.indicator
+      (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q + 2965) v)
+def AspisR1.P2P_NativeSelection.pair : AdapterRw.Ops →
+  AspisR1.S2W_ExtractionBoundary.Program →
+    AspisR1.S2W_D189Entry.Entry →
+      AspisR1.S2W_D189Entry.Entry →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          AspisR1.S2W_ExtractionBoundary.Slot →
+            AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs :=
+fun ops id e1 e2 data2 slot =>
+  ({ proof := List.drop 688 (AspisR1.Hiq_ByteSelection.account ops e1.first 0#usize),
+      pub := AspisR1.Hiq_ByteSelection.account ops e1.first 1#usize },
+    {
+      proof :=
+        List.drop 688 (AspisR1.Hiq_ByteSelection.account ops (e2.second AspisR1.S2W_D189Wrappers.secondSizes) 0#usize),
+      pub := AspisR1.Hiq_ByteSelection.public2 ops id (e2.second AspisR1.S2W_D189Wrappers.secondSizes) data2 slot })
+def AspisR1.F3Y_SourceClaims.Claims : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.LiteralByteProtocol.Decoder →
+      (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+        AspisR1.F3T_ByteCarrier.ByteProver →
+          ℕ →
+            (AspisR1.F3X_Projection.Output →
+                AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs) →
+              Prop :=
+fun {F C} c D hashv P Q select =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.F3T_TwoPass.annotatedWith D (AspisR1.F3T_Installed.source c hashv)
+                (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c P)))).2.2 =
+        Bool.true →
+      (AspisV8R19.OracleResampling.mean fun coins =>
+            ↑(AspisR1.ActualCostedExtractorM10.extractor.eval
+                    (AspisR1.F3T_Experiment.view
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.F3T_TwoPass.annotatedWith D (AspisR1.F3T_Installed.source c hashv)
+                          (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c P)))))
+                    coins).2.total) ≤
+          ↑(AspisR1.CostedAllocationLedgerM10.params (Q + 1161)).attemptBudget ∨
+        AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q + 2965)
+          (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.Hiq_RecordedJoint.program (AspisR1.F3X_Account.program c hashv P) AspisR1.F3X_Projection.project
+              select))
+def AspisR1.F3Y_AccountMass.Claims : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      AspisR1.F3T_ByteCarrier.ByteProver →
+        ℕ →
+          (AspisR1.F3X_Projection.Output → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs) →
+            Prop :=
+fun {F C} c hashv P Q select =>
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Account.program c hashv P)).1 ≤
+        Q + 1921) ∧
+    AspisR1.F3T_AccountCharge.mass (AspisR1.F3X_Account.program c hashv P) AspisR1.F3X_Projection.project select Q ≤
+      AspisR1.F3T_Numeric.accountLoss Q
