@@ -1,0 +1,31 @@
+'R0P.input_note_trace_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_block_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_initial_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_initial_note' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_initial_nullifier' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_chunk_three_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_chunk_three' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_chunk_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_path_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_commitment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_nullifier' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_node_rate_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_node_input' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_merkle_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_next_current' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extraction_membership' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.input_note_extracted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extractionChunk' depends on axioms: [propext, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extractionOutput' depends on axioms: [propext, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extractionCurrent' depends on axioms: [propext, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extractionLeft' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.Extraction.0.R0P.extractionRight' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R0P.input_note_extracted : ∀ {K : Type} [inst : Field K] (pub : R0P.Public K) (A : R0P.Trace K),
+  R0P.Holds R0P.scheduleFamily pub A →
+    R0P.Holds R0P.pathFamily pub A →
+      R0P.Holds R0P.digestFamily pub A →
+        R0P.Holds R0P.assetFamily pub A →
+          R0P.Holds R0P.poseidonScalarFamily pub A → R0P.CopyLinkBalance pub A → R0P.InputNoteExtracted pub A
