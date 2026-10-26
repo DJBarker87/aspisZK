@@ -16,7 +16,7 @@ def Outcome {CoreError H : Type} {installed : AspisR1CurrentCaller.Ops} {reserve
     (run : Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved)
     (H : Bytes → State) (trace : List (Bytes × State)) (parsed : Parsed) (q : Fin 22 → Fin 262144)
     (data : MatchingSupport.Data OraclePortCheckpointAbiC5.E) (rho : OraclePortCheckpointAbiC5.K) : Prop :=
-  ∀ (ports : Port5Q1_QueryPorts.SessionAPrimitives query)
+  ∀ (ports : Port5Q1_QueryPorts.SessionAPrimitives query),
     Port5Q1_GeometryCanonical.SessionAPrimitives geo →
     Port5Q1_Domain.SessionADomain geo →
     geo.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →

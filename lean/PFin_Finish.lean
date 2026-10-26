@@ -69,7 +69,7 @@ theorem consume {W : Type} (finish : FinishOps W)
   have same : (⟨bytesOf proof.val,parsed.semantic⟩ : Parsed)=parsed := by
     cases parsed
     simp only [Parsed.mk.injEq] at *
-    exact congrArg (fun w=>Parsed.mk w _) wire.symm
+    exact ⟨wire.symm, trivial⟩
   have found' : input (⟨bytesOf proof.val,parsed.semantic⟩ : Parsed) q tr=some i := by
     rw [same]; exact found
   have read := (input_fields _ _ _ _ found').2
