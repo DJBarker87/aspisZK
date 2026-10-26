@@ -118,3 +118,27 @@ trigger. Inherited pins, NOT freshly reproduced or rehashed:
 
 No session A worktree/candidate, foreign prefix module, key, wallet, balance,
 authority or funds was touched. No object, binary, ELF or archive is committed.
+
+## Final validation and budget stop
+
+Budget EXHAUSTED: 100/100 actual Lean invocations,0/0 Kani.
+90 pass,10 excluded failures;79 missing unchanged dependency builds.
+Label002 is the sole prelaunch-only label. No further compiler invocation.
+All27 new theorems were checked and axioms-printed in final target
+ARR_FinalAudit.lean (101): exit0,wall2.216972825000994s,
+peakRSS5267712KiB,swaps0,revisionb45f544adc010e06ceae81f8556851411154dc0a
+plus exact dirty-source hash 7a7dac727dce8e5b8038e039f1519ef7239730ee237097675b275acc4121e4e5.
+All printed axiom sets are subsets of propext/Classical.choice/Quot.sound.
+Total actual Lean wall179.90244749881094s;maximum RSS5293604KiB;swap0.
+ARR_validate.py --final passes source/snapshot hashes, standard axioms, caps,
+budget, unchanged root, forbidden-proof-token scan and the atomic ledger recount.
+ARR_HOST_MANIFEST.json freshly pins all90 passing source/object pairs and
+sidecars in the reused workspace; it is NOT a coherent full release rebuild.
+The exact next unbuilt source-graph predecessor after this restoration is
+RRNodeTariffM10; Port1_CanonicalHeadline remains unavailable at the root.
+The source graph remains an overapproximation of kernel imports.
+
+No live own compiler scope remains. Shared pinned cache objects are retained
+for reuse; no duplicate workspace, Rust target, solver temp or object-scratch
+directory was created. Only ARR_ proof modules and this task's evidence are
+committed. All stage commits remain local, with plain messages.

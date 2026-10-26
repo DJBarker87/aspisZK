@@ -1,0 +1,41 @@
+{"attempt": "ARR_101", "exit_status": 0, "wall_seconds": 2.216972825000994, "peak_rss_kib": "5267712", "swaps": "0", "print_axioms": ["'AspisR1.ARR_OracleCoverage.exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_OracleCoverage.digest_iff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_OracleLoss.digest_loss' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_OracleLoss.cost_loss' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_WorldCompatibility.iff_witness' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_WorldCompatibility.separates' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_WorldCompatibility.not_all_worlds' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_ReturnCoverage.of_returns' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_ReturnCoverage.returns_of_covered' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_ReturnCoverage.iff_returns' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_PrefixCost.suffix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_PrefixCost.native_le_ideal' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_PrefixCost.same_cost_iff_empty' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_CoveredExamples.ideal_dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_CoveredExamples.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_CoveredExamples.rejected_returns' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_OffPath.different' depends on axioms: [propext, Quot.sound]", "'AspisR1.ARR_OffPath.change' depends on axioms: [propext]", "'AspisR1.ARR_OffPath.incompatible_same_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_OffPath.factory_forces_reads' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_FiniteFresh.missing' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_FreshState.flatten_parts' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_FreshState.fresh' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_FreshState.no_factory' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_FactoryLoss.state_card' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_FactoryLoss.same_execution' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARR_FactoryLoss.bounded_no_factory' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARR_OracleCoverage.exact : ∀ {A : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (code : AspisR1.CheckpointBytes5Effect.Code A),
+  AspisR1.ARR_OracleCoverage.Covered H hashv code →
+    ∀ (before : AspisR1.SdkC_Source.Log),
+      (AspisR1.SdkC_Source.run hashv code before).1 =
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).2 ∧
+        AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code before).2 =
+            AspisR1.SdkC_Source.readLog before ++
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.p
+...
+izedProgramLaw.eval H p).1.length < 256 ^ 32 →
+      (∀ (s : AspisV8R19.SourceDuplexStep.State),
+          ∃ digest, hashv (AspisR1.ARR_FreshState.parts s) = Aeneas.Std.Result.ok digest) →
+        ∃ K,
+          AspisV8R19.MemoizedProgramLaw.eval K p = AspisV8R19.MemoizedProgramLaw.eval H p ∧
+            good (AspisV8R19.MemoizedProgramLaw.eval K p) ∧
+              ¬∃ sha256,
+                  AspisR1.S2W_ExtractionBoundary.P1 sha256 K ∧
+                    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+'AspisR1.ARR_FactoryLoss.same_execution' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_FactoryLoss.bounded_no_factory : ∀ {X : Type}
+  (p : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State X)
+  (accepts : X → Prop) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  accepts (AspisV8R19.MemoizedProgramLaw.eval H p).2 →
+    ∀ (N : ℕ),
+      (∀ (K : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval K p).1.length ≤ N) →
+        N < 256 ^ 32 →
+          (∀ (s : AspisV8R19.SourceDuplexStep.State),
+              ∃ digest, hashv (AspisR1.ARR_FreshState.parts s) = Aeneas.Std.Result.ok digest) →
+            ¬∀ (K : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                accepts (AspisV8R19.MemoizedProgramLaw.eval K p).2 →
+                  ∃ sha256,
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 K ∧
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+'AspisR1.ARR_FactoryLoss.bounded_no_factory' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0b5f1cef4ae64aa0a1d45a224c32e614.scope; invocation ID: ae03a332f9164af9a570aa452a7294d9

@@ -1,0 +1,221 @@
+@AspisR1.ARR_OracleCoverage.exact : ∀ {A : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (code : AspisR1.CheckpointBytes5Effect.Code A),
+  AspisR1.ARR_OracleCoverage.Covered H hashv code →
+    ∀ (before : AspisR1.SdkC_Source.Log),
+      (AspisR1.SdkC_Source.run hashv code before).1 =
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).2 ∧
+        AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code before).2 =
+            AspisR1.SdkC_Source.readLog before ++
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 ∧
+          AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code before).2 =
+            AspisR1.RPx_AttemptPrefix.addresses before ++
+              List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1
+'AspisR1.ARR_OracleCoverage.exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.ARR_OracleCoverage.digest_iff : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (parts : AspisR1.SdkC_Source.Parts),
+  (AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_Source.digestCode parts) []).1 =
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program (AspisR1.SdkC_Source.digestCode parts))).2 ↔
+    hashv parts =
+      Aeneas.Std.Result.ok
+        (AspisV8R19.SqueezeOracleBridge.encodeState (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))
+'AspisR1.ARR_OracleCoverage.digest_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.ARR_OracleLoss.digest_loss : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (parts : AspisR1.SdkC_Source.Parts),
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall AspisR1.SCG_PartialOracle.failingOracle H ∧
+    AspisR1.S2W_ExtractionBoundary.P1 H H ∧
+      (AspisR1.SdkC_Source.run AspisR1.SCG_PartialOracle.failingOracle (AspisR1.SdkC_Source.digestCode parts) []).1 ≠
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program (AspisR1.SdkC_Source.digestCode parts))).2
+'AspisR1.ARR_OracleLoss.digest_loss' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.ARR_OracleLoss.cost_loss : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p q : AspisR1.SdkC_Source.Parts),
+  List.length (AspisR1.SdkC_Source.run AspisR1.SCG_PartialOracle.failingOracle (AspisR1.ARR_OracleLoss.two p q) []).2 =
+      1 ∧
+    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program (AspisR1.ARR_OracleLoss.two p q))).1.length = 2 ∧
+      (AspisR1.SdkC_Source.run AspisR1.SCG_PartialOracle.failingOracle (AspisR1.ARR_OracleLoss.two p q) []).1 =
+          Aeneas.Std.Result.fail Aeneas.Std.Error.assertionFailure ∧
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program (AspisR1.ARR_OracleLoss.two p q))).2 =
+          Aeneas.Std.Result.ok true
+'AspisR1.ARR_OracleLoss.cost_loss' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.ARR_WorldCompatibility.iff_witness : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.ARR_WorldCompatibility.Compatible H hashv ↔
+    ∃ sha256, AspisR1.S2W_ExtractionBoundary.P1 sha256 H ∧ AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+'AspisR1.ARR_WorldCompatibility.iff_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.ARR_WorldCompatibility.separates : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (H K : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (p : AspisR1.SdkC_Source.Parts)
+  (d : AspisR1.SdkC_Source.Digest),
+  hashv p = Aeneas.Std.Result.ok d →
+    H (AspisV8R19.SqueezeOracleBridge.flatten p) ≠ K (AspisV8R19.SqueezeOracleBridge.flatten p) →
+      ¬(AspisR1.ARR_WorldCompatibility.Compatible H hashv ∧ AspisR1.ARR_WorldCompatibility.Compatible K hashv)
+'AspisR1.ARR_WorldCompatibility.separates' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.ARR_WorldCompatibility.not_all_worlds : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (p : AspisR1.SdkC_Source.Parts)
+  (d : AspisR1.SdkC_Source.Digest),
+  hashv p = Aeneas.Std.Result.ok d →
+    ¬∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        AspisR1.ARR_WorldCompatibility.Compatible H hashv
+'AspisR1.ARR_WorldCompatibility.not_all_worlds' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_ReturnCoverage.of_returns : ∀ {A : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.ARR_WorldCompatibility.Compatible H hashv →
+    ∀ (code : AspisR1.CheckpointBytes5Effect.Code A) (before : AspisR1.SdkC_Source.Log),
+      AspisR1.ARR_ReturnCoverage.ReturnsOnly (AspisR1.SdkC_Source.run hashv code before).2 →
+        AspisR1.ARR_OracleCoverage.Covered H hashv code
+'AspisR1.ARR_ReturnCoverage.of_returns' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_ReturnCoverage.returns_of_covered : ∀ {A : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (code : AspisR1.CheckpointBytes5Effect.Code A),
+  AspisR1.ARR_OracleCoverage.Covered H hashv code →
+    ∀ (before : AspisR1.SdkC_Source.Log),
+      AspisR1.ARR_ReturnCoverage.ReturnsOnly before →
+        AspisR1.ARR_ReturnCoverage.ReturnsOnly (AspisR1.SdkC_Source.run hashv code before).2
+'AspisR1.ARR_ReturnCoverage.returns_of_covered' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_ReturnCoverage.iff_returns : ∀ {A : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.ARR_WorldCompatibility.Compatible H hashv →
+    ∀ (code : AspisR1.CheckpointBytes5Effect.Code A),
+      AspisR1.ARR_OracleCoverage.Covered H hashv code ↔
+        AspisR1.ARR_ReturnCoverage.ReturnsOnly (AspisR1.SdkC_Source.run hashv code []).2
+'AspisR1.ARR_ReturnCoverage.iff_returns' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_PrefixCost.suffix : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∃ remaining,
+        List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+            AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code []).2 ++ remaining ∧
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1.length =
+            List.length (AspisR1.SdkC_Source.run hashv code []).2 + remaining.length
+'AspisR1.ARR_PrefixCost.suffix' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_PrefixCost.native_le_ideal : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      List.length (AspisR1.SdkC_Source.run hashv code []).2 ≤
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1.length
+'AspisR1.ARR_PrefixCost.native_le_ideal' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_PrefixCost.same_cost_iff_empty : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (remaining : List AspisV8R19.DuplexFrames.Bytes),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1.length =
+      List.length (AspisR1.SdkC_Source.run hashv code []).2 + remaining.length →
+    ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1.length =
+        List.length (AspisR1.SdkC_Source.run hashv code []).2 ↔
+      remaining = [])
+'AspisR1.ARR_PrefixCost.same_cost_iff_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_CoveredExamples.ideal_dictionary : ∀ {A : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (code : AspisR1.CheckpointBytes5Effect.Code A), AspisR1.ARR_OracleCoverage.Covered H (AspisR1.F3U_Oracle.hashv H) code
+'AspisR1.ARR_CoveredExamples.ideal_dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_CoveredExamples.rejected : ∀ {A : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (error : Aeneas.Std.Error)
+  (k : Unit → AspisR1.CheckpointBytes5Effect.Code A),
+  AspisR1.ARR_OracleCoverage.Covered H hashv (AspisR1.CheckpointBytes5Effect.Code.step (Aeneas.Std.Result.fail error) k)
+'AspisR1.ARR_CoveredExamples.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_CoveredExamples.rejected_returns : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (error : Aeneas.Std.Error)
+  (k : Unit → AspisR1.CheckpointBytes5Effect.Code A),
+  AspisR1.ARR_ReturnCoverage.ReturnsOnly
+    (AspisR1.SdkC_Source.run hashv (AspisR1.CheckpointBytes5Effect.Code.step (Aeneas.Std.Result.fail error) k) []).2
+'AspisR1.ARR_CoveredExamples.rejected_returns' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.ARR_OffPath.different : ∀ (s : AspisV8R19.SourceDuplexStep.State), ∃ d, d ≠ s
+'AspisR1.ARR_OffPath.different' depends on axioms: [propext, Quot.sound]
+@AspisR1.ARR_OffPath.change : ∀ {X : Type}
+  (p : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  ∀ address ∉ List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H p).1,
+    ∀ (answer : AspisV8R19.SourceDuplexStep.State),
+      AspisV8R19.MemoizedProgramLaw.eval (fun x => if x = address then answer else H x) p =
+        AspisV8R19.MemoizedProgramLaw.eval H p
+'AspisR1.ARR_OffPath.change' depends on axioms: [propext]
+@AspisR1.ARR_OffPath.incompatible_same_run : ∀ {X : Type}
+  (p : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (parts : AspisR1.SdkC_Source.Parts)
+  (digest : AspisR1.SdkC_Source.Digest),
+  hashv parts = Aeneas.Std.Result.ok digest →
+    AspisV8R19.SqueezeOracleBridge.flatten parts ∉ List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H p).1 →
+      ∃ K,
+        AspisV8R19.MemoizedProgramLaw.eval K p = AspisV8R19.MemoizedProgramLaw.eval H p ∧
+          ¬AspisR1.ARR_WorldCompatibility.Compatible K hashv
+'AspisR1.ARR_OffPath.incompatible_same_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_OffPath.factory_forces_reads : ∀ {X : Type}
+  (p : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State X)
+  (accepts : X → Prop) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  accepts (AspisV8R19.MemoizedProgramLaw.eval H p).2 →
+    (∀ (K : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        accepts (AspisV8R19.MemoizedProgramLaw.eval K p).2 →
+          ∃ sha256,
+            AspisR1.S2W_ExtractionBoundary.P1 sha256 K ∧ AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256) →
+      ∀ (parts : AspisR1.SdkC_Source.Parts) (digest : AspisR1.SdkC_Source.Digest),
+        hashv parts = Aeneas.Std.Result.ok digest →
+          AspisV8R19.SqueezeOracleBridge.flatten parts ∈ List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H p).1
+'AspisR1.ARR_OffPath.factory_forces_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_FiniteFresh.missing : ∀ {S X : Type} [inst : Fintype S] [DecidableEq X] (f : S → X),
+  Function.Injective f → ∀ (log : List X), log.length < Fintype.card S → ∃ s, f s ∉ log
+'AspisR1.ARR_FiniteFresh.missing' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.ARR_FreshState.flatten_parts : ∀ (s : AspisV8R19.SourceDuplexStep.State),
+  AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.ARR_FreshState.parts s) = AspisV8R19.SourceDuplexStep.bytes s
+'AspisR1.ARR_FreshState.flatten_parts' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.ARR_FreshState.fresh : ∀ (log : List AspisV8R19.DuplexFrames.Bytes),
+  log.length < Fintype.card AspisV8R19.SourceDuplexStep.State → ∃ s, AspisV8R19.SourceDuplexStep.bytes s ∉ log
+'AspisR1.ARR_FreshState.fresh' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_FreshState.no_factory : ∀ {X : Type}
+  (p : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State X)
+  (accepts : X → Prop) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  accepts (AspisV8R19.MemoizedProgramLaw.eval H p).2 →
+    (AspisV8R19.MemoizedProgramLaw.eval H p).1.length < Fintype.card AspisV8R19.SourceDuplexStep.State →
+      (∀ (s : AspisV8R19.SourceDuplexStep.State),
+          ∃ digest, hashv (AspisR1.ARR_FreshState.parts s) = Aeneas.Std.Result.ok digest) →
+        ¬∀ (K : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            accepts (AspisV8R19.MemoizedProgramLaw.eval K p).2 →
+              ∃ sha256,
+                AspisR1.S2W_ExtractionBoundary.P1 sha256 K ∧ AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+'AspisR1.ARR_FreshState.no_factory' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.ARR_FactoryLoss.state_card : Fintype.card AspisV8R19.SourceDuplexStep.State = 256 ^ 32
+'AspisR1.ARR_FactoryLoss.state_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_FactoryLoss.same_execution : ∀ {X : Type}
+  (p : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (good : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) × X → Prop),
+  good (AspisV8R19.MemoizedProgramLaw.eval H p) →
+    (AspisV8R19.MemoizedProgramLaw.eval H p).1.length < 256 ^ 32 →
+      (∀ (s : AspisV8R19.SourceDuplexStep.State),
+          ∃ digest, hashv (AspisR1.ARR_FreshState.parts s) = Aeneas.Std.Result.ok digest) →
+        ∃ K,
+          AspisV8R19.MemoizedProgramLaw.eval K p = AspisV8R19.MemoizedProgramLaw.eval H p ∧
+            good (AspisV8R19.MemoizedProgramLaw.eval K p) ∧
+              ¬∃ sha256,
+                  AspisR1.S2W_ExtractionBoundary.P1 sha256 K ∧
+                    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+'AspisR1.ARR_FactoryLoss.same_execution' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARR_FactoryLoss.bounded_no_factory : ∀ {X : Type}
+  (p : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State X)
+  (accepts : X → Prop) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  accepts (AspisV8R19.MemoizedProgramLaw.eval H p).2 →
+    ∀ (N : ℕ),
+      (∀ (K : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval K p).1.length ≤ N) →
+        N < 256 ^ 32 →
+          (∀ (s : AspisV8R19.SourceDuplexStep.State),
+              ∃ digest, hashv (AspisR1.ARR_FreshState.parts s) = Aeneas.Std.Result.ok digest) →
+            ¬∀ (K : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                accepts (AspisV8R19.MemoizedProgramLaw.eval K p).2 →
+                  ∃ sha256,
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 K ∧
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+'AspisR1.ARR_FactoryLoss.bounded_no_factory' depends on axioms: [propext, Classical.choice, Quot.sound]
