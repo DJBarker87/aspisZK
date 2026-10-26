@@ -12,6 +12,10 @@ def replace(old,new):
  global s
  assert s.count(old)==1, old
  s=s.replace(old,new)
+if os.environ.get('EJS_PROFILE'):
+ profile=os.environ['EJS_PROFILE']
+ assert profile in {'provider','formatter'}
+ replace("roots={'joint':J,'union':U}", "roots={'joint':J,'union':U}\nprofile_name='EJS_"+profile+"'\nroots[profile_name]=U/profile_name\nrows.extend(json.loads((T/(profile_name+'-sources.json')).read_text()))")
 replace("pending=[r for r in rows if r['key'] not in attempted or r['key'] in repair_keys]", """assert 30800 <= attempt <= 31600, attempt
 assert len(past) >= 800
 excluded={'R1Z/EventsR1P2','R1Z/SimCostOuterRetry6'}

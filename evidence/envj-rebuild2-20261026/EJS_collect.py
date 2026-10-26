@@ -17,7 +17,7 @@ for r in rs:
 for name in ['EJS_builder.log','EJS_initial-reservation.json','EJS_initial-reservation.log','EJS_executed-builder.py','EJR_progress.json']:
  p=T/name
  if p.exists():files['EJS_'+name.removeprefix('EJS_')]=p.read_text()
-print(json.dumps(dict(records=rs,files=files)))
+print(json.dumps(dict(records=rs,files=files,reuses=[json.loads(l) for l in (T/'EJR_reuses.jsonl').read_text().splitlines() if l.strip()])))
 '''
 d=json.loads(subprocess.check_output(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(remote)],text=True))
 R=O/'receipts';R.mkdir(exist_ok=True)
@@ -28,6 +28,7 @@ for r in d['records']:
  r['unsupported_printed_axioms']=sorted({a for b in re.findall(r'depends on axioms:\s*\[([^]]*)\]',s,re.S) for a in b.replace(',',' ').split()}-{'propext','Classical.choice','Quot.sound'})
  r['continuation_revision']='a38d3dc536'
  if r['unsupported_printed_axioms']:r['validation_exit']=90
+(O/'EJS_reuses.json').write_text(json.dumps(d['reuses'],indent=2)+'\n')
 rs=d['records'];(O/'EJS_attempts.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in rs))
 s=dict(attempts=len(rs),compiler_passes=sum(r['lean_exit']==0 for r in rs),validation_passes=sum(r['validation_exit']==0 for r in rs),next_attempt=30800+len(rs),peak_rss_kib=max((r['peak_rss_kib'] or 0 for r in rs),default=0),swaps=sum(r['swaps'] or 0 for r in rs),failures=[dict(attempt=r['attempt'],key=r['key'],exit=r['validation_exit'],errors=r['errors'],unsupported=r['unsupported_printed_axioms']) for r in rs if r['validation_exit']!=0])
 (O/'EJS_summary.json').write_text(json.dumps(s,indent=2)+'\n');print(json.dumps(s))
