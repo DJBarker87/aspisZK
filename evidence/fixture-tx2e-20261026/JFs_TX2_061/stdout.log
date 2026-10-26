@@ -1,0 +1,142 @@
+JFs_TX2_TailTotal.lean:15:98: error: unsolved goals
+i : Fin 12
+slot : Fin 4
+g : Std.Array FIo_Install.NE 29#usize
+q0 : JFr_TX2_TailRead.Q
+hq0 :
+  JFr_TX2_TailRead.read (JFr_TX2_Windows.array (JFr_TX2_Tails.position i)) (JFr_TX2_Tails.offset slot 0)
+      (JFr_TX2_Tails.stop slot 0) =
+    ok q0
+q1 : JFr_TX2_TailRead.Q
+hq1 :
+  JFr_TX2_TailRead.read (JFr_TX2_Windows.array (JFr_TX2_Tails.position i)) (JFr_TX2_Tails.offset slot 1)
+      (JFr_TX2_Tails.stop slot 1) =
+    ok q1
+q2 : JFr_TX2_TailRead.Q
+hq2 :
+  JFr_TX2_TailRead.read (JFr_TX2_Windows.array (JFr_TX2_Tails.position i)) (JFr_TX2_Tails.offset slot 2)
+      (JFr_TX2_Tails.stop slot 2) =
+    ok q2
+c0 : FIo_QMValues.Canon q0
+c1 : FIo_QMValues.Canon q1
+c2 : FIo_QMValues.Canon q2
+g28 : FIo_Install.NE
+hg28 : g.index_usize 28#usize = ok g28
+right✝³ : g28 ∈ ↑g
+g26 : FIo_Install.NE
+hg26 : g.index_usize 26#usize = ok g26
+right✝² : g26 ∈ ↑g
+g27 : FIo_Install.NE
+hg27 : g.index_usize 27#usize = ok g27
+right✝¹ : g27 ∈ ↑g
+s0 : FIo_Native.fast_pairing.EbyKDot
+h0 : initial.push g28 q0 = ok (core.result.Result.Ok (), s0)
+n0 : ↑s0.count = ↑initial.count + 1
+s1 : FIo_Native.fast_pairing.EbyKDot
+h1 : s0.push g26 q1 = ok (core.result.Result.Ok (), s1)
+n1 : ↑s1.count = ↑s0.count + 1
+s2 : FIo_Native.fast_pairing.EbyKDot
+h2 : s1.push g27 q2 = ok (core.result.Result.Ok (), s2)
+right✝ : ↑s2.count = ↑s1.count + 1
+out : FIo_Native.aspis_core.field.wide_exact.WideExact
+ho : s2.finish = ok out
+canon : FIo_WideValues.Canon out
+hn : FIo_Native.fast_pairing.EbyKDot.new = ok initial
+⊢ (do
+      let q28 ←
+        JFr_TX2_TailRead.read (JFr_TX2_Windows.array (JFn_Values.position i)) (JFr_TX2_Tails.offset slot 0)
+            (JFr_TX2_Tails.stop slot 0)
+      let (r0, s0) ← initial.push g28 q28
+      match r0 with
+        | core.result.Result.Ok x => ok x
+        | core.result.Result.Err a => fail Error.panic
+      let q26 ←
+        JFr_TX2_TailRead.read (JFr_TX2_Windows.array (JFn_Values.position i)) (JFr_TX2_Tails.offset slot 1)
+            (JFr_TX2_Tails.stop slot 1)
+      let (r1, s1) ← s0.push g26 q26
+      match r1 with
+        | core.result.Result.Ok x => ok x
+        | core.result.Result.Err a => fail Error.panic
+      let q27 ←
+        JFr_TX2_TailRead.read (JFr_TX2_Windows.array (JFn_Values.position i)) (JFr_TX2_Tails.offset slot 2)
+            (JFr_TX2_Tails.stop slot 2)
+      let (r2, s2) ← s1.push g27 q27
+      match r2 with
+        | core.result.Result.Ok x => ok x
+        | core.result.Result.Err a => fail Error.panic
+      let out ← s2.finish
+      ok out) =
+    ok out
+JFs_TX2_TailTotal.lean:32:57: warning: This simp argument is unused:
+  hq0
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_TX2_TailStages.source, ̲hn, ̲hg28, ̲hg26, ̲hg27, ̲hq0̵,̵h̵q̵1, ̲hq2, ̲h0, ̲h1, ̲h2, ̲ho,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry, ̲core.result.Result.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_TX2_TailTotal.lean:32:61: warning: This simp argument is unused:
+  hq1
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_TX2_TailStages.source, ̲hn, ̲hg28, ̲hg26, ̲hg27, ̲hq0, ̲hq1̵,̵h̵q̵2, ̲h0, ̲h1, ̲h2, ̲ho,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry, ̲core.result.Result.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_TX2_TailTotal.lean:32:65: warning: This simp argument is unused:
+  hq2
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_TX2_TailStages.source, ̲hn, ̲hg28, ̲hg26, ̲hg27, ̲hq0, ̲hq1, ̲hq̵2̵,̵h̵0, ̲h1, ̲h2, ̲ho,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry, ̲core.result.Result.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_TX2_TailTotal.lean:32:69: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵J̵F̵s̵_̵T̵X̵2̵_̵T̵a̵i̵l̵S̵t̵a̵g̵e̵s̵.̵s̵o̵u̵r̵c̵e̵,̵h̵n̵,̵h̵g̵2̵8̵,̵h̵g̵2̵6̵,̵h̵g̵2̵7̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵]̵[̲J̲F̲s̲_̲T̲X̲2̲_̲T̲a̲i̲l̲S̲t̲a̲g̲e̲s̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲h̲n̲,̲ ̲h̲g̲2̲8̲,̲ ̲h̲g̲2̲6̲,̲ ̲h̲g̲2̲7̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲o̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_TX2_TailTotal.lean:32:72: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_TX2_TailStages.source, ̲hn, ̲hg28, ̲hg26, ̲hg27, ̲hq0, ̲hq1, ̲hq2, ̲h0, ̲h1̵,̵h̵2, ̲ho,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry, ̲core.result.Result.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_TX2_TailTotal.lean:32:75: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_TX2_TailStages.source, ̲hn, ̲hg28, ̲hg26, ̲hg27, ̲hq0, ̲hq1, ̲hq2, ̲h0, ̲h1, ̲h2̵,̵h̵o,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry, ̲core.result.Result.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_TX2_TailTotal.lean:32:78: warning: This simp argument is unused:
+  ho
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_TX2_TailStages.source, ̲hn, ̲hg28, ̲hg26, ̲hg27, ̲hq0, ̲hq1, ̲hq2, ̲h0, ̲h1, ̲h2,h̵o̵,̵
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry, ̲core.result.Result.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_TX2_TailTotal.lean:33:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵J̵F̵s̵_̵T̵X̵2̵_̵T̵a̵i̵l̵S̵t̵a̵g̵e̵s̵.̵s̵o̵u̵r̵c̵e̵,̵h̵n̵,̵h̵g̵2̵8̵,̵h̵g̵2̵6̵,̵h̵g̵2̵7̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵]̵[̲J̲F̲s̲_̲T̲X̲2̲_̲T̲a̲i̲l̲S̲t̲a̲g̲e̲s̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲h̲n̲,̲ ̲h̲g̲2̲8̲,̲ ̲h̲g̲2̲6̲,̲ ̲h̲g̲2̲7̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFs_TX2_TailTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

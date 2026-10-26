@@ -1,0 +1,95 @@
+JFs_TX2_DotPush.lean:20:83: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 5
+where
+ e := ↑↑({ start := 0#usize, «end» := 4#usize }, self).1.start
+JFs_TX2_DotPush.lean:27:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+raw : Std.Array U64 4#usize
+self : Dot
+r : Range
+s : Dot
+he : ↑r.end = 4
+hs : ↑r.start ≤ 4
+o : Option Usize
+iter1 : core.ops.range.Range Usize
+_✝ : [> let(o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize r <]
+o_post1 : if ↑r.start < ↑r.end then o = some r.start ∧ ↑iter1.start = ↑r.start + 1 else o = none ∧ iter1.start = r.start
+o_post2 : iter1.end = r.end
+j : UScalar UScalarTy.Usize
+h✝ : o = some j
+i : U64
+_ : [> let i ← s.sums.index_usize j <]
+i_post : i = (↑s.sums)[↑j]
+⊢ ↑j < 4
+JFs_TX2_DotPush.lean:27:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+raw : Std.Array U64 4#usize
+self : Dot
+r : Range
+s : Dot
+he : ↑r.end = 4
+hs : ↑r.start ≤ 4
+o : Option Usize
+iter1 : core.ops.range.Range Usize
+_✝¹ : [> let(o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize r <]
+o_post1 : if ↑r.start < ↑r.end then o = some r.start ∧ ↑iter1.start = ↑r.start + 1 else o = none ∧ iter1.start = r.start
+o_post2 : iter1.end = r.end
+j : UScalar UScalarTy.Usize
+h✝ : o = some j
+i : U64
+_✝ : [> let i ← s.sums.index_usize j <]
+i_post : i = (↑s.sums)[↑j]
+i1 : U64
+_ : [> let i1 ← raw.index_usize j <]
+i1_post : i1 = (↑raw)[↑j]
+⊢ ↑j < 4
+JFs_TX2_DotPush.lean:27:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+raw : Std.Array U64 4#usize
+self : Dot
+r : Range
+s : Dot
+he : ↑r.end = 4
+hs : ↑r.start ≤ 4
+o : Option Usize
+iter1 : core.ops.range.Range Usize
+_✝² : [> let(o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize r <]
+o_post1 : if ↑r.start < ↑r.end then o = some r.start ∧ ↑iter1.start = ↑r.start + 1 else o = none ∧ iter1.start = r.start
+o_post2 : iter1.end = r.end
+j : UScalar UScalarTy.Usize
+h✝ : o = some j
+i : U64
+_✝¹ : [> let i ← s.sums.index_usize j <]
+i_post : i = (↑s.sums)[↑j]
+i1 : U64
+_✝ : [> let i1 ← raw.index_usize j <]
+i1_post : i1 = (↑raw)[↑j]
+a : Std.Array U64 4#usize
+_ :
+  [> let a ←
+    s.sums.update j
+      (core.num.U64.wrapping_add i
+        (core.num.U64.wrapping_add (i1 &&& core.convert.num.FromU64U32.from FIo_Native.fast_pairing.canonical.P)
+          (i1.wrapping_shr 31#u32))) <]
+a_post :
+  a =
+    s.sums.set j
+      (core.num.U64.wrapping_add (↑s.sums)[↑j]
+        (core.num.U64.wrapping_add ((↑raw)[↑j] &&& core.convert.num.FromU64U32.from FIo_Native.fast_pairing.canonical.P)
+          ((↑raw)[↑j].wrapping_shr 31#u32)))
+⊢ ↑iter1.start ≤ 4 ∧ 4 - ↑iter1.start < 4 - ↑r.start
+'AspisR1.JFs_TX2_DotPush.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_DotPush.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
