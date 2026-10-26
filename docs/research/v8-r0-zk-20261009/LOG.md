@@ -9722,3 +9722,30 @@ attempts unused, against the completion rule. pv-dict6 relaunches on the same br
 changed task: prove by reachability over the extracted erased caller which of the 99 operations
 and 2 types the refinement actually requires, then take the reachable error-carrier/IO entries by
 the P6 owned-reference route. Privacy target not yet established.
+
+## D194 (Stream B, 2026-10-26 09:55): three early returns reviewed; launcher range extended; three relaunches
+
+pv-rebase (head 3f9177b647) merged research into the candidate without conflicts and stopped at the
+source-identity condition: four aspis-core files differ (Cargo.toml feature `ct-host-prover`,
+field.rs, field/ct.rs, field/wide_exact.rs). Lead review: every difference is a
+`#[cfg(not(feature = "ct-host-prover"))]` guard or feature-gated addition, and the feature is
+host-only. The adoption condition is ELF byte identity, not source identity, so pv-rebase2 now runs
+the gates in order: three ELFs against the pins with a research control build in the same session,
+fixture bytes, the 1000-pair differential, quiet-host timing (<15 s, <=1.10x research). A byte
+difference stops the gates and isolates the responsible hunk; no repin is proposed by workers.
+
+pv-client (head 149855299b, merged into research d13ac3cb43; docs and an audit tool only):
+the operational R1 runner (`devnet_spend`, planner plan.rs:112) still calls the Generic96 route;
+`RealR1_client::prove_for_proof_accounts` (proof-account route, D162) is unwired; the release ledger
+pins no client. The minimal change needs tools/ and scripts/ only. D162 decision 1 already
+authorises this client change, so pv-client2 wires the runner to the proof-account route, makes the
+96-byte route unreachable with a test, and produces the acceptance receipt against the pinned ELFs
+plus source pins. No crates/ or programs/ change is permitted; one would stop the job.
+
+pv-l2-sim (head 5048eb9408, merged dd6bb7ee09; design note and row report only, all rows open)
+was refused by the shared launcher: `attempt 20100 outside 5000-9999`. Lead fix on the host,
+range only: run-joint.sh line 20 now also accepts `2[0-9][0-9][0-9][0-9]`; backup
+`run-joint.sh.bak-streamB-20261026`; new sha256 9804d43be78c1b83343d5c0545bd2cd4da0bb413a92ad202b5604210b9cbb864;
+probe 20100 passes the range check, 30000 is refused. The launcher's TasksMax=128 is its standing
+setting and is accepted for run-joint.sh compiles (memory caps unchanged). pv-l2-sim2 relaunched
+with its full budget. Six jobs running. Privacy target not yet established; no premise removed.
