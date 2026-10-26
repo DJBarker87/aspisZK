@@ -43,3 +43,10 @@ SCI_007/008 are excluded elaboration failures with snapshots; SCI_009/010 pass.
 SCI_010: exit0, wall3.2476406680070795s, peakRSS5519136KiB, swap0, standard
 axioms for all11 current Projection theorems. SCI_008 reservation hit a vanished
 foreign cgroup, waited30s and retried once, then admitted. Launcher unchanged.
+
+SCI_012 generalizes the order/deletion witness to every event budget >=2,
+and deleting_uncached_charged specializes it to the exact release IV and
+Q+2965 budget. Both traces still have <=2 distinct reads. This avoids any
+inference from a different IV, parser predicate, or smaller event budget.
+Exit0, wall3.578684800013434s, peakRSS5520612KiB, swap0; all12 Projection
+theorems print only standard axioms. Exact final source hash is in receipt.

@@ -145,12 +145,12 @@ theorem address_pred (j : Fin 5) :
 /-- The actual five-target event changes under reordering the SAME two
 consistent reads in the SAME oracle world. This rules out replacing ordered
 first-read association by set containment or common-H rhetoric. -/
-theorem reordered_event :
+theorem reordered_event (Q : Nat) (large : 2 ≤ Q) :
     ∃ H : Bytes → State,
       (∀ q ∈ ([(address,two),([],one)] : List (Bytes × State)), q.2 = H q.1) ∧
       (∀ q ∈ ([( [],one),(address,two)] : List (Bytes × State)), q.2 = H q.1) ∧
-      BinRawByteCollisionTargets.event zero 2 ([(address,two),([],one)],()) ∧
-      ¬ BinRawByteCollisionTargets.event zero 2 ([( [],one),(address,two)],()) := by
+      BinRawByteCollisionTargets.event zero Q ([(address,two),([],one)],()) ∧
+      ¬ BinRawByteCollisionTargets.event zero Q ([( [],one),(address,two)],()) := by
   let H : Bytes → State := fun a => if a = [] then one else two
   have oneZero : one ≠ zero := by intro h; have evaluated :=  congrFun h 0; exact (by decide : (1 : AspisV8R19.DuplexFrames.Byte) ≠ 0) evaluated
   have twoZero : two ≠ zero := by intro h; have evaluated :=  congrFun h 0; exact (by decide : (2 : AspisV8R19.DuplexFrames.Byte) ≠ 0) evaluated
@@ -172,7 +172,7 @@ theorem reordered_event :
     left
     refine ⟨?_,?_,Or.inr (Or.inr ⟨4,address,Or.inr ?_,?_⟩)⟩
     · simp only [AspisV8PairedCommitment.put,Ne.symm nonempty,if_false,emptyTable]
-    · refine ⟨{address},by simp,?_⟩
+    · refine ⟨{address},by simp only [Finset.card_singleton]; omega,?_⟩
       intro b known
       by_cases same : b = address
       · exact Finset.mem_singleton.mpr same
@@ -209,7 +209,7 @@ theorem reordered_event :
 occurrence of an address. The smaller log is a literal sublist, yet its
 charged event is true while the larger physical-order log's is false.
 Both remain within the same distinct-read budget of two. -/
-theorem deleting_uncached :
+theorem deleting_uncached (Q : Nat) (large : 2 ≤ Q) :
     ∃ H : Bytes → State,
       (∀ q ∈ ([(address,two),([],one)] : List (Bytes × State)), q.2 = H q.1) ∧
       (∀ q ∈ ([( [],one),(address,two),([],one)] : List (Bytes × State)), q.2 = H q.1) ∧
@@ -217,9 +217,9 @@ theorem deleting_uncached :
         [( [],one),(address,two),([],one)] ∧
       firstReads emptyTable ([(address,two),([],one)] : List (Bytes × State)) ≤ 2 ∧
       firstReads emptyTable ([( [],one),(address,two),([],one)] : List (Bytes × State)) ≤ 2 ∧
-      BinRawByteCollisionTargets.event zero 2 ([(address,two),([],one)],()) ∧
-      ¬ BinRawByteCollisionTargets.event zero 2 ([( [],one),(address,two),([],one)],()) := by
-  obtain ⟨H,leftCons,rightCons,hit,clean⟩ := reordered_event
+      BinRawByteCollisionTargets.event zero Q ([(address,two),([],one)],()) ∧
+      ¬ BinRawByteCollisionTargets.event zero Q ([( [],one),(address,two),([],one)],()) := by
+  obtain ⟨H,leftCons,rightCons,hit,clean⟩ := reordered_event Q large
   refine ⟨H,leftCons,?_,List.Sublist.cons _ (List.Sublist.refl _),?_,?_,hit,?_⟩
   · intro q member
     simp only [List.mem_cons,List.not_mem_nil,or_false] at member
@@ -231,12 +231,28 @@ theorem deleting_uncached :
   · simp only [firstReads,emptyTable,AspisV8PairedCommitment.put,if_true,
       if_neg nonempty,if_neg (Ne.symm nonempty)]
     decide
-  · have cached := SCH_EventKnownSuffix.same zero 2
+  · have cached := SCH_EventKnownSuffix.same zero Q
       ([( [],one),(address,two),([],one)],()) ([( [],one),(address,two)],())
       [([],one)] rfl (by simp only [List.map_cons,List.map_nil,List.mem_cons,
         List.not_mem_nil,or_false]; intro a same; exact Or.inl same)
     exact fun bad => clean (cached.mp bad)
 
+/-- Same obstruction at the RELEASE initial state and Q+2965 event budget,
+not a replacement predicate or weakened budget. -/
+theorem deleting_uncached_charged (Q : Nat) :
+    ∃ H : Bytes → State,
+      (∀ q ∈ ([(address,two),([],one)] : List (Bytes × State)), q.2 = H q.1) ∧
+      (∀ q ∈ ([( [],one),(address,two),([],one)] : List (Bytes × State)), q.2 = H q.1) ∧
+      ([(address,two),([],one)] : List (Bytes × State)).Sublist
+        [( [],one),(address,two),([],one)] ∧
+      firstReads emptyTable ([(address,two),([],one)] : List (Bytes × State)) ≤ 2 ∧
+      firstReads emptyTable ([( [],one),(address,two),([],one)] : List (Bytes × State)) ≤ 2 ∧
+      BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q+2965) ([(address,two),([],one)],()) ∧
+      ¬ BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q+2965) ([( [],one),(address,two),([],one)],()) := by
+  have iv : SelectedTranscriptParams.params.iv = zero := rfl
+  simpa only [iv] using deleting_uncached (Q+2965) (by omega)
+
+#print axioms deleting_uncached_charged
 #print axioms deleting_uncached
 #print axioms nonempty
 #print axioms child_none
