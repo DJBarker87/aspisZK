@@ -66,6 +66,14 @@ Rust verifiers, plus duplicate failure. It never loads a pinned verifier ELF.
 Historical all-three-ELF reproduction is artifact identity, not execution of
 this client's proof through that ELF.
 
+Moreover, `evidence/real-r1-20261023/summary.json` records historical default
+`40dc75742430dd198bd51d519aa5a41bad4a45e8f173ccbd51c6d5be344ac3f0`
+and devnet `12cb0bc2f8ff3993643638080a3786fdcd941910e5e4dd65ae2937a99290c28f`,
+which differ from the current release pins above; Pool matches. Its selected
+transfer measured 60.2266s versus 47.2759s direct (+27.39%, contended host),
+and stopped on the 10% gate. These historical receipts cannot be relabelled
+as current pinned-ELF integration or quiet-host performance acceptance.
+
 The headline's `rust : FSExperiments ...` must be instantiated by the complete
 execution of the adopted client invoking
 `aspis_r1_cost_probe::RealR1_client::prove_for_proof_accounts` →
@@ -143,7 +151,63 @@ adoption” (:227), plus E1/E2 and L1/L2/L3 rows. Removes **none**. No
 `design/PRIVACY-LEDGER-20261026.md` exists at the baseline; these exact row
 names/exact deployment condition identify the lead's prospective rows.
 
-Validation is source/document inspection only so far. No Lean attempt, Kani
+Validation is source/document inspection. No Lean attempt, Kani
 run, Cargo check/test, host scope, proof generation, ELF execution, chain/RPC,
 wallet-secret read or key operation ran. Formal axioms/resource receipts are
-N/A. Candidate review and reproducible source hashes follow in the next stage.
+N/A. A local read-only Python source audit completed with exit 0; the tool
+reported 0.923102s wall. Peak RSS/swap were not measured for this small local
+audit, and no host/formal release receipt is claimed.
+
+## Candidate review — unadopted, not merged
+
+Reviewed only through git object reads: `codex/cx-client64-20261024`, exact head
+`1dfbd5711684d73fc2ff664cfae9ae78f7dd34f8`. This is the candidate D202
+reviewed, not a replacement shipping client in this branch.
+
+| Candidate addition | Concrete source / reviewed behavior |
+|---|---|
+| Selected64 planner | `tools/r1-cost-probe/src/bin/devnet_spend/plan.rs:81–82,115–117` imports the existing adapter, validates eight keys, opens the durable ledger, calls `prove_for_proof_accounts(..., |k| accounts.nonce(k))`, and selects the returned successful attempt. No generic96 wrapper call remains in that planner. |
+| Publication key mapping | `Client64_accounts.rs:13–47` rejects legacy input, malformed/zero/duplicate keys; enforces callback order; uses `attempts - 1`; inserts that same key into settlement position 10 and stage1 position 0. `plan.rs:126,129` emits these actual instruction accounts and selected route/index. |
+| Retention and interruption policy | `scripts/Client64_proof_accounts.py:63–79,114–188` persists private key/mapping data with exclusive staging/link publication, records entered/success states, validates requests/artifacts on resume and fails closed on incomplete runs. `scripts/r1_devnet_spend.py:164–184` uses the selected key for create/upload/stage1/settlement. Keys and ledgers for rejected, unused, fatal and ambiguous runs remain retained. |
+| Inventory migration | `scripts/r1_devnet_inventory.py` plus `Client64_inventory.py` cover known/configured nested key/recovery/staging paths and legacy coexistence; missing, symlink, mode and listing errors prevent completion before RPC. `Client64_inventory.py:44–48` supplies `os.walk(onerror=...)`; repeat scanning uses guarded `scandir` at :98. Reports cover configured roots, not every possible wallet location. |
+| Offline evidence | `.../evidence/client64-20261024/rust-03/receipt.json`: actual planner/helper, two tiny account-selection tests, exit 0, 0.512583489s, 222828KiB RSS, swap 0, optimized locked/offline `-j4`, 6G/8G/noSwap/Tasks64. `python-14.json`: 15 final inventory tests and source/import/receipt audit, exit 0, 2.62s, 100139008 bytes RSS, swap 0. Prior 16 lifecycle tests are reused with unchanged source hashes. These are historical results, not fresh execution here. |
+
+Candidate production changes are confined to tools/scripts; its report records
+no crates/programs change. The selected caller/prover/entropy bytes match the
+baseline in this audit. The candidate preserves the selected adapter's general
+mutable callback API; its concrete eight-key policy is not a new restriction
+on the theorem adversary. Mocked error/lifecycle tests do not prove actual
+entropy, disk, cleanup, oracle or timing semantics.
+
+Adoption remains blocked on a pinned complete client bundle (including new
+helpers), the final native selected prover, source/effect/refinement and
+NativeDrop/owner/error joins, literal E1 and retained E2, L1/L2/CT-v2/L3,
+whole-prover identical-coin 1000 comparisons, applicable all-three-ELF identity,
+the proof-account runtime integration receipt described above, and quiet
+selected-route median <15s/H5 slowdown <=10%. D202 explicitly claims no real
+proof generation, native privacy, ELF or performance gate. This review does
+not remove any of those gates. No candidate implementation is copied or run.
+
+## Reproducible source evidence
+
+Run `python3 -B tools/pv-client-20261026/PV_Client_audit.py`. It reads only
+repository sources and candidate git blobs, checks the operational routing
+counterexample, checks candidate selected64 wiring lexically, and verifies
+all **21** source/dependency hashes in candidate `python-14.json` plus the
+two actual Rust-03 tested-source hashes. It checks 48 current source pins
+against the exact baseline revision. This is a source/receipt integrity
+check, not a native call-graph proof, test rerun or acceptance receipt.
+
+Full SHA-256/size pins and exact source lines are committed in
+[`evidence/pv-client-20261026/source-audit.json`](../evidence/pv-client-20261026/source-audit.json).
+The generator is
+[`PV_Client_audit.py`](../tools/pv-client-20261026/PV_Client_audit.py).
+Its successful check is expected even though the deployment gate is open:
+it confirms that the documented mismatch is present, rather than certifying
+selected-route adoption. No released source or read-only ledger is modified.
+
+Next concrete deliverable for the lead/owner: decide adoption of the existing
+client64 bundle alongside the final gated native prover, then produce the
+selected client → pinned-ELF transfer/withdrawal receipt with exact final pins.
+This job stops at the verified source counterexample as required by task step 3;
+0/10 Lean attempts, 0/10 Kani runs, Env-J 20500–20549 unused.
