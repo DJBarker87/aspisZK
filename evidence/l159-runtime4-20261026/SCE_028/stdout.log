@@ -1,0 +1,27 @@
+SCE_ReplayWords.lean:14:9: error: Ambiguous term
+  Words
+Possible interpretations:
+  RawCutWordsFromRunExecutableBin.Words : Type
+  
+  CanonicalCutEnrichedTranscript.Words : Type
+SCE_ReplayWords.lean:20:64: error: unsolved goals
+run : RawCutProverCompiler.RunView
+suffix : List (Bytes × State)
+w : sorry
+H : Bytes → State
+consistent : ∀ q ∈ run.1 ++ suffix, q.2 = H q.1
+known : ∀ a ∈ List.map Prod.fst suffix, a ∈ List.map Prod.fst run.1
+h0 : Read run.1 (RawCommitmentFrameReplay.frameFromView run 0)
+h2 : Read run.1 (RawCommitmentFrameReplay.frameFromView run 2)
+h30 : Read run.1 (RawCommitmentFrameReplay.frameFromView run 30)
+⊢ (have f0 := RawCommitmentFrameReplay.frameFromView (annotated run suffix sorry) 0;
+    have f2 := RawCommitmentFrameReplay.frameFromView (annotated run suffix sorry) 2;
+    have f30 := RawCommitmentFrameReplay.frameFromView (annotated run suffix sorry) 30;
+    RawCutRecordedWordsExecutableBin.wordsFromRecordedCutsExec (annotated run suffix sorry).1 f0 f2 f30
+      (RawCutWordsFromView.rootFrom 8 f0) (RawCutWordsFromView.rootFrom 8 f2) (RawCutWordsFromView.rootFrom 9 f30)) =
+    have f0 := RawCommitmentFrameReplay.frameFromView run 0;
+    have f2 := RawCommitmentFrameReplay.frameFromView run 2;
+    have f30 := RawCommitmentFrameReplay.frameFromView run 30;
+    RawCutRecordedWordsExecutableBin.wordsFromRecordedCutsExec run.1 f0 f2 f30 (RawCutWordsFromView.rootFrom 8 f0)
+      (RawCutWordsFromView.rootFrom 8 f2) (RawCutWordsFromView.rootFrom 9 f30)
+'AspisR1.SCE_ReplayWords.recovered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

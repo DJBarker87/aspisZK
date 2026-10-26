@@ -18,9 +18,10 @@ variable {A F C : Type} (c : DrvC_Installation.Configuration F C)
     (sha256 H : Bytes → State) (p1 : S2W_ExtractionBoundary.P1 sha256 H)
     (syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
 
+include extraction p1 syscall
+
 /-- Acceptance transfer uses the actual response-selected submissions of ONE
 adversary, in this H. It makes no all-oracle native acceptance assertion. -/
-include extraction p1 syscall
 
 theorem accepted
     (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))

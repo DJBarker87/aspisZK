@@ -10,7 +10,7 @@ open CanonicalCutEnrichedTranscript SCE_ReplayFrames RawCutWordsFromRunExecutabl
 /-- Transport through known-cell replay and ghost metadata, retaining the
 physical log on the left. No literal replay-log equality is assumed. -/
 theorem transport (run : RawCutProverCompiler.RunView) (suffix : List (Bytes × State))
-    (w : Words) (H : Bytes → State)
+    (w : CanonicalCutEnrichedTranscript.Words) (H : Bytes → State)
     (consistent : ∀ q ∈ run.1 ++ suffix, q.2 = H q.1)
     (known : ∀ a ∈ suffix.map Prod.fst, a ∈ run.1.map Prod.fst)
     (h0 : Read run.1 (RawCommitmentFrameReplay.frameFromView run 0))

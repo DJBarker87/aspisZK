@@ -1,4 +1,4 @@
-import SCE_ReplayWords
+import SCE_RecoveredExtraction
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.SCE_ReplayExtractor
@@ -15,12 +15,12 @@ theorem extract_congr (left right : RawCutProverCompiler.RunView)
     (coins : GSConcreteByteDecoderBank.RawCoins) :
     RawRecordedPublicSpendExtractorBin.extract left coins =
       RawRecordedPublicSpendExtractorBin.extract right coins := by
-  unfold RawRecordedPublicSpendExtractorBin.extract RawCutWordsFromRunPublicValidBin.runDecodedPublic
-  rw [pub]
-  congr 1
-  funext decoded
-  unfold extractFromRun initialWordsFromRun finalWordFromRun
-  rw [words]
+  have decoded : RawCutWordsFromRunPublicValidBin.runDecodedPublic left =
+      RawCutWordsFromRunPublicValidBin.runDecodedPublic right :=
+    congrArg (fun p : LiteralTranscript.Public => SemanticPublicWire.parsePublic p.pubBytes) pub
+  have calls : (fun p => extractFromRun p left coins) = (fun p => extractFromRun p right coins) :=
+    funext (fun p => SCE_RecoveredExtraction.extracted left right words p coins)
+  exact congrArg₂ (fun p f => Option.bind p f) decoded calls
 
 /-- Failure-mass transport retains the SAME acceptance flag and private coin
 law; no failure probability or target bound is a hypothesis. -/
@@ -31,7 +31,7 @@ theorem mass_congr (left right : RawCutProverCompiler.RunView)
     RawRecordedOracleExtractionMassBin.failureMass left =
       RawRecordedOracleExtractionMassBin.failureMass right := by
   unfold RawRecordedOracleExtractionMassBin.failureMass
-  congr 1
+  apply congrArg AspisV8R19.OracleResampling.mean
   funext coins
   rw [accept,extract_congr left right pub words coins]
 

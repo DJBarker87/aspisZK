@@ -11,7 +11,7 @@ open CanonicalCutEnrichedTranscript SCE_ReplayFrames RawCutWordsFromRunExecutabl
 /-- Literal log equality is unnecessary for extractor-word transport. Known
 replay and ghost enrichment preserve the executable recovery at read cuts. -/
 theorem recovered (run : RawCutProverCompiler.RunView) (suffix : List (Bytes × State))
-    (w : Words) (H : Bytes → State)
+    (w : CanonicalCutEnrichedTranscript.Words) (H : Bytes → State)
     (consistent : ∀ q ∈ run.1 ++ suffix, q.2 = H q.1)
     (known : ∀ a ∈ suffix.map Prod.fst, a ∈ run.1.map Prod.fst)
     (h0 : Read run.1 (RawCommitmentFrameReplay.frameFromView run 0))
