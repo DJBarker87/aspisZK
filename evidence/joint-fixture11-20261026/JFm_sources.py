@@ -67,10 +67,6 @@ end AspisR1.{ns}
 '''
  files[R/'lean'/(ns+'.lean')]=s
 for f,s in files.items():
- match=re.fullmatch(r'JFm_Q(\d+)(?:Hashes|Source)\.lean',f.name)
- if match and 16<=int(match[1])<=24:
-  f=P/'JFm_COMPONENTS'/(f.name+'.txt')
-  if '--check' not in sys.argv:f.parent.mkdir(exist_ok=True)
  if '--check' in sys.argv:assert f.read_text()==s,str(f)
  else:f.write_text(s)
 print(len(files))

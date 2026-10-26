@@ -9,6 +9,7 @@ def generate(i,prev,row):
  scan=re.search(r'(JFz_Scan\d+)\.canonical_selected',native)[1];text=(R/f'lean/{scan}.lean').read_text()
  payload=row['frame'][5:];parts=[payload[j:j+32] for j in range(0,len(payload),32)];assert len(parts)==n
  o=['namespace Input']
+ if i>=16:o += ['attribute [local irreducible] JFx_NativeBytes.proof']
  for j,p in enumerate(parts):o += [f'def p{j:02} : List U8 := {us(p)}']
  nodes={};lemmas=[];at=0
  for m in re.finditer(r'def (b\d+) : List U8 := \[(.*?)\]',text):
@@ -19,7 +20,7 @@ def generate(i,prev,row):
   o += [f'theorem blocks_{name} : JFw_Blocks.blocks {a+b} {scan}.{name}=['+','.join(aa+bb)+'] := by',f'  rw [{scan}.{name},JFm_BlockSplit.append {a} {b} _ _ {scan}.{left}_length,blocks_{left},blocks_{right}]','  rfl',f'#print axioms blocks_{name}']
  root=re.search(r'def data : List U8 := (\w+)',text)[1];assert nodes[root][0]==n
  ps='['+','.join(f'p{j:02}' for j in range(n))+']'
- o += [f'def sourcePayload : List U8 := {ps}.flatten',f'theorem payloadBytes : JFw_NativeRow{i:02}.payload.val=sourcePayload := by',f'  change (JFw_Blocks.blocks {n} ((JFx_NativeBytes.proof.val.drop {off}).take {16*n})).flatten=_',f'  rw [{scan}.selected]',f'  unfold {scan}.data',f'  rw [blocks_{root}]','  rfl','#print axioms payloadBytes',f'theorem frameBytes : JFw_NativeRow{i:02}.record.val={us(row["frame"][:5])} ++ sourcePayload := by',f'  change _::_::_::_::_::JFw_NativeRow{i:02}.payload.val=_','  rw [payloadBytes]','  rfl','#print axioms frameBytes']
+ o += [f'def sourcePayload : List U8 := {ps}.flatten',f'theorem payloadBytes : JFw_NativeRow{i:02}.payload.val=sourcePayload := by',(f'  change (JFw_Blocks.blocks {n} ((JFx_NativeBytes.proof.val.drop {off}).take {16*n})).flatten=_' if i==15 else f'  dsimp only [JFw_NativeRow{i:02}.payload,JFw_Frames.expandedPayload,JFw_Frames.window]'),f'  rw [{scan}.selected]',f'  unfold {scan}.data',f'  rw [blocks_{root}]','  rfl','#print axioms payloadBytes',f'theorem frameBytes : JFw_NativeRow{i:02}.record.val={us(row["frame"][:5])} ++ sourcePayload := by',f'  change _::_::_::_::_::JFw_NativeRow{i:02}.payload.val=_','  rw [payloadBytes]','  rfl','#print axioms frameBytes']
  segs=[row['before']+[0,160+i]+row['frame'][:5]]+parts
  for j,seg in enumerate(segs):
   o += [f'def n{j:02} : List Nat := {ls(seg)}']
