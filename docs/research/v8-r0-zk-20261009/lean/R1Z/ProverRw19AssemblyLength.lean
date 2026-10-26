@@ -18,7 +18,9 @@ theorem assemble (front : Except Error Bytes) (ps : List QueryParts)
     split at success
     · cases success
     · cases hs : slots ss (queries ps first) with
-      | error e => simp only [hs, Except.bind] at success
+      | error e =>
+        rw [hs] at success
+        cases success
       | ok final =>
         simp only [hs, Except.bind] at success
         split at success
