@@ -1,0 +1,95 @@
+@AspisR1.ARU_IndexedOriginalLaw.original_law : ∀ {I W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A)
+      (native H : I → AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : (i : I) → AspisR1.ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a (native i)),
+      (∀ (i : I), AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv (native i)) →
+        (∀ (i : I),
+            AspisR1.ARS_AccountReplay.Consistent
+              (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                AspisR1.CPH_Program.verifier a)
+              (native i) (H i)) →
+          ∀ (worlds : Finset I) (weight : I → ℚ) (observe : AspisR1.GExq_AccountExperiment.Outcome A → ℕ → ℚ),
+            (∀ (i : I), Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a (H i))) ∧
+              ∑ i ∈ worlds,
+                  weight i *
+                    observe
+                      (AspisV8R19.MemoizedProgramLaw.eval (H i)
+                          (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy
+                            allocator AspisR1.CPH_Program.verifier a)).2
+                      (AspisV8R19.MemoizedProgramLaw.eval (H i)
+                            (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy
+                              allocator AspisR1.CPH_Program.verifier a)).1.length =
+                ∑ i ∈ worlds,
+                  weight i *
+                    observe
+                      (AspisR1.ARS_NativeOutcome.wrappers copy allocator AspisR1.CPH_Program.verifier a native1 native2
+                        (native i))
+                      (AspisR1.ARS_NativeAccount.attempts (AspisR1.FIp_Install.configuration err c r) hashv copy
+                        allocator AspisR1.CPH_Program.verifier a (native i))
+@AspisR1.ARU_OriginalAverage.averaged : ∀ {I W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A)
+      (native H : I → AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : (i : I) → AspisR1.ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a (native i)),
+      (∀ (i : I), AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv (native i)) →
+        (∀ (i : I),
+            AspisR1.ARS_AccountReplay.Consistent
+              (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                AspisR1.CPH_Program.verifier a)
+              (native i) (H i)) →
+          AspisR1.S2W_TrustedStd.TrustedStd copy →
+            ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (words : AspisR1.CanonicalCutEnrichedTranscript.Words),
+              AspisR1.FIp_GlobalOwners.Owners (AspisR1.FIp_Install.configuration err c r)
+                  (AspisR1.Rc2_Install.configuration (AspisR1.Rc5_Install.seed err (AspisR1.FIp_Install.select r c))
+                      r).boundaries →
+                ∀ (Q : ℕ),
+                  AspisR1.ART_AdversaryWork.Bound (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                      AspisR1.CPH_Program.verifier a Q →
+                    ∀ (worlds : Finset I) (weight : I → ℚ),
+                      (∀ i ∈ worlds, 0 ≤ weight i) →
+                        ∑ i ∈ worlds,
+                            weight i *
+                              AspisR1.RawRecordedOracleExtractionMassBin.failureMass
+                                (AspisR1.ART_PhysicalView.physical (AspisR1.FIp_Install.configuration err c r) hashv
+                                  copy allocator AspisR1.CPH_Program.verifier a (H i)) ≤
+                          ∑ i ∈ worlds,
+                              weight i *
+                                AspisR1.RawRecordedOracleExtractionMassBin.failureMass
+                                  (AspisV8R19.MemoizedProgramLaw.eval (H i)
+                                    (AspisR1.F3T_Charged.projected D
+                                      (AspisR1.F3T_Canon.canon
+                                        (AspisR1.F3T_ByteCarrier.lift (AspisR1.FIp_Install.configuration err c r)
+                                          (AspisR1.SCE_Experiment.submission a))))) +
+                            ∑ i ∈ worlds,
+                              weight i *
+                                AspisV8R19.CausalFirstHitUnionBound.indicator
+                                  (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv
+                                    (Q + 2965)
+                                    (AspisV8R19.MemoizedProgramLaw.eval (H i)
+                                      (AspisR1.Hiq_RecordedJoint.program
+                                        (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r)
+                                          hashv copy allocator AspisR1.CPH_Program.verifier a)
+                                        AspisR1.ARQ_Observer.project
+                                        (AspisR1.ARQ_Observer.select (AspisR1.FIp_Install.configuration err c r)
+                                          AspisR1.CPH_Program.verifier))))
+'AspisR1.ARU_IndexedOriginalLaw.original_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ARU_OriginalAverage.averaged' depends on axioms: [propext, Classical.choice, Quot.sound]

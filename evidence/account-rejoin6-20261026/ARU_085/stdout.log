@@ -1,0 +1,53 @@
+@AspisR1.ARU_OriginalFactory.original : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A)
+      (native H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a native),
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv native →
+        AspisR1.ARS_AccountReplay.Consistent
+            (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+              AspisR1.CPH_Program.verifier a)
+            native H →
+          Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a H) ∧
+            AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                  AspisR1.CPH_Program.verifier a) =
+              AspisV8R19.MemoizedProgramLaw.eval native
+                (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                  AspisR1.CPH_Program.verifier a)
+@AspisR1.ARU_ObstructionResolved.installed : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A)
+      (native : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARQ_WorldSupport.NativeAt L copy allocator c err r native1 native2 hashv a native)
+      (parts : AspisR1.SdkC_Source.Parts) (digest : AspisR1.SdkC_Source.Digest),
+      hashv parts = Aeneas.Std.Result.ok digest →
+        AspisV8R19.SqueezeOracleBridge.flatten parts ∉
+            List.map Prod.fst
+              (AspisV8R19.MemoizedProgramLaw.eval native
+                  (AspisR1.SCE_Experiment.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                    AspisR1.CPH_Program.verifier a)).1 →
+          ∀ (value : AspisV8R19.SourceDuplexStep.State),
+            value ≠ native (AspisV8R19.SqueezeOracleBridge.flatten parts) →
+              have H := AspisR1.ART_QueryCylinder.change native (AspisV8R19.SqueezeOracleBridge.flatten parts) value;
+              Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a H) ∧
+                ¬Nonempty (AspisR1.ARQ_WorldSupport.NativeAt L copy allocator c err r native1 native2 hashv a H)
+'AspisR1.ARU_ObstructionResolved.installed' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,45 @@
+{"attempt": "ARU_009", "exit_status": 1, "wall_seconds": 2.019018373975996, "peak_rss_kib": "5366804", "swaps": "0", "print_axioms": ["'AspisR1.ARU_OracleLog.coherent' depends on axioms: [propext, Quot.sound]", "'AspisR1.ARU_OracleLog.agrees' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ARU_OracleLog.lean:31:45: error: No goals to be solved
+ARU_OracleLog.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (readLog (run hashv code []).2, ok value).1
+in the target expression
+  (flatten q.parts, decodeState digest) ∈ readLog (run hashv code []).2
+
+X : Type
+hashv : Parts → Result Digest
+native H : Bytes → State
+code : Code X
+value : X
+success : (run hashv code []).1 = ok value
+original : ARS_QueryTransport.Agrees native (run hashv code []).2
+same : eval H (SdkC_Oracle.program code) = eval native (SdkC_Oracle.program code)
+exactRun : eval native (SdkC_Oracle.program code) = (readLog (run hashv code []).2, ok value)
+q : Query
+member : q ∈ (run h
+...
+ARU_OracleLog.lean:31:45: error: No goals to be solved
+ARU_OracleLog.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (readLog (run hashv code []).2, ok value).1
+in the target expression
+  (flatten q.parts, decodeState digest) ∈ readLog (run hashv code []).2
+
+X : Type
+hashv : Parts → Result Digest
+native H : Bytes → State
+code : Code X
+value : X
+success : (run hashv code []).1 = ok value
+original : ARS_QueryTransport.Agrees native (run hashv code []).2
+same : eval H (SdkC_Oracle.program code) = eval native (SdkC_Oracle.program code)
+exactRun : eval native (SdkC_Oracle.program code) = (readLog (run hashv code []).2, ok value)
+q : Query
+member : q ∈ (run hashv code []).2
+digest : Digest
+returned : q.returned = ok digest
+read : (flatten q.parts, decodeState digest) ∈ readLog (run hashv code []).2
+logs : (eval H (SdkC_Oracle.program code)).1 = (readLog (run hashv code []).2, ok value).1
+⊢ decodeState digest = H (flatten q.parts)
+'AspisR1.ARU_OracleLog.coherent' depends on axioms: [propext, Quot.sound]
+'AspisR1.ARU_OracleLog.agrees' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re8c074246d5f47e98dece278970d9d4d.scope; invocation ID: c3afe7184bf04af69359887b8f25352d

@@ -1,0 +1,109 @@
+ARU_Mass.lean:33:86: error: unsolved goals
+case pointwise
+W A C Tx : Type
+L : Library W (ℕ → Record)
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+c : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+r : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+    hashv
+a : Adversary A
+std : S2W_TrustedStd.TrustedStd copy
+D : LiteralByteProtocol.Decoder
+words : CanonicalCutEnrichedTranscript.Words
+owners :
+  FIp_GlobalOwners.Owners (FIp_Install.configuration err c r)
+    (Rc2_Install.configuration (Rc5_Install.seed err (FIp_Install.select r c)) r).boundaries
+Q : ℕ
+bound : ART_AdversaryWork.Bound (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a Q
+support : ARU_AllWorld.Supported L copy allocator c err r native1 native2 hashv a
+cfg : DrvC_Installation.Configuration FIo_Install.W C := FIp_Install.configuration err c r
+law :
+  ∀ (H : Bytes → State),
+    (ART_PhysicalView.physical (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a H).2.2 =
+        true →
+      ¬BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q + 2965)
+            (eval H
+              (Hiq_RecordedJoint.program
+                (ART_PartialAccount.account (FIp_Install.configuration err c r) hashv copy allocator
+                  CPH_Program.verifier a)
+                ARQ_Observer.project (ARQ_Observer.select (FIp_Install.configuration err c r) CPH_Program.verifier))) →
+        (eval H
+                  (F3T_Charged.projected D
+                    (F3T_Canon.canon (F3T_ByteCarrier.lift (FIp_Install.configuration err c r) (submission a))))).2.2 =
+            true ∧
+          OraclePortRefineJoin.RecoveredInputAgreement
+            (ART_PhysicalView.physical (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a
+              H)
+            (eval H
+              (F3T_Charged.projected D
+                (F3T_Canon.canon (F3T_ByteCarrier.lift (FIp_Install.configuration err c r) (submission a)))))
+⊢ ∀ (H : Bytes → State),
+    F3T_Runtime.runtimeMass (eval H (ART_Runtime.runtime cfg hashv copy allocator CPH_Program.verifier a)) ≤
+      RawRecordedOracleExtractionMassBin.failureMass
+        (eval H (F3T_Charged.projected D (F3T_Canon.canon (F3T_ByteCarrier.lift cfg (submission a)))))
+
+W A C Tx : Type
+L : Library W (ℕ → Record)
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+c : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+r : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+    hashv
+a : Adversary A
+std : S2W_TrustedStd.TrustedStd copy
+D : LiteralByteProtocol.Decoder
+words : CanonicalCutEnrichedTranscript.Words
+owners :
+  FIp_GlobalOwners.Owners (FIp_Install.configuration err c r)
+    (Rc2_Install.configuration (Rc5_Install.seed err (FIp_Install.select r c)) r).boundaries
+Q : ℕ
+bound : ART_AdversaryWork.Bound (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a Q
+support : ARU_AllWorld.Supported L copy allocator c err r native1 native2 hashv a
+cfg : DrvC_Installation.Configuration FIo_Install.W C := FIp_Install.configuration err c r
+law :
+  ∀ (H : Bytes → State),
+    (ART_PhysicalView.physical (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a H).2.2 =
+        true →
+      ¬BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q + 2965)
+            (eval H
+              (Hiq_RecordedJoint.program
+                (ART_PartialAccount.account (FIp_Install.configuration err c r) hashv copy allocator
+                  CPH_Program.verifier a)
+                ARQ_Observer.project (ARQ_Observer.select (FIp_Install.configuration err c r) CPH_Program.verifier))) →
+        (eval H
+                  (F3T_Charged.projected D
+                    (F3T_Canon.canon (F3T_ByteCarrier.lift (FIp_Install.configuration err c r) (submission a))))).2.2 =
+            true ∧
+          OraclePortRefineJoin.RecoveredInputAgreement
+            (ART_PhysicalView.physical (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a
+              H)
+            (eval H
+              (F3T_Charged.projected D
+                (F3T_Canon.canon (F3T_ByteCarrier.lift (FIp_Install.configuration err c r) (submission a)))))
+pointwise :
+  ∀ (H : Bytes → State),
+    F3T_Runtime.runtimeMass (eval H (ART_Runtime.runtime cfg hashv copy allocator CPH_Program.verifier a)) ≤
+      RawRecordedOracleExtractionMassBin.failureMass
+        (eval H (F3T_Charged.projected D (F3T_Canon.canon (F3T_ByteCarrier.lift cfg (submission a)))))
+⊢ F3T_Runtime.deployedFailure
+      (ART_Runtime.runtime (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a) ≤
+    lazyMean
+        (F3T_Charged.projected D
+          (F3T_Canon.canon (F3T_ByteCarrier.lift (FIp_Install.configuration err c r) (submission a))))
+        FS.emptyTable RawRecordedOracleExtractionMassBin.failureMass +
+      F3T_Numeric.accountLoss Q
+ARU_Mass.lean:39:104: error: unexpected token ')'; expected command
+'AspisR1.ARU_Mass.conditional' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

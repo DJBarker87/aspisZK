@@ -1,0 +1,165 @@
+ARU_Header.lean:44:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1DigestLogCarrier.flatten (AspisR1Stage2.WireTx2.singletonParts ?s)
+in the target expression
+  stateOf hp = H (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1Stage2.WireTx2.singletonParts proof))
+
+Hash : Type
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+p : AspisR1Stage2.verifier.Prepared
+a : AspisR1Stage2.verifier.Accumulator
+proof pub : Slice U8
+saved : alloc.vec.Vec U8
+oracle :
+  ∀ (parts : Slice (Slice U8)) (digest : Std.Array U8 32#usize),
+    AspisV8R19.SqueezeOracleBridge.flatten parts = bytesOf ↑proof ∨
+        AspisV8R19.SqueezeOracleBridge.flatten parts = bytesOf ↑pub →
+      (VTop_Checkpoint.digest D).digest hash parts = ok digest →
+        stateOf digest = H (AspisV8R19.SqueezeOracleBridge.flatten parts)
+success :
+  (do
+      let ck ←
+        CheckpointBytes5Effect.erase (VTop_Checkpoint.digest D) hash
+            (CheckpointBytes5Writer.writer (CheckpointBytes3Namespaces.toPrepared p)
+              (CheckpointBytes3Namespaces.toAccumulator a) proof pub)
+      ok ⟨↑ck, ⋯⟩) =
+    ok saved
+hp : CheckpointBytes5Effect.Digest
+hpCall : (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts proof) = ok hp
+hu : CheckpointBytes5Effect.Digest
+huCall : (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts pub) = ok hu
+hc : CheckpointBytes5Effect.Digest
+hcCall :
+  (VTop_Checkpoint.digest D).digest hash
+      (AspisR1Stage2.WireTx2.checksumParts
+        (CheckpointBytes5Writer.bodySlice (CheckpointBytes3Namespaces.toPrepared p)
+          (CheckpointBytes3Namespaces.toAccumulator a) hp hu)) =
+    ok hc
+rest :
+  ok
+      ⟨↑(CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+            (CheckpointBytes3Namespaces.toAccumulator a) hp hu hc),
+        ⋯⟩ =
+    ok saved
+source :
+  ↑⟨↑(CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+            (CheckpointBytes3Namespaces.toAccumulator a) hp hu hc),
+        ⋯⟩ =
+    ↑saved
+hck :
+  (do
+      let a_1 ← (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts proof)
+      let a_2 ← (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts pub)
+      let a_3 ←
+        (VTop_Checkpoint.digest D).digest hash
+            (AspisR1Stage2.WireTx2.checksumParts
+              (CheckpointBytes5Writer.bodySlice (CheckpointBytes3Namespaces.toPrepared p)
+                (CheckpointBytes3Namespaces.toAccumulator a) a_1 a_2))
+      ok
+          (CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+            (CheckpointBytes3Namespaces.toAccumulator a) a_1 a_2 a_3)) =
+    ok
+      (CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu hc)
+tail✝¹ :
+  (do
+      let a_1 ← (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts pub)
+      let a_2 ←
+        (VTop_Checkpoint.digest D).digest hash
+            (AspisR1Stage2.WireTx2.checksumParts
+              (CheckpointBytes5Writer.bodySlice (CheckpointBytes3Namespaces.toPrepared p)
+                (CheckpointBytes3Namespaces.toAccumulator a) hp a_1))
+      ok
+          (CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+            (CheckpointBytes3Namespaces.toAccumulator a) hp a_1 a_2)) =
+    ok
+      (CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu hc)
+tail✝ :
+  (do
+      let a_1 ←
+        (VTop_Checkpoint.digest D).digest hash
+            (AspisR1Stage2.WireTx2.checksumParts
+              (CheckpointBytes5Writer.bodySlice (CheckpointBytes3Namespaces.toPrepared p)
+                (CheckpointBytes3Namespaces.toAccumulator a) hp hu))
+      ok
+          (CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+            (CheckpointBytes3Namespaces.toAccumulator a) hp hu a_1)) =
+    ok
+      (CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu hc)
+tail :
+  ok
+      (CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu hc) =
+    ok
+      (CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu hc)
+encoded :
+  bytesOf ↑saved =
+    CheckpointBytesDecodeC5.sourceBody (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu ++
+      bytes (stateOf hc)
+size : (↑saved).length = 1768
+hpEq : stateOf hp = H (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1Stage2.WireTx2.singletonParts proof))
+huEq : stateOf hu = H (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1Stage2.WireTx2.singletonParts pub))
+⊢ decode (bytesOf ↑saved) = some (H (bytesOf ↑proof), H (bytesOf ↑pub)) ∧ (↑saved).length = 1768
+ARU_Header.lean:76:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1DigestLogCarrier.flatten c.proofParts
+in the target expression
+  stateOf c.proofDigest = H (AspisV8R19.SqueezeOracleBridge.flatten c.proofParts)
+
+reserved : Bool
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+checkpoint proof pub : Slice U8
+p : AspisR1Stage2.verifier.Prepared
+a : AspisR1Stage2.verifier.Accumulator
+oracle :
+  ∀ (parts : Slice (Slice U8)) (digest : Std.Array U8 32#usize),
+    AspisV8R19.SqueezeOracleBridge.flatten parts = bytesOf ↑proof ∨
+        AspisV8R19.SqueezeOracleBridge.flatten parts = bytesOf ↑pub →
+      D.digest hash parts = ok digest → stateOf digest = H (AspisV8R19.SqueezeOracleBridge.flatten parts)
+success :
+  AspisR1Stage2.verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D checkpoint proof pub
+      AspisR1Stage2.transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+c : AspisR1Stage2.Tx2ResumeDigests.Calls D hash checkpoint proof pub
+w✝⁴ w✝³ : Slice U8
+w✝² : U8
+w✝¹ w✝ : core.slice.iter.Iter U8
+length : (↑checkpoint).length = 1768
+right✝ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) checkpoint { «end» := 8#usize } =
+      ok w✝⁴ ∧
+    ↑w✝⁴ = [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8] ∧
+      checkpoint.index_usize 8#usize = ok 2#u8 ∧
+        checkpoint.index_usize 9#usize = ok w✝² ∧
+          checkpoint.index_usize 10#usize = ok 1#u8 ∧
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) checkpoint
+                  { start := 11#usize, «end» := 16#usize } =
+                ok w✝³ ∧
+              core.slice.Slice.iter w✝³ = ok w✝¹ ∧ CheckpointBytes4Ops.headerAny w✝¹ = ok (false, w✝)
+proofRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) checkpoint
+      { start := 16#usize, «end» := 48#usize } =
+    ok (MultiproofConeSlices.sub checkpoint 16#usize 48#usize)
+pubRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) checkpoint
+      { start := 48#usize, «end» := 80#usize } =
+    ok (MultiproofConeSlices.sub checkpoint 48#usize 80#usize)
+proofEq : ↑(MultiproofConeSlices.sub checkpoint 16#usize 48#usize) = ↑c.storedProof
+pubEq : ↑(MultiproofConeSlices.sub checkpoint 48#usize 80#usize) = ↑c.storedPublic
+inputs :
+  AspisR1DigestLogCarrier.flatten c.proofParts = bytesOf ↑proof ∧
+    AspisR1DigestLogCarrier.flatten c.publicParts = bytesOf ↑pub ∧
+      AspisR1DigestLogCarrier.flatten c.checksumParts =
+        OraclePortPhysicalFrameDraft.domain ++ List.take 1736 (bytesOf ↑checkpoint)
+hpEq : stateOf c.proofDigest = H (AspisV8R19.SqueezeOracleBridge.flatten c.proofParts)
+huEq : stateOf c.publicDigest = H (AspisV8R19.SqueezeOracleBridge.flatten c.publicParts)
+⊢ decode (bytesOf ↑checkpoint) = some (H (bytesOf ↑proof), H (bytesOf ↑pub))
+'AspisR1.ARU_Header.writer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ARU_Header.reader' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

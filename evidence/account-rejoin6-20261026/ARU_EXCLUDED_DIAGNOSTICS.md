@@ -1,0 +1,3 @@
+# Excluded exploratory diagnostic
+
+ARU_075 compiled ARU_BothRowsRestriction, which removes binding and finishOwners. The atomic ledger identifies L181 as deployment-only oracle-model/rejected-prefix order, NOT finishOwners. This exploratory diagnostic therefore does not describe the requested two-row deletion and is excluded from delivered modules and final proof audit. Its exact passing source and receipt remain in ARU_075; no actual root changed. ARU_RootRestriction (066) independently checks the relevant exact binding-only deletion while retaining every other root binder, including finishOwners.
