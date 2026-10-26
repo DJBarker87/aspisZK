@@ -1,0 +1,89 @@
+import R1Z.PV_Src_Identification
+import R1Z.PV_Src_Records
+import R1Z.PV_Src_PublicRecords
+import R1Z.PV_Src_OptionShape
+
+/-! A non-vacuous canonical input family for the extracted stages. The domain
+retains the explicit U64 representation bound and public option shape; it does
+not contain a trace equality or a SourceIdentification proof. Association of
+native entry-point records with these encodings is a separate source job. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Src_Canonical
+open Aeneas Aeneas.Std Result R0P R0Z.WriterRefine R1J.SpendWitnessMap
+open PV_Src_Identification BuilderPrimitiveArguments
+variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]
+
+structure Instance where
+  canonical : BuilderCanonical.Instance (K := K)
+  indexBound : canonical.val.1.nextPairIndex < 2^64
+  pool : PV_Src_PublicRecords.Context
+  domain : PV_Src_PublicRecords.Context
+  destination : PV_Src_PublicRecords.Context
+
+def inputs (i : Instance (K := K)) : Input where
+  publicInput := PV_Src_PublicRecords.input i.canonical.val.1 i.indexBound i.pool i.domain i.destination
+  witnessRecord := PV_Src_Records.bankWitness (BuilderCanonical.rustWitness i.canonical.val.2)
+  publicRecord := PV_Src_Records.bankPublic (BuilderCanonical.rustPublic i.canonical.val.1) i.indexBound
+
+theorem encoded_public (i : Instance (K := K)) :
+    PV_Src_Public.canonicalPublic (inputs i).publicInput = i.canonical.val.1 :=
+  PV_Src_PublicRecords.public_roundtrip _ _ _ _ _ (PV_Src_OptionShape.canonical i.canonical)
+
+def premises : PV_Src_Premises (K := K) (inputs (K := K)) PV_Src_Transport.transport where
+  words := by
+    intro i
+    rw [show wordWitness (inputs i).witnessRecord = BuilderCanonical.rustWitness i.canonical.val.2
+      from PV_Src_Records.witness_roundtrip _]
+    exact witnessOk_toRust _
+  publicCorr := by
+    intro i
+    rw [show wordPublic (inputs i).publicRecord = BuilderCanonical.rustPublic i.canonical.val.1
+      from PV_Src_Records.public_roundtrip _ _,encoded_public]
+    exact pubCorr_toRustPub _
+  admission := by
+    intro i
+    rw [encoded_public,
+      show wordWitness (inputs i).witnessRecord = BuilderCanonical.rustWitness i.canonical.val.2
+        from PV_Src_Records.witness_roundtrip _,PV_Src_Records.decoded_witness]
+    exact i.canonical.property
+  row_call := fun _ => rfl
+
+def identification : BuilderSource.SourceIdentification
+    (prover (K := K) (inputs (K := K)) PV_Src_Transport.transport) (toInstance premises) :=
+  PV_Src_Identification.identification premises
+
+theorem public_eq (i : Instance (K := K)) :
+    (prover inputs PV_Src_Transport.transport).public i = BuilderSource.prover.public i.canonical := by
+  change mapPub (BuilderPublicProjection.semanticPublic (PV_Src_Public.output _)) = _
+  rw [PV_Src_Public.public_eq,encoded_public]
+  rfl
+
+theorem canonical_instance (i : Instance (K := K)) :
+    toInstance premises i = i.canonical := by
+  apply Subtype.ext
+  change (PV_Src_Public.canonicalPublic (inputs i).publicInput,
+    BuilderRecordCanonical.witness (wordWitness (inputs i).witnessRecord)) = i.canonical.val
+  rw [encoded_public,
+    show wordWitness (inputs i).witnessRecord = BuilderCanonical.rustWitness i.canonical.val.2
+      from PV_Src_Records.witness_roundtrip _,PV_Src_Records.decoded_witness]
+
+theorem build_eq (i : Instance (K := K)) :
+    (prover inputs PV_Src_Transport.transport).build i = BuilderSource.prover.build i.canonical := by
+  exact ((identification (K := K)).build_eq i).trans
+    (congrArg (fun p : BuilderCanonical.Instance (K := K) =>
+      (BuilderSource.prover (K := K)).build p) (canonical_instance i))
+
+theorem transport_eq :
+    (prover (K := K) (inputs (K := K)) PV_Src_Transport.transport).transport = BuilderSource.π :=
+  PV_Src_Transport.transport_eq
+
+#print axioms encoded_public
+#print axioms premises
+#print axioms identification
+#print axioms public_eq
+#print axioms canonical_instance
+#print axioms build_eq
+#print axioms transport_eq
+end R1Z.PV_Src_Canonical

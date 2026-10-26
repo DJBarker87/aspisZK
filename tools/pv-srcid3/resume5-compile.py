@@ -48,7 +48,7 @@ g=ssh(f'mkdir -p {job}; python3 /home/dombarker/project-offloads/codex-pv-runjoi
 (e/f'reservation-{a}.log').write_text(g.stdout+g.stderr)
 subprocess.run(['scp','-q',f'{host}:{job}/reservation-{a}.json',str(e/f'reservation-{a}.json')],check=False)
 if g.returncode: print(g.stdout,g.stderr);sys.exit(g.returncode)
-backup=ssh(f'mkdir -p {job}/snapshots/resume5-{a}; for p in {joint}/sources/{module_path}.lean {joint}/objects/{module_path}.olean; do test ! -f \"$p\" || cp \"$p\" {job}/snapshots/resume5-{a}/; done')
+backup=ssh(f'mkdir -p {job}/snapshots/resume5-{a}; for p in {joint}/sources/{module_path}.lean {joint}/objects/{module_path}.olean; do test ! -f "$p" || cp "$p" {job}/snapshots/resume5-{a}/; done')
 assert backup.returncode==0
 subprocess.run(['scp','-q',str(src),f'{host}:{joint}/sources/{module_path}.lean'],check=True)
 imports=re.findall(r'^import (\S+)',src.read_text(),re.M)
