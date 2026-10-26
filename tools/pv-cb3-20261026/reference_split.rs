@@ -57,3 +57,24 @@ pub fn gamma(block:[u8;32])->WideExact {
     WideExact::new(QM31{c0:CM31{a:M31(digits[0]),b:M31(digits[1])},c1:CM31{a:M31(digits[2]),b:M31(digits[3])}},
         QM31{c0:CM31{a:M31(digits[4]),b:M31(digits[5])},c1:CM31{a:M31(digits[6]),b:M31(digits[7])}})
 }
+
+fn back_cell(original:u32,update:u32,index:usize,remaining:usize,last:u32)->u32 {
+    if remaining>0 && index==remaining-1 {last}
+    else if remaining>0 && index<remaining-1 {update}
+    else {original}
+}
+pub fn back_frame(data:&[u32;8],remaining:usize,updates:&[u32;8],last:u32)->(Option<u32>,[u32;8],usize) {
+    let old=if remaining==0 {None}else{Some(data[remaining-1])};
+    let next=if remaining==0 {0}else{remaining-1};
+    let result=[
+        back_cell(data[0],updates[0],0,remaining,last),
+        back_cell(data[1],updates[1],1,remaining,last),
+        back_cell(data[2],updates[2],2,remaining,last),
+        back_cell(data[3],updates[3],3,remaining,last),
+        back_cell(data[4],updates[4],4,remaining,last),
+        back_cell(data[5],updates[5],5,remaining,last),
+        back_cell(data[6],updates[6],6,remaining,last),
+        back_cell(data[7],updates[7],7,remaining,last),
+    ];
+    (old,result,next)
+}

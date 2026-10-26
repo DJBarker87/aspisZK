@@ -78,4 +78,23 @@ mod checks {
         assert_eq!(super::source_fragments::word_step(word,prior),super::reference_split::word_step(word,prior));
     }
 
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn iterator_back_frame8() {
+        let data:[u32;8]=kani::any();let updates:[u32;8]=kani::any();
+        let remaining:usize=kani::any();kani::assume(remaining<=8);
+        let last:u32=kani::any();let mut actual=data;
+        let read;
+        {
+            let mut iter=actual[..remaining].iter_mut();
+            read=iter.next_back().map(|word|{let old=*word;*word=last;old});
+            let rest=iter.into_slice();
+            let n=if remaining==0 {0}else{remaining-1};
+            assert_eq!(rest.len(),n);
+            if remaining>0 {rest.copy_from_slice(&updates[..n]);}
+        }
+        let expected=super::reference_split::back_frame(&data,remaining,&updates,last);
+        assert_eq!(read,expected.0);assert_eq!(actual,expected.1);
+    }
+
 }
