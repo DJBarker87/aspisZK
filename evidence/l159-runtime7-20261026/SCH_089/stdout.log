@@ -1,0 +1,94 @@
+structure AspisR1.TxS_Carriers.Metadata : Type
+number of parameters: 0
+fields:
+  AspisR1.TxS_Carriers.Metadata.decoded : R0P.Public AspisR1.SemanticPublicWire.M31
+  AspisR1.TxS_Carriers.Metadata.m31 : AspisR1.LiteralTranscript.Message
+  AspisR1.TxS_Carriers.Metadata.queryBytes : List ℕ
+  AspisR1.TxS_Carriers.Metadata.state31 : AspisV8R19.SourceDuplexStep.State
+  AspisR1.TxS_Carriers.Metadata.m32 : AspisR1.LiteralTranscript.Message
+  AspisR1.TxS_Carriers.Metadata.rho : AspisR1.LiteralTranscript.E
+  AspisR1.TxS_Carriers.Metadata.state32 : AspisV8R19.SourceDuplexStep.State
+constructor:
+  AspisR1.TxS_Carriers.Metadata.mk (decoded : R0P.Public AspisR1.SemanticPublicWire.M31)
+    (m31 : AspisR1.LiteralTranscript.Message) (queryBytes : List ℕ) (state31 : AspisV8R19.SourceDuplexStep.State)
+    (m32 : AspisR1.LiteralTranscript.Message) (rho : AspisR1.LiteralTranscript.E)
+    (state32 : AspisV8R19.SourceDuplexStep.State) : AspisR1.TxS_Carriers.Metadata
+structure AspisR1.Port5Q1_Domain.SessionADomain {CoreError : Type}
+  (ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port5Q1_Domain.SessionADomain.fibre : ∀ (u : Aeneas.Std.Usize)
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex),
+      ops.op12 u = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f) → f = u ∧ ↑f < 262144
+  AspisR1.Port5Q1_Domain.SessionADomain.point : ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+      ops.op15 f = Aeneas.Std.Result.ok p →
+        AspisR1.S7JoinBasisMachine.decode p.x =
+            AspisCircleGroupOrder.X (AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f)) ∧
+          AspisR1.S7JoinBasisMachine.decode p.y =
+            (↑(AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f))).2
+  AspisR1.Port5Q1_Domain.SessionADomain.line : ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op14 f = Aeneas.Std.Result.ok x →
+        AspisR1.S7JoinBasisMachine.decode x = AspisR1.FoldStoredGeometry.sourceX18 (AspisR1.Port5Q1_Domain.index ↑f)
+  AspisR1.Port5Q1_Domain.SessionADomain.multiply : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op9 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y
+  AspisR1.Port5Q1_Domain.SessionADomain.double : ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+      ops.op10 x = Aeneas.Std.Result.ok y →
+        AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x
+  AspisR1.Port5Q1_Domain.SessionADomain.one : ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op7 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1
+  AspisR1.Port5Q1_Domain.SessionADomain.subtract : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op8 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y
+constructor:
+  AspisR1.Port5Q1_Domain.SessionADomain.mk {CoreError : Type} {ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError}
+    (fibre :
+      ∀ (u : Aeneas.Std.Usize) (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex),
+        ops.op12 u = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f) → f = u ∧ ↑f < 262144)
+    (point :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+        (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+        ops.op15 f = Aeneas.Std.Result.ok p →
+          AspisR1.S7JoinBasisMachine.decode p.x =
+              AspisCircleGroupOrder.X (AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f)) ∧
+            AspisR1.S7JoinBasisMachine.decode p.y =
+              (↑(AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f))).2)
+    (line :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op14 f = Aeneas.Std.Result.ok x →
+          AspisR1.S7JoinBasisMachine.decode x = AspisR1.FoldStoredGeometry.sourceX18 (AspisR1.Port5Q1_Domain.index ↑f))
+    (multiply :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op9 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y)
+    (double :
+      ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+        ops.op10 x = Aeneas.Std.Result.ok y →
+          AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x)
+    (one :
+      ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op7 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1)
+    (subtract :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op8 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y) :
+    AspisR1.Port5Q1_Domain.SessionADomain ops
+structure AspisR1.S2W_ExtractionBoundary.P1
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.P1.realization : AspisR1.S2Z.Oracle.P1Realization sha256 H
+constructor:
+  AspisR1.S2W_ExtractionBoundary.P1.mk {sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (realization : AspisR1.S2Z.Oracle.P1Realization sha256 H) : AspisR1.S2W_ExtractionBoundary.P1 sha256 H
+structure AspisR1.S2W_ChildJoins.S8StageConeJoin (proof y1 : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.scanArgument : AspisR1.S2Y_OwnedChildren.Y1Range proof y1
+constructor:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.mk {proof y1 : Aeneas.Std.Slice Aeneas.Std.U8}
+    (scanArgument : AspisR1.S2Y_OwnedChildren.Y1Range proof y1) : AspisR1.S2W_ChildJoins.S8StageConeJoin proof y1

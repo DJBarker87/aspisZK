@@ -1,0 +1,89 @@
+structure AspisR1.Port4C_QueryArithmetic.SessionABackends (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port4C_QueryArithmetic.SessionABackends.s3_s4_s5_mulE : ∀ (value : AspisR1.Port4C_QueryValues.E)
+      (power : AspisR1.Port3_FlushInstall.K) (product : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      AspisR1.Port4C_QueryArithmetic.CanonE value →
+        AspisR1.Port3_FlushInstall.Canonical power →
+          ops.op3 value power = Aeneas.Std.Result.ok product →
+            AspisR1.CheckpointBytes5Output.ofE product =
+                AspisR1.CheckpointBytes5Output.ofE value *
+                  AspisR1.LiteralOpeningView.eK (AspisR1.CheckpointBytes5Output.ofK power) ∧
+              AspisR1.Port4C_QueryArithmetic.CanonE product
+  AspisR1.Port4C_QueryArithmetic.SessionABackends.s3_s4_s5_addE : ∀ (left right : AspisR1.Port4C_QueryValues.E)
+      (sum : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      AspisR1.Port4C_QueryArithmetic.CanonE left →
+        AspisR1.Port4C_QueryArithmetic.CanonE right →
+          ops.op2 left right = Aeneas.Std.Result.ok sum →
+            AspisR1.CheckpointBytes5Output.ofE sum =
+                AspisR1.CheckpointBytes5Output.ofE left + AspisR1.CheckpointBytes5Output.ofE right ∧
+              AspisR1.Port4C_QueryArithmetic.CanonE sum
+  AspisR1.Port4C_QueryArithmetic.SessionABackends.s3_s4_s9_mulK : ∀ (left right : AspisR1.Port3_FlushInstall.K)
+      (product : AspisR1Stage2.aspis_core.field.QM31),
+      AspisR1.Port3_FlushInstall.Canonical left →
+        AspisR1.Port3_FlushInstall.Canonical right →
+          ops.op9 left right = Aeneas.Std.Result.ok product →
+            AspisR1.CheckpointBytes5Output.ofK product =
+                AspisR1.CheckpointBytes5Output.ofK left * AspisR1.CheckpointBytes5Output.ofK right ∧
+              AspisR1.Port3_FlushInstall.Canonical product
+constructor:
+  AspisR1.Port4C_QueryArithmetic.SessionABackends.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (s3_s4_s5_mulE :
+      ∀ (value : AspisR1.Port4C_QueryValues.E) (power : AspisR1.Port3_FlushInstall.K)
+        (product : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        AspisR1.Port4C_QueryArithmetic.CanonE value →
+          AspisR1.Port3_FlushInstall.Canonical power →
+            ops.op3 value power = Aeneas.Std.Result.ok product →
+              AspisR1.CheckpointBytes5Output.ofE product =
+                  AspisR1.CheckpointBytes5Output.ofE value *
+                    AspisR1.LiteralOpeningView.eK (AspisR1.CheckpointBytes5Output.ofK power) ∧
+                AspisR1.Port4C_QueryArithmetic.CanonE product)
+    (s3_s4_s5_addE :
+      ∀ (left right : AspisR1.Port4C_QueryValues.E) (sum : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        AspisR1.Port4C_QueryArithmetic.CanonE left →
+          AspisR1.Port4C_QueryArithmetic.CanonE right →
+            ops.op2 left right = Aeneas.Std.Result.ok sum →
+              AspisR1.CheckpointBytes5Output.ofE sum =
+                  AspisR1.CheckpointBytes5Output.ofE left + AspisR1.CheckpointBytes5Output.ofE right ∧
+                AspisR1.Port4C_QueryArithmetic.CanonE sum)
+    (s3_s4_s9_mulK :
+      ∀ (left right : AspisR1.Port3_FlushInstall.K) (product : AspisR1Stage2.aspis_core.field.QM31),
+        AspisR1.Port3_FlushInstall.Canonical left →
+          AspisR1.Port3_FlushInstall.Canonical right →
+            ops.op9 left right = Aeneas.Std.Result.ok product →
+              AspisR1.CheckpointBytes5Output.ofK product =
+                  AspisR1.CheckpointBytes5Output.ofK left * AspisR1.CheckpointBytes5Output.ofK right ∧
+                AspisR1.Port3_FlushInstall.Canonical product) :
+    AspisR1.Port4C_QueryArithmetic.SessionABackends ops
+structure AspisR1.S2W_D189Wrappers.Allocator (A : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1.S2W_D189Wrappers.Allocator.allocate : A → ℕ → Aeneas.Std.Result A
+  AspisR1.S2W_D189Wrappers.Allocator.cleanup : A → Aeneas.Std.Result A
+constructor:
+  AspisR1.S2W_D189Wrappers.Allocator.mk {A : Type} (allocate : A → ℕ → Aeneas.Std.Result A)
+    (cleanup : A → Aeneas.Std.Result A) : AspisR1.S2W_D189Wrappers.Allocator A
+structure AspisR1.S2X.CheckpointVersionBinding (saved loaded : AspisV8R19.DuplexFrames.Bytes) : Type
+number of parameters: 2
+fields:
+  AspisR1.S2X.CheckpointVersionBinding.key : ℕ
+  AspisR1.S2X.CheckpointVersionBinding.ledger : ℕ → AspisV8R19.DuplexFrames.Bytes
+  AspisR1.S2X.CheckpointVersionBinding.events : List AspisR1.S2X.AccountEvent
+  AspisR1.S2X.CheckpointVersionBinding.savedAtCommit : self.ledger self.key = saved
+  AspisR1.S2X.CheckpointVersionBinding.loadedAtEntry : loaded = AspisR1.S2X.history self.ledger self.events self.key
+  AspisR1.S2X.CheckpointVersionBinding.noInterveningWrite : ∀ event ∈ self.events, AspisR1.S2X.Preserves self.key event
+constructor:
+  AspisR1.S2X.CheckpointVersionBinding.mk {saved loaded : AspisV8R19.DuplexFrames.Bytes} (key : ℕ)
+    (ledger : ℕ → AspisV8R19.DuplexFrames.Bytes) (events : List AspisR1.S2X.AccountEvent)
+    (savedAtCommit : ledger key = saved) (loadedAtEntry : loaded = AspisR1.S2X.history ledger events key)
+    (noInterveningWrite : ∀ event ∈ events, AspisR1.S2X.Preserves key event) :
+    AspisR1.S2X.CheckpointVersionBinding saved loaded
+structure AspisR1.GExq_AccountExperiment.FirstInputs (A : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1.GExq_AccountExperiment.FirstInputs.entry : AspisR1.S2W_D189Entry.Entry
+  AspisR1.GExq_AccountExperiment.FirstInputs.data : Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1.GExq_AccountExperiment.FirstInputs.state : A
+constructor:
+  AspisR1.GExq_AccountExperiment.FirstInputs.mk {A : Type} (entry : AspisR1.S2W_D189Entry.Entry)
+    (data : Aeneas.Std.Slice Aeneas.Std.U8) (state : A) : AspisR1.GExq_AccountExperiment.FirstInputs A

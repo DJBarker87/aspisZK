@@ -1,0 +1,156 @@
+structure AspisR1.F3_Model.SemanticPublic : Type
+number of parameters: 0
+fields:
+  AspisR1.F3_Model.SemanticPublic.value : AspisR1.LiteralTranscript.Public
+constructor:
+  AspisR1.F3_Model.SemanticPublic.mk (value : AspisR1.LiteralTranscript.Public) : AspisR1.F3_Model.SemanticPublic
+structure AspisR1.SAF_ReducedLaws.Arithmetic {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact) : Prop
+number of parameters: 5
+fields:
+  AspisR1.SAF_ReducedLaws.Arithmetic.round0 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE
+      v.round0 d.p0
+  AspisR1.SAF_ReducedLaws.Arithmetic.round1 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE
+      v.round1 d.p1
+  AspisR1.SAF_ReducedLaws.Arithmetic.pair : ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E)
+      (value : AspisR1Stage2.Stage2Finish.E),
+      ops.newWeights p.variant p.semantic_alpha p.z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+        Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+              p.alpha { «end» := 2#usize } =
+            Aeneas.Std.Result.ok alphas →
+          ops.pair weights alphas v.final_message p.kappa =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+            AspisR1.CheckpointBytes5Output.ofE value =
+              AspisR1.RoundPairing.dot d.f
+                (AspisR1.RoundPairing.dualFold d.alpha1
+                  (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))
+constructor:
+  AspisR1.SAF_ReducedLaws.Arithmetic.mk {W : Type} {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {v : AspisR1Stage2.verifier.View} {p : AspisR1Stage2.verifier.Prepared}
+    {d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact}
+    (round0 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE v.round0 d.p0)
+    (round1 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE v.round1 d.p1)
+    (pair :
+      ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+        ops.newWeights p.variant p.semantic_alpha p.z =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            ops.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+              AspisR1.CheckpointBytes5Output.ofE value =
+                AspisR1.RoundPairing.dot d.f
+                  (AspisR1.RoundPairing.dualFold d.alpha1
+                    (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))) :
+    AspisR1.SAF_ReducedLaws.Arithmetic ops v p d
+structure AspisR1.S2W_ExpandedChildren.ChildConeJoin (E : Type) (ops : AdapterRw.Ops) : Type 1
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.execute : {A : Type} →
+      AspisR1.S2W_Trace.Call A → Aeneas.Std.Result (A × List (AspisR1.S2W_ExpandedTrace.Event E))
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.erasure : ∀ {A : Type} (call : AspisR1.S2W_Trace.Call A),
+      (AspisR1.S2W_Trace.thenResult (self.execute call) fun answer => Aeneas.Std.Result.ok answer.1) =
+        AspisR1.S2W_Trace.invoke ops call
+constructor:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.mk {E : Type} {ops : AdapterRw.Ops}
+    (execute : {A : Type} → AspisR1.S2W_Trace.Call A → Aeneas.Std.Result (A × List (AspisR1.S2W_ExpandedTrace.Event E)))
+    (erasure :
+      ∀ {A : Type} (call : AspisR1.S2W_Trace.Call A),
+        (AspisR1.S2W_Trace.thenResult (execute call) fun answer => Aeneas.Std.Result.ok answer.1) =
+          AspisR1.S2W_Trace.invoke ops call) :
+    AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops
+structure AspisR1.Port3_NativeGeometryBody.Ops (CoreError : Type) : Type 1
+number of parameters: 1
+fields:
+  AspisR1.Port3_NativeGeometryBody.Ops.op0 : {T F : Type} →
+      (N : Aeneas.Std.Usize) →
+        Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N)
+  AspisR1.Port3_NativeGeometryBody.Ops.op1 : {Self B F Clause0_Item : Type} →
+      Aeneas.Std.core.iter.traits.iterator.Iterator Self Clause0_Item →
+        Aeneas.Std.core.ops.function.FnMut F Clause0_Item B →
+          Self → F → Aeneas.Std.Result (Aeneas.Std.core.iter.adapters.map.Map Self F)
+  AspisR1.Port3_NativeGeometryBody.Ops.op2 : {T E F O : Type} →
+      Aeneas.Std.core.ops.function.FnOnce O E F →
+        Aeneas.Std.core.result.Result T E → O → Aeneas.Std.Result (Aeneas.Std.core.result.Result T F)
+  AspisR1.Port3_NativeGeometryBody.Ops.op3 : {T F : Type} →
+      Aeneas.Std.core.ops.function.FnMut F T Bool →
+        Aeneas.Std.core.slice.iter.Iter T → F → Aeneas.Std.Result (Bool × Aeneas.Std.core.slice.iter.Iter T)
+  AspisR1.Port3_NativeGeometryBody.Ops.op4 : {T : Type} → Type → Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Result Bool
+  AspisR1.Port3_NativeGeometryBody.Ops.op5 : AspisR1Stage2.aspis_core.field.M31 →
+      AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result Bool
+  AspisR1.Port3_NativeGeometryBody.Ops.op6 : Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeGeometryBody.Ops.op7 : Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeGeometryBody.Ops.op8 : AspisR1Stage2.aspis_core.field.M31 →
+      AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeGeometryBody.Ops.op9 : AspisR1Stage2.aspis_core.field.M31 →
+      AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeGeometryBody.Ops.op10 : AspisR1Stage2.aspis_core.field.M31 →
+      Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeGeometryBody.Ops.op11 : AspisR1Stage2.aspis_core.field.M31 →
+      Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeGeometryBody.Ops.op12 : Aeneas.Std.Usize →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex CoreError)
+  AspisR1.Port3_NativeGeometryBody.Ops.op13 : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.M31 →
+      Aeneas.Std.Result
+        (Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.M31 × AspisR1Stage2.aspis_core.field.M31)
+  AspisR1.Port3_NativeGeometryBody.Ops.op14 : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex →
+      Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeGeometryBody.Ops.op15 : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex →
+      Aeneas.Std.Result (AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31)
+  AspisR1.Port3_NativeGeometryBody.Ops.mapIterator : {B I F Item : Type} →
+      Aeneas.Std.core.iter.traits.iterator.Iterator I Item →
+        Aeneas.Std.core.ops.function.FnMut F Item B →
+          Aeneas.Std.core.iter.traits.iterator.Iterator (Aeneas.Std.core.iter.adapters.map.Map I F) B
+constructor:
+  AspisR1.Port3_NativeGeometryBody.Ops.mk {CoreError : Type}
+    (op0 :
+      {T F : Type} →
+        (N : Aeneas.Std.Usize) →
+          Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N))
+    (op1 :
+      {Self B F Clause0_Item : Type} →
+        Aeneas.Std.core.iter.traits.iterator.Iterator Self Clause0_Item →
+          Aeneas.Std.core.ops.function.FnMut F Clause0_Item B →
+            Self → F → Aeneas.Std.Result (Aeneas.Std.core.iter.adapters.map.Map Self F))
+    (op2 :
+      {T E F O : Type} →
+        Aeneas.Std.core.ops.function.FnOnce O E F →
+          Aeneas.Std.core.result.Result T E → O → Aeneas.Std.Result (Aeneas.Std.core.result.Result T F))
+    (op3 :
+      {T F : Type} →
+        Aeneas.Std.core.ops.function.FnMut F T Bool →
+          Aeneas.Std.core.slice.iter.Iter T → F → Aeneas.Std.Result (Bool × Aeneas.Std.core.slice.iter.Iter T))
+    (op4 : {T : Type} → Type → Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Result Bool)
+    (op5 : AspisR1Stage2.aspis_core.field.M31 → AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result Bool)
+    (op6 op7 : Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31)
+    (op8 op9 :
+      AspisR1Stage2.aspis_core.field.M31 →
+        AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31)
+    (op10 op11 : AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31)
+    (op12 :
+      Aeneas.Std.Usize →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex CoreError))
+    (op13 :
+      Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.M31 →
+        Aeneas.Std.Result
+          (Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.M31 × AspisR1Stage2.aspis_core.field.M31))
+    (op14 :
+      AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex →
+        Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31)
+    (op15 :
+      AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex →
+        Aeneas.Std.Result (AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31))
+    (mapIterator :
+      {B I F Item : Type} →
+        Aeneas.Std.core.iter.traits.iterator.Iterator I Item →
+          Aeneas.Std.core.ops.function.FnMut F Item B →
+            Aeneas.Std.core.iter.traits.iterator.Iterator (Aeneas.Std.core.iter.adapters.map.Map I F) B) :
+    AspisR1.Port3_NativeGeometryBody.Ops CoreError

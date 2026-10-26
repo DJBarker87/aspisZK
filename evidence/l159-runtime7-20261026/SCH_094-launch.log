@@ -1,0 +1,45 @@
+{"attempt": "SCH_094", "exit_status": 0, "wall_seconds": 3.303144790988881, "peak_rss_kib": "5467792", "swaps": "0", "print_axioms": []}
+structure AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.basis : AspisR1.Port4C_BasisOuter.SessionABasis ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.arithmetic : AspisR1.Port4C_QueryArithmetic.SessionABackends ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.m31 : AspisR1.Port5Q1_NodeModel.SessionAM31 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.decoder : AspisR1.Port5Q1_OpeningValues.SessionAS3 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.line : ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+      (values : Aeneas.Std.Array
+...
+ub))
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.size : ∀
+      (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      AdapterRw.first_decoded ops semantic pub proof split =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+        (↑checkpoint).length = 1768
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.mk {ops : AdapterRw.Ops}
+    {decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {semantic : AspisR1.S2W_AuthenticatedInputs.Public} {pub proof : Aeneas.Std.Slice Aeneas.Std.U8}
+    {split : Aeneas.Std.Usize}
+    (header :
+      ∀ (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+        AdapterRw.first_decoded ops semantic pub proof split =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+          decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+            some (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub)))
+    (size :
+      ∀ (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+        AdapterRw.first_decoded ops semantic pub proof split =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+          (↑checkpoint).length = 1768) :
+    AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin ops decode H semantic pub proof split
+structure AspisR1.CPR_DataPersistence.Image : Type
+number of parameters: 0
+fields:
+  AspisR1.CPR_DataPersistence.Image.data : AspisV8R19.DuplexFrames.Bytes
+  AspisR1.CPR_DataPersistence.Image.lamports : ℕ
+constructor:
+  AspisR1.CPR_DataPersistence.Image.mk (data : AspisV8R19.DuplexFrames.Bytes) (lamports : ℕ) :
+    AspisR1.CPR_DataPersistence.Image
+
+Running as unit: run-rf6dd065aceb04c02aa630bc0f89de142.scope; invocation ID: 9fe1355006e84d0e99f97aa32da0164b

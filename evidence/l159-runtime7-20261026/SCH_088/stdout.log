@@ -1,0 +1,156 @@
+structure AspisR1.Rc4_Model.Input : Type
+number of parameters: 0
+fields:
+  AspisR1.Rc4_Model.Input.publicBytes : AspisV8R19.DuplexFrames.Bytes
+  AspisR1.Rc4_Model.Input.tag : AspisV8R19.DuplexFrames.Byte
+  AspisR1.Rc4_Model.Input.physical : AspisR1.F3_Model.PhysicalPublic
+  AspisR1.Rc4_Model.Input.proof : AspisR1.RawCutProverCompiler.Proof
+  AspisR1.Rc4_Model.Input.stored : AspisV8R19.DuplexFrames.Bytes
+constructor:
+  AspisR1.Rc4_Model.Input.mk (publicBytes : AspisV8R19.DuplexFrames.Bytes) (tag : AspisV8R19.DuplexFrames.Byte)
+    (physical : AspisR1.F3_Model.PhysicalPublic) (proof : AspisR1.RawCutProverCompiler.Proof)
+    (stored : AspisV8R19.DuplexFrames.Bytes) : AspisR1.Rc4_Model.Input
+structure AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives {CoreError : Type}
+  (ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.point : ∀
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+      ops.op15 f = Aeneas.Std.Result.ok p →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical p.x ∧ AspisR1.Port5Q1_GeometryCanonical.Canonical p.y
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.line : ∀
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op14 f = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.multiply : ∀ (x y : Aeneas.Std.U32)
+      (z : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+          ops.op9 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.double : ∀ (x : Aeneas.Std.U32)
+      (y : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        ops.op10 x = Aeneas.Std.Result.ok y → AspisR1.Port5Q1_GeometryCanonical.Canonical y
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.one : ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op7 = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.subtract : ∀ (x y : Aeneas.Std.U32)
+      (z : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+          ops.op8 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z
+constructor:
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.mk {CoreError : Type}
+    {ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError}
+    (point :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+        (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+        ops.op15 f = Aeneas.Std.Result.ok p →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical p.x ∧ AspisR1.Port5Q1_GeometryCanonical.Canonical p.y)
+    (line :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op14 f = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x)
+    (multiply :
+      ∀ (x y : Aeneas.Std.U32) (z : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+            ops.op9 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z)
+    (double :
+      ∀ (x : Aeneas.Std.U32) (y : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          ops.op10 x = Aeneas.Std.Result.ok y → AspisR1.Port5Q1_GeometryCanonical.Canonical y)
+    (one :
+      ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op7 = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x)
+    (subtract :
+      ∀ (x y : Aeneas.Std.U32) (z : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+            ops.op8 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z) :
+    AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives ops
+structure AspisR1.AdapterRw.RuntimeEntrypointAdmission {F : Type} (s : AspisR1.S2Trust.Heap F) (keys : ℕ → List UInt8)
+  (accountCount : ℕ) : Prop
+number of parameters: 4
+fields:
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.valid : AspisR1.S2Trust.Valid s
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.freshGuards : s.guards = []
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.noExternalBorrows : ∀ (c : ℕ), s.external c = 0
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.liveAccount : ∀ a < accountCount, s.ownerLive a = true
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.counterZero : ∀ a < accountCount, s.counter (s.accounts a).1 = 0
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.sharedCellsOnlyEqualKeys : ∀ (a b : ℕ),
+      a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.duplicateKeysShareCell : ∀ (a b : ℕ),
+      a < accountCount → b < accountCount → keys a = keys b → (s.accounts a).1 = (s.accounts b).1
+constructor:
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.mk {F : Type} {s : AspisR1.S2Trust.Heap F} {keys : ℕ → List UInt8}
+    {accountCount : ℕ} (valid : AspisR1.S2Trust.Valid s) (freshGuards : s.guards = [])
+    (noExternalBorrows : ∀ (c : ℕ), s.external c = 0) (liveAccount : ∀ a < accountCount, s.ownerLive a = true)
+    (counterZero : ∀ a < accountCount, s.counter (s.accounts a).1 = 0)
+    (sharedCellsOnlyEqualKeys :
+      ∀ (a b : ℕ), a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b)
+    (duplicateKeysShareCell :
+      ∀ (a b : ℕ), a < accountCount → b < accountCount → keys a = keys b → (s.accounts a).1 = (s.accounts b).1) :
+    AspisR1.AdapterRw.RuntimeEntrypointAdmission s keys accountCount
+structure AspisR1.S2W_ChildJoins.MultiproofConeJoin (proof0 proof1 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch0Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof0 nodes 0
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch1Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof1 nodes 1
+constructor:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.mk {proof0 proof1 : Aeneas.Std.Slice Aeneas.Std.U8}
+    {nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8}
+    (batch0Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof0 nodes 0)
+    (batch1Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof1 nodes 1) :
+    AspisR1.S2W_ChildJoins.MultiproofConeJoin proof0 proof1 nodes
+structure AspisR1.FGl_FinishLeaves.PairingRemaining {W : Type} (finish : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E) : Prop
+number of parameters: 5
+fields:
+  AspisR1.FGl_FinishLeaves.PairingRemaining.round0 : AspisR1.Port4D_Pairing.RoundLaws
+      (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE v.round0 data.p0
+  AspisR1.FGl_FinishLeaves.PairingRemaining.round1 : AspisR1.Port4D_Pairing.RoundLaws
+      (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE v.round1 data.p1
+  AspisR1.FGl_FinishLeaves.PairingRemaining.pair : ∀ (weights : W)
+      (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+      finish.newWeights p.variant p.semantic_alpha p.z =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+        Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+              p.alpha { «end» := 2#usize } =
+            Aeneas.Std.Result.ok alphas →
+          finish.pair weights alphas v.final_message p.kappa =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+            AspisR1.CheckpointBytes5Output.ofE value =
+              AspisR1.RoundPairing.dot data.f
+                (AspisR1.RoundPairing.dualFold data.alpha1
+                  (AspisR1.RoundPairing.dualFold data.alpha0
+                    (AspisR1.FunctionalWeights.weights data.F data.F0 data.kappa)))
+constructor:
+  AspisR1.FGl_FinishLeaves.PairingRemaining.mk {W : Type} {finish : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {v : AspisR1Stage2.verifier.View} {p : AspisR1Stage2.verifier.Prepared}
+    {data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E}
+    (round0 :
+      AspisR1.Port4D_Pairing.RoundLaws (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE
+        v.round0 data.p0)
+    (round1 :
+      AspisR1.Port4D_Pairing.RoundLaws (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE
+        v.round1 data.p1)
+    (pair :
+      ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+        finish.newWeights p.variant p.semantic_alpha p.z =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            finish.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+              AspisR1.CheckpointBytes5Output.ofE value =
+                AspisR1.RoundPairing.dot data.f
+                  (AspisR1.RoundPairing.dualFold data.alpha1
+                    (AspisR1.RoundPairing.dualFold data.alpha0
+                      (AspisR1.FunctionalWeights.weights data.F data.F0 data.kappa)))) :
+    AspisR1.FGl_FinishLeaves.PairingRemaining finish v p data

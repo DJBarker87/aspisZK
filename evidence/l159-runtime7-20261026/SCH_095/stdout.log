@@ -1,0 +1,70 @@
+structure AspisR1.Port4C_BasisOuter.SessionABasis (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_mul : ops.op7 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_sub : ops.op6 = AspisR1Qm31ArithmeticProbe.field.M31.sub
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_double : ops.op8 = S7Kani3BasisOuter.double
+  AspisR1.Port4C_BasisOuter.SessionABasis.zero : ops.op4 = Aeneas.Std.Result.ok 0#u32
+  AspisR1.Port4C_BasisOuter.SessionABasis.one : ops.op5 = Aeneas.Std.Result.ok 1#u32
+constructor:
+  AspisR1.Port4C_BasisOuter.SessionABasis.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (s3_s4_mul : ops.op7 = AspisR1Qm31ArithmeticProbe.field.M31.mul)
+    (s3_s4_sub : ops.op6 = AspisR1Qm31ArithmeticProbe.field.M31.sub) (s3_s4_double : ops.op8 = S7Kani3BasisOuter.double)
+    (zero : ops.op4 = Aeneas.Std.Result.ok 0#u32) (one : ops.op5 = Aeneas.Std.Result.ok 1#u32) :
+    AspisR1.Port4C_BasisOuter.SessionABasis ops
+structure AspisR1.S2Trust.Library (W F : Type) : Type
+number of parameters: 2
+fields:
+  AspisR1.S2Trust.Library.related : W → AspisR1.S2Trust.Heap F → Prop
+  AspisR1.S2Trust.Library.accountData : W → ℕ → ℕ
+  AspisR1.S2Trust.Library.accountLamports : W → ℕ → ℕ
+  AspisR1.S2Trust.Library.cellPayload : W → ℕ → AspisR1.S2Trust.Payload
+  AspisR1.S2Trust.Library.cellCounter : W → ℕ → ℤ
+  AspisR1.S2Trust.Library.liveGuard : W → ℕ → Option AspisR1.S2Trust.Guard
+  AspisR1.S2Trust.Library.allocated : W → ℕ → Bool
+  AspisR1.S2Trust.Library.run : W → AspisR1.S2Trust.Op → W × AspisR1.S2Trust.Reply
+constructor:
+  AspisR1.S2Trust.Library.mk {W F : Type} (related : W → AspisR1.S2Trust.Heap F → Prop)
+    (accountData accountLamports : W → ℕ → ℕ) (cellPayload : W → ℕ → AspisR1.S2Trust.Payload) (cellCounter : W → ℕ → ℤ)
+    (liveGuard : W → ℕ → Option AspisR1.S2Trust.Guard) (allocated : W → ℕ → Bool)
+    (run : W → AspisR1.S2Trust.Op → W × AspisR1.S2Trust.Reply) : AspisR1.S2Trust.Library W F
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin (ops : AdapterRw.Ops)
+  (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 6
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.checkedHeader : ops.op11
+          (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+      decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+        some (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.mk {ops : AdapterRw.Ops}
+    {decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8}
+    (checkedHeader :
+      ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+        decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+          some (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))) :
+    AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin ops decode H pub proof checkpoint
+structure AspisR1.CPG_Projection.Observations (Tx A : Type) : Type
+number of parameters: 2
+fields:
+  AspisR1.CPG_Projection.Observations.bank : Tx → AspisR1.CPP_BankState.Bank
+  AspisR1.CPG_Projection.Observations.layout : Tx → AspisR1.Hist_RuntimeEntry.Layout
+  AspisR1.CPG_Projection.Observations.next : Tx → Tx → Prop
+  AspisR1.CPG_Projection.Observations.intervening : Tx → Tx → List ℕ
+  AspisR1.CPG_Projection.Observations.parentReply : Tx → AspisR1.CPP_Atomic.Reply Unit
+  AspisR1.CPG_Projection.Observations.copied : Tx → Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8
+  AspisR1.CPG_Projection.Observations.actions : Tx → List (AspisR1.CPP_BankState.Action A)
+  AspisR1.CPG_Projection.Observations.parentTentative : Tx → AspisR1.CPP_BankState.Bank
+  AspisR1.CPG_Projection.Observations.physicalEvents : Tx → List AspisR1.S2X.AccountEvent
+constructor:
+  AspisR1.CPG_Projection.Observations.mk {Tx A : Type} (bank : Tx → AspisR1.CPP_BankState.Bank)
+    (layout : Tx → AspisR1.Hist_RuntimeEntry.Layout) (next : Tx → Tx → Prop) (intervening : Tx → Tx → List ℕ)
+    (parentReply : Tx → AspisR1.CPP_Atomic.Reply Unit) (copied : Tx → Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+    (actions : Tx → List (AspisR1.CPP_BankState.Action A)) (parentTentative : Tx → AspisR1.CPP_BankState.Bank)
+    (physicalEvents : Tx → List AspisR1.S2X.AccountEvent) : AspisR1.CPG_Projection.Observations Tx A
