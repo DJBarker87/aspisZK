@@ -124,3 +124,20 @@ in `*-dependencies.json`; individual immutable inputs/receipts reference that
 manifest. The fingerprint is still computed over the complete original object
 list; no dependency is omitted and no replay fingerprint is varied artificially.
 This is evidence deduplication only, not launcher/build infrastructure work.
+
+## Compression reference/model stage
+
+21309 passes the exact list state-fold equations and append composition.
+21310 rejects an extra `rfl` after a rewrite already solved the read;21311
+removes only that tactic and passes.21312 proves the complete indexed reference
+is the list fold on the entire input (and on arbitrary suffixes/accumulators).
+These are exact Result equations with no primitive totality/value premise.
+The final multiplication/power update remains observable to failure/divergence;
+it is not silently dropped. Standard axioms,zero swaps,1.90–2.08s focused jobs.
+This discharges the owned-reference/list-model substep ofV164, not the shipped
+native correspondence orV240/op223. No callback/root premise is removed here.
+
+21313 installed-totality is denied before Lean at10:41:59UTC for48.375GiB
+reserved/projected55.375GiB>55GiB. Its successor factors primitive totality
+into a generic lemma and a concrete installed bridge, testing the generic
+lemma first. The180s wait and fresh-ID policy remain in force.

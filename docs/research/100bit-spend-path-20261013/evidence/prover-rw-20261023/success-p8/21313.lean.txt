@@ -1,0 +1,31 @@
+import R1Z.PV_CompressModel
+import R1Z.ProverRwP7CompressPrimitives
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_CompressModelTotal
+open Aeneas Aeneas.Std Result ProverRwFull ProverRwP6CompressControl
+variable [ExternalTypes]
+
+theorem stateFold (ops : ExternalFuns) (values : List M) (lambda : Q) (state : Q × Q) :
+    letI : ExternalFuns := ProverRwP6BodyStore.selected ops
+    ∃ result, PV_CompressList.stateFold values lambda state = ok result := by
+  letI : ExternalFuns := ProverRwP6BodyStore.selected ops
+  induction values generalizing state with
+  | nil => exact ⟨state,rfl⟩
+  | cons m ms ih =>
+    rcases state with ⟨out,power⟩
+    obtain ⟨q,hq⟩ := ProverRwP7CompressPrimitives.scale ops power m
+    obtain ⟨o,ho⟩ := ProverRwP7CompressPrimitives.add ops out q
+    obtain ⟨p,hp⟩ := ProverRwP7CompressPrimitives.mul ops power lambda
+    obtain ⟨r,hr⟩ := ih (o,p)
+    exact ⟨r,by simp only [PV_CompressList.stateFold,hq,ho,hp,bind_tc_ok]; exact hr⟩
+
+theorem fold (ops : ExternalFuns) (values : List M) (lambda out power : Q) :
+    letI : ExternalFuns := ProverRwP6BodyStore.selected ops
+    ∃ result, PV_CompressList.fold values lambda out power = ok result := by
+  letI : ExternalFuns := ProverRwP6BodyStore.selected ops
+  obtain ⟨r,hr⟩ := stateFold ops values lambda (out,power)
+  exact ⟨r.1,by simp only [PV_CompressList.fold,hr,bind_tc_ok]⟩
+#print axioms stateFold
+#print axioms fold
+end R1Z.PV_CompressModelTotal
