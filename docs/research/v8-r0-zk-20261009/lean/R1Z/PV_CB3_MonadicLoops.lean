@@ -5,6 +5,7 @@ universe u v
 variable {m : Type u → Type v} [Monad m] [LawfulMonad m]
 
 /-- Per-step source equality preserves the complete monadic result of every length. -/
+omit [LawfulMonad m] in
 theorem foldlM_congr {α σ : Type u} (f g : σ → α → m σ)
     (step : ∀ s a, f s a = g s a) (init : σ) (xs : List α) :
     xs.foldlM f init = xs.foldlM g init := by
