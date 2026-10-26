@@ -1,0 +1,64 @@
+FIw_BuilderValue.lean:23:20: error(lean.unknownIdentifier): Unknown identifier `c`
+FIw_BuilderValue.lean:24:11: error: unsolved goals
+T C V : Type
+f : core.ops.function.FnMut C Usize T
+observe : T → V
+model : C → Usize → V
+step : ∀ (c : C) (i : Usize) (x : T) (c' : C), f.call_mut c i = ok (x, c') → observe x = model c i ∧ c' = c
+i : Usize
+is : List Usize
+ih :
+  ∀ (c : C) (xs : List T) (last : C),
+    OraclePortStdBuilder.fromFnLoop f is c = ok (xs, last) → List.map observe xs = List.map (model c) is ∧ last = c
+x : T
+c' : C
+ys : List T
+last' : C
+tail : OraclePortStdBuilder.fromFnLoop f is c' = ok (ys, last')
+r1 :
+  (match (x, c') with
+    | (x, c') => do
+      let __x ← OraclePortStdBuilder.fromFnLoop f is c'
+      match __x with
+        | (xs, c'') => ok (x :: xs, c'')) =
+    ok (x :: ys, last')
+r2 :
+  (match (ys, last') with
+    | (xs, c'') => ok (x :: xs, c'')) =
+    ok (x :: ys, last')
+call : f.call_mut c' i = ok (x, c')
+run :
+  (do
+      let __x ← f.call_mut c' i
+      match __x with
+        | (x, c') => do
+          let __x ← OraclePortStdBuilder.fromFnLoop f is c'
+          match __x with
+            | (xs, c'') => ok (x :: xs, c'')) =
+    ok (x :: ys, last')
+vx : observe x = model c' i
+rest : List.map observe ys = List.map (model sorry) is ∧ last' = sorry
+⊢ model c' i :: List.map observe ys = model c' i :: List.map (model c') is
+FIw_BuilderValue.lean:34:51: error: Application type mismatch: The argument
+  r1
+has type
+  (if h : xs✝.length = ↑n then ok ⟨xs✝, h⟩ else fail Error.panic) = ok out
+but is expected to have type
+  ok ?m.91 = ok ?m.92
+in the application
+  ok.inj r1
+FIw_BuilderValue.lean:34:4: error: stuck at solving universe constraint
+  ?u.52 + 1 =?= max 1 ?u.51
+while trying to unify
+  Eq.{max 1 ?u.51} ?m.91 ?m.92 : Prop
+with
+  Eq.{?u.52 + 1} ?m.91 ?m.92 : Prop
+FIw_BuilderValue.lean:37:2: error: No goals to be solved
+FIw_BuilderValue.lean:30:71: error: stuck at solving universe constraint
+  ?u.52 + 1 =?= max 1 ?u.51
+while trying to unify
+  Eq.{max 1 ?u.51} ?m.91 ?m.92 : Prop
+with
+  Eq.{?u.52 + 1} ?m.91 ?m.92 : Prop
+'AspisR1.FIw_BuilderValue.loop' depends on axioms: [sorryAx]
+'AspisR1.FIw_BuilderValue.fromFn' depends on axioms: [propext, sorryAx]
