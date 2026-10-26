@@ -1,0 +1,75 @@
+{"attempt": "JFv_018", "exit_status": 1, "wall_seconds": 8.334538872004487, "peak_rss_kib": "4316648", "swaps": "0", "print_axioms": ["'AspisR1.JFv_Value.payload' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_Value.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_Value.lean:11:12: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+JFv_Value.lean:11:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+JFv_Value.lean:21:40: error: unsolved goals
+case hbound
+self : r1_wire.ValidatedRecord
+byteOffset value offset : Usize
+bound : 5 + ↑byteOffset + 32 * ↑value + 16 ≤ self.framed.length
+small : self.framed.length ≤ 20000
+aligned : ↑byteOffset % 4 = 0
+offsetBound : ↑offset + ↑value ≤ Usize.max
+canon : canonical (bytesOf (List.drop 5 ↑self.framed))
+i : Usize
+_✝¹ : [> let i ← value * 32#usize <]
+i_post : ↑i = ↑valu
+...
+ize
+_✝¹³ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹² : [> let i21 ← bytes.index_usize i20 <]
+i21_post : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝¹¹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝¹⁰ : [> let i23 ← bytes.index_usize i22 <]
+i23_post : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁹ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁸ : [> let i25 ← bytes.index_usize i24 <]
+i25_post : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁷ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁶ : [> let i27 ← bytes.index_usize i26 <]
+i27_post : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝⁵ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝⁴ : [> let i29 ← bytes.index_usize i28 <]
+i29_post : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝³ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝² : [> let i31 ← bytes.index_usize i30 <]
+i31_post : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_✝¹ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+s_post :
+  s = (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice
+o : aspis_core.field.QM31
+_✝ : [> let o ← aspis_core.field.QM31.from_le_bytes s <]
+x✝ : Option aspis_core.field.QM31
+o_post : x✝ = some o
+i32 : Usize
+_ : [> let i32 ← offset + value <]
+i32_post : ↑i32 = ↑offset + ↑value
+⊢ core.option.Option.ok_or x✝ (r1_wire.Error.NonCanonical self.row i32) ⦃ result =>
+    ∃ q, result = core.result.Result.Ok q ⦄
+'AspisR1.JFv_Value.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_Value.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9660564cd4f2421799a1839487e58c25.scope; invocation ID: 97b644a88fe74465a1552d2cf40e86a8

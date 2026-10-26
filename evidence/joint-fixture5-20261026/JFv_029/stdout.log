@@ -1,0 +1,95 @@
+JFv_DecodeLoop.lean:24:120: error: unsolved goals
+N : Usize
+self : r1_wire.ValidatedRecord
+row : U8
+offset byteOffset : Usize
+values :
+  ∀ (value : Usize),
+    ↑value < ↑N →
+      ∃ q, { row := row, framed := self.framed }.decode_k_value byteOffset value offset = ok (core.result.Result.Ok q)
+iter : core.ops.range.Range Usize
+out : Std.Array aspis_core.field.QM31 N
+stop : iter.end = N
+span : ↑iter.start + 0 = ↑N
+done : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter)
+⊢ (let (o, iter1) := (none, iter)
+    match o with
+    | none => ok (ControlFlow.done (out, none))
+    | some value => do
+      let r ← { row := row, framed := self.framed }.decode_k_value byteOffset value offset
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let out1 ← out.update value val
+          ok (cont (iter1, out1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 N) (core.convert.FromSame r1_wire.Error) residual
+          ok (ControlFlow.done (out, some r1))) =
+    ok (ControlFlow.done (out, none))
+JFv_DecodeLoop.lean:35:124: error: unsolved goals
+N : Usize
+self : r1_wire.ValidatedRecord
+row : U8
+offset byteOffset : Usize
+values :
+  ∀ (value : Usize),
+    ↑value < ↑N →
+      ∃ q, { row := row, framed := self.framed }.decode_k_value byteOffset value offset = ok (core.result.Result.Ok q)
+fuel : ℕ
+ih :
+  ∀ (iter : core.ops.range.Range Usize) (out : Std.Array aspis_core.field.QM31 N),
+    iter.end = N →
+      ↑iter.start + fuel = ↑N → ∃ updated, self.decode_k_loop iter row offset byteOffset out = ok (updated, none)
+iter : core.ops.range.Range Usize
+out : Std.Array aspis_core.field.QM31 N
+stop : iter.end = N
+span : ↑iter.start + (fuel + 1) = ↑N
+active : ↑iter.start < ↑N
+next : OccupancyRangeTraversal.Range
+advance : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, next)
+start : ↑next.start = ↑iter.start + 1
+endEq : next.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+q : aspis_core.field.QM31
+read : { row := row, framed := self.framed }.decode_k_value byteOffset iter.start offset = ok (core.result.Result.Ok q)
+updated : Std.Array aspis_core.field.QM31 N
+set : out.update iter.start q = ok updated
+⊢ (let (o, iter1) := (some iter.start, next)
+    match o with
+    | none => ok (done (out, none))
+    | some value => do
+      let r ← { row := row, framed := self.framed }.decode_k_value byteOffset value offset
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let out1 ← out.update value val
+          ok (cont (iter1, out1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 N) (core.convert.FromSame r1_wire.Error) residual
+          ok (done (out, some r1))) =
+    ok (cont (next, updated))
+JFv_DecodeLoop.lean:36:79: warning: This simp argument is unused:
+  read
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.ValidatedRecord.decode_k_loop.body, ̲advance, ̲bind_tc_ok,r̵e̵a̵d̵,̵
+          core.result.Result.Insts.CoreOpsTry.branch, ̲set]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFv_DecodeLoop.lean:37:51: warning: This simp argument is unused:
+  set
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.ValidatedRecord.decode_k_loop.body, ̲advance, ̲bind_tc_ok, ̲read,
+          core.result.Result.Insts.CoreOpsTry.branch,̵s̵e̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFv_DecodeLoop.update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_DecodeLoop.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

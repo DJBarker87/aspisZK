@@ -1,0 +1,58 @@
+{"attempt": "JFv_065", "exit_status": 1, "wall_seconds": 3.381212782987859, "peak_rss_kib": "5598660", "swaps": "0", "print_axioms": ["'AspisR1.JFv_SemanticCall.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_SemanticCall.lean:15:2: error: unsolved goals
+case refine_1
+H : Type
+D : aspis_core.Digest32 H
+total : JFv_TranscriptTotal.Total D
+t : r1_wire.SemanticTranscript H
+vr : r1_wire.ValidatedRecord
+same : vr.row = t.next_row
+bound : ↑vr.row < 25
+block : Std.Array U8 32#usize
+after : r1_wire.SemanticTranscript H
+call : r1_wire.SemanticTranscript.sample_block_validated D t vr.row vr.framed = ok (core.result.Result.Ok block, after)
+next : ↑after.next_row = ↑vr.row + 1
+q : SamplerTransport.NewQM
+sampled : AspisR1PublicPreparation.sampler.qm31_sample block = ok q
+canonical :
+  ExtractedQM31SamplerCarrier.CurrentCanonicalQM (ExtractedQM31SamplerCarrier.toCurrent (SamplerTransport.toOld q))
+right✝ :
+...
+ 25
+block : Std.Array U8 32#usize
+after : r1_wire.SemanticTranscript H
+call : r1_wire.SemanticTranscript.sample_block_validated D t vr.row vr.framed = ok (core.result.Result.Ok block, after)
+next : ↑after.next_row = ↑vr.row + 1
+q : SamplerTransport.NewQM
+sampled : AspisR1PublicPreparation.sampler.qm31_sample block = ok q
+canonical :
+  ExtractedQM31SamplerCarrier.CurrentCanonicalQM (ExtractedQM31SamplerCarrier.toCurrent (SamplerTransport.toOld q))
+right✝ :
+  ExtractedQM31SamplerCorrect.coordinates (SamplerTransport.toOld q) =
+    SamplerNatModel.qm31Digits (SourceSamplerByteRank.rank block)
+⊢ (let (r, self1) := (core.result.Result.Ok block, after)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let q ← AspisR1PublicPreparation.sampler.qm31_sample val
+        ok (core.result.Result.Ok q, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (r1, self1)) =
+    ok (core.result.Result.Ok q, after)
+JFv_SemanticCall.lean:18:74: warning: This simp argument is unused:
+  sampled
+
+Hint: Omit it from the simp argument list.
+  simp only [call, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,̵s̵a̵m̵p̵l̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFv_SemanticCall.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rffc9dd021de14017bf151252cda07ad8.scope; invocation ID: 9a42e9f9898444d9bdeb32e3899a8bfa

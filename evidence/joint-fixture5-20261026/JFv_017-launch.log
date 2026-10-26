@@ -1,0 +1,44 @@
+{"attempt": "JFv_017", "exit_status": 1, "wall_seconds": 2.1892916680080816, "peak_rss_kib": "4301628", "swaps": "0", "print_axioms": ["'AspisR1.JFv_Value.payload' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_Value.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_Value.lean:11:12: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+JFv_Value.lean:11:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+JFv_Value.lean:20:2: error: Tactic `apply` failed: could not unify the conclusion of `@spec_imp_exists`
+  ∃ y, ?m = ok y ∧ ?P y
+with the goal
+  ∃ q, self.decode_k_value byteOffset value offset = ok (core.result.Result.Ok q)
+
+Note: The full type of `@spec_imp_exists` is
+  ∀ {α : Type ?u.56} {m : Result α} {P : Post α}, m ⦃ P ⦄ → ∃ y, m = ok y ∧ P y
+
+self : r1_wire.ValidatedRecord
+byteOffset value offset : Usiz
+...
+JFv_Value.lean:11:12: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+JFv_Value.lean:11:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+JFv_Value.lean:20:2: error: Tactic `apply` failed: could not unify the conclusion of `@spec_imp_exists`
+  ∃ y, ?m = ok y ∧ ?P y
+with the goal
+  ∃ q, self.decode_k_value byteOffset value offset = ok (core.result.Result.Ok q)
+
+Note: The full type of `@spec_imp_exists` is
+  ∀ {α : Type ?u.56} {m : Result α} {P : Post α}, m ⦃ P ⦄ → ∃ y, m = ok y ∧ P y
+
+self : r1_wire.ValidatedRecord
+byteOffset value offset : Usize
+bound : 5 + ↑byteOffset + 32 * ↑value + 16 ≤ self.framed.length
+small : self.framed.length ≤ 20000
+aligned : ↑byteOffset % 4 = 0
+offsetBound : ↑offset + ↑value ≤ Usize.max
+canon : canonical (bytesOf (List.drop 5 ↑self.framed))
+⊢ ∃ q, self.decode_k_value byteOffset value offset = ok (core.result.Result.Ok q)
+'AspisR1.JFv_Value.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_Value.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re4af5ef539d048c48b4ddb32f72ab680.scope; invocation ID: ca5cd9a98826470e88295c1ac3338839

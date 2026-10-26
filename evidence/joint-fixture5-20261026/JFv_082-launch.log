@@ -1,0 +1,48 @@
+{"attempt": "JFv_082", "exit_status": 1, "wall_seconds": 29.43104046600638, "peak_rss_kib": "5649840", "swaps": "0", "print_axioms": ["'AspisR1.JFv_Begin.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_Begin.lean:18:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+H : Type
+D : aspis_core.Digest32 H
+total : JFv_TranscriptTotal.Total D
+pre : r1_wire.Prefix
+t0 : r1_wire.SemanticTranscript H
+initial : ↑t0.next_row = 0
+r : r1_wire.ValidatedRecord
+_✝²⁶ : [> let r ← pre.validated_record 0#u8 <]
+x✝²⁴ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+r_post1 : x✝²⁴ = core.result.Result.Ok r
+r_post2 : r.row = 0#u8
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.ValidatedRecord
+_✝²⁵ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch 
+...
+sidual r1_wire.Challenges
+                (core.convert.FromSame r1_wire.Error) residual
+          ok (r19, transcript9)) ⦃
+    result => ∃ challenges after, result = (core.result.Result.Ok challenges, after) ∧ ↑after.next_row = 15 ⦄
+JFv_Begin.lean:16:8: warning: This simp argument is unused:
+  core.ops.control_flow.ControlFlow.Continue.injEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵c̵o̵n̵t̵r̵o̵l̵_̵f̵l̵o̵w̵.̵C̵o̵n̵t̵r̵o̵l̵F̵l̵o̵w̵.̵C̵o̵n̵t̵i̵n̵u̵e̵.̵i̵n̵j̵E̵q̵,̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+          core.ops.control_flow.ControlFlow.Break.injEq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFv_Begin.lean:17:8: warning: This simp argument is unused:
+  core.ops.control_flow.ControlFlow.Break.injEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵c̵o̵n̵t̵r̵o̵l̵_̵f̵l̵o̵w̵.̵C̵o̵n̵t̵r̵o̵l̵F̵l̵o̵w̵.̵C̵o̵n̵t̵i̵n̵u̵e̵.̵i̵n̵j̵E̵q̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵c̵o̵n̵t̵r̵o̵l̵_̵f̵l̵o̵w̵.̵C̵o̵n̵t̵r̵o̵l̵F̵l̵o̵w̵.̵B̵r̵e̵a̵k̵.̵i̵n̵j̵E̵q̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲c̲o̲n̲t̲r̲o̲l̲_̲f̲l̲o̲w̲.̲C̲o̲n̲t̲r̲o̲l̲F̲l̲o̲w̲.̲C̲o̲n̲t̲i̲n̲u̲e̲.̲i̲n̲j̲E̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFv_Begin.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r66277a706434492aae5be2e038d180c8.scope; invocation ID: bb0133b66fa74a54a22a9e1282968dc5

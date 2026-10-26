@@ -1,0 +1,417 @@
+JFv_Begin.lean:18:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+H : Type
+D : aspis_core.Digest32 H
+total : JFv_TranscriptTotal.Total D
+pre : r1_wire.Prefix
+t0 : r1_wire.SemanticTranscript H
+initial : ↑t0.next_row = 0
+r : r1_wire.ValidatedRecord
+_✝²⁶ : [> let r ← pre.validated_record 0#u8 <]
+x✝²⁴ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+r_post1 : x✝²⁴ = core.result.Result.Ok r
+r_post2 : r.row = 0#u8
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.ValidatedRecord
+_✝²⁵ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch x✝²⁴ <]
+vr : r1_wire.ValidatedRecord
+r1 transcript1 : aspis_core.field.CM31
+_✝²⁴ : [> let(r1, transcript1) ← r1_wire.SemanticTranscript.semantic_validated D t0 vr <]
+x✝²³ : r1_wire.SemanticTranscript H
+x✝²² : core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H
+cf_post : ok (core.ops.control_flow.ControlFlow.Continue r) = ok (core.ops.control_flow.ControlFlow.Continue vr)
+h✝ : cf = core.ops.control_flow.ControlFlow.Continue vr
+r1_post1 : x✝²² = (core.result.Result.Ok { c0 := r1, c1 := transcript1 }, x✝²³)
+r1_post2 : ↑x✝²³.next_row = ↑vr.row + 1
+r1_post3 : JFv_RoundArithmetic.Canonical { c0 := r1, c1 := transcript1 }
+r2 : r1_wire.ValidatedRecord
+_✝²³ : [> let r2 ← pre.validated_record 1#u8 <]
+x✝²¹ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+r2_post1 : x✝²¹ = core.result.Result.Ok r2
+r2_post2 : r2.row = 1#u8
+r3 transcript2 : aspis_core.field.CM31
+_✝²² : [> let(r3, transcript2) ← r1_wire.SemanticTranscript.semantic_validated D x✝²³ r2 <]
+x✝²⁰ : r1_wire.SemanticTranscript H
+x✝¹⁹ : core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H
+r3_post1 : x✝¹⁹ = (core.result.Result.Ok { c0 := r3, c1 := transcript2 }, x✝²⁰)
+r3_post2 : ↑x✝²⁰.next_row = ↑1#u8 + 1
+r3_post3 : JFv_RoundArithmetic.Canonical { c0 := r3, c1 := transcript2 }
+r4 : r1_wire.ValidatedRecord
+_✝²¹ : [> let r4 ← pre.validated_record 2#u8 <]
+x✝¹⁸ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+r4_post1 : x✝¹⁸ = core.result.Result.Ok r4
+r4_post2 : r4.row = 2#u8
+r5 transcript3 : aspis_core.field.CM31
+_✝²⁰ : [> let(r5, transcript3) ← r1_wire.SemanticTranscript.semantic_validated D x✝²⁰ r4 <]
+x✝¹⁷ : r1_wire.SemanticTranscript H
+x✝¹⁶ : core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H
+r5_post1 : x✝¹⁶ = (core.result.Result.Ok { c0 := r5, c1 := transcript3 }, x✝¹⁷)
+r5_post2 : ↑x✝¹⁷.next_row = ↑2#u8 + 1
+r5_post3 : JFv_RoundArithmetic.Canonical { c0 := r5, c1 := transcript3 }
+r6 : r1_wire.ValidatedRecord
+_✝¹⁹ : [> let r6 ← pre.validated_record 3#u8 <]
+x✝¹⁵ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+r6_post1 : x✝¹⁵ = core.result.Result.Ok r6
+r6_post2 : r6.row = 3#u8
+r7 transcript4 : aspis_core.field.CM31
+_✝¹⁸ : [> let(r7, transcript4) ← r1_wire.SemanticTranscript.semantic_validated D x✝¹⁷ r6 <]
+x✝¹⁴ : r1_wire.SemanticTranscript H
+x✝¹³ : core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H
+r7_post1 : x✝¹³ = (core.result.Result.Ok { c0 := r7, c1 := transcript4 }, x✝¹⁴)
+r7_post2 : ↑x✝¹⁴.next_row = ↑3#u8 + 1
+r7_post3 : JFv_RoundArithmetic.Canonical { c0 := r7, c1 := transcript4 }
+_✝¹⁷ : aspis_core.field.QM31
+index_mut_back : aspis_core.field.QM31 → Std.Array aspis_core.field.QM31 10#usize
+_✝¹⁶ : [> let(_✝¹⁷, index_mut_back) ← (Array.repeat 10#usize aspis_core.field.QM31.ZERO).index_mut_usize 0#usize <]
+__post2✝³ : index_mut_back = (Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize
+__post1✝³ : _✝¹⁷ = (↑(Array.repeat 10#usize aspis_core.field.QM31.ZERO))[0]
+r8 : r1_wire.ValidatedRecord
+_✝¹⁵ : [> let r8 ← pre.validated_record 4#u8 <]
+x✝¹² : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+r8_post1 : x✝¹² = core.result.Result.Ok r8
+r8_post2 : r8.row = 4#u8
+r9 transcript5 : aspis_core.field.CM31
+_✝¹⁴ : [> let(r9, transcript5) ← r1_wire.SemanticTranscript.semantic_validated D x✝¹⁴ r8 <]
+x✝¹¹ : r1_wire.SemanticTranscript H
+x✝¹⁰ : core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H
+r9_post1 : x✝¹⁰ = (core.result.Result.Ok { c0 := r9, c1 := transcript5 }, x✝¹¹)
+r9_post2 : ↑x✝¹¹.next_row = ↑4#u8 + 1
+r9_post3 : JFv_RoundArithmetic.Canonical { c0 := r9, c1 := transcript5 }
+_✝¹³ : aspis_core.field.QM31
+index_mut_back1 : aspis_core.field.QM31 → Std.Array aspis_core.field.QM31 10#usize
+_✝¹² :
+  [> let(_✝¹³, index_mut_back1) ←
+    ((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).index_mut_usize
+      1#usize <]
+__post2✝² :
+  index_mut_back1 =
+    ((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set 1#usize
+__post1✝² :
+  _✝¹³ = (↑((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }))[1]
+r10 : r1_wire.ValidatedRecord
+_✝¹¹ : [> let r10 ← pre.validated_record 5#u8 <]
+x✝⁹ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+r10_post1 : x✝⁹ = core.result.Result.Ok r10
+r10_post2 : r10.row = 5#u8
+r11 transcript6 : aspis_core.field.CM31
+_✝¹⁰ : [> let(r11, transcript6) ← r1_wire.SemanticTranscript.semantic_validated D x✝¹¹ r10 <]
+x✝⁸ : r1_wire.SemanticTranscript H
+x✝⁷ : core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H
+r11_post1 : x✝⁷ = (core.result.Result.Ok { c0 := r11, c1 := transcript6 }, x✝⁸)
+r11_post2 : ↑x✝⁸.next_row = ↑5#u8 + 1
+r11_post3 : JFv_RoundArithmetic.Canonical { c0 := r11, c1 := transcript6 }
+_✝⁹ : aspis_core.field.QM31
+index_mut_back2 : aspis_core.field.QM31 → Std.Array aspis_core.field.QM31 10#usize
+_✝⁸ :
+  [> let(_✝⁹, index_mut_back2) ←
+    (((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set 1#usize
+          { c0 := r9, c1 := transcript5 }).index_mut_usize
+      2#usize <]
+__post2✝¹ :
+  index_mut_back2 =
+    (((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set 1#usize
+          { c0 := r9, c1 := transcript5 }).set
+      2#usize
+__post1✝¹ :
+  _✝⁹ =
+    (↑(((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set 1#usize
+          { c0 := r9, c1 := transcript5 }))[2]
+r12 : r1_wire.ValidatedRecord
+_✝⁷ : [> let r12 ← pre.validated_record 6#u8 <]
+x✝⁶ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+r12_post1 : x✝⁶ = core.result.Result.Ok r12
+r12_post2 : r12.row = 6#u8
+r13 transcript7 : aspis_core.field.CM31
+_✝⁶ : [> let(r13, transcript7) ← r1_wire.SemanticTranscript.semantic_validated D x✝⁸ r12 <]
+x✝⁵ : r1_wire.SemanticTranscript H
+x✝⁴ : core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H
+r13_post1 : x✝⁴ = (core.result.Result.Ok { c0 := r13, c1 := transcript7 }, x✝⁵)
+r13_post2 : ↑x✝⁵.next_row = ↑6#u8 + 1
+r13_post3 : JFv_RoundArithmetic.Canonical { c0 := r13, c1 := transcript7 }
+_✝⁵ : aspis_core.field.QM31
+index_mut_back3 : aspis_core.field.QM31 → Std.Array aspis_core.field.QM31 10#usize
+_✝⁴ :
+  [> let(_✝⁵, index_mut_back3) ←
+    ((((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set 1#usize
+              { c0 := r9, c1 := transcript5 }).set
+          2#usize { c0 := r11, c1 := transcript6 }).index_mut_usize
+      3#usize <]
+__post2✝ :
+  index_mut_back3 =
+    ((((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set 1#usize
+              { c0 := r9, c1 := transcript5 }).set
+          2#usize { c0 := r11, c1 := transcript6 }).set
+      3#usize
+__post1✝ :
+  _✝⁵ =
+    (↑((((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set 1#usize
+              { c0 := r9, c1 := transcript5 }).set
+          2#usize { c0 := r11, c1 := transcript6 }))[3]
+r14 : r1_wire.ValidatedRecord
+_✝³ : [> let r14 ← pre.validated_record 7#u8 <]
+x✝³ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+r14_post1 : x✝³ = core.result.Result.Ok r14
+r14_post2 : r14.row = 7#u8
+r15 transcript8 : aspis_core.field.CM31
+_✝² : [> let(r15, transcript8) ← r1_wire.SemanticTranscript.semantic_validated D x✝⁵ r14 <]
+x✝² : r1_wire.SemanticTranscript H
+x✝¹ : core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H
+r15_post1 : x✝¹ = (core.result.Result.Ok { c0 := r15, c1 := transcript8 }, x✝²)
+r15_post2 : ↑x✝².next_row = ↑7#u8 + 1
+r15_post3 : JFv_RoundArithmetic.Canonical { c0 := r15, c1 := transcript8 }
+_✝¹ : aspis_core.field.QM31
+index_mut_back4 : aspis_core.field.QM31 → Std.Array aspis_core.field.QM31 10#usize
+_✝ :
+  [> let(_✝¹, index_mut_back4) ←
+    (((((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set 1#usize
+                  { c0 := r9, c1 := transcript5 }).set
+              2#usize { c0 := r11, c1 := transcript6 }).set
+          3#usize { c0 := r13, c1 := transcript7 }).index_mut_usize
+      4#usize <]
+__post2 :
+  index_mut_back4 =
+    (((((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set 1#usize
+                  { c0 := r9, c1 := transcript5 }).set
+              2#usize { c0 := r11, c1 := transcript6 }).set
+          3#usize { c0 := r13, c1 := transcript7 }).set
+      4#usize
+__post1 :
+  _✝¹ =
+    (↑(((((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set 1#usize
+                  { c0 := r9, c1 := transcript5 }).set
+              2#usize { c0 := r11, c1 := transcript6 }).set
+          3#usize { c0 := r13, c1 := transcript7 }))[4]
+r16 : r1_wire.ValidatedRecord
+_ : [> let r16 ← pre.validated_record 8#u8 <]
+x✝ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+r16_post1 : x✝ = core.result.Result.Ok r16
+r16_post2 : r16.row = 8#u8
+⊢ (do
+      let (r17, transcript9) ← r1_wire.SemanticTranscript.semantic_validated D x✝² r16
+      let cf17 ←
+        match r17 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf17 with
+        | core.ops.control_flow.ControlFlow.Continue val8 => do
+          let (_, index_mut_back5) ←
+            ((((((Array.repeat 10#usize aspis_core.field.QM31.ZERO).set 0#usize { c0 := r7, c1 := transcript4 }).set
+                                1#usize { c0 := r9, c1 := transcript5 }).set
+                            2#usize { c0 := r11, c1 := transcript6 }).set
+                        3#usize { c0 := r13, c1 := transcript7 }).set
+                    4#usize { c0 := r15, c1 := transcript8 }).index_mut_usize
+                5#usize
+          let r18 ← pre.validated_record 9#u8
+          let cf18 ←
+            match r18 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf18 with
+            | core.ops.control_flow.ControlFlow.Continue vr9 => do
+              let (r19, transcript10) ← r1_wire.SemanticTranscript.semantic_validated D transcript9 vr9
+              let cf19 ←
+                match r19 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf19 with
+                | core.ops.control_flow.ControlFlow.Continue val9 => do
+                  let (_, index_mut_back6) ← (index_mut_back5 val8).index_mut_usize 6#usize
+                  let r20 ← pre.validated_record 10#u8
+                  let cf20 ←
+                    match r20 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf20 with
+                    | core.ops.control_flow.ControlFlow.Continue vr10 => do
+                      let (r21, transcript11) ← r1_wire.SemanticTranscript.semantic_validated D transcript10 vr10
+                      let cf21 ←
+                        match r21 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf21 with
+                        | core.ops.control_flow.ControlFlow.Continue val10 => do
+                          let (_, index_mut_back7) ← (index_mut_back6 val9).index_mut_usize 7#usize
+                          let r22 ← pre.validated_record 11#u8
+                          let cf22 ←
+                            match r22 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf22 with
+                            | core.ops.control_flow.ControlFlow.Continue vr11 => do
+                              let (r23, transcript12) ←
+                                r1_wire.SemanticTranscript.semantic_validated D transcript11 vr11
+                              let cf23 ←
+                                match r23 with
+                                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                  | core.result.Result.Err e =>
+                                    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                              match cf23 with
+                                | core.ops.control_flow.ControlFlow.Continue val11 => do
+                                  let (_, index_mut_back8) ← (index_mut_back7 val10).index_mut_usize 8#usize
+                                  let r24 ← pre.validated_record 12#u8
+                                  let cf24 ←
+                                    match r24 with
+                                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                      | core.result.Result.Err e =>
+                                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                  match cf24 with
+                                    | core.ops.control_flow.ControlFlow.Continue vr12 => do
+                                      let (r25, transcript13) ←
+                                        r1_wire.SemanticTranscript.semantic_validated D transcript12 vr12
+                                      let cf25 ←
+                                        match r25 with
+                                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                          | core.result.Result.Err e =>
+                                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                      match cf25 with
+                                        | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                          let (_, index_mut_back9) ← (index_mut_back8 val11).index_mut_usize 9#usize
+                                          let r26 ← pre.validated_record 13#u8
+                                          let cf26 ←
+                                            match r26 with
+                                              | core.result.Result.Ok v =>
+                                                ok (core.ops.control_flow.ControlFlow.Continue v)
+                                              | core.result.Result.Err e =>
+                                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                          match cf26 with
+                                            | core.ops.control_flow.ControlFlow.Continue vr13 => do
+                                              let (r27, transcript14) ←
+                                                r1_wire.SemanticTranscript.semantic_validated D transcript13 vr13
+                                              let cf27 ←
+                                                match r27 with
+                                                  | core.result.Result.Ok v =>
+                                                    ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                  | core.result.Result.Err e =>
+                                                    ok
+                                                      (core.ops.control_flow.ControlFlow.Break
+                                                        (core.result.Result.Err e))
+                                              match cf27 with
+                                                | core.ops.control_flow.ControlFlow.Continue val13 => do
+                                                  let r28 ← pre.validated_record 14#u8
+                                                  let cf28 ←
+                                                    match r28 with
+                                                      | core.result.Result.Ok v =>
+                                                        ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                      | core.result.Result.Err e =>
+                                                        ok
+                                                          (core.ops.control_flow.ControlFlow.Break
+                                                            (core.result.Result.Err e))
+                                                  match cf28 with
+                                                    | core.ops.control_flow.ControlFlow.Continue vr14 => do
+                                                      let (r29, transcript15) ←
+                                                        r1_wire.SemanticTranscript.semantic_validated D transcript14
+                                                            vr14
+                                                      let cf29 ←
+                                                        match r29 with
+                                                          | core.result.Result.Ok v =>
+                                                            ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                          | core.result.Result.Err e =>
+                                                            ok
+                                                              (core.ops.control_flow.ControlFlow.Break
+                                                                (core.result.Result.Err e))
+                                                      match cf29 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val14 =>
+                                                          ok
+                                                            (core.result.Result.Ok
+                                                                { lambda := { c0 := r1, c1 := transcript1 },
+                                                                  chi := { c0 := r3, c1 := transcript2 },
+                                                                  theta := { c0 := r5, c1 := transcript3 },
+                                                                  zc := index_mut_back9 val12, mu := val13,
+                                                                  eta := val14 },
+                                                              transcript15)
+                                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                                          let r30 ←
+                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                r1_wire.Challenges (core.convert.FromSame r1_wire.Error)
+                                                                residual
+                                                          ok (r30, transcript15)
+                                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                                      let r29 ←
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            r1_wire.Challenges (core.convert.FromSame r1_wire.Error)
+                                                            residual
+                                                      ok (r29, transcript14)
+                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                  let r29 ←
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        r1_wire.Challenges (core.convert.FromSame r1_wire.Error)
+                                                        residual
+                                                  ok (r29, transcript14)
+                                            | core.ops.control_flow.ControlFlow.Break residual => do
+                                              let r27 ←
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                                              ok (r27, transcript13)
+                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                          let r27 ←
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                                          ok (r27, transcript13)
+                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                      let r25 ←
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                                      ok (r25, transcript12)
+                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                  let r25 ←
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                                  ok (r25, transcript12)
+                            | core.ops.control_flow.ControlFlow.Break residual => do
+                              let r23 ←
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                              ok (r23, transcript11)
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r23 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                          ok (r23, transcript11)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r21 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                      ok (r21, transcript10)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r21 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                  ok (r21, transcript10)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r19 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges
+                    (core.convert.FromSame r1_wire.Error) residual
+              ok (r19, transcript9)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r19 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges
+                (core.convert.FromSame r1_wire.Error) residual
+          ok (r19, transcript9)) ⦃
+    result => ∃ challenges after, result = (core.result.Result.Ok challenges, after) ∧ ↑after.next_row = 15 ⦄
+JFv_Begin.lean:16:8: warning: This simp argument is unused:
+  core.ops.control_flow.ControlFlow.Continue.injEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵c̵o̵n̵t̵r̵o̵l̵_̵f̵l̵o̵w̵.̵C̵o̵n̵t̵r̵o̵l̵F̵l̵o̵w̵.̵C̵o̵n̵t̵i̵n̵u̵e̵.̵i̵n̵j̵E̵q̵,̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+          core.ops.control_flow.ControlFlow.Break.injEq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFv_Begin.lean:17:8: warning: This simp argument is unused:
+  core.ops.control_flow.ControlFlow.Break.injEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵c̵o̵n̵t̵r̵o̵l̵_̵f̵l̵o̵w̵.̵C̵o̵n̵t̵r̵o̵l̵F̵l̵o̵w̵.̵C̵o̵n̵t̵i̵n̵u̵e̵.̵i̵n̵j̵E̵q̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵c̵o̵n̵t̵r̵o̵l̵_̵f̵l̵o̵w̵.̵C̵o̵n̵t̵r̵o̵l̵F̵l̵o̵w̵.̵B̵r̵e̵a̵k̵.̵i̵n̵j̵E̵q̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲c̲o̲n̲t̲r̲o̲l̲_̲f̲l̲o̲w̲.̲C̲o̲n̲t̲r̲o̲l̲F̲l̲o̲w̲.̲C̲o̲n̲t̲i̲n̲u̲e̲.̲i̲n̲j̲E̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFv_Begin.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

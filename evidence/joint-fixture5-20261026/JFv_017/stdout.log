@@ -1,0 +1,24 @@
+JFv_Value.lean:11:12: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+JFv_Value.lean:11:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+JFv_Value.lean:20:2: error: Tactic `apply` failed: could not unify the conclusion of `@spec_imp_exists`
+  ∃ y, ?m = ok y ∧ ?P y
+with the goal
+  ∃ q, self.decode_k_value byteOffset value offset = ok (core.result.Result.Ok q)
+
+Note: The full type of `@spec_imp_exists` is
+  ∀ {α : Type ?u.56} {m : Result α} {P : Post α}, m ⦃ P ⦄ → ∃ y, m = ok y ∧ P y
+
+self : r1_wire.ValidatedRecord
+byteOffset value offset : Usize
+bound : 5 + ↑byteOffset + 32 * ↑value + 16 ≤ self.framed.length
+small : self.framed.length ≤ 20000
+aligned : ↑byteOffset % 4 = 0
+offsetBound : ↑offset + ↑value ≤ Usize.max
+canon : canonical (bytesOf (List.drop 5 ↑self.framed))
+⊢ ∃ q, self.decode_k_value byteOffset value offset = ok (core.result.Result.Ok q)
+'AspisR1.JFv_Value.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_Value.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

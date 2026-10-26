@@ -1,0 +1,18 @@
+JFv_DecodeInspect.lean:3:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.UnrolledWideParserRefinement.fixed_success_iff`
+theorem AspisR1.UnrolledWideParserRefinement.fixed_success : ∀ (arr : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (value : AspisR1.CandidateWideParserRefinement.Wide),
+  AspisR1CandidateParser.field.wide_exact.WideExact.from_le_bytes_unrolled arr.to_slice =
+      Aeneas.Std.Result.ok (some value) →
+    ∃ limbs,
+      AspisR1.StrictWideByteCodec.decodeWideLE (AspisR1.WideParserArrayHalves.arrayBytes32 arr) = some limbs ∧
+        AspisR1.CandidateWideParserRefinement.limbsToCandidate limbs = value ∧
+          AspisR1.StrictWideByteCodec.encodeWideLE limbs = AspisR1.WideParserArrayHalves.arrayBytes32 arr :=
+fun arr value h =>
+  AspisR1.CandidateWideParserContracts.fixed_success arr value
+    (Eq.mp
+      (congrArg (fun _a => _a = Aeneas.Std.Result.ok (some value))
+        (AspisR1.UnrolledWideParserRefinement.source_eq_half_parser arr.to_slice))
+      h)
+@[reducible] def AspisR1.CandidateWideParserRefinement.Wide : Type :=
+AspisR1CandidateParser.field.wide_exact.WideExact
+JFv_DecodeInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.UnrolledWideParserRefinement`

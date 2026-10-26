@@ -1,0 +1,445 @@
+JFv_Value.lean:12:12: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+JFv_Value.lean:12:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+JFv_Value.lean:31:12: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ∀ (j : ℕ) (h : j < 16), (↑s)[j] = (↑bytes)[_a + j]
+Error: Application type mismatch: The argument
+  ?a
+has type
+  ↑start % 4 = 0
+but is expected to have type
+  _a % 4 = 0
+in the application
+  JFv_SelectedBytes.canonical_slice._proof_2 bytes s _a 16 ?a
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case same
+self : r1_wire.ValidatedRecord
+byteOffset value offset : Usize
+bound : 5 + ↑byteOffset + 32 * ↑value + 16 ≤ self.framed.length
+small : self.framed.length ≤ 20000
+aligned : ↑byteOffset % 4 = 0
+offsetBound : ↑offset + ↑value ≤ Usize.max
+canon : canonical (bytesOf (List.drop 5 ↑self.framed))
+i : Usize
+_✝³³ : [> let i ← value * 32#usize <]
+i_post : ↑i = ↑value * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← self.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑self.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+s_post :
+  s = (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice
+length : s.length = 16
+⊢ ∀ (j : ℕ) (h : j < 16), (↑s)[j] = (↑bytes)[↑start + j]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s
+JFv_Value.lean:32:8: error: Expected type must not contain free variables
+  ↑start + 16 ≤ bytes.length
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+JFv_Value.lean:33:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑bytes
+in the target expression
+  ↑start % 4 = 0
+
+case a
+self : r1_wire.ValidatedRecord
+byteOffset value offset : Usize
+bound : 5 + ↑byteOffset + 32 * ↑value + 16 ≤ self.framed.length
+small : self.framed.length ≤ 20000
+aligned : ↑byteOffset % 4 = 0
+offsetBound : ↑offset + ↑value ≤ Usize.max
+canon : canonical (bytesOf (List.drop 5 ↑self.framed))
+i : Usize
+_✝³³ : [> let i ← value * 32#usize <]
+i_post : ↑i = ↑value * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← self.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑self.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+s_post :
+  s = (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice
+length : s.length = 16
+⊢ ↑start % 4 = 0
+JFv_Value.lean:34:14: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case z
+self : r1_wire.ValidatedRecord
+byteOffset value offset : Usize
+bound : 5 + ↑byteOffset + 32 * ↑value + 16 ≤ self.framed.length
+small : self.framed.length ≤ 20000
+aligned : ↑byteOffset % 4 = 0
+offsetBound : ↑offset + ↑value ≤ Usize.max
+canon : canonical (bytesOf (List.drop 5 ↑self.framed))
+i : Usize
+_✝³³ : [> let i ← value * 32#usize <]
+i_post : ↑i = ↑value * 32
+start : Usize
+_✝³² : [> let start ← byteOffset + i <]
+start_post : ↑start = ↑byteOffset + ↑i
+bytes : Slice U8
+_✝³¹ : [> let bytes ← self.payload <]
+bytes_post : ↑bytes = List.drop 5 ↑self.framed
+i1 : U8
+_✝³⁰ : [> let i1 ← bytes.index_usize start <]
+i1_post : i1 = (↑bytes)[↑start]
+i2 : Usize
+_✝²⁹ : [> let i2 ← start + 1#usize <]
+i2_post : ↑i2 = ↑start + 1
+i3 : U8
+_✝²⁸ : [> let i3 ← bytes.index_usize i2 <]
+i3_post : i3 = (↑bytes)[↑i2]
+i4 : Usize
+_✝²⁷ : [> let i4 ← start + 2#usize <]
+i4_post : ↑i4 = ↑start + 2
+i5 : U8
+_✝²⁶ : [> let i5 ← bytes.index_usize i4 <]
+i5_post : i5 = (↑bytes)[↑i4]
+i6 : Usize
+_✝²⁵ : [> let i6 ← start + 3#usize <]
+i6_post : ↑i6 = ↑start + 3
+i7 : U8
+_✝²⁴ : [> let i7 ← bytes.index_usize i6 <]
+i7_post : i7 = (↑bytes)[↑i6]
+i8 : Usize
+_✝²³ : [> let i8 ← start + 4#usize <]
+i8_post : ↑i8 = ↑start + 4
+i9 : U8
+_✝²² : [> let i9 ← bytes.index_usize i8 <]
+i9_post : i9 = (↑bytes)[↑i8]
+i10 : Usize
+_✝²¹ : [> let i10 ← start + 5#usize <]
+i10_post : ↑i10 = ↑start + 5
+i11 : U8
+_✝²⁰ : [> let i11 ← bytes.index_usize i10 <]
+i11_post : i11 = (↑bytes)[↑i10]
+i12 : Usize
+_✝¹⁹ : [> let i12 ← start + 6#usize <]
+i12_post : ↑i12 = ↑start + 6
+i13 : U8
+_✝¹⁸ : [> let i13 ← bytes.index_usize i12 <]
+i13_post : i13 = (↑bytes)[↑i12]
+i14 : Usize
+_✝¹⁷ : [> let i14 ← start + 7#usize <]
+i14_post : ↑i14 = ↑start + 7
+i15 : U8
+_✝¹⁶ : [> let i15 ← bytes.index_usize i14 <]
+i15_post : i15 = (↑bytes)[↑i14]
+i16 : Usize
+_✝¹⁵ : [> let i16 ← start + 8#usize <]
+i16_post : ↑i16 = ↑start + 8
+i17 : U8
+_✝¹⁴ : [> let i17 ← bytes.index_usize i16 <]
+i17_post : i17 = (↑bytes)[↑i16]
+i18 : Usize
+_✝¹³ : [> let i18 ← start + 9#usize <]
+i18_post : ↑i18 = ↑start + 9
+i19 : U8
+_✝¹² : [> let i19 ← bytes.index_usize i18 <]
+i19_post : i19 = (↑bytes)[↑i18]
+i20 : Usize
+_✝¹¹ : [> let i20 ← start + 10#usize <]
+i20_post : ↑i20 = ↑start + 10
+i21 : U8
+_✝¹⁰ : [> let i21 ← bytes.index_usize i20 <]
+i21_post : i21 = (↑bytes)[↑i20]
+i22 : Usize
+_✝⁹ : [> let i22 ← start + 11#usize <]
+i22_post : ↑i22 = ↑start + 11
+i23 : U8
+_✝⁸ : [> let i23 ← bytes.index_usize i22 <]
+i23_post : i23 = (↑bytes)[↑i22]
+i24 : Usize
+_✝⁷ : [> let i24 ← start + 12#usize <]
+i24_post : ↑i24 = ↑start + 12
+i25 : U8
+_✝⁶ : [> let i25 ← bytes.index_usize i24 <]
+i25_post : i25 = (↑bytes)[↑i24]
+i26 : Usize
+_✝⁵ : [> let i26 ← start + 13#usize <]
+i26_post : ↑i26 = ↑start + 13
+i27 : U8
+_✝⁴ : [> let i27 ← bytes.index_usize i26 <]
+i27_post : i27 = (↑bytes)[↑i26]
+i28 : Usize
+_✝³ : [> let i28 ← start + 14#usize <]
+i28_post : ↑i28 = ↑start + 14
+i29 : U8
+_✝² : [> let i29 ← bytes.index_usize i28 <]
+i29_post : i29 = (↑bytes)[↑i28]
+i30 : Usize
+_✝¹ : [> let i30 ← start + 15#usize <]
+i30_post : ↑i30 = ↑start + 15
+i31 : U8
+_✝ : [> let i31 ← bytes.index_usize i30 <]
+i31_post : i31 = (↑bytes)[↑i30]
+s : Slice U8
+_ :
+  [> let s ←
+    lift (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice <]
+s_post :
+  s = (Array.make 16#usize [i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31] ⋯).to_slice
+length : s.length = 16
+⊢ 16 % 4 = 0
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:43:25: error(lean.unknownIdentifier): Unknown identifier `o_post`
+JFv_Value.lean:43:14: error: `simp` made no progress
+JFv_Value.lean:30:19: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵b̵y̵t̵e̵s̵_̵p̵o̵s̵t̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵d̵r̵o̵p̵]̵[̲b̲y̲t̲e̲s̲_̲p̲o̲s̲t̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲d̲r̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFv_Value.lean:30:43: warning: This simp argument is unused:
+  List.length_drop
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵b̵y̵t̵e̵s̵_̵p̵o̵s̵t̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵d̵r̵o̵p̵]̵[̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲b̲y̲t̲e̲s̲_̲p̲o̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFv_Value.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_Value.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
