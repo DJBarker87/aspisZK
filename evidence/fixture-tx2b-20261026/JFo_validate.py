@@ -19,8 +19,9 @@ final=[];pending=[]
 for f in sorted((R/'lean').glob('JFo_*.lean')):
  v=accepted.get((f.name,sha(f)))
  if not v:pending.append(f.name);continue
- s=f.read_text();ns=re.search(r'^namespace (\S+)',s,re.M).group(1)
- for t in re.findall(r'^theorem (\w+)',s,re.M):
+ s=f.read_text()
+ for match in re.finditer(r'^theorem (\w+)',s,re.M):
+  t=match.group(1);ns=re.findall(r'^namespace (\S+)',s[:match.start()],re.M)[-1]
   assert '#print axioms '+t in s,(f,t)
   assert any(ns+'.'+t in a for a in v.get('print_axioms',[])),(f,t)
  assert not re.search(r'\b(sorry|admit|native_decide)\b|^axiom\b|maxHeartbeats|maxRecDepth',s,re.M),f
