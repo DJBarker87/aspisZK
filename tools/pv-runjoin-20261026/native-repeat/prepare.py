@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Copy exact production entropy source fragments into a tiny no-stub probe."""
 from pathlib import Path
-import hashlib,json
+import hashlib,json,sys
 root=Path(__file__).resolve().parents[3]
 source=root/'crates/aspis-prover/src/state_only_entropy.rs'
 text=source.read_text()
@@ -37,12 +37,17 @@ output+='''fn main() {
 }
 '''
 out=Path(__file__).resolve().parent
-(out/'main.rs').write_text(output)
 manifest={'production_source':str(source.relative_to(root)),
  'production_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
  'fragments_sha256':[hashlib.sha256(s.encode()).hexdigest() for s in parts+[conversion]],
  'probe_sha256':hashlib.sha256(output.encode()).hexdigest(),
  'source_fragments_verbatim':True,'stubs':False,'logged_private_bytes':False,
  'scope':'native entropy helper only; not full prover, SBF, privacy or compiler adequacy'}
-(out/'source-pins.json').write_text(json.dumps(manifest,indent=2)+'\n')
-print(json.dumps(manifest))
+if '--check' in sys.argv:
+    assert (out/'main.rs').read_text() == output
+    assert json.loads((out/'source-pins.json').read_text()) == manifest
+    print('source fragments and probe pins match')
+else:
+    (out/'main.rs').write_text(output)
+    (out/'source-pins.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    print(json.dumps(manifest))

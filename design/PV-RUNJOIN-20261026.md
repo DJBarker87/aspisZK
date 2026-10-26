@@ -174,3 +174,23 @@ sub-obligation has been removed; requested deployment stages are incomplete.
 The final validation and generator --check pass. No full manifest,implementation
 or frozen-artifact gate is claimed. Exact resume receipts and field inventory
 are in `evidence/pv-runjoin-20261026/{summary.json,resume1.md,fixtures-stage.md}`.
+
+## Disk-interruption recovery and checked native helper boundary
+
+Recovered host evidence adds previously completed attempt20949, bringing the
+count to50/100Lean,0/10Kani. The native repeatability probe also completed before
+the interruption. See [recovery checkpoint](../evidence/pv-runjoin-20261026/resume2.md)
+and [native receipt](../evidence/pv-runjoin-20261026/native-repeat/receipt.json).
+No unchanged build is rerun. `PV_RunJoin_NativeRepeat` proves a single pure
+ExternalFuns dictionary cannot represent two distinct successful results at one
+nonce; actual native helper calls observed precisely that distinction. This is
+a source-helper boundary, not a full admitted proof-account/privacy counterexample.
+The unrestricted fixed-dictionary installation route stops here. An effect-aware
+full-client interpretation or sufficient complete-observer transport remains the
+next deliverable; no general impossibility is asserted.
+
+The requested deployed rust/endpoint remains absent. Endpoint fields3→3 and
+fixture associations2→2; no whole V036–V038 or V045–V047 deployment row is closed.
+The budget is not exhausted:50Lean/10Kani remain,nextunused20950. Counterexample
+stopping applies only to the checked installation route. No additional generic
+wrapper is represented as progress on the missing deployed instance.

@@ -1,0 +1,91 @@
+{
+  "source_revision": "bc957add0a0735da9688f4b7f58a14cad9dfb723",
+  "source_was_uncommitted": true,
+  "source_retained_in_lead_snapshot": "84b2a4c53560297adb5742fa09f9b34d17af003a",
+  "production_source_sha256": "e696427450eb2b9061a24ad46dd4b3432d9fc5bae14aba5938840a4e8bc61e34",
+  "scope": "native entropy helper only",
+  "exact_probe_fragments": true,
+  "native_invocations": 2,
+  "first_invocation": "compile exit101; missing Debug demanded by probe unwrap",
+  "second_invocation": "compile exit0/run exit0",
+  "kani_runs": 0,
+  "optimized": true,
+  "private_output_logged": false,
+  "proves_privacy_counterexample": false,
+  "full_prover_run": false,
+  "compiled_formal_boundary": "R1Z.PV_RunJoin_NativeRepeat.incompatible_successes",
+  "lean_attempt": 20949,
+  "resource_logs": [
+    "build.time",
+    "run.time"
+  ],
+  "recovered_without_rerun": true,
+  "command": "sh /home/dombarker/project-offloads/codex-pv-runjoin-20261026/native-repeat-run.sh",
+  "scope_name": "run-r0372861c94b94a7f8cdb0b712838120c.scope",
+  "axioms": "N/A for native Rust probe; Lean theorem audit is receipt-20949.json",
+  "caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "original_command_evidence": "original-launches.json",
+  "commands": [
+    {
+      "timestamp": "2026-10-26T10:47:30.821Z",
+      "command": [
+        "/bin/zsh",
+        "-lc",
+        "cat > tools/pv-runjoin-20261026/native-repeat/run.sh <<'EOF'\n#!/bin/sh\nset -eu\ncd /home/dombarker/project-offloads/codex-pv-runjoin-20261026\nexport PATH=\"$HOME/.cargo/bin:$PATH\"\npython3 reservation-existing.py evidence/native-repeat-go.json --requested-bytes 0\n/usr/bin/time -v -o evidence/native-repeat-build.time cargo build --offline --release -j 4 > evidence/native-repeat-build.log 2>&1\n/usr/bin/time -v -o evidence/native-repeat-run.time ./target/release/pv-runjoin-native-repeat > evidence/native-repeat-run.log 2>&1\nsha256sum target/release/pv-runjoin-native-repeat > evidence/native-repeat-bin.sha\nwc -c < target/release/pv-runjoin-native-repeat > evidence/native-repeat-bin.size\nrustc --version > evidence/native-repeat-toolchain.txt\nEOF\nscp tools/pv-runjoin-20261026/native-repeat/run.sh dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-pv-runjoin-20261026/native-repeat-run.sh\nssh dombarker@100.108.41.90 'cd /home/dombarker/project-offloads/codex-pv-runjoin-20261026 && python3 reservation-existing.py evidence/native-repeat-before.json'"
+      ],
+      "cwd": "file:///Users/dominic/ZK/.worktrees/pv-runjoin",
+      "exit_code": 0,
+      "duration": {
+        "secs": 0,
+        "nanos": 717510041
+      },
+      "started_at_ms": 1793011650103,
+      "completed_at_ms": 1793011650821,
+      "output": "{\"schema\": \"ProverRwNativeEntropy-reservation-v1\", \"utc\": \"2026-10-26T10:47:30.783195+00:00\", \"requested_bytes\": 8589934592, \"safe_limit_bytes\": 59055800320, \"scanner_sha256\": \"a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2\", \"print_axioms\": \"N/A: read-only resource gate\", \"allowed\": true, \"bounded_reserved_bytes\": 44426067968, \"projected_reserved_bytes\": 53016002560}\n"
+    },
+    {
+      "timestamp": "2026-10-26T10:47:38.043Z",
+      "command": [
+        "/bin/zsh",
+        "-lc",
+        "ssh dombarker@100.108.41.90 'systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 sh /home/dombarker/project-offloads/codex-pv-runjoin-20261026/native-repeat-run.sh'"
+      ],
+      "cwd": "file:///Users/dominic/ZK/.worktrees/pv-runjoin",
+      "exit_code": 101,
+      "duration": {
+        "secs": 1,
+        "nanos": 613810458
+      },
+      "started_at_ms": 1793011656429,
+      "completed_at_ms": 1793011658043,
+      "output": "{\"schema\": \"ProverRwNativeEntropy-reservation-v1\", \"utc\": \"2026-10-26T10:47:36.613262+00:00\", \"requested_bytes\": 0, \"safe_limit_bytes\": 59055800320, \"scanner_sha256\": \"a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2\", \"print_axioms\": \"N/A: read-only resource gate\", \"allowed\": true, \"bounded_reserved_bytes\": 51942260736, \"projected_reserved_bytes\": 51942260736}\n"
+    },
+    {
+      "timestamp": "2026-10-26T10:51:28.638Z",
+      "command": [
+        "/bin/zsh",
+        "-lc",
+        "ssh dombarker@100.108.41.90 'systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 sh /home/dombarker/project-offloads/codex-pv-runjoin-20261026/native-repeat-run.sh'"
+      ],
+      "cwd": "file:///Users/dominic/ZK/.worktrees/pv-runjoin",
+      "exit_code": 0,
+      "duration": {
+        "secs": 1,
+        "nanos": 580928250
+      },
+      "started_at_ms": 1793011887057,
+      "completed_at_ms": 1793011888638,
+      "output": "{\"schema\": \"ProverRwNativeEntropy-reservation-v1\", \"utc\": \"2026-10-26T10:51:27.359239+00:00\", \"requested_bytes\": 0, \"safe_limit_bytes\": 59055800320, \"scanner_sha256\": \"a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2\", \"print_axioms\": \"N/A: read-only resource gate\", \"allowed\": true, \"bounded_reserved_bytes\": 43352326144, \"projected_reserved_bytes\": 43352326144}\n"
+    }
+  ],
+  "second_compile_wall_seconds": 1.24,
+  "second_compile_peak_rss_KiB": 194492,
+  "second_run_wall_seconds": 0.0,
+  "second_run_peak_rss_KiB": 1936,
+  "swaps": 0
+}

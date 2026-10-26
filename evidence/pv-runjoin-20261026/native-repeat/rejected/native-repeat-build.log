@@ -1,0 +1,40 @@
+     Locking 7 packages to latest compatible versions
+      Adding getrandom v0.3.4 (available: v0.4.3)
+      Adding zeroize v1.8.1 (available: v1.9.1)
+   Compiling libc v0.2.191
+   Compiling getrandom v0.3.4
+   Compiling cfg-if v1.0.5
+   Compiling zeroize v1.8.1
+   Compiling pv-runjoin-native-repeat v0.0.0 (/home/dombarker/project-offloads/codex-pv-runjoin-20261026)
+error[E0277]: `StateOnlyAttemptEntropyError` doesn't implement `Debug`
+  --> main.rs:55:73
+   |
+55 |     let first = StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce).unwrap();
+   |                                                                         ^^^^^^ the trait `Debug` is not implemented for `StateOnlyAttemptEntropyError`
+   |
+   = note: add `#[derive(Debug)]` to `StateOnlyAttemptEntropyError` or manually `impl Debug for StateOnlyAttemptEntropyError`
+note: required by a bound in `Result::<T, E>::unwrap`
+  --> /rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1/library/core/src/result.rs:1227:4
+help: consider annotating `StateOnlyAttemptEntropyError` with `#[derive(Debug)]`
+   |
+ 3 + #[derive(Debug)]
+ 4 | pub enum StateOnlyAttemptEntropyError {
+   |
+
+error[E0277]: `StateOnlyAttemptEntropyError` doesn't implement `Debug`
+  --> main.rs:56:74
+   |
+56 |     let second = StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce).unwrap();
+   |                                                                          ^^^^^^ the trait `Debug` is not implemented for `StateOnlyAttemptEntropyError`
+   |
+   = note: add `#[derive(Debug)]` to `StateOnlyAttemptEntropyError` or manually `impl Debug for StateOnlyAttemptEntropyError`
+note: required by a bound in `Result::<T, E>::unwrap`
+  --> /rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1/library/core/src/result.rs:1227:4
+help: consider annotating `StateOnlyAttemptEntropyError` with `#[derive(Debug)]`
+   |
+ 3 + #[derive(Debug)]
+ 4 | pub enum StateOnlyAttemptEntropyError {
+   |
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `pv-runjoin-native-repeat` (bin "pv-runjoin-native-repeat") due to 2 previous errors
