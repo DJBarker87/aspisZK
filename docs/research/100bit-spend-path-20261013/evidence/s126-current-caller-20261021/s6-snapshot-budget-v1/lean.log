@@ -1,0 +1,30 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SnapshotBudgetV1.lean:34:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  reserve budget rest (remaining - size)
+in the target expression
+  reserve
+      { allocate := fun remaining bytes => if bytes ≤ remaining then ok (remaining - bytes) else fail Error.panic,
+        cleanup := fun remaining => ok remaining }
+      rest (remaining - size) =
+    ok (remaining - (size :: rest).sum)
+
+case cons
+size : ℕ
+rest : List ℕ
+ih : ∀ (remaining : ℕ), rest.sum ≤ remaining → reserve budget rest remaining = ok (remaining - rest.sum)
+remaining : ℕ
+fits : (size :: rest).sum ≤ remaining
+front : size ≤ remaining
+tail : rest.sum ≤ remaining - size
+⊢ reserve
+      { allocate := fun remaining bytes => if bytes ≤ remaining then ok (remaining - bytes) else fail Error.panic,
+        cleanup := fun remaining => ok remaining }
+      rest (remaining - size) =
+    ok (remaining - (size :: rest).sum)
+'AspisS6SnapshotBudget.first_snapshot_sum_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6SnapshotBudget.reserve_fits' depends on axioms: [propext, sorryAx]
+'AspisS6SnapshotBudget.reserve_insufficient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6SnapshotBudget.snapshot_headroom' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS6SnapshotBudget.snapshot_success_not_child_admission' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
