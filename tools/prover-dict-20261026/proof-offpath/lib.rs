@@ -13,3 +13,34 @@ pub fn string_new(n:usize)->String { String::with_capacity(n) }
 pub fn string_push(s:&mut String,t:&str) { s.push_str(t); }
 #[cfg(kani)]
 pub fn string_path(s:&String)->&std::path::Path { s.as_ref() }
+#[cfg(kani)]
+pub fn file_flush(file:&mut std::fs::File)->std::io::Result<()> {
+    use std::io::Write;
+    file.flush()
+}
+
+#[cfg(all(kani,not(pdict_extract)))]
+#[kani::proof]
+fn zeroizing_mutable_adapters_full_frame() {
+    #[derive(Clone)]
+    struct State { before:u64, cell:u64, after:u64 }
+    impl zeroize::Zeroize for State {
+        fn zeroize(&mut self) { self.cell=0; }
+    }
+    impl AsMut<u64> for State {
+        fn as_mut(&mut self)->&mut u64 { &mut self.cell }
+    }
+    let before:u64=kani::any(); let cell:u64=kani::any(); let after:u64=kani::any();
+    let replacement:u64=kani::any();
+    let mut z=zeroize::Zeroizing::new(State{before,cell,after});
+    assert!(*zero_as_mut(&mut z)==cell);
+    *zero_as_mut(&mut z)=replacement;
+    assert!(zero_deref_mut(&mut z).cell==replacement);
+    assert!(z.before==before && z.after==after);
+    let next:u64=kani::any();
+    zero_deref_mut(&mut z).cell=next;
+    assert!(*zero_as_mut(&mut z)==next);
+    assert!(z.before==before && z.after==after);
+}
+#[cfg(kani)]
+pub fn ct_default()->sha2::digest::core_api::CtVariableCoreWrapper<sha2::Sha256VarCore,sha2::digest::typenum::U32> { Default::default() }

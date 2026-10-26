@@ -2,7 +2,7 @@
 
 Target not yet established. Zero root refinement premises removed. These tables describe the final simultaneous partial source/value dictionary.
 
-New source entries:91; inherited:62; selected:153/262. Remaining:109, including18 outer-reachable entries outside the proof-body reachability overapproximation. Type interpretations:25/28; remaining0,3,27.
+New source entries:93; inherited:62; selected:155/262. Remaining:107, including19 outer-reachable entries outside the proof-body reachability overapproximation. Type interpretations:25/28; remaining0,3,27.
 
 ## Newly installed entries
 
@@ -17,6 +17,9 @@ New source entries:91; inherited:62; selected:153/262. Remaining:109, including1
 |21|`std.fs.OpenOptions.create_new`|`R1Z.PDict_ResumeDictionary.op21_installed`|
 |24|`std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode`|`R1Z.PDict_ResumeDictionary.op24_installed`|
 |27|`std.path.Path.Insts.CoreConvertAsRefPath.as_ref`|`R1Z.PDict_ResumeDictionary.op27_installed`|
+|124|`aspis_prover.state_only_hiding.volatile_clear_cell`|`R1Z.PDict_VolatileCell.op124_installed`|
+|125|`zeroize.Zeroizing.Insts.CoreConvertAsMut.as_mut`|`R1Z.PDict_OffpathBorrow.op125_installed`|
+|126|`zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut`|`R1Z.PDict_OffpathBorrow.op126_installed`|
 |135|`typenum.uint.UTerm.Insts.TypenumPrivatePrivateCmpUTermSoFarSoFar.private_cmp`|`R1Z.PDict_ResumeDictionary.op135_installed`|
 |136|`typenum.uint.UTerm.Insts.TypenumPrivatePrivateCmpUIntSoFarLess.private_cmp`|`R1Z.PDict_ResumeDictionary.op136_installed`|
 |137|`typenum.uint.UIntUlB1.Insts.TypenumPrivatePrivateCmpUIntUrB0SoFarClause3_Output.private_cmp`|`R1Z.PDict_ResumeDictionary.op137_installed`|
@@ -93,12 +96,11 @@ New source entries:91; inherited:62; selected:153/262. Remaining:109, including1
 |211|`ArrayT32.Insts.CoreConvertFromGenericArrayTUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplOddTArrayT0.from`|`R1Z.PDict_ResumeDictionary.op211_installed`|
 |213|`digest.digest.Digest.Blanket.update`|`R1Z.PDict_ResumeDictionary.op213_installed`|
 |214|`digest.digest.Digest.Blanket.new`|`R1Z.PDict_ResumeDictionary.op214_installed`|
+|218|`digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.CoreDefaultDefault.default`|`R1Z.PDict_CtConstructor.op218_installed`|
+|220|`digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiUpdateCore.update_blocks`|`R1Z.PDict_CtUpdate.op220_installed`|
 |221|`block_buffer.Eager.Insts.CoreDefaultDefault.default`|`R1Z.PDict_ResumeDictionary.op221_installed`|
 |238|`host_commitment.clear_private_salt`|`R1Z.PDict_ResumeDictionary.op238_installed`|
 |256|`r1_wire.Error.Insts.CoreCmpPartialEqError.eq`|`R1Z.PDict_ResumeDictionary.op256_installed`|
-|125|`zeroize.Zeroizing.Insts.CoreConvertAsMut.as_mut`|`R1Z.PDict_OffpathBorrow.op125_installed`|
-|126|`zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut`|`R1Z.PDict_OffpathBorrow.op126_installed`|
-|220|`digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiUpdateCore.update_blocks`|`R1Z.PDict_CtUpdate.op220_installed`|
 
 ## Type interpretations
 
@@ -201,7 +203,6 @@ Body-reachable entries remain with the sibling except the closed semantic-error 
 |121|`aspis_core.state_only_sumcheck.evaluate_state_only_polynomial`|True|
 |122|`Array.Insts.ZeroizeZeroize.zeroize`|True|
 |123|`zeroize.Zeroize.Blanket.zeroize`|True|
-|124|`aspis_prover.state_only_hiding.volatile_clear_cell`|False|
 |127|`zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref`|True|
 |128|`zeroize.Zeroizing.new`|True|
 |129|`getrandom.fill`|False|
@@ -217,7 +218,6 @@ Body-reachable entries remain with the sibling except the closed semantic-error 
 |215|`digest.core_api.wrapper.CoreWrapper.Insts.DigestFixedOutput.finalize_into`|False|
 |216|`digest.core_api.wrapper.CoreWrapper.Insts.DigestUpdate.update`|False|
 |217|`digest.core_api.wrapper.CoreWrapper.Insts.CoreDefaultDefault.default`|False|
-|218|`digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.CoreDefaultDefault.default`|False|
 |219|`digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiFixedOutputCore.finalize_fixed_core`|False|
 |222|`aspis_statement.constraints_v4.multilinear_evaluate_qm31`|True|
 |223|`aspis_statement.logup.compress_tagged_tuple`|True|

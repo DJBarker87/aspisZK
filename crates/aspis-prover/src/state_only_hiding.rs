@@ -1941,3 +1941,24 @@ mod prover_commit_four8 {
         assert_eq!(unsafe { CURSOR }, expected_calls);
     }
 }
+
+#[cfg(kani)]
+mod pdict_offpath_volatile_contract {
+    use super::*;
+    fn qm() -> QM31 {
+        QM31 { c0:CM31 { a:M31(kani::any()), b:M31(kani::any()) },
+               c1:CM31 { a:M31(kani::any()), b:M31(kani::any()) } }
+    }
+    #[kani::proof]
+    fn volatile_cell_native_mask_types_and_frame() {
+        let before=M31(kani::any()); let cell=M31(kani::any());
+        let after=M31(kani::any()); let replacement=M31(kani::any());
+        let mut scalar=[before,cell,after];
+        volatile_clear_cell(&mut scalar[1],replacement);
+        assert_eq!(scalar,[before,replacement,after]);
+        let before=qm();let cell=qm();let after=qm();let replacement=qm();
+        let mut secure=[before,cell,after];
+        volatile_clear_cell(&mut secure[1],replacement);
+        assert_eq!(secure,[before,replacement,after]);
+    }
+}

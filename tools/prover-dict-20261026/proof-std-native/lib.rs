@@ -40,3 +40,35 @@ fn compiler_fence_valid_order_frame() {
 fn compiler_fence_relaxed_has_panic() {
     core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::Relaxed);
 }
+
+#[cfg(kani)]
+#[kani::proof]
+fn native_r0_debug_sink_trace() {
+    use std::fmt::{self,Write,Debug};
+    use aspis_core::r0::Error::*;
+    let index:u8=kani::any(); kani::assume(index<17);
+    let (error,name)=match index {
+        0=>(IndexOutOfRange,"IndexOutOfRange"),1=>(WrongLength,"WrongLength"),
+        2=>(ZeroDenominator,"ZeroDenominator"),3=>(Allocation,"Allocation"),
+        4=>(NonCanonical,"NonCanonical"),5=>(WrongField,"WrongField"),
+        6=>(InvalidPoints,"InvalidPoints"),7=>(QuotientNotInImage,"QuotientNotInImage"),
+        8=>(RankDeficient,"RankDeficient"),9=>(Parse,"Parse"),
+        10=>(Semantic,"Semantic"),11=>(Schedule,"Schedule"),12=>(Sampler,"Sampler"),
+        13=>(Commitment,"Commitment"),14=>(Authentication,"Authentication"),
+        15=>(V1,"V1"),_=>(V2,"V2")
+    };
+    struct Sink { expected:&'static str, fail:bool, calls:u8, frame:u64 }
+    impl Write for Sink {
+        fn write_str(&mut self,bytes:&str)->fmt::Result {
+            assert!(bytes==self.expected);self.calls+=1;
+            if self.fail {Err(fmt::Error)}else{Ok(())}
+        }
+    }
+    let fail:bool=kani::any();let frame:u64=kani::any();
+    let mut sink=Sink{expected:name,fail,calls:0,frame};
+    let result={
+        let mut f=fmt::Formatter::new(&mut sink,fmt::FormattingOptions::new());
+        Debug::fmt(&error,&mut f)
+    };
+    assert!(sink.calls==1);assert!(sink.frame==frame);assert!(result.is_err()==fail);
+}
