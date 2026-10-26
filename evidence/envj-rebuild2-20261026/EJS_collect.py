@@ -18,7 +18,7 @@ for r in rs:
   for ext in ['json','log']:
    q=T/('EJR-'+str(r['attempt'])+'-reservation-'+str(retry)+'.'+ext)
    if q.exists():files['EJS_'+q.name]=q.read_text()
-for p in list(T.glob('EJS_*.json'))+list(T.glob('EJS_*.log')):
+for p in list(T.glob('EJS_*.json'))+list(T.glob('EJS_*.jsonl'))+list(T.glob('EJS_*.log')):
  if 'payload' not in p.name:files[p.name]=p.read_text()
 for name in ['EJS_builder.log','EJS_initial-reservation.json','EJS_initial-reservation.log','EJS_executed-builder.py','EJR_progress.json']:
  p=T/name

@@ -1,0 +1,195 @@
+def R1Z.RealR1_OuterOwner.BodyContract : {Extra Proof : Type} →
+  R1Z.RealR1_OuterOwner.Body Extra Proof → R1Z.RealR1_OuterOwner.Body Extra Proof → Prop :=
+fun {Extra Proof} left right =>
+  ∀ (secret : R1Z.RealR1_OuterOwner.Secret) (bytes : R1Z.RealR1_OuterOwner.PubBytes)
+    (s : R1Z.RealR1_OuterOwner.Store Extra), left secret bytes s = right secret bytes s
+def R1Z.RealR1_OuterOwner.PrefixContract : {Extra : Type} →
+  R1Z.RealR1_OuterOwner.Prefix Extra → R1Z.RealR1_OuterOwner.Prefix Extra → Prop :=
+fun {Extra} left right =>
+  ∀ (nonce : R0Z.FsStatement.OracleAnswer) (bytes : R1Z.RealR1_OuterOwner.PubBytes) (s : Extra),
+    left nonce bytes s = right nonce bytes s
+theorem R1Z.RealR1_OuterOwner.outer_owner : ∀ {Extra Proof : Type} (s2 : Bool) (pub : R1Z.RealR1_OuterOwner.Pub)
+  (nonce : R1Z.RealR1_OuterOwner.NoncePolicy Extra) (schedule : R1Z.ProverCommitLedger36.Schedule)
+  (tape : ℕ → AspisR1PublicNonce41.owner.Raw) (unix : Bool)
+  (leftPrefix rightPrefix : R1Z.RealR1_OuterOwner.Prefix Extra),
+  R1Z.RealR1_OuterOwner.PrefixContract leftPrefix rightPrefix →
+    ∀ (left right : R1Z.RealR1_OuterOwner.Body Extra Proof),
+      R1Z.RealR1_OuterOwner.BodyContract left right →
+        ∀ (s : R1Z.RealR1_OuterOwner.Store Extra),
+          R1Z.RealR1_OuterOwner.selected s2 pub (R1Z.RealR1_OuterOwner.nativeEntropy nonce schedule tape)
+              (R1Z.RealR1_OuterOwner.reserved leftPrefix schedule unix left) s =
+            R1Z.RealR1_OuterOwner.selected s2 pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape)
+              (R1Z.RealR1_OuterOwner.reserved rightPrefix schedule unix right) s :=
+fun {Extra Proof} s2 pub nonce schedule tape unix leftPrefix rightPrefix pre left right body s =>
+  have he := funext fun index => funext (R1Z.RealR1_OuterOwner.entropy_exact nonce schedule tape index);
+  have hc := R1Z.RealR1_OuterOwner.reserved_exact leftPrefix rightPrefix pre schedule unix left right body;
+  have hb := funext fun secret => funext fun bytes => funext (hc secret bytes);
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          R1Z.RealR1_OuterOwner.selected s2 pub _a (R1Z.RealR1_OuterOwner.reserved leftPrefix schedule unix left) s =
+            R1Z.RealR1_OuterOwner.selected s2 pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape)
+              (R1Z.RealR1_OuterOwner.reserved rightPrefix schedule unix right) s)
+        he))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            R1Z.RealR1_OuterOwner.selected s2 pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape) _a s =
+              R1Z.RealR1_OuterOwner.selected s2 pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape)
+                (R1Z.RealR1_OuterOwner.reserved rightPrefix schedule unix right) s)
+          hb))
+      (Eq.refl
+        (R1Z.RealR1_OuterOwner.selected s2 pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape)
+          (R1Z.RealR1_OuterOwner.reserved rightPrefix schedule unix right) s)))
+def R1Z.RealR1_ReachableRetry.Ready : {Extra : Type} →
+  R1Z.RealR1_OuterOwner.Pub →
+    R1Z.ProverCommitRetry34.Entropy (R1Z.RealR1_OuterOwner.Store Extra) R1Z.RealR1_OuterOwner.Secret →
+      R1Z.RealR1_OuterOwner.Prefix Extra →
+        R1Z.ProverCommitLedger36.Schedule →
+          Bool →
+            ℕ →
+              R1Z.RealR1_OuterOwner.Store Extra →
+                R1Z.RealR1_OuterOwner.Secret →
+                  R1Z.RealR1_OuterOwner.PubBytes → R1Z.RealR1_OuterOwner.Store Extra → Prop :=
+fun {Extra} pub entropy pre schedule unix index start secret bytes ready =>
+  ∃ generated path extra,
+    entropy index start = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok secret, generated) ∧
+      R1Z.RealR1_ReachableRetry.serializer pub = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) ∧
+        pre secret.1 bytes generated.2 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok path, extra) ∧
+          R1Z.ProverCommitLedger36.reserve schedule unix path generated.1 = (Except.ok (), ready.1) ∧ ready.2 = extra
+def R1Z.RealR1_ReachableRetry.PreparedBodyContract : {Extra Proof : Type} →
+  R1Z.RealR1_OuterOwner.Pub →
+    R1Z.ProverCommitRetry34.Entropy (R1Z.RealR1_OuterOwner.Store Extra) R1Z.RealR1_OuterOwner.Secret →
+      R1Z.RealR1_OuterOwner.Prefix Extra →
+        R1Z.ProverCommitLedger36.Schedule →
+          Bool →
+            (ℕ → R1Z.RealR1_OuterOwner.Store Extra → Prop) →
+              R1Z.RealR1_OuterOwner.Body Extra Proof → R1Z.RealR1_OuterOwner.Body Extra Proof → Prop :=
+fun {Extra Proof} pub entropy pre schedule unix Inv left right =>
+  ∀ (index : ℕ) (start : R1Z.RealR1_OuterOwner.Store Extra),
+    index < 8 →
+      Inv index start →
+        ∀ (secret : R1Z.RealR1_OuterOwner.Secret) (bytes : R1Z.RealR1_OuterOwner.PubBytes)
+          (ready : R1Z.RealR1_OuterOwner.Store Extra),
+          R1Z.RealR1_ReachableRetry.Ready pub entropy pre schedule unix index start secret bytes ready →
+            left secret bytes ready = right secret bytes ready
+theorem R1Z.RealR1_ReachableRetry.outer_owner_reachable : ∀ {Extra Proof : Type} (pub : R1Z.RealR1_OuterOwner.Pub)
+  (nonce : R1Z.RealR1_OuterOwner.NoncePolicy Extra) (schedule : R1Z.ProverCommitLedger36.Schedule)
+  (tape : ℕ → AspisR1PublicNonce41.owner.Raw) (unix : Bool) (pre : R1Z.RealR1_OuterOwner.Prefix Extra)
+  (Inv : ℕ → R1Z.RealR1_OuterOwner.Store Extra → Prop) (left right : R1Z.RealR1_OuterOwner.Body Extra Proof),
+  R1Z.RealR1_ReachableRetry.PreparedBodyContract pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape) pre
+      schedule unix Inv left right →
+    (∀ (index : ℕ) (s after : R1Z.RealR1_OuterOwner.Store Extra),
+        index < 8 →
+          Inv index s →
+            R1Z.ProverCommitRetry34.realAttempt pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape)
+                  (R1Z.RealR1_OuterOwner.reserved pre schedule unix right) index s =
+                Aeneas.Std.Result.ok (R1Z.ProverCommitRetry34.Step.retry, after) →
+              Inv (index + 1) after) →
+      ∀ (s : R1Z.RealR1_OuterOwner.Store Extra),
+        Inv 0 s →
+          R1Z.RealR1_OuterOwner.selected true pub (R1Z.RealR1_OuterOwner.nativeEntropy nonce schedule tape)
+              (R1Z.RealR1_OuterOwner.reserved pre schedule unix left) s =
+            R1Z.RealR1_OuterOwner.selected true pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape)
+              (R1Z.RealR1_OuterOwner.reserved pre schedule unix right) s :=
+fun {Extra Proof} pub nonce schedule tape unix pre Inv left right contract advance s initial =>
+  have entropy := funext fun i => funext (R1Z.RealR1_OuterOwner.entropy_exact nonce schedule tape i);
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          R1Z.RealR1_OuterOwner.selected true pub _a (R1Z.RealR1_OuterOwner.reserved pre schedule unix left) s =
+            R1Z.RealR1_OuterOwner.selected true pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape)
+              (R1Z.RealR1_OuterOwner.reserved pre schedule unix right) s)
+        entropy))
+    (R1Z.RealR1_ReachableRetry.run_reachable
+      (R1Z.ProverCommitRetry34.realAttempt pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape)
+        (R1Z.RealR1_OuterOwner.reserved pre schedule unix left))
+      (R1Z.ProverCommitRetry34.realAttempt pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape)
+        (R1Z.RealR1_OuterOwner.reserved pre schedule unix right))
+      Inv
+      (R1Z.RealR1_ReachableRetry.prepared_attempt pub (R1Z.RealR1_OuterOwner.modelEntropy nonce schedule tape) pre
+        schedule unix Inv left right contract)
+      advance 8 0 s (Decidable.byContradiction fun a => R1Z.RealR1_ReachableRetry.outer_owner_reachable._proof_1 a)
+      initial)
+theorem R1Z.RealR1_RetryHazards.selected_trace : ∀ {Extra Proof : Type} (pub : R1Z.RealR1_OuterOwner.Pub)
+  (nonce : R1Z.RealR1_OuterOwner.NoncePolicy Extra) (schedule : R1Z.ProverCommitLedger36.Schedule)
+  (tape : ℕ → AspisR1PublicNonce41.owner.Raw) (unix : Bool) (pre : R1Z.RealR1_OuterOwner.Prefix Extra)
+  (body : R1Z.RealR1_OuterOwner.Body Extra Proof)
+  (records : R1Z.SideChannelL1AttemptRecord.Owner (R1Z.RealR1_OuterOwner.Store Extra) Proof)
+  (Inv : ℕ → R1Z.RealR1_OuterOwner.Store Extra → Prop),
+  (∀ (index : ℕ) (s : R1Z.RealR1_OuterOwner.Store Extra),
+      index < 8 →
+        Inv index s →
+          R1Z.ProverCommitRetry34.realAttempt pub (R1Z.RealR1_OuterOwner.nativeEntropy nonce schedule tape)
+              (R1Z.RealR1_OuterOwner.reserved pre schedule unix body) index s =
+            Aeneas.Std.Result.ok ((records index s).1.result, (records index s).2)) →
+    (∀ (index : ℕ) (s after : R1Z.RealR1_OuterOwner.Store Extra),
+        index < 8 →
+          Inv index s →
+            R1Z.SideChannelL1AttemptRecord.eraseOwner records index s =
+                Aeneas.Std.Result.ok (R1Z.ProverCommitRetry34.Step.retry, after) →
+              Inv (index + 1) after) →
+      ∀ (s : R1Z.RealR1_OuterOwner.Store Extra),
+        Inv 0 s →
+          R1Z.RealR1_OuterOwner.selected true pub (R1Z.RealR1_OuterOwner.nativeEntropy nonce schedule tape)
+              (R1Z.RealR1_OuterOwner.reserved pre schedule unix body) s =
+            Aeneas.Std.Result.ok
+              ((R1Z.SideChannelL1AttemptRecord.run records 8 0 s).1.result,
+                (R1Z.SideChannelL1AttemptRecord.run records 8 0 s).2) :=
+fun {Extra Proof} pub nonce schedule tape unix pre body records Inv erasure advance s initial =>
+  Eq.trans
+    (R1Z.RealR1_ReachableRetry.run_reachable
+      (R1Z.ProverCommitRetry34.realAttempt pub (R1Z.RealR1_OuterOwner.nativeEntropy nonce schedule tape)
+        (R1Z.RealR1_OuterOwner.reserved pre schedule unix body))
+      (R1Z.SideChannelL1AttemptRecord.eraseOwner records) Inv erasure advance 8 0 s
+      (Decidable.byContradiction fun a => R1Z.RealR1_RetryHazards.selected_trace._proof_1 a) initial)
+    (R1Z.SideChannelL1AttemptRecord.erase_run records 8 0 s)
+theorem R1Z.RealR1_RetryHazards.entered_abort_hazard : ∀ {Sample S Proof : Type} [inst : Fintype Sample]
+  (records : Sample → R1Z.SideChannelL1AttemptRecord.Owner S Proof) (initial : Sample → S) (k : Fin 8)
+  (e : R1Z.ProverCommitRetry34.Error),
+  (R1Z.SideChannelRetryLaw.mass fun r =>
+      ↑k < (R1Z.SideChannelL1AttemptRecord.run (records r) 8 0 (initial r)).1.attempts.length ∧
+        R1Z.SideChannelRetryLaw.E records initial (↑k + 1) e r) =
+    R1Z.SideChannelRetryLaw.mass (R1Z.SideChannelRetryLaw.C records initial (↑k + 1)) *
+      R1Z.SideChannelRetryLaw.hazard (R1Z.SideChannelRetryLaw.C records initial (↑k + 1))
+        (R1Z.SideChannelRetryLaw.E records initial (↑k + 1) e) :=
+fun {Sample S Proof} [Fintype Sample] records initial k e =>
+  have same :=
+    funext fun r =>
+      propext
+        (and_congr
+          (Eq.mpr
+            (id
+              (congrArg (Iff (↑k < (R1Z.SideChannelL1AttemptRecord.run (records r) 8 0 (initial r)).1.attempts.length))
+                (congrArg (R1Z.SideChannelRetryLaw.rejectionPrefix (records r) (initial r))
+                  (Nat.add_sub_cancel (↑k) 1))))
+            (R1Z.SideChannelRetryLaw.actual_entry_iff (records r) (initial r) k))
+          Iff.rfl);
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          R1Z.SideChannelRetryLaw.mass _a =
+            R1Z.SideChannelRetryLaw.mass (R1Z.SideChannelRetryLaw.C records initial (↑k + 1)) *
+              R1Z.SideChannelRetryLaw.hazard (R1Z.SideChannelRetryLaw.C records initial (↑k + 1))
+                (R1Z.SideChannelRetryLaw.E records initial (↑k + 1) e))
+        same))
+    (R1Z.SideChannelRetryLaw.abort_hazard records initial k e)
+'R1Z.RealR1_OuterOwner.entropy_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.reserved_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.outer_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.wrong_variant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.entropy_failure_stops' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.reservation_failure_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.duplicate_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_ReachableRetry.prepared_attempt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_ReachableRetry.run_reachable' depends on axioms: [propext, Quot.sound]
+'R1Z.RealR1_ReachableRetry.outer_owner_reachable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_RetryHazards.selected_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_RetryHazards.entered_abort_hazard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_RetryHazards.entropy_count_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

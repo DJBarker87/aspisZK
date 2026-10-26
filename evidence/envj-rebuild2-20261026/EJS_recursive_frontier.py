@@ -52,7 +52,7 @@ for ln in subprocess.check_output(['git','ls-tree','-r','HEAD'],text=True).split
  resolved.setdefault(h,dict(blob=oid,revision=revision,path=p,bytes=len(b)))
 def imports(b):
  s=re.sub(r'/\-.*?\-/','',b.decode(),flags=re.S);s=re.sub(r'--[^\n]*','',s)
- return [m.replace('.','/') for ln in s.splitlines() if re.match(r'^\s*(?:public\s+|private\s+)?import\s',ln) for m in re.sub(r'^\s*(?:public\s+|private\s+)?import\s+','',ln).split() if re.fullmatch(r'[\w.]+',m)]
+ return [m.replace('.','/') for ln in s.splitlines() if re.match(r'^\s*(?:public\s+|private\s+)?import\s',ln) for m in re.sub(r'^\s*(?:public\s+|private\s+)?import\s+(?:all\s+)?','',ln).split() if re.fullmatch(r'[\w.]+',m)]
 roots=sorted({m for r in state['progress']['pending'] for m in r['missing'] if m not in known});queue=list(roots);selected={};blocked={};prefixes={'Init','Lean','Std','Mathlib','Aeneas','AeneasMeta','Batteries','Qq','Cli','Lake','Plausible','Aesop','ImportGraph','ProofWidgets','LeanSearchClient'}
 while queue:
  m=queue.pop()

@@ -17,5 +17,6 @@ plan=dict(next_attempt=30000+len(a),cumulative_attempts=len(a),additional_budget
 for k,v in old.items():
  if 'unresolved' in k:plan[k]=v
 plan['unresolved_historical_hashes']=json.loads((O.parent/'envj-rebuild-20261026/EJR_final-inventory.json').read_text())['unresolved_historical_hashes']
+plan['profile_unattempted_sources']=[r for rs in d.get('profiles',{}).values() for r in rs if r['workspace']+':'+r['module'] not in latest and r['workspace']+':'+r['module'] not in reused]
 (O/'EJS_resume-plan.json').write_text(json.dumps(plan,indent=2)+'\n')
 print(json.dumps({k:v for k,v in plan.items() if k in ['next_attempt','cumulative_attempts','additional_budget_used','additional_budget_remaining','status']}));print('unattempted',len(unattempted),'latest failed',len(fail))

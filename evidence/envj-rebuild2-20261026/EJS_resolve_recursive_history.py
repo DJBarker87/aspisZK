@@ -1,7 +1,7 @@
 """Resolve newly discovered exact hashes against historical Lean source blobs."""
 from pathlib import Path
 import json,subprocess,hashlib,time
-O=Path(__file__).parent;d=json.load(open(O/'EJS_recursive-frontier.json'));wanted={r['sha256'] for r in d['blocked'].values() if r['reason']=='attested hash not found in git'};initial=set(wanted);found={};start=time.monotonic()
+O=Path(__file__).parent;d=json.load(open(O/'EJS_recursive-frontier.json'));wanted={r['sha256'] for r in d['blocked'].values() if r['reason'] in ('attested hash not found in git','attested hash not resolved by HEAD/retained index')};initial=set(wanted);found=json.loads((O/'EJS_recursive-history-resolution.json').read_text()).get('found',{}) if (O/'EJS_recursive-history-resolution.json').exists() else {};start=time.monotonic()
 proc=subprocess.Popen(['git','cat-file','--batch'],stdin=subprocess.PIPE,stdout=subprocess.PIPE);seen=set();count=0;total=0
 for line in subprocess.check_output(['git','rev-list','--objects','--all'],text=True).splitlines():
  oid,_,path=line.partition(' ')

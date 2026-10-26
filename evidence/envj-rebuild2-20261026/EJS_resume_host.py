@@ -12,6 +12,8 @@ def replace(old,new):
  global s
  assert s.count(old)==1, old
  s=s.replace(old,new)
+# Lean 4.32 `import all M` uses `all` as a modifier, never a dependency.
+replace("r'^\\s*(?:public\\s+|private\\s+)?import\\s+'", "r'^\\s*(?:public\\s+|private\\s+)?import\\s+(?:all\\s+)?'")
 # Preserve valid pinned reuse aliases; replace dangling fallback aliases only.
 assert s.count("if dest.resolve()==canonical:continue")==2
 s=s.replace("if dest.resolve()==canonical:continue", "if dest.is_file():continue")
@@ -25,6 +27,19 @@ if os.environ.get('EJS_PROFILE'):
  else:
   replace("roots={'joint':J,'union':U}", "roots={'joint':J,'union':U}\nroots['EJS_missing']=U/'EJS_missing'\nrows.extend(json.loads((T/'EJS_missing-sources.json').read_text()))")
 if os.environ.get('EJS_PROFILE')=='missing':
+ replace("def try_reuse(r,ds):", """unrepaired=[];transitive_context=[]
+for k in list(repair_keys):
+ old=latest_by_key[k]
+ for e in old['errors']:
+  for name in re.findall(r"object file '([^']+)'",e):
+   p=Path(name);src=Path(name.replace('/objects/','/sources/').removesuffix('.olean')+'.lean')
+   transitive_context.append(dict(key=k,path=name,object_sha256=sha(p) if p.is_file() else None,source_sha256=sha(src) if src.is_file() else None,prior_failed_attempt=old['attempt']))
+ missing=[p for e in old['errors'] for p in re.findall(r"object file '([^']+)'",e) if not Path(p).is_file()]
+ if missing:
+  repair_keys.remove(k);unrepaired.append(dict(key=k,attempt=old['attempt'],missing_paths=missing,reason='No repaired physical import route; do not retry unchanged.'))
+(T/'EJS_transitive-import-context.json').write_text(json.dumps(transitive_context,indent=2)+chr(10))
+(T/'EJS_unrepaired-imports.json').write_text(json.dumps(unrepaired,indent=2)+chr(10))
+def try_reuse(r,ds):""")
  replace("def save_state(pending,reason):", """def publish_missing(r):
  if r['workspace']!='EJS_missing':return
  published=[]
@@ -43,7 +58,7 @@ if os.environ.get('EJS_PROFILE')=='missing':
  with (T/'EJS_missing-publications.jsonl').open('a') as f:f.write(json.dumps(dict(module=r['module'],source_sha256=r['source_sha256'],bindings=published))+chr(10))
 def save_state(pending,reason):""")
  replace("if ec==0:succeeded.add(r['key'])", "if ec==0:\n  succeeded.add(r['key']);publish_missing(r)")
- replace("context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json']}", "context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json','EJS_missing-sources.json']}")
+ replace("context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json']}", "context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json','EJS_missing-sources.json','EJS_transitive-import-context.json']}")
 if os.environ.get('EJS_PROFILE')=='formatter':
  replace("def try_reuse(r,ds):", """fmt_targets={'Aeneas','Aeneas/Std','Aeneas/Std/Core','Aeneas/Std/Array','Aeneas/Std/Array/ArraySlice','ImportUnionNamedDiscriminant','AspisR72Sampler/Types','AspisR72Sampler/Funs','AspisV8R19/SamplerWordRead'}
 fmt_rebuild={r['key'] for r in rows if r['workspace']=='EJS_formatter_union' and r['module'] in fmt_targets and (r['key'] not in latest_by_key or latest_by_key[r['key']]['attempt']<31066)}

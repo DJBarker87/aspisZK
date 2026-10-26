@@ -14,7 +14,7 @@ def sha(p):
  return _hash_cache[key]
 def imports(p):
  s=p.read_text();s=re.sub(r'/\-.*?\-/','',s,flags=re.S);s=re.sub(r'--[^\n]*','',s)
- return [m.replace('.','/') for ln in s.splitlines() if re.match(r'^\s*(?:public\s+|private\s+)?import\s',ln) for m in re.sub(r'^\s*(?:public\s+|private\s+)?import\s+','',ln).split() if re.fullmatch(r'[\w.]+',m)]
+ return [m.replace('.','/') for ln in s.splitlines() if re.match(r'^\s*(?:public\s+|private\s+)?import\s',ln) for m in re.sub(r'^\s*(?:public\s+|private\s+)?import\s+(?:all\s+)?','',ln).split() if re.fullmatch(r'[\w.]+',m)]
 def dep_paths(r):
  ps=[roots[r['workspace']]/'objects']+paths
  return ps
@@ -88,6 +88,18 @@ succeeded.update(r['key'] for r in reuses);attempted.update(r['key'] for r in re
 latest_by_key={r['key']:r for r in past}
 repair_keys={r['key'] for r in latest_by_key.values() if r['exit']!=0 and any('error: object file' in e and 'does not exist' in e for e in r['errors'])} - {r['key'] for r in reuses}
 
+unrepaired=[];transitive_context=[]
+for k in list(repair_keys):
+ old=latest_by_key[k]
+ for e in old['errors']:
+  for name in re.findall(r"object file '([^']+)'",e):
+   p=Path(name);src=Path(name.replace('/objects/','/sources/').removesuffix('.olean')+'.lean')
+   transitive_context.append(dict(key=k,path=name,object_sha256=sha(p) if p.is_file() else None,source_sha256=sha(src) if src.is_file() else None,prior_failed_attempt=old['attempt']))
+ missing=[p for e in old['errors'] for p in re.findall(r"object file '([^']+)'",e) if not Path(p).is_file()]
+ if missing:
+  repair_keys.remove(k);unrepaired.append(dict(key=k,attempt=old['attempt'],missing_paths=missing,reason='No repaired physical import route; do not retry unchanged.'))
+(T/'EJS_transitive-import-context.json').write_text(json.dumps(transitive_context,indent=2)+chr(10))
+(T/'EJS_unrepaired-imports.json').write_text(json.dumps(unrepaired,indent=2)+chr(10))
 def try_reuse(r,ds):
  fingerprint=lambda dd:[(d['module'].replace('.','/'),d['sha256']) for d in dd]
  for old in past:
@@ -185,7 +197,7 @@ while pending and len(past)<budget:
  label='EJR-'+str(attempt);admission=admit(label);root=roots[r['workspace']];src=Path(r['host_path']);assert sha(src)==r['source_sha256'];obj=root/'objects'/(r['module']+'.olean');obj.parent.mkdir(parents=True,exist_ok=True)
  if obj.is_symlink():obj.unlink()
  elif obj.exists():raise RuntimeError('refuse overwriting existing regular object '+str(obj))
- context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json','EJS_missing-sources.json']}
+ context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json','EJS_missing-sources.json','EJS_transitive-import-context.json']}
  fp=hashlib.sha256(json.dumps(dict(direct_dependencies=ds,physical_library_context=context),sort_keys=True).encode()).hexdigest();start=time.monotonic()
  if r['workspace']=='joint':
   cmd=['sh',str(H/'tools/run-joint.sh'),str(attempt),r['module'],'J','7000','8',fp]

@@ -13,6 +13,8 @@ def sha(p):
 rows=json.loads((T/'EJR_all-restored-sources.json').read_text())
 profiles={p.name:json.loads(p.read_text()) for p in T.glob('EJS_*-sources.json')}
 for rs in profiles.values():rows.extend(rs)
+for r in json.loads((T/'EJR_library-source-provenance.json').read_text()):
+ rows.append(dict(r,host_path=str(U/'sources'/(r['module']+'.lean'))))
 sources=[]
 for r in rows:
  p=Path(r['host_path']);actual=sha(p) if p.is_file() else None
