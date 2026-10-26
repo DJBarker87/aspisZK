@@ -1,0 +1,63 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_OrdinaryDecodeBridge.lean:14:2: error: Type mismatch
+  PV_OrdinaryNormalize.construct ?m.11 ?m.12
+has type
+  PV_OrdinarySource.aspis_core.field.wide_exact.WideExact.new (PV_OrdinaryNormalize.fromQ ?m.11)
+      (PV_OrdinaryNormalize.fromQ ?m.12) =
+    mapResult PV_OrdinaryNormalize.fromW (AspisR1Post25Sampler.field.WideExact.new ?m.11 ?m.12)
+but is expected to have type
+  (do
+      let i ← digits.index_usize 0#usize
+      let i1 ← digits.index_usize 1#usize
+      let i2 ← digits.index_usize 2#usize
+      let i3 ← digits.index_usize 3#usize
+      let i4 ← digits.index_usize 4#usize
+      let i5 ← digits.index_usize 5#usize
+      let i6 ← digits.index_usize 6#usize
+      let i7 ← digits.index_usize 7#usize
+      PV_OrdinarySource.aspis_core.field.wide_exact.WideExact.new
+          { c0 := { a := i, b := i1 }, c1 := { a := i2, b := i3 } }
+          { c0 := { a := i4, b := i5 }, c1 := { a := i6, b := i7 } }) =
+    do
+    let x ←
+      do
+        let i ← digits.index_usize 0#usize
+        let i1 ← digits.index_usize 1#usize
+        let i2 ← digits.index_usize 2#usize
+        let i3 ← digits.index_usize 3#usize
+        let i4 ← digits.index_usize 4#usize
+        let i5 ← digits.index_usize 5#usize
+        let i6 ← digits.index_usize 6#usize
+        let i7 ← digits.index_usize 7#usize
+        AspisR1Post25Sampler.field.WideExact.new { c0 := { a := i, b := i1 }, c1 := { a := i2, b := i3 } }
+            { c0 := { a := i4, b := i5 }, c1 := { a := i6, b := i7 } }
+    ok (PV_OrdinaryNormalize.fromW x)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_OrdinaryDecodeBridge.lean:22:2: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.15 ?m.16 ?m.17).mpr`
+  ?m.15 >>= ?m.16 = ?m.15 >>= ?m.17
+with the goal
+  (do
+      let (a, _) ← AspisR1Post25Sampler.sampler.low_base_p_digits block
+      PV_OrdinarySource.sampler_owned.decode8 a) =
+    do
+    let x ←
+      do
+        let __x ← AspisR1Post25Sampler.sampler.low_base_p_digits block
+        AspisR1Post25Sampler.sampler.decode8 __x.1
+    ok (PV_OrdinaryNormalize.fromW x)
+
+Note: The full type of `(bind_eq_iff ?m.15 ?m.16 ?m.17).mpr` is
+  (∀ (v : ?m.13), ?m.15 = ok v → ?m.16 v = ?m.17 v) → ?m.15 >>= ?m.16 = ?m.15 >>= ?m.17
+
+block : Std.Array U8 32#usize
+⊢ (do
+      let (a, _) ← AspisR1Post25Sampler.sampler.low_base_p_digits block
+      PV_OrdinarySource.sampler_owned.decode8 a) =
+    do
+    let x ←
+      do
+        let __x ← AspisR1Post25Sampler.sampler.low_base_p_digits block
+        AspisR1Post25Sampler.sampler.decode8 __x.1
+    ok (PV_OrdinaryNormalize.fromW x)
+'R1Z.PV_OrdinaryDecodeBridge.decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OrdinaryDecodeBridge.ordinary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

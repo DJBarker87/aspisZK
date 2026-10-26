@@ -1,0 +1,27 @@
+import R1Z.PV_OrdinaryNormalize
+import R1Z.PV_OrdinaryDigitsBridge
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_OrdinaryDecodeBridge
+open Aeneas Aeneas.Std Result ProverRwDictionaryTower
+
+theorem decode (digits : Array U32 8#usize) :
+    PV_OrdinarySource.sampler_owned.decode8 digits =
+      mapResult PV_OrdinaryNormalize.fromW (AspisR1Post25Sampler.sampler.decode8 digits) := by
+  unfold PV_OrdinarySource.sampler_owned.decode8 AspisR1Post25Sampler.sampler.decode8
+  simp only [AspisR1Post25Sampler.field.CM31.new,mapResult_bind,bind_assoc_eq,bind_tc_ok]
+  repeat' first | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr; intro _ _
+  simpa only [mapResult_bind] using PV_OrdinaryNormalize.construct _ _
+
+theorem ordinary (block : Array U8 32#usize) :
+    PV_OrdinarySource.sampler_owned.ordinary_sample block =
+      mapResult PV_OrdinaryNormalize.fromW (AspisR1Post25Sampler.sampler.ordinary_sample block) := by
+  unfold PV_OrdinarySource.sampler_owned.ordinary_sample AspisR1Post25Sampler.sampler.ordinary_sample
+  rw [PV_OrdinaryDigitsBridge.digits]
+  simp only [mapResult_bind,bind_assoc_eq]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  rintro ⟨digits,quotient⟩ _
+  simpa only [mapResult_bind] using decode digits
+#print axioms decode
+#print axioms ordinary
+end R1Z.PV_OrdinaryDecodeBridge

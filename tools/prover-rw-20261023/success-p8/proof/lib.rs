@@ -52,7 +52,8 @@ mod compression_checks {
   let lambda=QM31{c0:CM31{a:M31(raw[2]),b:M31(raw[3])},c1:CM31{a:M31(raw[4]),b:M31(raw[5])}};
   let a=aspis_statement::logup::compress_tagged_tuple(tag,&[value],lambda);
   let b=compression_single_state(tag,value,lambda);
-  assert_eq!([a.c0.a.0,a.c0.b.0,a.c1.a.0,a.c1.b.0],[b.c0.a.0,b.c0.b.0,b.c1.a.0,b.c1.b.0]);
+  assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);
+  assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
  }
 }
 
@@ -82,4 +83,68 @@ pub fn polynomial_owned(polynomial:[QM31;28],challenge:QM31)->QM31 {
  let mut accumulator=polynomial_block(polynomial,powers,6);let mut block=6usize;
  while block>0 {block-=1;accumulator=prepared.mul(accumulator).add(polynomial_block(polynomial,powers,block));}
  accumulator
+}
+
+#[cfg(kani)]
+mod pole_small_checks {
+ use super::*;
+ fn q()->QM31 {let r:[u32;4]=kani::any();QM31{c0:CM31{a:M31(r[0]),b:M31(r[1])},c1:CM31{a:M31(r[2]),b:M31(r[3])}}}
+ #[kani::proof]
+ #[kani::unwind(1030)]
+ fn pole_prefix16() {
+  let mut values=[[[QM31::ZERO;2];2];16];let mut i=0usize;
+  while i<16 {values[i]=[[q(),q()],[q(),q()]];i+=1;}
+  let masks:[u16;64]=kani::any();let chi=q();
+  let n:usize=kani::any();kani::assume(n<=16);
+  assert_eq!(shipped_pole::all_slots_clear(&values[..n],&masks,chi),all_slots_clear(&values[..n],&masks,chi));
+ }
+}
+
+#[cfg(kani)]
+mod polynomial_checks {
+ use super::*;
+ fn q()->QM31 {let r:[u32;4]=kani::any();QM31{c0:CM31{a:M31(r[0]),b:M31(r[1])},c1:CM31{a:M31(r[2]),b:M31(r[3])}}}
+ #[kani::proof]
+ #[kani::unwind(512)]
+ fn polynomial_full() {
+  let mut p=[QM31::ZERO;28];let mut i=0usize;
+  while i<28 {p[i]=q();i+=1;}
+  let chi=q();
+  let a=aspis_core::state_only_sumcheck::evaluate_state_only_polynomial(&p,chi);
+  let b=polynomial_owned(p,chi);
+  assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);
+  assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+ }
+}
+
+#[path = "../../../../crates/aspis-r1-cost-probe/src/sampler.rs"]
+mod shipped_sampler;
+pub mod sampler_owned;
+#[cfg(kani)]
+mod ordinary_checks {
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn ordinary_all_blocks() {
+  let bytes:[u8;32]=kani::any();
+  let a=super::shipped_sampler::ordinary_sample(&bytes);
+  let b=super::sampler_owned::ordinary_sample(&bytes);
+  assert_eq!(a.c0().c0.a.0,b.c0().c0.a.0);assert_eq!(a.c0().c0.b.0,b.c0().c0.b.0);
+  assert_eq!(a.c0().c1.a.0,b.c0().c1.a.0);assert_eq!(a.c0().c1.b.0,b.c0().c1.b.0);
+  assert_eq!(a.c1().c0.a.0,b.c1().c0.a.0);assert_eq!(a.c1().c0.b.0,b.c1().c0.b.0);
+  assert_eq!(a.c1().c1.a.0,b.c1().c1.a.0);assert_eq!(a.c1().c1.b.0,b.c1().c1.b.0);
+ }
+}
+
+#[cfg(kani)]
+mod division_pass_checks {
+ #[kani::proof]
+ #[kani::unwind(40)]
+ fn division_pass_all_ranks() {
+  let rank:[u32;8]=kani::any();
+  let a=super::sampler_owned::iterator_div_pass(rank);
+  let b=super::sampler_owned::qm31_div_pass(rank);
+  let mut i=0usize;
+  while i<8 {assert_eq!(a.0[i],b.0[i]);i+=1;}
+  assert_eq!(a.1,b.1);
+ }
 }

@@ -261,3 +261,73 @@ marker,launcher,backend,monitor or cap was changed.
 Current usage34/65Lean (30host+4local),6/12Kani;31Lean/6Kani remain.
 Successful-body callback remainder31;V163/V164,V036–V038,V161–V168 retained.
 Root premises removed0,added0,weakened0; target not yet established.
+
+## Exact comparator and current caller continuation
+
+21345 passes all six pole raw-word/value/symmetry equations;21346 rejects the
+Prop-negation→Bool-not bridge.21347 proves all four exact comparator/keep_clear
+facts by eight Boolean control cases.21348 proves full Result fold transport
+from three constituent primitive agreements.21349 installs current scale into
+the complete actual caller via exact dictionary preservation;21350 proves
+symbolic generic/2-cell array reads. All standard axioms,zero swaps,focused jobs.
+No whole callback/root premise follows from these primitive/control substeps.
+
+The exact full-pole Aeneas003 error is `Could not join the contexts`,
+ct_pole.rs23:12–25:13,InterpJoin.ml1680; it is a context JOIN failure, not the
+Not_found/collapse exception of the earlier polynomial/compression owners.
+No partial full-pole output is selected. Source leaves remain accepted.
+
+21351 refuses13:03:52UTC (50.375GiB reserved),21352 refuses13:07:42UTC after
+180s (72.375GiB reserved). Both consume IDs,zero compiles. No guard/cap changes.
+While waiting, the row model is strengthened with inactive/absorbing cases.
+Current41/65Lean,6/12Kani;24Lean/6Kani remain,next unused21353 after13:10:42UTC.
+V163,V164,V220,V240,V264 remain open;callback remainder31;root removals0.
+
+## Final Lean checkpoint: allowance exhausted, native work continues
+
+All65/65 Lean attempts in this allocation are now used, INCLUDING the interrupted
+run:61host+4small local Std-only checks. Refusals charge zero compiles. Final
+21385/PV_FinalAuditP8 passes:exit0,2.16s,4301932KiB RSS,zero swaps. It imports
+43accepted host modules and reports109new theorem axioms plus the unchanged
+conditional privacy headline: only propext/Classical.choice/Quot.sound. The15
+local Std-only reports are separately pinned and standard. This is a focused
+cached audit, not a coherent frozen release replay. No further Lean is launched.
+
+The indexed ordinary reference now has complete Result equality to the retained
+Post25 traversal/decoder and to ProverRwDictionarySamplers.ordinary, for EVERY
+32-byte block, without input-success/canonicality/output premises. Its exact
+rank law is reused and transported. Current CT normalization is proved equal
+to the retained modulo constructor for arbitrary raw coordinates. Explicit
+reference and policy dictionaries, and their complete per-attempt callers,
+are equal. These are AUXILIARY dictionaries, not an installation into the live
+candidate. The attempted stronger dictionary_preserved claim (21379) is rejected:
+op250 in the current selector is still arbitrary. Its unaccepted source is in
+pending/. No missing source equality is added as a new assumption to save it.
+The full native ordinary-sampler Kani comparison times out; op250 stays open.
+
+V164 substeps: exact owned indexed compression/list correspondence, append and
+primitive transport, total current field primitives, and conditional-free erasure
+of the final unused power update under the installed total multiplier. Empty/
+singleton cases are checked symbolically. V240's retained explicit caller site
+uses Array<M31,16>; its slice-length fact and site-local restriction theorem are
+checked. This is not a whole-caller/native compression certificate. Original
+power-update source order stays represented in the full fold; no L2/L3 observer
+law is inferred from a Result/value equation. V264 substeps include actual
+emitted raw equality/keep_clear, exact four-comparison row and ordered list fold,
+plus symbolic public-mask bounds/partition. Full native iterator association is
+still open after the recorded context-join translation failure.
+
+Before: source callbacks33; generic255 partial and247 unsupplied. After: exact
+all-variant255 (V262 source subobligation) and cfg-selected247 (V255 source
+subobligation) are supplied and consumed by the complete caller;31remain.
+V163 whole proof/audit security-model equality, V164 native compression,
+V036–V038 and V161–V168 remain open. No whole endpoint premise removed, added,
+weakened or hidden. The arbitrary-model antecedent of BodyData.refinement_of_data
+is unchanged. Neither real RunJoin nor privacy is claimed. E1/E2, ownership/
+effects, the full bytes+side-channel observer and L1/L2/L3 remain explicit.
+
+No crates/, programs/, existing proved source, security root, key, release pin,
+simulator or observer changed. Three-ELF/fixture evidence is reused from the
+lead's pv-rebase2 result; no unchanged artifact/performance suite is repeated.
+Native budget remains to be spent; subsequent receipts below determine its
+final count/results. No push or merge.

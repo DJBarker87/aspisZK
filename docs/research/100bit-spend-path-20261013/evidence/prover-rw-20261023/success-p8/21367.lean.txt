@@ -1,0 +1,50 @@
+import R1Z.PV_OrdinarySource
+import AspisR1Post25Sampler.Funs
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_OrdinaryNormalize
+open Aeneas Aeneas.Std Result ProverRwDictionaryTower
+abbrev OQ := AspisR1Post25Sampler.field.QM31
+abbrev OW := AspisR1Post25Sampler.field.WideExact
+
+def fromQ (v : OQ) : Q := ⟨⟨v.c0.a,v.c0.b⟩,⟨v.c1.a,v.c1.b⟩⟩
+def fromW (v : OW) : W := ⟨fromQ v.c0,fromQ v.c1⟩
+def toQ (v : Q) : OQ := ⟨⟨v.c0.a,v.c0.b⟩,⟨v.c1.a,v.c1.b⟩⟩
+def toW (v : W) : OW := ⟨toQ v.c0,toQ v.c1⟩
+def normalized (v : OQ) : OQ :=
+  ⟨⟨ProverCommitNativeOps47.normalizeWord v.c0.a,ProverCommitNativeOps47.normalizeWord v.c0.b⟩,
+   ⟨ProverCommitNativeOps47.normalizeWord v.c1.a,ProverCommitNativeOps47.normalizeWord v.c1.b⟩⟩
+
+theorem old (v : OQ) : AspisR1Post25Sampler.field.canonical_qm31 v = ok (normalized v) := by
+  simp only [AspisR1Post25Sampler.field.canonical_qm31,
+    AspisR1Post25Sampler.field.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call,
+    AspisR1Post25Sampler.field.P,ProverCommitNativeOps47.rem_source,bind_tc_ok]
+  rfl
+
+theorem current (v : OQ) :
+    ProverRwSuccessNativePorts.aspis_core.field.wide_exact.canonical_qm31 (fromQ v) =
+      ok (fromQ (normalized v)) := by
+  simpa only [ProverRwSuccessNativeNormalize.source,ProverRwSuccessNativeNormalize.normalized,
+    fromQ,normalized] using ProverRwSuccessNativeNormalize.native (fromQ v)
+
+theorem construct (a b : OQ) :
+    PV_OrdinarySource.aspis_core.field.wide_exact.WideExact.new (fromQ a) (fromQ b) =
+      mapResult fromW (AspisR1Post25Sampler.field.WideExact.new a b) := by
+  simp only [PV_OrdinarySource.aspis_core.field.wide_exact.WideExact.new,
+    ProverRwSuccessNativePorts.aspis_core.field.wide_exact.WideExact.new,
+    AspisR1Post25Sampler.field.WideExact.new,current,old,mapResult_bind,bind_tc_ok]
+  rfl
+theorem roundtrip (v : OW) : toW (fromW v)=v := by
+  rcases v with ⟨⟨⟨a,b⟩,⟨c,d⟩⟩,⟨⟨e,f⟩,⟨g,h⟩⟩⟩
+  rfl
+
+theorem fromW_injective : Function.Injective fromW := by
+  intro a b h
+  have same := congrArg toW h
+  simpa only [roundtrip] using same
+#print axioms roundtrip
+#print axioms fromW_injective
+#print axioms old
+#print axioms current
+#print axioms construct
+end R1Z.PV_OrdinaryNormalize

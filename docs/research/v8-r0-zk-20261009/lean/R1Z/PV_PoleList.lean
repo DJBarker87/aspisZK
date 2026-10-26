@@ -1,0 +1,41 @@
+import R1Z.PV_PoleLeafCorrect
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_PoleList
+open Aeneas Aeneas.Std Result PV_PoleLeafValue
+attribute [local instance] Classical.propDecidable
+-- Every entry is visited in order, including the suffix after clear=false.
+def fold (clear : Bool) (chi : Q) : List (Bool × Q) → Result Bool
+  | [] => ok clear
+  | (active,value)::rest => do
+    let next ← PV_PoleLeafSource.ct_pole.keep_clear clear active chi value
+    fold next chi rest
+
+def test (chi : Q) (xs : List (Bool × Q)) : Bool :=
+  xs.all (fun p => !(p.1 && (chi=p.2)))
+
+theorem value (clear : Bool) (chi : Q) (xs : List (Bool × Q)) :
+    fold clear chi xs = ok (clear && test chi xs) := by
+  induction xs generalizing clear with
+  | nil => cases clear <;> rfl
+  | cons p rest ih =>
+    rcases p with ⟨active,v⟩
+    simp only [fold,PV_PoleLeafCorrect.keep_clear,bind_tc_ok,ih,
+      test,List.all_cons,Bool.and_assoc]
+
+theorem append (clear : Bool) (chi : Q) (xs ys : List (Bool × Q)) :
+    fold clear chi (xs++ys) = (fold clear chi xs >>= fun next => fold next chi ys) := by
+  induction xs generalizing clear with
+  | nil => rfl
+  | cons p rest ih =>
+    rcases p with ⟨active,v⟩
+    simp only [List.cons_append,fold,bind_assoc_eq]
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro next _
+    exact ih next
+theorem total (clear : Bool) (chi : Q) (xs : List (Bool × Q)) :
+    ∃ answer, fold clear chi xs = ok answer := ⟨_,value clear chi xs⟩
+#print axioms total
+#print axioms value
+#print axioms append
+end R1Z.PV_PoleList

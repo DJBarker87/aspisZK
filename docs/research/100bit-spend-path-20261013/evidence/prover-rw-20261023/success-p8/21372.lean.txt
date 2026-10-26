@@ -1,0 +1,56 @@
+import R1Z.PV_OrdinaryNormalize
+import R1Z.PV_OrdinaryDigitsBridge
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_OrdinaryDecodeBridge
+open Aeneas Aeneas.Std Result ProverRwDictionaryTower
+
+theorem decode (digits : Array U32 8#usize) :
+    PV_OrdinarySource.sampler_owned.decode8 digits =
+      mapResult PV_OrdinaryNormalize.fromW (AspisR1Post25Sampler.sampler.decode8 digits) := by
+  unfold PV_OrdinarySource.sampler_owned.decode8 AspisR1Post25Sampler.sampler.decode8
+  simp only [AspisR1Post25Sampler.field.CM31.new,mapResult_bind,bind_assoc_eq,bind_tc_ok]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro x0 _
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro x1 _
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro x2 _
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro x3 _
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro x4 _
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro x5 _
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro x6 _
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro x7 _
+  simpa only [mapResult_bind,PV_OrdinaryNormalize.fromQ] using
+    PV_OrdinaryNormalize.construct
+      (⟨⟨x0,x1⟩,⟨x2,x3⟩⟩ : PV_OrdinaryNormalize.OQ)
+      (⟨⟨x4,x5⟩,⟨x6,x7⟩⟩ : PV_OrdinaryNormalize.OQ)
+
+theorem decode_success (digits : Array U32 8#usize) (value : PV_OrdinaryNormalize.OW)
+    (h : AspisR1Post25Sampler.sampler.decode8 digits = ok value) :
+    PV_OrdinarySource.sampler_owned.decode8 digits = ok (PV_OrdinaryNormalize.fromW value) := by
+  rw [decode,h]
+  rfl
+
+theorem ordinary (block : Array U8 32#usize) :
+    PV_OrdinarySource.sampler_owned.ordinary_sample block =
+      mapResult PV_OrdinaryNormalize.fromW (AspisR1Post25Sampler.sampler.ordinary_sample block) := by
+  have hd : PV_OrdinarySource.sampler_owned.decode8 =
+      (fun digits => mapResult PV_OrdinaryNormalize.fromW
+        (AspisR1Post25Sampler.sampler.decode8 digits)) := funext decode
+  simp only [PV_OrdinarySource.sampler_owned.ordinary_sample,
+    AspisR1Post25Sampler.sampler.ordinary_sample,PV_OrdinaryDigitsBridge.digits,
+    hd,mapResult_bind,bind_assoc_eq]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  rintro ⟨digits,quotient⟩ _
+  rfl
+
+#print axioms decode_success
+#print axioms decode
+#print axioms ordinary
+end R1Z.PV_OrdinaryDecodeBridge

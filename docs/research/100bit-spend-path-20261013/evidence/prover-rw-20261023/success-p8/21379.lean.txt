@@ -1,0 +1,22 @@
+import R1Z.PV_OrdinaryPolicyBridge
+import R1Z.PV_CurrentScaleInstall
+import R1Z.PV_SamplerUpdate
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_OrdinaryReferenceInstall
+open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes]
+-- Reference/model preservation only: full native sampler correspondence is OPEN.
+@[reducible] def selected (ops : ExternalFuns) : ExternalFuns :=
+  {PV_CurrentScaleInstall.selected ops with op250 := PV_OrdinarySource.sampler_owned.ordinary_sample}
+
+theorem source (ops : ExternalFuns) (block : Array U8 32#usize) :
+    (selected ops).op250 block = PV_OrdinarySource.sampler_owned.ordinary_sample block := rfl
+
+theorem dictionary_preserved (ops : ExternalFuns) :
+    selected ops = PV_CurrentScaleInstall.selected ops := by
+  apply PV_SamplerUpdate.preserve
+  exact funext PV_OrdinaryPolicyBridge.reference
+#print axioms source
+#print axioms dictionary_preserved
+end R1Z.PV_OrdinaryReferenceInstall
