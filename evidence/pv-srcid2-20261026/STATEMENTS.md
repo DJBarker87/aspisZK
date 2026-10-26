@@ -101,3 +101,29 @@ at the named interface; no source discharge claimed.
 | Family | Before fields | After fields | Status |
 |---|---:|---:|---|
 | publicCorr | 5 | 5 | REDUCED to the exact seven-field selected-record/returned-public interface above; unchanged obligation |
+
+## admission
+
+Before = after: `∀ i records, newRecords (inputs i) = ok records →
+BuilderSpendRelation.RspendPlus (mapPub (PV_Src_Public.canonicalPublic
+(publicInput (inputs i)))) (BuilderCanonical.liftWitness
+(BuilderRecordCanonical.witness (wordWitness records.w)))`.
+
+Classification: native association of the deployed caller's admitted input
+fibre with the semantic witness and public statement. The exact missing
+pv-runjoin5 interface is the statement above on the installed `inputs` family,
+with the same record as its successful constructor call. It must carry the
+original `Rspend` conjunction and the transfer-only nonzero change limb-7
+sentinel; it cannot be weakened to value bounds or successful bank generation.
+The raw mapper does not validate conservation, Merkle membership, nullifier,
+append transitions, or the sentinel. A successful constructor has no such
+postcondition. Outer selected entry validation and the original relation
+transport must supply these facts. No assumption of `RspendPlus` is inserted
+into a source data definition or relabelled as a pure theorem.
+
+| Family | Before fields | After fields | Status |
+|---|---:|---:|---|
+| admission | 5 | 5 | REDUCED to exact selected-input RspendPlus interface above; unchanged obligation |
+
+Stop this family at the owned native interface. Both original fixture fibres
+remain available without changing their relation, public fields or handles.
