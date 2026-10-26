@@ -10324,3 +10324,55 @@ crates/ and programs/ since 3f9177b647 (ELF-pin invalidation per path), the priv
 naming the sibling modules not yet joined into the headline route, the final replay command plan, and
 the owner escalation table for the nine decision rows. Six jobs running: rw18, adopt, runjoin6, srcid3,
 cb2, cb3. Privacy target not yet established.
+
+## D220 (Stream B, 2026-10-26 20:10): INCIDENT: shared Lean workspace and launcher deleted during the disk prune; six-round results; runjoin7 and join launched before the loss was known
+
+Incident. While both streams pruned the full host volume (D219), Stream A's pattern-based removal of
+workspaces "older than two days" deleted the SHARED env-J Lean infrastructure:
+/home/dombarker/project-offloads/aspis-joint-20261019 (sources and compiled objects for every J
+compile) and /home/dombarker/project-offloads/r1-privacy-build-integration-20261019 (tools/run-joint.sh,
+env/J.json, evidence/sent.txt and every host-side out-/time-/sha- receipt). Neither matched the keep
+patterns. Every Lean launch on the host now fails for both streams. pv-cb2 and pv-srcid3 stopped under
+local-lean rule 5 ("launcher and source tree vanished"; not budget exhaustion); rw18, cb3, join and
+runjoin7 will stop the same way. Receipts copied into the repo evidence directories survive; host
+originals do not. Stream A has been asked to stop deleting, list what was removed, and rebuild the
+launcher and the joint workspace (their infrastructure; sources from git at the pinned revisions, one
+cold R1Z build in a 6G/8G scope, hours). Stream B's prune touched only cargo-tagged caches and solver
+temp files (D219) and none of the shared paths. Volume now 631 GiB free. Owner: this is reportable as
+a process failure; recommendation: shared infrastructure gets a protected path list before any further
+pattern-based cleanup, and the launcher/env files are committed to the repo (tools/) so they are
+reproducible.
+Results before the loss. pv-cb2 (`codex/pv-cb-20261026`, head 641d98b783; 71/100 Lean, 10/20 Kani):
+18 of its 73 callback rows now have complete extracted source equations (PV_CB_Op*Source), up from 0;
+op117 partial; op105 correction and the combined dictionary prepared but uncompiled; 29 Lean/10 Kani
+unspent. pv-srcid3 (`codex/pv-srcid3-20261026`, head 2311884064; 93/100 Lean, 12/12 Kani, 55 accepted
+modules, standard axioms): `Checked` DISCHARGED for both fixture validation carriers and every encoded
+canonical instance (the excluded boundary is exactly outputValue < 2^30); words REDUCED to the
+unstubbed full-mapper equality plus installed input selection; publicCorr DISCHARGED for the frozen
+reference (deployed snapshot/root association remains); compile_call OPEN (ExternalLinear equality
+verified, Records pending); admission and row_call REDUCED to runjoin6's published interfaces.
+Reference premises 5 → 3, accepted by the unchanged consumer; deployed premises 5 → 5; final audit
+preserved as drafts pending the host (branch kept unmerged until it can be audited). pv-runjoin6
+(`codex/pv-runjoin-20261026`, head 87a332c140; 100/100 Lean, audit 25699 standard axioms, 1/12 Kani):
+full source/header projection, common public reservation, selected dictionary equations, both fixture
+source projections and the endpoint's row_call transport equality proved; published
+PV_RunJoin_SourceSelectionContract / SelectedAdmission / NativeSelectedInputs / InstalledTransport for
+srcid3; named world fields for entropy, open/read/write/sync/close, time, workers; endpoint record still
+residuals 6 → 6, runtime/boundary 2 → 2, fields 8 → 8. pv-adopt (`codex/pv-adopt-20261026`, git-only):
+sibling merge dry-runs show zero Lean-path conflicts and zero public-name collisions (one conflict in a
+historical launcher file); research drift under crates/ and programs/ since 3f9177b647: 0 paths, so the
+ELF-pin evidence stands; 990 sibling-family modules are not imported by the headline route (579 live
+only on sibling branches): the proved callback equations do not yet count in the endpoint's closure;
+replay plan reserves env-J 28000-29999. Branch kept (sibling of the candidate), worktree removed.
+Launched before the loss was known: pv-join (`codex/pv-join-20261026` = candidate + pv-cb + pv-cb3 +
+pv-adopt heads, IDs 26500-26799): discharge the caller's callback hypotheses by the proved source
+equations so they enter the headline closure ("callbacks remaining" count). pv-runjoin7 (IDs
+26800-27099) with LEAD RULING D220: after six rounds at 2 → 2 / 8 → 8 the remaining native facts are
+not provable from the extraction; define one minimal `PV_RunJoin_TrustItems` structure (exact
+statements, shipped locations, justification class; duplicates merged, derivable fields proved and
+removed), construct the concrete Runtime/Boundary for the proof-account caller and prove
+`privacy_headline_deployed_candidate (T : PV_RunJoin_TrustItems)` with the exact endpoint conclusion so
+the record reads 2 → 0 and 8 → 0 with T the only premise; missing proofs listed separately as P
+obligations, never folded into T; non-vacuity of T on both fixtures. That T list is the owner escalation
+the target requires. Both will stall until the launcher is restored. Rows removed outright: 0. Privacy
+target not yet established.
