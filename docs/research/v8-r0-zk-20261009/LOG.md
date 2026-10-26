@@ -10496,3 +10496,25 @@ the flag every 10 minutes for up to 24 polls, keep drafting between polls, and o
 budget unspent". Relaunched as pv-rw20 on the same branch with the same rows, IDs 27700-27999 and the
 rw19 drafts to validate smallest-first when the flag opens. Six slots: cb3, cb4, srcid4, runjoin8,
 join2, rw20. Rows removed outright: 0. Privacy target not yet established.
+
+## D225 (Stream B) 2026-10-26 21:55 UTC: host launcher restored (partial cache); Stream B host scopes resume
+
+Stream A's restoration message: the rebuilt env-J launcher (`r1-privacy-build-integration-20261019/tools/
+run-joint.sh`, committed env/J.json and run2.py, sources/objects under aspis-joint-20261019) passed its
+verification compile R1Z/EJR_Verification at attempt 30799 (exit 0, allowed reservation, axioms propext
+only); handoff evidence/envj-rebuild-20261026/EJR_HANDOFF.md (research 45a8bc3956). Accepted IDs
+5000-39999; 20000-27099 blocked as spent; 28000-29999 Stream B's replay reserve; 30000-34999 Stream A
+(rebuild2 continues at 30800); 35000-39999 Stream B. The recovery is PARTIAL: 1,830 sources byte-matched,
+767/800 compiles passed (765 standard axioms), 1,007 resolved sources not yet attempted, 28 latest
+targets failed, 19 selected source hashes absent from the git object database (329 historical variants);
+known blockers include core.fmt.Formatter from the archived Fmt source at 30628/30791, EventsR1P2.card_NZ
+kernel memory (symbolic subtype cardinality needed before any retry; Stream A), SimCostOuterRetry6 proof
+errors (Stream B takes it at the next free slot), CertOwnFill vs extracted-provider API mismatch, and scan
+modules needing IMPORT_UNION_SCAN_INPUT. Consequence for privacy: any replay or dependency-closure claim
+must state which objects came from this partial rebuild versus the jobs' own surviving caches; the final
+privacy replay (pv-adopt plan, 28000-29999) cannot be coherent until the 1,007 remaining sources are
+rebuilt or shown unneeded by the headline closure. Lead action: wrote pv-host-restored.flag (launcher,
+per-job ranges cb4 27100-27399, srcid4 27400-27699, rw20 27700-27999, runjoin8 35000-35299, join2
+35300-35599, cb3 35600-35899, cache caveat, never retry the two assigned modules). pv-cb3 was launched
+before ruling (f) with 24700-24999, now blocked (exit 65); it will exhaust refusals and be relaunched on
+35600-35899. Rows removed outright: 0. Privacy target not yet established.
