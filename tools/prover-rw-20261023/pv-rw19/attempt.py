@@ -39,14 +39,29 @@ ad=ssh('cat '+d+f'/{a}-admission.json');(e/f'{a}-admission.json').write_text(ad.
 if q.returncode:
  x.update(charged=False,preflight_exit=q.returncode,reason=q.stdout+q.stderr);(e/f'{a}-input.json').write_text(json.dumps(x,indent=2)+'\n');print(x['reason']);sys.exit(78)
 # Inspect and pin direct imported objects before changing the shared source.
+graph={}
+focused=e/'focused-dependencies.json'
+if focused.exists():
+ for row in json.loads(focused.read_text())['order']:
+  if row.get('imports') is not None:graph[row['module']]=row['imports']
+  if row.get('source') and (r/row['source']).is_file():graph[row['module']]=imports((r/row['source']).read_text())
+for p in (r/'docs/research/v8-r0-zk-20261009/lean/R1Z').glob('ProverRw19*.lean'):
+ graph['R1Z.'+p.stem]=imports(p.read_text())
+x['dependency_fingerprint_schema']='transitive-known-source-imports-v1'
 code="""import json,hashlib
 from pathlib import Path
-j=Path(J);env=json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text());roots=[j/'objects']+[Path(x) for x in env['LEAN_PATH'].split(':')];rows=[]
-for name in NAMES:
+j=Path(J);env=json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text());roots=[j/'objects']+[Path(x) for x in env['LEAN_PATH'].split(':')];rows=[];seen=set();graph=GRAPH
+
+def visit(name):
+ if name in seen:return
+ seen.add(name)
+ for child in graph.get(name,[]):visit(child)
  rel=name.replace('.','/')+'.olean';p=next((x/rel for x in roots if (x/rel).is_file()),None)
  rows.append({'module':name,'object':str(p) if p else None,'sha256':hashlib.sha256(p.read_bytes()).hexdigest() if p else None})
+for name in NAMES:visit(name)
 print(json.dumps(rows))
-""".replace('J',repr(j),1).replace('NAMES',repr(imports(s)),1)
+""".replace('J',repr(j),1).replace('GRAPH',repr(graph),1).replace('NAMES',repr(imports(s)),1)
+
 q=py(code);assert q.returncode==0,q.stderr
 x['dependencies']=json.loads(q.stdout);x['deps_fingerprint']=hashlib.sha256(json.dumps(x['dependencies'],sort_keys=True).encode()).hexdigest()
 missing=[v['module'] for v in x['dependencies'] if not v['object']]

@@ -2,7 +2,7 @@
 from pathlib import Path
 import json,hashlib,datetime,subprocess
 r=Path(__file__).resolve().parents[3];e=r/'evidence/pv-rw19-resume-20261026'
-receipts=[json.loads(p.read_text()) for p in sorted(e.glob('277*-receipt.json'))]
+receipts=[json.loads(p.read_text()) for p in sorted(e.glob('27[789]*-receipt.json'))]
 charged=[x for x in receipts if x.get('charged')]
 latest={}
 for x in receipts:
