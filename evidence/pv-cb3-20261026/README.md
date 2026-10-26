@@ -3,11 +3,11 @@
 Branch `codex/pv-cb3-20261026`, independent callback rows of recount 2.
 Prefix `PV_CB3_`; Env J 24700–24999; budgets 100 Lean / 20 Kani.
 
-The current checked row table is `ROWS.md`; op246/V254, op229/V246, op225/V242, op51/V195 and op120/V219 are
+The current checked row table is `ROWS.md`; op246/V254, op229/V246, op225/V242 and op120/V219 are
 discharged on this candidate by their `PV_CB3_Op*Source.op*_source` theorems,
-receipts 24701, 24705, 24711, 24753 and 24754. Recount 2 baseline:
+receipts 24701, 24705, 24711 and 24754. Recount 2 baseline:
 OPEN 110, independent OPEN 51, CLOSED-ON-CANDIDATE 40; adding this worker gives
-105 / 46 / 45. Endpoint premises removed: 0.
+106 / 47 / 44. Endpoint premises removed: 0.
 Target not yet established.
 
 The first four targets, descending: op258/V264, op253/V260,
@@ -32,3 +32,5 @@ Collector metadata correction: the copied collector originally carried a legacy
 09df2340 base and the 782-file hash inventory; raw command/output evidence is unchanged.
 
 P6 bindings for op51/op120: `P6-REFERENCE-PROVENANCE.json`; current no-stub native gates and named extracted-body SHA checks accompany both source equations. The retained-cache route is documented in `retained-cache-route.json`.
+
+Final review withdrew op51 credit: its Kani harness canonicalizes through WideExact::new, so the complete arbitrary-carrier source correspondence is still OPEN. The checked selected-to-reference equation remains supporting evidence. See P6-REFERENCE-PROVENANCE.json.
