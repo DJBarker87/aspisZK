@@ -1,0 +1,70 @@
+ARQ_SecondBody.lean:22:93: error(lean.unknownIdentifier): Unknown identifier `saved`
+
+Note: It is not possible to treat `saved` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+ARQ_SecondBody.lean:39:106: error: Application type mismatch: The argument
+  hashv
+has type
+  SdkC_Source.Parts → Result SdkC_Source.Digest
+but is expected to have type
+  Allocator ?m.181
+in the application
+  SCG_WrapperLog.second
+    (GExq_Caller.second c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries c.std
+      hashv id (i.entry.second secondSizes) i.data i.slot)
+    hashv
+ARQ_SecondBody.lean:23:93: error: unsolved goals
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+i : SecondInputs A
+post : Heap (ℕ → Record)
+final : A
+H : Bytes → State
+success : (eval H (secondCode c hashv allocator id i)).2 = ok (core.result.Result.Ok (post, final))
+allocated : A
+reserved : reserve allocator (admittedSizes i.entry 7 secondSizes) i.state = ok allocated
+body :
+  (eval H
+        (SdkC_Oracle.program
+          (GExq_Caller.second c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+            c.std hashv id (i.entry.second secondSizes) i.data i.slot))).2 =
+    ok (core.result.Result.Ok ())
+original :
+  (eval H
+        (SdkC_Oracle.program
+          (GExq_OuterLower.lower
+            (fun {A} =>
+              GExq_Caller.child c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+                c.std hashv)
+            (S2W_Outer.stage2_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id
+              (i.entry.second secondSizes) i.data i.slot)))).2 =
+    S2W_Trace.erase (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage2_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id (i.entry.second secondSizes)
+        i.data i.slot)
+result :
+  S2W_Trace.erase (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage2_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id (i.entry.second secondSizes)
+        i.data i.slot) =
+    ok (core.result.Result.Ok ())
+log : S2W_Trace.Log
+ran :
+  S2W_Trace.run (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage2_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id (i.entry.second secondSizes)
+        i.data i.slot)
+      [] =
+    ok (core.result.Result.Ok (), log)
+flattened :
+  ARQ_LowerTrace.trace c hashv H [] ++
+      (eval H
+          (SdkC_Oracle.program
+            (GExq_OuterLower.lower
+              (fun {A} =>
+                GExq_Caller.child c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+                  c.boundaries c.std hashv)
+              (S2W_Outer.stage2_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id
+                (i.entry.second secondSizes) i.data i.slot)))).1 =
+    ARQ_LowerTrace.trace c hashv H log
+⊢ (eval H (secondCode c hashv allocator id i)).1 = ARQ_LowerTrace.trace c hashv H log
+'AspisR1.ARQ_SecondBody.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
