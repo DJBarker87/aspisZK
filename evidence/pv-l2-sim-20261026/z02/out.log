@@ -1,0 +1,25 @@
+Kani Rust Verifier 0.67.0 (standalone)
+error[E0609]: no field `c0` on type `M31`
+  --> PV_L2_Zero_native.rs:26:37
+   |
+26 | pub fn is_zero(self) -> bool { self.c0.is_zero() & self.c1.is_zero() }
+   |                                     ^^ unknown field
+   |
+help: a field with a similar name exists
+   |
+26 - pub fn is_zero(self) -> bool { self.c0.is_zero() & self.c1.is_zero() }
+26 + pub fn is_zero(self) -> bool { self.0.is_zero() & self.c1.is_zero() }
+   |
+
+error[E0609]: no field `c1` on type `M31`
+  --> PV_L2_Zero_native.rs:26:57
+   |
+26 | pub fn is_zero(self) -> bool { self.c0.is_zero() & self.c1.is_zero() }
+   |                                                         ^^ unknown field
+   |
+   = note: available field is: `0`
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0609`.
+error: /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler exited with status exit status: 101

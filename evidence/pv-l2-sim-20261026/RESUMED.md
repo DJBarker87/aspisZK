@@ -35,3 +35,37 @@ this file. Failed elaboration `sorryAx` prints are not proof evidence.
 read records. Refills carry the extracted frame, including failures. Its
 outer record survives None, and the second stream is not called after the
 first fails. Native E1/L1/ROM instantiation and joint simulation remain open.
+
+## Inversion evidence (V380 inversion)
+
+`PV_L2_InversionQ.branch_nonzero` proves that the actual extracted QM31 zero
+test returns `ok false` for a canonical operand with nonzero decoded value.
+`logup_operand` produces the actual source subtraction result for chi-slot,
+its canonicality, nonzero value, false zero test, and successful extracted
+inverse, from canonical chi/slot and their decoded inequality. Inversion
+success is a conclusion, not a premise. `PV_L2_InversionPole.producer` and
+`consumer` derive that inequality from the existing model `NoPole` at every
+active row/slot, retaining the explicit native-slot-to-model equality.
+Neither theorem restricts to successful P_R1 challenges.
+
+Source anchors: `crates/aspis-statement/src/logup.rs:199–214`; selected
+pre-helper guard `crates/aspis-r1-cost-probe/src/host_semantic.rs:247–258`
+and `273–297`. **OPEN as a whole row:** native call enumeration and slot
+association remain unproved. Generic CodeField, WideExact, interpolation,
+quotient-pivot, circle/fallback and certificate paths remain required.
+Inherited source/overflow/canonical-arithmetic boundaries are retained.
+
+Fresh Kani allocation: **20/20 charged**, 17 successes, one CLI rejection,
+one source-assembly rejection, one proof-side memcmp unwind failure. The
+replacement for the last uses pointwise limb comparisons (z09), without
+raising its failed bound. No old timed-out harness was rerun. The 13 exact
+source items are pinned to rebase candidate
+`351c5c7f6b6ac0110459192ef1c55e25a6c80c67` in
+`tools/pv-l2-sim-20261026/zero-source-binding.json`, explicitly distinct from
+this branch's unchanged crates/ tree. No arithmetic/inversion stub exists.
+Checks cover CT zero predicates, canonical successful limb/byte decoding,
+roundtrips, wrong-length rejection (0–33 except 32), selected invalid limbs
+and an arbitrary selected nonzero limb. These are leaf/representation
+results, not native caller reachability or a complete V380 discharge.
+No witness attack has been established. z01–z20 retain resources, output,
+source snapshots/hashes and exact harness targets.
