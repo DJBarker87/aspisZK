@@ -1429,3 +1429,41 @@ remain byte-identical. The complete proof/audit data equation,35 callbacks,
 native representation/effects/compiler/artifact adequacy,PrefixContract/
 BodyContract,E1/E2,ordered ROM/TLS and real RunJoin remain open. Conjunct1/root
 premises removed0; target not yet established. No push or merge.
+
+## P7 continuation: source callbacks supplied and launcher retry stop
+
+Continues e52b6bec0a. New source/P6 entries231 (actual derived trace clone)
+and78 (actual fibre-point/pow/square owner, with all-raw native-checked bit
+reversal) are supplied and consumed in the complete per-attempt caller.
+The owned compression reference is now total for every slice/raw input; its
+new split native comparison times out and223 remains uninstalled. Current
+CT/base field bodies are transported to the retained arithmetic for all raw
+inputs. A native exhaustive1024-cell D-table comparison passes, and its
+reference compiles using32 symbolic chunk-length lemmas. Generic coefficient
+source/install/caller drafts remain pending;255 is still partial.
+
+The actual whole proof/audit data equation consumed by BodyData.refinement_of_data
+is still unproved. No concrete security-model carrier/experiment association is
+installed. Root/headline premises removed0; target not yet established. Source/P6
+callback remainder33; native effects/representation/compiler/artifact adequacy,
+PrefixContract/BodyContract,E1/E2,ordered ROM/TLS and real RunJoin remain open.
+
+Mandatory stop:14835 is refused before Lean by aggregate reservations. After
+waiting over180s under local-lean rule6, the exact retry returns exit65:
+`attempt 14835 already used`. The existing launcher writes its out/sent markers
+before admission. No replay guard, sent ledger, marker, launcher, backend or
+monitor is modified. Rule5 requires stop/report; no later proof/native launch.
+The lead must resolve this admission/replay-marker conflict before retrying the
+same source input. Next unused assigned env-J14836;14835 consumes no compiler
+attempt. The only launcher change is the authorized14800–15199 selector range.
+
+35/100 Lean compiles (24pass,10elaboration failures,1intentional TERM),3/15 Kani
+(2pass,1timeout).65Lean/12Kani remain; budget NOT exhausted. Read-only final
+validation checks24 accepted source/cache snapshots,85 individual standard-axiom
+reports, native reference hashes and both unchanged security roots. No combined
+final audit/full manifest, adoption, artifact replacement, push or merge.
+Evidence:docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/
+success-p7/{README.md,final-state.json,denied-14835/,pending/}. Proof checkpoint
+415017b9eb. Pending coefficient source has the corrected count API normalization;
+its last corrected input never ran. The uncompiled complex bridge is separate
+pending text. No new premise hides the missing data equality or native adequacy.

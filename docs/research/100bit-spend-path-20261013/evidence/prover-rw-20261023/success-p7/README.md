@@ -170,3 +170,16 @@ retrying the same proof input. Complex bridge and all-variant coefficient
 installation/typecheck remain pending. Whole data equality, compression native
 correspondence,33 callbacks, native effects/representations,PrefixContract/
 BodyContract,E1/E2,ordered ROM/TLS,real RunJoin and artifact association remain open.
+
+## Read-only final validation
+
+Proof checkpoint415017b9eb. `final.py` matches all24 accepted current P7 modules
+to immutable successful snapshots and the current host source/cache hashes.
+All85 new theorem reports use only standard axioms. Both security-root sources
+are byte-identical to e52b6bec0a; all inspected critical native source hashes
+match the native receipts. Both passing Kani harness summaries and exact Rust
+reference snapshots are checked. Four pending modules remain text-only.
+This validates development evidence without launching another capped scope;
+it is not a combined axioms compile, release replay or frozen-artifact proof.
+No shipped Rust, existing proved Lean module, key, security contract, root
+premise or artifact was changed. No push or merge. Target not yet established.
