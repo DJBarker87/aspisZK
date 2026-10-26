@@ -24,7 +24,7 @@ canonical membership, success or builder-soundness proposition defines it. -/
 def prover {I : Type} (inputs : I → Input) (transport : Fin 1024 ≃ Fin 1024) : HonestProver K where
   Instance := I
   «public» := fun i => mapPub (BuilderPublicProjection.semanticPublic
-    (PV_Src_Public.value (inputs i).publicInput))
+    (PV_Src_Public.output (inputs i).publicInput))
   build := fun i => PV_Src_Trace.trace (inputs i).witnessRecord (inputs i).publicRecord
   transport := transport
 
@@ -49,7 +49,7 @@ def toInstance (premises : PV_Src_Premises (K := K) inputs transport) (i : I) :
 
 theorem public_eq (premises : PV_Src_Premises (K := K) inputs transport) (i : I) :
     (prover inputs transport).public i = BuilderSource.prover.public (toInstance premises i) := by
-  change mapPub (BuilderPublicProjection.semanticPublic (PV_Src_Public.value _)) = _
+  change mapPub (BuilderPublicProjection.semanticPublic (PV_Src_Public.output _)) = _
   rw [PV_Src_Public.public_eq]
   rfl
 

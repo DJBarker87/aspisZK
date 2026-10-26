@@ -1,6 +1,7 @@
 import R1Z.PV_Src_Identification
 import R1Z.PV_Src_Records
 import R1Z.PV_Src_PublicRecords
+import R1Z.PV_Src_OptionShape
 
 /-! A non-vacuous canonical input family for the extracted stages. The domain
 retains the explicit U64 representation bound and public option shape; it does
@@ -17,7 +18,6 @@ variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
 structure Instance where
   canonical : BuilderCanonical.Instance (K := K)
   indexBound : canonical.val.1.nextPairIndex < 2^64
-  optionShape : AspisR1.PublicOptionShape.canonical canonical.val.1
   pool : PV_Src_PublicRecords.Context
   domain : PV_Src_PublicRecords.Context
   destination : PV_Src_PublicRecords.Context
@@ -29,7 +29,7 @@ def inputs (i : Instance (K := K)) : Input where
 
 theorem encoded_public (i : Instance (K := K)) :
     PV_Src_Public.canonicalPublic (inputs i).publicInput = i.canonical.val.1 :=
-  PV_Src_PublicRecords.public_roundtrip _ _ _ _ _ i.optionShape
+  PV_Src_PublicRecords.public_roundtrip _ _ _ _ _ (PV_Src_OptionShape.canonical i.canonical)
 
 def premises : PV_Src_Premises (K := K) inputs PV_Src_Transport.transport where
   words := by
@@ -56,7 +56,7 @@ def identification : BuilderSource.SourceIdentification
 
 theorem public_eq (i : Instance (K := K)) :
     (prover inputs PV_Src_Transport.transport).public i = BuilderSource.prover.public i.canonical := by
-  change mapPub (BuilderPublicProjection.semanticPublic (PV_Src_Public.value _)) = _
+  change mapPub (BuilderPublicProjection.semanticPublic (PV_Src_Public.output _)) = _
   rw [PV_Src_Public.public_eq,encoded_public]
   rfl
 

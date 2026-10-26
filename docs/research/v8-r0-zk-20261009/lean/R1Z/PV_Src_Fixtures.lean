@@ -17,10 +17,6 @@ local instance : CharP Scalar 2147483647 :=
 def fixture (isWithdrawal : Bool) : PV_Src_Canonical.Instance (K := Scalar) where
   canonical := if isWithdrawal then withdrawal else transfer
   indexBound := by cases isWithdrawal <;> change 0 < 2^64 <;> decide
-  optionShape := by
-    cases isWithdrawal
-    · exact (PV_Src_Fixture_FixtureRecords.spend false).1
-    · exact (PV_Src_Fixture_FixtureRecords.spend true).1
   pool := Array.repeat 32#usize 0#u8
   domain := Array.repeat 32#usize 0#u8
   destination := Array.repeat 32#usize 0#u8

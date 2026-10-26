@@ -49,3 +49,61 @@ were denied before scp or launcher invocation; zero Lean attempts. The second
 read-only check was made too soon to be the required three-minute retry;
 it is retained as an early inventory check, not a launch. The next retry is
 no earlier than 12:46:56 UTC. Both denial logs and full inventories are retained.
+
+## Capacity relaunch 1 (2026-10-26)
+
+Recovered commits 1508d64ce5 and 71d9b75ad4. Four charged Lean attempts
+(22552, 22555, 22556, 22558), all failed in PartsTotal; no Kani run.
+IDs 22550, 22551, 22553, 22554, 22557, 22559 and 22560 were reservation
+preflights only. Remaining budget: 96 Lean / 15 Kani. 22560 refused at
+13:04:18 UTC: reserved 51,942,260,736 bytes, projected 60,532,195,328
+above safe 59,055,800,320. Next retry no earlier than 13:07:18 UTC,
+using 22561. Source snapshot 22559 already replaces the failing concrete
+wrapping-arithmetic decisions with symbolic umul/uadd equations.
+
+The recovered new modules other than PartsTotal are UNCOMPILED WIP.
+Failed outputs containing sorryAx are diagnostic error recovery, not accepted
+proofs. No such output is accepted as closure evidence.
+
+## Resumed statement work (pending compilation)
+
+`PV_Src_Public.output` now executes `run` (the two extracted public calls);
+`output_eq` uses unconditional `run_success` to remove its fallback. It no
+longer substitutes the expected public projection as the input prover's public
+function. The trace executes `merged_banks` and `columns`; `run_exact` is meant
+to prove its fallback unreachable for every raw bank record, not merely fixtures.
+
+`PV_Src_OptionShape.reflect/canonical` derive the option shape from RspendPlus;
+the extra option-shape field was removed from the new canonical input carrier.
+The explicit `nextPairIndex < 2^64` representation bound remains: the adopted
+Rspend/AppendBinding model itself has no U64 bound. This is a source carrier
+restriction, not a proof that all mathematical instances have machine encodings.
+
+The four exact remaining generic stage premises in
+`PV_Src_Identification.PV_Src_Premises` are:
+
+1. `words : ∀ i, WitnessOk (wordWitness (inputs i).witnessRecord)`.
+2. `publicCorr : ∀ i, PubCorr (wordPublic (inputs i).publicRecord)
+   (mapPub (K := K) (PV_Src_Public.canonicalPublic (inputs i).publicInput))`.
+3. `admission : ∀ i, BuilderSpendRelation.RspendPlus
+   (mapPub (K := K) (PV_Src_Public.canonicalPublic (inputs i).publicInput))
+   (BuilderCanonical.liftWitness
+     (BuilderRecordCanonical.witness (wordWitness (inputs i).witnessRecord)))`.
+4. `row_call : ∀ j, transport j = PV_Src_Transport.row j`.
+
+The encoded canonical family is intended to construct all four, using admitted
+canonical relation data, raw-word encoding theorems, and the extracted arithmetic
+row reference. This is not a construction of the opaque forest `Records` callback
+or a proof that successful forest admission implies RspendPlus. These native
+associations remain independent of the stage theorem. V154 additionally retains
+the existing P6 Kani connection from shipped S2 to the extracted row reference;
+its receipt is reused, not introduced as a new Lean axiom or rerun unchanged.
+
+`PV_Src_Consumer.of_identification` targets the exact original
+`PrivacyR1Headline.BuilderPremises` type. The existing
+`PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises` is a proved fixed-input
+model theorem, with no SourceIdentification argument. Compatibility with its
+contract does not install the new input into the deployed RunJoin endpoint.
+
+Reservation refusals 22561 (13:07:26), 22562 (13:10:45), 22563 (13:14:02)
+are zero charged Lean attempts and have individual full inventory receipts.

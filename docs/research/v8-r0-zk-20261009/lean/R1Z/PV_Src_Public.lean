@@ -28,7 +28,16 @@ def canonicalPublic : Input → R0P.Public R1J.SpendWitnessMap.F
 
 theorem run_success (i : Input) : run i = ok (value i) := by cases i <;> rfl
 
-theorem public_eq (i : Input) : semanticPublic (value i) = canonicalPublic i := by
+/-- Execute the extracted public call. Totality, rather than an admission
+premise, proves that the fallback is unreachable. -/
+def output (i : Input) : SemanticPublic :=
+  R0Z.WriterRefine.okOr (run i) (value i)
+
+theorem output_eq (i : Input) : output i = value i := by
+  rw [output,run_success,R0Z.WriterRefine.okOr_ok]
+
+theorem public_eq (i : Input) : semanticPublic (output i) = canonicalPublic i := by
+  rw [output_eq]
   cases i <;> rfl
 
 theorem transfer_public_eq (p : Transfer) (t : Transition) (s : SemanticPublic)
@@ -42,6 +51,7 @@ theorem withdrawal_public_eq (p : Withdrawal) (t : Transition) (s : SemanticPubl
   withdrawal_success p t s h
 
 #print axioms run_success
+#print axioms output_eq
 #print axioms public_eq
 #print axioms transfer_public_eq
 #print axioms withdrawal_public_eq
