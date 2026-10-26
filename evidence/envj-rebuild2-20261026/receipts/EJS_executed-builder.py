@@ -3,6 +3,8 @@ from pathlib import Path
 import subprocess,json,hashlib,re,time,datetime,os,sys,shutil
 B=Path('/home/dombarker/project-offloads'); T=B/'aspis-fs-generic-20261006/evidence';H=B/'r1-privacy-build-integration-20261019';J=B/'aspis-joint-20261019';U=B/'codex-cx-import-union-20261022'
 rows=json.loads((T/'EJR_all-restored-sources.json').read_text());env=json.loads((H/'env/J.json').read_text());paths=[Path(p) for p in env['LEAN_PATH'].split(':')]; roots={'joint':J,'union':U}
+roots.update({n:U/n for n in ['EJS_formatter_joint','EJS_formatter_union']})
+rows.extend(json.loads((T/'EJS_formatter-sources.json').read_text()))
 REV=(T/'EJR_revision.txt').read_text().strip();budget=int(os.environ.get('EJR_CUMULATIVE_BUILD_LIMIT','799'))
 
 _hash_cache={}
@@ -86,7 +88,12 @@ succeeded.update(r['key'] for r in reuses);attempted.update(r['key'] for r in re
 latest_by_key={r['key']:r for r in past}
 repair_keys={r['key'] for r in latest_by_key.values() if r['exit']!=0 and any('error: object file' in e and 'does not exist' in e for e in r['errors'])} - {r['key'] for r in reuses}
 
+fmt_targets={'ImportUnionNamedDiscriminant','AspisR72Sampler/Types','AspisR72Sampler/Funs','AspisV8R19/SamplerWordRead'}
+fmt_rebuild={r['key'] for r in rows if r['workspace']=='EJS_formatter_union' and r['module'] in fmt_targets and (r['key'] not in latest_by_key or latest_by_key[r['key']]['attempt']<31046)}
+repair_keys.update(fmt_rebuild);succeeded.difference_update(fmt_rebuild)
+repair_keys.update(r['key'] for r in latest_by_key.values() if r['attempt'] in (31019,31020) and r['exit']==90)
 def try_reuse(r,ds):
+ if r['key'] in fmt_rebuild:return False
  fingerprint=lambda dd:[(d['module'].replace('.','/'),d['sha256']) for d in dd]
  for old in past:
   if old['exit'] or old['workspace'] not in roots or old['module']!=r['module'] or old['source_sha256']!=r['source_sha256'] or fingerprint(old['deps'])!=fingerprint(ds):continue
@@ -130,6 +137,13 @@ assert 30800 <= attempt <= 31600, attempt
 assert len(past) >= 800
 excluded={'R1Z/EventsR1P2','R1Z/SimCostOuterRetry6'}
 pending=[r for r in rows if (r['key'] not in attempted or r['key'] in repair_keys) and r['module'] not in excluded]
+collisions=[]
+for r in pending[:]:
+ obj=roots[r['workspace']]/'objects'/(r['module']+'.olean')
+ if r['workspace'] in ('joint','union') and obj.is_file() and not obj.is_symlink():
+  collisions.append(dict(key=r['key'],path=str(obj),object_sha256=sha(obj),source_sha256=r['source_sha256'],reason='Unreceipted regular object appeared in shared output root; preserve and do not overwrite or adopt it.'))
+  pending.remove(r)
+(T/'EJS_preserved-existing-objects.json').write_text(json.dumps(collisions,indent=2)+chr(10))
 bykey={r['key']:r for r in rows}
 priority=set()
 def mark(k):
@@ -160,7 +174,7 @@ while pending and len(past)<budget:
  label='EJR-'+str(attempt);admission=admit(label);root=roots[r['workspace']];src=Path(r['host_path']);assert sha(src)==r['source_sha256'];obj=root/'objects'/(r['module']+'.olean');obj.parent.mkdir(parents=True,exist_ok=True)
  if obj.is_symlink():obj.unlink()
  elif obj.exists():raise RuntimeError('refuse overwriting existing regular object '+str(obj))
- context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json']}
+ context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json','EJS_formatter-loader-repair.json']}
  fp=hashlib.sha256(json.dumps(dict(direct_dependencies=ds,physical_library_context=context),sort_keys=True).encode()).hexdigest();start=time.monotonic()
  if r['workspace']=='joint':
   cmd=['sh',str(H/'tools/run-joint.sh'),str(attempt),r['module'],'J','7000','8',fp]
