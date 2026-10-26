@@ -1,0 +1,59 @@
+# Proposed trust contract and P separation
+
+`R1Z.PV_RunJoin_TrustItems d` has four field groups. The parameter `d`
+remains explicit; no actual deployed native interpretation is claimed.
+All carriers and quantifiers are in `PV_RunJoin_TrustItems.lean`, printed in
+out-26801.log. This is an escalation for the owner, not adoption.
+
+| Field | Exact statement | Carrier | Shipped location | Class | If false |
+|---|---|---|---|---|---|
+| entropy_law | `∀ context raw, d.law context raw = 1 / (Fintype.card Raw : ℚ)` | `Raw = Fin 2 → OracleAnswer`, 64 successful bytes; complete prior context | `crates/aspis-prover/src/state_only_entropy.rs:StateOnlyAttemptSecrets::generate_for_mask_nonce` / `getrandom::fill` | OS/kernel contract | biased/correlated masks can expose witness information; the claimed uniform conditional law no longer transports |
+| entropy_kernel | `∀ c, d.nativeWeight c = PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c` | SAME joint completion coins and residual world; 128 64-byte draws | same factory, reached from `crates/aspis-r1-cost-probe/src/RealR1_client.rs:prove_for_proof_accounts` | OS/kernel contract | correlations with prior draws, oracle, failures or schedules can defeat joint privacy even with uniform marginals |
+| outcomes | `∀ w call, nativeCall d.native w call ↔ sourceCall d.laws w call` | complete `World E File Reply Time Worker`; tagged entropy/file/time/worker calls with exact replies and next worlds | factory; `state_only_entropy.rs:DurableStateOnlyMaskNonceStore::{open,reserve_fallible}`, `sync_directory`; `crates/aspis-r1-cost-probe/src/prover.rs:public_check / take_check_times` timing/TLS path and reached native worker operations | OS/kernel contract | filesystem replay/partial writes/failures or timing/scheduling differ from the interpreter; duplicated nonce use or distinguishable errors/traces become possible |
+| observation | `∀ c, d.nativeObservation c = d.extractedObservation c` | complete execution observation; deployment must instantiate with filesystem/E2 state plus complete D159 bytes/L1/L2/L3 observation | `RealR1_client.rs:prove_for_proof_accounts`, entire reached prover/callback/FS call graph, selected compiled x86_64 Linux binary | OS/kernel contract + toolchain + hardware | native effects or compiled/hardware observations reveal information absent from extracted execution; source privacy does not transfer |
+
+The fourth field is native-to-extraction only. It contains no equality with
+the privacy experiment, simulator, RunJoin, or privacy inequality. The P trace
+obligation supplies extraction-to-security-model agreement. F3/F5/F6 source
+trace simulation cannot be replaced by this trust item.
+
+Five filesystem constructor clauses are one outcome family; time/workers
+remain distinct constructors on the SAME world. `TrustOutcomes` proves exact
+equivalence with the old eight-leaf Identity structure, with no availability
+condition. It does not prove the actual native Identity instance.
+
+Separate filesystem and complete-view projection equalities are derivable by
+`observation_projection` WHEN the interpretation retains those components.
+They are deleted from T. Successful-byte uniformity does not imply joint
+factorization. Call outcome correspondence does not imply any probability law.
+No claim of globally smallest axiomatic presentation is made: these are four
+semantically distinct contracts, not a trick counting conjunctions as one.
+
+## Options, both UNADOPTED
+
+A (native availability) would add a separate premise that every reached
+factory/kernel operation succeeds (and excludes the first-error branch), or
+would restrict the theorem to that availability event. It does not follow
+from `entropy_law`, `entropy_kernel`, or `outcomes`. It is absent from T.
+B would change the experiment/conclusion to feed the SAME public error signal
+and full error observation to real and ideal, as in PublicFailureEndpoint.
+It belongs in the statement, not in a hidden observation equality. It is absent.
+
+## P obligations
+
+P-selection: construct the actual `SourceSelectionContract.Data`; prove its
+`PublicBinding`, with D162's selected caller and SAME compiled record.
+P-admission: SelectedAdmission.Remainder's exact `compile_call`, `words`,
+`publicCorr`, `admission` for those records. `row_call` is already a theorem.
+P-runtime: install actual world initializer/account policy/native dictionary,
+source hash/public inputs, complete decoders and ideal handler, on pinned
+release/compiler/CPU carriers. A function of free data is not a concrete value.
+P-source/ledger/fill: instantiate the checked candidate source/control lemmas
+at that same runtime (including dictionary/source projections).
+P-byte-blind: initial ledger independent of future raw tape and causal frames;
+fault schedule is already definitional in LedgerBoundary, so not a trust item.
+P-trace: for all adversaries/witnesses and SAME shared coin outside the UNCHANGED
+bad event, extracted COMPLETE observation equals the security source experiment.
+Includes joint L1/L2 F3/F5/F6; OS errors must be treated without silently adopting A/B.
+P-release: coherent dependency closure replay, release byte/source identity,
+compiler/flags and CPU pin, complete observer-carrier binding.
