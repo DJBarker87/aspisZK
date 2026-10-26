@@ -13,6 +13,10 @@
     "carry": {
       "text": "    for digit in digits {\n        let sum = u64::from(*digit) + u64::from(addend);\n        *digit = (sum % u64::from(P)) as u32;\n        addend = (sum / u64::from(P)) as u32;\n    }\n",
       "sha256": "a3522c21fc53b5c400de7ebf42a0138912d9f080741891a08b15dcf3dd594bfe"
+    },
+    "word": {
+      "text": "        let dividend = (remainder << 32) | u64::from(rank[j]);\n        rank[j] = (dividend / u64::from(P)) as u32;\n        remainder = dividend % u64::from(P);",
+      "sha256": "91ee8b92fb1042349f960bffc84a29fd7cfe429eb6be06a98c0832c73cb41e0f"
     }
   },
   "adaptation": "Only enclosing wrappers and exposed state tuples added. The recorded fragment texts occur verbatim in both frozen source and source_fragments.rs. pass is one callback body of low_base_p_digits, not the whole function. carry omits a release-disabled debug_assert; profile disables debug assertions in all gates. No stubs.",

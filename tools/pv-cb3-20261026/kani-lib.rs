@@ -71,4 +71,11 @@ mod checks {
         assert_eq!(super::sampler::gamma_sample(&block),super::reference_split::gamma(block));
     }
 
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_word_split() {
+        let word:u32=kani::any();let prior:u64=kani::any();
+        assert_eq!(super::source_fragments::word_step(word,prior),super::reference_split::word_step(word,prior));
+    }
+
 }
