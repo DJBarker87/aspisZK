@@ -1,0 +1,9 @@
+# Successful installed preparation
+
+`SAP_PrepareOwner.installed` derives all nine `PreparedFields` groups for EVERY successful preparation of `RowShape_InstalledSlots.verifierOps ops (F3M_CircleSource.install B) std`, including its own returned Prepared and scratch. No source success, scalar canonicality, circle canonicality, or Prepared equality is added as a hypothesis of this theorem.
+
+The proof inverts native buffer preparation, transports the actual original preparation return, consumes Session A's installed meaning theorem, derives query bounds/rho from actual opening calls, semantic alpha from actual SourceFull25 sampler calls, and circle coordinates from the explicitly installed wrapper. SAP_WrapperCanonical is a namespaced copy of the read-only S9 retained wrapper canonicality proof (no source edits to Session A). SAP_CanonicalCarrier and the split transport modules only move literal coordinates.
+
+All final stage-1 modules have exit0 receipts and standard-only axiom reports. Attempts SAP_006 and SAP_014 hit default heartbeat limits, and were replaced with smaller OpeningCuts/OpeningShape and AlphaTransport/CoordinateTransport proofs. No heartbeat/cap increase or unchanged rerun. SAP_005 was a missing S9 object preflight, with NO Lean invocation; SAP_WrapperCanonical supplies the namespaced source proof instead. Failed recovery axiom output is excluded. Actual Lean invocations so far:20 (SAP_001–021 excluding005); Kani0.
+
+This is not yet a top-level premise-removal claim: top consumption is the next stage. The free seed B is NOT proved equal to its installation. SAP_Install.configuration explicitly sets the circle field, and the extraction association must name this exact specialized dictionary. The fixed-source/artifact association remains an explicit inherited extraction boundary, not a new trusted equation.
