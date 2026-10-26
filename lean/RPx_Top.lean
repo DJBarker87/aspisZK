@@ -1,5 +1,6 @@
 import Rc7_Top
 import RPx_Transport
+import RPx_NativeTransport
 import Rc7_Native
 import P2P_Release
 import P2P_Accounting
@@ -164,14 +165,24 @@ theorem deployed {W A F CoreError Tx : Type}
     CPH_Trace.Facts p t u saved native1 native2 copy allocator CPH_Program.verifier ∧
     CPH_Recorder.Facts (Rc5_Install.configuration indexError c reservation) hashv native1 native2 copy allocator
       CPH_Program.verifier H p t u saved ) ∧
-    RPx_Transport.Claims (Rc5_Install.configuration indexError c reservation) hashv P (Q0+Q1) := by
+    RPx_Transport.Claims (Rc5_Install.configuration indexError c reservation) hashv P (Q0+Q1) ∧
+    RPx_NativeTransport.PrefixBound
+      (RPx_NativeTransport.firstCode (Rc5_Install.configuration indexError c reservation) hashv copy allocator
+        e1 CPH_Program.verifier data1 state1) hashv H 1018 ∧
+    RPx_NativeTransport.PrefixBound
+      (RPx_NativeTransport.secondCode (Rc5_Install.configuration indexError c reservation) hashv allocator
+        e2 CPH_Program.verifier data2 slot state2) hashv H 903 := by
   constructor
   · exact Rc7_Top.deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError
       reservation native1 native2 hashv extraction sha256 H p1 syscall data1 data2 slot
       state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length prior words
       p t u actions game RuntimePersistence D P Q0 Q1 queries runtime finishOwners binding
-  · exact RPx_Transport.transport (Rc2_Install.configuration (Rc5_Install.seed indexError c) reservation)
-      hashv D words P (Q0+Q1) queries
+  · refine ⟨RPx_Transport.transport (Rc2_Install.configuration (Rc5_Install.seed indexError c) reservation)
+      hashv D words P (Q0+Q1) queries,?_,?_⟩
+    · exact (RPx_NativeTransport.first _ hashv copy allocator e1 CPH_Program.verifier data1 state1
+        native1 native2 extraction sha256 H p1 syscall).2
+    · exact (RPx_NativeTransport.second _ hashv allocator e2 CPH_Program.verifier data2 slot state2
+        native1 native2 extraction sha256 H p1 syscall).2
 
 #print axioms deployed
 end AspisR1.RPx_Top
