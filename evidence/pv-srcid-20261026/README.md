@@ -43,3 +43,9 @@ Focused new modules only, shared launcher with Lean -M7000 and 6G/8G/swap0,
 TasksMax128 under lead ruling (b). No existing proved modules or sibling
 worktrees will be edited. Receipts will record revision, module/source and
 dependency hashes, exit, wall time, peak RSS, swaps and full axiom output.
+
+Reservation preflights 22550 (12:43:05 UTC) and 22551 (12:43:56 UTC)
+were denied before scp or launcher invocation; zero Lean attempts. The second
+read-only check was made too soon to be the required three-minute retry;
+it is retained as an early inventory check, not a launch. The next retry is
+no earlier than 12:46:56 UTC. Both denial logs and full inventories are retained.
