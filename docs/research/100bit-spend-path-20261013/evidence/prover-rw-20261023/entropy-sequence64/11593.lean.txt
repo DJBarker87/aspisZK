@@ -1,0 +1,88 @@
+import R1Z.ProverRwEntropyStep64
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropySequence64
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open ProverRwEffectSource ProverRwEffectTape ProverRwEffectPrefix
+variable [ExternalTypes]
+attribute [local instance] Classical.propDecidable
+
+/-- A successful fill supplies exactly64 bytes; errors preserve the actual
+returned buffer. This is a typed source-interpreter carrier, not an OS law. -/
+inductive Event where
+  | full : Array U8 64#usize → Event
+  | os : getrandom.error.Error → Slice U8 → Event
+  | failed : Error → Event
+  | diverged : Event
+
+def reply : Event → Result Reply
+  | .full bytes => .ok (.Ok (),Array.to_slice bytes)
+  | .os error bytes => .ok (.Err error,bytes)
+  | .failed error => .fail error
+  | .diverged => .div
+
+def world (events : List Event) (reads : List (Slice U8 × Result Reply)) : World :=
+  ⟨events.map reply,reads⟩
+
+def boundary (nonce : Array U8 32#usize) (retry : Usize) : Event → Boundary
+  | .full bytes =>
+      if ProverCommitPublicNonce40.decode (ProverRwEntropyDecode64.raw bytes) = none then
+        .retry (Usize.wrapping_add retry 1#usize)
+      else .returned (.ok (.Ok ⟨nonce,ProverRwEntropyDecode64.field bytes,ProverRwEntropyDecode64.leaf bytes⟩))
+  | .os error _ => .returned (.ok (.Err (.Os error)))
+  | .failed error => .returned (.fail error)
+  | .diverged => .returned .div
+
+def model (ops : ExternalFuns) (nonce : Array U8 32#usize) (limit : Usize) :
+    Nat → Usize → List Event → List (Slice U8 × Result Reply) → Execution
+  | 0,retry,events,reads => ⟨.retry retry,world events reads⟩
+  | fuel+1,retry,events,reads =>
+    if retry < limit then
+      match events with
+      | [] => ⟨.request ProverRwEntropyObstruction.zeroInput
+          (@after _ (install ops) nonce retry back),world [] reads⟩
+      | event::rest =>
+        let observed := reads ++ [(ProverRwEntropyObstruction.zeroInput,reply event)]
+        match boundary nonce retry event with
+        | .retry next => model ops nonce limit fuel next rest observed
+        | terminal => ⟨terminal,world rest observed⟩
+    else ⟨.returned (.ok (.Err .RepeatedZeroBlock)),world events reads⟩
+
+/-- Full finite sequence, including sixteen-draw cap tests, all ordered
+callbacks, successful arbitrary bytes, OS errors, failure and divergence.
+There is no per-callback result/equivalence premise. Native effect adequacy
+and the history-conditioned probability law are still separate obligations. -/
+theorem run_model (ops : ExternalFuns) (nonce : Array U8 32#usize) (limit : Usize)
+    (fuel : Nat) (retry : Usize) (events : List Event)
+    (reads : List (Slice U8 × Result Reply)) :
+    @run _ (install ops) nonce limit fuel retry (world events reads) =
+      model ops nonce limit fuel retry events reads := by
+  induction fuel generalizing retry events reads with
+  | zero => rfl
+  | succ fuel ih =>
+    by_cases below : retry < limit
+    · cases events with
+      | nil =>
+        simp only [run,model,below,if_true,world,List.map_nil,
+          ProverRwEntropyStep64.unserved]
+      | cons event rest =>
+        cases event with
+        | full bytes =>
+          simp only [run,model,below,if_true,world,List.map_cons,reply,
+            ProverRwEntropyStep64.full,boundary]
+          split
+          · exact ih _ _ _
+          · rfl
+        | os error bytes =>
+          simp only [run,model,below,if_true,world,List.map_cons,reply,
+            ProverRwEntropyStep64.os,boundary]
+        | failed error =>
+          simp only [run,model,below,if_true,world,List.map_cons,reply,
+            ProverRwEntropyStep64.failed,boundary]
+        | diverged =>
+          simp only [run,model,below,if_true,world,List.map_cons,reply,
+            ProverRwEntropyStep64.diverged,boundary]
+    · simp only [run,model,below,if_false,ProverRwEntropyStep64.cap ops nonce limit retry below]
+
+#print axioms run_model
+end R1Z.ProverRwEntropySequence64

@@ -1,0 +1,55 @@
+import R1Z.ProverRwEntropyDecode64
+import R1Z.ProverRwEntropyNonceGuard64
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyStep64
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open ProverRwEffectSource ProverRwEffectTape ProverRwEffectPrefix
+variable [ExternalTypes]
+attribute [local instance] Classical.propDecidable
+
+/-- No per-reply continuation/decoder equation is assumed. The advanced
+world retains the complete ordered fill request and this full reply. -/
+theorem full (ops : ExternalFuns) (nonce : Array U8 32#usize) (limit retry : Usize)
+    (below : retry < limit) (bytes : Array U8 64#usize)
+    (rest : List (Result Reply)) (reads : List (Slice U8 × Result Reply)) :
+    letI : ExternalFuns := install ops
+    let reply : Result Reply := .ok (.Ok (),Array.to_slice bytes)
+    step nonce limit retry ⟨reply::rest,reads⟩ =
+      ⟨if ProverCommitPublicNonce40.decode (ProverRwEntropyDecode64.raw bytes) = none then
+          .retry (Usize.wrapping_add retry 1#usize)
+        else .returned (.ok (.Ok ⟨nonce,ProverRwEntropyDecode64.field bytes,ProverRwEntropyDecode64.leaf bytes⟩)),
+       ⟨rest,reads ++ [(ProverRwEntropyObstruction.zeroInput,reply)]⟩⟩ := by
+  letI : ExternalFuns := install ops
+  dsimp only
+  unfold step
+  rw [request ops nonce limit retry below]
+  simp only [resumeResult,bind_tc_ok,ProverRwEntropyDecode64.after_full,advance]
+  split <;> rfl
+
+theorem failed (ops : ExternalFuns) (nonce : Array U8 32#usize) (limit retry : Usize)
+    (below : retry < limit) (error : Error) (rest : List (Result Reply))
+    (reads : List (Slice U8 × Result Reply)) :
+    letI : ExternalFuns := install ops
+    step nonce limit retry ⟨.fail error::rest,reads⟩ =
+      ⟨.returned (.fail error),⟨rest,reads ++ [(ProverRwEntropyObstruction.zeroInput,.fail error)]⟩⟩ := by
+  letI : ExternalFuns := install ops
+  unfold step
+  rw [request ops nonce limit retry below]
+  rfl
+
+theorem diverged (ops : ExternalFuns) (nonce : Array U8 32#usize) (limit retry : Usize)
+    (below : retry < limit) (rest : List (Result Reply))
+    (reads : List (Slice U8 × Result Reply)) :
+    letI : ExternalFuns := install ops
+    step nonce limit retry ⟨.div::rest,reads⟩ =
+      ⟨.returned .div,⟨rest,reads ++ [(ProverRwEntropyObstruction.zeroInput,.div)]⟩⟩ := by
+  letI : ExternalFuns := install ops
+  unfold step
+  rw [request ops nonce limit retry below]
+  rfl
+
+#print axioms full
+#print axioms failed
+#print axioms diverged
+end R1Z.ProverRwEntropyStep64

@@ -1,0 +1,121 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropySequence64.lean:74:12: error: Type mismatch
+  ih ?m.138 ?m.139 ?m.140
+has type
+  run nonce limit fuel ?m.138 (world ?m.139 ?m.140) = model ops nonce limit fuel ?m.138 ?m.139 ?m.140
+but is expected to have type
+  run nonce limit fuel next✝
+      { tape := List.map reply rest,
+        reads := reads ++ [(ProverRwEntropyObstruction.zeroInput, ok (core.result.Result.Ok (), bytes.to_slice))] } =
+    match
+      if ProverCommitPublicNonce40.decode (ProverRwEntropyDecode64.raw bytes) = none then
+        Boundary.retry (retry.wrapping_add 1#usize)
+      else
+        Boundary.returned
+          (ok
+            (core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := ProverRwEntropyDecode64.field bytes,
+                leaf_salt_seed := ProverRwEntropyDecode64.leaf bytes })) with
+    | Boundary.retry next =>
+      model ops nonce limit fuel next rest
+        (reads ++ [(ProverRwEntropyObstruction.zeroInput, ok (core.result.Result.Ok (), bytes.to_slice))])
+    | terminal =>
+      { boundary := terminal,
+        world :=
+          { tape := List.map reply rest,
+            reads :=
+              reads ++ [(ProverRwEntropyObstruction.zeroInput, ok (core.result.Result.Ok (), bytes.to_slice))] } }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropySequence64.lean:75:12: error: Tactic `rfl` failed: The left-hand side
+  {
+    boundary :=
+      if ProverCommitPublicNonce40.decode (ProverRwEntropyDecode64.raw bytes) = none then
+        Boundary.retry (retry.wrapping_add 1#usize)
+      else
+        Boundary.returned
+          (ok
+            (core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := ProverRwEntropyDecode64.field bytes,
+                leaf_salt_seed := ProverRwEntropyDecode64.leaf bytes })),
+    world :=
+      { tape := List.map reply rest,
+        reads := reads ++ [(ProverRwEntropyObstruction.zeroInput, ok (core.result.Result.Ok (), bytes.to_slice))] } }
+is not definitionally equal to the right-hand side
+  match
+    if ProverCommitPublicNonce40.decode (ProverRwEntropyDecode64.raw bytes) = none then
+      Boundary.retry (retry.wrapping_add 1#usize)
+    else
+      Boundary.returned
+        (ok
+          (core.result.Result.Ok
+            { mask_nonce := nonce, field_mask_entropy := ProverRwEntropyDecode64.field bytes,
+              leaf_salt_seed := ProverRwEntropyDecode64.leaf bytes })) with
+  | Boundary.retry next =>
+    model ops nonce limit fuel next rest
+      (reads ++ [(ProverRwEntropyObstruction.zeroInput, ok (core.result.Result.Ok (), bytes.to_slice))])
+  | terminal =>
+    { boundary := terminal,
+      world :=
+        { tape := List.map reply rest,
+          reads := reads ++ [(ProverRwEntropyObstruction.zeroInput, ok (core.result.Result.Ok (), bytes.to_slice))] } }
+
+case h_2
+inst✝ : ExternalTypes
+ops : ExternalFuns
+nonce : Std.Array U8 32#usize
+limit : Usize
+fuel : ℕ
+ih :
+  ∀ (retry : Usize) (events : List Event) (reads : List (Slice U8 × Result Reply)),
+    run nonce limit fuel retry (world events reads) = model ops nonce limit fuel retry events reads
+retry : Usize
+reads : List (Slice U8 × Result Reply)
+below : retry < limit
+rest : List Event
+bytes : Std.Array U8 64#usize
+x✝¹ : Boundary
+x✝ :
+  ∀ (next : Usize),
+    (if ProverCommitPublicNonce40.decode (ProverRwEntropyDecode64.raw bytes) = none then
+          Boundary.retry (retry.wrapping_add 1#usize)
+        else
+          Boundary.returned
+            (ok
+              (core.result.Result.Ok
+                { mask_nonce := nonce, field_mask_entropy := ProverRwEntropyDecode64.field bytes,
+                  leaf_salt_seed := ProverRwEntropyDecode64.leaf bytes }))) =
+        Boundary.retry next →
+      False
+⊢ {
+      boundary :=
+        if ProverCommitPublicNonce40.decode (ProverRwEntropyDecode64.raw bytes) = none then
+          Boundary.retry (retry.wrapping_add 1#usize)
+        else
+          Boundary.returned
+            (ok
+              (core.result.Result.Ok
+                { mask_nonce := nonce, field_mask_entropy := ProverRwEntropyDecode64.field bytes,
+                  leaf_salt_seed := ProverRwEntropyDecode64.leaf bytes })),
+      world :=
+        { tape := List.map reply rest,
+          reads :=
+            reads ++ [(ProverRwEntropyObstruction.zeroInput, ok (core.result.Result.Ok (), bytes.to_slice))] } } =
+    match
+      if ProverCommitPublicNonce40.decode (ProverRwEntropyDecode64.raw bytes) = none then
+        Boundary.retry (retry.wrapping_add 1#usize)
+      else
+        Boundary.returned
+          (ok
+            (core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := ProverRwEntropyDecode64.field bytes,
+                leaf_salt_seed := ProverRwEntropyDecode64.leaf bytes })) with
+    | Boundary.retry next =>
+      model ops nonce limit fuel next rest
+        (reads ++ [(ProverRwEntropyObstruction.zeroInput, ok (core.result.Result.Ok (), bytes.to_slice))])
+    | terminal =>
+      { boundary := terminal,
+        world :=
+          { tape := List.map reply rest,
+            reads :=
+              reads ++ [(ProverRwEntropyObstruction.zeroInput, ok (core.result.Result.Ok (), bytes.to_slice))] } }
+'R1Z.ProverRwEntropySequence64.run_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

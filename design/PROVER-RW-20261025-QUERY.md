@@ -572,3 +572,37 @@ rejection was followed by changed source11585 adding the all-sixteen lemma;
 no failed/killed unchanged compile was retried. Existing host reservations had
 fallen before the next launch. No build infrastructure or caps changed.
 Budget85/100 Lean,0/20Kani. No Rust/native/ELF/timing/full replay job.
+
+## Complete finite source/world entropy sequence (11591–11598)
+
+`ProverRwEntropyStep64` discharges the actual factored emitted continuation
+for arbitrary full64-byte replies and OS/error/failure/divergence outcomes,
+including cap and unserved-request boundaries. `EntropySequence64.run_model`
+composes these facts over arbitrary typed finite event lists with every
+ordered request/reply retained. There is no per-callback continuation or
+output-equivalence premise. `SequenceBound64` proves the remaining-counter
+rank symbolically, including non-wrapping Usize increment under the source
+cap. `OwnerSequence64.owner_exact` removes the public nonce-test premise and
+installs the actual16-draw limit; `at_most_sixteen` proves at most16 consumed
+fills. `SequenceComplete64.owner_complete` proves its17 interpreter steps
+leave no artificial retry boundary; missing replies remain requests.
+
+Scope is precise: this proves the source-shaped **world interpreter** under
+its four explicit wrapper interpretations, on successful full64-byte returns.
+It does not connect that interpreter to native getrandom/ABI/Drop or add its
+length/effect association as trust. It does not turn arbitrary correlated
+finite events into the conditional E1 kernels. The original actual-native
+entropy adequacy, both caller contracts and root real RunJoin are still open.
+No privacy target premise, event, entropy contract or observer was changed.
+
+Evidence `evidence/prover-rw-20261023/entropy-sequence64`:7 compiles,5pass,
+2 changed elaboration failures; all accepted new axioms standard.11594 exit0,
+2.26s,4,285,396KiB;11595 exit0,2.07s,4,276,920KiB;11597 exit0,1.97s,
+4,271,984KiB;11598 exit0,2.18s,4,275,384KiB;swap0 throughout.11591 was a
+second reservation rejection before Lean(same55GiB safe-limit arithmetic as
+11581); its admission JSON and inputs are preserved. The changed successor
+added all OS/cap/suspension step rules. Both job inputs and host admission
+records remain retained; no unchanged failed job rerun or cap change.
+Budget92/100 Lean,0/20Kani. No Rust, ELF, timing, Kani, or full-manifest replay.
+The existing assigned launchers end at11599. A request for the lead's existing
+11600+ launcher is pending; no launcher/monitor infrastructure was changed.

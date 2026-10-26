@@ -1,0 +1,46 @@
+import R1Z.ProverRwEntropySequenceBound64
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyOwnerSequence64
+open Aeneas Aeneas.Std Result ProverRwFull
+open ProverRwEffectSource ProverRwEffectTape ProverRwEffectPrefix ProverRwEntropySequence64
+variable [ExternalTypes]
+attribute [local instance] Classical.propDecidable
+
+def selected (ops : ExternalFuns) (nonce : Array U8 32#usize) (events : List Event)
+    (reads : List (Slice U8 × Result Reply)) : Execution :=
+  if ProverCommitOwnerBytes42.block nonce = 0 then
+    ⟨.returned (.ok (.Err .RepeatedZeroBlock)),world events reads⟩
+  else model ops nonce 16#usize 17 0#usize events reads
+
+/-- Source-shaped world-owner versus a typed byte/error sequence. All
+callback-result and nonce-test premises have been removed. This theorem
+retains the explicit wrapper interpretation and does not assert native effect
+adequacy, a probability law, or an outer-caller contract. -/
+theorem owner_exact (ops : ExternalFuns) (nonce : Array U8 32#usize) (events : List Event)
+    (reads : List (Slice U8 × Result Reply)) :
+    @ProverRwEffectOwner.worldOwner _ (install ops) nonce (world events reads) =
+      selected ops nonce events reads := by
+  letI : ExternalFuns := install ops
+  unfold ProverRwEffectOwner.worldOwner selected
+  rw [ProverRwEntropyHalves.nonzero_block]
+  by_cases zero : ProverCommitOwnerBytes42.block nonce = 0
+  · simp only [zero,decide_true,Bool.not_true,if_true]
+  · simp only [zero,decide_false,Bool.not_false,if_false]
+    unfold aspis_prover.state_only_entropy.ENTROPY_RETRY_LIMIT
+    exact run_model ops nonce 16#usize 17 0#usize events reads
+
+theorem at_most_sixteen (ops : ExternalFuns) (nonce : Array U8 32#usize) (events : List Event)
+    (reads : List (Slice U8 × Result Reply)) :
+    (@ProverRwEffectOwner.worldOwner _ (install ops) nonce (world events reads)).world.reads.length ≤
+      reads.length+16 := by
+  rw [owner_exact]
+  unfold selected
+  split
+  · simp only [world]
+    omega
+  · exact ProverRwEntropySequenceBound64.reads_bound ops nonce 16#usize 17 0#usize events reads
+
+#print axioms owner_exact
+#print axioms at_most_sixteen
+end R1Z.ProverRwEntropyOwnerSequence64
