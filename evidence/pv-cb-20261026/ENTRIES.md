@@ -118,3 +118,16 @@ Standard axioms only; full selected caller/endpoint composition remains open.
 |118|V218|INSTALLED (emitted source)|PV_CB_State.op118_installed;22815.json|
 
 Standard axioms only; no selected-native-caller or headline premise removed.
+
+## Checked Zeroizing value projections
+
+|op|row|status|theorem / receipt|
+|---:|---|---|---|
+|127|V223|INSTALLED (value)|PV_CB_Borrow.op127_installed;22816.json|
+|128|V224|INSTALLED (value)|PV_CB_Borrow.op128_installed;22816.json|
+|130|V226|INSTALLED (forwards zeroize callback)|PV_CB_Borrow.op130_installed;22816.json|
+|131|V227|INSTALLED (forwards AsRef callback)|PV_CB_Borrow.op131_installed;22816.json|
+
+Physical volatile erasure, fences, cleanup/Drop association and side channels
+are not supplied by value equations. Their native effect adequacy is DEFERRED
+to pv-runjoin3; these rows remain OPEN as complete deployment obligations.
