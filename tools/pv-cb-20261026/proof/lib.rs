@@ -165,6 +165,7 @@ mod checks {
 
 #[cfg(kani)]
 pub mod shipped {
+ pub fn string_capacity(n:usize)->String {String::with_capacity(n)}
  pub fn vec_pop<T>(x:&mut Vec<T>)->Option<T> {x.pop()}
  pub fn vec_empty<T>(x:&Vec<T>)->bool {x.is_empty()}
  pub fn vec_default<T>()->Vec<T> {Default::default()}

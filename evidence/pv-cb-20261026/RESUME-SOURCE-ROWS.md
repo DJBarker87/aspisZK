@@ -1,6 +1,6 @@
 # Source equation resume
 
-Before: 0/73 discharged; current: 18/73. No endpoint removal claimed.
+Before: 0/73 discharged; current: 22/73. No endpoint removal claimed.
 
 |op|row|status|theorem|receipt / obstruction|
 |---:|---|---|---|---|
@@ -26,7 +26,11 @@ Before: 0/73 discharged; current: 18/73. No endpoint removal claimed.
 |105|V211|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op105Source.op105_source|24013.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
 |107|V212|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op107Source.op107_source|24014.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
 |109|V213|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op109Source.op109_source|24015.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
-|110|V214|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op110Source.op110_source|24017.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|110|V214|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op110Source.op110_source|24017.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row. New source selection replaces old hand-written embedding; old-selection equality is not used. Generated shift literal31 is rendered U32 because pinned backend wrapping_shr requires U32; original literal is I32, same nonnegative shift count.|
 |111|V215|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op111Source.op111_source|24019.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
-|114|V216|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op114Source.op114_source|24020.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|114|V216|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op114Source.op114_source|24020.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row. New source selection preserves shipped field comparison order; old hand-written contextEq is not used.|
 |118|V218|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op118Source.op118_source|24021.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|127|V223|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op127Source.op127_source|24022.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|128|V224|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op128Source.op128_source|24023.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|130|V226|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op130Source.op130_source|24025.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|131|V227|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op131Source.op131_source|24027.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|

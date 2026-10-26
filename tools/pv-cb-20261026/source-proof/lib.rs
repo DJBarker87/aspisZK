@@ -57,3 +57,12 @@ pub fn from_m31(x:aspis_core::field::M31)->aspis_core::field::WideExact {
 
 #[cfg(kani)]
 pub fn context_eq(a:&aspis_core::state_only_hiding::StateOnlyHidingContext,b:&aspis_core::state_only_hiding::StateOnlyHidingContext)->bool {a==b}
+
+#[cfg(kani)]
+pub fn zeroizing_deref<Z:zeroize::Zeroize>(x:&zeroize::Zeroizing<Z>)->&Z {&*x}
+#[cfg(kani)]
+pub fn zeroizing_new<Z:zeroize::Zeroize>(x:Z)->zeroize::Zeroizing<Z> {zeroize::Zeroizing::new(x)}
+#[cfg(kani)]
+pub fn zeroizing_zeroize<Z:zeroize::Zeroize>(x:&mut zeroize::Zeroizing<Z>) {zeroize::Zeroize::zeroize(x)}
+#[cfg(kani)]
+pub fn zeroizing_asref<T:?Sized,Z:zeroize::Zeroize+AsRef<T>>(x:&zeroize::Zeroizing<Z>)->&T {x.as_ref()}
