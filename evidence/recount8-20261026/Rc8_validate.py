@@ -37,12 +37,15 @@ for filename,pin in pins['append_only_inputs'].items():
  data=R.joinpath(filename).read_bytes();n=pin['bytes']
  assert hashlib.sha256(data[:n]).hexdigest()==pin['sha256'],filename
  append_integrity[filename]={'prefix_bytes':n,'prefix_sha256':pin['sha256'],'current_sha256':sha(R/filename),'appended_bytes':len(data)-n}
+changed=subprocess.check_output(['git','diff','--name-only',pins['revision']],cwd=R,text=True).splitlines()
+for filename in changed:
+ assert filename.startswith(('lean/Rc8_','evidence/recount8-20261026/')) or filename in pins['append_only_inputs'],('outside authorised scope',filename)
 if '--final' in sys.argv:
  assert len(receipts)==60,len(receipts)
  assert [j['attempt'] for j in receipts]==[f'Rc8_{n:03}' for n in range(1,61)]
  assert all(v['appended_bytes']>0 for v in append_integrity.values())
 assert subprocess.run(['git','diff','--check',pins['revision']],cwd=R,capture_output=True).returncode==0
-result={'Lean_attempts':len(receipts),'Kani_runs':0,'all_exit_zero':True,'all_standard_axioms':True,'one_scope_at_a_time':'task calls strictly serial; existing host reservation for every attempt','caps':'6G/8G/swap0/64, -M7000','append_integrity':append_integrity,'receipts':receipts,'top_source_sha256':sha(R/'lean/Rc8_Top.lean')}
+result={'Lean_attempts':len(receipts),'Kani_runs':0,'all_exit_zero':True,'all_standard_axioms':True,'one_scope_at_a_time':'task calls strictly serial; existing host reservation for every attempt','caps':'6G/8G/swap0/64, -M7000','append_integrity':append_integrity,'receipts':receipts,'top_source_sha256':sha(R/'lean/Rc8_Top.lean'),'changed_paths':changed}
 E.joinpath('Rc8_validation.json').write_text(json.dumps(result,indent=2)+'\n')
 E.joinpath('Rc8_attempts.jsonl').write_text(''.join(json.dumps(j)+'\n' for j in receipts))
 print(json.dumps({'Lean':len(receipts),'Kani':0,'all_passed':True,'max_RSS_KiB':max(int(j['peak_rss_kib']) for j in receipts),'sum_wall_seconds':sum(j['wall_seconds'] for j in receipts)},indent=2))
