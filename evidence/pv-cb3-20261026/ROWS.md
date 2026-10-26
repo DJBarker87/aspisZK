@@ -13,10 +13,10 @@ This worker: 0 ROW-DISCHARGED(candidate); endpoint premises removed 0.
 |246|V254|PREPARED|—|op246-sibling-check.json|
 |230|V247|PREPARED|—|op230-sibling-check.json|
 |229|V246|PREPARED|—|op229-sibling-check.json|
-|228|V245|OPEN|—|—|
-|227|V244|OPEN|—|—|
-|226|V243|OPEN|—|—|
-|225|V242|OPEN|—|—|
+|228|V245|PREPARED|—|op228-sibling-check.json|
+|227|V244|PREPARED|—|op227-sibling-check.json|
+|226|V243|PREPARED|—|op226-sibling-check.json|
+|225|V242|PREPARED|—|op225-sibling-check.json|
 |224|V241|OPEN|—|—|
 |223|V240|OPEN|—|—|
 |222|V239|OPEN|—|—|
