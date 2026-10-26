@@ -7,3 +7,10 @@ pub fn sha_new(size:usize)->Result<sha2::Sha256VarCore,sha2::digest::InvalidOutp
 pub fn path_as_ref(path:&std::path::Path)->&std::path::Path { path.as_ref() }
 #[cfg(kani)]
 pub fn pathbuf_as_path(path:&std::path::PathBuf)->&std::path::Path { path.as_path() }
+#[cfg(kani)]
+pub fn digest_new() -> sha2::Sha256 {
+    use sha2::Digest;
+    sha2::Sha256::new()
+}
+#[cfg(kani)]
+pub fn error_kind_eq(a: std::io::ErrorKind, b: std::io::ErrorKind) -> bool { a == b }
