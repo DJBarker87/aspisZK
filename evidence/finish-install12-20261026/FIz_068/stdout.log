@@ -1,0 +1,52 @@
+FIz_ContributionAppend.lean:18:4: error: unsolved goals
+case pos
+xs ys : List K
+start group : ℕ
+i : Fin ↑4#usize
+lo : start ≤ 4 * group + ↑i
+hi : 4 * group + ↑i < start + xs.length
+nlo : ¬start + xs.length ≤ 4 * group + ↑i
+⊢ xs[4 * group + ↑i - start]?.getD 0 = if start ≤ 4 * group + ↑i then xs[4 * group + ↑i - start]?.getD 0 else 0
+FIz_ContributionAppend.lean:23:74: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 1
+  d ≥ 0
+  d + f ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  4*a - b - d - f ≤ 0
+  4*a - b + c - d - f ≥ 1
+where
+ a := ↑group
+ b := ↑start
+ c := ↑↑4#usize
+ d := ↑xs.length
+ e := ↑ys.length
+ f := ↑(4 * group + ↑i - (start + xs.length))
+FIz_ContributionAppend.lean:26:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - d ≤ -1
+  a ≥ 0
+  4*a + b - c ≥ 0
+  4*a + b - c - e ≥ 0
+where
+ a := ↑group
+ b := ↑↑i
+ c := ↑start
+ d := ↑↑4#usize
+ e := ↑xs.length
+FIz_ContributionAppend.lean:24:34: warning: This simp argument is unused:
+  zero_add
+
+Hint: Omit it from the simp argument list.
+  simp only [Option.getD_none,̵z̵e̵r̵o̵_̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIz_ContributionAppend.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

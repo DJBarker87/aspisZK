@@ -1,0 +1,131 @@
+FIz_ModelFamilies.lean:41:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.ofFn
+    (R0P.publicDigestLanes (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o) (FIw_PublicModel.selector s))
+in the target expression
+  FIz_ContributionList.fromList (List.ofFn (FIx_ScheduleModel.initial p.variant s o)) 0 ↑j +
+                  FIz_ContributionList.fromList (List.ofFn (FIx_ScheduleModel.absorption p.variant s o)) 16 ↑j +
+                FIz_ContributionList.fromList
+                  (R0P.pathFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                    (FIw_PublicModel.selector s))
+                  32 ↑j +
+              FIz_ContributionList.fromList (List.ofFn (FIy_ValuePacked.rangeModel o s)) 49 ↑j +
+            FIz_ContributionList.fromList (List.ofFn (FIy_ValuePacked.conservation o s)) 82 ↑j +
+          FIz_ContributionList.fromList
+            (R0P.occupancyFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+              (FIw_PublicModel.selector s))
+            0 ↑j +
+        FIz_ContributionList.fromList
+          (List.ofFn
+            (R0P.publicDigestLanes (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+              (FIw_PublicModel.selector s)))
+          84 ↑j +
+      FIz_ContributionList.fromList
+        (R0P.assetFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+          (FIw_PublicModel.selector s))
+        92 ↑j =
+    FIz_ContributionList.fromList
+                (R0P.scheduleFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                  (FIw_PublicModel.selector s))
+                0 ↑j +
+              FIz_ContributionList.fromList
+                (R0P.pathFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                  (FIw_PublicModel.selector s))
+                32 ↑j +
+            FIz_ContributionList.fromList
+              (R0P.valueFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                (FIw_PublicModel.selector s))
+              49 ↑j +
+          FIz_ContributionList.fromList
+            (R0P.digestFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+              (FIw_PublicModel.selector s))
+            84 ↑j +
+        FIz_ContributionList.fromList
+          (R0P.assetFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+            (FIw_PublicModel.selector s))
+          92 ↑j +
+      FIz_ContributionList.fromList
+        (R0P.occupancyFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+          (FIw_PublicModel.selector s))
+        0 ↑j
+
+p : Public
+o : Openings
+s : Selectors
+j : Fin ↑24#usize
+hm : ∑ h, FIv_NativeArray.value s.high ↑h = 1
+lm : ∑ l, FIv_NativeArray.value s.low ↑l = 1
+schedule :
+  FIz_ContributionList.fromList
+      (R0P.scheduleFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+        (FIw_PublicModel.selector s))
+      0 ↑j =
+    FIz_ContributionList.fromList (List.ofFn (FIx_ScheduleModel.initial p.variant s o)) 0 ↑j +
+      FIz_ContributionList.fromList (List.ofFn (FIx_ScheduleModel.absorption p.variant s o)) (0 + ↑16#usize) ↑j
+values :
+  FIz_ContributionList.fromList
+      (R0P.valueFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o) (FIw_PublicModel.selector s))
+      49 ↑j =
+    FIz_ContributionList.fromList (List.ofFn (FIy_ValuePacked.rangeModel o s)) 49 ↑j +
+      FIz_ContributionList.fromList (List.ofFn (FIy_ValuePacked.conservation o s)) (49 + ↑33#usize) ↑j
+digest :
+  List.ofFn
+      (R0P.publicDigestLanes (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o) (FIw_PublicModel.selector s)) =
+    R0P.digestFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o) (FIw_PublicModel.selector s)
+⊢ FIz_ContributionList.fromList (List.ofFn (FIx_ScheduleModel.initial p.variant s o)) 0 ↑j +
+                  FIz_ContributionList.fromList (List.ofFn (FIx_ScheduleModel.absorption p.variant s o)) 16 ↑j +
+                FIz_ContributionList.fromList
+                  (R0P.pathFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                    (FIw_PublicModel.selector s))
+                  32 ↑j +
+              FIz_ContributionList.fromList (List.ofFn (FIy_ValuePacked.rangeModel o s)) 49 ↑j +
+            FIz_ContributionList.fromList (List.ofFn (FIy_ValuePacked.conservation o s)) 82 ↑j +
+          FIz_ContributionList.fromList
+            (R0P.occupancyFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+              (FIw_PublicModel.selector s))
+            0 ↑j +
+        FIz_ContributionList.fromList
+          (List.ofFn
+            (R0P.publicDigestLanes (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+              (FIw_PublicModel.selector s)))
+          84 ↑j +
+      FIz_ContributionList.fromList
+        (R0P.assetFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+          (FIw_PublicModel.selector s))
+        92 ↑j =
+    FIz_ContributionList.fromList
+                (R0P.scheduleFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                  (FIw_PublicModel.selector s))
+                0 ↑j +
+              FIz_ContributionList.fromList
+                (R0P.pathFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                  (FIw_PublicModel.selector s))
+                32 ↑j +
+            FIz_ContributionList.fromList
+              (R0P.valueFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                (FIw_PublicModel.selector s))
+              49 ↑j +
+          FIz_ContributionList.fromList
+            (R0P.digestFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+              (FIw_PublicModel.selector s))
+            84 ↑j +
+        FIz_ContributionList.fromList
+          (R0P.assetFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+            (FIw_PublicModel.selector s))
+          92 ↑j +
+      FIz_ContributionList.fromList
+        (R0P.occupancyFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+          (FIw_PublicModel.selector s))
+        0 ↑j
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    R0P.publicDigestLanes (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o) (FIw_PublicModel.selector s)
+  has type
+    R0P.Digest K
+  but is expected to have type
+    Fin ↑8#usize → K
+  in the application
+    List.ofFn
+      (R0P.publicDigestLanes (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o) (FIw_PublicModel.selector s))
+'AspisR1.FIz_ModelFamilies.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
