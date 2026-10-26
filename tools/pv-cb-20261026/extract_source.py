@@ -34,3 +34,13 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
  (local/'collected-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
  print(name,'exit',receipt['exit'])
  if out.returncode:sys.exit(out.returncode)
+
+ if stage=='aeneas' and not out.returncode:
+  raw=ssh(f'cat {base}/shipped-op{op}-generated/translation.json')
+  meta=json.loads(raw.stdout);tail='::'+entry.split('::')[-1]
+  matches=[f.get('rust_name') for kind in ['functions','globals'] for f in meta.get(kind,[]) if f.get('rust_name','').endswith(tail)]
+  check=dict(requested_root=entry,matching_emitted_roots=matches,root_emitted=bool(matches),function_count=len(meta.get('functions',[])),global_count=len(meta.get('globals',[])))
+  (local/'translation-validation.json').write_text(json.dumps(check,indent=2)+'\n')
+  if not matches:
+   print(name,'no matching extracted root; zero exit is not a source law')
+   sys.exit(79)

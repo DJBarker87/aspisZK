@@ -1,6 +1,6 @@
 # Source equation resume
 
-Before: 0/73 discharged; current: 12/73. No endpoint removal claimed.
+Before: 0/73 discharged; current: 13/73. No endpoint removal claimed.
 
 |op|row|status|theorem|receipt / obstruction|
 |---:|---|---|---|---|
@@ -51,4 +51,8 @@ Before: 0/73 discharged; current: 12/73. No endpoint removal claimed.
 |223|V240|OBSTRUCTED|—|aeneas-source-op223-003/collected-receipt.json; Candidate tagged tuple loop extraction raises the same loop join/collapse Not_found. Slice length is generic; existing bounded fixtures are not a proved-sufficient universal P6 gate.|
 |224|V241|OBSTRUCTED|—|aeneas-source-op224-001/collected-receipt.json; Candidate forest copy helper extraction raises loop join/collapse Not_found; owned reference/native no-stub gate not supplied.|
 |225|V242|SKIPPED(sibling candidate source selection)|—|op225-sibling-check-resume-source.json; Candidate already contains ProverRwP6TransitionInstall.selected op225 / ProverRwP6TransitionSource. Preserve sibling-owned source selection; do not turn reuse into a newly discharged row.|
-|226|V243|PENDING(reservation retry)|—|charon-source-op226-001/collected-receipt.json; Direct candidate Public.public_bytes Charon extraction succeeds. Aeneas reservation refused; next unused extraction receipt after3min wait required, no Lean/source equation claimed.|
+|226|V243|OBSTRUCTED|—|aeneas-source-op226-003/collected-receipt.json; Correct explicit wrapper reaches shipped public_bytes. Aeneas Unexpected at pair_forest_semantic_terminal.rs2054-2056 (InterpMatchCtxs.ml477). Earlier zero-exit empty emission is retained and explicitly not a source-law pass.|
+|227|V244|OBSTRUCTED|—|aeneas-source-op227-001/collected-receipt.json; Aeneas cannot copy a non-Option builtin at pair_forest_semantic_terminal.rs1271:54-64 (InterpExpressions.ml193). No P6 source equation supplied.|
+|228|V245|OBSTRUCTED|—|aeneas-source-op228-001/collected-receipt.json; Candidate registry extraction fails; exact emitter error retained. No checked owned reference/no-stub gate or source equation supplied.|
+|229|V246|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op229Source.op229_source|24034.json; Direct candidate equality extraction includes M31 and verified-afterstate Eq bodies; no external function template imported. Exact pointwise dictionary law uses a proved bijective nominal record conversion (PV_CB_Op229Codec). All Result cases preserved.|
+|230|V247|OBSTRUCTED|—|aeneas-source-op230-001/collected-receipt.json; Direct candidate copy-helper-sum extraction fails in Aeneas; no owned-reference/native gate and source equation supplied. See exact retained emitter error; no effect/native-composition deferral inferred.|

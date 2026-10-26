@@ -106,3 +106,15 @@ where
  T::BufferKind:Default,
  sha2::digest::typenum::Le<T::BlockSize,sha2::digest::typenum::U256>:sha2::digest::typenum::NonZero,
  { Default::default() }
+
+#[cfg(kani)]
+pub fn public_bytes(public:aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>)->Result<Vec<u8>,aspis_core::state_only_prefix::r0::Error> {
+ public.public_bytes()
+}
+#[cfg(kani)]
+pub fn terminal(public:aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,claims:&[[aspis_core::field::QM31;29];3],alpha:&[aspis_core::field::QM31;10],c:&aspis_core::state_only_prefix::r0::Challenges)->Result<aspis_core::field::QM31,aspis_core::state_only_prefix::r0::Error> {
+ public.terminal_qm31(claims,alpha,c)
+}
+
+#[cfg(kani)]
+pub fn public_eq(a:&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1,b:&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1)->bool {a==b}
