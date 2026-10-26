@@ -151,3 +151,23 @@ eight raw words into ZMod 2147483647, and the ExternalLinear dictionary is
 kept explicit. Source totality/canonical output/refinement must be proved for
 the SAME selected dictionary. The fixed field-table certificates alone prove
 none of those source properties. All these new statements are still drafts.
+
+## Accepted constructor facts (35003 / 35031)
+
+The following is now checked, for the exact `world` constructor in
+CausalPrefix, uniformly over the ledger type `L`:
+
+```lean
+∀ (t u : Tape) (rest : Rest),
+  (world coordinates replies policy ledger body).ledger
+    (coordinates.symm (t,rest)) =
+  (world coordinates replies policy ledger body).ledger
+    (coordinates.symm (u,rest))
+```
+
+Strict-prefix `frame produce` also satisfies the original causal equation.
+The theorem has no initial-ledger independence or causal hypothesis. Both
+are still OPEN for an arbitrary/deployed runtime unless the actual source
+initializer/context producer are installed as these exact constructors.
+Consequently the accepted deployed P AFTER list and record counts remain
+unchanged. No runtime/observer binding was manufactured to instantiate P.

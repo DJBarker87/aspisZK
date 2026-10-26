@@ -179,3 +179,44 @@ preserved unchanged. Every accepted axiom report is standard.
 triggers a three-minute wait and a new ID. At the 35029 checkpoint: 27 Lean
 attempts, 24 accepted, three retained failures; 0 Kani. The dependency replay
 is not a new privacy premise removal or a frozen manifest/closure release.
+
+## Causal constructor accepted; source arithmetic prerequisites accepted
+
+35030 encountered the subsequently absent Ledger36 object. Rather than
+rebuild the unrelated filesystem model merely to type-check a field equality,
+CausalPrefix was generalized from that one ledger carrier to arbitrary L,
+preserving the exact desired specialization. 35031 passed: 1.76 s,
+4,255,985,664 bytes, swap 0; all six axiom reports standard. It uses the
+already checked Prefix theorem applications. This proves initial-ledger
+independence for the explicit residual-coordinate constructor, not native
+initialization/source association or the deployed RemainingProofs instance.
+
+The seven pinned srcid arithmetic prerequisites passed at 35032/35033 and
+35036-35040, standard axioms only. The new SourceArithmeticLift and its source
+loop dependents have not yet been checked. 35034, 35035 and 35041 were
+reservation refusals, zero charge, with three-minute waits/new IDs retained.
+At 35041 refusal: Lean 36/100, accepted 32, failed 4; Kani 1/8.
+
+## Kani first result and replacement
+
+Run 1 source_roots_00_02 timed out at 180.001520483 s after optimized codegen
+(13.43 s). Exit 124; aggregate cgroup memory peak 2,517,286,912 bytes; swap 0;
+observed controls 6G/8G/swap0/tasks64. The timeout-child RUSAGE maximum was
+16,580,608 bytes; aggregate process RSS was not sampled in this first run,
+so that number must not be mistaken for the aggregate cgroup peak. The raw
+receipt, output, exact command, source pins/revision and scope-ended evidence
+are retained. No verification conclusion or checked counterexample follows.
+The scope ended; no own solver temp files were left by that run.
+
+The original eight-group plan is preserved in kani-planned-v1.json. The
+replacement plan, recorded before further charge, uses seven SINGLE-cell
+harnesses for levels 0,1,2,3,7,13,20 with unchanged 180s and memory limits.
+These localize the timeout; they cannot cover all 21 cells. No failed group
+is rerun unchanged or with a larger cap. All source additions remain within
+the cfg(kani) child module; production function bodies are unchanged.
+Future Kani receipts additionally sample aggregate scope process RSS.
+
+SourceScalar prepares exact actual-forest reducer/multiplication and
+canonical add/sub Result transports, separately from the owned callback's
+namespace. These additional source leaves are drafts, with no added trust
+item, source-success hypothesis, or claimed compiler/trace closure.

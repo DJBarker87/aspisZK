@@ -1,11 +1,9 @@
 import R1Z.PV_RunJoin_Prefix
 import R1Z.PV_RunJoin_CompletedWorld
-import R1Z.PV_RunJoin_LedgerWorld
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_CausalPrefix
 local instance : ProverRwRngCaller.NativeTypes := PV_RunJoin_CallerWorld.nativeTypes
-variable [ProverRwFull.ExternalTypes]
 
 abbrev Raw := Fin 2 → R0Z.FsStatement.OracleAnswer
 abbrev Tape := Fin 128 → Raw
@@ -63,25 +61,25 @@ theorem causal_iff_factor {Rest Context : Type}
 /-- Construct the initialized world with the ledger taken from the residual
 coordinate. Replies may retain error tags and partial writes. No availability,
 uniformity or native/source interpretation is inferred from this data. -/
-def world {Coins Rest N C : Type}
+def world {Coins Rest N L C : Type}
     (coordinates : Coins ≃ Tape × Rest)
     (replies : Coins → Fin 128 →
       (Aeneas.Std.Array Aeneas.Std.U8 64#usize ×
         Aeneas.Std.core.result.Result Unit ProverRwRngCaller.getrandom.error.Error))
-    (policy : Rest → N) (ledger : Rest → PV_RunJoin_LedgerWorld.World)
+    (policy : Rest → N) (ledger : Rest → L)
     (body : Rest → C) :
-    PV_RunJoin_CompletedWorld.Data Coins N PV_RunJoin_LedgerWorld.World C where
+    PV_RunJoin_CompletedWorld.Data Coins N L C where
   replies := replies
   policy := fun c => policy (coordinates c).2
   ledger := fun c => ledger (coordinates c).2
   body := fun c => body (coordinates c).2
 
-theorem initial_ledger {Coins Rest N C : Type}
+theorem initial_ledger {Coins Rest N L C : Type}
     (coordinates : Coins ≃ Tape × Rest)
     (replies : Coins → Fin 128 →
       (Aeneas.Std.Array Aeneas.Std.U8 64#usize ×
         Aeneas.Std.core.result.Result Unit ProverRwRngCaller.getrandom.error.Error))
-    (policy : Rest → N) (ledger : Rest → PV_RunJoin_LedgerWorld.World)
+    (policy : Rest → N) (ledger : Rest → L)
     (body : Rest → C) (t u : Tape) (rest : Rest) :
     (world coordinates replies policy ledger body).ledger (coordinates.symm (t,rest)) =
       (world coordinates replies policy ledger body).ledger (coordinates.symm (u,rest)) := by

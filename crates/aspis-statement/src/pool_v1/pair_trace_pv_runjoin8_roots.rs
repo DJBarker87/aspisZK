@@ -24,24 +24,31 @@ fn check<const START: usize, const END: usize>() {
 #[kani::proof]
 #[kani::unwind(33)]
 fn source_roots_00_02() { check::<0, 3>(); }
+
 #[kani::proof]
 #[kani::unwind(33)]
-fn source_roots_03_05() { check::<3, 6>(); }
+fn source_root_00() { check::<0, 1>(); }
+
 #[kani::proof]
 #[kani::unwind(33)]
-fn source_roots_06_08() { check::<6, 9>(); }
+fn source_root_01() { check::<1, 2>(); }
+
 #[kani::proof]
 #[kani::unwind(33)]
-fn source_roots_09_11() { check::<9, 12>(); }
+fn source_root_02() { check::<2, 3>(); }
+
 #[kani::proof]
 #[kani::unwind(33)]
-fn source_roots_12_14() { check::<12, 15>(); }
+fn source_root_03() { check::<3, 4>(); }
+
 #[kani::proof]
 #[kani::unwind(33)]
-fn source_roots_15_17() { check::<15, 18>(); }
+fn source_root_07() { check::<7, 8>(); }
+
 #[kani::proof]
 #[kani::unwind(33)]
-fn source_roots_18_19() { check::<18, 20>(); }
+fn source_root_13() { check::<13, 14>(); }
+
 #[kani::proof]
 #[kani::unwind(33)]
-fn source_roots_20() { check::<20, 21>(); }
+fn source_root_20() { check::<20, 21>(); }
