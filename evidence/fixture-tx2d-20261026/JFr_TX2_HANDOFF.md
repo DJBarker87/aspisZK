@@ -75,3 +75,49 @@ Slice.len conversion;008 uses the inherited JFo_PrefixRead helper and passes.
 012 rejected normalization of the irreducible field.P;013 unfolds that named
 constant and passes. No timed-out or memory-killed job was rerun unchanged,
 no options/caps were raised, and failed recovery sorryAx is excluded.
+
+## Native term connection and symbolic arithmetic
+
+JFr_TX2_Scalars.source/canonical jointly cover all1248 native base-field scalar
+reads at positions10–21, four slots,26 terms. JFr_TX2_DotStep.body factors the
+actual extracted inner body by monadic association; JFr_TX2_DotTerm.source
+instantiates that body with the computed scalar and derives its actual iterator
+step. Its remaining expression is the actual native eight-limb update, not a
+successful callback. JFr_TX2_DotLanes.update factors that update into the eight
+unchanged native multiply/add/write lanes.
+
+JFr_TX2_DotBounds.four_products proves the batch bound symbolically. mul and
+add_product derive returning checked U64 operations from that bound.
+JFr_TX2_DotLaneTotal.source derives one actual lane multiply/add/write from its
+indexed operands and that bound, with exact numeric result and writeback. It
+retains operand read laws; it is not a complete eight-lane or dot-loop return.
+JFr_TX2_Powers selects ONE inherited returning powers array and transports its
+canonicality to the actual native field records. No whole powers recurrence is
+reduced and JFo_'s proof is imported rather than repeated.
+
+JFr_TX2_CircleTotal.source and JFr_TX2_CircleArray.source prove returning actual
+circle arithmetic on canonical arrays, and alpha0 proves the real checkpoint
+alpha0 canonical. The geometric inverse is still an array parameter. Totality
+is NOT the equality gate. No computed native four_dots output or circle-gate
+success is asserted by these statements.
+
+062's attempted factor needed the actual Option case split;063 adds it.066/067/
+069 normalized generic U64.size/max incompletely;070 unfolds the named bit count
+and passes.068 was an informational interface print, rejected for two unknown
+constant names; its exact source is retained as REJECTED, not shipped as Lean.
+073's association needed a final explicit return;074 supplies it.075/076 needed
+nominal iterator/uncurry normalization;079 closes it.077's extension and Vec-size
+normalization and078's Array-size normalization are fixed by the native BitVec
+width theorem and existing array update spec in080. These are deterministic
+elaboration failures, not memory kills, cap raises or unchanged-timeout reruns.
+
+## Tail-site method
+
+Tails10–21 retain all three physical QM31 reads per slot (offset104+120*slot,
+480+32*slot and496+32*slot), four slots per real query. Every16-byte window is
+selected symbolically from the SAME original proof, and each small native
+QM31 decoder and unwrap is evaluated separately. These are new first608-byte
+dot inputs, distinct from JFn_'s corrected query-values window[672:800]. The
+Tails aggregate exports the144 returning native reads; no pairing or dot output
+is smuggled in. Both generators have deterministic --check modes and retain the
+original57607-byte proof hash; no alternate literal fixture was substituted.
