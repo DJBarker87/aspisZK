@@ -1,0 +1,91 @@
+@AspisR1.Rc2_Events.Facts : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) →
+      AspisR1.S2W_ExtractionBoundary.First →
+        AspisR1.S2W_ExtractionBoundary.Second →
+          (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+              ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+            AspisR1.S2W_D189Wrappers.Allocator A →
+              AspisR1.S2W_ExtractionBoundary.Program →
+                (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+                  Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 → Prop
+def AspisR1.Rc2_Events.Facts : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) →
+      AspisR1.S2W_ExtractionBoundary.First →
+        AspisR1.S2W_ExtractionBoundary.Second →
+          (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+              ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+            AspisR1.S2W_D189Wrappers.Allocator A →
+              AspisR1.S2W_ExtractionBoundary.Program →
+                (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+                  Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 → Prop :=
+fun {A F C} c hashv n1 n2 copy allocator id H saved =>
+  (∀ (initial : AspisR1.CPP_BankState.Bank) (key : ℕ) (actions : List (AspisR1.CPP_BankState.Action A)),
+      (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.CPS_BankRecorder.program c hashv n1 n2 copy allocator id
+                (AspisR1.CPR_SourceBank.afterCopy initial key saved) actions)).2.2 =
+        (AspisR1.CPP_BankHistory.run n1 n2 copy allocator id (AspisR1.CPR_SourceBank.afterCopy initial key saved)
+            actions).2) ∧
+    (∀ (initial : AspisR1.Hist_Store.Store) (code : AspisR1.CPP_Schedule.Schedule A (AspisR1.CPP_Atomic.Reply Unit)),
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.CPP_Atomic.program n1 copy allocator id c hashv initial code) =
+          ((AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.CPP_Schedule.program n1 copy allocator id c hashv initial code)).1,
+            AspisR1.CPP_Atomic.run n1 n2 copy allocator id H initial code)) ∧
+      ∀ (initial : AspisR1.CPP_BankState.Bank) (actions : List (AspisR1.CPP_BankState.Action A)),
+        AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id initial actions Bool.false =
+          (initial, [AspisR1.S2X.AccountEvent.rollback])
+'AspisR1.Rc2_Events.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.P6C_OnCuts.same_cuts : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+            (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+            (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+            AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.DrvC_Installation.sdk c) accounts1 accounts2 saved f s →
+              AspisR1.P6C_OnCuts.SafeBatches c hashv H f s
+theorem AspisR1.P6C_OnCuts.same_cuts : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+            (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+            (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+            AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.DrvC_Installation.sdk c) accounts1 accounts2 saved f s →
+              AspisR1.P6C_OnCuts.SafeBatches c hashv H f s :=
+fun {F C} c native1 native2 hashv extraction sha256 H p1 syscall accounts1 accounts2 saved f s cuts =>
+  let ⟨p0, h✝⟩ :=
+    AspisR1.SdkC_BatchPair.same_pair c.adapter (AspisR1.Uni_Install.base c.currentBase c.reserved c.query c.geometry)
+      (AspisR1.SdkD_Install.stage c.stageBase c.reserved c.query c.geometry) c.finish c.boundaries c.std native1 native2
+      hashv
+      (Eq.mp
+        (congrArg (fun _a => AspisR1.S2W_DigestExtraction.AeneasExtraction _a native1 native2 hashv)
+          (AspisR1.DrvC_Installation.aus1_dictionary c))
+        extraction)
+      sha256 H p1 syscall accounts1 accounts2 saved f s
+      (Eq.mp
+        (congrArg (fun _a => AspisR1.S2W_NativeConsolidation.SourceCuts _a accounts1 accounts2 saved f s)
+          (AspisR1.DrvC_Installation.aus1_dictionary c))
+        cuts)
+  let ⟨root0, h✝¹⟩ := h✝
+  let ⟨p2, h✝²⟩ := h✝¹
+  let ⟨root2, h✝³⟩ := h✝²
+  let ⟨first, second⟩ := h✝³
+  Exists.intro p0
+    (Exists.intro root0
+      (Exists.intro p2
+        (Exists.intro root2
+          ⟨AspisR1.P6C_Pair.safe hashv H (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0)
+              (Aeneas.Std.core.result.Result.Ok ()) first,
+            ⟨AspisR1.P6C_Pair.safe hashv H (AspisR1.SdkC_BatchSource.stageCode hashv s.proof p2 root2)
+                (Aeneas.Std.core.result.Result.Ok ()) second,
+              ⟨AspisR1.P6C_Batches.current hashv H f.proof p0 root0 first.left,
+                AspisR1.P6C_Batches.stage hashv H s.proof p2 root2 second.left⟩⟩⟩)))
+'AspisR1.P6C_OnCuts.same_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]

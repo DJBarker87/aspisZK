@@ -1,0 +1,43 @@
+{"attempt": "SCJ_026", "exit_status": 0, "wall_seconds": 2.125362613995094, "peak_rss_kib": "5494872", "swaps": "0", "print_axioms": ["'AspisR1.S2W_D189Wrappers.Allocator' does not depend on any axioms", "'AspisR1.P6C_OnCuts.SafeBatches' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.S2W_D189Wrappers.Allocator : Type → Type
+structure AspisR1.S2W_D189Wrappers.Allocator (A : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1.S2W_D189Wrappers.Allocator.allocate : A → ℕ → Aeneas.Std.Result A
+  AspisR1.S2W_D189Wrappers.Allocator.cleanup : A → Aeneas.Std.Result A
+constructor:
+  AspisR1.S2W_D189Wrappers.Allocator.mk {A : Type} (allocate : A → ℕ → Aeneas.Std.Result A)
+    (cleanup : A → Aeneas.Std.Result A) : AspisR1.S2W_D189Wrappers.Allocator A
+'AspisR1.S2W_D189Wrappers.Allocator' does not depend on any axioms
+@AspisR1.P6C_OnCuts.SafeBatches : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.Sd
+...
+ A
+'AspisR1.S2W_D189Wrappers.Allocator' does not depend on any axioms
+@AspisR1.P6C_OnCuts.SafeBatches : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+        AspisR1.S2W_NativeConsolidation.FirstCut → AspisR1.S2W_NativeConsolidation.SecondCut → Prop
+def AspisR1.P6C_OnCuts.SafeBatches : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+        AspisR1.S2W_NativeConsolidation.FirstCut → AspisR1.S2W_NativeConsolidation.SecondCut → Prop :=
+fun {F C} c hashv H f s =>
+  ∃ p0 root0 p2 root2,
+    AspisR1.P6C_Pair.Safe hashv H (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0)
+        (Aeneas.Std.core.result.Result.Ok ()) ∧
+      AspisR1.P6C_Pair.Safe hashv H (AspisR1.SdkC_BatchSource.stageCode hashv s.proof p2 root2)
+          (Aeneas.Std.core.result.Result.Ok ()) ∧
+        AspisR1.SdkC_Source.run (AspisR1.P6C_Batches.extended hashv H)
+              (AspisR1.SdkC_BatchSource.currentCode (AspisR1.P6C_Batches.extended hashv H) f.proof p0 root0) [] =
+            AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0) [] ∧
+          AspisR1.SdkC_Source.run (AspisR1.P6C_Batches.extended hashv H)
+              (AspisR1.SdkC_BatchSource.stageCode (AspisR1.P6C_Batches.extended hashv H) s.proof p2 root2) [] =
+            AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_BatchSource.stageCode hashv s.proof p2 root2) []
+'AspisR1.P6C_OnCuts.SafeBatches' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r785061e85e5848eb958763b271769b64.scope; invocation ID: d85da5e276244d9fa300334dd6da91c9
+

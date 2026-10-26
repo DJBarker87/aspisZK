@@ -1,0 +1,40 @@
+{"attempt": "SCJ_053", "exit_status": 0, "wall_seconds": 2.275282923015766, "peak_rss_kib": "5493840", "swaps": "0", "print_axioms": ["'AspisR1.S2W_DigestExtraction.AeneasExtraction' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.TxS_Carriers.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.S2W_DigestExtraction.AeneasExtraction : AdapterRw.Ops →
+  AspisR1.S2W_ExtractionBoundary.First →
+    AspisR1.S2W_ExtractionBoundary.Second →
+      (AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest) → Prop
+structure AspisR1.S2W_DigestExtraction.AeneasExtraction (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (account
+...
+oundary.First} {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest}
+    (stage1 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts) :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv
+'AspisR1.S2W_DigestExtraction.AeneasExtraction' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.TxS_Carriers.source : AspisR1.TxS_Carriers.Metadata →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds → AspisR1.R1FinalSoundness.SourceInputs
+def AspisR1.TxS_Carriers.source : AspisR1.TxS_Carriers.Metadata →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds → AspisR1.R1FinalSoundness.SourceInputs :=
+fun m rs =>
+  { decoded := m.decoded, data := AspisR1.TxS_Carriers.data rs, m31 := m.m31, queryBytes := m.queryBytes,
+    state31 := m.state31, m32 := m.m32, rho := m.rho, state32 := m.state32 }
+'AspisR1.TxS_Carriers.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2a5a68facd514669b1f7e19e2e88b454.scope; invocation ID: 2b0c9ec767a34b549c91d0e868c039c4
+

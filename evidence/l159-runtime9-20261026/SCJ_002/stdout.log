@@ -1,0 +1,40 @@
+SCJ_Checkpoint.lean:39:65: error: Application type mismatch: The argument
+  cuts
+has type
+  SourceCuts (DrvC_Installation.sdk c) e1.first (e2.second secondSizes) saved f s
+of sort `Prop` but is expected to have type
+  Observations ?m.51 ?m.52
+of sort `Type` in the application
+  CPG_History.on_cuts cuts
+SCJ_Checkpoint.lean:35:52: error: unsolved goals
+Tx A F C : Type
+p : Observations Tx A
+t u : Tx
+e1 e2 : Entry
+saved : alloc.vec.Vec U8
+actions : List (Action A)
+c : DrvC_Installation.Configuration F C
+keyLaw : (DrvC_Installation.sdk c).op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+extraction : S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk c) n1 n2 hashv
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id system : S2W_ExtractionBoundary.Program
+notSystem : id ≠ system
+game : CPG_Game.DeployedPairExecution p t u e1 e2 saved actions n1 n2 copy allocator id
+data1 data2 : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+state1 state2 final1 final2 : A
+post1 post2 : Heap (ℕ → Record)
+accepted1 : first n1 copy allocator e1 id data1 state1 = ok (core.result.Result.Ok (saved, post1, final1))
+accepted2 : second n2 allocator e2 id data2 slot state2 = ok (core.result.Result.Ok (post2, final2))
+RuntimePersistence :
+  CPR_DataPersistence.TwoTransactionLaw (adjacent p) (ordinary p system) (before p) (tentative p) (success p) (loaded p)
+f : FirstCut
+s : SecondCut
+cuts : SourceCuts (DrvC_Installation.sdk c) e1.first (e2.second secondSizes) saved f s
+⊢ bytesOf ↑s.checkpoint = bytesOf ↑saved
+'AspisR1.SCJ_Checkpoint.same_saved' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

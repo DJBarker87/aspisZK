@@ -1,0 +1,44 @@
+{"attempt": "SCJ_031", "exit_status": 0, "wall_seconds": 2.287174890981987, "peak_rss_kib": "5495396", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_QueryArithmetic.SessionABackends' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SAQ_Decoder.read' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4C_QueryArithmetic.SessionABackends : AspisR1.Port3_NativeQueryBody.Ops → Prop
+structure AspisR1.Port4C_QueryArithmetic.SessionABackends (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port4C_QueryArithmetic.SessionABackends.s3_s4_s5_mulE : ∀ (value : AspisR1.Port4C_QueryValues.E)
+      (power : AspisR1.Port3_FlushInstall.K) (product : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      AspisR1.Port4C_QueryArithmetic.CanonE value →
+        AspisR1.Port3_FlushInstall.Canonical power →
+          ops.op3 value power = Aeneas.Std.Result.ok product →
+            AspisR1.CheckpointBytes5Output.ofE product =
+                AspisR1.Chec
+...
+1.Port4C_QueryArithmetic.CanonE right →
+            ops.op2 left right = Aeneas.Std.Result.ok sum →
+              AspisR1.CheckpointBytes5Output.ofE sum =
+                  AspisR1.CheckpointBytes5Output.ofE left + AspisR1.CheckpointBytes5Output.ofE right ∧
+                AspisR1.Port4C_QueryArithmetic.CanonE sum)
+    (s3_s4_s9_mulK :
+      ∀ (left right : AspisR1.Port3_FlushInstall.K) (product : AspisR1Stage2.aspis_core.field.QM31),
+        AspisR1.Port3_FlushInstall.Canonical left →
+          AspisR1.Port3_FlushInstall.Canonical right →
+            ops.op9 left right = Aeneas.Std.Result.ok product →
+              AspisR1.CheckpointBytes5Output.ofK product =
+                  AspisR1.CheckpointBytes5Output.ofK left * AspisR1.CheckpointBytes5Output.ofK right ∧
+                AspisR1.Port3_FlushInstall.Canonical product) :
+    AspisR1.Port4C_QueryArithmetic.SessionABackends ops
+'AspisR1.Port4C_QueryArithmetic.SessionABackends' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SAQ_Decoder.read : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Usize → Aeneas.Std.Result AspisR1.SAQ_WideABI.E
+def AspisR1.SAQ_Decoder.read : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result AspisR1.SAQ_WideABI.E :=
+fun bytes i => do
+  let start ← 32#usize * i
+  let finish ← start + 32#usize
+  let selected ←
+    Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+        { start := start, «end» := finish }
+  let decoded ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected
+  let raw ← Aeneas.Std.core.option.Option.unwrap decoded
+  Aeneas.Std.Result.ok (AspisR1.SAQ_RecordDecode.fromRecord raw)
+'AspisR1.SAQ_Decoder.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd34d0e8d94574142a4a904b48fdb10b5.scope; invocation ID: 0fd95653c6924ddcbabaf8ca63bc2dcc
+

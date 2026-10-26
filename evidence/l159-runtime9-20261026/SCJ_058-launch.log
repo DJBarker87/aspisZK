@@ -1,0 +1,37 @@
+{"attempt": "SCJ_058", "exit_status": 0, "wall_seconds": 2.2775481560383923, "peak_rss_kib": "5494752", "swaps": "0", "print_axioms": ["'AspisR1.R3SemanticRemainingJoins.EquationEndpoint' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.F3T_ByteCarrier.input' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.R3SemanticRemainingJoins.EquationEndpoint : R0P.Public AspisR1.SemanticPublicWire.M31 →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+    AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E → Prop
+def AspisR1.R3SemanticRemainingJoins.EquationEndpoint : R0P.Public AspisR1.SemanticPublicWire.M31 →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+    AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E → Prop :=
+fun pub rs data =>
+  ∀ (view : AspisR1.LiteralOpeningView.View) (claim : AspisR1.LiteralAcceptanceTerminal.E)
+    (polynomials : Fin 10 → Polynomial AspisR1.LiteralAcceptanceTerminal.E),
+    AspisR1.LiteralOpeningView.read rs = Option.some
+...
+oint : R0P.Public AspisR1.SemanticPublicWire.M31 →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+    AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E → Prop
+def AspisR1.R3SemanticRemainingJoins.EquationEndpoint : R0P.Public AspisR1.SemanticPublicWire.M31 →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+    AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E → Prop :=
+fun pub rs data =>
+  ∀ (view : AspisR1.LiteralOpeningView.View) (claim : AspisR1.LiteralAcceptanceTerminal.E)
+    (polynomials : Fin 10 → Polynomial AspisR1.LiteralAcceptanceTerminal.E),
+    AspisR1.LiteralOpeningView.read rs = Option.some view →
+      R0P.Mask.claimOf (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = Option.some claim →
+        R0P.Mask.semPolysZ (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = Option.some polynomials →
+          AspisR1.R3SemanticEquationCore.Equations claim (AspisR1.R3SemanticRemainingJoins.terminal pub view data)
+            (fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) polynomials
+'AspisR1.R3SemanticRemainingJoins.EquationEndpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.F3T_ByteCarrier.input : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C → AspisR1.F3T_ByteCarrier.Submission → AspisR1.F3_Model.Input
+def AspisR1.F3T_ByteCarrier.input : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C → AspisR1.F3T_ByteCarrier.Submission → AspisR1.F3_Model.Input :=
+fun {F C} c s =>
+  { semantic := { value := AspisR1.F3T_ByteCarrier.semantic c s }, physical := { bytes := s.publicBytes },
+    proof := AspisR1.Port1_StoredCarrier.proof s.stored, stored := s.stored }
+'AspisR1.F3T_ByteCarrier.input' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r286ddd767d594805814d2d7a6cb19f6f.scope; invocation ID: d1fec52d50b542e4b70fecf57709dca0
