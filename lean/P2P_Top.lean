@@ -1,5 +1,7 @@
-import Rc6_Top
-import P2P_Charge
+import P2P_R6Top
+import P2P_Release
+import P2P_R6Result
+import P2P_R5Top
 import P6C_Extension
 import Rc5_Top
 import Rc6_Result
@@ -70,9 +72,11 @@ open S2W_ExpandedChildren S2W_TraceSplice MultiproofConeCanonical
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 
-/-- Integration baseline: retains Rc6's full conclusion and exposes binding
-for the charged account program's selected pair. The native pair remains
-independent: this theorem does NOT remove L097/L098 from Rc6_Result. -/
+/-- Composed adopted frozen3 endpoint on the owner-approved two-transaction checkpoint
+projection. RuntimePersistence is the named external runtime item. The system
+program is the fixed all-zero public key; the verifier identity is selected from the
+retained exact-default-ELF deployment receipt. The raw canonical join, runtime carrier
+binding, P2Prime and FirstEntry are retained. -/
 theorem deployed {W A F CoreError Tx : Type}
     (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
     (copy : Heap (Nat → Record) → Nat → Payload → Outcome (Nat → Record))
@@ -120,8 +124,7 @@ theorem deployed {W A F CoreError Tx : Type}
     (prefixBound : ∀ H, (eval H adversary).1.length ≤ Q0)
     (choiceBound : ∀ input saved post final H, (eval H (chooseSecond input saved post final)).1.length ≤ Q1)
     (project : GExq_AccountExperiment.Outcome A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
-    (select : GExq_AccountExperiment.Outcome A → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs) :
-    (
+    : let select : GExq_AccountExperiment.Outcome A → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs := fun _ => P2P_NativeSelection.pair (DrvC_Installation.sdk (Rc5_Install.configuration indexError c reservation)) CPH_Program.verifier e1 e2 data2 slot
     MultiproofConeP6Frozen2Stage.P6Boundary (P6C_Extension.dictionary hashv H) () H
       Op5T_P6.parent Op5T_P6.parent Op5T_P6.parent MultiproofConeP6Batch.referenceLeaf ∧
     DrvC_Implementation.driver (Rc5_Install.configuration indexError c reservation) = DrvC_SourceEntry.source (Rc5_Install.configuration indexError c reservation) hashv ∧
@@ -129,14 +132,16 @@ theorem deployed {W A F CoreError Tx : Type}
       SdkD_PairBatches.dictionary (Rc5_Install.configuration indexError c reservation).adapter (Rc5_Install.configuration indexError c reservation).currentBase (Rc5_Install.configuration indexError c reservation).stageBase
         (Rc5_Install.configuration indexError c reservation).finish (Rc5_Install.configuration indexError c reservation).reserved (Rc5_Install.configuration indexError c reservation).query (Rc5_Install.configuration indexError c reservation).geometry
         (Rc5_Install.configuration indexError c reservation).boundaries (Rc5_Install.configuration indexError c reservation).std ∧
-    (Rc6_Result.Outcome L e1 e2 w1 w2
+    (P2P_Result.Outcome L e1 e2 w1 w2
       (Rc5_Install.configuration indexError c reservation).adapter (Rc5_Install.configuration indexError c reservation).currentBase
       (Rc5_Install.configuration indexError c reservation).reserved (Rc5_Install.configuration indexError c reservation).query
       (Rc5_Install.configuration indexError c reservation).geometry (Rc5_Install.configuration indexError c reservation).stageBase
       (Rc5_Install.configuration indexError c reservation).finish c.boundaries
       reservation CPH_Program.verifier data1 data2 slot saved post1 post2 H
       (DrvC_Implementation.driver (Rc5_Install.configuration indexError c reservation)) prior
-      (p.physicalEvents t) hashv) ∧
+      (p.physicalEvents t) hashv (BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0+Q1+2965)
+        (eval H (Hiq_RecordedJoint.program
+          (CPG_Account.source (Rc5_Install.configuration indexError c reservation) hashv copy allocator CPH_Program.verifier adversary chooseSecond) project select)))) ∧
     ((∀ H : Bytes → State,(eval H (annotatedWith D (F3T_Installed.source (Rc5_Install.configuration indexError c reservation) hashv)
         (F3T_Canon.canon (lift (Rc5_Install.configuration indexError c reservation) P)))).2.2=true →
       mean (fun coins : Coins=>((ActualCostedExtractorM10.extractor.eval
@@ -165,33 +170,39 @@ theorem deployed {W A F CoreError Tx : Type}
     CPH_Protection.Facts p t saved CPH_Program.verifier ∧
     CPH_Trace.Facts p t u saved native1 native2 copy allocator CPH_Program.verifier ∧
     CPH_Recorder.Facts (Rc5_Install.configuration indexError c reservation) hashv native1 native2 copy allocator
-      CPH_Program.verifier H p t u saved) ∧
-    (BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0+Q1+2965)
-      (eval H (Hiq_RecordedJoint.program
-        (CPG_Account.source (Rc5_Install.configuration indexError c reservation) hashv copy allocator
-          CPH_Program.verifier adversary chooseSecond) project select)) ∨
-      R9PoolRuntimeBinding.P2Prime H
-        (select (eval H (CPG_Account.source (Rc5_Install.configuration indexError c reservation)
-          hashv copy allocator CPH_Program.verifier adversary chooseSecond)).2).1
-        (select (eval H (CPG_Account.source (Rc5_Install.configuration indexError c reservation)
-          hashv copy allocator CPH_Program.verifier adversary chooseSecond)).2).2) := by
-  constructor
-  · exact Rc6_Top.deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation
+      CPH_Program.verifier H p t u saved := by
+  dsimp only
+  let select : GExq_AccountExperiment.Outcome A → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs := fun _ => P2P_NativeSelection.pair (DrvC_Installation.sdk (Rc5_Install.configuration indexError c reservation)) CPH_Program.verifier e1 e2 data2 slot
+  obtain ⟨boundary,driverEq,sdkEq,original,headline,bound,zero,copyFacts,events,protection,trace,recorder⟩ :=
+    P2P_R6Top.deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation
       native1 native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2
       saved post1 post2 accepted1 accepted2 root length prior words p t u actions game RuntimePersistence
       D P Q0 Q1 queries runtime raw binding adversary chooseSecond prefixBound choiceBound project select
-  · apply P2P_Charge.binding_or_collision
-    exact RawJ_CollisionBudget.first_reads
-      (Rc5_Install.configuration indexError c reservation).adapter
-      (Rc5_Install.configuration indexError c reservation).currentBase
-      (Rc5_Install.configuration indexError c reservation).stageBase
-      (Rc5_Install.configuration indexError c reservation).finish
-      (Rc5_Install.configuration indexError c reservation).reserved
-      (Rc5_Install.configuration indexError c reservation).query
-      (Rc5_Install.configuration indexError c reservation).geometry
-      (Rc5_Install.configuration indexError c reservation).boundaries
-      (Rc5_Install.configuration indexError c reservation).std
-      hashv copy allocator CPH_Program.verifier adversary chooseSecond Q0 Q1 prefixBound choiceBound
+  refine ⟨boundary,driverEq,sdkEq,?_,headline,bound,zero,copyFacts,events,protection,trace,recorder⟩
+  apply P2P_Release.remove L e1 e2 w1 w2
+    (Rc5_Install.configuration indexError c reservation).adapter
+    (Rc5_Install.configuration indexError c reservation).currentBase
+    (Rc5_Install.configuration indexError c reservation).reserved
+    (Rc5_Install.configuration indexError c reservation).query
+    (Rc5_Install.configuration indexError c reservation).geometry
+    (Rc5_Install.configuration indexError c reservation).stageBase
+    (Rc5_Install.configuration indexError c reservation).finish c.boundaries reservation
+    CPH_Program.verifier data1 data2 slot saved post1 post2 H
+    (DrvC_Implementation.driver (Rc5_Install.configuration indexError c reservation)) prior
+    (p.physicalEvents t) hashv
+    (CPG_Account.source (Rc5_Install.configuration indexError c reservation) hashv copy allocator CPH_Program.verifier adversary chooseSecond)
+    project (Q0+Q1) _ original
+  exact RawJ_CollisionBudget.first_reads
+    (Rc5_Install.configuration indexError c reservation).adapter
+    (Rc5_Install.configuration indexError c reservation).currentBase
+    (Rc5_Install.configuration indexError c reservation).stageBase
+    (Rc5_Install.configuration indexError c reservation).finish
+    (Rc5_Install.configuration indexError c reservation).reserved
+    (Rc5_Install.configuration indexError c reservation).query
+    (Rc5_Install.configuration indexError c reservation).geometry
+    (Rc5_Install.configuration indexError c reservation).boundaries
+    (Rc5_Install.configuration indexError c reservation).std
+    hashv copy allocator CPH_Program.verifier adversary chooseSecond Q0 Q1 prefixBound choiceBound
 
 #print axioms deployed
 end AspisR1.P2P_Top
