@@ -1,0 +1,135 @@
+F3V_PairLog.lean:36:82: error(lean.unknownIdentifier): Unknown identifier `eval_bind`
+F3V_PairLog.lean:38:2: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (AspisV8R19.OracleProgramOps.bind
+      (SdkC_Oracle.program
+        (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std hashv
+          (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize))
+      fun first =>
+      match first with
+      | ok (core.result.Result.Ok saved) =>
+        AspisV8R19.OracleProgramOps.bind
+          (SdkC_Oracle.program (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref))
+          fun second =>
+          Program.done
+            (match second with
+            | ok (core.result.Result.Ok PUnit.unit) => true
+            | x => false)
+      | x => Program.done false)
+is not definitionally equal to the right-hand side
+  (SdkC_Source.readLog
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+              hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+            []).2 ++
+      SdkC_Source.readLog
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) []).2,
+    true)
+
+F C : Type
+c : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+semantic : Port1_Driver.Semantic
+pub proof : Slice U8
+H : Bytes → State
+accepted : (eval H (DrvC_PairProgram.source c hashv semantic pub proof)).2 = true
+saved : alloc.vec.Vec U8
+first :
+  (eval H
+        (GExp_Experiment.first (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+          hashv (currentDigest c)
+          { semantic := AspisS6CurrentVerifierCarrier.toPublic semantic, pub := pub, proof := proof,
+            split := 10#usize })).2 =
+    ok (core.result.Result.Ok saved)
+second :
+  (eval H
+        (GExp_Experiment.second (stage c) c.reserved hashv (digest c)
+          { pub := pub, proof := proof, checkpoint := saved.deref })).2 =
+    ok (core.result.Result.Ok ())
+one :
+  eval H
+      (SdkC_Oracle.program
+        (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std hashv
+          (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)) =
+    (SdkC_Source.readLog
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+              hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+            []).2,
+      ok (core.result.Result.Ok saved))
+two :
+  eval H (SdkC_Oracle.program (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref)) =
+    (SdkC_Source.readLog
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) []).2,
+      ok (core.result.Result.Ok ()))
+oneValue :
+  (SdkC_Source.run (F3U_Oracle.hashv H)
+        (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std hashv
+          (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+        []).1 =
+    ok (core.result.Result.Ok saved)
+twoValue :
+  (SdkC_Source.run (F3U_Oracle.hashv H)
+        (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) []).1 =
+    ok (core.result.Result.Ok ())
+⊢ eval H
+      (AspisV8R19.OracleProgramOps.bind
+        (SdkC_Oracle.program
+          (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+            hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize))
+        fun first =>
+        match first with
+        | ok (core.result.Result.Ok saved) =>
+          AspisV8R19.OracleProgramOps.bind
+            (SdkC_Oracle.program (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref))
+            fun second =>
+            Program.done
+              (match second with
+              | ok (core.result.Result.Ok PUnit.unit) => true
+              | x => false)
+        | x => Program.done false) =
+    (SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+                hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+              []).2 ++
+        SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) []).2,
+      true)
+F3V_PairLog.lean:37:4: warning: This simp argument is unused:
+  one
+
+Hint: Omit it from the simp argument list.
+  simp only [DrvC_PairProgram.source, ̲GExp_Experiment.first, ̲GExp_Experiment.second, ̲eval_bind, ̲t̲w̲o̲,̲
+      o̵n̵e̵,̵t̵w̵o̵,̵Port1_Driver.verdict, ̲eval, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3V_PairLog.lean:37:8: warning: This simp argument is unused:
+  two
+
+Hint: Omit it from the simp argument list.
+  simp only [DrvC_PairProgram.source, ̲GExp_Experiment.first, ̲GExp_Experiment.second, ̲eval_bind, ̲o̲n̲e̲,̲
+      o̵n̵e̵,̵t̵w̵o̵,̵Port1_Driver.verdict, ̲eval, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3V_PairLog.lean:37:33: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [DrvC_PairProgram.source, ̲GExp_Experiment.first, ̲GExp_Experiment.second, ̲eval_bind, ̲o̲n̲e̲,̲
+      o̵n̵e̵,̵two, ̲Port1_Driver.verdict,e̵v̵a̵l̵,̵ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3V_PairLog.lean:37:38: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵D̵r̵v̵C̵_̵P̵a̵i̵r̵P̵r̵o̵g̵r̵a̵m̵.̵s̵o̵u̵r̵c̵e̵,̵G̵E̵x̵p̵_̵E̵x̵p̵e̵r̵i̵m̵e̵n̵t̵.̵f̵i̵r̵s̵t̵,̵G̵E̵x̵p̵_̵E̵x̵p̵e̵r̵i̵m̵e̵n̵t̵.̵s̵e̵c̵o̵n̵d̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵o̵n̵e̵,̵t̵w̵o̵,̵P̵o̵r̵t̵1̵_̵D̵r̵i̵v̵e̵r̵.̵v̵e̵r̵d̵i̵c̵t̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲D̲r̲v̲C̲_̲P̲a̲i̲r̲P̲r̲o̲g̲r̲a̲m̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲G̲E̲x̲p̲_̲E̲x̲p̲e̲r̲i̲m̲e̲n̲t̲.̲f̲i̲r̲s̲t̲,̲ ̲G̲E̲x̲p̲_̲E̲x̲p̲e̲r̲i̲m̲e̲n̲t̲.̲s̲e̲c̲o̲n̲d̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲o̲n̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲t̲w̲o̲,̲ ̲P̲o̲r̲t̲1̲_̲D̲r̲i̲v̲e̲r̲.̲v̲e̲r̲d̲i̲c̲t̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3V_PairLog.evaluated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

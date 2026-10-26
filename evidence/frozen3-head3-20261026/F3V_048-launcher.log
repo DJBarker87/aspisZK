@@ -1,0 +1,45 @@
+{"attempt": "F3V_048", "exit_status": 1, "wall_seconds": 2.0762154340045527, "peak_rss_kib": "5284136", "swaps": "0", "print_axioms": ["'AspisR1.F3V_AllWorldFirst.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+F3V_AllWorldFirst.lean:29:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CheckpointBytes5Effect.erase
+    (SdkC_Source.dictionary (AspisR1CurrentCaller.aspis_core.digest.Digest32.digest ?m.153 ())) ()
+    (GExp_FirstCode.code ?m.149 ?m.150 ?m.151 (AspisR1CurrentCaller.aspis_core.digest.Digest32.digest ?m.153 ()) ?m.153
+      ?semantic ?pub ?proof ?split)
+in the target expression
+  CheckpointBytes5Effect.erase (SdkC_Source.dictionary (F3U_Oracle.hashv H)) ()
+      (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+        (F3U_Oracle.hashv H) (F3V_OracleDictionary.current H (currentDigest c))
+        (Aspis
+...
+       (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize) =
+    ok (core.result.Result.Ok saved)
+second :
+  CheckpointBytes5Effect.erase (SdkC_Source.dictionary (F3U_Oracle.hashv H)) ()
+      (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) =
+    ok (core.result.Result.Ok ())
+⊢ ∃ pub proof semantic saved,
+    bytesOf ↑pub = s.publicBytes ∧
+      bytesOf ↑proof = s.stored ∧
+        Port1_Driver.decodeSemantic (sdk c) pub = ok (some semantic) ∧
+          AspisR1CurrentCaller.verifier.candidate.tx1
+                (GExp_FirstCode.installed (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries
+                  c.std)
+                (F3V_OracleDictionary.current H (currentDigest c)) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub
+                proof 10#usize () none =
+              ok (core.result.Result.Ok saved) ∧
+            CheckpointBytes5Effect.erase (SdkC_Source.dictionary (F3U_Oracle.hashv H)) ()
+                (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) =
+              ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3V_AllWorldFirst.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfc81c6cc85774f099d2d8a29e9f3b7ba.scope; invocation ID: 09fa26c034794a559db2610a9f04d97f
