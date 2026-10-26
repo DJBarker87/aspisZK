@@ -1,0 +1,46 @@
+JFq_Scalar.lean:13:104: error: unsolved goals
+pos : Usize
+b : Std.Array U8 16#usize
+q : OraclePortCkptAbi2Extracted.aspis_core.field.QM31
+raw : CheckpointBytes3Reader.raw 16#usize (JFq_Raw.reader pos) = ok (b, JFq_Raw.reader (pos.wrapping_add 16#usize))
+decoded : OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice = ok (some q)
+⊢ (let (b, out) := (b, JFq_Raw.reader (pos.wrapping_add 16#usize))
+    do
+    let q ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+    ok
+        (match q with
+          | none => core.result.Result.Err verifier.Error.Checkpoint
+          | some x => core.result.Result.Ok (CheckpointBytes3Namespaces.fromK x),
+          out)) =
+    ok (core.result.Result.Ok (CheckpointBytes3Namespaces.fromK q), JFq_Raw.reader (pos.wrapping_add 16#usize))
+JFq_Scalar.lean:14:57: warning: This simp argument is unused:
+  decoded
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes3Reader.readK, ̲raw, ̲bind_tc_ok,d̵e̵c̵o̵d̵e̵d̵,̵ ̲CheckpointBytes3Reader.optionK]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFq_Scalar.lean:22:104: error: unsolved goals
+pos : Usize
+b : Std.Array U8 32#usize
+q : OraclePortCkptAbi2Extracted.aspis_core.field.wide_exact.WideExact
+raw : CheckpointBytes3Reader.raw 32#usize (JFq_Raw.reader pos) = ok (b, JFq_Raw.reader (pos.wrapping_add 32#usize))
+decoded : OraclePortCkptAbi2Extracted.decode_e_spec b.to_slice = ok (some q)
+⊢ (let (b, out) := (b, JFq_Raw.reader (pos.wrapping_add 32#usize))
+    do
+    let q ← OraclePortCkptAbi2Extracted.decode_e_spec b.to_slice
+    ok
+        (match q with
+          | none => core.result.Result.Err verifier.Error.Checkpoint
+          | some x => core.result.Result.Ok (CheckpointBytes3Namespaces.fromE x),
+          out)) =
+    ok (core.result.Result.Ok (CheckpointBytes3Namespaces.fromE q), JFq_Raw.reader (pos.wrapping_add 32#usize))
+JFq_Scalar.lean:23:57: warning: This simp argument is unused:
+  decoded
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes3Reader.readE, ̲raw, ̲bind_tc_ok,d̵e̵c̵o̵d̵e̵d̵,̵ ̲CheckpointBytes3Reader.optionE]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFq_Scalar.k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFq_Scalar.e' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

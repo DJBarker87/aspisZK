@@ -1,0 +1,48 @@
+{"attempt": "JFq_001", "exit_status": 0, "wall_seconds": 2.3449701910139993, "peak_rss_kib": "5503864", "swaps": "0", "print_axioms": ["'AspisR1.Rc8_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.T2Nat_ReaderJoin.resume' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.Rc8_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_ReaderJoin.resume' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.CheckpointBytes3Reader.raw : (n : Aeneas.Std.Usize) →
+  AspisR1Stage2.verifier.Reader →
+    Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 n × AspisR1Stage2.verifier.Reader) :=
+fun n r =>
+  AspisR1Stage2.verifier.Reader.rawWithUnwrap n
+    (AspisR1.OraclePortCkptAbi2Unwrap.unwrapWithPanic fun x => Aeneas.Std.Result.fail Aeneas.Std.Error.panic) r
+def AspisR1.CheckpointBytes3Reader.readK : AspisR1Stage2.verifier.Reader →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.fie
+...
+3Reader.raw : (n : Aeneas.Std.Usize) →
+  AspisR1Stage2.verifier.Reader →
+    Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 n × AspisR1Stage2.verifier.Reader) :=
+fun n r =>
+  AspisR1Stage2.verifier.Reader.rawWithUnwrap n
+    (AspisR1.OraclePortCkptAbi2Unwrap.unwrapWithPanic fun x => Aeneas.Std.Result.fail Aeneas.Std.Error.panic) r
+def AspisR1.CheckpointBytes3Reader.readK : AspisR1Stage2.verifier.Reader →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.QM31 AspisR1Stage2.verifier.Error ×
+      AspisR1Stage2.verifier.Reader) :=
+fun r => do
+  let (b, out) ← AspisR1.CheckpointBytes3Reader.raw 16#usize r
+  let q ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+  Aeneas.Std.Result.ok (AspisR1.CheckpointBytes3Reader.optionK q, out)
+def AspisR1.CheckpointBytes3Reader.readE : AspisR1Stage2.verifier.Reader →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact AspisR1Stage2.verifier.Error ×
+      AspisR1Stage2.verifier.Reader) :=
+fun r => do
+  let (b, out) ← AspisR1.CheckpointBytes3Reader.raw 32#usize r
+  let q ← OraclePortCkptAbi2Extracted.decode_e_spec b.to_slice
+  Aeneas.Std.Result.ok (AspisR1.CheckpointBytes3Reader.optionE q, out)
+def AspisR1.CheckpointBytes4Sections.c5ReadK : AspisR1Stage2.verifier.Reader →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result AspisR1.CheckpointBytes4Sections.K AspisR1Stage2.verifier.Error ×
+      AspisR1Stage2.verifier.Reader) :=
+fun r => do
+  let (b, out) ← AspisR1.CheckpointBytes3Reader.raw 16#usize r
+  Aeneas.Std.Result.ok
+      (AspisR1.CheckpointBytes3Reader.optionK
+          (Option.map AspisR1.CheckpointBytes3KDecode.rawK
+            (AspisR1.ExactLeafFieldCodec.decodeQM31 (AspisR1.MultiproofConeCanonical.bytesOf ↑b))),
+        out)
+
+Running as unit: run-r86e0224aaec34cbea0e764b98523b3d0.scope; invocation ID: 7f3defd5a9084a3d901c253a4cae8a10
