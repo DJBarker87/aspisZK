@@ -49,8 +49,15 @@ def visit(m):
   for p in main or cs:groups[h(checked(p))].append(p)
   selections[m]={'all_candidates':cs,'non_diagnostic_candidates':main,'distinct_non_diagnostic_hashes':{k:v for k,v in groups.items()}}
   if len(groups)!=1:
-   mods[m]={'kind':'unresolved','reason':'no committed source' if not cs else 'genuine source ambiguity','candidates':cs};return
-  p=next(iter(groups.values()))[0];why='unique committed research content after explicit diagnostic exclusion'
+   variants=main or cs
+   normalized={re.sub(r'\s+',' ',re.sub(r'^\s*set_option (?:maxHeartbeats|maxRecDepth) [^\n]*','',strip(checked(f).decode()),flags=re.M)).strip() for f in variants}
+   no_override=[f for f in variants if not re.search(r'^\s*set_option (?:maxHeartbeats|maxRecDepth) ',checked(f).decode(),re.M)]
+   if variants and len(normalized)==1 and no_override:
+    p=no_override[0];why='committed research variant with identical declarations and no heartbeat/depth overrides'
+    selections[m]['option_only_variants']=True
+   else:
+    mods[m]={'kind':'unresolved','reason':'no committed source' if not cs else 'genuine source ambiguity','candidates':cs};return
+  else:p=next(iter(groups.values()))[0];why='unique committed research content after explicit diagnostic exclusion'
  data=checked(p);s=strip(data.decode());imports=[] if re.search(r'^\s*prelude\b',s,re.M) else ['Init']
  for line in s.splitlines():
   z=re.match(r'^\s*(?:(?:public|private|meta)\s+)*import\s+(.*)',line)

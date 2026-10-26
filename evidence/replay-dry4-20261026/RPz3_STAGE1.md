@@ -41,3 +41,12 @@ exposed by the selected source imports. RPz3_source-plan.json records them.
 The in-flight serial source phase retains its initial graph; the additional
 vertices will be scheduled only after that phase is terminal. No previously
 selected source changed in this follow-up.
+
+## Option-only source review
+
+Three further names have identical declarations after removing comments,
+whitespace and only maxHeartbeats/maxRecDepth options. Select the existing
+committed variant with neither override (no source edit). The final selection
+currently has 4545 repository modules, 142 trusted direct imports, 36 unresolved
+names. Of the original 45, 22 now resolve and 23 remain unresolved. Remaining
+conflicting declaration/import/budget variants stay explicit ambiguities.
