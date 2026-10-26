@@ -1,0 +1,7 @@
+def AspisR1.MatchingSupport.match0 : {E : Type} →
+  [inst : Field E] →
+    [inst_1 : Fintype E] →
+      [inst_2 : DecidableEq E] →
+        [inst_3 : Algebra (ZMod AspisCircleGroupOrder.P) E] → AspisR1.MatchingSupport.Data E → Fin 262144 → Prop :=
+fun {E} [Field E] [Fintype E] [DecidableEq E] [Algebra (ZMod AspisCircleGroupOrder.P) E] d i =>
+  AspisR1.FirstFold.foldWord d.alpha0 (AspisR1.TwoFoldExtraction.batchedWord d.W d.gamma) i = d.V i

@@ -1,0 +1,30 @@
+structure AspisR1.DrvC_Installation.Configuration (F CoreError : Type) : Type 1
+number of parameters: 2
+fields:
+  AspisR1.DrvC_Installation.Configuration.adapter : AdapterRw.Ops
+  AspisR1.DrvC_Installation.Configuration.currentBase : AspisR1CurrentCaller.Ops
+  AspisR1.DrvC_Installation.Configuration.stageBase : VTop_Stages.Ops
+  AspisR1.DrvC_Installation.Configuration.finish : AspisR1Stage2.Stage2Finish.FinishOps F
+  AspisR1.DrvC_Installation.Configuration.reserved : Bool
+  AspisR1.DrvC_Installation.Configuration.query : AspisR1.Port3_NativeQueryBody.Ops
+  AspisR1.DrvC_Installation.Configuration.geometry : AspisR1.Port3_NativeGeometryBody.Ops CoreError
+  AspisR1.DrvC_Installation.Configuration.boundaries : AspisR1PublicPreparation.FinishModel.Boundaries
+  AspisR1.DrvC_Installation.Configuration.std : AspisR1.ClaimsUnrolledFinish.StdCalls
+constructor:
+  AspisR1.DrvC_Installation.Configuration.mk {F CoreError : Type} (adapter : AdapterRw.Ops)
+    (currentBase : AspisR1CurrentCaller.Ops) (stageBase : VTop_Stages.Ops)
+    (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+    (geometry : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+    (boundaries : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls) :
+    AspisR1.DrvC_Installation.Configuration F CoreError
+def AspisR1.Rc3_Install.configuration : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.NP6_StdModel.Reservation → AspisR1.DrvC_Installation.Configuration F C :=
+fun {F C} c r => AspisR1.SAP_Install.configuration (AspisR1.Rc2_Install.select c r)
+def AspisR1.Port3_FinishStage.release : {W : Type} →
+  AspisR1Stage2.Stage2Finish.FinishOps W → AspisR1Stage2.Stage2Finish.FinishOps W :=
+fun {W} ops =>
+  { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := AspisR1.Port3_FinishStage.ne,
+    polynomial := ops.polynomial, trace := fun x x_1 x_2 => Aeneas.Std.Result.ok (),
+    folds := AspisR1.Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+    mark := AspisR1.Port3_QueryStage.mark, dot := ops.dot }
