@@ -9860,3 +9860,39 @@ permutation does not preserve the first-nonzero position), not a witness attack;
 construction fixes the raw E1 tape. Rows removed: 0. pv-l2-sim3 continues with a fresh budget on the
 E1/expander record joined to the full L1 attempt record and ROM history, the new inversion
 zero-boundary row V380 from D197, then the F5/F6 rows, reporting CLOSED/REDUCED/OPEN per row.
+
+## D199 (Stream B, 2026-10-26 14:30): host barrier cause; disk-full interruption; runjoin and dict rounds
+
+Host barrier. Stream A reported refusals "projected reservations above 55 GiB" at about 11 GiB actual
+use. Cause (lead, read from run2.sh/run2-par.sh/run-joint.sh on the host): the projection is the live
+sum of memory.max over every populated cgroup scope, and eight Docker container scopes under
+system.slice carry finite caps of about 23 GiB while using about 8 GiB. With two 8 GiB run scopes the
+sum is 40 GiB; a third makes 56 and holds. So the host admits three capped Lean/Rust scopes at a time
+across both streams regardless of job counts. No stale records exist; no launcher logic was changed.
+Owner decision requested (recommendation: shrink the Docker caps to their real profile; alternatives:
+exclude Docker from the projection, or accept the three-scope ceiling). Stream A concurs.
+
+Disk. The Mac root volume filled at 10:51 UTC (23 worktrees, 122 GB under .worktrees); pv-rw15,
+pv-runjoin and pv-l1 died with "No space left on device" and their output files never finalised. The
+lead committed WIP snapshots in the three worktrees and relaunched them with resume preambles
+(rw16, runjoin2, l1b). Merged Stream B worktrees are removed on merge; the remaining 16 non-Stream-B
+worktrees are Stream A's and session A's.
+
+pv-runjoin2 (`codex/pv-runjoin-20261026`, head 55749bbc7f, 50/100 Lean, 0/10 Kani): shared coupling
+from explicit model coordinates; complete-observer agreement characterised; conditional endpoint
+composed; canonical fixture fibres for transfer and withdrawal (V047 discharged for the shipped
+statements, fields `transfer_public_V047`/`withdrawal_public_V047`); finite cap8 entropy replay.
+Checked counterexample: a native probe observed two distinct successful entropy outputs at one public
+nonce, so one pure ExternalFuns dictionary cannot represent both; same obstruction as D190, route
+already chosen in D191–D193. Lead ruling: the RunJoin's RealRand is the explicit (tape, cursor,
+policy, ledger) world; runjoin3 relaunched on that route with the remaining budget. Fields still open:
+`uniform_V037`, `disclosed_V038`, `observerOracle_V038`; V045 instance incomplete.
+
+pv-dict7 (`codex/cx-prover-dict-20261026`, head ea4fd01ba3, 74/74 Lean, 15/15 Kani, audit J20701
+exit 0, 6.73 s, 4,331,620 KiB, swap 0, 486 standard-axiom reports): seven-field independence proved
+through the actual extracted proof-account caller; thirteen pure entries installed; owned-error
+reference extracted with its source observations; sufficient source requirements 172/255 selected,
+83 open (255 is a sufficient overapproximation, not yet the exact invocation set); types 26/28.
+Crate changes unchanged since D193 (cfg(kani) harnesses only). dict8 relaunched on the fallible-store
+transport, full carrier caller lift, and the native error/File-world quotient for types 3 and 27.
+Root conjunct-1 premises removed: 0. Six jobs running. Privacy target not yet established.
