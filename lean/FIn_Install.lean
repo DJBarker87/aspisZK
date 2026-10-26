@@ -35,9 +35,7 @@ theorem finish {W C : Type} (err : C) (c : DrvC_Installation.Configuration W C)
 theorem idempotent {W : Type} (seed : FinishOps W) : finishOps (finishOps seed) = finishOps seed := rfl
 
 theorem retained {W : Type} (seed : FinishOps W) :
-    {finishOps seed with field := seed.field, add := seed.add,
-      polynomial := seed.polynomial, dot := seed.dot,
-      quarter := seed.quarter, mulM := seed.mulM} = seed := by
+    {(finishOps seed) with field := seed.field, add := seed.add, polynomial := seed.polynomial, dot := seed.dot, quarter := seed.quarter, mulM := seed.mulM} = seed := by
   cases seed
   rfl
 

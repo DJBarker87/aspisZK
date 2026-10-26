@@ -77,13 +77,8 @@ theorem value (bytes : Slice U8) (x out : E) (f : Fin 7 → AspisWideTower.WideE
   have h := go_value bytes x zero out _ coeff ?_ run
   · rw [zero_value] at h
     rw [OpeningPolynomialView.polynomial_eval]
-    apply h.trans
-    simpa only [List.foldl_cons,List.foldl_nil,coeff,
-      show (6#usize).val = 6 from rfl, show (5#usize).val = 5 from rfl,
-      show (4#usize).val = 4 from rfl, show (3#usize).val = 3 from rfl,
-      show (2#usize).val = 2 from rfl, show (1#usize).val = 1 from rfl,
-      show (0#usize).val = 0 from rfl, Nat.reduceLT, _root_.dite_true]
-      using FIn_Horner.seven f (CheckpointBytes5Output.ofE x)
+    exact h.trans (FIn_Horner.fold_seven f (fun i => coeff i.val)
+      (CheckpointBytes5Output.ofE x) rfl rfl rfl rfl rfl rfl rfl)
   · intro i hi c hc
     have bound : i.val < 7 := by
       simp only [List.mem_cons,List.not_mem_nil,or_false] at hi
