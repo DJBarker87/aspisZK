@@ -1,0 +1,40 @@
+import R1Z.ProverRwDictionaryBytes
+import R1Z.ProverCommitArray49
+set_option autoImplicit false
+namespace R1Z.ProverRwDictionaryLimbs
+open Aeneas Aeneas.Std Result ProverRwFull
+abbrev W := aspis_core.field.wide_exact.WideExact
+abbrev P := ProverRwDictionaryBytesSource.aspis_core.field.P
+
+def packed (w : Nat → U32) : W :=
+  ⟨⟨⟨w 0,w 1⟩,⟨w 2,w 3⟩⟩,⟨⟨w 4,w 5⟩,⟨w 6,w 7⟩⟩⟩
+
+def decode (w : Nat → U32) : Option W :=
+  if w 0 >= P then none else
+  if w 1 >= P then none else
+  if w 2 >= P then none else
+  if w 3 >= P then none else
+  if w 4 >= P then none else
+  if w 5 >= P then none else
+  if w 6 >= P then none else
+  if w 7 >= P then none else some (packed w)
+
+/-- No input-success premise: all eight indices are in bounds. The actual
+parser retains the first failed canonicality test, and has no machine failure. -/
+theorem total (w : Nat → U32) :
+    ProverRwDictionaryBytesSource.aspis_core.field.wide_exact.WideExact.from_limbs
+      (ProverCommitArray49.array 8#usize w) = .ok (decode w) := by
+  simp only [ProverRwDictionaryBytesSource.aspis_core.field.wide_exact.WideExact.from_limbs,
+    ProverCommitArray49.index _ _ _ (by decide),bind_tc_ok]
+  unfold decode packed
+  split <;> simp only [*]
+  split <;> simp only [*]
+  split <;> simp only [*]
+  split <;> simp only [*]
+  split <;> simp only [*]
+  split <;> simp only [*]
+  split <;> simp only [*]
+  split <;> simp only [*]
+
+#print axioms total
+end R1Z.ProverRwDictionaryLimbs

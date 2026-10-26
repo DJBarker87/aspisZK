@@ -791,3 +791,74 @@ three rejection-coverage lemmas. All accepted reports use only standard axioms.
 11631 was prepared only and never launched. Budget now30actual Lean compiles
 (25pass,5changed failures),one reservation refusal;20actual Kani runs.
 No release replay or privacy/adoption claim is made.
+
+## Final selected-source byte/parser stage (11633–11648)
+
+Final selector: `ProverRwDictionaryConstants.selected`,74/262 source entries,
+66 added over inherited8,188 unselected; all28 whole native type
+representations remain unassociated. `dictionary-stage-c.json` is authoritative
+for this selector; stage-b remains its historical62-entry receipt. Added7,9,10
+retain the actual Option return/branch/residual constructors;49,50,60,72 are
+literal retained real-source limb/parser/complex-constructor/serialization
+bodies, preserving every Result constructor;110 composes the retained QM31
+from-base and wide-embedding bodies;82,83,86,111 select pinned literal Rust
+constant initializers. New read-only source generators have passing --check.
+No allocator, file IO, entropy, mutable ROM or Drop placeholder is installed.
+
+`ProverRwDictionaryLimbs.total` proves that all eight source limb accesses
+succeed and returns the exact nested guard result. `LimbAccept.accepted`
+derives success from the canonical operand invariant. `LimbReject.decode_none`,
+`decode_some` and `rejected` prove exact canonicality rejection/success, without
+supplied parser-success or output-equality premises. `DictionaryBytes.reject_length`
+proves byte-length rejection before any access. These discharge local source
+parser obligations, not the complete successful proof body. The failed
+retraction normalization was removed; finite symbolic guard proofs replaced
+failed broad reductions. All failed inputs/logs remain immutable receipts.
+11648 audits24 post-11629 reports and prints the unchanged root definition;
+accepted new axioms are subsets of propext/Classical.choice/Quot.sound.
+
+Remaining sizes(syntactic, overlapping footprints, not proof percentages):
+
+| Consumer | Retained declarations | Source lines | Still-unselected source refs |
+| --- | ---: | ---: | ---: |
+| prove_masked_with_attempt |532|9627|72|
+| prove_masked_attempt |609|20994|178|
+| derive_private_salts |20|288|6|
+| build_with_material |163|3066|32|
+| prepare_opening |57|842|15|
+| finish_opening |49|827|7|
+| public_check |2|25|1|
+| publish_compact |59|1004|6|
+| Transcript.queries |10|237|1|
+| retry_attempt |610|21063|178|
+
+The native effect cut is still41local/16type leaves(body subset35local/16type).
+The query trace still needs native association of both op110 and op247 and
+22 ordered writes, despite110 now having a selected *source* interpretation.
+The extraction script enables optimized-terminal,ct-host-prover; trace.rs
+compiles its TLS push out under ct-host-prover. A no-op for that profile cannot
+silently stand in for the full observer/TLS contract. `effect-transport-review.json`
+pins that review and reservation_path's domain/nonce/filename/directory and
+create_new/0600 behavior. Native ledger/schedule/IO transport remains open.
+
+Completion status: **target not yet established; zero root/headline premises
+removed.** No quantifier, carrier, realBad, observer or security target changed;
+no trust item added. Concrete PrefixContract, successful BodyContract, native
+history-conditioned E1/E2, common finite-carrier real RunJoin with exact marginals
+and complete ordered public view/observer decision, joint L1≤45056/L2=4096,
+and current release-artifact association remain open. The first concrete
+native deliverable is an adequate callback/effect/Drop extraction retaining
+provider and history state; existing pure extraction is insufficient. The
+current frozen-candidate ELF mismatch also requires lead investigation before
+adoption can proceed; no unauthorized implementation or pin fix was attempted.
+
+This continuation used46/100actual Lean compiles(35pass,11changed failures),
+one pre-Lean reservation refusal;11631 was preparation only. All20Kani runs
+were used(12pass,1compile failure,7timeouts),no memory kill/cap increase. The
+remaining Lean allowance is unused: it cannot supply the missing native
+extraction association or repair the failed frozen artifact gate. No unchanged
+full manifest/runtime suite was repeated. `final-source-verification.json`
+checks every current new Dictionary module against its accepted immutable
+snapshot and pins the unchanged root. Section6 receipts record exact commands,
+source/dependency hashes, status, wall/RSS/swap and complete axioms. All stages
+committed locally; no push, merge, key deletion or other worktree mutation.
