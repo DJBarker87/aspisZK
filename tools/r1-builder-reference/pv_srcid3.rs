@@ -230,3 +230,104 @@ fn pv_srcid3_dynamic_path_cell() {
     assert_eq!(w.bits[level], v.bits[level]);
     assert_eq!(w.sibs[level][lane], v.sibs[level][lane]);
 }
+
+// Second resume: variant + component splits of prior verification timeouts.
+// Each harness executes both complete pure mappers with no stubs.
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid5_transfer_fields() {
+    let (input, out, recipient, change, snapshot, asset) = arbitrary_inputs();
+    kani::assume(recipient.is_some());
+    let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let (v, q) = super::records_reference(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    assert_eq!(w.input_value, v.input_value);
+    assert_eq!(w.output_value, v.output_value);
+    assert_eq!(w.change_value, v.change_value);
+    assert_eq!(w.sk, v.sk);
+    assert_eq!(w.salt, v.salt);
+    assert_eq!(w.pair_first, v.pair_first);
+    assert_eq!(w.pair_occupied, v.pair_occupied);
+    assert_eq!(w.pair_second, v.pair_second);
+    assert_eq!(w.pair_inverse, v.pair_inverse);
+    assert_eq!(w.recipient_owner, v.recipient_owner);
+    assert_eq!(w.recipient_salt, v.recipient_salt);
+    assert_eq!(w.change_owner, v.change_owner);
+    assert_eq!(w.change_salt, v.change_salt);
+}
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid5_transfer_path() {
+    let (input, out, recipient, change, snapshot, asset) = arbitrary_inputs();
+    kani::assume(recipient.is_some());
+    let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let (v, q) = super::records_reference(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let level: usize = kani::any(); let lane: usize = kani::any();
+    kani::assume(level < 24 && lane < 8);
+    assert_eq!(w.bits[level], v.bits[level]);
+    assert_eq!(w.sibs[level][lane], v.sibs[level][lane]);
+}
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid5_transfer_public() {
+    let (input, out, recipient, change, snapshot, asset) = arbitrary_inputs();
+    kani::assume(recipient.is_some());
+    let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let (v, q) = super::records_reference(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    assert_eq!(p.transfer, q.transfer);
+    assert_eq!(p.asset, q.asset);
+    assert_eq!(p.next_pair_index, q.next_pair_index);
+    assert_eq!(p.frontier, q.frontier);
+    assert_eq!(p.empty, q.empty);
+}
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid5_withdrawal_fields() {
+    let (input, out, recipient, change, snapshot, asset) = arbitrary_inputs();
+    kani::assume(recipient.is_none());
+    let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let (v, q) = super::records_reference(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    assert_eq!(w.input_value, v.input_value);
+    assert_eq!(w.output_value, v.output_value);
+    assert_eq!(w.change_value, v.change_value);
+    assert_eq!(w.sk, v.sk);
+    assert_eq!(w.salt, v.salt);
+    assert_eq!(w.pair_first, v.pair_first);
+    assert_eq!(w.pair_occupied, v.pair_occupied);
+    assert_eq!(w.pair_second, v.pair_second);
+    assert_eq!(w.pair_inverse, v.pair_inverse);
+    assert_eq!(w.recipient_owner, v.recipient_owner);
+    assert_eq!(w.recipient_salt, v.recipient_salt);
+    assert_eq!(w.change_owner, v.change_owner);
+    assert_eq!(w.change_salt, v.change_salt);
+}
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid5_withdrawal_path() {
+    let (input, out, recipient, change, snapshot, asset) = arbitrary_inputs();
+    kani::assume(recipient.is_none());
+    let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let (v, q) = super::records_reference(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let level: usize = kani::any(); let lane: usize = kani::any();
+    kani::assume(level < 24 && lane < 8);
+    assert_eq!(w.bits[level], v.bits[level]);
+    assert_eq!(w.sibs[level][lane], v.sibs[level][lane]);
+}
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid5_withdrawal_public() {
+    let (input, out, recipient, change, snapshot, asset) = arbitrary_inputs();
+    kani::assume(recipient.is_none());
+    let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let (v, q) = super::records_reference(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    assert_eq!(p.transfer, q.transfer);
+    assert_eq!(p.asset, q.asset);
+    assert_eq!(p.next_pair_index, q.next_pair_index);
+    assert_eq!(p.frontier, q.frontier);
+    assert_eq!(p.empty, q.empty);
+}

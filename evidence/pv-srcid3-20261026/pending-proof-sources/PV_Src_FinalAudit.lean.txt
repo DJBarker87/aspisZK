@@ -8,6 +8,7 @@ import R1Z.PV_Src_BanksTotal
 import R1Z.PV_Src_Canonical
 import R1Z.PV_Src_CanonicalDecode
 import R1Z.PV_Src_CanonicalNormalize
+import R1Z.PV_Src_CanonicalPrivateRecord
 import R1Z.PV_Src_CanonicalRequest
 import R1Z.PV_Src_CanonicalRoots
 import R1Z.PV_Src_CanonicalSibling
@@ -22,6 +23,8 @@ import R1Z.PV_Src_CheckedValidation
 import R1Z.PV_Src_CheckedVariants
 import R1Z.PV_Src_CompilerTactic
 import R1Z.PV_Src_Consumer
+import R1Z.PV_Src_DynamicAdmission
+import R1Z.PV_Src_DynamicPublic
 import R1Z.PV_Src_ExternalBlocks
 import R1Z.PV_Src_ExternalCanonical
 import R1Z.PV_Src_ExternalLanes
@@ -160,6 +163,8 @@ Source inventory is not a kernel replay or a source/installed-input join. -/
 #print axioms R1Z.PV_Src_CanonicalNormalize.public_eq
 #print axioms R1Z.PV_Src_CanonicalNormalize.transfer
 #print axioms R1Z.PV_Src_CanonicalNormalize.withdrawal
+#print axioms R1Z.PV_Src_CanonicalPrivateRecord.admission
+#print axioms R1Z.PV_Src_CanonicalPrivateRecord.witness
 #print axioms R1Z.PV_Src_CanonicalRequest.amount
 #print axioms R1Z.PV_Src_CanonicalRequest.output_value
 #print axioms R1Z.PV_Src_CanonicalRequest.word_value
@@ -194,6 +199,8 @@ Source inventory is not a kernel replay or a source/installed-input join. -/
 #print axioms R1Z.PV_Src_Consumer.extracted_stages
 #print axioms R1Z.PV_Src_Consumer.forest_stages
 #print axioms R1Z.PV_Src_Consumer.of_identification
+#print axioms R1Z.PV_Src_DynamicAdmission.selected
+#print axioms R1Z.PV_Src_DynamicPublic.correspondence
 #print axioms R1Z.PV_Src_ExternalBlocks.total
 #print axioms R1Z.PV_Src_ExternalCanonical.loop
 #print axioms R1Z.PV_Src_ExternalCanonical.total

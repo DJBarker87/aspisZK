@@ -3,7 +3,7 @@
 import hashlib,json,pathlib,re,subprocess,sys,datetime
 root=pathlib.Path(__file__).resolve().parents[2]
 a=int(sys.argv[1]); m=sys.argv[2]
-assert 36200 <= a <= 36499 and (m.startswith('PV_Src_') or m in {'R1Z.BuilderAdmissionExtracted','AspisR1ProverCommit.Types'})
+assert 36200 <= a <= 36499 and (m.startswith('PV_Src_') or m in {'R1Z.BuilderAdmissionExtracted','AspisR1ProverCommit.Types','AspisR72Sampler.Types'})
 module_name=('R1Z.'+m) if m.startswith('PV_Src_') else m
 module_path=module_name.replace('.','/')
 module_dir=module_path.rsplit('/',1)[0]
@@ -38,7 +38,7 @@ src=root/f'docs/research/v8-r0-zk-20261009/lean/{module_path}.lean'
 plan=json.loads((e/'resume5-plan.json').read_text())
 row=next((x for x in plan['rows'] if x['module']==module_name),None)
 if row and row['research_source_exists']:
- data=subprocess.check_output(['git','show',plan['research_revision']+':docs/research/v8-r0-zk-20261009/lean/'+module_path+'.lean'],cwd=root)
+ data=subprocess.check_output(['git','show',plan['research_revision']+':'+row.get('research_source_path','docs/research/v8-r0-zk-20261009/lean/'+module_path+'.lean')],cwd=root)
  src=e/'sources'/('research-'+m+'.lean')
  src.parent.mkdir(exist_ok=True);src.write_bytes(data)
 (e/'sources').mkdir(exist_ok=True)
