@@ -65,3 +65,15 @@ change recorded in SECURITY-CONTRACT as a statement amendment. Alternative:
 keep Rc10 literal and accept that L181 is closed only by a `binding` proof for
 an arbitrary Runtime, which ARU_ showed is contradictory in the zero-query
 case; that alternative has no route.
+
+## Amendment (lead, 2026-10-26, after ARW_)
+
+The "deployed runtime image at a" in the proposed root is the ADMITTED
+runtime: ARX_AdmittedRuntime, parameterised by the bank tuple, admission1/2,
+the approved game and RuntimePersistence, with world range exactly the
+executions the approved game admits. ARW_ showed the literal ART_Runtime term
+ranges over a world the game excludes (accepted but unsupported RunView,
+ARV_Poison.no_admission), so it is not the right image. The adversary a stays
+arbitrary; constants and failure event unchanged. ARX_ (account-rejoin9)
+proves the law equivalence on admitted worlds and the root; adoption still
+awaits the owner.
