@@ -1,0 +1,52 @@
+//! Proof references only; no shipped source changes.
+use aspis_core::field::{M31,CM31,QM31};
+pub fn compression_single(tag:M31, x:M31, lambda:QM31)->QM31 {
+ QM31::from_cm31(CM31::from_m31(tag)).add(lambda.mul_m31(x))
+}
+#[cfg(kani)]
+mod compression_split {
+ use super::*;
+ #[kani::proof]
+ #[kani::unwind(3)]
+ fn one_b() {
+  let raw:[u32;6]=kani::any();
+  let t=M31(raw[0]);let x=M31(raw[1]);
+  let l=QM31{c0:CM31{a:M31(raw[2]),b:M31(raw[3])},c1:CM31{a:M31(raw[4]),b:M31(raw[5])}};
+  let a=aspis_statement::logup::compress_tagged_tuple(t,&[x],l);
+  let b=compression_single(t,x,l);
+  assert_eq!(a.c0.b.0,b.c0.b.0);
+ }
+}
+
+pub fn trace_clone(x:&aspis_statement::state_only_trace::StateOnlyTraceFoundation)->aspis_statement::state_only_trace::StateOnlyTraceFoundation {x.clone()}
+
+pub fn reverse32(mut x:u32)->u32 {
+ let mut out=0u32;let mut i=0usize;
+ while i<32 {out=(out<<1)|(x&1);x>>=1;i=i.wrapping_add(1);}
+ out
+}
+#[cfg(kani)]
+mod reverse_checks {
+ #[kani::proof]
+ #[kani::unwind(34)]
+ fn all_raw_reverse() {
+  let x:u32=kani::any();assert_eq!(x.reverse_bits(),super::reverse32(x));
+ }
+}
+
+pub fn mask(c1:&[QM31;16], mask_only:&[QM31;10], g:QM31, point:&[QM31;10])->QM31 {
+ aspis_core::state_only_hiding::state_only_selected_mask_value(c1,mask_only,g,point)
+}
+
+mod table;
+pub use table::{COEFFICIENT_REFERENCE,coefficient_table};
+#[cfg(kani)]
+mod coefficient_table_checks {
+ #[kani::proof]
+ #[kani::unwind(1026)]
+ fn native_full_table() {
+  let actual=aspis_core::r0::transport::COEFFICIENT_TO_ROW;
+  let reference=super::COEFFICIENT_REFERENCE;
+  let mut i=0usize;while i<1024 {assert_eq!(actual[i],reference[i]);i+=1;}
+ }
+}

@@ -33,3 +33,20 @@ mod reverse_checks {
   let x:u32=kani::any();assert_eq!(x.reverse_bits(),super::reverse32(x));
  }
 }
+
+pub fn mask(c1:&[QM31;16], mask_only:&[QM31;10], g:QM31, point:&[QM31;10])->QM31 {
+ aspis_core::state_only_hiding::state_only_selected_mask_value(c1,mask_only,g,point)
+}
+
+mod table;
+pub use table::{COEFFICIENT_REFERENCE,coefficient_table};
+#[cfg(kani)]
+mod coefficient_table_checks {
+ #[kani::proof]
+ #[kani::unwind(1026)]
+ fn native_full_table() {
+  let actual=aspis_core::r0::transport::COEFFICIENT_TO_ROW;
+  let reference=super::COEFFICIENT_REFERENCE;
+  let mut i=0usize;while i<1024 {assert_eq!(actual[i],reference[i]);i+=1;}
+ }
+}

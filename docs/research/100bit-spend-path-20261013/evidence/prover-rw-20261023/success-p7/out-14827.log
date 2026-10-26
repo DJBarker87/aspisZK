@@ -1,0 +1,66 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP7CurrentCtBridge.lean:13:89: error: unsolved goals
+x : U32
+⊢ ok
+      (core.num.U32.wrapping_sub x
+        (2147483647#u32 &&&
+          core.num.U32.wrapping_sub 0#u32 (UScalar.cast_fromBool UScalarTy.U32 (decide (x ≥ 2147483647#u32))))) =
+    ok
+      (core.num.U32.wrapping_sub x
+        (AspisR1ProducerRelease47.field.P &&&
+          core.num.U32.wrapping_sub 0#u32
+            (UScalar.cast_fromBool UScalarTy.U32 (decide (x ≥ AspisR1ProducerRelease47.field.P)))))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP7CurrentCtBridge.lean:19:94: error: unsolved goals
+x : U64
+⊢ ProverRwSuccessCtSubtract.source
+      (UScalar.cast UScalarTy.U32
+        (U64.wrapping_add
+          (U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+            UScalar.cast UScalarTy.U64 2147483647#u32)
+          ((U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32)).wrapping_shr
+            31#u32))) =
+    ProverRwSuccessNativePorts.aspis_core.field.ct.subtract_p
+      (UScalar.cast UScalarTy.U32
+        (U64.wrapping_add
+          (U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 AspisR1ProducerRelease47.field.P)
+              (x.wrapping_shr 31#u32) &&&
+            UScalar.cast UScalarTy.U64 AspisR1ProducerRelease47.field.P)
+          ((U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 AspisR1ProducerRelease47.field.P)
+                (x.wrapping_shr 31#u32)).wrapping_shr
+            31#u32)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP7CurrentCtBridge.lean:30:12: error: Tactic `rfl` failed: The left-hand side
+  ok ((core.num.U32.wrapping_add a b).wrapping_sub AspisR1ProducerRelease47.field.P)
+is not definitionally equal to the right-hand side
+  if a.wrapping_add b ≥ AspisR1ProducerRelease47.field.P then
+    ok ((a.wrapping_add b).wrapping_sub AspisR1ProducerRelease47.field.P)
+  else ok (a.wrapping_add b)
+
+case isTrue
+a b : U32
+h✝ : core.num.U32.wrapping_add a b ≥ AspisR1ProducerRelease47.field.P
+⊢ ok ((core.num.U32.wrapping_add a b).wrapping_sub AspisR1ProducerRelease47.field.P) =
+    if a.wrapping_add b ≥ AspisR1ProducerRelease47.field.P then
+      ok ((a.wrapping_add b).wrapping_sub AspisR1ProducerRelease47.field.P)
+    else ok (a.wrapping_add b)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP7CurrentCtBridge.lean:30:12: error: Tactic `rfl` failed: The left-hand side
+  ok (core.num.U32.wrapping_add a b)
+is not definitionally equal to the right-hand side
+  if a.wrapping_add b ≥ AspisR1ProducerRelease47.field.P then
+    ok ((a.wrapping_add b).wrapping_sub AspisR1ProducerRelease47.field.P)
+  else ok (a.wrapping_add b)
+
+case isFalse
+a b : U32
+h✝ : ¬core.num.U32.wrapping_add a b ≥ AspisR1ProducerRelease47.field.P
+⊢ ok (core.num.U32.wrapping_add a b) =
+    if a.wrapping_add b ≥ AspisR1ProducerRelease47.field.P then
+      ok ((a.wrapping_add b).wrapping_sub AspisR1ProducerRelease47.field.P)
+    else ok (a.wrapping_add b)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP7CurrentCtBridge.lean:38:12: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'R1Z.ProverRwP7CurrentCtBridge.subtract_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwP7CurrentCtBridge.reduce_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwP7CurrentCtBridge.add_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwP7CurrentCtBridge.sub_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

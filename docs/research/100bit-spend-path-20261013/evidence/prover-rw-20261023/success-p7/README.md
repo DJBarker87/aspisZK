@@ -108,3 +108,65 @@ The current radix-four polynomial extraction's translation independently hits
 `InterpReduceCollapse.collapse_ctx_following_sequence` Not_found. Source extraction
 succeeds; no generated proof/callback is accepted from the failed translation.
 Further work must split this owner or use a checked P6 reference.
+
+## Stage5: exact current CT/base bridges and native D-table reference
+
+The current field helpers emitted with mask extraction are checked as their
+own module. `CurrentCtBridge` proves current CT subtract/reduce/add/sub equal
+the retained source arithmetic, and `CurrentBaseBridge` lifts this through
+current M31 wrappers for reduce, multiplication, addition, subtraction and
+doubling. These hold for every raw input, with full Result equality and no
+canonicality/success/output premise. They strengthen the current primitive
+source binding; they do not supply selected-mask117 or whole native adequacy.
+The first CT bridge fails on source-constant/API normalization; the successor
+uses independently checked API lemmas without increasing limits.
+
+The first release mask translation emitted only helpers, despite exit0; its
+missing owner is explicitly rejected. A proof-only wrapper successor reaches
+the pinned context-collapse Not_found. Neither establishes117. Polynomial121
+and the native D-table constructor translation hit the same backend failure.
+No infrastructure/backend repair or unchanged failed translation is attempted.
+
+Kani `native_full_table` checks all1024 current COEFFICIENT_TO_ROW cells against
+an explicit reference, optimized, no stubs, memory/unwinding checks enabled.
+This is an exhaustive finite native table comparison, not an arbitrary-prover
+refinement. It passes in1.03s. The exact reference then extracts/translates.
+14831 rejects the default1024-cell Array.make length simp at recursion depth;
+14832 uses32 named32-cell length lemmas and a symbolic append proof instead,
+passing3.66s,2,926,720KiB,zero swaps. No depth/cap/heartbeat increase. Both
+`coefficient-table.py --check` and `coefficient-lean.py --check` pass.
+
+Fresh all-variant coefficient source is retained, with the inherited ordered
+fromFn library model and the native-checked table reference.14833 rejects two
+emitted Usize shift counts against the existing U32-count API.14834 proves
+that narrowing preserves both32/64-bit machine masking residues for every
+Usize. Its corrected source successor14835 **did not compile**: admission was
+refused, followed by the infrastructure stop below. Thus255 remains partial;
+no new callback is claimed from its pending source/install/caller drafts.
+Those and the uncompiled current-complex bridge are archived under `pending/`,
+excluded from accepted Lean modules and imports. New supplied callbacks remain
+231 and78;33 remain. Root/headline premises removed0; target not established.
+
+## Mandatory launcher stop after the permitted contention retry
+
+At09:35:05UTC,14835's pre-admission gate reports48.375GiB populated reservations,
+projected55.375GiB with its requested7GiB, against55GiB safe limit. No Lean
+process/time/axiom result exists for14835. The exact input snapshot, dependency
+fingerprint, admission record and launcher output are in `denied-14835/`.
+After waiting more than180s per local-lean rule6, the exact launcher retry is
+rejected **exit65, `attempt 14835 already used`**. The launcher creates the out
+marker and sent triple before successful admission. Rule5 requires stopping
+on launcher misbehavior; no marker, sent-log, guard, launcher or monitor is
+changed or bypassed. No later proof/native launch follows this rejection.
+
+Allocation use:35/100 Lean compiles (24pass,10elaboration failures,1intentional
+TERM),3/15 Kani (2pass,1timeout). **65Lean and12Kani remain; budget not exhausted.**
+All accepted new theorem axioms were checked individually and are standard.
+No final combined axiom job/full replay is launched after the infrastructure
+stop. Read-only receipt/source/root validation follows; no release/adoption claim.
+Next unused assigned ID14836;14835 was denied before Lean, not a compiler attempt.
+The lead must resolve the launcher's admission/replay-marker conflict before
+retrying the same proof input. Complex bridge and all-variant coefficient
+installation/typecheck remain pending. Whole data equality, compression native
+correspondence,33 callbacks, native effects/representations,PrefixContract/
+BodyContract,E1/E2,ordered ROM/TLS,real RunJoin and artifact association remain open.
