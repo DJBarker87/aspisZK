@@ -1,0 +1,263 @@
+FIz_ScheduleInitial.lean:25:4: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    j
+  has type
+    Fin 16
+  but is expected to have type
+    Fin ↑16#usize
+  in the application
+    Eq j
+FIz_ScheduleInitial.lean:11:124: error: unsolved goals
+case neg
+v : FIx_ScheduleModel.Variant
+s : Selectors
+o : Openings
+hm : ∑ h, FIv_NativeArray.value s.high ↑h = 1
+lm : ∑ l, FIv_NativeArray.value s.low ↑l = 1
+j : Fin 16
+initial :
+  FIx_ScheduleModel.initial v s o j =
+    if ↑j = 9 then FIx_ScheduleModel.initialRaw v s o j - FIx_ScheduleModel.low s 0 * FIx_ScheduleModel.length v s
+    else
+      if ↑j = 8 then FIx_ScheduleModel.initialRaw v s o j - FIx_ScheduleModel.low s 0 * FIx_ScheduleModel.domain v s
+      else FIx_ScheduleModel.initialRaw v s o j
+e8 : j = 8 ↔ ↑j = 8
+e9 : j = 9 ↔ ↑j = 9
+h8 : ↑j = 8
+h9 : ¬↑j = 9
+⊢ (if 8 = 9 then
+      (if 8 < 8 then
+            FIv_NativeArray.value s.low 0 *
+                (FIv_NativeArray.value s.high 0 + FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 25 +
+                      FIv_NativeArray.value s.high 30 +
+                    (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                        (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                        (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).2.1) +
+              FIv_NativeArray.value s.low 0 * FIx_ScheduleModel.nodes s
+          else
+            FIv_NativeArray.value s.low 0 *
+              (FIv_NativeArray.value s.high 0 + FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 25 +
+                    FIv_NativeArray.value s.high 30 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                      (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                      (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).2.1)) *
+          FIv_NativeArray.value o.z 8 -
+        FIv_NativeArray.value s.low 0 *
+          (FIv_NativeArray.value s.high 0 * 8 +
+              (FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 30 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                      (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1) *
+                18 +
+            FIv_NativeArray.value s.high 25 * 16)
+    else
+      (if 8 < 8 then
+            FIv_NativeArray.value s.low 0 *
+                (FIv_NativeArray.value s.high 0 + FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 25 +
+                      FIv_NativeArray.value s.high 30 +
+                    (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                        (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                        (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).2.1) +
+              FIv_NativeArray.value s.low 0 * FIx_ScheduleModel.nodes s
+          else
+            FIv_NativeArray.value s.low 0 *
+              (FIv_NativeArray.value s.high 0 + FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 25 +
+                    FIv_NativeArray.value s.high 30 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                      (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                      (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).2.1)) *
+          FIv_NativeArray.value o.z 8 -
+        FIv_NativeArray.value s.low 0 *
+          (FIv_NativeArray.value s.high 0 * 1095958529 +
+              (FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 30 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                      (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1) *
+                1095958531 +
+            FIv_NativeArray.value s.high 25 * 1095958530)) =
+    (if 8 < 8 then
+        (FIv_NativeArray.value s.low ↑0 *
+              (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                    FIv_NativeArray.value s.high ↑30 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                      (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                      (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) +
+            FIv_NativeArray.value s.low ↑0 * FIx_ScheduleModel.nodes s) *
+          FIv_NativeArray.value o.z 8
+      else
+        FIv_NativeArray.value s.low ↑0 *
+            (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                  FIv_NativeArray.value s.high ↑30 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                    (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1 +
+              (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                    (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) *
+          FIv_NativeArray.value o.z 8) -
+      FIv_NativeArray.value s.low ↑0 *
+        (FIv_NativeArray.value s.high ↑0 * 1095958529 +
+            (FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑30 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                    (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1) *
+              1095958531 +
+          FIv_NativeArray.value s.high ↑25 * 1095958530)
+
+case pos
+v : FIx_ScheduleModel.Variant
+s : Selectors
+o : Openings
+hm : ∑ h, FIv_NativeArray.value s.high ↑h = 1
+lm : ∑ l, FIv_NativeArray.value s.low ↑l = 1
+j : Fin 16
+initial :
+  FIx_ScheduleModel.initial v s o j =
+    if ↑j = 9 then FIx_ScheduleModel.initialRaw v s o j - FIx_ScheduleModel.low s 0 * FIx_ScheduleModel.length v s
+    else
+      if ↑j = 8 then FIx_ScheduleModel.initialRaw v s o j - FIx_ScheduleModel.low s 0 * FIx_ScheduleModel.domain v s
+      else FIx_ScheduleModel.initialRaw v s o j
+e8 : j = 8 ↔ ↑j = 8
+e9 : j = 9 ↔ ↑j = 9
+h8 : ¬↑j = 8
+h9 : ↑j = 9
+⊢ (if 9 < 8 then
+          FIv_NativeArray.value s.low 0 *
+              (FIv_NativeArray.value s.high 0 + FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 25 +
+                    FIv_NativeArray.value s.high 30 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                      (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                      (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).2.1) +
+            FIv_NativeArray.value s.low 0 * FIx_ScheduleModel.nodes s
+        else
+          FIv_NativeArray.value s.low 0 *
+            (FIv_NativeArray.value s.high 0 + FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 25 +
+                  FIv_NativeArray.value s.high 30 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                    (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1 +
+              (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                    (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).2.1)) *
+        FIv_NativeArray.value o.z 9 -
+      FIv_NativeArray.value s.low 0 *
+        (FIv_NativeArray.value s.high 0 * 8 +
+            (FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 30 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                    (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1) *
+              18 +
+          FIv_NativeArray.value s.high 25 * 16) =
+    if 9 = 8 then
+      (if 9 < 8 then
+          (FIv_NativeArray.value s.low ↑0 *
+                (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                      FIv_NativeArray.value s.high ↑30 +
+                    (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v)
+                        (FIv_NativeArray.value s.high ↑27) (FIv_NativeArray.value s.high ↑28)
+                        (FIv_NativeArray.value s.high ↑29)).1 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                        (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) +
+              FIv_NativeArray.value s.low ↑0 * FIx_ScheduleModel.nodes s) *
+            FIv_NativeArray.value o.z 9
+        else
+          FIv_NativeArray.value s.low ↑0 *
+              (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                    FIv_NativeArray.value s.high ↑30 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                      (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                      (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) *
+            FIv_NativeArray.value o.z 9) -
+        FIv_NativeArray.value s.low ↑0 *
+          (FIv_NativeArray.value s.high ↑0 * 1095958529 +
+              (FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑30 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                      (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1) *
+                1095958531 +
+            FIv_NativeArray.value s.high ↑25 * 1095958530)
+    else
+      (if 9 < 8 then
+          (FIv_NativeArray.value s.low ↑0 *
+                (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                      FIv_NativeArray.value s.high ↑30 +
+                    (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v)
+                        (FIv_NativeArray.value s.high ↑27) (FIv_NativeArray.value s.high ↑28)
+                        (FIv_NativeArray.value s.high ↑29)).1 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                        (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) +
+              FIv_NativeArray.value s.low ↑0 * FIx_ScheduleModel.nodes s) *
+            FIv_NativeArray.value o.z 9
+        else
+          FIv_NativeArray.value s.low ↑0 *
+              (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                    FIv_NativeArray.value s.high ↑30 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                      (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                      (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) *
+            FIv_NativeArray.value o.z 9) -
+        FIv_NativeArray.value s.low ↑0 *
+          (FIv_NativeArray.value s.high ↑0 * 8 +
+              (FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑30 +
+                  (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                      (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1) *
+                18 +
+            FIv_NativeArray.value s.high ↑25 * 16)
+
+case neg
+v : FIx_ScheduleModel.Variant
+s : Selectors
+o : Openings
+hm : ∑ h, FIv_NativeArray.value s.high ↑h = 1
+lm : ∑ l, FIv_NativeArray.value s.low ↑l = 1
+j : Fin 16
+initial :
+  FIx_ScheduleModel.initial v s o j =
+    if ↑j = 9 then FIx_ScheduleModel.initialRaw v s o j - FIx_ScheduleModel.low s 0 * FIx_ScheduleModel.length v s
+    else
+      if ↑j = 8 then FIx_ScheduleModel.initialRaw v s o j - FIx_ScheduleModel.low s 0 * FIx_ScheduleModel.domain v s
+      else FIx_ScheduleModel.initialRaw v s o j
+e8 : j = 8 ↔ ↑j = 8
+e9 : j = 9 ↔ ↑j = 9
+h8 : ¬↑j = 8
+h9 : ¬↑j = 9
+⊢ (if ↑j < 8 then
+        FIv_NativeArray.value s.low 0 *
+            (FIv_NativeArray.value s.high 0 + FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 25 +
+                  FIv_NativeArray.value s.high 30 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                    (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1 +
+              (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                    (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).2.1) +
+          FIv_NativeArray.value s.low 0 * FIx_ScheduleModel.nodes s
+      else
+        FIv_NativeArray.value s.low 0 *
+          (FIv_NativeArray.value s.high 0 + FIv_NativeArray.value s.high 1 + FIv_NativeArray.value s.high 25 +
+                FIv_NativeArray.value s.high 30 +
+              (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                  (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).1 +
+            (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high 27)
+                  (FIv_NativeArray.value s.high 28) (FIv_NativeArray.value s.high 29)).2.1)) *
+      FIv_NativeArray.value o.z ↑j =
+    if ↑j < 8 then
+      (FIv_NativeArray.value s.low ↑0 *
+            (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                  FIv_NativeArray.value s.high ↑30 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                    (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1 +
+              (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                    (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) +
+          FIv_NativeArray.value s.low ↑0 * FIx_ScheduleModel.nodes s) *
+        FIv_NativeArray.value o.z ↑j
+    else
+      FIv_NativeArray.value s.low ↑0 *
+          (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                FIv_NativeArray.value s.high ↑30 +
+              (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                  (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1 +
+            (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                  (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) *
+        FIv_NativeArray.value o.z ↑j
+'AspisR1.FIz_ScheduleInitial.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
