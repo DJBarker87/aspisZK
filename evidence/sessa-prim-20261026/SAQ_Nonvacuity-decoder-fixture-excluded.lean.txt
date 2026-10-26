@@ -1,0 +1,10 @@
+def zeroBytes : Slice U8 := Array.to_slice (Array.repeat 128#usize 0#u8)
+def zeroE : SAQ_WideABI.E :=
+  ⟨⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩,⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩⟩
+
+theorem decoder_success : SAQ_Decoder.read zeroBytes 0#usize=ok zeroE := by
+  simp only [SAQ_Decoder.read,AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes,
+    AspisR1RecordParser.field.wide_exact.WideExact.from_limbs,
+    AspisR1RecordParser.field.wide_exact.WideExact.BYTE_LEN,AspisR1RecordParser.field.P]
+  rfl
+

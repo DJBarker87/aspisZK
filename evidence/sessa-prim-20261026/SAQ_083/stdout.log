@@ -1,0 +1,65 @@
+SAQ_RecordDecode.lean:26:73: error: unsolved goals
+case im.re.re
+arr : Std.Array U8 32#usize
+canonical : ∀ (i : Fin 8), ↑(wordLE arr i) < 2147483647
+⊢ ↑↑(wordLE arr (Fin.addNat 0 RetainedFieldByteCodec.qm31LimbCount)) = ↑↑(wordLE arr 4)
+
+case im.re.im
+arr : Std.Array U8 32#usize
+canonical : ∀ (i : Fin 8), ↑(wordLE arr i) < 2147483647
+⊢ ↑↑(wordLE arr (Fin.addNat 1 RetainedFieldByteCodec.qm31LimbCount)) = ↑↑(wordLE arr 5)
+
+case im.im.re
+arr : Std.Array U8 32#usize
+canonical : ∀ (i : Fin 8), ↑(wordLE arr i) < 2147483647
+⊢ ↑↑(wordLE arr (Fin.addNat 2 RetainedFieldByteCodec.qm31LimbCount)) = ↑↑(wordLE arr 6)
+
+case im.im.im
+arr : Std.Array U8 32#usize
+canonical : ∀ (i : Fin 8), ↑(wordLE arr i) < 2147483647
+⊢ ↑↑(wordLE arr (Fin.addNat 3 RetainedFieldByteCodec.qm31LimbCount)) = ↑↑(wordLE arr 7)
+SAQ_RecordDecode.lean:29:74: warning: This simp argument is unused:
+  residue_cast
+
+Hint: Omit it from the simp argument list.
+  simp [WideExactLimbCodec.pairToExact, ̲RetainedExactLimbCodec.qm31ExactLimbEquiv,
+      RetainedExactLimbCodec.limbsToQM31Exact, ̲canonicalLimbs, ̲canonicalWords,r̵e̵s̵i̵d̵u̵e̵_̵c̵a̵s̵t̵,̵
+  ̵  ̵ ̵ ̵fromRecord,
+  ̲ ̲ ̲ ̲ ̲ExtractedRecordLimbCanonicality.packed, ̲SAQ_WideABI.toW, ̲SAQ_WideABI.toQ,
+      AspisR1CurrentWide.Proof.decodeWide, ̲AspisR1CurrentWide.Proof.decodeQM,
+      AspisR1CurrentWide.Proof.toQM, ̲AspisR1CurrentWide.Proof.toCM, ̲ExtractedCurrentQM31Exact.decode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SAQ_RecordDecode.lean:39:44: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.val`
+SAQ_RecordDecode.lean:42:72: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  StrictWideByteCodec.decodeWideLE (arrayBytes arr)
+in the target expression
+  Option.map (⇑WideExactLimbCodec.pairExactEquiv) ((some (arrayBytes arr)).bind StrictWideByteCodec.decodeWideLE) =
+    some
+      (CheckpointBytes5Output.ofE
+        (fromRecord
+          (ExtractedRecordLimbCanonicality.packed (wordLE arr 0) (wordLE arr 1) (wordLE arr 2) (wordLE arr 3)
+            (wordLE arr 4) (wordLE arr 5) (wordLE arr 6) (wordLE arr 7))))
+
+bytes : Slice U8
+w : R
+h : AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes = ok (some w)
+left✝ : (↑bytes).length = 32
+arr : Std.Array U8 32#usize
+hs : arr.to_slice = bytes
+hc : ∀ (i : Fin 8), ↑(wordLE arr i) < 2147483647
+hp :
+  w =
+    ExtractedRecordLimbCanonicality.packed (wordLE arr 0) (wordLE arr 1) (wordLE arr 2) (wordLE arr 3) (wordLE arr 4)
+      (wordLE arr 5) (wordLE arr 6) (wordLE arr 7)
+same : ↑arr = ↑bytes
+lists : List.ofFn (arrayBytes arr) = MultiproofConeCanonical.bytesOf ↑arr
+⊢ Option.map (⇑WideExactLimbCodec.pairExactEquiv) ((some (arrayBytes arr)).bind StrictWideByteCodec.decodeWideLE) =
+    some
+      (CheckpointBytes5Output.ofE
+        (fromRecord
+          (ExtractedRecordLimbCanonicality.packed (wordLE arr 0) (wordLE arr 1) (wordLE arr 2) (wordLE arr 3)
+            (wordLE arr 4) (wordLE arr 5) (wordLE arr 6) (wordLE arr 7))))
+'AspisR1.SAQ_RecordDecode.residue_cast' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SAQ_RecordDecode.packed_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SAQ_RecordDecode.successful' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

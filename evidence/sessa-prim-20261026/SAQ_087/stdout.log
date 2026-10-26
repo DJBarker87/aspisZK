@@ -1,0 +1,76 @@
+SAQ_Decoder.lean:38:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  start.add 32#usize
+in the target expression
+  match start + 32#usize with
+  | ok z => ↑start + ↑32#usize < 2 ^ UScalarTy.Usize.numBits ∧ ↑z = ↑start + ↑32#usize ∧ z.bv = start.bv + 32#usize.bv
+  | fail e => ¬UScalar.inBounds UScalarTy.Usize (↑start + ↑32#usize)
+  | x => ⊥
+
+case some
+bytes : Slice U8
+i : Usize
+hi : ↑i < 4
+length : (↑bytes).length = 128
+start finish : UScalar UScalarTy.Usize
+selected : Slice U8
+selectedCall :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+      { start := start, «end» := finish } =
+    ok selected
+raw : AspisR1RecordParser.field.wide_exact.WideExact
+decodedCall : AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected = ok (some raw)
+run✝³ : read bytes i = ok (SAQ_RecordDecode.fromRecord raw)
+run✝² :
+  (do
+      let finish ← start + 32#usize
+      let selected ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := start, «end» := finish }
+      let decoded ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected
+      let raw ← core.option.Option.unwrap decoded
+      ok (SAQ_RecordDecode.fromRecord raw)) =
+    ok (SAQ_RecordDecode.fromRecord raw)
+run✝¹ :
+  (do
+      let selected ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := start, «end» := finish }
+      let decoded ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected
+      let raw ← core.option.Option.unwrap decoded
+      ok (SAQ_RecordDecode.fromRecord raw)) =
+    ok (SAQ_RecordDecode.fromRecord raw)
+run✝ :
+  (do
+      let decoded ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected
+      let raw ← core.option.Option.unwrap decoded
+      ok (SAQ_RecordDecode.fromRecord raw)) =
+    ok (SAQ_RecordDecode.fromRecord raw)
+run :
+  (do
+      let raw ← ofOption (some raw) Error.panic
+      ok (SAQ_RecordDecode.fromRecord raw)) =
+    ok (SAQ_RecordDecode.fromRecord raw)
+hs : 32#usize.mul i = ok start
+hf : start.add 32#usize = ok finish
+hstart :
+  match ok start with
+  | ok z => ↑32#usize * ↑i ≤ UScalar.max UScalarTy.Usize ∧ ↑z = ↑32#usize * ↑i ∧ z.bv = 32#usize.bv * i.bv
+  | fail e => UScalar.max UScalarTy.Usize < ↑32#usize * ↑i
+  | div => False
+sv : ↑start = 32 * ↑i
+hfinish :
+  match start + 32#usize with
+  | ok z => ↑start + ↑32#usize < 2 ^ UScalarTy.Usize.numBits ∧ ↑z = ↑start + ↑32#usize ∧ z.bv = start.bv + 32#usize.bv
+  | fail e => ¬UScalar.inBounds UScalarTy.Usize (↑start + ↑32#usize)
+  | x => ⊥
+⊢ FoldedLeafCodec.decodeWide (OraclePortCompactDraft.slice (bytesOf ↑bytes) (32 * ↑i) 32) =
+    some (CheckpointBytes5Output.ofE (SAQ_RecordDecode.fromRecord raw))
+SAQ_Decoder.lean:29:41: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.option.Option.unwrap,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SAQ_Decoder.law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SAQ_Decoder.primitives' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
