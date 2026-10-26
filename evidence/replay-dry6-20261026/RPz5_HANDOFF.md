@@ -109,8 +109,8 @@ Source replay stopped at **687 attempts**:685 pass, two retained failures
 (the selected smaller-cohort Tx1 failure041 and obsolete larger-probe Phase
 failure074). Selected current view: **3341 green contexts**, comprising2687
 unchanged reused contexts and654 newly passing source contexts. The larger
-probe's31 successful contexts receive no current-view credit. All82 original
-ready vertices passed. All23 original unresolved names remain resolved/green.
+probe's31 successful contexts receive no current-view credit. All 82 original
+ready vertices passed. All 23 original unresolved names remain resolved/green.
 
 Exact final source frontier: **one failed vertex,1622 blocked descendants,
 zero other unattempted, zero ready, zero unresolved**. The actual Rc10 closure
@@ -118,3 +118,54 @@ has4963 modules; the requested union with Rc7_Top has4964. Rc7/Rc8/Rc9/Rc10
 all remain blocked. This is a source-finding stop, not budget exhaustion:
 no admissible source compile remains without changing blocked inputs or
 repeating unchanged work. Final batched audit/hash validation follows.
+
+## Final audits, validation and budget
+
+**Budget used 694/1500 Lean attempts; 0/0 Kani.** This is **not budget
+exhaustion**: 806 attempts remain unused because every remaining source target
+is blocked, and unchanged retries/out-of-closure work are prohibited. All
+independent admissible work completed: 687 source attempts plus 7 final audit
+batches; 692 attempts pass, two source failures retained. No timeout, memory
+kill, unchanged failed-input retry or cap increase occurred. No reservation
+retry or bypass occurred.
+
+The final frontier is unchanged: 3341 green contexts, one failed vertex,
+1622 blocked descendants, zero other unattempted, zero ready, zero unresolved.
+All 82 original ready modules pass. All 23 original names remain green with
+source/object provenance in RPz5_resolution-table.json. Rc7/Rc8/Rc9/Rc10 stay
+blocked; no fresh top compile, top axioms or formatter reachability result is
+claimed.
+
+All seven audits pass: 12581 fresh structured queries and12581 full raw
+printed axiom results. Combined with the 2687 unchanged pinned contexts,
+coverage is 3341 contexts / 103830 declaration results. The all-declaration
+standard-only gate is FALSE: 180 formatter records / 85 nonstandard axioms,
+with no audited nonformatter declaration reaching them. Fresh top
+reachability remains UNKNOWN. RPz5_FORMATTERS.md and the combined audit JSON
+retain full scope and limitations; repeated names imply no proof identity.
+
+Final consistency checks report **zero errors**: 11133 direct dependency
+edges over 3817 actual object paths hash-match; all 4964 selected source hashes
+match; 3617 current namespace artifacts/targets match. All 31 obsolete-probe
+artifacts/targets also match, and none enters the selected green view.
+All 18 inherited AeneasMeta additions are stable. All 22637 pinned base
+artifacts are present; the sole base drift is the SAME previously recorded
+metadata-only S2H reservation-script change f5b8318a… →195657d7…, not a
+Lean/library/runner drift. No live job compiler/runner or default Lake
+repository object directory remains. The source recipe's unused missing
+library-path component and final explicit pinned-library path are documented
+in RPz5_LIBRARY-PATH.md; no input or successful source context was rewritten.
+
+Aggregate compiler wall: **1899.177012591s** excluding SSH/admission
+waits; peak process RSS **5254256KiB**; swaps **0**. Each exact
+section6 target/command/source revision/hash/dependency pin/exit/wall/RSS/
+swap/limits/raw axiom/error result remains in its receipt. Current objects
+and namespace views remain in the pinned replay workspace for a changed-input
+continuation. No other worker's files or shared launcher was modified.
+
+Premises removed/added/changed remain 0/0/0, ledger T0/P0/G0/C0. The complete
+identical before/after statement is pinned by RPz5_statement-check.json.
+No fresh joint non-vacuity witness exists. L187/L188 and the 100-bit release
+target remain unestablished. The next deliverable is the single Phase-owner
+source reconciliation described above, then the blocked closure and fresh
+top/trust/artifact audit. All commits remain local; no push.
