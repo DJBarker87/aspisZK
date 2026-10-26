@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessQuarticInverseExact.lean:26:4: error: Tactic `rfl` failed: The left-hand side
+  ProverCommitNativeC49.value x.c0 * ProverCommitNativeC49.value x.c0 -
+    qm31R * (ProverCommitNativeC49.value x.c1 * ProverCommitNativeC49.value x.c1)
+is not definitionally equal to the right-hand side
+  (decode x).re * (decode x).re - qm31R * (decode x).im * (decode x).im
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+x : Old.Q
+hx : Canonical x
+hn : decode x ≠ 0
+a : Old.C
+ha :
+  ProverRwSuccessComplexOperations.S.mul (ProverRwSuccessComplexOperations.input x.c0)
+      (ProverRwSuccessComplexOperations.input x.c0) =
+    ok (ProverRwSuccessComplexOperations.input a)
+hca : ProverCommitNativeC49.Canonical a
+hva : ProverCommitNativeC49.value a = ProverCommitNativeC49.value x.c0 * ProverCommitNativeC49.value x.c0
+b : Old.C
+hb :
+  ProverRwSuccessComplexOperations.S.mul (ProverRwSuccessComplexOperations.input x.c1)
+      (ProverRwSuccessComplexOperations.input x.c1) =
+    ok (ProverRwSuccessComplexOperations.input b)
+hcb : ProverCommitNativeC49.Canonical b
+hvb : ProverCommitNativeC49.value b = ProverCommitNativeC49.value x.c1 * ProverCommitNativeC49.value x.c1
+rb : Old.C
+hrb :
+  ProverRwSuccessComplexOperations.S.mul (ProverRwSuccessComplexOperations.input r)
+      (ProverRwSuccessComplexOperations.input b) =
+    ok (ProverRwSuccessComplexOperations.input rb)
+hcrb : ProverCommitNativeC49.Canonical rb
+hvrb : ProverCommitNativeC49.value rb = ProverCommitNativeC49.value r * ProverCommitNativeC49.value b
+n : Old.C
+hnn :
+  ProverRwSuccessComplexOperations.S.sub (ProverRwSuccessComplexOperations.input a)
+      (ProverRwSuccessComplexOperations.input rb) =
+    ok (ProverRwSuccessComplexOperations.input n)
+hcn : ProverCommitNativeC49.Canonical n
+hvn : ProverCommitNativeC49.value n = ProverCommitNativeC49.value a - ProverCommitNativeC49.value rb
+⊢ ProverCommitNativeC49.value x.c0 * ProverCommitNativeC49.value x.c0 -
+      qm31R * (ProverCommitNativeC49.value x.c1 * ProverCommitNativeC49.value x.c1) =
+    (decode x).re * (decode x).re - qm31R * (decode x).im * (decode x).im
+'R1Z.ProverRwSuccessQuarticInverseExact.r_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessQuarticInverseExact.r_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessQuarticInverseExact.inverse' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

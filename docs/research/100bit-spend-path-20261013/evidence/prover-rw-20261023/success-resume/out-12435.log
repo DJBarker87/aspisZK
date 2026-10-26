@@ -1,0 +1,193 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessComplexInverseExact.lean:20:22: error(lean.unknownIdentifier): Unknown identifier `norm_value`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessComplexInverseExact.lean:43:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let m ← field.M31.mul (ProverRwDictionaryTower.fromC (source x)).a (ProverRwDictionaryTower.fromC (source x)).a
+    let m1 ← field.M31.mul (ProverRwDictionaryTower.fromC (source x)).b (ProverRwDictionaryTower.fromC (source x)).b
+    let norm ← m.add m1
+    let o ← ProverRwSuccessInverseSource.field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv norm
+    let cf ←
+      match o with
+        | none => ok (core.ops.control_flow.ControlFlow.Break none)
+        | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let m2 ← field.M31.mul (ProverRwDictionaryTower.fromC (source x)).a val
+        let m3 ← field.M31.neg (ProverRwDictionaryTower.fromC (source x)).b
+        let m4 ← m3.mul val
+        ok (some { a := m2, b := m4 })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+          ProverRwSuccessInverseSource.field.CM31 residual
+is not definitionally equal to the right-hand side
+  ok (some (ProverRwDictionaryTower.fromC (source { a := a, b := b })))
+
+case refine_1
+inst✝ : ProverRwFull.ExternalTypes
+ops : ProverRwFull.ExternalFuns
+x : Old.C
+hx : Canonical x
+hn : value x ≠ 0
+aa : U32
+haa : field.M31.mul x.a x.a = ok aa
+hcaa : ProverCommitM31Ops48.canonical aa
+hvaa : ProverCommitM31Ops48.decode aa = ProverCommitM31Ops48.decode x.a * ProverCommitM31Ops48.decode x.a
+bb : U32
+hbb : field.M31.mul x.b x.b = ok bb
+hcbb : ProverCommitM31Ops48.canonical bb
+hvbb : ProverCommitM31Ops48.decode bb = ProverCommitM31Ops48.decode x.b * ProverCommitM31Ops48.decode x.b
+n : U32
+hnn : field.M31.add aa bb = ok n
+hcn : ProverCommitM31Ops48.canonical n
+hvn : ProverCommitM31Ops48.decode n = ProverCommitM31Ops48.decode aa + ProverCommitM31Ops48.decode bb
+hnorm : ProverCommitM31Ops48.decode n = QuadraticAlgebra.norm (value x)
+nonzero : n ≠ 0#u32
+ni : U32 := ProverCommitInverse48.inverseWord n
+hni : ProverRwSuccessInverseInstall.Src.mInv n = ok (some ni)
+hcni : ↑(ProverCommitInverse48.inverseWord n) < AspisCircleGroupOrder.P
+hvni : ProverCommitInverse48.decode (ProverCommitInverse48.inverseWord n) = (ProverCommitInverse48.decode n)⁻¹
+a : U32
+ha : field.M31.mul x.a ni = ok a
+hca : ProverCommitM31Ops48.canonical a
+hva : ProverCommitM31Ops48.decode a = ProverCommitM31Ops48.decode x.a * ProverCommitM31Ops48.decode ni
+nb : U32
+hnb : field.M31.neg x.b = ok nb
+hcnb : ↑nb < ProverCommitNativeNeg49.P
+hvnb : ↑↑nb = -↑↑x.b
+b : U32
+hb : field.M31.mul nb ni = ok b
+hcb : ProverCommitM31Ops48.canonical b
+hvb : ProverCommitM31Ops48.decode b = ProverCommitM31Ops48.decode nb * ProverCommitM31Ops48.decode ni
+⊢ (do
+      let m ← field.M31.mul (ProverRwDictionaryTower.fromC (source x)).a (ProverRwDictionaryTower.fromC (source x)).a
+      let m1 ← field.M31.mul (ProverRwDictionaryTower.fromC (source x)).b (ProverRwDictionaryTower.fromC (source x)).b
+      let norm ← m.add m1
+      let o ← ProverRwSuccessInverseSource.field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv norm
+      let cf ←
+        match o with
+          | none => ok (core.ops.control_flow.ControlFlow.Break none)
+          | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let m2 ← field.M31.mul (ProverRwDictionaryTower.fromC (source x)).a val
+          let m3 ← field.M31.neg (ProverRwDictionaryTower.fromC (source x)).b
+          let m4 ← m3.mul val
+          ok (some { a := m2, b := m4 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+            ProverRwSuccessInverseSource.field.CM31 residual) =
+    ok (some (ProverRwDictionaryTower.fromC (source { a := a, b := b })))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessComplexInverseExact.lean:41:6: warning: This simp argument is unused:
+  haa
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwSuccessInverseTotal.Src.cInv,
+       ̵ ̵ProverRwSuccessInverseSource.field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv,
+  ̵  ̵ ̵ ̵ ̵ ̵input,
+  ̲ ̲ ̲ ̲ ̲ProverRwSuccessInverseSource.field.M31.mul,
+  ̵  ̵ ̵ ̵ ̵ ̵ProverRwSuccessInverseSource.field.M31.add,
+       ̵ ̵ProverRwSuccessInverseSource.field.M31.neg,
+  ̵  ̵ ̵ ̵ ̵ ̵ha̵a̵,̵h̵bb, ̲hnn, ̲hni, ̲ha, ̲hnb, ̲hb, ̲bind_tc_ok,
+       ̵ ̵ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessComplexInverseExact.lean:41:10: warning: This simp argument is unused:
+  hbb
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwSuccessInverseTotal.Src.cInv,
+       ̵ ̵ProverRwSuccessInverseSource.field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv,
+  ̵  ̵ ̵ ̵ ̵ ̵input,
+  ̲ ̲ ̲ ̲ ̲ProverRwSuccessInverseSource.field.M31.mul,
+  ̵  ̵ ̵ ̵ ̵ ̵ProverRwSuccessInverseSource.field.M31.add,
+       ̵ ̵ProverRwSuccessInverseSource.field.M31.neg,
+  ̵  ̵ ̵ ̵ ̵ ̵haa, ̲hb̵b̵,̵h̵nn, ̲hni, ̲ha, ̲hnb, ̲hb, ̲bind_tc_ok,
+       ̵ ̵ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessComplexInverseExact.lean:41:14: warning: This simp argument is unused:
+  hnn
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwSuccessInverseTotal.Src.cInv,
+       ̵ ̵ProverRwSuccessInverseSource.field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv,
+  ̵  ̵ ̵ ̵ ̵ ̵input,
+  ̲ ̲ ̲ ̲ ̲ProverRwSuccessInverseSource.field.M31.mul,
+  ̵  ̵ ̵ ̵ ̵ ̵ProverRwSuccessInverseSource.field.M31.add,
+       ̵ ̵ProverRwSuccessInverseSource.field.M31.neg,
+  ̵  ̵ ̵ ̵ ̵ ̵haa, ̲hbb, ̲hnn̵,̵h̵n̵i, ̲ha, ̲hnb, ̲hb, ̲bind_tc_ok,
+       ̵ ̵ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessComplexInverseExact.lean:41:18: warning: This simp argument is unused:
+  hni
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwSuccessInverseTotal.Src.cInv,
+       ̵ ̵ProverRwSuccessInverseSource.field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv,
+  ̵  ̵ ̵ ̵ ̵ ̵input,
+  ̲ ̲ ̲ ̲ ̲ProverRwSuccessInverseSource.field.M31.mul,
+  ̵  ̵ ̵ ̵ ̵ ̵ProverRwSuccessInverseSource.field.M31.add,
+       ̵ ̵ProverRwSuccessInverseSource.field.M31.neg,
+  ̵  ̵ ̵ ̵ ̵ ̵haa, ̲hbb, ̲hnn̵n̲, ̲hn̵i̵,̵h̵a, ̲hnb, ̲hb, ̲bind_tc_ok,
+       ̵ ̵ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessComplexInverseExact.lean:41:22: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwSuccessInverseTotal.Src.cInv,
+       ̵ ̵ProverRwSuccessInverseSource.field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv,
+  ̵  ̵ ̵ ̵ ̵ ̵input,
+  ̲ ̲ ̲ ̲ ̲ProverRwSuccessInverseSource.field.M31.mul,
+  ̵  ̵ ̵ ̵ ̵ ̵ProverRwSuccessInverseSource.field.M31.add,
+       ̵ ̵ProverRwSuccessInverseSource.field.M31.neg,
+  ̵  ̵ ̵ ̵ ̵ ̵haa, ̲hbb, ̲hnn, ̲hni, ̲ha̵,̵h̵nb, ̲hb, ̲bind_tc_ok,
+       ̵ ̵ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessComplexInverseExact.lean:41:25: warning: This simp argument is unused:
+  hnb
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwSuccessInverseTotal.Src.cInv,
+       ̵ ̵ProverRwSuccessInverseSource.field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv,
+  ̵  ̵ ̵ ̵ ̵ ̵input,
+  ̲ ̲ ̲ ̲ ̲ProverRwSuccessInverseSource.field.M31.mul,
+  ̵  ̵ ̵ ̵ ̵ ̵ProverRwSuccessInverseSource.field.M31.add,
+       ̵ ̵ProverRwSuccessInverseSource.field.M31.neg,
+  ̵  ̵ ̵ ̵ ̵ ̵haa, ̲hbb, ̲hnn, ̲hni, ̲ha, ̲hn̵b,h̵ ̲b,̵b̵ind_tc_ok,
+       ̵ ̵ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessComplexInverseExact.lean:41:29: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwSuccessInverseTotal.Src.cInv,
+       ̵ ̵ProverRwSuccessInverseSource.field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv,
+  ̵  ̵ ̵ ̵ ̵ ̵input,
+  ̲ ̲ ̲ ̲ ̲ProverRwSuccessInverseSource.field.M31.mul,
+  ̵  ̵ ̵ ̵ ̵ ̵ProverRwSuccessInverseSource.field.M31.add,
+       ̵ ̵ProverRwSuccessInverseSource.field.M31.neg,
+  ̵  ̵ ̵ ̵ ̵ ̵haa, ̲hbb, ̲hnn, ̲hni, ̲ha, ̲hnb,h̵ ̲b,̵b̵ind_tc_ok,
+       ̵ ̵ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessComplexInverseExact.lean:41:32: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwSuccessInverseTotal.Src.cInv,
+       ̵ ̵ProverRwSuccessInverseSource.field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv,
+  ̵  ̵ ̵ ̵ ̵ ̵input,
+  ̲ ̲ ̲ ̲ ̲ProverRwSuccessInverseSource.field.M31.mul,
+  ̵  ̵ ̵ ̵ ̵ ̵ProverRwSuccessInverseSource.field.M31.add,
+       ̵ ̵ProverRwSuccessInverseSource.field.M31.neg,
+  ̵  ̵ ̵ ̵ ̵ ̵haa, ̲hb̵b̵,̵h̵b̲b̲,̲ ̲h̲nn̵,̵h̵n̵n̲,̲ ̲h̲n̲i,̵h̵a̵,̵h̵,̲ ̲h̲a̲,̲ ̲h̲nb̵b̲,h̵b̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲h̲b̲,̲
+       ̵ ̵ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwSuccessComplexInverseExact.inverse' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

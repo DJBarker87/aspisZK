@@ -1047,3 +1047,29 @@ Native budget11/11 is exhausted; Lean work continues. History-conditioned E1,
 full sixteen-position native payload coverage, physical Drop composition,
 callback/effect extraction, ordered ROM/TLS, prefix/body and real RunJoin all
 remain open. No root/headline premise was removed; target not yet established.
+
+## Exact generic field inverses (12432–12442)
+
+`ProverRwSuccessScalarInverseExact.exact_result` and `fixed_chain` prove the
+retained generic binary-power inverse returns the exact canonical fixed-chain
+word for every raw nonzero word; its field decode is the multiplicative
+inverse, including residue zero for noncanonical raw words. No canonicality
+of the raw base, arithmetic success or output equation is supplied. The raw
+zero guard still differs from field zero on noncanonical inputs; the CodeField
+None-iff-field-zero law therefore still requires the retained canonical invariant.
+
+`ProverRwSuccessComplexInverseExact.inverse` and
+`ProverRwSuccessQuarticInverseExact.inverse` prove the selected generic norm/
+multiply inverses on canonical nonzero field inputs, with exact source Result,
+canonical output and field-inverse value. The complex and quartic arithmetic
+maps are proved separately and consumed; neither an assumed norm-success nor
+inverse-success/value equation remains. These generic bodies are not silently
+replaced by the different specialized square kernels. No new external entry
+is counted: selector102/262 and44 remaining successful-body references stay.
+
+Eleven compiles:5pass,6changed elaboration failures. Combined resumed Lean
+use27/85, native11/11. Focused receipts/snapshots/full axiom reports are in
+`success-resume`; all accepted axioms standard, all successful compiles about
+2s and4.3GiB RSS,zero swaps. No resource failure, infrastructure edit or unchanged
+regression. Native ABI/extraction, complete body/prefix, ordered oracle/TLS
+and real RunJoin are retained: zero root premises removed; target not yet established.
