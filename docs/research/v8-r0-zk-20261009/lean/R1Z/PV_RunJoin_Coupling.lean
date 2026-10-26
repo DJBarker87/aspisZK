@@ -42,6 +42,25 @@ theorem completed_tape_mean {K : Type} [Field K] [Fintype K] (F : Subfield K)
       f (ProverCommitTapeCompletion.complete s.1 s.2)) = mean f :=
   R1Z.CouplingR1PBin.mp_equiv ProverCommitTapeCompletion.completionEquiv f
 
+/-- A common product carrier gives the real marginal outright. Only the
+model push-forward law is a supplied Prop, to be exposed as V037 by consumers.
+Padding and the map remain data; this is not a deployed construction. -/
+def projection_cp {R M P : Type} [Fintype R] [Nonempty R]
+    [Fintype M] [Fintype P] [Nonempty P]
+    (toModel : R × P → ((M × OracleAnswer) × Tape))
+    (uniform : ∀ f : ((M × OracleAnswer) × Tape) → ℚ,
+      mean (fun s => f (toModel s)) = mean f) :
+    Coupling R ((M × OracleAnswer) × Tape) where
+  S := R × P
+  finS := inferInstance
+  nonemptyS := inferInstance
+  toR := Prod.fst
+  toM := toModel
+  meanR := R1Z.CouplingR1PBin.mp_fst
+  meanM := uniform
+
+#print axioms projection_cp
+
 #print axioms cp
 #print axioms real_marginal
 #print axioms model_marginal

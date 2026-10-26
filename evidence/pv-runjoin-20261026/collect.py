@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Read-only collection of focused proof receipts; never starts a build."""
-import hashlib, json, pathlib, subprocess, sys
+import hashlib, json, pathlib, re, subprocess, sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEST = pathlib.Path(__file__).resolve().parent
 HOST = 'dombarker@100.108.41.90'
@@ -26,9 +26,9 @@ for attempt, module, revision in zip(sys.argv[1::3], sys.argv[2::3], sys.argv[3:
         dep_hashes[dep] = subprocess.check_output(['ssh',HOST,'sha256sum',
             f'{REMOTE}/objects/{path}.olean',f'{REMOTE}/sources/{path}.lean']).decode().splitlines()
     fingerprint = hashlib.sha256(json.dumps(dep_hashes,sort_keys=True).encode()).hexdigest()
-    axioms = [line for line in logs['out'].splitlines() if 'depends on axioms:' in line or 'does not depend on any axioms' in line]
+    axioms = re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)", logs['out'])
     receipt = dict(attempt=int(attempt),target=module,source_revision=revision,
-        source_sha256=digest,dependency_fingerprint=fingerprint,direct_dependencies=dep_hashes,
+        source_sha256=digest,launcher_dependency_fingerprint="none",postrun_direct_dependency_fingerprint=fingerprint,direct_dependencies=dep_hashes,
         command=f'sh /home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh {attempt} {module} J 7000 8',
         caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=128,LeanM=7000),
         axioms=axioms,exit=[s for s in logs['out'].splitlines() if s.startswith('exit=')],
