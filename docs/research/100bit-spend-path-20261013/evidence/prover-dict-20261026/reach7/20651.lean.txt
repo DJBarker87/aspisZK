@@ -1,0 +1,63 @@
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FormatterTypeMaps
+open Aeneas Aeneas.Std ProverRwFull
+@[reducible] def types (base : ExternalTypes) (F : Type) : ExternalTypes :=
+  {base with op27 := F}
+abbrev Late := @aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+abbrev Public := @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+abbrev Trace := @aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestTraceV1
+abbrev Compilation := @aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+abbrev CopyLink := @aspis_statement.pool_v1.pair_trace.PoolV1PairCopyLinkV1
+abbrev Times := @aspis_z4b_probe.probe.z9.z9b.z9c.z9d.z9e.R1CheckTimes
+
+def late (base : ExternalTypes) (F : Type) (x : @Late base) : @Late (types base F) :=
+  ⟨x.live_snapshot,x.candidate_afterstate⟩
+def unlate (base : ExternalTypes) (F : Type) (x : @Late (types base F)) : @Late base :=
+  ⟨x.live_snapshot,x.candidate_afterstate⟩
+def pub (base : ExternalTypes) (F : Type) (x : @Public base) : @Public (types base F) :=
+  match x with
+  | .Transfer p l => .Transfer p (late base F l)
+  | .Withdrawal p l => .Withdrawal p (late base F l)
+def unpublic (base : ExternalTypes) (F : Type) (x : @Public (types base F)) : @Public base :=
+  match x with
+  | .Transfer p l => .Transfer p (unlate base F l)
+  | .Withdrawal p l => .Withdrawal p (unlate base F l)
+def trace (base : ExternalTypes) (F : Type) (x : @Trace base) : @Trace (types base F) :=
+  ⟨x.stable,x.late,x.variant,x.private_directions,x.value_bits,x.public_outputs,x.afterstate⟩
+def untrace (base : ExternalTypes) (F : Type) (x : @Trace (types base F)) : @Trace base :=
+  ⟨x.stable,x.late,x.variant,x.private_directions,x.value_bits,x.public_outputs,x.afterstate⟩
+def compilation (base : ExternalTypes) (F : Type) (x : @Compilation base) : @Compilation (types base F) :=
+  ⟨trace base F x.trace,x.semantic_c1,late base F x.public_statement⟩
+def uncompilation (base : ExternalTypes) (F : Type) (x : @Compilation (types base F)) : @Compilation base :=
+  ⟨untrace base F x.trace,x.semantic_c1,unlate base F x.public_statement⟩
+def link (base : ExternalTypes) (F : Type) (x : @CopyLink base) : @CopyLink (types base F) :=
+  ⟨x.id,x.tag,x.kind,x.weight,x.producer,x.consumer⟩
+def unlink (base : ExternalTypes) (F : Type) (x : @CopyLink (types base F)) : @CopyLink base :=
+  ⟨x.id,x.tag,x.kind,x.weight,x.producer,x.consumer⟩
+def times (base : ExternalTypes) (F : Type) (x : @Times base) : @Times (types base F) :=
+  ⟨x.public_data,x.emit,x.builders,x.check⟩
+def untimes (base : ExternalTypes) (F : Type) (x : @Times (types base F)) : @Times base :=
+  ⟨x.public_data,x.emit,x.builders,x.check⟩
+
+theorem late_roundtrip (b : ExternalTypes) (F : Type) (x : @Late b) :
+    unlate b F (late b F x) = x := by cases x; rfl
+theorem public_roundtrip (b : ExternalTypes) (F : Type) (x : @Public b) :
+    unpublic b F (pub b F x) = x := by cases x <;> rfl
+theorem trace_roundtrip (b : ExternalTypes) (F : Type) (x : @Trace b) :
+    untrace b F (trace b F x) = x := by cases x; rfl
+theorem compilation_roundtrip (b : ExternalTypes) (F : Type) (x : @Compilation b) :
+    uncompilation b F (compilation b F x) = x := by cases x; rfl
+theorem link_roundtrip (b : ExternalTypes) (F : Type) (x : @CopyLink b) :
+    unlink b F (link b F x) = x := by cases x; rfl
+theorem times_roundtrip (b : ExternalTypes) (F : Type) (x : @Times b) :
+    untimes b F (times b F x) = x := by cases x; rfl
+
+#print axioms late_roundtrip
+#print axioms public_roundtrip
+#print axioms trace_roundtrip
+#print axioms compilation_roundtrip
+#print axioms link_roundtrip
+#print axioms times_roundtrip
+end R1Z.PDict_FormatterTypeMaps

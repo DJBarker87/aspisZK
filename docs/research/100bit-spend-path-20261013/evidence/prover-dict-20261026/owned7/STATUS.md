@@ -49,3 +49,27 @@ association follows from these harnesses. native-summary.json includes every
 executed Kani target and failures; precompiler refusal JSON is retained.
 Lean inputs, dependency fingerprints, exact source snapshots, status, GNU time,
 RSS, swap, and accepted standard-only axiom reports live in ../reach7/.
+
+## Final continuation evidence
+
+Native allocation:15executed Kani runs,12pass; zero remain. The final additional
+accepted IDs are116(interrupted write),121(write zero),123(terminal write
+errno!=4),124(one64-bit custom payload/drop),126(interrupted fsync).
+The complete owned reference extracts at130and baseline-translates at132.
+OwnedErrorCorrect is accepted. Its successor draft incorrectly mapped the
+success arm instead of the error arm and is archived; the corrected error map
+and complete reference observation are checked in PDict_FinalAudit.
+
+The accepted source requirement is now172/83/255, from159/96/255 by13new
+pure entries. Full-dictionary selection is176/262. The tables preserve all99
+original open-operation rows. Native types remain26/28; no native IO/world or
+root headline premise is discharged. Formatter full-dictionary structural/trait
+retyping, seven carrier equivalences, store/path and directory sync are checked;
+fallible store and whole caller carrier transport remain open. Pending failed
+sources are .lean.txt and are not imported by the accepted closure.
+
+Kani109's scope journal is retained: coarse scope lifetime95s and87.382s CPU.
+Final GNU RSS/swap and cgroup peak counters remain unavailable; it is rejected
+evidence. Full native-source snapshot qualifications are in
+standalone-source-bindings.json. All reservation snapshots, including later
+precompiler refusals, are under admissions/. No refusal used Kani budget.

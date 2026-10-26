@@ -1,0 +1,27 @@
+import R1Z.PDict_CodecDictionary
+set_option autoImplicit false
+namespace R1Z.PDict_ConstantValues
+open Aeneas Aeneas.Std Result ProverRwFull
+
+theorem leaf_bits : PDict_ConstantsSource.leaf_bits = .ok 18#u32 := rfl
+theorem batch : PDict_ConstantsSource.max_batch = .ok 16#usize := rfl
+theorem lanes : PDict_ConstantsSource.lanes = .ok 29#usize := rfl
+theorem claims : PDict_ConstantsSource.claims = .ok 87#usize := by
+  unfold PDict_ConstantsSource.claims
+  unfold PDict_ConstantsSource.aspis_r1_cost_probe.r1_wire.CLAIMS
+  unfold PDict_ConstantsSource.aspis_r1_cost_probe.r1_wire.POINTS
+  unfold PDict_ConstantsSource.aspis_r1_cost_probe.r1_wire.LANES
+  rfl
+
+theorem selected_claims (base : ExternalTypes)
+    (ops : @ExternalFuns (PDict_CodecDictionary.native base)) :
+    (PDict_CodecDictionary.selected base ops).op239 = .ok 87#usize := by
+  change PDict_ConstantsSource.claims = _
+  exact claims
+
+#print axioms leaf_bits
+#print axioms batch
+#print axioms lanes
+#print axioms claims
+#print axioms selected_claims
+end R1Z.PDict_ConstantValues

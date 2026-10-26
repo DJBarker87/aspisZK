@@ -1,0 +1,299 @@
+import R1Z.PDict_FormatterTraitMap
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FormatterDictionaryMap
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterTraitMap
+
+def resultMap {A B : Type} (f : A → B) : Result A → Result B
+  | .ok x => .ok (f x)
+  | .fail e => .fail e
+  | .div => .div
+
+def innerMap {A B E : Type} (f : A → B) : core.result.Result A E → core.result.Result B E
+  | .Ok x => .Ok (f x)
+  | .Err e => .Err e
+
+def vecMap {A B : Type} (f : A → B) (v : alloc.vec.Vec A) : alloc.vec.Vec B :=
+  ⟨v.val.map f, by simpa only [List.length_map] using v.property⟩
+
+/-- Retypes an arbitrary extracted dictionary. The unreachable Formatter
+callback diverges. Every other operation is retained through structural maps;
+no native callback correctness or native Formatter representation is asserted. -/
+@[reducible] def selected (base : ExternalTypes) (F : Type)
+    (ops : @ExternalFuns base) : @ExternalFuns (types base F) :=
+  letI : ExternalTypes := types base F
+  {
+    op0 := @ExternalFuns.op0 base ops
+    op1 := @ExternalFuns.op1 base ops
+    op2 := @ExternalFuns.op2 base ops
+    op3 := @ExternalFuns.op3 base ops
+    op4 := @ExternalFuns.op4 base ops
+    op5 := @ExternalFuns.op5 base ops
+    op6 := @ExternalFuns.op6 base ops
+    op7 := @ExternalFuns.op7 base ops
+    op8 := @ExternalFuns.op8 base ops
+    op9 := @ExternalFuns.op9 base ops
+    op10 := @ExternalFuns.op10 base ops
+    op11 := @ExternalFuns.op11 base ops
+    op12 := @ExternalFuns.op12 base ops
+    op13 := @ExternalFuns.op13 base ops
+    op14 := @ExternalFuns.op14 base ops
+    op15 := @ExternalFuns.op15 base ops
+    op16 := @ExternalFuns.op16 base ops
+    op17 := @ExternalFuns.op17 base ops
+    op18 := @ExternalFuns.op18 base ops
+    op19 := @ExternalFuns.op19 base ops
+    op20 := @ExternalFuns.op20 base ops
+    op21 := @ExternalFuns.op21 base ops
+    op22 := @ExternalFuns.op22 base ops
+    op23 := @ExternalFuns.op23 base ops
+    op24 := @ExternalFuns.op24 base ops
+    op25 := @ExternalFuns.op25 base ops
+    op26 := @ExternalFuns.op26 base ops
+    op27 := @ExternalFuns.op27 base ops
+    op28 := @ExternalFuns.op28 base ops
+    op29 := @ExternalFuns.op29 base ops
+    op30 := @ExternalFuns.op30 base ops
+    op31 := @ExternalFuns.op31 base ops
+    op32 := @ExternalFuns.op32 base ops
+    op33 := @ExternalFuns.op33 base ops
+    op34 := @ExternalFuns.op34 base ops
+    op35 := @ExternalFuns.op35 base ops
+    op36 := @ExternalFuns.op36 base ops
+    op37 := @ExternalFuns.op37 base ops
+    op38 := @ExternalFuns.op38 base ops
+    op39 := @ExternalFuns.op39 base ops
+    op40 := @ExternalFuns.op40 base ops
+    op41 := @ExternalFuns.op41 base ops
+    op42 := @ExternalFuns.op42 base ops
+    op43 := @ExternalFuns.op43 base ops
+    op44 := @ExternalFuns.op44 base ops
+    op45 := @ExternalFuns.op45 base ops
+    op46 := @ExternalFuns.op46 base ops
+    op47 := @ExternalFuns.op47 base ops
+    op48 := @ExternalFuns.op48 base ops
+    op49 := @ExternalFuns.op49 base ops
+    op50 := @ExternalFuns.op50 base ops
+    op51 := @ExternalFuns.op51 base ops
+    op52 := @ExternalFuns.op52 base ops
+    op53 := @ExternalFuns.op53 base ops
+    op54 := @ExternalFuns.op54 base ops
+    op55 := @ExternalFuns.op55 base ops
+    op56 := @ExternalFuns.op56 base ops
+    op57 := @ExternalFuns.op57 base ops
+    op58 := @ExternalFuns.op58 base ops
+    op59 := @ExternalFuns.op59 base ops
+    op60 := @ExternalFuns.op60 base ops
+    op61 := @ExternalFuns.op61 base ops
+    op62 := @ExternalFuns.op62 base ops
+    op63 := @ExternalFuns.op63 base ops
+    op64 := @ExternalFuns.op64 base ops
+    op65 := @ExternalFuns.op65 base ops
+    op66 := @ExternalFuns.op66 base ops
+    op67 := @ExternalFuns.op67 base ops
+    op68 := @ExternalFuns.op68 base ops
+    op69 := @ExternalFuns.op69 base ops
+    op70 := @ExternalFuns.op70 base ops
+    op71 := @ExternalFuns.op71 base ops
+    op72 := @ExternalFuns.op72 base ops
+    op73 := @ExternalFuns.op73 base ops
+    op74 := @ExternalFuns.op74 base ops
+    op75 := @ExternalFuns.op75 base ops
+    op76 := @ExternalFuns.op76 base ops
+    op77 := @ExternalFuns.op77 base ops
+    op78 := @ExternalFuns.op78 base ops
+    op79 := @ExternalFuns.op79 base ops
+    op80 := @ExternalFuns.op80 base ops
+    op81 := @ExternalFuns.op81 base ops
+    op82 := @ExternalFuns.op82 base ops
+    op83 := @ExternalFuns.op83 base ops
+    op84 := @ExternalFuns.op84 base ops
+    op85 := fun _ _ => .div
+    op86 := @ExternalFuns.op86 base ops
+    op87 := @ExternalFuns.op87 base ops
+    op88 := @ExternalFuns.op88 base ops
+    op89 := @ExternalFuns.op89 base ops
+    op90 := @ExternalFuns.op90 base ops
+    op91 := @ExternalFuns.op91 base ops
+    op92 := @ExternalFuns.op92 base ops
+    op93 := @ExternalFuns.op93 base ops
+    op94 := @ExternalFuns.op94 base ops
+    op95 := @ExternalFuns.op95 base ops
+    op96 := @ExternalFuns.op96 base ops
+    op97 := @ExternalFuns.op97 base ops
+    op98 := @ExternalFuns.op98 base ops
+    op99 := @ExternalFuns.op99 base ops
+    op100 := @ExternalFuns.op100 base ops
+    op101 := @ExternalFuns.op101 base ops
+    op102 := @ExternalFuns.op102 base ops
+    op103 := @ExternalFuns.op103 base ops
+    op104 := @ExternalFuns.op104 base ops
+    op105 := @ExternalFuns.op105 base ops
+    op106 := @ExternalFuns.op106 base ops
+    op107 := @ExternalFuns.op107 base ops
+    op108 := @ExternalFuns.op108 base ops
+    op109 := @ExternalFuns.op109 base ops
+    op110 := @ExternalFuns.op110 base ops
+    op111 := @ExternalFuns.op111 base ops
+    op112 := @ExternalFuns.op112 base ops
+    op113 := @ExternalFuns.op113 base ops
+    op114 := @ExternalFuns.op114 base ops
+    op115 := @ExternalFuns.op115 base ops
+    op116 := @ExternalFuns.op116 base ops
+    op117 := @ExternalFuns.op117 base ops
+    op118 := @ExternalFuns.op118 base ops
+    op119 := @ExternalFuns.op119 base ops
+    op120 := @ExternalFuns.op120 base ops
+    op121 := @ExternalFuns.op121 base ops
+    op122 := @ExternalFuns.op122 base ops
+    op123 := @ExternalFuns.op123 base ops
+    op124 := @ExternalFuns.op124 base ops
+    op125 := @ExternalFuns.op125 base ops
+    op126 := @ExternalFuns.op126 base ops
+    op127 := @ExternalFuns.op127 base ops
+    op128 := @ExternalFuns.op128 base ops
+    op129 := @ExternalFuns.op129 base ops
+    op130 := @ExternalFuns.op130 base ops
+    op131 := @ExternalFuns.op131 base ops
+    op132 := @ExternalFuns.op132 base ops
+    op133 := @ExternalFuns.op133 base ops
+    op134 := @ExternalFuns.op134 base ops
+    op135 := @ExternalFuns.op135 base ops
+    op136 := @ExternalFuns.op136 base ops
+    op137 := @ExternalFuns.op137 base ops
+    op138 := @ExternalFuns.op138 base ops
+    op139 := @ExternalFuns.op139 base ops
+    op140 := @ExternalFuns.op140 base ops
+    op141 := @ExternalFuns.op141 base ops
+    op142 := @ExternalFuns.op142 base ops
+    op143 := @ExternalFuns.op143 base ops
+    op144 := @ExternalFuns.op144 base ops
+    op145 := @ExternalFuns.op145 base ops
+    op146 := @ExternalFuns.op146 base ops
+    op147 := @ExternalFuns.op147 base ops
+    op148 := @ExternalFuns.op148 base ops
+    op149 := @ExternalFuns.op149 base ops
+    op150 := @ExternalFuns.op150 base ops
+    op151 := @ExternalFuns.op151 base ops
+    op152 := @ExternalFuns.op152 base ops
+    op153 := @ExternalFuns.op153 base ops
+    op154 := @ExternalFuns.op154 base ops
+    op155 := @ExternalFuns.op155 base ops
+    op156 := @ExternalFuns.op156 base ops
+    op157 := @ExternalFuns.op157 base ops
+    op158 := @ExternalFuns.op158 base ops
+    op159 := @ExternalFuns.op159 base ops
+    op160 := @ExternalFuns.op160 base ops
+    op161 := @ExternalFuns.op161 base ops
+    op162 := @ExternalFuns.op162 base ops
+    op163 := @ExternalFuns.op163 base ops
+    op164 := @ExternalFuns.op164 base ops
+    op165 := @ExternalFuns.op165 base ops
+    op166 := @ExternalFuns.op166 base ops
+    op167 := @ExternalFuns.op167 base ops
+    op168 := @ExternalFuns.op168 base ops
+    op169 := @ExternalFuns.op169 base ops
+    op170 := @ExternalFuns.op170 base ops
+    op171 := @ExternalFuns.op171 base ops
+    op172 := @ExternalFuns.op172 base ops
+    op173 := @ExternalFuns.op173 base ops
+    op174 := @ExternalFuns.op174 base ops
+    op175 := @ExternalFuns.op175 base ops
+    op176 := @ExternalFuns.op176 base ops
+    op177 := @ExternalFuns.op177 base ops
+    op178 := @ExternalFuns.op178 base ops
+    op179 := @ExternalFuns.op179 base ops
+    op180 := @ExternalFuns.op180 base ops
+    op181 := @ExternalFuns.op181 base ops
+    op182 := @ExternalFuns.op182 base ops
+    op183 := @ExternalFuns.op183 base ops
+    op184 := @ExternalFuns.op184 base ops
+    op185 := @ExternalFuns.op185 base ops
+    op186 := @ExternalFuns.op186 base ops
+    op187 := @ExternalFuns.op187 base ops
+    op188 := @ExternalFuns.op188 base ops
+    op189 := @ExternalFuns.op189 base ops
+    op190 := @ExternalFuns.op190 base ops
+    op191 := @ExternalFuns.op191 base ops
+    op192 := @ExternalFuns.op192 base ops
+    op193 := @ExternalFuns.op193 base ops
+    op194 := @ExternalFuns.op194 base ops
+    op195 := @ExternalFuns.op195 base ops
+    op196 := @ExternalFuns.op196 base ops
+    op197 := @ExternalFuns.op197 base ops
+    op198 := @ExternalFuns.op198 base ops
+    op199 := @ExternalFuns.op199 base ops
+    op200 := @ExternalFuns.op200 base ops
+    op201 := @ExternalFuns.op201 base ops
+    op202 := @ExternalFuns.op202 base ops
+    op203 := @ExternalFuns.op203 base ops
+    op204 := @ExternalFuns.op204 base ops
+    op205 := @ExternalFuns.op205 base ops
+    op206 := @ExternalFuns.op206 base ops
+    op207 := @ExternalFuns.op207 base ops
+    op208 := @ExternalFuns.op208 base ops
+    op209 := @ExternalFuns.op209 base ops
+    op210 := @ExternalFuns.op210 base ops
+    op211 := @ExternalFuns.op211 base ops
+    op212 := @ExternalFuns.op212 base ops
+    op213 := @ExternalFuns.op213 base ops
+    op214 := @ExternalFuns.op214 base ops
+    op215 := @ExternalFuns.op215 base ops
+    op216 := @ExternalFuns.op216 base ops
+    op217 := @ExternalFuns.op217 base ops
+    op218 := @ExternalFuns.op218 base ops
+    op219 := @ExternalFuns.op219 base ops
+    op220 := fun inst a b c d e state blocks => @ExternalFuns.op220 base ops (unVariable base F _ _ _ _ _ _ _ _ _ inst) a b c d e state blocks
+    op221 := @ExternalFuns.op221 base ops
+    op222 := @ExternalFuns.op222 base ops
+    op223 := @ExternalFuns.op223 base ops
+    op224 := fun x n g k => @ExternalFuns.op224 base ops (untrace base F x) n g k
+    op225 := fun x => resultMap (late base F) (@ExternalFuns.op225 base ops (unpublic base F x))
+    op226 := fun x => @ExternalFuns.op226 base ops (unpublic base F x)
+    op227 := fun x a b c => @ExternalFuns.op227 base ops (unpublic base F x) a b c
+    op228 := resultMap (innerMap (vecMap (link base F))) (@ExternalFuns.op228 base ops)
+    op229 := fun x y => @ExternalFuns.op229 base ops (unlate base F x) (unlate base F y)
+    op230 := @ExternalFuns.op230 base ops
+    op231 := @ExternalFuns.op231 base ops
+    op232 := fun x => resultMap (fun r => (r.1,times base F r.2)) (@ExternalFuns.op232 base ops x)
+    op233 := @ExternalFuns.op233 base ops
+    op234 := @ExternalFuns.op234 base ops
+    op235 := @ExternalFuns.op235 base ops
+    op236 := @ExternalFuns.op236 base ops
+    op237 := @ExternalFuns.op237 base ops
+    op238 := @ExternalFuns.op238 base ops
+    op239 := @ExternalFuns.op239 base ops
+    op240 := @ExternalFuns.op240 base ops
+    op241 := @ExternalFuns.op241 base ops
+    op242 := @ExternalFuns.op242 base ops
+    op243 := @ExternalFuns.op243 base ops
+    op244 := @ExternalFuns.op244 base ops
+    op245 := @ExternalFuns.op245 base ops
+    op246 := @ExternalFuns.op246 base ops
+    op247 := @ExternalFuns.op247 base ops
+    op248 := @ExternalFuns.op248 base ops
+    op249 := @ExternalFuns.op249 base ops
+    op250 := @ExternalFuns.op250 base ops
+    op251 := @ExternalFuns.op251 base ops
+    op252 := @ExternalFuns.op252 base ops
+    op253 := @ExternalFuns.op253 base ops
+    op254 := @ExternalFuns.op254 base ops
+    op255 := @ExternalFuns.op255 base ops
+    op256 := @ExternalFuns.op256 base ops
+    op257 := @ExternalFuns.op257 base ops
+    op258 := @ExternalFuns.op258 base ops
+    op259 := @ExternalFuns.op259 base ops
+    op260 := @ExternalFuns.op260 base ops
+    op261 := @ExternalFuns.op261 base ops
+  }
+
+theorem kind_retained (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    (selected base F ops).op23 = ops.op23 := rfl
+
+theorem formatter_erased (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base)
+    (e : aspis_core.r0.Error) (fmt : F) :
+    (selected base F ops).op85 e fmt = .div := rfl
+
+#print axioms kind_retained
+#print axioms formatter_erased
+end R1Z.PDict_FormatterDictionaryMap

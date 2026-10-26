@@ -7,7 +7,9 @@ for p in sorted(e.glob('pdict-*')):
  if not p.is_dir():continue
  q=p/'receipt.json'
  if q.exists():
-  x=json.loads(q.read_text());rows.append({k:x.get(k) for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','cgroup_memory_peak_bytes','cgroup_swap_peak_bytes','target','limits','print_axioms','expected_work']})
+  x=json.loads(q.read_text())
+  if 'kani' not in x.get('target',[]):continue
+  rows.append({k:x.get(k) for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','cgroup_memory_peak_bytes','cgroup_swap_peak_bytes','target','limits','print_axioms','expected_work']})
  elif (p/'manual-stop.json').exists():
   rows.append(dict(attempt=p.name,exit_status='scope stopped explicitly',wall_seconds=None,peak_rss_kib=None,swaps=None,qualification='Constant-EINTR retry path isolated and stopped; stopping the entire scope also killed the receipt writer. Final resource counters unavailable. Rejected, no validation claim. See preflight/time/stdout and manual-stop.'))
 rows.sort(key=lambda x:int(x['attempt'].split('-')[-1]));assert len({x['attempt'] for x in rows})==len(rows)

@@ -1,0 +1,54 @@
+import R1Z.PDict_OwnedErrorSource
+import R1Z.PDict_OwnedErrorDictionary
+import R1Z.PDict_ResultTransport
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_OwnedErrorCorrect
+open Aeneas Aeneas.Std Result ProverRwFull
+abbrev Kind := core.io.error.ErrorKind
+abbrev Owned := PDict_OwnedErrorSource.owned_error.OwnedError
+abbrev Observation := PDict_OwnedErrorSource.owned_error.Observation
+
+def encode (k : Kind) : Owned := ⟨k⟩
+def decode (e : Owned) : Kind := e.kind
+
+theorem decode_encode (k : Kind) : decode (encode k) = k := rfl
+theorem encode_decode (e : Owned) : encode (decode e) = e := by cases e; rfl
+
+theorem observe_success (b : Bool) :
+    PDict_OwnedErrorSource.owned_error_observe (.Ok b) = .ok (⟨b,none⟩ : Observation) := rfl
+
+theorem observe_error (k : Kind) :
+    PDict_OwnedErrorSource.owned_error_observe (.Err (encode k)) =
+      .ok (⟨false,some k⟩ : Observation) := rfl
+
+theorem open_error (k : Kind) :
+    PDict_OwnedErrorSource.owned_error_open (encode k) =
+      .ok (if k = .AlreadyExists then core.result.Result.Ok false else .Err (encode k)) := by
+  change (do
+    let b ← PDict_ErrorKind.eq k .AlreadyExists
+    if b then .ok (.Ok false) else .ok (.Err (encode k))) = _
+  rw [PDict_ErrorKind.eq_exact]
+  by_cases h : k = .AlreadyExists
+  · simp only [h, decide_true]
+    rfl
+  · simp only [h, decide_false]
+    rfl
+
+/-- Source-extracted owned representation, with no unknown dynamic payload and
+no native representation assumption introduced by the Lean codec. -/
+theorem open_observation (k : Kind) :
+    (do
+      let r ← PDict_OwnedErrorSource.owned_error_open (encode k)
+      PDict_OwnedErrorSource.owned_error_observe r) =
+    .ok (if k = .AlreadyExists then (⟨false,none⟩ : Observation) else ⟨false,some k⟩) := by
+  rw [open_error]
+  by_cases h : k = .AlreadyExists <;> simp only [h, if_true, if_false] <;> rfl
+
+#print axioms decode_encode
+#print axioms encode_decode
+#print axioms observe_success
+#print axioms observe_error
+#print axioms open_error
+#print axioms open_observation
+end R1Z.PDict_OwnedErrorCorrect

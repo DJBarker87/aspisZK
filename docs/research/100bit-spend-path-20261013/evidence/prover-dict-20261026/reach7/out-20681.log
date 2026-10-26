@@ -1,0 +1,149 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FormatterReserveFallible.lean:12:133: error: unsolved goals
+b : ExternalTypes
+F : Type
+ops : ExternalFuns
+s : Store
+sd nonce : Std.Array U8 32#usize
+hs :
+  { directory := (store b F s).directory, last_error := none } =
+    store b F { directory := s.directory, last_error := none }
+v✝ : std.path.PathBuf
+a✝ : { directory := s.directory, last_error := none }.reservation_path nonce = Result.ok v✝
+⊢ (do
+      let options ← std.fs.OpenOptions.new
+      let (oo, write_back) ← options.write true
+      let (oo1, create_new_back) ← oo.create_new true
+      let (oo3, mode_back) ←
+        std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode (write_back (create_new_back oo1)) 384#u32
+      let r ← std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath (mode_back oo3) v✝
+      match r with
+        | core.result.Result.Ok file => do
+          let s_1 ← lift aspis_prover.state_only_entropy.RESERVATION_MAGIC.to_slice
+          let (r1, file1) ← std.fs.File.Insts.StdIoWrite.write_all file s_1
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let s1 ← lift sd.to_slice
+              let (r2, file2) ← std.fs.File.Insts.StdIoWrite.write_all file1 s1
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let s2 ← lift nonce.to_slice
+                  let (r3, file3) ← std.fs.File.Insts.StdIoWrite.write_all file2 s2
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue a => do
+                      let r4 ← file3.sync_all
+                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue a => do
+                          let p ← std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref (store b F s).directory
+                          let r5 ← aspis_prover.state_only_entropy.sync_directory p
+                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                          match cf4 with
+                            | core.ops.control_flow.ControlFlow.Continue a =>
+                              Result.ok
+                                (core.result.Result.Ok true, store b F { directory := s.directory, last_error := none })
+                            | core.ops.control_flow.ControlFlow.Break residual => do
+                              let r6 ←
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                                    (core.convert.FromSame std.io.error.Error) residual
+                              Result.ok (r6, store b F { directory := s.directory, last_error := none })
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r6 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                                (core.convert.FromSame std.io.error.Error) residual
+                          Result.ok (r6, store b F { directory := s.directory, last_error := none })
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r6 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                            (core.convert.FromSame std.io.error.Error) residual
+                      Result.ok (r6, store b F { directory := s.directory, last_error := none })
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                        (core.convert.FromSame std.io.error.Error) residual
+                  Result.ok (r6, store b F { directory := s.directory, last_error := none })
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r6 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                    (core.convert.FromSame std.io.error.Error) residual
+              Result.ok (r6, store b F { directory := s.directory, last_error := none })
+        | core.result.Result.Err error => do
+          let ek ← error.kind
+          let b_1 ← core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq ek core.io.error.ErrorKind.AlreadyExists
+          let r6 ←
+            if b_1 = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)
+          Result.ok (r6, store b F { directory := s.directory, last_error := none })) =
+    do
+    let a ← std.fs.OpenOptions.new
+    let a ← a.write true
+    resultMap (pairStore b F)
+        (let (oo, write_back) := a
+        do
+        let (oo1, create_new_back) ← oo.create_new true
+        let (oo3, mode_back) ←
+          std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode (write_back (create_new_back oo1)) 384#u32
+        let r ← std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath (mode_back oo3) v✝
+        match r with
+          | core.result.Result.Ok file => do
+            let s_1 ← lift aspis_prover.state_only_entropy.RESERVATION_MAGIC.to_slice
+            let (r1, file1) ← std.fs.File.Insts.StdIoWrite.write_all file s_1
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let s1 ← lift sd.to_slice
+                let (r2, file2) ← std.fs.File.Insts.StdIoWrite.write_all file1 s1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    let s2 ← lift nonce.to_slice
+                    let (r3, file3) ← std.fs.File.Insts.StdIoWrite.write_all file2 s2
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        let r4 ← file3.sync_all
+                        let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                        match cf3 with
+                          | core.ops.control_flow.ControlFlow.Continue a => do
+                            let p ← std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref s.directory
+                            let r5 ← aspis_prover.state_only_entropy.sync_directory p
+                            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                            match cf4 with
+                              | core.ops.control_flow.ControlFlow.Continue a =>
+                                Result.ok (core.result.Result.Ok true, { directory := s.directory, last_error := none })
+                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                let r6 ←
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Bool (core.convert.FromSame std.io.error.Error) residual
+                                Result.ok (r6, { directory := s.directory, last_error := none })
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r6 ←
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                                  (core.convert.FromSame std.io.error.Error) residual
+                            Result.ok (r6, { directory := s.directory, last_error := none })
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r6 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                              (core.convert.FromSame std.io.error.Error) residual
+                        Result.ok (r6, { directory := s.directory, last_error := none })
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r6 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                          (core.convert.FromSame std.io.error.Error) residual
+                    Result.ok (r6, { directory := s.directory, last_error := none })
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r6 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                      (core.convert.FromSame std.io.error.Error) residual
+                Result.ok (r6, { directory := s.directory, last_error := none })
+          | core.result.Result.Err error => do
+            let ek ← error.kind
+            let b_1 ←
+              core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq ek core.io.error.ErrorKind.AlreadyExists
+            let r6 ←
+              if b_1 = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)
+            Result.ok (r6, { directory := s.directory, last_error := none }))
+'R1Z.PDict_FormatterReserveFallible.fallible' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
