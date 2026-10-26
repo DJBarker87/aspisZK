@@ -27,6 +27,12 @@ First compile corrected `PV_CB_Op105Funs` (27100 if still unused), then
 `PV_CB_CandidateDictionary`, five projection groups and
 `PV_CB_CandidateAudit`. The audit now prints axioms for both all 18 published
 source theorems and all 18 joint projections. It is not yet run.
+The uncompiled op105 Exact import was narrowed from `PV_CB_State` to
+`ProverRwFullExternalFuns`; its name/type is unchanged. It now needs only
+its own Types/Funs and the generated interface, rather than the whole worker
+selection chain. `RESUME3-DEPENDENCY-ORDER.json` records the current own-module
+source order for these pending targets; actual object availability and coherent
+dependency fingerprints still await the restored host gate.
 
 ## Prepared rows, retaining published interfaces
 
