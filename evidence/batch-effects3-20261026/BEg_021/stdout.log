@@ -1,0 +1,7 @@
+AspisR1.Port4B_Bounds.count : ∀ (batch : Aeneas.Std.Usize),
+  (↑(AspisR1.Port4B_TreeCuts.count batch) = if batch = 0#usize then 10 else 12) ∧
+    ↑(AspisR1.Port4B_TreeCuts.lo batch) = if ↑batch = 0 then 0 else 10
+'AspisR1.Port4B_Bounds.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Bounds.slot : ∀ (batch kind : Aeneas.Std.Usize),
+  ↑batch < 2 → ↑kind < 3 → ↑(AspisR1.Port4B_TreeCuts.slot batch kind) = 3 * ↑batch + ↑kind
+'AspisR1.Port4B_Bounds.slot' depends on axioms: [propext, Classical.choice, Quot.sound]

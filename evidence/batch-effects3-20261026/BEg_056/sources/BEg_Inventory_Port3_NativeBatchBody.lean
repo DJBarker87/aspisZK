@@ -1,0 +1,12 @@
+import Port3_NativeBatchBody
+/- Focused L166 kernel boundary inventory. No native simulation instance asserted. -/
+#print AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool.call_mut
+#print AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnOnceTupleSharedSliceU8Bool.call_once
+#print AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnOnceTupleSharedSliceU8Bool
+#print AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+#print AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+#print AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+#print AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+#print AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values
+#print AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle
+#print AspisR1.Port3_NativeBatchBody.Ops

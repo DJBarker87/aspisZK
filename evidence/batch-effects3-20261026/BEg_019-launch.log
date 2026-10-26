@@ -1,0 +1,38 @@
+{"attempt": "BEg_019", "exit_status": 0, "wall_seconds": 1.9141031589824706, "peak_rss_kib": "4402492", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_AnyFalse.body_nil' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_AnyFalse.body_cons' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_AnyFalse.all_chunks' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_AnyFalse.body_nil : ∀
+  (predicate : Aeneas.Std.core.ops.function.FnMut Unit (Aeneas.Std.Slice Aeneas.Std.U8) Bool)
+  (remainder : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.Port3_BatchStd.anyBody (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8) predicate
+      ({ chunks := [], remainder := remainder }, ()) =
+    Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (false, { chunks := [], remainder := remainder }))
+'AspisR1.Port4B_AnyFalse.body_nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_AnyFalse.body_cons : ∀
+  (predicate : Aeneas.Std.core.ops.function.FnMut Unit (Aeneas.Std.Slice Aeneas.Std.U8) Bool)
+  (chunk : Aeneas.S
+...
+inder := remainder }, ()) =
+    Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (false, { chunks := [], remainder := remainder }))
+'AspisR1.Port4B_AnyFalse.body_nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_AnyFalse.body_cons : ∀
+  (predicate : Aeneas.Std.core.ops.function.FnMut Unit (Aeneas.Std.Slice Aeneas.Std.U8) Bool)
+  (chunk : Aeneas.Std.Slice Aeneas.Std.U8) (rest : List (Aeneas.Std.Slice Aeneas.Std.U8))
+  (remainder : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.Port3_BatchStd.anyBody (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8) predicate
+      ({ chunks := chunk :: rest, remainder := remainder }, ()) =
+    do
+    let (stop, state) ← predicate.call_mut () chunk
+    if stop = true then
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (true, { chunks := rest, remainder := remainder }))
+      else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont ({ chunks := rest, remainder := remainder }, state))
+'AspisR1.Port4B_AnyFalse.body_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_AnyFalse.all_chunks : ∀
+  (predicate : Aeneas.Std.core.ops.function.FnMut Unit (Aeneas.Std.Slice Aeneas.Std.U8) Bool)
+  (chunks : List (Aeneas.Std.Slice Aeneas.Std.U8)) (remainder : Aeneas.Std.Slice Aeneas.Std.U8)
+  (after : Aeneas.Std.core.slice.iter.ChunksExact Aeneas.Std.U8),
+  AspisR1.Port3_BatchStd.anyDefault (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8) predicate
+        { chunks := chunks, remainder := remainder } () =
+      Aeneas.Std.Result.ok (false, after) →
+    (∀ chunk ∈ chunks, predicate.call_mut () chunk = Aeneas.Std.Result.ok (false, ())) ∧ after.chunks = []
+'AspisR1.Port4B_AnyFalse.all_chunks' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r14ade42cf2e746899182cda5a81b1fbf.scope; invocation ID: e9b71248645e4ae5be38a81983a7fd9d

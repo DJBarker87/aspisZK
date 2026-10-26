@@ -1,0 +1,45 @@
+AspisR1.Port4B_LeafCut.iteration : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)) →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑proof).length = 57607 →
+        ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+            ∀ (q : Fin 22 → Fin 262144) (batch selected : ℕ) (kind lo n slot pos : Aeneas.Std.Usize)
+              (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+              (s : MultiproofConeRef.reference.Scratch),
+              selected ∈ AspisR1.OraclePortFrozenOrder.sortedPositions q batch ↑kind →
+                (↑lo = if batch = 0 then 0 else 10) →
+                  pos < n →
+                    ↑s.n < 16 →
+                      keys.index_usize pos =
+                          Aeneas.Std.Result.ok (AspisR1.MultiproofConeSortOrder.packed q batch (↑kind) selected) →
+                        ∀ (before : AspisR1.CheckpointBytes5Effect.Log),
+                          ∃ view,
+                            (AspisR1.Port4B_LeafInstall.install base).op2 proof
+                                  (AspisR1.Port4B_NativeLeaf.openingIndex lo
+                                    (AspisR1.MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+                                Aeneas.Std.Result.ok view ∧
+                              AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind view) =
+                                  AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected ∧
+                                AspisR1.CheckpointBytes5Effect.run D hash (AspisR1.Port4B_LeafCode.code kind view)
+                                      before =
+                                    Aeneas.Std.Result.ok
+                                      (AspisV8R19.SqueezeOracleBridge.encodeState
+                                          (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)),
+                                        before ++
+                                          [(AspisR1.Port4B_LeafCode.input kind view,
+                                              AspisV8R19.SqueezeOracleBridge.encodeState
+                                                (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)))]) ∧
+                                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                      (AspisR1.Port3_BatchStd.install (AspisR1.Port4B_LeafInstall.install base)) D proof
+                                      root kind hash lo n slot keys s.idx s.val s.n pos =
+                                    do
+                                    let out ←
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.MultiproofConeP6Batch.referenceLeaf parsed q (↑kind) selected s)).2
+                                    Aeneas.Std.Result.ok
+                                        (AspisR1.Port4B_LeafStep.project s (pos.wrapping_add 1#usize) out)
+'AspisR1.Port4B_LeafCut.iteration' depends on axioms: [propext, Classical.choice, Quot.sound]

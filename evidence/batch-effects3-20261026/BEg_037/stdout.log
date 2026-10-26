@@ -1,0 +1,35 @@
+AspisR1.Port4B_NativeLeaf.active : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n slot d pos : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val : AspisR1.Port3_NativeBatchCalls.Values),
+  pos < n →
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port3_BatchStd.install leaves) D
+        proof root tree hash lo n slot keys idx val d pos =
+      do
+      let key ← keys.index_usize pos
+      let view ← leaves.op2 proof (AspisR1.Port4B_NativeLeaf.openingIndex lo key)
+      let leaf ← leaves.op6 D hash tree view
+      AspisR1.Port4B_LeafStep.post idx val d (AspisR1.Port4B_NativeLeaf.decodedIndex key) leaf
+          (pos.wrapping_add 1#usize)
+'AspisR1.Port4B_NativeLeaf.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_NativeLeaf.step : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n slot pos : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch) (key : Aeneas.Std.U64)
+  (view : Aeneas.Std.Slice Aeneas.Std.U8) (leaf : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  pos < n →
+    ↑s.n < 16 →
+      keys.index_usize pos = Aeneas.Std.Result.ok key →
+        leaves.op2 proof (AspisR1.Port4B_NativeLeaf.openingIndex lo key) = Aeneas.Std.Result.ok view →
+          leaves.op6 D hash tree view = Aeneas.Std.Result.ok leaf →
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                (AspisR1.Port3_BatchStd.install leaves) D proof root tree hash lo n slot keys s.idx s.val s.n pos =
+              do
+              let out ← MultiproofConeRef.reference.leaf_step s (AspisR1.Port4B_NativeLeaf.decodedIndex key) leaf
+              Aeneas.Std.Result.ok (AspisR1.Port4B_LeafStep.project s (pos.wrapping_add 1#usize) out)
+'AspisR1.Port4B_NativeLeaf.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_NativeLeaf.decodedIndex : Aeneas.Std.U64 → Aeneas.Std.U32 :=
+fun key => Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 (key.wrapping_shr 8#u32)
+def AspisR1.Port4B_NativeLeaf.openingIndex : Aeneas.Std.Usize → Aeneas.Std.U64 → Aeneas.Std.Usize :=
+fun lo key => lo.wrapping_add (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize (key &&& 255#u64))

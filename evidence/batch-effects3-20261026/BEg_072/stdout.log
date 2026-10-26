@@ -1,0 +1,69 @@
+AspisR1.SdkC_Replay.replay_bound : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Replay.replay p q)).1.length ≤ 1040
+'AspisR1.SdkC_Replay.replay_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SdkC_Replay.firstReads_append_le : ∀ {I A : Type} [inst : DecidableEq I]
+  (table : AspisV8PairedCommitment.Table I A) (left right : List (I × A)),
+  FS.firstReads table (left ++ right) ≤ FS.firstReads table left + right.length
+'AspisR1.SdkC_Replay.firstReads_append_le' depends on axioms: [propext, Quot.sound]
+@AspisR1.SdkC_Replay.augmented_bound : ∀ {A : Type}
+  (source : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A)
+  (prepare : A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H source).1 ≤ Q) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      FS.firstReads FS.emptyTable
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Replay.augmented source prepare)).1 ≤
+        Q + 1040
+'AspisR1.SdkC_Replay.augmented_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SdkC_Replay.collision_bound : ∀ {A : Type}
+  (source : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A)
+  (prepare : A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H source).1 ≤ Q) →
+    (AspisV8R19.MemoizedProgramLaw.lazyMean (AspisR1.SdkC_Replay.augmented source prepare) FS.emptyTable fun view =>
+        AspisV8R19.CausalFirstHitUnionBound.indicator
+          (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q + 1040) view)) ≤
+      6 * ↑(Q + 1040) ^ 2 / 256 ^ 32
+'AspisR1.SdkC_Replay.collision_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Replay.cut_append : ∀
+  (log suffix : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State))
+  (frame : AspisV8R19.DuplexFrames.Bytes),
+  FS2.Duplex.Read log frame →
+    AspisR1.BinRawByteCutRecovery.cut (log ++ suffix) frame = AspisR1.BinRawByteCutRecovery.cut log frame
+'AspisR1.SdkC_Replay.cut_append' depends on axioms: [propext]
+AspisR1.SdkC_Replay.recover_or_collision : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored : AspisV8R19.DuplexFrames.Bytes) (p : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.OraclePortCompactDraft.parse stored = some p →
+    ∀ (q : Fin 22 → Fin 262144),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Replay.replay p q)).2 = true →
+        ∀ (log : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)) (Q : ℕ),
+          (∀ a ∈ log, a.2 = H a.1) →
+            FS.firstReads FS.emptyTable log ≤ Q →
+              ∀ kind < 3,
+                ∀ (frame : AspisV8R19.DuplexFrames.Bytes) (j : Fin 5),
+                  FS2.Duplex.Read log frame →
+                    AspisR1.BinRawByteCollisionTargets.pred j frame =
+                        some (AspisR1.OraclePortBatchDraft.committedRoot p kind) →
+                      FS.hitsBad
+                          (AspisR1.AllAddressCollision.bad AspisR1.SelectedTranscriptParams.params.iv
+                            AspisR1.BinRawByteCollisionTargets.pred (Q + 1040))
+                          FS.emptyTable
+                          (log ++ (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Replay.replay p q)).1) ∨
+                        ∀ pos < 22,
+                          AspisR1.OraclePortAllSelectedRecoveryC6.recovered log frame p kind
+                              (AspisR1.OraclePortSelectedDraft.index q kind pos) =
+                            some (AspisR1.OraclePortPackedChoiceC4.payload p kind pos)
+'AspisR1.SdkC_Replay.recover_or_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.SdkC_Replay.replay : AspisR1.OraclePortCompactDraft.Parsed →
+  (Fin 22 → Fin 262144) →
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool :=
+fun p q => AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortBatchDraft.slots
+def AspisR1.SdkC_Replay.augmented : {A : Type} →
+  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A →
+    (A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)) →
+      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A :=
+fun {A} source prepare =>
+  AspisV8R19.OracleProgramOps.bind source fun value =>
+    AspisV8R19.OracleProgramOps.bind (AspisR1.SdkC_Replay.replay (prepare value).1 (prepare value).2) fun x =>
+      AspisV8R19.MemoizedProgramLaw.Program.done value

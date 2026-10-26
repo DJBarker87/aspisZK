@@ -1,0 +1,29 @@
+{"attempt": "BEg_064", "exit_status": 0, "wall_seconds": 2.2715497629833408, "peak_rss_kib": "5238488", "swaps": "0", "print_axioms": ["'AspisR1.Op5T_Cuts.first_batch' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Op5T_Cuts.second_batch' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Op5T_Cuts.first_batch : ∀ (ops : AspisR1CurrentCaller.Ops) {Hash : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash) (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (split : Aeneas.Std.Usize) (hash : Hash) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (g : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AspisR1CurrentCaller.Tx1Reachability.afterPrepare ops D pub proof split hash none p g =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    ∃ folded, ops.op6 D proof p folded 0#usize hash = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR
+...
+AspisR1.Op5T_Cuts.first_batch : ∀ (ops : AspisR1CurrentCaller.Ops) {Hash : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash) (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (split : Aeneas.Std.Usize) (hash : Hash) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (g : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AspisR1CurrentCaller.Tx1Reachability.afterPrepare ops D pub proof split hash none p g =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    ∃ folded, ops.op6 D proof p folded 0#usize hash = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Op5T_Cuts.first_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Op5T_Cuts.second_batch : ∀ (ops : VTop_Stages.Ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8),
+  VTop_Stages.verifier.candidate.tx2_common ops D pub proof checkpoint hash none =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    ∃ p folded, ops.op5 D proof p folded 1#usize hash = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Op5T_Cuts.second_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r72a68cb9f7c4453480de316cfb9253c8.scope; invocation ID: 3bbd0b0d21c64ec5913f8a3011bb4ad3

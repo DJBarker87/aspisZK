@@ -1,0 +1,42 @@
+{"attempt": "BEg_047", "exit_status": 0, "wall_seconds": 2.076443712983746, "peak_rss_kib": "4404424", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_SlotInstall.offset_bound' depends on axioms: [propext]", "'AspisR1.Port4B_SlotInstall.offset_step' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port4B_SlotInstall.physical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_SlotInstall.caller' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_SlotInstall.offset_bound : ∀ n ≤ 6, AspisR1.OraclePortSelectedDraft.slotStart n ≤ 57607
+'AspisR1.Port4B_SlotInstall.offset_bound' depends on axioms: [propext]
+AspisR1.Port4B_SlotInstall.offset_step : ∀ (n : ℕ),
+  AspisR1.OraclePortSelectedDraft.slotStart (n + 1) =
+    AspisR1.OraclePortSelectedDraft.slotStart n + 32 * AspisR1.OraclePortSelectedDraft.capacity n
+'AspisR1.Port4B_SlotInstall.offset_step' depends on axioms: [propext, Quot.sound]
+AspisR1.Port4B_SlotInstall.physical : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+      parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+
+...
+s.Std.Slice Aeneas.Std.U8),
+      (↑proof).length = 57607 →
+        parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+          ∀ (b k : ℕ),
+            b < 2 →
+              k < 3 →
+                ∀ (slot : Aeneas.Std.Usize),
+                  ↑slot = 3 * b + k →
+                    AspisR1.Port4B_SlotInstall.nodeSlot proof slot = Aeneas.Std.Result.ok (c.nodes b k)
+'AspisR1.Port4B_SlotInstall.caller' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_SlotInstall.offset : (n : ℕ) → n ≤ 6 → Aeneas.Std.Usize :=
+fun n bound => Aeneas.Std.UScalar.ofNat (AspisR1.OraclePortSelectedDraft.slotStart n) ⋯
+def AspisR1.Port4B_SlotInstall.nodeSlot : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8) :=
+fun proof slot =>
+  if small : ↑slot < 6 then
+    Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+      { start := AspisR1.Port4B_SlotInstall.offset ↑slot ⋯, «end» := AspisR1.Port4B_SlotInstall.offset (↑slot + 1) ⋯ }
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+def AspisR1.Port4B_SlotInstall.install : AspisR1.Port3_NativeBatchBody.Ops → AspisR1.Port3_NativeBatchBody.Ops :=
+fun base =>
+  have __src := AspisR1.Port4B_CountInstall.install base;
+  { op0 := @AspisR1.Port3_NativeBatchBody.Ops.op0 __src, op1 := @AspisR1.Port3_NativeBatchBody.Ops.op1 __src,
+    op2 := __src.op2, op3 := AspisR1.Port4B_SlotInstall.nodeSlot, op4 := __src.op4, op5 := __src.op5,
+    op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 __src, op7 := __src.op7, op8 := __src.op8, op9 := __src.op9,
+    op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 __src, op11 := __src.op11, op12 := __src.op12, op13 := __src.op13,
+    unwrap8 := __src.unwrap8 }
+
+Running as unit: run-r481b5b4fb9a24aa5b9f9f1f5cd0f77e3.scope; invocation ID: a216c324c1db44abb245d7a3e5324dfb

@@ -1,0 +1,42 @@
+@AspisR1.GExq_BatchSource.current_source : ∀ {Hash : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash) (hash : Hash),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), D.digest hash parts = hashv parts) →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1CurrentCaller.verifier.Prepared)
+      (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+      AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_Source.dictionary hashv) ()
+          (AspisR1.GExq_BatchSource.current D hash proof p root) =
+        AspisR1.Op5T_Install.currentBatch AspisR1.Port4B_Install.leaves D proof p root 0#usize hash
+'AspisR1.GExq_BatchSource.current_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.GExq_BatchSource.stage_source : ∀ {Hash : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), D.digest hash parts = hashv parts) →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+      (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+      AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_Source.dictionary hashv) ()
+          (AspisR1.GExq_BatchSource.stage D hash proof p root) =
+        AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves D proof p root 1#usize hash
+'AspisR1.GExq_BatchSource.stage_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.GExq_BatchSource.current : {Hash : Type} →
+  AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash →
+    Hash →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1CurrentCaller.verifier.Prepared →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            AspisR1.SdkC_Source.Code (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error) :=
+fun {Hash} D hash proof p root =>
+  have E := { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest };
+  AspisR1.SdkC_BatchSource.mapCode AspisR1.Op5T_Install.currentError
+    (AspisR1.SdkC_BatchSource.code E hash proof p.queries p.roots root 0#usize)
+def AspisR1.GExq_BatchSource.stage : {Hash : Type} →
+  VTop_Stages.aspis_core.digest.Digest32 Hash →
+    Hash →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        VTop_Stages.verifier.Prepared →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            AspisR1.SdkC_Source.Code (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error) :=
+fun {Hash} D hash proof p root =>
+  have E := { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest };
+  AspisR1.SdkC_BatchSource.mapCode AspisR1.Op5T_Install.stageError
+    (AspisR1.SdkC_BatchSource.code E hash proof p.queries p.roots root 1#usize)

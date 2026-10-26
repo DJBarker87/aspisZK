@@ -1,0 +1,25 @@
+{"attempt": "BEg_086", "exit_status": 0, "wall_seconds": 2.0382733659935184, "peak_rss_kib": "5268084", "swaps": "0", "print_axioms": ["'AspisR1.GExp_ReadPrefix.retained_reads' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.GExp_ReadPrefix.retained_reads : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (before : AspisR1.SdkC_Source.Log),
+        ∃ kept remaining,
+          AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code before).2 =
+              AspisR1.SdkC_Source.readLog before ++ kept ∧
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 = kept ++ remain
+...
+@AspisR1.GExp_ReadPrefix.retained_reads : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (before : AspisR1.SdkC_Source.Log),
+        ∃ kept remaining,
+          AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code before).2 =
+              AspisR1.SdkC_Source.readLog before ++ kept ∧
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 = kept ++ remaining
+'AspisR1.GExp_ReadPrefix.retained_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-raadf883dd3d04bbfa614a1a905c3a455.scope; invocation ID: c281eaaf487e47fdb1fdf2b1c245ab95

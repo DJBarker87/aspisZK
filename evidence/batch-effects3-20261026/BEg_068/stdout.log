@@ -1,0 +1,30 @@
+AspisR1.SdkC_Oracle.readLog_append : ∀ (left right : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.readLog (left ++ right) = AspisR1.SdkC_Source.readLog left ++ AspisR1.SdkC_Source.readLog right
+'AspisR1.SdkC_Oracle.readLog_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Oracle.accepted_transport : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ {A : Type} (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Log) (value : A),
+        (AspisR1.SdkC_Source.run hashv code before).1 = Aeneas.Std.Result.ok value →
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).2 = Aeneas.Std.Result.ok value ∧
+            AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code before).2 =
+              AspisR1.SdkC_Source.readLog before ++
+                (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1
+'AspisR1.SdkC_Oracle.accepted_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Oracle.accepted_exact : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ {A : Type} (code : AspisR1.SdkC_Source.Code A) (value : A),
+        (AspisR1.SdkC_Source.run hashv code []).1 = Aeneas.Std.Result.ok value →
+          AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code) =
+            (AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code []).2, Aeneas.Std.Result.ok value)
+'AspisR1.SdkC_Oracle.accepted_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.SdkC_Oracle.program : {A : Type} →
+  AspisR1.SdkC_Source.Code A →
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (Aeneas.Std.Result A) :=
+fun {A} x => AspisR1.CheckpointBytes5Effect.Code.brecOn x AspisR1.SdkC_Oracle.program._f

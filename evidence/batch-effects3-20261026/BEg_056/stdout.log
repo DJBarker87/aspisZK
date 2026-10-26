@@ -1,0 +1,357 @@
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool.call_mut : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure H →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result (Bool × AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure H) :=
+fun ops {H} aspis_coredigestDigest32Inst c tupled_args => do
+  let r ← Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 8#usize Aeneas.Std.core.marker.CopyU8 tupled_args
+  let a ← ops.unwrap8 r
+  let i ← Aeneas.Std.lift (Aeneas.Std.core.num.U64.from_le_bytes a)
+  Aeneas.Std.Result.ok (i != 0#u64, c)
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnOnceTupleSharedSliceU8Bool.call_once : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure H →
+        Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result Bool :=
+fun ops {H} aspis_coredigestDigest32Inst c s => do
+  let (b, _) ←
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool.call_mut
+        ops aspis_coredigestDigest32Inst c s
+  Aeneas.Std.Result.ok b
+@[reducible] def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnOnceTupleSharedSliceU8Bool : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.core.ops.function.FnOnce (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure H)
+        (Aeneas.Std.Slice Aeneas.Std.U8) Bool :=
+fun ops {H} aspis_coredigestDigest32Inst =>
+  {
+    call_once :=
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnOnceTupleSharedSliceU8Bool.call_once
+        ops aspis_coredigestDigest32Inst }
+@[reducible] def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.core.ops.function.FnMut (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure H)
+        (Aeneas.Std.Slice Aeneas.Std.U8) Bool :=
+fun ops {H} aspis_coredigestDigest32Inst =>
+  {
+    FnOnceInst :=
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnOnceTupleSharedSliceU8Bool
+        ops aspis_coredigestDigest32Inst,
+    call_mut :=
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool.call_mut
+        ops aspis_coredigestDigest32Inst }
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Usize →
+            H →
+              Aeneas.Std.Usize →
+                Aeneas.Std.Usize →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Array Aeneas.Std.U64 16#usize →
+                      Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+                        Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                          Aeneas.Std.Usize →
+                            Aeneas.Std.Usize →
+                              Aeneas.Std.Result
+                                (Aeneas.Std.ControlFlow
+                                  (Aeneas.Std.Array Aeneas.Std.U32 16#usize ×
+                                    Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize ×
+                                      Aeneas.Std.Usize × Aeneas.Std.Usize)
+                                  (Aeneas.Std.Array Aeneas.Std.U32 16#usize ×
+                                    Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize ×
+                                      Option (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error))) :=
+fun ops {H} aspis_coredigestDigest32Inst proof root tree hash lo n s keys idx val d key_position =>
+  if key_position < n then do
+    let key ← ops.op9 keys key_position
+    let key_position1 ← Aeneas.Std.lift (key_position.wrapping_add 1#usize)
+    let i ← Aeneas.Std.lift (key.wrapping_shr 8#u32)
+    let index ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 i)
+    let i1 ← Aeneas.Std.lift (key &&& 255#u64)
+    let i2 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize i1)
+    let i3 ← Aeneas.Std.lift (lo.wrapping_add i2)
+    let q ← ops.op2 proof i3
+    let leaf ← ops.op6 aspis_coredigestDigest32Inst hash tree q
+    if d > 0#usize then do
+        let i4 ← Aeneas.Std.lift (d.wrapping_sub 1#usize)
+        let b ← ops.op8 idx i4 index
+        if b = true then do
+            let i5 ← Aeneas.Std.lift (d.wrapping_sub 1#usize)
+            let b1 ← ops.op7 val i5 leaf
+            if b1 = true then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx, val, d, key_position1))
+              else
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.ControlFlow.done
+                    (idx, val, some (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle)))
+          else do
+            let idx1 ← idx.update d index
+            let val1 ← val.update d leaf
+            let d1 ← Aeneas.Std.lift (d.wrapping_add 1#usize)
+            Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx1, val1, d1, key_position1))
+      else do
+        let idx1 ← idx.update d index
+        let val1 ← val.update d leaf
+        let d1 ← Aeneas.Std.lift (d.wrapping_add 1#usize)
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx1, val1, d1, key_position1))
+  else do
+    let s1 ←
+      Aeneas.Std.core.array.Array.index
+          (Aeneas.Std.core.ops.index.IndexSlice
+            (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+          idx { «end» := d }
+    let o ← ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two s1
+    let r ← ops.op1 o AspisR1Stage2.verifier.Error.Merkle
+    let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+        let nodes ← ops.op3 proof s
+        let a ← ops.op12
+        let i ← a.index_usize s
+        if val1 > i then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, none))
+          else do
+            let i1 ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 32#usize val1)
+            let s2 ←
+              Aeneas.Std.core.slice.index.Slice.index
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) nodes { start := i1 }
+            let ce ← Aeneas.Std.core.slice.Slice.chunks_exact s2 8#usize
+            let (b, _) ←
+              ops.op0 (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+                  (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                    ops aspis_coredigestDigest32Inst)
+                  ce ()
+            if b = true then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, none))
+              else do
+                let i2 ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 32#usize val1)
+                let s3 ←
+                  Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8) nodes { «end» := i2 }
+                let (b1, idx1, val2) ←
+                  ops.op10 aspis_coredigestDigest32Inst hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx
+                      val d s3
+                if b1 = true then
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.ControlFlow.done (idx1, val2, some (Aeneas.Std.core.result.Result.Ok ())))
+                  else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx1, val2, none))
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+        let _ ←
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, none))
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+              Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                H →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Usize →
+                        Aeneas.Std.Array Aeneas.Std.U64 16#usize →
+                          Aeneas.Std.Usize →
+                            Aeneas.Std.Usize →
+                              Aeneas.Std.Result
+                                (Aeneas.Std.Array Aeneas.Std.U32 16#usize ×
+                                  Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize ×
+                                    Option (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)) :=
+fun ops {H} aspis_coredigestDigest32Inst proof root tree idx val hash lo n s keys d key_position =>
+  Aeneas.Std.loop
+    (fun x =>
+      match x with
+      | (idx1, val1, d1, key_position1) =>
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops aspis_coredigestDigest32Inst proof
+          root tree hash lo n s keys idx1 val1 d1 key_position1)
+    (idx, val, d, key_position)
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            Aeneas.Std.Usize →
+              Aeneas.Std.Usize →
+                Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+                  Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                    H →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error ×
+                          Aeneas.Std.Array Aeneas.Std.U32 16#usize ×
+                            Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize) :=
+fun ops {H} aspis_coredigestDigest32Inst proof queries root batch tree idx val hash => do
+  let (lo, hi) ←
+    if batch = 0#usize then do
+        let i ← ops.op13
+        Aeneas.Std.Result.ok (0#usize, i)
+      else do
+        let i ← ops.op13
+        Aeneas.Std.Result.ok (i, 22#usize)
+  let n ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_sub hi lo)
+  let i ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 3#usize batch)
+  let s ← Aeneas.Std.lift (i.wrapping_add tree)
+  let a ← ops.op4 queries lo n tree
+  let keys ← ops.op5 a n
+  let (idx1, val1, pending_return) ←
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops aspis_coredigestDigest32Inst proof root tree
+        idx val hash lo n s keys 0#usize 0#usize
+  match pending_return with
+    | none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+    | some r => Aeneas.Std.Result.ok (r, idx1, val1)
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+          Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 3#usize →
+            Aeneas.Std.Usize →
+              H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) :=
+fun ops {H} aspis_coredigestDigest32Inst proof queries roots batch hash =>
+  have idx := Aeneas.Std.Array.repeat 16#usize 0#u32;
+  have a := Aeneas.Std.Array.repeat 32#usize 0#u8;
+  have val := Aeneas.Std.Array.repeat 16#usize a;
+  do
+  let root0 ← roots.index_usize 0#usize
+  let root1 ← roots.index_usize 1#usize
+  let root2 ← roots.index_usize 2#usize
+  let (r, idx1, val1) ←
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree ops aspis_coredigestDigest32Inst proof queries root0
+        batch 0#usize idx val hash
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+      let (r1, idx2, val2) ←
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree ops aspis_coredigestDigest32Inst proof queries root1
+            batch 1#usize idx1 val1 hash
+      let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+          let (r2, _, _) ←
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree ops aspis_coredigestDigest32Inst proof queries
+                root2 batch 2#usize idx2 val2 hash
+          let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf2 with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+        (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1Stage2.verifier.Prepared →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            Aeneas.Std.Usize →
+              H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) :=
+fun ops {H} aspis_coredigestDigest32Inst proof p folded_root batch hash => do
+  let root0 ← p.roots.index_usize 0#usize
+  let root1 ← p.roots.index_usize 1#usize
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values ops aspis_coredigestDigest32Inst proof p.queries
+      (Aeneas.Std.Array.make 3#usize [root0, root1, folded_root] ⋯) batch hash
+structure AspisR1.Port3_NativeBatchBody.Ops : Type 1
+number of parameters: 0
+fields:
+  AspisR1.Port3_NativeBatchBody.Ops.op0 : {Self F Clause0_Item : Type} →
+      Aeneas.Std.core.iter.traits.iterator.Iterator Self Clause0_Item →
+        Aeneas.Std.core.ops.function.FnMut F Clause0_Item Bool → Self → F → Aeneas.Std.Result (Bool × Self)
+  AspisR1.Port3_NativeBatchBody.Ops.op1 : {T E : Type} →
+      Option T → E → Aeneas.Std.Result (Aeneas.Std.core.result.Result T E)
+  AspisR1.Port3_NativeBatchBody.Ops.op2 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8)
+  AspisR1.Port3_NativeBatchBody.Ops.op3 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8)
+  AspisR1.Port3_NativeBatchBody.Ops.op4 : Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+  AspisR1.Port3_NativeBatchBody.Ops.op5 : Aeneas.Std.Array Aeneas.Std.U64 16#usize →
+      Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+  AspisR1.Port3_NativeBatchBody.Ops.op6 : {H : Type} →
+      AspisR1Stage2.aspis_core.digest.Digest32 H →
+        H →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AspisR1.Port3_NativeBatchBody.Ops.op7 : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+      Aeneas.Std.Usize → Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Result Bool
+  AspisR1.Port3_NativeBatchBody.Ops.op8 : Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+      Aeneas.Std.Usize → Aeneas.Std.U32 → Aeneas.Std.Result Bool
+  AspisR1.Port3_NativeBatchBody.Ops.op9 : Aeneas.Std.Array Aeneas.Std.U64 16#usize →
+      Aeneas.Std.Usize → Aeneas.Std.Result Aeneas.Std.U64
+  AspisR1.Port3_NativeBatchBody.Ops.op10 : {H : Type} →
+      AspisR1Stage2.aspis_core.digest.Digest32 H →
+        H →
+          AspisR1.Port3_NativeBatchBody.multiproof.Arity →
+            Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+              Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+                Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Slice Aeneas.Std.U8 →
+                      Aeneas.Std.Result
+                        (Bool ×
+                          Aeneas.Std.Array Aeneas.Std.U32 16#usize ×
+                            Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize)
+  AspisR1.Port3_NativeBatchBody.Ops.op11 : AspisR1.Port3_NativeBatchBody.multiproof.Arity →
+      Aeneas.Std.Slice Aeneas.Std.U32 → Aeneas.Std.Result (Option Aeneas.Std.Usize)
+  AspisR1.Port3_NativeBatchBody.Ops.op12 : Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.Usize 6#usize)
+  AspisR1.Port3_NativeBatchBody.Ops.op13 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1.Port3_NativeBatchBody.Ops.unwrap8 : Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 8#usize)
+        Aeneas.Std.core.array.TryFromSliceError →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 8#usize)
+constructor:
+  AspisR1.Port3_NativeBatchBody.Ops.mk
+    (op0 :
+      {Self F Clause0_Item : Type} →
+        Aeneas.Std.core.iter.traits.iterator.Iterator Self Clause0_Item →
+          Aeneas.Std.core.ops.function.FnMut F Clause0_Item Bool → Self → F → Aeneas.Std.Result (Bool × Self))
+    (op1 : {T E : Type} → Option T → E → Aeneas.Std.Result (Aeneas.Std.core.result.Result T E))
+    (op2 op3 : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8))
+    (op4 :
+      Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U64 16#usize))
+    (op5 :
+      Aeneas.Std.Array Aeneas.Std.U64 16#usize →
+        Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U64 16#usize))
+    (op6 :
+      {H : Type} →
+        AspisR1Stage2.aspis_core.digest.Digest32 H →
+          H →
+            Aeneas.Std.Usize →
+              Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (op7 :
+      Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+        Aeneas.Std.Usize → Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Result Bool)
+    (op8 : Aeneas.Std.Array Aeneas.Std.U32 16#usize → Aeneas.Std.Usize → Aeneas.Std.U32 → Aeneas.Std.Result Bool)
+    (op9 : Aeneas.Std.Array Aeneas.Std.U64 16#usize → Aeneas.Std.Usize → Aeneas.Std.Result Aeneas.Std.U64)
+    (op10 :
+      {H : Type} →
+        AspisR1Stage2.aspis_core.digest.Digest32 H →
+          H →
+            AspisR1.Port3_NativeBatchBody.multiproof.Arity →
+              Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+                  Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Slice Aeneas.Std.U8 →
+                        Aeneas.Std.Result
+                          (Bool ×
+                            Aeneas.Std.Array Aeneas.Std.U32 16#usize ×
+                              Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize))
+    (op11 :
+      AspisR1.Port3_NativeBatchBody.multiproof.Arity →
+        Aeneas.Std.Slice Aeneas.Std.U32 → Aeneas.Std.Result (Option Aeneas.Std.Usize))
+    (op12 : Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.Usize 6#usize)) (op13 : Aeneas.Std.Result Aeneas.Std.Usize)
+    (unwrap8 :
+      Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 8#usize) Aeneas.Std.core.array.TryFromSliceError →
+        Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 8#usize)) :
+    AspisR1.Port3_NativeBatchBody.Ops

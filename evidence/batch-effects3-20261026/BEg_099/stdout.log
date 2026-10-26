@@ -1,0 +1,36 @@
+@AspisR1.P6C_EventTransport.inclusion : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (code : AspisR1.SdkC_Source.Code A)
+        (bad : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) → A → Prop),
+        AspisR1.P6C_EventTransport.realEvent hashv code bad → AspisR1.P6C_EventTransport.idealEvent H code bad
+'AspisR1.P6C_EventTransport.inclusion' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.P6C_EventTransport.mass : ∀ {I A : Type} (worlds : Finset I) (weight : I → ℚ),
+  (∀ i ∈ worlds, 0 ≤ weight i) →
+    ∀ (hashv : I → AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+      (sha256 H : I → AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (∀ (i : I), AspisR1.S2W_ExtractionBoundary.P1 (sha256 i) (H i)) →
+        (∀ (i : I), AspisR1.S2W_ExtractionBoundary.RuntimeSyscall (hashv i) (sha256 i)) →
+          ∀ (code : I → AspisR1.SdkC_Source.Code A)
+            (bad : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) → A → Prop),
+            (∑ i ∈ worlds, if AspisR1.P6C_EventTransport.realEvent (hashv i) (code i) bad then weight i else 0) ≤
+              ∑ i ∈ worlds, if AspisR1.P6C_EventTransport.idealEvent (H i) (code i) bad then weight i else 0
+'AspisR1.P6C_EventTransport.mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.P6C_EventTransport.realEvent : {A : Type} →
+  (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+    AspisR1.SdkC_Source.Code A →
+      (List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) → A → Prop) → Prop :=
+fun {A} hashv code bad =>
+  ∃ value,
+    (AspisR1.SdkC_Source.run hashv code []).1 = Aeneas.Std.Result.ok value ∧
+      bad (AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code []).2) value
+def AspisR1.P6C_EventTransport.idealEvent : {A : Type} →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    AspisR1.SdkC_Source.Code A →
+      (List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) → A → Prop) → Prop :=
+fun {A} H code bad =>
+  ∃ value,
+    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).2 = Aeneas.Std.Result.ok value ∧
+      bad (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 value

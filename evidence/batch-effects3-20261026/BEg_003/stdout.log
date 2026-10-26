@@ -1,0 +1,19 @@
+BEg_Terminal.lean:46:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (observe (BEf_Carrier.run call (terminal code) state before)).1
+in the target expression
+  BEg_Observation.accepted (BEf_Carrier.run call (terminal code) state before).1 = some a ↔
+    BEg_Observation.accepted (BEf_Carrier.run call code state before).1 = some a
+
+S A E : Type
+call : Parts → S → Result Digest × S
+code : Code (core.result.Result A E)
+state : S
+before : Log
+a : A
+same :
+  (observe (BEf_Carrier.run call (terminal code) state before)).1 = (observe (BEf_Carrier.run call code state before)).1
+⊢ BEg_Observation.accepted (BEf_Carrier.run call (terminal code) state before).1 = some a ↔
+    BEg_Observation.accepted (BEf_Carrier.run call code state before).1 = some a
+'AspisR1.BEg_Terminal.transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEg_Terminal.effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEg_Terminal.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

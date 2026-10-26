@@ -1,0 +1,21 @@
+AspisR1.Port4B_SortInstall.key_stream : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (raw sorted : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (n : Aeneas.Std.Usize),
+  ↑n ≤ 16 →
+    0 < ↑n →
+      List.take ↑n ↑raw =
+          List.map (AspisR1.MultiproofConeSortOrder.packed q batch kind)
+            (AspisR1.OraclePortSelectedDraft.batchPositions batch) →
+        (AspisR1.Port4B_SortInstall.install base).op5 raw n = Aeneas.Std.Result.ok sorted →
+          (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind).length = ↑n ∧
+            AspisR1.Port4B_LeafLoop.KeyStream q batch kind sorted 0#usize
+              (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind)
+'AspisR1.Port4B_SortInstall.key_stream' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_SortInstall.install : AspisR1.Port3_NativeBatchBody.Ops → AspisR1.Port3_NativeBatchBody.Ops :=
+fun base =>
+  have __src := AspisR1.Port4B_LeafInstall.install base;
+  { op0 := @AspisR1.Port3_NativeBatchBody.Ops.op0 __src, op1 := @AspisR1.Port3_NativeBatchBody.Ops.op1 __src,
+    op2 := __src.op2, op3 := __src.op3, op4 := __src.op4,
+    op5 := fun raw n => MultiproofSortRef.sort_reference.sort_rows raw 1#usize n,
+    op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 __src, op7 := __src.op7, op8 := __src.op8, op9 := __src.op9,
+    op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 __src, op11 := __src.op11, op12 := __src.op12, op13 := __src.op13,
+    unwrap8 := __src.unwrap8 }

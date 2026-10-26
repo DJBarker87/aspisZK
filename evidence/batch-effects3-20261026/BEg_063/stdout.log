@@ -1,0 +1,41 @@
+@AspisR1.Op5T_CarrierGap.first_marks : ∀ {E : Type} {ops : AdapterRw.Ops}
+  (base : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops) (read : E),
+  AspisR1.Op5T_Marks.FirstMarks base →
+    AspisR1.Op5T_Marks.FirstMarks (AspisR1.Op5I_BatchEventCounterexample.inject base read)
+'AspisR1.Op5T_CarrierGap.first_marks' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Op5T_CarrierGap.second_marks : ∀ {E : Type} {ops : AdapterRw.Ops}
+  (base : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops) (read : E),
+  AspisR1.Op5T_Marks.SecondMarks base →
+    AspisR1.Op5T_Marks.SecondMarks (AspisR1.Op5I_BatchEventCounterexample.inject base read)
+'AspisR1.Op5T_CarrierGap.second_marks' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Op5T_CarrierGap.countermodel : ∀ {F : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (port :
+    AspisR1.S2W_ExpandedChildren.ChildConeJoin (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)
+      (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std)),
+  AspisR1.Op5T_Marks.FirstMarks port →
+    AspisR1.Op5T_Marks.SecondMarks port →
+      ∀ (event : AspisR1.S2W_Trace.Event),
+        AspisR1.S2W_OuterOccurrences.mark event = some false →
+          AspisR1.Op5T_Marks.accepted (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std) event →
+            ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+              (a : AspisV8R19.DuplexFrames.Bytes) (d : AspisV8R19.SourceDuplexStep.State),
+              d ≠ H a →
+                ∃ fake,
+                  AspisR1.Op5T_Marks.FirstMarks fake ∧
+                    AspisR1.Op5T_Marks.SecondMarks fake ∧
+                      (∃ before after,
+                          AspisR1.S2W_ExpandedChildren.events fake event =
+                            before ++
+                                [AspisR1.S2W_ExpandedTrace.Event.site AspisR1.S2LeadInterface.Site.batch0,
+                                  AspisR1.S2W_ExpandedTrace.Event.child (a, d)] ++
+                              after) ∧
+                        ∀ (R : Type)
+                          (code :
+                            AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                              AspisV8R19.SourceDuplexStep.State R),
+                          AspisR1.Op5I_AcceptedCarrierCounterexample.readEvents
+                              (AspisR1.S2W_ExpandedChildren.events fake event) ≠
+                            (AspisV8R19.MemoizedProgramLaw.eval H code).1
+'AspisR1.Op5T_CarrierGap.countermodel' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,29 @@
+{"attempt": "BEg_040", "exit_status": 0, "wall_seconds": 1.813852405990474, "peak_rss_kib": "4399648", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_Padding.chunks_zero' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_Padding.native_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_Padding.chunks_zero : ∀ (xs : List Aeneas.Std.U8),
+  xs.length % 8 = 0 → (∀ c ∈ (Aeneas.Std.List.toChunksExact 8 ⋯ xs).1, ∀ b ∈ c, b = 0#u8) → ∀ b ∈ xs, b = 0#u8
+'AspisR1.Port4B_Padding.chunks_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Padding.native_zero : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (padding : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑padding).length % 8 = 0 →
+    ∀ (ce after : Aeneas.Std.core.slice.iter.ChunksExact Aeneas.Std.U8),
+      Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce →
+        (AspisR1.Port3_BatchStd.install base)
+...
+AspisR1.Port4B_Padding.chunks_zero : ∀ (xs : List Aeneas.Std.U8),
+  xs.length % 8 = 0 → (∀ c ∈ (Aeneas.Std.List.toChunksExact 8 ⋯ xs).1, ∀ b ∈ c, b = 0#u8) → ∀ b ∈ xs, b = 0#u8
+'AspisR1.Port4B_Padding.chunks_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Padding.native_zero : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (padding : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑padding).length % 8 = 0 →
+    ∀ (ce after : Aeneas.Std.core.slice.iter.ChunksExact Aeneas.Std.U8),
+      Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce →
+        (AspisR1.Port3_BatchStd.install base).op0
+              (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+              (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                (AspisR1.Port3_BatchStd.install base) D)
+              ce () =
+            Aeneas.Std.Result.ok (false, after) →
+          ∀ b ∈ ↑padding, b = 0#u8
+'AspisR1.Port4B_Padding.native_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r116dbea1c3484d94b84fdb894d1c96fe.scope; invocation ID: fa89fb5a8d2a46f9bf17627e7a205c2d

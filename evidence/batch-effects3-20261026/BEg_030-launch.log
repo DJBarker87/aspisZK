@@ -1,0 +1,29 @@
+{"attempt": "BEg_030", "exit_status": 0, "wall_seconds": 1.9543197880266234, "peak_rss_kib": "4400356", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_KeyDecode.high' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_KeyDecode.low' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_KeyDecode.packed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_KeyDecode.high : ∀ (key : Aeneas.Std.U64),
+  ↑(AspisR1.Port4B_NativeLeaf.decodedIndex key) = ↑key / 256 % 4294967296
+'AspisR1.Port4B_KeyDecode.high' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_KeyDecode.low : ∀ (key : Aeneas.Std.U64),
+  ↑(Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize (key &&& 255#u64)) = ↑key % 256
+'AspisR1.Port4B_KeyDecode.low' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_KeyDecode.packed : ∀ (q : Fin 22 → Fin 262144) (batch kind pos : ℕ),
+  pos ∈ AspisR1.OraclePortSelectedDraft.batchPositions batch →
+    ∀ (lo : Aeneas.Std.Usize),
+      (↑lo = if batch = 0 then 0 else 10) →
+        ↑(AspisR1.Por
+...
+AspisR1.Port4B_KeyDecode.high : ∀ (key : Aeneas.Std.U64),
+  ↑(AspisR1.Port4B_NativeLeaf.decodedIndex key) = ↑key / 256 % 4294967296
+'AspisR1.Port4B_KeyDecode.high' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_KeyDecode.low : ∀ (key : Aeneas.Std.U64),
+  ↑(Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize (key &&& 255#u64)) = ↑key % 256
+'AspisR1.Port4B_KeyDecode.low' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_KeyDecode.packed : ∀ (q : Fin 22 → Fin 262144) (batch kind pos : ℕ),
+  pos ∈ AspisR1.OraclePortSelectedDraft.batchPositions batch →
+    ∀ (lo : Aeneas.Std.Usize),
+      (↑lo = if batch = 0 then 0 else 10) →
+        ↑(AspisR1.Port4B_NativeLeaf.decodedIndex (AspisR1.MultiproofConeSortOrder.packed q batch kind pos)) =
+            AspisR1.OraclePortSelectedDraft.index q kind pos ∧
+          ↑(AspisR1.Port4B_NativeLeaf.openingIndex lo (AspisR1.MultiproofConeSortOrder.packed q batch kind pos)) = pos
+'AspisR1.Port4B_KeyDecode.packed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb7f40e3da7b44424873444774d050c16.scope; invocation ID: 2fbc3cca30e5446eb9dbcd900a373641

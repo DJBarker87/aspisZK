@@ -1,0 +1,32 @@
+{"attempt": "BEg_044", "exit_status": 0, "wall_seconds": 1.9826107579865493, "peak_rss_kib": "4398832", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_Prepared.digest_of_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_Prepared.roots' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_Prepared.query_value' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_Prepared.digest_of_bytes : ∀ (native : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (model : AspisV8R19.SourceDuplexStep.State),
+  AspisR1.MultiproofConeCanonical.bytesOf ↑native = AspisV8R19.SourceDuplexStep.bytes model →
+    native = AspisV8R19.SqueezeOracleBridge.encodeState model
+'AspisR1.Port4B_Prepared.digest_of_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Prepared.roots : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+  AspisR1.CheckpointByt
+...
+AspisR1.Port4B_Prepared.digest_of_bytes : ∀ (native : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (model : AspisV8R19.SourceDuplexStep.State),
+  AspisR1.MultiproofConeCanonical.bytesOf ↑native = AspisV8R19.SourceDuplexStep.bytes model →
+    native = AspisV8R19.SqueezeOracleBridge.encodeState model
+'AspisR1.Port4B_Prepared.digest_of_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Prepared.roots : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am →
+    AspisR1.Port3_BatchStage.root0 p = AspisV8R19.SqueezeOracleBridge.encodeState (pm.roots 0) ∧
+      AspisR1.Port3_BatchStage.root1 p = AspisV8R19.SqueezeOracleBridge.encodeState (pm.roots 1)
+'AspisR1.Port4B_Prepared.roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Prepared.query_value : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am →
+    ∀ (j : Fin 22) (value : Aeneas.Std.U32),
+      p.queries.index_usize (↑j)#usize = Aeneas.Std.Result.ok value → ↑value = ↑(pm.queries j)
+'AspisR1.Port4B_Prepared.query_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2f27689e3fdd42c1b0ab67676b395337.scope; invocation ID: 614e4faa36534ce7bf4ddb170c0955ea

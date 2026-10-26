@@ -1,0 +1,26 @@
+AspisR1.Port4B_CountInstall.accepted_count : ∀ (front : Aeneas.Std.Slice Aeneas.Std.U32) (count : Aeneas.Std.Usize),
+  AspisR1.Port4B_CountInstall.nodeCount AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two front =
+      Aeneas.Std.Result.ok (some count) →
+    AspisR1.OraclePortFrozenOrder.wellFormed (List.map Aeneas.Std.UScalar.val ↑front) ∧
+      ↑count = AspisR1.OraclePortFrozenOrder.nodeCount 18 (List.map Aeneas.Std.UScalar.val ↑front) ∧ ↑count ≤ 288
+'AspisR1.Port4B_CountInstall.accepted_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_CountInstall.countValue : (is : List ℕ) →
+  AspisR1.OraclePortFrozenOrder.wellFormed is → Aeneas.Std.Usize :=
+fun is well => Aeneas.Std.UScalar.ofNat (AspisR1.MultiproofConeCountLevels.sourceCount 18 is) ⋯
+def AspisR1.Port4B_CountInstall.nodeCount : AspisR1.Port3_NativeBatchBody.multiproof.Arity →
+  Aeneas.Std.Slice Aeneas.Std.U32 → Aeneas.Std.Result (Option Aeneas.Std.Usize) :=
+fun arity is =>
+  match arity with
+  | AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two =>
+    if well : AspisR1.OraclePortFrozenOrder.wellFormed (List.map Aeneas.Std.UScalar.val ↑is) then
+      Aeneas.Std.Result.ok (some (AspisR1.Port4B_CountInstall.countValue (List.map Aeneas.Std.UScalar.val ↑is) well))
+    else Aeneas.Std.Result.ok none
+  | AspisR1.Port3_NativeBatchBody.multiproof.Arity.Eight => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+def AspisR1.Port4B_CountInstall.install : AspisR1.Port3_NativeBatchBody.Ops → AspisR1.Port3_NativeBatchBody.Ops :=
+fun base =>
+  have __src := AspisR1.Port4B_SortInstall.install base;
+  { op0 := @AspisR1.Port3_NativeBatchBody.Ops.op0 __src, op1 := @AspisR1.Port3_NativeBatchBody.Ops.op1 __src,
+    op2 := __src.op2, op3 := __src.op3, op4 := __src.op4, op5 := __src.op5,
+    op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 __src, op7 := __src.op7, op8 := __src.op8, op9 := __src.op9,
+    op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 __src, op11 := AspisR1.Port4B_CountInstall.nodeCount,
+    op12 := __src.op12, op13 := __src.op13, unwrap8 := __src.unwrap8 }

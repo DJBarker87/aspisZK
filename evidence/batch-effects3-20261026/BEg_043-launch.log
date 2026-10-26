@@ -1,0 +1,37 @@
+{"attempt": "BEg_043", "exit_status": 0, "wall_seconds": 2.2611826839856803, "peak_rss_kib": "4405592", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_PrepareCut.branch_pair' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_PrepareCut.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.Port4B_PrepareCut.branch_pair : ∀ {G : Type}
+  (r : Aeneas.Std.core.result.Result VTop_Stages.verifier.Prepared VTop_Stages.verifier.Error × G)
+  (p : VTop_Stages.verifier.Prepared),
+  Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r.1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue p) →
+    r = (Aeneas.Std.core.result.Result.Ok p, r.2)
+'AspisR1.Port4B_PrepareCut.branch_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_PrepareCut.tx1 : ∀ (base : VTop_Stages.Ops) {X : Type} (D : VTop_Stages.aspis_core.digest.Digest32 X)
+  (hash : X) (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0
+...
+repared VTop_Stages.verifier.Error × G)
+  (p : VTop_Stages.verifier.Prepared),
+  Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r.1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue p) →
+    r = (Aeneas.Std.core.result.Result.Ok p, r.2)
+'AspisR1.Port4B_PrepareCut.branch_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_PrepareCut.tx1 : ∀ (base : VTop_Stages.Ops) {X : Type} (D : VTop_Stages.aspis_core.digest.Digest32 X)
+  (hash : X) (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  VTop_Stages.verifier.candidate.tx1 (AspisR1.Port4B_FoldedCut.install base) D semantic pub proof split hash none =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    ∃ zero g p root view,
+      base.op1 = Aeneas.Std.Result.ok zero ∧
+        base.op7 D semantic proof hash none (Aeneas.Std.Array.repeat 29#usize zero) =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, g) ∧
+          Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+                proof { start := 7751#usize, «end» := 7783#usize } =
+              Aeneas.Std.Result.ok view ∧
+            Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 view =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) ∧
+              AspisR1.Port4B_Install.batch D proof p root 0#usize hash =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Port4B_PrepareCut.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rfa6df4bdb31b4b888ef8947ccb27e1af.scope; invocation ID: 6b1806c980234e15a96d09b1bd07d4c4

@@ -1,0 +1,37 @@
+{"attempt": "BEg_051", "exit_status": 0, "wall_seconds": 2.044299984991085, "peak_rss_kib": "4405416", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_TailRun.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_TailRun.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.Port4B_VerifyInstall.digest D) hash H binary occupied sibling
+      leaf →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑proof).length = 57607 →
+        ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+
+...
+neas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch)
+                          (outIdx : AspisR1.Port3_NativeBatchCalls.Indices)
+                          (outVal : AspisR1.Port3_NativeBatchCalls.Values),
+                          AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                (AspisR1.Port3_BatchStd.install (AspisR1.Port4B_VerifyInstall.install base)) D proof
+                                root kind hash lo n slot keys s.idx s.val s.n n =
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.ControlFlow.done
+                                  (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ()))) →
+                            ∃ nodes final,
+                              AspisR1.Port4B_SlotInstall.nodeSlot proof slot = Aeneas.Std.Result.ok nodes ∧
+                                AspisR1.MultiproofConeCanonical.bytesOf ↑nodes =
+                                    AspisR1.OraclePortCompactDraft.slice parsed.wire
+                                      (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + ↑kind))
+                                      (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + ↑kind)) ∧
+                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                          (AspisR1.MultiproofConeP6Batch.tailState
+                                            (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed b
+                                            (↑kind) nodes s)).2 =
+                                      (true, final) ∧
+                                    final.idx = outIdx ∧ final.val = outVal
+'AspisR1.Port4B_TailRun.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r69116887eafb4c9cbaadeb12b94dc926.scope; invocation ID: 853f48039c3a4028aa74dcea86e44948

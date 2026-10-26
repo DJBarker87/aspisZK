@@ -1,0 +1,37 @@
+{"attempt": "BEg_094", "exit_status": 0, "wall_seconds": 2.315383501991164, "peak_rss_kib": "5359280", "swaps": "0", "print_axioms": ["'AspisR1.RPx_RuntimePrefix.evaluation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.RPx_RuntimePrefix.binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.RPx_RuntimePrefix.acceptance' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.RPx_RuntimePrefix.evaluation : ∀
+  (prelude : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (runtime : AspisR1.F3T_Runtime.Runtime) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.RPx_RuntimePrefix.prepend prelude runtime) =
+    ((AspisV8R19.MemoizedProgramLaw.eval H prelude).1 ++ (AspisV8R19.MemoizedProgramLaw.eval H runtime).1,
+      (AspisV8R19.MemoizedProgramLaw.eval H runtime).2)
+'AspisR1.RPx_RuntimePrefix.evaluation' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.RPx_RuntimePrefix.binding : ∀ {F C : Type} (c : AspisR1.DrvC
+...
+moizedProgramLaw.eval H runtime).1,
+      (AspisV8R19.MemoizedProgramLaw.eval H runtime).2)
+'AspisR1.RPx_RuntimePrefix.evaluation' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.RPx_RuntimePrefix.binding : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (rust : AspisR1.F3T_TwoPass.Verifier)
+  (P : AspisR1.F3T_ByteCarrier.ByteProver) (runtime : AspisR1.F3T_Runtime.Runtime),
+  AspisR1.F3T_Runtime.StoredCarrierBinding c D rust P runtime →
+    ∀
+      (prelude :
+        AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit),
+      AspisR1.F3T_Runtime.StoredCarrierBinding c D rust P (AspisR1.RPx_RuntimePrefix.prepend prelude runtime)
+'AspisR1.RPx_RuntimePrefix.binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.RPx_RuntimePrefix.acceptance : ∀
+  (prelude : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (runtime : AspisR1.F3T_Runtime.Runtime) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (run : AspisR1.F3T_Experiment.RunView),
+  (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = some run →
+    run.2.2 = true →
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.RPx_RuntimePrefix.prepend prelude runtime)).2 = some run ∧
+        run.2.2 = true
+'AspisR1.RPx_RuntimePrefix.acceptance' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.RPx_RuntimePrefix.prepend : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+    AspisV8R19.SourceDuplexStep.State Unit →
+  AspisR1.F3T_Runtime.Runtime → AspisR1.F3T_Runtime.Runtime :=
+fun prelude runtime => AspisV8R19.OracleProgramOps.bind prelude fun x => runtime
+
+Running as unit: run-re580ecc8d78c454398eabc3c8ba78f0a.scope; invocation ID: 1545abe7913545f4aeb4c029e9fe203c

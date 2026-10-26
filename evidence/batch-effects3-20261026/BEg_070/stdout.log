@@ -1,0 +1,34 @@
+@AspisR1.SdkC_Accounting.attempts : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (code : AspisR1.SdkC_Source.Code A)
+  (before : AspisR1.SdkC_Source.Log) (n : ℕ),
+  AspisR1.SdkC_Accounting.Bounded n code →
+    List.length (AspisR1.SdkC_Source.run hashv code before).2 ≤ List.length before + n
+'AspisR1.SdkC_Accounting.attempts' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SdkC_Accounting.first_reads : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (code : AspisR1.SdkC_Source.Code A)
+  (n : ℕ),
+  AspisR1.SdkC_Accounting.Bounded n code →
+    FS.firstReads FS.emptyTable (AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code []).2) ≤ n
+'AspisR1.SdkC_Accounting.first_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SdkC_Accounting.ideal_reads : ∀ {A : Type} (code : AspisR1.SdkC_Source.Code A) (n : ℕ),
+  AspisR1.SdkC_Accounting.Bounded n code →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1.length ≤ n
+'AspisR1.SdkC_Accounting.ideal_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SdkC_Accounting.collision_bound : ∀ {A : Type} (code : AspisR1.SdkC_Source.Code A) (Q : ℕ),
+  AspisR1.SdkC_Accounting.Bounded Q code →
+    (AspisV8R19.MemoizedProgramLaw.lazyMean (AspisR1.SdkC_Oracle.program code) FS.emptyTable fun view =>
+        AspisV8R19.CausalFirstHitUnionBound.indicator
+          (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv Q view)) ≤
+      6 * ↑Q ^ 2 / 256 ^ 32
+'AspisR1.SdkC_Accounting.collision_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Accounting.leaf_range_budget : ∀ (opening : Aeneas.Std.Slice Aeneas.Std.U8) (tag : Aeneas.Std.U8)
+  (vs ve ss se : Aeneas.Std.Usize),
+  AspisR1.SdkC_Accounting.Bounded 1 (AspisR1.Port4B_LeafCode.codeFor opening tag vs ve ss se)
+'AspisR1.SdkC_Accounting.leaf_range_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Accounting.leaf_budget : ∀ (kind : Aeneas.Std.Usize) (opening : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.SdkC_Accounting.Bounded 1 (AspisR1.Port4B_LeafCode.code kind opening)
+'AspisR1.SdkC_Accounting.leaf_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.SdkC_Accounting.Bounded : {A : Type} → ℕ → AspisR1.SdkC_Source.Code A → Prop :=
+fun {A} x x_1 =>
+  AspisR1.CheckpointBytes5Effect.Code.brecOn (motive := fun x => ℕ → Prop) x_1 AspisR1.SdkC_Accounting.Bounded._f x

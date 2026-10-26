@@ -1,0 +1,40 @@
+AspisR1.SdkC_GlobalRecovery.indexed_recovery_or_collision : ∀
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (stored : AspisV8R19.DuplexFrames.Bytes)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.OraclePortCompactDraft.parse stored = some parsed →
+    ∀ (q : Fin 22 → Fin 262144) (kind pos : ℕ),
+      kind < 3 →
+        pos < 22 →
+          ∀
+            (path :
+              AspisR1.BinMerkle32Path.Path
+                (AspisR1.BinMultiproof.slots 18 (AspisR1.OraclePortSelectedDraft.index q kind pos))),
+            AspisR1.BinMerkle32Path.foldPath H path (H (AspisR1.OraclePortSelectedDraft.leaf parsed kind pos)) =
+                AspisR1.OraclePortBatchDraft.committedRoot parsed kind →
+              ∀ (log : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)) (Q : ℕ),
+                (∀ a ∈ log, a.2 = H a.1) →
+                  (∀
+                      a ∈
+                        AspisR1.BinMerkle32Leaf.fullTrace H path (AspisR1.OraclePortSelectedDraft.leaf parsed kind pos),
+                      FS2.Duplex.Read log a) →
+                    FS.firstReads FS.emptyTable log ≤ Q →
+                      ∀ (frame : AspisV8R19.DuplexFrames.Bytes) (j : Fin 5),
+                        FS2.Duplex.Read log frame →
+                          AspisR1.BinRawByteCollisionTargets.pred j frame =
+                              some (AspisR1.OraclePortBatchDraft.committedRoot parsed kind) →
+                            FS.hitsBad
+                                (AspisR1.AllAddressCollision.bad AspisR1.SelectedTranscriptParams.params.iv
+                                  AspisR1.BinRawByteCollisionTargets.pred Q)
+                                FS.emptyTable log ∨
+                              AspisR1.OraclePortAllSelectedRecoveryC6.recovered log frame parsed kind
+                                  (AspisR1.OraclePortSelectedDraft.index q kind pos) =
+                                some (AspisR1.OraclePortPackedChoiceC4.payload parsed kind pos)
+'AspisR1.SdkC_GlobalRecovery.indexed_recovery_or_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SdkC_GlobalRecovery.collision_bound : ∀ {A : Type} (code : AspisR1.SdkC_Source.Code A) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 ≤ Q) →
+    (AspisV8R19.MemoizedProgramLaw.lazyMean (AspisR1.SdkC_Oracle.program code) FS.emptyTable fun view =>
+        AspisV8R19.CausalFirstHitUnionBound.indicator
+          (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv Q view)) ≤
+      6 * ↑Q ^ 2 / 256 ^ 32
+'AspisR1.SdkC_GlobalRecovery.collision_bound' depends on axioms: [propext, Classical.choice, Quot.sound]

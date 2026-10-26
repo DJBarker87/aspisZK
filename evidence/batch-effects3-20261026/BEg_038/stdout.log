@@ -1,0 +1,62 @@
+AspisR1.Port4B_NativeReject.missing_count : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n s d : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val : AspisR1.Port3_NativeBatchCalls.Values) (prefixIdx : Aeneas.Std.Slice Aeneas.Std.U32),
+  Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+        idx { «end» := d } =
+      Aeneas.Std.Result.ok prefixIdx →
+    leaves.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two prefixIdx = Aeneas.Std.Result.ok none →
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port3_BatchStd.install leaves) D
+          proof root tree hash lo n s keys idx val d n =
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, none))
+'AspisR1.Port4B_NativeReject.missing_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_NativeReject.nonzero_padding : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n s d : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val : AspisR1.Port3_NativeBatchCalls.Values) (prefixIdx : Aeneas.Std.Slice Aeneas.Std.U32)
+  (count cap scaled : Aeneas.Std.Usize) (nodes padding : Aeneas.Std.Slice Aeneas.Std.U8),
+  Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+        idx { «end» := d } =
+      Aeneas.Std.Result.ok prefixIdx →
+    leaves.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two prefixIdx = Aeneas.Std.Result.ok (some count) →
+      leaves.op3 proof s = Aeneas.Std.Result.ok nodes →
+        (Aeneas.Std.Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize] ⋯).index_usize
+              s =
+            Aeneas.Std.Result.ok cap →
+          ¬count > cap →
+            Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 32#usize count) = Aeneas.Std.Result.ok scaled →
+              Aeneas.Std.core.slice.index.Slice.index
+                    (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) nodes
+                    { start := scaled } =
+                  Aeneas.Std.Result.ok padding →
+                (∃ ce after,
+                    Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce ∧
+                      (AspisR1.Port3_BatchStd.install leaves).op0
+                          (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+                          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                            (AspisR1.Port3_BatchStd.install leaves) D)
+                          ce () =
+                        Aeneas.Std.Result.ok (true, after)) →
+                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                      (AspisR1.Port3_BatchStd.install leaves) D proof root tree hash lo n s keys idx val d n =
+                    Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, none))
+'AspisR1.Port4B_NativeReject.nonzero_padding' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_NativeReject.exit_loop : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n s d pos : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val : AspisR1.Port3_NativeBatchCalls.Values)
+  (out :
+    AspisR1.Port3_NativeBatchCalls.Indices ×
+      AspisR1.Port3_NativeBatchCalls.Values × Option (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)),
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n s keys idx val d
+        pos =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out) →
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops D proof root tree idx val hash lo n s keys d
+        pos =
+      Aeneas.Std.Result.ok out
+'AspisR1.Port4B_NativeReject.exit_loop' depends on axioms: [propext, Classical.choice, Quot.sound]

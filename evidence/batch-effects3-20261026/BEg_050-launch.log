@@ -1,0 +1,37 @@
+{"attempt": "BEg_050", "exit_status": 0, "wall_seconds": 1.9964467670070007, "peak_rss_kib": "4404480", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_TailReads.reads' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_TailReads.reads : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (kind lo n slot d : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx outIdx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val outVal : AspisR1.Port3_NativeBatchCalls.Values),
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port3_BatchStd.install base) D proof
+        root kind hash lo n slot keys idx val d n =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (outIdx, outVal, some (Aeneas.S
+...
+ Aeneas.Std.Result.ok (some count) ∧
+          base.op3 proof slot = Aeneas.Std.Result.ok nodes ∧
+            (Aeneas.Std.Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                      ⋯).index_usize
+                  slot =
+                Aeneas.Std.Result.ok cap ∧
+              ¬count > cap ∧
+                Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) nodes
+                      { start := Aeneas.Std.Usize.wrapping_mul 32#usize count } =
+                    Aeneas.Std.Result.ok padding ∧
+                  Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce ∧
+                    (AspisR1.Port3_BatchStd.install base).op0
+                          (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+                          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                            (AspisR1.Port3_BatchStd.install base) D)
+                          ce () =
+                        Aeneas.Std.Result.ok (false, after) ∧
+                      Aeneas.Std.core.slice.index.Slice.index
+                            (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8) nodes
+                            { «end» := Aeneas.Std.Usize.wrapping_mul 32#usize count } =
+                          Aeneas.Std.Result.ok supplied ∧
+                        base.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val d supplied =
+                          Aeneas.Std.Result.ok (true, outIdx, outVal)
+'AspisR1.Port4B_TailReads.reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r81fdfa729235412182709084eb65dea0.scope; invocation ID: 7d83ead45ea344ea87a574bcefc4fbfa

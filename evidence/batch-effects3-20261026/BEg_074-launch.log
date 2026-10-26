@@ -1,0 +1,38 @@
+{"attempt": "BEg_074", "exit_status": 0, "wall_seconds": 2.1760459890356287, "peak_rss_kib": "5256484", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_Authentication.ideal_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SdkC_Authentication.stage_acceptance' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SdkC_Authentication.stage_paths' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.SdkC_Authentication.ideal_value : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash parts =
+        Aeneas.Std.Result.ok
+          (AspisV8R19.SqueezeOracleBridge.encodeState (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))) →
+    ∀ (code : AspisR1.SdkC_Source.Code A),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).2 =
+        AspisR1.CheckpointBytes5Effect.erase D hash code
+'AspisR1.SdkC_Authentication.ideal_value' depends on axioms: [propext, Classical.c
+...
+        ∀ pos ∈ AspisR1.OraclePortSelectedDraft.batchPositions 1,
+                                      ∃ path,
+                                        AspisR1.BinMerkle32Path.foldPath H path
+                                              (H (AspisR1.OraclePortSelectedDraft.leaf parsed kind pos)) =
+                                            AspisR1.OraclePortBatchDraft.committedRoot parsed kind ∧
+                                          ∀
+                                            a ∈
+                                              AspisR1.BinMerkle32Leaf.fullTrace H path
+                                                (AspisR1.OraclePortSelectedDraft.leaf parsed kind pos),
+                                            FS2.Duplex.Read
+                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch
+                                                    AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                                    AspisR1.MultiproofConeP6Batch.referenceLeaf parsed q nodes 1
+                                                    AspisR1.Port4B_BatchJoin.initial)).1
+                                              a
+'AspisR1.SdkC_Authentication.stage_paths' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.SdkC_Authentication.idealStage : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  VTop_Stages.aspis_core.digest.Digest32 Unit :=
+fun H =>
+  { coremarkerCopyInst := { cloneInst := { clone := fun q => Aeneas.Std.Result.ok q } },
+    digest := fun x parts =>
+      Aeneas.Std.Result.ok
+        (AspisV8R19.SqueezeOracleBridge.encodeState (H (AspisV8R19.SqueezeOracleBridge.flatten parts))) }
+
+Running as unit: run-rbf7470ee5259489a8f3ba4ab7fe939ae.scope; invocation ID: 09a9af5e0908496cb2b7985c92631070

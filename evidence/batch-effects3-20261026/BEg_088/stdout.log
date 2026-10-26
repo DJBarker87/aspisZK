@@ -1,0 +1,83 @@
+@AspisR1.RPx_NativeTransport.bounded : ∀ {T : Type} (code : AspisR1.CheckpointBytes5Effect.Code T) (n : ℕ),
+  AspisR1.GExp_CountLaws.count n code →
+    ∀ (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+      (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          AspisR1.RPx_NativeTransport.PrefixBound code hashv H n
+'AspisR1.RPx_NativeTransport.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.RPx_NativeTransport.first : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e : AspisR1.S2W_D189Entry.Entry)
+  (id : AspisR1.S2W_ExtractionBoundary.Program) (data : Aeneas.Std.Slice Aeneas.Std.U8) (state : A)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          have code := AspisR1.RPx_NativeTransport.firstCode c hashv copy allocator e id data state;
+          (AspisR1.SdkC_Source.run hashv code []).1 =
+              AspisR1.S2W_D189Wrappers.first native1 copy allocator e id data state ∧
+            AspisR1.RPx_NativeTransport.PrefixBound code hashv H 1018
+'AspisR1.RPx_NativeTransport.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.RPx_NativeTransport.second : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e : AspisR1.S2W_D189Entry.Entry)
+  (id : AspisR1.S2W_ExtractionBoundary.Program) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state : A) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          have code := AspisR1.RPx_NativeTransport.secondCode c hashv allocator e id data slot state;
+          (AspisR1.SdkC_Source.run hashv code []).1 =
+              AspisR1.S2W_D189Wrappers.second native2 allocator e id data slot state ∧
+            AspisR1.RPx_NativeTransport.PrefixBound code hashv H 903
+'AspisR1.RPx_NativeTransport.second' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.RPx_NativeTransport.PrefixBound : {T : Type} →
+  AspisR1.CheckpointBytes5Effect.Code T →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → ℕ → Prop :=
+fun {T} code hashv H n =>
+  List.length (AspisR1.SdkC_Source.run hashv code []).2 ≤ n ∧
+    ∃ kept remaining,
+      AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code []).2 = kept ∧
+        List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+          kept ++ remaining
+def AspisR1.RPx_NativeTransport.firstCode : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+        AspisR1.S2W_D189Wrappers.Allocator A →
+          AspisR1.S2W_D189Entry.Entry →
+            AspisR1.S2W_ExtractionBoundary.Program →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                A →
+                  AspisR1.CheckpointBytes5Effect.Code
+                    (Aeneas.Std.core.result.Result
+                      (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 ×
+                        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) × A)
+                      AspisR1.AdapterRw.Cuts.PE) :=
+fun {A F C} c hashv copy allocator e id data state =>
+  AspisR1.GExq_InstalledWrapper.first c.adapter c.currentBase (AspisR1.AuS1_Install.base c.stageBase) c.finish
+    c.reserved c.query c.geometry c.boundaries c.std hashv copy allocator e id data state
+def AspisR1.RPx_NativeTransport.secondCode : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      AspisR1.S2W_D189Wrappers.Allocator A →
+        AspisR1.S2W_D189Entry.Entry →
+          AspisR1.S2W_ExtractionBoundary.Program →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              AspisR1.S2W_ExtractionBoundary.Slot →
+                A →
+                  AspisR1.CheckpointBytes5Effect.Code
+                    (Aeneas.Std.core.result.Result (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) × A)
+                      AspisR1.AdapterRw.Cuts.PE) :=
+fun {A F C} c hashv allocator e id data slot state =>
+  AspisR1.GExq_InstalledWrapper.second c.adapter c.currentBase (AspisR1.AuS1_Install.base c.stageBase) c.finish
+    c.reserved c.query c.geometry c.boundaries c.std hashv allocator e id data slot state
