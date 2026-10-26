@@ -1,0 +1,28 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling poolw-guard v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolW_guard)
+warning: use of deprecated module `solana_program::system_program`: Use `solana_sdk_ids::system_program` instead
+ --> PoolW_lib.rs:3:44
+  |
+3 |     entrypoint::ProgramResult, rent::Rent, system_program};
+  |                                            ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+error[E0382]: use of moved value: `expected`
+  --> PoolW_harness.rs:65:74
+   |
+63 |     let expected=if !owner_is_id {ProgramError::IncorrectProgramId} else {ProgramError::InvalidAccountData};
+   |         -------- move occurs because `expected` has type `solana_program::program_error::ProgramError`, which does not implement the `Copy` trait
+64 |     assert!(require_program_owned_zeroed(&account,&id,192,&Rent::default())==Err(expected));
+   |                                                                                  -------- value moved here
+65 |     assert!(PoolW_zero_reference(&account,&id,192,&Rent::default())==Err(expected));
+   |                                                                          ^^^^^^^^ value used here after move
+   |
+help: consider cloning the value if the performance cost is acceptable
+   |
+64 |     assert!(require_program_owned_zeroed(&account,&id,192,&Rent::default())==Err(expected.clone()));
+   |                                                                                          ++++++++
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `poolw-guard` (lib) due to 1 previous error; 1 warning emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.

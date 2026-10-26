@@ -1,0 +1,64 @@
+{
+  "attempt": "PoolW_KANI006",
+  "kind": "kani",
+  "source_revision": "383ecab4cf9e34fc23789c0d29765c3c2ae62e0b",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolW_guard/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_kani_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolW_zero_occupied_marker",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolW_guard/Cargo.toml",
+    "PoolW_guard/PoolW_lib.rs",
+    "PoolW_guard/error.rs",
+    "PoolW_guard/PoolW_harness.rs",
+    "PoolW_SLICES.json"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Split after KANI001 relational whole-scan timeout: PoolW_zero_occupied_marker; actual native isolated source, no stubs, full frames"
+  },
+  "expected_time": "Optimized Kani compile then one bounded exact native/reference guard equivalence and frame check",
+  "exit_status": 1,
+  "wall_seconds": 0.2563941479893401,
+  "peak_rss_kib": "156968",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rb7cb55e8e3cd482682a15e43c4c4afa4.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "87654400",
+  "source_hashes": {
+    "PoolW_guard/Cargo.toml": "2770125100e4f37110ed5b8a187c35685ded35b6b1d656f1f0f538043586af92",
+    "PoolW_guard/PoolW_lib.rs": "8fab2a8e929ee5324671a7ae1e27914ce8d51f11d86cc5b57cd9bdedc3a7a443",
+    "PoolW_guard/error.rs": "7a70c51c3a2f8e9ca09370f530704089ce2c85c658c1e6d7131fd984ebd17d2e",
+    "PoolW_guard/PoolW_harness.rs": "1d35d2a1d3906a4c03f63dc56444cd82a7f9e7c34af759ef7ca3a358e176c198",
+    "PoolW_SLICES.json": "942159663cf309e20e29a2344091ba0f24bf7af95e4d8c5f34fb549f18790be3"
+  },
+  "print_axioms": "N/A: kani"
+}

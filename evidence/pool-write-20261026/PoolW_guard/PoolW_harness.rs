@@ -100,3 +100,93 @@ fn PoolW_zero_occupied_marker() {
     assert!(require_program_owned_zeroed(&account,&id,192,&Rent::default())==Err(PoolV1ProgramError::InvalidFreshAccount.into()));
     drop(account);assert!(bytes==original);assert!(funds==old);
 }
+
+#[kani::proof]
+#[kani::unwind(386)]
+fn PoolW_copy_full_images() {
+    let id=Pubkey::new_from_array([7;32]);let mk=Pubkey::new_from_array(kani::any());let ck=Pubkey::new_from_array(kani::any());
+    kani::assume(mk!=ck);
+    let mut m:[u8;384]=kani::any();let mut c:[u8;192]=kani::any();
+    let mut ml:u64=kani::any();let mut cl:u64=kani::any();let oldml=ml;let oldcl=cl;
+    let plan=PoolW_Planned{checkpoint_image:kani::any(),next_master_image:kani::any()};
+    let master=AccountInfo::new(&mk,false,true,&mut ml,&mut m,&id,false,0);
+    let checkpoint=AccountInfo::new(&ck,false,true,&mut cl,&mut c,&id,false,0);
+    assert!(PoolW_copy_tail(&master,&checkpoint,&plan)==Ok(()));
+    assert!(master.key==&mk && checkpoint.key==&ck);
+    assert!(master.owner==&id && checkpoint.owner==&id);
+    drop(master);drop(checkpoint);
+    assert!(c==plan.checkpoint_image);assert!(m==plan.next_master_image);
+    assert!(ml==oldml && cl==oldcl);
+}
+
+#[kani::proof]
+fn PoolW_copy_checkpoint_borrow_error() {
+    let id=Pubkey::new_from_array([7;32]);let mk=Pubkey::new_from_array([8;32]);let ck=Pubkey::new_from_array([9;32]);
+    let mut m=[0u8;384];let mut c=[0u8;192];let mut ml=1;let mut cl=2;
+    let plan=PoolW_Planned{checkpoint_image:[65u8;192],next_master_image:[42u8;384]};
+    let master=AccountInfo::new(&mk,false,true,&mut ml,&mut m,&id,false,0);
+    let checkpoint=AccountInfo::new(&ck,false,true,&mut cl,&mut c,&id,false,0);
+    let held=checkpoint.try_borrow_data().unwrap();
+    assert!(PoolW_copy_tail(&master,&checkpoint,&plan)==Err(ProgramError::AccountBorrowFailed));
+    drop(held);drop(master);drop(checkpoint);
+    assert!(m==[0u8;384] && c==[0u8;192]);assert!(ml==1 && cl==2);
+}
+
+#[kani::proof]
+fn PoolW_zero_owner_error() {
+    let id=Pubkey::new_from_array([7;32]);let owner=Pubkey::new_from_array([8;32]);let key=Pubkey::new_from_array([9;32]);
+    let mut data:[u8;192]=kani::any();let original=data;let mut funds:u64=kani::any();let old=funds;
+    let a=AccountInfo::new(&key,kani::any(),kani::any(),&mut funds,&mut data,&owner,kani::any(),0);
+    assert!(require_program_owned_zeroed(&a,&id,192,&Rent::default())==Err(ProgramError::IncorrectProgramId));
+    drop(a);assert!(data==original && funds==old);
+}
+#[kani::proof]
+fn PoolW_zero_executable_error() {
+    let id=Pubkey::new_from_array([7;32]);let key=Pubkey::new_from_array([9;32]);
+    let mut data:[u8;192]=kani::any();let original=data;let mut funds:u64=kani::any();let old=funds;
+    let a=AccountInfo::new(&key,kani::any(),kani::any(),&mut funds,&mut data,&id,true,0);
+    assert!(require_program_owned_zeroed(&a,&id,192,&Rent::default())==Err(ProgramError::InvalidAccountData));
+    drop(a);assert!(data==original && funds==old);
+}
+#[kani::proof]
+fn PoolW_zero_readonly_error() {
+    let id=Pubkey::new_from_array([7;32]);let key=Pubkey::new_from_array([9;32]);
+    let mut data:[u8;192]=kani::any();let original=data;let mut funds:u64=kani::any();let old=funds;
+    let a=AccountInfo::new(&key,kani::any(),false,&mut funds,&mut data,&id,false,0);
+    assert!(require_program_owned_zeroed(&a,&id,192,&Rent::default())==Err(ProgramError::InvalidAccountData));
+    drop(a);assert!(data==original && funds==old);
+}
+#[kani::proof]
+fn PoolW_fresh_system_empty() {
+    let id=Pubkey::new_from_array([7;32]);let key=Pubkey::new_from_array([9;32]);let owner=system_program::id();
+    let mut data=[];let mut funds:u64=kani::any();let old=funds;
+    let a=AccountInfo::new(&key,false,true,&mut funds,&mut data,&owner,false,0);
+    assert!(plan_fresh_program_pda(&a,&id,&key,192)==Ok(FreshPdaPreparationV1::CreateOrAllocateSystemOwned));
+    drop(a);assert!(funds==old);
+}
+#[kani::proof]
+fn PoolW_fresh_system_occupied() {
+    let id=Pubkey::new_from_array([7;32]);let key=Pubkey::new_from_array([9;32]);let owner=system_program::id();
+    let mut data:[u8;192]=kani::any();let original=data;let mut funds:u64=kani::any();let old=funds;
+    let a=AccountInfo::new(&key,false,true,&mut funds,&mut data,&owner,false,0);
+    assert!(plan_fresh_program_pda(&a,&id,&key,192)==Err(PoolV1ProgramError::InvalidFreshAccount.into()));
+    drop(a);assert!(data==original && funds==old);
+}
+#[kani::proof]
+#[kani::unwind(195)]
+fn PoolW_fresh_program_zero() {
+    let id=Pubkey::new_from_array([7;32]);let key=Pubkey::new_from_array([9;32]);
+    let mut data=[0u8;192];let mut funds:u64=kani::any();let old=funds;
+    let a=AccountInfo::new(&key,false,true,&mut funds,&mut data,&id,false,0);
+    assert!(plan_fresh_program_pda(&a,&id,&key,192)==Ok(FreshPdaPreparationV1::ProgramOwnedZeroed));
+    drop(a);assert!(data==[0u8;192] && funds==old);
+}
+#[kani::proof]
+#[kani::unwind(195)]
+fn PoolW_fresh_program_occupied() {
+    let id=Pubkey::new_from_array([7;32]);let key=Pubkey::new_from_array([9;32]);
+    let mut data:[u8;192]=kani::any();kani::assume(data[0]!=0);let original=data;let mut funds:u64=kani::any();let old=funds;
+    let a=AccountInfo::new(&key,false,true,&mut funds,&mut data,&id,false,0);
+    assert!(plan_fresh_program_pda(&a,&id,&key,192)==Err(PoolV1ProgramError::InvalidFreshAccount.into()));
+    drop(a);assert!(data==original && funds==old);
+}

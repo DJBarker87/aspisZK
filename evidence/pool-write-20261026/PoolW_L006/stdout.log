@@ -1,0 +1,116 @@
+PoolW_ZeroExact.lean:27:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PoolW_Zero.zero_bytes_loop.body ?bytes ?i false
+in the target expression
+  (match (j, false) with
+    | (j, z) => PoolW_Zero.zero_bytes_loop.body bytes j z) ⦃
+    r =>
+    match r with
+    | done y => y = target
+    | cont x' => Inv bytes target x' ∧ (↑bytes).length - ↑x'.1 < (↑bytes).length - ↑(j, false).1 ⦄
+
+case pos.false
+bytes : Slice U8
+i : Usize
+zero : Bool
+bound : ↑i ≤ (↑bytes).length
+target : Bool := remaining bytes i zero
+j : Usize
+more : j < bytes.len
+range : ↑(j, false).1 ≤ (↑bytes).length
+eq : remaining bytes (j, false).1 (j, false).2 = target
+⊢ (match (j, false) with
+    | (j, z) => PoolW_Zero.zero_bytes_loop.body bytes j z) ⦃
+    r =>
+    match r with
+    | done y => y = target
+    | cont x' => Inv bytes target x' ∧ (↑bytes).length - ↑x'.1 < (↑bytes).length - ↑(j, false).1 ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+PoolW_ZeroExact.lean:34:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PoolW_Zero.zero_bytes_loop.body bytes j true
+in the target expression
+  (match (j, true) with
+    | (j, z) => PoolW_Zero.zero_bytes_loop.body bytes j z) ⦃
+    r =>
+    match r with
+    | done y => y = target
+    | cont x' => Inv bytes target x' ∧ (↑bytes).length - ↑x'.1 < (↑bytes).length - ↑(j, true).1 ⦄
+
+case pos.true
+bytes : Slice U8
+i : Usize
+zero : Bool
+bound : ↑i ≤ (↑bytes).length
+target : Bool := remaining bytes i zero
+j : Usize
+more : j < bytes.len
+range : ↑(j, true).1 ≤ (↑bytes).length
+eq : remaining bytes (j, true).1 (j, true).2 = target
+valid : ↑j < (↑bytes).length
+read : bytes.index_usize j = ok (↑bytes)[↑j]
+⊢ (match (j, true) with
+    | (j, z) => PoolW_Zero.zero_bytes_loop.body bytes j z) ⦃
+    r =>
+    match r with
+    | done y => y = target
+    | cont x' => Inv bytes target x' ∧ (↑bytes).length - ↑x'.1 < (↑bytes).length - ↑(j, true).1 ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+PoolW_ZeroExact.lean:45:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PoolW_Zero.zero_bytes_loop.body bytes j z
+in the target expression
+  (match (j, z) with
+    | (j, z) => PoolW_Zero.zero_bytes_loop.body bytes j z) ⦃
+    r =>
+    match r with
+    | done y => y = target
+    | cont x' => Inv bytes target x' ∧ (↑bytes).length - ↑x'.1 < (↑bytes).length - ↑(j, z).1 ⦄
+
+case neg
+bytes : Slice U8
+i : Usize
+zero : Bool
+bound : ↑i ≤ (↑bytes).length
+target : Bool := remaining bytes i zero
+j : Usize
+z : Bool
+range : ↑(j, z).1 ≤ (↑bytes).length
+eq : remaining bytes (j, z).1 (j, z).2 = target
+more : ¬j < bytes.len
+⊢ (match (j, z) with
+    | (j, z) => PoolW_Zero.zero_bytes_loop.body bytes j z) ⦃
+    r =>
+    match r with
+    | done y => y = target
+    | cont x' => Inv bytes target x' ∧ (↑bytes).length - ↑x'.1 < (↑bytes).length - ↑(j, z).1 ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+'AspisR1.PoolW_ZeroExact.loop_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolW_ZeroExact.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

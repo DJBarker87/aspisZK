@@ -64,5 +64,14 @@ pub(crate) fn plan_fresh_program_pda(
     }
 }
 
+struct PoolW_Planned { checkpoint_image: [u8;192], next_master_image: [u8;384] }
+fn PoolW_copy_tail(master: &AccountInfo<'_>, checkpoint: &AccountInfo<'_>, planned: &PoolW_Planned) -> ProgramResult {
+    let mut master_data = master.try_borrow_mut_data()?;
+    let mut checkpoint_data = checkpoint.try_borrow_mut_data()?;
+    checkpoint_data.copy_from_slice(&planned.checkpoint_image);
+    master_data.copy_from_slice(&planned.next_master_image);
+    Ok(())
+}
+
 #[cfg(kani)]
 include!("PoolW_harness.rs");
