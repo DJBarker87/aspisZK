@@ -1,0 +1,61 @@
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw18ContextStep.lean:28:17: error: unsolved goals
+case ok.some
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+lambda : Q
+iterator : Iter
+out power : Q
+next : core.slice.iter.Iter U32
+value : U32
+h : core.slice.iter.IteratorSliceIter.next iterator = ok (some value, next)
+⊢ (let (head, next) := (some value, next)
+    match head with
+    | none => ok (done out)
+    | some value => do
+      let scaled ← aspis_core.field.QM31.mul_m31 power value
+      let out1 ← aspis_core.field.QM31.add out scaled
+      let power1 ← aspis_core.field.QM31.mul power lambda
+      ok (cont (next, out1, power1))) =
+    do
+    let x ←
+      let (o, iterator1) := (some value, next)
+        match o with
+        | none => ok (false, iterator1, out, power)
+        | some value => do
+          let q ← aspis_core.field.QM31.mul_m31 power value
+          let compressed1 ← aspis_core.field.QM31.add out q
+          let power1 ← aspis_core.field.QM31.mul power lambda
+          ok (true, iterator1, compressed1, power1)
+    let flow ←
+      let (live, next, out, power) := x
+        if live = true then ok (cont (next, out, power)) else ok (done (out, power))
+    ok
+        (match flow with
+        | done final => done final.1
+        | cont state => cont state)
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw18ContextStep.lean:29:50: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵p̵r̵o̵j̵e̵c̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRw18ContextStep.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       40.74 real         1.53 user         4.89 sys
+          2793963520  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              238296  page reclaims
+              221075  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               35346  voluntary context switches
+              234821  involuntary context switches
+           430747146  instructions retired
+           215330772  cycles elapsed
+            11797344  peak memory footprint
