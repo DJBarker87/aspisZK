@@ -1,6 +1,6 @@
 # Source equation resume
 
-Before: 0/73 discharged; current: 1/73. No endpoint removal claimed.
+Before: 0/73 discharged; current: 5/73. No endpoint removal claimed.
 
 |op|row|status|theorem|receipt / obstruction|
 |---:|---|---|---|---|
@@ -12,3 +12,7 @@ Before: 0/73 discharged; current: 1/73. No endpoint removal claimed.
 |34|V185|OBSTRUCTED|—|aeneas-source-op34-001/collected-receipt.json; Aeneas rejects Charon allocator-parametric Vec type at alloc/src/vec/mod.rs:438 (TypesAnalysis.ml:484). Existing selected list interpretation and bounded gates alone do not prove the extracted shipped body. Next: narrow opacity for Vec type, or per-step P6 with a proved-sufficient bound.|
 |35|V186|OBSTRUCTED|—|aeneas-source-op35-001/collected-receipt.json; Aeneas rejects Charon allocator-parametric Vec type at alloc/src/vec/mod.rs:438 (TypesAnalysis.ml:484). Existing selected list interpretation and bounded gates alone do not prove the extracted shipped body. Next: narrow opacity for Vec type, or per-step P6 with a proved-sufficient bound.|
 |36|V187|OBSTRUCTED|—|aeneas-source-op36-001/collected-receipt.json; Aeneas rejects Charon allocator-parametric Vec type at alloc/src/vec/mod.rs:438 (TypesAnalysis.ml:484). Existing selected list interpretation and bounded gates alone do not prove the extracted shipped body. Next: narrow opacity for Vec type, or per-step P6 with a proved-sufficient bound.|
+|71|V197|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op71Source.op71_source|24001.json; Exact extracted function equation; all Result cases and arbitrary callback instances retained. D188 extraction trust only.|
+|72|V198|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op72Source.op72_source|24002.json; Exact extracted function equation; all Result cases and arbitrary callback instances retained. D188 extraction trust only.|
+|77|V199|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op77Source.op77_source|24004.json; Exact extracted function equation; all Result cases and arbitrary callback instances retained. D188 extraction trust only.|
+|80|V202|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op80Source.op80_source|24005.json; Exact extracted function equation; all Result cases and arbitrary callback instances retained. D188 extraction trust only.|

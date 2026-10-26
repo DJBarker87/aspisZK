@@ -43,3 +43,6 @@ mod checks {
         assert_eq!(super::mask(&c1,&m,g,&point),super::owned::mask(c1,m,g,point));
     }
 }
+
+#[cfg(kani)]
+pub fn point_clone<E:Clone>(p:&aspis_core::r0::domain::Point<E>)->aspis_core::r0::domain::Point<E> {p.clone()}
