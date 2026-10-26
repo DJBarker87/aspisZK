@@ -1,0 +1,110 @@
+import GSScalarSequentialScheduleM10
+import CompPolySplitFactorQuality
+
+/-! Operand envelopes concern canonical stored coefficient arrays. The
+binaryRec backend is bounded directly, without identifying its occurrence
+count with the distinct Raw power implementation. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSScalarOperandEnvelopeM10
+open CompPoly Polynomial CompPolySplitTrial CompPolySplitFactorQuality
+open GSScalarCallScheduleM10 CompPolyPolynomialBackendBridge
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [Fintype K]
+
+theorem stored_size (p : CPolynomial K) : p.val.size ≤ p.natDegree+1 := by
+  cases hs : p.val.size <;> simp [CPolynomial.natDegree, hs]
+
+theorem stored_size_of_degree (p : CPolynomial K) (D : Nat)
+    (h : p.toPoly.natDegree ≤ D) : p.val.size ≤ D+1 := by
+  have hs := stored_size p
+  rw [CPolynomial.natDegree_toPoly] at hs
+  omega
+
+theorem power_degree (a m : CPolynomial K) (e : Nat) (hm : m.toPoly.Monic) :
+    (modPower a m e).toPoly.natDegree ≤ m.toPoly.natDegree := by
+  have hb : m.monic := (CPolynomial.monic_toPoly_iff m).mpr hm
+  refine Nat.binaryRec (motive := fun e =>
+    (modPower a m e).toPoly.natDegree ≤ m.toPoly.natDegree) ?_ ?_ e
+  · simp only [modPower, Nat.binaryRec_zero, CPolynomial.toPoly_one,
+      Polynomial.natDegree_one]
+    exact Nat.zero_le _
+  · intro b n _
+    by_cases hz : Nat.bit b n = 0
+    · rw [hz]
+      simp only [modPower, Nat.binaryRec_zero, CPolynomial.toPoly_one,
+        Polynomial.natDegree_one]
+      exact Nat.zero_le _
+    · have hc : n = 0 → b = true := by
+        intro hn
+        subst n
+        cases b with
+        | false => exact False.elim (hz rfl)
+        | true => rfl
+      unfold modPower
+      rw [Nat.binaryRec_eq b n (Or.inr hc)]
+      rw [CPolynomial.modByMonic_toPoly_eq_modByMonic _ _ hb]
+      exact Polynomial.natDegree_modByMonic_le _ hm
+
+theorem linear_degree (c : K × K) : (linear c).toPoly.natDegree ≤ 1 := by
+  simp only [linear, CPolynomial.toPoly_add, CPolynomial.toPoly_mul,
+    CPolynomial.C_toPoly, CPolynomial.X_toPoly]
+  exact (Polynomial.natDegree_add_le _ _).trans (by
+    have h := Polynomial.natDegree_mul_le (p := C c.2) (q := X)
+    simp only [Polynomial.natDegree_C, Polynomial.natDegree_X, Nat.zero_add] at h
+    simpa only [Polynomial.natDegree_C, max_le_iff, Nat.zero_le, true_and] using h)
+
+def Bounded (D q : Nat) : Call K → Prop
+  | .gcd a b => a.val.size ≤ D+1 ∧ b.val.size ≤ D+1
+  | .power a m e => a.val.size ≤ D+1 ∧ m.val.size ≤ D+1 ∧ e ≤ q ∧ m.toPoly.Monic
+  | .division a b => a.val.size ≤ D+1 ∧ b.val.size ≤ D+1 ∧ b.toPoly.Monic
+
+theorem trial_bounded (f h : CPolynomial K) (q D : Nat)
+    (hf : f.toPoly.Monic) (hfd : f.toPoly.natDegree ≤ D)
+    (hhd : h.toPoly.natDegree ≤ D) :
+    ∀ c ∈ (trial f h q).2, Bounded D q c := by
+  have sf := stored_size_of_degree f D hfd
+  have sh := stored_size_of_degree h D hhd
+  have ha := power_degree h f (q/2) hf
+  have hd : (modPower h f (q/2)-1).toPoly.natDegree ≤ D := by
+    rw [CPolynomial.toPoly_sub, CPolynomial.toPoly_one]
+    exact (Polynomial.natDegree_sub_le _ _).trans
+      (max_le (ha.trans hfd) (by simp))
+  have sa := stored_size_of_degree _ D hd
+  simp only [trial]
+  split
+  · intro c hc
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at hc
+    subst c
+    exact ⟨sf,sh⟩
+  · intro c hc
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at hc
+    rcases hc with rfl | rfl | rfl
+    · exact ⟨sf,sh⟩
+    · exact ⟨sh,sf,Nat.div_le_self _ _,hf⟩
+    · exact ⟨sf,sa⟩
+
+theorem retry_bounded (f : CPolynomial K) (q t D : Nat) (tape : Fin t → K × K)
+    (hf : f.toPoly.Monic) (hfd : f.toPoly.natDegree ≤ D) (hD : 1 ≤ D) :
+    ∀ c ∈ (GSScalarCallScheduleM10.retry f q t tape).2, Bounded D q c := by
+  induction t with
+  | zero => simp only [GSScalarCallScheduleM10.retry, List.not_mem_nil, IsEmpty.forall_iff,
+      implies_true]
+  | succ t ih =>
+    have hh := trial_bounded f (linear (tape 0)) q D hf hfd ((linear_degree _).trans hD)
+    have ht := ih (fun i => tape i.succ)
+    simp only [GSScalarCallScheduleM10.retry]
+    split
+    · exact hh
+    · intro c hc
+      rcases List.mem_append.mp hc with hc | hc
+      · exact hh c hc
+      · exact ht c hc
+
+#print axioms stored_size
+#print axioms stored_size_of_degree
+#print axioms power_degree
+#print axioms linear_degree
+#print axioms trial_bounded
+#print axioms retry_bounded
+end AspisR1.GSScalarOperandEnvelopeM10
+end

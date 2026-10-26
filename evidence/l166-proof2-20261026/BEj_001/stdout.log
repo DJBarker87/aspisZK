@@ -1,0 +1,25 @@
+BEj_ReifiedBatch.lean:51:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nativeCode ?hashv ?input ?slot
+in the target expression
+  BEh_Scope.Law
+    ((fun input slot state before => BEf_Carrier.run call (nativeCode hashv input slot) state before) input slot state
+      before)
+    ((fun input slot state before => BEf_Carrier.run call (sourceCode hashv input slot) state before) input slot state
+      before)
+
+S : Type
+call : Parts → S → Result Digest × S
+hashv : Parts → Result Digest
+input : Input
+slot : Fin 2
+state : S
+before : Log
+a✝ : True
+⊢ BEh_Scope.Law
+    ((fun input slot state before => BEf_Carrier.run call (nativeCode hashv input slot) state before) input slot state
+      before)
+    ((fun input slot state before => BEf_Carrier.run call (sourceCode hashv input slot) state before) input slot state
+      before)
+'AspisR1.BEj_ReifiedBatch.programs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEj_ReifiedBatch.of_steps' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEj_ReifiedBatch.reified_observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
