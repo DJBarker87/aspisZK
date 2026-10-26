@@ -1,0 +1,38 @@
+structure AspisR1.ARU_Support.At {W A C Tx : Type} (L : Library W (ℕ → Record))
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (c : DrvC_Installation.Configuration FIo_Install.W C) (err : C) (r : NP6_StdModel.Reservation)
+  (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (a : Adversary A) (H : Bytes → State) : Type
+number of parameters: 15
+fields:
+  AspisR1.ARU_Support.At.entry : ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a H
+  AspisR1.ARU_Support.At.firstAgrees : ARS_QueryTransport.Agrees H
+      (SdkC_Source.run hashv
+          (ARS_NativeAccount.firstSyntax (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier
+            (eval H a.first).2)
+          []).2
+  AspisR1.ARU_Support.At.secondAgrees : ARS_QueryTransport.Agrees H
+      (SdkC_Source.run hashv
+          (ARS_NativeAccount.secondSyntax (FIp_Install.configuration err c r) hashv allocator CPH_Program.verifier
+            (eval H (a.second (eval H a.first).2 self.entry.saved self.entry.post1 self.entry.final1)).2)
+          []).2
+constructor:
+  AspisR1.ARU_Support.At.mk {W A C Tx : Type} {L : Library W (ℕ → Record)}
+    {copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)} {allocator : Allocator A}
+    {c : DrvC_Installation.Configuration FIo_Install.W C} {err : C} {r : NP6_StdModel.Reservation}
+    {native1 : S2W_ExtractionBoundary.First} {native2 : S2W_ExtractionBoundary.Second}
+    {hashv : SdkC_Source.Parts → Result SdkC_Source.Digest} {a : Adversary A} {H : Bytes → State}
+    (entry : ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a H)
+    (firstAgrees :
+      ARS_QueryTransport.Agrees H
+        (SdkC_Source.run hashv
+            (ARS_NativeAccount.firstSyntax (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier
+              (eval H a.first).2)
+            []).2)
+    (secondAgrees :
+      ARS_QueryTransport.Agrees H
+        (SdkC_Source.run hashv
+            (ARS_NativeAccount.secondSyntax (FIp_Install.configuration err c r) hashv allocator CPH_Program.verifier
+              (eval H (a.second (eval H a.first).2 entry.saved entry.post1 entry.final1)).2)
+            []).2) :
+    At L copy allocator c err r native1 native2 hashv a H
