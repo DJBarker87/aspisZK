@@ -1,0 +1,145 @@
+theorem AspisR1.PoolT_Write.accepted_verifier_writes_copy : ∀ {A : Type} (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e : AspisR1.S2W_D189Entry.Entry)
+          (program : AspisR1.S2W_ExtractionBoundary.Program) (data : Aeneas.Std.Slice Aeneas.Std.U8) (state final : A)
+          (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+          (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+          AspisR1.S2W_D189Wrappers.first native1 copy allocator e program data state =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) →
+            native1 program e.first data = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+              (↑saved).length = 1768 ∧
+                AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                      (post.payload (e.heap.accounts 2).1) 1768 =
+                    AspisR1.MultiproofConeCanonical.bytesOf ↑saved ∧
+                  post.ambient = e.heap.ambient ∧
+                    post.accounts = e.heap.accounts ∧
+                      post.counter = e.heap.counter ∧
+                        ∀ (cell : ℕ), cell ≠ (e.heap.accounts 2).1 → post.payload cell = e.heap.payload cell :=
+fun {A} ops native1 native2 hashv extraction copy std allocator e program data state final saved post accepted =>
+  let ⟨native, written⟩ :=
+    AspisR1.S2W_D189Wrappers.first_accepted native1 copy std allocator e program data state final saved post accepted
+  have sourceAccepted := Eq.trans (Eq.symm (extraction.stage1 program e.first data)) native;
+  have size := AspisR1.PoolT_Verifier.returned_size ops e program data saved sourceAccepted;
+  have destination := AspisR1.S2W_D189Entry.checkpoint_size e ops program data saved sourceAccepted;
+  have frame :=
+    AspisR1.S2W_WrapperLaws.checkpoint_write e.heap 2 0 0
+      (AspisR1.S2W_CommittedCheckpoint.source (AspisR1.S2W_ReturnedCheckpoint.nativeBytes saved)) rfl rfl destination;
+  ⟨native,
+    ⟨size,
+      ⟨AspisR1.Hist_CommittedPayload.copied ops native1 native2 hashv extraction copy std allocator e program data state
+          final saved post accepted size,
+        ⟨Eq.mpr (id (congrArg (fun _a => _a.ambient = e.heap.ambient) written)) frame.right.left,
+          ⟨Eq.mpr (id (congrArg (fun _a => _a.accounts = e.heap.accounts) written)) frame.right.right.left,
+            ⟨Eq.mpr (id (congrArg (fun _a => _a.counter = e.heap.counter) written)) frame.right.right.right.left,
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a => ∀ (cell : ℕ), cell ≠ (e.heap.accounts 2).1 → _a.payload cell = e.heap.payload cell)
+                    written))
+                frame.right.right.right.right⟩⟩⟩⟩⟩⟩
+theorem AspisR1.PoolT_SourceWrite.verifier : ∀ {A : Type} (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (program : AspisR1.S2W_ExtractionBoundary.Program)
+          (before after : AspisR1.Hist_Store.Store) (layout : AspisR1.Hist_RuntimeEntry.Layout)
+          (data : Aeneas.Std.Slice Aeneas.Std.U8) (state : A) (key : ℕ) (image : AspisV8R19.DuplexFrames.Bytes),
+          AspisR1.Hiq_NativeWriter.apply native1 copy allocator program before layout data state =
+              (after, AspisR1.S2X.AccountEvent.committedWrite key image) →
+            ∃ saved post final statement semantic proof split,
+              AspisR1.S2W_D189Wrappers.first native1 copy allocator (AspisR1.Hist_RuntimeEntry.load before layout)
+                    program data state =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) ∧
+                key = (layout.handles 2).1 ∧
+                  after = AspisR1.Hist_RuntimeEntry.commit before key saved ∧
+                    (↑saved).length = 1768 ∧
+                      image = AspisR1.MultiproofConeCanonical.bytesOf ↑saved ∧
+                        AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                              (post.payload key) 1768 =
+                            image ∧
+                          ops.op47 (before (layout.handles 1).1).data =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok statement) ∧
+                            statement.semantic_public = Aeneas.Std.Result.ok semantic ∧
+                              Aeneas.Std.core.slice.index.Slice.index
+                                    (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+                                    (before (layout.handles 0).1).data { start := 688#usize, «end» := 58295#usize } =
+                                  Aeneas.Std.Result.ok proof ∧
+                                ops.op10 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) semantic
+                                    (before (layout.handles 1).1).data proof split () none =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) :=
+fun {A} ops native1 native2 hashv extraction copy std allocator program before after layout data state key image
+    committed =>
+  let ⟨saved, h✝⟩ :=
+    AspisR1.PoolT_Event.verifier native1 copy std allocator program before after layout data state key image committed
+  let ⟨post, h✝¹⟩ := h✝
+  let ⟨final, h✝²⟩ := h✝¹
+  let ⟨accepted, right✝⟩ := h✝²
+  let ⟨sameKey, right✝¹⟩ := right✝
+  let ⟨sameImage, right✝²⟩ := right✝¹
+  let ⟨storeEq, bytes⟩ := right✝²
+  have native :=
+    (AspisR1.S2W_D189Wrappers.first_accepted native1 copy std allocator (AspisR1.Hist_RuntimeEntry.load before layout)
+        program data state final saved post accepted).left;
+  have sourceAccepted :=
+    Eq.trans (Eq.symm (extraction.stage1 program (AspisR1.Hist_RuntimeEntry.load before layout).first data)) native;
+  have size :=
+    AspisR1.PoolT_Verifier.returned_size ops (AspisR1.Hist_RuntimeEntry.load before layout) program data saved
+      sourceAccepted;
+  let ⟨statement, h✝³⟩ :=
+    AspisR1.PoolT_Child.original_inputs ops (AspisR1.Hist_RuntimeEntry.load before layout) program data saved
+      sourceAccepted
+  let ⟨semantic, h✝⁴⟩ := h✝³
+  let ⟨proof, h✝⁵⟩ := h✝⁴
+  let ⟨split, h✝⁶⟩ := h✝⁵
+  let ⟨decode, right✝³⟩ := h✝⁶
+  let ⟨getter, right✝⁴⟩ := right✝³
+  let ⟨range, child⟩ := right✝⁴
+  Exists.intro saved
+    (Exists.intro post
+      (Exists.intro final
+        (Exists.intro statement
+          (Exists.intro semantic
+            (Exists.intro proof
+              (Exists.intro split
+                ⟨accepted,
+                  ⟨sameKey,
+                    ⟨Eq.mpr
+                        (id
+                          (congrArg (Eq after)
+                            (congrFun' (congrArg (AspisR1.Hist_RuntimeEntry.commit before) sameKey) saved)))
+                        storeEq,
+                      ⟨size,
+                        ⟨sameImage,
+                          ⟨Eq.mp
+                              (congrFun'
+                                (congrArg Eq
+                                  (congr
+                                    (congrArg
+                                      (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode)
+                                      (congrArg post.payload (Eq.symm sameKey)))
+                                    size))
+                                image)
+                              bytes,
+                            ⟨decode, ⟨getter, ⟨range, child⟩⟩⟩⟩⟩⟩⟩⟩⟩))))))
+'AspisR1.PoolT_Verifier.returned_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolT_Write.accepted_verifier_writes_copy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolT_Canonical.verifier' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolT_CopyShape.accepted_lengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolT_CopyShape.accepted_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolT_Event.verifier' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolT_Snapshot.data' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolT_Child.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolT_Child.original_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolT_SourceWrite.verifier' depends on axioms: [propext, Classical.choice, Quot.sound]
