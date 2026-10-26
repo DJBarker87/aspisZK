@@ -10110,3 +10110,26 @@ evidence on research and the unmerged branches, with the ruling that dictionary 
 Kani gates are not closures, a new row for the OS-entropy failure (D206), and an explicit check of
 the lead's D196-D208 claims against the evidence. Six jobs running: rw17, dict9, runjoin5, srcid,
 cb2, recount2. Rows removed outright: 0. Privacy target not yet established.
+
+## D210 (Stream B, 2026-10-26 16:55): dict9 three entries (175/255), stopped on a no-stubs question; ruling given, dict10 launched; quiet window agreed
+
+pv-dict9 (`codex/cx-prover-dict-20261026`, head dfd8a438bc; 59/100 Lean, 45 passed; 15/15 Kani: 10
+passed, 4 timeouts, 1 unsupported; audit J23158 standard axioms; no crates/programs change): entries
+78 (fibre point, V200), 231 (trace clone, V248) and 247 (CT trace value, V255) installed in
+`R1Z.PDict_RemainingDictionary231` (172 → 175 of 255 selected; 83 → 80 open; types still 26/28), plus
+`client_independent` (replacing these raw callbacks leaves the proof-account caller unchanged at the
+selected dictionary). It stopped with 41 attempts unused asking whether "no stubs" permits an explicit
+nondeterministic C ABI environment, because Kani rejects actual File::open at the foreign `open64`.
+Lead ruling (D210): no; a C ABI replacement is a stub, and Kani's reach ends at the OS boundary. The
+OS-call outcomes are a world interface for the effect-aware route (D190-D193, PV_RunJoin_World /
+CallerWorld / E1Tape): Kani only for pure projections, the File/OS paths by Lean against extraction
+with outcomes read from the world state, and each OS-outcome law surfaced as a named world field
+(never an axiom) for matching against runjoin5 and E1/E2. Entry 255 (`from_fn`, Aeneas mutable-borrow
+copy rejection in core) goes by the P6 route or a hand-stated monomorphic extraction with its identity
+obligation recorded; no backend patch. pv-dict10 relaunched with 81 Lean / 10 Kani (IDs 24400-24699).
+Host scheduling: Stream A and Stream B agreed a quiet window 16:50-17:20 UTC (marker
+/home/dombarker/project-offloads/QUIET_WINDOW.json; both streams' launchers refuse while it is in
+force; LEAD RULING (e) for Stream B workers) for the prover timing gate (D209); the shared launcher
+run-joint.sh gained the hold check before any attempt ID is consumed (backup
+run-joint.sh.bak-quietwin-20261026). Six jobs running: rw17, dict10, runjoin5, srcid, cb2, recount2.
+Rows removed outright: 0. Privacy target not yet established.
