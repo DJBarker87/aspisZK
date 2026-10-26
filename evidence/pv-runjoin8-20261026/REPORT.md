@@ -87,3 +87,19 @@ law. No large recurrence is normalized, no failed Kani aggregate is rerun,
 and no field-model certificate is relabelled as source equivalence. These two
 additional drafts have not compiled. ParentRefinement remains open P work,
 fully stated in P-obligations.md; it is not a field of T or the headline.
+
+## Planned bounded Kani leaves
+
+kani-planned.json lists all eight harness names BEFORE charging any run.
+The pending cfg(kani) child module checks the 21 source parent-compression
+cells in eight disjoint groups of one to three calls. No stubs, symbolic
+OS call, or native-factory retry is planned. This replaces the sibling's
+failed full-root aggregate by smaller explicitly identified cells; it is
+not an unchanged rerun with a larger cap. The Rust harness is still a text
+draft, not installed under crates/, and no Kani command has run.
+
+A compile-free parse confirms equality of all 21x8 source/model table
+literals, with both source file hashes retained. This is static data identity,
+not a hash-recurrence proof or kernel validation. The optimized Kani leaf
+results, exact source lineage, and symbolic loop composition would still be
+needed. No successful leaf would alone prove full mapper/compile/trace closure.
