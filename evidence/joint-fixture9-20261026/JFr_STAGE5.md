@@ -1,0 +1,9 @@
+# Stage 5: all ten exact native polynomial decodes
+
+All ten Round/Bytes/Decode module triples now compile at their delivered hashes. JFr_Decode00.source is receipt065; Decode01 is070; Decode02-09 are073/076/079/082/085/088/091/094. Every actual decodeMain 28 return is the exact array consumed by the corresponding native generatedMainBoundary/generatedMainValue theorems. The 280 sixteen-byte parser windows are bound to the retained real proof, using native parser refinement, named codec inverses and the symbolic compact block stride.
+
+The offset629 continuation initially exposed elaboration normalizing a large proof-buffer drop (068). A structural rewrite replacement still tried expensive definitional equality at the annotated selected-window binding (069). The permanent generator replacement unfolds the frame/window structure explicitly and rewrites the named selected-byte theorem syntactically. The focused replacement070 and all later instances pass without increasing depth/heartbeat or memory limits. The successful00 source remains byte-identical to065.
+
+All three generators pass --check. New generic predecessors and the first affected instances were checked before the continuation. Through094:94 Lean processes,82 pass,12 reject,0 Kani. No timeout/memory kill, cap increase, shipped-file change, package replay or ELF rebuild. Each accepted theorem has a full standard-axiom audit; per-attempt receipts retain exact target/command/source revision and hashes/dependency objects/exit/wall/RSS/swap/cgroup limits.
+
+No oracle-to-numeric-alpha binding, full arithmetic finish acceptance, accepted1/accepted2, same-pair frozen3 join or complete top-premise inhabitation is claimed. Source decode non-vacuity and the numeric native computations are actual checked results; the Rc9 top ledger removal delta remains zero.

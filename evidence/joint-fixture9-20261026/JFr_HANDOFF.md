@@ -29,3 +29,28 @@ actual generated QM31 operations. The helpers use symbolic modular word
 formulas; every primitive call and every new theorem has an axiom audit.
 No whole recurrence is kernel-reduced. The numeric alpha values are inherited
 SHA diagnostics; the arithmetic facts alone do not bind oracle calls to them.
+
+## Exact native byte binding
+
+JFr_DecodeCell.source is a success inversion of the actual indexed native
+parser, using the same original read window and return, with no selected
+coefficient correspondence premise. JFr_EncodedCell.parser supplies the
+native parser return via the retained codec inverse. JFr_BlockWindow.source
+proves compact expansion's exact 16-to-32-byte stride symbolically.
+
+The Bytes modules bind every cell to named retained proof windows; the Decode
+modules return the exact arrays consumed by the Round arithmetic modules.
+The generator treats deep physical offsets specially: structural frame and
+window rewrites prevent elaboration from reducing a large proof-buffer drop.
+The attempted flat 448-byte declaration was permanently replaced by existing
+balanced selected chunks and named per-window lemmas. No recursion/heartbeat
+or memory cap was raised.
+
+## Workflow exception retained
+
+062 accidentally reran the unchanged rejected061 source after a local edit
+script failed but the shell continued. It rejected again, is charged, and
+receives no validation credit. This violates the unchanged-source workflow
+rule; subsequent dependent edits/launches were separated. No timeout or
+memory-killed compile was rerun, and no cap was raised. All rejected recovery
+sorryAx diagnostics are retained strictly as rejected evidence.

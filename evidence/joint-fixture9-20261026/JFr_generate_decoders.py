@@ -20,10 +20,23 @@ def record : r1_wire.ValidatedRecord := ⟨{15+r}#u8,{native}.record⟩
 '''
  for i in range(28):
   s+=f'''theorem window{i:02} : ((record.framed.val.drop 5).drop (32*{i})).take 16=cell{i:02}.val := by
-  change (((JFw_Blocks.blocks 28 (JFw_Frames.window {off} 448).val).flatten).drop (32*{i})).take 16=cell{i:02}.val
-  have same : (JFw_Frames.window {off} 448).val=raw := selected
+'''
+  if off>=512:
+   s+=f'''  simp only [record,{native}.record,JFw_Frames.frame,List.drop_succ_cons,List.drop_zero]
+  dsimp only [{native}.payload,JFw_Frames.expandedPayload]
+'''
+  else:
+   s+=f'''  change (((JFw_Blocks.blocks 28 (JFw_Frames.window {off} 448).val).flatten).drop (32*{i})).take 16=cell{i:02}.val
+'''
+  if off>=512:
+   s+=f'''  dsimp only [JFw_Frames.window]
+  rw [selected,JFr_BlockWindow.source 28 raw rawLength {i} (by omega)]
+'''
+  else:
+   s+=f'''  have same : (JFw_Frames.window {off} 448).val=raw := selected
   rw [same,JFr_BlockWindow.source 28 raw rawLength {i} (by omega)]
-  exact rawCell{i:02}
+'''
+  s+=f'''  exact rawCell{i:02}
 #print axioms window{i:02}
 '''
  s+=f'''theorem source : decodeMain 28#usize record 0#usize=ok (.Ok {roundm}.polynomial) := by
