@@ -1,0 +1,69 @@
+BEf_Carrier.lean:52:18: error: Tactic `rfl` failed: The left-hand side
+  project
+    (have log' := log ++ [{ parts := parts, returned := fail e }];
+    match fail e with
+    | ok digest => run call (k digest) next log'
+    | fail e => (fail e, next, log')
+    | div => (div, next, log'))
+is not definitionally equal to the right-hand side
+  SdkC_Source.run hashv (CheckpointBytes5Effect.Code.read parts k) log
+
+case fail
+S A : Type
+call : Parts → S → Result Digest × S
+hashv : Parts → Result Digest
+binding : ∀ (parts : Parts) (state : S), (call parts state).1 = hashv parts
+parts : CheckpointBytes5Effect.Parts
+k : CheckpointBytes5Effect.Digest → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : CheckpointBytes5Effect.Digest) (state : S) (log : Log),
+    project (run call (k a) state log) = SdkC_Source.run hashv (k a) log
+state : S
+log : Log
+x✝ : Result Digest × S
+next : S
+h : call parts state = (hashv parts, next)
+e : Error
+result : hashv parts = fail e
+⊢ project
+      (have log' := log ++ [{ parts := parts, returned := fail e }];
+      match fail e with
+      | ok digest => run call (k digest) next log'
+      | fail e => (fail e, next, log')
+      | div => (div, next, log')) =
+    SdkC_Source.run hashv (CheckpointBytes5Effect.Code.read parts k) log
+BEf_Carrier.lean:53:15: error: Tactic `rfl` failed: The left-hand side
+  project
+    (have log' := log ++ [{ parts := parts, returned := div }];
+    match div with
+    | ok digest => run call (k digest) next log'
+    | fail e => (fail e, next, log')
+    | div => (div, next, log'))
+is not definitionally equal to the right-hand side
+  SdkC_Source.run hashv (CheckpointBytes5Effect.Code.read parts k) log
+
+case div
+S A : Type
+call : Parts → S → Result Digest × S
+hashv : Parts → Result Digest
+binding : ∀ (parts : Parts) (state : S), (call parts state).1 = hashv parts
+parts : CheckpointBytes5Effect.Parts
+k : CheckpointBytes5Effect.Digest → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : CheckpointBytes5Effect.Digest) (state : S) (log : Log),
+    project (run call (k a) state log) = SdkC_Source.run hashv (k a) log
+state : S
+log : Log
+x✝ : Result Digest × S
+next : S
+h : call parts state = (hashv parts, next)
+result : hashv parts = div
+⊢ project
+      (have log' := log ++ [{ parts := parts, returned := div }];
+      match div with
+      | ok digest => run call (k digest) next log'
+      | fail e => (fail e, next, log')
+      | div => (div, next, log')) =
+    SdkC_Source.run hashv (CheckpointBytes5Effect.Code.read parts k) log
+'AspisR1.BEf_Carrier.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BEf_Carrier.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
