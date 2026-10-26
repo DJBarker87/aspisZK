@@ -1,0 +1,134 @@
+F3M_SemanticChallenges.lean:29:13: error: unsolved goals
+case nil
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+before after : r1_wire.SemanticTranscript Hash
+cs : List (SourceFull25.Call D pre)
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+records : p.semantic = List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+self : r1_wire.SemanticTranscript Hash
+row : ℕ
+P : LiteralTranscript.Prefix
+positive : row ≠ 0
+count : row + [].length ≤ 25
+number : ↑self.next_row = row
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState self.state
+⊢ F3M_ReaderChallenges.ordinaryValues
+      (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) row [].length P)).2.rounds =
+    F3M_ReaderChallenges.ordinaryValues P.rounds
+F3M_SemanticChallenges.lean:57:20: error(lean.unknownIdentifier): Unknown constant `AspisR1.LiteralTranscript.Prefix.ext`
+F3M_SemanticChallenges.lean:30:29: error: unsolved goals
+case cons
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+before after✝ : r1_wire.SemanticTranscript Hash
+cs✝ : List (SourceFull25.Call D pre)
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+records : p.semantic = List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+after : r1_wire.SemanticTranscript Hash
+cs : List (SourceFull25.Call D pre)
+c : SourceFull25.Call D pre
+tail : SourceFull25.Trace D pre c.after after cs
+ih :
+  ∀ (row : ℕ) (P : LiteralTranscript.Prefix),
+    row ≠ 0 →
+      row + cs.length ≤ 25 →
+        ↑c.after.next_row = row →
+          UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) =
+              decodeState c.after.state →
+            F3M_ReaderChallenges.ordinaryValues
+                (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) row cs.length P)).2.rounds =
+              F3M_ReaderChallenges.ordinaryValues P.rounds ++ List.map SourceLiteralTraceLift.sourceChallenge cs
+row : ℕ
+P : LiteralTranscript.Prefix
+positive : row ≠ 0
+count : row + (c :: cs).length ≤ 25
+number : ↑c.before.next_row = row
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState c.before.state
+rowC : ↑c.row = row
+nextC : ↑c.after.next_row = row + 1
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p root w bound
+erased : LiteralTranscript.erase (pf row) = TranscriptView.Message.payload ⟨rowBytes p row, ⋯⟩
+bytesEq : rowBytes p row = rawBytes c.record.framed
+step :
+  eval H (LiteralByteSampler.samp row P (F3J_InputRows.proof p root w bound row)).toProgram =
+    (callLog c, TranscriptView.Value.ordinary (SourceLiteralTraceLift.sourceChallenge c), decodeState c.after.state)
+next : Prefix LiteralTranscript.Public LiteralTranscript.Message LiteralTranscript.Challenge :=
+  Prefix.ext P (pf row)
+    (TranscriptView.Value.ordinary (SourceLiteralTraceLift.sourceChallenge c), decodeState c.after.state)
+nextState :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix next) =
+    decodeState c.after.state
+result :
+  F3M_ReaderChallenges.ordinaryValues
+      (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) (row + 1) cs.length next)).2.rounds =
+    F3M_ReaderChallenges.ordinaryValues next.rounds ++ List.map SourceLiteralTraceLift.sourceChallenge cs
+⊢ List.map
+        (fun mc =>
+          match mc.2.1 with
+          | TranscriptView.Value.ordinary x => x
+          | TranscriptView.Value.queries result => 0)
+        (Prefix.ext P (pf row)
+            (TranscriptView.Value.ordinary (SourceLiteralTraceLift.sourceChallenge c),
+              decodeState c.after.state)).rounds ++
+      List.map SourceLiteralTraceLift.sourceChallenge cs =
+    List.map
+        (fun mc =>
+          match mc.2.1 with
+          | TranscriptView.Value.ordinary x => x
+          | TranscriptView.Value.queries result => 0)
+        P.rounds ++
+      SourceLiteralTraceLift.sourceChallenge c :: List.map SourceLiteralTraceLift.sourceChallenge cs
+F3M_SemanticChallenges.lean:29:27: warning: This simp argument is unused:
+  F3J_SamplerRun.program
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵J̵_̵S̵a̵m̵p̵l̵e̵r̵R̵u̵n̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_SemanticChallenges.lean:29:50: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [F3J_SamplerRun.program,e̵v̵a̵l̵,̵ ̲List.map_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_SemanticChallenges.lean:58:6: warning: This simp argument is unused:
+  List.map_append
+
+Hint: Omit it from the simp argument list.
+  simp only [next, ̲LiteralTranscript.Prefix.ext, ̲F3M_ReaderChallenges.ordinaryValues,
+        List.map_a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵cons, ̲List.map_nil, ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_SemanticChallenges.lean:58:36: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [next, ̲LiteralTranscript.Prefix.ext, ̲F3M_ReaderChallenges.ordinaryValues,
+        List.map_append, ̲List.map_cons, ̲List.m̵ap_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵pp̵end_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_SemanticChallenges.lean:58:49: warning: This simp argument is unused:
+  List.append_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [next, ̲LiteralTranscript.Prefix.ext, ̲F3M_ReaderChallenges.ordinaryValues,
+        List.map_append, ̲List.map_cons, ̲List.map_nil,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3M_SemanticChallenges.positive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
