@@ -1,0 +1,115 @@
+def AspisR1.FIs_Literal.Outcome : {CoreError : Type} →
+  (adapter : AdapterRw.Ops) →
+    (ops : AspisR1CurrentCaller.Ops) →
+      (reserved : Bool) →
+        (query : AspisR1.Port3_NativeQueryBody.Ops) →
+          (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError) →
+            (stage : VTop_Stages.Ops) →
+              {F : Type} →
+                (finish : AspisR1Stage2.Stage2Finish.FinishOps F) →
+                  (B : AspisR1PublicPreparation.FinishModel.Boundaries) →
+                    (std : AspisR1.ClaimsUnrolledFinish.StdCalls) →
+                      (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) →
+                        (f : AspisR1.S2W_NativeConsolidation.FirstCut) →
+                          AspisR1.S2W_NativeConsolidation.SecondCut →
+                            AspisR1.Tx1Q_Execution.Run
+                                (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current ops) reserved query geo
+                                  (AspisR1.F3M_CircleSource.install B) std)
+                                reserved query geo
+                                (AspisR1.SdkD_PairBatches.current adapter ops stage finish reserved query geo
+                                  (AspisR1.F3M_CircleSource.install B) std)
+                                () (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved →
+                              (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+                                List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) →
+                                  AspisR1.OraclePortCompactDraft.Parsed → AspisR1.Cons_Native.Witness → Prop :=
+fun {CoreError} adapter ops reserved query geo stage {F} finish B std saved f s run H trace authParsed tx2 =>
+  ∃ rawModel parsed q metadata view,
+    have model := AspisR1.Rc4_Model.typed rawModel;
+    have tr :=
+      AspisR1.LiteralTranscript.erasePrefix
+        (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3J_SamplerRun.program model.proof 0 33 (FS.emptyPrefix model.semantic.value))).2;
+    have i := AspisR1.TxS_Carriers.source metadata (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr);
+    model.physical.bytes = AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub ∧
+      model.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof ∧
+        AspisR1.OraclePortStoredParserC4.parseReached model.stored tr = Option.some parsed ∧
+          AspisR1.OraclePortSelectedDraft.queries tr = Option.some q ∧
+            AspisR1.OraclePortStoredDecisionDraftC4.input parsed q tr = Option.some i ∧
+              AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                  Option.some i.data ∧
+                AspisR1.LiteralOpeningView.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                    Option.some view ∧
+                  AspisR1.SAP_LiteralFields.Fields run.p i q
+                      (AspisR1.OraclePortAcceptedContextC6.context parsed i view) ∧
+                    AspisR1.SAP_CurrentNumeric.numeric run.p =
+                        AspisR1.OraclePortCheckpointResumeC5.prepared
+                          (AspisR1.OraclePortAcceptedContextC6.context parsed i view) i.data
+                          (AspisR1.SelectedChallengeMap.rhoOf i.rho) q ∧
+                      AspisR1.Port5Q1_QueryPorts.SessionAPrepare (AspisR1.Tx1Q_Carriers.prepared run.p) i.data q
+                          (AspisR1.SelectedChallengeMap.rhoOf i.rho) ∧
+                        AspisR1.Port5Q2_Prepared.PreparedFields (AspisR1.Tx1Q_Carriers.prepared run.p) ∧
+                          ∃ sourcePrepared,
+                            AspisR1CurrentCaller.InstalledPreparation.currentPrepared sourcePrepared = run.p ∧
+                              AspisR1.F3L_SourcePrepared.numeric sourcePrepared =
+                                  AspisR1.OraclePortCheckpointResumeC5.prepared
+                                    (AspisR1.OraclePortAcceptedContextC6.context parsed i view) i.data
+                                    (AspisR1.SelectedChallengeMap.rhoOf i.rho) q ∧
+                                (AspisR1.AuS1_Finish.Collision H trace authParsed q ∨
+                                  AspisR1.CheckpointBytes5Output.accumulator
+                                        (AspisR1.Tx1Q_Carriers.accumulator
+                                          (have __src := run.out;
+                                          { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                            next := __src.next })) =
+                                      (AspisR1.OraclePortCheckpointStateC3.write
+                                          (AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                            (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).accumulator ∧
+                                    AspisR1.Port3_CheckpointInstall.writer
+                                          (AspisR1.Tx1Q_Install.digest
+                                            (AspisR1.SdkD_PairBatches.current adapter ops stage finish reserved query
+                                              geo (AspisR1.F3M_CircleSource.install B) std))
+                                          (AspisR1.Tx1Q_Carriers.prepared run.p)
+                                          (AspisR1.Tx1Q_Carriers.accumulator
+                                            (have __src := run.out;
+                                            { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                              next := __src.next }))
+                                          f.proof f.pub () =
+                                        Aeneas.Std.Result.ok saved ∧
+                                      (↑run.flushed).length = 64 ∧
+                                        ↑run.out.next = 10 ∧
+                                          saved =
+                                              AspisR1.Tx2N_Reader.writer H
+                                                (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof)
+                                                (AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub)
+                                                (AspisR1.OraclePortCheckpointResumeC5.prepared
+                                                  (AspisR1.OraclePortAcceptedContextC6.context parsed i view) i.data
+                                                  (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                                                (AspisR1.OraclePortCheckpointStateC3.write
+                                                    (AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                                      (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).accumulator ∧
+                                            AspisR1.FIs_Finish.Outcome finish tx2.v2 tx2.p2
+                                              (have __src := tx2.returned2;
+                                              { weights := tx2.back2 tx2.flushed2, rhs := __src.rhs,
+                                                power := __src.power, next := __src.next })
+                                              s.proof saved H (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof)
+                                              (AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub) run.p authParsed trace
+                                              parsed.semantic q tr i
+                                              (AspisR1.OraclePortAcceptedContextC6.context parsed i view))
+@AspisR1.Rc5_LiteralForget.forget : ∀ {CoreError : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (stage : VTop_Stages.Ops) {F : Type} (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+  (s : AspisR1.S2W_NativeConsolidation.SecondCut)
+  (run :
+    AspisR1.Tx1Q_Execution.Run
+      (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current ops) reserved query geo
+        (AspisR1.F3M_CircleSource.install B) std)
+      reserved query geo
+      (AspisR1.SdkD_PairBatches.current adapter ops stage finish reserved query geo (AspisR1.F3M_CircleSource.install B)
+        std)
+      () (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (trace : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State))
+  (authParsed : AspisR1.OraclePortCompactDraft.Parsed) (tx2 : AspisR1.Cons_Native.Witness),
+  AspisR1.Rc5_Literal.Outcome adapter ops reserved query geo stage finish B std saved f s run H trace authParsed tx2 →
+    AspisR1.Rc4_Literal.Outcome adapter ops reserved query geo stage finish B std saved f s run H trace authParsed tx2
