@@ -1,0 +1,21 @@
+import F3T_RootAgreement
+import F3T_Reached
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.F3T_AlignedRows
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw
+open OraclePortCompactDraft
+
+theorem lookup (D : LiteralByteProtocol.Decoder) (H : Bytes → State)
+    (pub : LiteralTranscript.Public) (pf : LiteralProtocol.Proof) (row : Nat) (below : row<33) :
+    ∃ c,(LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H pub pf 33)).rounds[row]?=
+      some (LiteralTranscript.erase (pf row),c) := by
+  refine ⟨(eval H (LiteralByteSampler.samp row
+    ((LiteralByteProtocol.protocol D).transcript H pub pf row) (pf row)).toProgram).2,?_⟩
+  simp only [LiteralTranscript.erasePrefix,List.getElem?_map,
+    LiteralByteRunFacts.transcript_index D H pub pf 33 row below,Option.map_some]
+
+#print axioms lookup
+end AspisR1.F3T_AlignedRows
+end
