@@ -16,9 +16,9 @@ No implementation or release pin changed. Target not yet established.
 |246|V254|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op246Source.op246_source|24701.json|
 |230|V247|OPEN: direct iterator closure obstructed; narrowing/P6 pending|—|aeneas-source-op230-001/collected-receipt.json|
 |229|V246|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op229Source.op229_source|24705.json|
-|228|V245|OPEN|—|—|
-|227|V244|OPEN|—|—|
-|226|V243|OPEN|—|—|
+|228|V245|OPEN: borrow-processing failure; P6 pending|—|aeneas-source-op228-001/collected-receipt.json|
+|227|V244|OPEN: builtin-copy extraction failure; P6 pending|—|aeneas-source-op227-001/collected-receipt.json|
+|226|V243|OPEN: branch-context extraction failure; P6 pending|—|aeneas-source-op226-004/collected-receipt.json|
 |225|V242|OPEN|—|—|
 |224|V241|OPEN|—|—|
 |223|V240|OPEN|—|—|

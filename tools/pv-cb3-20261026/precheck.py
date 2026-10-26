@@ -11,3 +11,5 @@ r=dict(op=n,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),branch=
 p=root/'evidence/pv-cb3-20261026'/f'op{n}-sibling-check{("-"+sys.argv[2]) if len(sys.argv)>2 else ""}.json'
 assert not p.exists();p.write_text(json.dumps(r,indent=2)+'\n')
 print(json.dumps(r))
+
+if r["status"] == "SKIPPED(sibling)": sys.exit(3)
