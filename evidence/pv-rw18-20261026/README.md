@@ -251,7 +251,7 @@ existing Copy polynomial, emitted final power and extracted byte writer.
 `FixturePolynomial`, `FixturePower`, `FixtureWrite`, and `FixtureDecode` give
 checked nonempty sample specializations for both measured release fixtures.
 These are compression-component theorems and do not assert whole-fixture
-proof-byte/audit equality. Native non-vacuity remains816 full Result/state
+proof-byte/audit equality. Native non-vacuity remains816 native output/final-power
 comparisons per fixture across all136 copy links, including270/264 nonzero
 producer/consumer tuples respectively.
 
@@ -285,3 +285,22 @@ that file with its summary. The26000 receipt was captured before that write
 and is authoritative for the complete172 axiom strings. The final manifest
 uses separate wrapper/raw log paths. No proof source, limits or compiler is
 changed, and the unchanged audit is not rerun.
+
+## Final allocation and result
+
+The100 Lean attempts are exhausted:80 successful target checks and20 failed
+attempts, with immutable failed snapshots and replacements retained.25901 and
+25957 were dependency preflights with no compiler invocation and zero charge.
+The20 Kani runs are exhausted:16 passes, four timeouts, no counterexample.
+All80 current ProverRw18 Lean modules have matching successful SHA receipts.
+The26000 audit records172 standard-only axiom results;26001 runs the frozen
+component manifest exactly once at committed revision71020eda20. Both pass.
+No further compile, Kani, native fixture or release replay is performed.
+
+V164 is REDUCED to the exact original-helper context identity and sibling
+op223 source law in ContextJoin.callback; neither is supplied. V163 is OPEN:
+the concrete whole-model term and both actual proof-byte/audit comparisons
+remain missing on both fixtures and generally. No endpoint/ledger premise
+is removed, added or weakened. Mathematical field/codec corollaries require
+canonical lambda and tag<P; the unrestricted full-Result context/reference
+correspondence is unchanged. The privacy target is not established.
