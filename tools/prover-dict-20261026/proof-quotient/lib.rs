@@ -13,7 +13,7 @@ pub struct ErrorProjection {
 pub fn retry(reference: ErrorProjection) -> bool {
     reference.kind == ErrorKind::AlreadyExists
 }
-struct ByteObserver { message: &'static str, position: usize, calls: usize, fail: bool }
+struct ByteObserver { message: &'static str, position: usize, calls: usize, fail: bool, frame:u64 }
 impl Write for ByteObserver {
     fn write_str(&mut self, bytes: &str) -> fmt::Result {
         assert!(bytes.len() == self.message.len());
@@ -29,10 +29,11 @@ fn custom(message: &'static str, kind: ErrorKind) {
     assert!((error.kind() == ErrorKind::AlreadyExists) == retry(reference));
     let position:usize=kani::any();kani::assume(position<message.len());
     let fail:bool=kani::any();
-    let mut observer=ByteObserver {message,position,calls:0,fail};
+    let frame:u64=kani::any();
+    let mut observer=ByteObserver {message,position,calls:0,fail,frame};
     let outcome=Display::fmt(&error,&mut fmt::Formatter::new(&mut observer,fmt::FormattingOptions::new()));
     assert!(outcome.is_err()==fail);
-    assert!(observer.calls==1);
+    assert!(observer.calls==1 && observer.frame==frame);
 }
 #[kani::proof]
 #[kani::unwind(4)]
@@ -125,7 +126,8 @@ fn r0_formatter(index:u8, all_options:bool) {
     };
     let position:usize=kani::any();kani::assume(position<name.len());
     let fail:bool=kani::any();
-    let mut sink=ByteObserver {message:name,position,calls:0,fail};
+    let frame:u64=kani::any();
+    let mut sink=ByteObserver {message:name,position,calls:0,fail,frame};
     let mut opts=fmt::FormattingOptions::new();
     if all_options {
         opts.fill(kani::any::<char>()).width(kani::any::<Option<u16>>())
@@ -141,7 +143,7 @@ fn r0_formatter(index:u8, all_options:bool) {
     let outcome={let mut formatter=fmt::Formatter::new(&mut sink,opts);
         let r=fmt::Debug::fmt(&error,&mut formatter);
         assert!(formatter.options()==opts);r};
-    assert!(outcome.is_err()==fail && sink.calls==1);
+    assert!(outcome.is_err()==fail && sink.calls==1 && sink.frame==frame);
 }
 #[kani::proof]
 #[kani::unwind(4)]

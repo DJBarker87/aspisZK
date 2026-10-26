@@ -1,6 +1,84 @@
 {
   "runs": [
     {
+      "attempt": "pdict-q231-array-extract-001",
+      "target": [
+        "timeout",
+        "120",
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "optimized",
+        "--sysroot",
+        "default",
+        "--rustc-arg=--cfg=kani",
+        "--start-from",
+        "crate::coefficients",
+        "--include",
+        "aspis_r1_cost_probe::transport",
+        "--include",
+        "aspis_core::r0::transport",
+        "--include",
+        "core::array",
+        "--dest-file",
+        "PDict_StdArray231.llbc",
+        "--",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-remaining/Cargo.toml",
+        "--offline",
+        "--release",
+        "--lib",
+        "--jobs",
+        "4"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 0.31497027503792197,
+      "peak_rss_kib": 184624,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then generic core-array source extraction; no elimination"
+    },
+    {
+      "attempt": "pdict-q231-array-translate-001",
+      "target": [
+        "timeout",
+        "90",
+        "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "PDict_StdArraySource231",
+        "-dest",
+        "/home/dombarker/project-offloads/codex-cx-prover-dict-20261026/src/PDict_StdArrayGenerated231",
+        "-split-files",
+        "-emit-json",
+        "tools/prover-dict-20261026/proof-remaining/PDict_StdArray231.llbc"
+      ],
+      "exit_status": 2,
+      "wall_seconds": 0.2680180970346555,
+      "peak_rss_kib": 67936,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "Aeneas translation of generic core-array source; no elimination"
+    },
+    {
       "attempt": "pdict-q231-extract-001",
       "target": [
         "timeout",
@@ -216,6 +294,336 @@
       "expected_work": "optimized compilation then one named bounded harness at a time: reverse bits, Error projections, File boundaries, Formatter sinks; no elimination"
     },
     {
+      "attempt": "pdict-q231-kani-038",
+      "target": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-quotient/Cargo.toml",
+        "--lib",
+        "--harness",
+        "error_noncollision_message_bytes_kind_retry",
+        "--exact",
+        "--solver",
+        "kissat",
+        "-j",
+        "4",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 124,
+      "wall_seconds": 120.0042029430042,
+      "peak_rss_kib": 16188,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then remaining independent bounded Error/File/Formatter and array-from-fn harnesses; one at a time, no elimination"
+    },
+    {
+      "attempt": "pdict-q231-kani-039",
+      "target": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-quotient/Cargo.toml",
+        "--lib",
+        "--harness",
+        "file_flush_live_owner",
+        "--exact",
+        "--solver",
+        "kissat",
+        "-j",
+        "4",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 0.851265582954511,
+      "peak_rss_kib": 174544,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then remaining independent bounded Error/File/Formatter and array-from-fn harnesses; one at a time, no elimination"
+    },
+    {
+      "attempt": "pdict-q231-kani-040",
+      "target": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-quotient/Cargo.toml",
+        "--lib",
+        "--harness",
+        "file_open_nul_path_no_world_stub",
+        "--exact",
+        "--solver",
+        "kissat",
+        "-j",
+        "4",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 5.188146168016829,
+      "peak_rss_kib": 389460,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then remaining independent bounded Error/File/Formatter and array-from-fn harnesses; one at a time, no elimination"
+    },
+    {
+      "attempt": "pdict-q231-kani-041",
+      "target": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-quotient/Cargo.toml",
+        "--lib",
+        "--harness",
+        "error_simple_retry_projection",
+        "--exact",
+        "--solver",
+        "kissat",
+        "-j",
+        "4",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 1.6723077109782025,
+      "peak_rss_kib": 178032,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then remaining independent bounded Error/File/Formatter and array-from-fn harnesses; one at a time, no elimination"
+    },
+    {
+      "attempt": "pdict-q231-kani-042",
+      "target": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-quotient/Cargo.toml",
+        "--lib",
+        "--harness",
+        "error_os_retry_projection",
+        "--exact",
+        "--solver",
+        "kissat",
+        "-j",
+        "4",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 1.402803817007225,
+      "peak_rss_kib": 177444,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then remaining independent bounded Error/File/Formatter and array-from-fn harnesses; one at a time, no elimination"
+    },
+    {
+      "attempt": "pdict-q231-kani-043",
+      "target": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-quotient/Cargo.toml",
+        "--lib",
+        "--harness",
+        "file_open_nonempty_no_world_stub",
+        "--exact",
+        "--solver",
+        "kissat",
+        "-j",
+        "4",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 11.32821868895553,
+      "peak_rss_kib": 454708,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then remaining independent bounded Error/File/Formatter and array-from-fn harnesses; one at a time, no elimination"
+    },
+    {
+      "attempt": "pdict-q231-kani-048",
+      "target": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-quotient/Cargo.toml",
+        "--lib",
+        "--harness",
+        "array_from_fn_1024_order_and_pointwise_value",
+        "--exact",
+        "--solver",
+        "kissat",
+        "-j",
+        "4",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 95.26389969198499,
+      "peak_rss_kib": 1906312,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then named array-from-fn 1024 event-order check and bounded Formatter/File checks, sequentially; no elimination"
+    },
+    {
+      "attempt": "pdict-q231-kani-058",
+      "target": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-quotient/Cargo.toml",
+        "--lib",
+        "--harness",
+        "formatter_all_r0_variants_all_options",
+        "--exact",
+        "--solver",
+        "kissat",
+        "-j",
+        "4",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 3.736054365988821,
+      "peak_rss_kib": 272736,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then bounded Formatter all-options and final File checks, sequentially; no elimination"
+    },
+    {
+      "attempt": "pdict-q231-kani-059",
+      "target": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-quotient/Cargo.toml",
+        "--lib",
+        "--harness",
+        "file_empty_write_all_preserves_owner",
+        "--exact",
+        "--solver",
+        "kissat",
+        "-j",
+        "4",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 2.2602826070506126,
+      "peak_rss_kib": 290508,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then bounded Formatter all-options and final File checks, sequentially; no elimination"
+    },
+    {
+      "attempt": "pdict-q231-kani-060",
+      "target": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-dict-20261026/proof-quotient/Cargo.toml",
+        "--lib",
+        "--harness",
+        "file_create_new_mode_nul_no_world_stub",
+        "--exact",
+        "--solver",
+        "kissat",
+        "-j",
+        "4",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 5.000745062017813,
+      "peak_rss_kib": 389820,
+      "swaps": 0,
+      "print_axioms": "N/A: Rust or translation; no Lean theorem checked",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "expected_work": "optimized compilation then bounded Formatter all-options and final File checks, sequentially; no elimination"
+    },
+    {
       "attempt": "pdict-q231-translate-001",
       "target": [
         "timeout",
@@ -248,6 +656,12 @@
       "expected_work": "Aeneas translation of four extracted pure roots; no elimination"
     }
   ],
-  "kani_runs": 5,
-  "qualification": "Admission refusals and PATH failures before cargo are not Kani invocations. Native scope peaks across a batch are cumulative; raw GNU time is per target."
+  "kani_runs": 15,
+  "qualification": "Admission refusals and PATH failures before cargo are not Kani invocations. Native scope peaks across a batch are cumulative; raw GNU time is per target.",
+  "kani_remaining": 0,
+  "kani_passed": 10,
+  "kani_timeouts": 4,
+  "kani_unsupported_boundary": 1,
+  "root_premises_removed": 0,
+  "native_types": 26
 }

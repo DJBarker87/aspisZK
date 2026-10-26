@@ -25,7 +25,7 @@ inputs=['tools/prover-dict-20261026/proof-quotient/lib.rs',
         'tools/prover-dict-20261026/PDict_quotient_batch231.py']
 pins={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in inputs}
 rows=[]
-for number,case in enumerate(cases[3:],18):
+for number,case in enumerate(cases[10:],58):
     label=f'pdict-q231-kani-{number:03d}'
     cmd=['timeout','120','cargo','kani','--manifest-path',
          'tools/prover-dict-20261026/proof-quotient/Cargo.toml','--lib',
@@ -35,7 +35,7 @@ for number,case in enumerate(cases[3:],18):
     ret=subprocess.run([sys.executable,'tools/prover-rw-20261023/host-run.py',label,*cmd]).returncode
     folder=Path('receipts')/label
     (folder/'input-supplement.json').write_text(json.dumps(dict(
-        worktree_revision='4cd294bc606a713f9fa107bae8f116a1abdd6028',
+        worktree_revision='1f5f2545eaaaf1eb95229a7b691514991dfd0e0b',
         proof_only_sources=pins,target=cmd,exit=ret,
         scope_qualification='Sequential harnesses share one admitted scope; cgroup peaks are cumulative across this batch. GNU time is per target.',
         source_revision_qualification='Historical host snapshot label retained in raw receipt. Exact proof inputs above supplement its incomplete inventory.'),indent=2)+'\n')

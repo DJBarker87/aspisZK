@@ -44,3 +44,22 @@ Three source fields installed:78→V200,231→V248,247→V255. Sufficient source
 counts175selected/80open/255; native types26/28; root premises removed0.
 Entry255 is not counted. Full lift remains untouched. No crates/programs,
 sibling source/worktree, backend, simulator, observer, artifact pin or key changed.
+
+
+Admission timing deviation: after the13:55:58 refusal, q231-006 and007
+rechecked after140.1s/166.2s instead of the required180s. The first scope
+failed before Cargo (PATH); the second Kani timed out and is rejected. Live
+preflight and in-scope gates both allowed those launches; no barrier/cap was
+bypassed or changed. Early read-only observations002/003/014 also precede
+180s; they were not used to launch early. Exact times are retained in
+`admission-timing-deviations.json`. These waits are not claimed compliant.
+
+
+## Final focused checkpoint
+
+See HANDOFF.md for the final source/caller result and remaining type obligations.
+59Lean attempts(45pass/14reject),41remaining;15Kani(10pass/4timeout/1unsupported).
+J23157 actual caller callback independence passes; J23158 audit passes50standard-only
+reports. Sufficient source counts175/80/255; types26/28; root premises removed0.
+No full frozen replay or deployed privacy claim. Native boundary interpretation
+is pending user/lead clarification, rather than assumed permissive.
