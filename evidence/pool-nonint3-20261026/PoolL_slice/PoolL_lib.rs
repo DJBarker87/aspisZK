@@ -87,3 +87,72 @@ pub fn PoolL_allocate_prefix(payer: &AccountInfo<'_>, account: &AccountInfo<'_>,
     }
     Ok(())
 }
+
+pub fn require_program_account(
+    account: &AccountInfo,
+    program_id: &Pubkey,
+    writable: bool,
+) -> Result<(), ProgramError> {
+    if account.owner != program_id {
+        return Err(ProgramError::IncorrectProgramId);
+    }
+    if account.executable || account.is_writable != writable {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    Ok(())
+}
+pub fn PoolL_fresh_header(account: &AccountInfo<'_>, expected_address: &Pubkey) -> ProgramResult {
+    if account.key != expected_address
+        || account.executable
+        || account.is_signer
+        || !account.is_writable
+    {
+        return Err(PoolV1ProgramError::InvalidFreshAccount.into());
+    }
+    Ok(())
+}
+pub fn PoolL_marker_header(marker_account: &AccountInfo<'_>) -> ProgramResult {
+    if marker_account.executable || marker_account.is_signer || !marker_account.is_writable {
+        return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
+    }
+    Ok(())
+}
+pub fn PoolL_vault_header(vault: &AccountInfo<'_>, expected: &Pubkey) -> ProgramResult {
+    if vault.key != expected
+        || vault.executable
+        || vault.is_signer
+        || !vault.is_writable
+    {
+        return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
+    }
+    Ok(())
+}
+pub fn PoolL_canonical_header(account: &AccountInfo<'_>, program_id: &Pubkey) -> ProgramResult {
+    require_program_account(account, program_id, true)?;
+    if account.is_signer {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    Ok(())
+}
+
+pub fn PoolL_borrow_length(data: Result<&[u8], ProgramError>, exact_bytes: usize) -> ProgramResult {
+    let bytes = data?;
+    PoolL_length_prefix(bytes, exact_bytes)
+}
+pub fn PoolL_canonical_role(account: &AccountInfo<'_>, program_id: &Pubkey,
+    data: Result<&[u8], ProgramError>) -> ProgramResult {
+    PoolL_canonical_header(account, program_id)?;
+    PoolL_borrow_length(data, 1000)
+}
+pub fn PoolL_fresh_length(data: &[u8], expected: usize) -> ProgramResult {
+    if data.len() != expected {
+        return Err(PoolV1ProgramError::InvalidFreshAccount.into());
+    }
+    Ok(())
+}
+pub fn PoolL_marker_length(data: &[u8]) -> ProgramResult {
+    if data.len() != 208 {
+        return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
+    }
+    Ok(())
+}
