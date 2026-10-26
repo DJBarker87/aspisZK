@@ -54,7 +54,8 @@ mod checks {
         let bytes:[u64;16]=kani::any(); let len:usize=kani::any(); kani::assume(len<=16);
         let mut actual=bytes[..len].to_vec(); let old=actual.pop();
         let (expected,tail)=reference::pop(&bytes[..len]);
-        assert_eq!(old,expected.copied()); assert_eq!(actual.as_slice(),tail);
+        assert_eq!(old,expected.copied()); assert_eq!(actual.len(),tail.len());
+        for i in 0..actual.len() {assert_eq!(actual[i],tail[i]);}
     }
     #[kani::proof]
     #[kani::unwind(18)]
@@ -74,7 +75,11 @@ mod checks {
         let bytes:[u64;16]=kani::any(); let len:usize=kani::any(); kani::assume(len<=16);
         let actual:Result<[u64;4],Vec<u64>>=bytes[..len].to_vec().try_into();
         let expected=reference::array::<u64,4>(bytes[..len].to_vec());
-        assert_eq!(actual,expected);
+        match (actual,expected) {
+            (Ok(a),Ok(b))=>{for i in 0..4 {assert_eq!(a[i],b[i]);}},
+            (Err(a),Err(b))=>{assert_eq!(a.len(),b.len());for i in 0..a.len() {assert_eq!(a[i],b[i]);}},
+            _=>panic!("different result variants"),
+        }
     }
     #[kani::proof]
     #[kani::unwind(18)]
@@ -138,4 +143,22 @@ mod checks {
         assert!(actual.try_reserve_exact(usize::MAX).is_ok());
         assert!(actual.is_empty());
     }
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn push_ascii1() {
+        let a:u8=kani::any();let b:u8=kani::any();
+        kani::assume(a<128 && b<128);
+        let mut actual=String::new();actual.push(a as char);
+        let mut suffix=String::new();suffix.push(b as char);actual.push_str(&suffix);
+        assert_eq!(actual.as_bytes(),&[a,b]);
+    }
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn take_array4() {
+        let x:[u64;4]=kani::any();let mut actual=x;
+        let old=std::mem::take(&mut actual);
+        let (expected,cleared)=reference::take(x);
+        for i in 0..4 {assert_eq!(old[i],expected[i]);assert_eq!(actual[i],cleared[i]);}
+    }
+
 }

@@ -1,0 +1,35 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling pv-cb-references v0.0.0 (/home/dombarker/project-offloads/codex-pv-cb-20261026/proof)
+warning: unexpected `cfg` condition name: `pv_cb_extract`
+ --> lib.rs:3:20
+  |
+3 | #[cfg(all(kani,not(pv_cb_extract)))]
+  |                    ^^^^^^^^^^^^^
+  |
+  = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+  = help: consider using a Cargo feature instead
+  = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+           [lints.rust]
+           unexpected_cfgs = { level = "warn", check-cfg = ['cfg(pv_cb_extract)'] }
+  = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(pv_cb_extract)");` to the top of the `build.rs`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+  = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.16s
+Thread 1: Checking harness checks::reserve_zst_overflow...
+Thread 1: 
+VERIFICATION RESULT:
+ ** 0 of 241 failed (6 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.16285077s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

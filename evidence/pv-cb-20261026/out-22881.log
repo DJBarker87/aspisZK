@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_OwnedMaskLinears.lean:25:4: error: Type mismatch
+  ih (pred e) ?m.84 ?m.85 small
+has type
+  PV_CB_OwnedMask.owned.linears_fold point (pred e) ?m.84 ?m.85 =
+    PV_CB_MaskLinearsFinite.finite point fuel (pred e) ?m.84 ?m.85
+but is expected to have type
+  (do
+      let q ← point.index_usize (e.wrapping_sub 1#usize)
+      let suffix1 ← ProverRwP7CurrentFieldSource.aspis_core.field.QM31.add suffix q
+      let weighted1 ←
+        if (e.wrapping_sub 1#usize != 0#usize) = true then
+            ProverRwP7CurrentFieldSource.aspis_core.field.QM31.add weighted suffix1
+          else ok weighted
+      PV_CB_OwnedMask.owned.linears_fold point (e.wrapping_sub 1#usize) suffix1 weighted1) =
+    do
+    let q ← point.index_usize (Usize.ofNatCore (↑e - 1) ⋯)
+    let suffix1 ← ProverRwP7CurrentFieldSource.aspis_core.field.QM31.add suffix q
+    let weighted1 ←
+      if (Usize.ofNatCore (↑e - 1) ⋯ != 0#usize) = true then
+          ProverRwP7CurrentFieldSource.aspis_core.field.QM31.add weighted suffix1
+        else ok weighted
+    PV_CB_MaskLinearsFinite.finite point fuel (Usize.ofNatCore (↑e - 1) ⋯) suffix1 weighted1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_OwnedMaskLinears.lean:23:41: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [more, ̲if_true, ̲lift, ̲bind_tc_ok, ̲PV_CB_MaskLinearsFinite.finite,
+        PV_CB_MaskLinearsFinite.S.add, ̲pred,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB_OwnedMaskLinears.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

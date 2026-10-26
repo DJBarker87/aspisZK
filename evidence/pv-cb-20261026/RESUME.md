@@ -1,4 +1,14 @@
 # Latest checkpoint (supersedes counts below)
+Lean91/100; next22892. Kani17/20 with array017 running (session73901).
+No other own scope. Kani14pop failed memcmp unwind,15empty and16default passed.
+012mask unwind failure,013mask180s timeout. Whole native mask relation still OPEN.
+OwnedMask80, Leaves82, ReverseWrap83, Linears84, Horner85, LinearsTotal86,
+HornerTotal87, LinearsEq91 green. Failed81/88/89/90 retained. Four pending modules:
+OwnedMaskHornerEq, OwnedMaskFill, OwnedMaskFillTotal, OwnedMaskTotal, not yet compiled.
+Fresh late-op checks205–261 and full73-op status table in FINAL-STATUS.md/json.
+0 full ledger/endpoint premises removed. Continue remaining budget; no push.
+
+# Latest checkpoint (supersedes counts below)
 Lean79/100; next22880. Kani10/20, Kani11 zst running. Own scope only.
 EncoderTotal22879 passed. Native small reserve010 passed. No endpoint rows removed.
 Latest per-run inputs frozen in native job directories. Continue whole budget.

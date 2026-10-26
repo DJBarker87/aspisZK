@@ -32,7 +32,7 @@ mod checks {
         QM31{c0:CM31{a:M31(words[0]),b:M31(words[1])},c1:CM31{a:M31(words[2]),b:M31(words[3])}}
     }
     #[kani::proof]
-    #[kani::unwind(32)]
+    #[kani::unwind(40)]
     fn mask_qm31() {
         use aspis_core::field::QM31;
         let words:[[u32;4];37]=kani::any();

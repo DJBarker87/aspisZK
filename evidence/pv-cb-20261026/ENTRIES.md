@@ -293,3 +293,25 @@ The original arbitrary UTF8 gate timeout remains. Row26's initial blanket
 allocator deferral is superseded: bounded path_join8 passed; full generic law
 remains OPEN. No ledger or endpoint premise removed: assigned73 before/73 after.
 Fresh sibling checks79/117 at rwbbcc13a0 anddict1f5f2545 found no installation.
+
+## Owned mask source checkpoint
+
+Charon/Aeneas recursive mask extraction passes. owned_mask_source.py --check
+matches all31 emitted field definitions to the checked current field source,
+after the documented two signed shift-count API literals; carriers match
+field-for-field and control bodies are otherwise unchanged. PV_CB_OwnedMask
+22880 compiles. Tower source/totality22882 and wrapping predecessor22883 pass.
+Owned linears/horner finite correspondence22884/85 and totality22886/87 pass.
+Failed22881 retained (wrapping predecessor missing);22888 linears root bridge
+fails on iterator default reduction and is being corrected. Standard axioms
+on all green theorems. Native row117 stays OPEN: Kani12 unwind32 failed in
+37-element Arbitrary initialization; corrected40 run13 timed out180s. No own
+solver survived. This is not a counterexample and not native correspondence.
+
+Late source audit checks205–261 in ascending order before source inspection;
+per-op sibling receipts and exact emitted function names are retained.
+Existing sibling source installs246/249/250 are reused, alongside225/254.
+Native effect deferrals:232 returns measured Instant timings (z4/z9e.rs196–220),
+257 invokes native worker scheduling plus optional trace mutex (host_work.rs),
+261 writes std filesystem state. See late-op-source-inventory.json. Other
+unfinished pure rows remain OPEN; no arbitrary effect deferrals are invented.
