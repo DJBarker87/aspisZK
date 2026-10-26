@@ -1,0 +1,142 @@
+AspisR1.FIv_NativeTerminal.value : ∀ (pub : FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (claims : Aeneas.Std.Array (Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 29#usize) 3#usize)
+  (alpha : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 10#usize) (c : FIq_Native.state_only_prefix.r0.Challenges)
+  (out : AspisR1.FIv_NativeArithmetic.NQ),
+  pub.terminal_qm31 claims alpha c = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+    (∀ x ∈ ↑c.zc, AspisR1.FIv_NativeValue.Canon x) →
+      (∀ x ∈ ↑alpha, AspisR1.FIv_NativeValue.Canon x) →
+        AspisR1.FIv_NativeValue.Canon c.mu →
+          AspisR1.FIv_NativeValue.Canon c.theta →
+            ∃ selected sem c1 mask g semantic poseidon copy h,
+              FIq_Native.array_from_fn_copy 84#usize FIq_Native.field.QM31.Insts.CoreMarkerCopy
+                    FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                    FIq_Native.field.QM31.ZERO claims =
+                  Aeneas.Std.Result.ok selected ∧
+                pub.semantic = Aeneas.Std.Result.ok sem ∧
+                  FIq_Native.pool_v1.pair_forest_semantic_terminal.terminal_parts sem selected alpha c.lambda c.chi
+                        c.theta c.zc c.mu =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out, c1, mask, g)) ∧
+                    ((∀ x ∈ ↑semantic, AspisR1.FIv_NativeValue.Canon x) →
+                      (∀ x ∈ ↑poseidon, AspisR1.FIv_NativeValue.Canon x) →
+                        AspisR1.FIv_NativeValue.Canon copy.residual →
+                          AspisR1.FIv_NativeValue.Canon h →
+                            AspisR1.FIv_NativeValue.Canon copy.active →
+                              AspisR1.FIv_NativeValue.Canon out ∧
+                                AspisR1.FIv_NativeValue.decode out =
+                                  AspisR1.FIv_TerminalValue.formula (AspisR1.FIv_EqualityValue.weight c.zc alpha)
+                                    (AspisR1.FIv_CompositionValue.polynomial (AspisR1.FIv_NativeValue.decode c.theta)
+                                      semantic poseidon copy.residual)
+                                    (AspisR1.FIv_NativeValue.decode c.mu) (AspisR1.FIv_NativeValue.decode h)
+                                    (AspisR1.FIv_NativeValue.decode copy.active))
+AspisR1.FIv_CompositionExact.value : ∀ (pub : AspisR1.FIv_CompositionTrace.SemPub)
+  (claims : Aeneas.Std.Array AspisR1.FIv_CompositionTrace.NQ 84#usize)
+  (point : Aeneas.Std.Array AspisR1.FIv_CompositionTrace.NQ 10#usize)
+  (lambda chi theta comp g h active : AspisR1.FIv_CompositionTrace.NQ)
+  (c1 : Aeneas.Std.Array AspisR1.FIv_CompositionTrace.NQ 16#usize)
+  (mask : Aeneas.Std.Array AspisR1.FIv_CompositionTrace.NQ 10#usize),
+  AspisR1.FIv_CompositionTrace.composition pub claims point lambda chi theta =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (comp, c1, mask, g, h, active)) →
+    AspisR1.FIv_NativeValue.Canon theta →
+      ∃ a a1 a2 amount selectors sops variant semantic poseidon copy,
+        FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = Aeneas.Std.Result.ok selectors ∧
+          FIq_Native.pool_v1.pair_forest_semantic_terminal.poseidon_selectors selectors = Aeneas.Std.Result.ok sops ∧
+            FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                  { z := a, succ_z := a1, xor12_z := a2 } sops =
+                Aeneas.Std.Result.ok poseidon ∧
+              FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed
+                    { variant := pub.variant, pool := pub.pool, deployment_domain := pub.deployment_domain,
+                      anchor := pub.anchor, nullifier := pub.nullifier, asset_id := pub.asset_id,
+                      recipient := pub.recipient, change := pub.change, withdrawal_amount := amount,
+                      transition := pub.transition }
+                    { z := a, succ_z := a1, xor12_z := a2 } selectors =
+                  Aeneas.Std.Result.ok semantic ∧
+                FIq_Native.pool_v1.pair_forest_semantic_terminal.copy_variant pub.variant =
+                    Aeneas.Std.Result.ok variant ∧
+                  FIq_Native.pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h selectors lambda chi
+                        pub.transition.live_snapshot.next_pair_index variant =
+                      Aeneas.Std.Result.ok copy ∧
+                    copy.active = active ∧
+                      ((∀ x ∈ ↑semantic, AspisR1.FIv_NativeValue.Canon x) →
+                        (∀ x ∈ ↑poseidon, AspisR1.FIv_NativeValue.Canon x) →
+                          AspisR1.FIv_NativeValue.Canon copy.residual →
+                            AspisR1.FIv_NativeValue.Canon comp ∧
+                              AspisR1.FIv_NativeValue.decode comp =
+                                AspisR1.FIv_CompositionExact.polynomial (AspisR1.FIv_NativeValue.decode theta) semantic
+                                  poseidon copy.residual)
+AspisR1.FIv_FoldsTotal.value : ∀ (semantic : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 24#usize)
+  (poseidon : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize) (theta seed : AspisR1.FIv_NativeArithmetic.NQ),
+  AspisR1.FIv_NativeValue.Canon theta →
+    AspisR1.FIv_NativeValue.Canon seed →
+      (∀ x ∈ ↑semantic, AspisR1.FIv_NativeValue.Canon x) →
+        (∀ x ∈ ↑poseidon, AspisR1.FIv_NativeValue.Canon x) →
+          ∃ out,
+            AspisR1.FIv_FoldsTotal.body semantic poseidon theta seed = Aeneas.Std.Result.ok out ∧
+              AspisR1.FIv_NativeValue.Canon out ∧
+                AspisR1.FIv_NativeValue.decode out =
+                  AspisR1.FIv_CompositionValue.polynomial (AspisR1.FIv_NativeValue.decode theta) semantic poseidon seed
+AspisR1.FIv_FoldNonvacuity.value : ∃ out,
+  AspisR1.FIv_FoldsTotal.body AspisR1.FIv_FoldNonvacuity.semantic AspisR1.FIv_FoldNonvacuity.poseidon
+        AspisR1.FIv_FoldNonvacuity.zero AspisR1.FIv_FoldNonvacuity.zero =
+      Aeneas.Std.Result.ok out ∧
+    AspisR1.FIv_NativeValue.Canon out ∧ AspisR1.FIv_NativeValue.decode out = 0
+'AspisR1.FIv_Map.map_bind' does not depend on any axioms
+'AspisR1.FIv_Map.map_ok' does not depend on any axioms
+'AspisR1.FIv_Map.bind_success' does not depend on any axioms
+'AspisR1.FIv_NativeArithmetic.bind_map' does not depend on any axioms
+'AspisR1.FIv_NativeArithmetic.m31_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeArithmetic.m31_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeArithmetic.m31_reduce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeArithmetic.m31_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeCM.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeCM.sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeCM.mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeCM.by_r' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeQM.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeQM.mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeValue.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeValue.mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeValue.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeValue.one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedNew.component' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedNew.mapped' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedNew.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_CompositionExact.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_CompositionOperands.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_CompositionTrace.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_CompositionValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_EqualityCell.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_EqualityLoop.exact_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_EqualityProduct.product' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_EqualityProduct.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_EqualityReach.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_EqualityShape.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_EqualityValue.exact_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_FoldNonvacuity.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_FoldsTotal.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_Horner24.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_Horner4.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_Horner4Total.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_HornerAlgebra.reversed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_HornerAlgebra.four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_HornerTotal.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_LowSum.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeArray.slot' depends on axioms: [propext]
+'AspisR1.FIv_NativeArray.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_NativeArray.canonical' depends on axioms: [propext]
+'AspisR1.FIv_NativeTerminal.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_PartsValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedMul.component' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedMul.mapped' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedMul.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedNewTotal.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedTotal.mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedTotal.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_SubMap.mapped' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_SubMap.qm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_TerminalParts.maps' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_TerminalParts.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_TerminalTrace.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIv_TerminalValue.arithmetic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
