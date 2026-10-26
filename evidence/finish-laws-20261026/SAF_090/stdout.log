@@ -1,0 +1,24 @@
+AspisR1.SAF_SavedIdentities.fields : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am →
+    AspisR1.CheckpointBytes5Output.ofE p.claim = pm.claim ∧
+      (∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+          p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok x → AspisR1.CheckpointBytes5Output.ofE x = pm.alpha 0) ∧
+        ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+          p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok x → AspisR1.CheckpointBytes5Output.ofE x = pm.alpha 1
+AspisR1.SAF_PreparedPairing.identities : ∀ (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (parsed : AspisR1.OraclePortCompactDraft.Parsed)
+  (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs) (view : AspisR1.LiteralOpeningView.View)
+  (q : Fin 22 → Fin 262144)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisWideTower.WideExact),
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches p a
+      (AspisR1.OraclePortCheckpointResumeC5.prepared (AspisR1.OraclePortAcceptedContextC6.context parsed i view) i.data
+        (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+      am →
+    AspisR1.CheckpointBytes5Output.ofE p.claim =
+        AspisR1.JointFunctionalBinding.claimedValue i.data.Y i.data.c0 i.data.gamma i.data.kappa ∧
+      (∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+          p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok x → AspisR1.CheckpointBytes5Output.ofE x = i.data.alpha0) ∧
+        ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+          p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok x → AspisR1.CheckpointBytes5Output.ofE x = i.data.alpha1
