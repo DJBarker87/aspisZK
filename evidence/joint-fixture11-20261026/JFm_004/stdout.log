@@ -1,0 +1,61 @@
+JFm_Query00Semantic.lean:27:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (let (r, self1) :=
+      (core.result.Result.Ok (encodeState JFp_Query00Source.block),
+        { state := encodeState JFp_Query00Source.ratchet, hash := hash, next_row := 1#u8 })
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let q ← AspisR1PublicPreparation.sampler.qm31_sample val
+        ok (core.result.Result.Ok q, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (r1, self1)) =
+    ok (core.result.Result.Ok q, { state := encodeState JFp_Query00Source.ratchet, hash := hash, next_row := 1#u8 })
+
+Hash : Type
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash
+hash : Hash
+q : aspis_core.field.QM31
+call : AspisR1PublicPreparation.sampler.qm31_sample (encodeState JFp_Query00Source.block) = ok q
+coords :
+  ExtractedQM31SamplerCorrect.coordinates (SamplerTransport.toOld q) = [399501241, 284689285, 1852519329, 449773828]
+⊢ (let (r, self1) :=
+      (core.result.Result.Ok (encodeState JFp_Query00Source.block),
+        { state := encodeState JFp_Query00Source.ratchet, hash := hash, next_row := 1#u8 })
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let q ← AspisR1PublicPreparation.sampler.qm31_sample val
+        ok (core.result.Result.Ok q, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (r1, self1)) =
+    ok (core.result.Result.Ok q, { state := encodeState JFp_Query00Source.ratchet, hash := hash, next_row := 1#u8 })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JFm_Query00Semantic.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
