@@ -1,0 +1,59 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EnteredBody.lean:29:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  let (r, after) := (status, after)
+  ProverRwBodyStoreSource.afterReserve (dictionary ops schedule unix address) pub compiled variant hash context binding
+    secret r after
+in the target expression
+  ProverRwBodyStore.Keeps after
+    (ProverRwBodyStoreSource.afterReserve (dictionary ops schedule unix address) pub compiled variant hash context
+      binding secret status after)
+
+case frame
+inst✝ : ExternalTypes
+ops : ExternalFuns
+schedule : ProverCommitLedger36.Schedule
+unix : Bool
+address : Address
+pub : Pub
+compiled : Compiled
+variant : transport.Variant
+secret : Secret
+hash : Hash
+binding : Std.Array U8 32#usize
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+s : World
+empty : s.entered = none
+this : ExternalFuns := ops
+out : core.result.Result Proof verifier.Error × World
+status : PV_RunJoin_ReservationGuards.MaterialStatus
+after : World
+run :
+  (let (r, after) := (status, after)
+    ProverRwBodyStoreSource.afterReserve (dictionary ops schedule unix address) pub compiled variant hash context
+      binding secret r after) =
+    ok out
+state :
+  ProverRwBodyStore.Keeps after
+    (ProverRwBodyStoreSource.afterReserve (dictionary ops schedule unix address) pub compiled variant hash context
+      binding secret status after)
+⊢ out.2.entered = (status, after).2.entered
+'R1Z.PV_RunJoin_EnteredBody.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       44.50 real         1.59 user         5.33 sys
+          2631696384  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              245293  page reclaims
+              242347  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               57328  voluntary context switches
+              325211  involuntary context switches
+           622694976  instructions retired
+           273726238  cycles elapsed
+            11617024  peak memory footprint
+
+exit=1
