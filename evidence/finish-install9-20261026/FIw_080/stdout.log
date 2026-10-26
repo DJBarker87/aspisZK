@@ -1,0 +1,261 @@
+FIw_CopyEndpoint.lean:34:74: error: unsolved goals
+case refl
+values weights : Std.Array NQ 2#usize
+e : Endpoint
+tag weight : U32
+patterns : Std.Array NQ 14#usize
+s : Selectors
+hv : canonical values
+hw : canonical weights
+hp : canonical patterns
+hh : canonical s.high
+hl : canonical s.low
+hr : ↑e.row < 1024
+hs : ↑e.slot < 2
+hpat : ↑e.pattern < 14
+ht : ↑tag < FIw_ScalarArithmetic.P
+rowIndex : Usize
+h_rowIndex : lift (core.convert.num.FromUsizeU16.from e.row) = ok rowIndex
+selector : field.QM31
+h_selector : pool_v1.pair_forest_copy_terminal.Selectors.row s rowIndex = ok selector
+slot : Usize
+h_slot : lift (core.convert.num.FromUsizeU8.from e.slot) = ok slot
+oldWeight : field.QM31
+h_oldWeight : weights.index_usize slot = ok oldWeight
+weighted : field.QM31
+h_weighted : selector.mul_m31 weight = ok weighted
+nextWeight : field.QM31
+h_nextWeight : oldWeight.add weighted = ok nextWeight
+newWeights : Std.Array field.QM31 2#usize
+h_newWeights : weights.update slot nextWeight = ok newWeights
+patternIndex : Usize
+h_patternIndex : lift (core.convert.num.FromUsizeU8.from e.pattern) = ok patternIndex
+pattern : field.QM31
+h_pattern : patterns.index_usize patternIndex = ok pattern
+compressed oldValue : field.QM31
+h_oldValue : values.index_usize slot = ok oldValue
+selected : field.QM31
+h_selected : selector.mul compressed = ok selected
+nextValue : field.QM31
+h_nextValue : oldValue.add selected = ok nextValue
+newValues : Std.Array field.QM31 2#usize
+h_newValues : values.update slot nextValue = ok newValues
+run :
+  (do
+      let i ← lift (core.convert.num.FromUsizeU16.from e.row)
+      let selector ← pool_v1.pair_forest_copy_terminal.Selectors.row s i
+      let slot ← lift (core.convert.num.FromUsizeU8.from e.slot)
+      let q ← weights.index_usize slot
+      let q1 ← selector.mul_m31 weight
+      let q2 ← q.add q1
+      let weights1 ← weights.update slot q2
+      let q3 ← pool_v1.pair_forest_copy_terminal.lift_m31 tag
+      let i1 ← lift (core.convert.num.FromUsizeU8.from e.pattern)
+      let q4 ← patterns.index_usize i1
+      let compressed ← q3.add q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, weights1)) =
+    ok (newValues, newWeights)
+r1 :
+  (do
+      let selector ← pool_v1.pair_forest_copy_terminal.Selectors.row s rowIndex
+      let slot ← lift (core.convert.num.FromUsizeU8.from e.slot)
+      let q ← weights.index_usize slot
+      let q1 ← selector.mul_m31 weight
+      let q2 ← q.add q1
+      let weights1 ← weights.update slot q2
+      let q3 ← pool_v1.pair_forest_copy_terminal.lift_m31 tag
+      let i1 ← lift (core.convert.num.FromUsizeU8.from e.pattern)
+      let q4 ← patterns.index_usize i1
+      let compressed ← q3.add q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, weights1)) =
+    ok (newValues, newWeights)
+r2 :
+  (do
+      let slot ← lift (core.convert.num.FromUsizeU8.from e.slot)
+      let q ← weights.index_usize slot
+      let q1 ← selector.mul_m31 weight
+      let q2 ← q.add q1
+      let weights1 ← weights.update slot q2
+      let q3 ← pool_v1.pair_forest_copy_terminal.lift_m31 tag
+      let i1 ← lift (core.convert.num.FromUsizeU8.from e.pattern)
+      let q4 ← patterns.index_usize i1
+      let compressed ← q3.add q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, weights1)) =
+    ok (newValues, newWeights)
+r3 :
+  (do
+      let q ← weights.index_usize slot
+      let q1 ← selector.mul_m31 weight
+      let q2 ← q.add q1
+      let weights1 ← weights.update slot q2
+      let q3 ← pool_v1.pair_forest_copy_terminal.lift_m31 tag
+      let i1 ← lift (core.convert.num.FromUsizeU8.from e.pattern)
+      let q4 ← patterns.index_usize i1
+      let compressed ← q3.add q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, weights1)) =
+    ok (newValues, newWeights)
+r4 :
+  (do
+      let q1 ← selector.mul_m31 weight
+      let q2 ← oldWeight.add q1
+      let weights1 ← weights.update slot q2
+      let q3 ← pool_v1.pair_forest_copy_terminal.lift_m31 tag
+      let i1 ← lift (core.convert.num.FromUsizeU8.from e.pattern)
+      let q4 ← patterns.index_usize i1
+      let compressed ← q3.add q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, weights1)) =
+    ok (newValues, newWeights)
+r5 :
+  (do
+      let q2 ← oldWeight.add weighted
+      let weights1 ← weights.update slot q2
+      let q3 ← pool_v1.pair_forest_copy_terminal.lift_m31 tag
+      let i1 ← lift (core.convert.num.FromUsizeU8.from e.pattern)
+      let q4 ← patterns.index_usize i1
+      let compressed ← q3.add q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, weights1)) =
+    ok (newValues, newWeights)
+r6 :
+  (do
+      let weights1 ← weights.update slot nextWeight
+      let q3 ← pool_v1.pair_forest_copy_terminal.lift_m31 tag
+      let i1 ← lift (core.convert.num.FromUsizeU8.from e.pattern)
+      let q4 ← patterns.index_usize i1
+      let compressed ← q3.add q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, weights1)) =
+    ok (newValues, newWeights)
+r7 :
+  (do
+      let q3 ← pool_v1.pair_forest_copy_terminal.lift_m31 tag
+      let i1 ← lift (core.convert.num.FromUsizeU8.from e.pattern)
+      let q4 ← patterns.index_usize i1
+      let compressed ← q3.add q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, newWeights)) =
+    ok (newValues, newWeights)
+r11 :
+  (do
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, newWeights)) =
+    ok (newValues, newWeights)
+r12 :
+  (do
+      let q6 ← selector.mul compressed
+      let q7 ← oldValue.add q6
+      let values1 ← values.update slot q7
+      ok (values1, newWeights)) =
+    ok (newValues, newWeights)
+r13 :
+  (do
+      let q7 ← oldValue.add selected
+      let values1 ← values.update slot q7
+      ok (values1, newWeights)) =
+    ok (newValues, newWeights)
+r14 :
+  (do
+      let values1 ← values.update slot nextValue
+      ok (values1, newWeights)) =
+    ok (newValues, newWeights)
+r15 : ok (newValues, newWeights) = ok (newValues, newWeights)
+rowValue : ↑rowIndex = ↑e.row
+slotValue : ↑slot = ↑e.slot
+patternValue : ↑patternIndex = ↑e.pattern
+slotBound : ↑slot < ↑2#usize
+patternBound : ↑patternIndex < ↑14#usize
+sv :
+  Canon selector ∧
+    decode selector = FIv_NativeArray.value s.high (↑rowIndex / 16) * FIv_NativeArray.value s.low (↑rowIndex % 16)
+ow : Canon oldWeight
+ov : Canon oldValue
+pv : Canon pattern
+weightedV : Canon weighted ∧ decode weighted = decode selector * ↑↑weight
+nextWeightV : Canon nextWeight ∧ decode nextWeight = decode oldWeight + decode weighted
+weightUpdate :
+  canonical newWeights ∧ decoded newWeights = Function.update (decoded weights) ⟨↑slot, slotBound⟩ (decode nextWeight)
+h_compressed : field.QM31.add (FIw_ScalarArithmetic.lifted tag) pattern = ok compressed
+r8 :
+  (do
+      let i1 ← lift (core.convert.num.FromUsizeU8.from e.pattern)
+      let q4 ← patterns.index_usize i1
+      let compressed ← field.QM31.add (FIw_ScalarArithmetic.lifted tag) q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, newWeights)) =
+    ok (newValues, newWeights)
+r9 :
+  (do
+      let q4 ← patterns.index_usize patternIndex
+      let compressed ← field.QM31.add (FIw_ScalarArithmetic.lifted tag) q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, newWeights)) =
+    ok (newValues, newWeights)
+r10 :
+  (do
+      let compressed ← field.QM31.add (FIw_ScalarArithmetic.lifted tag) pattern
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, newWeights)) =
+    ok (newValues, newWeights)
+h_tagValue : ok (FIw_ScalarArithmetic.lifted tag) = ok (FIw_ScalarArithmetic.lifted tag)
+tagV : Canon (FIw_ScalarArithmetic.lifted tag) ∧ decode (FIw_ScalarArithmetic.lifted tag) = ↑↑tag
+compressedV : Canon compressed ∧ decode compressed = decode (FIw_ScalarArithmetic.lifted tag) + decode pattern
+selectedV : Canon selected ∧ decode selected = decode selector * decode compressed
+nextValueV : Canon nextValue ∧ decode nextValue = decode oldValue + decode selected
+valueUpdate :
+  canonical newValues ∧ decoded newValues = Function.update (decoded values) ⟨↑slot, slotBound⟩ (decode nextValue)
+⊢ (Function.update (decoded values) ⟨↑e.slot, ⋯⟩
+        (decoded values ⟨↑e.slot, ⋯⟩ +
+          FIv_NativeArray.value s.high (↑e.row / 16) * FIv_NativeArray.value s.low (↑e.row % 16) *
+            (↑↑tag + decoded patterns ⟨↑e.pattern, ⋯⟩)),
+      Function.update (decoded weights) ⟨↑e.slot, ⋯⟩
+        (decoded weights ⟨↑e.slot, ⋯⟩ +
+          FIv_NativeArray.value s.high (↑e.row / 16) * FIv_NativeArray.value s.low (↑e.row % 16) * ↑↑weight)) =
+    (Function.update (decoded values) ⟨↑e.slot, hs⟩
+        (decoded values ⟨↑e.slot, hs⟩ +
+          FIv_NativeArray.value s.high (↑e.row / 16) * FIv_NativeArray.value s.low (↑e.row % 16) *
+            (↑↑tag + decoded patterns ⟨↑e.pattern, hpat⟩)),
+      Function.update (decoded weights) ⟨↑e.slot, hs⟩
+        (decoded weights ⟨↑e.slot, hs⟩ +
+          FIv_NativeArray.value s.high (↑e.row / 16) * FIv_NativeArray.value s.low (↑e.row % 16) * ↑↑weight))
+'AspisR1.FIw_CopyEndpoint.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

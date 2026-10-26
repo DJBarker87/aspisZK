@@ -1,0 +1,55 @@
+FIw_SelectedValue.lean:25:47: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+claims : Std.Array NQ 84#usize
+point column : Usize
+out : NQ
+run :
+  (do
+      let i1 ← point * 28#usize
+      let i2 ← i1 + column
+      claims.index_usize i2) =
+    ok out
+base : UScalar UScalarTy.Usize
+hb : point * 28#usize = ok base
+r1 :
+  (do
+      let i2 ← base + column
+      claims.index_usize i2) =
+    ok out
+index : UScalar UScalarTy.Usize
+hi : base + column = ok index
+r2 : claims.index_usize index = ok out
+⊢ ↑base = ↑point * 28
+FIw_SelectedValue.lean:26:60: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+claims : Std.Array NQ 84#usize
+point column : Usize
+out : NQ
+run :
+  (do
+      let i1 ← point * 28#usize
+      let i2 ← i1 + column
+      claims.index_usize i2) =
+    ok out
+base : UScalar UScalarTy.Usize
+hb : point * 28#usize = ok base
+r1 :
+  (do
+      let i2 ← base + column
+      claims.index_usize i2) =
+    ok out
+index : UScalar UScalarTy.Usize
+hi : base + column = ok index
+r2 : claims.index_usize index = ok out
+baseValue : ↑base = ↑point * 28
+⊢ ↑index = ↑point * 28 + ↑column
+'AspisR1.FIw_SelectedValue.width' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIw_SelectedValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,9 @@
+def Aeneas.Std.UScalar.mul : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x * ↑y)
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.UScalar.tryMk : (ty : UScalarTy) → ℕ → Result (UScalar ty) :=
+fun ty x => ofOption (UScalar.tryMkOpt ty x) Error.integerOverflow
+@[reducible] def Aeneas.Std.UScalar.ofNat : {ty : UScalarTy} →
+  (x : ℕ) → autoParam (x ≤ UScalar.cMax ty) UScalar.ofNat._auto_1 → UScalar ty :=
+fun {ty} x hInBounds => UScalar.ofNatCore x ⋯

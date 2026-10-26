@@ -1,0 +1,93 @@
+FIw_CoefficientMeaning.lean:34:27: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  x = sum ∨ x ∈ []
+
+case PrivateTransfer.refl.left.inr
+present : Bool
+input output transfer withdrawal : NQ
+hi : Canon input
+ho : Canon output
+hp : Canon transfer
+hw : Canon withdrawal
+sum : field.QM31
+hs : field.QM31.add output transfer = ok sum
+value : Canon sum ∧ decode sum = decode output + decode transfer
+run✝ :
+  (match pool_v1.pair_forest_semantic_terminal.CompiledVariant.PrivateTransfer with
+    | pool_v1.pair_forest_semantic_terminal.CompiledVariant.PrivateTransfer => do
+      let output_scalar1 ← field.QM31.add output transfer
+      ok (Array.make 2#usize [input, output_scalar1] ⋯)
+    | pool_v1.pair_forest_semantic_terminal.CompiledVariant.Withdrawal =>
+      if present = true then do
+        let output_scalar1 ← field.QM31.add output withdrawal
+        ok (Array.make 2#usize [input, output_scalar1] ⋯)
+      else ok (Array.make 2#usize [input, output] ⋯)) =
+    ok (Array.make 2#usize [input, sum] ⋯)
+run : ok (Array.make 2#usize [input, sum] ⋯) = ok (Array.make 2#usize [input, sum] ⋯)
+x : NQ
+h✝ : x = sum ∨ x ∈ []
+⊢ Canon x
+FIw_CoefficientMeaning.lean:45:29: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  x = output ∨ x ∈ []
+
+case Withdrawal.false.refl.left.inr
+input output transfer withdrawal : NQ
+hi : Canon input
+ho : Canon output
+hp : Canon transfer
+hw : Canon withdrawal
+run :
+  pool_v1.pair_forest_semantic_terminal.scalar_lanes pool_v1.pair_forest_semantic_terminal.CompiledVariant.Withdrawal
+      false input output transfer withdrawal =
+    ok (Array.make 2#usize [input, output] ⋯)
+x : NQ
+h✝ : x = output ∨ x ∈ []
+⊢ Canon x
+FIw_CoefficientMeaning.lean:58:29: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  x = sum ∨ x ∈ []
+
+case Withdrawal.true.refl.left.inr
+input output transfer withdrawal : NQ
+hi : Canon input
+ho : Canon output
+hp : Canon transfer
+hw : Canon withdrawal
+sum : field.QM31
+hs : field.QM31.add output withdrawal = ok sum
+value : Canon sum ∧ decode sum = decode output + decode withdrawal
+run✝ :
+  (match pool_v1.pair_forest_semantic_terminal.CompiledVariant.Withdrawal with
+    | pool_v1.pair_forest_semantic_terminal.CompiledVariant.PrivateTransfer => do
+      let output_scalar1 ← field.QM31.add output transfer
+      ok (Array.make 2#usize [input, output_scalar1] ⋯)
+    | pool_v1.pair_forest_semantic_terminal.CompiledVariant.Withdrawal =>
+      if true = true then do
+        let output_scalar1 ← field.QM31.add output withdrawal
+        ok (Array.make 2#usize [input, output_scalar1] ⋯)
+      else ok (Array.make 2#usize [input, output] ⋯)) =
+    ok (Array.make 2#usize [input, sum] ⋯)
+run : ok (Array.make 2#usize [input, sum] ⋯) = ok (Array.make 2#usize [input, sum] ⋯)
+x : NQ
+h✝ : x = sum ∨ x ∈ []
+⊢ Canon x
+FIw_CoefficientMeaning.lean:33:42: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲]̲ at hx
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIw_CoefficientMeaning.lean:44:44: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲]̲ at hx
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIw_CoefficientMeaning.lean:57:44: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲]̲ at hx
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIw_CoefficientMeaning.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
