@@ -1,0 +1,65 @@
+def AspisR1.SAG_NativeFull.Shape : VTop_Stages.Ops →
+  Aeneas.Std.Slice Aeneas.Std.U8 → AspisR1.Cons_Native.Witness → Prop :=
+fun ops proof t =>
+  ∃ round0 folded round1 finalStart queryStart,
+    ops.op22 = Aeneas.Std.Result.ok round0 ∧
+      ops.op15 = Aeneas.Std.Result.ok folded ∧
+        ops.op14 = Aeneas.Std.Result.ok round1 ∧
+          ops.op21 = Aeneas.Std.Result.ok finalStart ∧
+            ops.op20 = Aeneas.Std.Result.ok queryStart ∧
+              Aeneas.Std.core.slice.index.Slice.index
+                    (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                    { start := round0, «end» := folded } =
+                  Aeneas.Std.Result.ok t.v2.round0 ∧
+                Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                      { start := round1, «end» := finalStart } =
+                    Aeneas.Std.Result.ok t.v2.round1 ∧
+                  Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                      { start := finalStart, «end» := queryStart } =
+                    Aeneas.Std.Result.ok t.v2.final_message
+@AspisR1.SAG_NativeFull.accepted : ∀ {F C Hash : Type} (base : VTop_Stages.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+  (geo : AspisR1.Port3_NativeGeometryBody.Ops C) (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8),
+  VTop_Stages.verifier.candidate.tx2_authenticated
+        (AspisR1.Tx2I_Install.stage (AspisR1.Tx2N_Execution.control base reserved query geo) finish) D pub proof
+        checkpoint hash Option.none =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    ∃ t,
+      AspisR1.Cons_Native.Calls base finish reserved query geo D hash pub proof checkpoint t ∧
+        AspisR1.Cons_NativeBuild.Aux reserved query geo D hash pub proof checkpoint t ∧
+          AspisR1.SAG_NativeFull.Shape
+            (AspisR1.Tx2N_Execution.control (AspisR1.Tx2I_Install.stage base finish) reserved query geo) proof t
+@AspisR1.SAG_SecondFull.accepted : ∀ {F C : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops C)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (f : AspisR1.S2W_NativeConsolidation.FirstCut) (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+  AspisR1.S2W_NativeConsolidation.SourceCuts
+      (AspisR1.ClaimsUnrolledSdk.sdkOps
+        (AspisR1.Tx2I_Install.install adapter
+          (AspisR1.Op5T_Concrete.stage
+            (AspisR1.Tx2N_Execution.control (AspisR1.AuS1_Install.base stage) reserved query geo))
+          finish)
+        (AspisR1.Uni_Install.current ops reserved query geo) B std)
+      accounts1 accounts2 saved f s →
+    have D :=
+      AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+        (AspisR1.ClaimsUnrolledSdk.sdkOps
+          (AspisR1.Tx2I_Install.install adapter
+            (AspisR1.Op5T_Concrete.stage
+              (AspisR1.Tx2N_Execution.control (AspisR1.AuS1_Install.base stage) reserved query geo))
+            finish)
+          (AspisR1.Uni_Install.current ops reserved query geo) B std);
+    ∃ t,
+      AspisR1.Cons_Native.Calls (AspisR1.AuS1_Install.base stage) finish reserved query geo D () s.pub s.proof
+          s.checkpoint t ∧
+        AspisR1.Cons_NativeBuild.Aux reserved query geo D () s.pub s.proof s.checkpoint t ∧
+          AspisR1.SAG_NativeFull.Shape
+            (AspisR1.Tx2N_Execution.control
+              (AspisR1.Tx2I_Install.stage (AspisR1.Op5T_Concrete.stage (AspisR1.AuS1_Install.base stage)) finish)
+              reserved query geo)
+            s.proof t

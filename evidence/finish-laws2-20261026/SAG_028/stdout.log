@@ -1,0 +1,33 @@
+SAG_DotWeights.lean:16:15: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵Option.getD_some, ̲same]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SAG_DotWeights.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑a.weights.deref)[↑index]?.getD (CheckpointBytes4ReaderFields.sourceK 0)
+in the target expression
+  CheckpointBytes5Output.ofK value =
+    CheckpointBytes5Output.ofK ((↑a.weights)[↑index]?.getD (CheckpointBytes4ReaderFields.sourceK 0))
+
+a : verifier.Accumulator
+index : Usize
+value : K
+bound : ↑index < 64
+read : a.weights.deref.index_usize index = ok value
+⊢ CheckpointBytes5Output.ofK value =
+    CheckpointBytes5Output.ofK ((↑a.weights)[↑index]?.getD (CheckpointBytes4ReaderFields.sourceK 0))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a.weights
+  has type
+    alloc.vec.Vec aspis_core.field.QM31
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑a.weights
+'AspisR1.SAG_DotWeights.read_getD' depends on axioms: [propext]
+'AspisR1.SAG_DotWeights.accumulator_read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

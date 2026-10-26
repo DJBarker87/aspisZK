@@ -1,0 +1,57 @@
+AspisR1.SAG_CommonFull.reached : ∀ (ops : VTop_Stages.Ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8)
+  (obs : Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit)),
+  VTop_Stages.verifier.candidate.tx2_common ops D pub proof checkpoint hash obs =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    ∃ p saved g geometry pending returned after inactive split round0 folded round1,
+      ops.op18 D checkpoint proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, saved)) ∧
+        ops.op16 = Aeneas.Std.Result.ok split ∧
+          saved.next = split ∧
+            ops.op17 29#usize p.gamma = Aeneas.Std.Result.ok g ∧
+              ops.op11 p.queries saved.next 22#usize =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok geometry) ∧
+                ops.op10 saved.weights.deref = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pending) ∧
+                  ops.op6 proof p saved g obs geometry pending 22#usize =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (returned, after)) ∧
+                    ops.op22 = Aeneas.Std.Result.ok round0 ∧
+                      ops.op15 = Aeneas.Std.Result.ok folded ∧
+                        ops.op14 = Aeneas.Std.Result.ok round1 ∧
+                          AspisR1.Tx2I_Cuts.tail ops proof p obs inactive round0 folded round1 (returned, after) =
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+AspisR1.SAG_ViewTail.reached : ∀ (ops : VTop_Stages.Ops) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : VTop_Stages.verifier.Prepared) (obs : Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit))
+  (inactive : VTop_Stages.aspis_core.field.wide_exact.WideExact) (round0 folded round1 : Aeneas.Std.Usize)
+  (state : VTop_Stages.verifier.Accumulator × VTop_Stages.verifier.BatchedWeights),
+  AspisR1.Tx2I_Cuts.tail ops proof p obs inactive round0 folded round1 state =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    ∃ flushed back r0 r1 fm finalStart queryStart,
+      state.1.weights.deref_mut = (state.1.weights.deref, back) ∧
+        ops.op9 state.2 state.1.weights.deref = Aeneas.Std.Result.ok flushed ∧
+          ops.op21 = Aeneas.Std.Result.ok finalStart ∧
+            ops.op20 = Aeneas.Std.Result.ok queryStart ∧
+              Aeneas.Std.core.slice.index.Slice.index
+                    (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                    { start := round0, «end» := folded } =
+                  Aeneas.Std.Result.ok r0 ∧
+                Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                      { start := round1, «end» := finalStart } =
+                    Aeneas.Std.Result.ok r1 ∧
+                  Aeneas.Std.core.slice.index.Slice.index
+                        (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                        { start := finalStart, «end» := queryStart } =
+                      Aeneas.Std.Result.ok fm ∧
+                    ops.op19 (AspisR1.SAG_ViewTail.view inactive r0 r1 fm) p
+                        (have __src := state.1;
+                        { weights := back flushed, rhs := __src.rhs, power := __src.power, next := __src.next })
+                        obs =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+@AspisR1.SAG_ViewPins.constants : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  have ops := AspisR1.DrvC_Installation.stage (AspisR1.Rc3_Install.configuration c r);
+  ops.op22 = Aeneas.Std.Result.ok 7527#usize ∧
+    ops.op15 = Aeneas.Std.Result.ok 7751#usize ∧
+      ops.op14 = Aeneas.Std.Result.ok 7783#usize ∧
+        ops.op21 = Aeneas.Std.Result.ok 8007#usize ∧ ops.op20 = Aeneas.Std.Result.ok 10055#usize

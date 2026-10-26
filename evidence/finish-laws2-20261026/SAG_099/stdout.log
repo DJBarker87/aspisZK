@@ -1,0 +1,61 @@
+structure AspisR1.DrvC_Installation.Configuration (F CoreError : Type) : Type 1
+number of parameters: 2
+fields:
+  AspisR1.DrvC_Installation.Configuration.adapter : AdapterRw.Ops
+  AspisR1.DrvC_Installation.Configuration.currentBase : AspisR1CurrentCaller.Ops
+  AspisR1.DrvC_Installation.Configuration.stageBase : VTop_Stages.Ops
+  AspisR1.DrvC_Installation.Configuration.finish : AspisR1Stage2.Stage2Finish.FinishOps F
+  AspisR1.DrvC_Installation.Configuration.reserved : Bool
+  AspisR1.DrvC_Installation.Configuration.query : AspisR1.Port3_NativeQueryBody.Ops
+  AspisR1.DrvC_Installation.Configuration.geometry : AspisR1.Port3_NativeGeometryBody.Ops CoreError
+  AspisR1.DrvC_Installation.Configuration.boundaries : AspisR1PublicPreparation.FinishModel.Boundaries
+  AspisR1.DrvC_Installation.Configuration.std : AspisR1.ClaimsUnrolledFinish.StdCalls
+constructor:
+  AspisR1.DrvC_Installation.Configuration.mk {F CoreError : Type} (adapter : AdapterRw.Ops)
+    (currentBase : AspisR1CurrentCaller.Ops) (stageBase : VTop_Stages.Ops)
+    (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+    (geometry : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+    (boundaries : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls) :
+    AspisR1.DrvC_Installation.Configuration F CoreError
+structure AspisR1.S2W_DigestExtraction.AeneasExtraction (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage2 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+      (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts
+constructor:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.mk {ops : AdapterRw.Ops}
+    {native1 : AspisR1.S2W_ExtractionBoundary.First} {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest}
+    (stage1 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts) :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv
+def AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun D rust =>
+  ∀ (s : AspisR1.Port1_StoredCarrier.Submission)
+    (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port1_StoredCarrier.input s))).2 = Bool.true →
+      AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port1_StoredCarrier.input s)) =
+        AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2
+            (AspisR1.Port1_StoredCarrier.input s))

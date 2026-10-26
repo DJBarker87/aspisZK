@@ -1,0 +1,172 @@
+def AspisR1CurrentWide.Proof.recordWideToFinish : AspisR1CurrentWide.Proof.RecordWide →
+  AspisR1CurrentWide.Proof.FinishE :=
+fun x => { c0 := AspisR1CurrentWide.Proof.recordQMToFinish x.c0, c1 := AspisR1CurrentWide.Proof.recordQMToFinish x.c1 }
+def AspisR1WeightsFieldCurrent.weights.field : {T : Type} →
+  (Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (Option T)) →
+    Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Usize → Aeneas.Std.Result T :=
+fun {T} decode bytes i => do
+  let i1 ← i * 32#usize
+  let i2 ← i + 1#usize
+  let i3 ← i2 * 32#usize
+  let s ←
+    Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) bytes
+        { start := i1, «end» := i3 }
+  let o ← decode s
+  Aeneas.Std.core.option.Option.unwrap o
+def AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Option AspisR1RecordParser.field.wide_exact.WideExact) :=
+fun bytes =>
+  have i := bytes.len;
+  if (i != AspisR1RecordParser.field.wide_exact.WideExact.BYTE_LEN) = Bool.true then Aeneas.Std.Result.ok Option.none
+  else do
+    let i1 ← bytes.index_usize 0#usize
+    let i2 ← bytes.index_usize 1#usize
+    let i3 ← bytes.index_usize 2#usize
+    let i4 ← bytes.index_usize 3#usize
+    let i5 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes (Aeneas.Std.Array.make 4#usize [i1, i2, i3, i4] ⋯))
+    let i6 ← bytes.index_usize 4#usize
+    let i7 ← bytes.index_usize 5#usize
+    let i8 ← bytes.index_usize 6#usize
+    let i9 ← bytes.index_usize 7#usize
+    let i10 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes (Aeneas.Std.Array.make 4#usize [i6, i7, i8, i9] ⋯))
+    let i11 ← bytes.index_usize 8#usize
+    let i12 ← bytes.index_usize 9#usize
+    let i13 ← bytes.index_usize 10#usize
+    let i14 ← bytes.index_usize 11#usize
+    let i15 ←
+      Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes (Aeneas.Std.Array.make 4#usize [i11, i12, i13, i14] ⋯))
+    let i16 ← bytes.index_usize 12#usize
+    let i17 ← bytes.index_usize 13#usize
+    let i18 ← bytes.index_usize 14#usize
+    let i19 ← bytes.index_usize 15#usize
+    let i20 ←
+      Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19] ⋯))
+    let i21 ← bytes.index_usize 16#usize
+    let i22 ← bytes.index_usize 17#usize
+    let i23 ← bytes.index_usize 18#usize
+    let i24 ← bytes.index_usize 19#usize
+    let i25 ←
+      Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes (Aeneas.Std.Array.make 4#usize [i21, i22, i23, i24] ⋯))
+    let i26 ← bytes.index_usize 20#usize
+    let i27 ← bytes.index_usize 21#usize
+    let i28 ← bytes.index_usize 22#usize
+    let i29 ← bytes.index_usize 23#usize
+    let i30 ←
+      Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes (Aeneas.Std.Array.make 4#usize [i26, i27, i28, i29] ⋯))
+    let i31 ← bytes.index_usize 24#usize
+    let i32 ← bytes.index_usize 25#usize
+    let i33 ← bytes.index_usize 26#usize
+    let i34 ← bytes.index_usize 27#usize
+    let i35 ←
+      Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes (Aeneas.Std.Array.make 4#usize [i31, i32, i33, i34] ⋯))
+    let i36 ← bytes.index_usize 28#usize
+    let i37 ← bytes.index_usize 29#usize
+    let i38 ← bytes.index_usize 30#usize
+    let i39 ← bytes.index_usize 31#usize
+    let i40 ←
+      Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes (Aeneas.Std.Array.make 4#usize [i36, i37, i38, i39] ⋯))
+    AspisR1RecordParser.field.wide_exact.WideExact.from_limbs
+        (Aeneas.Std.Array.make 8#usize [i5, i10, i15, i20, i25, i30, i35, i40] ⋯)
+SAG_FieldAudit.lean:10:7: error(lean.unknownIdentifier): Unknown constant `AspisR1RecordParser.field.QM31.from_le_bytes`
+SAG_FieldAudit.lean:11:7: error(lean.unknownIdentifier): Unknown constant `AspisR1RecordParser.field.CM31.from_le_bytes`
+SAG_FieldAudit.lean:12:7: error(lean.unknownIdentifier): Unknown constant `AspisR1RecordParser.field.M31.from_le_bytes`
+def AspisR1.PAln_MatchingFacts.payloads : AspisR1.LiteralOpeningStages.Second →
+  AspisR1.OpeningRecordCodec.Payload AspisR1.OpeningRecordCodec.Row.final → AspisR1.SelectedOpeningData.Payloads :=
+fun staged row31 =>
+  { row25 := staged.row25, row26 := staged.row26, row27 := staged.row27, row28 := staged.row28, row29 := staged.row29,
+    row30 := staged.row30, row31 := row31 }
+def AspisR1.OraclePortCompactDraft.rowBytes : AspisR1.OraclePortCompactDraft.Parsed →
+  ℕ → AspisV8R19.DuplexFrames.Bytes :=
+fun p row =>
+  if row < 27 then p.semantic[row]?.getD []
+  else
+    if row = 27 then
+      AspisR1.OraclePortCompactDraft.framed
+        (AspisR1.OraclePortCompactDraft.expand 29 (AspisR1.OraclePortCompactDraft.slice p.wire 7031 464))
+    else
+      if row = 28 then AspisR1.OraclePortCompactDraft.framed (AspisR1.OraclePortCompactDraft.slice p.wire 7495 32)
+      else
+        if row = 29 then AspisR1.OraclePortCompactDraft.framed (AspisR1.OraclePortCompactDraft.slice p.wire 7527 224)
+        else
+          if row = 30 then AspisR1.OraclePortCompactDraft.framed (AspisR1.OraclePortCompactDraft.slice p.wire 7751 256)
+          else
+            if row = 31 then
+              AspisR1.OraclePortCompactDraft.framed (AspisR1.OraclePortCompactDraft.slice p.wire 8007 2048)
+            else AspisR1.OraclePortCompactDraft.framed []
+theorem AspisR1CurrentWide.Proof.finishField_success_canonical : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (i : Aeneas.Std.Usize) (value : AspisR1CurrentWide.Proof.FinishE),
+  AspisR1CurrentWide.Proof.finishField bytes i = Aeneas.Std.Result.ok value →
+    AspisR1CurrentWide.Proof.CanonicalFinish value :=
+fun bytes i value h =>
+  Aeneas.Std.Result.casesOn (motive := fun t =>
+    AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i = t →
+      AspisR1CurrentWide.Proof.CanonicalFinish value)
+    (AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i)
+    (fun out h_1 =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i =
+            x →
+          AspisR1CurrentWide.Proof.CanonicalFinish value)
+        (fun hs =>
+          have he :=
+            Aeneas.Std.Result.ok.inj
+              (Eq.mp
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind hs) fun value =>
+                        Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value))
+                      (Aeneas.Std.bind_tc_ok out fun y =>
+                        Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish y))))
+                  (Aeneas.Std.Result.ok value))
+                h);
+          Eq.mpr (id (congrArg (fun _a => AspisR1CurrentWide.Proof.CanonicalFinish _a) (Eq.symm he)))
+            (AspisR1CurrentWide.Proof.record_field_finish_canonical bytes i out hs))
+        (Eq.symm h_1)
+        (Eq.refl
+          (AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes
+            i)))
+    (fun e h_1 =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i =
+            x →
+          AspisR1CurrentWide.Proof.CanonicalFinish value)
+        (fun hs =>
+          let ⟨⟩ := Aeneas.Std.Result.ok value
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind hs) fun value =>
+                    Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value))
+                  (Aeneas.Std.bind_tc_fail e fun y =>
+                    Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish y))))
+              (Aeneas.Std.Result.ok value))
+            h)
+        (Eq.symm h_1)
+        (Eq.refl
+          (AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes
+            i)))
+    (fun h_1 =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i =
+            x →
+          AspisR1CurrentWide.Proof.CanonicalFinish value)
+        (fun hs =>
+          let ⟨⟩ := Aeneas.Std.Result.ok value
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind hs) fun value =>
+                    Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value))
+                  (Aeneas.Std.bind_tc_div fun y =>
+                    Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish y))))
+              (Aeneas.Std.Result.ok value))
+            h)
+        (Eq.symm h_1)
+        (Eq.refl
+          (AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes
+            i)))
+    (Eq.refl
+      (AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i))

@@ -1,0 +1,1265 @@
+def AspisR1FinishDotReturnedFieldProductV1.productSum : List
+    (Aeneas.Std.Usize × AspisR1FinishDotDecodedProductTrace.FinishE × AspisR1FinishDotDecodedProductTrace.FinishQM) →
+  AspisR1FinishDotReturnedFieldProductV1.Wide :=
+fun x => List.brecOn x AspisR1FinishDotReturnedFieldProductV1.productSum._f
+theorem AspisR1FinishDotReturnedFieldProductV1.decodeDelta_sum : ∀
+  (xs :
+    List
+      (Aeneas.Std.Usize × AspisR1FinishDotDecodedProductTrace.FinishE × AspisR1FinishDotDecodedProductTrace.FinishQM)),
+  AspisR1FinishDotReturnedDeltaDecodeV1.decodeDelta (AspisR1FinishDotDecodedProductTrace.deltaSum xs) =
+    AspisR1FinishDotReturnedFieldProductV1.productSum xs :=
+fun xs =>
+  List.rec (id (id (Eq.refl 0)))
+    (fun t xs ih =>
+      id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                _a =
+                  AspisR1FinishDotReturnedFieldProductV1.queryProductWide t.2.1 t.2.2 +
+                    AspisR1FinishDotReturnedFieldProductV1.productSum xs)
+              (AspisR1FinishDotReturnedFieldProductV1.decodeDelta_add
+                (AspisR1FinishDotDecodedProductTrace.queryDelta t.2.1 t.2.2)
+                (AspisR1FinishDotDecodedProductTrace.deltaSum xs))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  _a +
+                      AspisR1FinishDotReturnedDeltaDecodeV1.decodeDelta
+                        (AspisR1FinishDotDecodedProductTrace.deltaSum xs) =
+                    AspisR1FinishDotReturnedFieldProductV1.queryProductWide t.2.1 t.2.2 +
+                      AspisR1FinishDotReturnedFieldProductV1.productSum xs)
+                (AspisR1FinishDotReturnedFieldProductV1.decodeDelta_query t.2.1 t.2.2)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    AspisR1FinishDotReturnedFieldProductV1.queryProductWide t.2.1 t.2.2 + _a =
+                      AspisR1FinishDotReturnedFieldProductV1.queryProductWide t.2.1 t.2.2 +
+                        AspisR1FinishDotReturnedFieldProductV1.productSum xs)
+                  ih))
+              (Eq.refl
+                (AspisR1FinishDotReturnedFieldProductV1.queryProductWide t.2.1 t.2.2 +
+                  AspisR1FinishDotReturnedFieldProductV1.productSum xs))))))
+    xs
+theorem AspisR1FinishDotReturnedDeltaDecodeV1.successful_finish_decodes_accumulated_residues : ∀ {W : Type}
+  (ops : AspisR1FinishRelationCurrent.FinishOps W AspisR1FinishDotDecodedProductTrace.PushState)
+  (fm : Aeneas.Std.Slice Aeneas.Std.U8) (ws : Aeneas.Std.Slice AspisR1FinishDotDecodedProductTrace.FinishQM)
+  (out : AspisR1FinishDotDecodedProductTrace.FinishE),
+  AspisR1FinishRelationCurrent.verifier.finish_query_dot
+        (AspisR1FinishDotConcreteOps.withConcreteDot (AspisR1CurrentWide.Proof.finishConcreteField ops)
+          AspisR1EbyKPushDecodedProductUpdate.QRaw)
+        fm ws =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+    ∃ final xs,
+      AspisR1FinishDotSourceABI.finishFromPush final = Aeneas.Std.Result.ok out ∧
+        AspisR1CurrentWide.Proof.decodeFinish out =
+          AspisR1FinishDotReturnedDeltaDecodeV1.decodeDelta (AspisR1FinishDotDecodedProductTrace.deltaSum xs) :=
+fun {W} ops fm ws out hrun =>
+  let ⟨final, h✝⟩ :=
+    AspisR1FinishDotReturnedProductWords.successful_current_finish_query_product_words ops fm ws out hrun
+  let ⟨xs, h✝¹⟩ := h✝
+  let ⟨hfinish, right✝⟩ := h✝¹
+  let ⟨hwords, right✝¹⟩ := right✝
+  let ⟨hdelta, right✝²⟩ := right✝¹
+  let ⟨hlen, right✝³⟩ := right✝²
+  let ⟨hseq, hreads⟩ := right✝³
+  let ⟨c0, c1, count, h✝²⟩ := final
+  Eq.ndrec (motive := fun final =>
+    AspisR1FinishDotSourceABI.finishFromPush final = Aeneas.Std.Result.ok out →
+      AspisR1FinishDotSourceABI.finishWords out =
+          List.map AspisR1EbyKFinish.Proof.word (↑final.c0.sums ++ ↑final.c1.sums) →
+        AspisR1FinishDotDecodedProductTrace.stateDelta final = AspisR1FinishDotDecodedProductTrace.deltaSum xs →
+          ∃ final xs,
+            AspisR1FinishDotSourceABI.finishFromPush final = Aeneas.Std.Result.ok out ∧
+              AspisR1CurrentWide.Proof.decodeFinish out =
+                AspisR1FinishDotReturnedDeltaDecodeV1.decodeDelta (AspisR1FinishDotDecodedProductTrace.deltaSum xs))
+    (fun hfinish hwords hdelta =>
+      let ⟨s0, h✝³⟩ := c0
+      Eq.ndrec (motive := fun c0 =>
+        AspisR1FinishDotSourceABI.finishFromPush { c0 := c0, c1 := c1, count := count } = Aeneas.Std.Result.ok out →
+          AspisR1FinishDotSourceABI.finishWords out =
+              List.map AspisR1EbyKFinish.Proof.word
+                (↑{ c0 := c0, c1 := c1, count := count }.c0.sums ++ ↑{ c0 := c0, c1 := c1, count := count }.c1.sums) →
+            AspisR1FinishDotDecodedProductTrace.stateDelta { c0 := c0, c1 := c1, count := count } =
+                AspisR1FinishDotDecodedProductTrace.deltaSum xs →
+              ∃ final xs,
+                AspisR1FinishDotSourceABI.finishFromPush final = Aeneas.Std.Result.ok out ∧
+                  AspisR1CurrentWide.Proof.decodeFinish out =
+                    AspisR1FinishDotReturnedDeltaDecodeV1.decodeDelta (AspisR1FinishDotDecodedProductTrace.deltaSum xs))
+        (fun hfinish hwords hdelta =>
+          let ⟨s1, h✝⁴⟩ := c1
+          Eq.ndrec (motive := fun c1 =>
+            AspisR1FinishDotSourceABI.finishFromPush { c0 := { sums := s0 }, c1 := c1, count := count } =
+                Aeneas.Std.Result.ok out →
+              AspisR1FinishDotSourceABI.finishWords out =
+                  List.map AspisR1EbyKFinish.Proof.word
+                    (↑{ c0 := { sums := s0 }, c1 := c1, count := count }.c0.sums ++
+                      ↑{ c0 := { sums := s0 }, c1 := c1, count := count }.c1.sums) →
+                AspisR1FinishDotDecodedProductTrace.stateDelta { c0 := { sums := s0 }, c1 := c1, count := count } =
+                    AspisR1FinishDotDecodedProductTrace.deltaSum xs →
+                  ∃ final xs,
+                    AspisR1FinishDotSourceABI.finishFromPush final = Aeneas.Std.Result.ok out ∧
+                      AspisR1CurrentWide.Proof.decodeFinish out =
+                        AspisR1FinishDotReturnedDeltaDecodeV1.decodeDelta
+                          (AspisR1FinishDotDecodedProductTrace.deltaSum xs))
+            (fun hfinish hwords hdelta =>
+              let ⟨a, h✝⁵⟩ := List.length_eq_four.mp s0.property
+              let ⟨b, h✝⁶⟩ := h✝⁵
+              let ⟨c, h✝⁷⟩ := h✝⁶
+              let ⟨d, hshape0⟩ := h✝⁷
+              let ⟨e, h✝⁸⟩ := List.length_eq_four.mp s1.property
+              let ⟨f, h✝⁹⟩ := h✝⁸
+              let ⟨g, h✝¹⁰⟩ := h✝⁹
+              let ⟨h, hshape1⟩ := h✝¹⁰
+              have hword := hwords;
+              have hvals :=
+                congrArg (List.map fun w => ↑w)
+                  (Eq.mp
+                    (congrArg
+                      (fun _a =>
+                        AspisR1FinishDotSourceABI.finishWords out =
+                          List.map AspisR1EbyKFinish.Proof.word ([a, b, c, d] ++ _a))
+                      hshape1)
+                    (Eq.mp
+                      (congrArg
+                        (fun _a =>
+                          AspisR1FinishDotSourceABI.finishWords out =
+                            List.map AspisR1EbyKFinish.Proof.word
+                              (_a ++ ↑{ c0 := { sums := s0 }, c1 := { sums := s1 }, count := count }.c1.sums))
+                        hshape0)
+                      hword));
+              List.cons.noConfusion
+                (Eq.mp
+                  (congrArg
+                    (Eq
+                      [↑out.c0.c0.a, ↑out.c0.c0.b, ↑out.c0.c1.a, ↑out.c0.c1.b, ↑out.c1.c0.a, ↑out.c1.c0.b, ↑out.c1.c1.a,
+                        ↑out.c1.c1.b])
+                    (Eq.trans (congrArg (List.map fun w => ↑w) List.map_append) List.map_append))
+                  hvals)
+                fun ha htail0 =>
+                List.cons.noConfusion (eq_of_heq htail0) fun hb htail1 =>
+                  List.cons.noConfusion (eq_of_heq htail1) fun hc htail2 =>
+                    List.cons.noConfusion (eq_of_heq htail2) fun hd htail3 =>
+                      List.cons.noConfusion (eq_of_heq htail3) fun he htail4 =>
+                        List.cons.noConfusion (eq_of_heq htail4) fun hf htail5 =>
+                          List.cons.noConfusion (eq_of_heq htail5) fun hg htail6 =>
+                            List.cons.noConfusion (eq_of_heq htail6) fun hh htail7 =>
+                              have hlow :=
+                                of_eq_true
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg Eq
+                                        (congr
+                                          (congrArg QuadraticAlgebra.mk
+                                            (congr
+                                              (congrArg QuadraticAlgebra.mk
+                                                (congrArg Prod.fst
+                                                  (congrArg Prod.fst
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congr
+                                                          (congrArg Prod.mk
+                                                            (Eq.trans
+                                                              (congrArg Nat.cast
+                                                                (congrArg Prod.fst
+                                                                  (congrArg Prod.fst
+                                                                    (congr
+                                                                      (congrArg Prod.mk
+                                                                        (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                          (eq_of_heq hb)))
+                                                                      (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                        (eq_of_heq hd))))))
+                                                              (ZMod.natCast_mod (↑a) AspisV8R17.RawReducer.P)))
+                                                          (Eq.trans
+                                                            (congrArg Nat.cast
+                                                              (congrArg Prod.snd
+                                                                (congrArg Prod.fst
+                                                                  (congr
+                                                                    (congrArg Prod.mk
+                                                                      (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                        (eq_of_heq hb)))
+                                                                    (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                      (eq_of_heq hd))))))
+                                                            (ZMod.natCast_mod (↑b) AspisV8R17.RawReducer.P))))
+                                                      (congr
+                                                        (congrArg Prod.mk
+                                                          (Eq.trans
+                                                            (congrArg Nat.cast
+                                                              (congrArg Prod.fst
+                                                                (congrArg Prod.snd
+                                                                  (congr
+                                                                    (congrArg Prod.mk
+                                                                      (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                        (eq_of_heq hb)))
+                                                                    (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                      (eq_of_heq hd))))))
+                                                            (ZMod.natCast_mod (↑c) AspisV8R17.RawReducer.P)))
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.snd
+                                                              (congrArg Prod.snd
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                      (eq_of_heq hb)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                    (eq_of_heq hd))))))
+                                                          (ZMod.natCast_mod (↑d) AspisV8R17.RawReducer.P)))))))
+                                              (congrArg Prod.snd
+                                                (congrArg Prod.fst
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congr
+                                                        (congrArg Prod.mk
+                                                          (Eq.trans
+                                                            (congrArg Nat.cast
+                                                              (congrArg Prod.fst
+                                                                (congrArg Prod.fst
+                                                                  (congr
+                                                                    (congrArg Prod.mk
+                                                                      (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                        (eq_of_heq hb)))
+                                                                    (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                      (eq_of_heq hd))))))
+                                                            (ZMod.natCast_mod (↑a) AspisV8R17.RawReducer.P)))
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.snd
+                                                              (congrArg Prod.fst
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                      (eq_of_heq hb)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                    (eq_of_heq hd))))))
+                                                          (ZMod.natCast_mod (↑b) AspisV8R17.RawReducer.P))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.fst
+                                                              (congrArg Prod.snd
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                      (eq_of_heq hb)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                    (eq_of_heq hd))))))
+                                                          (ZMod.natCast_mod (↑c) AspisV8R17.RawReducer.P)))
+                                                      (Eq.trans
+                                                        (congrArg Nat.cast
+                                                          (congrArg Prod.snd
+                                                            (congrArg Prod.snd
+                                                              (congr
+                                                                (congrArg Prod.mk
+                                                                  (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                    (eq_of_heq hb)))
+                                                                (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                  (eq_of_heq hd))))))
+                                                        (ZMod.natCast_mod (↑d) AspisV8R17.RawReducer.P))))))))
+                                          (congr
+                                            (congrArg QuadraticAlgebra.mk
+                                              (congrArg Prod.fst
+                                                (congrArg Prod.snd
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congr
+                                                        (congrArg Prod.mk
+                                                          (Eq.trans
+                                                            (congrArg Nat.cast
+                                                              (congrArg Prod.fst
+                                                                (congrArg Prod.fst
+                                                                  (congr
+                                                                    (congrArg Prod.mk
+                                                                      (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                        (eq_of_heq hb)))
+                                                                    (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                      (eq_of_heq hd))))))
+                                                            (ZMod.natCast_mod (↑a) AspisV8R17.RawReducer.P)))
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.snd
+                                                              (congrArg Prod.fst
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                      (eq_of_heq hb)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                    (eq_of_heq hd))))))
+                                                          (ZMod.natCast_mod (↑b) AspisV8R17.RawReducer.P))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.fst
+                                                              (congrArg Prod.snd
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                      (eq_of_heq hb)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                    (eq_of_heq hd))))))
+                                                          (ZMod.natCast_mod (↑c) AspisV8R17.RawReducer.P)))
+                                                      (Eq.trans
+                                                        (congrArg Nat.cast
+                                                          (congrArg Prod.snd
+                                                            (congrArg Prod.snd
+                                                              (congr
+                                                                (congrArg Prod.mk
+                                                                  (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                    (eq_of_heq hb)))
+                                                                (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                  (eq_of_heq hd))))))
+                                                        (ZMod.natCast_mod (↑d) AspisV8R17.RawReducer.P)))))))
+                                            (congrArg Prod.snd
+                                              (congrArg Prod.snd
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.fst
+                                                              (congrArg Prod.fst
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                      (eq_of_heq hb)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                    (eq_of_heq hd))))))
+                                                          (ZMod.natCast_mod (↑a) AspisV8R17.RawReducer.P)))
+                                                      (Eq.trans
+                                                        (congrArg Nat.cast
+                                                          (congrArg Prod.snd
+                                                            (congrArg Prod.fst
+                                                              (congr
+                                                                (congrArg Prod.mk
+                                                                  (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                    (eq_of_heq hb)))
+                                                                (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                  (eq_of_heq hd))))))
+                                                        (ZMod.natCast_mod (↑b) AspisV8R17.RawReducer.P))))
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (Eq.trans
+                                                        (congrArg Nat.cast
+                                                          (congrArg Prod.fst
+                                                            (congrArg Prod.snd
+                                                              (congr
+                                                                (congrArg Prod.mk
+                                                                  (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                    (eq_of_heq hb)))
+                                                                (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                  (eq_of_heq hd))))))
+                                                        (ZMod.natCast_mod (↑c) AspisV8R17.RawReducer.P)))
+                                                    (Eq.trans
+                                                      (congrArg Nat.cast
+                                                        (congrArg Prod.snd
+                                                          (congrArg Prod.snd
+                                                            (congr
+                                                              (congrArg Prod.mk
+                                                                (congr (congrArg Prod.mk (eq_of_heq ha))
+                                                                  (eq_of_heq hb)))
+                                                              (congr (congrArg Prod.mk (eq_of_heq hc))
+                                                                (eq_of_heq hd))))))
+                                                      (ZMod.natCast_mod (↑d) AspisV8R17.RawReducer.P)))))))))
+                                      (congr
+                                        (congrArg QuadraticAlgebra.mk
+                                          (congr
+                                            (congrArg QuadraticAlgebra.mk
+                                              (congrArg Prod.fst
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg Nat.cast
+                                                      (congrArg Aeneas.Std.UScalar.val
+                                                        (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 0)
+                                                          (getElem!_pos [a, b, c, d] 0
+                                                            (of_eq_true
+                                                              (Eq.trans
+                                                                (congrArg (LT.lt 0)
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                Nat.ofNat_pos._simp_1)))))))
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 1)
+                                                            (getElem!_pos [a, b, c, d] 1
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 1)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  Nat.one_lt_ofNat._simp_1)))))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg Nat.cast
+                                                          (congrArg Aeneas.Std.UScalar.val
+                                                            (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 2)
+                                                              (getElem!_pos [a, b, c, d] 2
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (congrArg (LT.lt 2)
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                            1))
+                                                                        1))
+                                                                    (eq_true_of_decide (Eq.refl Bool.true)))))))))
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 3)
+                                                            (getElem!_pos [a, b, c, d] 3
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 3)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  (Nat.lt_add_one._simp_1 3))))))))))))
+                                            (congrArg Prod.fst
+                                              (congrArg Prod.snd
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg Nat.cast
+                                                      (congrArg Aeneas.Std.UScalar.val
+                                                        (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 0)
+                                                          (getElem!_pos [a, b, c, d] 0
+                                                            (of_eq_true
+                                                              (Eq.trans
+                                                                (congrArg (LT.lt 0)
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                Nat.ofNat_pos._simp_1)))))))
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 1)
+                                                            (getElem!_pos [a, b, c, d] 1
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 1)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  Nat.one_lt_ofNat._simp_1)))))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg Nat.cast
+                                                          (congrArg Aeneas.Std.UScalar.val
+                                                            (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 2)
+                                                              (getElem!_pos [a, b, c, d] 2
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (congrArg (LT.lt 2)
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                            1))
+                                                                        1))
+                                                                    (eq_true_of_decide (Eq.refl Bool.true)))))))))
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 3)
+                                                            (getElem!_pos [a, b, c, d] 3
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 3)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  (Nat.lt_add_one._simp_1 3))))))))))))))
+                                        (congr
+                                          (congrArg QuadraticAlgebra.mk
+                                            (congrArg Prod.fst
+                                              (congrArg Prod.snd
+                                                (congrArg Prod.snd
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 0)
+                                                            (getElem!_pos [a, b, c, d] 0
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 0)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  Nat.ofNat_pos._simp_1)))))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg Nat.cast
+                                                          (congrArg Aeneas.Std.UScalar.val
+                                                            (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 1)
+                                                              (getElem!_pos [a, b, c, d] 1
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (congrArg (LT.lt 1)
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                            1))
+                                                                        1))
+                                                                    Nat.one_lt_ofNat._simp_1)))))))
+                                                      (congr
+                                                        (congrArg Prod.mk
+                                                          (congrArg Nat.cast
+                                                            (congrArg Aeneas.Std.UScalar.val
+                                                              (Eq.trans
+                                                                (congrFun' (congrArg GetElem?.getElem! hshape0) 2)
+                                                                (getElem!_pos [a, b, c, d] 2
+                                                                  (of_eq_true
+                                                                    (Eq.trans
+                                                                      (congrArg (LT.lt 2)
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun'
+                                                                              (congrArg HAdd.hAdd
+                                                                                (congrFun'
+                                                                                  (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                              1))
+                                                                          1))
+                                                                      (eq_true_of_decide (Eq.refl Bool.true)))))))))
+                                                        (congrArg Nat.cast
+                                                          (congrArg Aeneas.Std.UScalar.val
+                                                            (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 3)
+                                                              (getElem!_pos [a, b, c, d] 3
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (congrArg (LT.lt 3)
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                            1))
+                                                                        1))
+                                                                    (Nat.lt_add_one._simp_1 3))))))))))))))
+                                          (congrArg Prod.snd
+                                            (congrArg Prod.snd
+                                              (congrArg Prod.snd
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg Nat.cast
+                                                      (congrArg Aeneas.Std.UScalar.val
+                                                        (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 0)
+                                                          (getElem!_pos [a, b, c, d] 0
+                                                            (of_eq_true
+                                                              (Eq.trans
+                                                                (congrArg (LT.lt 0)
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                Nat.ofNat_pos._simp_1)))))))
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 1)
+                                                            (getElem!_pos [a, b, c, d] 1
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 1)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  Nat.one_lt_ofNat._simp_1)))))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg Nat.cast
+                                                          (congrArg Aeneas.Std.UScalar.val
+                                                            (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 2)
+                                                              (getElem!_pos [a, b, c, d] 2
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (congrArg (LT.lt 2)
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                            1))
+                                                                        1))
+                                                                    (eq_true_of_decide (Eq.refl Bool.true)))))))))
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape0) 3)
+                                                            (getElem!_pos [a, b, c, d] 3
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 3)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  (Nat.lt_add_one._simp_1 3))))))))))))))))
+                                    (eq_self { re := { re := ↑↑a, im := ↑↑b }, im := { re := ↑↑c, im := ↑↑d } }));
+                              have hhigh :=
+                                of_eq_true
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg Eq
+                                        (congr
+                                          (congrArg QuadraticAlgebra.mk
+                                            (congr
+                                              (congrArg QuadraticAlgebra.mk
+                                                (congrArg Prod.fst
+                                                  (congrArg Prod.fst
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congr
+                                                          (congrArg Prod.mk
+                                                            (Eq.trans
+                                                              (congrArg Nat.cast
+                                                                (congrArg Prod.fst
+                                                                  (congrArg Prod.fst
+                                                                    (congr
+                                                                      (congrArg Prod.mk
+                                                                        (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                          (eq_of_heq hf)))
+                                                                      (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                        (eq_of_heq hh))))))
+                                                              (ZMod.natCast_mod (↑e) AspisV8R17.RawReducer.P)))
+                                                          (Eq.trans
+                                                            (congrArg Nat.cast
+                                                              (congrArg Prod.snd
+                                                                (congrArg Prod.fst
+                                                                  (congr
+                                                                    (congrArg Prod.mk
+                                                                      (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                        (eq_of_heq hf)))
+                                                                    (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                      (eq_of_heq hh))))))
+                                                            (ZMod.natCast_mod (↑f) AspisV8R17.RawReducer.P))))
+                                                      (congr
+                                                        (congrArg Prod.mk
+                                                          (Eq.trans
+                                                            (congrArg Nat.cast
+                                                              (congrArg Prod.fst
+                                                                (congrArg Prod.snd
+                                                                  (congr
+                                                                    (congrArg Prod.mk
+                                                                      (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                        (eq_of_heq hf)))
+                                                                    (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                      (eq_of_heq hh))))))
+                                                            (ZMod.natCast_mod (↑g) AspisV8R17.RawReducer.P)))
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.snd
+                                                              (congrArg Prod.snd
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                      (eq_of_heq hf)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                    (eq_of_heq hh))))))
+                                                          (ZMod.natCast_mod (↑h) AspisV8R17.RawReducer.P)))))))
+                                              (congrArg Prod.snd
+                                                (congrArg Prod.fst
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congr
+                                                        (congrArg Prod.mk
+                                                          (Eq.trans
+                                                            (congrArg Nat.cast
+                                                              (congrArg Prod.fst
+                                                                (congrArg Prod.fst
+                                                                  (congr
+                                                                    (congrArg Prod.mk
+                                                                      (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                        (eq_of_heq hf)))
+                                                                    (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                      (eq_of_heq hh))))))
+                                                            (ZMod.natCast_mod (↑e) AspisV8R17.RawReducer.P)))
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.snd
+                                                              (congrArg Prod.fst
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                      (eq_of_heq hf)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                    (eq_of_heq hh))))))
+                                                          (ZMod.natCast_mod (↑f) AspisV8R17.RawReducer.P))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.fst
+                                                              (congrArg Prod.snd
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                      (eq_of_heq hf)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                    (eq_of_heq hh))))))
+                                                          (ZMod.natCast_mod (↑g) AspisV8R17.RawReducer.P)))
+                                                      (Eq.trans
+                                                        (congrArg Nat.cast
+                                                          (congrArg Prod.snd
+                                                            (congrArg Prod.snd
+                                                              (congr
+                                                                (congrArg Prod.mk
+                                                                  (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                    (eq_of_heq hf)))
+                                                                (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                  (eq_of_heq hh))))))
+                                                        (ZMod.natCast_mod (↑h) AspisV8R17.RawReducer.P))))))))
+                                          (congr
+                                            (congrArg QuadraticAlgebra.mk
+                                              (congrArg Prod.fst
+                                                (congrArg Prod.snd
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congr
+                                                        (congrArg Prod.mk
+                                                          (Eq.trans
+                                                            (congrArg Nat.cast
+                                                              (congrArg Prod.fst
+                                                                (congrArg Prod.fst
+                                                                  (congr
+                                                                    (congrArg Prod.mk
+                                                                      (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                        (eq_of_heq hf)))
+                                                                    (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                      (eq_of_heq hh))))))
+                                                            (ZMod.natCast_mod (↑e) AspisV8R17.RawReducer.P)))
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.snd
+                                                              (congrArg Prod.fst
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                      (eq_of_heq hf)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                    (eq_of_heq hh))))))
+                                                          (ZMod.natCast_mod (↑f) AspisV8R17.RawReducer.P))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.fst
+                                                              (congrArg Prod.snd
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                      (eq_of_heq hf)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                    (eq_of_heq hh))))))
+                                                          (ZMod.natCast_mod (↑g) AspisV8R17.RawReducer.P)))
+                                                      (Eq.trans
+                                                        (congrArg Nat.cast
+                                                          (congrArg Prod.snd
+                                                            (congrArg Prod.snd
+                                                              (congr
+                                                                (congrArg Prod.mk
+                                                                  (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                    (eq_of_heq hf)))
+                                                                (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                  (eq_of_heq hh))))))
+                                                        (ZMod.natCast_mod (↑h) AspisV8R17.RawReducer.P)))))))
+                                            (congrArg Prod.snd
+                                              (congrArg Prod.snd
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (Eq.trans
+                                                          (congrArg Nat.cast
+                                                            (congrArg Prod.fst
+                                                              (congrArg Prod.fst
+                                                                (congr
+                                                                  (congrArg Prod.mk
+                                                                    (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                      (eq_of_heq hf)))
+                                                                  (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                    (eq_of_heq hh))))))
+                                                          (ZMod.natCast_mod (↑e) AspisV8R17.RawReducer.P)))
+                                                      (Eq.trans
+                                                        (congrArg Nat.cast
+                                                          (congrArg Prod.snd
+                                                            (congrArg Prod.fst
+                                                              (congr
+                                                                (congrArg Prod.mk
+                                                                  (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                    (eq_of_heq hf)))
+                                                                (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                  (eq_of_heq hh))))))
+                                                        (ZMod.natCast_mod (↑f) AspisV8R17.RawReducer.P))))
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (Eq.trans
+                                                        (congrArg Nat.cast
+                                                          (congrArg Prod.fst
+                                                            (congrArg Prod.snd
+                                                              (congr
+                                                                (congrArg Prod.mk
+                                                                  (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                    (eq_of_heq hf)))
+                                                                (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                  (eq_of_heq hh))))))
+                                                        (ZMod.natCast_mod (↑g) AspisV8R17.RawReducer.P)))
+                                                    (Eq.trans
+                                                      (congrArg Nat.cast
+                                                        (congrArg Prod.snd
+                                                          (congrArg Prod.snd
+                                                            (congr
+                                                              (congrArg Prod.mk
+                                                                (congr (congrArg Prod.mk (eq_of_heq he))
+                                                                  (eq_of_heq hf)))
+                                                              (congr (congrArg Prod.mk (eq_of_heq hg))
+                                                                (eq_of_heq hh))))))
+                                                      (ZMod.natCast_mod (↑h) AspisV8R17.RawReducer.P)))))))))
+                                      (congr
+                                        (congrArg QuadraticAlgebra.mk
+                                          (congr
+                                            (congrArg QuadraticAlgebra.mk
+                                              (congrArg Prod.fst
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg Nat.cast
+                                                      (congrArg Aeneas.Std.UScalar.val
+                                                        (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 0)
+                                                          (getElem!_pos [e, f, g, h] 0
+                                                            (of_eq_true
+                                                              (Eq.trans
+                                                                (congrArg (LT.lt 0)
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                Nat.ofNat_pos._simp_1)))))))
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 1)
+                                                            (getElem!_pos [e, f, g, h] 1
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 1)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  Nat.one_lt_ofNat._simp_1)))))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg Nat.cast
+                                                          (congrArg Aeneas.Std.UScalar.val
+                                                            (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 2)
+                                                              (getElem!_pos [e, f, g, h] 2
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (congrArg (LT.lt 2)
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                            1))
+                                                                        1))
+                                                                    (eq_true_of_decide (Eq.refl Bool.true)))))))))
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 3)
+                                                            (getElem!_pos [e, f, g, h] 3
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 3)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  (Nat.lt_add_one._simp_1 3))))))))))))
+                                            (congrArg Prod.fst
+                                              (congrArg Prod.snd
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg Nat.cast
+                                                      (congrArg Aeneas.Std.UScalar.val
+                                                        (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 0)
+                                                          (getElem!_pos [e, f, g, h] 0
+                                                            (of_eq_true
+                                                              (Eq.trans
+                                                                (congrArg (LT.lt 0)
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                Nat.ofNat_pos._simp_1)))))))
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 1)
+                                                            (getElem!_pos [e, f, g, h] 1
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 1)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  Nat.one_lt_ofNat._simp_1)))))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg Nat.cast
+                                                          (congrArg Aeneas.Std.UScalar.val
+                                                            (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 2)
+                                                              (getElem!_pos [e, f, g, h] 2
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (congrArg (LT.lt 2)
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                            1))
+                                                                        1))
+                                                                    (eq_true_of_decide (Eq.refl Bool.true)))))))))
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 3)
+                                                            (getElem!_pos [e, f, g, h] 3
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 3)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  (Nat.lt_add_one._simp_1 3))))))))))))))
+                                        (congr
+                                          (congrArg QuadraticAlgebra.mk
+                                            (congrArg Prod.fst
+                                              (congrArg Prod.snd
+                                                (congrArg Prod.snd
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 0)
+                                                            (getElem!_pos [e, f, g, h] 0
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 0)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  Nat.ofNat_pos._simp_1)))))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg Nat.cast
+                                                          (congrArg Aeneas.Std.UScalar.val
+                                                            (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 1)
+                                                              (getElem!_pos [e, f, g, h] 1
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (congrArg (LT.lt 1)
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                            1))
+                                                                        1))
+                                                                    Nat.one_lt_ofNat._simp_1)))))))
+                                                      (congr
+                                                        (congrArg Prod.mk
+                                                          (congrArg Nat.cast
+                                                            (congrArg Aeneas.Std.UScalar.val
+                                                              (Eq.trans
+                                                                (congrFun' (congrArg GetElem?.getElem! hshape1) 2)
+                                                                (getElem!_pos [e, f, g, h] 2
+                                                                  (of_eq_true
+                                                                    (Eq.trans
+                                                                      (congrArg (LT.lt 2)
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun'
+                                                                              (congrArg HAdd.hAdd
+                                                                                (congrFun'
+                                                                                  (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                              1))
+                                                                          1))
+                                                                      (eq_true_of_decide (Eq.refl Bool.true)))))))))
+                                                        (congrArg Nat.cast
+                                                          (congrArg Aeneas.Std.UScalar.val
+                                                            (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 3)
+                                                              (getElem!_pos [e, f, g, h] 3
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (congrArg (LT.lt 3)
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                            1))
+                                                                        1))
+                                                                    (Nat.lt_add_one._simp_1 3))))))))))))))
+                                          (congrArg Prod.snd
+                                            (congrArg Prod.snd
+                                              (congrArg Prod.snd
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg Nat.cast
+                                                      (congrArg Aeneas.Std.UScalar.val
+                                                        (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 0)
+                                                          (getElem!_pos [e, f, g, h] 0
+                                                            (of_eq_true
+                                                              (Eq.trans
+                                                                (congrArg (LT.lt 0)
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                Nat.ofNat_pos._simp_1)))))))
+                                                  (congr
+                                                    (congrArg Prod.mk
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 1)
+                                                            (getElem!_pos [e, f, g, h] 1
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 1)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  Nat.one_lt_ofNat._simp_1)))))))
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg Nat.cast
+                                                          (congrArg Aeneas.Std.UScalar.val
+                                                            (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 2)
+                                                              (getElem!_pos [e, f, g, h] 2
+                                                                (of_eq_true
+                                                                  (Eq.trans
+                                                                    (congrArg (LT.lt 2)
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                            1))
+                                                                        1))
+                                                                    (eq_true_of_decide (Eq.refl Bool.true)))))))))
+                                                      (congrArg Nat.cast
+                                                        (congrArg Aeneas.Std.UScalar.val
+                                                          (Eq.trans (congrFun' (congrArg GetElem?.getElem! hshape1) 3)
+                                                            (getElem!_pos [e, f, g, h] 3
+                                                              (of_eq_true
+                                                                (Eq.trans
+                                                                  (congrArg (LT.lt 3)
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  (Nat.lt_add_one._simp_1 3))))))))))))))))
+                                    (eq_self { re := { re := ↑↑e, im := ↑↑f }, im := { re := ↑↑g, im := ↑↑h } }));
+                              have hdecode := AspisR1FinishDotReturnedDecodedValueV1.decodeFinish_eq_word_tower out;
+                              let final' := { c0 := { sums := s0 }, c1 := { sums := s1 }, count := count };
+                              have hfinal :=
+                                Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        _a =
+                                          AspisR1FinishDotReturnedDeltaDecodeV1.decodeDelta
+                                            (AspisR1FinishDotDecodedProductTrace.stateDelta final'))
+                                      hdecode))
+                                  (of_eq_true
+                                    (Eq.trans
+                                      (congrFun' (congrArg Eq (congr (congrArg QuadraticAlgebra.mk hlow) hhigh))
+                                        {
+                                          re :=
+                                            AspisR1FinishDotReturnedDeltaDecodeV1.tupleToTowerQ
+                                              (AspisR1EbyKPushDecodedProductUpdate.castSums s0),
+                                          im :=
+                                            AspisR1FinishDotReturnedDeltaDecodeV1.tupleToTowerQ
+                                              (AspisR1EbyKPushDecodedProductUpdate.castSums s1) })
+                                      (eq_self
+                                        {
+                                          re :=
+                                            AspisR1FinishDotReturnedDeltaDecodeV1.tupleToTowerQ
+                                              (AspisR1EbyKPushDecodedProductUpdate.castSums s0),
+                                          im :=
+                                            AspisR1FinishDotReturnedDeltaDecodeV1.tupleToTowerQ
+                                              (AspisR1EbyKPushDecodedProductUpdate.castSums s1) })));
+                              Exists.intro final'
+                                (Exists.intro xs
+                                  ⟨hfinish,
+                                    Eq.mp
+                                      (congrArg
+                                        (fun _a =>
+                                          AspisR1CurrentWide.Proof.decodeFinish out =
+                                            AspisR1FinishDotReturnedDeltaDecodeV1.decodeDelta _a)
+                                        hdelta)
+                                      hfinal⟩))
+            (Eq.symm h✝⁴) hfinish hwords hdelta)
+        (Eq.symm h✝³) hfinish hwords hdelta)
+    (Eq.symm h✝²) hfinish hwords hdelta
+theorem AspisR1FinishDotReturnedProductWords.successful_current_finish_query_product_words : ∀ {W : Type}
+  (ops : AspisR1FinishRelationCurrent.FinishOps W AspisR1FinishDotDecodedProductTrace.PushState)
+  (fm : Aeneas.Std.Slice Aeneas.Std.U8) (ws : Aeneas.Std.Slice AspisR1FinishDotDecodedProductTrace.FinishQM)
+  (out : AspisR1FinishDotDecodedProductTrace.FinishE),
+  AspisR1FinishRelationCurrent.verifier.finish_query_dot
+        (AspisR1FinishDotConcreteOps.withConcreteDot (AspisR1CurrentWide.Proof.finishConcreteField ops)
+          AspisR1EbyKPushDecodedProductUpdate.QRaw)
+        fm ws =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+    ∃ final xs,
+      AspisR1FinishDotSourceABI.finishFromPush final = Aeneas.Std.Result.ok out ∧
+        AspisR1FinishDotSourceABI.finishWords out =
+            List.map AspisR1EbyKFinish.Proof.word (↑final.c0.sums ++ ↑final.c1.sums) ∧
+          AspisR1FinishDotDecodedProductTrace.stateDelta final = AspisR1FinishDotDecodedProductTrace.deltaSum xs ∧
+            xs.length = ↑ws.len ∧
+              (∀ (k : ℕ) (hk : k < xs.length), ↑xs[k].1 = k) ∧
+                ∀ t ∈ xs,
+                  t.1 < ws.len ∧
+                    AspisR1CurrentWide.Proof.finishField fm t.1 = Aeneas.Std.Result.ok t.2.1 ∧
+                      ws.index_usize t.1 = Aeneas.Std.Result.ok t.2.2 :=
+fun {W} ops fm ws out hrun =>
+  let ⟨final, h✝⟩ :=
+    AspisR1FinishDotDecodedProductTrace.successful_current_finish_query_product_trace ops fm ws out hrun
+  let ⟨xs, h✝¹⟩ := h✝
+  let ⟨hfinish, right✝⟩ := h✝¹
+  let ⟨hcount, right✝¹⟩ := right✝
+  let ⟨hdelta, right✝²⟩ := right✝¹
+  let ⟨hlen, right✝³⟩ := right✝²
+  let ⟨hseq, hreads⟩ := right✝³
+  have hwords := AspisR1FinishDotSourceABI.finishFromPush_success_canonical final out hfinish;
+  Exists.intro final (Exists.intro xs ⟨hfinish, ⟨hwords.right, ⟨hdelta, ⟨hlen, ⟨hseq, hreads⟩⟩⟩⟩⟩)
+def AspisR1CurrentWide.Proof.decodeFinish : AspisR1CurrentWide.Proof.FinishE → AspisWideTower.WideExact :=
+fun x => AspisR1CurrentWide.Proof.decodeWide (AspisR1CurrentWide.Proof.ofFinishE x)
+def AspisR1CurrentWide.Proof.finishField : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result AspisR1CurrentWide.Proof.FinishE :=
+fun bytes i => do
+  let value ←
+    AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i
+  Aeneas.Std.Result.ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+def AspisR1FinishDotReturnedFieldProductV1.finishQMDecoded : AspisR1FinishDotDecodedProductTrace.FinishQM →
+  AspisR1FinishDotReturnedFieldProductV1.Q :=
+fun q => AspisV8R17.QM31WordTower.decodeQ (AspisR1FinishDotReturnedProductWords.finishQMWords q)
