@@ -1,0 +1,23 @@
+def Aeneas.Std.core.array.Array.map : {T F U : Type} →
+  {N : Usize} → core.ops.function.FnMut F T U → Std.Array T N → F → Result (Std.Array U N) :=
+fun {T F U} {N} callback self f =>
+  match h : AspisV8R19.TraversalRuntime.mapState callback.call_mut (↑self) f with
+  | ok (ys, _last) => ok ⟨ys, ⋯⟩
+  | fail e => fail e
+  | div => div
+def FIq_Native.core.array.Array.map : {T F U : Type} →
+  {N : Usize} → core.ops.function.FnMut F T U → Std.Array T N → F → Result (Std.Array U N) :=
+fun {T F U} {N} callback self f => Std.core.array.Array.map callback self f
+def Aeneas.Std.BuiltinFnMut.{u, v} : (Inputs : Type u) →
+  (Outputs : Type v) → core.ops.function.FnMut (Inputs → Result Outputs) Inputs Outputs :=
+fun Inputs Outputs =>
+  { FnOnceInst := BuiltinFnOnce Inputs Outputs,
+    call_mut := fun f x =>
+      match f x with
+      | ok y => ok (y, f)
+      | fail e => fail e
+      | div => div }
+def AspisV8R19.TraversalRuntime.mapState : {T U F : Type} →
+  (F → T → Result (U × F)) → List T → F → Result (List U × F) :=
+fun {T U F} call x x_1 =>
+  List.brecOn (motive := fun x => F → Result (List U × F)) x (AspisV8R19.TraversalRuntime.mapState._f call) x_1
