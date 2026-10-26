@@ -1,0 +1,45 @@
+reservation: populated 24 GiB + 8 GiB; window=0 (London 1845); env=J
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionOccupiedScan.lean:24:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let m ← ok 0#u32
+    let b ←
+      core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m aspis_core.field.M31.ZERO
+    ok (b, 0#u32)
+is not definitionally equal to the right-hand side
+  ok (false, 0#u32)
+
+d : Std.Array U32 8#usize
+f : core.ops.function.FnMut pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.validate.closure aspis_core.field.M31
+  Bool :=
+  pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.validate.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+x : U32
+⊢ (do
+      let m ← ok 0#u32
+      let b ←
+        core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m aspis_core.field.M31.ZERO
+      ok (b, 0#u32)) =
+    ok (false, 0#u32)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionOccupiedScan.lean:35:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let __x ← ok (false, (↑d).length)
+    ok (__x.1, { slice := ⟨↑d, ⋯⟩, i := 0 + __x.2 })
+is not definitionally equal to the right-hand side
+  ok (false, { slice := ⟨↑d, ⋯⟩, i := (↑d).length })
+
+d : Std.Array U32 8#usize
+f : core.ops.function.FnMut pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.validate.closure aspis_core.field.M31
+  Bool :=
+  pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.validate.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+hf : ∀ (c x : U32), c = 0#u32 → f.call_mut c x = ok (false, c)
+hs : ∀ (xs : List U32), scan f true xs 0#u32 = ok (false, xs.length)
+⊢ (do
+      let __x ← ok (false, (↑d).length)
+      ok (__x.1, { slice := ⟨↑d, ⋯⟩, i := 0 + __x.2 })) =
+    ok (false, { slice := ⟨↑d, ⋯⟩, i := (↑d).length })
+'R1Z.PV_Src_AdmissionOccupiedScan.scan_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.78
+	Maximum resident set size (kbytes): 4086376
+	Swaps: 0
+	Exit status: 1

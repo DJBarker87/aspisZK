@@ -92,3 +92,26 @@ They do not yet prove a successful dynamic root call or full forest compiler.
 
 25326 was refused by aggregate reservation at 18:21:00 UTC, charged zero.
 Earliest retry is 18:24:00 UTC with the next unused ID, 25327.
+
+## Frozen-reference next statement (draft)
+
+The retained root certificates cover all 21 fixed source calls and their exact
+21-call composition (P6 Kani/CBMC soundness). The five relevant source files
+are byte-identical to the accepted historical revision; the only current
+root-harness overlay is a new cfg(kani)-only accessor, whose unchanged prefix
+is recorded in root-certificate-inventory.json.
+
+The new full-mapper harness compares the actual unstubbed mapper (including
+its root helper) to the extracted owned reference on that fixed frozen table.
+It does not stub roots or raw words. This strengthens the pending check so
+that a successful P6 result can feed both words and the public root fields.
+
+A further draft selects the canonical snapshot encoding as data, rather than
+assuming its canonicality in publicCorr. Given the original compile_call,
+ReturnedSnapshot identifies its snapshot with the returned compilation, and
+PublicParts plus the frozen root table then proves the entire seven-field
+publicCorr. The proposed three-field remainder retains compile_call, exact
+selected-record RspendPlus and exact installed transport equality. This is a
+proposed reference-side 5→3 reduction until those new modules compile and the
+unstubbed P6/installed-caller joins have their evidence. No endpoint row is
+credited here on the basis of a draft or historical root evidence alone.
