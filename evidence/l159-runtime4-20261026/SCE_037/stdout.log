@@ -1,0 +1,27 @@
+SCE_ModelReadFrames.lean:24:4: error: Type mismatch
+  F3T_CanonicalChecks.canonical_valid D P H accepted row
+    (Decidable.byContradiction fun a => frames._proof_1 row small a)
+has type
+  LiteralTranscript.valid row ((F3T_Reached.input (F3T_Canon.canon P) H).proof row)
+but is expected to have type
+  LiteralTranscript.valid row (v.2.1.2 row)
+SCE_ModelReadFrames.lean:30:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  view (eval ?H (original ?D ?P))
+in the target expression
+  Read v.1 (RawCutWordsFromView.frameFromView D v row)
+
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+accepted : (eval H (original D (F3T_Canon.canon P))).2.2 = true
+CP : Prover := F3T_Canon.canon P
+v : RawCutProverCompiler.RunView := view (eval H (original D CP))
+valid : RawCutWordsFromRunExecutableBin.ValidPrefix v
+equal :
+  RawCommitmentFrameReplay.frameFromView v 0 = RawCutWordsFromView.frameFromView D v 0 ∧
+    RawCommitmentFrameReplay.frameFromView v 2 = RawCutWordsFromView.frameFromView D v 2 ∧
+      RawCommitmentFrameReplay.frameFromView v 30 = RawCutWordsFromView.frameFromView D v 30
+row : ℕ
+small : row < 33
+⊢ Read v.1 (RawCutWordsFromView.frameFromView D v row)
+'AspisR1.SCE_ModelReadFrames.frames' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

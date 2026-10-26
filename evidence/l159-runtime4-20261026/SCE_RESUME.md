@@ -14,3 +14,12 @@ complete-account submission alternative pays for this work but originalWith
 then appends a verifier execution again. CompleteChronology establishes the
 remaining empty-suffix requirement explicitly. Neither construction warrants
 claiming an actual top premise removed.
+
+After resumption:074,024,075,026,027,077 passed;025,028,029 failed.
+029 was a default-heartbeat timeout, replaced by split RecoveredExtraction
+and explicit public/Option.bind congruence. No cap or limit raised.
+Batch6 reservations denied13:03:58.920UTC, retry1 denied13:07:25.140,
+retry2 denied13:10:52.248; each retry spacing is above180s. Other jobs' populated
+reservations were over the55GiB safe limit. No SCE scope was live on denial.
+Keep retrying the unchanged reservation gate up to10 times; denial is NOT a
+Lean compile attempt. Current actual Lean count50, no Kani.

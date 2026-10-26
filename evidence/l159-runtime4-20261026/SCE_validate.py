@@ -13,6 +13,7 @@ receipts = [json.loads(p.read_text()) for p in E.glob('SCE_*/receipt.json')]
 assert 0 < len(receipts) <= 100
 limits = {'memory.high': '6442450944', 'memory.max': '8589934592',
           'memory.swap.max': '0', 'pids.max': '64'}
+groups = json.loads((E / "SCE_SCOPE_GROUPS.json").read_text())["groups"]
 green = {}
 for r in receipts:
     assert r['limits'] == limits and r['swaps'] == '0'
@@ -33,6 +34,11 @@ for r in receipts:
             else:
                 assert 'does not depend on any axioms' in line
     reservations = [json.loads(p.read_text()) for p in E.glob(r['attempt'] + '-reservation*.json')]
+    matching = [g for g in groups if r['attempt'] in g['actual_attempts']]
+    for g in matching:
+        reservations.append(json.loads((E / g['admission']).read_text()))
+        reference = json.loads((E / g['reference_receipt']).read_text())
+        assert r['cgroup'] == reference['cgroup']
     allowed = [p for p in reservations if p['allowed']]
     assert allowed, r['attempt']
     for p in allowed:

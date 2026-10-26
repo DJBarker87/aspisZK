@@ -21,7 +21,7 @@ theorem drop_eq (raw proof : Bytes)
   have same := congrArg (List.drop 688) suffix
   rw [List.drop_append,size,Nat.sub_self,List.drop_zero] at same
   have empty : (raw.take 688).drop 688 = [] := by
-    rw [← size,List.drop_length]
+    simpa only [size] using (List.drop_length (l := raw.take 688))
   simpa only [empty,List.nil_append] using same
 
 #print axioms prefix_exists
