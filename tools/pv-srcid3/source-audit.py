@@ -13,7 +13,7 @@ for p in tracked:
  body=re.sub(r'/\-.*?\-/','',s,flags=re.S);body=re.sub(r'--[^\n]*','',body)
  forbidden=re.findall(r'\b(?:sorry|admit|native_decide|implemented_by|axiom)\b',body)
  rows.append(dict(file=p,sha256=sha,accepted_attempts=[r['attempt'] for r in hits],forbidden=forbidden,axioms=hits[-1]['axioms'] if hits else []))
-report=dict(charged_lean=len(a),predecessor_lean=4,remaining_lean=96-len(a),kani_invocations=len((ev/'kani-invocations.jsonl').read_text().splitlines()),files=rows)
+report=dict(charged_lean=len(a),predecessor_lean=4,remaining_lean=json.loads((ev/'BUDGET.json').read_text())['authorized_lean_total']-4-len(a),kani_invocations=len((ev/'kani-invocations.jsonl').read_text().splitlines()),files=rows)
 (ev/'source-audit.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps({k:v for k,v in report.items() if k!='files'}))
 print('Matched',sum(bool(r['accepted_attempts']) for r in rows),'of',len(rows),'source files')

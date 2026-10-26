@@ -1,6 +1,7 @@
 import R1Z.PV_Src_CanonicalNormalize
 import R1Z.PV_Src_FrozenInput
 import R1Z.PV_Src_PathBits
+import R1Z.PV_Src_FrozenStages
 
 /-! A canonical selected carrier with path-consistent membership index. This
 supplies representation data, not equality to the installed native caller. -/
@@ -22,6 +23,10 @@ def select (i : PV_Src_FrozenInput.Data (K := K)) : PV_Src_FrozenInput.Data (K :
   domain := i.domain
   destination := i.destination
 
+theorem public_preserved (i : PV_Src_FrozenInput.Data (K := K)) :
+    (select i).canonical.val.1 = i.canonical.val.1 :=
+  PV_Src_CanonicalNormalize.public_eq i.canonical
+
 theorem index_bound (i : PV_Src_FrozenInput.Data (K := K)) : (select i).index.val < 2^20 :=
   PV_Src_PathIndex.bound _
 
@@ -35,7 +40,17 @@ theorem bits (i : PV_Src_FrozenInput.Data (K := K)) :
       (BuilderCanonical.rustWitness (select i).canonical.val.2).bits :=
   PV_Src_PathBits.bits _
 
+theorem primitive (i : PV_Src_FrozenInput.Data (K := K)) :
+    ∃ records banks,
+      @PV_Src_NativeInput.newRecords PV_Src_FrozenInput.records
+        (PV_Src_FrozenInput.input (select i)) = ok records ∧
+      R0Z.WriterRefine.WitnessOk (PV_Src_Forest_PrimitiveArguments.wordWitness records.w) ∧
+      pair_forest_copy_builder.CopyRecords.banks records = ok (some banks) :=
+  PV_Src_FrozenStages.primitive (select i)
+
+#print axioms public_preserved
 #print axioms index_bound
 #print axioms checked
 #print axioms bits
+#print axioms primitive
 end R1Z.PV_Src_PackedSelection

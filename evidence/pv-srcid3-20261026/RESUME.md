@@ -11,8 +11,8 @@ flag check at 21:15 UTC found it absent. No host action has run in this resume.
 CanonicalNormalize, CanonicalTransferRecord and PackedSelection were reviewed
 against their actual imports. They remain uncompiled drafts. FinalAudit now
 imports every PV_Src module on this branch and the three pending drafts,
-prints all 544 source theorem declarations and existing axiom-check requests
-(571 unique checks). dependency-closure.json lists the direct and transitive
+prints all 546 source theorem declarations and existing axiom-check requests
+(573 unique checks). dependency-closure.json lists the direct and transitive
 research imports for each module; each theorem inherits its module's closure.
 This source inventory is not a kernel audit. No compiled theorem or premise
 removal is claimed by preparing it.
@@ -27,3 +27,9 @@ The prior raw output-value diagnostic is outside Checked and is not a ROW
 counterexample. Deployed PV_Src_Premises still has five fields; the explicit
 selected frozen-reference construction has three retained fields. Installed
 inputs and transport remain the exact RunJoin interfaces recorded in REPORT.
+
+PackedSelection additionally preserves the public statement and carries the
+primitive-stage existence theorem for every selected canonical input, hence
+for both fixture data values. These additions also remain uncompiled. The
+read-only RunJoin resume pin is 3478e00a58970c2480a1b20451dc107cfb1ac98f;
+runjoin-resume-read-only.json records its still-free input family.

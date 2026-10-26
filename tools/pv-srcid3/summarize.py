@@ -22,6 +22,12 @@ refusals=[]
 for p in e.glob('reservation-*.json'):
  r=json.loads(p.read_text())
  if not r.get('allowed',True):refusals.append(p.name)
-budget=dict(new_lean=len(a),predecessor_lean=4,total_lean=len(a)+4,authorized_lean_total=100,remaining_lean=96-len(a),new_kani=len(k),authorized_new_kani=12,completed_kani=len(results),results=results,zero_charge_resource_refusals=refusals,other_zero_charge_preflights=[25401])
+previous=json.loads((e/'BUDGET.json').read_text())
+resume=previous.get('resume')
+limit=130 if resume else 100
+budget=dict(new_lean=len(a),predecessor_lean=4,total_lean=len(a)+4,authorized_lean_total=limit,remaining_lean=limit-4-len(a),new_kani=len(k),authorized_new_kani=20 if resume else 12,completed_kani=len(results),results=results,zero_charge_resource_refusals=refusals,other_zero_charge_preflights=[25401])
+if resume:
+ resume.update(charged_lean=len(a)-89,charged_kani=len(k)-12)
+ budget['resume']=resume
 (e/'BUDGET.json').write_text(json.dumps(budget,indent=2)+'\n')
 print(json.dumps({key:value for key,value in budget.items() if key not in ['results','zero_charge_resource_refusals']}))
