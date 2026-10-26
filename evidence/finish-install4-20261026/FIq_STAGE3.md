@@ -1,0 +1,13 @@
+# FIq stage 3: accepted source to the same typed source data
+
+FIq_SemanticSource.verified (089) derives the SAME parsed prefix, actual row14 decode and scalar read, all ten actual polynomial recurrence steps, and the SAME returned alpha array from one successful installed semantic verification. `children_same` identifies the existing installed source decoder/arithmetic dictionary definitionally with the checked round dictionary. No independent successful rounds call, coefficient list or challenge list is assumed.
+
+FIq_TypedInitial.frame_at/initial (095) bind the actual row14 record/decoded running scalar to claimAt14 of the SAME complete source typed prefix. Canonicality, strict low-value decoding and high-coordinate typing are derived by the existing all-input decoder theorems. FIq_TypedPolynomials.same_entry (096) binds each actual source coefficient array to coeffAt of its own row of that SAME typed prefix. No caller canonicality or coefficient-meaning hypothesis is introduced.
+
+092 diagnosed a missing S1 child import and exposed the projection rewrite;093/094 isolated the semireducible Slice/Fin-projection transparency obstruction.095 uses the explicit source claim projection and `erw`, with the identical mathematical statement. No heartbeat/depth increase or changed success domain.091 was a charged direct-import preflight, not a compiler run: the source used the disk filename SemanticPayloadView rather than the canonical cached module R1SemanticPayloadView. Import corrected without launcher/infrastructure changes. Retired diagnostic-only modules were moved into this evidence directory; their failed receipts remain.
+
+These are source-local accepted-run refinements. The top's literal semantic view, challenge sequence and data.Y still require same-execution transport. All five global and all native-local ledger rows remain; no source lemma count is credited as removal.
+
+FIq_TypedData.verified097 composes those facts from one successful semantic verification. The same actual parsed prefix supplies its Full typed prefix, row14 value, every source coefficient polynomial, and source challenge list equal to the returned alpha array. All assumptions used by the local decoder bridges are derived inside that composition. This still does not identify the literal transcript view used by FIp_GlobalOwners, so neither L144 nor L145 is removed.
+
+FIq_TerminalParts.reached099 exports the SAME actual84-cell gather, semantic-public projection and successful terminal_parts tuple, with its first component exactly the native terminal output. This advances the concrete terminal value proof's reachability interface; its canonicality/formula/literal joins remain.
