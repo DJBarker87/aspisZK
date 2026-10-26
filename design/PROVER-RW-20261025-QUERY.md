@@ -1229,3 +1229,22 @@ before/after and one-line diff are retained. Existing5G/7G/zero-swap/Tasks64 and
 -M7000 are unchanged. No native run or frozen artifact changed. Native adequacy,
 remaining42 references and complete proof/audit data equality remain open.
 Current allocation use3/100Lean,0/15Kani. Target not yet established.
+
+### Checked-source obstruction and stopped current pole extraction
+
+12803 compiles the retained selected-mask helper and all its checked arithmetic
+without modifying them. It is NOT installed.12804 proves an explicit mismatch:
+checked M31.add(2^32−1,1) returns integerOverflow, while the retained release
+addition succeeds. These are one-addition machine facts, not a concrete large
+recurrence. Therefore op117 is not counted closed by that retained source;
+canonical/native wrapping transport is still required. Three new theorem
+axiom reports use only standard axioms. No security premise was changed.
+
+Current-source ct_pole MIR extraction succeeded in a capped optimized job;
+the inherited prover backend rejects its nested loop join at ct_pole.rs23–25.
+The cleanup-specific backend first rejected escaping iterator-reference outputs;
+no backend was altered or that guard bypassed. Both translation failures are
+retained. An initial missing upload directory caused a pre-extraction Python
+failure; the corrected successor had the script present, then extracted once.
+The derived-error extraction is being narrowed separately. Empty translations
+are explicitly rejected as closure evidence. No root premise is discharged.
