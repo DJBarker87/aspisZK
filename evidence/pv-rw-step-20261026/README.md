@@ -299,7 +299,7 @@ hashes. `llbc-source-resolution.json` resolves every recorded source binding;
 it supplements, and does not modify, the conservative original receipt fields.
 The fission translator failure remains a failure, with no accepted whole output.
 
-Final audit preflight237/23807 (ID23807) refused locally before invoking Lean:
+Final audit preflight23807 refused locally before invoking Lean:
 IteratorMeasure had been checked in23735 without an emitted object. Zero
 attempts charged. The uncompiled two-stage audit proposal is archived verbatim;
 no accepted leaf source changed.23808 emits that exact existing prerequisite
@@ -307,3 +307,18 @@ into the local pinned cache (3.33s,659,587,072 RSS bytes,0swap,standard axioms).
 The last compile will combine the complete axioms audit and frozen focused
 manifest into a single invocation. `final-focused-source-manifest-v2.json`
 explicitly supersedes the preflight-only proposal, retaining its original pins.
+
+
+## Allocation exhausted
+
+100/100 Lean,73 passes/27 failures;20/20 Kani,12 passes/8 timeouts.
+Final23809 passes the complete212-theorem plus headline axioms audit in24.06s,
+3,185,344,512 RSS bytes,0swap. All69 current PV_RW modules match accepted
+source receipts and frozen v2 hashes. No ledger row or endpoint premise removed.
+See FINAL-REPORT.md, BEFORE-AFTER.md, KANI-SPLITS.md and summary.json.
+No further Lean or Kani invocation is authorized under this exhausted allocation.
+
+Native metadata qualification: the Rust runner's `toolchain` field is ambient
+`rustc -Vv`, not proof that Kani's bundled compiler is that same compiler.
+Verifier stdout, exact commands and immutable input hashes remain authoritative
+for these focused checks. No compiler/ELF reproducibility claim is made here.

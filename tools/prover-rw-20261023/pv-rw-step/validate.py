@@ -31,7 +31,7 @@ for p in sorted((e/'local').glob('*-receipt.json')):
    if 'depends on axioms:' in report:
     names=set(z.strip() for z in report.split('depends on axioms: [')[1].split(']')[0].split(','))
     assert names<={'propext','Classical.choice','Quot.sound'},(a,report)
-  latest.setdefault(x['module'],x)
+  if x['module'] not in latest or x['attempt']>latest[x['module']]['attempt']:latest[x['module']]=x
  lean.append(dict(attempt=a,module=x['module'],exit=x['exit_status'],wall=x.get('wall_seconds'),peak_rss_bytes=x.get('peak_rss_bytes'),swap=x.get('swaps'),axioms=x['print_axioms'],source_sha256=x.get('source_sha256'),kind='local'))
 assert len(lean)<=100
 modules=[];pending=[]
@@ -57,6 +57,15 @@ for p in sorted(e.glob('pv-rw-step-*/receipt.json')):
   if f.is_file():assert sha(f)==x['source_sha256']['tools/prover-rw-20261023/pv-rw-step/'+str(f.relative_to(p.parent/'inputs'))]
  native.append(dict(attempt=x['attempt'],harness=harness,bound=bound,exit=x['exit_status'],result='PASS' if x['exit_status']==0 else 'timeout; no certificate',wall_seconds=x['wall_seconds'],cgroup_memory_peak_bytes=x['cgroup_memory_peak_bytes'],swap_peak_bytes=x['cgroup_swap_peak_bytes'],source_revision_label=x['source_revision']))
 assert len(native)==20
+frozen=e/'final-focused-source-manifest-v2.json'
+if frozen.exists():
+ f=json.loads(frozen.read_text())
+ for item in f['sources']:assert sha(r/item['path'])==item['sha256'],('frozen source changed',item['path'])
+ final=e/'local/23809-receipt.json'
+ if final.exists():
+  q=json.loads(final.read_text());assert q['exit_status']==0
+  assert len(q['print_axioms'])==f['theorem_reports']+1
+
 changed=subprocess.check_output(['git','diff','--name-only','5d97a425c5','--','crates','programs'],cwd=r,text=True).strip();assert not changed
 summary=dict(base='5d97a425c5',branch=subprocess.check_output(['git','branch','--show-current'],cwd=r,text=True).strip(),lean_budget=100,lean_used=len(lean),lean_remaining=100-len(lean),lean_passes=sum(x['exit']==0 for x in lean),kani_budget=20,kani_used=len(native),kani_passes=sum(x['exit']==0 for x in native),kani_timeouts=sum(x['exit']==124 for x in native),accepted_modules=modules,pending_modules=pending,lean=lean,kani=native,ledger_rows_removed=[],endpoint_premises_removed=[],target_established=False,scope='Focused cached source checks. No coherent release replay, deployment adoption or native full compression certificate.')
 (e/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
