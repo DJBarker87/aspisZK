@@ -1017,3 +1017,33 @@ Eight focused compiles:5pass,3changed failures. Receipts/snapshots are in
 `success-resume`, all accepted axiom reports standard, no resource failure,
 no launcher edit or unchanged regression. Total resumed Lean use16/85; native
 work remains in progress. The frozen artifacts and root definitions are unchanged.
+
+## Native entropy split continuation (eleven runs)
+
+Eleven capped Kani runs used the entire remaining native allocation:6pass,
+4timeouts,1compile rejection,0OOM. Terminal5 actual-destructor control timed
+out. A changed generic array destructor cut then passes control5, payload2,
+error2, payload3, payload4 and payload5. Each payload checks an arbitrary byte
+of both private seeds and the unchanged public nonce against the actual last
+provider reply, with exact callback count. Prefixes retain either zero half
+and arbitrary surviving bytes; OS-error post-buffers remain arbitrary. The
+same OR32 predicate has the inherited standalone native proof. These are
+support/control facts under an **explicit no-op array destructor cut**; native
+physical Drop/extractor composition is not claimed. The first cut failed
+because Kani resolves array monomorphs to one generic method; the changed
+successor has one generic mapping. The all0–7 payload, all-position error and
+sixteen-rejection cases time out and are retained, not rerun unchanged.
+
+`success-resume/native/summary.json` indexes exact commands, hashes, source
+snapshots, logs, wall/GNU RSS/cgroup peak/swap/events,6G/8G/swap0/Tasks64 scopes
+and optimized profile3,j4. Every immutable stream harness snapshot is
+reconstructed and SHA-verified against its original receipt, including the
+compile failure. Raw native revision labels are stale; actual base49bf51d3e9
+and exact source pins supersede them. All new Rust extends only the existing
+cfg(kani) module; its original prefix is byte-identical. No production byte,
+ELF, native release/performance gate, infrastructure or key changed.
+
+Native budget11/11 is exhausted; Lean work continues. History-conditioned E1,
+full sixteen-position native payload coverage, physical Drop composition,
+callback/effect extraction, ordered ROM/TLS, prefix/body and real RunJoin all
+remain open. No root/headline premise was removed; target not yet established.

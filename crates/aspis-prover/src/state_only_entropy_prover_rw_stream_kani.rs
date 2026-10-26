@@ -427,3 +427,95 @@ fn guard_last_public_frame() {
     }
     assert_eq!(unsafe{CALLS},16);
 }
+
+// Destructor-free control cut after the five-rejection native timeout.
+// The retained physical Drop proofs are separate: no composition is claimed.
+fn drop_array_cut<Z: zeroize::Zeroize,const N:usize>(_bytes: &mut [Z;N]) {}
+#[kani::proof]
+#[kani::unwind(65)]
+#[kani::stub(super::entropy_nonzero32,nonzero)]
+#[kani::stub(getrandom::fill,control_stream)]
+#[kani::stub(<[u8;32] as zeroize::Zeroize>::zeroize,drop_array_cut)]
+fn control5_drop_cut() {control::<5,false>();}
+
+#[kani::proof]
+#[kani::unwind(65)]
+#[kani::stub(super::entropy_nonzero32,nonzero)]
+#[kani::stub(getrandom::fill,stream)]
+#[kani::stub(<[u8;32] as zeroize::Zeroize>::zeroize,drop_array_cut)]
+fn payload2_drop_cut() {terminal::<2,false>();}
+
+#[kani::proof]
+#[kani::unwind(65)]
+#[kani::stub(super::entropy_nonzero32,nonzero)]
+#[kani::stub(getrandom::fill,stream)]
+#[kani::stub(<[u8;32] as zeroize::Zeroize>::zeroize,drop_array_cut)]
+fn error2_drop_cut() {terminal::<2,true>();}
+
+fn payload_range_drop_cut(low:usize,high:usize,failed:bool) {
+    let index=usize::from(kani::any::<u8>()&15);kani::assume(low<=index && index<high);
+    let nonce:[u8;32]=kani::any();kani::assume(nonce!=[0;32]);
+    let byte=usize::from(kani::any::<u8>()&31);
+    unsafe{CALLS=0;TERMINAL=index;FAIL=failed;CODE=kani::any();}
+    match StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce) {
+        Ok(secret)=>{
+            assert!(!failed);
+            assert_eq!(secret.mask_nonce[byte],nonce[byte]);
+            assert_eq!(secret.field_mask_entropy[byte],unsafe{LAST}[byte]);
+            assert_eq!(secret.leaf_salt_seed[byte],unsafe{LAST}[32+byte]);
+        }
+        Err(StateOnlyAttemptEntropyError::Os(actual))=>{
+            assert!(failed);assert_eq!(actual,error(unsafe{CODE}));
+        }
+        Err(_)=>assert!(false),
+    }
+    assert_eq!(unsafe{CALLS},index+1);
+}
+#[kani::proof]
+#[kani::unwind(65)]
+#[kani::stub(super::entropy_nonzero32,nonzero)]
+#[kani::stub(getrandom::fill,stream)]
+#[kani::stub(<[u8;32] as zeroize::Zeroize>::zeroize,drop_array_cut)]
+fn payload_low_drop_cut() {payload_range_drop_cut(0,8,false);}
+#[kani::proof]
+#[kani::unwind(65)]
+#[kani::stub(super::entropy_nonzero32,nonzero)]
+#[kani::stub(getrandom::fill,stream)]
+#[kani::stub(<[u8;32] as zeroize::Zeroize>::zeroize,drop_array_cut)]
+fn payload_high_drop_cut() {payload_range_drop_cut(8,16,false);}
+#[kani::proof]
+#[kani::unwind(65)]
+#[kani::stub(super::entropy_nonzero32,nonzero)]
+#[kani::stub(getrandom::fill,stream)]
+#[kani::stub(<[u8;32] as zeroize::Zeroize>::zeroize,drop_array_cut)]
+fn error_all_drop_cut() {payload_range_drop_cut(0,16,true);}
+
+#[kani::proof]
+#[kani::unwind(65)]
+#[kani::stub(super::entropy_nonzero32,nonzero)]
+#[kani::stub(getrandom::fill,stream)]
+#[kani::stub(<[u8;32] as zeroize::Zeroize>::zeroize,drop_array_cut)]
+fn payload3_drop_cut() {terminal::<3,false>();}
+#[kani::proof]
+#[kani::unwind(65)]
+#[kani::stub(super::entropy_nonzero32,nonzero)]
+#[kani::stub(getrandom::fill,stream)]
+#[kani::stub(<[u8;32] as zeroize::Zeroize>::zeroize,drop_array_cut)]
+fn payload4_drop_cut() {terminal::<4,false>();}
+#[kani::proof]
+#[kani::unwind(65)]
+#[kani::stub(super::entropy_nonzero32,nonzero)]
+#[kani::stub(getrandom::fill,stream)]
+#[kani::stub(<[u8;32] as zeroize::Zeroize>::zeroize,drop_array_cut)]
+fn payload5_drop_cut() {terminal::<5,false>();}
+#[kani::proof]
+#[kani::unwind(65)]
+#[kani::stub(super::entropy_nonzero32,nonzero)]
+#[kani::stub(getrandom::fill,stream)]
+#[kani::stub(<[u8;32] as zeroize::Zeroize>::zeroize,drop_array_cut)]
+fn rejected16_drop_cut() {
+    let nonce:[u8;32]=kani::any();kani::assume(nonce!=[0;32]);
+    unsafe{CALLS=0;TERMINAL=16;FAIL=false;}
+    assert!(matches!(StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce),Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)));
+    assert_eq!(unsafe{CALLS},16);
+}
