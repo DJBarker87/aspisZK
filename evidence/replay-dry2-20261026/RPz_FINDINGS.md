@@ -69,3 +69,20 @@ establish a definitive set of FunsExternal axioms reached by that top or map a
 purported empty set to Rust externals. Those two requested results remain
 unknown, not verified empty. Historical cached headline audits do not fill the
 fresh-object gap.
+
+## Audit preflight correction and artifact stability
+
+RPz_530 (RPz_Audit001) failed before any query: the unannotated mutable
+counter was inferred as MessageData. Its source and diagnostics are retained.
+The corrected template gives the counter explicit type Nat. New, uniquely
+named audit modules RPz_Audit531 onward repartition all 527 successful replay
+modules across the remaining 70 attempts. RPz_530 is not rerun or counted as
+an audit. This is an audit-source type correction, not a proof change.
+
+The read-only post-source-replay inventory checked 22,637 pinned trusted-base
+artifacts with zero changed or missing artifacts. `RPz_final-object-inventory.json`
+records their manifest hash and all 542 fresh repository object/sidecar file
+hashes and sizes. The workspace has no default `.lake/build/lib/lean` directory;
+only the explicit RPz object and trusted-library paths are selected. This is
+artifact identity/stability evidence, not independent source reproduction of
+the owner-approved trusted base.

@@ -8,7 +8,7 @@ def collect(name):
  r=subprocess.run(['scp','-q',H+':'+B+'/'+name,str(p)],capture_output=True,text=True)
  if r.returncode:raise SystemExit('STOP collection: '+r.stderr)
 audit_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
-state=json.loads((E/'RPz_state.json').read_text());used=state['attempts'];remaining=600-used
+state=json.loads((E/'RPz_state.json').read_text());used=max(int(f.parent.name.split('_')[1]) for f in E.glob('RPz_*/receipt.json'));remaining=600-used
 passed=[m for m,s in state['state'].items() if s=='passed'];groups=[]
 # Nonoverlapping query groups. If necessary partition a module's declarations by
 # name hash; no declaration's axioms are queried twice in the explicit audit.
@@ -21,7 +21,7 @@ else:
   for b in range(buckets):groups.append(([m],b,buckets))
 template=(E/'RPz_audit-template.txt').read_text()
 for i,(ms,bucket,buckets) in enumerate(groups,1):
- a=f'RPz_{used+i:03d}';name=f'RPz_Audit{i:03d}';rel=name+'.lean'
+ a=f'RPz_{used+i:03d}';name=f'RPz_Audit{used+i:03d}';rel=name+'.lean'
  src=template.replace('@@IMPORTS@@','\n'.join('import '+m for m in ms)).replace('@@SELECTED@@','#[ '+', '.join('`'+m for m in ms)+' ]').replace('if selected.contains owner then',f'if selected.contains owner && n.hash.toNat % {buckets} == {bucket} then')
  (E/rel).write_text(src)
  if (E/a/'receipt.json').exists():continue

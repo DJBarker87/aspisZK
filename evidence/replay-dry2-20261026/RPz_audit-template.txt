@@ -10,7 +10,7 @@ run_cmd do
     let owner := env.header.modules[i]!.module
     let data := env.header.moduleData[i]!
     logInfo m!"RPZ_IMPORTS {(Json.mkObj [("module", toJson owner.toString), ("imports", toJson (data.imports.map (·.module.toString)))]).compress}"
-  let mut count := 0
+  let mut count : Nat := 0
   for (n, c) in env.toKernelEnv.constants.toList do
     if let some mi := env.getModuleIdxFor? n then
       let owner := env.header.modules[mi.toNat]!.module
