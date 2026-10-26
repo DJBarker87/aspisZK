@@ -9896,3 +9896,28 @@ reference extracted with its source observations; sufficient source requirements
 Crate changes unchanged since D193 (cfg(kani) harnesses only). dict8 relaunched on the fallible-store
 transport, full carrier caller lift, and the native error/File-world quotient for types 3 and 27.
 Root conjunct-1 premises removed: 0. Six jobs running. Privacy target not yet established.
+
+## D200 (Stream B, 2026-10-26 15:40): L2 stage 3 merged; L2 paused pending native association; recount job
+
+Merged `codex/pv-l2-sim-20261026` stage 3 (8524c4269d; research-based, no crates/programs change).
+pv-l2-sim3 used 100/100 Lean and 20/20 Kani (121 theorem results, standard axioms; 17 Kani passes):
+full rejected-attempt L1 and ROM prefixes preserved through source attempts; failure-preserving seeded
+source transport; whole extracted checker erasure; and, for the D197 inversion escalation, a PARTIAL
+result: `PV_L2_InversionQ.logup_operand` proves the extracted QM31 inversion takes the nonzero branch
+for every non-pole operand (operand nonzero derived from the model `NoPole` for every active copy row),
+with inversion success a conclusion, not a hypothesis. The whole inversion row stays OPEN: native
+reached-call enumeration, slot correspondence, and the M31/WideExact/circle/interpolation/certificate
+paths still need caller nonzero arguments. No witness-dependent zero was found. Row outcome: 0 CLOSED,
+0 REDUCED, 19 OPEN, after two full L2 rounds.
+
+Lead assessment (owner rule: when the must-prove count stops falling, reconsider rather than add
+workers): the L2 job's own next deliverable is the native E1 seed-event producer and ordered ROM
+association on the headline coupling, which is the same native-refinement work as conjunct 1 /
+V038. L2 rows are therefore downstream of the RunJoin and will not close from more trace-erasure
+helpers. The L2 slot is paused and reallocated to a mechanical RECOUNT and dependency audit of the
+ledger (pv-recount, `codex/pv-recount-20261026`, audit only), which will classify every open row as
+independent, downstream of the native refinement, or downstream of an owner decision, and credit the
+evidence now on research (ELF identities, fixture fibres, client route). Ledger ID note: the L2
+report's "V380 (inversion)" collides with the ledger's existing V380 (TrustedStd
+`btree_entry_or_insert_with`); the recount assigns the inversion row a fresh ID. Six jobs running:
+rw16, dict8, runjoin3, recount, rebase2, l1b. Privacy target not yet established.
