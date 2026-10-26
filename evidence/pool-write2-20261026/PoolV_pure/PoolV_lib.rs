@@ -63,40 +63,50 @@ mod PoolV_checks {
     }
     #[kani::proof]
     #[kani::unwind(80)]
-    fn PoolV_plan_exact_output() {
+    fn PoolV_plan_scalars(){
         let m=arbitrary_master();let lanes=arbitrary_lanes();let root=core::array::from_fn(|_|M31(kani::any()));let bump=kani::any();
         if let Ok(plan)=plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump) {
-            assert!(plan.checkpoint.bump==bump && plan.checkpoint.master==m.identity.pool);
-            assert!(plan.checkpoint.deployment_domain==m.identity.deployment_domain);
-            assert!(plan.checkpoint.checkpoint_sequence==m.next_checkpoint_sequence && plan.checkpoint.global_root==root);
-            assert!(m.next_checkpoint_sequence<u64::MAX);
-            assert!(plan.next_master.next_checkpoint_sequence==m.next_checkpoint_sequence+1);
-            assert!(plan.next_master.has_checkpoint);
-            assert!(plan.next_master.identity==m.identity && plan.next_master.verifier_policy==m.verifier_policy);
-            assert!(plan.next_master.bump==m.bump && plan.next_master.initialized_lane_mask==m.initialized_lane_mask);
-            for i in 0..8 {
-                assert!(lanes[i].master==m.identity.pool && lanes[i].lane_id as usize==i);
-                assert!(plan.checkpoint.lane_sequences[i]==lanes[i].tree.next_leaf_index);
-                assert!(plan.next_master.last_checkpoint_lane_sequences[i]==lanes[i].tree.next_leaf_index);
-            }
+assert!(plan.checkpoint.bump==bump && plan.checkpoint.master==m.identity.pool && plan.checkpoint.deployment_domain==m.identity.deployment_domain);
+assert!(plan.checkpoint.checkpoint_sequence==m.next_checkpoint_sequence && plan.checkpoint.global_root==root);
+assert!(m.next_checkpoint_sequence<u64::MAX && plan.next_master.next_checkpoint_sequence==m.next_checkpoint_sequence+1 && plan.next_master.has_checkpoint);
         }
     }
     #[kani::proof]
     #[kani::unwind(80)]
-    fn PoolV_plan_chronology() {
+    fn PoolV_plan_selected_lane(){
         let m=arbitrary_master();let lanes=arbitrary_lanes();let root=core::array::from_fn(|_|M31(kani::any()));let bump=kani::any();
         if let Ok(plan)=plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump) {
-            assert!(m.initialized_lane_mask==255);
-            let mut progressed=false;
-            for i in 0..8 {
-                assert!(plan.checkpoint.lane_sequences[i]<=POOL_V1_PAIR_CAPACITY);
-                if m.has_checkpoint {
-                    assert!(plan.checkpoint.lane_sequences[i]>=m.last_checkpoint_lane_sequences[i]);
-                    progressed|=plan.checkpoint.lane_sequences[i]>m.last_checkpoint_lane_sequences[i];
-                }
-            }
-            assert!(!m.has_checkpoint || progressed);
+let i:usize=kani::any();kani::assume(i<8);
+assert!(lanes[i].master==m.identity.pool && lanes[i].lane_id as usize==i);
+assert!(plan.checkpoint.lane_sequences[i]==lanes[i].tree.next_leaf_index);
+assert!(plan.next_master.last_checkpoint_lane_sequences[i]==lanes[i].tree.next_leaf_index);
+assert!(plan.checkpoint.lane_sequences[i]<=POOL_V1_PAIR_CAPACITY);
         }
     }
-
+    #[kani::proof]
+    #[kani::unwind(80)]
+    fn PoolV_plan_selected_monotone(){
+        let m=arbitrary_master();let lanes=arbitrary_lanes();let root=core::array::from_fn(|_|M31(kani::any()));let bump=kani::any();
+        if let Ok(plan)=plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump) {
+let i:usize=kani::any();kani::assume(i<8);
+assert!(!m.has_checkpoint || plan.checkpoint.lane_sequences[i]>=m.last_checkpoint_lane_sequences[i]);
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(80)]
+    fn PoolV_plan_progress(){
+        let m=arbitrary_master();let lanes=arbitrary_lanes();let root=core::array::from_fn(|_|M31(kani::any()));let bump=kani::any();
+        if let Ok(plan)=plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump) {
+assert!(!m.has_checkpoint || (0..8).any(|i|plan.checkpoint.lane_sequences[i]>m.last_checkpoint_lane_sequences[i]));
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(80)]
+    fn PoolV_plan_master_frame(){
+        let m=arbitrary_master();let lanes=arbitrary_lanes();let root=core::array::from_fn(|_|M31(kani::any()));let bump=kani::any();
+        if let Ok(plan)=plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump) {
+assert!(m.initialized_lane_mask==255 && plan.next_master.initialized_lane_mask==m.initialized_lane_mask);
+assert!(plan.next_master.identity==m.identity && plan.next_master.verifier_policy==m.verifier_policy && plan.next_master.bump==m.bump);
+        }
+    }
 }
