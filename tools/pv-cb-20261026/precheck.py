@@ -6,6 +6,10 @@ branches=['codex/cx-prover-rw-20261023','codex/cx-prover-dict-20261026']
 tables=['docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/README.md','docs/research/100bit-spend-path-20261013/evidence/prover-dict-20261026/ENTRIES.md']
 def git(*args):return subprocess.check_output(['git',*args],cwd=root,text=True)
 r=dict(op=n,required_log=git('log','-1','--format=%H',*branches),branches={})
+cb3='codex/pv-cb3-20261026'
+check=subprocess.run(['git','grep','-n',f'op{n}_source',cb3,'--','*.lean'],cwd=root,text=True,capture_output=True)
+assert check.returncode in (0,1)
+r['cb3_source_equation']=dict(branch=cb3,revision=git('rev-parse',cb3).strip(),pattern=f'op{n}_source',exit=check.returncode,matches=check.stdout.splitlines(),decision='SKIP(sibling)' if check.stdout else 'continue')
 for branch,table in zip(branches,tables):
  s=git('show',f'{branch}:{table}')
  lines=[l for l in s.splitlines() if l.startswith(f'|{n}|') or f'op{n} ' in l or f'op{n}`' in l]
@@ -18,3 +22,4 @@ for branch,table in zip(branches,tables):
   except subprocess.CalledProcessError:pass
 p=root/'evidence/pv-cb-20261026'/f'op{n}-sibling-check{("-"+sys.argv[2]) if len(sys.argv)>2 else ""}.json'
 assert not p.exists();p.write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r))
+if check.stdout:raise SystemExit(2)

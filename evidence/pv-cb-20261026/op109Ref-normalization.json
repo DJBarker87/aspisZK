@@ -1,0 +1,18 @@
+{
+  "raw_sha256": {
+    "Types": "506da5ed95fceea7fe97dd5562f8d5d4e0fcf711f60f6d786526da39dd513a1c",
+    "Funs": "6bd5e980e1861924677f5042beb03fb5b63435d07cbf53158ea1afaa0ccde1c2"
+  },
+  "shift_count_type_adaptations": [
+    {
+      "before": "Std.U64.wrapping_shr x 31#i32",
+      "after": "Std.U64.wrapping_shr x 31#u32"
+    },
+    {
+      "before": "Std.U64.wrapping_shr x1 31#i32",
+      "after": "Std.U64.wrapping_shr x1 31#u32"
+    }
+  ],
+  "logical_option_tag_adapter": false,
+  "change": "Funs imports rewritten to own Types and, for emitted Option residual discriminant checks, the proved None0/Some1 adapter; nonnegative wrapping_shr literal counts rendered U32 for the pinned backend API, preserving numeric amounts; all other emitted bodies and Types unchanged; no external function template."
+}

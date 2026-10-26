@@ -8,6 +8,8 @@ import R1Z.PV_CB_Op83Source
 import R1Z.PV_CB_Op86Source
 import R1Z.PV_CB_Op100Exact
 import R1Z.PV_CB_Op101Exact
+import R1Z.PV_CB_Op105Exact
+import R1Z.PV_CB_Op107Exact
 import R1Z.PV_CB_Op110Source
 import R1Z.PV_CB_Op111Source
 import R1Z.PV_CB_Op114Source
@@ -38,6 +40,8 @@ abbrev Late := PV_CB_Op229Transport.Late
     op86 := @ExternalFuns.op86 _ (PV_CB_Merkle.selected ops),
     op100 := @ExternalFuns.op100 _ (PV_CB_Op100Exact.selected ops),
     op101 := @ExternalFuns.op101 _ (PV_CB_Op101Exact.selected ops),
+    op105 := @ExternalFuns.op105 _ (PV_CB_Op105Exact.selected ops),
+    op107 := @ExternalFuns.op107 _ (PV_CB_Op107Exact.selected ops),
     op110 := @ExternalFuns.op110 _ (PV_CB_Op110Source.selected ops),
     op111 := @ExternalFuns.op111 _ (PV_CB_State.selected ops),
     op114 := @ExternalFuns.op114 _ (PV_CB_Op114Source.selected ops),

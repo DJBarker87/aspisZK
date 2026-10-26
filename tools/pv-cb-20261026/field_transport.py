@@ -9,7 +9,7 @@ assert 'structure aspis_core.field.CM31 where' in s
 assert 'structure aspis_core.field.QM31 where' in s
 haswide='structure aspis_core.field.wide_exact.WideExact where' in s
 out=f'''import R1Z.PV_CB_Op{n}Types
-import R1Z.PV_CB_State
+import R1Z.ProverRwFullExternalFuns
 set_option autoImplicit false
 namespace R1Z.PV_CB_Op{n}Transport
 abbrev N := ProverRwFull.aspis_core.field.QM31

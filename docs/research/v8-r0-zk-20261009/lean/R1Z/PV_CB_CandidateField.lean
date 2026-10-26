@@ -17,6 +17,19 @@ theorem op101 (base : ExternalTypes) (ops : @ExternalFuns (native base)) (x : as
   change (PV_CB_Op101Exact.selected ops).op101 x = _
   exact R1Z.PV_CB_Op101Exact.op101_source ops x
 #print axioms op101
+theorem op105 (base : ExternalTypes) (ops : @ExternalFuns (native base)) (x : aspis_core.field.M31) :
+    (selected base ops).op105 x =
+      PV_CB_ShippedOp105.aspis_core.field.M31.Insts.Aspis_coreR0ScalarCodeField.try_inv x := by
+  change (PV_CB_Op105Exact.selected ops).op105 x = _
+  exact R1Z.PV_CB_Op105Exact.op105_source ops x
+#print axioms op105
+theorem op107 (base : ExternalTypes) (ops : @ExternalFuns (native base)) (x : aspis_core.field.QM31) :
+    (selected base ops).op107 x = (do
+      let value ← PV_CB_ShippedOp107.aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField.try_inv (PV_CB_Op107Transport.encode x)
+      ok (value.map PV_CB_Op107Transport.decode)) := by
+  change (PV_CB_Op107Exact.selected ops).op107 x = _
+  exact R1Z.PV_CB_Op107Exact.op107_source ops x
+#print axioms op107
 theorem op110 (base : ExternalTypes) (ops : @ExternalFuns (native base)) (x : aspis_core.field.M31) :
     (selected base ops).op110 x =
       PV_CB_ShippedOp110.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31 x := by

@@ -4,6 +4,7 @@ pub use aspis_core::{field,transcript};
 pub mod owned;
 pub mod captured_mask;
 pub mod owned_points;
+pub mod owned_wide_new;
 #[cfg(not(pv_cb_extract))]
 mod checks {
     use aspis_core::field::{M31,CM31,QM31,PreparedQm31Multiplier};
@@ -108,6 +109,16 @@ mod checks {
                 same(actual[row][coordinate], expected[row][coordinate]);
             }
         }
+    }
+
+    #[kani::proof]
+    #[kani::unwind(8)]
+    fn wide_new_reference() {
+        let input = kani::any::<[[u32; 4]; 2]>().map(q);
+        let actual = aspis_core::field::WideExact::new(input[0], input[1]);
+        let expected = super::owned_wide_new::new(input[0], input[1]);
+        same(actual.c0(), expected.c0);
+        same(actual.c1(), expected.c1);
     }
 
 }

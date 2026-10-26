@@ -15,6 +15,8 @@ import R1Z.PV_CB_CandidatePublic
 #print axioms R1Z.PV_CB_Op86Source.op86_source
 #print axioms R1Z.PV_CB_Op100Exact.op100_source
 #print axioms R1Z.PV_CB_Op101Exact.op101_source
+#print axioms R1Z.PV_CB_Op105Exact.op105_source
+#print axioms R1Z.PV_CB_Op107Exact.op107_source
 #print axioms R1Z.PV_CB_Op110Source.op110_source
 #print axioms R1Z.PV_CB_Op111Source.op111_source
 #print axioms R1Z.PV_CB_Op114Source.op114_source
@@ -33,6 +35,8 @@ import R1Z.PV_CB_CandidatePublic
 #print axioms R1Z.PV_CB_CandidateDictionary.op86
 #print axioms R1Z.PV_CB_CandidateDictionary.op100
 #print axioms R1Z.PV_CB_CandidateDictionary.op101
+#print axioms R1Z.PV_CB_CandidateDictionary.op105
+#print axioms R1Z.PV_CB_CandidateDictionary.op107
 #print axioms R1Z.PV_CB_CandidateDictionary.op110
 #print axioms R1Z.PV_CB_CandidateDictionary.op111
 #print axioms R1Z.PV_CB_CandidateDictionary.op114
