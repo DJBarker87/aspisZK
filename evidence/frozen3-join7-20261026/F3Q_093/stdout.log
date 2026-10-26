@@ -1,0 +1,259 @@
+F3Q_OpeningSourceLog.lean:32:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run (PreparedHashEffects.new effects D hash sem.transcript.state v.variant >>= ?m.368)
+in the target expression
+  observe
+      (run
+          (PreparedHashCode.bind (liftM (r1_wire.SemanticTranscript.impl.state D sem.transcript)) fun a =>
+            PreparedHashCode.bind (PreparedHashEffects.new effects D hash a v.variant) fun t =>
+              PreparedHashCode.bind (PreparedScalarEffects.scalar effects B.sampling D t 27#u8 v.y1 true) fun __x =>
+                Code.step (B.sampling.toBytes v.inactive) fun b =>
+                  PreparedHashCode.bind (liftM (ok b.to_slice)) fun s =>
+                    PreparedHashCode.bind (PreparedScalarEffects.scalar effects B.sampling D __x.2 28#u8 s false)
+                      fun __x_1 =>
+                      PreparedHashCode.bind
+                        (PreparedScalarEffects.scalar effects B.sampling D __x_1.2 29#u8 v.round0 false) fun __x_2 =>
+                        PreparedHashCode.bind (liftM v.variant.folds) fun i =>
+                          if i = 2#usize then
+                            PreparedHashCode.bind (liftM (32#usize + 224#usize)) fun i1 =>
+                              PreparedHashCode.bind (liftM (core.option.Option.unwrap v.folded_root)) fun a2 =>
+                                PreparedHashCode.bind (liftM (ok a2.to_slice)) fun s1 =>
+                                  PreparedHashCode.bind
+                                    (liftM
+                                      (alloc.vec.Vec.extend_from_slice core.clone.CloneU8
+                                        (alloc.vec.Vec.with_capacity U8 i1) s1))
+                                    fun bytes1 =>
+                                    PreparedHashCode.bind
+                                      (liftM (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1))
+                                      fun bytes2 =>
+                                      PreparedHashCode.bind
+                                        (PreparedScalarEffects.scalar effects B.sampling D __x_2.2 30#u8 bytes2.deref
+                                          false)
+                                        fun __x_3 =>
+                                        PreparedHashCode.bind
+                                          (PreparedQueryEffects.queries effects
+                                            (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                                              Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                                            D __x_3.2 31#u8 v.final_message)
+                                          fun __x_4 =>
+                                          PreparedHashCode.bind
+                                            (liftM (core.result.Result.Insts.CoreOpsTry.branch __x_4.1)) fun cf =>
+                                            match cf with
+                                            | core.ops.control_flow.ControlFlow.Continue val =>
+                                              PreparedHashCode.bind (liftM (31#u8 + 1#u8)) fun i2 =>
+                                                PreparedHashCode.bind (liftM (ok (Std.Array.empty U8).to_slice))
+                                                  fun s3 =>
+                                                  PreparedHashCode.bind
+                                                    (PreparedScalarEffects.scalar_k effects B.sampling D __x_4.2 i2 s3)
+                                                    fun __x_5 =>
+                                                    Code.step (B.powers 29#usize __x.1) fun g1 =>
+                                                      Code.step (B.claim D sem v.y1 v.inactive g1 __x_1.1) fun r1 =>
+                                                        PreparedHashCode.bind
+                                                          (liftM (core.result.Result.Insts.CoreOpsTry.branch r1))
+                                                          fun cf1 => ⋯
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              PreparedHashCode.bind
+                                                (liftM
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    verifier.Prepared (core.convert.FromSame verifier.Error) residual))
+                                                fun r1 => pure (r1, input)
+                          else
+                            PreparedHashCode.bind (liftM OriginalPreparedNative.zero) fun we =>
+                              PreparedHashCode.bind
+                                (PreparedQueryEffects.queries effects
+                                  (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                                    Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                                  D __x_2.2 30#u8 v.final_message)
+                                fun __x_3 =>
+                                PreparedHashCode.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch __x_3.1))
+                                  fun cf =>
+                                  match cf with
+                                  | core.ops.control_flow.ControlFlow.Continue val =>
+                                    PreparedHashCode.bind (liftM (30#u8 + 1#u8)) fun i1 =>
+                                      PreparedHashCode.bind (liftM (ok (Std.Array.empty U8).to_slice)) fun s1 =>
+                                        PreparedHashCode.bind
+                                          (PreparedScalarEffects.scalar_k effects B.sampling D __x_3.2 i1 s1)
+                                          fun __x_4 =>
+                                          Code.step (B.powers 29#usize __x.1) fun g1 =>
+                                            Code.step (B.claim D sem v.y1 v.inactive g1 __x_1.1) fun r1 =>
+                                              PreparedHashCode.bind
+                                                (liftM (core.result.Result.Insts.CoreOpsTry.branch r1)) fun cf1 =>
+                                                match cf1 with
+                                                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                                  pure
+                                                    (core.result.Result.Ok
+                                                        { variant := v.variant, roots := sem.roots, gamma := __x.1,
+                                                          kappa := __x_1.1, alpha := Array.make 2#usize [__x_2.1, we] ⋯,
+                                                          rho := __x_4.1, queries := val, semantic_alpha := sem.alpha,
+                                                          z := sem.z, claim := val1, state := __x_4.2.state },
+                                                      g1)
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  PreparedHashCode.bind
+                                                    (liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        verifier.Prepared (core.convert.FromSame verifier.Error)
+                                                        residual))
+                                                    fun r2 => pure (r2, g1)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    PreparedHashCode.bind
+                                      (liftM
+                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          verifier.Prepared (core.convert.FromSame verifier.Error) residual))
+                                      fun r1 => pure (r1, input))).1 =
+    observe (run (PreparedHashEffects.new effects D hash sem.transcript.state v.variant)).1 ++
+      F3K_OpeningCalls.log spine.c
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedScratchModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+sem : r1_semantic.Verified Hash
+v : verifier.View
+hash : Hash
+p : OraclePortCompactDraft.Parsed
+out : verifier.Prepared
+scratch input : Std.Array aspis_core.field.WideExact 29#usize
+spine : F3K_OpeningSpine.Spine D B embed sem v hash p out scratch
+variant : v.variant = transport.Variant.S2
+seed : erase (PreparedHashEffects.new effects D hash sem.transcript.state v.variant) = ok spine.c.t0
+first :
+  erase (PreparedScalarEffects.scalar effects B.sampling D spine.c.t0 27#u8 v.y1 true) = ok (spine.c.gamma, spine.c.t1)
+second :
+  erase (PreparedScalarEffects.scalar effects B.sampling D spine.c.t1 28#u8 spine.c.inactive.to_slice false) =
+    ok (spine.c.kappa, spine.c.t2)
+third :
+  erase (PreparedScalarEffects.scalar effects B.sampling D spine.c.t2 29#u8 v.round0 false) =
+    ok (spine.c.alpha0, spine.c.t3)
+fourth :
+  erase (PreparedScalarEffects.scalar effects B.sampling D spine.c.t3 30#u8 spine.c.second.deref false) =
+    ok (spine.c.alpha1, spine.c.t4)
+query :
+  erase
+      (PreparedQueryEffects.queries effects
+        (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+          embed)
+        D spine.c.t4 31#u8 v.final_message) =
+    ok (core.result.Result.Ok spine.c.queries, spine.c.t5)
+rho :
+  erase
+      (PreparedScalarEffects.scalar_k effects B.sampling D spine.c.t5 32#u8 PreparedScratchReachability.emptyPayload) =
+    ok (spine.c.rho, spine.c.t6)
+⊢ observe
+      (run
+          (PreparedHashCode.bind (liftM (r1_wire.SemanticTranscript.impl.state D sem.transcript)) fun a =>
+            PreparedHashCode.bind (PreparedHashEffects.new effects D hash a v.variant) fun t =>
+              PreparedHashCode.bind (PreparedScalarEffects.scalar effects B.sampling D t 27#u8 v.y1 true) fun __x =>
+                Code.step (B.sampling.toBytes v.inactive) fun b =>
+                  PreparedHashCode.bind (liftM (ok b.to_slice)) fun s =>
+                    PreparedHashCode.bind (PreparedScalarEffects.scalar effects B.sampling D __x.2 28#u8 s false)
+                      fun __x_1 =>
+                      PreparedHashCode.bind
+                        (PreparedScalarEffects.scalar effects B.sampling D __x_1.2 29#u8 v.round0 false) fun __x_2 =>
+                        PreparedHashCode.bind (liftM v.variant.folds) fun i =>
+                          if i = 2#usize then
+                            PreparedHashCode.bind (liftM (32#usize + 224#usize)) fun i1 =>
+                              PreparedHashCode.bind (liftM (core.option.Option.unwrap v.folded_root)) fun a2 =>
+                                PreparedHashCode.bind (liftM (ok a2.to_slice)) fun s1 =>
+                                  PreparedHashCode.bind
+                                    (liftM
+                                      (alloc.vec.Vec.extend_from_slice core.clone.CloneU8
+                                        (alloc.vec.Vec.with_capacity U8 i1) s1))
+                                    fun bytes1 =>
+                                    PreparedHashCode.bind
+                                      (liftM (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1))
+                                      fun bytes2 =>
+                                      PreparedHashCode.bind
+                                        (PreparedScalarEffects.scalar effects B.sampling D __x_2.2 30#u8 bytes2.deref
+                                          false)
+                                        fun __x_3 =>
+                                        PreparedHashCode.bind
+                                          (PreparedQueryEffects.queries effects
+                                            (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                                              Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                                            D __x_3.2 31#u8 v.final_message)
+                                          fun __x_4 =>
+                                          PreparedHashCode.bind
+                                            (liftM (core.result.Result.Insts.CoreOpsTry.branch __x_4.1)) fun cf =>
+                                            match cf with
+                                            | core.ops.control_flow.ControlFlow.Continue val =>
+                                              PreparedHashCode.bind (liftM (31#u8 + 1#u8)) fun i2 =>
+                                                PreparedHashCode.bind (liftM (ok (Std.Array.empty U8).to_slice))
+                                                  fun s3 =>
+                                                  PreparedHashCode.bind
+                                                    (PreparedScalarEffects.scalar_k effects B.sampling D __x_4.2 i2 s3)
+                                                    fun __x_5 =>
+                                                    Code.step (B.powers 29#usize __x.1) fun g1 =>
+                                                      Code.step (B.claim D sem v.y1 v.inactive g1 __x_1.1) fun r1 =>
+                                                        PreparedHashCode.bind
+                                                          (liftM (core.result.Result.Insts.CoreOpsTry.branch r1))
+                                                          fun cf1 => ⋯
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              PreparedHashCode.bind
+                                                (liftM
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    verifier.Prepared (core.convert.FromSame verifier.Error) residual))
+                                                fun r1 => pure (r1, input)
+                          else
+                            PreparedHashCode.bind (liftM OriginalPreparedNative.zero) fun we =>
+                              PreparedHashCode.bind
+                                (PreparedQueryEffects.queries effects
+                                  (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                                    Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                                  D __x_2.2 30#u8 v.final_message)
+                                fun __x_3 =>
+                                PreparedHashCode.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch __x_3.1))
+                                  fun cf =>
+                                  match cf with
+                                  | core.ops.control_flow.ControlFlow.Continue val =>
+                                    PreparedHashCode.bind (liftM (30#u8 + 1#u8)) fun i1 =>
+                                      PreparedHashCode.bind (liftM (ok (Std.Array.empty U8).to_slice)) fun s1 =>
+                                        PreparedHashCode.bind
+                                          (PreparedScalarEffects.scalar_k effects B.sampling D __x_3.2 i1 s1)
+                                          fun __x_4 =>
+                                          Code.step (B.powers 29#usize __x.1) fun g1 =>
+                                            Code.step (B.claim D sem v.y1 v.inactive g1 __x_1.1) fun r1 =>
+                                              PreparedHashCode.bind
+                                                (liftM (core.result.Result.Insts.CoreOpsTry.branch r1)) fun cf1 =>
+                                                match cf1 with
+                                                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                                  pure
+                                                    (core.result.Result.Ok
+                                                        { variant := v.variant, roots := sem.roots, gamma := __x.1,
+                                                          kappa := __x_1.1, alpha := Array.make 2#usize [__x_2.1, we] ⋯,
+                                                          rho := __x_4.1, queries := val, semantic_alpha := sem.alpha,
+                                                          z := sem.z, claim := val1, state := __x_4.2.state },
+                                                      g1)
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  PreparedHashCode.bind
+                                                    (liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        verifier.Prepared (core.convert.FromSame verifier.Error)
+                                                        residual))
+                                                    fun r2 => pure (r2, g1)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    PreparedHashCode.bind
+                                      (liftM
+                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          verifier.Prepared (core.convert.FromSame verifier.Error) residual))
+                                      fun r1 => pure (r1, input))).1 =
+    observe (run (PreparedHashEffects.new effects D hash sem.transcript.state v.variant)).1 ++
+      F3K_OpeningCalls.log spine.c
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+F3Q_OpeningSourceLog.lean:31:51: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [preparationEffects, ̲Bind.bind, ̲MonadLift.monadLift, ̲MonadLiftT.monadLift,
+      AspisR1PublicPreparation.PreparedHashCode.bind,r̵u̵n̵,̵ ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3Q_OpeningSourceLog.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
