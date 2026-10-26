@@ -16,5 +16,9 @@ def trace.value
 
 theorem exact (tag : U16) (index : Usize) (x : aspis_core.field.wide_exact.WideExact) :
     trace.value tag index x = ok () := rfl
+theorem operands_erased (tag tag' : U16) (index index' : Usize)
+    (x y : aspis_core.field.wide_exact.WideExact) :
+    trace.value tag index x = trace.value tag' index' y := rfl
 #print axioms exact
+#print axioms operands_erased
 end R1Z.PV_TraceValueSource

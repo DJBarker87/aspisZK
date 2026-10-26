@@ -141,3 +141,28 @@ native correspondence orV240/op223. No callback/root premise is removed here.
 reserved/projected55.375GiB>55GiB. Its successor factors primitive totality
 into a generic lemma and a concrete installed bridge, testing the generic
 lemma first. The180s wait and fresh-ID policy remain in force.
+
+## Disk-full recovery and trace callback stage
+
+Recovered base137080a85a includes16 actual Lean compiles through21320 and3 Kani
+runs against this allocation;21321 has no time or barrier result and no compiled
+object. Its pre-scan allowed admission but the interrupted SSH launch never
+reached Lean. It consumes its ID and zero compile attempts. Receipt retained;
+no markers deleted. Next source adds a genuine operand-erasure theorem rather
+than bypassing the sent-input guard.21322–21324 pass with standard axioms;
+source has no axioms. Current recovered budget19/65Lean,3/12Kani.
+
+21314/21315 establish generic primitive-totality transport and concrete totality
+of the owned compression/list model.21318/21319/21320 install current quartic
+source arithmetic and preserve the complete caller by exact dictionary equality.
+21316/21317 are retained changed elaboration failures, not accepted results.
+
+Before: selected op247 remained a callback. After: `PV_TraceValueInstall.selected`
+selects the literal current `trace.value` emitted under optimized-terminal and
+ct-host-prover; `PV_TraceValueBody.caller` consumes it in the complete caller,
+with reservation, failures and divergence preserved. LedgerV254/op247 source
+subobligation supplied,32→31 successful-body source callbacks remain. Actual
+cfg/artifact association and the complete observable side-channel laws remain
+separate obligations. This no-op source theorem supplies no TLS/observer law.
+V163/V164,V036–V038,V161–V168 remain open; root premises removed0,added0,
+weakened0. Target not yet established. No shipped Rust/proved old module change.

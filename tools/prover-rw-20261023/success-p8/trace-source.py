@@ -13,7 +13,11 @@ abbrev aspis_core.field.wide_exact.WideExact := ProverRwFull.aspis_core.field.wi
 '''+body+'''
 theorem exact (tag : U16) (index : Usize) (x : aspis_core.field.wide_exact.WideExact) :
     trace.value tag index x = ok () := rfl
+theorem operands_erased (tag tag' : U16) (index index' : Usize)
+    (x y : aspis_core.field.wide_exact.WideExact) :
+    trace.value tag index x = trace.value tag' index' y := rfl
 #print axioms exact
+#print axioms operands_erased
 end R1Z.PV_TraceValueSource
 '''
 p=r/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_TraceValueSource.lean'
