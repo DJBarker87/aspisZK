@@ -1,0 +1,110 @@
+import InitialForwardEncoderBaseV9
+import WideExactNaturalBasisTriangularV9
+import GSScalarOperandEnvelopeM10
+import RawExtractorCostLedger
+
+/-! A deliberately coarse schedule for the fixed initial forward encoder.
+Chebyshev calls count both recursive operands (no common-subexpression
+assumption). Fractional lifts pay linear power fuel for every summand;
+expansion pays every stored coefficient. All polynomial arithmetic is charged
+at one fixed degree envelope, independently of coefficient values. Input
+message coordinates are reads from the retained 1024-element message array. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.InitialEncoderScheduleM10
+open CompPoly Polynomial AspisWide.InitialForwardEncoderBaseV9
+open AspisWide.NaturalBasisComputable AspisWide.NaturalBasisTriangularV4
+open AspisV5FriCircleEncoderDistance AspisV5FriInitialCircleEncoderIdentity
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K]
+  [NeZero (2 : K)] [Algebra (ZMod AspisCircleGroupOrder.P) K] [Fintype K]
+
+-- One operation reserves a dense coefficient square, normalization, copying
+-- and scalar/control work. 2048 includes unreduced products and X^2 expansion.
+def primitive : Nat := 100*(2048+4)^3
+
+def cheb : Nat → Nat
+  | 0 => 1
+  | b+1 => 2*cheb b+4
+
+theorem cheb_shape (b : Nat) : cheb b+4 = 5*2^b := by
+  induction b with
+  | zero => rfl
+  | succ b ih => simp only [cheb,pow_succ]; omega
+
+theorem cheb_bound (b : Nat) : cheb b ≤ 5*2^b := by have h := cheb_shape b; omega
+
+def natural (n : Nat) : Nat := (n.bitIndices.map (fun b => cheb b+1)).sum+1
+
+def naturalBudget (N : Nat) : Nat := (N+1)*(5*N+1)+1
+
+theorem natural_bound (n N : Nat) (hn : n ≤ N) : natural n ≤ naturalBudget N := by
+  have hi : n.bitIndices.toFinset ⊆ Finset.range (N+1) := by
+    intro b hb
+    have hp := Nat.two_pow_le_of_mem_bitIndices (List.mem_toFinset.mp hb)
+    have hl : b < 2^b := Nat.lt_two_pow_self
+    exact Finset.mem_range.mpr (by omega)
+  have hl : n.bitIndices.length ≤ N+1 := by
+    have hh := Finset.card_le_card hi
+    simpa only [List.toFinset_card_of_nodup Nat.bitIndices_nodup,Finset.card_range] using hh
+  have hs := RawExtractorCostLedger.sum_charge_le n.bitIndices (fun b => cheb b+1)
+    (N+1) (5*N+1) hl (fun b hb => by
+      have hp := Nat.two_pow_le_of_mem_bitIndices hb
+      have hc := cheb_bound b
+      have hm := Nat.mul_le_mul_left 5 (hp.trans hn)
+      omega)
+  exact Nat.add_le_add_right hs 1
+
+def basisSchedule : Nat → Nat
+  | 0 => natural 0+2
+  | n+1 => basisSchedule n+natural (n+1)+3
+
+theorem basis_bound (n N : Nat) (hn : n ≤ N) :
+    basisSchedule n ≤ (n+1)*(naturalBudget N+3) := by
+  induction n with
+  | zero =>
+    have hh := natural_bound 0 N (by omega)
+    simp only [basisSchedule,Nat.zero_add,Nat.one_mul]
+    omega
+  | succ n ih =>
+    have ht := ih (by omega)
+    have hh := natural_bound (n+1) N hn
+    simp only [basisSchedule]
+    nlinarith
+
+def fractional (d : Nat) : Nat := (d+1)*(2*d+10)
+def expansion (d : Nat) : Nat := (d+1)*(2*d+10)
+
+def operations : Nat :=
+  2*basisSchedule 511+fractional 512+fractional 511+expansion 512+expansion 511+6
+
+def operationBudget : Nat :=
+  2*(512*(naturalBudget 511+3))+fractional 512+fractional 511+expansion 512+expansion 511+6
+
+theorem operations_bound : operations ≤ operationBudget := by
+  have hh := basis_bound 511 511 (Nat.le_refl _)
+  exact Nat.add_le_add_right (Nat.add_le_add_right (Nat.add_le_add_right
+    (Nat.add_le_add_right (Nat.add_le_add_right (Nat.mul_le_mul_left 2 hh) _) _) _) _) _
+
+def eval (m : Fin 1024 → K) : CPolynomial K × Nat := (encodeInitialC m,operations*primitive)
+def budget : Nat := operationBudget*primitive
+
+theorem value (m : Fin 1024 → K) : (eval m).1 = encodeInitialC m := rfl
+
+theorem work (m : Fin 1024 → K) : (eval m).2 ≤ budget :=
+  Nat.mul_le_mul_right primitive operations_bound
+
+theorem output_size (m : Fin 1024 → K) : (eval m).1.val.size ≤ 1025 := by
+  apply GSScalarOperandEnvelopeM10.stored_size_of_degree _ 1024
+  rw [value,encodeInitialC_toPoly]
+  exact circleNumerator_natDegree_le _ _
+
+#print axioms cheb_shape
+#print axioms cheb_bound
+#print axioms natural_bound
+#print axioms basis_bound
+#print axioms operations_bound
+#print axioms value
+#print axioms work
+#print axioms output_size
+end AspisR1.InitialEncoderScheduleM10
+end

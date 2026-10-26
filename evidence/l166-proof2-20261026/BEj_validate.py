@@ -13,7 +13,7 @@ for f in sorted(P.glob('BEj_*/receipt.json')):
   assert hashlib.sha256((f.parent/'sources'/name).read_bytes()).hexdigest()==digest
  if x['exit_status']==0:
   for audit in x.get('print_axioms',[]):
-   names=audit.split('[')[-1].rstrip(']').replace(' ','').split(',') if '[' in audit else []
+   names=re.sub(r'\s+', '', audit.split('[')[-1].rstrip(']')).split(',') if '[' in audit else []
    assert set(names)<= {'propext','Classical.choice','Quot.sound',''},audit
 assert len(receipts)<=100
 accepted=[]
