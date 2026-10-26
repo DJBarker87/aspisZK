@@ -124,3 +124,10 @@ error-path agreement must be checked explicitly rather than assumed or added
 to bad. Native byte/public-record mapping, physical erasure, proved=shipped and
 a coherent frozen dependency/artifact replay remain required. The budget,
 not a new counterexample or a privacy release result, stops this continuation.
+
+Source commit9297a12175 and hashes are archived under the assigned host directory
+sources/final-9297a12175/R1Z. New/retained PV_RunJoin cache objects are preserved
+in objects-final-9297a12175/R1Z (cache only; no extra host check claimed). All
+uploaded source SHA256 values match final-pins.json. Temporary copied/generated
+local cache directories were removed after hashing/archiving; sources, receipts
+and retained native keys were not removed. See local-cache-cleanup.json.
