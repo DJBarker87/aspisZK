@@ -1,0 +1,59 @@
+import JFq_Weights
+import JFq_Rhs
+import JFq_Power
+import JFq_AuthBytes
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFq_DecodedAccumulator
+open Aeneas Aeneas.Std Result AspisR1Stage2
+open OraclePortCompactDraft
+open MultiproofConeCanonical OraclePortCheckpointAbiC5 OraclePortCheckpointResumeC5
+open CheckpointBytes4ReaderFields CheckpointBytes5Output
+
+def value : verifier.Accumulator := ⟨JFq_Weights.value,JFq_Rhs.scalar,JFq_Power.scalar,10#usize⟩
+
+theorem header : slice (bytesOf JFx_NativeBytes.checkpoint.val) 0 16=
+    OraclePortPhysicalFrameDraft.magic ++ [2,10,1,0,0,0,0,0] := by
+  simp only [slice,bytesOf,List.drop_zero,← List.map_take,JFq_AuthBytes.first16]
+  rfl
+
+theorem source : decodeAccumulator (bytesOf JFx_NativeBytes.checkpoint.val)=
+    some (accumulator value) := by
+  obtain ⟨rhs,readRhs,rhsEq,_,_⟩ := CheckpointBytes4ReaderFields.e_success
+    (JFq_Raw.reader 664#usize) (JFq_Raw.reader 696#usize) JFq_Rhs.scalar
+    (by change 664+32≤JFx_NativeBytes.checkpoint.val.length;rw [JFx_NativeBytes.checkpointBytes_length];decide)
+    JFq_Rhs.source
+  obtain ⟨power,readPower,powerEq,_,_⟩ := CheckpointBytes4ReaderFields.k_success
+    (JFq_Raw.reader 696#usize) (JFq_Raw.reader 712#usize) JFq_Power.scalar
+    (by change 696+16≤JFx_NativeBytes.checkpoint.val.length;rw [JFx_NativeBytes.checkpointBytes_length];decide)
+    JFq_Power.source
+  have restored := JFq_Weights.source JFq_Weights.value JFq_Weights.length
+  obtain ⟨model,readModel,modelEq,_⟩ := CheckpointBytes4SectionContents.weights_contents
+    JFx_NativeBytes.checkpoint 712#usize 1736#usize JFq_Weights.value JFq_Weights.value
+    (by rw [JFq_Weights.length];change 712+64*16≤JFx_NativeBytes.checkpoint.val.length;rw [JFx_NativeBytes.checkpointBytes_length];decide)
+    restored
+  have package : ∃ weights : Fin JFq_Weights.value.val.length → K,
+      decodeKs JFq_Weights.value.val.length
+        (slice (bytesOf JFx_NativeBytes.checkpoint.val) 712 (JFq_Weights.value.val.length*16))=some weights ∧
+      JFq_Weights.value.val=(List.ofFn weights).map sourceK := ⟨model,readModel,modelEq⟩
+  rw [JFq_Weights.length] at package
+  obtain ⟨weights,readWeights,weightsEq⟩:=package
+  have state : accumulator value=(⟨weights,rhs,power,10⟩ : QueryAccumulator.State K E) := by
+    unfold accumulator value
+    congr 1
+    · funext j
+      rw [weightsEq]
+      simp only [List.getElem?_map,List.getElem?_ofFn,j.isLt,↓reduceDIte,
+        Option.map_some,Option.getD_some,ofK_source]
+    · rw [← rhsEq,ofE_source]
+    · rw [← powerEq,ofK_source]
+  change FoldedLeafCodec.decodeWide (slice (bytesOf JFx_NativeBytes.checkpoint.val) 664 32)=some rhs at readRhs
+  change ExactLeafFieldCodec.decodeQM31 (slice (bytesOf JFx_NativeBytes.checkpoint.val) 696 16)=some power at readPower
+  rw [decodeAccumulator,if_pos header,readRhs,readPower,readWeights]
+  simp only [Option.bind_eq_bind,Option.bind_some]
+  rw [state]
+
+#print axioms header
+#print axioms source
+end AspisR1.JFq_DecodedAccumulator
+end

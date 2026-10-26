@@ -1,0 +1,46 @@
+JFq_Raw.lean:23:49: error: Function expected at
+  Usize.max
+but this term has type
+  ℕ
+
+Note: Expected a function because this term is being applied to the argument
+  pos
+JFq_Raw.lean:26:58: error: unsolved goals
+case mk
+pos N : Usize
+b : Std.Array U8 N
+bound : ↑pos + ↑N ≤ 1768
+selected : List.take (↑N) (List.drop ↑pos ↑JFx_NativeBytes.checkpoint) = ↑b
+size : (↑JFx_NativeBytes.checkpoint).length = 1768
+out : Std.Array U8 N
+bytes : ↑out = List.take (↑N) (List.drop ↑(reader pos).at ↑(reader pos).bytes)
+same : out = b
+wrap : ↑(pos.wrapping_add N) = ↑pos + ↑N
+bytes✝ : Slice U8
+at✝ : Usize
+run :
+  verifier.Reader.rawWithUnwrap N (OraclePortCkptAbi2Unwrap.unwrapWithPanic fun x => fail Error.panic) (reader pos) =
+    ok (out, { bytes := bytes✝, «at» := at✝ })
+cursor : ↑{ bytes := bytes✝, «at» := at✝ }.at = ↑(reader pos).at + ↑N
+frame : { bytes := bytes✝, «at» := at✝ }.bytes = (reader pos).bytes
+⊢ bytes✝ = JFx_NativeBytes.checkpoint ∧ at✝ = pos.wrapping_add N
+JFq_Raw.lean:14:50: error: unsolved goals
+pos N : Usize
+b : Std.Array U8 N
+bound : ↑pos + ↑N ≤ 1768
+selected : List.take (↑N) (List.drop ↑pos ↑JFx_NativeBytes.checkpoint) = ↑b
+size : (↑JFx_NativeBytes.checkpoint).length = 1768
+out : Std.Array U8 N
+last : verifier.Reader
+run :
+  verifier.Reader.rawWithUnwrap N (OraclePortCkptAbi2Unwrap.unwrapWithPanic fun x => fail Error.panic) (reader pos) =
+    ok (out, last)
+bytes : ↑out = List.take (↑N) (List.drop ↑(reader pos).at ↑(reader pos).bytes)
+cursor : ↑last.at = ↑(reader pos).at + ↑N
+frame : last.bytes = (reader pos).bytes
+same : out = b
+wrap : ↑(pos.wrapping_add N) = ↑pos + ↑N
+lastEq : last = reader (pos.wrapping_add N)
+⊢ CheckpointBytes3Reader.raw N (reader pos) = ok (b, reader (pos.wrapping_add N))
+JFq_Raw.lean:28:48: error: unexpected identifier; expected command
+'AspisR1.JFq_Raw.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
