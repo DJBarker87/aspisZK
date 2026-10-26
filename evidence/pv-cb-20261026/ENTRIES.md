@@ -107,3 +107,14 @@ Standard axioms only; no endpoint premise removal or native effect claim.
 |109|V213|INSTALLED (native-port source)|PV_CB_Field.op109_installed;22814.json|
 
 Standard axioms only; full selected caller/endpoint composition remains open.
+
+## Checked context and statement-point values
+
+|op|row|status|theorem / receipt|
+|---:|---|---|---|
+|110|V214|INSTALLED (source)|PV_CB_State.op110_installed;22815.json|
+|111|V215|INSTALLED (source constant)|PV_CB_State.op111_installed;22815.json|
+|114|V216|INSTALLED (context equality)|PV_CB_State.op114_installed;22815.json|
+|118|V218|INSTALLED (emitted source)|PV_CB_State.op118_installed;22815.json|
+
+Standard axioms only; no selected-native-caller or headline premise removed.
