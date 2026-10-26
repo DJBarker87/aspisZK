@@ -35,13 +35,15 @@ theorem erase_275 (ops other : ExternalFuns) :
   all_goals rfl
 #print axioms erase_275
 
+#print host_commitment.EncodingDomain.evaluate
 /-- Full symbolic source-function equality for `host_commitment.EncodingDomain.evaluate`. -/
 theorem erase_276 (ops other : ExternalFuns) :
     @host_commitment.EncodingDomain.evaluate _ (replace ops other) = @host_commitment.EncodingDomain.evaluate _ ops := by
+  funext T code self
   delta host_commitment.EncodingDomain.evaluate
-  delta host_commitment.EncodingDomain.evaluate.mutual
-  try simp only [erase_274 ops other, erase_275 ops other]
-  all_goals rfl
+  apply fixed_equal
+  funext recur coefficients depth
+  simp only [erase_274 ops other, erase_275 ops other]
 #print axioms erase_276
 
 /-- Full symbolic source-function equality for `host_commitment.EncodingDomain.encode_channel`. -/

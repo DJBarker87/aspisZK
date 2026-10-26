@@ -1,4 +1,4 @@
-import R1Z.PDict_FmtErase18
+import R1Z.PDict_FmtErase17B
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PDict_FmtErase
@@ -31,8 +31,10 @@ theorem erase_306 (ops other : ExternalFuns) :
 /-- Full symbolic source-function equality for `host_tree.append_levels`. -/
 theorem erase_307 (ops other : ExternalFuns) :
     @host_tree.append_levels _ (replace ops other) = @host_tree.append_levels _ ops := by
+  funext H digest hash
   delta host_tree.append_levels
-  delta host_tree.append_levels.mutual
+  apply fixed_equal
+  funext recur levels depth
   try simp only [erase_306 ops other]
   all_goals rfl
 #print axioms erase_307

@@ -64,8 +64,10 @@ theorem erase_406 (ops other : ExternalFuns) :
 /-- Full symbolic source-function equality for `host_commitment.fill_opening_values`. -/
 theorem erase_407 (ops other : ExternalFuns) :
     @host_commitment.fill_opening_values _ (replace ops other) = @host_commitment.fill_opening_values _ ops := by
+  funext c u
   delta host_commitment.fill_opening_values
-  delta host_commitment.fill_opening_values.mutual
+  apply fixed_equal
+  funext recur values j
   try simp only [erase_406 ops other]
   all_goals rfl
 #print axioms erase_407

@@ -1,4 +1,6 @@
 import R1Z.PDict_FmtErase25
+import R1Z.PDict_VolatileCell
+import R1Z.PrivacyR1HeadlineDeployedReal
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PDict_FmtErase
@@ -79,9 +81,20 @@ theorem erase_424 (ops other : ExternalFuns) :
 /-- Full symbolic source-function equality for `prover.retry_attempt`. -/
 theorem erase_425 (ops other : ExternalFuns) :
     @prover.retry_attempt _ (replace ops other) = @prover.retry_attempt _ ops := by
+  funext T callback public compiled variant hash
   delta prover.retry_attempt
-  delta prover.retry_attempt.mutual
+  apply fixed_equal
+  funext recur nonce_store next_attempt k
   try simp only [erase_424 ops other]
   all_goals rfl
 #print axioms erase_425
+/-- Every return, failure and divergence of the full recursive retry execution
+is unchanged when only the Formatter operation is replaced. -/
+theorem retry_without_formatter (ops other : ExternalFuns) :
+    @prover.retry_attempt _ (replace ops other) = @prover.retry_attempt _ ops :=
+  erase_425 ops other
+#print axioms retry_without_formatter
+#print axioms R1Z.PDict_VolatileCell.op124_installed
+#print R1Z.ProverCommitDeployedFuel22.RustProverRefinement
+#print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
 end R1Z.PDict_FmtErase

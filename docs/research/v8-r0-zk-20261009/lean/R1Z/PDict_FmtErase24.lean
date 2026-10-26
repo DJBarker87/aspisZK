@@ -111,9 +111,15 @@ theorem erase_396 (ops other : ExternalFuns) :
 /-- Full symbolic source-function equality for `host_tree.multiproof_levels`. -/
 theorem erase_397 (ops other : ExternalFuns) :
     @host_tree.multiproof_levels _ (replace ops other) = @host_tree.multiproof_levels _ ops := by
+  have hmutual : @host_tree.multiproof_levels.mutual _ (replace ops other) =
+      @host_tree.multiproof_levels.mutual _ ops := by
+    funext tree bits
+    delta host_tree.multiproof_levels.mutual
+    apply fixed_equal
+    funext recur out level depth
+    rfl
   delta host_tree.multiproof_levels
-  delta host_tree.multiproof_levels.mutual
-  all_goals rfl
+  rw [hmutual]
 #print axioms erase_397
 
 /-- Full symbolic source-function equality for `host_tree.check_indices_loop.body`. -/
