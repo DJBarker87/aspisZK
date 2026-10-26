@@ -1,3 +1,6 @@
+import TxS_RawTen
+import TxS_RawFinish
+import TxS_RawPublic
 import T2Nat_NativePair
 import AuS1_Accepted
 import DrvC_SourceHeadline
@@ -55,7 +58,7 @@ def Outcome {W F CoreError : Type}
       Cons_Native.Calls (AuS1_Install.base stageBase) finishOps reserved queryOps geoOps
         (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)) () s.pub s.proof s.checkpoint tx2 ∧
       Cons_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B claimsStd program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run ∧
-      T2R_Public.Facts f.pub f.proof ∧
+      TxS_RawPublic.Facts f.pub f.proof ∧
       TxS_CallerSource.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B claimsStd program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run prior tx2
 end AspisR1.TxS_ResultSource
 end

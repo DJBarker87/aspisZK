@@ -115,7 +115,7 @@ theorem accepted {W A M Cv F CoreError : Type} {N : Nat}
     · exact ⟨control.1,control.2.1,control.2.2.1,control.2.2.2.1,control.2.2.2.2,
       run.writer_call,domain,WAdm_Carrier.wide _ _ _ _ domain,sourceContent,nativeContent⟩
     · exact ⟨tx2.1,tx2.2.1,tx2.2.2.1⟩
-  · refine ⟨T2R_PublicDecode.facts f.pub f.proof f.statement cuts.decode,?_⟩
+  · refine ⟨TxS_RawPublic.of_typed f.pub f.proof (T2R_PublicDecode.facts f.pub f.proof f.statement cuts.decode),?_⟩
     unfold TxS_CallerSource.Outcome
     dsimp only
     intro runtime p2prime entry
@@ -134,7 +134,8 @@ theorem accepted {W A M Cv F CoreError : Type} {N : Nat}
     intro queryLeaves geoLeaves domain multiply one inverse
     have old := oldOutcome queryLeaves geoLeaves domain multiply one inverse
     refine ⟨authParsed,frame,parser,frameRead,target,?_,?_⟩
-    · intro ports q tr data rho prepare read geo domain multiply one inverse
+    · apply TxS_RawTen.of_typed
+      intro ports q tr data rho prepare read geo domain multiply one inverse
       rcases auth data rho q prepare with collision | indexed
       · exact Or.inl collision
       · exact Or.inr (Tx1Q_Model.ten _ _ _ _ _ _ _ _ _ _ _ run
@@ -156,6 +157,7 @@ theorem accepted {W A M Cv F CoreError : Type} {N : Nat}
         s.checkpoint s.proof s.pub saved (Tx1Q_Carriers.prepared run.p) tx2run.p2
         (Tx1Q_Carriers.accumulator {run.out with weights:=⟨run.flushed.val,run.flushed.property⟩}) tx2run.saved2
         H oracle f.proof f.pub size fields.queries canonical control.2.2.1 run.writer_call sameCheckpoint calls.1
+      apply TxS_RawFinish.of_typed
       exact TxS_FinishProof.strengthen (AuS1_Install.base stageBase) finishOps reserved queryOps queryLeaves
         geoOps geoLeaves domain multiply one inverse _ () s.pub s.proof s.checkpoint saved H
         (bytesOf f.proof.val) (bytesOf f.pub.val) _ _ () _ f.pub f.proof f.split run size fields.queries canonical

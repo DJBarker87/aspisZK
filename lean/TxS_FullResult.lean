@@ -1,3 +1,6 @@
+import TxS_RawTen
+import TxS_RawFinish
+import TxS_RawPublic
 import T2R_Parser
 import T2R_Acceptance
 import T2Nat_NativePair
@@ -58,7 +61,7 @@ def Outcome {W F CoreError : Type}
       Cons_Native.Calls (AuS1_Install.base stageBase) finishOps reserved queryOps geoOps
         (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)) () s.pub s.proof s.checkpoint tx2 ∧
       Cons_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B claimsStd program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run ∧
-      T2R_Public.Facts f.pub f.proof ∧
+      TxS_RawPublic.Facts f.pub f.proof ∧
       T2R_Parser.Facts f.proof ∧
       T2R_Acceptance.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
         (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) ∧
