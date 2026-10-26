@@ -2,7 +2,7 @@
 
 Target not yet established. Zero root refinement premises removed. These tables describe the final simultaneous partial source/value dictionary.
 
-New source entries:88; inherited:62; selected:150/262. Remaining:112, including21 outer-reachable entries outside the proof-body reachability overapproximation. Type interpretations:25/28; remaining0,3,27.
+New source entries:91; inherited:62; selected:153/262. Remaining:109, including18 outer-reachable entries outside the proof-body reachability overapproximation. Type interpretations:25/28; remaining0,3,27.
 
 ## Newly installed entries
 
@@ -96,6 +96,9 @@ New source entries:88; inherited:62; selected:150/262. Remaining:112, including2
 |221|`block_buffer.Eager.Insts.CoreDefaultDefault.default`|`R1Z.PDict_ResumeDictionary.op221_installed`|
 |238|`host_commitment.clear_private_salt`|`R1Z.PDict_ResumeDictionary.op238_installed`|
 |256|`r1_wire.Error.Insts.CoreCmpPartialEqError.eq`|`R1Z.PDict_ResumeDictionary.op256_installed`|
+|125|`zeroize.Zeroizing.Insts.CoreConvertAsMut.as_mut`|`R1Z.PDict_OffpathBorrow.op125_installed`|
+|126|`zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut`|`R1Z.PDict_OffpathBorrow.op126_installed`|
+|220|`digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiUpdateCore.update_blocks`|`R1Z.PDict_CtUpdate.op220_installed`|
 
 ## Type interpretations
 
@@ -199,8 +202,6 @@ Body-reachable entries remain with the sibling except the closed semantic-error 
 |122|`Array.Insts.ZeroizeZeroize.zeroize`|True|
 |123|`zeroize.Zeroize.Blanket.zeroize`|True|
 |124|`aspis_prover.state_only_hiding.volatile_clear_cell`|False|
-|125|`zeroize.Zeroizing.Insts.CoreConvertAsMut.as_mut`|False|
-|126|`zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut`|False|
 |127|`zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref`|True|
 |128|`zeroize.Zeroizing.new`|True|
 |129|`getrandom.fill`|False|
@@ -218,7 +219,6 @@ Body-reachable entries remain with the sibling except the closed semantic-error 
 |217|`digest.core_api.wrapper.CoreWrapper.Insts.CoreDefaultDefault.default`|False|
 |218|`digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.CoreDefaultDefault.default`|False|
 |219|`digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiFixedOutputCore.finalize_fixed_core`|False|
-|220|`digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiUpdateCore.update_blocks`|False|
 |222|`aspis_statement.constraints_v4.multilinear_evaluate_qm31`|True|
 |223|`aspis_statement.logup.compress_tagged_tuple`|True|
 |224|`aspis_statement.pool_v1.pair_forest_semantic_oracle.build_pool_v1_pair_forest_copy_helper_v1`|True|

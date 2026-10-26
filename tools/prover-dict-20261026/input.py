@@ -7,7 +7,7 @@ h=Path('/home/dombarker/project-offloads/codex-cx-prover-dict-20261026/receipts'
 h.mkdir(parents=True,exist_ok=True)
 j=Path('/home/dombarker/project-offloads/aspis-joint-20261019')
 a=int(sys.argv[1]);module=sys.argv[2];revision=sys.argv[3]
-assert (12000<=a<=12399 or 13200<=a<=13599) and module.startswith('R1Z/PDict_')
+assert (12000<=a<=12399 or 13200<=a<=13999) and module.startswith('R1Z/PDict_')
 assert not (h/f'{a}-input.json').exists()
 assert not Path(f'/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/out-{a}.log').exists()
 env=json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text())
