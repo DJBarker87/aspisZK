@@ -10,6 +10,7 @@ loop=orig[orig.index('    let mut lane_sequences'):orig.index('    if master.has
 tail=orig[orig.index('    if master.has_checkpoint'):orig.index('    let checkpoint =')]
 assembly=orig[orig.index('    let checkpoint ='):orig.index('\n}',orig.index('    let checkpoint ='))+2]
 text='use aspis_statement::pool_v1::*;\nuse aspis_core::field::M31;\ntype Digest=[M31;8];\n'+validate+'\nfn digest_is_canonical(d:&Digest)->bool {d.iter().all(|x|x.0<2147483647)}\n'
+text=text[:text.index('fn digest_is_canonical')]+s[s.index('fn digest_is_canonical('):s.index('fn digest_is_canonical(')+s[s.index('fn digest_is_canonical('):].index('\n}\n')+3].replace('P {','2147483647 {')+'\n'
 text+='fn PoolT_loop(master:&PoolV1PairForestMasterV1,lanes:&[PoolV1PairForestLaneStateV1;8])->Result<[u64;8],PoolV1PairForestAccountErrorV1>{\n'+loop+'    Ok(lane_sequences)\n}\n'
 text+='fn PoolT_tail(master:&PoolV1PairForestMasterV1,lane_sequences:[u64;8])->Result<u64,PoolV1PairForestAccountErrorV1>{\n'+tail+'    Ok(next_sequence)\n}\n'
 text+='fn PoolT_assembly(master:&PoolV1PairForestMasterV1,lane_sequences:[u64;8],global_root:Digest,checkpoint_bump:u8,next_sequence:u64)->Result<PoolV1PairForestCheckpointPlanV1,PoolV1PairForestAccountErrorV1>{\n'+assembly+'\n'
