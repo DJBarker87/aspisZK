@@ -117,3 +117,50 @@ All three terminal packets and complete source snapshot are retained in
 s1-native-prepared-query-full-v1 and s1-native-query-full-terminal-v2.
 check-full.py reports EVIDENCE_AUDIT_PASS with uncut_enclosing_verification
 NOT_ESTABLISHED, distinctly from the passed bounded-contract constructor.
+
+## Addendum: actual native samplers AND query driver in SAME constructor
+
+The combined point6 check passes: the SAME actual native constructor/claim
+execution now runs the frozen gamma, all three ordinary and rho samplers,
+as well as the exact frozen eight-pair query driver. Every returned gamma,
+kappa, alpha0, alpha1 and rho is compared with its own actual logged native
+sampler return, with all source coordinates/canonicality and nonzero gamma
+checked. Query arrays/selected state feed this SAME returned Prepared and rho
+absorb. Digest preimages, scratch pointer/reuse, actual29-power control,
+canonical928-byte Y1/actual field reads, complete native dot carriers and claim
+continuation remain checked. No sampled scalar, rho, query array or selected
+query state is independently chosen as an opaque reply.
+
+This composes two prior focused results rather than attributing them to a
+single run: the native sampler check had497.93s/9450964KiB and the query-driver
+check153.15s/6137532KiB. The NEW combined source passed3884 assertions,
+2/3 expected point6 covers,523.901202778s/9659548KiB, swap0; cgroup peak
+10038665216B,12GiB max/11GiB high/SwapMax0, no pressure/OOM. Fresh outer and
+phase admissions passed. Optimized -j1 compile and checked claim-loop bounds
+were used;540s solver/600s scope remained below the ten-minute review point.
+This is not an unchanged retry of the timed-out uncut scan stage: that scan
+is modularized using the already checked range contract.
+
+Exactly the arithmetic/dot result cuts (mul,add,push,finish) and the bounded
+complete-state scan contract remain computational value boundaries. The
+sampler/query/field hooks execute their frozen native bodies. The native scan
+poststate contract is audited using the prior native block/Std membership
+packets, and the source/math decoder/driver induction is already checked in
+Lean. Source/runtime/heap/SDK/extraction/SBF/whole-caller association remains
+separate. Native initializedness/allocator/abort/drop and the literal-data
+binding are NOT established. Kani retains malloc-success/no-uninit-check
+interpretation. No whole S1/S6 or deployed100-bit conclusion follows here.
+
+The combined binding JSON inherited a generic reference to 'Sampler cuts'
+from its generator template; the actual Rust bodies and this audit distinguish
+observational hooks from opaque value cuts. check-combined.py checks all three
+actual native calls, every return comparison, full same-source driver body,
+frozen sampler.rs bytes, source/tool pins, range-callee audits and terminal
+receipt. It adds no assumption and does not relabel the uncut timeout.
+
+Local compile-only: exit0,5.008765500s,687980544B peak RSS,722812928B observed
+aggregate,swap0. Complete contemporaneous sources/commands/tool/import-native
+pins and NUC terminal text are source-only in
+s1-native-prepared-query-combined-v1 and s1-native-query-combined-terminal-v1.
+#print axioms: N/A (Kani); no Lean axiom added. No production source, adopted
+freeze, source security contract or artifact pin changed.
