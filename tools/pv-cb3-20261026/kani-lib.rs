@@ -50,6 +50,16 @@ mod checks {
         assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
     }
     #[kani::proof]
+    #[kani::unwind(65)]
+    fn sum_products3_flat() {
+        let a:[[u32;4];3]=kani::any();let b:[[u32;4];3]=kani::any();
+        let left=[q(a[0]),q(a[1]),q(a[2])];let right=[q(b[0]),q(b[1]),q(b[2])];
+        let x=aspis_core::field::qm31_sum_products3(left,right);
+        let y=super::reference_polynomial::sum_products3(left,right);
+        assert_eq!(x.c0.a.0,y.c0.a.0);assert_eq!(x.c0.b.0,y.c0.b.0);
+        assert_eq!(x.c1.a.0,y.c1.a.0);assert_eq!(x.c1.b.0,y.c1.b.0);
+    }
+    #[kani::proof]
     fn pole_equal() {
         let a=q(kani::any());let b=q(kani::any());
         assert_eq!(super::ct_pole::equal(a,b),super::reference::equal(a,b));

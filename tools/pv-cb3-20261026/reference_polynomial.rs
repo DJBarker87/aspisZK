@@ -53,7 +53,7 @@ fn qm31_accumulate_product_channels(
     sums[2][2] += left_components[2][2].0 as u64 * right_components[2][2].0 as u64;
     sums
 }
-fn sum_products3(left:[QM31;3],right:[QM31;3])->QM31 {
+pub fn sum_products3(left:[QM31;3],right:[QM31;3])->QM31 {
  let s=qm31_accumulate_product_channels([[0u64;3];3],left[0],right[0]);
  let s=qm31_accumulate_product_channels(s,left[1],right[1]);
  let s=qm31_accumulate_product_channels(s,left[2],right[2]);
