@@ -1,0 +1,51 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling pools2-prefix v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_prefix)
+warning: module `PoolS2_checks` should have a snake case name
+  --> PoolS2_lib.rs:48:18
+   |
+48 | #[cfg(kani)] mod PoolS2_checks{use super::*;
+   |                  ^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_s2_checks`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `PoolS2_unique_projection` should have a snake case name
+  --> PoolS2_lib.rs:51:4
+   |
+51 | fn PoolS2_unique_projection(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_s2_unique_projection`
+
+warning: function `PoolS2_unique_master_checkpoint` should have a snake case name
+  --> PoolS2_lib.rs:60:4
+   |
+60 | fn PoolS2_unique_master_checkpoint(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_s2_unique_master_checkpoint`
+
+warning: function `PoolS2_instruction_exact` should have a snake case name
+  --> PoolS2_lib.rs:70:4
+   |
+70 | fn PoolS2_instruction_exact(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_s2_instruction_exact`
+
+warning: function `PoolS2_count_exact` should have a snake case name
+  --> PoolS2_lib.rs:77:4
+   |
+77 | fn PoolS2_count_exact(){
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_s2_count_exact`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.60s
+Thread 0: Checking harness PoolS2_checks::PoolS2_count_exact...
+Thread 0: 
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - PoolS2_checks::PoolS2_count_exact
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
