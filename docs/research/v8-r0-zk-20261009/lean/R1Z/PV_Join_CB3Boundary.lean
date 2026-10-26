@@ -22,7 +22,7 @@ theorem step (x : aspis_core.field.QM31) (s : S) :
     (do let t ← PV_CB3_Op120Source.Raw.boundary_acc_step x s; ok (decode t)) =
       ProverRwP6BoundarySource.boundary_acc_step x (decode s) := by
   simp only [PV_CB3_Op120Source.Raw.boundary_acc_step,
-    ProverRwP6BoundarySource.boundary_acc_step,decode,bind_assoc_eq,bind_tc_ok]
+    ProverRwP6BoundarySource.boundary_acc_step,decode,lift,bind_assoc_eq,bind_tc_ok]
 /-- All 28 inputs stay symbolic; no finite-array enumeration or numeral reduction. -/
 theorem body (p : Array aspis_core.field.QM31 28#usize) :
     PV_CB3_Op120Source.Raw.boundary_flat p = ProverRwP6BoundarySource.boundary_flat p := by
@@ -32,7 +32,7 @@ theorem body (p : Array aspis_core.field.QM31 28#usize) :
     ProverRwP6BoundarySource.aspis_core.field.M31.reduce_u64,reduce,
     PV_CB3_Op120Source.Raw.aspis_core.field.CM31.new,
     ProverRwP6BoundarySource.aspis_core.field.CM31.new,
-    ProverRwDictionaryBytes.Src.complex,bind_assoc_eq,bind_tc_ok]
+    ProverRwDictionaryBytes.Src.complex,lift,bind_assoc_eq,bind_tc_ok]
 variable [ExternalTypes]
 theorem selected_bridge (ops : ExternalFuns) (p : Array aspis_core.field.QM31 28#usize) :
     (ProverRwP6BodyStore.selected ops).op120 p = (PV_CB3_Op120Source.selected ops).op120 p := by
