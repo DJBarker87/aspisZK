@@ -54,7 +54,9 @@ theorem finish (ops : FinishOps W) (v : verifier.View) (p : verifier.Prepared)
   have eq1 : r1.lhs = r1.rhs := by
     have value := RowFinish_Control.round_value ops v.round1 alpha1 r0.value 1#usize r1
     rw [Port4D_Round.round_one] at value
-    rw [ev0,hr1] at value
+    have hr1' : verifier.finishRelationRoundWithOps (Port3_FinishStage.release ops)
+        v.round1 alpha1 r0.value 1#usize = ok (.Ok value1) := ev0 ▸ hr1
+    rw [hr1'] at value
     split at value
     · assumption
     · cases value

@@ -1,0 +1,72 @@
+SAF_Returns.lean:57:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    verifier.finishRelationRoundWithOps (Port3_FinishStage.release ops) v.round1 alpha1 _a 1#usize =
+      ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+Error: Application type mismatch: The argument
+  r1
+has type
+  RoundValues ops v.round1 alpha1 r0.value
+but is expected to have type
+  RoundValues ops v.round1 alpha1 _a
+in the application
+  r1.lhs
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+s2 : p.variant = transport.Variant.S2
+success : Port4D_FinishInstall.finish ops v p a none = ok (core.result.Result.Ok ())
+native :
+  verifier.finishRelationWithOps (Port3_FinishStage.release ops) v p a (Port3_QueryInstall.observer none) =
+    ok (core.result.Result.Ok ())
+two : (Port3_FinishStage.release ops).folds p.variant = ok 2#usize
+alpha0 value0 alpha1 value1 : aspis_core.field.wide_exact.WideExact
+weights : W
+alphas : Slice E
+pair dot : E
+h0 : p.alpha.index_usize 0#usize = ok alpha0
+hr0 :
+  verifier.finishRelationRoundWithOps (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (core.result.Result.Ok value0)
+h1 : p.alpha.index_usize 1#usize = ok alpha1
+hr1 :
+  verifier.finishRelationRoundWithOps (Port3_FinishStage.release ops) v.round1 alpha1 value0 1#usize =
+    ok (core.result.Result.Ok value1)
+hw : (Port3_FinishStage.release ops).newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+hs :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : (Port3_FinishStage.release ops).pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hep : (Port3_FinishStage.release ops).ne pair value1 = ok false
+hd : (Port3_FinishStage.release ops).dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+left✝ : a.next = 22#usize
+hed : (Port3_FinishStage.release ops).ne dot a.rhs = ok false
+r0 : RoundValues ops v.round0 alpha0 p.claim
+ev0 : r0.value = value0
+r1 : RoundValues ops v.round1 alpha1 r0.value
+ev1 : r1.value = value1
+eq0 : r0.lhs = r0.rhs
+value :
+  verifier.finishRelationRoundWithOps (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+⊢ r1.lhs = r1.rhs
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.SAF_Returns.round' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SAF_Returns.finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
