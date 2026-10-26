@@ -21,3 +21,12 @@ SCI_006: exit 0, wall 2.7622673789737746 seconds, peak RSS 5504236 KiB, swap 0.
 All three new top theorems print only propext/Classical.choice/Quot.sound.
 Receipt has exact source revision/hash, direct selected object/sidecar
 fingerprints, command, cgroup and full output. No package replay.
+
+account_of_join now consumes precisely source acceptance, its single-pass
+chronological association, and the pointwise equality returned by the
+accepted F3X branch. It derives model acceptance and canonicalization itself,
+then applies account_agreement. This is the completed C consumer for A/B;
+no additional clean recovery contract is needed. A/B are still unproved.
+SCI_011 passed with all four Recovery theorems on standard axioms, exit0,
+wall2.914862354984507s, peakRSS5503892KiB, swap0. Its final source snapshot
+includes account_of_join; its imported Projection object is SCI_010.

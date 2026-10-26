@@ -101,6 +101,42 @@ theorem account_extract {A F C : Type} (c : DrvC_Installation.Configuration F C)
   SCF_Recovery.extract _ _
     (account_agreement c D hashv copy allocator id a H run observed success modelSuccess ordered) coins
 
+/-- The requested accepted F3X branch consumer, specialized to the concrete
+same-adversary account. Source acceptance (A), its exact chronological source
+join (B), and the pointwise raw F3X branch are the ONLY unproved inputs.
+Canonicalization, observer input identity, model acceptance, the three causal
+cuts and executable recovery are derived here. -/
+theorem account_of_join {A F C : Type} (c : DrvC_Installation.Configuration F C)
+    (D : LiteralByteProtocol.Decoder)
+    (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+    (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+    (allocator : Allocator A) (id : S2W_ExtractionBoundary.Program)
+    (a : SCE_Experiment.Adversary A) (H : Bytes → State) (run : RunView)
+    (observed : (eval H (SCE_Experiment.runtime c hashv copy allocator id a)).2 = some run)
+    (success : run.2.2 = true)
+    (sourceSuccess : (eval H (F3T_Installed.source c hashv
+      (input c (eval H (SCE_Experiment.submission a)).2))).2 = true)
+    (raw : eval H (F3T_Installed.source c hashv
+      (input c (eval H (SCE_Experiment.submission a)).2)) =
+      eval H (F3_Model.verifier D (input c (eval H (SCE_Experiment.submission a)).2)))
+    (ordered : (eval H (SCE_Experiment.account c hashv copy allocator id a)).1 =
+      (eval H a.first).1 ++ (eval H (F3T_Installed.source c hashv
+        (input c (eval H (SCE_Experiment.submission a)).2))).1) :
+    (eval H (F3T_Charged.projected D (F3T_Canon.canon (lift c (SCE_Experiment.submission a))))).2.2 = true ∧
+    RecoveredInputAgreement (view run)
+      (eval H (F3T_Charged.projected D (F3T_Canon.canon (lift c (SCE_Experiment.submission a))))) := by
+  have modelSuccess : (eval H (original D (F3T_Canon.canon (lift c (SCE_Experiment.submission a))))).2.2 = true := by
+    rw [original_eval,F3T_Canon.canon_eval,lift_eval,F3T_Canon.verifier_canon,← raw]
+    exact sourceSuccess
+  have logs : run.1 = (eval H (original D (F3T_Canon.canon (lift c (SCE_Experiment.submission a))))).1 := by
+    rw [SCE_Projection.chronological c hashv copy allocator id a H run observed,
+      original_eval,F3T_Canon.canon_eval,lift_eval,F3T_Canon.verifier_canon,← raw]
+    simpa only [SCE_Experiment.submission_eval] using ordered
+  refine ⟨?_,account_agreement c D hashv copy allocator id a H run observed success modelSuccess logs⟩
+  rw [F3T_Charged.projected_eval,recorded_eval]
+  exact modelSuccess
+
+#print axioms account_of_join
 #print axioms model_agreement
 #print axioms account_agreement
 #print axioms account_extract
