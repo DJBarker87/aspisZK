@@ -15,7 +15,7 @@ def aspis_core.field.P : Std.U32 := 2147483647#u32
     Visibility: public -/
 def reference_split.word_step
   (word : Std.U32) (remainder : Std.U64) : Result (Std.U32 × Std.U64) := do
-  let i ← lift (Std.U64.wrapping_shl remainder 32#i32)
+  let i ← lift (Std.U64.wrapping_shl remainder 32#u32)
   let i1 ← lift (core.convert.num.FromU64U32.from word)
   let dividend ← lift (i ||| i1)
   let i2 ← lift (core.convert.num.FromU64U32.from aspis_core.field.P)
@@ -33,7 +33,7 @@ set_option autoImplicit false
 abbrev denominator : U64 :=
   core.convert.num.FromU64U32.from PV_CB3_ShippedOp249word.aspis_core.field.P
 abbrev dividend (word : U32) (prior : U64) : U64 :=
-  (U64.wrapping_shl prior 32#i32) ||| (core.convert.num.FromU64U32.from word)
+  (U64.wrapping_shl prior 32#u32) ||| (core.convert.num.FromU64U32.from word)
 
 theorem denominator_nonzero : denominator.val ≠ 0 := by
   rw [core.convert.num.FromU64U32.from_val_eq]
