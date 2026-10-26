@@ -1,0 +1,135 @@
+import R1Z.PDict_FmtCarrier24
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FmtCarrier
+open Aeneas Aeneas.Std ProverRwFull
+
+
+/-- Full symbolic source-function equality for `host_tree.check_indices`. -/
+theorem erase_400 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_tree.check_indices (eraseType base) (eraseOps base ops) = @host_tree.check_indices base ops := by
+  delta host_tree.check_indices
+  try simp only [erase_399 base ops]
+  all_goals rfl
+#print axioms erase_400
+
+/-- Full symbolic source-function equality for `host_tree.node_count`. -/
+theorem erase_401 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_tree.node_count (eraseType base) (eraseOps base ops) = @host_tree.node_count base ops := by
+  delta host_tree.node_count
+  try simp only [erase_400 base ops]
+  all_goals rfl
+#print axioms erase_401
+
+/-- Full symbolic source-function equality for `host_tree.BinaryTree.multiproof`. -/
+theorem erase_402 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_tree.BinaryTree.multiproof (eraseType base) (eraseOps base ops) = @host_tree.BinaryTree.multiproof base ops := by
+  delta host_tree.BinaryTree.multiproof
+  try simp only [erase_397 base ops, erase_401 base ops]
+  all_goals rfl
+#print axioms erase_402
+
+/-- Full symbolic source-function equality for `host_commitment.Commitment.multiproof`. -/
+theorem erase_403 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_commitment.Commitment.multiproof (eraseType base) (eraseOps base ops) = @host_commitment.Commitment.multiproof base ops := by
+  delta host_commitment.Commitment.multiproof
+  try simp only [erase_402 base ops]
+  all_goals rfl
+#print axioms erase_403
+
+/-- Full symbolic source-function equality for `prover.append_node_slot`. -/
+theorem erase_404 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.append_node_slot (eraseType base) (eraseOps base ops) = @prover.append_node_slot base ops := by
+  delta prover.append_node_slot
+  try simp only [erase_403 base ops, erase_402 base ops]
+  all_goals rfl
+#print axioms erase_404
+
+/-- Full symbolic source-function equality for `prover.append_node_slots`. -/
+theorem erase_405 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.append_node_slots (eraseType base) (eraseOps base ops) = @prover.append_node_slots base ops := by
+  delta prover.append_node_slots
+  try simp only [erase_404 base ops]
+  all_goals rfl
+#print axioms erase_405
+
+/-- Full symbolic source-function equality for `host_commitment.opening_lane_values`. -/
+theorem erase_406 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_commitment.opening_lane_values (eraseType base) (eraseOps base ops) = @host_commitment.opening_lane_values base ops := by
+  delta host_commitment.opening_lane_values
+  try simp only [erase_260 base ops]
+  all_goals rfl
+#print axioms erase_406
+
+/-- Full symbolic source-function equality for `host_commitment.fill_opening_values`. -/
+theorem erase_407 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_commitment.fill_opening_values (eraseType base) (eraseOps base ops) = @host_commitment.fill_opening_values base ops := by
+  funext c u
+  delta host_commitment.fill_opening_values
+  apply fixed_equal
+  funext recur values j
+  try simp only [erase_406 base ops]
+  all_goals rfl
+#print axioms erase_407
+
+/-- Full symbolic source-function equality for `host_commitment.Commitment.fill_opening`. -/
+theorem erase_408 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_commitment.Commitment.fill_opening (eraseType base) (eraseOps base ops) = @host_commitment.Commitment.fill_opening base ops := by
+  delta host_commitment.Commitment.fill_opening
+  try simp only [erase_407 base ops]
+  all_goals rfl
+#print axioms erase_408
+
+/-- Full symbolic source-function equality for `host_commitment.Commitment.opening_salt`. -/
+theorem erase_409 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_commitment.Commitment.opening_salt (eraseType base) (eraseOps base ops) = @host_commitment.Commitment.opening_salt base ops := by
+  delta host_commitment.Commitment.opening_salt
+  all_goals rfl
+#print axioms erase_409
+
+/-- Full symbolic source-function equality for `prover.append_opening_base_row_loop.body`. -/
+theorem erase_410 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.append_opening_base_row_loop.body (eraseType base) (eraseOps base ops) = @prover.append_opening_base_row_loop.body base ops := by
+  delta prover.append_opening_base_row_loop.body
+  all_goals rfl
+#print axioms erase_410
+
+/-- Full symbolic source-function equality for `prover.append_opening_base_row_loop`. -/
+theorem erase_411 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.append_opening_base_row_loop (eraseType base) (eraseOps base ops) = @prover.append_opening_base_row_loop base ops := by
+  delta prover.append_opening_base_row_loop
+  try simp only [erase_410 base ops]
+  all_goals rfl
+#print axioms erase_411
+
+/-- Full symbolic source-function equality for `prover.append_opening_base_row`. -/
+theorem erase_412 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.append_opening_base_row (eraseType base) (eraseOps base ops) = @prover.append_opening_base_row base ops := by
+  delta prover.append_opening_base_row
+  try simp only [erase_411 base ops]
+  all_goals rfl
+#print axioms erase_412
+
+/-- Full symbolic source-function equality for `prover.append_opening_secure_row_loop.body`. -/
+theorem erase_413 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.append_opening_secure_row_loop.body (eraseType base) (eraseOps base ops) = @prover.append_opening_secure_row_loop.body base ops := by
+  delta prover.append_opening_secure_row_loop.body
+  all_goals rfl
+#print axioms erase_413
+
+/-- Full symbolic source-function equality for `prover.append_opening_secure_row_loop`. -/
+theorem erase_414 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.append_opening_secure_row_loop (eraseType base) (eraseOps base ops) = @prover.append_opening_secure_row_loop base ops := by
+  delta prover.append_opening_secure_row_loop
+  try simp only [erase_413 base ops]
+  all_goals rfl
+#print axioms erase_414
+
+/-- Full symbolic source-function equality for `prover.append_opening_secure_row`. -/
+theorem erase_415 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.append_opening_secure_row (eraseType base) (eraseOps base ops) = @prover.append_opening_secure_row base ops := by
+  delta prover.append_opening_secure_row
+  try simp only [erase_414 base ops]
+  all_goals rfl
+#print axioms erase_415
+end R1Z.PDict_FmtCarrier

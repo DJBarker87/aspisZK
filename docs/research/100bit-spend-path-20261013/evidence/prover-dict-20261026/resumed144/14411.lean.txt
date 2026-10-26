@@ -1,0 +1,45 @@
+import R1Z.PDict_FmtQueryOpenings
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FmtErase
+open Aeneas Aeneas.Std ProverRwFull
+variable [ExternalTypes]
+
+theorem keep_op12 (ops other : ExternalFuns) :
+    @ExternalFuns.op12 _ (replace ops other) = @ExternalFuns.op12 _ ops := rfl
+#print axioms keep_op12
+
+theorem keep_op51 (ops other : ExternalFuns) :
+    @ExternalFuns.op51 _ (replace ops other) = @ExternalFuns.op51 _ ops := rfl
+#print axioms keep_op51
+
+theorem keep_op234 (ops other : ExternalFuns) :
+    @ExternalFuns.op234 _ (replace ops other) = @ExternalFuns.op234 _ ops := rfl
+#print axioms keep_op234
+
+theorem keep_op242 (ops other : ExternalFuns) :
+    @ExternalFuns.op242 _ (replace ops other) = @ExternalFuns.op242 _ ops := rfl
+#print axioms keep_op242
+
+theorem keep_op243 (ops other : ExternalFuns) :
+    @ExternalFuns.op243 _ (replace ops other) = @ExternalFuns.op243 _ ops := rfl
+#print axioms keep_op243
+
+theorem keep_op244 (ops other : ExternalFuns) :
+    @ExternalFuns.op244 _ (replace ops other) = @ExternalFuns.op244 _ ops := rfl
+#print axioms keep_op244
+
+theorem keep_op245 (ops other : ExternalFuns) :
+    @ExternalFuns.op245 _ (replace ops other) = @ExternalFuns.op245 _ ops := rfl
+#print axioms keep_op245
+
+/-- Full symbolic source-function equality for `prover.publish_compact`. -/
+theorem erase_420 (ops other : ExternalFuns) :
+    @prover.publish_compact _ (replace ops other) = @prover.publish_compact _ ops := by
+  funext variant p
+  delta prover.publish_compact
+  simp only [prover.publish_compact.match_1, keep_op12 ops other, keep_op51 ops other, keep_op234 ops other, keep_op242 ops other, keep_op243 ops other, keep_op244 ops other, keep_op245 ops other, erase_396 ops other, erase_405 ops other, erase_419 ops other]
+  all_goals rfl
+#print axioms erase_420
+
+end R1Z.PDict_FmtErase
