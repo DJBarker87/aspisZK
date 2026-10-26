@@ -28,5 +28,10 @@ fn PoolT_original_decomposition(){
 }
 }
 '''
-(B/'PoolT_planner/PoolT_lib.rs').write_text(text)
+current=B/'PoolT_planner/PoolT_lib.rs'
+# Preserve the delivered diagnostic/proof harnesses when regenerating exact source slices.
+if current.exists():
+ old=current.read_text()
+ text=text[:text.index('#[cfg(kani)]')]+old[old.index('#[cfg(kani)]'):]
+current.write_text(text)
 (B/'PoolT_SOURCE.json').write_text(json.dumps({'original':{'path':'crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs','sha256':hashlib.sha256(s.encode()).hexdigest()},'slices':{'head':head,'loop':loop,'tail':tail,'assembly':assembly},'scope':'Full original production planner compared against syntactically fissioned function on unrestricted original types; validate_master text reused from matched native PoolV slice'},indent=2)+'\n')

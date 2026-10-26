@@ -1,0 +1,40 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling poolt-snapshot v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolT_snapshot)
+warning: module `PoolT_checks` should have a snake case name
+ --> PoolT_lib.rs:8:18
+  |
+8 | #[cfg(kani)] mod PoolT_checks{
+  |                  ^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_t_checks`
+  |
+  = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `PoolT_stored_lane_snapshot` should have a snake case name
+  --> PoolT_lib.rs:12:4
+   |
+12 | fn PoolT_stored_lane_snapshot(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_t_stored_lane_snapshot`
+
+warning: function `PoolT_stored_lane_conflict` should have a snake case name
+  --> PoolT_lib.rs:21:4
+   |
+21 | fn PoolT_stored_lane_conflict(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_t_stored_lane_conflict`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.50s
+Thread 0: Checking harness PoolT_checks::PoolT_stored_lane_conflict...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 543 failed (6 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.8375026s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

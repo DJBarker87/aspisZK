@@ -1,0 +1,60 @@
+{
+  "attempt": "PoolT_K012",
+  "kind": "kani",
+  "source_revision": "ab8baf3314933c007156fb6e19c66dc1a0403c7b",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolT_planner/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolT_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolT_raw_sequences",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolT_planner/Cargo.toml",
+    "PoolT_planner/PoolT_lib.rs",
+    "PoolT_SOURCE.json"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "PoolT_raw_sequences; original unrestricted production inputs; optimized integer-only lane arbitrary constructor"
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check",
+  "exit_status": 124,
+  "wall_seconds": 300.5089850730146,
+  "peak_rss_kib": "2112",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/PoolT-K012.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "6769893376",
+  "source_hashes": {
+    "PoolT_planner/Cargo.toml": "9c4154249ded28c8e0f5e2f500c3d53375c072d243a3496faeac9e26bf3d929f",
+    "PoolT_planner/PoolT_lib.rs": "436037263e2be1ce8955a85e7fd1a52e582bf2ffa1a6386446afd0b95810eaf1",
+    "PoolT_SOURCE.json": "f4b63ae2412872ee6b394d54c7609da849caa00b8f28e575169826cd4ecabfec"
+  },
+  "print_axioms": "N/A: kani"
+}
