@@ -1,0 +1,3 @@
+from pathlib import Path
+import json,hashlib
+T=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence');U=Path('/home/dombarker/project-offloads/codex-cx-import-union-20261022');src=U/'EJS_formatter_union/sources/EJS_FmtUnionAudit.lean';assert not src.exists();src.write_bytes((T/'EJS_FmtUnionAudit.lean').read_bytes());rows=json.loads((T/'EJS_formatter-sources.json').read_text());rows.append(dict(module='EJS_FmtUnionAudit',workspace='EJS_formatter_union',host_path=str(src),source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),blob='new EJS diagnostic; no theorem',revision='EJS_FmtUnionAudit.lean committed evidence',bytes=src.stat().st_size));(T/'EJS_formatter-sources.json').write_text(json.dumps(rows,indent=2)+'\n')
