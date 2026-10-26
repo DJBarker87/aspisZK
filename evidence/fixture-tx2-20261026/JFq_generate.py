@@ -69,7 +69,21 @@ end
  if '--check' in sys.argv: assert f.read_text()==s,f
  else:f.write_text(s)
 for group in range(16):
- content=''.join(s for _,s in weight_sources[4*group:4*group+4])
+ content='import JFq_Scalar\n'+''.join(s.replace('import JFq_Scalar\n','') for _,s in weight_sources[4*group:4*group+4])
+ i=4*group;off=712+16*i
+ content+=f'''\nnoncomputable section
+namespace AspisR1.JFq_WeightBlock{group:02}
+open Aeneas Aeneas.Std Result AspisR1Stage2
+def values : List aspis_core.field.QM31 := [{','.join(f'JFq_Weight{j:02}.scalar' for j in range(i,i+4))}]
+theorem source : Port5Q2_ReaderWeights.reads CheckpointBytes3Reader.readK
+    JFx_NativeBytes.checkpoint 4 {off}#usize=ok (.Ok (values,{off+64}#usize)) := by
+  simp only [Port5Q2_ReaderWeights.reads,{','.join(f'JFq_Weight{j:02}.source' for j in range(i,i+4))},
+    bind_tc_ok,Aeneas.Std.uncurry]
+  rfl
+#print axioms source
+end AspisR1.JFq_WeightBlock{group:02}
+end
+'''
  f=R/'lean'/f'JFq_Weights{group:02}.lean'
  if '--check' in sys.argv:assert f.read_text()==content,f
  else:f.write_text(content)
