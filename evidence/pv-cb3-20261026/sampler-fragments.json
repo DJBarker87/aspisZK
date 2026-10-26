@@ -3,8 +3,8 @@
   "source_sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
   "fragments": {
     "words": {
-      "text": "    let mut quotient: [u32;",
-      "sha256": "ca73db5178a59fd127f3e15f2c4ed4648bea906681199d854653913c629a1299"
+      "text": "    let mut quotient: [u32; 8] =\n        core::array::from_fn(|i| u32::from_le_bytes(block[4 * i..4 * i + 4].try_into().unwrap()));",
+      "sha256": "0117319abb640faf3451065d0f9c85103912987d00941eef28dd7ed607068973"
     },
     "pass": {
       "text": "        let mut remainder = 0u64;\n        for limb in quotient.iter_mut().rev() {\n            let dividend = (remainder << 32) | u64::from(*limb);\n            *limb = (dividend / u64::from(P)) as u32;\n            remainder = dividend % u64::from(P);\n        }\n",
@@ -15,5 +15,6 @@
       "sha256": "a3522c21fc53b5c400de7ebf42a0138912d9f080741891a08b15dcf3dd594bfe"
     }
   },
-  "adaptation": "Only enclosing wrappers and exposed state tuples added. The recorded fragment texts occur verbatim in both frozen source and source_fragments.rs. pass is one callback body of low_base_p_digits, not the whole function. carry omits a release-disabled debug_assert; profile disables debug assertions in all gates. No stubs."
+  "adaptation": "Only enclosing wrappers and exposed state tuples added. The recorded fragment texts occur verbatim in both frozen source and source_fragments.rs. pass is one callback body of low_base_p_digits, not the whole function. carry omits a release-disabled debug_assert; profile disables debug assertions in all gates. No stubs.",
+  "correction": "Initial byte-fragment extraction mistakenly stopped at the array-type semicolon. Compiler failure kani-gamma-words-001 retained; corrected boundary includes the complete from_fn expression."
 }

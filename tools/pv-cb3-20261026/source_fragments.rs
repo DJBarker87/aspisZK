@@ -2,7 +2,8 @@
 //! Wrappers expose owned inputs and state outputs, not replacement callbacks.
 use aspis_core::field::P;
 pub fn words(block:&[u8;32])->[u32;8] {
-    let mut quotient: [u32;
+    let mut quotient: [u32; 8] =
+        core::array::from_fn(|i| u32::from_le_bytes(block[4 * i..4 * i + 4].try_into().unwrap()));
     quotient
 }
 pub fn pass(rank:[u32;8])->([u32;8],u32) {
