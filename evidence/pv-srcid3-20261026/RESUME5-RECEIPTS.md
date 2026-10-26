@@ -62,7 +62,7 @@ All targets: -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, 
 | 36260 | R1Z/PV_Src_AdmissionCommonSuccess | 0 | 0:01.72 | 4110632 | 0 | 34995987c0 | 1 | standard |
 | 36261 | R1Z/PV_Src_FixtureCommonValidation | 0 | 0:01.65 | 4219356 | 0 | 34995987c0 | 1 | standard |
 | 36262 | R1Z/PV_Src_ResultControl | 0 | 0:01.04 | 2587176 | 0 | 34995987c0 | 3 | standard |
-| 36263 | R1Z/PV_Src_CompilerTactic | 0 | 0:01.14 | 2603572 | 0 | 34995987c0 | 0 | standard |
+| 36263 | R1Z/PV_Src_CompilerTactic | 0 | 0:01.14 | 2603572 | 0 | 34995987c0 | 0 | no proof check in source |
 | 36264 | R1Z/PV_Src_ForestCompilation | 0 | 0:03.18 | 4148772 | 0 | 34995987c0 | 1 | standard |
 | 36265 | R1Z/PV_Src_NativeIdentification | 0 | 0:01.74 | 4110096 | 0 | 34995987c0 | 12 | standard |
 | 36267 | R1Z/PV_Src_SelectedFour | 0 | 0:01.52 | 4115896 | 0 | 34995987c0 | 2 | standard |
@@ -88,3 +88,19 @@ All targets: -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, 
 | 36288 | R1Z/PV_Src_ThreeConsumer | 0 | 0:02.28 | 4239296 | 0 | 9b3806cc36 | 1 | standard |
 | 36289 | R1Z/PV_Src_RecordRangeObstruction | 0 | 0:01.64 | 4086652 | 0 | 9b3806cc36 | 2 | standard |
 | 36290 | R1Z/PV_Src_Fixtures | 0 | 0:02.82 | 4231940 | 0 | 9b3806cc36 | 7 | standard |
+| 36292 | R1Z/PV_Src_NativeFamilyAudit | 0 | 0:01.67 | 4229984 | 0 | 9b3806cc36 | 13 | standard |
+| 36293 | R1Z/PV_Src_CheckedPipeline | 0 | 0:01.81 | 4220292 | 0 | 9b3806cc36 | 3 | standard |
+| 36294 | R1Z/PV_Src_FrozenStages | 0 | 0:01.70 | 4225776 | 0 | 9b3806cc36 | 2 | standard |
+| 36295 | R1Z/PV_Src_FixtureValidationInputs | 0 | 0:01.68 | 4217232 | 0 | 9b3806cc36 | 5 | standard |
+| 36296 | R1Z/PV_Src_FrozenFixtures | 0 | 0:02.28 | 4230008 | 0 | 9b3806cc36 | 2 | standard |
+| 36297 | R1Z/PV_Src_ExternalCanonical | 0 | 0:01.96 | 4107172 | 0 | 9b3806cc36 | 2 | standard |
+| 36298 | R1Z/PV_Src_ReleaseAudit | 0 | 0:01.74 | 4228900 | 0 | 9b3806cc36 | 40 | standard |
+| 36299 | R1Z/PV_Src_FixtureCheckedSource | 0 | 0:01.73 | 4222428 | 0 | 9b3806cc36 | 2 | standard |
+| 36300 | R1Z/BuilderAdmissionExtracted | 0 | 0:01.87 | 2683416 | 0 | 9b3806cc36 | 1 | standard |
+| 36301 | AspisR1ProverCommit/Types | 0 | 0:01.28 | 2641436 | 0 | 9b3806cc36 | 0 | no proof check in source |
+| 36302 | R1Z/PV_Src_FinalAudit | 0 | 0:02.20 | 4234376 | 0 | 9b3806cc36 | 575 | standard |
+| 36303 | R1Z/PV_Src_CanonicalPrivateRecord | 0 | 0:01.66 | 4106396 | 0 | fb141d0105 | 163 | standard |
+| 36304 | AspisR72Sampler/Types | 0 | 0:01.07 | 2637148 | 0 | 2eeb4408ec | 0 | no proof check in source |
+| 36305 | R1Z/PV_Src_DynamicAdmission | 0 | 0:01.54 | 4100780 | 0 | 2eeb4408ec | 1 | standard |
+| 36306 | R1Z/PV_Src_DynamicPublic | 0 | 0:01.75 | 4103568 | 0 | 2eeb4408ec | 1 | standard |
+| 36309 | R1Z/PV_Src_FinalAudit | 0 | 0:02.38 | 4229844 | 0 | 639a67e175 | 579 | standard |

@@ -36,3 +36,18 @@ or hidden. Fixed-root reference Remainder remains 3. Full compiler-success
 fibres and installed selection/public/root joins are still not supplied.
 The unchanged smaller-instance consumer and both original fixture fibres/
 primitive bank stages were included in the complete successful audit.
+
+Final updated kernel replay: 36309, exit 0, wall 2.38 s, RSS 4,229,844 KiB,
+swaps 0, revision 639a67e175; 579/579 standard axiom reports. All 100/100 new
+Lean attempts succeeded. All 64 new/changed formal sources since the branch
+base match accepted source hashes and contain no forbidden proof constructs
+(resume5-final-new-source-audit.json). No further Lean compile is authorized.
+
+The final expanded project inventory reaches 839 modules plus 193 external
+import roots, with zero missing objects. The known live host-source mismatch
+is now only R1NaturalProjection (material evaluator/API difference); 46 other
+research-source copies are absent from the joint source tree, so their source/
+object provenance is not silently inferred. The 64 unmerged branch source
+additions have explicit branch pins. Package-source/object attestation is not
+claimed exhaustive. **Merge gate BLOCKED**, separately from kernel PASS; exact
+hashes and source paths are in resume5-final-gate.json.
