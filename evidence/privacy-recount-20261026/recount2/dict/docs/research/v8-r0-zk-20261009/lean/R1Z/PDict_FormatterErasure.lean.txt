@@ -1,0 +1,18 @@
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FormatterErasure
+open Aeneas Aeneas.Std ProverRwFull
+variable [ExternalTypes]
+/-- Changes only the otherwise opaque error formatter implementation. -/
+@[reducible] def replace (ops other : ExternalFuns) : ExternalFuns :=
+  { ops with op85 := other.op85 }
+
+/-- Full symbolic function equality, including every rejection and machine outcome.
+The extracted retry caller does not use the Debug dictionary entry. -/
+theorem retry_independent (ops other : ExternalFuns) :
+    @prover.retry_attempt _ (replace ops other) = @prover.retry_attempt _ ops := by
+  with_unfolding_all rfl
+
+#print axioms retry_independent
+end R1Z.PDict_FormatterErasure

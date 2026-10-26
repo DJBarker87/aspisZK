@@ -1,0 +1,123 @@
+import R1Z.PDict_FmtEraseBase
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FmtErase
+open Aeneas Aeneas.Std ProverRwFull
+variable [ExternalTypes]
+
+/-- Full symbolic source-function equality for `ArrayT32.Insts.CoreConvertFromGenericArrayTUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplOddTArrayT0`. -/
+theorem erase_0 (ops other : ExternalFuns) :
+    @ArrayT32.Insts.CoreConvertFromGenericArrayTUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplOddTArrayT0 _ (replace ops other) = @ArrayT32.Insts.CoreConvertFromGenericArrayTUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplOddTArrayT0 _ ops := by
+  delta ArrayT32.Insts.CoreConvertFromGenericArrayTUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplOddTArrayT0
+  all_goals rfl
+#print axioms erase_0
+
+/-- Full symbolic source-function equality for `Shared0T.Insts.CoreConvertAsRef`. -/
+theorem erase_1 (ops other : ExternalFuns) :
+    @Shared0T.Insts.CoreConvertAsRef _ (replace ops other) = @Shared0T.Insts.CoreConvertAsRef _ ops := by
+  delta Shared0T.Insts.CoreConvertAsRef
+  all_goals rfl
+#print axioms erase_1
+
+/-- Full symbolic source-function equality for `Slice.Insts.CoreConvertAsRefSlice`. -/
+theorem erase_2 (ops other : ExternalFuns) :
+    @Slice.Insts.CoreConvertAsRefSlice _ (replace ops other) = @Slice.Insts.CoreConvertAsRefSlice _ ops := by
+  delta Slice.Insts.CoreConvertAsRefSlice
+  all_goals rfl
+#print axioms erase_2
+
+/-- Full symbolic source-function equality for `alloc.string.String.Insts.CoreConvertAsRefPath`. -/
+theorem erase_3 (ops other : ExternalFuns) :
+    @alloc.string.String.Insts.CoreConvertAsRefPath _ (replace ops other) = @alloc.string.String.Insts.CoreConvertAsRefPath _ ops := by
+  delta alloc.string.String.Insts.CoreConvertAsRefPath
+  all_goals rfl
+#print axioms erase_3
+
+/-- Full symbolic source-function equality for `aspis_prover.state_only_entropy.reservation_name`. -/
+theorem erase_4 (ops other : ExternalFuns) :
+    @aspis_prover.state_only_entropy.reservation_name _ (replace ops other) = @aspis_prover.state_only_entropy.reservation_name _ ops := by
+  delta aspis_prover.state_only_entropy.reservation_name
+  all_goals rfl
+#print axioms erase_4
+
+/-- Full symbolic source-function equality for `block_buffer.Eager.Insts.CoreDefaultDefault`. -/
+theorem erase_5 (ops other : ExternalFuns) :
+    @block_buffer.Eager.Insts.CoreDefaultDefault _ (replace ops other) = @block_buffer.Eager.Insts.CoreDefaultDefault _ ops := by
+  delta block_buffer.Eager.Insts.CoreDefaultDefault
+  all_goals rfl
+#print axioms erase_5
+
+/-- Full symbolic source-function equality for `digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.CoreDefaultDefault`. -/
+theorem erase_6 (ops other : ExternalFuns) :
+    @digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.CoreDefaultDefault _ (replace ops other) = @digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.CoreDefaultDefault _ ops := by
+  delta digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.CoreDefaultDefault
+  all_goals rfl
+#print axioms erase_6
+
+/-- Full symbolic source-function equality for `digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiUpdateCore`. -/
+theorem erase_7 (ops other : ExternalFuns) :
+    @digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiUpdateCore _ (replace ops other) = @digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiUpdateCore _ ops := by
+  delta digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiUpdateCore
+  all_goals rfl
+#print axioms erase_7
+
+/-- Full symbolic source-function equality for `digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiFixedOutputCore`. -/
+theorem erase_8 (ops other : ExternalFuns) :
+    @digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiFixedOutputCore _ (replace ops other) = @digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiFixedOutputCore _ ops := by
+  delta digest.core_api.ct_variable.CtVariableCoreWrapper.Insts.DigestCore_apiFixedOutputCore
+  try simp only [erase_7]
+  all_goals rfl
+#print axioms erase_8
+
+/-- Full symbolic source-function equality for `digest.core_api.wrapper.CoreWrapper.Insts.CoreDefaultDefault`. -/
+theorem erase_9 (ops other : ExternalFuns) :
+    @digest.core_api.wrapper.CoreWrapper.Insts.CoreDefaultDefault _ (replace ops other) = @digest.core_api.wrapper.CoreWrapper.Insts.CoreDefaultDefault _ ops := by
+  delta digest.core_api.wrapper.CoreWrapper.Insts.CoreDefaultDefault
+  all_goals rfl
+#print axioms erase_9
+
+/-- Full symbolic source-function equality for `digest.core_api.wrapper.CoreWrapper.Insts.DigestUpdate`. -/
+theorem erase_10 (ops other : ExternalFuns) :
+    @digest.core_api.wrapper.CoreWrapper.Insts.DigestUpdate _ (replace ops other) = @digest.core_api.wrapper.CoreWrapper.Insts.DigestUpdate _ ops := by
+  delta digest.core_api.wrapper.CoreWrapper.Insts.DigestUpdate
+  all_goals rfl
+#print axioms erase_10
+
+/-- Full symbolic source-function equality for `digest.core_api.wrapper.CoreWrapper.Insts.DigestFixedOutput`. -/
+theorem erase_11 (ops other : ExternalFuns) :
+    @digest.core_api.wrapper.CoreWrapper.Insts.DigestFixedOutput _ (replace ops other) = @digest.core_api.wrapper.CoreWrapper.Insts.DigestFixedOutput _ ops := by
+  delta digest.core_api.wrapper.CoreWrapper.Insts.DigestFixedOutput
+  try simp only [erase_10]
+  all_goals rfl
+#print axioms erase_11
+
+/-- Full symbolic source-function equality for `typenum.bit.B0.Insts.CoreDefaultDefault`. -/
+theorem erase_12 (ops other : ExternalFuns) :
+    @typenum.bit.B0.Insts.CoreDefaultDefault _ (replace ops other) = @typenum.bit.B0.Insts.CoreDefaultDefault _ ops := by
+  delta typenum.bit.B0.Insts.CoreDefaultDefault
+  all_goals rfl
+#print axioms erase_12
+
+/-- Full symbolic source-function equality for `typenum.bit.B0.Insts.CoreCloneClone`. -/
+theorem erase_13 (ops other : ExternalFuns) :
+    @typenum.bit.B0.Insts.CoreCloneClone _ (replace ops other) = @typenum.bit.B0.Insts.CoreCloneClone _ ops := by
+  delta typenum.bit.B0.Insts.CoreCloneClone
+  all_goals rfl
+#print axioms erase_13
+
+/-- Full symbolic source-function equality for `typenum.bit.B0.Insts.CoreMarkerCopy`. -/
+theorem erase_14 (ops other : ExternalFuns) :
+    @typenum.bit.B0.Insts.CoreMarkerCopy _ (replace ops other) = @typenum.bit.B0.Insts.CoreMarkerCopy _ ops := by
+  delta typenum.bit.B0.Insts.CoreMarkerCopy
+  try simp only [erase_13]
+  all_goals rfl
+#print axioms erase_14
+
+/-- Full symbolic source-function equality for `typenum.bit.B0.Insts.TypenumMarker_traitsBit`. -/
+theorem erase_15 (ops other : ExternalFuns) :
+    @typenum.bit.B0.Insts.TypenumMarker_traitsBit _ (replace ops other) = @typenum.bit.B0.Insts.TypenumMarker_traitsBit _ ops := by
+  delta typenum.bit.B0.Insts.TypenumMarker_traitsBit
+  try simp only [erase_12, erase_14]
+  all_goals rfl
+#print axioms erase_15
+end R1Z.PDict_FmtErase

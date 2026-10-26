@@ -1,0 +1,48 @@
+import R1Z.PDict_FormatterDictionaryMap
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FormatterTransport
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps
+
+theorem lower_0 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @ArrayT32.Insts.CoreConvertFromGenericArrayTUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplOddTArrayT0 (types base F) (PDict_FormatterDictionaryMap.selected base F ops) =
+    @ArrayT32.Insts.CoreConvertFromGenericArrayTUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplOddTArrayT0 base ops := by
+  delta ArrayT32.Insts.CoreConvertFromGenericArrayTUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplEvenTGenericArrayImplOddTArrayT0
+  rfl
+#print axioms lower_0
+
+theorem lower_1 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @Shared0T.Insts.CoreConvertAsRef (types base F) (PDict_FormatterDictionaryMap.selected base F ops) =
+    @Shared0T.Insts.CoreConvertAsRef base ops := by
+  delta Shared0T.Insts.CoreConvertAsRef
+  rfl
+#print axioms lower_1
+
+theorem lower_2 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @Slice.Insts.CoreConvertAsRefSlice (types base F) (PDict_FormatterDictionaryMap.selected base F ops) =
+    @Slice.Insts.CoreConvertAsRefSlice base ops := by
+  delta Slice.Insts.CoreConvertAsRefSlice
+  rfl
+#print axioms lower_2
+
+theorem lower_3 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @alloc.string.String.Insts.CoreConvertAsRefPath (types base F) (PDict_FormatterDictionaryMap.selected base F ops) =
+    @alloc.string.String.Insts.CoreConvertAsRefPath base ops := by
+  delta alloc.string.String.Insts.CoreConvertAsRefPath
+  rfl
+#print axioms lower_3
+
+theorem lower_4 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @aspis_prover.state_only_entropy.reservation_name (types base F) (PDict_FormatterDictionaryMap.selected base F ops) =
+    @aspis_prover.state_only_entropy.reservation_name base ops := by
+  delta aspis_prover.state_only_entropy.reservation_name
+  rfl
+#print axioms lower_4
+
+theorem lower_5 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @block_buffer.Eager.Insts.CoreDefaultDefault (types base F) (PDict_FormatterDictionaryMap.selected base F ops) =
+    @block_buffer.Eager.Insts.CoreDefaultDefault base ops := by
+  delta block_buffer.Eager.Insts.CoreDefaultDefault
+  rfl
+#print axioms lower_5
+end R1Z.PDict_FormatterTransport
