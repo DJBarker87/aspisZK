@@ -54,3 +54,22 @@ After: post-reservation continuation projection proved generally; full caller
 projection and actual installed native dictionary remain next. Residual6→6,
 endpoint8→8, runtime/boundary2→2. No quantifier/carrier/failure-event or observer
 change to the original endpoint. No whole native row discharged.
+
+## Full source/header projection checked
+
+PV_RunJoin_LedgerSourceProjection.caller (25616) now projects the complete
+emitted generic caller with the ledger-world callback to the actual
+`prover.prove_masked_attempt`, retaining the full proof/error status and
+source store header. The only dictionary hypothesis is the exact pure op12
+identity used by dict10. PV_RunJoin_LedgerSourceBody.source_law (25618)
+installs that projection as BodySourceLaw for the existing LedgerBody and
+proves its provider frame. Intermediate reservation, guards, body and caller
+projections are separately checked (25612,25613,25614,25615).
+
+Before: only reservation callback source/header projection; complete body
+projection open. After: full source/header projection generally checked.
+No fixture-specific native dictionary or actual source-input family is
+fabricated. No OS/world association inferred from the header projection.
+Original six native residuals remain6→6; endpoint8→8;runtime/boundary2→2.
+This permits constructing a ledger-world interpreter with a proved source
+field; it is not yet the actual proof-account Runtime/Boundary instance.
