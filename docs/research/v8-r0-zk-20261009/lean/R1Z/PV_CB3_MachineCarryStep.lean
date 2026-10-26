@@ -31,10 +31,7 @@ theorem projection (digit addend : BitVec 32) :
   have ha := addend.isLt
   have hp : 0 < base := by unfold base; omega
   have hr : (digit.toNat + addend.toNat) % base < 2 ^ 32 := by
-    have h := Nat.mod_lt (digit.toNat + addend.toNat) hp
-    unfold base at h
-    change (digit.toNat + addend.toNat) % base < 4294967296
-    omega
+    exact Nat.lt_trans (Nat.mod_lt _ hp) (by unfold base; decide)
   have hq : (digit.toNat + addend.toNat) / base < 2 ^ 32 := by
     apply (Nat.div_lt_iff_lt_mul hp).2
     unfold base
