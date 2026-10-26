@@ -1,0 +1,311 @@
+JFv_TX2_InnerMeaning.lean:63:27: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ok ?x ⦃ ?m.681 ⦄
+in the target expression
+  (let (o, iter1) := (none, next)
+    match o with
+    | none => ok (done s)
+    | some term => do
+      let i_1 ← (↑slot)#usize * 120#usize
+      let i1 ← term * 4#usize
+      let i2 ← i_1 + i1
+      let i3 ← i_1 + i1
+      let i4 ← i3 + 4#usize
+      let s_1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            (JFr_TX2_Windows.array (JFn_Values.position i)) { start := i2, «end» := i4 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s_1
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let o1 ← FIp_DotDecode.field.M31.from_le_bytes a
+      let scalar ← core.option.Option.unwrap o1
+      let we ← JFr_TX2_FirstLane.native.index_usize term
+      let coefficient ← we.to_limbs
+      let i5 ← coefficient.index_usize 0#usize
+      let i6 ← lift (core.convert.num.FromU64U32.from i5)
+      let i7 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i8 ← i6 * i7
+      let i9 ← s.index_usize 0#usize
+      let i10 ← i9 + i8
+      let sums1 ← s.update 0#usize i10
+      let i11 ← coefficient.index_usize 1#usize
+      let i12 ← lift (core.convert.num.FromU64U32.from i11)
+      let i13 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i14 ← i12 * i13
+      let i15 ← sums1.index_usize 1#usize
+      let i16 ← i15 + i14
+      let sums2 ← sums1.update 1#usize i16
+      let i17 ← coefficient.index_usize 2#usize
+      let i18 ← lift (core.convert.num.FromU64U32.from i17)
+      let i19 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i20 ← i18 * i19
+      let i21 ← sums2.index_usize 2#usize
+      let i22 ← i21 + i20
+      let sums3 ← sums2.update 2#usize i22
+      let i23 ← coefficient.index_usize 3#usize
+      let i24 ← lift (core.convert.num.FromU64U32.from i23)
+      let i25 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i26 ← i24 * i25
+      let i27 ← sums3.index_usize 3#usize
+      let i28 ← i27 + i26
+      let sums4 ← sums3.update 3#usize i28
+      let i29 ← coefficient.index_usize 4#usize
+      let i30 ← lift (core.convert.num.FromU64U32.from i29)
+      let i31 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i32 ← i30 * i31
+      let i33 ← sums4.index_usize 4#usize
+      let i34 ← i33 + i32
+      let sums5 ← sums4.update 4#usize i34
+      let i35 ← coefficient.index_usize 5#usize
+      let i36 ← lift (core.convert.num.FromU64U32.from i35)
+      let i37 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i38 ← i36 * i37
+      let i39 ← sums5.index_usize 5#usize
+      let i40 ← i39 + i38
+      let sums6 ← sums5.update 5#usize i40
+      let i41 ← coefficient.index_usize 6#usize
+      let i42 ← lift (core.convert.num.FromU64U32.from i41)
+      let i43 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i44 ← i42 * i43
+      let i45 ← sums6.index_usize 6#usize
+      let i46 ← i45 + i44
+      let sums7 ← sums6.update 6#usize i46
+      let i47 ← coefficient.index_usize 7#usize
+      let i48 ← lift (core.convert.num.FromU64U32.from i47)
+      let i49 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i50 ← i48 * i49
+      let i51 ← sums7.index_usize 7#usize
+      let i52 ← i51 + i50
+      let sums8 ← sums7.update 7#usize i52
+      ok (cont (iter1, sums8))) ⦃
+    r =>
+    match r with
+    | done y =>
+      JFs_TX2_ArrayEight.Bound y (↑iter.end - ↑iter.start) ∧
+        ∀ (j : Fin 8), ↑(cell y j) = sum i slot j (↑iter.start) (↑iter.end - ↑iter.start)
+    | cont x' => Inv i slot (↑iter.start) (↑iter.end) x' ∧ ↑iter.end - ↑x'.1.start < ↑iter.end - ↑r.start ⦄
+
+case neg
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+r : core.ops.range.Range Usize
+s : Std.Array U64 8#usize
+he : ↑r.end = ↑iter.end
+hb : ↑iter.start ≤ ↑r.start
+ho : ↑r.start ≤ ↑iter.end
+hs : JFs_TX2_ArrayEight.Bound s (↑r.start - ↑iter.start)
+values : ∀ (j : Fin 8), ↑(cell s j) = sum i slot j (↑iter.start) (↑r.start - ↑iter.start)
+running : ¬↑r.start < ↑r.end
+next : core.ops.range.Range (UScalar UScalarTy.Usize)
+right✝ : next = r
+run :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) r =
+    ok (none, next)
+⊢ (let (o, iter1) := (none, next)
+    match o with
+    | none => ok (done s)
+    | some term => do
+      let i_1 ← (↑slot)#usize * 120#usize
+      let i1 ← term * 4#usize
+      let i2 ← i_1 + i1
+      let i3 ← i_1 + i1
+      let i4 ← i3 + 4#usize
+      let s_1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            (JFr_TX2_Windows.array (JFn_Values.position i)) { start := i2, «end» := i4 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s_1
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let o1 ← FIp_DotDecode.field.M31.from_le_bytes a
+      let scalar ← core.option.Option.unwrap o1
+      let we ← JFr_TX2_FirstLane.native.index_usize term
+      let coefficient ← we.to_limbs
+      let i5 ← coefficient.index_usize 0#usize
+      let i6 ← lift (core.convert.num.FromU64U32.from i5)
+      let i7 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i8 ← i6 * i7
+      let i9 ← s.index_usize 0#usize
+      let i10 ← i9 + i8
+      let sums1 ← s.update 0#usize i10
+      let i11 ← coefficient.index_usize 1#usize
+      let i12 ← lift (core.convert.num.FromU64U32.from i11)
+      let i13 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i14 ← i12 * i13
+      let i15 ← sums1.index_usize 1#usize
+      let i16 ← i15 + i14
+      let sums2 ← sums1.update 1#usize i16
+      let i17 ← coefficient.index_usize 2#usize
+      let i18 ← lift (core.convert.num.FromU64U32.from i17)
+      let i19 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i20 ← i18 * i19
+      let i21 ← sums2.index_usize 2#usize
+      let i22 ← i21 + i20
+      let sums3 ← sums2.update 2#usize i22
+      let i23 ← coefficient.index_usize 3#usize
+      let i24 ← lift (core.convert.num.FromU64U32.from i23)
+      let i25 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i26 ← i24 * i25
+      let i27 ← sums3.index_usize 3#usize
+      let i28 ← i27 + i26
+      let sums4 ← sums3.update 3#usize i28
+      let i29 ← coefficient.index_usize 4#usize
+      let i30 ← lift (core.convert.num.FromU64U32.from i29)
+      let i31 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i32 ← i30 * i31
+      let i33 ← sums4.index_usize 4#usize
+      let i34 ← i33 + i32
+      let sums5 ← sums4.update 4#usize i34
+      let i35 ← coefficient.index_usize 5#usize
+      let i36 ← lift (core.convert.num.FromU64U32.from i35)
+      let i37 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i38 ← i36 * i37
+      let i39 ← sums5.index_usize 5#usize
+      let i40 ← i39 + i38
+      let sums6 ← sums5.update 5#usize i40
+      let i41 ← coefficient.index_usize 6#usize
+      let i42 ← lift (core.convert.num.FromU64U32.from i41)
+      let i43 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i44 ← i42 * i43
+      let i45 ← sums6.index_usize 6#usize
+      let i46 ← i45 + i44
+      let sums7 ← sums6.update 6#usize i46
+      let i47 ← coefficient.index_usize 7#usize
+      let i48 ← lift (core.convert.num.FromU64U32.from i47)
+      let i49 ← lift (core.convert.num.FromU64U32.from scalar)
+      let i50 ← i48 * i49
+      let i51 ← sums7.index_usize 7#usize
+      let i52 ← i51 + i50
+      let sums8 ← sums7.update 7#usize i52
+      ok (cont (iter1, sums8))) ⦃
+    r =>
+    match r with
+    | done y =>
+      JFs_TX2_ArrayEight.Bound y (↑iter.end - ↑iter.start) ∧
+        ∀ (j : Fin 8), ↑(cell y j) = sum i slot j (↑iter.start) (↑iter.end - ↑iter.start)
+    | cont x' => Inv i slot (↑iter.start) (↑iter.end) x' ∧ ↑iter.end - ↑x'.1.start < ↑iter.end - ↑r.start ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JFv_TX2_InnerMeaning.lean:73:24: error: Tactic `rfl` failed: The left-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨0, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨0, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«0»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨0, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨0, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+JFv_TX2_InnerMeaning.lean:73:24: error: Tactic `rfl` failed: The left-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨1, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨1, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«1»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨1, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨1, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+JFv_TX2_InnerMeaning.lean:73:24: error: Tactic `rfl` failed: The left-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨2, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨2, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«2»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨2, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨2, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+JFv_TX2_InnerMeaning.lean:73:24: error: Tactic `rfl` failed: The left-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨3, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨3, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«3»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨3, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨3, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+JFv_TX2_InnerMeaning.lean:73:24: error: Tactic `rfl` failed: The left-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨4, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨4, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«4»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨4, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨4, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+JFv_TX2_InnerMeaning.lean:73:24: error: Tactic `rfl` failed: The left-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨5, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨5, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«5»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨5, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨5, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+JFv_TX2_InnerMeaning.lean:73:24: error: Tactic `rfl` failed: The left-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨6, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨6, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«6»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨6, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨6, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+JFv_TX2_InnerMeaning.lean:73:24: error: Tactic `rfl` failed: The left-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨7, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨7, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«7»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨7, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨7, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+'AspisR1.JFv_TX2_InnerMeaning.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
