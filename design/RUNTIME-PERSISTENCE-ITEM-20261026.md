@@ -131,3 +131,32 @@ owner can consider the narrow law against an explicit validator/feature pin;
 the positive correlated branch's conditional composition is checked. Arbitrary
 physical lifetimes, zero-funded temporary CPs, cleanup/recreation, failed writer
 parents, source-event extraction and deployment adoption remain unclosed.
+
+## Checked endpoint-history counterexample
+
+`CPR_EventsGap.final_image_equal` proves that writing `[]` to key 0 and then
+writing its original bytes back leaves the entire final byte ledger unchanged.
+`runtime_law` satisfies the narrow two-transaction law with ordinary eligibility
+and adjacency both true. `no_actual_history` proves there is no protected history
+with THAT key and THAT event list. This is an account-event algebra countermodel,
+not a claim that the verifier allows such writes. It shows why replacing
+`eventsView` by endpoint byte equality is unsound. The **requested law-only
+L180 closure has not been established**; no countermodel to all cryptographic
+accepted-root hypotheses is claimed either.
+
+## Validation and non-vacuity
+
+`CPR_Nonvacuity.canonical_law` supplies a model of the operational law.
+`nonempty_suffix` includes credit, an authorized foreign write and real cleanup
+of another zero-funded key. `parent_failure` discards tentative writes and
+credits. These establish local model non-vacuity, not a joint native/crypto/bank
+inhabitant. `CPR_PhysicalOrder.original` maps the conditional strengthened result
+back to the original FullResult on identical source witnesses and carriers.
+
+Before/after source statements and the zero recount are retained in
+`CPR_BEFORE_*`, `CPR_AFTER_*` and `CPR_LEDGER_DELTA.json` under the receipts
+folder. `CPR_L024/stdout.log` prints elaborated root/result/continuation statements
+and all then-current top-theorem axioms; the final independent event
+counterexample has its own `CPR_L025` axioms audit. Only standard axioms appear
+in successful receipts. See `CPR_HANDOFF.md` for exact resource totals, failures,
+remaining obligations, inherited artifact pins and the unused budget.
