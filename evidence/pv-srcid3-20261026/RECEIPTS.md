@@ -114,6 +114,17 @@ This table is a rendering of existing evidence, not a final kernel replay.
 | 27416 | R1Z/PV_Src_PublicRecords | 0 | 0:01.73 | 4094288 | 0 | ad4e2be474 | standard only |
 | 27417 | R1Z/PV_Src_CheckedEncoding | 0 | 0:01.69 | 4109124 | 0 | ad4e2be474 | standard only |
 | 27418 | R1Z/PV_Src_PathIndex | 0 | 0:01.82 | 4114632 | 0 | ad4e2be474 | standard only |
+| 27420 | R1Z/PV_Src_PathBits | 0 | 0:01.73 | 4104760 | 0 | 030f4f4d03 | standard only |
+| 27421 | R1Z/PV_Src_CanonicalSibling | 0 | 0:01.61 | 4106224 | 0 | 030f4f4d03 | standard only |
+| 27422 | R1Z/PV_Src_PathSiblings | 0 | 0:01.69 | 4105412 | 0 | 030f4f4d03 | standard only |
+| 27423 | R1Z/PV_Src_ReferenceTransfer | 0 | 0:01.57 | 4105892 | 0 | 030f4f4d03 | standard only |
+| 27424 | R1Z/PV_Src_CheckedVariants | 0 | 0:01.52 | 4095920 | 0 | 030f4f4d03 | standard only |
+| 27425 | R1Z/PV_Src_OptionShape | 0 | 0:01.59 | 4092388 | 0 | 030f4f4d03 | standard only |
+| 27426 | R1Z/PV_Src_CanonicalRequest | 0 | 0:01.63 | 4107116 | 0 | 030f4f4d03 | standard only |
+| 27427 | R1Z/PV_Src_CanonicalTransferRecord | 0 | 0:01.53 | 4100392 | 0 | 030f4f4d03 | standard only |
+| 27428 | R1Z/PV_Src_RecordDynamic | 0 | 0:01.56 | 4104692 | 0 | 030f4f4d03 | standard only |
+| 27429 | R1Z/PV_Src_CheckedCanonical | 0 | 0:01.60 | 4107288 | 0 | 030f4f4d03 | standard only |
+| 27430 | R1Z/PV_Src_PackedSelection | 0 | 0:01.56 | 4104956 | 0 | 030f4f4d03 | standard only |
 
 ## Kani
 
