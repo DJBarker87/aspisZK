@@ -196,3 +196,15 @@ marker deletion, launcher edit, guard bypass or new ID substitution occurred.
 Budget remains35/100 Lean and3/15 Kani used,65/12 remaining; next unused14836.
 Root/headline premises removed0; target not yet established. The lead must
 resolve the admission/replay-marker conflict before proof work can resume.
+
+## Automatic capacity resume2: admission conflict remains unresolved
+
+Read-only host inspection again finds the identical launcher SHA-256
+`e6979aa097a0ebc34642608a594dfce081b40fdb814f526163dca1f69069661d`,
+the existing out-14835 marker, and no time-14835.log. The previously required
+retry rejected `attempt 14835 already used` (exit65); no resolution is present.
+Local-lean rule5 still requires stop/report. No proof/native launch, infrastructure
+change, marker deletion, guard bypass or replacement-ID launch occurred.
+Budget remains35/100 Lean and3/15 Kani used;65/12 remain. Next unused14836.
+Receipt:capacity-resume-2.json. Root/headline premises removed0; target not
+yet established. Lead resolution of the admission/replay conflict is required.
