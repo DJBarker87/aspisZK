@@ -95,3 +95,15 @@ allocator/Drop/side-channel obligations remain separate from value equations.
 |86|V208|INSTALLED (source constant)|PV_CB_Merkle.op86_installed;22813.json|
 
 Standard axioms only; no endpoint premise removal or native effect claim.
+
+## Checked field callback values
+
+|op|row|status|theorem / receipt|
+|---:|---|---|---|
+|100|V209|INSTALLED (native-port source)|PV_CB_Field.op100_installed;22814.json|
+|101|V210|INSTALLED (source)|PV_CB_Field.op101_installed;22814.json|
+|105|V211|INSTALLED (source)|PV_CB_Field.op105_installed;22814.json|
+|107|V212|INSTALLED (source)|PV_CB_Field.op107_installed;22814.json|
+|109|V213|INSTALLED (native-port source)|PV_CB_Field.op109_installed;22814.json|
+
+Standard axioms only; full selected caller/endpoint composition remains open.
