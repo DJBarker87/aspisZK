@@ -1,0 +1,45 @@
+F3K_PrepareLog.lean:41:4: error: Tactic `rfl` failed: The left-hand side
+  transport.Variant.S2.folds
+is not definitionally equal to the right-hand side
+  ok 2#usize
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedScratchModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+sem : r1_semantic.Verified Hash
+v : verifier.View
+hash : Hash
+p : OraclePortCompactDraft.Parsed
+out : verifier.Prepared
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+s : F3K_OpeningSpine.Spine D B embed sem v hash p out scratch
+variant : v.variant = transport.Variant.S2
+input : Std.Array aspis_core.field.WideExact 29#usize
+hn : erase (PreparedHashEffects.new effects D hash sem.transcript.state v.variant) = ok s.c.t0
+h27 : erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t0 27#u8 v.y1 true) = ok (s.c.gamma, s.c.t1)
+h28 :
+  erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t1 28#u8 s.c.inactive.to_slice false) =
+    ok (s.c.kappa, s.c.t2)
+h29 : erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t2 29#u8 v.round0 false) = ok (s.c.alpha0, s.c.t3)
+h30 :
+  erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t3 30#u8 s.c.second.deref false) =
+    ok (s.c.alpha1, s.c.t4)
+hq :
+  erase
+      (PreparedQueryEffects.queries effects
+        (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+          embed)
+        D s.c.t4 31#u8 v.final_message) =
+    ok (core.result.Result.Ok s.c.queries, s.c.t5)
+hr :
+  erase (PreparedScalarEffects.scalar_k effects B.sampling D s.c.t5 32#u8 PreparedScratchReachability.emptyPayload) =
+    ok (s.c.rho, s.c.t6)
+⊢ transport.Variant.S2.folds = ok 2#usize
+F3K_PrepareLog.lean:42:55: error: Type mismatch
+  rfl
+has type
+  ?m.804 = ?m.804
+but is expected to have type
+  32#usize + 224#usize = ok 256#usize
+'AspisR1.F3K_PrepareLog.spine' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

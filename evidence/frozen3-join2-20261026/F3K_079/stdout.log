@@ -1,0 +1,30 @@
+F3K_SamplerProtocol.lean:21:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H (F3J_SamplerRun.program ?pf ?row (?n + 1) ?P)
+in the target expression
+  let pr := LiteralByteProtocol.protocol D;
+  eval H (F3J_SamplerRun.program pf row (n + 1) (pr.transcript H pub pf row)) =
+    ((List.map (fun j => (eval H (pr.chain H pub pf (row + j)).toProgram).1) (List.range (n + 1))).flatten,
+      pr.transcript H pub pf (row + (n + 1)))
+
+case succ
+D : LiteralByteProtocol.Decoder
+H : Bytes → State
+pub : LiteralTranscript.Public
+pf : RawCutProverCompiler.Proof
+pr : FS2.Protocol LiteralTranscript.Public LiteralTranscript.Message LiteralTranscript.Challenge
+  LiteralByteProtocol.Witness LiteralByteProtocol.Proof LiteralByteProtocol.Address LiteralByteProtocol.State :=
+  LiteralByteProtocol.protocol D
+n : ℕ
+ih :
+  ∀ (row : ℕ),
+    let pr := LiteralByteProtocol.protocol D;
+    eval H (F3J_SamplerRun.program pf row n (pr.transcript H pub pf row)) =
+      ((List.map (fun j => (eval H (pr.chain H pub pf (row + j)).toProgram).1) (List.range n)).flatten,
+        pr.transcript H pub pf (row + n))
+row : ℕ
+⊢ let pr := LiteralByteProtocol.protocol D;
+  eval H (F3J_SamplerRun.program pf row (n + 1) (pr.transcript H pub pf row)) =
+    ((List.map (fun j => (eval H (pr.chain H pub pf (row + j)).toProgram).1) (List.range (n + 1))).flatten,
+      pr.transcript H pub pf (row + (n + 1)))
+'AspisR1.F3K_SamplerProtocol.exact_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3K_SamplerProtocol.initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

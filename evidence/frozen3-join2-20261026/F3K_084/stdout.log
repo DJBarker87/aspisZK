@@ -1,0 +1,99 @@
+F3K_PreparedSourceFields.lean:19:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    _a.variant = v.variant ∧
+      _a.gamma = s.c.gamma ∧
+        _a.kappa = s.c.kappa ∧
+          _a.alpha = Array.make 2#usize [s.c.alpha0, s.c.alpha1] ⋯ ∧
+            _a.rho = s.c.rho ∧
+              _a.queries = s.c.queries ∧
+                _a.state = s.c.t6.state ∧
+                  _a.claim = s.claimValue ∧ _a.roots = sem.roots ∧ _a.semantic_alpha = sem.alpha ∧ _a.z = sem.z
+Error: Application type mismatch: The argument
+  s
+has type
+  F3K_OpeningSpine.Spine D B embed sem v hash p out scratch
+but is expected to have type
+  F3K_OpeningSpine.Spine D B embed sem v hash p _a scratch
+in the application
+  s.c
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedScratchModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+sem : r1_semantic.Verified Hash
+v : verifier.View
+hash : Hash
+p : OraclePortCompactDraft.Parsed
+out : verifier.Prepared
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+s : F3K_OpeningSpine.Spine D B embed sem v hash p out scratch
+⊢ out.variant = v.variant ∧
+    out.gamma = s.c.gamma ∧
+      out.kappa = s.c.kappa ∧
+        out.alpha = Array.make 2#usize [s.c.alpha0, s.c.alpha1] ⋯ ∧
+          out.rho = s.c.rho ∧
+            out.queries = s.c.queries ∧
+              out.state = s.c.t6.state ∧
+                out.claim = s.claimValue ∧ out.roots = sem.roots ∧ out.semantic_alpha = sem.alpha ∧ out.z = sem.z
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+F3K_PreparedSourceFields.lean:27:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    ∃ q,
+      LiteralQueryRead.decode (List.map (fun x => ↑x) ↑_a) = some q ∧
+        (∀ (j : Fin 22), ↑(↑_a)[↑j] = ↑(q j)) ∧ ∀ (j : Fin 22), ↑(↑_a)[↑j] < 262144
+Error: Application type mismatch: The argument
+  len
+has type
+  (↑_a).length = 22
+but is expected to have type
+  (↑out.queries).length = 22
+in the application
+  query_binding._proof_1 j len
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedScratchModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+sem : r1_semantic.Verified Hash
+v : verifier.View
+hash : Hash
+p : OraclePortCompactDraft.Parsed
+out : verifier.Prepared
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+s : F3K_OpeningSpine.Spine D B embed sem v hash p out scratch
+same : out.queries = s.c.queries
+⊢ ∃ q,
+    LiteralQueryRead.decode (List.map (fun x => ↑x) ↑out.queries) = some q ∧
+      (∀ (j : Fin 22), ↑(↑out.queries)[↑j] = ↑(q j)) ∧ ∀ (j : Fin 22), ↑(↑out.queries)[↑j] < 262144
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3K_PreparedSourceFields.fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3K_PreparedSourceFields.query_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
