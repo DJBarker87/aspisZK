@@ -115,3 +115,37 @@ log with the successful retry log, so no more specific initial failure is claime
 No launcher/monitor/infrastructure repair or barrier bypass was attempted.
 Nonauthoritative launch/driver summary copies have whitespace normalized;
 authoritative stdout/time/receipt files are retained exactly.
+
+## Final receipts and budget exhausted
+
+**60/60 Lean attempts,59 passed,002 failed and repaired;0/0 Kani.**
+No further Lean invocation is authorized under this allocation. Sum of focused
+Lean wall times149.003798214s; maximum reported process peak5531380KiB;
+swaps0 throughout. This is per-target accounting, not orchestration elapsed
+time or a claim of fresh aggregate closure replay.
+
+| Attempt / exact target | Exit | Wall seconds | Peak RSS KiB | Swap | Source revision |
+|---|---:|---:|---:|---:|---|
+| Rc9_003 / Rc9_Top.lean | 0 | 2.720233600 | 5525652 | 0 | 7dd6db972494fe8972eac3e631ce34acffb9e635 (exact dirty hashes in receipt) |
+| Rc9_005 / Rc9_Transport.lean | 0 | 2.874169477 | 5523988 | 0 | 7dd6db972494fe8972eac3e631ce34acffb9e635 (exact dirty hashes in receipt) |
+| Rc9_006 / Rc9_Nonvacuity.lean | 0 | 3.027870294 | 5531380 | 0 | 7dd6db972494fe8972eac3e631ce34acffb9e635 (exact dirty hashes in receipt) |
+| Rc9_053 / Rc9_Baseline.lean | 0 | 2.515204073 | 5523960 | 0 | 4c674dd342ff10d7b56e39cd3ce08bbd8746be25 (exact dirty hashes in receipt) |
+| Rc9_059 / Rc9_ClosureChecks.lean | 0 | 2.399719799 | 5498080 | 0 | ac785c9c8059121e83311fd59a546d504c7e983e (exact dirty hashes in receipt) |
+| Rc9_060 / Rc9_FinalAxioms.lean | 0 | 2.398981940 | 5496304 | 0 | ac785c9c8059121e83311fd59a546d504c7e983e (exact dirty hashes in receipt) |
+
+All new top theorems are audited together in060: only
+`[propext, Classical.choice, Quot.sound]`. Closure059 freshly checks all
+named CLOSED claims. Before/after full signatures and all row diffs are
+retained; no native-law removal or release closure is claimed.
+`Rc9_recount.py` and `Rc9_validate.py --final` pass, including current-source
+hashes for every one of59 new modules, exact resource caps, full60 attempt
+accounting and prior bytes of both shared documents. `git diff --check`
+passes. The append-only ledger/map record the unchanged totals, every
+covering job and the D188 fidelity note.
+
+Stage1:4c674dd342 composed top/compatibility/reverse/nonvacuity.
+Stage2:ac785c9c80 fresh kernel inventories, mechanical recount and ledger.
+Stage3 commits the closure-map update and final validation receipts.
+No push; no shipped-file or artifact change. The next deliverables remain
+actual native finish law removal, source/runtime/effects association, joint
+fixture and final coherent replay/trust audit. Target not yet established.
