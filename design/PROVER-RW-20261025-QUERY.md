@@ -1172,3 +1172,41 @@ as failed evidence, never imported. All accepted theorem axioms are standard.
 Resumed use84/85 Lean,11/11 Kani. The final focused combined axioms audit remains;
 there is no unchanged full regression or artifact rebuild. Read-only source
 generator checks passed for the changed retained sources and proof generators.
+
+## Final continuation checkpoint: full allocation used (12500)
+
+The focused combined audit imports all45 new accepted source modules and
+prints all129 new theorem axiom reports, plus the complete actual deployed
+RustProverRefinement definition.12500 exits0 in1.76s, peak4288784KiB, swaps0,
+against proof-source revision8a986c7e4602e6c52edf0c3ecbfc503f3c726bea. All axioms
+are a subset of propext/Classical.choice/Quot.sound. The final46 modules
+(including the audit) match accepted immutable source snapshots. Receipts
+record exact commands, source hashes/revisions, dependency hashes, limits,
+exit/wall/RSS/swaps, errors and full axiom text. No compiled binary is committed.
+
+Resumed budget:85/85 Lean attempts(46pass,39changed failures),11/11 Kani
+(6pass,4timeout,1compile rejection). Peak Lean RSS4483312KiB,zero swaps/OOM;
+the longest16.31s monolithic elaboration was split after its heartbeat failure.
+No unchanged source+dependency input was retried. No full manifest replay or
+release/adoption result is claimed. Next unused env-J ID12501; no remaining
+allocation in this worker assignment. The permitted vanished-cgroup launch
+retry was never needed. Host infrastructure and existing stricter caps remain
+unchanged. Keys, production Rust bytes, frozen artifacts and security target
+were not changed. The inherited source/feature/SBF association gap remains open.
+
+`success-resume/final-state.json` is the authoritative continuation boundary:
+103 retained-source full entries;109 including six logical ports; partial255
+excluded from both full-entry counts.43 successful-body source references
+remain(37 unselected by the logical candidate). These are interpretation
+counts. **Conjunct1 and the headline remain unchanged; premises removed0;
+target not established.** The sibling's off-path/type ownership is untouched.
+
+Next consumer: prove the actual proof/audit data equation consumed by
+`ProverRwBodyCandidateData.refinement_of_data`, then connect that concrete
+body and the actual prefix/native effects to the complete contracts. Retain
+all remaining allocator/library/extractor/ABI/feature obligations. The explicit
+source query histories still need ordered native ROM/TLS adequacy; entropy
+still needs history-conditioned E1/E2, full native terminal coverage and actual
+Drop composition. The final per-adversary/per-witness real RunJoin must prove
+both marginals and bad-event transport to the exact root conjecture. The new
+local store/control/arithmetic facts do not supply any of those joint laws.
