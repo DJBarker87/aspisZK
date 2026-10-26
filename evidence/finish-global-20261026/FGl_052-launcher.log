@@ -1,0 +1,29 @@
+{"attempt": "FGl_052", "exit_status": 0, "wall_seconds": 2.763539612002205, "peak_rss_kib": "5401216", "swaps": "0", "print_axioms": []}
+def AspisR1.F3T_Runtime.StoredCarrierBinding : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.LiteralByteProtocol.Decoder →
+      AspisR1.F3T_TwoPass.Verifier → AspisR1.F3T_ByteCarrier.ByteProver → AspisR1.F3T_Runtime.Runtime → Prop :=
+fun {F C} c D rust P runtime =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (run : AspisR1.F3T_Experiment.RunView),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = Option.some run →
+      run.2.2 = Bool.true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_TwoPass.annotatedWith D rust (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c P)))
+def AspisR
+...
+def AspisR1.F3T_Runtime.StoredCarrierBinding : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.LiteralByteProtocol.Decoder →
+      AspisR1.F3T_TwoPass.Verifier → AspisR1.F3T_ByteCarrier.ByteProver → AspisR1.F3T_Runtime.Runtime → Prop :=
+fun {F C} c D rust P runtime =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (run : AspisR1.F3T_Experiment.RunView),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = Option.some run →
+      run.2.2 = Bool.true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_TwoPass.annotatedWith D rust (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c P)))
+def AspisR1.F3T_RuntimeBound.failureModel : AspisR1.F3T_Runtime.Runtime → ℚ :=
+fun runtime => AspisR1.F3T_Runtime.deployedFailure runtime + AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18)
+
+Running as unit: run-race73f9b4d9a407593f9c8728def47c1.scope; invocation ID: 8b814dfe4e0e40d393d425b12d697c37

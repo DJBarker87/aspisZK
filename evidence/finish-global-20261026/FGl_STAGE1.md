@@ -6,7 +6,7 @@ twelve-step return. Canonicality is absent from the continuation; pairing,
 matching, semantic endpoint and dot meaning are retained. This proves forward
 accepted-value transport, not canonicality of arbitrary source field values.
 
-The seven new theorems/definitions are private FGl modules; existing modules,
+The new theorems and definitions are private FGl modules; existing modules,
 source dictionaries, shipped files and other workers' files are unchanged.
 Every theorem audit is standard-only. Raw receipts pin exact command, revision,
 source/dependencies, status, wall, RSS, swap and scope limits. No package replay,
