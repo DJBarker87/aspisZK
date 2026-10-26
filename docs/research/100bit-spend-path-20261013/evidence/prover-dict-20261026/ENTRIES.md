@@ -2,7 +2,7 @@
 
 Target not yet established. Zero root refinement premises removed. These tables describe the final simultaneous partial source/value dictionary.
 
-New source entries:93; inherited:62; selected:155/262. Remaining:107, including19 outer-reachable entries outside the proof-body reachability overapproximation. Type interpretations:25/28; remaining0,3,27.
+New source entries:94; inherited:62; selected:156/262. Remaining:106, including19 outer-reachable entries outside the proof-body reachability overapproximation. Type interpretations:25/28; remaining0,3,27.
 
 ## Newly installed entries
 
@@ -12,6 +12,7 @@ New source entries:93; inherited:62; selected:155/262. Remaining:107, including1
 |1|`Slice.Insts.CoreConvertAsRefSlice.as_ref`|`R1Z.PDict_ResumeDictionary.op1_installed`|
 |2|`core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq`|`R1Z.PDict_ResumeDictionary.op2_installed`|
 |13|`core.sync.atomic.compiler_fence`|`R1Z.PDict_ResumeDictionary.op13_installed`|
+|17|`std.fs.File.Insts.StdIoWrite.flush`|`R1Z.PDict_FileFlush.op17_installed`|
 |19|`std.fs.OpenOptions.new`|`R1Z.PDict_ResumeDictionary.op19_installed`|
 |20|`std.fs.OpenOptions.write`|`R1Z.PDict_ResumeDictionary.op20_installed`|
 |21|`std.fs.OpenOptions.create_new`|`R1Z.PDict_ResumeDictionary.op21_installed`|
@@ -153,7 +154,6 @@ Body-reachable entries remain with the sibling except the closed semantic-error 
 |14|`std.fs.File.open`|False|
 |15|`std.fs.File.sync_all`|False|
 |16|`std.io.Write.write_all.default`|False|
-|17|`std.fs.File.Insts.StdIoWrite.flush`|False|
 |18|`std.fs.File.Insts.StdIoWrite.write`|False|
 |22|`std.fs.OpenOptions.open`|False|
 |23|`std.io.error.Error.kind`|False|
