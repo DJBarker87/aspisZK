@@ -105,3 +105,32 @@ for J20100–20399 with TasksMax 64; then implement/compile `PV_L2_F5` against
 the actual QueryScan real-vector/parser definitions, followed by the concrete
 joint transport across tape absorption. That first bridge must be labelled
 real-to-lazy until the simulator leg is discharged.
+
+## Resumed execution, 2026-10-26
+
+The lead's 09:50 rulings supersede the infrastructure stop above: J20000–29999
+and TasksMax=128 for the existing Lean launcher are accepted. The launcher
+was not edited. Baseline is 5048eb9408 on the same assigned branch.
+
+Stage F5: `PV_L2_F5.history_prefix` (J20104) checks prefix preservation on the
+actual `PhaseSamplerParserBin.parsedWords/scanned`, `PhaseQueryScanBin.stop`
+and `Q22WordScan.finish`. `history` includes raw block prefix, per-block
+state, ordered comparison operands/results, duplicate decisions and guards,
+first stop and failure. This is a Lean parser observation; native contains,
+Vec allocation and machine trace correspondence remain open.
+
+`PV_L2_F5Transport.real_to_lazy` (J20106) uses the actual
+`QueryScanRealLazyBound.real_vector_toRP` with the SAME `lazyBad`, `RAddrIn`
+and `RCausal`. `lazy_to_middle` identifies it on actual `gM` coins.
+`completion_joint` preserves this history jointly with the whole view across
+`gMQ` quotient tape completion. This is real-to-lazy plus quotient completion,
+NOT yet witness absorption or `simE`. No new agreement premise is introduced.
+
+Receipts: J20101–J20106 subdirectories (four initial local theorem errors,
+then passing F5 J20104 and transport J20106). Each records source SHA,
+direct cached-object fingerprint, exit/wall/RSS/swap and full axiom output.
+Failed elaborations print sorryAx and are explicitly excluded from proofs.
+Passing top theorems use only propext, Classical.choice, Quot.sound.
+No shipped file changed, no existing proved module overwritten.
+Endpoint premises removed: NONE at this stage. Deployment L1/L2, source
+refinement, E1/E2 and the simulator leg remain retained in full.

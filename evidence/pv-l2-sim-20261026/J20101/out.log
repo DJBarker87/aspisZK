@@ -1,0 +1,57 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F5.lean:73:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (let k := stop done q;
+      (k, List.take (↑k + 1) (List.ofFn q),
+        List.map
+          (fun i =>
+            have j := ⟨↑i, ⋯⟩;
+            (scanned j q, scanHistory AspisR1.QueryScanModelFailure.initial (parsedWords q j)))
+          (List.finRange (↑k + 1)),
+        finish (scanned k q).1)) =
+      let k := _a;
+      (k, List.take (↑k + 1) (List.ofFn q'),
+        List.map
+          (fun i =>
+            have j := ⟨↑i, ⋯⟩;
+            (scanned j q', scanHistory AspisR1.QueryScanModelFailure.initial (parsedWords q' j)))
+          (List.finRange (↑k + 1)),
+        finish (scanned k q').1)
+Error: Application type mismatch: The argument
+  i
+has type
+  Fin (↑k + 1)
+but is expected to have type
+  Fin (↑(stop done q') + 1)
+in the application
+  history._proof_2 q' i
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+q q' : Fin 8 → OracleAnswer
+he : PrefixAgree q q' (stop done q)
+hs : stop done q = stop done q'
+hp : observed q (stop done q) = observed q' (stop done q)
+hraw : List.take (↑(stop done q) + 1) (List.ofFn q) = List.take (↑(stop done q) + 1) (List.ofFn q')
+hw : ∀ j ≤ stop done q, parsedWords q j = parsedWords q' j
+⊢ (let k := stop done q;
+    (k, List.take (↑k + 1) (List.ofFn q),
+      List.map
+        (fun i =>
+          have j := ⟨↑i, ⋯⟩;
+          (scanned j q, scanHistory AspisR1.QueryScanModelFailure.initial (parsedWords q j)))
+        (List.finRange (↑k + 1)),
+      finish (scanned k q).1)) =
+    let k := stop done q';
+    (k, List.take (↑k + 1) (List.ofFn q'),
+      List.map
+        (fun i =>
+          have j := ⟨↑i, ⋯⟩;
+          (scanned j q', scanHistory AspisR1.QueryScanModelFailure.initial (parsedWords q' j)))
+        (List.finRange (↑k + 1)),
+      finish (scanned k q').1)
+'R1Z.PV_L2_F5.instrumented_erases' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_L2_F5.history_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
