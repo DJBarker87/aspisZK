@@ -9,14 +9,14 @@ def read(path):
 module={20000:'Statement',20001:'Statement',20002:'Readable',20003:'Fields',20004:'FieldsComplete',20005:'Consumers'}
 receipts=[]
 for attempt,suffix in module.items():
- source='PV_Ledger_'+suffix+'.lean';s=(OUT/source).read_bytes();log=read(T+f'out-{attempt}.log');(OUT/f'out-{attempt}.log').write_text(log)
+ source='PV_Ledger_'+suffix+'.lean';s=(OUT/source).read_bytes();log=read(T+f'out-{attempt}.log');(OUT/({20000:'out-20000.log',20001:'statement-20001.log',20002:'readable-20002.log',20003:'rejected-fields-20003.log',20004:'fields-20004.log',20005:'consumers-20005.log'}[attempt])).write_text(log)
  try:tim=read(T+f'time-{attempt}.log')
  except subprocess.CalledProcessError:tim=''
  if tim:(OUT/f'time-{attempt}.log').write_text(tim)
  matches=re.findall(r"'[^'\n]+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",log,re.S)
  def metric(pattern):
   m=re.search(pattern,tim);return m.group(1) if m else None
- rec=dict(attempt=attempt,module=source,source_sha256=hashlib.sha256(s).hexdigest(),source_revision=json.loads((OUT/'input-pins.json').read_text())['revision'],source_kind='new print/check-only helper retained verbatim; no theorem',command=f'sh /home/dombarker/project-offloads/codex-pv-ledger-20261026/run-joint.sh {attempt} {source[:-5]} J 7000 8'+(' '+(OUT/'statement-fingerprint.txt').read_text().strip() if attempt==20001 else ''),exit_status=metric(r'Exit status: (\d+)'),wall=metric(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.*)'),peak_rss_kib=metric(r'Maximum resident set size \(kbytes\): (\d+)'),swap=metric(r'Swaps: (\d+)'),limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,Lean_M=7000),print_axioms=matches,errors=[line for line in log.splitlines() if 'error' in line.lower()][:15],evidence=f'out-{attempt}.log')
+ rec=dict(attempt=attempt,module=source,source_sha256=hashlib.sha256(s).hexdigest(),source_revision='e654849fd1aacaacecd0c19a6937bbe6136a222f',source_tree_dirty=True,input_revision=json.loads((OUT/'input-pins.json').read_text())['revision'],source_kind='new print/check-only helper retained verbatim; no theorem',command=f'sh /home/dombarker/project-offloads/codex-pv-ledger-20261026/run-joint.sh {attempt} {source[:-5]} J 7000 8'+(' '+(OUT/'statement-fingerprint.txt').read_text().strip() if attempt==20001 else ''),exit_status=metric(r'Exit status: (\d+)'),wall=metric(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.*)'),peak_rss_kib=metric(r'Maximum resident set size \(kbytes\): (\d+)'),swap=metric(r'Swaps: (\d+)'),limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,Lean_M=7000),print_axioms=matches,errors=[line for line in log.splitlines() if 'error' in line.lower()][:15],evidence={20000:'out-20000.log',20001:'statement-20001.log',20002:'readable-20002.log',20003:'rejected-fields-20003.log',20004:'fields-20004.log',20005:'consumers-20005.log'}[attempt])
  if attempt==20000:rec.update(compiler_invoked=False,exit_status=None,reason='barrier FileNotFoundError for unrelated vanished cgroup before GNU time/Lean; limits verified in traceback; permitted one retry after >30s; launcher final grep exit2 is not Lean status')
  else:rec['compiler_invoked']=True
  rec['dependency_fingerprint']='none at launcher' if attempt!=20001 else (OUT/'statement-fingerprint.txt').read_text().strip()
