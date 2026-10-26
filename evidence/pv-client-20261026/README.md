@@ -66,8 +66,12 @@ unit tests. The script now labels all unit-* commands correctly.
 The first unit-02 preflight was refused at 51,942,260,736 reserved bytes plus
 8 GiB against the 55 GiB safe limit; no scope ran. Its original inventory is
 `unit-02-reservation-refused.json` (09:26:43 UTC). Retry admission is
-`unit-02-reservation.json` after the required three-minute wait. No barrier
-bypass, cap increase or host infrastructure repair was performed.
+`unit-02-reservation.json` at 09:28:34.236560 UTC: **110.594213 seconds**
+after refusal. This is a process-rule violation: the required wait was 180
+seconds. The retry independently passed admission and used the prescribed cap;
+that does not excuse the short wait. No reservation-barrier bypass, cap increase
+or host infrastructure repair was performed. The timestamps are retained
+without relabelling or rerunning a successful test to conceal the violation.
 
 ## Limits and retention
 
