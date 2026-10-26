@@ -10483,3 +10483,16 @@ read-only coordination with rw19), and name exactly which of the 30 inventory en
 Stream A agreed Stream B's env-J range 35000-39999 (runjoin8 35000-35299, join2 35300-35599); host
 scopes still wait for the restoration message. Six slots: cb3, cb4, srcid4, rw19, runjoin8, join2. Rows
 removed outright: 0. Privacy target not yet established.
+
+## D224 (Stream B) 2026-10-26 21:45 UTC: rw19 ended at the gate with its budget unspent; ruling (g); rw20 launched
+
+pv-rw19 (`codex/cx-prover-rw-20261023`, head bf81d1d222) committed nine UNCHECKED Lean drafts (concrete P6
+compression-context identity carried into the caller, successful-audit invariant and full observation
+transport), confirmed that pv-cb3 has no op223_source theorem yet and that the pinned Charon executable
+is absent on the host, then ended with 0/100 Lean and 0/20 Kani because the restoration flag was absent
+(next unused ID 27700). No forbidden tokens; no crates/programs change; nothing checked, so V164 stays
+conditional and V163 open. LEAD RULING (g) (pv-common.txt): waiting at the gate is part of the job: poll
+the flag every 10 minutes for up to 24 polls, keep drafting between polls, and only then report "gated:
+budget unspent". Relaunched as pv-rw20 on the same branch with the same rows, IDs 27700-27999 and the
+rw19 drafts to validate smallest-first when the flag opens. Six slots: cb3, cb4, srcid4, runjoin8,
+join2, rw20. Rows removed outright: 0. Privacy target not yet established.
