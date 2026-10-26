@@ -1,0 +1,9 @@
+# Complete guarded dispatch and native CP protection
+
+CPP_Write.committed exhaustively inverts a committed count-aware invocation event: first release route and count3, SAME accepted native wrapper, SAME saved1768 copy, and full metadata/counter/other-cell frames. It invokes PoolT_Write.accepted_verifier_writes_copy rather than assuming a successful write. Non-first routes and every failed wrapper result cannot produce the committed event.
+
+CPP_Dispatch.source connects the actual extracted Hiq release dispatcher to guarded native-wrapper callbacks. It preserves outer failures/divergence, exact ProgramErrors and the original full account slice/count. Arbitrary lifecycle callbacks are unreachable. Native/SDK/allocator/std interpretations retain their existing scope; this is NOT a new native/SBF caller refinement premise adopted as trust.
+
+CPP_ProgramErasure.exact proves literal all-world oracle-program equality from a count-complete finite schedule to the existing Hir schedule. CPP_RunErasure.exact identifies native results/events/stores. Malformed-count invokes yield their original Err with no hash call and an explicit rollback; accepted/rejected reached child logs remain unchanged. CPP_Protection.protection then derives no-intervening-write plus complete protected Cell retention on all such schedules, using source zero checks and existing owner authorization. No no-write premise is input.
+
+21/100 Lean invocations, 0/25 Kani. All currently delivered theorem roots have passing standard-only axiom audits; failed development logs are retained, including automatic sorryAx recovery output, and are not accepted evidence. No timeout/memory kill/cap increase or unchanged replay. No shipped edits or rebuild trigger. Actual deployed root unchanged: global row removal remains zero. Next: source-schedule runtime association and selected-version/log connection to the actual root continuations, with non-vacuity.
