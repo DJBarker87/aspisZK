@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Schedule.lean:27:18: error: ambiguous term, use fully qualified name, possible interpretations [@_root_.control, PV_L2_F3Words.control]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Schedule.lean:41:4: error: unsolved goals
+case pos.e_fst
+e : Fin 2147483647 ≃ Fin 2147483647
+words : ℕ → Candidate
+n : ℕ
+ih :
+  ∀ (cursor : ℕ),
+    scalar n (fun i => (permute e) (words i)) cursor =
+      (Option.map (⇑e) (scalar n words cursor).1, (scalar n words cursor).2)
+cursor : ℕ
+hc : accepts (words cursor)
+hc' : accepts ((permute e) (words cursor))
+⊢ ↑(match Option.map (⇑e) (if h : ↑(words cursor) < 2147483647 then some ⟨↑(words cursor), h⟩ else none) with
+      | none => ⟨2147483647, cellEquiv._proof_5⟩
+      | some c => ⟨↑c, ⋯⟩) =
+    ↑(e ⟨↑(words cursor), ⋯⟩)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Schedule.lean:45:56: warning: This simp argument is unused:
+  dif_pos hc
+
+Hint: Omit it from the simp argument list.
+  simp only [permute, Equiv.trans_apply, cellEquiv, d̵i̵f̵_̵p̵o̵s̵ ̵h̵c̵,̵Equiv.optionCongr_apply, Option.map_some,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲Equiv.symm_mk, Equiv.coe_fn_mk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Schedule.lean:46:33: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [permute, Equiv.trans_apply, cellEquiv, dif_pos hc, Equiv.optionCongr_apply,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵ ̵Equiv.symm_mk, Equiv.coe_fn_mk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_L2_F3Schedule.scalar_control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Schedule.scalar_permute' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Schedule.tower_permute' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Schedule.tower_refills' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

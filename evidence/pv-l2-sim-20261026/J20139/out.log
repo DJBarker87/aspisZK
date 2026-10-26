@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6DotStep.lean:43:2: error: Ambiguous term
+  pure
+Possible interpretations:
+  PV_L2_Record.pure (acc1, p1) : Recorded (U64 × Usize)
+  
+  Pure.pure (acc1, p1) : Recorded (U64 × Usize)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6DotStep.lean:47:79: error: unsolved goals
+a : Slice U32
+ao ast : Usize
+b : Slice U32
+bo bst : Usize
+acc : U64
+p : Usize
+⊢ (do
+      let a_1 ← p * ast
+      let a_2 ← ao + a_1
+      let a ← a.index_usize a_2
+      let a_3 ← p * bst
+      let a_4 ← bo + a_3
+      let a_5 ← b.index_usize a_4
+      let a ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 a_5
+      let a ← a % P
+      let _ ← acc + a
+      let _ ← p + 1#usize
+      sorry.value) =
+    do
+    let i ← p * ast
+    let i1 ← ao + i
+    let i2 ← a.index_usize i1
+    let i3 ← p * bst
+    let i4 ← bo + i3
+    let i5 ← b.index_usize i4
+    let i6 ← UScalar.cast UScalarTy.U64 i2 * UScalar.cast UScalarTy.U64 i5
+    let i7 ← i6 % P
+    let acc1 ← acc + i7
+    let p1 ← p + 1#usize
+    ok (acc1, p1)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6DotStep.lean:48:43: warning: This simp argument is unused:
+  pure_value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵c̵o̵r̵d̵e̵d̵,̵o̵p̵e̵r̵a̵t̵i̵o̵n̵_̵b̵i̵n̵d̵_̵v̵a̵l̵u̵e̵,̵p̵u̵r̵e̵_̵v̵a̵l̵u̵e̵,̵s̵t̵e̵p̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲r̲e̲c̲o̲r̲d̲e̲d̲,̲ ̲o̲p̲e̲r̲a̲t̲i̲o̲n̲_̲b̲i̲n̲d̲_̲v̲a̲l̲u̲e̲,̲ ̲s̲t̲e̲p̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6DotStep.lean:48:13: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6DotStep.lean:59:4: error: No goals to be solved
+'R1Z.PV_L2_F6DotStep.recorded_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6DotStep.unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6DotStep.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

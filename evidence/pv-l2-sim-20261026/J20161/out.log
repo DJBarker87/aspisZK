@@ -1,0 +1,24 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Blocks.lean:51:36: error: Tactic `rfl` failed: The left-hand side
+  (a, history)
+is not definitionally equal to the right-hand side
+  (b, history)
+
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+n L r : ℕ
+a b : Fin L → ↥sourceBase
+history : Fin L → ℕ
+eqv : ProverCommitSequentialFibres.Values (↥sourceBase × ℕ) L ≃ (Fin L → ↥sourceBase) × (Fin L → ℕ) :=
+  split (↥sourceBase) L
+heq :
+  ∀ (out : (Fin L → ↥sourceBase) × (Fin L → ℕ)),
+    {ws | arrays accepted n L r ws = some out} =
+      {ws | PV_L2_F3CountedFibres.counted accepted n L r ws = some (eqv.symm out)}
+⊢ (a, history) = (b, history)
+'R1Z.PV_L2_F3Blocks.precompose_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Blocks.word_arrays_fibres' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Blocks.block_fibres' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Blocks.blocks_joint_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,21 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Schedule.lean:29:6: error: Tactic `rfl` failed: The left-hand side
+  (some ⟨↑(words cursor), hc⟩, cursor + 1, [true]).2.2
+is not definitionally equal to the right-hand side
+  have accept := decide (accepts (words cursor));
+  accept :: if accept = true then [] else PV_L2_F3Words.control n words (cursor + 1)
+
+case pos
+words : ℕ → Candidate
+n : ℕ
+ih : ∀ (cursor : ℕ), (scalar n words cursor).2.2 = PV_L2_F3Words.control n words cursor
+cursor : ℕ
+hc : accepts (words cursor)
+⊢ (some ⟨↑(words cursor), hc⟩, cursor + 1, [true]).2.2 =
+    have accept := decide (accepts (words cursor));
+    accept :: if accept = true then [] else PV_L2_F3Words.control n words (cursor + 1)
+'R1Z.PV_L2_F3Schedule.scalar_control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Schedule.scalar_permute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Schedule.tower_permute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Schedule.tower_refills' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
