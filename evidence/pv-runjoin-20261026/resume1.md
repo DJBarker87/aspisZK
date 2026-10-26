@@ -69,3 +69,31 @@ Attempts20917,20920,20922,20923 pass, all standard axioms, peakRSS<4GiB,swap0.
 20918/20919/20921 reject changed proof-script inputs; their sorryAx diagnostics
 are rejected. All snapshots and per-run receipts retained.24/100 Lean used
 through20923,0/10 Kani;next unused20924 before the focused final audit.
+
+Final resume checkpoint
+
+Canonical mathematical fixture validity and the transfer sentinel are now
+proved; see fixtures-stage.md. The final fixture association record retains2
+source-public equations, down from3intermediate fields. Endpoint transport
+fields remain3. No whole deployed ledger row is claimed removed. In particular
+PV_RunJoin_Deployed.rust and the requested DEPLOYED specialization remain absent.
+This checkpoint must not be described as task completion or budget exhaustion.
+
+Final focused cached audit20948 at proof revisione5fd33f656:exit0,wall1.75s,
+peak4274308KiB,swap0,12standard-axiom reports. Exact source snapshot,logs,
+resource metrics,command,revision and dependency-object fingerprints retained.
+The source-root absence of some historical import sources is labelled explicitly
+in receipts; no cached import is relabelled a coherent release source replay.
+
+Cumulative49/100 Lean attempts,29passes/20rejected inputs,0/10 Kani; next unused
+20949,51Lean and10Kani remain. One optimized standalone numeric-generator run,
+not a native prover/Kani check. No cap increase,resource failure,reservation
+refusal,unchanged rerun,shared-object overwrite,implementation/key/artifact
+change,push,merge or full frozen-manifest replay. The read-only final validator
+checks all current source snapshots,accepted axioms,original endpoint conclusion
+and both final field lists. The renderer --check is green.
+
+Next: native full-client world/effect-to-ROMView association and the concrete
+shared sampling map/law, plus both native fixture public equations. Those
+missing source associations cannot be obtained by the pure-dictionary theorem,
+the D193 prototype completion,or the new canonical mathematical constructors.

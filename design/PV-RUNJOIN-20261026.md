@@ -166,3 +166,11 @@ association, with actual callback/body/error/store/ordered-ROM/TLS semantics;
 then the concrete shared sampling map and its law. The proven finite-capacity
 completion is available for that task. The two named native fixture public
 associations must also be supplied. No model theorem is relabelled deployment.
+
+Final resume audit20948:exit0,1.75s,4274308KiB RSS,swap0,12standard-axiom
+reports at proof revisione5fd33f656. Cumulative49/100Lean(29pass,20rejected),
+0/10Kani;next20949,51Lean remain. The allowance is NOT exhausted. The sentinel
+sub-obligation has been removed; requested deployment stages are incomplete.
+The final validation and generator --check pass. No full manifest,implementation
+or frozen-artifact gate is claimed. Exact resume receipts and field inventory
+are in `evidence/pv-runjoin-20261026/{summary.json,resume1.md,fixtures-stage.md}`.

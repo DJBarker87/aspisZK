@@ -27,5 +27,8 @@ def conclusion(s,n):
 assert conclusion(original,'privacy_headline_deployed')==conclusion(endpoint,'privacy_headline_from_premises')
 fields=re.findall(r'^  (\w+_V0\d+) :',endpoint,re.M)
 assert fields==['uniform_V037','disclosed_V038','observerOracle_V038']
+fixture=(lean/'PV_RunJoin_CanonicalFixtures.lean').read_text()
+fixture_fields=re.findall(r'^  (\w+_V047) :',fixture,re.M)
+assert fixture_fields==['transfer_public_V047','withdrawal_public_V047']
 assert subprocess.check_output(['git','diff','c0f03d8a0c5bcb2f6db6616d99b47630eff972a3','--',str(lean/'PrivacyR1HeadlineDeployedReal.lean')],cwd=root)==b''
-print(json.dumps(dict(attempts=len(receipts),passes=sum(r['exit']==['exit=0'] for r in receipts),failures=sum(r['exit']!=['exit=0'] for r in receipts),fields=fields,current_sources_match_successful_snapshots=True,conclusion_byte_equal=True,accepted_axioms_standard=True),indent=2))
+print(json.dumps(dict(attempts=len(receipts),passes=sum(r['exit']==['exit=0'] for r in receipts),failures=sum(r['exit']!=['exit=0'] for r in receipts),fields=fields,fixture_association_fields=fixture_fields,terminal_field_count=len(fields)+len(fixture_fields),current_sources_match_successful_snapshots=True,conclusion_byte_equal=True,accepted_axioms_standard=True),indent=2))
