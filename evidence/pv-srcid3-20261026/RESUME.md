@@ -33,3 +33,9 @@ primitive-stage existence theorem for every selected canonical input, hence
 for both fixture data values. These additions also remain uncompiled. The
 read-only RunJoin resume pin is 3478e00a58970c2480a1b20451dc107cfb1ac98f;
 runjoin-resume-read-only.json records its still-free input family.
+
+A follow-on CanonicalWithdrawalRecord draft is held in resume-drafts, outside
+the first final audit. It uses CanonicalRequest.amount to equate the actual
+withdrawal request with the reference's amount projection; its private-record
+identity then applies ReferenceWithdrawal.witness. It is for the family phase
+after the first pending-module/audit sequence, not an accepted result.
