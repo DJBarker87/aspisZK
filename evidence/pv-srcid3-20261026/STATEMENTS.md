@@ -157,3 +157,18 @@ all canonical carriers survive record/word/bank stages; publicCorr is conditiona
 on the retained original compiler-success premise. These are explicit fixed-root
 Records/owned ExternalLinear dictionaries, not installed shipped equality.
 Native deployed count remains5. Selected fixed-root reference count is5→3.
+
+Mapper-values projection Kani5 reached180seconds (exit124), no proof or
+counterexample. Formula slicing did not complete this gate within the focused
+cap. A scope-state read immediately after receipt briefly reported active;
+the follow-up stop found the unit already unloaded and confirmed inactive/dead.
+No other scope was launched in between. The client now allows a short scope
+teardown poll, and stops its own scope if teardown does not complete. No Kani
+configuration error appeared; this timeout does not stop the distinct-target
+queue.
+
+Path family25372–25378: symbolic little-endian packing bound/bit equations
+and the complete24-row reference bit array now match canonical encoding for
+the packed membership index. No concrete index enumeration or hash recurrence
+normalization. This strengthens the selected-encoding direction and does not
+supply installed input equality or admission for arbitrary raw payloads.

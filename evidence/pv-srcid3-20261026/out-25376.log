@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PathBits.lean:32:70: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ d ≤ 23
+  0 ≤ c ≤ 23
+  c - d ≥ 1
+  0 ≤ b ≤ 1
+  1 ≤ a ≤ 20
+where
+ a := ↑n
+ b := ↑(w.path ⟨↑⟨n - 1, ⋯⟩ + 1, ⋯⟩).1.toNat
+ c := ↑↑⟨n, hn⟩
+ d := ↑↑⟨n - 1 + 1, ⋯⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PathBits.lean:34:6: error: Type mismatch: After simplification, term
+  hb
+ has type
+  ↑(PV_Src_PathIndex.index w) / 2 ^ (n - 1) % 2 = bif (w.path ⟨n, hn⟩).1 then 1 else 0
+but is expected to have type
+  ↑(PV_Src_NativeDirections.reference (nativeWitness w (PV_Src_PathIndex.index w))).pair.membership.index /
+        2 ^ ↑(U32.ofNatCore (n - 1) ⋯) %
+      2 =
+    ↑(if (w.path ⟨n, hn⟩).1 = true then 1#u32 else 0#u32)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PathBits.lean:38:72: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ c ≤ 23
+  0 ≤ b ≤ 23
+  b - c ≥ 1
+  21 ≤ a ≤ 23
+where
+ a := ↑n
+ b := ↑↑⟨n, hn⟩
+ c := ↑↑⟨n - 21 + 21, ⋯⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PathBits.lean:50:6: error: Ambiguous term
+  arr24_get
+Possible interpretations:
+  R1J.SpendWitnessMap.arr24_get ?m.46 n hn' : (↑(R1J.SpendWitnessMap.arr24 ?m.46))[n]! = ?m.46 ⟨n, hn'⟩
+  
+  R0Z.WriterRefine.arr24_get ?m.46 n hn' : (↑(R0Z.WriterRefine.arr24 ?m.46))[n]! = ?m.46 ⟨n, hn'⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PathBits.lean:44:47: error: unsolved goals
+w : W
+n : ℕ
+hn : n < ↑24#usize
+hn' : n < 24
+⊢ (if (w.path ⟨n, hn'⟩).1 = true then 1#u32 else 0#u32) =
+    (↑(R1J.SpendWitnessMap.arr24 fun l =>
+          if ((BuilderSpendRelation.modelWitness w).path l).1 = true then 1#u32 else 0#u32))[n]!
+'R1Z.PV_Src_PathBits.bool_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PathBits.bit_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PathBits.bits' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

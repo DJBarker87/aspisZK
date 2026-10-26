@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """One reserved, optimized, capped Kani invocation; no automatic queue."""
-import datetime,json,pathlib,shlex,subprocess,sys
+import datetime,json,pathlib,shlex,subprocess,sys,time
 root=pathlib.Path(__file__).resolve().parents[2];e=root/'evidence/pv-srcid3-20261026'
 host='dombarker@100.108.41.90';job='/home/dombarker/project-offloads/codex-pv-srcid-20261026'
 name,harness,seconds=sys.argv[1:4];metadata=harness=='metadata'
@@ -27,6 +27,14 @@ with f.open('a') as out:out.write(json.dumps(record)+'\n')
 print('CHARGED '+json.dumps(record),flush=True)
 r=ssh(shlex.join(cmd));print(r.stdout+r.stderr,flush=True)
 subprocess.run(['scp','-qr',f'{host}:{job}/{name}',str(e)],check=True)
-s=ssh(f'systemctl --user show pv-{name}.scope -p ActiveState -p SubState');(e/f'{name}-scope-ended.log').write_text(s.stdout+s.stderr)
+s=ssh(f'systemctl --user show pv-{name}.scope -p ActiveState -p SubState')
+for _ in range(10):
+ if 'ActiveState=inactive' in s.stdout:break
+ time.sleep(0.5)
+ s=ssh(f'systemctl --user show pv-{name}.scope -p ActiveState -p SubState')
+if 'ActiveState=inactive' not in s.stdout:
+ ssh(f'systemctl --user stop pv-{name}.scope')
+ s=ssh(f'systemctl --user show pv-{name}.scope -p ActiveState -p SubState')
+(e/f'{name}-scope-ended.log').write_text(s.stdout+s.stderr)
 assert 'ActiveState=inactive' in s.stdout,s.stdout
 sys.exit(r.returncode)

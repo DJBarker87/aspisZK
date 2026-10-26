@@ -1,0 +1,77 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PathBits.lean:26:4: error: failed to create binder due to failure when reverting variable dependencies
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PathBits.lean:29:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if n = 0 then ?m.106 else ?m.107
+in the target expression
+  (if i = 0#usize then
+      core.convert.num.FromU32Bool.from
+        (PV_Src_NativeDirections.reference (nativeWitness w (PV_Src_PathIndex.index w))).pair.selected_second
+    else
+      if i ≤ 20#usize then
+        (PV_Src_NativeDirections.reference
+                      (nativeWitness w (PV_Src_PathIndex.index w))).pair.membership.index.wrapping_shr
+            (UScalar.cast UScalarTy.U32 (i.wrapping_sub 1#usize)) &&&
+          1#u32
+      else
+        core.convert.num.FromU32Bool.from
+          (↑(PV_Src_NativeDirections.reference
+                  (nativeWitness w (PV_Src_PathIndex.index w))).super_root_directions)[n - 21]!) =
+    if (w.path ⟨n, hn⟩).1 = true then 1#u32 else 0#u32
+
+case neg
+w : W
+n : ℕ
+hn : n < 24
+i : Usize := UScalar.ofNatCore n ⋯
+hi : ↑i = n
+hg :
+  (↑(BuilderRecordsPath.bits (PV_Src_NativeDirections.reference (nativeWitness w (PV_Src_PathIndex.index w)))))[n]! =
+    if i = 0#usize then
+      core.convert.num.FromU32Bool.from
+        (PV_Src_NativeDirections.reference (nativeWitness w (PV_Src_PathIndex.index w))).pair.selected_second
+    else
+      if i ≤ 20#usize then
+        (PV_Src_NativeDirections.reference
+                      (nativeWitness w (PV_Src_PathIndex.index w))).pair.membership.index.wrapping_shr
+            (UScalar.cast UScalarTy.U32 (i.wrapping_sub 1#usize)) &&&
+          1#u32
+      else
+        core.convert.num.FromU32Bool.from
+          (↑(PV_Src_NativeDirections.reference
+                  (nativeWitness w (PV_Src_PathIndex.index w))).super_root_directions)[n - 21]!
+h0 : ¬n = 0
+⊢ (if i = 0#usize then
+      core.convert.num.FromU32Bool.from
+        (PV_Src_NativeDirections.reference (nativeWitness w (PV_Src_PathIndex.index w))).pair.selected_second
+    else
+      if i ≤ 20#usize then
+        (PV_Src_NativeDirections.reference
+                      (nativeWitness w (PV_Src_PathIndex.index w))).pair.membership.index.wrapping_shr
+            (UScalar.cast UScalarTy.U32 (i.wrapping_sub 1#usize)) &&&
+          1#u32
+      else
+        core.convert.num.FromU32Bool.from
+          (↑(PV_Src_NativeDirections.reference
+                  (nativeWitness w (PV_Src_PathIndex.index w))).super_root_directions)[n - 21]!) =
+    if (w.path ⟨n, hn⟩).1 = true then 1#u32 else 0#u32
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PathBits.lean:52:14: error: Ambiguous term
+  arr24
+Possible interpretations:
+  R1J.SpendWitnessMap.arr24 ?m.41 : Std.Array ?m.40 24#usize
+  
+  R0Z.WriterRefine.arr24 ?m.41 : Std.Array ?m.40 24#usize
+'R1Z.PV_Src_PathBits.bool_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PathBits.bit_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PathBits.bits' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
