@@ -10376,3 +10376,45 @@ the record reads 2 → 0 and 8 → 0 with T the only premise; missing proofs lis
 obligations, never folded into T; non-vacuity of T on both fixtures. That T list is the owner escalation
 the target requires. Both will stall until the launcher is restored. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D221 (Stream B) 2026-10-26 21:30 UTC: rw18 exhausted (V164 REDUCED, V163 OPEN), host gate ruling, cb4/srcid4/rw19 launched
+
+pv-rw18 (`codex/cx-prover-rw-20261023`, head d1351e0a27; 100/100 Lean = 80 green/20 failed-replaced,
+20/20 Kani = 16 pass/4 timeouts, no counterexample, no crates/programs change, no forbidden tokens,
+frozen component manifest 71020eda20 exit 0 / 4.83 s / peak RSS 3.52 GB / swap 0, 172 declarations
+standard axioms). V164 REDUCED to two exact hypotheses retained by `R1Z.ProverRw18ContextJoin.callback`:
+`source_law : ops.op223 = extracted` (pv-cb3's V240) and `context_identity : extracted =
+ProverRw18ContextCompression.compress _ (PV_CurrentScaleInstall.selected ops)` for the original whole
+Rust helper (extraction obstructed; pinned Charon executable absent on the host). V163 OPEN:
+`R1Z.ProverRw18ContextDataIff.criterion` is the exact residual iff (proof-byte and audit observations
+equal a model output); no concrete whole-model instance and neither equation yet. Native checks on 816
+cases per fixture are measurements, not whole-proof comparisons. Endpoint premises: none removed. The
+last 29 of its compiles ran on the Mac (`local-cached-J` receipts under `evidence/pv-rw18-20261026/local/`,
+cache /private/tmp/pv-rw-step-native-local-20261026, 1 GB) after the host workspace loss; pv-cb3 also
+compiled locally (time-247xx-local.log). Kani012 scope deviation recorded as a charged diagnostic.
+
+Host state at 21:15 UTC: Stream A's rebuild (EJR_, 567 attempts, 535 validation passes, peak 7.17 GB,
+no swap) has restored `r1-privacy-build-integration-20261019/{tools/run-joint.sh,env/J.json,
+evidence/sent.txt}` and `aspis-joint-20261019/{sources,objects}`; the rebuilt launcher accepts env-J IDs
+5000-39999, refuses 20000-27099 as spent by Stream B (exit 65), reads sent.txt from evidence/, and has
+no quiet-window block (the systemd-run shim covers it). Confirmation of a verification compile has not
+arrived, so LEAD RULING (f) (pv-common.txt): no Stream B host scope until the lead creates
+`pv-host-restored.flag` in the scratchpad; compile-free work meanwhile; no new local Mac compiles (24 GiB
+host, two jobs already compile locally). Two anomalies in the rebuild's own audit concern privacy
+modules and are passed to Stream A: `R1Z/SimCostOuterRetry6` elaborated with `sorryAx` at attempt 30431
+(exit 90: an elaboration error in the rebuilt environment, the research source has no sorry) and
+`R1Z/EventsR1P2` hit "(kernel) excessive memory consumption" at 30485 (the module's `card_NZ` is a theorem,
+not an axiom). Neither module is imported by `PrivacyR1HeadlineDeployedReal` directly; the closure
+check comes with the replay.
+
+Launched under ruling (f): pv-cb4 (resume of pv-cb on `codex/pv-cb-20261026`, IDs 27100-27399, 69 Lean /
+10 Kani: corrected op105, combined 18-row dictionary and projection groups, ops 107/109/118, then the
+remaining upward pure ops; op117 only by split gates), pv-srcid4 (resume of pv-srcid3 on
+`codex/pv-srcid3-20261026`, IDs 27400-27699: pending CanonicalNormalize / CanonicalTransferRecord /
+PackedSelection / FinalAudit, then Checked on every admitted input, full-mapper `words` by unstubbed P6,
+publicCorr and compile_call pure parts), pv-rw19 (candidate worktree, IDs 27700-27999, 100 Lean / 20
+Kani: discharge `source_law` from pv-cb3's op223 law and `context_identity` by the D188 identity or P6,
+then V163's concrete model instance and both equations). Six slots: cb3, join, runjoin7, cb4, srcid4,
+rw19. Next free Stream B range 28000 is the replay reserve (pv-adopt), so new jobs start at 30000 only
+after agreeing with Stream A, whose verification attempts use 30000+. Rows removed outright: 0. Privacy
+target not yet established.
