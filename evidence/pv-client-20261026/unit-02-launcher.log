@@ -1,0 +1,46 @@
+Running as unit: run-r418220e4cbb24e3cbcb8ebb4c29f2deb.scope; invocation ID: a5eb8f9a0032471e9f2a95670f07969e
+{"attempt": "unit-02", "exit_status": 0, "wall_seconds": 0.616951348958537, "peak_rss_kib": "225772", "swaps": "0", "print_axioms": "N/A: optimized Rust client gate"}
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-pv-client-20261026/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = note: see <https://doc.rust-lang
+...
+^^^^^^^^^^^^^^^^^^
+
+warning: associated items `apply_authenticated_afterstate_from_program_invariant` and `decode_from_program_invariant` are never used
+   --> /home/dombarker/project-offloads/codex-pv-client-20261026/src/programs/aspis-pool/src/pair_state.rs:188:19
+    |
+151 | impl PairPoolStateV1 {
+    | -------------------- associated items in this implementation
+...
+188 |     pub(crate) fn apply_authenticated_afterstate_from_program_invariant(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+369 |     pub(crate) fn decode_from_program_invariant(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `transition_kind` is never used
+  --> /home/dombarker/project-offloads/codex-pv-client-20261026/src/programs/aspis-pool/src/prepared_settlement.rs:88:19
+   |
+87 | impl AuthenticatedPreparedSettlementActionV1 {
+   | -------------------------------------------- method in this implementation
+88 |     pub(crate) fn transition_kind(self) -> PoolV1TransitionKind {
+   |                   ^^^^^^^^^^^^^^^
+
+warning: `aspis-pool` (lib) generated 22 warnings (run `cargo fix --lib -p aspis-pool` to apply 3 suggestions)
+   Compiling aspis-r1-cu-probe v0.1.0 (/home/dombarker/project-offloads/codex-pv-client-20261026/src/tools/r1-cost-probe)
+    Finished `release` profile [optimized] target(s) in 0.58s
+     Running unittests src/bin/devnet_spend.rs (native-target/release/deps/devnet_spend-63b62be01b04f616)
+
+running 3 tests
+test plan::client64_accounts::route_tests::shipped_runner_has_no_generic96_fallback ... ok
+test plan::client64_accounts::tests::invalid_abi ... ok
+test plan::client64_accounts::tests::first_rejected_and_last_selection ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+

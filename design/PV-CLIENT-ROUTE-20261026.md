@@ -1,213 +1,163 @@
-# Proof-account client route audit — 26 October 2026
+# Proof-account operational client — 26 October 2026
 
-**STOP / owner escalation: selected route is not adopted by the operational R1
-client. Target not yet established.** No shipped implementation is changed here.
+The operational planner is now wired to the selected64 proof-account route on
+`codex/pv-client-20261026`. This implements owner LOG D162 decision 1 under the
+lead's explicit continuation authorization. The earlier routing counterexample
+at `149855299b` is superseded. **The privacy target is not yet established.**
+No theorem, observer, simulator, error envelope or cryptographic assumption is
+weakened. The soundness release ledger is unchanged.
 
-Audit baseline: `a0c5e1f66a9d16f76a22bd77fb0bc499a64a9978` (`research`), branch
-`codex/pv-client-20261026`. The release ledger is read-only. “Shipped” below
-means checked-in operational entry points, not an attestation of an installed
-binary. The ledger does not pin an adopted client executable or Python bundle.
+## Before and after
 
-## Entry-point inventory
-
-The operational R1 client is the `devnet_spend` binary in package
-`aspis-r1-cu-probe` (`tools/r1-cost-probe/Cargo.toml:2`), driven by
-`scripts/r1_devnet_spend.py:9,167`. The script permits a configured `signer`
-path; its default is `native-target/release/devnet_spend`. The default Cargo
-binary `aspis-r1-cu-probe` is a probe, not this client. The selected *library*
-caller is in crate `aspis-r1-cost-probe`, exported behind `r1p-check`
-(`crates/aspis-r1-cost-probe/src/lib.rs:25`). Neither export nor a crate name
-establishes client adoption.
-
-| Entry point / source location | Prover route | Release significance |
+| Entry | Before, `149855299b` | Current branch |
 |---|---|---|
-| `devnet_spend::main`, `tools/r1-cost-probe/src/bin/devnet_spend.rs:13–15`; planner action `plan.rs:70,112` | `prove_masked_retrying` → `StateOnlyAttemptSecrets::generate` at `crates/aspis-r1-cost-probe/src/prover.rs:334`; 96-byte draw | Operational R1 transfer/withdrawal runner; **not D162 target**. `plan.rs:120,123` uses a separately supplied proof account for publication. |
-| `RealR1_client::prove_for_proof_accounts`, `crates/aspis-r1-cost-probe/src/RealR1_client.rs:20,27–28` | `prove_masked_retrying_with` + `generate_for_mask_nonce(proof_account(k))`; public nonce and 64 private bytes | Selected D162/D186/D187 library route, not wired into the operational planner. |
-| Public R1 APIs, `crates/aspis-r1-cost-probe/src/prover.rs:51,82,105,327,354` | `prove`/`prove_masked_fixture`: deterministic fixtures; `prove_masked_attempt`: caller-supplied secrets/store; generic retry: 96; callback retry: caller-selected | Only the concrete selected callback fixes the 64-byte proof-account route. Generic APIs remain available. |
-| `pool_gate`, `tools/r1-cost-probe/src/bin/pool_gate.rs:1492,1510–1513` | Fixture or OS96 single `prove_masked_attempt` | LiteSVM Pool/proof measurement harness, not selected client. |
-| R1 examples `proof_size_s2:23`, `masked_fixture_gate:46`, `authenticated_tx2_gate:20` under `crates/aspis-r1-cost-probe/examples/` | Deterministic `prove_masked_fixture` | Fixture proofs, not deployment evidence. |
-| R1 example `secure_attempt_gate.rs:43–46,66–81` | Initial OS96 single attempt; selected-nonce replay probes | Replay checks do not make its first proof selected64. |
-| R1 example `r1p_retry_gate.rs:52–54,89` | OS96 single attempts and generic96 retry | Research retry/performance gate. |
-| R1 historical examples `native_gate.rs:34`, `proof_size_s1.rs`; `readbudget_count.rs:70–72` | Deterministic / retired eight-way or candidate APIs | Manifest records historical unbuildable combinations/missing `compact-binary` feature; not operational releases. Other R1 examples inspect semantics/folds or simulate, not user spend production. |
-| Profiling entry `tools/prover-speed-20261022/speed_profile.rs:16–17` | 64 private bytes with OS-generated public nonce | Not a retained proof-account callback/client. |
-| CLI `aspis-xtask v6-honest-proof` / `v7-honest-proof`, `xtask/src/main.rs:180–195`, `xtask/src/v6_release.rs:359–363,471–475` | Public proof-account nonce, 64 private bytes → V6/V7 onefold production builders | **Other protocol**, not R1 callback/retry/proof format. |
-| Live client crate `tools/v7-live-pool-proof/src/lib.rs:63–71,93–101` | `generate_for_mask_nonce(plan.attempt_id)` → V7 pair-forest transfer/withdrawal onefold | **Other protocol**; wallet adapter binds attempt ID to proof account (`crates/aspis-pool-wallet-v1/src/live_pool_witness_adapter_v2.rs:673,811`). |
-| `tools/v7-txv1-honest-proof/src/main.rs:100–112` | `build_v7_pair_forest_transfer_fixture_mined_v1` → deterministic fixture seeds (`crates/aspis-prover/src/v7_pair_forest_fixture.rs:351–353`) | Mined V7 fixture, not selected R1. Its upload-request binary `src/bin/build_proof_upload_requests.rs:104` reads existing payload, does not prove. |
-| CLI V5 artifact builder, `xtask/src/spend_devnet/v5.rs:4166`, `xtask/src/v5_cu_probe.rs:1371` | V5 runtime-bound production demo body | **Other protocol**. Older spend execute/readiness/upload commands consume existing artifacts; they do not become selected R1 by submitting them. |
-| `aspis-prover` example `spend_production_miner.rs:221` → `state_only_spend.rs:1003–1010` | OS96 bounded first-good/mined state-only spend | **Other protocol**, 17 attempts, not R1 eight-attempt route. |
-| `aspis-prover` example `spend_fixture.rs:81–83`; `tools/v8-state-only-cu-probe/src/main.rs:118` | Deterministic spend fixture / low-level state-only proof | **Other protocol**. `spend_complete_good_product` and `spend_soundness_epro_ledger` analyze saved artifacts, not selected R1 spend generation. |
-| Lower-level `aspis-prover` APIs `src/lib.rs:288–735`, `src/r0.rs:70`, `src/state_only_proof.rs:167,212`, `src/v6_onefold_prover.rs:1778–2100` | Generic stage/R0, state-only, V6/V7 production/fixture builders with caller data | Library building blocks, no automatic R1 client-route binding. |
-| Wallet crate `crates/aspis-pool-wallet-v1/src/live_pool_witness_adapter_v2.rs:4–5`; examples `tx_v1_devnet_probe`, `tx_v1_simulation_request` | Witness/request/account/upload construction | No spend prover invocation; external V7 handoff above is distinct. On-chain programs verify/settle, not produce user proofs. |
+| `devnet_spend::main`, `action=prove` → `plan::run` → `plan::prove` | `prove_masked_retrying`, Generic96; independently supplied publication key | `RealR1_client::prove_for_proof_accounts`; ordered eight-key callback, S2, public nonce = retained proof-account key, two private 32-byte seeds |
+| Python `r1_devnet_spend.py` orchestration | one independently selected proof account; saved plan could bypass mapping | `Client64_proof_accounts.proof_plan`, eight retained keys before invocation, exclusive claim, persisted original request, checked successful `attempts - 1` mapping and artifact hashes |
+| Publication | independently supplied proof account | selected key appears at settlement index 10 and stage1 index 0; Python uses its retained key for account creation/upload |
+| Error/resume path | legacy saved-plan reuse | legacy independent-key ABI rejected; failed/entered/interrupted mapping requires manual recovery; no automatic new ledger/key allocation after ambiguous invocation |
+| Inventory | known flat key/recovery paths | nested attempt keys, generated/staging copies, manifests, legacy and selected recovery paths; discovery/IO/mode/symlink errors prevent completion before RPC |
+| Generic96 library APIs and other probes | exported generic/fixture APIs | unchanged; no call/fallback from the operational runner/planner |
 
-Inventory covers checked-in `crates/`, `tools/`, `xtask/`, `scripts/` and
-`programs/`; copied evidence, tests and parked experiment snapshots are not
-additional shipped clients. This is source inspection, not a formal whole-program
-call-graph or installed-binary census.
+Eight reviewed production/test files were transplanted with `git show` from
+parked candidate `1dfbd5711684d73fc2ff664cfae9ae78f7dd34f8`, rather than merging
+its branch. They are the planner/account helper and the six Python
+retention/inventory/driver/test files listed in `stage1-review.md`. The new
+runner-route test and integration harness are this job's additions. No file
+under `crates/` or `programs/` changes relative to `research`; no three-ELF
+rebuild trigger is introduced.
 
-## Release identity and selected experiment
+## Concrete caller and observable boundary
 
-`design/RELEASE-LEDGER-20261025.md:214` explicitly keeps this route open and
-client64 parked. Lines 225–243 pin on-chain artifacts, not a host client:
+The headline's `rust` must describe the complete operational execution rooted
+at **`devnet_spend::main` with `action=prove`**, entered from
+`scripts/r1_devnet_spend.py` through `Client64_proof_accounts.proof_plan` and
+its subprocess callback. Its selected inner function is
+`devnet_spend::plan::prove`. `client-pins.json` records the exact file:line chain
+through the selected adapter, `generate_for_mask_nonce`, retry owner,
+`prove_masked_attempt`, reservation and private prover body. A symbol name
+alone is not an `FSExperiments`, `RunJoin`, or `RustRealRefinement` instance.
 
-| Artifact | SHA-256 (historical release pin, not freshly reproduced) |
-|---|---|
-| Default verifier | `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4` |
-| Devnet verifier | `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299` |
-| Pool | `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548` |
+The implementation retains the selected adapter and all called crate bytes.
+Only `Rejected` retries; entropy errors, malformed public serialization,
+duplicate/reservation failures and other fatal errors keep their native order.
+The new client ABI first checks the eight nonzero distinct account keys, before
+statement processing. The proof directory and note-recovery write precede
+opening the ledger and entropy/prover call. Reservation occurs before masks
+and salts; rejected/fatal/interrupted/unused attempt keys and ledgers remain
+retained. The ledger is scoped to the retained proof invocation. The production
+helper allocates fresh keys and permanently claims that invocation, and never
+re-enters an ambiguous run or silently resets its ledger. Arbitrarily replacing
+private ledger storage is not certified; E2 remains explicit.
 
-D162 decision 1 selects **public nonce = retained proof-account key**, with only
-two private 32-byte seeds. `state_only_entropy.rs:202` implements that draw;
-`generate()` instead chooses all three blocks. D186/D187's R1 host result is
-the selected library caller, durable ledger and fail-closed duplicates, with
-verifier untouched. `REAL-R1-20261023.md` stage 6 explicitly says this is a
-library caller/control instance and is not yet wired into a network client.
-`RealR1_client_tests.rs:24–29,48–55` exercises direct/adapter paths and native
-Rust verifiers, plus duplicate failure. It never loads a pinned verifier ELF.
-Historical all-three-ELF reproduction is artifact identity, not execution of
-this client's proof through that ELF.
+On success, `attempts`, selected index/key, `mask_audit`, proof length/count,
+`prove_wall_seconds`, instruction accounts and order, statement/proof files and
+manifest transitions remain observables of this client. Python adds subprocess
+errors, saved requests/plans, signed receipts, creation/upload/stage1/settlement,
+RPC errors/reconciliation and timing. Inventory has its own visible validation
+failures. These must all be in the experiment's observer/effect image. We do
+not erase error origins, retry counts, cleanup, ledger IO, oracle/TLS history,
+output lengths, publication or the new retained mapping from the argument.
 
-Moreover, `evidence/real-r1-20261023/summary.json` records historical default
-`40dc75742430dd198bd51d519aa5a41bad4a45e8f173ccbd51c6d5be344ac3f0`
-and devnet `12cb0bc2f8ff3993643638080a3786fdcd941910e5e4dd65ae2937a99290c28f`,
-which differ from the current release pins above; Pool matches. Its selected
-transfer measured 60.2266s versus 47.2759s direct (+27.39%, contended host),
-and stopped on the 10% gate. These historical receipts cannot be relabelled
-as current pinned-ELF integration or quiet-host performance acceptance.
+## Validation and integration
 
-The headline's `rust : FSExperiments ...` must be instantiated by the complete
-execution of the adopted client invoking
-`aspis_r1_cost_probe::RealR1_client::prove_for_proof_accounts` →
-`StateOnlyAttemptSecrets::generate_for_mask_nonce` →
-`aspis_r1_cost_probe::prover::prove_masked_retrying_with` →
-`prove_masked_attempt`/private prover body, including errors, ledger effects,
-key policy, publication and observer events. The present operational planner
-does not instantiate that selected execution. A function name alone cannot
-instantiate `RustRealRefinement`: the actual `rust.real`, `rust.observe`,
-randomness law and `RunJoin` must be supplied at these source/artifact pins.
+31 lifecycle/inventory Python tests pass. Three optimized Rust runner tests
+pass: invalid ABI/duplicate account keys, first/retry/eighth-attempt mapping,
+and lexical exclusion of alternative prover calls from the operational source.
+The latter is a regression guard on the pinned runner/planner, not a general
+machine-code call-graph absence theorem. Generic APIs remain elsewhere.
 
-## Gaps and minimum owner proposal
+The runtime gate invokes the actual built `devnet_spend` subprocess to produce
+proofs with OS entropy and the actual durable ledger. It checks the successful
+key against retained ledger records, reopens that ledger, invokes the unchanged
+selected adapter with the same nonce under a second valid statement, requires
+`Semantic`, and verifies every durable record is unchanged. Thus reuse across
+statements fails closed inside that ledger. Rust key-list tests separately
+exercise rejection at the operational ABI boundary.
 
-1. No adopted selected64 operational caller or pinned deployed client bundle.
-2. Proof-account selection is disconnected from entropy in the current runner;
-   a separately published account key does not repair the nonce law.
-3. No current client-to-pinned-ELF proof-account integration receipt, and no
-   artifact-level exclusion of the generic96 fallback.
-4. R1 native control evidence retains public prefix/hash binding, initial/retry
-   invariant, reachable R2/R3 body, cleanup/Drop/error effects, E1/E2 and exact
-   experiment marginals. Retain seed/fuel/query-scan obligations and all
-   L1/L2/L3 observer obligations; do not weaken `simE` or the observer.
-5. Final client/native/compiler/features/CPU identity, native refinement,
-   identical-coin 1000 whole-prover comparisons, quiet median <15s and H5
-   slowdown <=10% remain adoption gates (release ledger:227–228).
+The gate executes actual signed LiteSVM transactions against all three pinned
+ELFs: verifier stage1 writes a distinct checkpoint while leaving proof/public
+inputs unchanged; stage2 must return the exact expected ASR8 without changing
+inputs; the actual planner's Pool settlement must return that ASR8, and the
+runner validates the resulting lane and consumed nullifier marker. Default
+and devnet proofs bind their respective embedded Pool/Registry identities.
+Raw proof/public carrier and authenticated state images are preloaded fixtures;
+this is not network deployment, live registry provisioning, or carrier
+create/upload evidence. No production wallet is used. Task keys and ledgers
+remain on the host; no cleanup/refund transaction occurs.
 
-**Minimal wiring change, proposed only:** change
-`tools/r1-cost-probe/src/bin/devnet_spend/plan.rs` to call the existing selected
-adapter using retained per-attempt keys, choose exactly `attempts - 1` for
-stage1/settlement, and change `scripts/r1_devnet_spend.py` to allocate/persist
-that mapping before proving and use its selected key for create/upload.
-Add a small account-policy helper and Python retention/resume helper; update
-`scripts/r1_devnet_inventory.py` plus inventory helper to discover every new
-key/recovery path. Keep rejected, unused, fatal and interrupted keys/ledgers;
-fail closed on ambiguous resume/duplicates/IO errors, with no generic fallback.
-The reviewed candidate already proposes this implementation; do not duplicate
-or merge it here.
+All four fixture cases are accepted: default transfer/withdrawal and devnet
+transfer/withdrawal, each on attempt 1, with the exact pinned Pool. The acceptance
+record is [`runtime-02-public/acceptance.json`](../evidence/pv-client-20261026/runtime-02-public/acceptance.json).
+Its scope receipt is [`runtime-02/receipt.json`](../evidence/pv-client-20261026/runtime-02/receipt.json):
+source `ce5583a4a2`, exit 0, wall **195.957410694 s**, peak RSS **547352 KiB**,
+**0 swaps**. Full source revision/argv/limits/input fingerprint are in that
+receipt; each execution JSON includes instruction accounts, signed transaction
+hash/length, CU, runtime logs and return hash. Binary/compiler/CPU/ELF SHA/size
+pins are in [`runtime-bundle.json`](../evidence/pv-client-20261026/runtime-bundle.json).
+The 1,295-file SHA-256/size source dictionary and exact file:line chain are in
+[`client-pins.json`](../evidence/pv-client-20261026/client-pins.json), generated by
+`python3 tools/pv-client-20261026/PV_client_pins.py`; use `--check` to verify.
+It deliberately overapproximates called source rather than omitting transitive
+crate/build/checker inputs. Cargo dependencies are pinned by the lockfiles;
+this is not a new whole-machine dependency-closure proof.
 
-This minimum touches **tools/ and scripts/, no crates/ or programs/**. The
-current job explicitly stops before implementation/adoption; no three-ELF
-rebuild is triggered by this documentation. If final native prover integration
-changes any crates/ or programs/, all three ELFs must be rebuilt and match the
-pins, or stop and escalate. Historical identities alone cannot satisfy that
-changed-source gate. Owner escalation is required by this task's step 3 and
-the frozen-implementation instruction in `pv-common.txt`.
+The first runtime run retained a successful default transfer, then rejected
+an incorrectly default-bound statement under the devnet ELF. The changed gate
+uses the pinned devnet Pool/Registry IDs rather than changing the verifier or
+misreporting the rejection. Its failed receipt and replacement, the initial
+harness import error, and an overbroad lexical-test failure are all retained.
+See [`README.md`](../evidence/pv-client-20261026/README.md) for every run's resources,
+including the reservation refusal and the recorded wait-rule breach (110.6 s
+instead of the required 180 s). The retry independently passed admission. No failed
+run was repeated unchanged. Every Rust command uses optimized code and one admitted
+6G/8G/no-swap/64-task scope at a time, four Cargo jobs. No Lean/Kani theorem is
+changed or needed to establish this operational source/fixture condition.
 
-## Integration receipt required before adoption
+## Release-ledger rows to pin
 
-Pin by SHA-256 and size: exact client binary, Python bundle/helpers, manifests,
-Cargo.lock, selected caller/prover/entropy/ledger closure, compiler/flags/features,
-verifier/Pool ELF and program IDs; record source revision and dirty hashes.
-Exercise actual planner and selected callback for transfer and withdrawal, with
-the resulting successful nonce/key used for account creation, upload, stage1
-and settlement against the pinned ELF in a controlled runtime. Record actual
-acceptance and protected-state effects, not just native `verifier::tx1/tx2`.
-Include rejection then success/eighth-attempt mapping, duplicate and durable
-failure, exhaustion/entropy failure, interrupted/error resume and retained state.
-Use source/call reachability checks plus exact built-feature/binary association
-to exclude generic96 from this shipped entry, including fallbacks; other
-exported library APIs can remain. No runtime acceptance or absence theorem
-is claimed in this audit. Keep every funded/refundable/authority key securely.
+The lead should pin these **row shapes**, without treating this document as an
+edit to `design/RELEASE-LEDGER-20261025.md`:
 
-## Premise delta and validation
+| Row | Identity / evidence fields | Disposition |
+|---|---|---|
+| Selected proof-account client route and caller-error behavior | client revision, `devnet_spend::main` action ABI, source dictionary digest, binary SHA/size, exact compiler/target/features/flags, configured signer, Python bundle SHA dictionary, ordered callback and retained key/ledger policy, positive/duplicate receipts | Operational Generic96 mismatch removed in this branch; source/fixture subgate closes, installation/adoption and full error/event refinement remain |
+| Representable statement domain and publication/observer association | same client pins, complete request/public bytes image, successful attempt index/nonce/key, proof/statement hashes, create/upload/stage1/settlement instructions and program IDs, runtime ASR8/state effects | Informed by tested fixtures and mapping tests; universal statement/observer association remains |
+| Freeze and all three ELF association | unchanged crate/program dictionary; default/devnet/Pool SHA/size and loaded Program/ProgramData readback; locked dependency and host binary pins | Current pinned-ELF fixture integration supplied; not a changed-verifier reproduction or live cluster attestation |
+| Prover rewrite adoption | exact selected client + final prover/controller/Drop source pins, source/effect/native equivalence, fixed-coin 1000 whole-prover comparisons, all applicable artifact identities, quiet median <15s and H5 slowdown <=10% | Client wiring contributes one necessary condition; other gates remain |
+| L1 outcome counts and joint mask/count/TLS/oracle transcript; E2 | manifest/claim/reservation effects, all retry/abort/error/publication/cleanup events on this exact client, producer-to-model and joint law evidence | Still open; mock fault tests and successful native fixtures do not discharge native event transport or E2 |
+| L2/CT-v2; L3 platform; Real-prover refinement; final closure/axioms | exact final client/prover binary/compiler/CPU and complete observer, native two-run/source joins, coherent dependency replay and axioms | Retained obligations; no side-channel or refinement closure claimed |
 
-Before: deployment requires “client uses selected proof-account route.” After:
-**same requirement, unsatisfied by the audited operational planner**. No Lean
-statement, quantifier, event, bound, trust field or deployment premise is removed,
-added or weakened. This checked source-routing counterexample is the task's
-stop condition; spending Lean/Kani budget cannot repair a different caller.
+Before: “operational planner uses Generic96; selected client route has no native
+runner instance or current pinned-ELF acceptance receipt.” After: “operational
+planner uses selected64, concrete retained-key mapping is pinned and tested,
+and the measured fixture acceptance/duplicate subgate has evidence.” The exact
+formal premise `RustRealRefinement` is **retained**, with no quantifier, carrier,
+conclusion, simulator or bad-event change. E1/E2, seed/fuel/query-scan events,
+complete real RunJoin, native owner/Drop/error bindings and all L1/L2/L3
+requirements remain. This removes the checked source mismatch, not the deployed
+privacy theorem's refinement hypothesis.
 
-Informs release-ledger rows “Selected proof-account client route and caller-error
-behavior” (:214), “Representable statement domain and publication/observer
-association” (:215), “Real-prover refinement” (:207), and “Prover rewrite
-adoption” (:227), plus E1/E2 and L1/L2/L3 rows. Removes **none**. No
-`design/PRIVACY-LEDGER-20261026.md` exists at the baseline; these exact row
-names/exact deployment condition identify the lead's prospective rows.
+## Final handoff
 
-Validation is source/document inspection. No Lean attempt, Kani
-run, Cargo check/test, host scope, proof generation, ELF execution, chain/RPC,
-wallet-secret read or key operation ran. Formal axioms/resource receipts are
-N/A. A local read-only Python source audit completed with exit 0; the tool
-reported 0.923102s wall. Peak RSS/swap were not measured for this small local
-audit, and no host/formal release receipt is claimed.
+Stage commits are separate: wiring `b7cd400a55`, source/test validation
+`5270ce4bf3`, final successful runtime source `ce5583a4a2`, acceptance evidence
+`5228877938`, followed by the source-pin and document commits. The preliminary
+audit is retained in git and `source-audit.json`; its baseline guard intentionally
+fails on the newly authorized wiring and is not the current pin checker.
 
-## Candidate review — unadopted, not merged
+`git diff --stat research.. -- crates programs` produces no output. No live
+chain transaction, key cleanup, push, merge, existing Lean-module edit, Lean
+compile, Kani run or launcher-range edit was made. Lean 0/10 (20500–20549
+unused), Kani 0/10; seven capped Rust commands (two rejected builds/tests,
+one runtime diagnostic failure, four successful commands), no overlapping
+scopes. The implementation source mismatch is removed and the fixture
+acceptance condition measured; additional theorem budget cannot turn those
+facts into a complete native privacy refinement.
 
-Reviewed only through git object reads: `codex/cx-client64-20261024`, exact head
-`1dfbd5711684d73fc2ff664cfae9ae78f7dd34f8`. This is the candidate D202
-reviewed, not a replacement shipping client in this branch.
-
-| Candidate addition | Concrete source / reviewed behavior |
-|---|---|
-| Selected64 planner | `tools/r1-cost-probe/src/bin/devnet_spend/plan.rs:81–82,115–117` imports the existing adapter, validates eight keys, opens the durable ledger, calls `prove_for_proof_accounts(..., |k| accounts.nonce(k))`, and selects the returned successful attempt. No generic96 wrapper call remains in that planner. |
-| Publication key mapping | `Client64_accounts.rs:13–47` rejects legacy input, malformed/zero/duplicate keys; enforces callback order; uses `attempts - 1`; inserts that same key into settlement position 10 and stage1 position 0. `plan.rs:126,129` emits these actual instruction accounts and selected route/index. |
-| Retention and interruption policy | `scripts/Client64_proof_accounts.py:63–79,114–188` persists private key/mapping data with exclusive staging/link publication, records entered/success states, validates requests/artifacts on resume and fails closed on incomplete runs. `scripts/r1_devnet_spend.py:164–184` uses the selected key for create/upload/stage1/settlement. Keys and ledgers for rejected, unused, fatal and ambiguous runs remain retained. |
-| Inventory migration | `scripts/r1_devnet_inventory.py` plus `Client64_inventory.py` cover known/configured nested key/recovery/staging paths and legacy coexistence; missing, symlink, mode and listing errors prevent completion before RPC. `Client64_inventory.py:44–48` supplies `os.walk(onerror=...)`; repeat scanning uses guarded `scandir` at :98. Reports cover configured roots, not every possible wallet location. |
-| Offline evidence | `.../evidence/client64-20261024/rust-03/receipt.json`: actual planner/helper, two tiny account-selection tests, exit 0, 0.512583489s, 222828KiB RSS, swap 0, optimized locked/offline `-j4`, 6G/8G/noSwap/Tasks64. `python-14.json`: 15 final inventory tests and source/import/receipt audit, exit 0, 2.62s, 100139008 bytes RSS, swap 0. Prior 16 lifecycle tests are reused with unchanged source hashes. These are historical results, not fresh execution here. |
-
-Candidate production changes are confined to tools/scripts; its report records
-no crates/programs change. The selected caller/prover/entropy bytes match the
-baseline in this audit. The candidate preserves the selected adapter's general
-mutable callback API; its concrete eight-key policy is not a new restriction
-on the theorem adversary. Mocked error/lifecycle tests do not prove actual
-entropy, disk, cleanup, oracle or timing semantics.
-
-Adoption remains blocked on a pinned complete client bundle (including new
-helpers), the final native selected prover, source/effect/refinement and
-NativeDrop/owner/error joins, literal E1 and retained E2, L1/L2/CT-v2/L3,
-whole-prover identical-coin 1000 comparisons, applicable all-three-ELF identity,
-the proof-account runtime integration receipt described above, and quiet
-selected-route median <15s/H5 slowdown <=10%. D202 explicitly claims no real
-proof generation, native privacy, ELF or performance gate. This review does
-not remove any of those gates. No candidate implementation is copied or run.
-
-## Reproducible source evidence
-
-Run `python3 -B tools/pv-client-20261026/PV_Client_audit.py`. It reads only
-repository sources and candidate git blobs, checks the operational routing
-counterexample, checks candidate selected64 wiring lexically, and verifies
-all **21** source/dependency hashes in candidate `python-14.json` plus the
-two actual Rust-03 tested-source hashes. It checks 48 current source pins
-against the exact baseline revision. This is a source/receipt integrity
-check, not a native call-graph proof, test rerun or acceptance receipt.
-
-Full SHA-256/size pins and exact source lines are committed in
-[`evidence/pv-client-20261026/source-audit.json`](../evidence/pv-client-20261026/source-audit.json).
-The generator is
-[`PV_Client_audit.py`](../tools/pv-client-20261026/PV_Client_audit.py).
-Its successful check is expected even though the deployment gate is open:
-it confirms that the documented mismatch is present, rather than certifying
-selected-route adoption. No released source or read-only ledger is modified.
-
-Next concrete deliverable for the lead/owner: decide adoption of the existing
-client64 bundle alongside the final gated native prover, then produce the
-selected client → pinned-ELF transfer/withdrawal receipt with exact final pins.
-This job stops at the verified source counterexample as required by task step 3;
-0/10 Lean attempts, 0/10 Kani runs, Env-J 20500–20549 unused.
+Next concrete deliverable: the lead adopts/pins the client bundle with its
+configured signer and retained storage policy, then binds the complete native
+client event/effect trace and its randomness/error marginals to `rust.real`,
+`rust.observe` and RunJoin on the final prover pins. Live carrier publication,
+installation attestation and all remaining adoption/performance/side-channel
+rows still require their named evidence. No release-ledger row is silently
+changed here.

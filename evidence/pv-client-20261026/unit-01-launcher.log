@@ -1,0 +1,50 @@
+Running as unit: run-r8eddf1b40a0c4aa6a7f32f5ffb634fbc.scope; invocation ID: e7649329cd1240aebe8e58f23425924e
+{"attempt": "unit-01", "exit_status": 101, "wall_seconds": 34.514774807030335, "peak_rss_kib": "563488", "swaps": "0", "print_axioms": "N/A: optimized Rust client gate"}
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-pv-client-20261026/src/crates/aspis-core)
+   Compiling aspis-r0-poseidon-copy v0.0.0 (/home/dombarker/project-offloads/codex-pv-client-20261026/src/docs/research/v8-r0-zk-20261009/refine/poseidon)
+   Compiling aspis-r0-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-pv-client-20261026/src/docs/research/v8-r0-zk-20261009/refine/writers)
+   Compiling aspis-r0-block-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-pv-client-20261026/src/docs/research/v8-r0-zk-20261009/refine/blockwriters)
+   Compiling aspis-r1-cert-check v0.0.0 (/home/dombarker/project-offloads/codex-pv-client-20261026/src/docs/resea
+...
+ment.rs:102:5
+    |
+ 99 | pub struct Commitment {
+    |            ---------- field in this struct
+...
+102 |     messages: Vec<Message<E>>,
+    |     ^^^^^^^^
+
+warning: method `matches` is never used
+   --> /home/dombarker/project-offloads/codex-pv-client-20261026/src/crates/aspis-r1-cost-probe/src/host_commitment.rs:223:8
+    |
+127 | impl Commitment {
+    | --------------- method in this implementation
+...
+223 |     fn matches(&self, messages: &[Message<E>]) -> bool {
+    |        ^^^^^^^
+
+warning: `aspis-z4b-probe` (lib) generated 1 warning
+warning: `aspis-prover` (lib) generated 29 warnings
+warning: `aspis-r1-cost-probe` (lib) generated 33 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 4 suggestions)
+   Compiling aspis-r1-cu-probe v0.1.0 (/home/dombarker/project-offloads/codex-pv-client-20261026/src/tools/r1-cost-probe)
+    Finished `release` profile [optimized] target(s) in 34.48s
+     Running unittests src/bin/devnet_spend.rs (native-target/release/deps/devnet_spend-63b62be01b04f616)
+
+running 3 tests
+
+thread 'plan::client64_accounts::route_tests::shipped_runner_has_no_generic96_fallback' (3702550) panicked at src/bin/devnet_spend/Client64_accounts.rs:97:17:
+alternative prover route: prover::
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test plan::client64_accounts::tests::first_rejected_and_last_selection ... ok
+test plan::client64_accounts::tests::invalid_abi ... ok
+test plan::client64_accounts::route_tests::shipped_runner_has_no_generic96_fallback ... FAILED
+
+failures:
+
+failures:
+    plan::client64_accounts::route_tests::shipped_runner_has_no_generic96_fallback
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin devnet_spend`
+

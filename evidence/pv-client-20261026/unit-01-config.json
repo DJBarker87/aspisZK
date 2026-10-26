@@ -1,0 +1,41 @@
+{
+  "attempt": "unit-01",
+  "kind": "optimized Rust client gate",
+  "source_revision": "b7cd400a5564fcb281f852ea3491c8043dce13de",
+  "source_tree_dirty": true,
+  "expected_time": "Optimized incremental compilation/link and tiny account-policy tests",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "test",
+    "--manifest-path",
+    "src/tools/r1-cost-probe/Cargo.toml",
+    "--release",
+    "--locked",
+    "--offline",
+    "-j",
+    "4",
+    "--features",
+    "r1p-check",
+    "--bin",
+    "devnet_spend",
+    "--",
+    "--nocapture"
+  ],
+  "timeout": 1800,
+  "sources": [
+    "src/tools/r1-cost-probe/src/bin/devnet_spend.rs",
+    "src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "src/tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-client-20261026/native-target",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4",
+    "CARGO_BUILD_JOBS": "4"
+  },
+  "deps_fingerprint": {
+    "manifest_sha256": "75e60fc48474894b27a8620374a4aeee200cc1040e97e720ffa77553d8c5ac76",
+    "manifest": "unit-01-inputs.json"
+  }
+}
