@@ -1,0 +1,55 @@
+{"attempt": "F3T_042", "exit_status": 1, "wall_seconds": 1.6136535880505107, "peak_rss_kib": "4248916", "swaps": "0", "print_axioms": ["'AspisR1.F3T_AcceptedTransport.original_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.F3T_AcceptedTransport.built_words' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.F3T_AcceptedTransport.annotated_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+F3T_AcceptedTransport.lean:32:4: error: Type mismatch
+  first
+has type
+  (eval H (originalWith rust P)).2.2 = true
+but is expected to have type
+  (eval H (rust ((eval H P).1 ++ (eval H (rust (eval H P).2)).1, (eval H P).2, (eval H (rust (eval H P).2)).2).2.1)).2 =
+    true
+F3T_AcceptedTransport.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H (rust (eval H (original D P)).2.1)
+in the target expression
+  (have v := eval H (original D P);
+    (v.1 ++ (eval H (rust v.2.1)).1, enrich (build D (view v)) v.2.1, v.2.2)) =
+    have v := eval H (original D P);
+    (v.1 ++ (eval H (F3_Model.verifier D v.2.1)).1, enrich (build D (view v)) v.2.1, v.2.2)
+
+D : 
+...
+F3T_AcceptedTransport.lean:32:4: error: Type mismatch
+  first
+has type
+  (eval H (originalWith rust P)).2.2 = true
+but is expected to have type
+  (eval H (rust ((eval H P).1 ++ (eval H (rust (eval H P).2)).1, (eval H P).2, (eval H (rust (eval H P).2)).2).2.1)).2 =
+    true
+F3T_AcceptedTransport.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H (rust (eval H (original D P)).2.1)
+in the target expression
+  (have v := eval H (original D P);
+    (v.1 ++ (eval H (rust v.2.1)).1, enrich (build D (view v)) v.2.1, v.2.2)) =
+    have v := eval H (original D P);
+    (v.1 ++ (eval H (F3_Model.verifier D v.2.1)).1, enrich (build D (view v)) v.2.1, v.2.2)
+
+D : LiteralByteProtocol.Decoder
+rust : Verifier
+inv : AnnotationInvariant rust
+join : RawJoin D rust
+P : Prover
+H : Bytes → State
+ha :
+  (have v := eval H (originalWith rust P);
+        (v.1 ++ (eval H (rust v.2.1)).1, enrich (build D (view v)) v.2.1, v.2.2)).2.2 =
+    true
+first : (eval H (originalWith rust P)).2.2 = true
+firstEq : eval H (originalWith rust P) = eval H (original D P)
+accept : (eval H (rust (eval H (original D P)).2.1)).2 = true
+⊢ (have v := eval H (original D P);
+    (v.1 ++ (eval H (rust v.2.1)).1, enrich (build D (view v)) v.2.1, v.2.2)) =
+    have v := eval H (original D P);
+    (v.1 ++ (eval H (F3_Model.verifier D v.2.1)).1, enrich (build D (view v)) v.2.1, v.2.2)
+'AspisR1.F3T_AcceptedTransport.original_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3T_AcceptedTransport.built_words' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3T_AcceptedTransport.annotated_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: F3T-042.scope; invocation ID: 32b1896171864ffda786b25b1280800c
