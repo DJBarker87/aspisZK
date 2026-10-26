@@ -204,3 +204,38 @@ WideExact::new values, boundary Kani covers all raw28-coefficient arrays,
 transition is payload-independent, powers is actual extracted source under
 retained primitives. Native representations/features/effects/artifacts and
 conjunct1 are not established. Root/headline premises removed0.
+
+## Capacity resume: gamma producer transported into the complete caller
+
+Recovered immutable host receipts14061–14067 complete the interrupted snapshot.
+Together with retained14050–14060 they establish the actual powers source's
+Result transport to the retained gamma/kappa producers. `BodyGamma.values`
+proves all29 indexed cells canonical and equal to x^i for canonical raw x;
+`BodyGamma.source` has no canonicality or successful-output hypothesis.
+`BodyGammaPort.body` installs the exact gamma producer at capacity29 in the
+complete caller, retaining failure/divergence and reservation state. Its
+`port_source` proves the replacement on every input and every capacity;
+other capacities retain the already selected powers owner. The remaining whole
+proof/audit data equation is still explicit in `BodyData.refinement_of_data`.
+This criterion does not prove that equation or instantiate a security contract.
+
+14068 passes in6.96s,4,343,576KiB RSS,zero swaps; all four theorem audits use
+standard axioms. No new native run or extraction is launched on this resume.
+All prior attempts count:64/65 continuation Lean attempts through14068 and7/7
+Kani runs are used. The final assigned Lean attempt is reserved for the focused
+cached axioms audit of accepted current modules. Source snapshots, exact
+commands, dependency fingerprints, revision labels, errors, timing and axioms
+are in the per-attempt receipts and summary. Raw early revision labels predate
+uncommitted inputs; snapshot hashes identify those exact inputs.
+
+Before/after: the selected powers slot formerly had only finite-control/totality
+facts; it now has the exact retained producer equation and29-element value law,
+installed through the full caller. No security-root statement, quantifier,
+carrier, bad event or conclusion changes. Four source/P6 candidate entries
+remain supplied225,51,120,254;35 of39 remain. Compression remains uninstalled:
+its Kani successors timed out, so owned-reference control is not promoted to
+shipped equivalence. Full native representation/ABI/compiler/artifact binding,
+remaining callbacks, whole proof/audit model equality, PrefixContract/BodyContract,
+E1/E2, ordered effects/ROM/TLS and real RunJoin remain open. Conjunct1/headline
+premises removed0; target not yet established. No keys, shipped Rust, frozen
+artifacts, existing proved modules, caps or infrastructure changed on this resume.
