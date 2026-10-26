@@ -13,8 +13,7 @@ theorem accepted (empty : Account → Result Bool) (system loader : Key)
       a.owner = system ∧ empty a = ok true := by
   rw [control,PoolM_NativeCancelReject.then_accepted]
   by_cases owner : a.owner = system
-  · cases h : empty a <;> simp [owner] <;> rename_i x
-    cases x <;> simp
+  · cases h : empty a <;> simp [owner]
   · simp [owner]
 
 #print axioms accepted
