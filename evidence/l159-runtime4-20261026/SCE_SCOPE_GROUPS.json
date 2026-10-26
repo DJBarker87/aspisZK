@@ -1,0 +1,36 @@
+{
+  "schema": "SCE sequential capped scope v1",
+  "groups": [
+    {
+      "name": "SCE_BATCH1",
+      "admission": "SCE_BATCH1-reservation-retry2.json",
+      "actual_attempts": [
+        "SCE_072",
+        "SCE_073",
+        "SCE_022",
+        "SCE_023"
+      ],
+      "planned_attempts": [
+        "SCE_072",
+        "SCE_073",
+        "SCE_022",
+        "SCE_023",
+        "SCE_024",
+        "SCE_025",
+        "SCE_026",
+        "SCE_027",
+        "SCE_028",
+        "SCE_029",
+        "SCE_031",
+        "SCE_032",
+        "SCE_033",
+        "SCE_034",
+        "SCE_035",
+        "SCE_036"
+      ],
+      "command": "cd /home/dombarker/project-offloads/codex-cx-sound-int2-20261025 && python3 JFz_reservation.py SCE_BATCH1-reservation-retry2.json && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 -c 'import subprocess\nfor n in [\"SCE_072\",\"SCE_073\",\"SCE_022\",\"SCE_023\",\"SCE_024\",\"SCE_025\",\"SCE_026\",\"SCE_027\",\"SCE_028\",\"SCE_029\",\"SCE_031\",\"SCE_032\",\"SCE_033\",\"SCE_034\",\"SCE_035\",\"SCE_036\"]:\n subprocess.run(['\\''python3'\\'','\\''S2W_lean_host.py'\\'',n+'\\''.json'\\''],check=True)\n'",
+      "reference_receipt": "SCE_072/receipt.json",
+      "note": "One admitted 8 GiB scope, one module per unchanged launcher invocation, sequential, stopped on first failure. Cgroup peak is cumulative across this group; /usr/bin/time RSS is per invocation."
+    }
+  ]
+}
