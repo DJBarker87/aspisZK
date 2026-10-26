@@ -10024,3 +10024,32 @@ statement of the eight obligations. Rows removed: 0. pv-runjoin4 was stopped sec
 relaunched as pv-runjoin4b with the order corrected: instantiate `runtime`/`boundary` from the frozen
 extracted operational client first (free parameters 2→0, record restated at the concrete instance),
 then discharge fields. This entry is the record of the correction; nothing in the proof tree changed.
+
+## D206 (Stream B, 2026-10-26 20:10): OS entropy failure is outside the model; owner decision requested
+
+pv-runjoin4b (`codex/pv-runjoin-20261026`, head 5090b732a0; 11/100 Lean, 0/15 Kani, stopped early
+against the completion rule; audit 23416 exit 0, 25.16 s, 3.18 GB, swap 0; standard axioms) did not
+construct the concrete instance (parameters 2→2, fields 8→8, rows removed 0) but surfaced a model gap:
+- Proved: the emitted Draw64 owner transports partial-write OS errors and the shared-world client
+  stops before the body; normalised kernels satisfy the conditional E1 law with zero success
+  availability (E1 does not exclude the fault path, by design: D147 states E1 "without assuming
+  availability"); every successful model `firstGood` branch has a nonempty oracle log, preserved by
+  reencoding for complete observers; hence an empty native log disagrees with that model-success log.
+- Measured: the literal selected entropy factory (pinned getrandom/zeroize) returns `Os(EIO)` under a
+  process-only seccomp EIO fault; the EPERM probe did not reproduce because getrandom falls back to
+  /dev/urandom (retained as a setup failure).
+So a real run in which the OS entropy source fails yields a view (empty log, error) that the current
+model never produces, and that world is outside the fixed bad event. This is not a witness-dependent
+leak claim: no outside-bad witness/decoder counterexample is constructed yet, and OS failure is
+expected to be witness-independent (to be proved by runjoin5).
+
+**Escalation 3 to the owner (contract/model, D185 comparison contract).** Two repairs, neither adopted:
+(A) availability-conditioned endpoint: add a named environment assumption `OsAvailable` (getrandom
+does not fail during the proof-account run) as a trust item; the headline statement is otherwise
+unchanged. (B) failure-as-public-input: make the environment failure signal a public input to BOTH
+experiments so the simulator sees the same witness-independent failure; the error bound is unchanged,
+but the model statement changes. Lead recommendation: (B), because it needs no new trust and keeps
+the observer complete (an attacker who can induce EIO sees the failure in both worlds), provided
+runjoin5 proves the failure event witness-independent; (A) otherwise. pv-runjoin5 relaunched with the
+remaining 89 Lean / 15 Kani to state the disagreement exactly, prepare both options as separate stated
+theorems, and continue the concrete instance. Six jobs running. Privacy target not yet established.
