@@ -39,3 +39,9 @@ the first final audit. It uses CanonicalRequest.amount to equate the actual
 withdrawal request with the reference's amount projection; its private-record
 identity then applies ReferenceWithdrawal.witness. It is for the family phase
 after the first pending-module/audit sequence, not an accepted result.
+
+At 22:12:30 UTC, 27419 (PathBits) was refused by the aggregate reservation
+barrier: 51,942,260,736 reserved bytes plus 8 GiB exceeds the 55 GiB limit.
+Zero charge; next ID is 27420 after the required three-minute wait.
+CanonicalNormalize compiled at 27402 with standard axioms. The rebuilt
+launcher uses TasksMax=64 (stricter than accepted 128), memory caps unchanged.

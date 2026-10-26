@@ -98,6 +98,22 @@ This table is a rendering of existing evidence, not a final kernel replay.
 | 25400 | R1Z/PV_Src_RecordAdmission | 0 | 0:02.22 | 4097864 | 0 | cef0887322 | standard only |
 | 27401 | R1Z/PV_Src_WithdrawalRecipient | 0 | 0:01.64 | 4091888 | 0 | 18c180a456 | standard only |
 | 27402 | R1Z/PV_Src_CanonicalNormalize | 0 | 0:01.64 | 4090916 | 0 | 18c180a456 | standard only |
+| 27403 | R1Z/PV_Src_LowBits | 0 | 0:01.67 | 4096372 | 0 | ad4e2be474 | standard only |
+| 27404 | R1Z/PV_Src_PathPacking | 0 | 0:01.72 | 4097728 | 0 | ad4e2be474 | standard only |
+| 27405 | R1Z/PV_Src_Forest_BankMerge | 0 | 0:01.75 | 3818596 | 0 | ad4e2be474 | standard only |
+| 27406 | R1Z/PV_Src_Forest_PrimitiveWriters | 0 | 0:02.13 | 3832772 | 0 | ad4e2be474 | standard only |
+| 27407 | R1Z/PV_Src_Forest_PrimitiveArguments | 0 | 0:01.59 | 3825124 | 0 | ad4e2be474 | standard only |
+| 27408 | R1Z/PV_Src_Forest_Inverse | 0 | 0:01.98 | 3836444 | 0 | ad4e2be474 | standard only |
+| 27409 | R1Z/PV_Src_Forest_InverseResult | 0 | 0:01.57 | 3820308 | 0 | ad4e2be474 | standard only |
+| 27410 | R1Z/PV_Src_Forest_PrimitiveDigests | 0 | 0:04.19 | 3877256 | 0 | ad4e2be474 | standard only |
+| 27411 | R1Z/PV_Src_Forest_DigestArguments | 0 | 0:02.56 | 4113796 | 0 | ad4e2be474 | standard only |
+| 27412 | R1Z/PV_Src_NativeDirections | 0 | 0:01.97 | 4109364 | 0 | ad4e2be474 | standard only |
+| 27413 | R1Z/PV_Src_Public | 0 | 0:01.60 | 4096124 | 0 | ad4e2be474 | standard only |
+| 27414 | R1Z/PV_Src_NativeInput | 0 | 0:01.64 | 4106064 | 0 | ad4e2be474 | standard only |
+| 27415 | R1Z/PV_Src_RecordReference | 0 | 0:01.70 | 4108960 | 0 | ad4e2be474 | standard only |
+| 27416 | R1Z/PV_Src_PublicRecords | 0 | 0:01.73 | 4094288 | 0 | ad4e2be474 | standard only |
+| 27417 | R1Z/PV_Src_CheckedEncoding | 0 | 0:01.69 | 4109124 | 0 | ad4e2be474 | standard only |
+| 27418 | R1Z/PV_Src_PathIndex | 0 | 0:01.82 | 4114632 | 0 | ad4e2be474 | standard only |
 
 ## Kani
 
