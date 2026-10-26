@@ -1,0 +1,175 @@
+import R1Z.ProverRwEntropyAbort64
+import R1Z.ProverRwEntropyBudget64
+import R1Z.ProverRwEntropyByteOr
+import R1Z.ProverRwEntropyCarrier64
+import R1Z.ProverRwEntropyDecode64
+import R1Z.ProverRwEntropyExhaust64
+import R1Z.ProverRwEntropyHalves
+import R1Z.ProverRwEntropyKernel64
+import R1Z.ProverRwEntropyKernelBounds64
+import R1Z.ProverRwEntropyKernelLaw64
+import R1Z.ProverRwEntropyKernelRate64
+import R1Z.ProverRwEntropyNonceGuard64
+import R1Z.ProverRwEntropyOwnerSequence64
+import R1Z.ProverRwEntropyPartition64
+import R1Z.ProverRwEntropyRepeated64
+import R1Z.ProverRwEntropyResume64
+import R1Z.ProverRwEntropySequence64
+import R1Z.ProverRwEntropySequenceBound64
+import R1Z.ProverRwEntropySequenceComplete64
+import R1Z.ProverRwEntropyStep64
+import R1Z.ProverRwEntropySum64
+import R1Z.ProverRwEntropyTermination64
+import R1Z.ProverRwEntropyUniform64
+import R1Z.ProverRwEntropyZero32
+import R1Z.ProverRwOuterAfterChecks
+import R1Z.ProverRwOuterBytes
+import R1Z.ProverRwOuterCaller
+import R1Z.ProverRwOuterContext
+import R1Z.ProverRwOuterContextModel
+import R1Z.ProverRwOuterEncode
+import R1Z.ProverRwOuterFrames
+import R1Z.ProverRwOuterGuardBridge
+import R1Z.ProverRwOuterGuardLeaves
+import R1Z.ProverRwOuterInstalled
+import R1Z.ProverRwOuterMapErr
+import R1Z.ProverRwOuterPrefix
+import R1Z.ProverRwOuterPrepare
+import R1Z.ProverRwOuterRejected
+import R1Z.ProverRwOuterReservationFailure
+import R1Z.ProverRwOuterTag
+import R1Z.ProverRwOuterWrite
+import R1Z.PrivacyR1HeadlineDeployedReal
+import R1Z.RealR1_OuterOwner
+
+/-- Joint focused input/axiom audit only; this is not a frozen-manifest replay. -/
+#print axioms R1Z.ProverRwEntropyAbort64.failure_mass
+#print axioms R1Z.ProverRwEntropyAbort64.decode_none_iff
+#print axioms R1Z.ProverRwEntropyAbort64.candidate_bad_mass
+#print axioms R1Z.ProverRwEntropyAbort64.unavailable_generate
+#print axioms R1Z.ProverRwEntropyAbort64.unavailable_mass
+#print axioms R1Z.ProverRwEntropyAbort64.e1_no_subunit_availability
+#print axioms R1Z.ProverRwEntropyBudget64.failure_bound
+#print axioms R1Z.ProverRwEntropyByteOr.or_zero_iff
+#print axioms R1Z.ProverRwEntropyByteOr.chain_zero_iff
+#print axioms R1Z.ProverRwEntropyCarrier64.privateEquiv
+#print axioms R1Z.ProverRwEntropyCarrier64.cardinality
+#print axioms R1Z.ProverRwEntropyCarrier64.transported_mass
+#print axioms R1Z.ProverRwEntropyCarrier64.sixteen_power
+#print axioms R1Z.ProverRwEntropyCarrier64.eight_power
+#print axioms R1Z.ProverRwEntropyDecode64.split_join
+#print axioms R1Z.ProverRwEntropyDecode64.raw_zero_iff
+#print axioms R1Z.ProverRwEntropyDecode64.after_full
+#print axioms R1Z.ProverRwEntropyExhaust64.exhaustion_first
+#print axioms R1Z.ProverRwEntropyExhaust64.zero_nonce_mass
+#print axioms R1Z.ProverRwEntropyExhaust64.exhaustion_mass
+#print axioms R1Z.ProverRwEntropyHalves.first_half
+#print axioms R1Z.ProverRwEntropyHalves.second_half
+#print axioms R1Z.ProverRwEntropyHalves.back_join
+#print axioms R1Z.ProverRwEntropyHalves.copy_half
+#print axioms R1Z.ProverRwEntropyHalves.nonzero_block
+#print axioms R1Z.ProverRwEntropyKernel64.marginal_step
+#print axioms R1Z.ProverRwEntropyKernel64.e1_arrival
+#print axioms R1Z.ProverRwEntropyKernel64.output_uniform
+#print axioms R1Z.ProverRwEntropyKernelBounds64.zero_bound
+#print axioms R1Z.ProverRwEntropyKernelBounds64.campaign_bound
+#print axioms R1Z.ProverRwEntropyKernelBounds64.eight_bound
+#print axioms R1Z.ProverRwEntropyKernelLaw64.sixteen_law
+#print axioms R1Z.ProverRwEntropyKernelLaw64.eight_exhaustion
+#print axioms R1Z.ProverRwEntropyKernelRate64.uniform_event
+#print axioms R1Z.ProverRwEntropyKernelRate64.retry_total
+#print axioms R1Z.ProverRwEntropyKernelRate64.retry_nonnegative
+#print axioms R1Z.ProverRwEntropyKernelRate64.retry_bound
+#print axioms R1Z.ProverRwEntropyKernelRate64.sixteen_zero_bound
+#print axioms R1Z.ProverRwEntropyNonceGuard64.zero_nonce
+#print axioms R1Z.ProverRwEntropyNonceGuard64.nonzero_nonce
+#print axioms R1Z.ProverRwEntropyOwnerSequence64.owner_exact
+#print axioms R1Z.ProverRwEntropyOwnerSequence64.at_most_sixteen
+#print axioms R1Z.ProverRwEntropyPartition64.subtype_partition
+#print axioms R1Z.ProverRwEntropyPartition64.decode_none_iff
+#print axioms R1Z.ProverRwEntropyPartition64.decoder_partition
+#print axioms R1Z.ProverRwEntropyPartition64.raw_partition
+#print axioms R1Z.ProverRwEntropyPartition64.uniform_sum
+#print axioms R1Z.ProverRwEntropyPartition64.law_normalized
+#print axioms R1Z.ProverRwEntropyPartition64.step_mass
+#print axioms R1Z.ProverRwEntropyPartition64.e1_step_conservation
+#print axioms R1Z.ProverRwEntropyRepeated64.all_sixteen
+#print axioms R1Z.ProverRwEntropyRepeated64.next_repeated
+#print axioms R1Z.ProverRwEntropyRepeated64.run_bad
+#print axioms R1Z.ProverRwEntropyRepeated64.repeated_exhaustion
+#print axioms R1Z.ProverRwEntropyRepeated64.repeated_mass
+#print axioms R1Z.ProverRwEntropyRepeated64.fixed_coordinate
+#print axioms R1Z.ProverRwEntropyResume64.from_slice_half
+#print axioms R1Z.ProverRwEntropyResume64.after_join
+#print axioms R1Z.ProverRwEntropySequence64.run_model
+#print axioms R1Z.ProverRwEntropySequenceBound64.increment
+#print axioms R1Z.ProverRwEntropySequenceBound64.reads_bound
+#print axioms R1Z.ProverRwEntropySequenceComplete64.complete
+#print axioms R1Z.ProverRwEntropySequenceComplete64.owner_complete
+#print axioms R1Z.ProverRwEntropyStep64.after_os
+#print axioms R1Z.ProverRwEntropyStep64.os
+#print axioms R1Z.ProverRwEntropyStep64.cap
+#print axioms R1Z.ProverRwEntropyStep64.unserved
+#print axioms R1Z.ProverRwEntropyStep64.full
+#print axioms R1Z.ProverRwEntropyStep64.failed
+#print axioms R1Z.ProverRwEntropyStep64.diverged
+#print axioms R1Z.ProverRwEntropySum64.swap_weighted_sum
+#print axioms R1Z.ProverRwEntropyTermination64.done_step
+#print axioms R1Z.ProverRwEntropyTermination64.terminal_step
+#print axioms R1Z.ProverRwEntropyTermination64.stop_step
+#print axioms R1Z.ProverRwEntropyTermination64.zero_step
+#print axioms R1Z.ProverRwEntropyTermination64.conservation
+#print axioms R1Z.ProverRwEntropyUniform64.constant_factor
+#print axioms R1Z.ProverRwEntropyUniform64.success_factor
+#print axioms R1Z.ProverRwEntropyUniform64.sixteen_factor
+#print axioms R1Z.ProverRwEntropyZero32.read_value
+#print axioms R1Z.ProverRwEntropyZero32.scan_finite
+#print axioms R1Z.ProverRwEntropyZero32.chain_zero
+#print axioms R1Z.ProverRwEntropyZero32.nonzero_correct
+#print axioms R1Z.ProverRwOuterBytes.value_bytes
+#print axioms R1Z.ProverRwOuterCaller.source_entry
+#print axioms R1Z.ProverRwOuterContext.context_roundtrip
+#print axioms R1Z.ProverRwOuterContext.construct_fields
+#print axioms R1Z.ProverRwOuterContext.encode_source
+#print axioms R1Z.ProverRwOuterContext.construct_installed
+#print axioms R1Z.ProverRwOuterContext.encode_installed
+#print axioms R1Z.ProverRwOuterContextModel.block_list
+#print axioms R1Z.ProverRwOuterContextModel.mask_bytes
+#print axioms R1Z.ProverRwOuterContextModel.factor_bytes
+#print axioms R1Z.ProverRwOuterContextModel.context_encoding
+#print axioms R1Z.ProverRwOuterContextModel.construct_encode
+#print axioms R1Z.ProverRwOuterEncode.encode_factor
+#print axioms R1Z.ProverRwOuterEncode.encode_total
+#print axioms R1Z.ProverRwOuterFrames.direct_run
+#print axioms R1Z.ProverRwOuterFrames.digest_frame
+#print axioms R1Z.ProverRwOuterFrames.binding_frame
+#print axioms R1Z.ProverRwOuterGuardBridge.checked
+#print axioms R1Z.ProverRwOuterGuardBridge.caller
+#print axioms R1Z.ProverRwOuterGuardLeaves.mask_source
+#print axioms R1Z.ProverRwOuterGuardLeaves.factor_source
+#print axioms R1Z.ProverRwOuterGuardLeaves.mask_installed
+#print axioms R1Z.ProverRwOuterGuardLeaves.factor_installed
+#print axioms R1Z.ProverRwOuterGuardLeaves.list_compare_self
+#print axioms R1Z.ProverRwOuterGuardLeaves.array_ne_self
+#print axioms R1Z.ProverRwOuterInstalled.prefix_entries
+#print axioms R1Z.ProverRwOuterInstalled.caller_eight
+#print axioms R1Z.ProverRwOuterMapErr.source
+#print axioms R1Z.ProverRwOuterMapErr.installed
+#print axioms R1Z.ProverRwOuterPrefix.attempt_factor
+#print axioms R1Z.ProverRwOuterPrepare.prepare_direct
+#print axioms R1Z.ProverRwOuterRejected.reserve_failure
+#print axioms R1Z.ProverRwOuterRejected.body_failure
+#print axioms R1Z.ProverRwOuterReservationFailure.rejected
+#print axioms R1Z.ProverRwOuterReservationFailure.semantic
+#print axioms R1Z.ProverRwOuterReservationFailure.body_failure
+#print axioms R1Z.ProverRwOuterTag.tag_source
+#print axioms R1Z.ProverRwOuterTag.tag_installed
+#print axioms R1Z.ProverRwOuterTag.construct_installed
+#print axioms R1Z.ProverRwOuterTag.encode_installed
+#print axioms R1Z.ProverRwOuterWrite.write_exact
+#print R1Z.ProverCommitPublicNonce40.E1
+#print R1Z.RealR1_OuterOwner.PrefixContract
+#print R1Z.RealR1_OuterOwner.BodyContract
+#print R1Z.ProverCommitDeployedFuel22.RustProverRefinement
+#print axioms R1Z.ProverRwEntropyIteration.no_retry_then_success
+#print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
