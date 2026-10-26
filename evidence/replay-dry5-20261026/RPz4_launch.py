@@ -1,13 +1,14 @@
 """Serial job orchestration of unchanged reservation and S2W command runner."""
 from pathlib import Path
-import json,subprocess,time,sys
+import json,subprocess,time,sys,math
 E=Path(__file__).resolve().parent; H='dombarker@100.108.41.90'
+SSH=['-o','ControlMaster=auto','-o','ControlPersist=120','-o','ControlPath=/tmp/RPz4-ssh-%h-%p-%r']
 B='/home/dombarker/project-offloads/codex-cx-replay-dry-20261026'
 T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
-def ssh(cmd):return subprocess.run(['ssh',H,cmd],text=True,capture_output=True)
+def ssh(cmd):return subprocess.run(['ssh',*SSH,H,cmd],text=True,capture_output=True)
 def collect(name):
  p=E/name;p.parent.mkdir(parents=True,exist_ok=True)
- r=subprocess.run(['scp','-q',H+':'+B+'/'+name,str(p)],capture_output=True,text=True)
+ r=subprocess.run(['scp','-q',*SSH,H+':'+B+'/'+name,str(p)],capture_output=True,text=True)
  if r.returncode:raise SystemExit('STOP collection: '+r.stderr)
 plan=json.loads((E/'RPz4_source-plan.json').read_text());rows=[]
 for m in plan['order']:
@@ -15,7 +16,7 @@ for m in plan['order']:
 rows.sort(key=lambda r:(r['module'] not in ['ImportUnionNamedDiscriminant','R1NaturalProjection','SemanticCallExtraction.Types'], -plan['distance_to_top'].get(r['module'],0)))
 state=json.loads((E/'RPz4_reuse.json').read_text())['state'];state={m:v for m,v in state.items() if v in ['passed','failed']};attempt=0;blocked=[]
 if (E/'RPz4_state.json').exists():
- prior=json.loads((E/'RPz4_state.json').read_text());state.update({m:v for m,v in prior['state'].items() if v in ['passed','failed']});attempt=prior['attempts']
+ prior=json.loads((E/'RPz4_state.json').read_text());state.update({m:v for m,v in prior['state'].items() if v in ['passed','failed']});attempt=max(prior['attempts'],max([int(f.parent.name.split('_')[1]) for f in E.glob('RPz4_*/receipt.json')],default=0))
 # Dynamic ready scheduling in critical-distance order. A blocked predecessor never launches.
 ordered=[];pending=rows[:];sim=state.copy()
 while pending:
@@ -27,7 +28,7 @@ for row in rows:
  m=row['module'];missing=[n for n in row['imports'] if plan['modules'].get(n,{}).get('kind')!='trusted-library' and state.get(n)!='passed']
  if missing:
   state[m]='blocked';blocked.append({'module':m,'missing':missing});continue
- if attempt>=1490:break
+ if attempt + math.ceil((sum(v=='passed' for v in state.values())+1)/100) >= 1500:break
  attempt+=1;a=f'RPz4_{attempt:03d}'
  if (E/a/'receipt.json').exists():
   receipt=json.loads((E/a/'receipt.json').read_text());assert receipt['module']==m
@@ -48,7 +49,7 @@ for row in rows:
  # Admission receipt precedes any source transfer. Keep the existing runner unchanged.
  r=ssh('mkdir -p '+B+'/RPz4_sources/'+m.replace('.','/').rsplit('/',1)[0] if '.' in m else 'mkdir -p '+B+'/RPz4_sources')
  if r.returncode:raise SystemExit('STOP source directory: '+r.stderr)
- r=subprocess.run(['scp','-q',str(E.parents[1]/row['repository_source']),H+':'+B+'/'+row['source']],capture_output=True,text=True)
+ r=subprocess.run(['scp','-q',*SSH,str(E.parents[1]/row['repository_source']),H+':'+B+'/'+row['source']],capture_output=True,text=True)
  if r.returncode:raise SystemExit('STOP source transfer: '+r.stderr)
  r=ssh('mkdir -p '+B+'/'+str(__import__('pathlib').Path(row['object']).parent))
  if r.returncode:raise SystemExit('STOP object directory: '+r.stderr)
@@ -64,7 +65,7 @@ for n in row['imports']:
 cfg['deps_fingerprint']['selected_objects']=objs
 (B/(cfg['attempt']+'.json')).write_text(json.dumps(cfg,indent=2)+'\\n')
 """%(B,T,json.dumps(row),json.dumps(cfg))
- r=subprocess.run(['ssh',H,'python3 -'],input=payload,text=True,capture_output=True)
+ r=subprocess.run(['ssh',*SSH,H,'python3 -'],input=payload,text=True,capture_output=True)
  if r.returncode:raise SystemExit('STOP dependency pin: '+r.stderr)
  collect(a+'.json')
  r=ssh(f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py {a}.json')
