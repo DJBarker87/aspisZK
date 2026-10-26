@@ -10518,3 +10518,24 @@ per-job ranges cb4 27100-27399, srcid4 27400-27699, rw20 27700-27999, runjoin8 3
 35300-35599, cb3 35600-35899, cache caveat, never retry the two assigned modules). pv-cb3 was launched
 before ruling (f) with 24700-24999, now blocked (exit 65); it will exhaust refusals and be relaunched on
 35600-35899. Rows removed outright: 0. Privacy target not yet established.
+
+## D226 (Stream B) 2026-10-26 22:30 UTC: cb3 exhausted (four candidate source rows), envfix launched for the two rebuilt-env failures
+
+pv-cb3 (`codex/pv-cb3-20261026`, head 54f2ac877f; 100/100 Lean, 20/20 Kani, no crates/programs change, no
+forbidden tokens; 39-module bundle and final audit on the host before the range block: exit 0, 1.08 s,
+peak RSS 2.55 GiB, swap 0, standard axioms). ROW-DISCHARGED(candidate) by the D208/D211 law, composed in
+`PV_CB3_CallbackBundle.opN_source`: op246 (V254, receipt 24763), op229 (V246, 24760; duplicate of pv-cb's
+op229_source, to be deduplicated at recount 3), op225 (V242, 24762), op120 (V219, 24754). Op51 (V195)
+withdrawn and OPEN: the native harness canonicalises through `WideExact::new`, so arbitrary
+extracted-carrier correspondence is unproved; the serialization native gate is recorded as
+constructor-image evidence only. Worker's running count against recount 2: OPEN 110 → 106, independent
+OPEN 51 → 47, CLOSED-ON-CANDIDATE 40 → 44 (subject to the V246 dedupe and to D223: these are source
+equations, not headline-closure entries). Endpoint premises removed: 0. The freed slot went to pv-envfix
+(`codex/pv-envfix-20261026`, research base, IDs 35900-36199, 60 Lean): diagnose SimCostOuterRetry6 (omega
+failures 31:44/46:27, type mismatch 51:12 → sorryAx at 30431) and EventsR1P2 (kernel memory at 30485,
+7.17 GB) as environment-variant versus source faults by hashing each import chain against research HEAD
+and the rebuild's sent list; recompile mismatched dependencies into its own objects; EventsR1P2 only by
+the symbolic subtype-cardinality route, never an unchanged retry (Stream A confirmed both modules are
+Stream B's). cb3's continuation (op51 arbitrary-carrier correspondence, remaining top-down ops) takes the
+next free slot on range 35600-35899. Six slots: cb4, srcid4, runjoin8, join2, rw20, envfix. Rows removed
+outright: 0. Privacy target not yet established.
