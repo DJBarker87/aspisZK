@@ -1,0 +1,47 @@
+{
+  "kind": "static source inventory; not a formal source-to-ELF certificate",
+  "feature_receipt": "docs/research/100bit-spend-path-20261013/evidence/s10-repin3-20261023/build-default-v1/receipt.json",
+  "feature_pin": "be6ab3b2634fbe8a7df0014158756b77e4b3fade329e29b60fb5c915a20f998c",
+  "entries": [
+    {
+      "file": "programs/r1-cost-probe/src/lib.rs",
+      "line": 71,
+      "source": "let proof=accounts[0].try_borrow_data()?;let public=accounts[1].try_borrow_data()?;let mut checkpoint=accounts[2].try_borrow_mut_data()?;"
+    },
+    {
+      "file": "programs/r1-cost-probe/src/lib.rs",
+      "line": 139,
+      "source": "let _held_proof_data = accounts[0].try_borrow_mut_data().unwrap();"
+    },
+    {
+      "file": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+      "line": 357,
+      "source": "let mut target_data = target.try_borrow_mut_data()?;"
+    },
+    {
+      "file": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+      "line": 393,
+      "source": "let mut target_data = target.try_borrow_mut_data()?;"
+    },
+    {
+      "file": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+      "line": 420,
+      "source": "let mut target_data = target.try_borrow_mut_data()?;"
+    },
+    {
+      "file": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+      "line": 457,
+      "source": "accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpoint);"
+    }
+  ],
+  "reachable": [
+    "r1_pool_adapter_owned.rs:457 TX1 actual final copy"
+  ],
+  "unreachable": [
+    "lib.rs:71 legacy cfg(not(feature=pool-adapter))",
+    "r1_pool_adapter.rs:357 lifecycle_init tag4",
+    "r1_pool_adapter.rs:393 lifecycle_write tag5",
+    "r1_pool_adapter.rs:420 lifecycle_finalize tag6"
+  ],
+  "close_realloc_reassign": "no call site in these four source modules; AccountInfo SDK leaves and safe pure-child source closure retain their existing trust/source boundaries"
+}

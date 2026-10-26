@@ -1,0 +1,49 @@
+CPP_ProgramErasure.lean:35:39: error: Ambiguous term
+  bind
+Possible interpretations:
+  AspisV8R19.OracleProgramOps.bind : Program ?m.94 ?m.95 ?m.96 →
+    (?m.96 → Program ?m.94 ?m.95 ?m.97) → Program ?m.94 ?m.95 ?m.97
+  
+  Std.bind : Result ?m.94 → (?m.94 → Result ?m.95) → Result ?m.95
+CPP_ProgramErasure.lean:34:4: error: unsolved goals
+case neg
+A B F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+n1 : S2W_ExtractionBoundary.First
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+input : Invocation A
+k : Hir_Call.Reply A → Schedule A B
+ih :
+  ∀ (a : Hir_Call.Reply A) (store : Store),
+    CPP_Schedule.program n1 copy allocator id c hashv store (k a) =
+      Hir_Schedule.program n1 copy allocator id c hashv store (erase (k a))
+store : Store
+good : ¬compatible input
+⊢ (AspisV8R19.OracleProgramOps.bind (Program.done (store, S2X.AccountEvent.rollback, rejectedReply input)) fun head =>
+      AspisV8R19.OracleProgramOps.bind (Hir_Schedule.program n1 copy allocator id c hashv head.1 (erase (k head.2.2)))
+        fun tail => Program.done (tail.1, head.2.1 :: tail.2.1, tail.2.2)) =
+    AspisV8R19.OracleProgramOps.bind
+      (Hir_Schedule.program n1 copy allocator id c hashv store (erase (k (rejectedReply input)))) fun tail =>
+      Program.done (tail.1, S2X.AccountEvent.rollback :: tail.2.1, tail.2.2)
+CPP_ProgramErasure.lean:32:44: warning: This simp argument is unused:
+  if_pos good
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵P̵P̵_̵S̵c̵h̵e̵d̵u̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵r̵a̵s̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵g̵o̵o̵d̵,̵H̵i̵r̵_̵S̵c̵h̵e̵d̵u̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵C̵P̵P̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵i̵f̵_̵p̵o̵s̵ ̵g̵o̵o̵d̵,̵i̵h̵]̵[̲C̲P̲P̲_̲S̲c̲h̲e̲d̲u̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲e̲r̲a̲s̲e̲,̲ ̲H̲i̲r̲_̲S̲c̲h̲e̲d̲u̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲C̲P̲P̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲p̲o̲s̲ ̲g̲o̲o̲d̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CPP_ProgramErasure.lean:34:44: warning: This simp argument is unused:
+  if_neg good
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵P̵P̵_̵S̵c̵h̵e̵d̵u̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵r̵a̵s̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵g̵o̵o̵d̵,̵H̵i̵r̵_̵S̵c̵h̵e̵d̵u̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵C̵P̵P̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵i̵f̵_̵n̵e̵g̵ ̵g̵o̵o̵d̵,̵b̵i̵n̵d̵,̵i̵h̵]̵[̲C̲P̲P̲_̲S̲c̲h̲e̲d̲u̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲e̲r̲a̲s̲e̲,̲ ̲H̲i̲r̲_̲S̲c̲h̲e̲d̲u̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲C̲P̲P̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲n̲e̲g̲ ̲g̲o̲o̲d̲,̲ ̲b̲i̲n̲d̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CPP_ProgramErasure.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

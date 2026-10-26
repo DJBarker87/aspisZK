@@ -1,0 +1,57 @@
+CPP_Dispatch.lean:46:14: error: Tactic `rfl` failed: The left-hand side
+  match Hiq_ReleaseRoute.Route.reject with
+  | Hiq_ReleaseRoute.Route.first => (callbacks n1 n2 copy allocator store call lifecycle).first id accounts call.data
+  | Hiq_ReleaseRoute.Route.second => (callbacks n1 n2 copy allocator store call lifecycle).second id accounts call.data
+  | Hiq_ReleaseRoute.Route.reject =>
+    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+is not definitionally equal to the right-hand side
+  reply (CPP_Invocation.native n1 n2 copy allocator id store { call := call, count := (↑accounts).length }).2.2
+
+case reject
+A Account : Type
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+store : Store
+call : Call A
+accounts : Slice Account
+lifecycle : Key → Slice Account → Slice U8 → Result (core.result.Result Unit Hiq_DispatchSource.PE)
+route : Hiq_ReleaseRoute.route call.data = Hiq_ReleaseRoute.Route.reject
+⊢ (match Hiq_ReleaseRoute.Route.reject with
+    | Hiq_ReleaseRoute.Route.first => (callbacks n1 n2 copy allocator store call lifecycle).first id accounts call.data
+    | Hiq_ReleaseRoute.Route.second =>
+      (callbacks n1 n2 copy allocator store call lifecycle).second id accounts call.data
+    | Hiq_ReleaseRoute.Route.reject =>
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)) =
+    reply (CPP_Invocation.native n1 n2 copy allocator id store { call := call, count := (↑accounts).length }).2.2
+CPP_Dispatch.lean:47:14: error: Tactic `rfl` failed: The left-hand side
+  match Hiq_ReleaseRoute.Route.second with
+  | Hiq_ReleaseRoute.Route.first => (callbacks n1 n2 copy allocator store call lifecycle).first id accounts call.data
+  | Hiq_ReleaseRoute.Route.second => (callbacks n1 n2 copy allocator store call lifecycle).second id accounts call.data
+  | Hiq_ReleaseRoute.Route.reject =>
+    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+is not definitionally equal to the right-hand side
+  reply (CPP_Invocation.native n1 n2 copy allocator id store { call := call, count := (↑accounts).length }).2.2
+
+case second
+A Account : Type
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+store : Store
+call : Call A
+accounts : Slice Account
+lifecycle : Key → Slice Account → Slice U8 → Result (core.result.Result Unit Hiq_DispatchSource.PE)
+route : Hiq_ReleaseRoute.route call.data = Hiq_ReleaseRoute.Route.second
+⊢ (match Hiq_ReleaseRoute.Route.second with
+    | Hiq_ReleaseRoute.Route.first => (callbacks n1 n2 copy allocator store call lifecycle).first id accounts call.data
+    | Hiq_ReleaseRoute.Route.second =>
+      (callbacks n1 n2 copy allocator store call lifecycle).second id accounts call.data
+    | Hiq_ReleaseRoute.Route.reject =>
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)) =
+    reply (CPP_Invocation.native n1 n2 copy allocator id store { call := call, count := (↑accounts).length }).2.2
+'AspisR1.CPP_Dispatch.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,71 @@
+CPP_AtomicInputs.lean:54:77: error: unsolved goals
+A F C : Type
+c : DrvC_Installation.Configuration F C
+law : (DrvC_Installation.sdk c).op36 = Hist_Authority.keyEq
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction : S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk c) native1 native2 hashv
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+initial : Store
+schedule : Schedule A (Call A)
+count2 Q0 Q1 : ℕ
+scheduledBound :
+  ∀ (H : Bytes → State),
+    (eval H (CPP_AtomicSchedule.program native1 copy allocator id c hashv initial schedule)).1.length ≤ Q0 + Q1 + 1018
+genesis : ∀ (key : ℕ), (initial key).owner = id → ¬Initialized (initial key).data
+allowed : CPP_AtomicSchedule.admissible native1 native2 copy allocator id H initial schedule
+post2 : Heap (ℕ → Record)
+final2 : A
+accepted2 :
+  let out := CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule;
+  CPP_Invocation.second native2 allocator id out.1 { call := out.2.2, count := count2 } =
+    ok (core.result.Result.Ok (post2, final2))
+project : Execution A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)
+out : Hir_Schedule.Output (Call A) := CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule
+count : count2 = 7
+writer : Hir_WriterSelect.Writer A
+found :
+  search native1 copy allocator id
+      ((CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).2.2.layout.handles 6).1
+      ((CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).1
+          ((CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).2.2.layout.handles 6).1).data
+      (sites native1 native2 copy allocator id H initial schedule) =
+    some writer
+member : writer.site ∈ sites native1 native2 copy allocator id H initial schedule
+birth :
+  Birth native1 copy allocator id
+    ((CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).2.2.layout.handles 6).1
+    ((CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).1
+        ((CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).2.2.layout.handles 6).1).data
+    writer.site
+accepted1 :
+  first native1 copy allocator (load writer.site.before writer.site.call.layout) id writer.site.call.data
+      writer.site.call.state =
+    ok (core.result.Result.Ok (writer.saved, writer.post, writer.final))
+native2Accepted :
+  second native2 allocator
+      (load (CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).1
+        (CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).2.2.layout)
+      id (CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).2.2.data
+      (CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).2.2.slot
+      (CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).2.2.state =
+    ok (core.result.Result.Ok (post2, final2))
+⊢ some
+      (Hir_FirstChoice.input writer.site.before writer.site.call,
+        ok (core.result.Result.Ok (writer.saved, writer.post, writer.final)),
+        some
+          (Hir_Choice.input (CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).1
+              (CPP_AtomicSchedule.run native1 native2 copy allocator id H initial schedule).2.2,
+            ok (core.result.Result.Ok (post2, final2)))) =
+    some
+      (Hir_FirstChoice.input writer.site.before writer.site.call,
+        ok (core.result.Result.Ok (writer.saved, writer.post, writer.final)),
+        some (Hir_Choice.input out.1 out.2.2, ok (core.result.Result.Ok (post2, final2))))
+'AspisR1.CPP_AtomicInputs.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

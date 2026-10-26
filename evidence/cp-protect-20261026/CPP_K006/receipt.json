@@ -1,0 +1,62 @@
+{
+  "attempt": "CPP_K006",
+  "kind": "kani",
+  "source_revision": "3a1ef68f3c508b463c23bd78a131aa3057b8b4d6",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/CPP_guard/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/CPP_kani_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "CPP_guard_error_payload",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "CPP_guard/Cargo.toml",
+    "CPP_guard/CPP_lib.rs",
+    "CPP_guard/CPP_SOURCE_MAP.json",
+    "CPP_guard/Cargo.lock"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "K003 timeout replacement: exact error payload via discriminant/payload match, no full ProgramError assert_eq formatter. Same all-u32 Custom errors and complete32-byte program; unchanged source guard."
+  },
+  "expected_time": "Optimized compile, then named native CP metadata guard symbolic check; no dense elimination or proof generation.",
+  "exit_status": 0,
+  "wall_seconds": 1.3219179599545896,
+  "peak_rss_kib": "204976",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/CPP-K006.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "124862464",
+  "source_hashes": {
+    "CPP_guard/Cargo.toml": "4eca9e04b156d8c4d93d6e4d928c47513cf2c5b8c3018d76329451c1e6ce7272",
+    "CPP_guard/CPP_lib.rs": "63585a9873bc80ea39ce68dc58c07ea1bf3e84acf3bac601a44c714f25d73f70",
+    "CPP_guard/CPP_SOURCE_MAP.json": "43fb7c640322ef063dbb4dbfe77002402e51642c81a014fda172ecb382e14885",
+    "CPP_guard/Cargo.lock": "f939296d704fbfe53332486851346754c2770b3ce0356b1d3adc04efe54f333b"
+  },
+  "print_axioms": "N/A: kani"
+}
