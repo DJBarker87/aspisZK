@@ -1,0 +1,46 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_SelectedFour.lean:36:0: warning: Definition `complete` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_SelectedFour.lean:45:0: warning: Definition `identification` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+structure R1Z.PV_Src_SelectedFour.Remainder {K : Type} [Field K] [CharP K 2147483647] [ExternalLinear] {I : Type}
+  (selected : I → PV_Src_CheckedCanonical.Data) (transport : Fin 1024 ≃ Fin 1024) : Prop
+number of parameters: 7
+fields:
+  R1Z.PV_Src_SelectedFour.Remainder.compile_call : ∀ (i : I),
+      run (PV_Src_CheckedCanonical.input (selected i)) =
+        ok (core.result.Result.Ok (PV_Src_CheckedCanonical.input (selected i)).compiled)
+  R1Z.PV_Src_SelectedFour.Remainder.publicCorr : ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+      newRecords (PV_Src_CheckedCanonical.input (selected i)) = ok records →
+        PubCorr (wordPublic records.p)
+          (mapPub (PV_Src_Public.canonicalPublic (publicInput (PV_Src_CheckedCanonical.input (selected i)))))
+  R1Z.PV_Src_SelectedFour.Remainder.admission : ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+      newRecords (PV_Src_CheckedCanonical.input (selected i)) = ok records →
+        BuilderSpendRelation.RspendPlus
+          (mapPub (PV_Src_Public.canonicalPublic (publicInput (PV_Src_CheckedCanonical.input (selected i)))))
+          (BuilderCanonical.liftWitness (BuilderRecordCanonical.witness (wordWitness records.w)))
+  R1Z.PV_Src_SelectedFour.Remainder.row_call : ∀ (j : Fin 1024), transport j = PV_Src_Transport.row j
+constructor:
+  R1Z.PV_Src_SelectedFour.Remainder.mk {K : Type} [Field K] [CharP K 2147483647] [ExternalLinear] {I : Type}
+    {selected : I → PV_Src_CheckedCanonical.Data} {transport : Fin 1024 ≃ Fin 1024}
+    (compile_call :
+      ∀ (i : I),
+        run (PV_Src_CheckedCanonical.input (selected i)) =
+          ok (core.result.Result.Ok (PV_Src_CheckedCanonical.input (selected i)).compiled))
+    (publicCorr :
+      ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+        newRecords (PV_Src_CheckedCanonical.input (selected i)) = ok records →
+          PubCorr (wordPublic records.p)
+            (mapPub (PV_Src_Public.canonicalPublic (publicInput (PV_Src_CheckedCanonical.input (selected i))))))
+    (admission :
+      ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+        newRecords (PV_Src_CheckedCanonical.input (selected i)) = ok records →
+          BuilderSpendRelation.RspendPlus
+            (mapPub (PV_Src_Public.canonicalPublic (publicInput (PV_Src_CheckedCanonical.input (selected i)))))
+            (BuilderCanonical.liftWitness (BuilderRecordCanonical.witness (wordWitness records.w))))
+    (row_call : ∀ (j : Fin 1024), transport j = PV_Src_Transport.row j) : Remainder selected transport
+'R1Z.PV_Src_SelectedFour.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_SelectedFour.identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh
