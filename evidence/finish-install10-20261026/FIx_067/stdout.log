@@ -1,0 +1,78 @@
+FIx_ValueBits0.lean:45:4: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  n = n + 1
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.55} {β : α → Sort ?u.54} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case succ.e_a
+o returned : Openings
+out : Std.Array NQ 33#usize
+ho : canonical o.z
+n : ℕ
+ih :
+  ∀ (index : Usize) (range : Std.Array NQ 33#usize),
+    ↑index + n = 10 →
+      canonical range →
+        loop o range index = ok (returned, out) →
+          returned = o ∧ canonical out ∧ decoded out = FIx_ValueBitModel.model o.z 0 n (↑index) (decoded range)
+index : Usize
+range : Std.Array NQ 33#usize
+span : ↑index + (n + 1) = 10
+hp : canonical range
+success✝⁴ :
+  (do
+      let q ← o.z.index_usize index
+      let q1 ← q.square
+      let q2 ← q1.sub q
+      let a ← range.update index q2
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o a index1) =
+    ok (returned, out)
+more : index < 10#usize
+q : field.QM31
+hq : o.z.index_usize index = ok q
+success✝³ :
+  (do
+      let q1 ← q.square
+      let q2 ← q1.sub q
+      let a ← range.update index q2
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o a index1) =
+    ok (returned, out)
+square : field.QM31
+hsquare : q.square = ok square
+success✝² :
+  (do
+      let q2 ← square.sub q
+      let a ← range.update index q2
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o a index1) =
+    ok (returned, out)
+residual : field.QM31
+hresidual : square.sub q = ok residual
+success✝¹ :
+  (do
+      let a ← range.update index residual
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o a index1) =
+    ok (returned, out)
+updated : Std.Array field.QM31 33#usize
+hupdated : range.update index residual = ok updated
+success✝ :
+  (do
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o updated index1) =
+    ok (returned, out)
+next : UScalar UScalarTy.Usize
+hnext : index + 1#usize = ok next
+success : pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o updated next = ok (returned, out)
+hqcan : Canon q
+vsquare : Canon square ∧ decode square = decode q * decode q
+vresidual : Canon residual ∧ decode residual = decode square - decode q
+vi : ↑next = ↑index + 1
+vu : canonical updated ∧ decoded updated = Function.update (decoded range) ⟨↑index, ⋯⟩ (decode residual)
+rest : returned = o ∧ canonical out ∧ decoded out = FIx_ValueBitModel.model o.z 0 n (↑next) (decoded updated)
+⊢ n = n + 1
+'AspisR1.FIx_ValueBits0.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
