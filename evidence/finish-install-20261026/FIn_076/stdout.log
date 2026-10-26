@@ -1,0 +1,34 @@
+def AspisR1.FIn_Remaining.Holds : {W : Type} →
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps W) →
+    (v : AspisR1Stage2.verifier.View) →
+      (p : AspisR1Stage2.verifier.Prepared) →
+        (a : AspisR1Stage2.verifier.Accumulator) →
+          AspisR1.F3S_FinishWitness.Primitives finish v p a →
+            (Fin 22 → Fin 262144) →
+              AspisR1.OraclePortCompactDraft.Parsed →
+                AspisR1.RawCutTranscriptRun.ErasedPrefix → AspisR1.RecordedBinaryExperimentBin.SourceInputs → Prop :=
+fun {W} finish v p a x q parsed tr input =>
+  AspisR1.FIn_Finish.PairMeaning finish v p input.data ∧
+    (∀ (j : Fin 22), AspisR1.MatchingSupport.match0 input.data (q j)) ∧
+      AspisR1.R3SemanticRemainingJoins.EquationEndpoint input.decoded
+          (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) input.data ∧
+        ∀ y ∈ [x.r0.lhs, x.r0.rhs, x.r1.lhs, x.r1.rhs, x.pair, x.r1.value, x.dot, a.rhs],
+          AspisR1.CheckpointBytes4ReaderFields.sourceE (AspisR1.CheckpointBytes5Output.ofE y) = y
+def AspisR1.FIn_Finish.PairMeaning : {W : Type} →
+  AspisR1Stage2.Stage2Finish.FinishOps W →
+    AspisR1Stage2.verifier.View →
+      AspisR1Stage2.verifier.Prepared → AspisR1.MatchingSupport.Data AspisWideTower.WideExact → Prop :=
+fun {W} ops v p d =>
+  ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+    ops.newWeights p.variant p.semantic_alpha p.z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+      Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice
+              (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+            p.alpha { «end» := 2#usize } =
+          Aeneas.Std.Result.ok alphas →
+        ops.pair weights alphas v.final_message p.kappa =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+          AspisR1.CheckpointBytes5Output.ofE value =
+            AspisR1.RoundPairing.dot d.f
+              (AspisR1.RoundPairing.dualFold d.alpha1
+                (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))

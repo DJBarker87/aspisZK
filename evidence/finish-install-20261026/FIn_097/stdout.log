@@ -1,0 +1,22 @@
+structure Aeneas.Std.core.clone.Clone (Self : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.clone.Clone.clone : Self → Aeneas.Std.Result Self
+  Aeneas.Std.core.clone.Clone.clone_from : Self → Self → Aeneas.Std.Result Self :=
+    fun x => self.clone
+constructor:
+  Aeneas.Std.core.clone.Clone.mk {Self : Type} (clone : Self → Aeneas.Std.Result Self)
+    (clone_from : Self → Self → Aeneas.Std.Result Self) : Aeneas.Std.core.clone.Clone Self
+structure Aeneas.Std.core.marker.Copy (Self : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.marker.Copy.cloneInst : Aeneas.Std.core.clone.Clone Self
+constructor:
+  Aeneas.Std.core.marker.Copy.mk {Self : Type} (cloneInst : Aeneas.Std.core.clone.Clone Self) :
+    Aeneas.Std.core.marker.Copy Self
+inductive Aeneas.Std.Result.{u} : Type u → Type u
+number of parameters: 1
+constructors:
+Aeneas.Std.Result.ok : {α : Type u} → α → Aeneas.Std.Result α
+Aeneas.Std.Result.fail : {α : Type u} → Aeneas.Std.Error → Aeneas.Std.Result α
+Aeneas.Std.Result.div : {α : Type u} → Aeneas.Std.Result α

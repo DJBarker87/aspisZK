@@ -1,0 +1,29 @@
+FIn_Payloads.lean:35:2: error: Type mismatch: After simplification, term
+  unframed
+ has type
+  List.drop 36
+      (PublicInitFrame.lengthBytes
+          (List.length
+            (match OpeningRecordCodec.Row.second, f with
+            | OpeningRecordCodec.Row.gamma, coefficients => SelectedFieldSequenceCodec.encodeLow coefficients
+            | OpeningRecordCodec.Row.kappa, value => FoldedLeafCodec.encodeWide value
+            | OpeningRecordCodec.Row.first, coefficients => SelectedFieldSequenceCodec.encodeWide coefficients
+            | OpeningRecordCodec.Row.second, (root, coefficients) =>
+              OpeningRecordCodec.stateBytes root ++ SelectedFieldSequenceCodec.encodeWide coefficients
+            | OpeningRecordCodec.Row.final, coefficients => SelectedFieldSequenceCodec.encodeWide coefficients
+            | OpeningRecordCodec.Row.rho, x => [])) ++
+        match OpeningRecordCodec.Row.second, f with
+        | OpeningRecordCodec.Row.gamma, coefficients => SelectedFieldSequenceCodec.encodeLow coefficients
+        | OpeningRecordCodec.Row.kappa, value => FoldedLeafCodec.encodeWide value
+        | OpeningRecordCodec.Row.first, coefficients => SelectedFieldSequenceCodec.encodeWide coefficients
+        | OpeningRecordCodec.Row.second, (root, coefficients) =>
+          OpeningRecordCodec.stateBytes root ++ SelectedFieldSequenceCodec.encodeWide coefficients
+        | OpeningRecordCodec.Row.final, coefficients => SelectedFieldSequenceCodec.encodeWide coefficients
+        | OpeningRecordCodec.Row.rho, x => []) =
+    List.drop 36 (le32 (min 256 (List.length p.wire - 7751)) ++ List.take 256 (List.drop 7751 p.wire))
+but is expected to have type
+  SelectedFieldSequenceCodec.encodeWide f.2 = List.take 224 (List.drop 7783 p.wire)
+'AspisR1.FIn_Payloads.decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIn_Payloads.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIn_Payloads.second' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIn_Payloads.from_read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

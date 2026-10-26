@@ -1,0 +1,28 @@
+def AspisR1.FIn_WeightsInstall.install : AspisR1Stage2.Stage2Finish.FinishOps AspisR1.FIn_WeightsInstall.W →
+  AspisR1Stage2.Stage2Finish.FinishOps AspisR1.FIn_WeightsInstall.W :=
+fun seed =>
+  have __src := AspisR1.FIn_Install.finishOps seed;
+  { field := __src.field, quarter := __src.quarter, add := __src.add, mulM := __src.mulM, ne := __src.ne,
+    polynomial := __src.polynomial, trace := __src.trace, folds := __src.folds,
+    newWeights := AspisR1.FIn_WeightsInstall.newWeights, pair := __src.pair, mark := __src.mark, dot := __src.dot }
+def AspisR1.FIn_Install.finishOps : {W : Type} →
+  AspisR1Stage2.Stage2Finish.FinishOps W → AspisR1Stage2.Stage2Finish.FinishOps W :=
+fun {W} seed =>
+  have __src := AspisR1.SAG_StageScale.install seed;
+  { field := AspisR1.FIn_Primitives.field, quarter := __src.quarter, add := AspisR1.FIn_Primitives.add,
+    mulM := __src.mulM, ne := __src.ne, polynomial := AspisR1.FIn_ExtractInstall.polynomial, trace := __src.trace,
+    folds := __src.folds, newWeights := __src.newWeights, pair := __src.pair, mark := __src.mark,
+    dot := AspisR1.SAG_DotClosed.source }
+def AspisR1.FIn_WeightsInstall.newWeights : AspisR1Stage2.transport.Variant →
+  Aeneas.Std.Array AspisR1Stage2.Stage2Finish.K 10#usize →
+    Aeneas.Std.Array AspisR1Stage2.aspis_core.circle.SecureCirclePoint 2#usize →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result AspisR1.FIn_WeightsInstall.W AspisR1Stage2.verifier.Error) :=
+fun v alpha z => do
+  let result ←
+    FIn_WeightsExtract.weights_new (AspisR1.FIn_WeightsInstall.variant v)
+        (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toQ alpha)
+        (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toPoint z)
+  match result with
+    | Aeneas.Std.core.result.Result.Ok w => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w)
+    | Aeneas.Std.core.result.Result.Err FIn_WeightsExtract.FInError.Allocation =>
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)

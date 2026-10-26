@@ -1,0 +1,164 @@
+structure AspisR1.F3V_RunEvidence.Evidence {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (s : AspisR1.F3T_ByteCarrier.Submission)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Type
+number of parameters: 6
+fields:
+  AspisR1.F3V_RunEvidence.Evidence.pub : Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1.F3V_RunEvidence.Evidence.proof : Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1.F3V_RunEvidence.Evidence.semantic : AspisR1.Port1_Driver.Semantic
+  AspisR1.F3V_RunEvidence.Evidence.saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8
+  AspisR1.F3V_RunEvidence.Evidence.pubBytes : AspisR1.MultiproofConeCanonical.bytesOf ↑self.pub = s.publicBytes
+  AspisR1.F3V_RunEvidence.Evidence.proofBytes : AspisR1.MultiproofConeCanonical.bytesOf ↑self.proof = s.stored
+  AspisR1.F3V_RunEvidence.Evidence.decoded : AspisR1.Port1_Driver.decodeSemantic (AspisR1.DrvC_Installation.sdk c)
+        self.pub =
+      Aeneas.Std.Result.ok (Option.some self.semantic)
+  AspisR1.F3V_RunEvidence.Evidence.header : AspisR1.OraclePortHeader.accepts
+        (AspisR1.MultiproofConeCanonical.bytesOf ↑self.proof) =
+      Bool.true
+  AspisR1.F3V_RunEvidence.Evidence.canonical : AspisR1.OraclePortCompactDraft.scan
+      (AspisR1.MultiproofConeCanonical.bytesOf ↑self.proof)
+  AspisR1.F3V_RunEvidence.Evidence.run : AspisR1.Tx1Q_Execution.Run
+      (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry
+        c.boundaries c.std)
+      c.reserved c.query c.geometry (AspisR1.F3V_RunEvidence.D1 c H) ()
+      (AspisS6CurrentVerifierCarrier.toPublic self.semantic) self.pub self.proof 10#usize self.saved
+  AspisR1.F3V_RunEvidence.Evidence.zero : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO
+        (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry
+          c.boundaries c.std) =
+      Aeneas.Std.Result.ok self.run.zero
+  AspisR1.F3V_RunEvidence.Evidence.rootView : Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1.F3V_RunEvidence.Evidence.rootRange : Aeneas.Std.core.slice.index.Slice.index
+        (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) self.proof
+        { start := 7751#usize, «end» := 7783#usize } =
+      Aeneas.Std.Result.ok self.rootView
+  AspisR1.F3V_RunEvidence.Evidence.rootCopy : Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize
+        Aeneas.Std.core.marker.CopyU8 self.rootView =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.run.root)
+  AspisR1.F3V_RunEvidence.Evidence.second : VTop_Stages.verifier.candidate.tx2_authenticated
+        (AspisR1.GExp_SecondCode.installed (AspisR1.DrvC_Installation.stage c) c.reserved)
+        (AspisR1.F3V_RunEvidence.D2 c H) self.pub self.proof self.saved.deref () Option.none =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+  AspisR1.F3V_RunEvidence.Evidence.prepared : AspisR1.F3V_PreparedFacts.Facts
+      (AspisR1.Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry B c.std
+      (AspisR1.F3V_RunEvidence.D1 c H) self.semantic self.pub self.proof self.run.p self.run.zero H
+constructor:
+  AspisR1.F3V_RunEvidence.Evidence.mk {F C : Type} {c : AspisR1.DrvC_Installation.Configuration F C}
+    {B : AspisR1PublicPreparation.FinishModel.Boundaries} {s : AspisR1.F3T_ByteCarrier.Submission}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State} (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+    (semantic : AspisR1.Port1_Driver.Semantic) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+    (pubBytes : AspisR1.MultiproofConeCanonical.bytesOf ↑pub = s.publicBytes)
+    (proofBytes : AspisR1.MultiproofConeCanonical.bytesOf ↑proof = s.stored)
+    (decoded :
+      AspisR1.Port1_Driver.decodeSemantic (AspisR1.DrvC_Installation.sdk c) pub =
+        Aeneas.Std.Result.ok (Option.some semantic))
+    (header : AspisR1.OraclePortHeader.accepts (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) = Bool.true)
+    (canonical : AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑proof))
+    (run :
+      AspisR1.Tx1Q_Execution.Run
+        (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry
+          c.boundaries c.std)
+        c.reserved c.query c.geometry (AspisR1.F3V_RunEvidence.D1 c H) ()
+        (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize saved)
+    (zero :
+      AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO
+          (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry
+            c.boundaries c.std) =
+        Aeneas.Std.Result.ok run.zero)
+    (rootView : Aeneas.Std.Slice Aeneas.Std.U8)
+    (rootRange :
+      Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+          proof { start := 7751#usize, «end» := 7783#usize } =
+        Aeneas.Std.Result.ok rootView)
+    (rootCopy :
+      Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 rootView =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok run.root))
+    (second :
+      VTop_Stages.verifier.candidate.tx2_authenticated
+          (AspisR1.GExp_SecondCode.installed (AspisR1.DrvC_Installation.stage c) c.reserved)
+          (AspisR1.F3V_RunEvidence.D2 c H) pub proof saved.deref () Option.none =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+    (prepared :
+      AspisR1.F3V_PreparedFacts.Facts (AspisR1.Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry B
+        c.std (AspisR1.F3V_RunEvidence.D1 c H) semantic pub proof run.p run.zero H) :
+    AspisR1.F3V_RunEvidence.Evidence c B s H
+@AspisR1.FIn_Aligned.values : ∀ {F C : Type} (base : AspisR1.DrvC_Installation.Configuration F C)
+  (seed : AspisR1Stage2.Stage2Finish.FinishOps F),
+  base.finish = AspisR1.FIn_Install.finishOps seed →
+    base.stageBase.op22 = Aeneas.Std.Result.ok 7527#usize ∧
+        base.stageBase.op21 = Aeneas.Std.Result.ok 8007#usize ∧ base.stageBase.op20 = Aeneas.Std.Result.ok 10055#usize →
+      ∀ (s : AspisR1.F3T_ByteCarrier.Submission) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+        (e : AspisR1.F3V_RunEvidence.Evidence (AspisR1.F3V_Install.configuration base) base.boundaries s H)
+        (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+        AspisR1CurrentCaller.verifier.candidate.tx1
+              (AspisR1.GExp_FirstCode.installed
+                (AspisR1.GExp_FirstPair.base base.currentBase base.reserved base.query base.geometry)
+                (AspisR1.F3V_Install.configuration base).boundaries base.std)
+              (AspisR1.F3V_RunEvidence.D1 (AspisR1.F3V_Install.configuration base) H)
+              (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.pub e.proof 10#usize () Option.none =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok e.saved) →
+          ∀
+            (prior :
+              AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                Unit),
+            let c := AspisR1.F3V_Install.configuration base;
+            AspisR1.WAdm_Domain.SessionAPrepare
+                (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current c.currentBase) c.reserved c.query
+                  c.geometry c.boundaries c.std) →
+              ∀ (decoder : AspisR1.LiteralByteProtocol.Decoder),
+                AspisR1.Port5Q1_QueryPorts.SessionAPrimitives c.query →
+                  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives c.geometry →
+                    AspisR1.Port5Q1_Domain.SessionADomain c.geometry →
+                      c.geometry.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+                        c.geometry.op7 = Aeneas.Std.Result.ok 1#u32 →
+                          c.geometry.op11 = AspisR1.Port4C_InverseExecution.inverse_owned →
+                            ∃ i p q data t,
+                              have tr :=
+                                AspisR1.LiteralTranscript.erasePrefix
+                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                      (AspisR1.F3J_SamplerRun.program i.proof 0 33
+                                        (FS.emptyPrefix i.semantic.value))).2;
+                              i.physical.bytes = AspisR1.MultiproofConeCanonical.bytesOf ↑e.pub ∧
+                                i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑e.proof ∧
+                                  AspisR1.OraclePortStoredParserC4.parseReached i.stored tr = Option.some p ∧
+                                    AspisR1.OraclePortSelectedDraft.queries tr = Option.some q ∧
+                                      AspisR1.OraclePortStoredDecisionDraftC4.input p q tr = Option.some data ∧
+                                        AspisR1.Cons_Native.Calls
+                                            (AspisR1.Op5T_Concrete.stage (AspisR1.AuS1_Install.base c.stageBase))
+                                            c.finish c.reserved c.query c.geometry (AspisR1.F3V_RunEvidence.D2 c H) ()
+                                            e.pub e.proof e.saved.deref t ∧
+                                          AspisR1.Cons_NativeBuild.Aux c.reserved c.query c.geometry
+                                              (AspisR1.F3V_RunEvidence.D2 c H) () e.pub e.proof e.saved.deref t ∧
+                                            AspisR1.SAG_NativeFull.Shape
+                                                (AspisR1.Tx2N_Execution.control
+                                                  (AspisR1.Tx2I_Install.stage
+                                                    (AspisR1.Op5T_Concrete.stage
+                                                      (AspisR1.AuS1_Install.base c.stageBase))
+                                                    c.finish)
+                                                  c.reserved c.query c.geometry)
+                                                e.proof t ∧
+                                              AspisR1.F3Y_PreparedAt.At c base.boundaries s H e i p q data ∧
+                                                (AspisR1.AuS1_Finish.Collision H
+                                                    (AspisR1.F3V_Checkpoint.trace c base.boundaries s H e prior) p q ∨
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (AspisR1.F3T_Installed.source c hashv
+                                                            (AspisR1.F3T_ByteCarrier.input c s))).1 =
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (AspisR1.F3_Model.verifier decoder i)).1 ∧
+                                                    AspisR1.F3Y_FinishFields.Holds t.p2 data.data ∧
+                                                      (∀
+                                                          (x :
+                                                            AspisR1.F3S_FinishWitness.Primitives c.finish t.v2 t.p2
+                                                              (have __src := t.returned2;
+                                                              { weights := t.back2 t.flushed2, rhs := __src.rhs,
+                                                                power := __src.power, next := __src.next })),
+                                                          AspisR1.FIn_Derived.Holds c.finish t.v2 t.p2
+                                                            (have __src := t.returned2;
+                                                            { weights := t.back2 t.flushed2, rhs := __src.rhs,
+                                                              power := __src.power, next := __src.next })
+                                                            x p q tr data.data) ∧
+                                                        AspisR1.F3S_AcceptanceValues.Values c.finish t.v2 t.p2
+                                                          (have __src := t.returned2;
+                                                          { weights := t.back2 t.flushed2, rhs := __src.rhs,
+                                                            power := __src.power, next := __src.next })
+                                                          H (AspisR1.F3V_Checkpoint.trace c base.boundaries s H e prior)
+                                                          p q tr data decoder i)
