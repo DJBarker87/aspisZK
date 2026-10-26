@@ -30,7 +30,7 @@ def visit(m):
  canonical=[p for p in ['lean/'+suffix,'docs/research/100bit-spend-path-20261013/lean/'+suffix] if p in cand]
  expected=rc.get(m,{}).get('source',{}).get('sha256') or old.get(m,{}).get('source_sha256')
  matches=[p for p in cand if sha((R/p).read_bytes())==expected]
- choices=canonical or matches
+ choices=matches or canonical
  if not choices and len({sha((R/p).read_bytes()) for p in cand})==1:choices=cand
  if not choices:
   errors.append({'module':m,'candidates':cand,'expected_sha256':expected});mods[m]={'kind':'unresolved'};active.remove(m);return
