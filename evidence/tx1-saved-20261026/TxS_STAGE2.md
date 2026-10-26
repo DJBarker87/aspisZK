@@ -1,0 +1,7 @@
+# Stage 2: N115 removed in actual endpoint
+
+TxS_Top.deployed compiles (019), preserving Rc2's installed identities, headline, same-run result, Pool copy/frame, bank events and protection. TxS_Finish has all original universal source/model input quantifiers except the unused Context binder and N115. No new root hypothesis or trust item. No independently chosen accepted run. TxS_FinishProof derives ten on the exact finish data from the original run's query call and existing indexed authentication; full physical BodyMatches transfers source queries/rho/alpha1 into the original reader's return. TxS_Query then proves twelve, and the original FinT_Model composes finish. The full physical encoding is proved; an equality of every arbitrarily chosen Context is neither asserted nor needed.
+
+Provisional ledger delta against Rc2: remove N115, add none; actual82T+171P ->82T+170P; lead23P ->22P. L151-L153 retained pending raw-carrier replacement and exact reverse transport. Not a 100-bit or frozen3 whole-experiment claim; inherited headline is left unchanged for its dedicated worker.
+
+19 Lean invocations:15 passes,4 excluded diagnostics. New diagnostics018 was missing explicit Intermediate import, fixed019. All accepted axioms standard; peak5,329,848KiB, swaps0. Focused existing cache only; no package replay, Kani, Rust, source/ELF/key operations. Full receipts contain section6 fields and unchanged pinned compiler/caps.
