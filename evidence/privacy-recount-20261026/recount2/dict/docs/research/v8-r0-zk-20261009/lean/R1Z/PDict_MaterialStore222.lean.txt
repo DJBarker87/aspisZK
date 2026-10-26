@@ -1,0 +1,35 @@
+import R1Z.PDict_Static222_Semantics
+import Mathlib.Tactic.CasesM
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_MaterialStore222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterDictionaryMap PDict_ResultTransport
+variable [ExternalTypes]
+
+def pairMap {R A B : Type} (f : A → B) (x : R × A) : R × B := (x.1, f x.2)
+
+theorem material_store (ops : ExternalFuns) {A B : Type}
+    (sa : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore A)
+    (sb : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore B) (f : A → B)
+    (hr : ∀ s sd n, sb.reserve (f s) sd n = resultMap (pairMap f) (sa.reserve s sd n))
+    (self : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets)
+    (hash : Slice (Slice U8) → Result (Array U8 32#usize))
+    (binding : Array U8 32#usize) (ctx : aspis_core.state_only_hiding.StateOnlyHidingContext) (s : A) :
+    @aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+      _ ops B sb self hash binding ctx (f s) =
+    resultMap (pairMap f)
+      (@aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+        _ ops A sa self hash binding ctx s) := by
+  delta aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+  delta aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1.match_1
+  simp only [apply_ite, PDict_FallibleTransport.map_prod, PDict_FallibleTransport.map_result, PDict_FallibleTransport.map_control, map_bind, hr, bind_map, Aeneas.Std.uncurry]
+  repeat first
+    | rfl
+    | (apply PDict_FallibleTransport.bind_congr; intro x;
+        (try simp only [apply_ite, PDict_FallibleTransport.map_prod, PDict_FallibleTransport.map_result, PDict_FallibleTransport.map_control, map_bind, hr, bind_map, Aeneas.Std.uncurry, map_ok, pairMap]))
+    | (casesm* (_ × _), core.result.Result _ _, core.ops.control_flow.ControlFlow _ _, Bool <;>
+        (try simp only [apply_ite, PDict_FallibleTransport.map_prod, PDict_FallibleTransport.map_result, PDict_FallibleTransport.map_control, map_bind, hr, bind_map, Aeneas.Std.uncurry, map_ok, pairMap]))
+    | split
+
+#print axioms material_store
+end R1Z.PDict_MaterialStore222

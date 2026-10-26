@@ -1,0 +1,65 @@
+reservation: populated 24 GiB + 8 GiB; window=0 (London 1636); env=J
+              (fun a => R0Z.FsStatement.OracleAnswer)
+              (instDecidableEqFin (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              {
+                  len :=
+                    @OfNat.ofNat Nat (nat_lit 1)
+                      (instOfNatNat (nat_lit 1)) }.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+              fun a =>
+              @Pi.instFintype (Fin (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) (fun a => UInt8)
+                (instDecidableEqFin (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+                {
+                    len :=
+                      @OfNat.ofNat Nat (nat_lit 31)
+                        (instOfNatNat (nat_lit 31)) }.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+                fun a => @FinEnum.instFintype UInt8 FinEnum.instUInt8))))
+structure R1Z.ProverCommitLedger36.E2 (OS Data : Type) (present : OS → R1Z.ProverCommitLedger36.Path → Prop)
+  (create : OS → R1Z.ProverCommitLedger36.Path → Prod R1Z.ProverCommitEnvironment35.Outcome OS)
+  (stored : OS → R1Z.ProverCommitLedger36.Path → Data → Prop)
+  (writtenFsynced : OS → R1Z.ProverCommitLedger36.Path → Data → OS → Prop) (persists : OS → OS → Prop) : Prop
+number of parameters: 7
+fields:
+  R1Z.ProverCommitLedger36.E2.atomic : ∀ (s : OS) (p : R1Z.ProverCommitLedger36.Path),
+      And
+        (Iff
+          (@Eq R1Z.ProverCommitEnvironment35.Outcome (@Prod.fst R1Z.ProverCommitEnvironment35.Outcome OS (create s p))
+            (@Except.error R1Z.ProverCommitEnvironment35.IOError Unit
+              R1Z.ProverCommitEnvironment35.IOError.alreadyExists))
+          (present s p))
+        (And
+          (@Eq R1Z.ProverCommitEnvironment35.Outcome (@Prod.fst R1Z.ProverCommitEnvironment35.Outcome OS (create s p))
+              (@Except.ok R1Z.ProverCommitEnvironment35.IOError Unit Unit.unit) →
+            present (@Prod.snd R1Z.ProverCommitEnvironment35.Outcome OS (create s p)) p)
+          (∀ (q : R1Z.ProverCommitLedger36.Path),
+            present s q → present (@Prod.snd R1Z.ProverCommitEnvironment35.Outcome OS (create s p)) q))
+  R1Z.ProverCommitLedger36.E2.durable : ∀ (s : OS) (p : R1Z.ProverCommitLedger36.Path) (data : Data) (t : OS),
+      writtenFsynced s p data t → And (stored t p data) (∀ (u : OS), persists t u → stored u p data)
+constructor:
+  R1Z.ProverCommitLedger36.E2.mk {OS Data : Type} {present : OS → R1Z.ProverCommitLedger36.Path → Prop}
+    {create : OS → R1Z.ProverCommitLedger36.Path → Prod R1Z.ProverCommitEnvironment35.Outcome OS}
+    {stored : OS → R1Z.ProverCommitLedger36.Path → Data → Prop}
+    {writtenFsynced : OS → R1Z.ProverCommitLedger36.Path → Data → OS → Prop} {persists : OS → OS → Prop}
+    (atomic :
+      ∀ (s : OS) (p : R1Z.ProverCommitLedger36.Path),
+        And
+          (Iff
+            (@Eq R1Z.ProverCommitEnvironment35.Outcome (@Prod.fst R1Z.ProverCommitEnvironment35.Outcome OS (create s p))
+              (@Except.error R1Z.ProverCommitEnvironment35.IOError Unit
+                R1Z.ProverCommitEnvironment35.IOError.alreadyExists))
+            (present s p))
+          (And
+            (@Eq R1Z.ProverCommitEnvironment35.Outcome (@Prod.fst R1Z.ProverCommitEnvironment35.Outcome OS (create s p))
+                (@Except.ok R1Z.ProverCommitEnvironment35.IOError Unit Unit.unit) →
+              present (@Prod.snd R1Z.ProverCommitEnvironment35.Outcome OS (create s p)) p)
+            (∀ (q : R1Z.ProverCommitLedger36.Path),
+              present s q → present (@Prod.snd R1Z.ProverCommitEnvironment35.Outcome OS (create s p)) q)))
+    (durable :
+      ∀ (s : OS) (p : R1Z.ProverCommitLedger36.Path) (data : Data) (t : OS),
+        writtenFsynced s p data t → And (stored t p data) (∀ (u : OS), persists t u → stored u p data)) :
+    R1Z.ProverCommitLedger36.E2 OS Data present create stored writtenFsynced persists
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.28
+	Maximum resident set size (kbytes): 4223436
+	Swaps: 0
+	Exit status: 0

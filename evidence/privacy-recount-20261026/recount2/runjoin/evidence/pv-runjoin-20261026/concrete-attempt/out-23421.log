@@ -1,0 +1,143 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:25:69: error: Invalid simp theorem: Expected a proposition, but found
+  Call → Result Outcome
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:27:2: error: Tactic `rfl` failed: The left-hand side
+  match ProverRwEffectTape.pure (Call.read input (after nonce 0#usize back)) with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun retry =>
+          ProverRwEffectTape.pure
+            (if retry < 16#usize then Call.read input (after nonce retry back)
+            else
+              Call.stop
+                (ok
+                  (done
+                    (core.result.Result.Err
+                      aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.RepeatedZeroBlock)))))
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err (aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os err))
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+nonce : Std.Array U8 32#usize
+entered : aspis_prover.state_only_entropy.entropy_nonzero32 nonce = ok true
+input : Slice U8
+back : Back
+hprefix : before = ok (input, back)
+err : getrandom.error.Error
+written : Slice U8
+fault : getrandom.fill input = ok (core.result.Result.Err err, written)
+⊢ (match ProverRwEffectTape.pure (Call.read input (after nonce 0#usize back)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun retry =>
+            ProverRwEffectTape.pure
+              (if retry < 16#usize then Call.read input (after nonce retry back)
+              else
+                Call.stop
+                  (ok
+                    (done
+                      (core.result.Result.Err
+                        aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.RepeatedZeroBlock)))))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Err (aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os err))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:26:4: warning: This simp argument is unused:
+  fault
+
+Hint: Omit it from the simp argument list.
+  simp only [aspis_prover.state_only_entropy.ENTROPY_RETRY_LIMIT, ̲emit,
+      show (0#usize : Usize) < 16#usize from by decide, ̲if_true, ̲hprefix, ̲pure,
+  ̵  ̵ ̵ ̵f̵a̵u̵l̵t̵,̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ProverRwEffectControl.after_os_error]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:26:10: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [aspis_prover.state_only_entropy.ENTROPY_RETRY_LIMIT, ̲emit,
+      show (0#usize : Usize) < 16#usize from by decide, ̲if_true, ̲hprefix, ̲pure,
+  ̵  ̵ ̵ ̵fault,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̲ ̲ ̲ ̲ ̲ProverRwEffectControl.after_os_error]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:26:21: warning: This simp argument is unused:
+  ProverRwEffectControl.after_os_error
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵s̵p̵i̵s̵_̵p̵r̵o̵v̵e̵r̵.̵s̵t̵a̵t̵e̵_̵o̵n̵l̵y̵_̵e̵n̵t̵r̵o̵p̵y̵.̵E̵N̵T̵R̵O̵P̵Y̵_̵R̵E̵T̵R̵Y̵_̵L̵I̵M̵I̵T̵,̵e̵m̵i̵t̵,̵[̲a̲s̲p̲i̲s̲_̲p̲r̲o̲v̲e̲r̲.̲s̲t̲a̲t̲e̲_̲o̲n̲l̲y̲_̲e̲n̲t̲r̲o̲p̲y̲.̲E̲N̲T̲R̲O̲P̲Y̲_̲R̲E̲T̲R̲Y̲_̲L̲I̲M̲I̲T̲,̲ ̲e̲m̲i̲t̲,̲
+      show (0#usize : Usize) < 16#usize from by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵h̵p̵r̵e̵f̵i̵x̵,̵p̵u̵r̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵f̵a̵u̵l̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵r̵o̵v̵e̵r̵R̵w̵E̵f̵f̵e̵c̵t̵C̵o̵n̵t̵r̵o̵l̵.̵a̵f̵t̵e̵r̵_̵o̵s̵_̵e̵r̵r̵o̵r̵]̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲h̲p̲r̲e̲f̲i̲x̲,̲ ̲p̲u̲r̲e̲,̲ ̲f̲a̲u̲l̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:48:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (r, c1, back) ←
+      do
+        let r1 ←
+          core.result.Result.map_err
+              (RealR1_client.prove_for_proof_accounts.closure.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError
+                account)
+              (core.result.Result.Err (aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os err)) ()
+        ok (r1, next, fun c1 => c1)
+    ok (r, back c1)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err verifier.Error.Entropy, next)
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+S : Type
+account : ProverRwEffectCallback.Account S
+state next : S
+nonce : Std.Array U8 32#usize
+called : account.call_mut state 0#usize = ok (nonce, next)
+err : getrandom.error.Error
+factory :
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce =
+    ok (core.result.Result.Err (aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os err))
+variant :
+  core.cmp.PartialEq.ne.trait_default transport.Variant.Insts.CoreCmpPartialEqVariant transport.Variant.S2
+      transport.Variant.S2 =
+    ok false
+pub : Pub
+compiled : Compiled
+hash : Hash
+store : Store
+⊢ (do
+      let (r, c1, back) ←
+        do
+          let r1 ←
+            core.result.Result.map_err
+                (RealR1_client.prove_for_proof_accounts.closure.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError
+                  account)
+                (core.result.Result.Err (aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os err)) ()
+          ok (r1, next, fun c1 => c1)
+      ok (r, back c1)) =
+    ok (core.result.Result.Err verifier.Error.Entropy, next)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:45:15: warning: This simp argument is unused:
+  RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+
+Hint: Omit it from the simp argument list.
+  simp only [̵R̵e̵a̵l̵R̵1̵_̵c̵l̵i̵e̵n̵t̵.̵p̵r̵o̵v̵e̵_̵f̵o̵r̵_̵p̵r̵o̵o̵f̵_̵a̵c̵c̵o̵u̵n̵t̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵M̵u̵t̵T̵u̵p̵l̵e̵U̵s̵i̵z̵e̵R̵e̵s̵u̵l̵t̵S̵t̵a̵t̵e̵O̵n̵l̵y̵A̵t̵t̵e̵m̵p̵t̵S̵e̵c̵r̵e̵t̵s̵E̵r̵r̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵R̵e̵a̵l̵R̵1̵_̵c̵l̵i̵e̵n̵t̵.̵p̵r̵o̵v̵e̵_̵f̵o̵r̵_̵p̵r̵o̵o̵f̵_̵a̵c̵c̵o̵u̵n̵t̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵M̵u̵t̵T̵u̵p̵l̵e̵U̵s̵i̵z̵e̵R̵e̵s̵u̵l̵t̵S̵t̵a̵t̵e̵O̵n̵l̵y̵A̵t̵t̵e̵m̵p̵t̵S̵e̵c̵r̵e̵t̵s̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵a̵l̵l̵e̵d̵,̵f̵a̵c̵t̵o̵r̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲R̲e̲a̲l̲R̲1̲_̲c̲l̲i̲e̲n̲t̲.̲p̲r̲o̲v̲e̲_̲f̲o̲r̲_̲p̲r̲o̲o̲f̲_̲a̲c̲c̲o̲u̲n̲t̲s̲.̲c̲l̲o̲s̲u̲r̲e̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲F̲u̲n̲c̲t̲i̲o̲n̲F̲n̲M̲u̲t̲T̲u̲p̲l̲e̲U̲s̲i̲z̲e̲R̲e̲s̲u̲l̲t̲S̲t̲a̲t̲e̲O̲n̲l̲y̲A̲t̲t̲e̲m̲p̲t̲S̲e̲c̲r̲e̲t̲s̲E̲r̲r̲o̲r̲.̲c̲a̲l̲l̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲a̲l̲l̲e̲d̲,̲ ̲f̲a̲c̲t̲o̲r̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_SourceOsFailure.factory_os_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SourceOsFailure.client_on_factory_error' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

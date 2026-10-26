@@ -1,0 +1,10 @@
+import R1Z.PrivacyR1HeadlineOwnedClosed
+import R1Z.ProverCommitOwnedEndpoint
+import R1Z.PrivacyR1HeadlineDeployedReal
+set_option pp.explicit true
+#check @R1Z.PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises
+#print axioms R1Z.PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises
+#check @R1Z.ProverCommitOwnedEndpoint.caller_law
+#print axioms R1Z.ProverCommitOwnedEndpoint.caller_law
+#check @R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
+#print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed

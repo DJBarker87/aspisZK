@@ -1,0 +1,16 @@
+import R1Z.PDict_Static222_24
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_Static222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap
+/-- Carrier transport candidate for `prover.prepare_opening`. -/
+theorem erase_392 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.prepare_opening (types base F) (selected base F ops) = @prover.prepare_opening base ops := by
+  delta prover.prepare_opening
+  delta prover.prepare_opening.match_1
+  delta prover.prepare_opening.match_2
+  try simp only [Aeneas.Std.uncurry, erase_59 base F ops, erase_375 base F ops, erase_276 base F ops, erase_376 base F ops, erase_347 base F ops, erase_351 base F ops, erase_355 base F ops, erase_382 base F ops, erase_385 base F ops, erase_388 base F ops, erase_391 base F ops, erase_371 base F ops, erase_361 base F ops]
+  all_goals rfl
+#print axioms erase_392
+
+end R1Z.PDict_Static222

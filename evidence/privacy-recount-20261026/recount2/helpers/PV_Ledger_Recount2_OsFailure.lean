@@ -1,0 +1,14 @@
+import R1Z.PV_RunJoin_OsFailure
+import R1Z.PV_RunJoin_SourceFailureIndependence
+import R1Z.PV_RunJoin_PublicFailureEndpoint
+import R1Z.PV_RunJoin_OsFailureEndpoint
+set_option pp.explicit true
+#check @R1Z.PV_RunJoin_OsFailure.conditional_disagreement
+#print axioms R1Z.PV_RunJoin_OsFailure.conditional_disagreement
+#check @R1Z.PV_RunJoin_SourceFailureIndependence.source_witness_independent
+#print axioms R1Z.PV_RunJoin_SourceFailureIndependence.source_witness_independent
+#check @R1Z.PV_RunJoin_PublicFailureEndpoint.privacy_headline_public_failure
+#print axioms R1Z.PV_RunJoin_PublicFailureEndpoint.privacy_headline_public_failure
+#check @R1Z.PV_RunJoin_OsFailureEndpoint.PV_RunJoin_OsFailure
+#print axioms R1Z.PV_RunJoin_OsFailureEndpoint.PV_RunJoin_OsFailure
+#print R1Z.PV_RunJoin_OsFailure.FirstDrawFailure

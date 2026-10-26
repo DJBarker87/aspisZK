@@ -1,0 +1,144 @@
+@R1Z.PV_Src_Identification.public_eq : ∀ {K : Type} [inst : Field K] [Fintype K] [DecidableEq K]
+  [@Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  {I : Type} {inputs : I → R1Z.PV_Src_Identification.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))}
+  (premises : @R1Z.PV_Src_Identification.PV_Src_Premises K inst inst_4 I inputs transport) (i : I),
+  @Eq (R0P.Public K)
+    (@R0Z.ZkStatement.HonestProver.public K (@R1Z.PV_Src_Identification.prover K inst inst_4 I inputs transport) i)
+    (@R0Z.ZkStatement.HonestProver.public K (@R1Z.BuilderSource.prover K inst inst_4)
+      (@R1Z.PV_Src_Identification.toInstance K inst inst_4 I inputs transport premises i))
+'R1Z.PV_Src_Identification.public_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_Src_Identification.build_eq : ∀ {K : Type} [inst : Field K] [Fintype K] [DecidableEq K]
+  [@Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  {I : Type} {inputs : I → R1Z.PV_Src_Identification.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))}
+  (premises : @R1Z.PV_Src_Identification.PV_Src_Premises K inst inst_4 I inputs transport) (i : I),
+  @Eq (R0P.Trace K)
+    (@R0Z.ZkStatement.HonestProver.build K (@R1Z.PV_Src_Identification.prover K inst inst_4 I inputs transport) i)
+    (@R0Z.ZkStatement.HonestProver.build K (@R1Z.BuilderSource.prover K inst inst_4)
+      (@R1Z.PV_Src_Identification.toInstance K inst inst_4 I inputs transport premises i))
+'R1Z.PV_Src_Identification.build_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_Src_Identification.transport_eq : ∀ {K : Type} [inst : Field K] [Fintype K] [DecidableEq K]
+  [@Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  {I : Type} {inputs : I → R1Z.PV_Src_Identification.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))},
+  @R1Z.PV_Src_Identification.PV_Src_Premises K inst inst_4 I inputs transport →
+    @Eq
+      (Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+        (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024)))))
+      (@R0Z.ZkStatement.HonestProver.transport K (@R1Z.PV_Src_Identification.prover K inst inst_4 I inputs transport))
+      R1Z.BuilderSource.π
+'R1Z.PV_Src_Identification.transport_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure R1Z.PV_Src_Identification.PV_Src_Premises {K : Type} [Field K]
+  [@CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst✝))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  {I : Type} (inputs : I → R1Z.PV_Src_Identification.Input)
+  (transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))) :
+  Prop
+number of parameters: 6
+fields:
+  R1Z.PV_Src_Identification.PV_Src_Premises.words : ∀ (i : I),
+      R0Z.WriterRefine.WitnessOk (R1Z.BuilderPrimitiveArguments.wordWitness (inputs i).witnessRecord)
+  R1Z.PV_Src_Identification.PV_Src_Premises.publicCorr : ∀ (i : I),
+      @R0Z.WriterRefine.PubCorr K inst✝¹ (R1Z.BuilderPrimitiveArguments.wordPublic (inputs i).publicRecord)
+        (@R1J.SpendWitnessMap.mapPub K inst✝¹ inst✝ (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput))
+  R1Z.PV_Src_Identification.PV_Src_Premises.admission : ∀ (i : I),
+      @R1Z.BuilderSpendRelation.RspendPlus K inst✝¹
+        (@R1J.SpendWitnessMap.mapPub K inst✝¹ inst✝ (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput))
+        (@R1Z.BuilderCanonical.liftWitness K inst✝¹ inst✝
+          (R1Z.BuilderRecordCanonical.witness (R1Z.BuilderPrimitiveArguments.wordWitness (inputs i).witnessRecord)))
+  R1Z.PV_Src_Identification.PV_Src_Premises.row_call : ∀
+      (j : Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024)))),
+      @Eq (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+        (@DFunLike.coe
+          (Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+            (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024)))))
+          (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+          (fun x => Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+          (@EquivLike.toFunLike
+            (Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+              (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024)))))
+            (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+            (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+            (@Equiv.instEquivLike (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+              (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))))
+          transport j)
+        (R1Z.PV_Src_Transport.row j)
+constructor:
+  R1Z.PV_Src_Identification.PV_Src_Premises.mk {K : Type} [Field K]
+    [@CharP K
+        (@AddGroupWithOne.toAddMonoidWithOne K
+          (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst✝))))
+        (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+    {I : Type} {inputs : I → R1Z.PV_Src_Identification.Input}
+    {transport :
+      Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+        (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))}
+    (words : ∀ (i : I), R0Z.WriterRefine.WitnessOk (R1Z.BuilderPrimitiveArguments.wordWitness (inputs i).witnessRecord))
+    (publicCorr :
+      ∀ (i : I),
+        @R0Z.WriterRefine.PubCorr K inst✝ (R1Z.BuilderPrimitiveArguments.wordPublic (inputs i).publicRecord)
+          (@R1J.SpendWitnessMap.mapPub K inst✝ inst✝¹ (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput)))
+    (admission :
+      ∀ (i : I),
+        @R1Z.BuilderSpendRelation.RspendPlus K inst✝
+          (@R1J.SpendWitnessMap.mapPub K inst✝ inst✝¹ (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput))
+          (@R1Z.BuilderCanonical.liftWitness K inst✝ inst✝¹
+            (R1Z.BuilderRecordCanonical.witness (R1Z.BuilderPrimitiveArguments.wordWitness (inputs i).witnessRecord))))
+    (row_call :
+      ∀ (j : Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024)))),
+        @Eq (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+          (@DFunLike.coe
+            (Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+              (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024)))))
+            (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+            (fun x => Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+            (@EquivLike.toFunLike
+              (Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+                (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024)))))
+              (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+              (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+              (@Equiv.instEquivLike (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+                (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))))
+            transport j)
+          (R1Z.PV_Src_Transport.row j)) :
+    @R1Z.PV_Src_Identification.PV_Src_Premises K inst✝ inst✝¹ I inputs transport
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh
