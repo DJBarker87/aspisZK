@@ -21,3 +21,20 @@ No source observation may be used to define its own mathematical model.
 Inventory: 30 -> 30 so far. Neither fixture's V163 data equation or security
 model non-vacuity is established. No headline premise removed. Target not yet
 established. No shipped source, key, launcher or sibling worktree was changed.
+
+## Compile-free stage 1, 21:39 UTC
+
+All requested bridge targets now have active PV_Join_ drafts: Current71,
+Current100, Current101, EmbeddingWord/Embedding, CB3Flat, CB3Boundary,
+HeapCompatibility, PublicOp20. These are not yet type-checked. No source
+correspondence, data equation or fixture obligation is marked proved on the
+basis of these drafts. FinalAudit remains first in the authorized compile order.
+The scalar normalization bridge uses a symbolic canonical-word bound before
+the embedding; the boundary proof keeps all 28 inputs symbolic.
+
+Read-only host inventory: restored objects contain 769 .olean files (360 MiB),
+but searches of the restored and candidate host trees found no
+ProverRwP6BodyData.olean, ProverRw19AuditCaller.olean or
+PV_Join_PublicCaller.olean. The backend path in env/J.json was also absent.
+These are diagnostics only: no infrastructure repair or scope launch occurred.
+The flag was still absent at 21:39:17 UTC.
