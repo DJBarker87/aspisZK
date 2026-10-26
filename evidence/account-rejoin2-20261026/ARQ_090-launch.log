@@ -1,0 +1,46 @@
+{"attempt": "ARQ_090", "exit_status": 0, "wall_seconds": 3.671871512022335, "peak_rss_kib": "5535928", "swaps": "0", "print_axioms": []}
+structure AspisR1.ARQ_WorldSupport.NativeAt {W A C Tx : Type} (L : Library W (ℕ → Record))
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (c : DrvC_Installation.Configuration FIo_Install.W C) (err : C) (r : NP6_StdModel.Reservation)
+  (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (a : Adversary A) (H : Bytes → State) : Type
+number of parameters: 15
+fields:
+  AspisR1.ARQ_WorldSupport.NativeAt.sha256 : Bytes → State
+  AspisR1.ARQ_WorldSupport.NativeAt.p1 : S2W_ExtractionBoundary.P1 self.sha256 H
+  AspisR1.ARQ_WorldSupport.NativeAt.syscall 
+...
+     (eval H a.first).2.state =
+        ok (core.result.Result.Ok (saved, post1, final1)))
+    (accepted2 :
+      let j := (eval H (a.second (eval H a.first).2 saved post1 final1)).2;
+      second native2 allocator j.entry CPH_Program.verifier j.data j.slot j.state =
+        ok (core.result.Result.Ok (post2, final2)))
+    (p : CPG_Projection.Observations Tx A) (t u : Tx) (actions : List (CPP_BankState.Action A))
+    (game :
+      CPH_Game.DeployedPairExecution p t u (eval H a.first).2.entry
+        (eval H (a.second (eval H a.first).2 saved post1 final1)).2.entry saved actions native1 native2 copy allocator
+        CPH_Program.verifier)
+    (RuntimePersistence :
+      CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+        (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p) (CPG_Projection.tentative p)
+        (CPG_Projection.success p) (CPG_Projection.loaded p)) :
+    NativeAt L copy allocator c err r native1 native2 hashv a H
+def AspisR1.ARQ_WorldSupport.Supported : {W A C : Type} →
+  {Tx : Type} →
+    Library W (ℕ → Record) →
+      (Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) →
+        Allocator A →
+          DrvC_Installation.Configuration FIo_Install.W C →
+            C →
+              NP6_StdModel.Reservation →
+                S2W_ExtractionBoundary.First →
+                  S2W_ExtractionBoundary.Second →
+                    (SdkC_Source.Parts → Result SdkC_Source.Digest) → Adversary A → Prop :=
+fun {W A C Tx} L copy allocator c err r native1 native2 hashv a =>
+  ∀ (H : Bytes → State),
+    accepted (eval H (account (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a)).2 =
+        true →
+      Nonempty (NativeAt L copy allocator c err r native1 native2 hashv a H)
+
+Running as unit: run-r34274e203fed4c049727a232230f2039.scope; invocation ID: d3d6f728f16c4ff1a2e6614a2d6543c4

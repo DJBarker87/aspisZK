@@ -1,0 +1,27 @@
+{"attempt": "ARQ_002", "exit_status": 0, "wall_seconds": 2.186603615991771, "peak_rss_kib": "5387040", "swaps": "0", "print_axioms": []}
+def AspisR1.ARQ_Observer.project : {A : Type} → Outcome A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144) :=
+fun {A} out =>
+  ((OraclePortCompactDraft.parse (submitted out.1).stored).getD { wire := (submitted out.1).stored, semantic := [] },
+    match (motive := FirstReply A → Fin 22 → Fin 262144) out.2.1 with
+    | ok (core.result.Result.Ok (saved, fst, snd)) =>
+      (OraclePortCheckpointPreparedC5.decodeQueries (OraclePortCompactDraft.slice (bytesOf ↑saved) 320 88)).getD
+        fun x => 0
+    | x => fun x => 0)
+def AspisR1.ARQ_Observer.select : {A F C : Type} →
+  DrvC_Installation.Configuration F C →
+    S2W_ExtractionBoundary.Program → Outcome A → R9PoolRuntimeBinding.Inputs × R
+...
+def AspisR1.ARQ_Observer.project : {A : Type} → Outcome A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144) :=
+fun {A} out =>
+  ((OraclePortCompactDraft.parse (submitted out.1).stored).getD { wire := (submitted out.1).stored, semantic := [] },
+    match (motive := FirstReply A → Fin 22 → Fin 262144) out.2.1 with
+    | ok (core.result.Result.Ok (saved, fst, snd)) =>
+      (OraclePortCheckpointPreparedC5.decodeQueries (OraclePortCompactDraft.slice (bytesOf ↑saved) 320 88)).getD
+        fun x => 0
+    | x => fun x => 0)
+def AspisR1.ARQ_Observer.select : {A F C : Type} →
+  DrvC_Installation.Configuration F C →
+    S2W_ExtractionBoundary.Program → Outcome A → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs :=
+fun {A F C} c id => Hiq_ByteSelection.select (DrvC_Installation.sdk c) id
+
+Running as unit: run-r680ced2454b0431fa2c0aa37cf82bba0.scope; invocation ID: 2c703281c36843a08a3a702dcbf176b4

@@ -1,0 +1,89 @@
+ARQ_AccountPrefix.lean:46:9: error: don't know how to synthesize implicit argument `b`
+  @And.intro
+    (S2W_Trace.run (SCH_IdealSdk.dictionary c hashv H)
+        (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id
+          (eval H a.first).2.entry.first (eval H a.first).2.data)
+        [] =
+      ok (core.result.Result.Ok saved, log))
+    ((eval H (account c hashv copy allocator id a)).1 =
+      (eval H a.first).1 ++ (ARQ_LowerTrace.trace c hashv H log ++ ?m.109))
+    ran ?m.112
+context:
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+a : Adversary A
+H : Bytes → State
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+final : A
+first :
+  (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).2 = ok (core.result.Result.Ok (saved, post, final))
+log : S2W_Trace.Log
+ran :
+  S2W_Trace.run (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id
+        (eval H a.first).2.entry.first (eval H a.first).2.data)
+      [] =
+    ok (core.result.Result.Ok saved, log)
+same : (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1 = ARQ_LowerTrace.trace c hashv H log
+⊢ Prop
+ARQ_AccountPrefix.lean:46:14: error: don't know how to synthesize placeholder for argument `w`
+context:
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+a : Adversary A
+H : Bytes → State
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+final : A
+first :
+  (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).2 = ok (core.result.Result.Ok (saved, post, final))
+log : S2W_Trace.Log
+ran :
+  S2W_Trace.run (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id
+        (eval H a.first).2.entry.first (eval H a.first).2.data)
+      [] =
+    ok (core.result.Result.Ok saved, log)
+same : (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1 = ARQ_LowerTrace.trace c hashv H log
+⊢ List (Bytes × State)
+ARQ_AccountPrefix.lean:44:78: error: unsolved goals
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+a : Adversary A
+H : Bytes → State
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+final : A
+first :
+  (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).2 = ok (core.result.Result.Ok (saved, post, final))
+log : S2W_Trace.Log
+ran :
+  S2W_Trace.run (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id
+        (eval H a.first).2.entry.first (eval H a.first).2.data)
+      [] =
+    ok (core.result.Result.Ok saved, log)
+same : (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1 = ARQ_LowerTrace.trace c hashv H log
+⊢ ∃ log tail,
+    S2W_Trace.run (SCH_IdealSdk.dictionary c hashv H)
+          (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id
+            (eval H a.first).2.entry.first (eval H a.first).2.data)
+          [] =
+        ok (core.result.Result.Ok saved, log) ∧
+      (eval H (account c hashv copy allocator id a)).1 =
+        (eval H a.first).1 ++ (ARQ_LowerTrace.trace c hashv H log ++ tail)
+'AspisR1.ARQ_AccountPrefix.first_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ARQ_AccountPrefix.first_log_block' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

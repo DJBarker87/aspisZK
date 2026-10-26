@@ -1,0 +1,109 @@
+ARQ_FirstBody.lean:39:39: error: don't know how to synthesize placeholder for argument `body`
+context:
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+i : FirstInputs A
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+final : A
+H : Bytes → State
+success : (eval H (firstCode c hashv copy allocator id i)).2 = ok (core.result.Result.Ok (saved, post, final))
+allocated : A
+reserved : reserve allocator (admittedSizes i.entry 3 firstSizes) i.state = ok allocated
+body :
+  (eval H
+        (SdkC_Oracle.program
+          (GExq_Caller.first c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+            c.std hashv id i.entry.first i.data))).2 =
+    ok (core.result.Result.Ok saved)
+original :
+  (eval H
+        (SdkC_Oracle.program
+          (GExq_OuterLower.lower
+            (fun {A} =>
+              GExq_Caller.child c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+                c.std hashv)
+            (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id i.entry.first
+              i.data)))).2 =
+    S2W_Trace.erase (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id i.entry.first i.data)
+result :
+  S2W_Trace.erase (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id i.entry.first i.data) =
+    ok (core.result.Result.Ok saved)
+log : S2W_Trace.Log
+ran :
+  S2W_Trace.run (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id i.entry.first i.data) [] =
+    ok (core.result.Result.Ok saved, log)
+flattened :
+  ARQ_LowerTrace.trace c hashv H [] ++
+      (eval H
+          (SdkC_Oracle.program
+            (GExq_OuterLower.lower
+              (fun {A} =>
+                GExq_Caller.child c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+                  c.boundaries c.std hashv)
+              (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id i.entry.first
+                i.data)))).1 =
+    ARQ_LowerTrace.trace c hashv H log
+⊢ SdkC_Source.Code S2W_Observation.Answer
+ARQ_FirstBody.lean:39:7: error: failed to infer `have` declaration type
+ARQ_FirstBody.lean:24:97: error: unsolved goals
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+i : FirstInputs A
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+final : A
+H : Bytes → State
+success : (eval H (firstCode c hashv copy allocator id i)).2 = ok (core.result.Result.Ok (saved, post, final))
+allocated : A
+reserved : reserve allocator (admittedSizes i.entry 3 firstSizes) i.state = ok allocated
+body :
+  (eval H
+        (SdkC_Oracle.program
+          (GExq_Caller.first c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+            c.std hashv id i.entry.first i.data))).2 =
+    ok (core.result.Result.Ok saved)
+original :
+  (eval H
+        (SdkC_Oracle.program
+          (GExq_OuterLower.lower
+            (fun {A} =>
+              GExq_Caller.child c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+                c.std hashv)
+            (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id i.entry.first
+              i.data)))).2 =
+    S2W_Trace.erase (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id i.entry.first i.data)
+result :
+  S2W_Trace.erase (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id i.entry.first i.data) =
+    ok (core.result.Result.Ok saved)
+log : S2W_Trace.Log
+ran :
+  S2W_Trace.run (SCH_IdealSdk.dictionary c hashv H)
+      (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id i.entry.first i.data) [] =
+    ok (core.result.Result.Ok saved, log)
+flattened :
+  ARQ_LowerTrace.trace c hashv H [] ++
+      (eval H
+          (SdkC_Oracle.program
+            (GExq_OuterLower.lower
+              (fun {A} =>
+                GExq_Caller.child c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+                  c.boundaries c.std hashv)
+              (S2W_Outer.stage1_owned (SCH_IdealSdk.dictionary c hashv H) S2W_Outer.traceEffects id i.entry.first
+                i.data)))).1 =
+    ARQ_LowerTrace.trace c hashv H log
+⊢ (eval H (firstCode c hashv copy allocator id i)).1 = ARQ_LowerTrace.trace c hashv H log
+'AspisR1.ARQ_FirstBody.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
