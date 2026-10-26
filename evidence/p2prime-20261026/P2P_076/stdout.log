@@ -1,0 +1,118 @@
+def AspisR1.P2P_Acceptance.Facts : (AspisR1.OraclePortStoredExperimentC4.Input →
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Slice Aeneas.Std.U8 → AspisV8R19.DuplexFrames.Bytes → Prop :=
+fun driver H pub proof pub2 proof2 checkpoint written =>
+  ∃ i,
+    i.statement.pubBytes = AspisR1.MultiproofConeCanonical.bytesOf ↑pub ∧
+      i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑proof ∧
+        i.statement.tag = 2 ∧
+          List.length i.statement.pubBytes = 1880 ∧
+            75 + List.length i.statement.pubBytes ≤ AspisR1.SelectedTranscriptParams.L ∧
+              (AspisV8R19.MemoizedProgramLaw.eval H (driver i)).2 = Bool.true ∧
+                ¬∀ (j : AspisR1.OraclePortStoredExperimentC4.Input),
+                    (AspisV8R19.MemoizedProgramLaw.eval H (driver j)).2 = Bool.false
+def AspisR1.P2P_Acceptance.Nonrejecting : (AspisR1.OraclePortStoredExperimentC4.Input →
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Slice Aeneas.Std.U8 → Prop :=
+fun driver H pub proof =>
+  ∃ i,
+    i.statement.pubBytes = AspisR1.MultiproofConeCanonical.bytesOf ↑pub ∧
+      i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑proof ∧
+        i.statement.tag = 2 ∧
+          List.length i.statement.pubBytes = 1880 ∧
+            (AspisV8R19.MemoizedProgramLaw.eval H (driver i)).2 = Bool.true ∧
+              ¬∀ (j : AspisR1.OraclePortStoredExperimentC4.Input),
+                  (AspisV8R19.MemoizedProgramLaw.eval H (driver j)).2 = Bool.false
+@AspisR1.P2P_NativeNonvacuity.accepted_input : ∀ {W F CoreError : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops) (reserved : Bool)
+  (queryOps : AspisR1.Port3_NativeQueryBody.Ops) (geoOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (stageBase : VTop_Stages.Ops) (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (reservation : AspisR1.NP6_StdModel.Reservation)
+  (program : AspisR1.S2W_ExtractionBoundary.Program) (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (driver :
+    AspisR1.OraclePortStoredExperimentC4.Input →
+      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool)
+  (prior : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (events : List AspisR1.S2X.AccountEvent)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+  AspisR1.P2P_GoodResult.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation
+      program data1 data2 slot saved post1 post2 H driver prior events hashv →
+    ∃ f s,
+      AspisR1.S2W_NativeConsolidation.SourceCuts
+          (AspisR1.ClaimsUnrolledSdk.sdkOps
+            (AspisR1.Tx2I_Install.install adapterOps
+              (AspisR1.Op5T_Concrete.stage
+                (AspisR1.Tx2N_Execution.control (AspisR1.AuS1_Install.base stageBase) reserved queryOps geoOps))
+              finishOps)
+            (AspisR1.Uni_Install.current ops reserved queryOps geoOps) (AspisR1.F3M_CircleSource.install B)
+            (AspisR1.NP6_StdModel.calls reservation))
+          e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s ∧
+        ∃ i,
+          i.statement.pubBytes = AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub ∧
+            i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof ∧
+              i.statement.tag = 2 ∧
+                List.length i.statement.pubBytes = 1880 ∧
+                  (AspisV8R19.MemoizedProgramLaw.eval H (driver i)).2 = Bool.true ∧
+                    ¬∀ (j : AspisR1.OraclePortStoredExperimentC4.Input),
+                        (AspisV8R19.MemoizedProgramLaw.eval H (driver j)).2 = Bool.false
+@AspisR1.P2P_Nonvacuity.exists_clean : ∀ {A : Type}
+  (source : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A)
+  (project : A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+  (select : A → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H source).1 ≤ 0 + 1921) →
+    ∃ H,
+      ¬AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv 2965
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Hiq_RecordedJoint.program source project select)) ∧
+        AspisR1.R9PoolRuntimeBinding.P2Prime H (select (AspisV8R19.MemoizedProgramLaw.eval H source).2).1
+          (select (AspisV8R19.MemoizedProgramLaw.eval H source).2).2
+AspisR1.Rc5_RuntimeFixture.joint_runtime : ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+  AspisR1.S2Trust.S2TrustedSdkBorrow (AspisR1.S2Trust.model (ℕ → AspisR1.S2W_D189Entry.Record)) ∧
+    AspisR1.S2W_TrustedStd.TrustedStd AspisR1.CPH_FixtureData.copy ∧
+      Nonempty
+          (AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission
+            (AspisR1.S2Trust.model (ℕ → AspisR1.S2W_D189Entry.Record)) AspisR1.CPH_FixtureData.e1
+            AspisR1.CPH_FixtureData.e1.heap 3) ∧
+        Nonempty
+            (AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission
+              (AspisR1.S2Trust.model (ℕ → AspisR1.S2W_D189Entry.Record)) AspisR1.CPH_FixtureData.e2
+              AspisR1.CPH_FixtureData.e2.heap 7) ∧
+          AspisR1.CPH_Game.DeployedPairExecution AspisR1.CPH_FixtureData.observations Bool.false Bool.true
+              AspisR1.CPH_FixtureData.e1 AspisR1.CPH_FixtureData.e2 AspisR1.CPH_FixtureData.saved
+              AspisR1.CPH_FixtureData.suffix AspisR1.CPH_FixtureData.n1 AspisR1.CPH_FixtureData.n2
+              AspisR1.CPH_FixtureData.copy AspisR1.CPH_FixtureData.allocator AspisR1.CPH_FixtureData.id ∧
+            AspisR1.CPR_DataPersistence.TwoTransactionLaw
+                (AspisR1.CPG_Projection.adjacent AspisR1.CPH_FixtureData.observations)
+                (AspisR1.CPG_Projection.ordinary AspisR1.CPH_FixtureData.observations
+                  (AspisR1.Hist_Nonvacuity.key 0#u8))
+                (AspisR1.CPG_Projection.before AspisR1.CPH_FixtureData.observations)
+                (AspisR1.CPG_Projection.tentative AspisR1.CPH_FixtureData.observations)
+                (AspisR1.CPG_Projection.success AspisR1.CPH_FixtureData.observations)
+                (AspisR1.CPG_Projection.loaded AspisR1.CPH_FixtureData.observations) ∧
+              AspisR1.S2W_D189Wrappers.first AspisR1.CPH_FixtureData.n1 AspisR1.CPH_FixtureData.copy
+                    AspisR1.CPH_FixtureData.allocator AspisR1.CPH_FixtureData.e1 AspisR1.CPH_FixtureData.id data1 () =
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Ok
+                      (AspisR1.CPH_FixtureData.saved, AspisR1.CPH_FixtureWrappers.post1, ())) ∧
+                AspisR1.S2W_D189Wrappers.second AspisR1.CPH_FixtureData.n2 AspisR1.CPH_FixtureData.allocator
+                      AspisR1.CPH_FixtureData.e2 AspisR1.CPH_FixtureData.id data2 slot () =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (AspisR1.CPH_FixtureData.e2.heap, ())) ∧
+                  Nonempty
+                      (AspisR1.S2X.CheckpointVersionBinding
+                        (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                          (AspisR1.CPH_FixtureWrappers.post1.payload (AspisR1.CPH_FixtureData.e1.heap.accounts 2).1)
+                          1768)
+                        (AspisR1.MultiproofConeCanonical.bytesOf
+                          ↑(AspisR1.CPH_FixtureData.e2.buffers (AspisR1.CPH_FixtureData.e2.handles 6).1))) ∧
+                    AspisR1.CPH_FixtureData.observations.physicalEvents Bool.false ≠ [] ∧
+                      AspisR1.CPH_FixtureData.id = AspisR1.CPH_Program.verifier

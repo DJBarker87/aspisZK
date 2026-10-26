@@ -1,0 +1,40 @@
+{"attempt": "P2P_081", "exit_status": 0, "wall_seconds": 3.950747035036329, "peak_rss_kib": "5426404", "swaps": "0", "print_axioms": []}
+structure AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission {W : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (e : AspisR1.S2W_D189Entry.Entry) (w : W) (n : ℕ) :
+  Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.entry : AspisR1.AdapterRw.RuntimeEntrypointAdmission e.heap
+      (fun a => List.map AspisR1.S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles a).1).owned.key) n
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.related : L.related w e.heap
+constructor:
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.mk {W : Type}
+    {L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entr
+...
+ntrypointAdmission L e w n
+structure AspisR1.AdapterRw.RuntimeEntrypointAdmission {F : Type} (s : AspisR1.S2Trust.Heap F) (keys : ℕ → List UInt8)
+  (accountCount : ℕ) : Prop
+number of parameters: 4
+fields:
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.valid : AspisR1.S2Trust.Valid s
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.freshGuards : s.guards = []
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.noExternalBorrows : ∀ (c : ℕ), s.external c = 0
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.liveAccount : ∀ a < accountCount, s.ownerLive a = Bool.true
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.counterZero : ∀ a < accountCount, s.counter (s.accounts a).1 = 0
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.sharedCellsOnlyEqualKeys : ∀ (a b : ℕ),
+      a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.duplicateKeysShareCell : ∀ (a b : ℕ),
+      a < accountCount → b < accountCount → keys a = keys b → (s.accounts a).1 = (s.accounts b).1
+constructor:
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.mk {F : Type} {s : AspisR1.S2Trust.Heap F} {keys : ℕ → List UInt8}
+    {accountCount : ℕ} (valid : AspisR1.S2Trust.Valid s) (freshGuards : s.guards = [])
+    (noExternalBorrows : ∀ (c : ℕ), s.external c = 0) (liveAccount : ∀ a < accountCount, s.ownerLive a = Bool.true)
+    (counterZero : ∀ a < accountCount, s.counter (s.accounts a).1 = 0)
+    (sharedCellsOnlyEqualKeys :
+      ∀ (a b : ℕ), a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b)
+    (duplicateKeysShareCell :
+      ∀ (a b : ℕ), a < accountCount → b < accountCount → keys a = keys b → (s.accounts a).1 = (s.accounts b).1) :
+    AspisR1.AdapterRw.RuntimeEntrypointAdmission s keys accountCount
+
+Running as unit: run-r3425541d27764cb99ea4227bee8ac4d9.scope; invocation ID: ec8d99a5081c4f10b86a9f56d62036a8
+
