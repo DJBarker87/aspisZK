@@ -1,0 +1,44 @@
+{"attempt": "JFr_TX2_096", "exit_status": 0, "wall_seconds": 2.4401587329921313, "peak_rss_kib": "5541648", "swaps": "0", "print_axioms": ["'AspisR1.JFr_TX2_Partial.dot_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFr_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.JFr_TX2_Partial.dot_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFr_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JFr_TX2_Partial.on_saved : ∀ (saved : alloc.vec.Vec U8),
+  ↑saved = ↑JFx_NativeBytes.checkpoint →
+    ∀ {Hash : Type} (H : Bytes → State) (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+      JFn_HashBoundary.Realizes H →
+        ∀ (seed : Port3_NativeQueryBody.Ops),
+          Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary H D) ⟨↑saved, ⋯⟩ JFx_NativeBytes.proof
+                JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2 hash =
+            
+...
+.weights.deref =
+                  ok (core.result.Result.Ok JFo_Pending.value) ∧
+                (∀ (i : Fin 12),
+                    (JFr_TX2_DotsBinding.ops seed).op0 4#usize
+                        (Port3_NativeQueryBody.verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+                          (JFr_TX2_DotsBinding.ops seed))
+                        (JFo_Opening.value (JFn_Values.position i)) =
+                      ok (JFn_Values.value i)) ∧
+                  ∀ (i : Fin 12) (slot : Fin 4) (term : Fin 26),
+                    ∃ scalar,
+                      JFr_TX2_ScalarRead.read (JFr_TX2_Windows.array (JFn_Values.position i)) (↑slot)#usize
+                            (↑term)#usize =
+                          ok scalar ∧
+                        ↑scalar < 2147483647 :=
+fun saved same {Hash} H D hash realizes seed =>
+  ⟨JFn_Resume.on_saved saved same H D hash realizes,
+    ⟨JFr_TX2_Powers.source,
+      ⟨JFo_Pending.source,
+        ⟨fun i =>
+          JFn_Values.source
+            { op0 := @Port3_NativeQueryBody.Ops.op0 seed, op1 := seed.op1, op2 := seed.op2, op3 := seed.op3,
+              op4 := seed.op4, op5 := seed.op5, op6 := seed.op6, op7 := seed.op7, op8 := seed.op8, op9 := seed.op9,
+              op10 := seed.op10, op11 := seed.op11, op12 := seed.op12, op13 := seed.op13, op14 := seed.op14,
+              op15 := seed.op15, op16 := seed.op16, op17 := FIp_CircleQuery.circle, op18 := seed.op18,
+              op19 := seed.op19, op20 := FIp_DotsAdapter.dots, op21 := seed.op21,
+              widePartialEq := FIp_Equality.dictionary }
+            i,
+          fun i slot term =>
+          Exists.intro (↑(JFr_TX2_Scalars.values i slot))[↑term]
+            ⟨JFr_TX2_Scalars.source i slot term, JFr_TX2_Scalars.canonical i slot term⟩⟩⟩⟩⟩
+
+Running as unit: run-rb5dbe4f019834a7aaf06bfe738f9cf32.scope; invocation ID: af6887b9617c42cba18e38a8bfb5c393

@@ -121,3 +121,29 @@ dot inputs, distinct from JFn_'s corrected query-values window[672:800]. The
 Tails aggregate exports the144 returning native reads; no pairing or dot output
 is smuggled in. Both generators have deterministic --check modes and retain the
 original57607-byte proof hash; no alternate literal fixture was substituted.
+
+## Final joint partial statement and non-vacuity
+
+095 checks JFr_TX2_Tails.source, joining all144 returning native tail decodes.
+096 checks JFr_TX2_Partial.dot_inputs: ONE returning powers array with native
+canonicality, all1248 returning scalar reads with canonical bounds, and all144
+returning tail reads on the same real proof. This is a closed input-call
+non-vacuity theorem; it makes no hash claim and no accepted-pair claim.
+JFr_TX2_Partial.on_saved imports JFn_'s reader proof on any saved Vec whose
+bytes equal the real1768-byte checkpoint, retains Realizes H explicitly, and
+joins it with the named powers return, pending allocation, corrected query
+arrays under the dictionary with ACTUAL dot/circle bindings, and the1248
+computed scalar reads. No decoded-result/reader-success/array-success/powers-
+success premise is supplied to those partial statements. SHA256 realization,
+complete source-loop returns and native acceptance do not follow from them.
+
+Still OPEN, in requested order: complete native four_dots outputs and the
+circle-fold equality gate; returned query geometry/inverse array/node; all12
+chained accepted query updates and the post-query flush; batch1 Merkle
+authentication; installed finish arithmetic; accepted2; TX1's accepted1 and
+SAME saved-checkpoint equality; then the joint native pair with actual frozen3,
+game, RuntimePersistence, runtime admissions and remaining global owners.
+No JFr_TX2.accepted2 is delivered. The100-bit target and full joint/deployed-top
+non-vacuity remain not established. No real-byte premise was proved false or
+uninhabitable. The arbitrary-oracle and free-callback counterexamples inherited
+from JFn_ retain their precise local scope, not a SHA256/real-fixture vacuity claim.
