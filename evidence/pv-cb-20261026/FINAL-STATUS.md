@@ -1,8 +1,9 @@
-# Callback status (current checkpoint)
+# Complete callback status
 
-Assigned source/value rows:73 before,73 retained after; **0 full ledger/endpoint premises removed**.
-INSTALLED below means a checked selected dictionary/value equation, not native correspondence.
-OPEN is retained explicitly because it would be false to call unfinished pure work a native-effect deferral.
+Branch codex/pv-cb-20261026; base821157fbdd16034290613b9c4feac7023e15498c.
+Assigned source/value rows73 before/73 retained after; **0 full ledger or endpoint premises removed**.
+INSTALLED means a checked selected dictionary/value equation. Native correspondence is not inferred.
+OPEN identifies unfinished pure work; it is not mislabeled as an effect deferral.
 
 |op|row|status|theorem / receipt|remaining boundary|
 |---:|---|---|---|---|
@@ -12,12 +13,12 @@ OPEN is retained explicitly because it would be false to call unfinished pure wo
 |28|V179|INSTALLED(value interpretation only)|PV_CB_StringPath.op28_installed; 22804.json|Bounded carrier interpretation; ASCII0–8 and one Unicode scalar gates pass; arbitrary UTF8 length≤16 timed out.|
 |29|V180|INSTALLED(value interpretation only)|PV_CB_PathAsRef.op29_installed; 22805.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
 |30|V181|OPEN|—; source audit|Source/value law not completed; no native-effect deferral inferred.|
-|31|V182|OPEN|—; source audit|Source/value law not completed; no native-effect deferral inferred.|
-|32|V183|OPEN|—; source audit|Source/value law not completed; no native-effect deferral inferred.|
-|33|V184|INSTALLED(value interpretation only)|PV_CB_Pop.op33_installed; 22806.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
-|34|V185|INSTALLED(value interpretation only)|PV_CB_IsEmpty.op34_installed; 22807.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
-|35|V186|INSTALLED(value interpretation only)|PV_CB_VecDefault.op35_installed; 22808.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
-|36|V187|INSTALLED(value interpretation only)|PV_CB_VecArray.op36_accept; 22809.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
+|31|V182|OPEN|—; kani-push-008; kani-push-018|ASCII prefix/suffix0–8 timed out; exactly one arbitrary ASCII byte each passes. General UTF8 concatenation/native carrier transport remains OPEN.|
+|32|V183|OPEN|—; kani-reserve-overflow-009; kani-reserve-small-010; kani-zst-011|Bounded byte content preservation and capacity overflow gates pass; Vec<()> permits usizeMAX reserve. Full allocator-result law remains OPEN.|
+|33|V184|INSTALLED(value interpretation only)|PV_CB_Pop.op33_installed; 22806.json; kani-pop-020|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Bounded native gate passes; generic element/Drop/allocator law not inferred.|
+|34|V185|INSTALLED(value interpretation only)|PV_CB_IsEmpty.op34_installed; 22807.json; kani-empty-015|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Bounded native gate passes; generic element/Drop/allocator law not inferred.|
+|35|V186|INSTALLED(value interpretation only)|PV_CB_VecDefault.op35_installed; 22808.json; kani-default-016|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Bounded native gate passes; generic element/Drop/allocator law not inferred.|
+|36|V187|INSTALLED(value interpretation only)|PV_CB_VecArray.op36_accept; 22809.json; kani-array-017; kani-array-small-019|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Both native array scopes timed out180s.|
 |51|V195|SKIPPED(sibling source installation)|ProverRwP6FlatInstall.source; 22810.json|Sibling source reuse; full ledger/endpoint closure not claimed.|
 |71|V197|INSTALLED(value interpretation only)|PV_CB_Codecs.op71_installed; 22810.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
 |72|V198|INSTALLED(value interpretation only)|PV_CB_Codecs.op72_installed; 22810.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
@@ -37,16 +38,16 @@ OPEN is retained explicitly because it would be false to call unfinished pure wo
 |110|V214|INSTALLED(value interpretation only)|PV_CB_State.op110_installed; 22815.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
 |111|V215|INSTALLED(value interpretation only)|PV_CB_State.op111_installed; 22815.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
 |114|V216|INSTALLED(value interpretation only)|PV_CB_State.op114_installed; 22815.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
-|117|V217|OPEN|PV_CB_MaskTotal.total; owned recurrence proofs; 22872.json; kani-mask-012; kani-mask-013|Prepared control totality; recursive extraction passes; native gate unwind failure then timeout. OPEN.|
+|117|V217|OPEN|PV_CB_MaskTotal.total; PV_CB_OwnedMaskTotal.total; PV_CB_MaskExponentTables.c1/mask/read; 22872.json;22896.json;22899.json; kani-mask-012; kani-mask-013|Prepared and extracted owned controls total; table correspondence checked. Native full comparison unwind failure then timeout; row remains OPEN.|
 |118|V218|INSTALLED(value interpretation only)|PV_CB_State.op118_installed; 22815.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
 |120|V219|SKIPPED(sibling source installation)|retained polynomial source installation; source audit|Sibling source reuse; full ledger/endpoint closure not claimed.|
 |121|V220|OPEN|—; source audit|Source/value law not completed; no native-effect deferral inferred.|
-|122|V221|OPEN|—; source audit|Source/value law not completed; no native-effect deferral inferred.|
-|123|V222|OPEN|—; source audit|Source/value law not completed; no native-effect deferral inferred.|
-|127|V223|INSTALLED(value interpretation only)|PV_CB_Borrow.op127_installed; 22816.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
-|128|V224|INSTALLED(value interpretation only)|PV_CB_Borrow.op128_installed; 22816.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
-|130|V226|INSTALLED(value interpretation only)|PV_CB_Borrow.op130_installed; 22816.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
-|131|V227|INSTALLED(value interpretation only)|PV_CB_Borrow.op131_installed; 22816.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open.|
+|122|V221|DEFERRED(pv-runjoin3)|—; source audit|zeroize1.8.1 lib.rs369–388 array iterator invokes each arbitrary Zeroize implementation and a fence. Element erasure effects and native call association require effect-aware route; no full effect law supplied.|
+|123|V222|DEFERRED(pv-runjoin3)|—; source audit|zeroize1.8.1 lib.rs301–304 performs volatile_write(Default) and atomic_fence. Native memory erasure/fence effects require effect-aware route; no unconditional native equation installed.|
+|127|V223|INSTALLED(value interpretation only)|PV_CB_Borrow.op127_installed; 22816.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Native volatile erasure/fences/Drop association is deferred to pv-runjoin3; value projection alone does not establish those effects.|
+|128|V224|INSTALLED(value interpretation only)|PV_CB_Borrow.op128_installed; 22816.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Native volatile erasure/fences/Drop association is deferred to pv-runjoin3; value projection alone does not establish those effects.|
+|130|V226|INSTALLED(value interpretation only)|PV_CB_Borrow.op130_installed; 22816.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Native volatile erasure/fences/Drop association is deferred to pv-runjoin3; value projection alone does not establish those effects.|
+|131|V227|INSTALLED(value interpretation only)|PV_CB_Borrow.op131_installed; 22816.json|Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Native volatile erasure/fences/Drop association is deferred to pv-runjoin3; value projection alone does not establish those effects.|
 |132|V228|OPEN|—; source audit|Source/value law not completed; no native-effect deferral inferred.|
 |133|V229|OPEN|—; source audit|Source/value law not completed; no native-effect deferral inferred.|
 |134|V230|OPEN|—; source audit|Source/value law not completed; no native-effect deferral inferred.|

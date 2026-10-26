@@ -52,48 +52,48 @@
     "row": "V182",
     "status": "OPEN",
     "theorem": null,
-    "receipt": null,
-    "note": "Source/value law not completed; no native-effect deferral inferred."
+    "receipt": "kani-push-008; kani-push-018",
+    "note": "ASCII prefix/suffix0\u20138 timed out; exactly one arbitrary ASCII byte each passes. General UTF8 concatenation/native carrier transport remains OPEN."
   },
   {
     "op": 32,
     "row": "V183",
     "status": "OPEN",
     "theorem": null,
-    "receipt": null,
-    "note": "Source/value law not completed; no native-effect deferral inferred."
+    "receipt": "kani-reserve-overflow-009; kani-reserve-small-010; kani-zst-011",
+    "note": "Bounded byte content preservation and capacity overflow gates pass; Vec<()> permits usizeMAX reserve. Full allocator-result law remains OPEN."
   },
   {
     "op": 33,
     "row": "V184",
     "status": "INSTALLED(value interpretation only)",
     "theorem": "PV_CB_Pop.op33_installed",
-    "receipt": "22806.json",
-    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open."
+    "receipt": "22806.json; kani-pop-020",
+    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Bounded native gate passes; generic element/Drop/allocator law not inferred."
   },
   {
     "op": 34,
     "row": "V185",
     "status": "INSTALLED(value interpretation only)",
     "theorem": "PV_CB_IsEmpty.op34_installed",
-    "receipt": "22807.json",
-    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open."
+    "receipt": "22807.json; kani-empty-015",
+    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Bounded native gate passes; generic element/Drop/allocator law not inferred."
   },
   {
     "op": 35,
     "row": "V186",
     "status": "INSTALLED(value interpretation only)",
     "theorem": "PV_CB_VecDefault.op35_installed",
-    "receipt": "22808.json",
-    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open."
+    "receipt": "22808.json; kani-default-016",
+    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Bounded native gate passes; generic element/Drop/allocator law not inferred."
   },
   {
     "op": 36,
     "row": "V187",
     "status": "INSTALLED(value interpretation only)",
     "theorem": "PV_CB_VecArray.op36_accept",
-    "receipt": "22809.json",
-    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open."
+    "receipt": "22809.json; kani-array-017; kani-array-small-019",
+    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Both native array scopes timed out180s."
   },
   {
     "op": 51,
@@ -251,9 +251,9 @@
     "op": 117,
     "row": "V217",
     "status": "OPEN",
-    "theorem": "PV_CB_MaskTotal.total; owned recurrence proofs",
-    "receipt": "22872.json; kani-mask-012; kani-mask-013",
-    "note": "Prepared control totality; recursive extraction passes; native gate unwind failure then timeout. OPEN."
+    "theorem": "PV_CB_MaskTotal.total; PV_CB_OwnedMaskTotal.total; PV_CB_MaskExponentTables.c1/mask/read",
+    "receipt": "22872.json;22896.json;22899.json; kani-mask-012; kani-mask-013",
+    "note": "Prepared and extracted owned controls total; table correspondence checked. Native full comparison unwind failure then timeout; row remains OPEN."
   },
   {
     "op": 118,
@@ -282,18 +282,18 @@
   {
     "op": 122,
     "row": "V221",
-    "status": "OPEN",
+    "status": "DEFERRED(pv-runjoin3)",
     "theorem": null,
     "receipt": null,
-    "note": "Source/value law not completed; no native-effect deferral inferred."
+    "note": "zeroize1.8.1 lib.rs369\u2013388 array iterator invokes each arbitrary Zeroize implementation and a fence. Element erasure effects and native call association require effect-aware route; no full effect law supplied."
   },
   {
     "op": 123,
     "row": "V222",
-    "status": "OPEN",
+    "status": "DEFERRED(pv-runjoin3)",
     "theorem": null,
     "receipt": null,
-    "note": "Source/value law not completed; no native-effect deferral inferred."
+    "note": "zeroize1.8.1 lib.rs301\u2013304 performs volatile_write(Default) and atomic_fence. Native memory erasure/fence effects require effect-aware route; no unconditional native equation installed."
   },
   {
     "op": 127,
@@ -301,7 +301,7 @@
     "status": "INSTALLED(value interpretation only)",
     "theorem": "PV_CB_Borrow.op127_installed",
     "receipt": "22816.json",
-    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open."
+    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Native volatile erasure/fences/Drop association is deferred to pv-runjoin3; value projection alone does not establish those effects."
   },
   {
     "op": 128,
@@ -309,7 +309,7 @@
     "status": "INSTALLED(value interpretation only)",
     "theorem": "PV_CB_Borrow.op128_installed",
     "receipt": "22816.json",
-    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open."
+    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Native volatile erasure/fences/Drop association is deferred to pv-runjoin3; value projection alone does not establish those effects."
   },
   {
     "op": 130,
@@ -317,7 +317,7 @@
     "status": "INSTALLED(value interpretation only)",
     "theorem": "PV_CB_Borrow.op130_installed",
     "receipt": "22816.json",
-    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open."
+    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Native volatile erasure/fences/Drop association is deferred to pv-runjoin3; value projection alone does not establish those effects."
   },
   {
     "op": 131,
@@ -325,7 +325,7 @@
     "status": "INSTALLED(value interpretation only)",
     "theorem": "PV_CB_Borrow.op131_installed",
     "receipt": "22816.json",
-    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open."
+    "note": "Selected dictionary equation; exact native/source correspondence and row discharge remain separately open. Native volatile erasure/fences/Drop association is deferred to pv-runjoin3; value projection alone does not establish those effects."
   },
   {
     "op": 132,

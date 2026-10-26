@@ -72,7 +72,7 @@ mod checks {
     #[kani::proof]
     #[kani::unwind(18)]
     fn array4() {
-        let bytes:[u64;16]=kani::any(); let len:usize=kani::any(); kani::assume(len<=16);
+        let bytes:[u64;16]=kani::any(); let len:usize=kani::any(); kani::assume(len<=4);
         let actual:Result<[u64;4],Vec<u64>>=bytes[..len].to_vec().try_into();
         let expected=reference::array::<u64,4>(bytes[..len].to_vec());
         match (actual,expected) {

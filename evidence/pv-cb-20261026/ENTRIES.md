@@ -315,3 +315,30 @@ Native effect deferrals:232 returns measured Instant timings (z4/z9e.rs196–220
 257 invokes native worker scheduling plus optional trace mutex (host_work.rs),
 261 writes std filesystem state. See late-op-source-inventory.json. Other
 unfinished pure rows remain OPEN; no arbitrary effect deferrals are invented.
+
+## Final budget-exhausted disposition (supersedes checkpoint counts above)
+
+See FINAL-STATUS.md/json for all73 ops, FINAL-REPORT.json for exact budgets and
+native outcomes. Lean100/100 (IDs22800–22900 except refusal22826), Kani20/20.
+Owned Horner equality22892, fill recurrence22893, fill totality22895, root
+OwnedMaskTotal22896 and exponent widening/read bridge22899 pass. Failures94,
+97,98 are retained and corrected. Final focused dependency/axioms audit22900
+passes:1.67s,4287112KiB RSS,zero swap,standard axioms only. No full frozen
+release replay claimed. All current Lean declarations have checked receipts.
+
+Kani20 pop passes allu64 length0–16 after replacing the128-byte memcmp
+assertion in failed14 with element comparisons.15empty,16default,18single
+ASCII byte push pass;17array0–16 and19array0–4 time out180s. Total native
+outcomes13 passes,5 timeouts,2 unwinding failures. No source counterexample.
+
+Final status30 selected value interpretations,7 sibling source reuses,
+5 native-effect deferrals (122/123zeroize,232time,257workers,261filesystem),
+31 OPEN. Zeroizing value projections127/128/130/131 also retain physical
+native erasure/fence/Drop obligations. Pure unfinished rows remain OPEN.
+Assigned ledger73 before/73 retained,0 full ledger/endpoint premises removed.
+No generic native law, RunJoin, L1/L2/L3 or headline proof inferred.
+
+Next: owned/prepared fill-step/root equality using checked exponent tables,
+then compositional native gates without stubs before op117 row removal.
+Generic WideExact encoder native association remains open. No execution
+remains running; stopped because both explicit budgets are exhausted.
