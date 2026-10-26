@@ -97,3 +97,14 @@ exact SHA256 in each receipt. Full argv, selected object hashes, reservation
 logs, source hashes, cgroup limits and raw stdout/time/axiom lines are retained
 under RPz6_001/ and RPz6_002/. No timeout, memory kill, cap change, admission
 retry, unchanged failed-input rerun, Kani, Rust or ELF rebuild occurred.
+
+## Existing transport, for a revised scope
+
+`docs/research/100bit-spend-path-20261013/lean/bridge-verify-prefix-fe80-20261017/ExtractedFirstHelperBinding.lean`
+already defines `AspisR1PublicPreparation.FirstHelperBinding.phaseToFirst`
+constructor by constructor from producer verifier.Phase to FirstCaller.Phase,
+and maps observer callbacks through it before Tx1Model.tx1. This is source
+inspection, not a new compile or a type-equality theorem. The current caller's
+`CurrentCompactFirstCompositionV1.retainedPhase` is another explicit map,
+from the current caller's own Phase. These existing maps support a transport
+repair direction; neither makes the two requested types definitionally equal.
