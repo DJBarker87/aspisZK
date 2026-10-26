@@ -1,0 +1,64 @@
+F3Q_TreeCode.lean:32:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop Port4B_Install.leaves D proof root kind idx val hash
+    (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) keys 0#usize 0#usize
+in the target expression
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchLoop.code Port4B_Install.leaves D hash proof root kind (Port4B_TreeCuts.lo batch)
+            (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) keys (↑(Port4B_TreeCuts.count batch) + 1)
+            idx val 0#usize 0#usize))).2 =
+    Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port9OR_BatchStep.ops Port4B_Install.leaves) D proof root
+      kind idx val hash (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) keys
+      0#usize 0#usize
+
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (parts : Slice (Slice U8)), D.digest hash parts = ok (MultiproofConePhysicalTransport.rawOracle H parts)
+proof : Slice U8
+root : Std.Array U8 32#usize
+queries : Std.Array U32 22#usize
+batch kind : Usize
+idx outIdx : Indices
+val outVal : Values
+raw keys : Std.Array U64 16#usize
+built :
+  (Port9OR_BatchStep.ops Port4B_Install.leaves).op4 queries (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+      kind =
+    ok raw
+sorted : (Port9OR_BatchStep.ops Port4B_Install.leaves).op5 raw (Port4B_TreeCuts.count batch) = ok keys
+small : ↑(Port4B_TreeCuts.count batch) < 256
+loop :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop Port4B_Install.leaves D proof root kind idx val hash
+      (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) keys 0#usize 0#usize =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+value :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchLoop.code Port4B_Install.leaves D hash proof root kind (Port4B_TreeCuts.lo batch)
+            (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) keys (↑(Port4B_TreeCuts.count batch) + 1)
+            idx val 0#usize 0#usize))).2 =
+    Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port9OR_BatchStep.ops Port4B_Install.leaves) D proof root
+      kind idx val hash (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) keys
+      0#usize 0#usize
+⊢ (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof queries root batch kind idx val))).1 =
+    (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchLoop.code Port4B_Install.leaves D hash proof root kind (Port4B_TreeCuts.lo batch)
+            (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) keys (↑(Port4B_TreeCuts.count batch) + 1)
+            idx val 0#usize 0#usize))).1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3Q_TreeCode.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

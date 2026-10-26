@@ -49,6 +49,10 @@ theorem accepted {F C : Type} (a : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Op
     ∃ run : Tx1Q_Execution.Run (Tx1Q_Execution.actual (Op5T_Concrete.current ops) reserved query geo (F3M_CircleSource.install B0) std)
       reserved query geo (SdkD_PairBatches.current a ops stage finish reserved query geo (F3M_CircleSource.install B0) std) ()
       (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved,
+    ∃ (rootView : Slice U8),
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+        f.proof {start:=7751#usize,«end»:=7783#usize}=ok rootView ∧
+      core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 rootView=ok (.Ok run.root) ∧
     ∃ (i : F3_Model.Input) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
       (input : RecordedBinaryExperimentBin.SourceInputs) (out : AspisR1PublicPreparation.verifier.Prepared)
       (v : LiteralOpeningView.View) (tx2 : Cons_Native.Witness),
@@ -118,7 +122,7 @@ theorem accepted {F C : Type} (a : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Op
     run owner ports H oracle out output
   obtain ⟨tx2,calls,aux⟩ := F3N_SameSecond.from_cut a ops stage finish reserved query geo B std
     accounts1 accounts2 saved f s cuts
-  refine ⟨f,s,log,cuts,recorded,ran,run,i,p,q,input,out,v,tx2,physical,stored,parser,queries,found,output,prepared,calls,writer,?_⟩
+  refine ⟨f,s,log,cuts,recorded,ran,run,view,range,copy,i,p,q,input,out,v,tx2,physical,stored,parser,queries,found,output,prepared,calls,writer,?_⟩
   intro prior history sameProof
   have same := S2X.checkpoint_persistence _ _ history
   have parserSource : OraclePortStoredParserC4.parseReached (bytesOf f.proof.val) (LiteralTranscript.erasePrefix

@@ -1,0 +1,119 @@
+F3Q_LeafPost.lean:75:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program do
+      let i4 ← Code.step (ok (d.wrapping_sub 1#usize)) Code.done
+      let b ← Code.step (Port3_BatchStd.sameIndex idx i4 index) Code.done
+      if b = true then do
+          let i5 ← Code.step (ok (d.wrapping_sub 1#usize)) Code.done
+          let b1 ← Code.step (Port3_BatchStd.sameLeaf val i5 leaf) Code.done
+          if b1 = true then pure (cont (idx, val, d, pos))
+            else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Code.step (Array.update idx d index) Code.done
+          let val1 ← Code.step (Array.update val d leaf) Code.done
+          let d1 ← Code.step (ok (d.wrapping_add 1#usize)) Code.done
+          pure (cont (idx1, val1, d1, pos)))
+is not definitionally equal to the right-hand side
+  ([], do
+    let same ← Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index
+    if same = true then do
+        let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+        if equal = true then ok (cont (idx, val, d, pos))
+          else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+      else do
+        let idx1 ← Array.update idx d index
+        let val1 ← Array.update val d leaf
+        ok (cont (idx1, val1, d.wrapping_add 1#usize, pos)))
+
+case pos
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+positive : d > 0#usize
+⊢ eval H
+      (SdkC_Oracle.program do
+        let i4 ← Code.step (ok (d.wrapping_sub 1#usize)) Code.done
+        let b ← Code.step (Port3_BatchStd.sameIndex idx i4 index) Code.done
+        if b = true then do
+            let i5 ← Code.step (ok (d.wrapping_sub 1#usize)) Code.done
+            let b1 ← Code.step (Port3_BatchStd.sameLeaf val i5 leaf) Code.done
+            if b1 = true then pure (cont (idx, val, d, pos))
+              else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else do
+            let idx1 ← Code.step (Array.update idx d index) Code.done
+            let val1 ← Code.step (Array.update val d leaf) Code.done
+            let d1 ← Code.step (ok (d.wrapping_add 1#usize)) Code.done
+            pure (cont (idx1, val1, d1, pos))) =
+    ([], do
+      let same ← Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index
+      if same = true then do
+          let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+          if equal = true then ok (cont (idx, val, d, pos))
+            else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Array.update idx d index
+          let val1 ← Array.update val d leaf
+          ok (cont (idx1, val1, d.wrapping_add 1#usize, pos)))
+F3Q_LeafPost.lean:75:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program do
+      let idx1 ← Code.step (Array.update idx d index) Code.done
+      let val1 ← Code.step (Array.update val d leaf) Code.done
+      let d1 ← Code.step (ok (d.wrapping_add 1#usize)) Code.done
+      pure (cont (idx1, val1, d1, pos)))
+is not definitionally equal to the right-hand side
+  ([], do
+    let idx1 ← Array.update idx d index
+    let val1 ← Array.update val d leaf
+    ok (cont (idx1, val1, d.wrapping_add 1#usize, pos)))
+
+case neg
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+positive : ¬d > 0#usize
+⊢ eval H
+      (SdkC_Oracle.program do
+        let idx1 ← Code.step (Array.update idx d index) Code.done
+        let val1 ← Code.step (Array.update val d leaf) Code.done
+        let d1 ← Code.step (ok (d.wrapping_add 1#usize)) Code.done
+        pure (cont (idx1, val1, d1, pos))) =
+    ([], do
+      let idx1 ← Array.update idx d index
+      let val1 ← Array.update val d leaf
+      ok (cont (idx1, val1, d.wrapping_add 1#usize, pos)))
+F3Q_LeafPost.lean:71:38: warning: This simp argument is unused:
+  SdkC_Oracle.program
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵v̵a̵l̵]̵[̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_LeafPost.lean:71:58: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵v̵a̵l̵]̵[̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_LeafPost.lean:72:58: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_Oracle.program, ̲CheckpointBytes5Effect.bind,
+         ̵ ̵CheckpointBytes5Effect.liftResult, ̲lift, ̲bind_tc_ok,̵e̵v̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3Q_LeafPost.eval_post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

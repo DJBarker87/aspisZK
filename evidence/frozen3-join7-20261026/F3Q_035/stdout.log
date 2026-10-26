@@ -1,0 +1,75 @@
+F3Q_VerifyAccepted.lean:29:44: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 1
+  0 ≤ e ≤ 172
+where
+ e := ↑(↑nodes).length / 32
+ f := ↑↑0#usize
+F3Q_VerifyAccepted.lean:37:61: error(lean.unknownIdentifier): Unknown identifier `eval_bind`
+F3Q_VerifyAccepted.lean:22:49: error: unsolved goals
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+law : ∀ (parts : Slice (Slice U8)), D.digest hash parts = ok (rawOracle H parts)
+occupied sibling : MultiproofConeP6Callbacks.Parent
+og : MultiproofConeP6Callbacks.ParentGate (rawOracle H) occupied
+sg : MultiproofConeP6Callbacks.ParentGate (rawOracle H) sibling
+root : Std.Array U8 32#usize
+s out : reference.Scratch
+nodes : Slice U8
+well : OraclePortFrozenOrder.wellFormed (List.map Prod.fst (live s 0 ↑s.n))
+words : (↑nodes).length % 32 = 0
+size : (↑nodes).length ≤ 5504
+success : reference.verify_owned (Port9OR_P6Node.digest D) hash root s nodes = ok (true, out)
+wrapper :
+  MultiproofConeP6Verify.wrapper (fun t => reference.levels (Port9OR_P6Node.digest D) hash t nodes 18#u32) root s
+      nodes =
+    ok (true, out)
+nonzero : s.n ≠ 0#usize
+bounded : ¬s.n > 16#usize
+valid : reference.valid_indices s.idx s.n 0#usize = ok true
+multiple : nodes.len % 32#usize = ok 0#usize
+positive : 0 < ↑s.n
+bound : ↑s.n ≤ 16
+domain : MultiproofConeLevelIteration.Domain nodes { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize }
+lower :
+  eval H
+      (SdkC_Oracle.program
+        (Port9OR_P6Levels.levels 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes)) =
+    eval H
+      (transport
+        (MultiproofConeP6Composition.levels (MultiproofConeP6Callbacks.nodeWith occupied sibling) 18
+          { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes))
+guard :
+  OraclePortFrozenOrder.wellFormed
+      (List.map Prod.fst (live { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } 0 ↑s.n)) ∧
+    (↑nodes).length % 32 = 0
+⊢ (eval H
+        (transport
+          (MultiproofConeP6Composition.levels (MultiproofConeP6Callbacks.nodeWith occupied sibling) 18
+            { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes))).1 =
+    (eval H
+        (AspisV8R19.OracleProgramOps.bind
+          (transport
+            (MultiproofConeP6Composition.levels (MultiproofConeP6Callbacks.nodeWith occupied sibling) 18
+              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes))
+          fun result =>
+          Program.done
+            (MultiproofConeVerifyState.finishState root nodes { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize }
+              result))).1
+F3Q_VerifyAccepted.lean:37:71: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵P̵6̵V̵e̵r̵i̵f̵y̵.̵v̵e̵r̵i̵f̵y̵S̵t̵a̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵g̵u̵a̵r̵d̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲P̲6̲V̲e̲r̲i̲f̲y̲.̲v̲e̲r̲i̲f̲y̲S̲t̲a̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲g̲u̲a̲r̲d̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_VerifyAccepted.lean:37:76: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵P̵6̵V̵e̵r̵i̵f̵y̵.̵v̵e̵r̵i̵f̵y̵S̵t̵a̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵g̵u̵a̵r̵d̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲P̲6̲V̲e̲r̲i̲f̲y̲.̲v̲e̲r̲i̲f̲y̲S̲t̲a̲t̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲g̲u̲a̲r̲d̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3Q_VerifyAccepted.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

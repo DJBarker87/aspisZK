@@ -1,0 +1,45 @@
+F3Q_VerifyGuards.lean:20:43: error: Tactic `assumption` failed
+
+run : reference.Scratch → Result reference.Level
+root : Std.Array U8 32#usize
+s out : reference.Scratch
+nodes : Slice U8
+h✝⁶ : ¬s.n = 0#usize
+h✝⁵ : ¬s.n > 16#usize
+x✝⁴ : Result Bool
+a✝³ : Bool
+heq✝⁴ : reference.valid_indices s.idx s.n 0#usize = ok a✝³
+h✝⁴ : a✝³ = true
+h✝³ : ¬(nodes.len.bv.umod 32#usize.bv#uscalar != 0#usize) = true
+x✝³ : Result reference.Level
+l✝ : reference.Level
+out✝ : reference.Scratch
+heq✝³ : run { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } = ok (reference.Level.Done out✝)
+h✝² : out✝.n = 1#usize
+x✝² : Result U32
+a✝² : U32
+heq✝² : out✝.idx.index_usize 0#usize = ok a✝²
+h✝¹ : a✝² = 0#u32
+x✝¹ : Result (Std.Array U8 32#usize)
+a✝¹ : Std.Array U8 32#usize
+heq✝¹ : out✝.val.index_usize 0#usize = ok a✝¹
+x✝ : Result Bool
+a✝ : Bool
+heq✝ : core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a✝¹ root = ok a✝
+h✝ : a✝ = true
+success : ok (decide (out✝.at = nodes.len), out✝) = ok (true, out)
+⊢ reference.valid_indices s.idx s.n 0#usize = ok true
+F3Q_VerifyGuards.lean:22:20: error: Type mismatch
+  0#usize
+has type
+  UScalar UScalarTy.Usize
+but is expected to have type
+  Bool
+F3Q_VerifyGuards.lean:23:16: error: Invalid argument: Variable `zero` is not a proposition or let-declaration
+F3Q_VerifyGuards.lean:23:4: error: Type mismatch: After simplification, term
+  remCall
+ has type
+  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a✝ root = ok rem
+but is expected to have type
+  nodes.len % 32#usize = ok 0#usize
+'AspisR1.F3Q_VerifyGuards.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

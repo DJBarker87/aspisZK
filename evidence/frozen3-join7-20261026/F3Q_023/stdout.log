@@ -1,0 +1,33 @@
+F3Q_VerifyGuards.lean:25:4: error: Tactic `assumption` failed
+
+case h_1.isTrue
+run : reference.Scratch → Result reference.Level
+root : Std.Array U8 32#usize
+s out : reference.Scratch
+nodes : Slice U8
+x✝⁴ : Result Bool
+a✝³ : Bool
+x✝³ : Result reference.Level
+l✝ : reference.Level
+out✝ : reference.Scratch
+x✝² : Result U32
+a✝² : U32
+x✝¹ : Result (Std.Array U8 32#usize)
+a✝¹ : Std.Array U8 32#usize
+x✝ : Result Bool
+a✝ : Bool
+h✝⁶ : ¬↑s.n = 0
+h✝⁵ : ↑s.n ≤ 16
+heq✝⁴ : reference.valid_indices s.idx s.n 0#usize = ok true
+h✝⁴ : a✝³ = true
+h✝³ : ↑(nodes.len.bv % 32#System.Platform.numBits#uscalar) = 0
+heq✝³ : run { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } = ok (reference.Level.Done out)
+h✝² : out.n = 1#usize
+heq✝² : out.idx.index_usize 0#usize = ok 0#u32
+h✝¹ : a✝² = 0#u32
+heq✝¹ : out.val.index_usize 0#usize = ok a✝¹
+heq✝ : core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a✝¹ root = ok true
+h✝ : a✝ = true
+success : out✝.at = nodes.len ∧ out✝ = out
+⊢ ↑(nodes.len.bv % 32#usize.bv#uscalar) = ↑0#usize
+'AspisR1.F3Q_VerifyGuards.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
