@@ -18,7 +18,7 @@ T=/home/dombarker/project-offloads/aspis-fs-generic-20261006
 H=/home/dombarker/project-offloads/r1-privacy-build-integration-20261019
 A=$1; M=$2; E=$3; ML=${4:-7000}; MX=${5:-7}; FP=${6:-none}; NSLOTS=4
 if [ "$E" = J ]; then
-  case "$A" in 1156[3-9]|115[7-9][0-9]) ;; *) echo "attempt $A outside assigned 11563-11599"; exit 64;; esac
+  case "$A" in 1156[3-9]|115[7-9][0-9]|11[6-9][0-9][0-9]) ;; *) echo "attempt $A outside assigned 11563-11599"; exit 64;; esac
   J=/home/dombarker/project-offloads/aspis-joint-20261019; SRCROOT="$J/sources"; OBJ="$J/objects"
 else
   case "$A" in 45[2-9][0-9]) ;; *) echo "attempt $A outside 4520-4599"; exit 64;; esac

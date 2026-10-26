@@ -683,3 +683,21 @@ cannot be launched without an existing expanded launcher from the lead. The
 pending async request names this exact infrastructure constraint. No launcher,
 reservation, monitoring, shared sent-record, other worktree or wallet key was
 modified. All stages committed, no push.
+
+## Owner continuation: native association review and authorized ID extension
+
+The existing assigned `native-drop/run-joint.sh` now also accepts11600–11999.
+Exactly one case-pattern range edit was made locally and copied to its existing
+host location; caps, reservation, monitoring and locking are byte-unchanged.
+The before/after diff and hashes are in `native-install/launcher-range.*`.
+
+Item1 remains blocked under existing trust: retained raw baseline extraction
+omits `real_drop`'s destructor effect, while the guarded selected64 and minimal
+cases are rejected(exit2,no output). The raw exit0 baseline is explicitly
+unaccepted. The pure op129 contradiction also remains. This review reuses
+retained negative evidence; no failed job is rerun. Native callback/extractor/
+ABI/Drop association is not supplied by the world interpreter. No conditional
+entropy rate is promoted to a native statement; no trust premise is added.
+`native-install/native-entropy-obstruction.json` pins the reviewed inputs.
+Continue independent selected-source dictionary installations. Root conjunct1
+and both concrete caller contracts remain open; zero root premises removed.
