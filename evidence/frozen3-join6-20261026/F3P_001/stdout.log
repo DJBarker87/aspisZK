@@ -1,0 +1,1752 @@
+structure AspisR1PublicPreparation.RoundModel.Boundaries : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.RoundModel.Boundaries.decode : (N : Aeneas.Std.Usize) →
+      AspisR1PublicPreparation.r1_wire.ValidatedRecord →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 N)
+              AspisR1PublicPreparation.r1_wire.Error)
+  AspisR1PublicPreparation.RoundModel.Boundaries.boundary : Aeneas.Std.Array
+        AspisR1PublicPreparation.aspis_core.field.QM31 28#usize →
+      Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.RoundModel.Boundaries.value : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31
+        28#usize →
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+        Aeneas.Std.Usize → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+constructor:
+  AspisR1PublicPreparation.RoundModel.Boundaries.mk
+    (decode :
+      (N : Aeneas.Std.Usize) →
+        AspisR1PublicPreparation.r1_wire.ValidatedRecord →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 N)
+                AspisR1PublicPreparation.r1_wire.Error))
+    (boundary :
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 28#usize →
+        Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31)
+    (value :
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 28#usize →
+        Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+          Aeneas.Std.Usize → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31) :
+    AspisR1PublicPreparation.RoundModel.Boundaries
+theorem AspisR1PublicPreparation.S1SemanticFinishBounds.finish_success : ∀
+  (R : AspisR1PublicPreparation.RoundModel.Boundaries) (B : AspisR1PublicPreparation.FinishModel.Boundaries) {H : Type}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix) (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges)
+  (obs : Option (AspisR1PublicPreparation.verifier.Phase → Aeneas.Std.Result Unit))
+  (out : AspisR1PublicPreparation.r1_semantic.Verified H),
+  AspisR1PublicPreparation.FinishModel.finish R B D pub pre before challenges obs =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+    ∃ running t25 record25 record26 z0 t26 z1 t27,
+      AspisR1PublicPreparation.RoundModel.rounds R D pre before =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (running, out.alpha, t25)) ∧
+        out.challenges = challenges ∧
+          out.state_before_z0 = t25.state ∧
+            out.transcript = t27 ∧
+              B.claims pre = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.claims) ∧
+                pre.validated_record 25#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record25) ∧
+                  R.decode 29#usize record25 87#usize =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.extra) ∧
+                    AspisR1PublicPreparation.FinishModel.circle_validated B D t25 record25 =
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z0, t26) ∧
+                      pre.validated_record 26#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record26) ∧
+                        R.decode 29#usize record26 0#usize =
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.before_z1) ∧
+                          AspisR1PublicPreparation.FinishModel.circle_validated B D t26 record26 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z1, t27) ∧
+                            out.z = Aeneas.Std.Array.make 2#usize [z0, z1] ⋯ :=
+fun R B {H} D pub pre before challenges obs out h =>
+  let ⟨roundsResult, h✝⟩ :=
+    AspisR1PublicPreparation.S1SemanticFinishBounds.bind_success✝
+      (AspisR1PublicPreparation.RoundModel.rounds R D pre before)
+      (fun x => do
+        let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch x
+        match cf with
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+            let (running, alpha, transcript1) := val
+            do
+            AspisR1PublicPreparation.VerifyPrefix.mark obs 2#u8
+            let r1 ← B.claims pre
+            let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+                let r2 ← B.terminal pub val1 alpha challenges
+                let r3 ←
+                  AspisR1PublicPreparation.core.result.Result.map_err
+                      (AspisR1PublicPreparation.FinishModel.closureFn11 D) r2 ()
+                let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf2 with
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                    AspisR1PublicPreparation.VerifyPrefix.mark obs 3#u8
+                    let a ← B.fromFn 16#usize (AspisR1PublicPreparation.FinishModel.closureFn9 D) val1
+                    let a1 ← B.fromFn 10#usize (AspisR1PublicPreparation.FinishModel.closureFn5 D) val1
+                    let a2 ← val1.index_usize 0#usize
+                    let q ← a2.index_usize 27#usize
+                    let mask ← B.mask a a1 q alpha
+                    let r4 ← pre.validated_record 25#u8
+                    let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4
+                    match cf3 with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr => do
+                        let r5 ← R.decode 29#usize vr 87#usize
+                        let cf4 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r5
+                        match cf4 with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 => do
+                            let q1 ← B.mul challenges.eta val2
+                            let q2 ← B.add mask q1
+                            let q3 ← val3.index_usize 28#usize
+                            let masked_terminal ← B.add q2 q3
+                            let b ←
+                              Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                                  AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 running
+                                  masked_terminal
+                            if b = true then
+                                Aeneas.Std.Result.ok
+                                  (Aeneas.Std.core.result.Result.Err AspisR1PublicPreparation.r1_wire.Error.Terminal)
+                              else do
+                                AspisR1PublicPreparation.VerifyPrefix.mark obs 4#u8
+                                let state_before_z0 ←
+                                  AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state D transcript1
+                                let cf5 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4
+                                match cf5 with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr1 => do
+                                    let (r6, transcript2) ←
+                                      AspisR1PublicPreparation.FinishModel.circle_validated B D transcript1 vr1
+                                    let cf6 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r6
+                                    match cf6 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val4 => do
+                                        let r7 ← pre.validated_record 26#u8
+                                        let cf7 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7
+                                        match cf7 with
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                            let r8 ← R.decode 29#usize vr2 0#usize
+                                            let cf8 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r8
+                                            match cf8 with
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val5 => do
+                                                let cf9 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7
+                                                match cf9 with
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr3 => do
+                                                    let (r9, transcript3) ←
+                                                      AspisR1PublicPreparation.FinishModel.circle_validated B D
+                                                          transcript2 vr3
+                                                    let cf10 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r9
+                                                    match cf10 with
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val6 => do
+                                                        AspisR1PublicPreparation.VerifyPrefix.mark obs 5#u8
+                                                        let b1 ← AspisR1PublicPreparation.FinishModel.pointEq val4 val6
+                                                        if b1 = true then
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Err
+                                                                AspisR1PublicPreparation.r1_wire.Error.EqualCirclePoints)
+                                                          else do
+                                                            let r10 ←
+                                                              AspisR1PublicPreparation.FinishModel.payload pre 2#u8
+                                                            let cf11 ←
+                                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r10
+                                                            match cf11 with
+                                                              |
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                  val7 =>
+                                                                do
+                                                                let r11 ←
+                                                                  Aeneas.Std.core.array.TryFromArrayCopySlice.try_from
+                                                                      32#usize Aeneas.Std.core.marker.CopyU8 val7
+                                                                let a3 ← B.unwrapRoot r11
+                                                                Aeneas.Std.Result.ok
+                                                                    (Aeneas.Std.core.result.Result.Ok
+                                                                      {
+                                                                        roots :=
+                                                                          Aeneas.Std.Array.make 2#usize
+                                                                            [pre.c1_root, a3]
+                                                                            (AspisR1PublicPreparation.FinishModel.finish._proof_10
+                                                                              pre a3),
+                                                                        challenges := challenges, alpha := alpha,
+                                                                        claims := val1, extra := val3,
+                                                                        before_z1 := val5,
+                                                                        state_before_z0 := state_before_z0,
+                                                                        z :=
+                                                                          Aeneas.Std.Array.make 2#usize [val4, val6]
+                                                                            (AspisR1PublicPreparation.FinishModel.finish._proof_11
+                                                                              val4 val6),
+                                                                        transcript := transcript3 })
+                                                              |
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                  residual =>
+                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                                  (Aeneas.Std.core.convert.FromSame
+                                                                    AspisR1PublicPreparation.r1_wire.Error)
+                                                                  residual
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                          (Aeneas.Std.core.convert.FromSame
+                                                            AspisR1PublicPreparation.r1_wire.Error)
+                                                          residual
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                      (Aeneas.Std.core.convert.FromSame
+                                                        AspisR1PublicPreparation.r1_wire.Error)
+                                                      residual
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                  (Aeneas.Std.core.convert.FromSame
+                                                    AspisR1PublicPreparation.r1_wire.Error)
+                                                  residual
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                              (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                              residual
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                          (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                          residual
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                      (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                              (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                          (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                      (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                  (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (AspisR1PublicPreparation.r1_semantic.Verified H)
+              (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual)
+      (Aeneas.Std.core.result.Result.Ok out) h
+  let ⟨hrounds, h⟩ := h✝
+  Aeneas.Std.core.result.Result.casesOn (motive := fun t =>
+    roundsResult = t →
+      ∃ running t25 record25 record26 z0 t26 z1 t27,
+        AspisR1PublicPreparation.RoundModel.rounds R D pre before =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (running, out.alpha, t25)) ∧
+          out.challenges = challenges ∧
+            out.state_before_z0 = t25.state ∧
+              out.transcript = t27 ∧
+                B.claims pre = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.claims) ∧
+                  pre.validated_record 25#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record25) ∧
+                    R.decode 29#usize record25 87#usize =
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.extra) ∧
+                      AspisR1PublicPreparation.FinishModel.circle_validated B D t25 record25 =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z0, t26) ∧
+                        pre.validated_record 26#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record26) ∧
+                          R.decode 29#usize record26 0#usize =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.before_z1) ∧
+                            AspisR1PublicPreparation.FinishModel.circle_validated B D t26 record26 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z1, t27) ∧
+                              out.z =
+                                Aeneas.Std.Array.make 2#usize [z0, z1]
+                                  (of_eq_true
+                                    (Eq.trans
+                                      (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 2
+                                            (of_decide_eq_true (id (Eq.refl true))))))
+                                      (eq_self 2))))
+    roundsResult
+    (fun val h_1 =>
+      Eq.ndrec (motive := fun roundsResult =>
+        AspisR1PublicPreparation.RoundModel.rounds R D pre before = Aeneas.Std.Result.ok roundsResult →
+          (do
+                let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch roundsResult
+                match cf with
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+                    let (running, alpha, transcript1) := val
+                    do
+                    AspisR1PublicPreparation.VerifyPrefix.mark obs 2#u8
+                    let r1 ← B.claims pre
+                    let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                    match cf1 with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+                        let r2 ← B.terminal pub val1 alpha challenges
+                        let r3 ←
+                          AspisR1PublicPreparation.core.result.Result.map_err
+                              (AspisR1PublicPreparation.FinishModel.closureFn11 D) r2 ()
+                        let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+                        match cf2 with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                            AspisR1PublicPreparation.VerifyPrefix.mark obs 3#u8
+                            let a ← B.fromFn 16#usize (AspisR1PublicPreparation.FinishModel.closureFn9 D) val1
+                            let a1 ← B.fromFn 10#usize (AspisR1PublicPreparation.FinishModel.closureFn5 D) val1
+                            let a2 ← val1.index_usize 0#usize
+                            let q ← a2.index_usize 27#usize
+                            let mask ← B.mask a a1 q alpha
+                            let r4 ← pre.validated_record 25#u8
+                            let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4
+                            match cf3 with
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr => do
+                                let r5 ← R.decode 29#usize vr 87#usize
+                                let cf4 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r5
+                                match cf4 with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 => do
+                                    let q1 ← B.mul challenges.eta val2
+                                    let q2 ← B.add mask q1
+                                    let q3 ← val3.index_usize 28#usize
+                                    let masked_terminal ← B.add q2 q3
+                                    let b ←
+                                      Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                                          AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+                                          running masked_terminal
+                                    if b = true then
+                                        Aeneas.Std.Result.ok
+                                          (Aeneas.Std.core.result.Result.Err
+                                            AspisR1PublicPreparation.r1_wire.Error.Terminal)
+                                      else do
+                                        AspisR1PublicPreparation.VerifyPrefix.mark obs 4#u8
+                                        let state_before_z0 ←
+                                          AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state D transcript1
+                                        let cf5 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4
+                                        match cf5 with
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr1 => do
+                                            let (r6, transcript2) ←
+                                              AspisR1PublicPreparation.FinishModel.circle_validated B D transcript1 vr1
+                                            let cf6 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r6
+                                            match cf6 with
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                let r7 ← pre.validated_record 26#u8
+                                                let cf7 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7
+                                                match cf7 with
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                                    let r8 ← R.decode 29#usize vr2 0#usize
+                                                    let cf8 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r8
+                                                    match cf8 with
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val5 => do
+                                                        let cf9 ←
+                                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7
+                                                        match cf9 with
+                                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr3 =>
+                                                            do
+                                                            let (r9, transcript3) ←
+                                                              AspisR1PublicPreparation.FinishModel.circle_validated B D
+                                                                  transcript2 vr3
+                                                            let cf10 ←
+                                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r9
+                                                            match cf10 with
+                                                              |
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                  val6 =>
+                                                                do
+                                                                AspisR1PublicPreparation.VerifyPrefix.mark obs 5#u8
+                                                                let b1 ←
+                                                                  AspisR1PublicPreparation.FinishModel.pointEq val4 val6
+                                                                if b1 = true then
+                                                                    Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.result.Result.Err
+                                                                        AspisR1PublicPreparation.r1_wire.Error.EqualCirclePoints)
+                                                                  else do
+                                                                    let r10 ←
+                                                                      AspisR1PublicPreparation.FinishModel.payload pre
+                                                                          2#u8
+                                                                    let cf11 ←
+                                                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                          r10
+                                                                    match cf11 with
+                                                                      |
+                                                                      Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                          val7 =>
+                                                                        do
+                                                                        let r11 ←
+                                                                          Aeneas.Std.core.array.TryFromArrayCopySlice.try_from
+                                                                              32#usize Aeneas.Std.core.marker.CopyU8
+                                                                              val7
+                                                                        let a3 ← B.unwrapRoot r11
+                                                                        Aeneas.Std.Result.ok
+                                                                            (Aeneas.Std.core.result.Result.Ok
+                                                                              {
+                                                                                roots :=
+                                                                                  Aeneas.Std.Array.make 2#usize
+                                                                                    [pre.c1_root, a3]
+                                                                                    (AspisR1PublicPreparation.FinishModel.finish._proof_10
+                                                                                      pre a3),
+                                                                                challenges := challenges,
+                                                                                alpha := alpha, claims := val1,
+                                                                                extra := val3, before_z1 := val5,
+                                                                                state_before_z0 := state_before_z0,
+                                                                                z :=
+                                                                                  Aeneas.Std.Array.make 2#usize
+                                                                                    [val4, val6]
+                                                                                    (AspisR1PublicPreparation.FinishModel.finish._proof_11
+                                                                                      val4 val6),
+                                                                                transcript := transcript3 })
+                                                                      |
+                                                                      Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                          residual =>
+                                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          (AspisR1PublicPreparation.r1_semantic.Verified
+                                                                            H)
+                                                                          (Aeneas.Std.core.convert.FromSame
+                                                                            AspisR1PublicPreparation.r1_wire.Error)
+                                                                          residual
+                                                              |
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                  residual =>
+                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                                  (Aeneas.Std.core.convert.FromSame
+                                                                    AspisR1PublicPreparation.r1_wire.Error)
+                                                                  residual
+                                                          |
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                              (Aeneas.Std.core.convert.FromSame
+                                                                AspisR1PublicPreparation.r1_wire.Error)
+                                                              residual
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                          (Aeneas.Std.core.convert.FromSame
+                                                            AspisR1PublicPreparation.r1_wire.Error)
+                                                          residual
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                      (Aeneas.Std.core.convert.FromSame
+                                                        AspisR1PublicPreparation.r1_wire.Error)
+                                                      residual
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                  (Aeneas.Std.core.convert.FromSame
+                                                    AspisR1PublicPreparation.r1_wire.Error)
+                                                  residual
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                              (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                              residual
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                      (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                  (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                              (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                          (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                      (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual) =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+            ∃ running t25 record25 record26 z0 t26 z1 t27,
+              AspisR1PublicPreparation.RoundModel.rounds R D pre before =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (running, out.alpha, t25)) ∧
+                out.challenges = challenges ∧
+                  out.state_before_z0 = t25.state ∧
+                    out.transcript = t27 ∧
+                      B.claims pre = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.claims) ∧
+                        pre.validated_record 25#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record25) ∧
+                          R.decode 29#usize record25 87#usize =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.extra) ∧
+                            AspisR1PublicPreparation.FinishModel.circle_validated B D t25 record25 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z0, t26) ∧
+                              pre.validated_record 26#u8 =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record26) ∧
+                                R.decode 29#usize record26 0#usize =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.before_z1) ∧
+                                  AspisR1PublicPreparation.FinishModel.circle_validated B D t26 record26 =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z1, t27) ∧
+                                    out.z =
+                                      Aeneas.Std.Array.make 2#usize [z0, z1]
+                                        (of_eq_true
+                                          (Eq.trans
+                                            (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 2
+                                                  (of_decide_eq_true (id (Eq.refl true))))))
+                                            (eq_self 2))))
+        (fun hrounds h_2 =>
+          let ⟨running, snd✝, hrounds, h⟩ := val
+          let ⟨alpha, t25, hrounds, h⟩ := snd✝
+          let ⟨claimsResult, h✝¹⟩ :=
+            AspisR1PublicPreparation.S1SemanticFinishBounds.bind_success✝ (B.claims pre)
+              (fun x => do
+                let cf1 ←
+                  match x with
+                    | Aeneas.Std.core.result.Result.Ok v =>
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                    | Aeneas.Std.core.result.Result.Err e =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Break (Aeneas.Std.core.result.Result.Err e))
+                match cf1 with
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+                    let r2 ← B.terminal pub val1 alpha challenges
+                    let r3 ←
+                      AspisR1PublicPreparation.core.result.Result.map_err
+                          (AspisR1PublicPreparation.FinishModel.closureFn11 D) r2 ()
+                    let cf2 ←
+                      match r3 with
+                        | Aeneas.Std.core.result.Result.Ok v =>
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                        | Aeneas.Std.core.result.Result.Err e =>
+                          Aeneas.Std.Result.ok
+                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Break (Aeneas.Std.core.result.Result.Err e))
+                    match cf2 with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                        let a ← B.fromFn 16#usize (AspisR1PublicPreparation.FinishModel.closureFn9 D) val1
+                        let a1 ← B.fromFn 10#usize (AspisR1PublicPreparation.FinishModel.closureFn5 D) val1
+                        let a2 ← val1.index_usize 0#usize
+                        let q ← a2.index_usize 27#usize
+                        let mask ← B.mask a a1 q alpha
+                        let r4 ← pre.validated_record 25#u8
+                        let cf3 ←
+                          match r4 with
+                            | Aeneas.Std.core.result.Result.Ok v =>
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                            | Aeneas.Std.core.result.Result.Err e =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                  (Aeneas.Std.core.result.Result.Err e))
+                        match cf3 with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr => do
+                            let r5 ← R.decode 29#usize vr 87#usize
+                            let cf4 ←
+                              match r5 with
+                                | Aeneas.Std.core.result.Result.Ok v =>
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                | Aeneas.Std.core.result.Result.Err e =>
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                      (Aeneas.Std.core.result.Result.Err e))
+                            match cf4 with
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 => do
+                                let q1 ← B.mul challenges.eta val2
+                                let q2 ← B.add mask q1
+                                let q3 ← val3.index_usize 28#usize
+                                let masked_terminal ← B.add q2 q3
+                                let b ←
+                                  Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                                      AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 running
+                                      masked_terminal
+                                if b = true then
+                                    Aeneas.Std.Result.ok
+                                      (Aeneas.Std.core.result.Result.Err
+                                        AspisR1PublicPreparation.r1_wire.Error.Terminal)
+                                  else do
+                                    let state_before_z0 ←
+                                      AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state D t25
+                                    let cf5 ←
+                                      match r4 with
+                                        | Aeneas.Std.core.result.Result.Ok v =>
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                        | Aeneas.Std.core.result.Result.Err e =>
+                                          Aeneas.Std.Result.ok
+                                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                              (Aeneas.Std.core.result.Result.Err e))
+                                    match cf5 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr1 => do
+                                        let (r6, transcript2) ←
+                                          AspisR1PublicPreparation.FinishModel.circle_validated B D t25 vr1
+                                        let cf6 ←
+                                          match r6 with
+                                            | Aeneas.Std.core.result.Result.Ok v =>
+                                              Aeneas.Std.Result.ok
+                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                            | Aeneas.Std.core.result.Result.Err e =>
+                                              Aeneas.Std.Result.ok
+                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                  (Aeneas.Std.core.result.Result.Err e))
+                                        match cf6 with
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val4 => do
+                                            let r7 ← pre.validated_record 26#u8
+                                            let cf7 ←
+                                              match r7 with
+                                                | Aeneas.Std.core.result.Result.Ok v =>
+                                                  Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                | Aeneas.Std.core.result.Result.Err e =>
+                                                  Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                      (Aeneas.Std.core.result.Result.Err e))
+                                            match cf7 with
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                                let r8 ← R.decode 29#usize vr2 0#usize
+                                                let cf8 ←
+                                                  match r8 with
+                                                    | Aeneas.Std.core.result.Result.Ok v =>
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                    | Aeneas.Std.core.result.Result.Err e =>
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                          (Aeneas.Std.core.result.Result.Err e))
+                                                match cf8 with
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val5 => do
+                                                    let cf9 ←
+                                                      match r7 with
+                                                        | Aeneas.Std.core.result.Result.Ok v =>
+                                                          Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                        | Aeneas.Std.core.result.Result.Err e =>
+                                                          Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                              (Aeneas.Std.core.result.Result.Err e))
+                                                    match cf9 with
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr3 => do
+                                                        let (r9, transcript3) ←
+                                                          AspisR1PublicPreparation.FinishModel.circle_validated B D
+                                                              transcript2 vr3
+                                                        let cf10 ←
+                                                          match r9 with
+                                                            | Aeneas.Std.core.result.Result.Ok v =>
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                  v)
+                                                            | Aeneas.Std.core.result.Result.Err e =>
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                  (Aeneas.Std.core.result.Result.Err e))
+                                                        match cf10 with
+                                                          |
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val6 =>
+                                                            do
+                                                            let b1 ←
+                                                              AspisR1PublicPreparation.FinishModel.pointEq val4 val6
+                                                            if b1 = true then
+                                                                Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Err
+                                                                    AspisR1PublicPreparation.r1_wire.Error.EqualCirclePoints)
+                                                              else do
+                                                                let r10 ←
+                                                                  AspisR1PublicPreparation.FinishModel.payload pre 2#u8
+                                                                let cf11 ←
+                                                                  match r10 with
+                                                                    | Aeneas.Std.core.result.Result.Ok v =>
+                                                                      Aeneas.Std.Result.ok
+                                                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                          v)
+                                                                    | Aeneas.Std.core.result.Result.Err e =>
+                                                                      Aeneas.Std.Result.ok
+                                                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                          (Aeneas.Std.core.result.Result.Err e))
+                                                                match cf11 with
+                                                                  |
+                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                      val7 =>
+                                                                    do
+                                                                    let r11 ←
+                                                                      Aeneas.Std.core.array.TryFromArrayCopySlice.try_from
+                                                                          32#usize Aeneas.Std.core.marker.CopyU8 val7
+                                                                    let a3 ← B.unwrapRoot r11
+                                                                    Aeneas.Std.Result.ok
+                                                                        (Aeneas.Std.core.result.Result.Ok
+                                                                          {
+                                                                            roots :=
+                                                                              Aeneas.Std.Array.make 2#usize
+                                                                                [pre.c1_root, a3]
+                                                                                (AspisR1PublicPreparation.FinishModel.finish._proof_10
+                                                                                  pre a3),
+                                                                            challenges := challenges, alpha := alpha,
+                                                                            claims := val1, extra := val3,
+                                                                            before_z1 := val5,
+                                                                            state_before_z0 := state_before_z0,
+                                                                            z :=
+                                                                              Aeneas.Std.Array.make 2#usize [val4, val6]
+                                                                                (AspisR1PublicPreparation.FinishModel.finish._proof_11
+                                                                                  val4 val6),
+                                                                            transcript := transcript3 })
+                                                                  |
+                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                      residual =>
+                                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                                      (Aeneas.Std.core.convert.FromSame
+                                                                        AspisR1PublicPreparation.r1_wire.Error)
+                                                                      residual
+                                                          |
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                              (Aeneas.Std.core.convert.FromSame
+                                                                AspisR1PublicPreparation.r1_wire.Error)
+                                                              residual
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                          (Aeneas.Std.core.convert.FromSame
+                                                            AspisR1PublicPreparation.r1_wire.Error)
+                                                          residual
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                      (Aeneas.Std.core.convert.FromSame
+                                                        AspisR1PublicPreparation.r1_wire.Error)
+                                                      residual
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                  (Aeneas.Std.core.convert.FromSame
+                                                    AspisR1PublicPreparation.r1_wire.Error)
+                                                  residual
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                              (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                              residual
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                          (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                          residual
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                  (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                              (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                          (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                      (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual)
+              (Aeneas.Std.core.result.Result.Ok out)
+              (Eq.mp
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrArg
+                        (bind
+                          (Aeneas.Std.Result.ok
+                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue (running, alpha, t25))))
+                        (funext fun cf =>
+                          congrFun'
+                            (congrArg
+                              (AspisR1PublicPreparation.FinishModel.finish.match_1
+                                (fun cf =>
+                                  Aeneas.Std.Result
+                                    (Aeneas.Std.core.result.Result (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                      AspisR1PublicPreparation.r1_wire.Error))
+                                cf)
+                              (funext fun val =>
+                                congrFun'
+                                  (congrArg Aeneas.Std.uncurry
+                                    (funext fun running =>
+                                      congrArg Aeneas.Std.uncurry
+                                        (funext fun alpha =>
+                                          funext fun transcript1 =>
+                                            Eq.trans
+                                              (congrArg (bind (Aeneas.Std.Result.ok ()))
+                                                (funext fun _ =>
+                                                  congrArg (bind (B.claims pre))
+                                                    (funext fun r1 =>
+                                                      congrArg
+                                                        (bind
+                                                          (match r1 with
+                                                          | Aeneas.Std.core.result.Result.Ok v =>
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                          | Aeneas.Std.core.result.Result.Err e =>
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                (Aeneas.Std.core.result.Result.Err e))))
+                                                        (funext fun cf1 =>
+                                                          congrFun'
+                                                            (congrArg
+                                                              (AspisR1PublicPreparation.FinishModel.finish.match_3
+                                                                (fun cf1 =>
+                                                                  Aeneas.Std.Result
+                                                                    (Aeneas.Std.core.result.Result
+                                                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                                      AspisR1PublicPreparation.r1_wire.Error))
+                                                                cf1)
+                                                              (funext fun val1 =>
+                                                                congrArg (bind (B.terminal pub val1 alpha challenges))
+                                                                  (funext fun r2 =>
+                                                                    congrArg
+                                                                      (bind
+                                                                        (AspisR1PublicPreparation.core.result.Result.map_err
+                                                                          (AspisR1PublicPreparation.FinishModel.closureFn11
+                                                                            D)
+                                                                          r2 ()))
+                                                                      (funext fun r3 => ⋯))))
+                                                            fun residual =>
+                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                              (Aeneas.Std.core.convert.FromSame
+                                                                AspisR1PublicPreparation.r1_wire.Error)
+                                                              residual))))
+                                              (Aeneas.Std.bind_tc_ok () fun y => do
+                                                let r1 ← B.claims pre
+                                                let cf1 ←
+                                                  match r1 with
+                                                    | Aeneas.Std.core.result.Result.Ok v =>
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                    | Aeneas.Std.core.result.Result.Err e =>
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                          (Aeneas.Std.core.result.Result.Err e))
+                                                match cf1 with
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+                                                    let r2 ← B.terminal pub val1 alpha challenges
+                                                    let r3 ←
+                                                      AspisR1PublicPreparation.core.result.Result.map_err
+                                                          (AspisR1PublicPreparation.FinishModel.closureFn11 D) r2 ()
+                                                    let cf2 ←
+                                                      match r3 with
+                                                        | Aeneas.Std.core.result.Result.Ok v =>
+                                                          Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                        | Aeneas.Std.core.result.Result.Err e =>
+                                                          Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                              (Aeneas.Std.core.result.Result.Err e))
+                                                    match cf2 with
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                        let a ←
+                                                          B.fromFn 16#usize
+                                                              (AspisR1PublicPreparation.FinishModel.closureFn9 D) val1
+                                                        let a1 ←
+                                                          B.fromFn 10#usize
+                                                              (AspisR1PublicPreparation.FinishModel.closureFn5 D) val1
+                                                        let a2 ← val1.index_usize 0#usize
+                                                        let q ← a2.index_usize 27#usize
+                                                        let mask ← B.mask a a1 q alpha
+                                                        let r4 ← pre.validated_record 25#u8
+                                                        let cf3 ←
+                                                          match r4 with
+                                                            | Aeneas.Std.core.result.Result.Ok v =>
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                  v)
+                                                            | Aeneas.Std.core.result.Result.Err e =>
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                  (Aeneas.Std.core.result.Result.Err e))
+                                                        match cf3 with
+                                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr =>
+                                                            do
+                                                            let r5 ← R.decode 29#usize vr 87#usize
+                                                            let cf4 ←
+                                                              match r5 with
+                                                                | Aeneas.Std.core.result.Result.Ok v =>
+                                                                  Aeneas.Std.Result.ok
+                                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                      v)
+                                                                | Aeneas.Std.core.result.Result.Err e =>
+                                                                  Aeneas.Std.Result.ok
+                                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                      (Aeneas.Std.core.result.Result.Err e))
+                                                            match cf4 with
+                                                              |
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                  val3 =>
+                                                                do
+                                                                let q1 ← B.mul challenges.eta val2
+                                                                let q2 ← B.add mask q1
+                                                                let q3 ← val3.index_usize 28#usize
+                                                                let masked_terminal ← B.add q2 q3
+                                                                let b ←
+                                                                  Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                                                                      AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+                                                                      running masked_terminal
+                                                                if b = true then
+                                                                    Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.result.Result.Err
+                                                                        AspisR1PublicPreparation.r1_wire.Error.Terminal)
+                                                                  else do
+                                                                    let state_before_z0 ←
+                                                                      AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state
+                                                                          D transcript1
+                                                                    let cf5 ←
+                                                                      match r4 with
+                                                                        | Aeneas.Std.core.result.Result.Ok v =>
+                                                                          Aeneas.Std.Result.ok
+                                                                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                              v)
+                                                                        | Aeneas.Std.core.result.Result.Err e =>
+                                                                          Aeneas.Std.Result.ok
+                                                                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                              (Aeneas.Std.core.result.Result.Err e))
+                                                                    match cf5 with
+                                                                      |
+                                                                      Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                          vr1 =>
+                                                                        do
+                                                                        let (r6, transcript2) ←
+                                                                          AspisR1PublicPreparation.FinishModel.circle_validated
+                                                                              B D transcript1 vr1
+                                                                        let cf6 ←
+                                                                          match r6 with
+                                                                            | Aeneas.Std.core.result.Result.Ok v =>
+                                                                              Aeneas.Std.Result.ok
+                                                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                  v)
+                                                                            | Aeneas.Std.core.result.Result.Err e =>
+                                                                              Aeneas.Std.Result.ok
+                                                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                  (Aeneas.Std.core.result.Result.Err e))
+                                                                        match cf6 with
+                                                                          |
+                                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                              val4 =>
+                                                                            do
+                                                                            let r7 ← pre.validated_record 26#u8
+                                                                            let cf7 ←
+                                                                              match r7 with
+                                                                                | Aeneas.Std.core.result.Result.Ok v =>
+                                                                                  Aeneas.Std.Result.ok
+                                                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                      v)
+                                                                                | Aeneas.Std.core.result.Result.Err e =>
+                                                                                  Aeneas.Std.Result.ok
+                                                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                      (Aeneas.Std.core.result.Result.Err
+                                                                                        e))
+                                                                            match cf7 with
+                                                                              |
+                                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                  vr2 =>
+                                                                                do
+                                                                                let r8 ← R.decode 29#usize vr2 0#usize
+                                                                                let cf8 ← ⋯
+                                                                                ⋯
+                                                                              |
+                                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                  residual =>
+                                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                  (AspisR1PublicPreparation.r1_semantic.Verified
+                                                                                    H)
+                                                                                  (Aeneas.Std.core.convert.FromSame
+                                                                                    AspisR1PublicPreparation.r1_wire.Error)
+                                                                                  residual
+                                                                          |
+                                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                              residual =>
+                                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                              (AspisR1PublicPreparation.r1_semantic.Verified
+                                                                                H)
+                                                                              (Aeneas.Std.core.convert.FromSame
+                                                                                AspisR1PublicPreparation.r1_wire.Error)
+                                                                              residual
+                                                                      |
+                                                                      Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                          residual =>
+                                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          (AspisR1PublicPreparation.r1_semantic.Verified
+                                                                            H)
+                                                                          (Aeneas.Std.core.convert.FromSame
+                                                                            AspisR1PublicPreparation.r1_wire.Error)
+                                                                          residual
+                                                              |
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                  residual =>
+                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                                  (Aeneas.Std.core.convert.FromSame
+                                                                    AspisR1PublicPreparation.r1_wire.Error)
+                                                                  residual
+                                                          |
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                              (Aeneas.Std.core.convert.FromSame
+                                                                AspisR1PublicPreparation.r1_wire.Error)
+                                                              residual
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                          (Aeneas.Std.core.convert.FromSame
+                                                            AspisR1PublicPreparation.r1_wire.Error)
+                                                          residual
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                      (Aeneas.Std.core.convert.FromSame
+                                                        AspisR1PublicPreparation.r1_wire.Error)
+                                                      residual))))
+                                  val))
+                            fun residual =>
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                              (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual))
+                      (Aeneas.Std.bind_tc_ok
+                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue (running, alpha, t25)) fun y =>
+                        match y with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+                          let (running, alpha, transcript1) := val
+                          do
+                          let r1 ← B.claims pre
+                          let cf1 ←
+                            match r1 with
+                              | Aeneas.Std.core.result.Result.Ok v =>
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                              | Aeneas.Std.core.result.Result.Err e =>
+                                Aeneas.Std.Result.ok
+                                  (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                    (Aeneas.Std.core.result.Result.Err e))
+                          match cf1 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+                              let r2 ← B.terminal pub val1 alpha challenges
+                              let r3 ←
+                                AspisR1PublicPreparation.core.result.Result.map_err
+                                    (AspisR1PublicPreparation.FinishModel.closureFn11 D) r2 ()
+                              let cf2 ←
+                                match r3 with
+                                  | Aeneas.Std.core.result.Result.Ok v =>
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                  | Aeneas.Std.core.result.Result.Err e =>
+                                    Aeneas.Std.Result.ok
+                                      (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                        (Aeneas.Std.core.result.Result.Err e))
+                              match cf2 with
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                                  let a ← B.fromFn 16#usize (AspisR1PublicPreparation.FinishModel.closureFn9 D) val1
+                                  let a1 ← B.fromFn 10#usize (AspisR1PublicPreparation.FinishModel.closureFn5 D) val1
+                                  let a2 ← val1.index_usize 0#usize
+                                  let q ← a2.index_usize 27#usize
+                                  let mask ← B.mask a a1 q alpha
+                                  let r4 ← pre.validated_record 25#u8
+                                  let cf3 ←
+                                    match r4 with
+                                      | Aeneas.Std.core.result.Result.Ok v =>
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                      | Aeneas.Std.core.result.Result.Err e =>
+                                        Aeneas.Std.Result.ok
+                                          (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                            (Aeneas.Std.core.result.Result.Err e))
+                                  match cf3 with
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr => do
+                                      let r5 ← R.decode 29#usize vr 87#usize
+                                      let cf4 ←
+                                        match r5 with
+                                          | Aeneas.Std.core.result.Result.Ok v =>
+                                            Aeneas.Std.Result.ok
+                                              (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                          | Aeneas.Std.core.result.Result.Err e =>
+                                            Aeneas.Std.Result.ok
+                                              (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                (Aeneas.Std.core.result.Result.Err e))
+                                      match cf4 with
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 => do
+                                          let q1 ← B.mul challenges.eta val2
+                                          let q2 ← B.add mask q1
+                                          let q3 ← val3.index_usize 28#usize
+                                          let masked_terminal ← B.add q2 q3
+                                          let b ←
+                                            Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                                                AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+                                                running masked_terminal
+                                          if b = true then
+                                              Aeneas.Std.Result.ok
+                                                (Aeneas.Std.core.result.Result.Err
+                                                  AspisR1PublicPreparation.r1_wire.Error.Terminal)
+                                            else do
+                                              let state_before_z0 ←
+                                                AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state D
+                                                    transcript1
+                                              let cf5 ←
+                                                match r4 with
+                                                  | Aeneas.Std.core.result.Result.Ok v =>
+                                                    Aeneas.Std.Result.ok
+                                                      (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                  | Aeneas.Std.core.result.Result.Err e =>
+                                                    Aeneas.Std.Result.ok
+                                                      (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                        (Aeneas.Std.core.result.Result.Err e))
+                                              match cf5 with
+                                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr1 => do
+                                                  let (r6, transcript2) ←
+                                                    AspisR1PublicPreparation.FinishModel.circle_validated B D
+                                                        transcript1 vr1
+                                                  let cf6 ←
+                                                    match r6 with
+                                                      | Aeneas.Std.core.result.Result.Ok v =>
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                      | Aeneas.Std.core.result.Result.Err e =>
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                            (Aeneas.Std.core.result.Result.Err e))
+                                                  match cf6 with
+                                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                      let r7 ← pre.validated_record 26#u8
+                                                      let cf7 ←
+                                                        match r7 with
+                                                          | Aeneas.Std.core.result.Result.Ok v =>
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                          | Aeneas.Std.core.result.Result.Err e =>
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                (Aeneas.Std.core.result.Result.Err e))
+                                                      match cf7 with
+                                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr2 =>
+                                                          do
+                                                          let r8 ← R.decode 29#usize vr2 0#usize
+                                                          let cf8 ←
+                                                            match r8 with
+                                                              | Aeneas.Std.core.result.Result.Ok v =>
+                                                                Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                    v)
+                                                              | Aeneas.Std.core.result.Result.Err e =>
+                                                                Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                    (Aeneas.Std.core.result.Result.Err e))
+                                                          match cf8 with
+                                                            |
+                                                            Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                val5 =>
+                                                              do
+                                                              let cf9 ←
+                                                                match r7 with
+                                                                  | Aeneas.Std.core.result.Result.Ok v =>
+                                                                    Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                        v)
+                                                                  | Aeneas.Std.core.result.Result.Err e =>
+                                                                    Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                        (Aeneas.Std.core.result.Result.Err e))
+                                                              match cf9 with
+                                                                |
+                                                                Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                    vr3 =>
+                                                                  do
+                                                                  let (r9, transcript3) ←
+                                                                    AspisR1PublicPreparation.FinishModel.circle_validated
+                                                                        B D transcript2 vr3
+                                                                  let cf10 ←
+                                                                    match r9 with
+                                                                      | Aeneas.Std.core.result.Result.Ok v =>
+                                                                        Aeneas.Std.Result.ok
+                                                                          (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                            v)
+                                                                      | Aeneas.Std.core.result.Result.Err e =>
+                                                                        Aeneas.Std.Result.ok
+                                                                          (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                            (Aeneas.Std.core.result.Result.Err e))
+                                                                  match cf10 with
+                                                                    |
+                                                                    Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                        val6 =>
+                                                                      do
+                                                                      let b1 ←
+                                                                        AspisR1PublicPreparation.FinishModel.pointEq
+                                                                            val4 val6
+                                                                      if b1 = true then
+                                                                          Aeneas.Std.Result.ok
+                                                                            (Aeneas.Std.core.result.Result.Err
+                                                                              AspisR1PublicPreparation.r1_wire.Error.EqualCirclePoints)
+                                                                        else do
+                                                                          let r10 ←
+                                                                            AspisR1PublicPreparation.FinishModel.payload
+                                                                                pre 2#u8
+                                                                          let cf11 ←
+                                                                            match r10 with
+                                                                              | Aeneas.Std.core.result.Result.Ok v =>
+                                                                                Aeneas.Std.Result.ok
+                                                                                  (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                    v)
+                                                                              | Aeneas.Std.core.result.Result.Err e =>
+                                                                                Aeneas.Std.Result.ok
+                                                                                  (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                    (Aeneas.Std.core.result.Result.Err
+                                                                                      e))
+                                                                          match cf11 with
+                                                                            |
+                                                                            Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                val7 =>
+                                                                              do
+                                                                              let r11 ←
+                                                                                Aeneas.Std.core.array.TryFromArrayCopySlice.try_from
+                                                                                    32#usize
+                                                                                    Aeneas.Std.core.marker.CopyU8 val7
+                                                                              let a3 ← B.unwrapRoot r11
+                                                                              Aeneas.Std.Result.ok
+                                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                                    {
+                                                                                      roots :=
+                                                                                        Aeneas.Std.Array.make 2#usize
+                                                                                          [pre.c1_root, a3]
+                                                                                          (AspisR1PublicPreparation.FinishModel.finish._proof_10
+                                                                                            pre a3),
+                                                                                      challenges := challenges,
+                                                                                      alpha := alpha, claims := val1,
+                                                                                      extra := val3, before_z1 := val5,
+                                                                                      state_before_z0 :=
+                                                                                        state_before_z0,
+                                                                                      z :=
+                                                                                        Aeneas.Std.Array.make 2#usize
+                                                                                          [val4, val6]
+                                                                                          (AspisR1PublicPreparation.FinishModel.finish._proof_11
+                                                                                            val4 val6),
+                                                                                      transcript := transcript3 })
+                                                                            |
+                                                                            Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                residual =>
+                                                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                (AspisR1PublicPreparation.r1_semantic.Verified
+                                                                                  H)
+                                                                                (Aeneas.Std.core.convert.FromSame
+                                                                                  AspisR1PublicPreparation.r1_wire.Error)
+                                                                                residual
+                                                                    |
+                                                                    Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                        residual =>
+                                                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        (AspisR1PublicPreparation.r1_semantic.Verified
+                                                                          H)
+                                                                        (Aeneas.Std.core.convert.FromSame
+                                                                          AspisR1PublicPreparation.r1_wire.Error)
+                                                                        residual
+                                                                |
+                                                                Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                    residual =>
+                                                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                                    (Aeneas.Std.core.convert.FromSame
+                                                                      AspisR1PublicPreparation.r1_wire.Error)
+                                                                    residual
+                                                            |
+                                                            Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                residual =>
+                                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                                (Aeneas.Std.core.convert.FromSame
+                                                                  AspisR1PublicPreparation.r1_wire.Error)
+                                                                residual
+                                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                            (Aeneas.Std.core.convert.FromSame
+                                                              AspisR1PublicPreparation.r1_wire.Error)
+                                                            residual
+                                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                        (Aeneas.Std.core.convert.FromSame
+                                                          AspisR1PublicPreparation.r1_wire.Error)
+                                                        residual
+                                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                    (Aeneas.Std.core.convert.FromSame
+                                                      AspisR1PublicPreparation.r1_wire.Error)
+                                                    residual
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                            (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                            residual
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                        (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                        residual
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                    (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (AspisR1PublicPreparation.r1_semantic.Verified H)
+                            (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual)))
+                  (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out)))
+                h)
+          let ⟨hclaims, h⟩ := h✝¹
+          Aeneas.Std.core.result.Result.casesOn (motive := fun t =>
+            claimsResult = t →
+              ∃ running t25 record25 record26 z0 t26 z1 t27,
+                AspisR1PublicPreparation.RoundModel.rounds R D pre before =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (running, out.alpha, t25)) ∧
+                  out.challenges = challenges ∧
+                    out.state_before_z0 = t25.state ∧
+                      out.transcript = t27 ∧
+                        B.claims pre = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.claims) ∧
+                          pre.validated_record 25#u8 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record25) ∧
+                            R.decode 29#usize record25 87#usize =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.extra) ∧
+                              AspisR1PublicPreparation.FinishModel.circle_validated B D t25 record25 =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z0, t26) ∧
+                                pre.validated_record 26#u8 =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record26) ∧
+                                  R.decode 29#usize record26 0#usize =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.before_z1) ∧
+                                    AspisR1PublicPreparation.FinishModel.circle_validated B D t26 record26 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z1, t27) ∧
+                                      out.z =
+                                        Aeneas.Std.Array.make 2#usize [z0, z1]
+                                          (of_eq_true
+                                            (Eq.trans
+                                              (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 2
+                                                    (of_decide_eq_true (id (Eq.refl true))))))
+                                              (eq_self 2))))
+            claimsResult
+            (fun claims h_3 =>
+              Eq.ndrec (motive := fun claimsResult =>
+                B.claims pre = Aeneas.Std.Result.ok claimsResult →
+                  (do
+                        let cf1 ←
+                          match claimsResult with
+                            | Aeneas.Std.core.result.Result.Ok v =>
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                            | Aeneas.Std.core.result.Result.Err e =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                  (Aeneas.Std.core.result.Result.Err e))
+                        match cf1 with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+                            let r2 ← B.terminal pub val1 alpha challenges
+                            let r3 ←
+                              AspisR1PublicPreparation.core.result.Result.map_err
+                                  (AspisR1PublicPreparation.FinishModel.closureFn11 D) r2 ()
+                            let cf2 ←
+                              match r3 with
+                                | Aeneas.Std.core.result.Result.Ok v =>
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                | Aeneas.Std.core.result.Result.Err e =>
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                      (Aeneas.Std.core.result.Result.Err e))
+                            match cf2 with
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                                let a ← B.fromFn 16#usize (AspisR1PublicPreparation.FinishModel.closureFn9 D) val1
+                                let a1 ← B.fromFn 10#usize (AspisR1PublicPreparation.FinishModel.closureFn5 D) val1
+                                let a2 ← val1.index_usize 0#usize
+                                let q ← a2.index_usize 27#usize
+                                let mask ← B.mask a a1 q alpha
+                                let r4 ← pre.validated_record 25#u8
+                                let cf3 ←
+                                  match r4 with
+                                    | Aeneas.Std.core.result.Result.Ok v =>
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                    | Aeneas.Std.core.result.Result.Err e =>
+                                      Aeneas.Std.Result.ok
+                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                          (Aeneas.Std.core.result.Result.Err e))
+                                match cf3 with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr => do
+                                    let r5 ← R.decode 29#usize vr 87#usize
+                                    let cf4 ←
+                                      match r5 with
+                                        | Aeneas.Std.core.result.Result.Ok v =>
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                        | Aeneas.Std.core.result.Result.Err e =>
+                                          Aeneas.Std.Result.ok
+                                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                              (Aeneas.Std.core.result.Result.Err e))
+                                    match cf4 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 => do
+                                        let q1 ← B.mul challenges.eta val2
+                                        let q2 ← B.add mask q1
+                                        let q3 ← val3.index_usize 28#usize
+                                        let masked_terminal ← B.add q2 q3
+                                        let b ←
+                                          Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                                              AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+                                              running masked_terminal
+                                        if b = true then
+                                            Aeneas.Std.Result.ok
+                                              (Aeneas.Std.core.result.Result.Err
+                                                AspisR1PublicPreparation.r1_wire.Error.Terminal)
+                                          else do
+                                            let state_before_z0 ←
+                                              AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state D t25
+                                            let cf5 ←
+                                              match r4 with
+                                                | Aeneas.Std.core.result.Result.Ok v =>
+                                                  Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                | Aeneas.Std.core.result.Result.Err e =>
+                                                  Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                      (Aeneas.Std.core.result.Result.Err e))
+                                            match cf5 with
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr1 => do
+                                                let (r6, transcript2) ←
+                                                  AspisR1PublicPreparation.FinishModel.circle_validated B D t25 vr1
+                                                let cf6 ←
+                                                  match r6 with
+                                                    | Aeneas.Std.core.result.Result.Ok v =>
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                    | Aeneas.Std.core.result.Result.Err e =>
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                          (Aeneas.Std.core.result.Result.Err e))
+                                                match cf6 with
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                    let r7 ← pre.validated_record 26#u8
+                                                    let cf7 ←
+                                                      match r7 with
+                                                        | Aeneas.Std.core.result.Result.Ok v =>
+                                                          Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                        | Aeneas.Std.core.result.Result.Err e =>
+                                                          Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                              (Aeneas.Std.core.result.Result.Err e))
+                                                    match cf7 with
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                                        let r8 ← R.decode 29#usize vr2 0#usize
+                                                        let cf8 ←
+                                                          match r8 with
+                                                            | Aeneas.Std.core.result.Result.Ok v =>
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                  v)
+                                                            | Aeneas.Std.core.result.Result.Err e =>
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                  (Aeneas.Std.core.result.Result.Err e))
+                                                        match cf8 with
+                                                          |
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val5 =>
+                                                            do
+                                                            let cf9 ←
+                                                              match r7 with
+                                                                | Aeneas.Std.core.result.Result.Ok v =>
+                                                                  Aeneas.Std.Result.ok
+                                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                      v)
+                                                                | Aeneas.Std.core.result.Result.Err e =>
+                                                                  Aeneas.Std.Result.ok
+                                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                      (Aeneas.Std.core.result.Result.Err e))
+                                                            match cf9 with
+                                                              |
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                  vr3 =>
+                                                                do
+                                                                let (r9, transcript3) ←
+                                                                  AspisR1PublicPreparation.FinishModel.circle_validated
+                                                                      B D transcript2 vr3
+                                                                let cf10 ←
+                                                                  match r9 with
+                                                                    | Aeneas.Std.core.result.Result.Ok v =>
+                                                                      Aeneas.Std.Result.ok
+                                                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                          v)
+                                                                    | Aeneas.Std.core.result.Result.Err e =>
+                                                                      Aeneas.Std.Result.ok
+                                                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                          (Aeneas.Std.core.result.Result.Err e))
+                                                                match cf10 with
+                                                                  |
+                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                      val6 =>
+                                                                    do
+                                                                    let b1 ←
+                                                                      AspisR1PublicPreparation.FinishModel.pointEq val4
+                                                                          val6
+                                                                    if b1 = true then
+                                                                        Aeneas.Std.Result.ok
+                                                                          (Aeneas.Std.core.result.Result.Err
+                                                                            AspisR1PublicPreparation.r1_wire.Error.EqualCirclePoints)
+                                                                      else do
+                                                                        let r10 ←
+                                                                          AspisR1PublicPreparation.FinishModel.payload
+                                                                              pre 2#u8
+                                                                        let cf11 ←
+                                                                          match r10 with
+                                                                            | Aeneas.Std.core.result.Result.Ok v =>
+                                                                              Aeneas.Std.Result.ok
+                                                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                  v)
+                                                                            | Aeneas.Std.core.result.Result.Err e =>
+                                                                              Aeneas.Std.Result.ok
+                                                                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                  (Aeneas.Std.core.result.Result.Err e))
+                                                                        match cf11 with
+                                                                          |
+                                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                              val7 =>
+                                                                            do
+                                                                            let r11 ←
+                                                                              Aeneas.Std.core.array.TryFromArrayCopySlice.try_from
+                                                                                  32#usize Aeneas.Std.core.marker.CopyU8
+                                                                                  val7
+                                                                            let a3 ← B.unwrapRoot r11
+                                                                            Aeneas.Std.Result.ok
+                                                                                (Aeneas.Std.core.result.Result.Ok
+                                                                                  {
+                                                                                    roots :=
+                                                                                      Aeneas.Std.Array.make 2#usize
+                                                                                        [pre.c1_root, a3]
+                                                                                        (AspisR1PublicPreparation.FinishModel.finish._proof_10
+                                                                                          pre a3),
+                                                                                    challenges := challenges,
+                                                                                    alpha := alpha, claims := val1,
+                                                                                    extra := val3, before_z1 := val5,
+                                                                                    state_before_z0 := state_before_z0,
+                                                                                    z :=
+                                                                                      Aeneas.Std.Array.make 2#usize
+                                                                                        [val4, val6]
+                                                                                        (AspisR1PublicPreparation.FinishModel.finish._proof_11
+                                                                                          val4 val6),
+                                                                                    transcript := transcript3 })
+                                                                          |
+                                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                              residual =>
+                                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                              (AspisR1PublicPreparation.r1_semantic.Verified
+                                                                                H)
+                                                                              (Aeneas.Std.core.convert.FromSame
+                                                                                AspisR1PublicPreparation.r1_wire.Error)
+                                                                              residual
+                                                                  |
+                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                      residual =>
+                                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                                      (Aeneas.Std.core.convert.FromSame
+                                                                        AspisR1PublicPreparation.r1_wire.Error)
+                                                                      residual
+                                                              |
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                  residual =>
+                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                                  (Aeneas.Std.core.convert.FromSame
+                                                                    AspisR1PublicPreparation.r1_wire.Error)
+                                                                  residual
+                                                          |
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                              (Aeneas.Std.core.convert.FromSame
+                                                                AspisR1PublicPreparation.r1_wire.Error)
+                                                              residual
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                          (Aeneas.Std.core.convert.FromSame
+                                                            AspisR1PublicPreparation.r1_wire.Error)
+                                                          residual
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                      (Aeneas.Std.core.convert.FromSame
+                                                        AspisR1PublicPreparation.r1_wire.Error)
+                                                      residual
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                  (Aeneas.Std.core.convert.FromSame
+                                                    AspisR1PublicPreparation.r1_wire.Error)
+                                                  residual
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                          (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                          residual
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                      (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                  (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (AspisR1PublicPreparation.r1_semantic.Verified H)
+                              (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual) =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+                    ∃ running t25 record25 record26 z0 t26 z1 t27,
+                      AspisR1PublicPreparation.RoundModel.rounds R D pre before =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (running, out.alpha, t25)) ∧
+                        out.challenges = challenges ∧
+                          out.state_before_z0 = t25.state ∧
+                            out.transcript = t27 ∧
+                              B.claims pre = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.claims) ∧
+                                pre.validated_record 25#u8 =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record25) ∧
+                                  R.decode 29#usize record25 87#usize =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.extra) ∧
+                                    AspisR1PublicPreparation.FinishModel.circle_validated B D t25 record25 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z0, t26) ∧
+                                      pre.validated_record 26#u8 =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record26) ∧
+                                        R.decode 29#usize record26 0#usize =
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.before_z1) ∧
+                                          AspisR1PublicPreparation.FinishModel.circle_validated B D t26 record26 =
+                                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z1, t27) ∧
+                                            out.z =
+                                              Aeneas.Std.Array.make 2#usize [z0, z1]
+                                                (of_eq_true
+                                                  (Eq.trans
+                                                    (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 2
+                                                          (of_decide_eq_true (id (Eq.refl true))))))
+                                                    (eq_self 2))))
+                (fun hclaims h_4 =>
+                  let ⟨terminalResult, h✝²⟩ :=
+                    AspisR1PublicPreparation.S1SemanticFinishBounds.bind_success✝
+                      (B.terminal pub claims alpha challenges)
+                      (fun x => do
+                        let r3 ←
+                          AspisR1PublicPreparation.core.result.Result.map_err
+                              (AspisR1PublicPreparation.FinishModel.closureFn11 D) x ()
+                        let cf2 ←
+                          match r3 with
+                            | Aeneas.Std.core.result.Result.Ok v =>
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                            | Aeneas.Std.core.result.Result.Err e =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                  (Aeneas.Std.core.result.Result.Err e))
+                        match cf2 with
+                          | ⋯ => do
+                            let a ← B.fromFn 16#usize (AspisR1PublicPreparation.FinishModel.closureFn9 D) claims
+                            let a1 ← B.fromFn 10#usize (AspisR1PublicPreparation.FinishModel.closureFn5 D) claims
+                            let a2 ← claims.index_usize 0#usize
+                            let q ← a2.index_usize 27#usize
+                            let mask ← B.mask a a1 q alpha
+                            let r4 ← pre.validated_record 25#u8
+                            let cf3 ←
+                              match r4 with
+                                | Aeneas.Std.core.result.Result.Ok v =>
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                | Aeneas.Std.core.result.Result.Err e =>
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                      (Aeneas.Std.core.result.Result.Err e))
+                            match cf3 with
+                              | ⋯ => do
+                                let r5 ← R.decode 29#usize vr 87#usize
+                                let cf4 ←
+                                  match r5 with
+                                    | Aeneas.Std.core.result.Result.Ok v =>
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                    | Aeneas.Std.core.result.Result.Err e =>
+                                      Aeneas.Std.Result.ok
+                                        (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                          (Aeneas.Std.core.result.Result.Err e))
+                                match cf4 with
+                                  | ⋯ => do
+                                    let q1 ← B.mul challenges.eta val2
+                                    let q2 ← B.add mask q1
+                                    let q3 ← val3.index_usize ⋯#usize
+                                    let masked_terminal ← ⋯
+                                    let b ← ⋯
+                                    ⋯
+                                  | ⋯ => ⋯
+                              | ⋯ => ⋯
+                          | ⋯ => ⋯)
+                      ⋯ ⋯
+                  ⋯)
+                ⋯ ⋯ ⋯)
+            ⋯ ⋯)
+        ⋯ ⋯ ⋯)
+    ⋯ ⋯
+def AspisR1PublicPreparation.S1SemanticRootCopy.install : AspisR1PublicPreparation.FinishModel.Boundaries →
+  AspisR1PublicPreparation.FinishModel.Boundaries :=
+fun B =>
+  { fromFn := @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn B, mask := B.mask, add := B.add, mul := B.mul,
+    terminal := B.terminal, circle := B.circle, unwrapRoot := AspisR1PublicPreparation.S1SemanticRootCopy.unwrapRoot,
+    claims := B.claims }
+theorem AspisR1CurrentCaller.S1SemanticInstallation.verify_roots : ∀
+  (R : AspisR1PublicPreparation.RoundModel.Boundaries) (B : AspisR1PublicPreparation.FinishModel.Boundaries) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (sem : AspisR1CurrentCaller.r1_semantic.Verified H),
+  AspisR1CurrentCaller.S1SemanticInstallation.verify R B D pub bytes hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) →
+    ∃ pre initial after challenges payload root2,
+      AspisR1PublicPreparation.PrefixAdapter.parseAccepted bytes =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+        AspisR1PublicPreparation.r1_semantic.public_transcript
+              (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+              (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) hash pre.c1_root =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok initial) ∧
+          AspisR1PublicPreparation.r1_wire.begin (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D) pre
+                initial =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok challenges, after) ∧
+            AspisR1PublicPreparation.FinishModel.finish R (AspisR1PublicPreparation.S1SemanticRootCopy.install B)
+                  (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+                  (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) pre after challenges none =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem)) ∧
+              AspisR1PublicPreparation.FinishModel.payload pre 2#u8 =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok payload) ∧
+                Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 payload =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root2) ∧
+                  ↑root2 = ↑payload ∧ sem.roots = Aeneas.Std.Array.make 2#usize [pre.c1_root, root2] ⋯ :=
+fun R B {H} D pub bytes hash sem success =>
+  have source := AspisR1CurrentCaller.S1SemanticInstallation.verify_return R B D pub bytes hash sem success;
+  let ⟨pre, h✝⟩ :=
+    AspisR1PublicPreparation.S1SemanticVerify.verify_success
+      (@AspisR1PublicPreparation.FinishModel.finish R (AspisR1PublicPreparation.S1SemanticRootCopy.install B))
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+      (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) bytes hash none
+      (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem) source
+  let ⟨initial, h✝¹⟩ := h✝
+  let ⟨after, h✝²⟩ := h✝¹
+  let ⟨challenges, h✝³⟩ := h✝²
+  let ⟨parsed, right✝⟩ := h✝³
+  let ⟨publicInit, right✝¹⟩ := right✝
+  let ⟨begin, finish⟩ := right✝¹
+  let ⟨payload, h✝⁴⟩ :=
+    AspisR1PublicPreparation.S1SemanticRootCopy.finish_roots R B
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+      (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) pre after challenges
+      (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem) finish
+  let ⟨root2, h✝⁵⟩ := h✝⁴
+  let ⟨hpayload, right✝²⟩ := h✝⁵
+  let ⟨hcopy, right✝³⟩ := right✝²
+  let ⟨hbytes, hroots⟩ := right✝³
+  Exists.intro pre
+    (Exists.intro initial
+      (Exists.intro after
+        (Exists.intro challenges
+          (Exists.intro payload
+            (Exists.intro root2 ⟨parsed, ⟨publicInit, ⟨begin, ⟨finish, ⟨hpayload, ⟨hcopy, ⟨hbytes, hroots⟩⟩⟩⟩⟩⟩⟩)))))
+def AspisR1.CircleRecordCodec.decode : (row : Fin 2) →
+  List AspisR1.CircleRecordCodec.Byte → Option (AspisR1.CircleRecordCodec.Payload row) :=
+fun row bytes =>
+  (AspisR1.RecordFrameCodec.parse (AspisR1.CircleRecordCodec.tag row) (AspisR1.CircleRecordCodec.count row * 32)
+        bytes).bind
+    (AspisR1.SelectedFieldSequenceCodec.decodeLow (AspisR1.CircleRecordCodec.count row))
+def AspisR1.LiteralOpeningStages.readGamma : List
+    (AspisR1.LiteralTranscript.Message × AspisR1.LiteralTranscript.Challenge) →
+  Option AspisR1.LiteralOpeningStages.Gamma :=
+fun rs => do
+  let row25 ← AspisR1.LiteralOpeningStages.readAt rs 25 (AspisR1.CircleRecordCodec.decode 0)
+  let row26 ← AspisR1.LiteralOpeningStages.readAt rs 26 (AspisR1.CircleRecordCodec.decode 1)
+  let row27 ←
+    AspisR1.LiteralOpeningStages.readAt rs 27 (AspisR1.OpeningRecordCodec.decode AspisR1.OpeningRecordCodec.Row.gamma)
+  pure { row25 := row25, row26 := row26, row27 := row27 }
+F3P_CellDefinitions.lean:8:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentCaller.ClaimsUnrolledFinish.install`
