@@ -274,3 +274,14 @@ no dependency build or concrete recurrence reduction. It does not constitute
 a deployed release manifest or a source identity for the original Rust loop.
 The exact next consumers remain the sibling op223 join, followed by
 `ProverRwP6BodyData.refinement_of_data` for a concrete whole-model instance.
+
+### Audit logging note
+
+Attempt26000 passed and its structured receipt retains all172 complete
+`#print axioms` results. The shell redirected the wrapper's stdout to the
+same path that the runner opens for raw compiler output. For logs longer than
+the wrapper's11000-character excerpt, the wrapper can overwrite a portion of
+that file with its summary. The26000 receipt was captured before that write
+and is authoritative for the complete172 axiom strings. The final manifest
+uses separate wrapper/raw log paths. No proof source, limits or compiler is
+changed, and the unchanged audit is not rerun.
