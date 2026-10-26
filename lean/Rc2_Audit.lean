@@ -22,7 +22,7 @@ set_option format.width 120
 #print AspisR1.S2W_TrustedStd.TrustedStd
 #print AspisR1.S2W_D189Wrappers.Allocator
 #print AspisR1.S2W_DigestExtraction.AeneasExtraction
-#print AspisR1.S2W_D189Entry.RuntimeEntrypointAdmission
+#print AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission
 #print AspisR1.WAdm_Domain.SessionAPrepare
 #print AspisR1.Port5Q1_QueryPorts.SessionAPrimitives
 #print AspisR1.T2R_Finish.Outcome
