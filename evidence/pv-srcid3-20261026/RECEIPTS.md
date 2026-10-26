@@ -125,6 +125,7 @@ This table is a rendering of existing evidence, not a final kernel replay.
 | 27428 | R1Z/PV_Src_RecordDynamic | 0 | 0:01.56 | 4104692 | 0 | 030f4f4d03 | standard only |
 | 27429 | R1Z/PV_Src_CheckedCanonical | 0 | 0:01.60 | 4107288 | 0 | 030f4f4d03 | standard only |
 | 27430 | R1Z/PV_Src_PackedSelection | 0 | 0:01.56 | 4104956 | 0 | 030f4f4d03 | standard only |
+| 27432 | R1Z/PV_Src_FocusedAudit | 0 | 0:01.53 | 4082320 | 0 | 052d91aa6c | standard only |
 
 ## Kani
 

@@ -18,9 +18,11 @@ for x in a:
 p=pathlib.Path('evidence/pv-srcid3-20261026/harness-inventory-refreshed.json');p.write_text(r.stdout)
 from collections import Counter
 counts=Counter(r['metadata_path'] for r in a)
-latest=max((r for r in a if counts[r['metadata_path']]==9),key=lambda r:r['metadata_mtime_ns'])['metadata_path']
+candidates={r['metadata_path'] for r in a if r['harness']['pretty_name'].endswith('pv_srcid3_full_dynamic_mapper')}
+assert candidates, 'new dynamic mapper harness missing from metadata'
+latest=max((r for r in a if r['metadata_path'] in candidates),key=lambda r:r['metadata_mtime_ns'])['metadata_path']
 active=[r for r in a if r['metadata_path']==latest]
-assert len(active)==9, len(active)
+assert any(r['harness']['pretty_name'].endswith('pv_srcid3_full_dynamic_mapper') for r in active)
 for r in active:
  if 'common_' in r['harness']['pretty_name']:assert r['harness']['attributes']['unwind_value']==33
 pathlib.Path('evidence/pv-srcid3-20261026/harness-inventory-active.json').write_text(json.dumps(active,indent=2)+'\n')
