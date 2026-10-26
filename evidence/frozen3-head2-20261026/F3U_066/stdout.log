@@ -1,0 +1,75 @@
+F3U_ReifyLog.lean:18:23: error: unsolved goals
+case read
+A : Type
+H : Bytes → State
+parts : CheckpointBytes5Effect.Parts
+next : CheckpointBytes5Effect.Digest → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : CheckpointBytes5Effect.Digest) (before : SdkC_Source.Log),
+    SdkC_Source.readLog (SdkC_Source.run (F3U_Oracle.hashv H) (next a) before).2 =
+      SdkC_Source.readLog before ++ (eval H (SdkC_Oracle.program (next a))).1
+before : SdkC_Source.Log
+⊢ List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok digest => some (flatten q.parts, decodeState digest)
+          | x => none)
+        (before ++ [{ parts := parts, returned := ok (encodeState (H (flatten parts))) }]) ++
+      (eval H (SdkC_Oracle.program (next (encodeState (H (flatten parts)))))).1 =
+    List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok digest => some (flatten q.parts, decodeState digest)
+          | x => none)
+        before ++
+      (flatten parts, H (flatten parts)) :: (eval H (SdkC_Oracle.program (next (encodeState (H (flatten parts)))))).1
+F3U_ReifyLog.lean:21:40: warning: This simp argument is unused:
+  SdkC_Oracle.readLog_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵F̵3̵U̵_̵O̵r̵a̵c̵l̵e̵.̵d̵e̵c̵o̵d̵e̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]̵[̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲e̲v̲a̲l̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲F̲3̲U̲_̲O̲r̲a̲c̲l̲e̲.̲d̲e̲c̲o̲d̲e̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3U_ReifyLog.lean:22:6: warning: This simp argument is unused:
+  List.filterMap_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_Oracle.program, ̲eval, ̲SdkC_Oracle.readLog_append, ̲SdkC_Source.readLog,
+        List.filterMap_c̵o̵ns̵,̵L̵is̵t̵.̵f̵i̵lt̵e̵r̵M̵a̵p̵_̵n̵i̵l̵, ̲F3U_Oracle.decoded, ̲List.append_assoc, ̲List.singleton_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3U_ReifyLog.lean:22:26: warning: This simp argument is unused:
+  List.filterMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_Oracle.program, ̲eval, ̲SdkC_Oracle.readLog_append, ̲SdkC_Source.readLog,
+        List.filterMap_cons,L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵ ̲F3U_Oracle.decoded, ̲List.append_assoc, ̲List.singleton_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3U_ReifyLog.lean:22:45: warning: This simp argument is unused:
+  F3U_Oracle.decoded
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_Oracle.program, ̲eval, ̲SdkC_Oracle.readLog_append, ̲SdkC_Source.readLog,
+        List.filterMap_cons, ̲List.filterMap_nil,F̵3̵U̵_̵O̵r̵a̵c̵l̵e̵.̵d̵e̵c̵o̵d̵e̵d̵,̵ ̲List.append_assoc, ̲List.singleton_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3U_ReifyLog.lean:22:64: warning: This simp argument is unused:
+  List.append_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_Oracle.program, ̲eval, ̲SdkC_Oracle.readLog_append, ̲SdkC_Source.readLog,
+        List.filterMap_cons, ̲List.filterMap_nil, ̲F3U_Oracle.decoded, ̲List.a̵p̵p̵e̵n̵d̵_̵a̵ss̵o̵c̵,̵L̵is̵t̵.̵s̵i̵ngleton_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3U_ReifyLog.lean:22:82: warning: This simp argument is unused:
+  List.singleton_append
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_Oracle.program, ̲eval, ̲SdkC_Oracle.readLog_append, ̲SdkC_Source.readLog,
+        List.filterMap_cons, ̲List.filterMap_nil, ̲F3U_Oracle.decoded, ̲List.append_assoc,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3U_ReifyLog.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
