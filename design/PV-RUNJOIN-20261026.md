@@ -106,3 +106,24 @@ withdrawal canonical RspendPlus witnesses and public projections; a generic
 subtype constructor or arbitrary x is insufficient. Then instantiate this
 conditional conclusion at the concrete rust and run one coherent dependency
 closure/axioms replay. No such source association is supplied in this branch.
+
+## Validation and disposition
+
+Fourteen Lean invocations20900–20913:9pass,5rejected elaboration/parser inputs,
+0resource failures;0/10Kani. The14/100Lean allowance is NOT exhausted. The direct
+fixed-dictionary source route is stopped at the checked interface obstruction;
+the source/effect and body work belongs to the live owner, and no replacement
+ownership work or assumed whole-owner equality is introduced here. Independent
+complete-view transport and focused audits are complete; requested stages1–3
+as deployed-source results are incomplete. This is a partial handoff, not a
+claim that the requested task or its budget-based completion rule was met.
+
+Final focused audit20913 at proof revision8d759ae239:exit0,5.44s,
+4260980KiB,swaps0,15standard-axiom reports. Source and direct cached-object hashes
+are retained before and after that audit. Receipts explicitly distinguish the
+launcher's `none` fingerprint on early attempts from post-run direct-input pins;
+20913 uses an explicit pinned direct-input fingerprint. This is NOT a coherent
+replay of the whole dependency source closure or a frozen-manifest release.
+`validate.py` checks source snapshots, accepted axioms, the3field inventory and
+literal conclusion equality. All four current modules match accepted snapshots.
+No keys,accounts,funds,source implementation or frozen artifacts were changed.
