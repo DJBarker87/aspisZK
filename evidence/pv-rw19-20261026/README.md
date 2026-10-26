@@ -54,3 +54,60 @@ Next validation, once authorized by the flag: compile the identity module
 first, then the join, then dependent callers; retain full target/exit/wall/
 RSS/swap/revision/axioms receipts. Never re-freeze a manifest containing
 unchecked drafts.
+
+## Stage 2: audit-value reduction draft
+
+The emitted `ProverRwBodyStoreSource.afterReserve` checks the C1 count is
+16, the mask-only count is 10, and the d/g/padding flags are true before
+returning a successful pair. Its return sets the final total flag to true.
+This motivates an independent mathematical constant
+`ProverRw19AuditValue.canonical = (16,10,true,true,true,true)`.
+
+`ProverRw19AuditSource.continuation` and `.body` are draft proofs that
+every successful source return has exactly that audit, for arbitrary
+primitive Results. They preserve all rejection, failure and divergence
+cases rather than postulating successful execution. The proof follows only
+the emitted body's binds/branches and final guards; it does not normalize
+any trace, finite field recurrence, or concrete release fixture.
+
+`ProverRw19AuditData.attachAudit` attaches this audit to an independently
+specified mathematical byte-result, carrying error/failure/divergence
+unchanged. It is **only a codec**, not the concrete V163 model. Its input
+is not defined as the actual source observation.
+
+`audit_of_bytes` derives the complete audit observation equation from
+the byte observation equation and the canonical successful-audit invariant.
+`ProverRw19AuditCaller` applies this to the body; the conditional
+`ProverRw19CanonicalAuditRefinement.refinement` retains exactly:
+
+```lean
+P_source_p6 : ops.op223 =
+  @ProverRwP6CompressSource.compress _ (PV_CurrentScaleInstall.selected ops)
+
+reservation : store.«reserve» s digest attempt.mask_nonce = ok (accepted,after)
+
+P_proof_bytes : PV_RW_DataProduct.observe PV_RW_DataProduct.first
+  (ProverRwBodyDataCriterion.data
+    (ProverRwP6BodyStore.execute (PV_RW_CombinedBodyData.closed ops)
+      store pub compiled v hash binding digest attempt s)) = modelBytes
+```
+
+The mathematical whole-model byte function `modelBytes` still has to be
+constructed for the deployed caller's admitted inputs and associated with
+the mathematical protocol. It remains a parameter of this conditional
+consumer. No equality is proved on either whole release fixture yet.
+No source-output alias or structure of assumed equations is introduced.
+
+All Stage 2 results remain **unchecked drafts**, so the checked V163/V164
+before/after status is unchanged. The lexical preflight only checks forbidden
+tokens and the presence of `#print axioms` commands; it is not an axioms
+audit or type-check. No attempt IDs were consumed by these edits.
+
+Focused validation order when the gate opens:
+
+1. `ProverRw19P6ContextIdentity`, then `ProverRw19P6Join`, then `ProverRw19P6Caller`.
+2. `ProverRw19AuditValue`, then `ProverRw19AuditSource` and `ProverRw19AuditData`
+   (sequential host scopes), then `ProverRw19AuditCaller`.
+3. `ProverRw19CanonicalAuditRefinement`, then `ProverRw19P6DataIff`.
+4. Only after focused targets are green, one final axioms audit and component
+   manifest re-freeze/replay. No unchecked source enters a frozen manifest.
