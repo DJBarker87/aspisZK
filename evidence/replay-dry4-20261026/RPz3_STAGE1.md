@@ -30,3 +30,14 @@ is relied on; the reservation barrier governs admission.
 Before/after theorem identical; ledger delta T0/P0/G0/C0. No new joint
 non-vacuity witness or premise removal is claimed. Target not yet established.
 No shipped source or artifact change; inherited ELF pins remain historical.
+
+## Qualified flat-source follow-up
+
+Committed flat snapshots resolve five additional qualified import names.
+The expanded partial traversal now has 4542 repository modules, 142 trusted
+direct imports and 39 unresolved names. Of the predecessor 45 selections,
+19 are resolved and 26 remain unresolved; another 13 unresolved names are
+exposed by the selected source imports. RPz3_source-plan.json records them.
+The in-flight serial source phase retains its initial graph; the additional
+vertices will be scheduled only after that phase is terminal. No previously
+selected source changed in this follow-up.

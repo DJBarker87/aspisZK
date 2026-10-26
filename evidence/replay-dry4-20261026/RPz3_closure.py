@@ -34,6 +34,8 @@ def visit(m):
  if m in mods:return
  if m.split('.')[0] in trusted:mods[m]={'kind':'trusted-library'};return
  suffix=m.replace('.','/')+'.lean';cs=[p for p in idx[Path(suffix).name] if p==suffix or p.endswith('/'+suffix)]
+ if not cs and m.rsplit('.',1)[-1] not in {'Funs','Types','FunsExternal','TypesExternal','Basic','Impl','Equiv','Degree','Proofs','Modular'}:
+  cs=idx[Path(suffix).name][:] # committed flat source snapshots may retain a qualified import name
  canonical=[p for p in ['lean/'+suffix,'docs/research/100bit-spend-path-20261013/lean/'+suffix,'docs/research/v8-full-view-zk-20260912/lean/'+suffix,'docs/research/v8-r0-zk-20261009/lean/'+suffix] if p in cs]
  prior=old['modules'].get(m,{})
  if canonical:p=canonical[0];why='committed canonical research source'
