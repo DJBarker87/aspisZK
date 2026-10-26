@@ -9971,3 +9971,17 @@ as pv-cb (`codex/pv-cb-20261026`, from the candidate, prefix PV_CB_, IDs 22800â€
 op order, skipping ops a sibling installs first and deferring effectful ops to the RunJoin route.
 Six jobs running: rw16, dict8, runjoin3, srcid, rebase2, cb. Mac disk: 24 GiB free. Privacy target
 not yet established.
+
+## D203 (Stream B, 2026-10-26 18:10): dict8 reviewed; dictionary refocused away from the shared lift
+
+pv-dict8 (`codex/cx-prover-dict-20261026`, head 4cd294bc60; 100/100 Lean, 53 passed, 47 rejected;
+0/15 Kani; audit 433 standard-only reports, 3.98 s, 4,326,772 KiB, swap 0): fallible nonce-store and
+reserve/material state transport proved without the former fallible-run hypothesis; public-carrier
+transport through the semantic and masked proof bodies; V269 reduced; V263 (`WorkExtensional`,
+op257) still an explicit contract; V268/V269/V271 native Error/Formatter/File-world open. Counts
+unchanged: 172 selected / 83 open / 255 sufficient requirements; types 26/28. Root premises removed: 0.
+The stage it spent the budget on, the full store/retry/client lift, is the same shared native
+interpretation obstruction as L1/L2/RunJoin (D199, D200, D202), now owned by pv-runjoin3. dict9 is
+relaunched refocused on what moves counts: types 3 and 27 by the Kani-first quotient route (15 unused
+runs), the open pure entries outside pv-cb's op list, and the V270 Formatter quotient. Six jobs
+running: rw16, dict9, runjoin3, srcid, rebase2, cb. Privacy target not yet established.
