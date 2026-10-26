@@ -1339,3 +1339,31 @@ backend errors are retained. Neither a library override nor new source associati
 is counted for those four ports. No backend/infrastructure change is made.
 Native-independent remaining source helpers are being investigated separately.
 Current allocation use29/100Lean,0/15Kani; no exhaustion is claimed.
+
+## Focused checkpoint and explicit incomplete handoff (12829)
+
+Audit12829 checks all39 new top theorem declarations against proof revision
+`d1af3d4428`:exit0,1.65s,4,288,816KiB RSS,zero swaps,standard axioms only.
+`success-next/final-state.json` SHA-validates all19 accepted source snapshots,
+both byte-identical security roots and the exact remaining39 IDs. It separately
+records the proof-crate-relative lib.rs resolver correction without overwriting
+the raw source-map-false receipt. Critical native field/scalar/CT source hashes
+match this worktree. Native execution/artifact association remains open.
+
+Total30/100 Lean attempts(19pass,11changed failures),0/15Kani. Budget NOT
+exhausted;70Lean/15Kani remain,nextunused12830. No unchanged full regression,
+OOM,swap,raised limit,infrastructure repair,push or merge. The one authorized
+ID-range extension has a retained one-line diff. The vanished-cgroup exception
+was not needed. Full branch history is retained through the proof checkpoint.
+
+The independent current compression223 extraction also stops: inherited Aeneas
+raises `Not_found` from InterpReduceCollapse.collapse_ctx_following_sequence.
+Its source receipt is retained and supplies no certificate. Vec default and
+is_empty retain their concrete transmute/type-expansion failures. No library
+model override is introduced to force these outputs. **The requested assignment
+is incomplete.** Source interpretations supplied4/43,remaining39; four Vec ports
+still lack source/library adequacy. Wide source-control/normalizer equations are
+proved under inherited primitive bindings, not whole native execution adequacy.
+Actual security-model proof/audit equality, concrete PrefixContract/BodyContract,
+E1/E2/Drop/effects,physical ordered ROM/TLS and real RunJoin are unchanged and
+open. Root/headline premises removed0; target not established.
