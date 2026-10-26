@@ -460,3 +460,94 @@ mod publication_open_rejections {
         }
     }
 }
+
+#[cfg(kani)]
+mod owned_error;
+#[cfg(kani)]
+mod owned_error_checks {
+    use super::owned_error::*;
+    fn kind(index:u8)->ErrorKind { match index {
+        0=>ErrorKind::NotFound,
+        1=>ErrorKind::PermissionDenied,
+        2=>ErrorKind::ConnectionRefused,
+        3=>ErrorKind::ConnectionReset,
+        4=>ErrorKind::HostUnreachable,
+        5=>ErrorKind::NetworkUnreachable,
+        6=>ErrorKind::ConnectionAborted,
+        7=>ErrorKind::NotConnected,
+        8=>ErrorKind::AddrInUse,
+        9=>ErrorKind::AddrNotAvailable,
+        10=>ErrorKind::NetworkDown,
+        11=>ErrorKind::BrokenPipe,
+        12=>ErrorKind::AlreadyExists,
+        13=>ErrorKind::WouldBlock,
+        14=>ErrorKind::NotADirectory,
+        15=>ErrorKind::IsADirectory,
+        16=>ErrorKind::DirectoryNotEmpty,
+        17=>ErrorKind::ReadOnlyFilesystem,
+        18=>ErrorKind::FilesystemLoop,
+        19=>ErrorKind::StaleNetworkFileHandle,
+        20=>ErrorKind::InvalidInput,
+        21=>ErrorKind::InvalidData,
+        22=>ErrorKind::TimedOut,
+        23=>ErrorKind::WriteZero,
+        24=>ErrorKind::StorageFull,
+        25=>ErrorKind::NotSeekable,
+        26=>ErrorKind::QuotaExceeded,
+        27=>ErrorKind::FileTooLarge,
+        28=>ErrorKind::ResourceBusy,
+        29=>ErrorKind::ExecutableFileBusy,
+        30=>ErrorKind::Deadlock,
+        31=>ErrorKind::CrossesDevices,
+        32=>ErrorKind::TooManyLinks,
+        33=>ErrorKind::InvalidFilename,
+        34=>ErrorKind::ArgumentListTooLong,
+        35=>ErrorKind::Interrupted,
+        36=>ErrorKind::Unsupported,
+        37=>ErrorKind::UnexpectedEof,
+        38=>ErrorKind::OutOfMemory,
+        39=>ErrorKind::InProgress,
+        40=>ErrorKind::Other,
+        _=>ErrorKind::Uncategorized,
+    }
+    use std::io::{Error,ErrorKind};
+    fn check(error: Error) {
+        let reference=OwnedError {kind:error.kind()};
+        assert!(native_observe(Err(error)) == owned_observe(Err(reference)));
+    }
+    fn check_open(error: Error) {
+        let reference=OwnedError {kind:error.kind()};
+        assert!(native_observe(native_open_error(error)) == owned_observe(owned_open_error(reference)));
+    }
+    #[kani::proof]
+    fn owned_error_os_kind_and_retry() { check_open(Error::from_raw_os_error(kani::any())); }
+    #[kani::proof]
+    fn owned_error_simple_kind_and_retry() {
+        let i:u8=kani::any();kani::assume(i<42);
+        check_open(Error::from(kind(i)));
+    }
+    #[kani::proof]
+    fn owned_error_success_and_prior_error_reset() {
+        let reserved:bool=kani::any();
+        assert!(native_observe(Ok(reserved))==owned_observe(Ok(reserved)));
+        assert!(owned_observe(Ok(reserved)).last_error.is_none());
+    }
+    #[kani::proof]
+    fn owned_error_static_payload_kind_and_retry() {
+        let i:u8=kani::any();kani::assume(i<42);
+        check_open(Error::new(kind(i),"mask nonce ledger path is not a directory"));
+    }
+    #[kani::proof]
+    fn owned_error_write_zero_kind_and_retry() { check_open(Error::from(ErrorKind::WriteZero)); }
+    #[kani::proof]
+    fn owned_error_os_observe() { check(Error::from_raw_os_error(kani::any())); }
+    #[kani::proof]
+    fn owned_error_simple_observe() {
+        let i:u8=kani::any();kani::assume(i<42);
+        check(Error::from(kind(i)));
+    }
+    #[kani::proof]
+    fn owned_error_static_payload_observe() {
+        check(Error::new(ErrorKind::NotADirectory,"mask nonce ledger path is not a directory"));
+    }
+}
