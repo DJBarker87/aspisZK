@@ -1,0 +1,52 @@
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorFuel.lean:23:8: error: Ambiguous term
+  bounded
+Possible interpretations:
+  PV_RW_CursorLoop.bounded : (?m.48 → ?m.49 → Outcome ?m.47 ?m.49) → Nat → Cursor ?m.48 → ?m.49 → Outcome ?m.47 ?m.49
+  
+  PV_RW_Cursor.bounded : ∀ (cursor : Cursor ?m.47),
+    cursor.index ≤ cursor.values.length → (next cursor).snd.index ≤ (next cursor).snd.values.length
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorFuel.lean:34:5: error: unknown tactic
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorFuel.lean:33:2: error: unsolved goals
+case mp
+E T S : Type
+fuel : Nat
+cursor : Cursor T
+state : S
+success : PV_RW_CursorLoop.bounded identityStep fuel cursor state = Outcome.ok state
+⊢ (remaining cursor).length < fuel
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorFuel.lean:31:40: error: unsolved goals
+case mpr
+E T S : Type
+fuel : Nat
+cursor : Cursor T
+state : S
+⊢ (remaining cursor).length < fuel → PV_RW_CursorLoop.bounded identityStep fuel cursor state = Outcome.ok state
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorFuel.lean:46:2: error: unsolved goals
+case left
+E T S : Type
+values : List T
+shape : values.length = 16
+state : S
+⊢ 16 ≤ 16
+'R1Z.PV_RW_CursorFuel.list_identity' does not depend on any axioms
+'R1Z.PV_RW_CursorFuel.insufficient' depends on axioms: [sorryAx]
+'R1Z.PV_RW_CursorFuel.sufficient_iff' depends on axioms: [sorryAx]
+'R1Z.PV_RW_CursorFuel.sixteen_requires_seventeen' depends on axioms: [propext, sorryAx, Quot.sound]
+        5.04 real         0.27 user         0.66 sys
+           636977152  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               14351  page reclaims
+               30751  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                6829  voluntary context switches
+               32119  involuntary context switches
+           641787395  instructions retired
+           480773980  cycles elapsed
+            12305200  peak memory footprint

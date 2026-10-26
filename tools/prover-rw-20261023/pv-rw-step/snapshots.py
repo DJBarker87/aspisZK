@@ -11,11 +11,11 @@ for p in (r/b).rglob('*'):
  data=p.read_bytes();known[sha(data)]=data
  if p.name=='lib.rs':
   t=data.decode()
-  for marker in ['#[cfg(kani)]\nmod leaves','pub mod sampler_step;','#[cfg(kani)]\nmod scalar_split','#[cfg(kani)]\nmod actual_shape','#[inline(always)]\npub fn scalar_product_owned','#[cfg(kani)]\nmod matched_steps','#[cfg(kani)]\nmod matched_coordinates','pub mod parse_step;']:
+  for marker in ['#[cfg(kani)]\nmod leaves','pub mod sampler_step;','#[cfg(kani)]\nmod scalar_split','#[cfg(kani)]\nmod actual_shape','#[inline(always)]\npub fn scalar_product_owned','#[cfg(kani)]\nmod matched_steps','#[cfg(kani)]\nmod matched_coordinates','pub mod parse_step;','pub mod iterator_step;','pub mod iterator_state_step;']:
    z=t.split(marker)[0].encode();known[sha(z)]=z
  if p.name=='sampler_step.rs':
   z=data.decode().split('// One complete owned')[0].encode();known[sha(z)]=z
- for rev in ['882c30be11','bbcc13a0af']:
+ for rev in ['882c30be11','bbcc13a0af','0c262bacc0']:
   z=subprocess.run(['git','show',f'{rev}:{p.relative_to(r)}'],cwd=r,capture_output=True)
   if not z.returncode:known[sha(z.stdout)]=z.stdout
 rows=[]

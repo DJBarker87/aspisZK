@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RW_IteratorStateSource.lean:13:4: warning: The namespace `iterator_state_step` is duplicated in the declaration `R1Z.PV_RW_IteratorStateSource.iterator_state_step.iterator_state_step`.
+
+Note: This linter can be disabled with `set_option linter.dupNamespace false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RW_IteratorStateSource.lean:48:6: error: 'change' tactic failed, pattern
+  (do
+      let triple ←
+        do
+          let scaled ← aspis_core.field.QM31.mul_m31 state.2 value
+          let out ← aspis_core.field.QM31.add state.1 scaled
+          let power ← aspis_core.field.QM31.mul state.2 lambda
+          ok (true, next, out, power)
+      if triple.1 = true then ok (cont (triple.2.1, triple.2.2.1, triple.2.2.2))
+        else ok (done (triple.2.2.1, triple.2.2.2))) =
+    do
+    let scaled ← aspis_core.field.QM31.mul_m31 state.2 value
+    let out ← aspis_core.field.QM31.add state.1 scaled
+    let power ← aspis_core.field.QM31.mul state.2 lambda
+    ok (cont (next, out, power))
+is not definitionally equal to target
+  (do
+      let (live, next, out, power) ←
+        do
+          let (o, iterator1) ← ok (some value, next)
+          match o with
+            | none => ok (false, iterator1, state.1, state.2)
+            | some value => do
+              let q ← aspis_core.field.QM31.mul_m31 state.2 value
+              let compressed1 ← aspis_core.field.QM31.add state.1 q
+              let power1 ← aspis_core.field.QM31.mul state.2 lambda
+              ok (true, iterator1, compressed1, power1)
+      if live = true then ok (cont (next, out, power)) else ok (done (out, power))) =
+    do
+    let pair ← ok (some value, next)
+    match pair.1 with
+      | none => ok (done state)
+      | some value => do
+        let next ← (fun value acc => PV_RW_CompressEmission.generated.shipped_step acc.1 acc.2 value lambda) value state
+        ok (cont (pair.2, next))
+'R1Z.PV_RW_IteratorStateSource.control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

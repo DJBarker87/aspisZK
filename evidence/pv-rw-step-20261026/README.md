@@ -234,3 +234,32 @@ or certificate was accepted. The quiet hold became known at the 23739 launcher
 refusal at 16:50:34. No further host capped scope was started until 17:21:32.
 This timing overlap is retained as a deviation, not hidden as a successful
 admission. The marker and launchers were never edited.
+
+Timing deviation: retry 23753 began at 17:29:01.907652 UTC, 169.388 seconds
+following refusal 23752, approximately 10.6 seconds short of the required
+180-second wait. Admission allowed it and the shared launcher was unchanged,
+but this does not satisfy the wait rule. This is recorded as a procedural
+deviation, not described as a compliant retry. No resource caps were raised.
+
+Read-only sibling refresh: pv-cb head
+`93c41a0ab28add4dc08dde56ad957e62f5c30ef7` still labels op223/V240 OPEN
+and op250/V257 SKIPPED (earlier sibling source-policy installation only).
+No callback installation or sibling worktree modification was performed here.
+The new local CursorFuel proof gives necessity as well as sufficiency of the
+17-evaluation arity16 control bound for successful identity steps. CursorTrace
+proves the instrumentation records every input exactly once in order and erases
+to the same complete Outcome, including failures/divergence. Neither is a new
+native Kani certificate or a source association for the whole Rust helper.
+
+23754 was an aggregate-reservation preflight refusal at 17:29:20.221764 UTC;
+zero Lean attempts. Fresh host compile 23759 began at 17:32:32.954111 UTC,
+after 192.732 seconds, and failed only on a Lean notation-spacing error.
+23760 corrected that source and passed; no unchanged failed compile was rerun.
+The iterator-state Aeneas scope reached its internal reservation check at
+17:37:00.159227 UTC and was refused on a racing removed cgroup path. The
+translator did not run. Its next retry must be after 17:40:00.159227 UTC.
+
+23778 was refused before compiler admission at 17:42:41.210373 UTC due to
+aggregate reservation (60,532,195,328 projected bytes). It counts zero Lean
+attempts. Next host attempt must have a fresh ID and begin no earlier than
+17:45:41.210373 UTC. No source was sent or compiler launched for this ID.

@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RW_IteratorStateSource.lean:13:4: warning: The namespace `iterator_state_step` is duplicated in the declaration `R1Z.PV_RW_IteratorStateSource.iterator_state_step.iterator_state_step`.
+
+Note: This linter can be disabled with `set_option linter.dupNamespace false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RW_IteratorStateSource.lean:49:6: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.117 ?m.118 ?m.119).mpr`
+  ?m.117 >>= ?m.118 = ?m.117 >>= ?m.119
+with the goal
+  (do
+      let (live, next, out, power) ←
+        let (o, iterator1) := (some value, next)
+          match o with
+          | none => ok (false, iterator1, state.1, state.2)
+          | some value => do
+            let q ← aspis_core.field.QM31.mul_m31 state.2 value
+            let compressed1 ← aspis_core.field.QM31.add state.1 q
+            let power1 ← aspis_core.field.QM31.mul state.2 lambda
+            ok (true, iterator1, compressed1, power1)
+      if live = true then ok (cont (next, out, power)) else ok (done (out, power))) =
+    do
+    let x ← state.2.mul_m31 value
+    let x ← state.1.add x
+    let x_1 ← state.2.mul lambda
+    ok (cont (next, x, x_1))
+
+Note: The full type of `(bind_eq_iff ?m.117 ?m.118 ?m.119).mpr` is
+  (∀ (v : ?m.115), ?m.117 = ok v → ?m.118 v = ?m.119 v) → ?m.117 >>= ?m.118 = ?m.117 >>= ?m.119
+
+case ok.some
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+lambda : Q
+iterator : Iter
+state : Q × Q
+next : core.slice.iter.Iter aspis_core.field.M31
+value : aspis_core.field.M31
+h : core.slice.iter.IteratorSliceIter.next iterator = ok (some value, next)
+⊢ (do
+      let (live, next, out, power) ←
+        let (o, iterator1) := (some value, next)
+          match o with
+          | none => ok (false, iterator1, state.1, state.2)
+          | some value => do
+            let q ← aspis_core.field.QM31.mul_m31 state.2 value
+            let compressed1 ← aspis_core.field.QM31.add state.1 q
+            let power1 ← aspis_core.field.QM31.mul state.2 lambda
+            ok (true, iterator1, compressed1, power1)
+      if live = true then ok (cont (next, out, power)) else ok (done (out, power))) =
+    do
+    let x ← state.2.mul_m31 value
+    let x ← state.1.add x
+    let x_1 ← state.2.mul lambda
+    ok (cont (next, x, x_1))
+'R1Z.PV_RW_IteratorStateSource.control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

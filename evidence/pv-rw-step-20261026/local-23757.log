@@ -1,0 +1,60 @@
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorTrace.lean:15:11: error: Tactic `rfl` failed: The left-hand side
+  listRun (instrument step) [] (state, before)
+is not definitionally equal to the right-hand side
+  map id (fun next => (next, before ++ [])) (listRun step [] state)
+
+case nil
+E T S : Type
+step : T → S → Outcome E S
+state : S
+before : List T
+⊢ listRun (instrument step) [] (state, before) = map id (fun next => (next, before ++ [])) (listRun step [] state)
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorTrace.lean:24:21: error: Ambiguous term
+  bind
+Possible interpretations:
+  PV_RW_Outcome.bind : Outcome ?m.119 ?m.120 → (?m.120 → Outcome ?m.119 ?m.121) → Outcome ?m.119 ?m.121
+  
+  Bind.bind : ?m.119 ?m.121 → (?m.121 → ?m.119 ?m.122) → ?m.119 ?m.122
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorTrace.lean:21:14: error: unsolved goals
+case cons.ok
+E T S : Type
+step : T → S → Outcome E S
+value : T
+tail : List T
+ih :
+  ∀ (state : S) (before : List T),
+    listRun (instrument step) tail (state, before) =
+      map id (fun next => (next, before ++ tail)) (listRun step tail state)
+state : S
+before : List T
+next : S
+h : step value state = Outcome.ok next
+⊢ (match listRun step tail next with
+    | Outcome.ok a => Outcome.ok (a, before ++ value :: tail)
+    | Outcome.fail e => Outcome.fail (id e)
+    | Outcome.div => Outcome.div) =
+    match PV_RW_Outcome.bind (Outcome.ok next) (listRun step tail) with
+    | Outcome.ok a => Outcome.ok (a, before ++ value :: tail)
+    | Outcome.fail e => Outcome.fail (id e)
+    | Outcome.div => Outcome.div
+'R1Z.PV_RW_CursorTrace.trace' depends on axioms: [sorryAx]
+'R1Z.PV_RW_CursorTrace.success_trace' depends on axioms: [sorryAx]
+'R1Z.PV_RW_CursorTrace.erase' depends on axioms: [sorryAx]
+        2.93 real         0.21 user         0.37 sys
+           637911040  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               18838  page reclaims
+               26218  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                1579  voluntary context switches
+               23621  involuntary context switches
+           348690248  instructions retired
+           204571950  cycles elapsed
+            12256096  peak memory footprint

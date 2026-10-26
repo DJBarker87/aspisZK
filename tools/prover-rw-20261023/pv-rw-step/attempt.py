@@ -1,10 +1,19 @@
 """One focused compile through the unchanged shared launcher; no retries."""
 from pathlib import Path
-import subprocess,sys
+import subprocess,sys,json,datetime
 r=Path(__file__).resolve().parents[3]
 a=int(sys.argv[1]);m=sys.argv[2]
 assert 23700<=a<=23999 and m.startswith('PV_RW_') and m.replace('_','').isalnum()
-h='dombarker@100.108.41.90';b='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023';s='/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/'
+evidence=r/'evidence/pv-rw-step-20261026'
+for receipt in [*evidence.glob('*-admission.json'),*evidence.glob('**/refusal.json')]:
+ gate=json.loads(receipt.read_text())
+ if gate.get('retry_earliest_utc'):
+  deadline=datetime.datetime.fromisoformat(gate['retry_earliest_utc'])
+ elif gate.get('allowed') is False and gate.get('utc'):
+  deadline=datetime.datetime.fromisoformat(gate['utc'])+datetime.timedelta(seconds=180)
+ else:continue
+ assert datetime.datetime.now(datetime.timezone.utc)>=deadline,('required wait remains',str(receipt),deadline.isoformat())
+h='dombarker@100.108.41.90' ;b='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023';s='/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/'
 def run(args):subprocess.run(args,check=True)
 run(['ssh',h,f'python3 {b}/src/tools/prover-rw-20261023/native-entropy/reservation.py {b}/pv-rw-step/{a}-admission.json > {b}/pv-rw-step/{a}-admission.log 2>&1; pv_rw_admit_status=$?; cat {b}/pv-rw-step/{a}-admission.log; exit $pv_rw_admit_status'])
 run(['scp',str(r/'docs/research/v8-r0-zk-20261009/lean/R1Z'/f'{m}.lean'),h+':'+s])
