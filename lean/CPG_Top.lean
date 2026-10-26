@@ -1,4 +1,5 @@
 import CPG_Pair
+import CPG_Account
 import CPP_Install
 import F3T_ConditionalClaims
 import CPG_History
@@ -54,6 +55,11 @@ open S2W_ExpandedChildren S2W_TraceSplice MultiproofConeCanonical
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 
+/-- Adopted frozen3 endpoint on the owner-approved two-transaction checkpoint
+projection. RuntimePersistence is the named external runtime item. The system
+program is the fixed all-zero public key; the verifier program distinction is
+an explicit deployment pin obligation. The raw canonical join, runtime carrier
+binding, P2Prime and FirstEntry are retained. -/
 theorem deployed {W A F CoreError Tx : Type}
     (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
     (copy : Heap (Nat → Record) → Nat → Payload → Outcome (Nat → Record))
@@ -83,20 +89,27 @@ theorem deployed {W A F CoreError Tx : Type}
     (p : CPG_Projection.Observations Tx A) (t u : Tx)
     (actions : List (CPP_BankState.Action A))
     (game : CPG_Game.DeployedPairExecution p t u e1 e2 saved actions)
-    (system : S2W_ExtractionBoundary.Program) (programNotSystem : program ≠ system)
+    (programNotSystem : program ≠ Hist_Nonvacuity.key 0#u8)
     (RuntimePersistence : CPR_DataPersistence.TwoTransactionLaw
-      (CPG_Projection.adjacent p) (CPG_Projection.ordinary p system) (CPG_Projection.before p)
+      (CPG_Projection.adjacent p) (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p)
       (CPG_Projection.tentative p native1 native2 copy allocator program)
       (CPG_Projection.success p) (CPG_Projection.loaded p))
-    (D : LiteralByteProtocol.Decoder) (P : F3T_ByteCarrier.ByteProver) (Q : Nat)
-    (queries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q)
+    (D : LiteralByteProtocol.Decoder) (P : F3T_ByteCarrier.ByteProver) (Q0 Q1 : Nat)
+    (queries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q0+Q1)
     (runtime : F3T_Runtime.Runtime)
     (raw : F3T_CanonicalJoin.AcceptedVerifierJoin
       (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) D
       (F3T_Installed.source (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) hashv))
     (binding : F3T_Runtime.StoredCarrierBinding
       (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) D
-      (F3T_Installed.source (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) hashv) P runtime) :
+      (F3T_Installed.source (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) hashv) P runtime)
+    (adversary : Program Bytes State (GExq_AccountExperiment.FirstInputs A))
+    (chooseSecond : GExq_AccountExperiment.FirstInputs A → alloc.vec.Vec U8 →
+      Heap (Nat → Record) → A → Program Bytes State (GExq_AccountExperiment.SecondInputs A))
+    (prefixBound : ∀ H, (eval H adversary).1.length ≤ Q0)
+    (choiceBound : ∀ input saved post final H, (eval H (chooseSecond input saved post final)).1.length ≤ Q1)
+    (project : GExq_AccountExperiment.Outcome A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+    (select : GExq_AccountExperiment.Outcome A → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs) :
     (CPR_PhysicalResult.Outcome L e1 e2 w1 w2
       (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).adapter (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).currentBase
       (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).reserved (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).query
@@ -105,24 +118,38 @@ theorem deployed {W A F CoreError Tx : Type}
       (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).std program data1 data2 slot saved post1 post2 H
       (DrvC_Implementation.driver (DrvC_FirstConstants.configuration (CPP_Install.configuration c))) prior
       (CPG_Projection.result p native1 native2 copy allocator program t).2) ∧
-    (∀ H : Bytes → State,(eval H (annotatedWith D (F3T_Installed.source (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) hashv)
+    ((∀ H : Bytes → State,(eval H (annotatedWith D (F3T_Installed.source (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) hashv)
         (F3T_Canon.canon (lift (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) P)))).2.2=true →
       mean (fun coins : Coins=>((ActualCostedExtractorM10.extractor.eval
         (view (eval H (annotatedWith D (F3T_Installed.source (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) hashv) (F3T_Canon.canon (lift (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) P))))) coins).2.total : Rat))≤
-          ((CostedAllocationLedgerM10.params (Q+1161)).attemptBudget : Rat)) ∧
+          ((CostedAllocationLedgerM10.params (Q0+Q1+1161)).attemptBudget : Rat)) ∧
     (∀ run coins w,(ActualCostedExtractorM10.extractor.eval run coins).1=some w →
       LiteralProtocol.relation run.2.1.1 w) ∧
     (1/(2:Rat)^126+1/(2:Rat)^454≤1/(2:Rat)^120) ∧
-    (F3T_RuntimeBound.failureModel runtime≤StartChargeNumeric.totalBound Q) ∧
-    (Q≤OraclePortHeadlineFrozen2.Qmax → F3T_RuntimeBound.failureModel runtime≤(Q+1:Rat)*(1/(2:Rat)^100)) := by
-  constructor
+    (F3T_RuntimeBound.failureModel runtime≤StartChargeNumeric.totalBound (Q0+Q1)) ∧
+    (Q0+Q1≤OraclePortHeadlineFrozen2.Qmax → F3T_RuntimeBound.failureModel runtime≤(Q0+Q1+1:Rat)*(1/(2:Rat)^100))) ∧
+    (let r := DrvC_FirstConstants.configuration (CPP_Install.configuration c);
+      F3T_RuntimeBound.failureModel runtime +
+        F3T_AccountCharge.mass (CPG_Account.source r hashv copy allocator program adversary chooseSecond)
+          project select (Q0+Q1) ≤ F3T_Numeric.total (Q0+Q1)) ∧
+    (let r := DrvC_FirstConstants.configuration (CPP_Install.configuration c);
+      Q0+Q1 = 0 → F3T_RuntimeBound.failureModel runtime +
+        F3T_AccountCharge.mass (CPG_Account.source r hashv copy allocator program adversary chooseSecond)
+          project select (Q0+Q1) < 1/(2:Rat)^100) := by
+  refine ⟨?_,?_,?_,?_⟩
   · exact CPG_Pair.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
       (CPP_Install.configuration c) native1 native2 prepareOwner primitiveOwner hashv extraction
       sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2
-      accepted1 accepted2 root length prior p t u actions game system programNotSystem
+      accepted1 accepted2 root length prior p t u actions game (Hist_Nonvacuity.key 0#u8) programNotSystem
       (CPP_Install.key c) RuntimePersistence
-  · exact F3T_ConditionalClaims.claims
-      (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) D P Q queries hashv runtime raw binding
+  · simpa only [Nat.cast_add] using F3T_ConditionalClaims.claims
+      (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) D P (Q0+Q1) queries hashv runtime raw binding
+  · exact CPG_Account.bound (DrvC_FirstConstants.configuration (CPP_Install.configuration c))
+      hashv copy allocator program adversary chooseSecond D P Q0 Q1 queries runtime raw binding
+      prefixBound choiceBound project select
+  · exact CPG_Account.zero (DrvC_FirstConstants.configuration (CPP_Install.configuration c))
+      hashv copy allocator program adversary chooseSecond D P Q0 Q1 queries runtime raw binding
+      prefixBound choiceBound project select
 
 #print axioms deployed
 end AspisR1.CPG_Top
