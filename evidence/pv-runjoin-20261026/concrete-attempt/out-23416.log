@@ -1,0 +1,85 @@
+@R1Z.PV_RunJoin_FaultAudit.owner_os_error : ∀ [ProverRwFull.ExternalTypes] [inst : ProverRwRngCaller.NativeTypes]
+  [inst_1 : ProverRwRngCaller.ErasureFns] (p after : ProverRwRngCaller.Tape)
+  (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  ProverRwRngCaller.entropy_nonzero32 nonce = Aeneas.Std.Result.ok true →
+    ∀ (written : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (error : ProverRwRngCaller.getrandom.error.Error),
+      ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8) =
+          Aeneas.Std.Result.ok ((after, Aeneas.Std.core.result.Result.Err error), written) →
+        ProverRwRngCaller.StateOnlyAttemptSecrets.generate_with ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64
+            nonce p =
+          Aeneas.Std.Result.ok
+            (after, Aeneas.Std.core.result.Result.Err (ProverRwRngCaller.StateOnlyAttemptEntropyError.Os error))
+@R1Z.PV_RunJoin_FaultAudit.client_os_error : ∀ [ProverRwFull.ExternalTypes] [inst : ProverRwRngCaller.NativeTypes]
+  [inst_1 : ProverRwRngCaller.ErasureFns] {N L C : Type}
+  (account : R1Z.ProverRwEffectCallback.Account (R1Z.PV_RunJoin_UnifiedRetry.State N L C))
+  (body : R1Z.PV_RunJoin_UnifiedRetry.Body (R1Z.PV_RunJoin_UnifiedRetry.State N L C))
+  (s next : R1Z.PV_RunJoin_UnifiedRetry.State N L C) (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (after : ProverRwRngCaller.Tape),
+  account.call_mut s (R1Z.ProverCommitRetrySource34.word 0) = Aeneas.Std.Result.ok (nonce, next) →
+    ProverRwRngCaller.entropy_nonzero32 nonce = Aeneas.Std.Result.ok true →
+      ∀ (written : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (error : ProverRwRngCaller.getrandom.error.Error),
+        ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64.fill next.provider
+              (Aeneas.Std.Array.repeat 64#usize 0#u8) =
+            Aeneas.Std.Result.ok ((after, Aeneas.Std.core.result.Result.Err error), written) →
+          R1Z.PV_RunJoin_UnifiedRetry.client account body s =
+            Aeneas.Std.Result.ok
+              (R1Z.ProverCommitRetry34.Step.stop AspisR1SimControl21.verifier.Error.Entropy,
+                { provider := after, policy := next.policy, ledger := next.ledger, client := next.client })
+@R1Z.PV_RunJoin_ErrorViewObstruction.empty_native_log_disagrees : ∀ {CommitHandle Aux : Type}
+  (W : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (Pr : R1Z.GamesR1PBin.R1ProverP R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.PrivacyR1AcctBasis.F W) (N : ℕ)
+  (hN : 0 < N) (P : R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Prop)
+  (Vp :
+    (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → h.Instance → Prop)
+  (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) (B : R0P.PackBasis R1Z.PrivacyR1AcctBasis.F)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (adv : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) (w : h.Instance)
+  (r : W.Tab × (Fin N → R1Z.GamesR1PBin.SecP)) (k : Fin N),
+  R0Z.FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = false)
+        (R1Z.GamesR1PBin.realOut W Pr h B outputs x w (W.look r.1) r.2) =
+      some k →
+    ∀ (native : R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat),
+      native.observerOracle = [] →
+        native.observerOracle ≠
+          ((R1Z.ProverCommitReencode16.experiment W Pr N hN P Vp R1Z.ProverCommitReencode16.encode).real h B outputs adv
+              x w r).observerOracle
+'R1Z.PV_RunJoin_FaultAudit.owner_os_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FaultAudit.client_os_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FaultAudit.E1_allows_total_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_Availability.e1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_Availability.normalized' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_Availability.nonnegative' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_Availability.total_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EncodingSupport.encode_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EncodingSupport.attempt_log_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EncodingSupport.real_success_log_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ErrorViewObstruction.reencoded_success_log_nonempty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_ErrorViewObstruction.empty_native_log_disagrees' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+       25.15 real         1.25 user         3.20 sys
+          3181051904  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              124892  page reclaims
+              204375  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               39902  voluntary context switches
+              201611  involuntary context switches
+           617214611  instructions retired
+           306675726  cycles elapsed
+            11666176  peak memory footprint
+
+exit=0
