@@ -107,3 +107,15 @@ contract does not install the new input into the deployed RunJoin endpoint.
 
 Reservation refusals 22561 (13:07:26), 22562 (13:10:45), 22563 (13:14:02)
 are zero charged Lean attempts and have individual full inventory receipts.
+
+`transport-reuse.json` compares the historical receipt's file pins. The actual
+shipped `transport.rs` is byte-identical. The reference crate acquired other
+modules and dependencies since that receipt; no claim of an unchanged full
+crate build is made. The new test-only `tools/pv-srcid/transport-kani/` harness
+calls actual `Variant::S2.coefficients` on 1024 arbitrary four-word cells and
+checks an arbitrary in-range output against `row_arithmetic`. It has no stubs,
+unwind 1025 with unwinding assertions, and is NOT RUN yet. Cargo metadata
+validated its dependency paths locally; no compilation or target directory
+was created. If run, expected time is Kani compilation followed by symbolic
+array-copy aggregation/solver, not native finite-field arithmetic. It must use
+its own sole 6G/8G/swap0/TasksMax64 scope after a successful reservation.
