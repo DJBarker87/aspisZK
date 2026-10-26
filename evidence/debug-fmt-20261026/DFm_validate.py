@@ -62,7 +62,7 @@ for key in [%r,%r]: (B/key).parent.mkdir(parents=True,exist_ok=True)
  if receipt['exit_status']!=0:raise SystemExit('STOP failed attempt: inspect, do not rerun unchanged')
 def audit(i,modules,label,mode):
  name=f'DFm_Audit{i:03d}';output=f'DFm_{label}.json'
- src=(E/'DFm_audit-template.txt').read_text().replace('@@IMPORTS@@','\n'.join('import '+m for m in modules)).replace('@@SELECTED@@','#[ '+', '.join('`'+m for m in modules)+' ]').replace('@@OUTPUT@@',output)
+ src=(E/('DFm_dag-audit-template.txt' if i>=8 else 'DFm_audit-template.txt')).read_text().replace('@@IMPORTS@@','\n'.join('import '+m for m in modules)).replace('@@SELECTED@@','#[ '+', '.join('`'+m for m in modules)+' ]').replace('@@OUTPUT@@',output)
  run(i,name,src,mode)
  # Large expression snapshots stay on host; hashes/comparison receipts are committed.
 inv=json.loads((E/'DFm_inventory.json').read_text());mods=[x['module'] for x in inv['modules']]
@@ -70,9 +70,12 @@ phase=sys.argv[1]
 if phase=='parsers':
  audit(5,mods,'parser-before','before');audit(6,mods,'parser-after','after')
 elif phase=='importers':
- rows=json.loads((E/'DFm_importers.json').read_text());names=[x['module'] for x in rows]
- audit(7,names,'importers-before','before')
- for i,x in enumerate(rows,8):run(i,x['module'],(ROOT/x['source']).read_text())
- for i,x in enumerate(rows[:15],25):audit(i,[x['module']],f'importer-{i}-after','after')
- audit(40,names,'importers-after','after')
+ raise SystemExit('Retired combined inspection after DFm_007 memory failure; use split')
+elif phase=='split':
+ rows=json.loads((E/'DFm_importers-split.json').read_text())
+ for j,x in enumerate(rows):
+  i=8+3*j
+  audit(i,[x['module']],f"split-{j:02d}-before",'before')
+  run(i+1,x['module'],(ROOT/x['source']).read_text())
+  audit(i+2,[x['module']],f"split-{j:02d}-after",'after')
 else:raise SystemExit('unknown phase')
