@@ -34,7 +34,6 @@ theorem value_conserved (base radix : Nat) (words : List Nat) :
     cases h : divideLE base radix ws with
     | mk q r =>
       rw [h] at ih
-      simp only [Prod.fst, Prod.snd] at ih
       simp only [divideLE, h, value]
       calc
         _ = ((r * radix + w) % base + base * ((r * radix + w) / base)) +
@@ -57,8 +56,40 @@ theorem word_quotient_bound (base radix remainder word : Nat)
     remainder * radix + word < base * radix := by omega
     _ = radix * base := Nat.mul_comm _ _
 
+theorem quotient_canonical (base radix : Nat) (positive : 0 < base) (words : List Nat)
+    (canonical : ∀ w, w ∈ words → w < radix) :
+    ∀ q, q ∈ (divideLE base radix words).1 → q < radix := by
+  revert canonical
+  induction words with
+  | nil => intro _ q h; simp only [divideLE, List.not_mem_nil] at h
+  | cons w ws ih =>
+    intro canonical q h
+    simp only [divideLE, List.mem_cons] at h
+    rcases h with h | h
+    · subst q
+      exact word_quotient_bound base radix _ w positive
+        (remainder_lt base radix positive ws) (canonical w (List.mem_cons_self ..))
+    · exact ih (fun x hx => canonical x (List.mem_cons_of_mem w hx)) q h
+
+/-- Complete scalar quotient and remainder, not just a conservation residual. -/
+theorem quotient_value (base radix : Nat) (positive : 0 < base) (words : List Nat) :
+    value radix words / base = value radix (divideLE base radix words).1 := by
+  rw [← value_conserved base radix words]
+  rw [Nat.add_comm (base * value radix (divideLE base radix words).1),
+    Nat.add_mul_div_left _ _ positive, Nat.div_eq_of_lt (remainder_lt base radix positive words)]
+  exact Nat.zero_add _
+
+theorem remainder_value (base radix : Nat) (positive : 0 < base) (words : List Nat) :
+    value radix words % base = (divideLE base radix words).2 := by
+  rw [← value_conserved base radix words]
+  rw [Nat.add_comm (base * value radix (divideLE base radix words).1),
+    Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt (remainder_lt base radix positive words)]
+
 #print axioms length_preserved
 #print axioms remainder_lt
 #print axioms value_conserved
 #print axioms word_quotient_bound
+#print axioms quotient_canonical
+#print axioms quotient_value
+#print axioms remainder_value
 end R1Z.PV_CB3_SamplerDivision
