@@ -1,0 +1,88 @@
+{
+  "method": "One atomic quantified law family per row; split conjunction leaves; preserve all same existential witnesses; do not count data-only fields or byte cells. Do not collapse game into one premise.",
+  "before_root": "AspisR1.T2R_Top.deployed",
+  "after_root": "AspisR1.CPG_Top.deployed",
+  "before_source_sha256": "cb58403d68178f55f759349a62ac2f38075f84652c8070d8835eefdfa8a44085",
+  "after_source_sha256": "39c07484531fab392de5d84d0d9df1e27260d50139196ee56638b80954d411c9",
+  "historical_ledger": "design/PREMISE-LEDGER-20261025.md",
+  "historical_ledger_sha256": "5dc6a05b262c625e1bab6cc0e1db0b056bf6762ba3e15a342e446dfa3ad8c4fa",
+  "rows": {
+    "L094": {
+      "before": "history.savedAtCommit antecedent",
+      "after": "constructed native-copy / traced-bank output",
+      "proof": "CPG_History.on_cuts \u2192 CPR_DataWriter.on_cuts \u2192 Hist_CommittedPayload.committed_version"
+    },
+    "L095": {
+      "before": "history.loadedAtEntry antecedent",
+      "after": "constructed from RuntimePersistence on independent parentTentative, derived entry2_view",
+      "proof": "CPG_History.tentative_view, entry2_view, on_cuts"
+    },
+    "L096": {
+      "before": "history.noInterveningWrite antecedent",
+      "after": "constructed for independent physicalEvents from the SAME action trace and source protection",
+      "proof": "CPG_RuntimeTrace.result \u2192 CPP_BankHistory.protection \u2192 CPR_DataWriter.on_cuts"
+    },
+    "L180": {
+      "before": "deployed CP key/version deliverable",
+      "after": "conditional game root exports history.key = e1.slot2 = e2.slot6 and history.events = physicalEvents",
+      "proof": "CPG_Pair.accepted; CPG_Result.Outcome"
+    }
+  },
+  "targeted_history_families": {
+    "before": 4,
+    "after_as_antecedents": 0,
+    "delta": -4
+  },
+  "expanded_game_conditions": {
+    "a.consecutive": "p.next t u",
+    "a.entry1": "e1 = entry p t",
+    "a.entry2": "e2 = entry p u",
+    "b.bankKey": "TX1.slot2 bank label = TX2.slot6 bank label",
+    "b.publicKey": "same CP public-key metadata",
+    "b.noOtherTransaction": "CP label not in intervening touch projection",
+    "c.finalParent": "success of FINAL parent reply",
+    "d.copyRecord": "actual recorded copy = original native saved result",
+    "d.actionList": "actual ordered physical action list = supplied source actions",
+    "d.executionTrace": "one state-threaded CPP-domain runtime trace on independently observed final bank/events"
+  },
+  "expanded_game_condition_count": 10,
+  "other_visible_condition": {
+    "programNotSystem": "verifier program != fixed all-zero system program; source/deployment pin, NOT added runtime trust"
+  },
+  "approved_trust_added": {
+    "RuntimePersistence": "Exact CPR_DataPersistence.TwoTransactionLaw; one named Prop hypothesis; parentTentative is independently observed, not source-defined"
+  },
+  "boundary_inventory_for_this_comparison": {
+    "before_targeted_P_rows": 4,
+    "after_history_P_rows": 0,
+    "after_game_P_or_event_conditions": 10,
+    "after_program_pin_P": 1,
+    "mechanical_P_delta_including_authorized_game_conditions": 7,
+    "T_delta": 1
+  },
+  "global_deployment_delta": 0,
+  "global_deployment_reason": "No universal weakening of independent entries, no independently certified validator-to-CPP trace exporter or full joint native/crypto/frozen3 fixture, no coherent frozen-release replay. The old root source is unchanged. Targeted removal is at the new conditional owner-approved game root only.",
+  "retained": [
+    "SDK/std/runtime admissions, allocator, extraction, P1 and RuntimeSyscall",
+    "P2Prime and FirstEntry on SAME cuts",
+    "frozen3 accepted canonical join (or charged collision) and StoredCarrierBinding",
+    "actual source/event and release-artifact interpretation obligations"
+  ],
+  "changed": [
+    "Owner-approved correlated game and named runtime trust",
+    "Concrete CPP pure key/error-clone dictionary installation",
+    "Owner-approved frozen2\u2192frozen3 headline and its explicitly different account-event carrier"
+  ],
+  "nonvacuity": {
+    "operational": "CPG_Nonvacuity.game and RuntimePersistence; nonempty evaluated source suffix",
+    "accepted_pair": "CPG_Nonrejecting.nonrejecting exports actual source acceptance under retained P2Prime from SAME result",
+    "full_joint_fixture": "NOT independently constructed"
+  },
+  "budget": {
+    "lean_used": 41,
+    "lean_limit": 100,
+    "kani_used": 0,
+    "kani_limit": 20,
+    "whole_budget_exhausted": false
+  }
+}
