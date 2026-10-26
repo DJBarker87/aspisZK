@@ -1,0 +1,92 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_Forest_Inverse.lean:65:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑↑a'
+in the target expression
+  ↑↑a' * ↑↑b' ^ ↑(e.wrapping_shr 1#u32) = ↑↑acc * ↑↑b ^ n
+
+case pos
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (b e acc : U64),
+      ↑b < 2147483647 →
+        ↑acc < 2147483647 → ↑e = m → ∃ out, inv_r_loop b e acc = ok out ∧ ↑out < 2147483647 ∧ ↑↑out = ↑↑acc * ↑↑b ^ m
+b e acc : U64
+hb : ↑b < 2147483647
+ha : ↑acc < 2147483647
+he : ↑e = n
+hz : ¬↑e = 0
+b' : UScalar UScalarTy.U64
+hb' : b.wrapping_mul b % UScalar.cast UScalarTy.U64 2147483647#u32 = ok b'
+hb_bound : ↑b' < ↑2147483647#u32
+hb_val : ↑↑b' = ↑↑b * ↑↑b
+hn : ↑(e.wrapping_shr 1#u32) < n
+hdecomp : ↑e = ↑e % 2 + 2 * (↑e / 2)
+hbit : e &&& 1#u64 = 1#u64
+a' : UScalar UScalarTy.U64
+ha' : acc.wrapping_mul b % UScalar.cast UScalarTy.U64 2147483647#u32 = ok a'
+ha_bound : ↑a' < ↑2147483647#u32
+ha_val : ↑↑a' = ↑↑acc * ↑↑b
+out : U64
+hout : inv_r_loop b' (e.wrapping_shr 1#u32) a' = ok out
+hbound : ↑out < 2147483647
+hval : ↑↑out = ↑↑a' * ↑↑b' ^ ↑(e.wrapping_shr 1#u32)
+⊢ ↑↑a' * ↑↑b' ^ ↑(e.wrapping_shr 1#u32) = ↑↑acc * ↑↑b ^ n
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_Forest_Inverse.lean:79:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑↑b'
+in the target expression
+  ↑↑acc * ↑↑b' ^ ↑(e.wrapping_shr 1#u32) = ↑↑acc * ↑↑b ^ n
+
+case neg
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (b e acc : U64),
+      ↑b < 2147483647 →
+        ↑acc < 2147483647 → ↑e = m → ∃ out, inv_r_loop b e acc = ok out ∧ ↑out < 2147483647 ∧ ↑↑out = ↑↑acc * ↑↑b ^ m
+b e acc : U64
+hb : ↑b < 2147483647
+ha : ↑acc < 2147483647
+he : ↑e = n
+hz : ¬↑e = 0
+b' : UScalar UScalarTy.U64
+hb' : b.wrapping_mul b % UScalar.cast UScalarTy.U64 2147483647#u32 = ok b'
+hb_bound : ↑b' < ↑2147483647#u32
+hb_val : ↑↑b' = ↑↑b * ↑↑b
+hn : ↑(e.wrapping_shr 1#u32) < n
+hdecomp : ↑e = ↑e % 2 + 2 * (↑e / 2)
+hbit : ¬e &&& 1#u64 = 1#u64
+out : U64
+hout : inv_r_loop b' (e.wrapping_shr 1#u32) acc = ok out
+hbound : ↑out < 2147483647
+hval : ↑↑out = ↑↑acc * ↑↑b' ^ ↑(e.wrapping_shr 1#u32)
+⊢ ↑↑acc * ↑↑b' ^ ↑(e.wrapping_shr 1#u32) = ↑↑acc * ↑↑b ^ n
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_Src_Forest_Inverse.shift_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.bit_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.multiply_mod' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.field_power_value' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.cast_word_value' depends on axioms: [propext]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,71 @@
+import R1Z.PV_Src_Forest_DigestArguments
+import R1Z.BuilderRecordsAdmission
+
+/-! Actual compiler private-direction closure versus the owned record bit
+map. Nominal adaptation preserves every witness field; no record-callee
+association or successful forest compilation is assumed. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_NativeDirections
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort.pool_v1
+abbrev Input := pair_forest_trace.PoolV1PairForestInputNoteWitnessV1
+
+def reference (i : Input) : BuilderRecordsPath.Input where
+  pair := {
+    nullifier_key := i.pair.nullifier_key
+    salt := i.pair.salt
+    value := i.pair.value
+    pair_leaf := {
+      first_commitment := i.pair.pair_leaf.first_commitment
+      second_occupied := i.pair.pair_leaf.second_occupied
+      second_commitment := i.pair.pair_leaf.second_commitment
+      second_occupancy_inverse := i.pair.pair_leaf.second_occupancy_inverse }
+    selected_second := i.pair.selected_second
+    membership := {siblings := i.pair.membership.siblings,index := i.pair.membership.index} }
+  super_root_siblings := i.super_root_siblings
+  super_root_directions := i.super_root_directions
+
+abbrev closure := pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+
+theorem closure_result (input : Input) (i : Usize) (hi : i.val < 24) :
+    closure.call_mut (input.pair,input) i =
+      ok ((BuilderRecordsPath.bits (reference input)).val[i.val]!, (input.pair,input)) := by
+  rw [BuilderRecordsPath.bits_get _ i hi]
+  dsimp only [closure, pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31]
+  rw [pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut]
+  by_cases h0 : i = 0#usize
+  · simp only [h0,if_true,lift,bind_tc_ok,reference]
+  · simp only [if_neg h0]
+    by_cases h20 : i ≤ 20#usize
+    · simp only [if_pos h20,lift,bind_tc_ok,reference]
+    · simp only [if_neg h20,lift,bind_tc_ok,reference]
+      have h21 : 21 ≤ i.val := by
+        have h := h20
+        simp only [UScalar.le_equiv,UScalar.ofNatCore_val_eq] at h
+        omega
+      have hv : (Usize.wrapping_sub i 21#usize).val = i.val-21 :=
+        BuilderRecordsPath.sub_val i 21#usize (by simpa using h21)
+      rw [index_ok_gen _ _ (by rw [hv]; simp; omega)]
+      simp only [bind_tc_ok,lift,hv]
+  all_goals rfl
+
+def run (input : Input) : Result (Array U32 24#usize) :=
+  BuilderForestStdPort.core.array.from_fn 24#usize closure (input.pair,input)
+
+theorem run_eq (input : Input) : run input = ok (BuilderRecordsPath.bits (reference input)) := by
+  unfold run
+  rw [PV_Src_Forest_DigestArguments.from_fn_nat 24#usize closure (input.pair,input)
+    (fun n => (BuilderRecordsPath.bits (reference input)).val[n]!)
+    (fun i hi => closure_result input i (by simpa using hi))]
+  congr 1
+
+theorem booleans (input : Input) : ∃ out, run input = ok out ∧
+    ∀ n, n < 24 → (out.val[n]!).val = 0 ∨ (out.val[n]!).val = 1 :=
+  ⟨BuilderRecordsPath.bits (reference input),run_eq input,
+    fun n hn => BuilderRecordsAdmission.bits_boolean (reference input) n hn⟩
+
+#print axioms reference
+#print axioms closure_result
+#print axioms run_eq
+#print axioms booleans
+end R1Z.PV_Src_NativeDirections

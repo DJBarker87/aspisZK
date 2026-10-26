@@ -1,0 +1,81 @@
+import R1Z.PV_Src_Public
+
+/-! Inhabitance of the actual public-projection input carrier for canonical
+publics with a representable index. Context fields remain explicit data. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Src_PublicRecords
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R1J.SpendWitnessMap
+open AspisBuilderPublicSource.pool_v1
+open BuilderPublicProjection
+
+abbrev Context := Array U8 32#usize
+
+def transition (pub : R0P.Public F) (bound : pub.nextPairIndex < 2^64)
+    (pool domain : Context) : Transition where
+  live_snapshot := {
+    pool := pool, deployment_domain := domain, sequence := 0#u64
+    next_pair_index := UScalar.ofNatCore pub.nextPairIndex bound
+    current_root := d32 pub.anchor
+    frontier := arr20 (fun l => d32 (pub.snapshotFrontier l)) }
+  candidate_afterstate := {
+    next_pair_index := 0#u64
+    next_root := d32 pub.nextRoot
+    next_frontier := arr20 (fun l => d32 (pub.nextFrontier l)) }
+
+def transfer (pub : R0P.Public F) (pool domain : Context) : Transfer where
+  pool := pool
+  deployment_domain := domain
+  anchor_sequence := 0#u64
+  anchor_root := d32 pub.anchor
+  nullifier := d32 pub.nullifier
+  asset_id := w32 pub.assetId
+  recipient_commitment := d32 (pub.recipient.getD (fun _ => 0))
+  change_commitment := d32 pub.change
+
+def withdrawal (pub : R0P.Public F) (pool domain destination : Context) : Withdrawal where
+  pool := pool
+  deployment_domain := domain
+  anchor_sequence := 0#u64
+  anchor_root := d32 pub.anchor
+  nullifier := d32 pub.nullifier
+  asset_id := w32 pub.assetId
+  amount := w32 (pub.withdrawalAmount.getD 0)
+  destination_token_account := destination
+  change_commitment := d32 pub.change
+
+def input (pub : R0P.Public F) (bound : pub.nextPairIndex < 2^64)
+    (pool domain destination : Context) : PV_Src_Public.Input :=
+  match pub.variant with
+  | .privateTransfer => .transfer (transfer pub pool domain) (transition pub bound pool domain)
+  | .withdrawal => .withdrawal (withdrawal pub pool domain destination) (transition pub bound pool domain)
+
+theorem self_scalar (x : F) : (ι : F →+* F) x = x := by
+  rw [ι_apply]
+  exact ZMod.natCast_zmod_val x
+
+theorem self_digest (d : R0P.Digest F) : digK (K := F) (d32 d) = d := by
+  rw [digK_d32]
+  exact funext (fun i => self_scalar (d i))
+
+theorem public_roundtrip (pub : R0P.Public F) (bound : pub.nextPairIndex < 2^64)
+    (pool domain destination : Context) (shape : AspisR1.PublicOptionShape.canonical pub) :
+    PV_Src_Public.canonicalPublic (input pub bound pool domain destination) = pub := by
+  cases hv : pub.variant with
+  | privateTransfer =>
+    obtain ⟨rec,hr,ha⟩ := AspisR1.PublicOptionShape.private_transfer_shape pub hv shape
+    simp only [input,hv,PV_Src_Public.canonicalPublic,transferPublic,transfer,transition,
+      self_digest,liftU_w32,self_scalar,arr20_getF,UScalar.ofNatCore_val_eq,hr,Option.getD_some]
+    cases pub
+    simp_all only
+  | withdrawal =>
+    obtain ⟨amount,_,ha,hr⟩ := AspisR1.PublicOptionShape.withdrawal_shape pub hv shape
+    simp only [input,hv,PV_Src_Public.canonicalPublic,withdrawalPublic,withdrawal,transition,
+      self_digest,liftU_w32,self_scalar,arr20_getF,UScalar.ofNatCore_val_eq,hr,ha,Option.getD_some]
+    cases pub
+    simp_all only
+
+#print axioms self_scalar
+#print axioms self_digest
+#print axioms public_roundtrip
+end R1Z.PV_Src_PublicRecords

@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 1247); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+          let block2 ← v.update i2 i
+          let i3 ← lift (Usize.wrapping_mul 6#usize 16#usize)
+          let i4 ← lift (i3.wrapping_add 1#usize)
+          let block3 ← block2.update i4 i1
+          let i5 ← lift (Usize.wrapping_mul 6#usize 16#usize)
+          let i6 ← lift (i5.wrapping_add 2#usize)
+          let block4 ← block3.update i6 partial1
+          let i7 ← lift (Usize.wrapping_mul 7#usize 16#usize)
+          let block5 ← block4.update i7 partial1
+          let i8 ← values.index_usize 2#usize
+          let i9 ← lift (Usize.wrapping_mul 7#usize 16#usize)
+          let i10 ← lift (i9.wrapping_add 1#usize)
+          block5.update i10 i8
+      let block1 ← R0WriterCopies.write_occupancy_row block 9#usize input
+      R0WriterCopies.write_occupancy_row block1 10#usize output) =
+    ok o
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (256 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PartsTotal.lean:35:8: error: Failed to rewrite using equation theorems for `parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayU32256.call_mut`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PartsTotal.lean:47:2: error: 'change' tactic failed, pattern
+  (do
+      let blocks ←
+        core.iter.traits.iterator.Iterator.collect.default (BuilderBankCollect.mapped f)
+            (core.iter.traits.collect.FromIteratorVec (Std.Array U32 256#usize))
+            { iter := { start := 0#usize, «end» := 57#usize }, f := (w, p) }
+      ?m.139 blocks PUnit.unit) =
+    ?m.109
+is not definitionally equal to target
+  ∃ pt,
+    (do
+        let blocks ←
+          core.iter.traits.iterator.Iterator.collect.default
+              (AspisBuilderGlueSource.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayU32256)
+              (core.iter.traits.collect.FromIteratorVec (Std.Array U32 256#usize))
+              { iter := { start := 0#usize, «end» := 57#usize }, f := (w, p) }
+        let __x ← path_arrays w p
+        let a ← AspisBuilderGlueSource.aspis_r0_writer_copies.write_path_block w.bits __x.1 __x.2.1 __x.2.2
+        let or ← in_rec w
+        let or1 ← out_rec w p
+        let aux ←
+          AspisBuilderGlueSource.aspis_r0_writer_copies.write_aux_block
+              (Array.make 3#usize [w.input_value, w.output_value, w.change_value] ⋯) or or1
+        ok { blocks := blocks, path := a, aux := aux }) =
+      ok pt
+'R1Z.PV_Src_PartsTotal.path_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PartsTotal.aux_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PartsTotal.parts_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.35
+	Maximum resident set size (kbytes): 4085636
+	Swaps: 0
+	Exit status: 1

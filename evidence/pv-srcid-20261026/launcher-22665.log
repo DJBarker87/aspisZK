@@ -1,0 +1,65 @@
+reservation: populated 24 GiB + 8 GiB; window=0 (London 1533); env=J
+                                                            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                            match cf4 with
+                                                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                let private_directions ←
+                                                                  BuilderForestStdPort.core.array.from_fn 24#usize
+                                                                      pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                                                      (input.pair, input)
+                                                                let a5 ← pair_trace.value_bits input.pair.value
+                                                                let a6 ← pair_trace.value_bits out
+                                                                let a7 ← pair_trace.value_bits change.value
+                                                                ok
+                                                                    (core.result.Result.Ok
+                                                                      {
+                                                                        trace :=
+                                                                          { stable := { c1 := val2.stable },
+                                                                            late := val2.late,
+                                                                            variant :=
+                                                                              pair_trace.PoolV1PairTraceVariantV1.PrivateTransfer,
+                                                                            private_directions := private_directions,
+                                                                            value_bits :=
+                                                                              Array.make 3#usize [a5, a6, a7] ⋯,
+                                                                            public_outputs :=
+                                                                              pair_trace.PoolV1PairTracePublicOutputsV1.PrivateTransfer
+                                                                                anchor nullifier recipient_commitment
+                                                                                change_commitment output_pair,
+                                                                            afterstate := val1 },
+                                                                        semantic_c1 := { c1 := val2.merged },
+                                                                        public_statement :=
+                                                                          { live_snapshot := snapshot,
+                                                                            candidate_afterstate := val1 } })
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                  (core.convert.FromSame
+                                                                    pair_trace.PoolV1PairTraceErrorV1)
+                                                                  residual
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                              (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1)
+                                                              residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                            (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+            (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual) =
+    ok (core.result.Result.Ok compiled)
+⊢ ∃ banks,
+    pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot publicInput.asset = ok records ∧
+      records.banks = ok (some banks) ∧ compiled.semantic_c1.c1 = banks.merged
+'R1Z.PV_Src_ForestCompilation.returned_bank' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:06.24
+	Maximum resident set size (kbytes): 4106860
+	Swaps: 0
+	Exit status: 1

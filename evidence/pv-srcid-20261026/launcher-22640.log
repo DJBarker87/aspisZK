@@ -1,0 +1,51 @@
+reservation: populated 24 GiB + 8 GiB; window=0 (London 1500); env=J
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_NativePremises.lean:22:28: error: Application type mismatch: The argument
+  PV_Src_Forest_Columns.read
+has type
+  Std.Array (alloc.vec.Vec U32) 16#usize → Fin 29 → Fin 1024 → U32
+but is expected to have type
+  Std.Array (alloc.vec.Vec U32) 16#usize → ℕ → ℕ → U32
+in the application
+  columns PV_Src_Forest_Columns.read
+structure R1Z.PV_Src_NativeIdentification.PV_Src_Premises {K : Type} [Field K] [CharP K 2147483647] [ExternalLinear]
+  [Records] {I : Type} (inputs : I → Input) (transport : Fin 1024 ≃ Fin 1024) : Prop
+number of parameters: 8
+fields:
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.compile_call : ∀ (i : I),
+      run (inputs i) = ok (core.result.Result.Ok (inputs i).compiled)
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.words : ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+      newRecords (inputs i) = ok records → WitnessOk (wordWitness records.w)
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.publicCorr : ∀ (i : I)
+      (records : pair_forest_copy_builder.CopyRecords),
+      newRecords (inputs i) = ok records →
+        PubCorr (wordPublic records.p) (mapPub (PV_Src_Public.canonicalPublic (publicInput (inputs i))))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.admission : ∀ (i : I)
+      (records : pair_forest_copy_builder.CopyRecords),
+      newRecords (inputs i) = ok records →
+        BuilderSpendRelation.RspendPlus (mapPub (PV_Src_Public.canonicalPublic (publicInput (inputs i))))
+          (BuilderCanonical.liftWitness (BuilderRecordCanonical.witness (wordWitness records.w)))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.row_call : ∀ (j : Fin 1024), transport j = PV_Src_Transport.row j
+constructor:
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.mk {K : Type} [Field K] [CharP K 2147483647] [ExternalLinear]
+    [Records] {I : Type} {inputs : I → Input} {transport : Fin 1024 ≃ Fin 1024}
+    (compile_call : ∀ (i : I), run (inputs i) = ok (core.result.Result.Ok (inputs i).compiled))
+    (words :
+      ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+        newRecords (inputs i) = ok records → WitnessOk (wordWitness records.w))
+    (publicCorr :
+      ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+        newRecords (inputs i) = ok records →
+          PubCorr (wordPublic records.p) (mapPub (PV_Src_Public.canonicalPublic (publicInput (inputs i)))))
+    (admission :
+      ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+        newRecords (inputs i) = ok records →
+          BuilderSpendRelation.RspendPlus (mapPub (PV_Src_Public.canonicalPublic (publicInput (inputs i))))
+            (BuilderCanonical.liftWitness (BuilderRecordCanonical.witness (wordWitness records.w))))
+    (row_call : ∀ (j : Fin 1024), transport j = PV_Src_Transport.row j) : PV_Src_Premises inputs transport
+'R1Z.PV_Src_NativeIdentification.prover' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.64
+	Maximum resident set size (kbytes): 4092964
+	Swaps: 0
+	Exit status: 1

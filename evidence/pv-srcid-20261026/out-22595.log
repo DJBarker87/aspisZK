@@ -1,0 +1,85 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_Forest_Inverse.lean:66:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  acc.wrapping_mul b % 2147483647#u64
+in the target expression
+  ∃ out,
+    (do
+          let acc1 ← acc.wrapping_mul b % UScalar.cast UScalarTy.U64 2147483647#u32
+          let b1 ← b.wrapping_mul b % UScalar.cast UScalarTy.U64 2147483647#u32
+          inv_r_loop b1 (e.wrapping_shr 1#u32) acc1) =
+        ok out ∧
+      ↑out < 2147483647 ∧ ↑↑out = ↑↑acc * ↑↑b ^ n
+
+case pos
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (b e acc : U64),
+      ↑b < 2147483647 →
+        ↑acc < 2147483647 → ↑e = m → ∃ out, inv_r_loop b e acc = ok out ∧ ↑out < 2147483647 ∧ ↑↑out = ↑↑acc * ↑↑b ^ m
+b e acc : U64
+hb : ↑b < 2147483647
+ha : ↑acc < 2147483647
+he : ↑e = n
+hz : ¬↑e = 0
+b' : UScalar UScalarTy.U64
+hb' : b.wrapping_mul b % 2147483647#u64 = ok b'
+hb_bound : ↑b' < 2147483647
+hb_val : ↑↑b' = ↑↑b * ↑↑b
+hn : ↑(e.wrapping_shr 1#u32) < n
+hdecomp : ↑e = ↑e % 2 + 2 * (↑e / 2)
+hbit : e &&& 1#u64 = 1#u64
+a' : UScalar UScalarTy.U64
+ha' : acc.wrapping_mul b % 2147483647#u64 = ok a'
+ha_bound : ↑a' < 2147483647
+ha_val : ↑↑a' = ↑↑acc * ↑↑b
+⊢ ∃ out,
+    (do
+          let acc1 ← acc.wrapping_mul b % UScalar.cast UScalarTy.U64 2147483647#u32
+          let b1 ← b.wrapping_mul b % UScalar.cast UScalarTy.U64 2147483647#u32
+          inv_r_loop b1 (e.wrapping_shr 1#u32) acc1) =
+        ok out ∧
+      ↑out < 2147483647 ∧ ↑↑out = ↑↑acc * ↑↑b ^ n
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_Forest_Inverse.lean:82:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  b.wrapping_mul b % 2147483647#u64
+in the target expression
+  ∃ out,
+    (do
+          let b1 ← b.wrapping_mul b % UScalar.cast UScalarTy.U64 2147483647#u32
+          inv_r_loop b1 (e.wrapping_shr 1#u32) acc) =
+        ok out ∧
+      ↑out < 2147483647 ∧ ↑↑out = ↑↑acc * ↑↑b ^ n
+
+case neg
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (b e acc : U64),
+      ↑b < 2147483647 →
+        ↑acc < 2147483647 → ↑e = m → ∃ out, inv_r_loop b e acc = ok out ∧ ↑out < 2147483647 ∧ ↑↑out = ↑↑acc * ↑↑b ^ m
+b e acc : U64
+hb : ↑b < 2147483647
+ha : ↑acc < 2147483647
+he : ↑e = n
+hz : ¬↑e = 0
+b' : UScalar UScalarTy.U64
+hb' : b.wrapping_mul b % 2147483647#u64 = ok b'
+hb_bound : ↑b' < 2147483647
+hb_val : ↑↑b' = ↑↑b * ↑↑b
+hn : ↑(e.wrapping_shr 1#u32) < n
+hdecomp : ↑e = ↑e % 2 + 2 * (↑e / 2)
+hbit : ¬e &&& 1#u64 = 1#u64
+⊢ ∃ out,
+    (do
+          let b1 ← b.wrapping_mul b % UScalar.cast UScalarTy.U64 2147483647#u32
+          inv_r_loop b1 (e.wrapping_shr 1#u32) acc) =
+        ok out ∧
+      ↑out < 2147483647 ∧ ↑↑out = ↑↑acc * ↑↑b ^ n
+'R1Z.PV_Src_Forest_Inverse.shift_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.bit_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.multiply_mod' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.multiply_prime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.field_power_value' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_Src_Forest_Inverse.cast_word_value' depends on axioms: [propext]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
