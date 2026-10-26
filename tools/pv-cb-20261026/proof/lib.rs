@@ -172,4 +172,8 @@ pub mod shipped {
  pub fn vec_array<T,const N:usize>(x:Vec<T>)->Result<[T;N],Vec<T>> {x.try_into()}
  pub fn path_deref(x:&std::path::PathBuf)->&std::path::Path {std::ops::Deref::deref(x)}
  pub fn take<T:Default>(x: &mut T)->T {std::mem::take(x)}
+ pub fn path_join<P:AsRef<std::path::Path>>(x:&std::path::Path,p:P)->std::path::PathBuf {x.join(p)}
+ pub fn string_push(mut x:String,y:&str)->String {x.push_str(y);x}
+ pub fn reserve_exact<T>(mut x:Vec<T>,n:usize)->(Result<(),std::collections::TryReserveError>,Vec<T>) {let r=x.try_reserve_exact(n);(r,x)}
+
 }

@@ -13,3 +13,13 @@ Still required: remaining arithmetic/native steps, exact association of shipped 
 The generic-index Horner harness timed out (`kani-step-horner-007`,180s). No counterexample was returned; any replacement must isolate coefficient selection or arithmetic before retry.
 
 Tower step passed (`kani-step-tower-008`); prepared selection receipt24042. Linears gate009 admission refused, zero charged; next launch waits three minutes.
+
+Prepared replacement for timed-out Horner: separate arbitrary-index coefficient selection (`horner_index`) from the arithmetic on a uniform coefficient array (`horner_uniform`). The latter alone does not quantify over arbitrary coefficient arrays; a locality/source theorem is required to compose them. No universal Horner pass is claimed from these restricted gates.
+
+The full linear helper passed (`kani-step-linears-010`,110.62s,700832KiB,swap0). Horner cell locality is proved in Lean (`PV_CB_HornerCell`,24044); prepared reverse-body congruence is proved in24046 (failed development24045 retained). These are semantic ingredients, not a fresh source binding.
+
+Power-chain native gate011 timed out180s. Index-only Horner replacement012 passed. Fresh Charon root extraction passed (`charon-source-op117-fresh-root`); Aeneas admission was refused twice (fresh-root and fresh-root-002), both uncharged. Continue with next unused receipt name after the three-minute wait; no cap changes.
+
+Fresh root Aeneas (`aeneas-source-op117-fresh-root-003`) fails at loop join/collapse with `Not_found`, `InterpReduceCollapse.ml:1991`. Charon succeeded first. This is the exact current-source extraction obstruction; it is unrelated to native composition. Continue the P6 reference route and preserve all passing step evidence.
+
+The uniform-coefficient Horner arithmetic gate013 also timed out180s. This changed-property isolation did not prove the remaining arithmetic gate. Stage3 is retained as PARTIAL with exact source/P6 obstructions; proceed to the later pure operations using the remaining Lean budget. No whole-run/native-composition boundary is substituted.

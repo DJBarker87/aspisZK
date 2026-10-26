@@ -12,6 +12,9 @@ dest=base+'/'+name
 r=ssh(f'mkdir -p {dest}; python3 {scanner} {dest}/admission-before.json > {dest}/reservation.log 2>&1')
 (local/'reservation-transport.log').write_text(r.stdout)
 if r.returncode:print(name,'reservation refused',r.returncode);sys.exit(r.returncode)
+# Sync only proof inputs after admission and before compiling this one gate.
+for relative in ['step-proof/lib.rs','source-proof/lib.rs']:
+ subprocess.run(['scp',str(root/'tools/pv-cb-20261026'/relative),'dombarker@100.108.41.90:'+base+'/'+relative],check=True)
 cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin',f'CARGO_TARGET_DIR={base}/source-kani-target','RUSTFLAGS=--cfg kani','/home/dombarker/.cargo/bin/cargo','kani','--manifest-path',base+'/step-proof/Cargo.toml','--lib','--harness','checks::'+harness,'--solver','kissat','--output-format','terse','-j','4']
 meta=dict(target=cmd,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),print_axioms='N/A Kani; separate Lean source/axioms receipts',harness=harness,no_stubs=True,expected_time='cached optimized compilation, then CBMC proof generation for this one named harness',profile='step-proof profile.dev opt-level3, overflow-checks=false, debug-assertions=false; source uses explicit wrapping CT arithmetic')
 (local/'target.json').write_text(json.dumps(meta,indent=2)+'\n')

@@ -72,4 +72,25 @@ mod checks {
     #[kani::proof]
     #[kani::unwind(6)]
     fn power26() {let x=q(kani::any());same(shipped::power26(x),reference::power26_step(x));}
+    // Isolate coefficient selection: both sides read the same symbolic slot,
+    // independently of multiplication. This replaces, rather than reruns,
+    // the timed-out combined array/arithmetic property.
+    #[kani::proof]
+    #[kani::unwind(30)]
+    fn horner_index() {
+        let coeff=kani::any::<[[u32;4];27]>().map(q);
+        let i:usize=kani::any();kani::assume(i<26);
+        let direct=coeff[i];
+        let decremented= i+1-1;
+        same(direct,coeff[decremented]);
+    }
+    #[kani::proof]
+    #[kani::unwind(30)]
+    fn horner_uniform() {
+        let term=q(kani::any());let coeff=[term;27];
+        let i:usize=kani::any();kani::assume(i<26);
+        let prepared=PreparedQm31Multiplier::new(q(kani::any()));let state=q(kani::any());
+        same(shipped::horner_step(&coeff,prepared,i,state),reference::horner_step(&coeff,prepared,i,state));
+    }
+
 }

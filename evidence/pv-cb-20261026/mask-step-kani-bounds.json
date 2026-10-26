@@ -1,5 +1,5 @@
 {
-  "status": "c1_step, mask_step, linear_step checked; remaining prepared",
+  "status": "Partial: c1/mask/linear/tower/full-linears/index checks pass; full mirror, combined Horner, scalar-representative Horner, power timeout. No final source law.",
   "c1_step": {
     "domain": "all16 raw128-bit QM31 inputs, all27 raw coefficients, all column<16",
     "unwind": 30,
@@ -38,11 +38,29 @@
   "linears": {
     "domain": "all10 raw coordinates",
     "unwind": 12,
-    "sufficiency": "shipped reverse loop and reference recursion each perform exactly10 updates; input/map length10"
+    "sufficiency": "shipped reverse loop and reference recursion each perform exactly10 updates; input/map length10",
+    "status": "PASS",
+    "receipt": "kani-step-linears-010/collected-receipt.json"
   },
   "power26": {
     "domain": "arbitrary raw QM31",
     "unwind": 6,
-    "sufficiency": "four input words and a fixed addition chain, no recurrence"
+    "sufficiency": "four input words and a fixed addition chain, no recurrence",
+    "status": "TIMEOUT180 not rerun unchanged",
+    "receipt": "kani-step-power-011/collected-receipt.json"
+  },
+  "horner_index": {
+    "domain": "all27 raw coefficients, index<26",
+    "unwind": 30,
+    "sufficiency": "map27 and fixed integer decrement within usize bounds; no multiply",
+    "status": "PASS",
+    "receipt": "kani-step-horner-index-012/collected-receipt.json"
+  },
+  "horner_uniform": {
+    "domain": "arbitrary raw repeated coefficient; arbitrary prepared raw linear and shared; exponent<26",
+    "unwind": 30,
+    "sufficiency": "uniform27 array; scalar calls; requires separate locality theorem for lifting",
+    "status": "TIMEOUT180; not rerun unchanged",
+    "receipt": "kani-step-horner-uniform-013/collected-receipt.json"
   }
 }

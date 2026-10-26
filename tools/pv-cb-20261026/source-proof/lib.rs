@@ -125,3 +125,24 @@ pub fn weights_materialize(x:&aspis_r1_cost_probe::weights::Weights,k:aspis_core
 pub fn weights_new(v:aspis_r1_cost_probe::transport::Variant,a:&[aspis_core::field::QM31;10],z:&[aspis_core::circle::SecureCirclePoint;2])->Result<Box<aspis_r1_cost_probe::weights::Weights>,aspis_r1_cost_probe::verifier::Error> {aspis_r1_cost_probe::weights::Weights::new(v,a,z)}
 #[cfg(kani)]
 pub fn weights_raw(x:&aspis_r1_cost_probe::weights::Weights,kind:usize,j:usize)->aspis_core::field::QM31 {x.raw(kind,j)}
+
+#[cfg(kani)]
+pub fn qm_parse(s:&[u8])->Option<aspis_core::field::QM31> {aspis_core::field::QM31::from_le_bytes(s)}
+#[cfg(kani)]
+pub fn qm_write(x:aspis_core::field::QM31,s:&mut[u8]) {x.write_le_bytes(s)}
+#[cfg(kani)]
+pub fn phi<E:aspis_core::r0::CodeField>(x:E,y:E,h:[E;4])->[E;4] {aspis_core::r0::fold::phi_inverse(x,y,h)}
+#[cfg(kani)]
+pub fn heap<T:Copy>(n:usize,x:T)->Result<Vec<T>,aspis_core::r0::Error> {aspis_core::r0::heap::filled(n,x)}
+#[cfg(kani)]
+pub fn wide_neg(x:aspis_core::field::WideExact)->aspis_core::field::WideExact {aspis_core::r0::CodeField::neg(x)}
+#[cfg(kani)]
+pub fn qm_neg(x:aspis_core::field::QM31)->aspis_core::field::QM31 {aspis_core::r0::CodeField::neg(x)}
+#[cfg(kani)]
+pub fn m_inv(x:aspis_core::field::M31)->Option<aspis_core::field::M31> {aspis_core::r0::CodeField::try_inv(x)}
+#[cfg(kani)]
+pub fn qm_inv(x:aspis_core::field::QM31)->Option<aspis_core::field::QM31> {aspis_core::r0::CodeField::try_inv(x)}
+#[cfg(kani)]
+pub fn wide_inv(x:aspis_core::field::WideExact)->Option<aspis_core::field::WideExact> {aspis_core::r0::CodeField::try_inv(x)}
+#[cfg(kani)]
+pub fn statement_points(x:&[aspis_core::field::QM31;10])->[[aspis_core::field::QM31;10];3] {aspis_core::state_only_prefix::r0::statement_points(x)}
