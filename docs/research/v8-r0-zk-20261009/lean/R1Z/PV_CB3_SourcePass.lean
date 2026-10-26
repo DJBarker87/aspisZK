@@ -30,7 +30,10 @@ theorem total (words : List U32) :
       exact PV_CB3_SamplerDivision.remainder_lt base radix (by unfold base; omega) _
     obtain ⟨q,r,hs,hqv,hrv⟩ := PV_CB3_WordArithmetic.total w prior bound
     refine ⟨q :: high,r,?_,?_,?_⟩
-    · simp only [pass,hp,bind_tc_ok,hs]
+    · simp only [pass,hp,bind_tc_ok]
+      dsimp only
+      rw [hs]
+      rfl
     · change q.val :: values high =
         (PV_CB3_SamplerDivision.divideLE base radix (w.val :: values ws)).1
       simp only [PV_CB3_SamplerDivision.divideLE]
