@@ -38,6 +38,25 @@ premises from the actual top theorem.
   never overwritten or silently adopted. The original 19 unresolved selected
   hashes and 329 historical variant hash failures remain unresolved.
 
+## Later recursive package and parser recovery
+
+The first recursive phase added 637 uniquely source-attested dependencies.
+Eleven further exact hashes were recovered from historical git blobs. The
+committed retained CompPoly inventory pins upstream revision
+`4165a87dd9a9ede48ee4dc5b4fe825604b8bb932`. Its immutable source archive matches
+all eleven recorded hashes. Seventy-six needed additional ancestor sources
+also match this repository's historical package snapshot blobs byte-for-byte;
+`EJS_comppoly-plan.json` records both provenance chains. Only the needed closure
+is restored; no package version or proof body is improvised.
+
+The EJS parser recognizes `import all M`; the canonical parser had treated
+`all` as a dependency. A later missing transitive wrapper was isolated at
+31435. The launcher refused the unchanged fingerprint before compiling at the
+next ID; the original guard text and log-retention qualification are in
+EJS_refusal-31436.json. The eventual retry fingerprints the actual newly
+available transitive object/source hashes and passes. No refusal is counted as
+a compiler attempt, and the duplicate guard is never bypassed.
+
 ## New launcher smoke test and non-vacuity
 
 `R1Z/EJS_Verification`, attempt **31075**, goes through rebuilt run-joint.sh
@@ -99,6 +118,18 @@ Objects/sources/journals are retained as explicitly requested for continuation.
 
 ## Final budget, integrity and resume
 
-Pending final collection. Do not interpret this section as authorization for
-additional compiles. The assigned cumulative hard limit is 1600 (800 inherited
-plus 800 new), IDs 30800–34999 only, with this run guarded below 31600.
+**800/800 additional Lean attempts used, IDs 30800–31599; 1600 cumulative. 0 Kani. Next unused ID: 31600. No further compile is authorized.**
+
+Compiler exit 0: 796; printed standard-axiom gate not rejected: 787; peak RSS 4,677,612 KiB; total swaps 0. Resource failures: 0. Additional object reuse records: 79. These are cache measurements, not premise discharge.
+
+Remaining original resolved source entries unattempted: 669; profile entries unattempted: 501. EJS_resume-plan.json contains exact source SHA/blob/revision/path records, latest failures and pending dependency names; original 19 selected and 329 historical unresolved hashes are retained. Eleven additional source hashes were resolved by read-only git-blob history traversal and staged for continuation without substituting any original unresolved selection.
+
+Integrity snapshot: 2833 source entries; 1538 latest successful compiled object entries; 108 reused object entries. Source mismatches 3; latest-object mismatches 2; reuse mismatches 0. Exact paths/hashes are in EJS_integrity.json. Shared-file drift is preserved, not overwritten or adopted.
+
+- Source drift `/home/dombarker/project-offloads/aspis-joint-20261019/sources/AspisR1ProverCommit/Types.lean`: expected `1cffcca7f5d3ff42d8f477e2b5e46c8bbded355d72d0d85ae76a64e99b5bb384`, observed `d3b7106ad143be82d8512a65de5dfbc0a9dfa2aa6e16a60f5507b7c6a06aa5d4`.
+- Source drift `/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/BuilderAdmissionExtracted.lean`: expected `bbddadb0e25cf688dcc625ff0a623fdb83b1a80fe3e9d4d798025123f74e12ef`, observed `19d637faebb2eb5aa0d8e2f66e0e3f9b2f31e5ff036594c1da8ff0fe254753b6`.
+- Source drift `/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PrivacyR1HeadlineV2.lean`: expected `4321909f01b6f4d578b5e4c2198ba59406418ef8bd85f6e177f34ae107ddb694`, observed `0bb8dcc74e6d33492d386582c06836aca1ee35fc61ce898cc3afb8f6d1b20e16`.
+- Object drift `/home/dombarker/project-offloads/aspis-joint-20261019/objects/R1Z/BuilderAdmissionExtracted.olean`: expected `38f63c049275222c616bddfcf33437044433921d89adffba7bf1a0068974ed6b`, observed `3d8cb34b1106832e2c5eef7b8dba846e78aef92f323db618c33792afc20fb36c`.
+- Object drift `/home/dombarker/project-offloads/aspis-joint-20261019/objects/AspisR1ProverCommit/Types.olean`: expected `1baa307cfe6d62566beae15b082a7caf52082ffb16b10b503a4e1d847f779472`, observed `80105a7feb92aa607c98f0323e7e20600c9625ee88243039a4efa34ee24df1bf`.
+
+The canonical builder and launcher/environment/driver pins are recorded in EJS_integrity.json. All owned build work is terminal. No frozen manifest, actual-top axioms replay, SBF or release conclusion is claimed. Use the EJS adapter source/manifest selection for a future explicitly budgeted continuation; do not resume the unguarded canonical mirror behavior. Retain the four authorized recovery roots and all EJS profile objects/journals.
