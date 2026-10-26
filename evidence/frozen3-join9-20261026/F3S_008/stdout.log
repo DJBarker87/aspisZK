@@ -1,0 +1,65 @@
+F3S_SecondCommon.lean:144:18: error: Type mismatch: After simplification, term
+  logs
+ has type
+  original =
+    List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok digest =>
+            some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+          | x => none)
+        (SdkC_Source.run hashv
+            (GExq_RetainedReader.code reserved checkpoint proof pub AspisR1Stage2.transport.Variant.S2) []).2 ++
+      (List.filterMap
+          (fun q =>
+            match q.returned with
+            | ok digest =>
+              some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+            | x => none)
+          (SdkC_Source.run hashv (GExq_BatchSource.stage D hash proof p root) []).2 ++
+        List.filterMap
+          (fun q =>
+            match q.returned with
+            | ok digest =>
+              some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+            | x => none)
+          (SdkC_Source.run hashv
+              (liftM
+                ((GExq_SecondCode.installed base reserved).op19
+                  { variant := AspisR1Stage2.transport.Variant.S2, semantic := empty1, y1 := empty2,
+                    inactive := inactive, round0 := round0, folded_root := none, round1 := round1,
+                    final_message := finalMessage, query_bytes := empty3 }
+                  p { weights := back flushed, rhs := a.rhs, power := a.power, next := a.next } none))
+              []).2)
+but is expected to have type
+  original =
+    List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok digest =>
+            some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+          | x => none)
+        (SdkC_Source.run hashv
+            (GExq_RetainedReader.code reserved checkpoint proof pub AspisR1Stage2.transport.Variant.S2) []).2 ++
+      List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok digest =>
+            some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+          | x => none)
+        (SdkC_Source.run hashv (GExq_BatchSource.stage D hash proof p root) []).2
+F3S_SecondCommon.lean:40:29: warning: This simp argument is unused:
+  erase
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵a̵d̵,̵i̵f̵_̵t̵r̵u̵e̵,̵e̵r̵a̵s̵e̵]̵[̲b̲a̲d̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲ at s2
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3S_SecondCommon.lean:42:21: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [bad,̵i̵f̵_̵f̵a̵l̵s̵e̵] at s2 logs
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3S_SecondCommon.split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

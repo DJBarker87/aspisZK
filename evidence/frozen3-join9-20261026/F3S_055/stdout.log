@@ -1,0 +1,70 @@
+F3S_BatchTree.lean:16:2: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  (have ops := Port9OR_BatchStep.ops base;
+    have lo := Port4B_TreeCuts.lo batch;
+    have n := Port4B_TreeCuts.count batch;
+    have slot := Port4B_TreeCuts.slot batch tree;
+    do
+    let raw ← liftResult (ops.op4 queries lo n tree)
+    let keys ← liftResult (ops.op5 raw n)
+    let __x ← Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys (↑n + 1) idx val 0#usize 0#usize
+    match __x with
+      | (outIdx, outVal, pending) =>
+        match pending with
+        | none => liftResult (fail Error.panic)
+        | some r => pure (r, outIdx, outVal)) =
+    have ops := Port9OR_BatchStep.ops base;
+    have lo := Port4B_TreeCuts.lo batch;
+    have n := Port4B_TreeCuts.count batch;
+    have slot := Port4B_TreeCuts.slot batch tree;
+    do
+    let raw ← liftResult (ops.op4 queries lo n tree)
+    let keys ← liftResult (ops.op5 raw n)
+    let __x ← Port9OR_BatchLoop.code base E hash proof root tree lo n slot keys (↑n + 1) idx val 0#usize 0#usize
+    match __x with
+      | (outIdx, outVal, pending) =>
+        match pending with
+        | none => liftResult (fail Error.panic)
+        | some r => pure (r, outIdx, outVal)
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.23} {β : α → Sort ?u.22} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+base : Port3_NativeBatchBody.Ops
+Hash : Type
+D E : aspis_core.digest.Digest32 Hash
+hash : Hash
+proof : Slice U8
+queries : Std.Array U32 22#usize
+root : Std.Array U8 32#usize
+batch tree : Usize
+idx : Indices
+val : Values
+⊢ (have ops := Port9OR_BatchStep.ops base;
+    have lo := Port4B_TreeCuts.lo batch;
+    have n := Port4B_TreeCuts.count batch;
+    have slot := Port4B_TreeCuts.slot batch tree;
+    do
+    let raw ← liftResult (ops.op4 queries lo n tree)
+    let keys ← liftResult (ops.op5 raw n)
+    let __x ← Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys (↑n + 1) idx val 0#usize 0#usize
+    match __x with
+      | (outIdx, outVal, pending) =>
+        match pending with
+        | none => liftResult (fail Error.panic)
+        | some r => pure (r, outIdx, outVal)) =
+    have ops := Port9OR_BatchStep.ops base;
+    have lo := Port4B_TreeCuts.lo batch;
+    have n := Port4B_TreeCuts.count batch;
+    have slot := Port4B_TreeCuts.slot batch tree;
+    do
+    let raw ← liftResult (ops.op4 queries lo n tree)
+    let keys ← liftResult (ops.op5 raw n)
+    let __x ← Port9OR_BatchLoop.code base E hash proof root tree lo n slot keys (↑n + 1) idx val 0#usize 0#usize
+    match __x with
+      | (outIdx, outVal, pending) =>
+        match pending with
+        | none => liftResult (fail Error.panic)
+        | some r => pure (r, outIdx, outVal)
+'AspisR1.F3S_BatchTree.dictionary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

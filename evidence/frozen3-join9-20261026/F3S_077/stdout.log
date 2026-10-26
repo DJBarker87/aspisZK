@@ -1,0 +1,45 @@
+F3S_CheckpointSplice.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SdkC_Source.readLog
+    (SdkC_Source.run hashv (CheckpointBytes5Effect.bind (CheckpointBytes5Writer.writer wp wa proof pub) ?m.56) []).2
+in the target expression
+  SdkC_Source.readLog
+      (SdkC_Source.run hashv
+          (do
+            let ck ← CheckpointBytes5Writer.writer wp wa proof pub
+            CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) ck proof pub
+                AspisR1Stage2.transport.Variant.S2)
+          []).2 =
+    CheckpointBytes5Inputs.observe after
+
+Hash : Type
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+law : ∀ (parts : Slice (Slice U8)), D.digest hash parts = hashv parts
+reserved : Bool
+wp : CheckpointBytes5Writer.Prepared
+wa : CheckpointBytes5Writer.Accumulator
+proof pub : Slice U8
+saved : alloc.vec.Vec U8
+p : AspisR1Stage2.verifier.Prepared
+a : AspisR1Stage2.verifier.Accumulator
+after : Log
+writer : erase (SdkC_Source.dictionary hashv) () (CheckpointBytes5Writer.writer wp wa proof pub) = ok saved.deref
+size : 32 ≤ (↑saved).length
+ran : run D hash (CheckpointBytes5Join.stage reserved wp wa proof pub) [] = ok (core.result.Result.Ok (p, a), after)
+actual :
+  SdkC_Source.readLog
+      (SdkC_Source.run hashv
+          (do
+            let ck ← CheckpointBytes5Writer.writer wp wa proof pub
+            CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) ck proof pub
+                AspisR1Stage2.transport.Variant.S2)
+          []).2 =
+    CheckpointBytes5Inputs.observe after
+⊢ SdkC_Source.readLog (SdkC_Source.run hashv (CheckpointBytes5Writer.writer wp wa proof pub) []).2 ++
+      SdkC_Source.readLog
+        (SdkC_Source.run hashv
+            (GExq_RetainedReader.code reserved saved.deref proof pub AspisR1Stage2.transport.Variant.S2) []).2 =
+    CheckpointBytes5Inputs.observe after
+'AspisR1.F3S_CheckpointSplice.raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3S_CheckpointSplice.writer' depends on axioms: [propext, Classical.choice, Quot.sound]
