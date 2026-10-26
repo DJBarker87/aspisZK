@@ -46,8 +46,10 @@ theorem finish_value (base : Nat) (positive : 0 < base)
       Nat.div_eq_of_lt_le (by omega) (by omega)
     rw [hq, if_neg (by decide : ¬ (1 : Nat) = 0), if_neg small]
     rw [← digits_remainder base positive _ 1, length_preserved, ← first_rem]
-    rw [Nat.mod_eq_sub_mod (by omega), Nat.mod_eq_of_lt (by omega),
-      Nat.mod_eq_of_lt (by omega)]
+    have hr : (value base digits + (high + 1)) % base ^ digits.length =
+        value base digits + (high + 1) - base ^ digits.length := by
+      rw [Nat.mod_eq_sub_mod (by omega), Nat.mod_eq_of_lt (by omega)]
+    rw [hr, Nat.mod_eq_of_lt (by omega)]
     omega
 
 #print axioms finish_length
