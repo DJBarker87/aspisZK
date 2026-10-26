@@ -1,0 +1,80 @@
+FIp_ArraySetValue.lean:10:25: error: Application type mismatch: The argument
+  Array.set ?m.7 (↑i) z ?m.8
+has type
+  _root_.Array NE
+but is expected to have type
+  Std.Array NE ?m.5
+in the application
+  FIp_ArrayValue.value (Array.set ?m.7 (↑i) z ?m.8)
+FIp_ArraySetValue.lean:10:26: error: could not synthesize default value for parameter 'h' using tactics
+FIp_ArraySetValue.lean:10:26: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+N : Usize
+a : Std.Array NE N
+i : Usize
+z : NE
+hi : ↑i < ↑N
+⊢ ↑i < Array.size ?m.7
+FIp_ArraySetValue.lean:10:36: error: Application type mismatch: The argument
+  a
+has type
+  Std.Array NE N
+but is expected to have type
+  _root_.Array NE
+in the application
+  @Array.set NE a
+FIp_ArraySetValue.lean:15:25: error: Application type mismatch: The argument
+  Array.set ?m.5 (↑i) z ?m.6
+has type
+  _root_.Array NE
+but is expected to have type
+  Std.Array NE ?m.3
+in the application
+  FIp_ArrayValue.value (Array.set ?m.5 (↑i) z ?m.6)
+FIp_ArraySetValue.lean:15:26: error: could not synthesize default value for parameter 'h' using tactics
+FIp_ArraySetValue.lean:15:26: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+N : Usize
+a : Std.Array NE N
+i : Usize
+z : NE
+j : ℕ
+ne : ↑i ≠ j
+⊢ ↑i < Array.size ?m.5
+FIp_ArraySetValue.lean:15:36: error: Application type mismatch: The argument
+  a
+has type
+  Std.Array NE N
+but is expected to have type
+  _root_.Array NE
+in the application
+  @Array.set NE a
+FIp_ArraySetValue.lean:19:59: error: could not synthesize default value for parameter 'h' using tactics
+FIp_ArraySetValue.lean:19:59: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+N : Usize
+a : Std.Array NE N
+i : Usize
+old : NE
+back : NE → Std.Array NE N
+run : a.index_mut_usize i = ok (old, back)
+v✝ : ?m.7
+⊢ ↑i < Array.size ?m.8
+FIp_ArraySetValue.lean:19:59: error: Type mismatch
+  fun v => Array.set ?m.8 (↑i) v ⋯
+has type
+  ?m.7 → _root_.Array ?m.7
+but is expected to have type
+  NE → Std.Array NE N
+FIp_ArraySetValue.lean:24:14: error(lean.unknownIdentifier): Unknown constant `same`
+FIp_ArraySetValue.lean:25:14: error(lean.unknownIdentifier): Unknown constant `other`
+FIp_ArraySetValue.lean:26:14: error(lean.unknownIdentifier): Unknown constant `back`

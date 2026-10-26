@@ -1,0 +1,200 @@
+FIp_Top.lean:141:4: error: Application type mismatch: The argument
+  FIo_Install.finishOps reservation c.finish
+has type
+  AspisR1Stage2.Stage2Finish.FinishOps FIo_Install.W
+but is expected to have type
+  SdkC_Source.Parts → Result SdkC_Source.Digest
+in the application
+  F3Y_AccountMass.claims
+    (Rc2_Install.configuration (Rc5_Install.seed indexError (FIo_Install.select reservation c)) reservation)
+    (FIo_Install.finishOps reservation c.finish)
+FIp_Top.lean:142:5: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.517 = ?m.517
+of sort `Prop` but is expected to have type
+  LiteralTranscript.C1Word
+of sort `Type` in the application
+  CanonicalCutEnrichedTranscript.Words.mk ⋯
+FIp_Top.lean:115:45: error: unsolved goals
+W A CoreError Tx : Type
+L : Library W (ℕ → Record)
+sdk : S2TrustedSdkBorrow L
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e1 e2 : Entry
+w1 w2 : W
+admission1 : RuntimeEntrypointAdmission L e1 w1 3
+admission2 : RuntimeEntrypointAdmission L e2 w2 7
+c : DrvC_Installation.Configuration FIo_Install.W CoreError
+indexError : CoreError
+reservation : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation))
+    native1 native2 hashv
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+data1 data2 : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+state1 state2 final1 final2 : A
+saved : alloc.vec.Vec U8
+post1 post2 : Heap (ℕ → Record)
+accepted1 :
+  first native1 copy allocator e1 CPH_Program.verifier data1 state1 = ok (core.result.Result.Ok (saved, post1, final1))
+accepted2 :
+  second native2 allocator e2 CPH_Program.verifier data2 slot state2 = ok (core.result.Result.Ok (post2, final2))
+root : Std.Array U8 32#usize
+length : U32
+prior : Program Bytes State Unit
+words : CanonicalCutEnrichedTranscript.Words
+p : CPG_Projection.Observations Tx A
+t u : Tx
+actions : List (CPP_BankState.Action A)
+game : CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator CPH_Program.verifier
+RuntimePersistence :
+  CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+    (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p) (CPG_Projection.tentative p)
+    (CPG_Projection.success p) (CPG_Projection.loaded p)
+D : LiteralByteProtocol.Decoder
+P : F3T_ByteCarrier.ByteProver
+Q0 Q1 : ℕ
+queries : ∀ (H : Bytes → State), (eval H P).1.length ≤ Q0 + Q1
+runtime : F3T_Runtime.Runtime
+finishOwners :
+  FIp_GlobalOwners.Owners (FIo_Install.configuration indexError c reservation)
+    (Rc2_Install.configuration (Rc5_Install.seed indexError (FIo_Install.select reservation c)) reservation).boundaries
+binding :
+  F3T_Runtime.StoredCarrierBinding (FIo_Install.configuration indexError c reservation) D
+    (F3T_Installed.source (FIo_Install.configuration indexError c reservation) hashv) P runtime
+select : F3X_Projection.Output → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs :=
+  fun x =>
+    P2P_NativeSelection.pair (DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation))
+      CPH_Program.verifier e1 e2 data2 slot
+prepare :
+  have a := Rc5_Install.configuration indexError (FIo_Install.select reservation c) reservation;
+  WAdm_Domain.SessionAPrepare
+    (Tx1Q_Execution.actual (Op5T_Concrete.current a.currentBase) a.reserved a.query a.geometry a.boundaries a.std)
+ports :
+  Port5Q1_QueryPorts.SessionAPrimitives
+    (Rc5_Install.configuration indexError (FIo_Install.select reservation c) reservation).query
+canonical :
+  Port5Q1_GeometryCanonical.SessionAPrimitives
+    (Rc5_Install.configuration indexError (FIo_Install.select reservation c) reservation).geometry
+domain :
+  Port5Q1_Domain.SessionADomain
+    (Rc5_Install.configuration indexError (FIo_Install.select reservation c) reservation).geometry
+multiply :
+  (Rc5_Install.configuration indexError (FIo_Install.select reservation c) reservation).geometry.op9 =
+    AspisR1Qm31ArithmeticProbe.field.M31.mul
+one : (Rc5_Install.configuration indexError (FIo_Install.select reservation c) reservation).geometry.op7 = ok 1#u32
+inverse :
+  (Rc5_Install.configuration indexError (FIo_Install.select reservation c) reservation).geometry.op11 =
+    Port4C_InverseExecution.inverse_owned
+security : F3T_RuntimeBound.failureModel runtime ≤ F3T_Numeric.total (Q0 + Q1)
+sourceCost :
+  ∀ (H : Bytes → State),
+    (eval H
+              (F3T_TwoPass.annotatedWith D
+                (F3T_Installed.source
+                  (F3V_Install.configuration
+                    (Rc2_Install.configuration (Rc5_Install.seed indexError (FIo_Install.select reservation c))
+                      reservation))
+                  hashv)
+                (F3T_Canon.canon
+                  (F3T_ByteCarrier.lift
+                    (F3V_Install.configuration
+                      (Rc2_Install.configuration (Rc5_Install.seed indexError (FIo_Install.select reservation c))
+                        reservation))
+                    P)))).2.2 =
+        true →
+      (mean fun coins =>
+            ↑(ActualCostedExtractorM10.extractor.eval
+                    (view
+                      (eval H
+                        (F3T_TwoPass.annotatedWith D
+                          (F3T_Installed.source
+                            (F3V_Install.configuration
+                              (Rc2_Install.configuration
+                                (Rc5_Install.seed indexError (FIo_Install.select reservation c)) reservation))
+                            hashv)
+                          (F3T_Canon.canon
+                            (F3T_ByteCarrier.lift
+                              (F3V_Install.configuration
+                                (Rc2_Install.configuration
+                                  (Rc5_Install.seed indexError (FIo_Install.select reservation c)) reservation))
+                              P)))))
+                    coins).2.total) ≤
+          ↑(CostedAllocationLedgerM10.params (Q0 + Q1 + 1161)).attemptBudget ∨
+        BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+          (eval H
+            (Hiq_RecordedJoint.program
+              (F3X_Account.program
+                (F3V_Install.configuration
+                  (Rc2_Install.configuration (Rc5_Install.seed indexError (FIo_Install.select reservation c))
+                    reservation))
+                hashv P)
+              F3X_Projection.project select))
+⊢ MultiproofConeP6Frozen2Stage.P6Boundary (P6C_Extension.dictionary hashv H) () H Op5T_P6.parent Op5T_P6.parent
+      Op5T_P6.parent MultiproofConeP6Batch.referenceLeaf ∧
+    DrvC_Implementation.driver (FIo_Install.configuration indexError c reservation) =
+        DrvC_SourceEntry.source (FIo_Install.configuration indexError c reservation) hashv ∧
+      DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation) =
+          SdkD_PairBatches.dictionary (FIo_Install.configuration indexError c reservation).adapter
+            (FIo_Install.configuration indexError c reservation).currentBase
+            (FIo_Install.configuration indexError c reservation).stageBase
+            (FIo_Install.configuration indexError c reservation).finish
+            (FIo_Install.configuration indexError c reservation).reserved
+            (FIo_Install.configuration indexError c reservation).query
+            (FIo_Install.configuration indexError c reservation).geometry
+            (FIo_Install.configuration indexError c reservation).boundaries
+            (FIo_Install.configuration indexError c reservation).std ∧
+        P2P_Result.Outcome L e1 e2 w1 w2 (FIo_Install.configuration indexError c reservation).adapter
+            (FIo_Install.configuration indexError c reservation).currentBase
+            (FIo_Install.configuration indexError c reservation).reserved
+            (FIo_Install.configuration indexError c reservation).query
+            (FIo_Install.configuration indexError c reservation).geometry
+            (FIo_Install.configuration indexError c reservation).stageBase
+            (FIo_Install.configuration indexError c reservation).finish c.boundaries reservation CPH_Program.verifier
+            data1 data2 slot saved post1 post2 H
+            (DrvC_Implementation.driver (FIo_Install.configuration indexError c reservation)) prior (p.physicalEvents t)
+            hashv
+            (BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+              (eval H
+                (Hiq_RecordedJoint.program
+                  (F3X_Account.program (FIo_Install.configuration indexError c reservation) hashv P)
+                  F3X_Projection.project fun x =>
+                  P2P_NativeSelection.pair (DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation))
+                    CPH_Program.verifier e1 e2 data2 slot))) ∧
+          (F3X_ModelClaims.Claims (FIo_Install.configuration indexError c reservation) D P (Q0 + Q1) ∧
+              (F3Y_SourceClaims.Claims (FIo_Install.configuration indexError c reservation) D hashv P (Q0 + Q1) fun x =>
+                  P2P_NativeSelection.pair (DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation))
+                    CPH_Program.verifier e1 e2 data2 slot) ∧
+                (F3Y_AccountMass.Claims (FIo_Install.configuration indexError c reservation) hashv P (Q0 + Q1) fun x =>
+                    P2P_NativeSelection.pair
+                      (DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation)) CPH_Program.verifier
+                      e1 e2 data2 slot) ∧
+                  F3T_RuntimeBound.failureModel runtime ≤ F3T_Numeric.total (Q0 + Q1) ∧
+                    (Q0 + Q1 ≤ F3U_RangeEdges.maxQueries →
+                        F3T_RuntimeBound.failureModel runtime ≤ (↑Q0 + ↑Q1 + 1) * (1 / 2 ^ 100)) ∧
+                      (Q0 + Q1 = 0 →
+                        F3U_Numeric.margin ≤ 1 / 2 ^ 100 - F3T_RuntimeBound.failureModel runtime ∧
+                          F3T_RuntimeBound.failureModel runtime < 1 / 2 ^ 100)) ∧
+            (native1 CPH_Program.verifier e1.first data1 = ok (core.result.Result.Ok saved) ∧
+                (↑saved).length = 1768 ∧
+                  payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768 = bytesOf ↑saved ∧
+                    post1.ambient = e1.heap.ambient ∧
+                      post1.accounts = e1.heap.accounts ∧
+                        post1.counter = e1.heap.counter ∧
+                          ∀ (cell : ℕ), cell ≠ (e1.heap.accounts 2).1 → post1.payload cell = e1.heap.payload cell) ∧
+              Rc2_Events.Facts (FIo_Install.configuration indexError c reservation) hashv native1 native2 copy allocator
+                  CPH_Program.verifier H saved ∧
+                CPH_Protection.Facts p t saved CPH_Program.verifier ∧
+                  CPH_Trace.Facts p t u saved native1 native2 copy allocator CPH_Program.verifier ∧
+                    CPH_Recorder.Facts (FIo_Install.configuration indexError c reservation) hashv native1 native2 copy
+                      allocator CPH_Program.verifier H p t u saved
+'AspisR1.FIp_Top.deployed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

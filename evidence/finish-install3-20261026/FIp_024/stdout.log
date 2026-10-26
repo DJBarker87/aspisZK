@@ -1,0 +1,74 @@
+FIp_CircleValue.lean:52:4: error: Inspecting final scalar-expression mismatch
+case right
+alpha a b c d out : E
+ix iy : U32
+cut : FIp_CircleCuts.Cuts alpha a b c d ix iy out
+e0 :
+  decodeWide cut.h0 =
+    (decodeWide a + decodeWide b + decodeWide c + decodeWide d) *
+      (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter)
+e1 :
+  decodeWide cut.h1 =
+    (decodeWide a - decodeWide b - decodeWide c + decodeWide d) *
+      (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase iy)
+e2 :
+  decodeWide cut.h2 =
+    (decodeWide a + decodeWide b - decodeWide c - decodeWide d) *
+      (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase ix)
+e3 :
+  decodeWide cut.h3 =
+    (decodeWide a - decodeWide b + decodeWide c - decodeWide d) *
+      (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase ix * decodeBase iy)
+e :
+  decodeWide out =
+    (decodeWide a + decodeWide b + decodeWide c + decodeWide d) *
+        (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter) +
+      decodeWide alpha *
+        ((decodeWide a - decodeWide b - decodeWide c + decodeWide d) *
+            (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase iy) +
+          decodeWide alpha *
+            ((decodeWide a + decodeWide b - decodeWide c - decodeWide d) *
+                (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase ix) +
+              decodeWide alpha *
+                ((decodeWide a - decodeWide b + decodeWide c - decodeWide d) *
+                  (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase ix * decodeBase iy))))
+⊢ decodeWide out =
+    formula (decodeWide alpha) (decodeWide a) (decodeWide b) (decodeWide c) (decodeWide d) (decodeBase ix)
+      (decodeBase iy)
+case right
+alpha a b c d out : E
+ix iy : U32
+cut : FIp_CircleCuts.Cuts alpha a b c d ix iy out
+e0 :
+  decodeWide cut.h0 =
+    (decodeWide a + decodeWide b + decodeWide c + decodeWide d) *
+      (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter)
+e1 :
+  decodeWide cut.h1 =
+    (decodeWide a - decodeWide b - decodeWide c + decodeWide d) *
+      (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase iy)
+e2 :
+  decodeWide cut.h2 =
+    (decodeWide a + decodeWide b - decodeWide c - decodeWide d) *
+      (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase ix)
+e3 :
+  decodeWide cut.h3 =
+    (decodeWide a - decodeWide b + decodeWide c - decodeWide d) *
+      (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase ix * decodeBase iy)
+e :
+  decodeWide out =
+    (decodeWide a + decodeWide b + decodeWide c + decodeWide d) *
+        (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter) +
+      decodeWide alpha *
+        ((decodeWide a - decodeWide b - decodeWide c + decodeWide d) *
+            (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase iy) +
+          decodeWide alpha *
+            ((decodeWide a + decodeWide b - decodeWide c - decodeWide d) *
+                (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase ix) +
+              decodeWide alpha *
+                ((decodeWide a - decodeWide b + decodeWide c - decodeWide d) *
+                  (algebraMap FP AspisWideTower.WideExact) (decodeBase quarter * decodeBase ix * decodeBase iy))))
+⊢ decodeWide out =
+    formula (decodeWide alpha) (decodeWide a) (decodeWide b) (decodeWide c) (decodeWide d) (decodeBase ix)
+      (decodeBase iy)
+'AspisR1.FIp_CircleValue.on_cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

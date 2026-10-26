@@ -1,0 +1,48 @@
+FIp_PowersValue.lean:20:36: error: Application type mismatch: The argument
+  run
+has type
+  FIo_Native.weights.powers N x = ok result
+but is expected to have type
+  FIo_Native.weights.powers_loop x ?m.6.1 ?m.6.2.1 ?m.6.2.2 = ok result
+in the application
+  loop_value x hx ?m.6 result ?m.7 run
+FIp_PowersValue.lean:21:11: error: Application type mismatch: The argument
+  FIo_GroupCanonical.zeros N
+has type
+  FIo_ArrayCanon.Holds (Array.repeat N FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+of sort `Prop` but is expected to have type
+  List NE
+of sort `Type` in the application
+  Subtype.mk ⋯
+FIp_PowersValue.lean:22:11: error: Type mismatch
+  0 ≤ ↑N
+has type
+  Prop
+of sort `Type` but is expected to have type
+  Type
+of sort `Type 1`
+FIp_PowersValue.lean:23:11: error: Type mismatch
+  decodeWide (wide FIo_Native.aspis_core.field.wide_exact.WideExact.ONE) = decodeWide (wide x) ^ 0
+has type
+  Prop
+of sort `Type` but is expected to have type
+  Type
+of sort `Type 1`
+FIp_PowersValue.lean:25:10: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_3
+N : Usize
+x : NE
+result : Std.Array NE N
+hx : FIo_WideValues.Canon x
+run : FIo_Native.weights.powers N x = ok result
+⊢ sorry < 2 ^ UScalarTy.Usize.numBits
+FIp_PowersValue.lean:19:71: error: unsolved goals
+N : Usize
+x : NE
+result : Std.Array NE N
+hx : FIo_WideValues.Canon x
+run : FIo_Native.weights.powers N x = ok result
+⊢ FIp_PowersState.Inv x (⟨sorry, ⋯⟩, sorry, { toFin := ⟨sorry, ⋯⟩ }#uscalar)
+'AspisR1.FIp_PowersValue.loop_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIp_PowersValue.powers' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

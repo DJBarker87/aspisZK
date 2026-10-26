@@ -1,0 +1,60 @@
+def AspisR1.FIo_Install.pair : AspisR1.NP6_StdModel.Reservation →
+  AspisR1.FIo_Install.W →
+    Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1Stage2.Stage2Finish.E →
+          Aeneas.Std.Result (Aeneas.Std.core.result.Result AspisR1Stage2.Stage2Finish.E AspisR1Stage2.verifier.Error) :=
+fun r w alpha message kappa => do
+  let result ←
+    (AspisR1.FIo_Install.toWeights w).pair (AspisR1.FIo_Install.toSlice alpha) message (AspisR1.FIo_Install.toE kappa)
+  match result with
+    | Aeneas.Std.core.result.Result.Ok out =>
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (AspisR1.FIo_Install.fromE out))
+    | Aeneas.Std.core.result.Result.Err e =>
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (AspisR1.FIo_Install.error e))
+def AspisR1.FIn_Finish.PairMeaning : {W : Type} →
+  AspisR1Stage2.Stage2Finish.FinishOps W →
+    AspisR1Stage2.verifier.View →
+      AspisR1Stage2.verifier.Prepared → AspisR1.MatchingSupport.Data AspisWideTower.WideExact → Prop :=
+fun {W} ops v p d =>
+  ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+    ops.newWeights p.variant p.semantic_alpha p.z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+      Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice
+              (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+            p.alpha { «end» := 2#usize } =
+          Aeneas.Std.Result.ok alphas →
+        ops.pair weights alphas v.final_message p.kappa =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+          AspisR1.CheckpointBytes5Output.ofE value =
+            AspisR1.RoundPairing.dot d.f
+              (AspisR1.RoundPairing.dualFold d.alpha1
+                (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))
+def AspisR1.FIo_Install.toWeights : AspisR1.FIo_Install.W → FIo_Native.weights.Weights :=
+fun w =>
+  { variant := AspisR1.FIo_Install.variant w.variant,
+    factors :=
+      AspisR1.FIn_WeightsInstall.mapArray
+        (AspisR1.FIn_WeightsInstall.mapArray (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIo_Install.toQ)) w.factors,
+    points :=
+      AspisR1.FIn_WeightsInstall.mapArray (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIo_Install.toQ) w.points,
+    extra := AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIo_Install.toQ w.extra }
+def AspisR1.FIp_Install.select : {C : Type} →
+  AspisR1.NP6_StdModel.Reservation →
+    AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C →
+      AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C :=
+fun {C} r c =>
+  have __src := AspisR1.FIo_Install.select r c;
+  { adapter := __src.adapter, currentBase := __src.currentBase, stageBase := __src.stageBase, finish := __src.finish,
+    reserved := __src.reserved,
+    query :=
+      have __src := c.query;
+      { op0 := @AspisR1.Port3_NativeQueryBody.Ops.op0 __src, op1 := __src.op1, op2 := __src.op2, op3 := __src.op3,
+        op4 := __src.op4, op5 := __src.op5, op6 := __src.op6, op7 := __src.op7, op8 := __src.op8, op9 := __src.op9,
+        op10 := __src.op10, op11 := __src.op11, op12 := __src.op12, op13 := __src.op13, op14 := __src.op14,
+        op15 := __src.op15, op16 := __src.op16, op17 := AspisR1.FIp_CircleQuery.circle, op18 := __src.op18,
+        op19 := __src.op19, op20 := AspisR1.FIp_DotsAdapter.dots, op21 := __src.op21,
+        widePartialEq := AspisR1.FIp_Equality.dictionary },
+    geometry := __src.geometry, boundaries := AspisR1.FIp_Install.boundaries c.boundaries, std := __src.std }
+'AspisR1.FIo_Install.pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIp_CircleQuery.exact_circle' depends on axioms: [propext, Classical.choice, Quot.sound]
