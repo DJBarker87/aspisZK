@@ -75,10 +75,23 @@ it with `sh` used the existing launcher unchanged. No reservation was bypassed.
 |34|V185|INSTALLED (value; native gate pending)|PV_CB_IsEmpty.op34_installed;22807.json|
 |35|V186|INSTALLED (value; native gate pending)|PV_CB_VecDefault.op35_installed;22808.json|
 |36|V187|INSTALLED (value; native gate pending)|PV_CB_VecArray.op36_accept/op36_reject;22809.json|
-|71|V203|INSTALLED (emitted source)|PV_CB_Codecs.op71_installed;22810.json|
-|72|V204|INSTALLED (emitted source)|PV_CB_Codecs.op72_installed;22810.json|
-|77|V205|INSTALLED (callback order)|PV_CB_PointClone.op77_installed;22811.json|
+|71|V197|INSTALLED (emitted source)|PV_CB_Codecs.op71_installed;22810.json|
+|72|V198|INSTALLED (emitted source)|PV_CB_Codecs.op72_installed;22810.json|
+|77|V199|INSTALLED (callback order)|PV_CB_PointClone.op77_installed;22811.json|
 
-Row numbers in this checkpoint are provisional until checked against the recount.
+Row numbers checked against research:evidence/privacy-recount-20261026/ROWS.md;
+row-map.json retains the exact op-to-row map.
 No endpoint premise or ledger row removed (before0/after0 removals). Native
 allocator/Drop/side-channel obligations remain separate from value equations.
+
+## Checked Phi and Merkle values
+
+|op|row|status|theorem / receipt|
+|---:|---|---|---|
+|80|V202|INSTALLED (emitted source)|PV_CB_Phi.op80_installed;22812.json|
+|82|V204|INSTALLED (source constant)|PV_CB_Merkle.op82_installed;22813.json|
+|83|V205|INSTALLED (source constant)|PV_CB_Merkle.op83_installed;22813.json|
+|84|V206|INSTALLED (hash callback framing)|PV_CB_Merkle.op84_installed;22813.json|
+|86|V208|INSTALLED (source constant)|PV_CB_Merkle.op86_installed;22813.json|
+
+Standard axioms only; no endpoint premise removal or native effect claim.
