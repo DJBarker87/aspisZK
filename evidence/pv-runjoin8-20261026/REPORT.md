@@ -103,3 +103,11 @@ literals, with both source file hashes retained. This is static data identity,
 not a hash-recurrence proof or kernel validation. The optimized Kani leaf
 results, exact source lineage, and symbolic loop composition would still be
 needed. No successful leaf would alone prove full mapper/compile/trace closure.
+
+SourceArithmeticLift further prepares two assumption-free source leaves:
+all-U64 wrapping reduction with canonical output/field meaning, and the
+owned source mat4 field-refinement for arbitrary raw U32 inputs. Both compose
+the pinned srcid source/copy theorem with the existing generic field proof;
+neither assumes source success or canonical input. They are predecessors to
+ParentRefinement, not proofs of the full source parent or compiler theorem.
+Ten draft modules now pass the compile-free inventory check; none has run.
