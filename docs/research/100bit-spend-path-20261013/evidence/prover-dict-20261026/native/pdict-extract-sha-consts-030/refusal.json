@@ -1,0 +1,49 @@
+{
+  "attempt": "pdict-extract-sha-consts-030",
+  "target": [
+    "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--rustc-arg=--cfg=kani",
+    "--start-from",
+    "crate::sha_new",
+    "--include",
+    "sha2::core_api",
+    "--include",
+    "sha2::consts",
+    "--dest-file",
+    "PDict_SHAConsts.llbc",
+    "--",
+    "--manifest-path",
+    "tools/prover-dict-20261026/proof-readonly/Cargo.toml",
+    "--offline",
+    "--release",
+    "--lib",
+    "--jobs",
+    "4"
+  ],
+  "runner": "python3 tools/prover-rw-20261023/run-host.py",
+  "source_revision": "1c2d5b1d485a8e13e57b2f31036d31c88a4518d5",
+  "source_hashes": {
+    "tools/prover-dict-20261026/proof-readonly/Cargo.toml": "b485b6e550f6b797df24cef4a7c5ca4cd11a4daadbcaf73beffbf106001632c8",
+    "tools/prover-dict-20261026/proof-readonly/lib.rs": "4e4c58af4b8e6bab195b0ddb05da5d7276c34e7fc3d52edf2988724ec9351d5c",
+    "tools/prover-dict-20261026/proof-readonly/Cargo.lock": "adb544afb21341ae905681ee31ab6480a4501c26595c2068137ef9f86b363b25"
+  },
+  "exit_status": 1,
+  "workload_started": false,
+  "wall_seconds": null,
+  "peak_rss_kib": null,
+  "swaps": null,
+  "print_axioms": "N/A: reservation refused before Charon; no theorem",
+  "guard": {
+    "allowed": false,
+    "projected_reserved_bytes": 60532195328,
+    "safe_limit_bytes": 59055800320
+  },
+  "disposition": "No rerun, cap increase, guard bypass, shared job termination or infrastructure change. Host proof jobs stopped. Missing workload timing is deliberate, not zero."
+}
