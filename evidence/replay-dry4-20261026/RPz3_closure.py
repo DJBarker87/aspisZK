@@ -37,7 +37,7 @@ def visit(m):
  suffix=m.replace('.','/')+'.lean';cs=[p for p in idx[Path(suffix).name] if p==suffix or p.endswith('/'+suffix)]
  if not cs and m.rsplit('.',1)[-1] not in {'Funs','Types','FunsExternal','TypesExternal','Basic','Impl','Equiv','Degree','Proofs','Modular'}:
   cs=idx[Path(suffix).name][:] # committed flat source snapshots may retain a qualified import name
- if not cs:
+ if not cs and m.split('.')[0]!='CompPoly' and m.rsplit('.',1)[-1] not in {'Funs','Types','FunsExternal','TypesExternal','Basic','Impl','Equiv','Degree','Proofs','Modular'}:
   leaf=m.rsplit('.',1)[-1]
   stems={leaf,re.sub(r'^AspisR1','',leaf)}
   for base,paths in idx.items():

@@ -67,3 +67,13 @@ Current partial closure: 4673 repository modules, 143 trusted direct imports,
 remain unresolved. Seven further unresolved names are exposed by actual imports.
 The exact complete closure size is unavailable until those sources resolve.
 All previously scheduled modules remain in the expanded target closure.
+
+D68 also selects the matching PublicPreparation.Types companion. The latest
+partial graph has 4674 repository modules, 143 trusted direct imports and 23
+unresolved names. Generic filenames Funs/Types/Basic are never matched merely
+by basename across unrelated namespaces; those remain missing absent a
+specific committed alias. Maximum additional source vertices reachable if
+all eligible attempts pass is 576, starting with the 802 validated reused
+objects and three unchanged failures. The source-attempt cap is 1450, reserving
+50 of the 1500 total attempts for the final batched audits and any necessary
+split audits. No use of the entire budget is claimed in advance.

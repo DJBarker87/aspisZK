@@ -27,7 +27,7 @@ for row in rows:
  m=row['module'];missing=[n for n in row['imports'] if plan['modules'].get(n,{}).get('kind')!='trusted-library' and state.get(n)!='passed']
  if missing:
   state[m]='blocked';blocked.append({'module':m,'missing':missing});continue
- if attempt>=1490:break
+ if attempt>=1450:break
  attempt+=1;a=f'RPz3_{attempt:03d}'
  if (E/a/'receipt.json').exists():
   receipt=json.loads((E/a/'receipt.json').read_text());assert receipt['module']==m
