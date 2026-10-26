@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP7FibreWide.lean:13:68: error: Tactic `decide` failed for proposition
+  ↑AspisR1ProducerRelease47.field.P ≠ 0
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqNat`, `instDecidableNot`, and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match h : (↑AspisR1ProducerRelease47.field.P).beq 0 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP7FibreWide.lean:19:11: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.41 = ?m.41
+but is expected to have type
+  (match do
+      let q ←
+        AspisR1ProducerRelease47.field.wide_exact.canonical_qm31
+            { c0 := { a := r, b := AspisR1ProducerRelease47.field.M31.ZERO },
+              c1 := AspisR1ProducerRelease47.field.CM31.ZERO }
+      ok { c0 := q, c1 := AspisR1ProducerRelease47.field.QM31.ZERO } with
+    | ok x => ok (fromW x)
+    | fail e => fail e
+    | div => div) =
+    ok ?m.39
+in the application
+  Exists.intro ?m.39 rfl
+'R1Z.ProverRwP7FibreWide.embed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwP7FibreWide.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

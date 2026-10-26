@@ -1,0 +1,30 @@
+import R1Z.ProverRwP7FibreTotal
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwP7FibreWide
+open Aeneas Aeneas.Std Result ProverRwFull ProverRwDictionaryTower
+variable [ExternalTypes]
+abbrev selected := ProverRwP7FibreInstall.selected
+
+theorem embed (ops : ExternalFuns) (x : U32) :
+    ∃ out, (selected ops).op110 x = ok out := by
+  change ∃ out, ProverRwDictionaryEmbedding.embed x = ok out
+  obtain ⟨r,hr,_⟩ := WP.spec_imp_exists
+    (UScalar.rem_spec x (y := AspisR1ProducerRelease47.field.P) (by decide))
+  simp only [ProverRwDictionaryEmbedding.embed,ProverRwDictionaryScalar.qFrom,
+    ProverRwDictionaryScalar.mFrom,hr,bind_tc_ok,
+    AspisR1ProducerRelease47.field.CM31.from_m31,
+    AspisR1ProducerRelease47.field.QM31.from_cm31,
+    AspisR1ProducerRelease47.field.wide_exact.WideExact.from_qm31,mapResult]
+  exact ⟨_,rfl⟩
+
+theorem total (ops : ExternalFuns) (i : aspis_core.r0.domain.FibreIndex) :
+    letI : ExternalFuns := selected ops
+    ∃ p, aspis_core.r0.domain.fibre_point
+      aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField i = ok p := by
+  letI : ExternalFuns := selected ops
+  apply ProverRwP7FibreTotal.source
+  exact embed ops
+#print axioms embed
+#print axioms total
+end R1Z.ProverRwP7FibreWide

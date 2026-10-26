@@ -72,3 +72,39 @@ that value equality, passing in1.80/1.82s. No unchanged rerun or cap increase.
 14808–14810 reject rewrite/simplifier attempts;14811 uses explicit alias unfolding
 and a final definitional join. All accepted theorem audits are standard.
 Root/headline premises removed0. The data equation from Stage1 remains open.
+
+## Stage4: current fibre-point source and selected-wide totality
+
+`FibreSource` retains current rev18, complex pow and its optimized complex
+square body. The reverse_bits leaf is the owned32-step reference: native
+Kani `all_raw_reverse` passes for every U32, optimized, memory/unwinding
+checks enabled and no stubs. Its exact reference snapshot is hash-checked.
+`ReverseControl` proves finite execution symbolically, without32-cell reduction.
+The remaining scalar/complex and current CT reducer source bindings are explicit,
+as in the retained arithmetic interpretation; full native adequacy is not inferred.
+
+`FibreInstall.source` supplies78 for every CodeField/input, preserving failures
+and divergence of arbitrary field embeddings. `FibrePower.total` proves totality
+of the actual complex exponent owner by strict exponent-halving induction for
+every U64 and raw complex input/accumulator. `FibreWide.total` additionally
+supplies total embeddings for the installed wide field, with no input-success
+or canonicality hypothesis. `BodyFibre.caller` consumes both supplied78/231
+in the complete actual caller while retaining the exact clone-free continuation.
+No geometric/field value equation, whole model identity or security contract
+is assumed proved by these source/termination results.
+
+14812–14825:10passes,4changed elaboration failures, no resource failures.
+All accepted theorem audits use standard axioms. Two source/P6 callbacks now
+supplied beyond P6 (231,78);33 of35 remain. Root/headline premises removed0.
+
+Reservation contention: the first native fibre-square extraction launch was
+refused before its target ran at08:55:20UTC,60.375GiB reserved against55GiB.
+After waiting at least180s, retry1 succeeds. The immutable wrapper needs a new
+receipt directory for the retry; original barrier evidence is preserved with
+exact retry UTC/exit in `reservation-retries.json`. No proof rerun, cap increase,
+barrier bypass, backend or infrastructure change. This follows local-lean rule6.
+
+The current radix-four polynomial extraction's translation independently hits
+`InterpReduceCollapse.collapse_ctx_following_sequence` Not_found. Source extraction
+succeeds; no generated proof/callback is accepted from the failed translation.
+Further work must split this owner or use a checked P6 reference.

@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP7FibreArithmetic.lean:20:2: error: Tactic `apply` failed: could not unify the conclusion of `ProverRwP6BindTotal.bind_total
+  (AspisR1ProducerRelease47.field.M31.reduce_u64 ?m.13) ?m.12 (ProverRwP6BaseTotal.reduce ?m.13)`
+  ∃ b,
+    (do
+        let a ← AspisR1ProducerRelease47.field.M31.reduce_u64 ?m.13
+        ?m.12 a) =
+      ok b
+with the goal
+  ∃ c,
+    (do
+        let m ←
+          AspisR1ProducerRelease47.field.reduce_u64
+              (((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)).wrapping_mul
+                (((core.convert.num.FromU64U32.from a.a).wrapping_add
+                      (core.convert.num.FromU64U32.from 2147483647#u32)).wrapping_sub
+                  (core.convert.num.FromU64U32.from a.b)))
+        let m1 ← ProverRwP7FibreSource.aspis_core.field.M31.mul a.a a.b
+        let m2 ← ProverRwP7FibreSource.aspis_core.field.M31.double m1
+        ok { a := m, b := m2 }) =
+      ok c
+
+Note: The full type of `ProverRwP6BindTotal.bind_total (AspisR1ProducerRelease47.field.M31.reduce_u64 ?m.13) ?m.12
+  (ProverRwP6BaseTotal.reduce ?m.13)` is
+  (∀ (a : AspisR1ProducerRelease47.field.M31), ∃ b, ?m.12 a = ok b) →
+    ∃ b,
+      (do
+          let a ← AspisR1ProducerRelease47.field.M31.reduce_u64 ?m.13
+          ?m.12 a) =
+        ok b
+
+a : C
+⊢ ∃ c,
+    (do
+        let m ←
+          AspisR1ProducerRelease47.field.reduce_u64
+              (((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)).wrapping_mul
+                (((core.convert.num.FromU64U32.from a.a).wrapping_add
+                      (core.convert.num.FromU64U32.from 2147483647#u32)).wrapping_sub
+                  (core.convert.num.FromU64U32.from a.b)))
+        let m1 ← ProverRwP7FibreSource.aspis_core.field.M31.mul a.a a.b
+        let m2 ← ProverRwP7FibreSource.aspis_core.field.M31.double m1
+        ok { a := m, b := m2 }) =
+      ok c
+'R1Z.ProverRwP7FibreArithmetic.mul_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwP7FibreArithmetic.square_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
