@@ -22,6 +22,7 @@ theorem log (R : RoundModel.Boundaries) (B : FinishModel.Boundaries)
       (init : PublicInitCall D pub pre.c1_root t0)
       (r25 r26 : r1_wire.ValidatedRecord) (z0 z1 : aspis_core.circle.SecureCirclePoint),
       PrefixAdapter.parseAccepted bytes=ok (.Ok pre) ∧
+      r1_semantic.public_transcript D pub () pre.c1_root=ok (.Ok t0) ∧
       SourceFull25.Trace D pre t0 t25 cs ∧ cs.map (fun c=>c.row.val)=List.range 25 ∧
       r1_wire.Prefix.validated_record pre 25#u8=ok (.Ok r25) ∧
       FinishModel.circle_validated B D t25 r25=ok (.Ok z0,t26) ∧
@@ -57,7 +58,7 @@ theorem log (R : RoundModel.Boundaries) (B : FinishModel.Boundaries)
   obtain ⟨init⟩ := public_success_has_init_call D pub pre.c1_root t0 (by simpa only [initHash] using rawPublic)
   have initLog : observe (run (S1SemanticCode.publicTranscript D pub () pre.c1_root)).1=[initPair init] := by
     simpa only [initHash] using F3R_PublicLog.log init
-  refine ⟨pre,t0,t25,t26,t27,cs0++cs1,init,r25,r26,z0,z1,parsed,
+  refine ⟨pre,t0,t25,t26,t27,cs0++cs1,init,r25,r26,z0,z1,parsed,rawPublic,
     F3R_TraceAppend.append trace0 trace1,?_,read25,
     (S1SemanticCode.circleValidated_erasure B D t25 r25).symm.trans circle25,read26,
     (S1SemanticCode.circleValidated_erasure B D t26 r26).symm.trans circle26,transcript,?_⟩
