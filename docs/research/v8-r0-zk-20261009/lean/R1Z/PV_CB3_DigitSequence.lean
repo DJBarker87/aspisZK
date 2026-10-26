@@ -61,8 +61,29 @@ theorem value_conserved (base radix n : Nat) (words : List Nat) :
           rw [hp] at hpv
           simpa only [Nat.add_comm] using hpv
 
+theorem quotient_value (base radix : Nat) (positive : 0 < base)
+    (n : Nat) (words : List Nat) :
+    value radix words / base ^ n = value radix (splitDigits base radix n words).2 := by
+  have bound := PV_CB3_SamplerCarry.value_lt_pow base (splitDigits base radix n words).1
+    (digits_canonical base radix positive n words)
+  rw [digits_length] at bound
+  rw [← value_conserved base radix n words,
+    Nat.add_mul_div_left _ _ (Nat.pow_pos positive), Nat.div_eq_of_lt bound]
+  exact Nat.zero_add _
+
+theorem digits_value (base radix : Nat) (positive : 0 < base)
+    (n : Nat) (words : List Nat) :
+    value radix words % base ^ n = value base (splitDigits base radix n words).1 := by
+  have bound := PV_CB3_SamplerCarry.value_lt_pow base (splitDigits base radix n words).1
+    (digits_canonical base radix positive n words)
+  rw [digits_length] at bound
+  rw [← value_conserved base radix n words,
+    Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt bound]
+
 #print axioms digits_length
 #print axioms quotient_length
 #print axioms digits_canonical
 #print axioms value_conserved
+#print axioms quotient_value
+#print axioms digits_value
 end R1Z.PV_CB3_DigitSequence
