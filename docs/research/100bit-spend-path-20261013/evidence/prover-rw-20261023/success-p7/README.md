@@ -183,3 +183,16 @@ This validates development evidence without launching another capped scope;
 it is not a combined axioms compile, release replay or frozen-artifact proof.
 No shipped Rust, existing proved Lean module, key, security contract, root
 premise or artifact was changed. No push or merge. Target not yet established.
+
+## Automatic capacity resume1: unresolved admission conflict
+
+Read-only host inspection confirms the existing launcher still appends the sent
+input before admission, the out-14835 marker remains, and time-14835.log is
+absent. The prior permitted retry failed exit65, `attempt 14835 already used`.
+No infrastructure fix or new authorization to bypass that guard is present.
+Local-lean rule5 therefore still requires stop/report. No compile/native job,
+marker deletion, launcher edit, guard bypass or new ID substitution occurred.
+`capacity-resume-1.json` pins the inspected launcher hash and read-only commands.
+Budget remains35/100 Lean and3/15 Kani used,65/12 remaining; next unused14836.
+Root/headline premises removed0; target not yet established. The lead must
+resolve the admission/replay-marker conflict before proof work can resume.
