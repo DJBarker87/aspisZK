@@ -14,7 +14,7 @@ if not mod.startswith('JFu_'):
 a=f'JFu12_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/recount10-20261026/Rc10_001/receipt.json').read_text())
 cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='JFu split certificate; block count in JFu_PLAN.json; focused source binding')
-cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/JFp_Cache:/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects:/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/objects'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/JFp_Cache:/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects'
 cfg['command'][-3:]=['-o',mod+'.olean',mod+'.lean']
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 retries=[]

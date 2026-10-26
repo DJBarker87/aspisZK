@@ -1,0 +1,4 @@
+import JFu_MaskInputs
+set_option pp.fullNames true
+#print AspisR1PublicPreparation.FinishModel.closureFn2
+#print AspisR1PublicPreparation.FinishModel.closureFn5

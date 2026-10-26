@@ -1,0 +1,18 @@
+def AspisR1PublicPreparation.FinishModel.closureFn2 : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.FinishModel.Closure2 H →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Result
+          (AspisR1PublicPreparation.aspis_core.field.QM31 × AspisR1PublicPreparation.FinishModel.Closure2 H) :=
+fun {H} aspis_coreDigest32Inst c tupled_args => do
+  let i ← 16#usize + tupled_args
+  let a ← Aeneas.Std.Array.index_usize c 0#usize
+  let q ← a.index_usize i
+  Aeneas.Std.Result.ok (q, c)
+@[reducible] def AspisR1PublicPreparation.FinishModel.closureFn5 : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    Aeneas.Std.core.ops.function.FnMut (AspisR1PublicPreparation.FinishModel.Closure2 H) Aeneas.Std.Usize
+      AspisR1PublicPreparation.aspis_core.field.QM31 :=
+fun {H} aspis_coreDigest32Inst =>
+  { FnOnceInst := AspisR1PublicPreparation.FinishModel.closureFn4 aspis_coreDigest32Inst,
+    call_mut := AspisR1PublicPreparation.FinishModel.closureFn2 aspis_coreDigest32Inst }

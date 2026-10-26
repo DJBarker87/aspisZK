@@ -1,0 +1,3 @@
+# Retained-byte transition sanity check
+
+Potential obstruction considered: the terminal's native validate_transition requires snapshot.sequence=snapshot.next_pair_index. The outer ASF8 anchor is42, but it is not the snapshot sequence. JFt_SnapshotValue.value has sequence13 and next_pair_index13; afterstate index14. The earlier preliminary suspicion was rejected by inspecting the actual definitions and promptly corrected in commentary. This is not a vacuity finding. Rust crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:194 and FIq_Native11.validate_transition enforce the same test. No source or retained byte was changed.
