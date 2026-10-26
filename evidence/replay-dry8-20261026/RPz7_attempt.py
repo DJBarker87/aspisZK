@@ -9,7 +9,7 @@ def collect(name):
  p=E/name;p.parent.mkdir(parents=True,exist_ok=True)
  r=subprocess.run(['scp','-q',*SSH,H+':'+B+'/'+name,str(p)],capture_output=True,text=True)
  if r.returncode:raise RuntimeError('STOP collection: '+r.stderr)
-def run(a,m,src,imports):
+def run(a,m,src,imports,roots=None):
  assert not (E/a/'receipt.json').exists(),a
  for retry in range(11):
   r=ssh(f'python3 /home/dombarker/project-offloads/codex-cx-s2h-20261023/S2H_reservation.py {B}/{a}-reservation.json > {B}/{a}-barrier-{retry}.log 2>&1')
@@ -28,12 +28,12 @@ def run(a,m,src,imports):
  rel='RPz7_sources/'+m+'.lean';obj='RPz7_objects/'+m+'.olean'
  r=subprocess.run(['scp','-q',*SSH,str(src),H+':'+B+'/'+rel],capture_output=True,text=True)
  if r.returncode:raise RuntimeError(r.stderr)
- cfg=dict(kind='lean',module=m,env={'LEAN_PATH':T+'/lib/lean:'+B+'/RPz7_overlay:'+B+'/RPz4_trusted:'+B+'/RPz_trusted'},timeout=540,command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','RPz7_sources','-o',obj,rel],sources=[rel],attempt=a,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,deps_fingerprint={'scope':'larger e5c producer, unchanged valid fresh predecessors and RPz7 replacement sources','toolchain':'leanprover/lean4:v4.32.0'},expected_time='one source module elaboration and kernel checking; no heavy arithmetic expansion planned',repository_source=str(src.relative_to(R)),reservation_retries=retry)
+ cfg=dict(kind='lean',module=m,env={'LEAN_PATH':':'.join(roots) if roots else T+'/lib/lean:'+B+'/RPz7_overlay:'+B+'/RPz4_trusted:'+B+'/RPz_trusted'},timeout=540,command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','RPz7_sources','-o',obj,rel],sources=[rel],attempt=a,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,deps_fingerprint={'scope':'larger e5c producer, unchanged valid fresh predecessors and RPz7 replacement sources','toolchain':'leanprover/lean4:v4.32.0'},expected_time='one source module elaboration and kernel checking; no heavy arithmetic expansion planned',repository_source=str(src.relative_to(R)),reservation_retries=retry)
  payload="""import json,hashlib
 from pathlib import Path
 B=Path(%r);T=Path(%r);cfg=json.loads(%r);objs={}
 for n in json.loads(%r):
- ps=[T/'lib/lean'/(n.replace('.','/')+'.olean'),B/'RPz7_overlay'/(n.replace('.','/')+'.olean'),B/'RPz4_trusted'/(n.replace('.','/')+'.olean'),B/'RPz_trusted'/(n.replace('.','/')+'.olean')]
+ ps=[Path(root)/(n.replace('.','/')+'.olean') for root in cfg['env']['LEAN_PATH'].split(':')]
  p=next((p for p in ps if p.is_file()),None);assert p is not None,(n,ps)
  objs[n]={'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size}
 cfg['deps_fingerprint']['selected_objects']=objs
