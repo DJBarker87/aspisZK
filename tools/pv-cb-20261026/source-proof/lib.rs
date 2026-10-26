@@ -118,3 +118,10 @@ pub fn terminal(public:aspis_statement::pool_v1::pair_forest_semantic_terminal::
 
 #[cfg(kani)]
 pub fn public_eq(a:&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1,b:&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1)->bool {a==b}
+
+#[cfg(kani)]
+pub fn weights_materialize(x:&aspis_r1_cost_probe::weights::Weights,k:aspis_core::field::WideExact)->Result<Vec<aspis_core::field::WideExact>,aspis_r1_cost_probe::verifier::Error> {x.materialize(k)}
+#[cfg(kani)]
+pub fn weights_new(v:aspis_r1_cost_probe::transport::Variant,a:&[aspis_core::field::QM31;10],z:&[aspis_core::circle::SecureCirclePoint;2])->Result<Box<aspis_r1_cost_probe::weights::Weights>,aspis_r1_cost_probe::verifier::Error> {aspis_r1_cost_probe::weights::Weights::new(v,a,z)}
+#[cfg(kani)]
+pub fn weights_raw(x:&aspis_r1_cost_probe::weights::Weights,kind:usize,j:usize)->aspis_core::field::QM31 {x.raw(kind,j)}

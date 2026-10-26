@@ -20,7 +20,7 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
   args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built',*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract'] if project in ['source-proof','proof'] else []),'--sysroot','default','--start-from',entry]
   if include:
    for pattern in include.split('+'):args+=['--include',pattern]
-  args+=['--dest-file',f'{base}/PV_CB_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{project}/Cargo.toml','--release','--offline','--lib','--jobs','4',*(['--features','r0'] if project.startswith('source/crates/') else [])]
+  args+=['--dest-file',f'{base}/PV_CB_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{project}/Cargo.toml','--release','--offline','--lib','--jobs','4',*(['--features','ct-host-prover' if project.endswith('aspis-r1-cost-probe') else 'r0'] if project.startswith('source/crates/') else [])]
  else:
   assert ssh(f'mkdir -p {base}/shipped-op{op}-generated').returncode==0
   args=['timeout','120',aeneas,'-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',f'PV_CB_ShippedOp{op}','-dest',f'{base}/shipped-op{op}-generated','-split-files','-emit-json',f'{base}/PV_CB_ShippedOp{op}.llbc']
