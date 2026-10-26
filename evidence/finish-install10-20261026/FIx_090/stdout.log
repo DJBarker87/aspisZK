@@ -1,0 +1,21 @@
+FIx_ReconstructPrefixModel.lean:31:14: error: unsolved goals
+case succ
+view : Std.Array NQ 16#usize
+n : ℕ
+ih :
+  n ≤ (↑view).length →
+    ∀ (acc : K),
+      FIx_ReconstructFold.model (List.take n ↑view) acc =
+        SelectorReconstructIndexModel.reconstructIndexed (FIv_NativeArray.value view) n acc
+bound : n + 1 ≤ (↑view).length
+acc : K
+hread : FIv_NativeArray.value view n = decode (↑view)[n]
+⊢ (match n, acc + acc + decode (↑view)[n] with
+    | 0, acc => acc
+    | n.succ, acc =>
+      SelectorReconstructIndexModel.reconstructIndexed (FIv_NativeArray.value view) n
+        (acc + acc + FIv_NativeArray.value view n)) =
+    SelectorReconstructIndexModel.reconstructIndexed (FIv_NativeArray.value view) n (acc + acc + decode (↑view)[n])
+'AspisR1.FIx_ReconstructPrefixModel.take_step' depends on axioms: [propext, Quot.sound]
+'AspisR1.FIx_ReconstructPrefixModel.model_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIx_ReconstructPrefixModel.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
