@@ -9842,3 +9842,21 @@ Relaunched as pv-rw15 (IDs 21300–21599, remaining budget) on the proof/audit d
 compression correspondence and callbacks. New job pv-l1 (`codex/pv-l1-20261026`, from the merged
 candidate, prefix PV_L1_, IDs 21600–21899): V347–V351 native L1 event producer and joint law, plus
 V366 on the same coupling. Six jobs running. Privacy target not yet established; rows removed: 0.
+
+## D198 (Stream B, 2026-10-26 13:10): L2 stage 2 merged; all F3/F5/F6 rows still open; l2-sim3
+
+Merged `codex/pv-l2-sim-20261026` (9f7205e539; research-based, no crates/programs change, no forbidden
+tokens). pv-l2-sim2 used 100/100 Lean (45 successes, 140 declarations audited standard-only) and
+20/20 Kani (11 pass, 8 timeouts, 1 unwind failure). Proved: actual QueryScan raw history transport to
+lazy and completed tapes (`Headline.real_to_lazy_actual`), fixed-coin absorption to the unchanged
+simE (`Headline.absorption_actual`, `HeadlineF3.absorption_actual`), owned-source entropy/masking
+count absorption (`F3SourceBudget`, `F3Tape.owned_joint_law`), and extracted checker erasures
+(`F6Dot/KDot/Image/Pivot/Product`). The generic local hypotheses (RAddrIn, RCausal, PublicBase,
+BuilderSoundOn, capacity budgets, conditional fibres) were discharged for the actual domains; no new
+endpoint assumption. Every complete F3/F5/F6 row (V352–V365) remains OPEN: the proved pieces are
+model/parser transports and sub-steps, not the whole native-trace law. `F3SeedObstruction.
+lifted_position_changes` (J20118) is a checked counterexample to a proof inference (successful-seed
+permutation does not preserve the first-nonzero position), not a witness attack; the replacement
+construction fixes the raw E1 tape. Rows removed: 0. pv-l2-sim3 continues with a fresh budget on the
+E1/expander record joined to the full L1 attempt record and ROM history, the new inversion
+zero-boundary row V380 from D197, then the F5/F6 rows, reporting CLOSED/REDUCED/OPEN per row.
