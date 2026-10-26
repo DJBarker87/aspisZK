@@ -1,3 +1,4 @@
+import CPH_Program
 import CPH_Pair
 import CPH_Protection
 import Rc2_Events
@@ -60,8 +61,8 @@ open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 
 /-- Candidate adopted frozen3 endpoint on the owner-approved two-transaction checkpoint
 projection. RuntimePersistence is the named external runtime item. The system
-program is the fixed all-zero public key; the verifier program distinction is
-an explicit deployment pin obligation. The raw canonical join, runtime carrier
+program is the fixed all-zero public key; the verifier identity is selected from the
+retained exact-default-ELF deployment receipt. The raw canonical join, runtime carrier
 binding, P2Prime and FirstEntry are retained. -/
 theorem deployed {W A F CoreError Tx : Type}
     (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
@@ -80,20 +81,19 @@ theorem deployed {W A F CoreError Tx : Type}
     (extraction : S2W_DigestExtraction.AeneasExtraction (sdkOps (Tx2I_Install.install (CPH_Install.configuration c reservation).adapter (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base (CPH_Install.configuration c reservation).stageBase) (CPH_Install.configuration c reservation).reserved (CPH_Install.configuration c reservation).query (CPH_Install.configuration c reservation).geometry)) (CPH_Install.configuration c reservation).finish) (Uni_Install.current (CPH_Install.configuration c reservation).currentBase (CPH_Install.configuration c reservation).reserved (CPH_Install.configuration c reservation).query (CPH_Install.configuration c reservation).geometry) (CPH_Install.configuration c reservation).boundaries (CPH_Install.configuration c reservation).std) native1 native2 hashv)
     (sha256 H : Bytes → State) (p1 : S2W_ExtractionBoundary.P1 sha256 H)
     (syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
-    (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+    (data1 data2 : Slice U8)
     (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
     (saved : alloc.vec.Vec U8) (post1 post2 : Heap (Nat → Record))
-    (accepted1 : S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+    (accepted1 : S2W_D189Wrappers.first native1 copy allocator e1 CPH_Program.verifier data1 state1 =
       ok (.Ok (saved,post1,final1)))
-    (accepted2 : S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+    (accepted2 : S2W_D189Wrappers.second native2 allocator e2 CPH_Program.verifier data2 slot state2 =
       ok (.Ok (post2,final2)))
     (root : Array U8 32#usize) (length : U32)
 
     (prior : Program Bytes State Unit)
     (p : CPG_Projection.Observations Tx A) (t u : Tx)
     (actions : List (CPP_BankState.Action A))
-    (game : CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator program)
-    (programNotSystem : program ≠ Hist_Nonvacuity.key 0#u8)
+    (game : CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator CPH_Program.verifier)
     (RuntimePersistence : CPR_DataPersistence.TwoTransactionLaw
       (CPG_Projection.adjacent p) (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p)
       (CPG_Projection.tentative p)
@@ -124,7 +124,7 @@ theorem deployed {W A F CoreError Tx : Type}
       (CPH_Install.configuration c reservation).reserved (CPH_Install.configuration c reservation).query
       (CPH_Install.configuration c reservation).geometry (CPH_Install.configuration c reservation).stageBase
       (CPH_Install.configuration c reservation).finish (CPH_Install.configuration c reservation).boundaries
-      reservation program data1 data2 slot saved post1 post2 H
+      reservation CPH_Program.verifier data1 data2 slot saved post1 post2 H
       (DrvC_Implementation.driver (CPH_Install.configuration c reservation)) prior (CPH_Install.configuration c reservation) hashv native1 native2 copy allocator
       (p.physicalEvents t)) ∧
     ((∀ H : Bytes → State,(eval H (annotatedWith D (F3T_Installed.source (CPH_Install.configuration c reservation) hashv)
@@ -139,41 +139,41 @@ theorem deployed {W A F CoreError Tx : Type}
     (Q0+Q1≤OraclePortHeadlineFrozen2.Qmax → F3T_RuntimeBound.failureModel runtime≤(Q0+Q1+1:Rat)*(1/(2:Rat)^100))) ∧
     (let r := CPH_Install.configuration c reservation;
       F3T_RuntimeBound.failureModel runtime +
-        F3T_AccountCharge.mass (CPG_Account.source r hashv copy allocator program adversary chooseSecond)
+        F3T_AccountCharge.mass (CPG_Account.source r hashv copy allocator CPH_Program.verifier adversary chooseSecond)
           project select (Q0+Q1) ≤ F3T_Numeric.total (Q0+Q1)) ∧
     (let r := CPH_Install.configuration c reservation;
       Q0+Q1 = 0 → F3T_RuntimeBound.failureModel runtime +
-        F3T_AccountCharge.mass (CPG_Account.source r hashv copy allocator program adversary chooseSecond)
+        F3T_AccountCharge.mass (CPG_Account.source r hashv copy allocator CPH_Program.verifier adversary chooseSecond)
           project select (Q0+Q1) < 1/(2:Rat)^100) ∧
-    (native1 program e1.first data1 = ok (.Ok saved) ∧
+    (native1 CPH_Program.verifier e1.first data1 = ok (.Ok saved) ∧
       saved.val.length = 1768 ∧
       payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768 = bytesOf saved.val ∧
       post1.ambient = e1.heap.ambient ∧ post1.accounts = e1.heap.accounts ∧
       post1.counter = e1.heap.counter ∧
       (∀ cell, cell ≠ (e1.heap.accounts 2).1 → post1.payload cell = e1.heap.payload cell)) ∧
-    Rc2_Events.Facts (CPH_Install.configuration c reservation) hashv native1 native2 copy allocator program H saved ∧
-    CPH_Protection.Facts p t saved program := by
+    Rc2_Events.Facts (CPH_Install.configuration c reservation) hashv native1 native2 copy allocator CPH_Program.verifier H saved ∧
+    CPH_Protection.Facts p t saved CPH_Program.verifier := by
   refine ⟨DrvC_SourceEntry.same_program (CPH_Install.select c reservation) hashv,
     DrvC_Installation.aus1_dictionary (CPH_Install.configuration c reservation),
     ?_,?_,?_,?_,?_,?_,?_⟩
   · exact CPH_Pair.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
       c reservation native1 native2 prepareOwner primitiveOwner hashv extraction
-      sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2
-      accepted1 accepted2 root length prior p t u actions game (Hist_Nonvacuity.key 0#u8) programNotSystem
+      sha256 H p1 syscall CPH_Program.verifier data1 data2 slot state1 state2 final1 final2 saved post1 post2
+      accepted1 accepted2 root length prior p t u actions game (Hist_Nonvacuity.key 0#u8) CPH_Program.not_system
       (CPH_Install.key c reservation) RuntimePersistence
   · simpa only [Nat.cast_add] using F3T_ConditionalClaims.claims
       (CPH_Install.configuration c reservation) D P (Q0+Q1) queries hashv runtime raw binding
   · exact CPG_Account.bound (CPH_Install.configuration c reservation)
-      hashv copy allocator program adversary chooseSecond D P Q0 Q1 queries runtime raw binding
+      hashv copy allocator CPH_Program.verifier adversary chooseSecond D P Q0 Q1 queries runtime raw binding
       prefixBound choiceBound project select
   · exact CPG_Account.zero (CPH_Install.configuration c reservation)
-      hashv copy allocator program adversary chooseSecond D P Q0 Q1 queries runtime raw binding
+      hashv copy allocator CPH_Program.verifier adversary chooseSecond D P Q0 Q1 queries runtime raw binding
       prefixBound choiceBound project select
   · exact PoolT_Write.accepted_verifier_writes_copy (DrvC_Installation.sdk (CPH_Install.configuration c reservation)) native1 native2 hashv extraction copy std allocator
-      e1 program data1 state1 final1 saved post1 accepted1
-  · exact Rc2_Events.derive _ hashv native1 native2 extraction copy allocator program sha256 H p1 syscall saved
+      e1 CPH_Program.verifier data1 state1 final1 saved post1 accepted1
+  · exact Rc2_Events.derive _ hashv native1 native2 extraction copy allocator CPH_Program.verifier sha256 H p1 syscall saved
   · exact CPH_Protection.derive p t u e1 e2 saved actions (CPH_Install.configuration c reservation)
-      (CPH_Install.key c reservation) native1 native2 hashv extraction copy std allocator program game
+      (CPH_Install.key c reservation) native1 native2 hashv extraction copy std allocator CPH_Program.verifier game
       data1 state1 final1 post1 accepted1
 
 #print axioms deployed
