@@ -1,0 +1,92 @@
+F3R_ModelSchedule.lean:38:33: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H i.semantic.value i.proof j).toProgram).1)
+          (List.range 33)).flatten,
+      (LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33).1
+in the target expression
+  (have tr := (LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33;
+    have terminal :=
+      eval H (OracleDecisionFeasibilityCore.onBytes (F3_Model.decision i.physical i.stored) tr (i.proof 33));
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H i.semantic.value i.proof j).toProgram).1)
+            (List.range 33)).flatten ++
+        terminal.1,
+      terminal.2)) =
+    ((eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).1 ++
+        ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+          ((eval H
+                (F3_Model.checkpoint i.physical i.stored p q
+                  (LiteralTranscript.erasePrefix
+                    (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)
+                  input v)).1 ++
+            (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1)),
+      true)
+
+D : LiteralByteProtocol.Decoder
+H : Bytes → State
+i : F3_Model.Input
+p : Parsed
+q : Fin 22 → Fin 262144
+input : RecordedBinaryExperimentBin.SourceInputs
+v : LiteralOpeningView.View
+guard :
+  OraclePortAdmission.Guard
+    (LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)
+parser :
+  OraclePortStoredParserC4.parseReached i.stored
+      (LiteralTranscript.erasePrefix
+        (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2) =
+    some p
+queries :
+  OraclePortSelectedDraft.queries
+      (LiteralTranscript.erasePrefix
+        (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2) =
+    some q
+found :
+  OraclePortStoredDecisionDraftC4.input p q
+      (LiteralTranscript.erasePrefix
+        (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2) =
+    some input
+opening :
+  LiteralOpeningView.read
+      (typedRows p q
+        (LiteralTranscript.erasePrefix
+          (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)) =
+    some v
+batch0 : (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2 = true
+batch1 : (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2 = true
+finish :
+  OraclePortFrozen2.finish p q
+      (LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)
+      input (OraclePortFrozen2.completeState input q) =
+    true
+sampler :
+  eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value)) =
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H i.semantic.value i.proof j).toProgram).1)
+          (List.range 33)).flatten,
+      (LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33)
+logEq :
+  (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).1 =
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H i.semantic.value i.proof j).toProgram).1)
+            (List.range 33)).flatten,
+        (LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33).1
+trEq :
+  (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2 =
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H i.semantic.value i.proof j).toProgram).1)
+            (List.range 33)).flatten,
+        (LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33).2
+⊢ (have tr := (LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33;
+    have terminal :=
+      eval H (OracleDecisionFeasibilityCore.onBytes (F3_Model.decision i.physical i.stored) tr (i.proof 33));
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H i.semantic.value i.proof j).toProgram).1)
+            (List.range 33)).flatten ++
+        terminal.1,
+      terminal.2)) =
+    ((eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).1 ++
+        ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+          ((eval H
+                (F3_Model.checkpoint i.physical i.stored p q
+                  (LiteralTranscript.erasePrefix
+                    (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)
+                  input v)).1 ++
+            (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1)),
+      true)
+'AspisR1.F3R_ModelSchedule.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
