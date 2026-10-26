@@ -1,4 +1,4 @@
-import P6C_OnCuts
+import P6C_FullBoundary
 import Rc3_Result
 import SAP_LiteralCaller
 import Rc3_Nonvacuity
@@ -65,6 +65,7 @@ def Outcome {W F CoreError : Type}
         (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) (F3M_CircleSource.install B) (NP6_StdModel.calls reservation))) () s.pub s.proof s.checkpoint tx2 ∧
       Rc2_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps (F3M_CircleSource.install B) reservation program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run ∧
       P6C_OnCuts.SafeBatches (⟨adapterOps,ops,stageBase,finishOps,reserved,queryOps,geoOps,F3M_CircleSource.install B,NP6_StdModel.calls reservation⟩ : DrvC_Installation.Configuration F CoreError) hashv H f s ∧
+      P6C_FullBoundary.Facts (⟨adapterOps,ops,stageBase,finishOps,reserved,queryOps,geoOps,F3M_CircleSource.install B,NP6_StdModel.calls reservation⟩ : DrvC_Installation.Configuration F CoreError) hashv H saved f s ∧
       NP6_Constructors.Contents run.initial run.pending ∧
       AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
         f.statement=ok f.semantic ∧
@@ -98,7 +99,9 @@ theorem strengthen {W F CoreError : Type}
     parser,acceptance,nonvacuity,caller⟩ := source
   have safe := P6C_OnCuts.same_cuts (⟨adapterOps,ops,stageBase,finishOps,reserved,queryOps,geoOps,F3M_CircleSource.install B,NP6_StdModel.calls reservation⟩ : DrvC_Installation.Configuration F CoreError) native1 native2 hashv extraction
     sha256 H p1 syscall e1.first (e2.second secondSizes) saved f s base.1
-  exact ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,safe,initial,selected,publicFacts,
+  have whole := P6C_FullBoundary.same_cuts (⟨adapterOps,ops,stageBase,finishOps,reserved,queryOps,geoOps,F3M_CircleSource.install B,NP6_StdModel.calls reservation⟩ : DrvC_Installation.Configuration F CoreError) native1 native2 hashv extraction
+    sha256 H p1 syscall e1.first (e2.second secondSizes) saved f s base.1
+  exact ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,safe,whole,initial,selected,publicFacts,
     parser,acceptance,nonvacuity,caller⟩
 
 #print axioms strengthen

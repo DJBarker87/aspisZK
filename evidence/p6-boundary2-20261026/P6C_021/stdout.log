@@ -1,0 +1,81 @@
+P6C_NativeEffects.lean:43:96: error: unsolved goals
+Hash A : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+hashv : Parts → Result Digest
+binding : ∀ (parts : Slice (Slice U8)), D.digest hash parts = hashv parts
+parts : CheckpointBytes5Effect.Parts
+k : CheckpointBytes5Effect.Digest → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : CheckpointBytes5Effect.Digest) (before : Log),
+    CheckpointBytes5Effect.run D hash (k a) (values before) = forget (run hashv (k a) before)
+before : Log
+digest : Digest
+actual : hashv parts = ok digest
+⊢ List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok value => some (q.parts, value)
+        | x => none)
+      (before ++ [{ parts := parts, returned := ok digest }]) =
+    List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok value => some (q.parts, value)
+          | x => none)
+        before ++
+      [(parts, digest)]
+P6C_NativeEffects.lean:44:19: warning: This simp argument is unused:
+  values_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵l̵u̵e̵s̵_̵a̵p̵p̵e̵n̵d̵,̵v̵a̵l̵u̵e̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵]̵[̲v̲a̲l̲u̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+P6C_NativeEffects.lean:44:40: warning: This simp argument is unused:
+  List.filterMap_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵l̵u̵e̵s̵_̵a̵p̵p̵e̵n̵d̵,̵v̵a̵l̵u̵e̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵]̵[̲v̲a̲l̲u̲e̲s̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲v̲a̲l̲u̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+P6C_NativeEffects.lean:44:60: warning: This simp argument is unused:
+  List.filterMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵l̵u̵e̵s̵_̵a̵p̵p̵e̵n̵d̵,̵v̵a̵l̵u̵e̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵]̵[̲v̲a̲l̲u̲e̲s̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲v̲a̲l̲u̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+P6C_NativeEffects.lean:71:20: error: Application type mismatch: The argument
+  fun q_1 member => successes q_1 (List.mem_cons_of_mem q member)
+has type
+  ∀ q ∈ rest, ∃ digest, q.returned = ok digest
+but is expected to have type
+  (run hashv code []).2 = rest
+in the application
+  ih fun q_1 member => successes q_1 (List.mem_cons_of_mem q member)
+P6C_NativeEffects.lean:72:28: error: Application type mismatch: The argument
+  tail
+has type
+  (∀ q ∈ rest, ∃ digest, q.returned = ok digest) → List.length (values rest) = rest.length
+but is expected to have type
+  (List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok value => some (q.parts, value)
+          | x => none)
+        rest).length =
+    rest.length
+in the application
+  congrArg Nat.succ tail
+P6C_NativeEffects.lean:70:51: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵l̵u̵e̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵r̵e̵t̵u̵r̵n̵e̵d̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵]̵[̲v̲a̲l̲u̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲r̲e̲t̲u̲r̲n̲e̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.P6C_NativeEffects.values_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_NativeEffects.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.P6C_NativeEffects.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.P6C_NativeEffects.no_lost_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
