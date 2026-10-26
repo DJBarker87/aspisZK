@@ -1,0 +1,22 @@
+BEf_Offset.lean:25:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run hashv (k digest) (before ++ [?m.137])
+in the target expression
+  run hashv (k digest) (before ++ [{ parts := parts, returned := ok digest }]) =
+    ((run hashv (k digest) [{ parts := parts, returned := ok digest }]).1,
+      before ++ (run hashv (k digest) [{ parts := parts, returned := ok digest }]).2)
+
+case read.ok
+A : Type
+hashv : Parts → Result Digest
+parts : CheckpointBytes5Effect.Parts
+k : CheckpointBytes5Effect.Digest → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : CheckpointBytes5Effect.Digest) (before : Log),
+    run hashv (k a) before = ((run hashv (k a) []).1, before ++ (run hashv (k a) []).2)
+before : Log
+digest : Digest
+h : hashv parts = ok digest
+⊢ run hashv (k digest) (before ++ [{ parts := parts, returned := ok digest }]) =
+    ((run hashv (k digest) [{ parts := parts, returned := ok digest }]).1,
+      before ++ (run hashv (k digest) [{ parts := parts, returned := ok digest }]).2)
+'AspisR1.BEf_Offset.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

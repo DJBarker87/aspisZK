@@ -1,0 +1,56 @@
+BEf_Bind.lean:31:21: error: Type mismatch
+  ih digest after (before ++ [{ parts := parts, returned := ok digest }])
+has type
+  BEf_Carrier.run call (next digest >>= k) after (before ++ [{ parts := parts, returned := ok digest }]) =
+    continueRun call k
+      (BEf_Carrier.run call (next digest) after (before ++ [{ parts := parts, returned := ok digest }]))
+but is expected to have type
+  (match (ok digest, after) with
+    | (answer, after) => BEf_Carrier.run call (CheckpointBytes5Effect.Code.read parts next >>= k) state before) =
+    continueRun call k (BEf_Carrier.run call (CheckpointBytes5Effect.Code.read parts next) state before)
+BEf_Bind.lean:32:18: error: Tactic `rfl` failed: The left-hand side
+  match (fail e, after) with
+  | (answer, after) => BEf_Carrier.run call (CheckpointBytes5Effect.Code.read parts next >>= k) state before
+is not definitionally equal to the right-hand side
+  continueRun call k (BEf_Carrier.run call (CheckpointBytes5Effect.Code.read parts next) state before)
+
+case read.mk.fail
+S A B : Type
+call : Parts → S → Result Digest × S
+k : A → Code B
+parts : CheckpointBytes5Effect.Parts
+next : CheckpointBytes5Effect.Digest → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : CheckpointBytes5Effect.Digest) (state : S) (before : Log),
+    BEf_Carrier.run call (next a >>= k) state before = continueRun call k (BEf_Carrier.run call (next a) state before)
+state : S
+before : Log
+after : S
+e : Error
+h : call parts state = (fail e, after)
+⊢ (match (fail e, after) with
+    | (answer, after) => BEf_Carrier.run call (CheckpointBytes5Effect.Code.read parts next >>= k) state before) =
+    continueRun call k (BEf_Carrier.run call (CheckpointBytes5Effect.Code.read parts next) state before)
+BEf_Bind.lean:33:15: error: Tactic `rfl` failed: The left-hand side
+  match (div, after) with
+  | (answer, after) => BEf_Carrier.run call (CheckpointBytes5Effect.Code.read parts next >>= k) state before
+is not definitionally equal to the right-hand side
+  continueRun call k (BEf_Carrier.run call (CheckpointBytes5Effect.Code.read parts next) state before)
+
+case read.mk.div
+S A B : Type
+call : Parts → S → Result Digest × S
+k : A → Code B
+parts : CheckpointBytes5Effect.Parts
+next : CheckpointBytes5Effect.Digest → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : CheckpointBytes5Effect.Digest) (state : S) (before : Log),
+    BEf_Carrier.run call (next a >>= k) state before = continueRun call k (BEf_Carrier.run call (next a) state before)
+state : S
+before : Log
+after : S
+h : call parts state = (div, after)
+⊢ (match (div, after) with
+    | (answer, after) => BEf_Carrier.run call (CheckpointBytes5Effect.Code.read parts next >>= k) state before) =
+    continueRun call k (BEf_Carrier.run call (CheckpointBytes5Effect.Code.read parts next) state before)
+'AspisR1.BEf_Bind.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
