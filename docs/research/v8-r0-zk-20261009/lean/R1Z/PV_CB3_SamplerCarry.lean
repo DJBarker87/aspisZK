@@ -57,7 +57,7 @@ theorem digits_canonical (base : Nat) (positive : 0 < base)
     · exact ih _ d h
 
 /-- Canonical digits have the expected radix bound for every length. -/
-theorem value_lt_pow (base : Nat) (positive : 0 < base) (digits : List Nat)
+theorem value_lt_pow (base : Nat) (digits : List Nat)
     (canonical : ∀ d, d ∈ digits → d < base) :
     value base digits < base ^ digits.length := by
   revert canonical
@@ -78,19 +78,19 @@ theorem carry_quotient (base : Nat) (positive : 0 < base)
     (digits : List Nat) (carry : Nat) :
     (value base digits + carry) / base ^ digits.length =
       (addCarry base digits carry).2 := by
-  have bound := value_lt_pow base positive (addCarry base digits carry).1
+  have bound := value_lt_pow base (addCarry base digits carry).1
     (digits_canonical base positive digits carry)
   rw [length_preserved] at bound
   rw [← value_conserved base digits carry]
   rw [Nat.add_mul_div_left _ _ (Nat.pow_pos positive), Nat.div_eq_of_lt bound]
-  rfl
+  exact Nat.zero_add _
 
 /-- The stored digits are exactly the low part modulo the full radix power. -/
 theorem digits_remainder (base : Nat) (positive : 0 < base)
     (digits : List Nat) (carry : Nat) :
     (value base digits + carry) % base ^ digits.length =
       value base (addCarry base digits carry).1 := by
-  have bound := value_lt_pow base positive (addCarry base digits carry).1
+  have bound := value_lt_pow base (addCarry base digits carry).1
     (digits_canonical base positive digits carry)
   rw [length_preserved] at bound
   rw [← value_conserved base digits carry, Nat.add_mul_mod_self_left,
