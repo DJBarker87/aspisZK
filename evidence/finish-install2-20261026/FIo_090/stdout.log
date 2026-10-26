@@ -1,0 +1,32 @@
+FIo_ArrayBack.lean:16:21: error: could not synthesize default value for parameter 'h' using tactics
+FIo_ArrayBack.lean:16:21: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+N : Usize
+a : Std.Array NE N
+i : Usize
+old : NE
+back : NE → Std.Array NE N
+run✝ :
+  (do
+      let x ← a.index_usize i
+      ok (x, a.set i)) =
+    ok (old, back)
+inv : FIo_ArrayCanon.Holds a
+value : NE
+hv : FIo_WideValues.Canon value
+x : NE
+hx : a.index_usize i = ok x
+run : ok (x, a.set i) = ok (old, back)
+same : (x, a.set i).2 = (old, back).2
+v✝ : ?m.45
+⊢ ↑i < Array.size ?m.46
+FIo_ArrayBack.lean:16:38: error: Type mismatch
+  Eq.symm same
+has type
+  (old, back).2 = (x, a.set i).2
+but is expected to have type
+  back = ?m.50
+'AspisR1.FIo_ArrayBack.canonical' depends on axioms: [propext, sorryAx]
