@@ -195,3 +195,16 @@ fn empty_root_call_trace() {
 
 // Accessor for the new unstubbed full-mapper certificate; cfg(kani) module only.
 pub(super) fn pv_srcid3_frozen_roots() -> [Digest; 21] { ROOTS.map(|r| r.map(M31)) }
+
+// Isolated pure-callee obligation after the full mapper timed out. This runs
+// the actual helper end to end; unlike empty_root_call_trace it has no stubs.
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid3_empty_roots_full() {
+    let actual = pair_empty_roots();
+    for level in 0..21 {
+        for lane in 0..8 {
+            assert_eq!(actual[level][lane].0, ROOTS[level][lane]);
+        }
+    }
+}

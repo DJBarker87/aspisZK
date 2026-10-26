@@ -189,3 +189,11 @@ complete witness recovery (the M31 embedding into itself is identity).
 RecordAdmission.selected derives the unchanged exact RspendPlus interface
 from private-record equality and public association with an existing canonical
 instance. These selected-input joins remain explicit, not globally assumed.
+
+19:50 UTC: path projection Kani6 timed out180sec, exit124, no conclusion.
+Before Lean25401, the reservation was admitted but scp failed because the
+shared aspIs-joint cache path was absent. Read-only checks also found the shared
+run-joint.sh path absent. No compile ran, so25401 is zero charged. The task's
+own repo/kani-target and reservation scanner remain present. Awaiting lead
+replacement/restoration while continuing independent Kani obligations. No
+shared infrastructure is recreated or edited to bypass the missing launcher.
