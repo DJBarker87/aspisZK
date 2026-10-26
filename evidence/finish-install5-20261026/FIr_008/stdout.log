@@ -1,0 +1,38 @@
+FIr_SourceInitial.lean:28:6: error: Dependent elimination failed: Failed to solve equation
+  { toFin := ⟨0, ⋯⟩ }#uscalar = entry✝.1
+FIr_SourceInitial.lean:33:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values ⟨↑0#usize, ⋯⟩)
+in the target expression
+  Polynomial.eval 0 (SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values 0)) +
+      Polynomial.eval 1 (SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values 0)) =
+    (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact) (DecodeMain initial.1)
+
+case cons
+H : Type
+D : aspis_core.Digest32 H
+pre : r1_wire.Prefix
+initial final : Outcome H
+values : SemanticPrefixCodec.Full
+full : SemanticPrefixCodec.encodeFull values = PrefixAdapter.completedRecords pre
+entry : RoundEvidence D pre
+rest : List (RoundEvidence D pre)
+run : AnnotatedRun D pre SemanticRoundsCheckedTrace.schedule initial final (entry :: rest)
+events : List.map (fun entry => (entry.round, entry.row)) (entry :: rest) = SemanticRoundsCheckedTrace.schedule
+first : entry.round = 0#usize
+poly :
+  Polynomial.map (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact)
+      (polynomialOf entry.coefficients) =
+    SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values ⟨↑0#usize, ⋯⟩)
+boundary :
+  Polynomial.eval 0 (polynomialOf entry.coefficients) + Polynomial.eval 1 (polynomialOf entry.coefficients) =
+    DecodeMain initial.1
+mapped :
+  (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact)
+        (Polynomial.eval 0 (polynomialOf entry.coefficients)) +
+      (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact)
+        (Polynomial.eval 1 (polynomialOf entry.coefficients)) =
+    (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact) (DecodeMain initial.1)
+⊢ Polynomial.eval 0 (SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values 0)) +
+      Polynomial.eval 1 (SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values 0)) =
+    (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact) (DecodeMain initial.1)
+'AspisR1.FIr_SourceInitial.first_boundary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

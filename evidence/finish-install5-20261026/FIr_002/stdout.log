@@ -1,0 +1,948 @@
+theorem AspisR1.LiteralSemanticIndex.read_index : ∀
+  (eK : AspisV8R15.ExactTowerBase.QM31Exact →+* AspisR1.LiteralSemanticPrefix.E) (offset : ℕ)
+  (xs : List (AspisR1.LiteralSemanticPrefix.Message × AspisR1.LiteralSemanticPrefix.Challenge))
+  (out : List (R0P.Mask.SemMsgZ AspisR1.LiteralSemanticPrefix.E × AspisR1.LiteralSemanticPrefix.E))
+  (hread : AspisR1.LiteralSemanticPrefix.read eK offset xs = some out) (i : ℕ) (hi : i < xs.length),
+  ∃ (hrow : offset + i < 25),
+    ∃ parsed c,
+      AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + i, hrow⟩ xs[i].1 = some parsed ∧
+        xs[i].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧ out[i] = (parsed, c) :=
+fun eK offset xs out hread =>
+  List.rec (motive := fun xs =>
+    ∀ (offset : ℕ) (out : List (R0P.Mask.SemMsgZ AspisR1.LiteralSemanticPrefix.E × AspisR1.LiteralSemanticPrefix.E))
+      (hread : AspisR1.LiteralSemanticPrefix.read eK offset xs = some out) (i : ℕ) (hi : i < xs.length),
+      ∃ (hrow : offset + i < 25),
+        ∃ parsed c,
+          AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + i, hrow⟩ xs[i].1 = some parsed ∧
+            xs[i].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧ out[i] = (parsed, c))
+    (fun offset out hread i hi => False.elim (Eq.mp not_lt_zero._simp_1 hi))
+    (fun item rest ih offset out hread i hi =>
+      let ⟨message, challenge, hread, hi⟩ := item
+      Nat.casesAuxOn (motive := fun a =>
+        i = a →
+          ∃ (hrow : offset + i < 25),
+            ∃ parsed c,
+              AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + i, hrow⟩ ((message, challenge) :: rest)[i].1 =
+                  some parsed ∧
+                ((message, challenge) :: rest)[i].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧ out[i] = (parsed, c))
+        i
+        (fun h =>
+          Eq.ndrec (motive := fun i =>
+            ∀ (hi : i < ((message, challenge) :: rest).length),
+              ∃ (hrow : offset + i < 25),
+                ∃ parsed c,
+                  AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + i, hrow⟩ ((message, challenge) :: rest)[i].1 =
+                      some parsed ∧
+                    ((message, challenge) :: rest)[i].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                      out[i] = (parsed, c))
+            (fun hi =>
+              if hoff : offset < 25 then
+                AspisR1.TranscriptView.Value.casesOn (motive := fun t =>
+                  challenge.1 = t →
+                    ∃ (hrow : offset + 0 < 25),
+                      ∃ parsed c,
+                        AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + 0, hrow⟩
+                              ((message, challenge) :: rest)[0].1 =
+                            some parsed ∧
+                          ((message, challenge) :: rest)[0].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                            out[0] = (parsed, c))
+                  challenge.1
+                  (fun c h =>
+                    Eq.ndrec (motive := fun x =>
+                      challenge.1 = x →
+                        ∃ (hrow : offset + 0 < 25),
+                          ∃ parsed c,
+                            AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + 0, hrow⟩
+                                  ((message, challenge) :: rest)[0].1 =
+                                some parsed ∧
+                              ((message, challenge) :: rest)[0].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                                out[0] = (parsed, c))
+                      (fun hvalue =>
+                        Option.casesOn (motive := fun t =>
+                          AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message = t →
+                            ∃ (hrow : offset + 0 < 25),
+                              ∃ parsed c,
+                                AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + 0, hrow⟩
+                                      ((message, challenge) :: rest)[0].1 =
+                                    some parsed ∧
+                                  ((message, challenge) :: rest)[0].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                                    out[0] = (parsed, c))
+                          (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)
+                          (fun h =>
+                            Eq.ndrec (motive := fun x =>
+                              AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message = x →
+                                ∃ (hrow : offset + 0 < 25),
+                                  ∃ parsed c,
+                                    AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + 0, hrow⟩
+                                          ((message, challenge) :: rest)[0].1 =
+                                        some parsed ∧
+                                      ((message, challenge) :: rest)[0].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                                        out[0] = (parsed, c))
+                              (fun hmessage =>
+                                False.elim
+                                  (Eq.mp
+                                    (Eq.trans
+                                      (congrFun'
+                                        (congrArg Eq
+                                          (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                            (Eq.trans
+                                              (congrArg
+                                                (fun x =>
+                                                  match x with
+                                                  | AspisR1.TranscriptView.Value.ordinary c =>
+                                                    (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                          ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                                      fun parsed =>
+                                                      Option.map (fun out => (parsed, c) :: out)
+                                                        (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                                                  | AspisR1.TranscriptView.Value.queries result => none)
+                                                hvalue)
+                                              (Option.bind_congr' hmessage fun a a_1 =>
+                                                Eq.refl
+                                                  (Option.map (fun out => (a, c) :: out)
+                                                    (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest))))))
+                                        (some out))
+                                      (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                                    hread))
+                              (Eq.symm h)
+                              (Eq.refl (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)))
+                          (fun parsed h =>
+                            Eq.ndrec (motive := fun x =>
+                              AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message = x →
+                                ∃ (hrow : offset + 0 < 25),
+                                  ∃ parsed c,
+                                    AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + 0, hrow⟩
+                                          ((message, challenge) :: rest)[0].1 =
+                                        some parsed ∧
+                                      ((message, challenge) :: rest)[0].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                                        out[0] = (parsed, c))
+                              (fun hmessage =>
+                                Option.casesOn (motive := fun t =>
+                                  AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest = t →
+                                    ∃ (hrow : offset + 0 < 25),
+                                      ∃ parsed c,
+                                        AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + 0, hrow⟩
+                                              ((message, challenge) :: rest)[0].1 =
+                                            some parsed ∧
+                                          ((message, challenge) :: rest)[0].2.1 =
+                                              AspisR1.TranscriptView.Value.ordinary c ∧
+                                            out[0] = (parsed, c))
+                                  (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                                  (fun h =>
+                                    Eq.ndrec (motive := fun x =>
+                                      AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest = x →
+                                        ∃ (hrow : offset + 0 < 25),
+                                          ∃ parsed c,
+                                            AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + 0, hrow⟩
+                                                  ((message, challenge) :: rest)[0].1 =
+                                                some parsed ∧
+                                              ((message, challenge) :: rest)[0].2.1 =
+                                                  AspisR1.TranscriptView.Value.ordinary c ∧
+                                                out[0] = (parsed, c))
+                                      (fun htail =>
+                                        False.elim
+                                          (Eq.mp
+                                            (Eq.trans
+                                              (congrFun'
+                                                (congrArg Eq
+                                                  (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                                    (Eq.trans
+                                                      (congrArg
+                                                        (fun x =>
+                                                          match x with
+                                                          | AspisR1.TranscriptView.Value.ordinary c =>
+                                                            (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                                  ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                                              fun parsed =>
+                                                              Option.map (fun out => (parsed, c) :: out)
+                                                                (AspisR1.LiteralSemanticPrefix.read eK (offset + 1)
+                                                                  rest)
+                                                          | AspisR1.TranscriptView.Value.queries result => none)
+                                                        hvalue)
+                                                      (Eq.trans
+                                                        (Option.bind_congr' hmessage fun a a_1 =>
+                                                          congrArg (Option.map fun out => (a, c) :: out) htail)
+                                                        (Option.bind_fun_none (some parsed))))))
+                                                (some out))
+                                              (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                                            hread))
+                                      (Eq.symm h) (Eq.refl (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)))
+                                  (fun tail h =>
+                                    Eq.ndrec (motive := fun x =>
+                                      AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest = x →
+                                        ∃ (hrow : offset + 0 < 25),
+                                          ∃ parsed c,
+                                            AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + 0, hrow⟩
+                                                  ((message, challenge) :: rest)[0].1 =
+                                                some parsed ∧
+                                              ((message, challenge) :: rest)[0].2.1 =
+                                                  AspisR1.TranscriptView.Value.ordinary c ∧
+                                                out[0] = (parsed, c))
+                                      (fun htail =>
+                                        have hout :=
+                                          Eq.mp
+                                            (Eq.trans
+                                              (congrFun'
+                                                (congrArg Eq
+                                                  (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                                    (Eq.trans
+                                                      (congrArg
+                                                        (fun x =>
+                                                          match x with
+                                                          | AspisR1.TranscriptView.Value.ordinary c =>
+                                                            (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                                  ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                                              fun parsed =>
+                                                              Option.map (fun out => (parsed, c) :: out)
+                                                                (AspisR1.LiteralSemanticPrefix.read eK (offset + 1)
+                                                                  rest)
+                                                          | AspisR1.TranscriptView.Value.queries result => none)
+                                                        hvalue)
+                                                      (Option.bind_congr' hmessage fun a a_1 =>
+                                                        congrArg (Option.map fun out => (a, c) :: out) htail))))
+                                                (some out))
+                                              (Option.some.injEq ((parsed, c) :: tail) out))
+                                            hread;
+                                        Eq.ndrec (motive := fun out =>
+                                          ∀
+                                            (hread :
+                                              AspisR1.LiteralSemanticPrefix.read eK offset
+                                                  ((message, challenge) :: rest) =
+                                                some out),
+                                            ∃ (hrow : offset + 0 < 25),
+                                              ∃ parsed c,
+                                                AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + 0, hrow⟩
+                                                      ((message, challenge) :: rest)[0].1 =
+                                                    some parsed ∧
+                                                  ((message, challenge) :: rest)[0].2.1 =
+                                                      AspisR1.TranscriptView.Value.ordinary c ∧
+                                                    out[0] = (parsed, c))
+                                          (fun hread =>
+                                            Exists.intro hoff
+                                              (Exists.intro parsed
+                                                (Exists.intro c
+                                                  ⟨Eq.mpr
+                                                      (id
+                                                        (congrFun'
+                                                          (congrArg Eq
+                                                            (congrFun'
+                                                              (congrArg (AspisR1.LiteralSemanticPrefix.parseMessage eK)
+                                                                (Fin.mk.congr_simp (offset + 0) offset (add_zero offset)
+                                                                  hoff))
+                                                              message))
+                                                          (some parsed)))
+                                                      hmessage,
+                                                    ⟨id hvalue, of_eq_true (eq_self (parsed, c))⟩⟩)))
+                                          hout hread)
+                                      (Eq.symm h) (Eq.refl (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)))
+                                  (Eq.refl (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)))
+                              (Eq.symm h)
+                              (Eq.refl (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)))
+                          (Eq.refl (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)))
+                      (Eq.symm h) (Eq.refl challenge.1))
+                  (fun result h =>
+                    Eq.ndrec (motive := fun x =>
+                      challenge.1 = x →
+                        ∃ (hrow : offset + 0 < 25),
+                          ∃ parsed c,
+                            AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + 0, hrow⟩
+                                  ((message, challenge) :: rest)[0].1 =
+                                some parsed ∧
+                              ((message, challenge) :: rest)[0].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                                out[0] = (parsed, c))
+                      (fun hvalue =>
+                        False.elim
+                          (Eq.mp
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                    (congrArg
+                                      (fun x =>
+                                        match x with
+                                        | AspisR1.TranscriptView.Value.ordinary c =>
+                                          (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                            fun parsed =>
+                                            Option.map (fun out => (parsed, c) :: out)
+                                              (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                                        | AspisR1.TranscriptView.Value.queries result => none)
+                                      hvalue)))
+                                (some out))
+                              (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                            hread))
+                      (Eq.symm h) (Eq.refl challenge.1))
+                  (Eq.refl challenge.1)
+              else
+                False.elim
+                  (Eq.mp
+                    (Eq.trans (congrFun' (congrArg Eq (dite_cond_eq_false (eq_false hoff))) (some out))
+                      (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                    hread))
+            (Eq.symm h) hi)
+        (fun i_1 h =>
+          Eq.ndrec (motive := fun i =>
+            ∀ (hi : i < ((message, challenge) :: rest).length),
+              ∃ (hrow : offset + i < 25),
+                ∃ parsed c,
+                  AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + i, hrow⟩ ((message, challenge) :: rest)[i].1 =
+                      some parsed ∧
+                    ((message, challenge) :: rest)[i].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                      out[i] = (parsed, c))
+            (fun hi =>
+              if hoff : offset < 25 then
+                AspisR1.TranscriptView.Value.casesOn (motive := fun t =>
+                  challenge.1 = t →
+                    ∃ (hrow : offset + (i_1 + 1) < 25),
+                      ∃ parsed c,
+                        AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + (i_1 + 1), hrow⟩
+                              ((message, challenge) :: rest)[i_1 + 1].1 =
+                            some parsed ∧
+                          ((message, challenge) :: rest)[i_1 + 1].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                            out[i_1 + 1] = (parsed, c))
+                  challenge.1
+                  (fun c h =>
+                    Eq.ndrec (motive := fun x =>
+                      challenge.1 = x →
+                        ∃ (hrow : offset + (i_1 + 1) < 25),
+                          ∃ parsed c,
+                            AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + (i_1 + 1), hrow⟩
+                                  ((message, challenge) :: rest)[i_1 + 1].1 =
+                                some parsed ∧
+                              ((message, challenge) :: rest)[i_1 + 1].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                                out[i_1 + 1] = (parsed, c))
+                      (fun hvalue =>
+                        Option.casesOn (motive := fun t =>
+                          AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message = t →
+                            ∃ (hrow : offset + (i_1 + 1) < 25),
+                              ∃ parsed c,
+                                AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + (i_1 + 1), hrow⟩
+                                      ((message, challenge) :: rest)[i_1 + 1].1 =
+                                    some parsed ∧
+                                  ((message, challenge) :: rest)[i_1 + 1].2.1 =
+                                      AspisR1.TranscriptView.Value.ordinary c ∧
+                                    out[i_1 + 1] = (parsed, c))
+                          (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)
+                          (fun h =>
+                            Eq.ndrec (motive := fun x =>
+                              AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message = x →
+                                ∃ (hrow : offset + (i_1 + 1) < 25),
+                                  ∃ parsed c,
+                                    AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + (i_1 + 1), hrow⟩
+                                          ((message, challenge) :: rest)[i_1 + 1].1 =
+                                        some parsed ∧
+                                      ((message, challenge) :: rest)[i_1 + 1].2.1 =
+                                          AspisR1.TranscriptView.Value.ordinary c ∧
+                                        out[i_1 + 1] = (parsed, c))
+                              (fun hmessage =>
+                                False.elim
+                                  (Eq.mp
+                                    (Eq.trans
+                                      (congrFun'
+                                        (congrArg Eq
+                                          (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                            (Eq.trans
+                                              (congrArg
+                                                (fun x =>
+                                                  match x with
+                                                  | AspisR1.TranscriptView.Value.ordinary c =>
+                                                    (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                          ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                                      fun parsed =>
+                                                      Option.map (fun out => (parsed, c) :: out)
+                                                        (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                                                  | AspisR1.TranscriptView.Value.queries result => none)
+                                                hvalue)
+                                              (Option.bind_congr' hmessage fun a a_1 =>
+                                                Eq.refl
+                                                  (Option.map (fun out => (a, c) :: out)
+                                                    (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest))))))
+                                        (some out))
+                                      (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                                    hread))
+                              (Eq.symm h)
+                              (Eq.refl (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)))
+                          (fun parsed h =>
+                            Eq.ndrec (motive := fun x =>
+                              AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message = x →
+                                ∃ (hrow : offset + (i_1 + 1) < 25),
+                                  ∃ parsed c,
+                                    AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + (i_1 + 1), hrow⟩
+                                          ((message, challenge) :: rest)[i_1 + 1].1 =
+                                        some parsed ∧
+                                      ((message, challenge) :: rest)[i_1 + 1].2.1 =
+                                          AspisR1.TranscriptView.Value.ordinary c ∧
+                                        out[i_1 + 1] = (parsed, c))
+                              (fun hmessage =>
+                                Option.casesOn (motive := fun t =>
+                                  AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest = t →
+                                    ∃ (hrow : offset + (i_1 + 1) < 25),
+                                      ∃ parsed c,
+                                        AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + (i_1 + 1), hrow⟩
+                                              ((message, challenge) :: rest)[i_1 + 1].1 =
+                                            some parsed ∧
+                                          ((message, challenge) :: rest)[i_1 + 1].2.1 =
+                                              AspisR1.TranscriptView.Value.ordinary c ∧
+                                            out[i_1 + 1] = (parsed, c))
+                                  (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                                  (fun h =>
+                                    Eq.ndrec (motive := fun x =>
+                                      AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest = x →
+                                        ∃ (hrow : offset + (i_1 + 1) < 25),
+                                          ∃ parsed c,
+                                            AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + (i_1 + 1), hrow⟩
+                                                  ((message, challenge) :: rest)[i_1 + 1].1 =
+                                                some parsed ∧
+                                              ((message, challenge) :: rest)[i_1 + 1].2.1 =
+                                                  AspisR1.TranscriptView.Value.ordinary c ∧
+                                                out[i_1 + 1] = (parsed, c))
+                                      (fun htail =>
+                                        False.elim
+                                          (Eq.mp
+                                            (Eq.trans
+                                              (congrFun'
+                                                (congrArg Eq
+                                                  (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                                    (Eq.trans
+                                                      (congrArg
+                                                        (fun x =>
+                                                          match x with
+                                                          | AspisR1.TranscriptView.Value.ordinary c =>
+                                                            (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                                  ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                                              fun parsed =>
+                                                              Option.map (fun out => (parsed, c) :: out)
+                                                                (AspisR1.LiteralSemanticPrefix.read eK (offset + 1)
+                                                                  rest)
+                                                          | AspisR1.TranscriptView.Value.queries result => none)
+                                                        hvalue)
+                                                      (Eq.trans
+                                                        (Option.bind_congr' hmessage fun a a_1 =>
+                                                          congrArg (Option.map fun out => (a, c) :: out) htail)
+                                                        (Option.bind_fun_none (some parsed))))))
+                                                (some out))
+                                              (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                                            hread))
+                                      (Eq.symm h) (Eq.refl (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)))
+                                  (fun tail h =>
+                                    Eq.ndrec (motive := fun x =>
+                                      AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest = x →
+                                        ∃ (hrow : offset + (i_1 + 1) < 25),
+                                          ∃ parsed c,
+                                            AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + (i_1 + 1), hrow⟩
+                                                  ((message, challenge) :: rest)[i_1 + 1].1 =
+                                                some parsed ∧
+                                              ((message, challenge) :: rest)[i_1 + 1].2.1 =
+                                                  AspisR1.TranscriptView.Value.ordinary c ∧
+                                                out[i_1 + 1] = (parsed, c))
+                                      (fun htail =>
+                                        have hout :=
+                                          Eq.mp
+                                            (Eq.trans
+                                              (congrFun'
+                                                (congrArg Eq
+                                                  (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                                    (Eq.trans
+                                                      (congrArg
+                                                        (fun x =>
+                                                          match x with
+                                                          | AspisR1.TranscriptView.Value.ordinary c =>
+                                                            (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                                  ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                                              fun parsed =>
+                                                              Option.map (fun out => (parsed, c) :: out)
+                                                                (AspisR1.LiteralSemanticPrefix.read eK (offset + 1)
+                                                                  rest)
+                                                          | AspisR1.TranscriptView.Value.queries result => none)
+                                                        hvalue)
+                                                      (Option.bind_congr' hmessage fun a a_1 =>
+                                                        congrArg (Option.map fun out => (a, c) :: out) htail))))
+                                                (some out))
+                                              (Option.some.injEq ((parsed, c) :: tail) out))
+                                            hread;
+                                        Eq.ndrec (motive := fun out =>
+                                          ∀
+                                            (hread :
+                                              AspisR1.LiteralSemanticPrefix.read eK offset
+                                                  ((message, challenge) :: rest) =
+                                                some out),
+                                            ∃ (hrow : offset + (i_1 + 1) < 25),
+                                              ∃ parsed c,
+                                                AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + (i_1 + 1), hrow⟩
+                                                      ((message, challenge) :: rest)[i_1 + 1].1 =
+                                                    some parsed ∧
+                                                  ((message, challenge) :: rest)[i_1 + 1].2.1 =
+                                                      AspisR1.TranscriptView.Value.ordinary c ∧
+                                                    out[i_1 + 1] = (parsed, c))
+                                          (fun hread =>
+                                            have hrest :=
+                                              ih (offset + 1) tail htail i_1
+                                                (Eq.mp AspisR1.LiteralSemanticIndex.read_index._simp_1 hi);
+                                            let ⟨hrow', h✝⟩ := hrest
+                                            let ⟨parsed', h✝¹⟩ := h✝
+                                            let ⟨c', h✝²⟩ := h✝¹
+                                            let ⟨hparse', right✝⟩ := h✝²
+                                            let ⟨hchallenge', hindex'⟩ := right✝
+                                            have hrow :=
+                                              Decidable.byContradiction fun a =>
+                                                AspisR1.LiteralSemanticIndex.read_index._proof_1 rest offset message
+                                                  challenge i_1 hrow' a;
+                                            have hidx :=
+                                              Decidable.byContradiction fun a =>
+                                                AspisR1.LiteralSemanticIndex.read_index._proof_2 rest offset message
+                                                  challenge i_1 a;
+                                            Exists.intro hrow
+                                              (Exists.intro parsed'
+                                                (Exists.intro c'
+                                                  ⟨Eq.mpr
+                                                      (id
+                                                        (congrFun'
+                                                          (congrArg Eq
+                                                            (congrFun'
+                                                              (congrArg (AspisR1.LiteralSemanticPrefix.parseMessage eK)
+                                                                (Fin.mk.congr_simp (offset + (i_1 + 1))
+                                                                  (offset + 1 + i_1) hidx hrow))
+                                                              rest[i_1].1))
+                                                          (some parsed')))
+                                                      hparse',
+                                                    ⟨id hchallenge', id hindex'⟩⟩)))
+                                          hout hread)
+                                      (Eq.symm h) (Eq.refl (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)))
+                                  (Eq.refl (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)))
+                              (Eq.symm h)
+                              (Eq.refl (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)))
+                          (Eq.refl (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)))
+                      (Eq.symm h) (Eq.refl challenge.1))
+                  (fun result h =>
+                    Eq.ndrec (motive := fun x =>
+                      challenge.1 = x →
+                        ∃ (hrow : offset + (i_1 + 1) < 25),
+                          ∃ parsed c,
+                            AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset + (i_1 + 1), hrow⟩
+                                  ((message, challenge) :: rest)[i_1 + 1].1 =
+                                some parsed ∧
+                              ((message, challenge) :: rest)[i_1 + 1].2.1 = AspisR1.TranscriptView.Value.ordinary c ∧
+                                out[i_1 + 1] = (parsed, c))
+                      (fun hvalue =>
+                        False.elim
+                          (Eq.mp
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                    (congrArg
+                                      (fun x =>
+                                        match x with
+                                        | AspisR1.TranscriptView.Value.ordinary c =>
+                                          (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                            fun parsed =>
+                                            Option.map (fun out => (parsed, c) :: out)
+                                              (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                                        | AspisR1.TranscriptView.Value.queries result => none)
+                                      hvalue)))
+                                (some out))
+                              (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                            hread))
+                      (Eq.symm h) (Eq.refl challenge.1))
+                  (Eq.refl challenge.1)
+              else
+                False.elim
+                  (Eq.mp
+                    (Eq.trans (congrFun' (congrArg Eq (dite_cond_eq_false (eq_false hoff))) (some out))
+                      (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                    hread))
+            (Eq.symm h) hi)
+        (Eq.refl i))
+    xs offset out hread
+theorem AspisR1.SemanticPrefixCodec.decodeFull_encodeFull : ∀ (values : AspisR1.SemanticPrefixCodec.Full),
+  AspisR1.SemanticPrefixCodec.decodeFull (AspisR1.SemanticPrefixCodec.encodeFull values) = some values :=
+fun values =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = some values)
+        (AspisR1.SemanticPrefixCodec.decodeFull_of_decoded (AspisR1.SemanticPrefixCodec.encodeFull values)
+          (AspisR1.SemanticPrefixCodec.entriesOf values) (AspisR1.SemanticPrefixCodec.encodeFull_length values)
+          (AspisR1.SemanticPrefixCodec.decode_encodeFull values))))
+    (Eq.mpr
+      (id (congrArg (fun _a => some _a = some values) (AspisR1.SemanticPrefixCodec.fullOfDecoded_encodeFull values)))
+      (Eq.refl (some values)))
+def AspisR1.SemanticPrefixCodec.encodeFull : AspisR1.SemanticPrefixCodec.Full →
+  List AspisR1.SemanticPrefixCodec.Bytes :=
+fun values => List.map AspisR1.SemanticPrefixCodec.encodeEntry (AspisR1.SemanticPrefixCodec.entriesOf values)
+def AspisR1.SemanticPrefixCodec.decodeFull : List AspisR1.SemanticPrefixCodec.Bytes →
+  Option AspisR1.SemanticPrefixCodec.Full :=
+fun raws =>
+  if hlen : raws.length = 25 then
+    match h : AspisR1.SemanticPrefixCodec.decodeFrom 0 raws with
+    | none => none
+    | some out => some (AspisR1.SemanticPrefixCodec.fullOfDecoded raws out hlen h)
+  else none
+theorem AspisR1.SemanticPrefixCodec.entriesOf_getElem : ∀ (values : AspisR1.SemanticPrefixCodec.Full) (i : Fin 25),
+  (AspisR1.SemanticPrefixCodec.entriesOf values)[↑i] = ⟨↑i, { isLt := ⋯, value := values i }⟩ :=
+fun values i =>
+  List.getElem_ofFn
+    (Eq.mpr (id (congrArg (fun _a => ↑i < _a) (AspisR1.SemanticPrefixCodec.entriesOf_length values))) i.isLt)
+theorem AspisR1.LiteralSemanticPrefix.read_length : ∀
+  (eK : AspisV8R15.ExactTowerBase.QM31Exact →+* AspisR1.LiteralSemanticPrefix.E) (offset : ℕ)
+  (xs : List (AspisR1.LiteralSemanticPrefix.Message × AspisR1.LiteralSemanticPrefix.Challenge))
+  (out : List (R0P.Mask.SemMsgZ AspisR1.LiteralSemanticPrefix.E × AspisR1.LiteralSemanticPrefix.E)),
+  AspisR1.LiteralSemanticPrefix.read eK offset xs = some out → out.length = xs.length :=
+fun eK offset xs out h =>
+  List.rec (motive := fun xs =>
+    ∀ (offset : ℕ) (out : List (R0P.Mask.SemMsgZ AspisR1.LiteralSemanticPrefix.E × AspisR1.LiteralSemanticPrefix.E)),
+      AspisR1.LiteralSemanticPrefix.read eK offset xs = some out → out.length = xs.length)
+    (fun offset out h =>
+      Eq.symm (Eq.mp (Eq.trans (Option.some.injEq [] out) List.nil_eq._simp_1) h) ▸ Eq.refl [].length)
+    (fun item rest ih offset out h =>
+      let ⟨message, challenge, h⟩ := item
+      if hoff : offset < 25 then
+        AspisR1.TranscriptView.Value.casesOn (motive := fun t =>
+          challenge.1 = t → out.length = ((message, challenge) :: rest).length) challenge.1
+          (fun c h_1 =>
+            Eq.ndrec (motive := fun x => challenge.1 = x → out.length = ((message, challenge) :: rest).length)
+              (fun hvalue =>
+                Option.casesOn (motive := fun t =>
+                  AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message = t →
+                    out.length = ((message, challenge) :: rest).length)
+                  (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)
+                  (fun h_2 =>
+                    Eq.ndrec (motive := fun x =>
+                      AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message = x →
+                        out.length = ((message, challenge) :: rest).length)
+                      (fun hmessage =>
+                        False.elim
+                          (Eq.mp
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                    (Eq.trans
+                                      (congrArg
+                                        (fun x =>
+                                          match x with
+                                          | AspisR1.TranscriptView.Value.ordinary c =>
+                                            (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                  ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                              fun parsed =>
+                                              Option.map (fun out => (parsed, c) :: out)
+                                                (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                                          | AspisR1.TranscriptView.Value.queries result => none)
+                                        hvalue)
+                                      (Option.bind_congr' hmessage fun a a_1 =>
+                                        Eq.refl
+                                          (Option.map (fun out => (a, c) :: out)
+                                            (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest))))))
+                                (some out))
+                              (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                            h))
+                      (Eq.symm h_2) (Eq.refl (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)))
+                  (fun parsed h_2 =>
+                    Eq.ndrec (motive := fun x =>
+                      AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message = x →
+                        out.length = ((message, challenge) :: rest).length)
+                      (fun hmessage =>
+                        Option.casesOn (motive := fun t =>
+                          AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest = t →
+                            out.length = ((message, challenge) :: rest).length)
+                          (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                          (fun h_3 =>
+                            Eq.ndrec (motive := fun x =>
+                              AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest = x →
+                                out.length = ((message, challenge) :: rest).length)
+                              (fun htail =>
+                                False.elim
+                                  (Eq.mp
+                                    (Eq.trans
+                                      (congrFun'
+                                        (congrArg Eq
+                                          (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                            (Eq.trans
+                                              (congrArg
+                                                (fun x =>
+                                                  match x with
+                                                  | AspisR1.TranscriptView.Value.ordinary c =>
+                                                    (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                          ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                                      fun parsed =>
+                                                      Option.map (fun out => (parsed, c) :: out)
+                                                        (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                                                  | AspisR1.TranscriptView.Value.queries result => none)
+                                                hvalue)
+                                              (Eq.trans
+                                                (Option.bind_congr' hmessage fun a a_1 =>
+                                                  congrArg (Option.map fun out => (a, c) :: out) htail)
+                                                (Option.bind_fun_none (some parsed))))))
+                                        (some out))
+                                      (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                                    h))
+                              (Eq.symm h_3) (Eq.refl (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)))
+                          (fun tail h_3 =>
+                            Eq.ndrec (motive := fun x =>
+                              AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest = x →
+                                out.length = ((message, challenge) :: rest).length)
+                              (fun htail =>
+                                have hout :=
+                                  Eq.mp
+                                    (Eq.trans
+                                      (congrFun'
+                                        (congrArg Eq
+                                          (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                                            (Eq.trans
+                                              (congrArg
+                                                (fun x =>
+                                                  match x with
+                                                  | AspisR1.TranscriptView.Value.ordinary c =>
+                                                    (AspisR1.LiteralSemanticPrefix.parseMessage eK
+                                                          ⟨offset, of_eq_true (eq_true hoff)⟩ message).bind
+                                                      fun parsed =>
+                                                      Option.map (fun out => (parsed, c) :: out)
+                                                        (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                                                  | AspisR1.TranscriptView.Value.queries result => none)
+                                                hvalue)
+                                              (Option.bind_congr' hmessage fun a a_1 =>
+                                                congrArg (Option.map fun out => (a, c) :: out) htail))))
+                                        (some out))
+                                      (Option.some.injEq ((parsed, c) :: tail) out))
+                                    h;
+                                let ⟨⟩ := out
+                                hout)
+                              (Eq.symm h_3) (Eq.refl (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)))
+                          (Eq.refl (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)))
+                      (Eq.symm h_2) (Eq.refl (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)))
+                  (Eq.refl (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, hoff⟩ message)))
+              (Eq.symm h_1) (Eq.refl challenge.1))
+          (fun result h_1 =>
+            Eq.ndrec (motive := fun x => challenge.1 = x → out.length = ((message, challenge) :: rest).length)
+              (fun hvalue =>
+                False.elim
+                  (Eq.mp
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans (dite_cond_eq_true (eq_true hoff))
+                            (congrArg
+                              (fun x =>
+                                match x with
+                                | AspisR1.TranscriptView.Value.ordinary c =>
+                                  (AspisR1.LiteralSemanticPrefix.parseMessage eK ⟨offset, of_eq_true (eq_true hoff)⟩
+                                        message).bind
+                                    fun parsed =>
+                                    Option.map (fun out => (parsed, c) :: out)
+                                      (AspisR1.LiteralSemanticPrefix.read eK (offset + 1) rest)
+                                | AspisR1.TranscriptView.Value.queries result => none)
+                              hvalue)))
+                        (some out))
+                      (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                    h))
+              (Eq.symm h_1) (Eq.refl challenge.1))
+          (Eq.refl challenge.1)
+      else
+        False.elim
+          (Eq.mp
+            (Eq.trans (congrFun' (congrArg Eq (dite_cond_eq_false (eq_false hoff))) (some out))
+              (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+            h))
+    xs offset out h
+theorem AspisR1.LiteralSemanticPayloadBridge.callback_toMessage : ∀
+  (eK : AspisV8R15.ExactTowerBase.QM31Exact →+* AspisR1.LiteralSemanticPayloadBridge.E) (row : Fin 25)
+  (payload : AspisR1.SemanticRecordCodec.RowPayload row) (m : AspisR1.LiteralSemanticPayloadBridge.Message)
+  (word : AspisR1.LiteralSemanticPayloadBridge.C2Word),
+  AspisR1.LiteralTranscript.valid (↑row) m →
+    AspisR1.LiteralSemanticPayloadBridge.CarriesC2 word m →
+      AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m) ↑payload =
+        AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word) ↑payload :=
+fun eK row payload m word hv hc2 =>
+  let ⟨payload, hp⟩ := payload
+  AspisR1.SemanticRecordCodec.Payload.casesOn (motive := fun t =>
+    payload = t →
+      AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m) ↑⟨payload, hp⟩ =
+        AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word) ↑⟨payload, hp⟩)
+    payload
+    (fun h =>
+      Eq.ndrec (motive := fun payload =>
+        ∀ (hp : AspisR1.SemanticRecordCodec.validRow row payload),
+          AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m) ↑⟨payload, hp⟩ =
+            AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word)
+              ↑⟨payload, hp⟩)
+        (fun hp =>
+          Eq.refl
+            (AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m)
+              ↑⟨AspisR1.SemanticRecordCodec.Payload.empty, hp⟩))
+        (Eq.symm h) hp)
+    (fun root h =>
+      Eq.ndrec (motive := fun payload =>
+        ∀ (hp : AspisR1.SemanticRecordCodec.validRow row payload),
+          AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m) ↑⟨payload, hp⟩ =
+            AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word)
+              ↑⟨payload, hp⟩)
+        (fun hp =>
+          have hr := hp;
+          AspisR1.LiteralTranscript.Message.casesOn (motive := fun t =>
+            m = t →
+              AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m)
+                  ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩ =
+                AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word)
+                  ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩)
+            m
+            (fun c1 c1word h =>
+              Eq.ndrec (motive := fun m =>
+                AspisR1.LiteralTranscript.valid (↑row) m →
+                  AspisR1.LiteralSemanticPayloadBridge.CarriesC2 word m →
+                    AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m)
+                        ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩ =
+                      AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word)
+                        ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩)
+                (fun hv hc2 =>
+                  False.elim
+                    (Eq.mp
+                      (Eq.trans
+                        (congrArg
+                          (fun x =>
+                            match x, AspisR1.LiteralTranscript.Message.initial c1 c1word with
+                            | 0, AspisR1.LiteralTranscript.Message.initial root word => True
+                            | 2, AspisR1.LiteralTranscript.Message.c2 bytes word => True
+                            | 30, AspisR1.LiteralTranscript.Message.second bytes word => True
+                            | i, AspisR1.LiteralTranscript.Message.payload bytes => i ≠ 0 ∧ i ≠ 2 ∧ i ≠ 30 ∧ i < 33
+                            | x, x_1 => False)
+                          hr)
+                        (AspisR1.LiteralTranscript.valid.match_1.eq_5✝ (fun x x_1 => Prop) 2
+                          (AspisR1.LiteralTranscript.Message.initial c1 c1word) (fun root word => True)
+                          (fun bytes word => True) (fun bytes word => True)
+                          (fun i bytes => i ≠ 0 ∧ i ≠ 2 ∧ i ≠ 30 ∧ i < 33) (fun x x_1 => False)
+                          (fun root word x => False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                          (fun bytes word x x_1 =>
+                            False.elim (noConfusion_of_Nat AspisR1.LiteralTranscript.Message.ctorIdx x_1))
+                          (fun bytes word x =>
+                            Nat.elimOffset 0 (0 + 28) 2 x fun x => False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                          fun bytes x => False.elim (noConfusion_of_Nat AspisR1.LiteralTranscript.Message.ctorIdx x)))
+                      hv))
+                (Eq.symm h) hv hc2)
+            (fun bs h =>
+              Eq.ndrec (motive := fun m =>
+                AspisR1.LiteralTranscript.valid (↑row) m →
+                  AspisR1.LiteralSemanticPayloadBridge.CarriesC2 word m →
+                    AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m)
+                        ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩ =
+                      AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word)
+                        ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩)
+                (fun hv hc2 =>
+                  False.elim
+                    (Eq.mp
+                      (Eq.trans
+                        (congrArg
+                          (fun x =>
+                            match x, AspisR1.LiteralTranscript.Message.payload bs with
+                            | 0, AspisR1.LiteralTranscript.Message.initial root word => True
+                            | 2, AspisR1.LiteralTranscript.Message.c2 bytes word => True
+                            | 30, AspisR1.LiteralTranscript.Message.second bytes word => True
+                            | i, AspisR1.LiteralTranscript.Message.payload bytes => i ≠ 0 ∧ i ≠ 2 ∧ i ≠ 30 ∧ i < 33
+                            | x, x_1 => False)
+                          hr)
+                        (Eq.trans
+                          (AspisR1.LiteralTranscript.valid.match_1.eq_4✝ (fun x x_1 => Prop) 2 bs
+                            (fun root word => True) (fun bytes word => True) (fun bytes word => True)
+                            (fun i bytes => i ≠ 0 ∧ i ≠ 2 ∧ i ≠ 30 ∧ i < 33) fun x x_1 => False)
+                          (Eq.trans
+                            (congr
+                              (congrArg And (Eq.trans (congrArg Not (OfNat.ofNat_ne_zero._simp_1 2)) not_false_eq_true))
+                              (Eq.trans
+                                (congr (congrArg And (Eq.trans (congrArg Not (eq_self 2)) not_true_eq_false))
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg And
+                                        (Eq.trans (congrArg Not (eq_false_of_decide (Eq.refl false)))
+                                          not_false_eq_true))
+                                      (eq_true_of_decide (Eq.refl true)))
+                                    (and_self True)))
+                                (and_true False)))
+                            (and_false True))))
+                      hv))
+                (Eq.symm h) hv hc2)
+            (fun bs actual h =>
+              Eq.ndrec (motive := fun m =>
+                AspisR1.LiteralTranscript.valid (↑row) m →
+                  AspisR1.LiteralSemanticPayloadBridge.CarriesC2 word m →
+                    AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m)
+                        ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩ =
+                      AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word)
+                        ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩)
+                (fun hv hc2 =>
+                  have he := hc2 bs actual rfl;
+                  Eq.ndrec (motive := fun actual =>
+                    AspisR1.LiteralTranscript.valid (↑row) (AspisR1.LiteralTranscript.Message.c2 bs actual) →
+                      AspisR1.LiteralSemanticPayloadBridge.CarriesC2 word
+                          (AspisR1.LiteralTranscript.Message.c2 bs actual) →
+                        AspisR1.SemanticPayloadView.toMessage
+                            (AspisR1.LiteralSemanticCodecBridge.callback eK
+                              (AspisR1.LiteralTranscript.Message.c2 bs actual))
+                            ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩ =
+                          AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word)
+                            ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩)
+                    (fun hv hc2 =>
+                      Eq.refl
+                        (AspisR1.SemanticPayloadView.toMessage
+                          (AspisR1.LiteralSemanticCodecBridge.callback eK
+                            (AspisR1.LiteralTranscript.Message.c2 bs word))
+                          ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩))
+                    (Eq.symm he) hv hc2)
+                (Eq.symm h) hv hc2)
+            (fun bs v h =>
+              Eq.ndrec (motive := fun m =>
+                AspisR1.LiteralTranscript.valid (↑row) m →
+                  AspisR1.LiteralSemanticPayloadBridge.CarriesC2 word m →
+                    AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m)
+                        ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩ =
+                      AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word)
+                        ↑⟨AspisR1.SemanticRecordCodec.Payload.c2Root root, hp⟩)
+                (fun hv hc2 =>
+                  False.elim
+                    (Eq.mp
+                      (Eq.trans
+                        (congrArg
+                          (fun x =>
+                            match x, AspisR1.LiteralTranscript.Message.second bs v with
+                            | 0, AspisR1.LiteralTranscript.Message.initial root word => True
+                            | 2, AspisR1.LiteralTranscript.Message.c2 bytes word => True
+                            | 30, AspisR1.LiteralTranscript.Message.second bytes word => True
+                            | i, AspisR1.LiteralTranscript.Message.payload bytes => i ≠ 0 ∧ i ≠ 2 ∧ i ≠ 30 ∧ i < 33
+                            | x, x_1 => False)
+                          hr)
+                        (AspisR1.LiteralTranscript.valid.match_1.eq_5✝ (fun x x_1 => Prop) 2
+                          (AspisR1.LiteralTranscript.Message.second bs v) (fun root word => True)
+                          (fun bytes word => True) (fun bytes word => True)
+                          (fun i bytes => i ≠ 0 ∧ i ≠ 2 ∧ i ≠ 30 ∧ i < 33) (fun x x_1 => False)
+                          (fun root word x => False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                          (fun bytes word x x_1 =>
+                            False.elim (noConfusion_of_Nat AspisR1.LiteralTranscript.Message.ctorIdx x_1))
+                          (fun bytes word x =>
+                            Nat.elimOffset 0 (0 + 28) 2 x fun x => False.elim (noConfusion_of_Nat Nat.ctorIdx x))
+                          fun bytes x => False.elim (noConfusion_of_Nat AspisR1.LiteralTranscript.Message.ctorIdx x)))
+                      hv))
+                (Eq.symm h) hv hc2)
+            (Eq.refl m))
+        (Eq.symm h) hp)
+    (fun value h =>
+      Eq.ndrec (motive := fun payload =>
+        ∀ (hp : AspisR1.SemanticRecordCodec.validRow row payload),
+          AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m) ↑⟨payload, hp⟩ =
+            AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word)
+              ↑⟨payload, hp⟩)
+        (fun hp =>
+          Eq.refl
+            (AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m)
+              ↑⟨AspisR1.SemanticRecordCodec.Payload.maskSum value, hp⟩))
+        (Eq.symm h) hp)
+    (fun coefficients h =>
+      Eq.ndrec (motive := fun payload =>
+        ∀ (hp : AspisR1.SemanticRecordCodec.validRow row payload),
+          AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m) ↑⟨payload, hp⟩ =
+            AspisR1.SemanticPayloadView.toMessage (fun x => AspisR1.LiteralSemanticPrefix.c2Pair eK word)
+              ↑⟨payload, hp⟩)
+        (fun hp =>
+          Eq.refl
+            (AspisR1.SemanticPayloadView.toMessage (AspisR1.LiteralSemanticCodecBridge.callback eK m)
+              ↑⟨AspisR1.SemanticRecordCodec.Payload.polynomial coefficients, hp⟩))
+        (Eq.symm h) hp)
+    (Eq.refl payload)
+'AspisR1.FIq_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
