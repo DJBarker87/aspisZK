@@ -14,3 +14,13 @@ pub fn digest_new() -> sha2::Sha256 {
 }
 #[cfg(kani)]
 pub fn error_kind_eq(a: std::io::ErrorKind, b: std::io::ErrorKind) -> bool { a == b }
+#[cfg(kani)]
+pub fn digest_update(state: &mut sha2::Sha256, data: &[u8]) {
+    use sha2::Digest;
+    state.update(data)
+}
+#[cfg(kani)]
+pub fn digest_finalize(state: sha2::Sha256) -> [u8; 32] {
+    use sha2::Digest;
+    state.finalize().into()
+}
