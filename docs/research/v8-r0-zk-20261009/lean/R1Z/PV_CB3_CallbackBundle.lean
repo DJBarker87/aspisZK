@@ -34,7 +34,7 @@ theorem op120_source (base : ExternalTypes) (ops : @ExternalFuns (Types base))
 theorem op246_source (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     {H : Type} (inst : aspis_core.digest.Digest32 H) (hash : H)
     (left right : Array U8 32#usize) :
-    @ExternalFuns.op246 (Types base) (selected base ops) inst hash left right =
+    @ExternalFuns.op246 (Types base) (selected base ops) H inst hash left right =
       PV_CB3_CoherentOp246.multiproof.binary_parent inst hash left right := rfl
 
 theorem op229_source (base : ExternalTypes) (ops : @ExternalFuns (Types base))
