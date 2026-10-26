@@ -1,0 +1,38 @@
+import R1Z.ProverCommitFront46
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw19AssemblyLength
+open ProverCommitPublish43
+attribute [local instance] Classical.propDecidable
+
+-- Inspect the final guard symbolically, never evaluate a concrete proof.
+theorem assemble (front : Except Error Bytes) (ps : List QueryParts)
+    (ss : List Slot) (offset size : Nat) (result : Bytes)
+    (success : ProverCommitPublish43.assemble front ps ss offset size = .ok result) :
+    result.length = size := by
+  unfold ProverCommitPublish43.assemble at success
+  cases front with
+  | error e => cases success
+  | ok first =>
+    dsimp only [Except.bind] at success
+    split at success
+    · cases success
+    · cases hs : slots ss (queries ps first) with
+      | error e => simp only [hs, Except.bind] at success
+      | ok final =>
+        simp only [hs, Except.bind] at success
+        split at success
+        · cases success
+        · have same : final = result := Except.ok.inj success
+          subst result
+          assumption
+
+theorem reference (fields : ProverCommitFront46.Fields) (ps : List QueryParts)
+    (ss : List Slot) (result : Bytes)
+    (success : ProverCommitFront46.referenceProof fields ps ss = .ok result) :
+    result.length = 57607 :=
+  assemble (ProverCommitFront46.referenceFront fields) ps ss 28359 57607 result success
+
+#print axioms assemble
+#print axioms reference
+end R1Z.ProverRw19AssemblyLength
