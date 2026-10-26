@@ -1,0 +1,49 @@
+F3R_Begin13.lean:31:2: error: 'change' tactic failed, pattern
+  observe (run (S1SemanticCode.semanticValidated D a.before a.record)).1 ++
+      (observe (run (S1SemanticCode.semanticValidated D b.before b.record)).1 ++ []) =
+    ?m.156
+is not definitionally equal to target
+  observe
+        (run
+            (Decidable.rec
+              (fun h =>
+                (fun x => do
+                    let s ← liftM (r1_wire.ValidatedRecord.impl.framed a.record)
+                    let __x ← S1SemanticCode.sampleBlock D a.before a.record.row s
+                    match __x with
+                      | (r, self1) => do
+                        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+                        match cf with
+                          | core.ops.control_flow.ControlFlow.Continue val => do
+                            let q ← liftM (sampler.qm31_sample val)
+                            pure (core.result.Result.Ok q, self1)
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r1 ←
+                              liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
+                            pure (r1, self1))
+                  h)
+              (fun h => (fun x => pure (core.result.Result.Err r1_wire.Error.InvalidRow, a.before)) h)
+              (24#u8.decLt a.record.row))).1 ++
+      (observe (run (S1SemanticCode.semanticValidated D a.after b.record)).1 ++
+        observe
+          (run
+              (match (core.result.Result.Ok b.q, b.after) with
+              | (r29, transcript15) => do
+                let cf29 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r29)
+                match cf29 with
+                  | core.ops.control_flow.ControlFlow.Continue val14 =>
+                    have zc10 := back v12;
+                    pure
+                      (core.result.Result.Ok
+                          { lambda := v0, chi := v1, theta := v2, zc := zc10, mu := a.q, eta := val14 },
+                        transcript15)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r30 ←
+                      liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual)
+                    pure (r30, transcript15))).1) =
+    callLog a ++ callLog b
+'AspisR1.F3R_Begin13.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

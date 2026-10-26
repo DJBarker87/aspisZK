@@ -1,0 +1,125 @@
+F3R_Admission.lean:10:67: error: unsolved goals
+case initial
+row : ℕ
+root✝ : State
+word✝ : LiteralTranscript.C1Word
+valid :
+  match row, LiteralTranscript.Message.initial root✝ word✝ with
+  | 0, LiteralTranscript.Message.initial root word => True
+  | 2, LiteralTranscript.Message.c2 bytes word => True
+  | 30, LiteralTranscript.Message.second bytes word => True
+  | i, LiteralTranscript.Message.payload bytes => ¬i = 0 ∧ ¬i = 2 ∧ ¬i = 30 ∧ i < 33
+  | x, x_1 => False
+⊢ match row, TranscriptView.Message.initial root✝ with
+  | 0, TranscriptView.Message.initial c1 => True
+  | n.succ, TranscriptView.Message.payload m => True
+  | x, x_1 => False
+
+case payload
+row : ℕ
+bytes✝ : LiteralTranscript.BytesMessage
+valid : ¬row = 0 ∧ ¬row = 2 ∧ ¬row = 30 ∧ row < 33
+⊢ match row, TranscriptView.Message.payload bytes✝ with
+  | 0, TranscriptView.Message.initial c1 => True
+  | n.succ, TranscriptView.Message.payload m => True
+  | x, x_1 => False
+
+case c2
+row : ℕ
+bytes✝ : LiteralTranscript.BytesMessage
+word✝ : LiteralTranscript.C2Word
+valid :
+  match row, LiteralTranscript.Message.c2 bytes✝ word✝ with
+  | 0, LiteralTranscript.Message.initial root word => True
+  | 2, LiteralTranscript.Message.c2 bytes word => True
+  | 30, LiteralTranscript.Message.second bytes word => True
+  | i, LiteralTranscript.Message.payload bytes => ¬i = 0 ∧ ¬i = 2 ∧ ¬i = 30 ∧ i < 33
+  | x, x_1 => False
+⊢ match row, TranscriptView.Message.payload bytes✝ with
+  | 0, TranscriptView.Message.initial c1 => True
+  | n.succ, TranscriptView.Message.payload m => True
+  | x, x_1 => False
+
+case second
+row : ℕ
+bytes✝ : LiteralTranscript.BytesMessage
+word✝ : LiteralTranscript.VWord
+valid :
+  match row, LiteralTranscript.Message.second bytes✝ word✝ with
+  | 0, LiteralTranscript.Message.initial root word => True
+  | 2, LiteralTranscript.Message.c2 bytes word => True
+  | 30, LiteralTranscript.Message.second bytes word => True
+  | i, LiteralTranscript.Message.payload bytes => ¬i = 0 ∧ ¬i = 2 ∧ ¬i = 30 ∧ i < 33
+  | x, x_1 => False
+⊢ match row, TranscriptView.Message.payload bytes✝ with
+  | 0, TranscriptView.Message.initial c1 => True
+  | n.succ, TranscriptView.Message.payload m => True
+  | x, x_1 => False
+F3R_Admission.lean:27:4: error: Type mismatch: After simplification, term
+  length
+ has type
+  @Eq ℕ (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2.rounds.length
+    ((FS.emptyPrefix i.semantic.value).rounds.length + 33)
+but is expected to have type
+  @Eq ℕ (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2.rounds.length 33
+F3R_Admission.lean:32:6: error: Type mismatch: After simplification, term
+  length
+ has type
+  @Eq ℕ (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2.rounds.length
+    ((FS.emptyPrefix i.semantic.value).rounds.length + 33)
+but is expected to have type
+  @Eq ℕ (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2.rounds.length 33
+F3R_Admission.lean:39:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (m, c).1
+in the target expression
+  UnifiedSampler.messageValid row m
+
+case refine_3
+D : LiteralByteProtocol.Decoder
+H : Bytes → State
+i : F3_Model.Input
+tag : i.semantic.value.tag = 2
+valid : ∀ row < 33, LiteralTranscript.valid row (i.proof row)
+fields :
+  ∃ input,
+    D0InstanceAdmission.Fields
+      (LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)
+      input
+length :
+  (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2.rounds.length =
+    (FS.emptyPrefix i.semantic.value).rounds.length + 33
+sampler :
+  eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value)) =
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H i.semantic.value i.proof j).toProgram).1)
+          (List.range 33)).flatten,
+      (LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33)
+trEq :
+  (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2 =
+    (LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33
+row : ℕ
+m : TranscriptView.Message LiteralTranscript.BytesMessage
+c : TranscriptView.Challenge LiteralTranscript.E
+bound :
+  row <
+    (LiteralTranscript.erasePrefix
+          (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2).rounds.length
+len :
+  (LiteralTranscript.erasePrefix
+          (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2).rounds.length =
+    33
+below : row < 33
+read :
+  (LiteralTranscript.erase (i.proof row),
+      (eval H
+          (LiteralByteSampler.samp row ((LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof row)
+              (i.proof row)).toProgram).2) =
+    (m, c)
+message :
+  (LiteralTranscript.erase (i.proof row),
+        (eval H
+            (LiteralByteSampler.samp row ((LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof row)
+                (i.proof row)).toProgram).2).1 =
+    (m, c).1
+⊢ UnifiedSampler.messageValid row m
+'AspisR1.F3R_Admission.erased_valid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3R_Admission.guard' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

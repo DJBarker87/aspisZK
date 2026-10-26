@@ -1,0 +1,431 @@
+F3R_SemanticOnTrace.lean:37:14: error: don't know how to synthesize implicit argument `b`
+  @Iff.mpr (?m.318 c ∈ List.map ?m.318 cs') (∃ a ∈ cs', ?m.318 a = ?m.318 c) List.mem_map (Exists.intro c ⟨hc, rfl⟩)
+context:
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 Unit
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+sem : r1_semantic.Verified Unit
+success :
+  erase (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none) =
+    ok (core.result.Result.Ok sem)
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : r1_wire.SemanticTranscript Unit
+cs : List (SourceFull25.Call D pre)
+init : PublicInitCall D pub pre.c1_root t0
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initialized : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace : SourceFull25.Trace D pre t0 t25 cs
+order : List.map (fun c => ↑c.row) cs = List.range 25
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D t25 r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+t25' t26' t27' : r1_wire.SemanticTranscript Unit
+r25' r26' : r1_wire.ValidatedRecord
+z0' z1' : aspis_core.circle.SecureCirclePoint
+circle25' : FinishModel.circle_validated B D t25' r25' = ok (core.result.Result.Ok z0', t26')
+circle26' : FinishModel.circle_validated B D t26' r26' = ok (core.result.Result.Ok z1', t27')
+transcript' : sem.transcript = t27'
+cs' : List (SourceFull25.Call D pre)
+parsed' : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+order' : List.map (fun c => ↑c.row) cs' = List.range 25
+read25' : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25')
+read26' : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26')
+init' : PublicInitCall D pub pre.c1_root t0
+initialized' : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace' : SourceFull25.Trace D pre t0 t25' cs'
+logs :
+  observe (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none)).1 =
+    initPair init' :: sourceLog cs' ++
+      (observe (run (S1SemanticCode.circleValidated B D t25' r25')).1 ++
+        observe (run (S1SemanticCode.circleValidated B D t26' r26')).1)
+c : SourceFull25.Call D pre
+hc : c ∈ cs'
+⊢ Prop
+F3R_SemanticOnTrace.lean:37:14: error: don't know how to synthesize implicit argument `a`
+  @Iff.mpr (?m.318 c ∈ List.map ?m.318 cs') (∃ a ∈ cs', ?m.318 a = ?m.318 c) List.mem_map (Exists.intro c ⟨hc, rfl⟩)
+context:
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 Unit
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+sem : r1_semantic.Verified Unit
+success :
+  erase (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none) =
+    ok (core.result.Result.Ok sem)
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : r1_wire.SemanticTranscript Unit
+cs : List (SourceFull25.Call D pre)
+init : PublicInitCall D pub pre.c1_root t0
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initialized : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace : SourceFull25.Trace D pre t0 t25 cs
+order : List.map (fun c => ↑c.row) cs = List.range 25
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D t25 r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+t25' t26' t27' : r1_wire.SemanticTranscript Unit
+r25' r26' : r1_wire.ValidatedRecord
+z0' z1' : aspis_core.circle.SecureCirclePoint
+circle25' : FinishModel.circle_validated B D t25' r25' = ok (core.result.Result.Ok z0', t26')
+circle26' : FinishModel.circle_validated B D t26' r26' = ok (core.result.Result.Ok z1', t27')
+transcript' : sem.transcript = t27'
+cs' : List (SourceFull25.Call D pre)
+parsed' : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+order' : List.map (fun c => ↑c.row) cs' = List.range 25
+read25' : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25')
+read26' : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26')
+init' : PublicInitCall D pub pre.c1_root t0
+initialized' : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace' : SourceFull25.Trace D pre t0 t25' cs'
+logs :
+  observe (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none)).1 =
+    initPair init' :: sourceLog cs' ++
+      (observe (run (S1SemanticCode.circleValidated B D t25' r25')).1 ++
+        observe (run (S1SemanticCode.circleValidated B D t26' r26')).1)
+c : SourceFull25.Call D pre
+hc : c ∈ cs'
+⊢ Prop
+F3R_SemanticOnTrace.lean:37:31: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (SourceFull25.Call D pre) (fun a => a ∈ cs' ∧ ?m.318 a = ?m.318 c) c ⟨hc, rfl⟩
+context:
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 Unit
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+sem : r1_semantic.Verified Unit
+success :
+  erase (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none) =
+    ok (core.result.Result.Ok sem)
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : r1_wire.SemanticTranscript Unit
+cs : List (SourceFull25.Call D pre)
+init : PublicInitCall D pub pre.c1_root t0
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initialized : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace : SourceFull25.Trace D pre t0 t25 cs
+order : List.map (fun c => ↑c.row) cs = List.range 25
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D t25 r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+t25' t26' t27' : r1_wire.SemanticTranscript Unit
+r25' r26' : r1_wire.ValidatedRecord
+z0' z1' : aspis_core.circle.SecureCirclePoint
+circle25' : FinishModel.circle_validated B D t25' r25' = ok (core.result.Result.Ok z0', t26')
+circle26' : FinishModel.circle_validated B D t26' r26' = ok (core.result.Result.Ok z1', t27')
+transcript' : sem.transcript = t27'
+cs' : List (SourceFull25.Call D pre)
+parsed' : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+order' : List.map (fun c => ↑c.row) cs' = List.range 25
+read25' : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25')
+read26' : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26')
+init' : PublicInitCall D pub pre.c1_root t0
+initialized' : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace' : SourceFull25.Trace D pre t0 t25' cs'
+logs :
+  observe (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none)).1 =
+    initPair init' :: sourceLog cs' ++
+      (observe (run (S1SemanticCode.circleValidated B D t25' r25')).1 ++
+        observe (run (S1SemanticCode.circleValidated B D t26' r26')).1)
+c : SourceFull25.Call D pre
+hc : c ∈ cs'
+⊢ SourceFull25.Call D pre → Prop
+F3R_SemanticOnTrace.lean:37:31: error: don't know how to synthesize implicit argument `b`
+  @And.intro (c ∈ cs') (?m.318 c = ?m.318 c) hc rfl
+context:
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 Unit
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+sem : r1_semantic.Verified Unit
+success :
+  erase (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none) =
+    ok (core.result.Result.Ok sem)
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : r1_wire.SemanticTranscript Unit
+cs : List (SourceFull25.Call D pre)
+init : PublicInitCall D pub pre.c1_root t0
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initialized : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace : SourceFull25.Trace D pre t0 t25 cs
+order : List.map (fun c => ↑c.row) cs = List.range 25
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D t25 r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+t25' t26' t27' : r1_wire.SemanticTranscript Unit
+r25' r26' : r1_wire.ValidatedRecord
+z0' z1' : aspis_core.circle.SecureCirclePoint
+circle25' : FinishModel.circle_validated B D t25' r25' = ok (core.result.Result.Ok z0', t26')
+circle26' : FinishModel.circle_validated B D t26' r26' = ok (core.result.Result.Ok z1', t27')
+transcript' : sem.transcript = t27'
+cs' : List (SourceFull25.Call D pre)
+parsed' : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+order' : List.map (fun c => ↑c.row) cs' = List.range 25
+read25' : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25')
+read26' : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26')
+init' : PublicInitCall D pub pre.c1_root t0
+initialized' : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace' : SourceFull25.Trace D pre t0 t25' cs'
+logs :
+  observe (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none)).1 =
+    initPair init' :: sourceLog cs' ++
+      (observe (run (S1SemanticCode.circleValidated B D t25' r25')).1 ++
+        observe (run (S1SemanticCode.circleValidated B D t26' r26')).1)
+c : SourceFull25.Call D pre
+hc : c ∈ cs'
+⊢ Prop
+F3R_SemanticOnTrace.lean:37:37: error: don't know how to synthesize implicit argument `a`
+  @rfl ?m.326 (?m.318 c)
+context:
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 Unit
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+sem : r1_semantic.Verified Unit
+success :
+  erase (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none) =
+    ok (core.result.Result.Ok sem)
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : r1_wire.SemanticTranscript Unit
+cs : List (SourceFull25.Call D pre)
+init : PublicInitCall D pub pre.c1_root t0
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initialized : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace : SourceFull25.Trace D pre t0 t25 cs
+order : List.map (fun c => ↑c.row) cs = List.range 25
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D t25 r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+t25' t26' t27' : r1_wire.SemanticTranscript Unit
+r25' r26' : r1_wire.ValidatedRecord
+z0' z1' : aspis_core.circle.SecureCirclePoint
+circle25' : FinishModel.circle_validated B D t25' r25' = ok (core.result.Result.Ok z0', t26')
+circle26' : FinishModel.circle_validated B D t26' r26' = ok (core.result.Result.Ok z1', t27')
+transcript' : sem.transcript = t27'
+cs' : List (SourceFull25.Call D pre)
+parsed' : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+order' : List.map (fun c => ↑c.row) cs' = List.range 25
+read25' : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25')
+read26' : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26')
+init' : PublicInitCall D pub pre.c1_root t0
+initialized' : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace' : SourceFull25.Trace D pre t0 t25' cs'
+logs :
+  observe (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none)).1 =
+    initPair init' :: sourceLog cs' ++
+      (observe (run (S1SemanticCode.circleValidated B D t25' r25')).1 ++
+        observe (run (S1SemanticCode.circleValidated B D t26' r26')).1)
+c : SourceFull25.Call D pre
+hc : c ∈ cs'
+⊢ ?m.326
+F3R_SemanticOnTrace.lean:37:37: error: don't know how to synthesize implicit argument `α`
+  @rfl ?m.326 (?m.318 c)
+context:
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 Unit
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+sem : r1_semantic.Verified Unit
+success :
+  erase (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none) =
+    ok (core.result.Result.Ok sem)
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : r1_wire.SemanticTranscript Unit
+cs : List (SourceFull25.Call D pre)
+init : PublicInitCall D pub pre.c1_root t0
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initialized : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace : SourceFull25.Trace D pre t0 t25 cs
+order : List.map (fun c => ↑c.row) cs = List.range 25
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D t25 r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+t25' t26' t27' : r1_wire.SemanticTranscript Unit
+r25' r26' : r1_wire.ValidatedRecord
+z0' z1' : aspis_core.circle.SecureCirclePoint
+circle25' : FinishModel.circle_validated B D t25' r25' = ok (core.result.Result.Ok z0', t26')
+circle26' : FinishModel.circle_validated B D t26' r26' = ok (core.result.Result.Ok z1', t27')
+transcript' : sem.transcript = t27'
+cs' : List (SourceFull25.Call D pre)
+parsed' : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+order' : List.map (fun c => ↑c.row) cs' = List.range 25
+read25' : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25')
+read26' : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26')
+init' : PublicInitCall D pub pre.c1_root t0
+initialized' : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace' : SourceFull25.Trace D pre t0 t25' cs'
+logs :
+  observe (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none)).1 =
+    initPair init' :: sourceLog cs' ++
+      (observe (run (S1SemanticCode.circleValidated B D t25' r25')).1 ++
+        observe (run (S1SemanticCode.circleValidated B D t26' r26')).1)
+c : SourceFull25.Call D pre
+hc : c ∈ cs'
+⊢ Type ?u.110
+F3R_SemanticOnTrace.lean:37:27: error: don't know how to synthesize placeholder
+context:
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 Unit
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+sem : r1_semantic.Verified Unit
+success :
+  erase (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none) =
+    ok (core.result.Result.Ok sem)
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : r1_wire.SemanticTranscript Unit
+cs : List (SourceFull25.Call D pre)
+init : PublicInitCall D pub pre.c1_root t0
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initialized : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace : SourceFull25.Trace D pre t0 t25 cs
+order : List.map (fun c => ↑c.row) cs = List.range 25
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D t25 r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+t25' t26' t27' : r1_wire.SemanticTranscript Unit
+r25' r26' : r1_wire.ValidatedRecord
+z0' z1' : aspis_core.circle.SecureCirclePoint
+circle25' : FinishModel.circle_validated B D t25' r25' = ok (core.result.Result.Ok z0', t26')
+circle26' : FinishModel.circle_validated B D t26' r26' = ok (core.result.Result.Ok z1', t27')
+transcript' : sem.transcript = t27'
+cs' : List (SourceFull25.Call D pre)
+parsed' : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+order' : List.map (fun c => ↑c.row) cs' = List.range 25
+read25' : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25')
+read26' : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26')
+init' : PublicInitCall D pub pre.c1_root t0
+initialized' : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace' : SourceFull25.Trace D pre t0 t25' cs'
+logs :
+  observe (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none)).1 =
+    initPair init' :: sourceLog cs' ++
+      (observe (run (S1SemanticCode.circleValidated B D t25' r25')).1 ++
+        observe (run (S1SemanticCode.circleValidated B D t26' r26')).1)
+c : SourceFull25.Call D pre
+hc : c ∈ cs'
+⊢ SourceFull25.Call D pre → ?m.326
+F3R_SemanticOnTrace.lean:37:27: error: don't know how to synthesize placeholder
+context:
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 Unit
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+sem : r1_semantic.Verified Unit
+success :
+  erase (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none) =
+    ok (core.result.Result.Ok sem)
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : r1_wire.SemanticTranscript Unit
+cs : List (SourceFull25.Call D pre)
+init : PublicInitCall D pub pre.c1_root t0
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initialized : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace : SourceFull25.Trace D pre t0 t25 cs
+order : List.map (fun c => ↑c.row) cs = List.range 25
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D t25 r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+t25' t26' t27' : r1_wire.SemanticTranscript Unit
+r25' r26' : r1_wire.ValidatedRecord
+z0' z1' : aspis_core.circle.SecureCirclePoint
+circle25' : FinishModel.circle_validated B D t25' r25' = ok (core.result.Result.Ok z0', t26')
+circle26' : FinishModel.circle_validated B D t26' r26' = ok (core.result.Result.Ok z1', t27')
+transcript' : sem.transcript = t27'
+cs' : List (SourceFull25.Call D pre)
+parsed' : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+order' : List.map (fun c => ↑c.row) cs' = List.range 25
+read25' : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25')
+read26' : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26')
+init' : PublicInitCall D pub pre.c1_root t0
+initialized' : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace' : SourceFull25.Trace D pre t0 t25' cs'
+logs :
+  observe (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none)).1 =
+    initPair init' :: sourceLog cs' ++
+      (observe (run (S1SemanticCode.circleValidated B D t25' r25')).1 ++
+        observe (run (S1SemanticCode.circleValidated B D t26' r26')).1)
+c : SourceFull25.Call D pre
+hc : c ∈ cs'
+⊢ ?m.326
+F3R_SemanticOnTrace.lean:37:27: error: don't know how to synthesize placeholder
+context:
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 Unit
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+sem : r1_semantic.Verified Unit
+success :
+  erase (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none) =
+    ok (core.result.Result.Ok sem)
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : r1_wire.SemanticTranscript Unit
+cs : List (SourceFull25.Call D pre)
+init : PublicInitCall D pub pre.c1_root t0
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initialized : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace : SourceFull25.Trace D pre t0 t25 cs
+order : List.map (fun c => ↑c.row) cs = List.range 25
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D t25 r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+t25' t26' t27' : r1_wire.SemanticTranscript Unit
+r25' r26' : r1_wire.ValidatedRecord
+z0' z1' : aspis_core.circle.SecureCirclePoint
+circle25' : FinishModel.circle_validated B D t25' r25' = ok (core.result.Result.Ok z0', t26')
+circle26' : FinishModel.circle_validated B D t26' r26' = ok (core.result.Result.Ok z1', t27')
+transcript' : sem.transcript = t27'
+cs' : List (SourceFull25.Call D pre)
+parsed' : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+order' : List.map (fun c => ↑c.row) cs' = List.range 25
+read25' : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25')
+read26' : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26')
+init' : PublicInitCall D pub pre.c1_root t0
+initialized' : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+trace' : SourceFull25.Trace D pre t0 t25' cs'
+logs :
+  observe (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none)).1 =
+    initPair init' :: sourceLog cs' ++
+      (observe (run (S1SemanticCode.circleValidated B D t25' r25')).1 ++
+        observe (run (S1SemanticCode.circleValidated B D t26' r26')).1)
+c : SourceFull25.Call D pre
+hc : c ∈ cs'
+⊢ Type ?u.110
+F3R_SemanticOnTrace.lean:37:9: error: failed to infer `have` declaration type
+'AspisR1.F3R_SemanticOnTrace.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

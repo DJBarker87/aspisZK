@@ -1,0 +1,39 @@
+F3R_SemanticChain.lean:44:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (code D pre (List.map (fun c => c.row) cs) c.after)
+in the target expression
+  (erase do
+      let rest ← code D pre (List.map (fun c => c.row) cs) c.after
+      match rest with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok (qs, t'') => pure (core.result.Result.Ok (c.q :: qs, t''))) =
+    ok (core.result.Result.Ok (c.q :: List.map (fun c => c.q) cs, after))
+
+case cons.left
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+before after✝ : r1_wire.SemanticTranscript Hash
+cs✝ : List (SourceFull25.Call D pre)
+after : r1_wire.SemanticTranscript Hash
+cs : List (SourceFull25.Call D pre)
+c : SourceFull25.Call D pre
+tail : SourceFull25.Trace D pre c.after after cs
+ih :
+  (∀ c ∈ cs, ↑c.row < 25) →
+    erase (code D pre (List.map (fun c => c.row) cs) c.after) =
+        ok (core.result.Result.Ok (List.map (fun c => c.q) cs, after)) ∧
+      observe (run (code D pre (List.map (fun c => c.row) cs) c.after)).1 = sourceLog cs
+below : ∀ c_1 ∈ c :: cs, ↑c_1.row < 25
+cb : ↑c.row < 25
+next :
+  erase (code D pre (List.map (fun c => c.row) cs) c.after) =
+      ok (core.result.Result.Ok (List.map (fun c => c.q) cs, after)) ∧
+    observe (run (code D pre (List.map (fun c => c.row) cs) c.after)).1 = sourceLog cs
+ret : erase (S1SemanticCode.semanticValidated D c.before c.record) = ok (core.result.Result.Ok c.q, c.after)
+⊢ (erase do
+      let rest ← code D pre (List.map (fun c => c.row) cs) c.after
+      match rest with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok (qs, t'') => pure (core.result.Result.Ok (c.q :: qs, t''))) =
+    ok (core.result.Result.Ok (c.q :: List.map (fun c => c.q) cs, after))
+'AspisR1.F3R_SemanticChain.trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

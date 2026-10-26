@@ -1,0 +1,180 @@
+F3R_JoinedRun.lean:114:75: error: Application type mismatch: The argument
+  retainedDigest D
+has type
+  AspisR1PublicPreparation.aspis_core.Digest32 Unit
+of sort `Type` but is expected to have type
+  AspisR1PublicPreparation.FinishModel.Boundaries
+of sort `Type 1` in the application
+  @AspisR1PublicPreparation.S1SemanticCode.verify_erasure ?m.948 (retainedDigest D)
+F3R_JoinedRun.lean:84:93: error: unsolved goals
+CoreError : Type
+ops : Ops
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops CoreError
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+D : aspis_core.digest.Digest32 Unit
+hash : Unit
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+publicBytes proof : Slice U8
+split : Usize
+saved : alloc.vec.Vec U8
+run :
+  Tx1Q_Execution.Run (Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo D hash pub publicBytes
+    proof split saved
+stored initial expanded storedY1 initialY1 y1 : Slice U8
+view : verifier.View
+sem : r1_semantic.Verified Unit
+read :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 16#usize, «end» := 7031#usize } =
+    ok stored
+expand :
+  AspisS1NativeCompact.compact.expand_semantic nativeValues stored initial = ok (core.result.Result.Ok (), expanded)
+readY1 :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7031#usize, «end» := 7495#usize } =
+    ok storedY1
+expandY1 : expandValues storedY1 initialY1 = ok (core.result.Result.Ok (), y1)
+wide : sourceView proof expanded y1 = ok (core.result.Result.Ok view)
+same : view.semantic = expanded
+yEq : view.y1 = y1
+verify :
+  S1SemanticInstallation.verify AspisS1ExtractedRoundChildren.children (ClaimsUnrolledFinish.install std B) D pub
+      expanded hash =
+    ok (core.result.Result.Ok sem)
+prepare :
+  originalNew (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed D sem view hash
+      (Array.repeat 29#usize run.zero) =
+    ok (core.result.Result.Ok run.p, run.scratch)
+prepareLog :
+  AspisR1PublicPreparation.PreparedHashCode.observe
+      (AspisR1PublicPreparation.PreparedHashCode.run
+          (SdkD_PrepareSource.code
+            (Op3I_Install.install (Op4P_Install.install (Tx1Q_Execution.base ops reserved query geo))) B std D pub proof
+            hash (Array.repeat 29#usize run.zero))).1 =
+    AspisR1PublicPreparation.PreparedHashCode.observe
+        (AspisR1PublicPreparation.PreparedHashCode.run
+            (S1SemanticCodeInstallation.code AspisS1ExtractedRoundChildren.children (ClaimsUnrolledFinish.install std B)
+              D pub view.semantic hash)).1 ++
+      AspisR1PublicPreparation.PreparedHashCode.observe
+        (AspisR1PublicPreparation.PreparedHashCode.run
+            (closedPreparationCode D sem view hash (Array.repeat 29#usize run.zero))).1
+retained : AspisR1PublicPreparation.verifier.Prepared
+rs : Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize
+reached :
+  AspisR1PublicPreparation.PreparedScratchReachability.Reachable
+    (AspisR1ClaimPreparedBridge.concreteBoundaries
+      (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+        AspisS1M31Embedding.Total.embed))
+    (retainedDigest D) (retainedSem sem) (retainedView view) hash retained rs
+out : currentPrepared retained = run.p
+scratch : AspisR1ClaimPreparedBridge.mapArray currentE rs = run.scratch
+y1bytes : bytesOf ↑y1 = OraclePortCompactDraft.expand (464 / 16) (slice (bytesOf ↑proof) 7031 464)
+y1physical : ↑storedY1 = List.take 464 (List.drop 7031 ↑proof)
+y1stored : bytesOf ↑storedY1 = slice (bytesOf ↑proof) 7031 464
+y1length : storedY1.length = 464
+y1Frame : bytesOf ↑view.y1 = OraclePortCompactDraft.expand 29 (slice (bytesOf ↑proof) 7031 464)
+sections :
+  bytesOf ↑(retainedView view).round0 = slice (bytesOf ↑proof) 7527 224 ∧
+    bytesOf ↑(retainedView view).round1 = slice (bytesOf ↑proof) 7783 224 ∧
+      bytesOf ↑(retainedView view).final_message = slice (bytesOf ↑proof) 8007 2048
+second :
+  ∀ (root : Std.Array U8 32#usize) (bytes1 bytes2 : alloc.vec.Vec U8),
+    core.option.Option.unwrap (retainedView view).folded_root = ok root →
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 256#usize) root.to_slice =
+          ok bytes1 →
+        alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 (retainedView view).round1 = ok bytes2 →
+          bytesOf ↑bytes2 = slice (bytesOf ↑proof) 7751 256
+variant : view.variant = transport.Variant.S2
+retainedVariant : (retainedView view).variant = AspisR1PublicPreparation.transport.Variant.S2
+opening :
+  PAln_OpeningStages.Double
+    (AspisR1ClaimPreparedBridge.concreteBoundaries
+      (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+        AspisS1M31Embedding.Total.embed))
+    (retainedDigest D) (retainedSem sem) (retainedView view) hash retained rs
+rawVerified :
+  AspisR1PublicPreparation.VerifyPrefix.verify
+      (fun {H} =>
+        AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+          (AspisR1PublicPreparation.S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B)))
+      (retainedDigest D) (FirstComposition.toRetainedPublic pub) expanded hash none =
+    ok (core.result.Result.Ok (retainedSem sem))
+⊢ ∃ expanded y1 view sem retained rs pre t0 t25 cs,
+    AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded = ok (core.result.Result.Ok pre) ∧
+      semanticRows 27 0 (slice (bytesOf ↑proof) 48 6983) = some (List.map (fun s => bytesOf ↑s) ↑pre.records) ∧
+        AspisR1PublicPreparation.r1_semantic.public_transcript (retainedDigest D)
+              (FirstComposition.toRetainedPublic pub) hash pre.c1_root =
+            ok (core.result.Result.Ok t0) ∧
+          ↑pre.c1_root = storedRoot proof ∧
+            sourceView proof expanded y1 = ok (core.result.Result.Ok view) ∧
+              view.semantic = expanded ∧
+                bytesOf ↑view.y1 = OraclePortCompactDraft.expand 29 (slice (bytesOf ↑proof) 7031 464) ∧
+                  bytesOf ↑(retainedView view).round0 = slice (bytesOf ↑proof) 7527 224 ∧
+                    bytesOf ↑(retainedView view).round1 = slice (bytesOf ↑proof) 7783 224 ∧
+                      bytesOf ↑(retainedView view).final_message = slice (bytesOf ↑proof) 8007 2048 ∧
+                        (∀ (root : Std.Array U8 32#usize) (bytes1 bytes2 : alloc.vec.Vec U8),
+                            core.option.Option.unwrap (retainedView view).folded_root = ok root →
+                              alloc.vec.Vec.extend_from_slice core.clone.CloneU8
+                                    (alloc.vec.Vec.with_capacity U8 256#usize) root.to_slice =
+                                  ok bytes1 →
+                                alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 (retainedView view).round1 =
+                                    ok bytes2 →
+                                  bytesOf ↑bytes2 = slice (bytesOf ↑proof) 7751 256) ∧
+                          PAln_OpeningStages.Double
+                              (AspisR1ClaimPreparedBridge.concreteBoundaries
+                                (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries
+                                  (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed))
+                              (retainedDigest D) (retainedSem sem) (retainedView view) hash retained rs ∧
+                            currentPrepared retained = run.p ∧
+                              AspisR1ClaimPreparedBridge.mapArray currentE rs = run.scratch ∧
+                                AspisR1PublicPreparation.SourceFull25.Trace (retainedDigest D) pre t0 t25 cs ∧
+                                  List.map (fun c => ↑c.row) cs = List.range 25 ∧
+                                    List.map (fun c => bytesOf ↑c.record.framed) cs =
+                                        List.take 25 (List.map (fun s => bytesOf ↑s) ↑pre.records) ∧
+                                      ∃ record25 record26 z0 t26 z1 t27,
+                                        pre.validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+                                          AspisR1PublicPreparation.FinishModel.circle_validated
+                                                (AspisR1PublicPreparation.S1SemanticRootCopy.install
+                                                  (ClaimsUnrolledFinish.install std B))
+                                                (retainedDigest D) t25 record25 =
+                                              ok (core.result.Result.Ok z0, t26) ∧
+                                            pre.validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+                                              AspisR1PublicPreparation.FinishModel.circle_validated
+                                                    (AspisR1PublicPreparation.S1SemanticRootCopy.install
+                                                      (ClaimsUnrolledFinish.install std B))
+                                                    (retainedDigest D) t26 record26 =
+                                                  ok (core.result.Result.Ok z1, t27) ∧
+                                                (retainedSem sem).transcript = t27 ∧
+                                                  ∃ init,
+                                                    AspisR1PublicPreparation.PreparedHashCode.observe
+                                                        (AspisR1PublicPreparation.PreparedHashCode.run
+                                                            (SdkD_PrepareSource.code
+                                                              (Op3I_Install.install
+                                                                (Op4P_Install.install
+                                                                  (Tx1Q_Execution.base ops reserved query geo)))
+                                                              B std D pub proof hash
+                                                              (Array.repeat 29#usize run.zero))).1 =
+                                                      AspisR1PublicPreparation.SourceGlobalOracleInitial.initPair
+                                                            init ::
+                                                          AspisR1PublicPreparation.SourceDigestLog.sourceLog cs ++
+                                                        (AspisR1PublicPreparation.PreparedHashCode.observe
+                                                            (AspisR1PublicPreparation.PreparedHashCode.run
+                                                                (AspisR1PublicPreparation.S1SemanticCode.circleValidated
+                                                                  (AspisR1PublicPreparation.S1SemanticRootCopy.install
+                                                                    (ClaimsUnrolledFinish.install std B))
+                                                                  (retainedDigest D) t25 record25)).1 ++
+                                                          (AspisR1PublicPreparation.PreparedHashCode.observe
+                                                              (AspisR1PublicPreparation.PreparedHashCode.run
+                                                                  (AspisR1PublicPreparation.S1SemanticCode.circleValidated
+                                                                    (AspisR1PublicPreparation.S1SemanticRootCopy.install
+                                                                      (ClaimsUnrolledFinish.install std B))
+                                                                    (retainedDigest D) t26 record26)).1 ++
+                                                            AspisR1PublicPreparation.PreparedHashCode.observe
+                                                              (AspisR1PublicPreparation.PreparedHashCode.run
+                                                                  (closedPreparationCode D sem view hash
+                                                                    (Array.repeat 29#usize run.zero))).1))
+F3R_JoinedRun.lean:144:6: error: unexpected token 'have'; expected command
+'AspisR1.F3R_JoinedRun.on_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
