@@ -1,3 +1,6 @@
+> Resume allocation completed: see [resume/FINAL-REPORT.md](resume/FINAL-REPORT.md).
+> The report below records the earlier allocation.
+
 # PV join handoff
 
 **Target not yet established. No headline premise removed.**

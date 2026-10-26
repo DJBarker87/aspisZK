@@ -1,3 +1,10 @@
+# Current result
+
+Resume allocation exhausted at 100/100; see [FINAL-REPORT.md](FINAL-REPORT.md).
+89 accepted targets, 11 failures. Inventory 30 → 30; fixture data equations and
+non-vacuity open; combined final audit non-green. The entries below are dated
+progress history and are superseded by the final report.
+
 # Resume allocation (100 host Lean attempts; no Kani)
 
 Base c9d2b33137. Ruling (f) applies from entry: no local compiles and no host
