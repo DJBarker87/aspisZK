@@ -16,9 +16,9 @@ local instance : Records := PV_Src_RecordDynamic.dictionary
 
 theorem builder_premises {CommitHandle : Type} {F : Subfield K}
     (B : PackBasis F) (x : Statement K CommitHandle)
-    {I : Type} {selected : I → PV_Src_CheckedCanonical.Data (K := K)}
+    {I : Type} {selected : I → PV_Src_CheckedCanonical.Data («K» := K)}
     {transport : Fin 1024 ≃ Fin 1024}
-    (p : PV_Src_SelectedFour.Remainder (K := K) selected transport) :
+    (p : PV_Src_SelectedFour.Remainder («K» := K) selected transport) :
     PrivacyR1Headline.BuilderPremises
       (PV_Src_NativeIdentification.prover (fun i => PV_Src_CheckedCanonical.input (selected i)) transport) B x :=
   PV_Src_NativeConsumer.builder_premises B x (PV_Src_SelectedFour.complete p)
