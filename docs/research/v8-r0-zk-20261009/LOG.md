@@ -10006,3 +10006,21 @@ reduction, and whole deployed rows removed is still 0. Lead review pending on th
 discharge the fields in order of least native dependence (kernels, byte-blind, ledger/fill, then
 source/V038 by composing pv-rw16/pv-cb/pv-dict9 results as they land), splitting any remainder into
 finer named fields so the record tracks the ledger. Six jobs running. Privacy target not yet established.
+
+## D205 (Stream B, 2026-10-26 19:20): correction to D204 after reading the endpoint statement
+
+Lead review of `PV_RunJoin_Endpoint.lean` (head 92a6c256a6) corrects D204. The endpoint theorem
+keeps the exact conclusion and standard axioms, but it is still PARAMETRIC: it quantifies over a free
+`runtime : PV_RunJoin_Deployed.Runtime …` and `boundary : PV_RunJoin_Boundary.Data runtime …`, and
+`rust := PV_RunJoin_Deployed.rust runtime`. So D204's sentence "the deployed instance is the
+shared-world retry interpretation of the selected client retry owner" is superseded: the interpretation
+is defined for an abstract runtime record, and the instance for the frozen extracted client has not
+been constructed. V045 (deployed rust instance) therefore remains open, and the `source_V045` field
+is a law relating `boundary.sourceBody` to `runtime.body`, both still parameters. The two V038 fields
+are the agreement split through `complete_view_ext` (view equality ⇒ decision equality), which is
+organisation of the premise, not discharge (AGENTS.md §3). What stands from D204: the coupling and
+both marginals on the abstract world (`uniform_V037` as a theorem), the fixture fibres, the exact
+statement of the eight obligations. Rows removed: 0. pv-runjoin4 was stopped seconds after launch and
+relaunched as pv-runjoin4b with the order corrected: instantiate `runtime`/`boundary` from the frozen
+extracted operational client first (free parameters 2→0, record restated at the concrete instance),
+then discharge fields. This entry is the record of the correction; nothing in the proof tree changed.
