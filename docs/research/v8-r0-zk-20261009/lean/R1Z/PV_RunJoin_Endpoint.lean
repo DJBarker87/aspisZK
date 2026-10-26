@@ -1,5 +1,6 @@
-import R1Z.PrivacyR1HeadlineDeployedReal
-import R1Z.PV_RunJoin_Coupling
+import R1Z.PV_RunJoin_AbstractEndpoint
+import R1Z.PV_RunJoin_WorldCoupling
+import R1Z.PV_RunJoin_Boundary
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_Endpoint
@@ -54,134 +55,89 @@ local notation "source" => ProverCommitReencode16.experiment W Pr 8 eight_pos
   (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')
   ProverCommitReencode16.encode
 
-variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
-  [Fintype rust.RealRand] [Nonempty rust.RealRand]
-  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat →
-    List (List UInt8 × OracleAnswer) → OProg)
-
-
-/-! Conditional composition only. `rust`, padding and the model projection are
-still parameters. In particular this is NOT a deployed-source certificate.
-V045/V047 cannot be discharged by packaging the remaining view laws. -/
-
 abbrev ModelCoins := (((source).RealRand × OracleAnswer) × ProverCommitFuelJoin22.Tape)
-variable {Padding : Type} [Fintype Padding] [Nonempty Padding]
-variable (toModel : (adv : rust.Adversary) → (w : (h).Instance) →
-  rust.RealRand × Padding → ModelCoins template outputs x)
+variable [ProverRwFull.ExternalTypes]
+local instance : ProverRwRngCaller.NativeTypes := PV_RunJoin_CallerWorld.nativeTypes
+local instance : ProverRwRngCaller.ErasureFns := ⟨fun _ value => .ok value,fun _ value => .ok value⟩
+variable {N Ledger Client Context Rest : Type} [Fintype Rest]
+variable (runtime : PV_RunJoin_Deployed.Runtime CommitHandle Aux (ModelCoins template outputs x) N Ledger Client)
+variable (boundary : PV_RunJoin_Boundary.Data runtime Context Rest)
+local notation "rust" => PV_RunJoin_Deployed.rust runtime
+local notation "observer_program" => PV_RunJoin_Deployed.observer_program runtime
+local notation "World" => PV_RunJoin_Deployed.World runtime
+local notation "State" => PV_RunJoin_Deployed.State N Ledger Client
+local notation "oldBad" => QueryScanRealLazyBound.realBad W Pr 8 h B outputs x
+local notation "queries" => PrivacyR1HeadlineDeployedReal.realSeedQueries template outputs x rust observer_program
 
-abbrev modelView (adv : rust.Adversary) (w : (h).Instance) (r : (source).RealRand) :=
-  (source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r
-
-abbrev oldBad (w : (h).Instance) := QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w
-abbrev queries (adv : rust.Adversary) (w : (h).Instance) :=
-  PrivacyR1HeadlineDeployedReal.realSeedQueries template outputs x rust observer_program adv w
-
-/-- Original quantifiers and arbitrary common coupling, with complete view
-agreement. No product-carrier or coordinate-bijection restriction. -/
-def ViewRefinement : Prop :=
-  ∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
-    Nonempty (ProverCommitFuelJoin22.RunJoin
-      (rust.real h B outputs adv x w)
-      ((source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w)
-      (oldBad template outputs x w)
-      (queries template outputs x rust observer_program adv w))
-
-/-- The exact original RunJoin premise is equivalent to complete VIEW
-refinement: decision equality follows for the unchanged complete observer.
-The SAME witness coupling is retained in both directions. -/
-theorem refinement_iff_view :
-    PrivacyR1HeadlineDeployedReal.RustRealRefinement template outputs x rust observer_program ↔
-      ViewRefinement template outputs x rust observer_program := by
-  constructor
-  · intro refinement adv w hw
-    obtain ⟨join⟩ := refinement adv w hw
-    exact ⟨{ cp := join.cp
-             agreement := fun s hn => congrArg Prod.fst (join.agreement s hn) }⟩
-  · intro refinement adv w hw
-    obtain ⟨join⟩ := refinement adv w hw
-    refine ⟨{ cp := join.cp, agreement := ?_ }⟩
-    intro s hn
-    have view := join.agreement s hn
-    apply Prod.ext view
-    change rust.observe adv _ = rust.observe adv _
-    exact congrArg (rust.observe adv) view
-
-/-- Explicit residual laws for a common PRODUCT sampling carrier. Padding
-and the projection are separate data. V045 and V047 remain outside this
-abstract transport theorem and are NOT removed. -/
+/-- Eight explicit row obligations. This conditional record is NOT an
+instantiated native certificate: the body, effect, kernel and complete-view
+fields remain to be proved for the frozen runtime data. No uniform_V037 field
+is needed on the constructed graph coupling. -/
 structure PV_RunJoin_Premises : Prop where
-  uniform_V037 : ∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
-    ∀ f : ModelCoins template outputs x → ℚ,
-      mean (fun s => f (toModel adv w s)) = mean f
-  disclosed_V038 : ∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
-    ∀ r, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad template outputs x w)
-      (queries template outputs x rust observer_program adv w) i (toModel adv w r)) →
-      (rust.real h B outputs adv x w r.1).disclosed =
-        (modelView template outputs x rust observer_program adv w (toModel adv w r).1.1).disclosed
-  observerOracle_V038 : ∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
-    ∀ r, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad template outputs x w)
-      (queries template outputs x rust observer_program adv w) i (toModel adv w r)) →
-      (rust.real h B outputs adv x w r.1).observerOracle =
-        (modelView template outputs x rust observer_program adv w (toModel adv w r).1.1).observerOracle
+  source_V045 :
+    (∀ w : (h).Instance, (h).public w = x.1 →
+      PV_RunJoin_UnifiedRetry.BodySourceLaw (boundary.sourceBody h x w) (runtime.body h x w)) ∧
+    (∀ (s : State) k nonce next,
+      runtime.account.call_mut s k = .ok (nonce,next) → next.provider = s.provider) ∧
+    (∀ (w : (h).Instance), (h).public w = x.1 → ∀ secret (s next : State) status,
+      runtime.body h x w secret s = .ok (status,next) → next.provider = s.provider)
+  E1_V329 : ProverCommitPublicNonce40.E1 boundary.law
+  native_fill_V336 : ∀ (p : ProverRwRngCaller.Tape), p.used.val < p.replies.val.length →
+    boundary.draw.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8) =
+      ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8)
+  native_ledger_V337 : ∀ (w : (h).Instance), (h).public w = x.1 →
+    ∀ secret (s next : State) status, runtime.body h x w secret s = .ok (status,next) →
+      boundary.ledger next =
+        match boundary.reservation secret s with
+        | none => boundary.ledger s
+        | some path => (ProverCommitLedger36.reserve boundary.schedule boundary.unix path (boundary.ledger s)).2
+  byte_blind_V338 :
+    (∀ secret (s : State) kind,
+      boundary.fault secret s kind = boundary.schedule (boundary.ledger s).history.length kind (boundary.ledger s).history) ∧
+    (∀ t u rest, boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (t,rest))) =
+      boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (u,rest)))) ∧
+    (∀ (i : Fin 128) (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest), (∀ j : Fin 128, j.val < i.val → t j = u j) →
+      boundary.frame i (t,rest) = boundary.frame i (u,rest))
+  kernels_V339 : ∀ c, boundary.nativeWeight c =
+    PV_RunJoin_E1Joint.weight 128 boundary.law boundary.frame boundary.coordinates c
+  disclosed_V038 : ∀ (adv : (rust).Adversary) (w : (h).Instance), (h).public w = x.1 →
+    ∀ r : World, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) →
+      ((rust).real h B outputs adv x w r).disclosed =
+        ((source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1).disclosed
+  observerOracle_V038 : ∀ (adv : (rust).Adversary) (w : (h).Instance), (h).public w = x.1 →
+    ∀ r : World, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) →
+      ((rust).real h B outputs adv x w r).observerOracle =
+        ((source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1).observerOracle
 
-theorem complete_view_ext {a b : ROMView K CommitHandle Aux R1Bat}
-    (disclosed : a.disclosed = b.disclosed) (oracle : a.observerOracle = b.observerOracle) :
-    a = b := by
-  cases a
-  cases b
-  cases disclosed
-  cases oracle
-  rfl
+theorem uniform_V037 (f : ModelCoins template outputs x → ℚ) :
+    mean (fun s => f ((PV_RunJoin_WorldCoupling.cp runtime).toM s)) = mean f :=
+  (PV_RunJoin_WorldCoupling.cp runtime).meanM f
 
-omit [Fintype rust.RealRand] [Nonempty rust.RealRand] in
-/-- Exact equivalence, in both directions, for the ORIGINAL complete
-observer. No observer restriction or bad-event enlargement is involved. -/
-theorem complete_observer_pair_iff (adv : rust.Adversary)
-    (rv mv : ROMView K CommitHandle Aux R1Bat) :
-    (rv, rust.observe adv rv) =
-      (mv, (source).observe (RomObserverBin.observerMap rust observer_program adv) mv) ↔
-      rv.disclosed = mv.disclosed ∧ rv.observerOracle = mv.observerOracle := by
-  constructor
-  · intro same
-    have view : rv = mv := congrArg Prod.fst same
-    exact ⟨congrArg ROMView.disclosed view, congrArg ROMView.observerOracle view⟩
-  · rintro ⟨disclosed,oracle⟩
-    have view := complete_view_ext disclosed oracle
-    cases view
-    rfl
-
-/-- The complete decision needs no independent equation once the WHOLE view
-is equal: observerMap preserves the exact original decision. -/
-def runJoin
-    (premises : PV_RunJoin_Premises template outputs x rust observer_program toModel)
-    (adv : rust.Adversary) (w : (h).Instance) (hw : (h).public w = x.1) :
+def runJoin (premises : PV_RunJoin_Premises template outputs x runtime boundary)
+    (adv : (rust).Adversary) (w : (h).Instance) (hw : (h).public w = x.1) :
     ProverCommitFuelJoin22.RunJoin
-      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let v := (rust).real h B outputs adv x w r; (v,(rust).observe adv v))
       (fun r => let a := RomObserverBin.observerMap rust observer_program adv
-                let v := (source).real h B outputs a x w r
-                (v, (source).observe a v))
-      (oldBad template outputs x w)
-      (queries template outputs x rust observer_program adv w) where
-  cp := PV_RunJoin_Coupling.projection_cp (toModel adv w) (premises.uniform_V037 adv w hw)
+                let v := (source).real h B outputs a x w r; (v,(source).observe a v))
+      (oldBad w) (queries adv w) where
+  cp := PV_RunJoin_WorldCoupling.cp runtime
   agreement := by
     intro r hn
-    have view := complete_view_ext
-      (premises.disclosed_V038 adv w hw r hn)
-      (premises.observerOracle_V038 adv w hw r hn)
+    have view := PV_RunJoin_AbstractEndpoint.complete_view_ext
+      (premises.disclosed_V038 adv w hw r hn) (premises.observerOracle_V038 adv w hw r hn)
     apply Prod.ext view
-    change rust.observe adv _ = rust.observe adv _
-    exact congrArg (rust.observe adv) view
+    change (rust).observe adv _ = (rust).observe adv _
+    exact congrArg ((rust).observe adv) view
 
-theorem refinement_from_premises
-    (premises : PV_RunJoin_Premises template outputs x rust observer_program toModel) :
+theorem refinement_from_premises (premises : PV_RunJoin_Premises template outputs x runtime boundary) :
     PrivacyR1HeadlineDeployedReal.RustRealRefinement template outputs x rust observer_program := by
   intro adv w hw
-  exact ⟨runJoin template outputs x rust observer_program toModel premises adv w hw⟩
+  exact ⟨runJoin template outputs x runtime boundary premises adv w hw⟩
 
 theorem privacy_headline_from_premises
-    (premises : PV_RunJoin_Premises template outputs x rust observer_program toModel)
+    (premises : PV_RunJoin_Premises template outputs x runtime boundary)
  :
-    (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    (∀ (adv : (rust).Adversary) (w : (h).Instance), (h).public w = x.1 →
       |mean (realTest h B outputs rust adv x w) -
         mean (idealTestS source (RomObserverBin.observerMap rust observer_program adv) x
           (simE (h).transport B outputs x))| ≤
@@ -190,11 +146,9 @@ theorem privacy_headline_from_premises
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100 := by
   exact PrivacyR1HeadlineDeployedReal.privacy_headline_deployed template outputs x rust observer_program
-    (refinement_from_premises template outputs x rust observer_program toModel premises)
+    (refinement_from_premises template outputs x runtime boundary premises)
 
-#print axioms refinement_iff_view
-#print axioms complete_observer_pair_iff
-#print axioms complete_view_ext
+#print axioms uniform_V037
 #print axioms runJoin
 #print axioms refinement_from_premises
 #print axioms privacy_headline_from_premises

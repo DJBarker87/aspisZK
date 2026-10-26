@@ -1,0 +1,51 @@
+import Mathlib.Data.Fintype.BigOperators
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_FiniteGraph
+
+/-- An explicit initialized world with a retained completion coordinate. This
+is finite even when native states themselves form an infinite type. -/
+structure World {Coins State : Type} (initialize : Coins → State) where
+  coins : Coins
+  state : State
+  state_eq : state = initialize coins
+
+def create {Coins State : Type} (initialize : Coins → State) (c : Coins) : World initialize :=
+  ⟨c,initialize c,rfl⟩
+
+def coordinates {Coins State : Type} (initialize : Coins → State) : World initialize ≃ Coins where
+  toFun := World.coins
+  invFun := create initialize
+  left_inv := by
+    rintro ⟨c,s,h⟩
+    subst s
+    rfl
+  right_inv := fun _ => rfl
+
+instance finite {Coins State : Type} (initialize : Coins → State) [Fintype Coins] :
+    Fintype (World initialize) := Fintype.ofEquiv Coins (coordinates initialize).symm
+
+instance nonempty {Coins State : Type} (initialize : Coins → State) [Nonempty Coins] :
+    Nonempty (World initialize) := ⟨create initialize (Classical.choice inferInstance)⟩
+
+theorem cardinality {Coins State : Type} (initialize : Coins → State) [Fintype Coins] :
+    Fintype.card (World initialize) = Fintype.card Coins := Fintype.card_congr (coordinates initialize)
+
+theorem sum_coordinates {Coins State : Type} (initialize : Coins → State) [Fintype Coins]
+    (f : Coins → ℚ) : (∑ w : World initialize, f w.coins) = ∑ c : Coins, f c := by
+  exact Fintype.sum_equiv (coordinates initialize) _ _ (fun _ => rfl)
+
+theorem mean_coordinates {Coins State : Type} (initialize : Coins → State) [Fintype Coins]
+    (f : Coins → ℚ) :
+    (∑ w : World initialize, f w.coins) / Fintype.card (World initialize) =
+      (∑ c : Coins, f c) / Fintype.card Coins := by
+  rw [cardinality,sum_coordinates]
+
+#print axioms create
+#print axioms coordinates
+#print axioms finite
+#print axioms nonempty
+#print axioms cardinality
+#print axioms sum_coordinates
+#print axioms mean_coordinates
+end R1Z.PV_RunJoin_FiniteGraph

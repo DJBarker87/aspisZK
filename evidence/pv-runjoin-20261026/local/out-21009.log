@@ -1,0 +1,125 @@
+'R1Z.PV_RunJoin_WorldTotal.cap8_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FixtureRecords.spend' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SpendRelationMap.rspend_map_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FixtureFibres.lift_spendPlus' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TransferSentinel.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TransferSentinel.nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalFixtures.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalFixtures.withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalFixtures.predecessor_premises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalFixtures.fibres' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalFixtures.mathematical_fibres' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_AbstractEndpoint.privacy_headline_from_premises' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@R1Z.PV_RunJoin_CanonicalFixtures.Association.transfer_public_V047 : ∀ {CommitHandle : Type}
+  {transferX withdrawalX : R0Z.ZkStatement.Statement R1Z.PV_RunJoin_CanonicalFixtures.Scalar CommitHandle},
+  R1Z.PV_RunJoin_CanonicalFixtures.Association transferX withdrawalX →
+    transferX.1 = R1J.SpendWitnessMap.mapPub (R1Z.PV_RunJoin_FixtureRecords.fixturePublic false)
+@R1Z.PV_RunJoin_CanonicalFixtures.Association.withdrawal_public_V047 : ∀ {CommitHandle : Type}
+  {transferX withdrawalX : R0Z.ZkStatement.Statement R1Z.PV_RunJoin_CanonicalFixtures.Scalar CommitHandle},
+  R1Z.PV_RunJoin_CanonicalFixtures.Association transferX withdrawalX →
+    withdrawalX.1 = R1J.SpendWitnessMap.mapPub (R1Z.PV_RunJoin_FixtureRecords.fixturePublic true)
+@R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises.uniform_V037 : ∀ {CommitHandle Aux : Type}
+  {template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux}
+  {outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux}
+  {x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle}
+  {rust :
+    R0Z.FsStatement.FSExperiments R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat R1Z.PrivacyR1AcctBasis.F}
+  [inst : Fintype rust.RealRand]
+  {observer_program :
+    rust.Adversary →
+      R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat →
+        List (List UInt8 × R0Z.FsStatement.OracleAnswer) → R1Z.GamesR1.OProg}
+  {Padding : Type} [inst_1 : Fintype Padding]
+  {toModel :
+    rust.Adversary →
+      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input).Instance →
+        rust.RealRand × Padding → R1Z.PV_RunJoin_AbstractEndpoint.ModelCoins template outputs x},
+  R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises template outputs x rust observer_program toModel →
+    ∀ (adv : rust.Adversary) (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input).Instance),
+      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input).public w = x.1 →
+        ∀ (f : R1Z.PV_RunJoin_AbstractEndpoint.ModelCoins template outputs x → ℚ),
+          (R0Z.mean fun s => f (toModel adv w s)) = R0Z.mean f
+@R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises.disclosed_V038 : ∀ {CommitHandle Aux : Type}
+  {template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux}
+  {outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux}
+  {x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle}
+  {rust :
+    R0Z.FsStatement.FSExperiments R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat R1Z.PrivacyR1AcctBasis.F}
+  [inst : Fintype rust.RealRand]
+  {observer_program :
+    rust.Adversary →
+      R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat →
+        List (List UInt8 × R0Z.FsStatement.OracleAnswer) → R1Z.GamesR1.OProg}
+  {Padding : Type} [inst_1 : Fintype Padding]
+  {toModel :
+    rust.Adversary →
+      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input).Instance →
+        rust.RealRand × Padding → R1Z.PV_RunJoin_AbstractEndpoint.ModelCoins template outputs x},
+  R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises template outputs x rust observer_program toModel →
+    ∀ (adv : rust.Adversary) (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input).Instance),
+      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input).public w = x.1 →
+        ∀ (r : rust.RealRand × Padding),
+          (¬∃ i,
+                R1Z.ProverCommitFuelJoin22.bad (R1Z.PV_RunJoin_AbstractEndpoint.oldBad template outputs x w)
+                  (R1Z.PV_RunJoin_AbstractEndpoint.queries template outputs x rust observer_program adv w) i
+                  (toModel adv w r)) →
+            (rust.real (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                  outputs adv x w r.1).disclosed =
+              (R1Z.PV_RunJoin_AbstractEndpoint.modelView template outputs x rust observer_program adv w
+                  (toModel adv w r).1.1).disclosed
+@R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises.observerOracle_V038 : ∀ {CommitHandle Aux : Type}
+  {template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux}
+  {outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux}
+  {x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle}
+  {rust :
+    R0Z.FsStatement.FSExperiments R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat R1Z.PrivacyR1AcctBasis.F}
+  [inst : Fintype rust.RealRand]
+  {observer_program :
+    rust.Adversary →
+      R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat →
+        List (List UInt8 × R0Z.FsStatement.OracleAnswer) → R1Z.GamesR1.OProg}
+  {Padding : Type} [inst_1 : Fintype Padding]
+  {toModel :
+    rust.Adversary →
+      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input).Instance →
+        rust.RealRand × Padding → R1Z.PV_RunJoin_AbstractEndpoint.ModelCoins template outputs x},
+  R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises template outputs x rust observer_program toModel →
+    ∀ (adv : rust.Adversary) (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input).Instance),
+      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input).public w = x.1 →
+        ∀ (r : rust.RealRand × Padding),
+          (¬∃ i,
+                R1Z.ProverCommitFuelJoin22.bad (R1Z.PV_RunJoin_AbstractEndpoint.oldBad template outputs x w)
+                  (R1Z.PV_RunJoin_AbstractEndpoint.queries template outputs x rust observer_program adv w) i
+                  (toModel adv w r)) →
+            (rust.real (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_AbstractEndpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                  outputs adv x w r.1).observerOracle =
+              (R1Z.PV_RunJoin_AbstractEndpoint.modelView template outputs x rust observer_program adv w
+                  (toModel adv w r).1.1).observerOracle
+       29.97 real         1.55 user         4.35 sys
+          2642362368  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              226194  page reclaims
+              234845  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               10156  voluntary context switches
+              235582  involuntary context switches
+           405213390  instructions retired
+           161969610  cycles elapsed
+            11436800  peak memory footprint
+
+exit=0

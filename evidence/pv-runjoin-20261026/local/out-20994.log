@@ -1,0 +1,1480 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:42:22: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:43:19: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:26: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:48:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match
+            { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                world := world }.boundary with
+          | ProverRwEffectTape.Boundary.request input resume =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.request input resume }
+          | ProverRwEffectTape.Boundary.retry k =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.entropyFuel k }
+          | ProverRwEffectTape.Boundary.returned (fail e) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.failed e }
+          | ProverRwEffectTape.Boundary.returned div =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.diverged }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+            {
+              state :=
+                {
+                  entropy :=
+                    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                        world := world }.world,
+                  policy := next, ledger := s.ledger },
+              signal := Signal.error verifier.Error.Entropy }
+          | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret_1)) =>
+            match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret_1 s.ledger with
+            | fail e =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.failed e }
+            | div =>
+              {
+                state :=
+                  {
+                    entropy :=
+                      { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                          world := world }.world,
+                    policy := next, ledger := s.ledger },
+                signal := Signal.diverged }
+            | ok (status, ledger) =>
+              match status with
+              | core.result.Result.Ok proof =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.published proof (index + 1) }
+              | core.result.Result.Err verifier.Error.Rejected =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.rejected }
+              | core.result.Result.Err e =>
+                {
+                  state :=
+                    {
+                      entropy :=
+                        { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)),
+                            world := world }.world,
+                      policy := next, ledger := ledger },
+                  signal := Signal.error e }).state.entropy =
+    contents s.entropy
+'R1Z.PV_RunJoin_EffectInventory.contents' depends on axioms: [propext]
+'R1Z.PV_RunJoin_EffectInventory.attempt_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EffectInventory.run_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EffectInventory.client_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       39.40 real         1.76 user         5.27 sys
+          2413330432  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              196045  page reclaims
+              314111  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               30391  voluntary context switches
+              318443  involuntary context switches
+           329323833  instructions retired
+           120870943  cycles elapsed
+            11485952  peak memory footprint
+
+exit=1

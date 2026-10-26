@@ -1,0 +1,78 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+[Kani] Running: `CARGO_ENCODED_RUSTFLAGS="-Coverflow-checks=on-Zunstable-options-Ztrim-diagnostic-paths=no-Zhuman_readable_cgu_names-Zalways-encode-mir--cfg=kani-Zcrate-attr=feature(register_tool)-Zcrate-attr=register_tool(kanitool)--sysroot/home/dombarker/.kani/kani-0.67.0-L/home/dombarker/.kani/kani-0.67.0/lib--externkani--externnoprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib-Cpanic=abort-Csymbol-mangling-version=v0-Zpanic_abort_tests=yes-Zmir-enable-passes=-RemoveStorageMarkers--check-cfg=cfg(kani)-Clinker=echo--kani-compiler-Cllvm-args=--check-version=0.67.0" CARGO_TERM_PROGRESS_WHEN="never" RUSTC="/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler" RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/toolchain/bin/cargo rustc --target x86_64-unknown-linux-gnu -Zhost-config -Ztarget-applies-to-host --config=host.rustflags=["--cfg=kani_host"] --target-dir /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani --message-format json-diagnostic-rendered-ansi -v -p path+file:///home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts#pv-runjoin-effect-cuts@0.0.0 --lib -- "-Cllvm-args=--reachability=harnesses --log-level=info --assertion-reach-checks --harness checks::scan_zero_iff --exact"`
+   Compiling pv-runjoin-effect-cuts v0.0.0 (/home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts)
+     Running `/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler --crate-name pv_runjoin_effect_cuts --edition=2021 lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debuginfo=2 -C debug-assertions=on --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values())' -C metadata=ced8ba3481bf2f98 -C extra-filename=-4f6fdd5666dd198f --out-dir /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps --target x86_64-unknown-linux-gnu -C incremental=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/incremental -L dependency=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/debug/deps '-Cllvm-args=--reachability=harnesses --log-level=info --assertion-reach-checks --harness checks::scan_zero_iff --exact' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib' -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0`
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.001864814s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.021688076s
+====== Reachability Analysis Result =======
+Total # items: 11
+Total # statements: 68
+Total # expressions: 16
+
+Reachable Items:
+  - function: 11
+
+Statements:
+  - Return: 10
+  - Call: 11
+  - Ignored: 24
+  - Assign: 16
+  - SwitchInt: 1
+  - Assert: 2
+  - Goto: 4
+
+Expressions:
+  - UnaryOp: 1
+  - CheckedBinaryOp: 1
+  - Cast: 1
+  - BinaryOp: 5
+  - Use: 6
+  - Ref: 2
+
+-------------------------------------------
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.13s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.symtab.out /home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out`
+Finished goto-cc in 0.04678056s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out --function _RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff -o /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out`
+Finished goto-cc in 0.024502236s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out'
+Finished goto-instrument in 0.04551886s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out'
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_precondition' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out'
+Finished goto-instrument in 0.02679215s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out'
+Finished goto-instrument in 0.022535987s
+Thread 0: Checking harness checks::scan_zero_iff...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 34 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-pv-runjoin-20261026/effect-cuts/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_effect_cuts-4f6fdd5666dd198f__RNvNtCs5v2s11S7zUZ_22pv_runjoin_effect_cuts6checks13scan_zero_iff.out --verbosity 9 --json-ui`
+Finished run_cbmc in 0.19805191s
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 24 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.19780461s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

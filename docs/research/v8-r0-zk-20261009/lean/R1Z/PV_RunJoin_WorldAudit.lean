@@ -22,5 +22,5 @@ endpoint. This is not a release-manifest or whole source-closure replay. -/
 #print axioms R1Z.PV_RunJoin_WorldTotal.policy_total
 #print axioms R1Z.PV_RunJoin_WorldTotal.cap8_total
 #print axioms R1Z.PV_RunJoin_Source.fixed_dictionary_obstruction
-#print axioms R1Z.PV_RunJoin_Endpoint.refinement_from_premises
-#print axioms R1Z.PV_RunJoin_Endpoint.privacy_headline_from_premises
+#print axioms R1Z.PV_RunJoin_AbstractEndpoint.refinement_from_premises
+#print axioms R1Z.PV_RunJoin_AbstractEndpoint.privacy_headline_from_premises

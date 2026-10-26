@@ -14,9 +14,9 @@ certificate nor a full frozen-manifest replay is supplied. -/
 #print axioms R1Z.PV_RunJoin_CanonicalFixtures.predecessor_premises
 #print axioms R1Z.PV_RunJoin_CanonicalFixtures.fibres
 #print axioms R1Z.PV_RunJoin_CanonicalFixtures.mathematical_fibres
-#print axioms R1Z.PV_RunJoin_Endpoint.privacy_headline_from_premises
+#print axioms R1Z.PV_RunJoin_AbstractEndpoint.privacy_headline_from_premises
 #check @R1Z.PV_RunJoin_CanonicalFixtures.Association.transfer_public_V047
 #check @R1Z.PV_RunJoin_CanonicalFixtures.Association.withdrawal_public_V047
-#check @R1Z.PV_RunJoin_Endpoint.PV_RunJoin_Premises.uniform_V037
-#check @R1Z.PV_RunJoin_Endpoint.PV_RunJoin_Premises.disclosed_V038
-#check @R1Z.PV_RunJoin_Endpoint.PV_RunJoin_Premises.observerOracle_V038
+#check @R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises.uniform_V037
+#check @R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises.disclosed_V038
+#check @R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises.observerOracle_V038
