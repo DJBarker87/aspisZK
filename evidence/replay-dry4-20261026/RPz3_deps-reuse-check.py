@@ -16,5 +16,5 @@ print(json.dumps(actual))
 '''%json.dumps(list(pins))
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -'],input=payload,text=True,capture_output=True);assert r.returncode==0,r.stderr
 actual=json.loads(r.stdout);bad=[e for e in edges if actual[e['path']]!={k:e[k] for k in ['sha256','bytes']}]
-out={'checked_direct_edges':len(edges),'unique_actual_paths':len(actual),'conflicting_expected_hashes':{p:list(v) for p,v in pins.items() if len(v)>1},'mismatches':bad,'actual_objects':actual,'qualification':'Actual dependency paths are hashed on the host, including copied trusted library paths rather than assuming their source-path names coincide. No prover invocation.'}
+out={'checked_direct_edges':len(edges),'unique_actual_paths':len(actual),'conflicting_expected_hashes':{p:list(v) for p,v in pins.items() if len(v)>1},'mismatches':bad,'actual_objects':actual,'qualification':'Actual dependency paths are hashed on the host, including selected symlinked library paths rather than assuming their source-path names coincide. No prover invocation.'}
 (E/'RPz3_deps-reuse-check.json').write_text(json.dumps(out,indent=2)+'\n');print('edges',len(edges),'paths',len(actual),'conflicts',len(out['conflicting_expected_hashes']),'mismatches',len(bad))
