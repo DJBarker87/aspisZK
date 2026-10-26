@@ -1,4 +1,5 @@
 import R1Z.PV_Src_Canonical
+import R1Z.PV_Src_ForestCanonical
 import R1Z.ProverCommitAdmittedEndpoint
 
 /-! The original BuilderPremises consumer accepts the constructed extracted
@@ -30,8 +31,14 @@ theorem of_identification {CommitHandle : Type} {F : Subfield K}
 theorem extracted_stages {CommitHandle : Type} {F : Subfield K}
     (B : PackBasis F) (x : Statement K CommitHandle) :
     PrivacyR1Headline.BuilderPremises
-      (PV_Src_Identification.prover PV_Src_Canonical.inputs PV_Src_Transport.transport) B x :=
+      (PV_Src_Identification.prover (PV_Src_Canonical.inputs (K := K)) PV_Src_Transport.transport) B x :=
   of_identification B x _ _ PV_Src_Canonical.identification
+
+theorem forest_stages {CommitHandle : Type} {F : Subfield K}
+    (B : PackBasis F) (x : Statement K CommitHandle) :
+    PrivacyR1Headline.BuilderPremises
+      (PV_Src_ForestIdentification.prover (PV_Src_ForestCanonical.inputs (K := K)) PV_Src_Transport.transport) B x :=
+  of_identification B x _ _ PV_Src_ForestCanonical.identification
 
 /-- This is the existing endpoint contract, reused without changing its
 statement. It does not consume SourceIdentification as an argument. -/
@@ -46,5 +53,6 @@ theorem existing_consumer {CommitHandle : Type}
 
 #print axioms of_identification
 #print axioms extracted_stages
+#print axioms forest_stages
 #print axioms existing_consumer
 end R1Z.PV_Src_Consumer

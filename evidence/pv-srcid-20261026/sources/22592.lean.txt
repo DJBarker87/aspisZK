@@ -1,0 +1,113 @@
+/- Namespace port of BuilderInverse: same symbolic proof, actual forest extraction. -/
+import R1Z.PV_Src_Forest_PrimitiveArguments
+
+/-! Symbolic modular exponentiation for the actual extracted occupancy
+inverse. No evaluation of the concrete exponent or digest is used. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_Forest_Inverse
+open Aeneas Aeneas.Std Result
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+
+theorem shift_one (e : U64) : (U64.wrapping_shr e 1#u32).val = e.val / 2 := by
+  change (e.bv.ushiftRight _).toNat = _
+  simp [BitVec.toNat_ushiftRight, Nat.shiftRight_eq_div_pow]
+
+theorem bit_one (e : U64) : (e &&& 1#u64).val = e.val % 2 := by
+  simp only [UScalar.val_and,UScalar.ofNatCore_val_eq,Nat.and_one_is_mod]
+
+theorem multiply_mod (m : U32) (hm : 1 < m.val) (a b : U64)
+    (ha : a.val < m.val) (hb : b.val < m.val) :
+    ∃ c, (U64.wrapping_mul a b % UScalar.cast .U64 m : Result U64) = ok c ∧
+      c.val < m.val ∧ (c.val : ZMod m.val) = (a.val : ZMod m.val) * (b.val : ZMod m.val) := by
+  have hm32 : m.val < 2^32 := m.hBounds
+  have hab : a.val * b.val < 2^64 := by nlinarith
+  have hmcast : (UScalar.cast .U64 m).val = m.val := by
+    rw [UScalar.cast_val_eq]
+    apply Nat.mod_eq_of_lt
+    simpa using (show m.val < 2^64 by omega)
+  obtain ⟨c,hc,hv⟩ := WP.spec_imp_exists (UScalar.rem_spec (U64.wrapping_mul a b)
+    (y := UScalar.cast .U64 m) (by rw [hmcast]; omega))
+  have hmul : (U64.wrapping_mul a b).val = a.val*b.val := by
+    rw [U64.wrapping_mul_val_eq]
+    apply Nat.mod_eq_of_lt
+    simpa [UScalar.size_def] using hab
+  rw [hmul,hmcast] at hv
+  refine ⟨c,hc,?_,?_⟩
+  · rw [hv]; exact Nat.mod_lt _ (by omega)
+  · rw [hv]
+    simp only [ZMod.natCast_mod, Nat.cast_mul]
+
+theorem loop (m : U32) (hm : 1 < m.val) (b e acc : U64)
+    (hb : b.val < m.val) (ha : acc.val < m.val) :
+    ∃ out, inv_r_loop m b e acc = ok out ∧ out.val < m.val ∧
+      (out.val : ZMod m.val) = (acc.val : ZMod m.val) * (b.val : ZMod m.val)^e.val := by
+  generalize he : e.val = n
+  induction n using Nat.strong_induction_on generalizing b e acc with
+  | h n ih =>
+    rw [inv_r_loop]
+    by_cases hz : e.val = 0
+    · rw [if_neg (show ¬ e > 0#u64 by simpa [UScalar.lt_equiv] using hz)]
+      exact ⟨acc,rfl,ha,by rw [← he,hz,pow_zero,mul_one]⟩
+    · rw [if_pos (show e > 0#u64 by simpa [UScalar.lt_equiv] using (show 0 < e.val by omega))]
+      try simp only [lift,bind_tc_ok]
+      obtain ⟨b',hb',hb_bound,hb_val⟩ := multiply_mod m hm b b hb hb
+      have hn : (U64.wrapping_shr e 1#u32).val < n := by rw [shift_one]; omega
+      have hdecomp : e.val = e.val%2 + 2*(e.val/2) := (Nat.mod_add_div e.val 2).symm
+      by_cases hbit : e &&& 1#u64 = 1#u64
+      · rw [if_pos hbit]
+        obtain ⟨a',ha',ha_bound,ha_val⟩ := multiply_mod m hm acc b ha hb
+        rw [ha']
+        try simp only [bind_tc_ok]
+        rw [hb']
+        try simp only [bind_tc_ok]
+        obtain ⟨out,hout,hbound,hval⟩ := ih _ hn b' _ a' hb_bound ha_bound rfl
+        refine ⟨out,hout,hbound,?_⟩
+        rw [hval,ha_val,hb_val,shift_one]
+        have hodd : e.val%2 = 1 := by
+          have := congrArg UScalar.val hbit
+          simpa only [bit_one,UScalar.ofNatCore_val_eq] using this
+        rw [← he]
+        conv_rhs => rw [hdecomp,hodd,pow_add,pow_mul]
+        simp only [pow_one,pow_two,mul_pow]
+        ring
+      · rw [if_neg hbit]
+        try simp only [bind_tc_ok]
+        rw [hb']
+        try simp only [bind_tc_ok]
+        obtain ⟨out,hout,hbound,hval⟩ := ih _ hn b' _ acc hb_bound ha rfl
+        refine ⟨out,hout,hbound,?_⟩
+        rw [hval,hb_val,shift_one]
+        have heven : e.val%2 = 0 := by
+          have hne : e.val%2 ≠ 1 := by
+            intro h
+            apply hbit
+            apply UScalar.eq_of_val_eq
+            simpa only [bit_one,UScalar.ofNatCore_val_eq] using h
+          have := Nat.mod_lt e.val (by decide : 0 < 2)
+          omega
+        rw [← he]
+        conv_rhs => rw [hdecomp,heven,zero_add,pow_mul]
+        simp only [pow_two,mul_pow]
+
+theorem field_power_value (b out : U64) (x n : Nat)
+    (hb : b.val = x % 2147483647) (ho : out.val < 2147483647)
+    (hval : (out.val : ZMod 2147483647) = (b.val : ZMod 2147483647)^n) :
+    out.val = x^n % 2147483647 := by
+  rw [hb,ZMod.natCast_mod] at hval
+  have hv := congrArg ZMod.val hval
+  rw [← Nat.cast_pow,ZMod.val_natCast,ZMod.val_natCast,Nat.mod_eq_of_lt ho] at hv
+  exact hv
+
+theorem cast_word_value (out : U64) (n : Nat) (hn : out.val = n % 2147483647) :
+    (UScalar.cast .U32 out).val = (BitVec.ofNat 32 (n % 2147483647)).toNat := by
+  rw [UScalar.cast_val_eq,hn,BitVec.toNat_ofNat]
+  rfl
+
+
+#print axioms shift_one
+#print axioms bit_one
+#print axioms multiply_mod
+#print axioms loop
+#print axioms field_power_value
+#print axioms cast_word_value
+end R1Z.PV_Src_Forest_Inverse

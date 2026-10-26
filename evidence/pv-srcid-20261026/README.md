@@ -149,3 +149,28 @@ the certificate on the same canonical encoding carrier. Fixtures and Consumer
 are now intended to use this direct forest source chain as well. These newer
 modules still need focused validation; none is presently a closure receipt.
 ForestBanks identifies successful CopyRecords.banks.merged with ForestTrace.run.
+
+## Direct forest validation, 14:14 UTC
+
+Forest BankMerge22588, PrimitiveWriters22590, PrimitiveArguments22591,
+Inverse22599, InverseResult22600, PrimitiveDigests22601 passed with standard
+axioms and zero swaps. The fixed-prime inverse specialization is permanent
+in the generator, using `multiply_prime` over literal ZMod2147483647 and the
+actual source divisor cast. Failed 22592/22593/22595 are retained; the
+replacement never evaluates the concrete exponent.
+
+22602 DigestArguments found that the forest's std aliases live in the imported
+BuilderForestStdPort namespace, unlike the aggregate extraction's local ones.
+The generator now maps these explicit prefixes too; ForestPartsTotal's map
+prefix was corrected likewise. The failed output's sorryAx lines are error
+recovery and NOT accepted evidence. Queue resumes at22603; charged attempts
+remain counted solely from attempts.jsonl. All reservation-only IDs remain
+zero charged attempts.
+
+PV_Src_NativeInput is a new UNCOMPILED data adapter for the actual returned
+forest compilation/public statement. It does not hide run success in its
+input domain. Transfer/withdrawal requests choose recipient/out-value as the
+source wrappers do; public transition comes from the compiler's returned
+payload. A native-output certificate, if completed, must expose compile_call,
+words, publicCorr, admission and row_call as named premises, and must prove
+raw trace equality through returned_bank rather than assume it.
