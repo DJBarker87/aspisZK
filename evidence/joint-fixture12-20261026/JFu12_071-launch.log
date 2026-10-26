@@ -1,0 +1,37 @@
+{"attempt": "JFu12_071", "exit_status": 0, "wall_seconds": 2.095608028990682, "peak_rss_kib": "5407864", "swaps": "0", "print_axioms": []}
+def AspisR1.FIp_MaskValue.value : Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 16#usize →
+  Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 10#usize →
+    AspisR1.FIp_SemanticArithmetic.MQ →
+      Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 10#usize → AspisR1.ExtractedMaskHornerPolynomial.ExactQM :=
+fun c1 m g point =>
+  AspisR1.ExtractedMaskHornerPolynomial.coefficientPolynomial
+      (AspisR1.ExtractedMaskHornerCaller.coefficientValue
+        (AspisR1.ExtractedMaskCallerModel.populatedCoefficients (AspisR1.FIp_SemanticArithmetic.mapArray c1)
+          (AspisR1.FIp_SemanticArithmetic.mapArray m)))
+      (AspisR1.ExtractedMaskLinearRecurrence.maskLinear 0
+        (AspisR1.Ext
+...
+def AspisR1.FIp_MaskValue.value : Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 16#usize →
+  Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 10#usize →
+    AspisR1.FIp_SemanticArithmetic.MQ →
+      Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 10#usize → AspisR1.ExtractedMaskHornerPolynomial.ExactQM :=
+fun c1 m g point =>
+  AspisR1.ExtractedMaskHornerPolynomial.coefficientPolynomial
+      (AspisR1.ExtractedMaskHornerCaller.coefficientValue
+        (AspisR1.ExtractedMaskCallerModel.populatedCoefficients (AspisR1.FIp_SemanticArithmetic.mapArray c1)
+          (AspisR1.FIp_SemanticArithmetic.mapArray m)))
+      (AspisR1.ExtractedMaskLinearRecurrence.maskLinear 0
+        (AspisR1.ExtractedMaskLinearsExact.decodedPoint (AspisR1.FIp_SemanticArithmetic.mapArray point))) +
+    (1 +
+        AspisR1.ExtractedMaskLinearRecurrence.maskLinear 16
+            (AspisR1.ExtractedMaskLinearsExact.decodedPoint (AspisR1.FIp_SemanticArithmetic.mapArray point)) ^
+          26) *
+      AspisR1.FIp_SemanticValues.decode g
+@[reducible] def AspisR1.FIp_SemanticValues.decode : AspisR1.FIp_SemanticArithmetic.MQ →
+  AspisR1.ExtractedMaskQM31Exact.QM31Exact :=
+fun x => AspisR1.ExtractedMaskQM31Exact.decode (AspisR1.FIp_SemanticArithmetic.toProbe x)
+@[reducible] def AspisR1.ExtractedMaskCallerModel.decode : AspisR1.ExtractedMaskQM31Exact.CurrentQM →
+  AspisR1.ExtractedMaskQM31Exact.QM31Exact :=
+AspisR1.ExtractedMaskQM31Exact.decode
+
+Running as unit: run-r16e46fbbd5e94531ae8ea0d0c3a70196.scope; invocation ID: 40f090dcbb8a457eaa962ab479a2bd45

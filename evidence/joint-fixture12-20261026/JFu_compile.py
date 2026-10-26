@@ -15,6 +15,11 @@ a=f'JFu12_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/recount10-20261026/Rc10_001/receipt.json').read_text())
 cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='JFu split certificate; block count in JFu_PLAN.json; focused source binding')
 cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/JFp_Cache:/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects'
+# Select the existing pinned circle namespace before the retired aggregate cache.
+circle_cache='/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects'
+search_paths=[p for p in cfg['env']['LEAN_PATH'].split(':') if p!=circle_cache]
+search_paths.insert(search_paths.index('/home/dombarker/project-offloads/codex-cx-parse-sem-20261025')+1,circle_cache)
+cfg['env']['LEAN_PATH']=':'.join(search_paths)
 cfg['command'][-3:]=['-o',mod+'.olean',mod+'.lean']
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 retries=[]

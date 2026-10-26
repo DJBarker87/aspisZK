@@ -1,0 +1,5 @@
+# Finish-stage limits
+
+JFu_FinishInputs.inhabited (076) jointly strengthens JFu_ChallengeFixture on the same proof/prefix and concrete digest oracle: Claims are the exact116-cell row25 decode arrays, the fourth29-element extra array is decoded at offset87, both ordered std mask gathers return exactly, and the actual installed mask returns a canonical value on the actual round alpha. MaskTotal's proof applies the existing generic source theorem; no successful mask call is assumed.
+
+The attempted additional equality with FIp_MaskValue.value hit default heartbeat/recursion limits, including at a generic identity declaration. Those drafts remain rejected, not evidence of inequality or vacuity. The actual compiled formula was printed in071 and agrees textually with the intended formula; no model/source claim was silently changed. No cap, heartbeat or recursion limit was increased. Native terminal output, masked-terminal equality, complete Prepared return, TX1 accepted1/same-saved-checkpoint, TX2 accepted2, frozen3/global/runtime/deployment composition remain unproved unless superseded by a later checked receipt in this job.
