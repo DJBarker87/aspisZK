@@ -1,0 +1,42 @@
+{"attempt": "Rc9_040", "exit_status": 0, "wall_seconds": 2.3940854879911058, "peak_rss_kib": "5501092", "swaps": "0", "print_axioms": []}
+def AspisR1.PFin_Packet.Facts : AspisV8R19.DuplexFrames.Bytes →
+  AspisV8R19.DuplexFrames.Bytes →
+    AspisR1Stage2.verifier.Prepared → (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun publicBytes stored prepared H =>
+  ∃ i p q source,
+    i.physical.bytes = publicBytes ∧
+      i.stored = stored ∧
+        have tr :=
+          AspisR1.LiteralTranscript.erasePrefix
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2;
+        AspisR1.OraclePortStoredParserC4.parseReached stored tr = Option.some p ∧
+          AspisR1.OraclePortCompactDraft.Aligned p tr ∧
+            A
+...
+      f s →
+    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+          f.statement =
+        Aeneas.Std.Result.ok f.semantic →
+      ∀
+        (run :
+          AspisR1.Tx1Q_Execution.Run
+            (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current ops) reserved query geo B std) reserved query
+            geo (AspisR1.SdkD_PairBatches.current adapter ops stage finish reserved query geo B std) ()
+            (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved),
+        AspisR1.OraclePortHeader.accepts (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) = Bool.true →
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+            (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+            (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+            AspisR1.S2W_DigestExtraction.AeneasExtraction
+                (AspisR1.SdkD_PairBatches.dictionary adapter ops stage finish reserved query geo B std) native1 native2
+                hashv →
+              ∀ (sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                    ∀ (w : AspisR1.CanonicalCutEnrichedTranscript.Words),
+                      AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) →
+                        AspisR1.PFin_Packet.Facts (AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub)
+                          (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) (AspisR1.Tx1Q_Carriers.prepared run.p) H
+
+Running as unit: run-r4d7da7cb23584160a67ce28b057f344d.scope; invocation ID: 673b4dd23d194ae7a4479a556c1c8f3d

@@ -1,0 +1,46 @@
+def AspisR1.FIp_Install.select : {C : Type} →
+  AspisR1.NP6_StdModel.Reservation →
+    AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C →
+      AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C :=
+fun {C} r c =>
+  have __src := AspisR1.FIo_Install.select r c;
+  { adapter := __src.adapter, currentBase := __src.currentBase, stageBase := __src.stageBase, finish := __src.finish,
+    reserved := __src.reserved,
+    query :=
+      have __src := c.query;
+      { op0 := @AspisR1.Port3_NativeQueryBody.Ops.op0 __src, op1 := __src.op1, op2 := __src.op2, op3 := __src.op3,
+        op4 := __src.op4, op5 := __src.op5, op6 := __src.op6, op7 := __src.op7, op8 := __src.op8, op9 := __src.op9,
+        op10 := __src.op10, op11 := __src.op11, op12 := __src.op12, op13 := __src.op13, op14 := __src.op14,
+        op15 := __src.op15, op16 := __src.op16, op17 := AspisR1.FIp_CircleQuery.circle, op18 := __src.op18,
+        op19 := __src.op19, op20 := AspisR1.FIp_DotsAdapter.dots, op21 := __src.op21,
+        widePartialEq := AspisR1.FIp_Equality.dictionary },
+    geometry := __src.geometry, boundaries := AspisR1.FIp_Install.boundaries c.boundaries, std := __src.std }
+def AspisR1.FIp_Install.boundaries : AspisR1.FIp_SemanticArithmetic.B → AspisR1.FIp_SemanticArithmetic.B :=
+fun seed =>
+  have __src := AspisR1.FIp_SemanticArithmetic.install seed;
+  { fromFn := fun {T F} => AspisR1.OraclePortStdBuilder.fromFn, mask := __src.mask, add := __src.add, mul := __src.mul,
+    terminal := __src.terminal, circle := __src.circle, unwrapRoot := __src.unwrapRoot, claims := __src.claims }
+def AspisR1.FIp_Install.configuration : {C : Type} →
+  C →
+    AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C →
+      AspisR1.NP6_StdModel.Reservation → AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C :=
+fun {C} err c r => AspisR1.Rc5_Install.configuration err (AspisR1.FIp_Install.select r c) r
+@AspisR1.FIp_Install.slots : ∀ {C : Type} (err : C)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (r : AspisR1.NP6_StdModel.Reservation),
+  (AspisR1.FIp_Install.configuration err c r).query.op17 = AspisR1.FIp_CircleQuery.circle ∧
+    (AspisR1.FIp_Install.configuration err c r).query.widePartialEq = AspisR1.FIp_Equality.dictionary ∧
+      (AspisR1.FIp_Install.configuration err c r).query.op20 = AspisR1.FIp_DotsAdapter.dots ∧
+        (AspisR1.FIp_Install.configuration err c r).boundaries.mask = AspisR1.FIp_SemanticArithmetic.mask ∧
+          (AspisR1.FIp_Install.configuration err c r).boundaries.add = AspisR1.FIp_SemanticArithmetic.add ∧
+            (AspisR1.FIp_Install.configuration err c r).boundaries.mul = AspisR1.FIp_SemanticArithmetic.mul ∧
+              (AspisR1.FIp_Install.configuration err c r).boundaries.terminal = c.boundaries.terminal ∧
+                @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn
+                    (AspisR1.FIp_Install.configuration err c r).boundaries =
+                  @AspisR1.OraclePortStdBuilder.fromFn
+@AspisR1.Rc9_Install.compatible : ∀ {C : Type} (err : C)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.FIo_Install.configuration err (AspisR1.FIp_Install.select r c) r = AspisR1.FIp_Install.configuration err c r
+@AspisR1.Rc9_Install.finish_preserved : ∀ {C : Type} (err : C)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (r : AspisR1.NP6_StdModel.Reservation),
+  (AspisR1.FIp_Install.configuration err c r).finish = (AspisR1.FIo_Install.configuration err c r).finish
+'AspisR1.FIp_Install.slots' depends on axioms: [propext, Classical.choice, Quot.sound]

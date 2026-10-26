@@ -1,0 +1,43 @@
+{"attempt": "Rc9_010", "exit_status": 0, "wall_seconds": 2.3499087070231326, "peak_rss_kib": "5501008", "swaps": "0", "print_axioms": []}
+def AspisR1.Rc2_Events.Facts : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) →
+      AspisR1.S2W_ExtractionBoundary.First →
+        AspisR1.S2W_ExtractionBoundary.Second →
+          (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+              ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+            AspisR1.S2W_D189Wrappers.Allocator A →
+              AspisR1.S2W_ExtractionBoundary.Program →
+                (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+                  Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+...
+.sdk c).op36 = AspisR1.Hist_Authority.keyEq →
+    ∀ (before : AspisR1.CPP_BankState.Bank) (actions : List (AspisR1.CPP_BankState.Action A)) (success : Bool),
+      AspisR1.Hist_Store.byteLedger
+            (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.cells =
+          AspisR1.S2X.history (AspisR1.Hist_Store.byteLedger before.cells)
+            (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).2 ∧
+        ∀ (key : ℕ),
+          (before.cells key).owner = id →
+            AspisR1.Hist_Store.Initialized (before.cells key).data →
+              0 < before.lamports key →
+                (∀ event ∈ (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).2,
+                    AspisR1.S2X.Preserves key event) ∧
+                  (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.cells key =
+                      before.cells key ∧
+                    before.lamports key ≤
+                      (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.lamports key
+def AspisR1.CPH_Protection.Facts : {Tx A : Type} →
+  AspisR1.CPG_Projection.Observations Tx A →
+    Tx → Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 → AspisR1.S2W_ExtractionBoundary.Program → Prop :=
+fun {Tx A} p t saved id =>
+  have bank :=
+    AspisR1.CPR_SourceBank.afterCopy (AspisR1.CPG_Projection.cached (p.bank t)) ((p.layout t).handles 2).1 saved;
+  have key := ((p.layout t).handles 2).1;
+  (bank.cells key).owner = id ∧
+    AspisR1.Hist_Store.Initialized (bank.cells key).data ∧
+      0 < bank.lamports key ∧
+        (∀ event ∈ p.physicalEvents t, AspisR1.S2X.Preserves key event) ∧
+          (p.parentTentative t).cells key = bank.cells key ∧ bank.lamports key ≤ (p.parentTentative t).lamports key
+
+Running as unit: run-r0851dfac5e314e58947ee12566afbcae.scope; invocation ID: 43a470fa582b4000892db72740fa8176
