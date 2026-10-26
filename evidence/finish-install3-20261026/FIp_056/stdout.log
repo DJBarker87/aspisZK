@@ -1,0 +1,391 @@
+FIp_PairFinalCall.lean:24:40: error: Tactic `assumption` failed
+
+inst✝ : FIo_Native.Allocation
+self : FIo_Native.weights.Weights
+alpha : Slice NE
+f : Slice U8
+kappa out : NE
+x✝¹⁷ : Result Usize
+a✝¹⁷ : Usize
+heq✝¹⁷ : FIo_Native.weights.Weights.pair_loop0 { start := 0#usize, «end» := alpha.len } 1024#usize = ok a✝¹⁷
+h✝² : ¬(f.len.bv.udiv 32#usize.bv#uscalar != a✝¹⁷) = true
+x✝¹⁶ : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a✝¹⁶ : FIo_Native.aspis_core.field.wide_exact.WideExact
+heq✝¹⁶ : alpha.index_usize 0#usize = ok a✝¹⁶
+x✝¹⁵ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+a✝¹⁵ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝¹⁵ : FIo_Native.weights.powers 4#usize a✝¹⁶ = ok a✝¹⁵
+x✝¹⁴ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+a✝¹⁴ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝¹⁴ :
+  (if alpha.len = 2#usize then do
+      let we1 ← alpha.index_usize 1#usize
+      FIo_Native.weights.powers 4#usize we1
+    else ok (Array.repeat 4#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ONE)) =
+    ok a✝¹⁴
+x✝¹³ : Result (core.result.Result (alloc.vec.Vec FIo_Native.aspis_core.field.QM31) FIo_Native.aspis_core.r0.Error)
+a✝¹³ : alloc.vec.Vec FIo_Native.aspis_core.field.QM31
+heq✝¹³ :
+  FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy
+      (f.len.bv.udiv 32#usize.bv#uscalar) FIo_Native.aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result Bool
+a✝¹² : Bool
+heq✝¹² : FIo_Native.weights.shared_two_point_guard self alpha.len = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result Unit FIo_Native.verifier.Error ×
+      alloc.vec.Vec FIo_Native.aspis_core.field.QM31 ×
+        Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝¹¹ :
+  core.result.Result Unit FIo_Native.verifier.Error ×
+    alloc.vec.Vec FIo_Native.aspis_core.field.QM31 × Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝¹¹ :
+  FIo_Native.weights.process_regular_kinds self a✝¹² alpha f alpha.len (f.len.bv.udiv 32#usize.bv#uscalar) a✝¹⁵ a✝¹⁴
+      a✝¹³ (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok a✝¹¹
+x✝¹⁰ :
+  Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit)
+cf✝¹ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit
+a✝¹⁰ : Unit
+heq✝¹⁰ : core.result.Result.Insts.CoreOpsTry.branch a✝¹¹.1 = ok (core.ops.control_flow.ControlFlow.Continue a✝¹⁰)
+h✝¹ : a✝¹² = true
+x✝⁹ : Result (FIo_Native.weights.Weights × Std.Array FIo_Native.aspis_core.field.QM31 16#usize)
+a✝⁹ : FIo_Native.weights.Weights × Std.Array FIo_Native.aspis_core.field.QM31 16#usize
+heq✝⁹ :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO) =
+    ok a✝⁹
+x✝⁸ :
+  Result
+    (core.result.Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize) FIo_Native.verifier.Error)
+a✝⁸ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝⁸ : FIo_Native.weights.shared_partials f a✝⁹.2 = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ :
+  Result
+    (core.result.Result Unit FIo_Native.verifier.Error ×
+      Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝⁷ :
+  core.result.Result Unit FIo_Native.verifier.Error × Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝⁷ : FIo_Native.weights.shared_high a✝⁸ a✝⁹.1 a✝¹⁵ a✝¹⁴ a✝¹¹.2.2 = ok a✝⁷
+x✝⁶ :
+  Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit)
+cf✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit
+a✝⁶ : Unit
+heq✝⁶ : core.result.Result.Insts.CoreOpsTry.branch a✝⁷.1 = ok (core.ops.control_flow.ControlFlow.Continue a✝⁶)
+h✝ : alpha.len = 1#usize
+x✝⁵ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize)
+a✝⁵ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize
+heq✝⁵ :
+  FIo_Native.weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } a✝¹⁵
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok a✝⁵
+x✝⁴ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize)
+a✝⁴ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize
+heq✝⁴ :
+  FIo_Native.weights.Weights.pair_loop3 { start := 0#usize, «end» := f.len.bv.udiv 32#usize.bv#uscalar } a✝⁹.1 f
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok a✝⁴
+x✝³ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝³ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝³ : FIo_Native.weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } a✝⁷.2 a✝⁵ a✝⁴ = ok a✝³
+x✝² : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝² : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝² : FIo_Native.weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } a✝⁹.1 f a✝¹⁵ a✝³ = ok a✝²
+x✝¹ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝¹ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝¹ : FIo_Native.weights.powers 7#usize kappa = ok a✝¹
+x✝ : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a✝ : FIo_Native.aspis_core.field.wide_exact.WideExact
+heq✝ :
+  FIo_Native.weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } a✝² a✝¹
+      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO =
+    ok a✝
+run : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok out)
+⊢ FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } ?m.3851 a✝¹
+      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+FIp_PairFinalCall.lean:24:40: error: Tactic `assumption` failed
+
+inst✝ : FIo_Native.Allocation
+self : FIo_Native.weights.Weights
+alpha : Slice NE
+f : Slice U8
+kappa out : NE
+x✝¹⁸ : Result Usize
+a✝¹⁸ : Usize
+heq✝¹⁸ : FIo_Native.weights.Weights.pair_loop0 { start := 0#usize, «end» := alpha.len } 1024#usize = ok a✝¹⁸
+h✝² : ¬(f.len.bv.udiv 32#usize.bv#uscalar != a✝¹⁸) = true
+x✝¹⁷ : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a✝¹⁷ : FIo_Native.aspis_core.field.wide_exact.WideExact
+heq✝¹⁷ : alpha.index_usize 0#usize = ok a✝¹⁷
+x✝¹⁶ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+a✝¹⁶ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝¹⁶ : FIo_Native.weights.powers 4#usize a✝¹⁷ = ok a✝¹⁶
+x✝¹⁵ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+a✝¹⁵ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝¹⁵ :
+  (if alpha.len = 2#usize then do
+      let we1 ← alpha.index_usize 1#usize
+      FIo_Native.weights.powers 4#usize we1
+    else ok (Array.repeat 4#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ONE)) =
+    ok a✝¹⁵
+x✝¹⁴ : Result (core.result.Result (alloc.vec.Vec FIo_Native.aspis_core.field.QM31) FIo_Native.aspis_core.r0.Error)
+a✝¹⁴ : alloc.vec.Vec FIo_Native.aspis_core.field.QM31
+heq✝¹⁴ :
+  FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy
+      (f.len.bv.udiv 32#usize.bv#uscalar) FIo_Native.aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ : Result Bool
+a✝¹³ : Bool
+heq✝¹³ : FIo_Native.weights.shared_two_point_guard self alpha.len = ok a✝¹³
+x✝¹² :
+  Result
+    (core.result.Result Unit FIo_Native.verifier.Error ×
+      alloc.vec.Vec FIo_Native.aspis_core.field.QM31 ×
+        Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝¹² :
+  core.result.Result Unit FIo_Native.verifier.Error ×
+    alloc.vec.Vec FIo_Native.aspis_core.field.QM31 × Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝¹² :
+  FIo_Native.weights.process_regular_kinds self a✝¹³ alpha f alpha.len (f.len.bv.udiv 32#usize.bv#uscalar) a✝¹⁶ a✝¹⁵
+      a✝¹⁴ (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok a✝¹²
+x✝¹¹ :
+  Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit)
+cf✝¹ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit
+a✝¹¹ : Unit
+heq✝¹¹ : core.result.Result.Insts.CoreOpsTry.branch a✝¹².1 = ok (core.ops.control_flow.ControlFlow.Continue a✝¹¹)
+h✝¹ : a✝¹³ = true
+x✝¹⁰ : Result (FIo_Native.weights.Weights × Std.Array FIo_Native.aspis_core.field.QM31 16#usize)
+a✝¹⁰ : FIo_Native.weights.Weights × Std.Array FIo_Native.aspis_core.field.QM31 16#usize
+heq✝¹⁰ :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO) =
+    ok a✝¹⁰
+x✝⁹ :
+  Result
+    (core.result.Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize) FIo_Native.verifier.Error)
+a✝⁹ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝⁹ : FIo_Native.weights.shared_partials f a✝¹⁰.2 = ok (core.result.Result.Ok a✝⁹)
+x✝⁸ :
+  Result
+    (core.result.Result Unit FIo_Native.verifier.Error ×
+      Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝⁸ :
+  core.result.Result Unit FIo_Native.verifier.Error × Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝⁸ : FIo_Native.weights.shared_high a✝⁹ a✝¹⁰.1 a✝¹⁶ a✝¹⁵ a✝¹².2.2 = ok a✝⁸
+x✝⁷ :
+  Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit)
+cf✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit
+a✝⁷ : Unit
+heq✝⁷ : core.result.Result.Insts.CoreOpsTry.branch a✝⁸.1 = ok (core.ops.control_flow.ControlFlow.Continue a✝⁷)
+h✝ : ¬alpha.len = 1#usize
+x✝⁶ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize)
+a✝⁶ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize
+heq✝⁶ :
+  FIo_Native.weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } a✝¹⁶ a✝¹⁵
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok a✝⁶
+x✝⁵ : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a✝⁵ : FIo_Native.aspis_core.field.wide_exact.WideExact
+heq✝⁵ : FIo_Native.weights.grouped_inactive_pair a✝¹⁰.1 f a✝⁶ = ok a✝⁵
+x✝⁴ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝⁴ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝⁴ : a✝⁸.2.update 0#usize a✝⁵ = ok a✝⁴
+x✝³ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+a✝³ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝³ :
+  (if decide (a✝¹⁰.1.variant.read_discriminant = FIo_Native.transport.Variant.S2.read_discriminant) = true then
+      FIo_Native.weights.factored_s2_libra_weights a✝¹⁶ a✝¹⁵ a✝¹⁰.1.extra
+    else FIo_Native.weights.twofold_libra_weights a✝⁶ a✝¹⁰.1.extra) =
+    ok a✝³
+x✝² : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝² : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝² : FIo_Native.weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a✝⁴ a✝³ = ok a✝²
+x✝¹ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝¹ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝¹ : FIo_Native.weights.powers 7#usize kappa = ok a✝¹
+x✝ : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a✝ : FIo_Native.aspis_core.field.wide_exact.WideExact
+heq✝ :
+  FIo_Native.weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } a✝² a✝¹
+      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO =
+    ok a✝
+run : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok out)
+⊢ FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } ?m.3851 a✝¹
+      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+FIp_PairFinalCall.lean:24:40: error: Tactic `assumption` failed
+
+inst✝ : FIo_Native.Allocation
+self : FIo_Native.weights.Weights
+alpha : Slice NE
+f : Slice U8
+kappa out : NE
+x✝¹³ : Result Usize
+a✝¹³ : Usize
+heq✝¹³ : FIo_Native.weights.Weights.pair_loop0 { start := 0#usize, «end» := alpha.len } 1024#usize = ok a✝¹³
+h✝² : ¬(f.len.bv.udiv 32#usize.bv#uscalar != a✝¹³) = true
+x✝¹² : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a✝¹² : FIo_Native.aspis_core.field.wide_exact.WideExact
+heq✝¹² : alpha.index_usize 0#usize = ok a✝¹²
+x✝¹¹ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+a✝¹¹ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝¹¹ : FIo_Native.weights.powers 4#usize a✝¹² = ok a✝¹¹
+x✝¹⁰ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+a✝¹⁰ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝¹⁰ :
+  (if alpha.len = 2#usize then do
+      let we1 ← alpha.index_usize 1#usize
+      FIo_Native.weights.powers 4#usize we1
+    else ok (Array.repeat 4#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ONE)) =
+    ok a✝¹⁰
+x✝⁹ : Result (core.result.Result (alloc.vec.Vec FIo_Native.aspis_core.field.QM31) FIo_Native.aspis_core.r0.Error)
+a✝⁹ : alloc.vec.Vec FIo_Native.aspis_core.field.QM31
+heq✝⁹ :
+  FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy
+      (f.len.bv.udiv 32#usize.bv#uscalar) FIo_Native.aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok a✝⁹)
+x✝⁸ : Result Bool
+a✝⁸ : Bool
+heq✝⁸ : FIo_Native.weights.shared_two_point_guard self alpha.len = ok a✝⁸
+x✝⁷ :
+  Result
+    (core.result.Result Unit FIo_Native.verifier.Error ×
+      alloc.vec.Vec FIo_Native.aspis_core.field.QM31 ×
+        Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝⁷ :
+  core.result.Result Unit FIo_Native.verifier.Error ×
+    alloc.vec.Vec FIo_Native.aspis_core.field.QM31 × Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝⁷ :
+  FIo_Native.weights.process_regular_kinds self a✝⁸ alpha f alpha.len (f.len.bv.udiv 32#usize.bv#uscalar) a✝¹¹ a✝¹⁰ a✝⁹
+      (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok a✝⁷
+x✝⁶ :
+  Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit)
+cf✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit
+a✝⁶ : Unit
+heq✝⁶ : core.result.Result.Insts.CoreOpsTry.branch a✝⁷.1 = ok (core.ops.control_flow.ControlFlow.Continue a✝⁶)
+h✝¹ : ¬a✝⁸ = true
+h✝ : alpha.len = 1#usize
+x✝⁵ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize)
+a✝⁵ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize
+heq✝⁵ :
+  FIo_Native.weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } a✝¹¹
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok a✝⁵
+x✝⁴ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize)
+a✝⁴ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize
+heq✝⁴ :
+  FIo_Native.weights.Weights.pair_loop11 { start := 0#usize, «end» := f.len.bv.udiv 32#usize.bv#uscalar } self f
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok a✝⁴
+x✝³ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝³ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝³ : FIo_Native.weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } a✝⁷.2.2 a✝⁵ a✝⁴ = ok a✝³
+x✝² : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝² : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝² : FIo_Native.weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } self f a✝¹¹ a✝³ = ok a✝²
+x✝¹ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝¹ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝¹ : FIo_Native.weights.powers 7#usize kappa = ok a✝¹
+x✝ : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a✝ : FIo_Native.aspis_core.field.wide_exact.WideExact
+heq✝ :
+  FIo_Native.weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } a✝² a✝¹
+      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO =
+    ok a✝
+run : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok out)
+⊢ FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } ?m.3851 a✝¹
+      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+FIp_PairFinalCall.lean:24:40: error: Tactic `assumption` failed
+
+inst✝ : FIo_Native.Allocation
+self : FIo_Native.weights.Weights
+alpha : Slice NE
+f : Slice U8
+kappa out : NE
+x✝¹⁴ : Result Usize
+a✝¹⁴ : Usize
+heq✝¹⁴ : FIo_Native.weights.Weights.pair_loop0 { start := 0#usize, «end» := alpha.len } 1024#usize = ok a✝¹⁴
+h✝² : ¬(f.len.bv.udiv 32#usize.bv#uscalar != a✝¹⁴) = true
+x✝¹³ : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a✝¹³ : FIo_Native.aspis_core.field.wide_exact.WideExact
+heq✝¹³ : alpha.index_usize 0#usize = ok a✝¹³
+x✝¹² : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+a✝¹² : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝¹² : FIo_Native.weights.powers 4#usize a✝¹³ = ok a✝¹²
+x✝¹¹ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+a✝¹¹ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝¹¹ :
+  (if alpha.len = 2#usize then do
+      let we1 ← alpha.index_usize 1#usize
+      FIo_Native.weights.powers 4#usize we1
+    else ok (Array.repeat 4#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ONE)) =
+    ok a✝¹¹
+x✝¹⁰ : Result (core.result.Result (alloc.vec.Vec FIo_Native.aspis_core.field.QM31) FIo_Native.aspis_core.r0.Error)
+a✝¹⁰ : alloc.vec.Vec FIo_Native.aspis_core.field.QM31
+heq✝¹⁰ :
+  FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy
+      (f.len.bv.udiv 32#usize.bv#uscalar) FIo_Native.aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Bool
+a✝⁹ : Bool
+heq✝⁹ : FIo_Native.weights.shared_two_point_guard self alpha.len = ok a✝⁹
+x✝⁸ :
+  Result
+    (core.result.Result Unit FIo_Native.verifier.Error ×
+      alloc.vec.Vec FIo_Native.aspis_core.field.QM31 ×
+        Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝⁸ :
+  core.result.Result Unit FIo_Native.verifier.Error ×
+    alloc.vec.Vec FIo_Native.aspis_core.field.QM31 × Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝⁸ :
+  FIo_Native.weights.process_regular_kinds self a✝⁹ alpha f alpha.len (f.len.bv.udiv 32#usize.bv#uscalar) a✝¹² a✝¹¹ a✝¹⁰
+      (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok a✝⁸
+x✝⁷ :
+  Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit)
+cf✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit
+a✝⁷ : Unit
+heq✝⁷ : core.result.Result.Insts.CoreOpsTry.branch a✝⁸.1 = ok (core.ops.control_flow.ControlFlow.Continue a✝⁷)
+h✝¹ : ¬a✝⁹ = true
+h✝ : ¬alpha.len = 1#usize
+x✝⁶ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize)
+a✝⁶ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize
+heq✝⁶ :
+  FIo_Native.weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } a✝¹² a✝¹¹
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok a✝⁶
+x✝⁵ : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a✝⁵ : FIo_Native.aspis_core.field.wide_exact.WideExact
+heq✝⁵ : FIo_Native.weights.grouped_inactive_pair self f a✝⁶ = ok a✝⁵
+x✝⁴ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝⁴ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝⁴ : a✝⁸.2.2.update 0#usize a✝⁵ = ok a✝⁴
+x✝³ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+a✝³ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+heq✝³ :
+  (if decide (self.variant.read_discriminant = FIo_Native.transport.Variant.S2.read_discriminant) = true then
+      FIo_Native.weights.factored_s2_libra_weights a✝¹² a✝¹¹ self.extra
+    else FIo_Native.weights.twofold_libra_weights a✝⁶ self.extra) =
+    ok a✝³
+x✝² : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝² : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝² : FIo_Native.weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f a✝⁴ a✝³ = ok a✝²
+x✝¹ : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+a✝¹ : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+heq✝¹ : FIo_Native.weights.powers 7#usize kappa = ok a✝¹
+x✝ : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a✝ : FIo_Native.aspis_core.field.wide_exact.WideExact
+heq✝ :
+  FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } a✝² a✝¹
+      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO =
+    ok a✝
+run : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok out)
+⊢ FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } ?m.3851 a✝¹
+      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+'AspisR1.FIp_PairFinalCall.reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

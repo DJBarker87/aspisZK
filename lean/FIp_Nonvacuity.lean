@@ -87,7 +87,7 @@ theorem composed {W A CoreError Tx : Type}
     (reservation : NP6_StdModel.Reservation)
     (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
     (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
-    (extraction : S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation)) native1 native2 hashv)
+    (extraction : S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration indexError c reservation)) native1 native2 hashv)
     (sha256 H : Bytes → State) (p1 : S2W_ExtractionBoundary.P1 sha256 H)
     (syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
     (data1 data2 : Slice U8)
@@ -110,14 +110,14 @@ theorem composed {W A CoreError Tx : Type}
       (CPG_Projection.success p) (CPG_Projection.loaded p))
     (D : LiteralByteProtocol.Decoder) (submission : F3T_ByteCarrier.Submission)
     (finishOwners : FIp_GlobalOwners.Owners
-      (FIo_Install.configuration indexError c reservation)
-      (Rc2_Install.configuration (Rc5_Install.seed indexError (FIo_Install.select reservation c)) reservation).boundaries)
+      (FIp_Install.configuration indexError c reservation)
+      (Rc2_Install.configuration (Rc5_Install.seed indexError (FIp_Install.select reservation c)) reservation).boundaries)
     (snapshots : ∀ f s,SourceCuts
-      (DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation))
+      (DrvC_Installation.sdk (FIp_Install.configuration indexError c reservation))
       e1.first (e2.second secondSizes) saved f s →
       bytesOf s.proof.val=bytesOf f.proof.val ∧ bytesOf s.pub.val=bytesOf f.pub.val ∧
       bytesOf f.pub.val=submission.publicBytes ∧ bytesOf f.proof.val=submission.stored) :
-    let r := FIo_Install.configuration indexError c reservation
+    let r := FIp_Install.configuration indexError c reservation
     let runtime := F3X_FixtureRuntime.runtime r D hashv (.done submission)
     F3T_Runtime.StoredCarrierBinding r D (F3T_Installed.source r hashv) (.done submission) runtime ∧
     (eval H (F3T_Installed.source r hashv (F3T_ByteCarrier.input r submission))).2=true ∧
@@ -125,7 +125,7 @@ theorem composed {W A CoreError Tx : Type}
     F3U_Numeric.margin ≤ 1/(2:Rat)^100-F3T_RuntimeBound.failureModel runtime ∧
     F3T_RuntimeBound.failureModel runtime<1/(2:Rat)^100 := by
   dsimp only
-  let r := FIo_Install.configuration indexError c reservation
+  let r := FIp_Install.configuration indexError c reservation
   let runtime := F3X_FixtureRuntime.runtime r D hashv (.done submission)
   have binding := F3X_FixtureRuntime.binding r D hashv (.done submission)
   obtain ⟨p6,driverEq,sdkEq,result,security,copyFacts,eventFacts,protection,trace,recorder⟩ :=

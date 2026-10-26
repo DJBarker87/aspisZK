@@ -1,0 +1,50 @@
+from pathlib import Path
+import re
+s=Path('lean/FIp_CircleSource.lean').read_text();body=s[s.index(':= do'):s.index('#print')]
+lets=re.findall(r'  let (\w+) ← (.+)',body)[6:]
+head='''import FIp_CircleSource
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FIp_CircleValue
+open Aeneas Aeneas.Std Result
+open AspisR1CurrentWide AspisR1CurrentWide.Proof
+open SAQ_LineSource
+
+def formula (alpha a b c d : AspisWideTower.WideExact) (ix iy : FP) :=
+  let embed := algebraMap FP AspisWideTower.WideExact
+  let h0 := (a+b+c+d)*embed R1ZCircleFoldMathV1.rustQuarter
+  let h1 := (a-b-c+d)*embed (R1ZCircleFoldMathV1.rustQuarter*iy)
+  let h2 := (a+b-c-d)*embed (R1ZCircleFoldMathV1.rustQuarter*ix)
+  let h3 := (a-b+c-d)*embed (R1ZCircleFoldMathV1.rustQuarter*ix*iy)
+  h0+alpha*(h1+alpha*(h2+alpha*h3))
+
+theorem made (alpha a b c d out : E) (ix iy lx ly lz : U32)
+    (run : FIp_CircleSource.circle alpha (Array.make 4#usize [a,b,c,d])
+      (Array.make 5#usize [ix,iy,lx,ly,lz])=ok out) :
+    CanonicalWide out ∧ decodeWide out=formula (decodeWide alpha)
+      (decodeWide a) (decodeWide b) (decodeWide c) (decodeWide d) (decodeBase ix) (decodeBase iy) := by
+  have ia0 : Array.index_usize (Array.make 4#usize [a,b,c,d]) 0#usize=ok a := rfl
+  have ia1 : Array.index_usize (Array.make 4#usize [a,b,c,d]) 1#usize=ok b := rfl
+  have ia2 : Array.index_usize (Array.make 4#usize [a,b,c,d]) 2#usize=ok c := rfl
+  have ia3 : Array.index_usize (Array.make 4#usize [a,b,c,d]) 3#usize=ok d := rfl
+  have ii0 : Array.index_usize (Array.make 5#usize [ix,iy,lx,ly,lz]) 0#usize=ok ix := rfl
+  have ii1 : Array.index_usize (Array.make 5#usize [ix,iy,lx,ly,lz]) 1#usize=ok iy := rfl
+  simp only [FIp_CircleSource.circle,ia0,ia1,ia2,ia3,ii0,ii1,bind_tc_ok] at run
+'''
+proof=''; facts=[]
+for v,expr in lets:
+ proof+=f'  obtain ⟨{v},H{v},run⟩ := Port3_PushFrame.bind_success _ _ _ run\n'
+ expr=expr.replace('a1','a'); fn,*args=expr.split(); args=' '.join(args)
+ if fn.endswith('.add'):fact=f'SAQ_RawWide.add_exact {args} {v} H{v}'
+ elif fn.endswith('.sub'):fact=f'SAQ_RawWide.sub_exact {args} {v} H{v}'
+ elif fn.endswith('.mul_m31'):fact=f'(scale {args.split()[0]} {v} {" ".join(args.split()[1:])} H{v}).2'
+ elif fn=='field.M31.mul':fact=f'(baseMul {args} {v} H{v}).2'
+ elif fn.endswith('.mul'):fact=f'(SAQ_RawWide.mul_exact {args} {v} H{v}).2'
+ facts.append(fact)
+proof+='''  constructor
+  · exact (wide_add_success h0 we14 out (scale we2 h0 quarter Hh0).1
+      (SAQ_RawWide.mul_exact alpha we13 we14 Hwe14).1 run).1
+  · have e := SAQ_RawWide.add_exact h0 we14 out run
+'''
+proof+='    rw ['+',\n      '.join(reversed(facts))+'] at e\n    exact e\n'
+Path('lean/FIp_CircleValue.lean').write_text(head+proof+'\n#print axioms made\nend AspisR1.FIp_CircleValue\nend\n')

@@ -1,4 +1,4 @@
-import FIo_Install
+import FIp_Install
 import FIp_Core
 import FIo_Nonvacuity
 set_option autoImplicit false
@@ -25,8 +25,9 @@ open S2W_ExpandedChildren S2W_TraceSplice MultiproofConeCanonical
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 
-/-- One native witness factory; one selected Q+2965 event for the frozen3
-headline and P2Prime byte binding. Global finish owners and L159 remain. -/
+/-- Rc7 conclusions on the concrete finish, first-fold and semantic-arithmetic
+installation. Global round and dot owner laws are derived on the same native
+source witness. Pair, matching, semantic and native-local obligations remain. -/
 theorem deployed {W A CoreError Tx : Type}
     (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
     (copy : Heap (Nat → Record) → Nat → Payload → Outcome (Nat → Record))
@@ -38,7 +39,7 @@ theorem deployed {W A CoreError Tx : Type}
     (reservation : NP6_StdModel.Reservation)
     (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
     (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
-    (extraction : S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation)) native1 native2 hashv)
+    (extraction : S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration indexError c reservation)) native1 native2 hashv)
     (sha256 H : Bytes → State) (p1 : S2W_ExtractionBoundary.P1 sha256 H)
     (syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
     (data1 data2 : Slice U8)
@@ -63,38 +64,38 @@ theorem deployed {W A CoreError Tx : Type}
     (queries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q0+Q1)
     (runtime : F3T_Runtime.Runtime)
     (finishOwners : FIp_GlobalOwners.Owners
-      (FIo_Install.configuration indexError c reservation)
-      (Rc2_Install.configuration (Rc5_Install.seed indexError (FIo_Install.select reservation c)) reservation).boundaries)
+      (FIp_Install.configuration indexError c reservation)
+      (Rc2_Install.configuration (Rc5_Install.seed indexError (FIp_Install.select reservation c)) reservation).boundaries)
     (binding : F3T_Runtime.StoredCarrierBinding
-      (FIo_Install.configuration indexError c reservation) D
-      (F3T_Installed.source (FIo_Install.configuration indexError c reservation) hashv) P runtime)
+      (FIp_Install.configuration indexError c reservation) D
+      (F3T_Installed.source (FIp_Install.configuration indexError c reservation) hashv) P runtime)
     :
     let select : F3X_Projection.Output → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs :=
       fun _ => P2P_NativeSelection.pair
-        (DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation))
+        (DrvC_Installation.sdk (FIp_Install.configuration indexError c reservation))
         CPH_Program.verifier e1 e2 data2 slot;
     MultiproofConeP6Frozen2Stage.P6Boundary (P6C_Extension.dictionary hashv H) () H
       Op5T_P6.parent Op5T_P6.parent Op5T_P6.parent MultiproofConeP6Batch.referenceLeaf ∧
-    DrvC_Implementation.driver (FIo_Install.configuration indexError c reservation) = DrvC_SourceEntry.source (FIo_Install.configuration indexError c reservation) hashv ∧
-    DrvC_Installation.sdk (FIo_Install.configuration indexError c reservation) =
-      SdkD_PairBatches.dictionary (FIo_Install.configuration indexError c reservation).adapter (FIo_Install.configuration indexError c reservation).currentBase (FIo_Install.configuration indexError c reservation).stageBase
-        (FIo_Install.configuration indexError c reservation).finish (FIo_Install.configuration indexError c reservation).reserved (FIo_Install.configuration indexError c reservation).query (FIo_Install.configuration indexError c reservation).geometry
-        (FIo_Install.configuration indexError c reservation).boundaries (FIo_Install.configuration indexError c reservation).std ∧
+    DrvC_Implementation.driver (FIp_Install.configuration indexError c reservation) = DrvC_SourceEntry.source (FIp_Install.configuration indexError c reservation) hashv ∧
+    DrvC_Installation.sdk (FIp_Install.configuration indexError c reservation) =
+      SdkD_PairBatches.dictionary (FIp_Install.configuration indexError c reservation).adapter (FIp_Install.configuration indexError c reservation).currentBase (FIp_Install.configuration indexError c reservation).stageBase
+        (FIp_Install.configuration indexError c reservation).finish (FIp_Install.configuration indexError c reservation).reserved (FIp_Install.configuration indexError c reservation).query (FIp_Install.configuration indexError c reservation).geometry
+        (FIp_Install.configuration indexError c reservation).boundaries (FIp_Install.configuration indexError c reservation).std ∧
     (P2P_Result.Outcome L e1 e2 w1 w2
-      (FIo_Install.configuration indexError c reservation).adapter (FIo_Install.configuration indexError c reservation).currentBase
-      (FIo_Install.configuration indexError c reservation).reserved (FIo_Install.configuration indexError c reservation).query
-      (FIo_Install.configuration indexError c reservation).geometry (FIo_Install.configuration indexError c reservation).stageBase
-      (FIo_Install.configuration indexError c reservation).finish c.boundaries
+      (FIp_Install.configuration indexError c reservation).adapter (FIp_Install.configuration indexError c reservation).currentBase
+      (FIp_Install.configuration indexError c reservation).reserved (FIp_Install.configuration indexError c reservation).query
+      (FIp_Install.configuration indexError c reservation).geometry (FIp_Install.configuration indexError c reservation).stageBase
+      (FIp_Install.configuration indexError c reservation).finish (FIp_SemanticArithmetic.install c.boundaries)
       reservation CPH_Program.verifier data1 data2 slot saved post1 post2 H
-      (DrvC_Implementation.driver (FIo_Install.configuration indexError c reservation)) prior
+      (DrvC_Implementation.driver (FIp_Install.configuration indexError c reservation)) prior
       (p.physicalEvents t) hashv
       (BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0+Q1+2965)
         (eval H (Hiq_RecordedJoint.program
-          (F3X_Account.program (FIo_Install.configuration indexError c reservation) hashv P)
+          (F3X_Account.program (FIp_Install.configuration indexError c reservation) hashv P)
           F3X_Projection.project select)))) ∧
-    (F3X_ModelClaims.Claims (FIo_Install.configuration indexError c reservation) D P (Q0+Q1) ∧
-      F3Y_SourceClaims.Claims (FIo_Install.configuration indexError c reservation) D hashv P (Q0+Q1) select ∧
-      F3Y_AccountMass.Claims (FIo_Install.configuration indexError c reservation) hashv P (Q0+Q1) select ∧
+    (F3X_ModelClaims.Claims (FIp_Install.configuration indexError c reservation) D P (Q0+Q1) ∧
+      F3Y_SourceClaims.Claims (FIp_Install.configuration indexError c reservation) D hashv P (Q0+Q1) select ∧
+      F3Y_AccountMass.Claims (FIp_Install.configuration indexError c reservation) hashv P (Q0+Q1) select ∧
       F3T_RuntimeBound.failureModel runtime ≤ F3T_Numeric.total (Q0+Q1) ∧
       (Q0+Q1 ≤ F3U_RangeEdges.maxQueries →
         F3T_RuntimeBound.failureModel runtime ≤ (Q0+Q1+1:Rat)*(1/(2:Rat)^100)) ∧
@@ -106,13 +107,13 @@ theorem deployed {W A CoreError Tx : Type}
       post1.ambient = e1.heap.ambient ∧ post1.accounts = e1.heap.accounts ∧
       post1.counter = e1.heap.counter ∧
       (∀ cell, cell ≠ (e1.heap.accounts 2).1 → post1.payload cell = e1.heap.payload cell)) ∧
-    Rc2_Events.Facts (FIo_Install.configuration indexError c reservation) hashv native1 native2 copy allocator CPH_Program.verifier H saved ∧
+    Rc2_Events.Facts (FIp_Install.configuration indexError c reservation) hashv native1 native2 copy allocator CPH_Program.verifier H saved ∧
     CPH_Protection.Facts p t saved CPH_Program.verifier ∧
     CPH_Trace.Facts p t u saved native1 native2 copy allocator CPH_Program.verifier ∧
-    CPH_Recorder.Facts (FIo_Install.configuration indexError c reservation) hashv native1 native2 copy allocator
+    CPH_Recorder.Facts (FIp_Install.configuration indexError c reservation) hashv native1 native2 copy allocator
       CPH_Program.verifier H p t u saved  := by
   exact FIp_Core.deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
-    (FIo_Install.select reservation c) indexError reservation (FIo_Install.finishOps reservation c.finish)
+    (FIp_Install.select reservation c) indexError reservation (FIo_Install.finishOps reservation c.finish)
     (FIo_Nonvacuity.arithmetic_fixed reservation c.finish).symm ⟨rfl,rfl,rfl⟩ native1 native2 hashv extraction sha256 H p1 syscall
     data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length
     prior words p t u actions game RuntimePersistence D P Q0 Q1 queries runtime finishOwners binding

@@ -9,7 +9,7 @@ open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw
 open DrvC_Installation F3T_ByteCarrier F3V_RunEvidence
 
-/-- Six retained source-global families, conditioned on the actual source
+/-- Five retained source-global families, conditioned on the actual source
 view reads. Shape is derived by the source consumer, not a new input law. -/
 def Owners {F C : Type} (c : Configuration F C)
     (B : AspisR1PublicPreparation.FinishModel.Boundaries) : Prop :=
