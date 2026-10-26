@@ -1,219 +1,194 @@
-# L2 simulation handoff — 2026-10-26
+# L2 joint simulation execution report — 2026-10-26
 
-Branch `codex/pv-l2-sim-20261026`, base research
-`a0c5e1f66a9d16f76a22bd77fb0bc499a64a9978`. Design was committed first as
-`2e103c4017`, before proof code. No Lean/Rust proof code was added and no
-shipped source changed. This is a design/source-interface review and blocked
-build handoff, **not** an L2 privacy proof.
+Branch `codex/pv-l2-sim-20261026`; resumed baseline `5048eb9408`.
+Proof only. **Budget exhausted: 100/100 Lean compiler attempts, 20/20 Kani
+runs. No complete F3/F5/F6 deployment row is closed. The privacy target is
+not established.** No shipped source, simulator, observer, bad-event envelope,
+release pin or existing soundness file changed. Work is committed, not pushed.
 
-## Established by review
+This report supersedes the inherited blocked handoff. The lead's 09:50
+rulings accept IDs 20000–29999 and the shared launcher's TasksMax=128.
+No launcher modification was made by this worker. The inherited J20100
+range refusal consumed zero compiler attempts. The design remains
+[PV-L2-SIM-20261026.md](../../design/PV-L2-SIM-20261026.md).
 
-`design/PV-L2-SIM-20261026.md` defines the intended joint observable and
-the theorem target, retains the headline's actual simulator and bad-event
-envelope, and inventories every F3/F5/F6 row of the requested v2 table.
-It distinguishes deterministic trace control from a proved law for its inputs.
+## What is proved
 
-The current proof interfaces do not supply a complete joint trace join:
+All module names below have prefix `R1Z.PV_L2_`. Actual parser inputs, not
+accepted-query sets alone, are used. `F5.history_prefix` records the raw read
+prefix, per-block state, ordered contains comparisons, duplicate/accept
+branches, first stop and failure using `PhaseSamplerParserBin.parsedWords`
+and `scanned`, `PhaseQueryScanBin.stop`, and Q22 finish. `F5Machine.execute`
+is a recursive instrumented implementation: its value erases to the actual
+Q22 scan, its events equal that observation, and `source_loop_record` joins
+the existing source-shaped explicit-list loop. Native array iteration, std
+and allocator traces are still separate obligations.
 
-- `PrivacyR1HeadlineDeployedReal.RustRealRefinement` joins the existing
-  view/observer decision and named failure/query interfaces, not new L2 events.
-- `QueryScanRealLazyBound.real_vector_toRP` preserves all normalized honest
-  answer coordinates off `lazyBad`; a deterministic observation of that vector
-  can be transported there. This alone does not cross the later witness-mask
-  absorption step to `simE`.
-- `ProverCommitQuotientCoupling.completed_view/middle_completion` preserve
-  the published view/retry test after completing the middle tape. They do
-  not conclude preservation of expander refill/rejection histories.
-- `SideChannelEntropy` preserves draw-count/status histories for successful
-  seed relabelings, while the requested L2 observer also sees byte-comparison
-  positions. The L1 report explicitly leaves composition with the masked
-  transcript open. It is not a completed layer that can simply be assumed.
-- `ProverCommitReencode16.recover/reindex` and `PhaseWireLog2Bin.opens`
-  specify logical disclosure/order. They do not specify BTree/sort/Vec costs.
+`F5Transport.real_to_lazy` is **real-to-lazy**, off the same `lazyBad`, with
+the existing `RAddrIn`/`RCausal`. `lazy_to_middle` and `completion_joint`
+carry the raw parser history jointly with the complete view through actual
+middle-tape completion. `F5Absorption.fixed_coins_joint` then carries all
+attempt parser histories through the existing `hvzk_R1S` to unchanged
+`simE`, for fixed complete coins and a selected P_R1/VR1-valid challenge.
+`Headline` specializes to the exact W, Pr, owned decoder, eight-attempt
+reencoded source and honest builder of `privacy_headline_deployed`.
+This supplies a simulator leg at this stated model scope; it does not turn
+the complete real/L1/L2/ROM retry experiment into a proved joint theorem.
 
-No checked witness-dependent valid-spend counterexample was found or asserted.
-The inherited leaf counterexamples refute proof inferences, not this protocol.
+F3 now has actual 32-bit word transport preserving the high bit and rejecting
+cell, adaptive finite-stream equivalences, bounded cap-16 scalar/four-limb
+records, and concrete source-shaped `next`/collector erasures. Counted
+conditional fibres are proved symbolically, first for words, then actual
+oracle blocks, both streams and the owned quotient tape. These are exact
+joint laws, not an inference from marginal uniformity. `F3SourceArrays`,
+`F3SourceBudget` and `F3SourceJoint` connect both complete scalar draw-count
+arrays to actual empty-cache source collectors, actual caller domains and
+existing fixed capacity/budget proofs, and erase to the endpoint's owned
+decoder. `F3CompletionLaw` proves the independent padding/completion law.
+`F3Absorption.source_count_absorption` transports the owned quotient plus
+both count arrays through completion and witness absorption to unchanged
+simE. `HeadlineF3.absorption_actual` specializes to the endpoint's field,
+honest builder and public statement, with P_R1/VR1 guards retained.
 
-## Row status
+`F3EntropyPrefix` fixes the entire raw E1 seed tape and actual public-nonce
+entropy return/state, so successful seed byte positions are unchanged.
+`F3EntropyJoin.entropy_count_absorption` retains that full entropy result
+jointly with count/view absorption in the ideal independent coordinates.
+This is **not** composition with `SideChannelL1AttemptRecord.Run`: all
+rejected attempts, failed scalar prefixes, actual ROM requests/history,
+allocation/drop/environment state and their native event producers remain
+unjoined. `None` in the count law preserves decoder failure as the same
+outcome; it does not retain its detailed partial observation.
 
-Locations are the assigned CT-KERNELS v2 anchors, with abbreviations defined
-in the design note. “Open” applies to the complete requested row. A dash in
-the theorem column means no new theorem was checked; inherited local results
-in `evidence/l2-leaf-20261025/REPORT.md` are not promoted to row closure.
-`B0` below is `launch-receipt.json` plus `launcher-J20100.log`, documenting
-the common build block, not a per-row proof receipt.
+F6 proves logical opening dependence on actual queries and source-linked
+binary sharing/cursor structure. Failure-preserving recorded dot, gathered
+dot, pivot, image, product-row and complete product loops erase to the
+actual extracted checker functions. Checked arithmetic/index errors and
+nested fail/div prefixes are retained; multiplication/remainder operands
+are explicitly recorded. These results do not establish that generated
+certificates/matrices factor through coupled challenges, nor native costs.
+No abstract callback supplies the desired arithmetic result.
 
-| Row (file:line) | Status | New theorem | Receipt / next missing evidence |
+## Row table
+
+Anchors are the assigned CT-KERNELS v2 locations; probe/prover/core/statement
+abbreviations and z4/c3 paths are defined in the design. **OPEN** means the
+whole requested row. Theorems below are partial evidence only. J and k
+references link through [the full receipt index](INDEX.md).
+
+| File:line → row | Status | Checked theorem / source result | Receipt → remaining join |
 |---|---|---|---|
-| F5 probe/sampler.rs:8,21,45,102,111,121; probe/r1_wire.rs:194,209,256; probe/transcript.rs:23,31 | open | — | B0; native division/gamma trace and raw-prefix joint transport |
-| F5 core/circle.rs:34,55; core/r0_transcript.rs:177 | open | — | B0; singular/subfield/inverse/fallback source trace |
-| F5 statement/constraints_v4.rs:601,654,782; probe/host_semantic.rs:31,204 | open | — | B0; sparse-point control refinement and history law |
-| F5 core/r0_transcript.rs:202,216,305; probe/transcript.rs:35 | open | — | B0; full duplicate/extra-block/exhaustion observation on actual parser |
-| F3 prover/state_only_entropy.rs:202 | open | — | B0; E1 byte-position observation jointly with L1/view |
-| F3 prover/state_only_entropy.rs:760,780,794,804 | open | — | B0; actual expander/refill/rejection-history join |
-| F3 prover/state_only_hiding.rs:330,350,361,371 | open | — | B0; private-mask expander joint join |
-| F3/F6 probe/sim.rs:79,80,84 | open | — | B0; simulator/real nonzero-loop joint law |
-| F5/F6 probe/prover.rs:253,266; probe/host_commitment.rs:220,229,242; probe/multiproof.rs:54,198,248,251 | open | — | B0; native addresses/sort/dedup/sharing/Vec trace |
-| F6 probe/prover.rs:307,354; z4/z9e.rs:50,90,184,196 | open | — | B0; hidden-attempt challenge factoring and phase/error traces |
-| F6 z4/z9c.rs:107,135,290,332; z4/z9d.rs:17,41,74,90,113 | open | — | B0; full elimination/pivot/certificate trace |
-| F6 z4/z9.rs:567,989,1010,1016; z4/z9b.rs:78,107; z4/probe.rs:2207,2214,2256 | open | — | B0; concrete descriptor/challenge factoring |
-| F6 c3/build/src/lib.rs:108,317,358,539,820,918 | open | — | B0; six actual fill-loop source joins |
-| F6 c3/check/src/lib.rs:27,40,56,81,96,138,149,160,171,182,193,204,215,227,243,255,270,275,370,384,407 | open | — | B0; actual checker/failure-prefix source joins |
-| F6 probe/sim.rs:99,114,133,358,368,396,439 | open | — | B0; actual collection comparison/callback history semantics |
+| probe/sampler.rs:8,21,45,102,111,121; r1_wire.rs:194,209,256; transcript.rs:23,31 → F5 | OPEN | Bounded exact-body gamma/zero-divisor checks | k08,k18–20; division k09 timeout → full division/circle call schedule and raw-prefix joint law |
+| core/circle.rs:34,55; r0_transcript.rs:177 → F5 | OPEN | No new complete source theorem | no row receipt → singular/subfield/inverse/fallback trace |
+| statement/constraints_v4.rs:601,654,782; probe/host_semantic.rs:31,204 → F5 | OPEN | No new complete source theorem | no row receipt → point/control refinement on every reached attempt |
+| core/r0_transcript.rs:202,216,305; probe/transcript.rs:35 → F5 | OPEN; actual model/parser transport proved | `F5.history_prefix`, `F5Machine.source_loop_record`, `Headline.real_to_lazy_actual`, `Headline.absorption_actual` | J20104,20106,20108,20126,20134; k01–03,06–07 → native iteration/std costs and whole retry/L1/ROM join |
+| prover/state_only_entropy.rs:202 → F3 | OPEN; ideal E1 prefix retained | `F3EntropyPrefix.actual_entropy_preserved`, `F3EntropyJoin.entropy_count_absorption` | J20132,20194; J20118 obstruction → full L1 Run/retry/ROM composition |
+| prover/state_only_entropy.rs:760,780,794,804 → F3 | OPEN; source counts/quotient absorption proved | `F3Recorded.qm31_erases`, `F3SourceBudget.entropy`, `F3SourceJoint.source_owned`, `HeadlineF3.absorption_actual` | J20123,20171,20181,20190–91,20193 → native refill/request/rejected-prefix and L1/ROM joint record |
+| prover/state_only_hiding.rs:330,350,361,371 → F3 | OPEN; source counts/quotient absorption proved | `F3SourceBudget.masking`, `F3Tape.owned_joint_law`, `F3Absorption.source_count_absorption` | J20165,20188,20190 → same native/full-history join, no replacement independent mask |
+| probe/sim.rs:79,80,84 → F3/F6 | OPEN | No cap/unbounded-loop equivalence claimed | no row receipt → actual simulator nonzero loop/order/exhaustion joint law |
+| probe/prover.rs:253,266; host_commitment.rs:220,229,242; multiproof.rs:54,198,248,251 → F5/F6 | OPEN; logical/structural subset proved | `F6Openings.parser_prefix_opens`, `F6Sharing.cursor_joint`, `singleton_count` | J20120,20124; k10,k15 pass, k11–14,16–17 timeout → native sort/dedup/Vec/std and payload validation |
+| probe/prover.rs:307,354; z4/z9e.rs:50,90,184,196 → F6 | OPEN | No complete phase-source theorem | no row receipt → challenge/emit/convert/check/error/panic phase factoring |
+| z4/z9c.rs:107,135,290,332; z9d.rs:17,41,74,90,113 → F6 | OPEN | No new complete elimination theorem | no row receipt → actual challenge-to-matrix/rank/pivot trace |
+| z4/z9.rs:567,989,1010,1016; z9b.rs:78,107; probe.rs:2207,2214,2256 → F6 | OPEN | No new descriptor theorem | no row receipt → concrete descriptor and reached-challenge refinement |
+| c3/build/src/lib.rs:108,317,358,539,820,918 → F6 | OPEN | No six-fill trace theorem | no row receipt → concrete fill loops and descriptor/challenge factoring |
+| c3/check/src/lib.rs:27,40,56,81,96,138,149,160,171,182,193,204,215,227,243,255,270,275,370,384,407 → F6 | OPEN; extracted subset recorded | `F6Dot.dot_erases`, `F6KDot.kdot_erases`, `F6Image.image_erases`, `F6Pivot.piv_erases`, `F6Product.product_erases` | J20141,20153,20160,20186,20196,20198–99 → remaining checkers, generated certificate/challenge factorization and native refinement |
+| probe/sim.rs:99,114,133,358,368,396,439 → F6 | OPEN | No native collection trace law | no row receipt → BTree paths/key bytes, callbacks, sharing and joint programmed history |
 
-## Infrastructure stop and budget
+## Counterexample and owner decision boundary
 
-The existing launcher was inspected and invoked as:
+`F3SeedObstruction.lifted_position_changes` (J20118) is a checked
+counterexample **to a proof inference**: successful raw seed pairs with their
+nonzero byte at positions 0 versus 1 can be swapped while the old
+`SideChannelEntropy.count_history_preserved` still holds for all public
+nonces and byte-blind fault schedules. The first-nonzero comparison position
+changes. Therefore arbitrary successful-seed permutation cannot justify the
+stronger observer. The replacement ideal construction fixes the raw E1 tape.
+This is not a valid-spend, same-public-statement witness attack. No genuinely
+witness-dependent row was established, so no row is marked closed or STOP
+on that basis. The obstruction is recorded for owner review here and in
+J20118; no messages were sent to third parties.
 
-```
-ssh dombarker@100.108.41.90 'sh /home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh 20100 R1Z/PV_L2_F5 J 7000 8'
-```
+## Premises before and after
 
-It exited **64**, `attempt 20100 outside 5000-9999`, before source lookup or
-any compiler/scope. `PV_L2_F5` is a planned target, not a submitted module.
-Its source SHA/dependency fingerprint and `#print axioms` are therefore N/A.
-No host wall/RSS/swap measurements exist; null fields in the receipt are
-intentional. Local SSH round-trip time is separately labelled.
+| Item | Before | After / effect |
+|---|---|---|
+| Endpoint `PrivacyR1HeadlineDeployedReal.RustRealRefinement` / `ProverCommitFuelJoin22.RunJoin` | Required, with existing view/failure/query interfaces | Retained identically; no arbitrary new L2 trace interface inferred |
+| E1/E2; prover proved = shipped; L1/L2/L3; client proof-account route; dependency-closure replay | Open deployment conditions | All retained; **zero endpoint premises removed** |
+| Local F5 `RAddrIn`, `RCausal` | Explicit in generic real-to-lazy theorem | Discharged in `Headline.real_to_lazy_actual` by existing coverage/address/causality proofs; no new runtime assumption |
+| Local `PublicBase`, `BuilderSoundOn` | Explicit in generic absorption | Discharged in `Headline.absorption_actual` and `HeadlineF3.absorption_actual` by existing admitted builder proofs; no endpoint premise removed |
+| `PackField`, public-instance equality, P_R1, VR1 | Existing model absorption guards | Retained, with actual packing theorem at headline specialization; rejected-P attempt traces not silently covered |
+| Capacity/word budget, equal conditional fibres | Initially explicit generic lemmas | Capacity/budgets discharged for actual domains in `F3SourceBudget`; conditional fibres proved for actual owned decoder; no trace-equality assumption added |
+| Source failure | Actual decoder can return None | Same None in both laws; failed-prefix trace join explicitly retained, no new allowed error |
+| Simulator, observer, bad-event bound | Actual simE; bytes + oracle history + L1/L2/L3; existing bound | Identical. No new bad event, observer restriction, simulator replacement, bound charge or runtime trust item |
 
-The observed launcher additionally specifies `TasksMax=128`; this job requires
-64. The common instructions permit changing **only** the accepted ID range.
-That permission cannot repair the task-cap mismatch. The binding
-`local-lean.txt` rule 5 says: “Do NOT build or repair build/launcher/monitoring
-infrastructure. If the launcher or host misbehaves, stop and report the exact
-error in one paragraph; the lead fixes infrastructure. Proof work only.”
-Accordingly no launcher change, alternative host runner, uncapped compile,
-cold local dependency build, or repetition of this rejected launch was made.
-This is not a reservation-barrier refusal, so the barrier retry rule does not
-apply. The launcher snapshot and SHA-256 are committed as evidence.
+The headline bound remains the design's existing model error, parser/fresh
+collision, seed-hit and fuel terms. These proofs do not charge missing trace
+agreement to one of those events. No ledger row was invented where the
+privacy ledger is absent in this branch.
 
-Budget consumed: **0/100 Lean compiler attempts, 0/20 Kani runs**; one rejected
-launcher preflight reserved J20100. No axioms audit or final manifest replay
-ran, and no formal theorem or source check is claimed from the diagnostic.
-Kani work was not started because the mandated order stops at F5 proof/build
-preflight, and the instructions require an infrastructure stop.
+## Validation and measured evidence
 
-## Premise/ledger accounting
+- **100 Lean compiles**, J20101–J20200: 45 successes, 55 failed elaborations;
+  every final module hash matches a successful compile. Each changed generic
+  target was compiled before its consuming bridge. No unchanged failed compile
+  was rerun at a higher cap. No broad numeral/recurrence evaluation or cap
+  override was introduced. Lean peak observed across runs: 4,268,660 KiB;
+  all GNU-time swaps zero. Full resources, source revisions/hashes and direct
+  object hashes: [INDEX.md](INDEX.md) and per-attempt JSON/raw logs.
+- **Final focused audit**, J20200, `R1Z/PV_L2_Audit`: exit 0, wall 0:02.01,
+  peak 4,265,580 KiB, swaps 0, source baseline `4d0b6c1713` plus exact submitted
+  source hash in receipt. All **140** printed declarations use only subsets
+  of `propext`, `Classical.choice`, `Quot.sound`, or no axioms. The result for
+  **each declaration** is [AXIOMS.md](AXIOMS.md); raw output is J20200/out.log.
+  Failed elaborations' `sorryAx` prints are excluded from proof results.
+- **20 Kani runs**, 11 pass, eight 50-second timeouts, one proof-side memcmp
+  unwind failure (k05). Full scoped outcomes are in INDEX.md. Exact 13 Rust
+  items are bound by `tools/pv-l2-sim-20261026/source-binding.json` and the
+  generator reproduces the checked file byte-for-byte. Proof modules are
+  `cfg(kani)` only, bounded and stub-free. These checks have their harness
+  scope; they are not whole-row or full native-trace equivalence results.
+  Larger unsuccessful scan/count scopes moved to source-shaped Lean references;
+  the unproved native equivalence is retained, not asserted as P6 completion.
+- Shared Lean launcher: `-M7000`, MemoryHigh=6G, MemoryMax=8G, swap=0,
+  TasksMax=128 (accepted lead ruling). Kani: standalone 0.67.0 bundled sysroot,
+  -j4, own 6G/8G/swap0/TasksMax64 scopes. One capped scope at a time; pinned
+  workspace/cache reused. No dense arithmetic gate or unoptimized Rust gate.
+  Before k18 a vanished-cgroup reservation error was retried once after 30s;
+  see reservation-k18-retry.json. No barrier was bypassed.
+- The J20181 unchanged-source preflight refusal (exit 67) occurred because
+  an intended edit did not match. It launched no compiler; the source was
+  corrected before successful J20181. Separate JSON records the refusal.
+  J20100 is the inherited pre-ruling range refusal, also charged zero.
+- Read-only regeneration/checks: exact Rust binding reproduction, prohibited
+  proof-token scan, final module/source receipt hash checks, `git diff --check`,
+  and no differences under crates/ or programs/ against baseline. No full
+  frozen deployment manifest was replayed: the source/coupling cone remains
+  incomplete. This is a focused proof result, not a formal release result.
+- Exact source SHA and raw diagnostics survive every failed run, but not
+  every intermediate failed source file. Collected dependency hashes describe
+  direct cached objects after the run, not a complete frozen transitive
+  closure. These limits are not hidden by the baseline revision field.
+- A local small-file write briefly failed with ENOSPC; a later space check
+  showed 4 GiB available and the write succeeded. No wallet/key cleanup or
+  deletion of other work was performed.
 
-The privacy ledger file is absent on the checked research revision. No ledger
-row is removed. Before/after are identical: the deployed `RustRealRefinement`
-and D159/D166 joint L1/L2 deployment conditions are retained in full. No new
-agreement hypothesis, bad event, runtime trust item, simulator or observer is
-introduced. The 100-bit deployed privacy target is **not yet established**.
+Reproduce receipt/audit consistency without a compiler:
+`python3 tools/pv-l2-sim-20261026/summarize.py`.
+Proof commits through the final audit are listed in [HISTORY.txt](HISTORY.txt);
+the final report-only commit is additionally identified in the final response.
 
-Next concrete deliverable: lead supplies a compliant existing Env-J launcher
-for J20100–20399 with TasksMax 64; then implement/compile `PV_L2_F5` against
-the actual QueryScan real-vector/parser definitions, followed by the concrete
-joint transport across tape absorption. That first bridge must be labelled
-real-to-lazy until the simulator leg is discharged.
+## Stop and next concrete deliverable
 
-## Resumed execution, 2026-10-26
+Stop reason: both authorized budgets exhausted. Neither a launcher issue nor
+Kani timeout is being used as the stop. No release/privacy completion claimed.
 
-The lead's 09:50 rulings supersede the infrastructure stop above: J20000–29999
-and TasksMax=128 for the existing Lean launcher are accepted. The launcher
-was not edited. Baseline is 5048eb9408 on the same assigned branch.
-
-Stage F5: `PV_L2_F5.history_prefix` (J20104) checks prefix preservation on the
-actual `PhaseSamplerParserBin.parsedWords/scanned`, `PhaseQueryScanBin.stop`
-and `Q22WordScan.finish`. `history` includes raw block prefix, per-block
-state, ordered comparison operands/results, duplicate decisions and guards,
-first stop and failure. This is a Lean parser observation; native contains,
-Vec allocation and machine trace correspondence remain open.
-
-`PV_L2_F5Transport.real_to_lazy` (J20106) uses the actual
-`QueryScanRealLazyBound.real_vector_toRP` with the SAME `lazyBad`, `RAddrIn`
-and `RCausal`. `lazy_to_middle` identifies it on actual `gM` coins.
-`completion_joint` preserves this history jointly with the whole view across
-`gMQ` quotient tape completion. This is real-to-lazy plus quotient completion,
-NOT yet witness absorption or `simE`. No new agreement premise is introduced.
-
-Receipts: J20101–J20106 subdirectories (four initial local theorem errors,
-then passing F5 J20104 and transport J20106). Each records source SHA,
-direct cached-object fingerprint, exit/wall/RSS/swap and full axiom output.
-Failed elaborations print sorryAx and are explicitly excluded from proofs.
-Passing top theorems use only propext, Classical.choice, Quot.sound.
-No shipped file changed, no existing proved module overwritten.
-Endpoint premises removed: NONE at this stage. Deployment L1/L2, source
-refinement, E1/E2 and the simulator leg remain retained in full.
-
-Stage F5 absorption: `PV_L2_F5Absorption.fixed_coins_joint` (J20108)
-uses the actual `SimulatorR1.hvzk_R1S` and unchanged `RefPayload.simE`.
-For a fixed full attempt-coin vector and selected P_R1/VR1-valid challenge,
-every test of (all raw QueryScan histories, selected honest view) has the
-same mean as (the same histories, simE view). PackField, PublicBase,
-BuilderSoundOn, P_R1, VR1 and public-instance equality are explicit inherited
-hypotheses. This supplies a fixed-coins absorption leg, not the native
-retry/L1/ROM-history joint endpoint. No trace-agreement assumption was added.
-
-`PV_L2_F3Words` (J20110) constructs a symbolic equivalence on all 31-bit
-candidates, fixes the unique rejecting cell P, and proves complete bounded
-scalar rejection-control preservation under any canonical-value permutation.
-It is a candidate-word lemma, not yet a Rust-word/ROM/E1/L1 source join.
-
-### Stage F3 and F6 focused evidence
-
-J20113 `PV_L2_F3Schedule`: scalar/tower values move by a canonical-value
-permutation; full cap-16 rejection histories, cursors, refill offsets and
-four-limb partial-failure prefixes stay. This is candidate-level semantics.
-J20116 `PV_L2_F3Adaptive`: a genuine finite-stream equivalence advances the
-logical permutation index only at accepted scalars, preserves every accept
-bit and the exact uniform input law. J20129 `PV_L2_F3WordCarrier` transports
-it to the ACTUAL `CommitReadsR1.Word`/`ProverCommitWordCarrier.accepted`:
-retained high bit, identical rejection Boolean, canonical output permutation.
-The whole block-byte decoder/owned-caller/witness-translation join is not yet
-proved by these separate facts.
-
-J20123 `PV_L2_F3Recorded.qm31_erases` records the ACTUAL extracted owned
-`next`/cap-16 scalar and four-limb caller. Erasure is proved by induction,
-including hash failure/divergence and scalar partial failure; no scalar stub.
-Read records contain raw proof inputs, not an assertion that all answer
-values are public side-channel leakage. It is not a native-machine trace.
-
-J20118 `PV_L2_F3SeedObstruction.lifted_position_changes` is a CHECKED
-COUNTEREXAMPLE TO AN INFERENCE, not to valid-spend witness privacy. Swapping
-successful seed pairs with nonzero bytes in positions 0 versus 1 preserves
-`SideChannelEntropy.count_history_preserved` for every public nonce and
-byte-blind fault schedule, but changes `firstNonzero`. This forbids using
-arbitrary successful-seed relabeling for the stronger observer. No row is
-marked witness-dependent on this evidence; the rows remain open.
-
-J20126 `PV_L2_F5Machine`: recursive instrumented parser erases to Q22 scan,
-its history equals the F5 observation, and the existing source-shaped
-`Query31ExplicitListLoop.scanListLoop_q22` consumes that recorded result.
-The array IntoIter/std cost boundaries of Query31 remain explicit.
-
-J20120 `PV_L2_F6Openings`: the actual `PhaseWireLog2Bin.opens` factors
-through queries, with complete `PhaseSamplerParserBin` prefix transport.
-J20124 `PV_L2_F6Sharing`: source-linked binary group/cursor structural
-record and symbolic singleton sibling count; no native std cost claim.
-
-Kani budget: 20/20 used, 11 successes, eight 50-second timeouts, one
-proof-side memcmp unwind failure (k05). Exact source items from current
-QueryScan/sampler/multiproof bodies are pinned by tools/.../source-binding.json;
-proof harnesses are cfg(kani)-only and contain NO stubs. Standalone Kani
-0.67 with bundled sysroot, -j4, one 6G/8G/swap0/TasksMax64 scope at a time.
-This is bounded symbolic checking, not an unoptimized arithmetic gate.
-All raw logs/times/receipts are k01–k20. Timeout GNU-time wrapper peaks
-can undercount descendants; actual peaks are null rather than invented.
-No timed-out target was rerun unchanged or at a raised cap. Larger scan/count
-scopes moved to the source-shaped Lean references at their stated scope.
-Reservation preflight before k18 saw a vanished cgroup; it was retried after
-30 seconds once and succeeded. No reservation barrier was bypassed.
-
-### Source-count and extracted-checker stage (supersedes earlier open subgoals)
-
-J20188 proves `PV_L2_F3Absorption.source_count_absorption`: actual owned
-quotient plus both scalar draw-count arrays, with common None failure,
-transports through uniform completion and `hvzk_R1S` to unchanged simE.
-J20190/J20191 connect these counts to the concrete source-shaped collector,
-actual domains, empty cache and fixed budgets, then erase to the actual
-owned decoder. J20193 specializes to the endpoint field/honest builder,
-discharging local builder/public premises using existing admitted proofs.
-J20194 retains the entire ideal E1 entropy return/state jointly. This is
-not full L1 Run composition, native trace equality or ROM-history transport.
-
-J20141/20153/20160/20186/20196 prove failure-preserving recorded dot,
-gathered-dot, pivot, image and product-row loops erase to actual extracted
-checker functions. They do not yet prove certificates factor through coupled
-challenges or native std/allocator traces. No complete row closes.
-All successful printed top theorems use only standard axioms. A full
-manifest is not authorized by the incomplete source/coupling cone.
+Next deliverable: a concrete failure-preserving E1/expander event producer
+joined to `SideChannelL1AttemptRecord.Run` on **every reached/rejected attempt**,
+with raw refill/address/rejection prefixes and actual ROM programming/history.
+Prove its success projection equals `F3SourceJoint.sourceObserved`; join its
+failure prefix without collapsing it to None; transport that complete record
+through the same witness coupling with unchanged simE and existing bad events.
+In parallel proof order, finish source-controlled F5 sampler/circle/sparse
+factoring and the remaining F6 checker/build/collection traces. No native std
+trace may be inferred solely from functional equality. New budget is needed
+for those focused gates and only then a complete frozen dependency replay.
