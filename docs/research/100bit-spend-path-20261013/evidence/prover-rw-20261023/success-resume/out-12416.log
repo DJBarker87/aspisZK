@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessPowerTotal.lean:37:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let cf ←
+      match (exp, base, acc) with
+        | (exp1, base1, acc1) => ProverRwSuccessInverseSource.field.M31.pow_loop.body exp1 base1 acc1
+    match cf with
+      | cont next =>
+        loop
+          (fun x =>
+            match x with
+            | (exp1, base1, acc1) => ProverRwSuccessInverseSource.field.M31.pow_loop.body exp1 base1 acc1)
+          next
+      | done out => ok out
+is not definitionally equal to the right-hand side
+  do
+    let cf ← S.body exp base acc
+    match cf with
+      | done x => ok x
+      | cont (e, b, a) =>
+        loop
+          (fun x =>
+            match x with
+            | (exp1, base1, acc1) => ProverRwSuccessInverseSource.field.M31.pow_loop.body exp1 base1 acc1)
+          (e, b, a)
+
+exp : U64
+base acc : U32
+⊢ (do
+      let cf ←
+        match (exp, base, acc) with
+          | (exp1, base1, acc1) => ProverRwSuccessInverseSource.field.M31.pow_loop.body exp1 base1 acc1
+      match cf with
+        | cont next =>
+          loop
+            (fun x =>
+              match x with
+              | (exp1, base1, acc1) => ProverRwSuccessInverseSource.field.M31.pow_loop.body exp1 base1 acc1)
+            next
+        | done out => ok out) =
+    do
+    let cf ← S.body exp base acc
+    match cf with
+      | done x => ok x
+      | cont (e, b, a) =>
+        loop
+          (fun x =>
+            match x with
+            | (exp1, base1, acc1) => ProverRwSuccessInverseSource.field.M31.pow_loop.body exp1 base1 acc1)
+          (e, b, a)
+'R1Z.ProverRwSuccessPowerTotal.mul_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessPowerTotal.shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessPowerTotal.loop_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessPowerTotal.pow_unfold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessPowerTotal.pow_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

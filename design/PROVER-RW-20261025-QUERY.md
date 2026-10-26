@@ -964,3 +964,30 @@ generic inverses, then continue remaining successful-body entries and source
 composition; retain the native effect obstruction throughout. All work is
 local to this assigned worktree and its owned host source area; no push/merge,
 other-worktree mutation or key cleanup was performed.
+
+## Resumed symbolic inverse and equality stage (12416–12423)
+
+`ProverRwSuccessPowerTotal.pow_total` proves totality of the actual retained
+binary power loop for every U64 exponent and arbitrary raw base/accumulator.
+The shift decreases symbolically; no P-2 expansion is used. The failed bind
+joins are retained as immutable changed predecessors. `m_total` consumes this
+fact to remove the scalar inverse's source success obligation. New
+`ProverRwSuccessInverseInstall.selected` installs the retained generic scalar
+and QM31 inverses and QM31 negation. `ProverRwSuccessByteEquality.array_eq`
+proves the actual library array equality for arbitrary N, without an array
+read/output premise. `ProverRwSuccessEquality` installs the derived circle and
+four-field context equality and proves unconditional structural equality.
+Selector now101/262;45 successful-body references remain unselected. This
+closes five source interpretation obligations, not their native ABI/effect
+association; **zero root/headline premises removed; target not yet established**.
+
+Eight focused host compiles:4pass,4changed elaboration failures. Every new top
+theorem has a standard-axiom report. Existing5G/7G,swap0,Tasks64,-M7000 launcher
+unchanged. Source/dependency hashes, exact targets/commands, raw exit/wall/RSS/
+swap and complete reports are in `success-resume/*-receipt.json`. The12416 input
+receipt was reconstructed after a mistaken absent script path let the shell
+continue with an empty fingerprint; the exact source and unchanged dependency
+objects were captured before the changed successor. The receipt states that
+actual invocation; no proof was rerun unchanged. No reservation error occurred.
+No shipped Rust, frozen artifact, trust boundary, model carrier or observer
+changed. Native entropy continuation is in progress independently.
