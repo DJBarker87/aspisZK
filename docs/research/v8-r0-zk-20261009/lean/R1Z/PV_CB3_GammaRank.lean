@@ -45,7 +45,7 @@ theorem sample_value (base radix count : Nat) (positive : 0 < base)
   rw [finish_modulus base positive _ _
     (digits_canonical base radix positive count words)
     (by simpa only [digits_length] using power_large) bound]
-  rw [digits_length, value_conserved]
+  rw [digits_length, PV_CB3_DigitSequence.value_conserved]
 
 #print axioms finish_modulus
 #print axioms sample_length
