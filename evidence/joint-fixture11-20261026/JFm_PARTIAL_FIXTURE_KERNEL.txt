@@ -1,0 +1,120 @@
+theorem AspisR1.JFm_ChallengeFixture.inhabited : ∀ {Hash : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (hash : Hash),
+  have D0 :=
+    AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+      (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D);
+  have t0 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFr_SeedBoundary.numeric, hash := hash,
+      next_row := 0#u8 };
+  have t15 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q14Source.ratchet, hash := hash,
+      next_row := 15#u8 };
+  have t25 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q24Source.ratchet, hash := hash,
+      next_row := 25#u8 };
+  ∃ expanded y1 pre view claims cs r25 r26 z0 t26 z1 t27,
+    AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+          AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+      AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+        AspisS1ValuesOwnedInstallation.expandValues AspisR1.JFw_Y1.stored AspisR1.JFw_Y1.initial =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), y1) ∧
+          y1.length = 928 ∧
+            AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded y1 =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+              AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ()))
+                    pre =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claims) ∧
+                AspisR1PublicPreparation.r1_semantic.public_transcript D0 AspisR1.JFs_PublicSerialization.value hash
+                      pre.c1_root =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok t0) ∧
+                  AspisR1PublicPreparation.r1_wire.begin D0 pre t0 =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JFm_Begin.challenges, t15) ∧
+                    AspisR1PublicPreparation.RoundModel.rounds AspisS1ExtractedRoundChildren.children D0 pre t15 =
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Ok
+                            (AspisS1ExtractedRoundChildren.genToMain AspisR1.JFr_Data09.output,
+                              AspisR1.JFm_PartialAlpha.a10, t25)) ∧
+                      AspisR1PublicPreparation.SourceFull25.Trace D0 pre t0 t25 cs ∧
+                        List.map AspisR1PublicPreparation.SourceFull25.Call.row cs = AspisR1.JFm_RealTrace.rows ∧
+                          List.map AspisR1PublicPreparation.SourceFull25.Call.q cs = AspisR1.JFm_RealTrace.values ∧
+                            List.map (fun c => c.record.framed) cs = List.take 25 ↑pre.records ∧
+                              pre.validated_record 25#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok r25) ∧
+                                AspisR1PublicPreparation.FinishModel.circle_validated
+                                      (AspisR1.F3M_CircleSource.install B) D0 t25 r25 =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z0, t26) ∧
+                                  pre.validated_record 26#u8 =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok r26) ∧
+                                    AspisR1PublicPreparation.FinishModel.circle_validated
+                                          (AspisR1.F3M_CircleSource.install B) D0 t26 r26 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z1, t27) ∧
+                                      ↑t27.next_row = 27 ∧
+                                        (AspisR1.SAP_CanonicalCarrier.CanonK z0.x ∧
+                                            AspisR1.SAP_CanonicalCarrier.CanonK z0.y) ∧
+                                          AspisR1.SAP_CanonicalCarrier.CanonK z1.x ∧
+                                            AspisR1.SAP_CanonicalCarrier.CanonK z1.y :=
+fun {Hash} D B hash =>
+  let ⟨expanded, h✝⟩ := AspisR1.JFv_ClaimsFixture.inhabited
+  let ⟨y1, h✝¹⟩ := h✝
+  let ⟨pre, h✝²⟩ := h✝¹
+  let ⟨view, h✝³⟩ := h✝²
+  let ⟨claims, h✝⁴⟩ := h✝³
+  let ⟨expand, right✝⟩ := h✝⁴
+  let ⟨parse, right✝¹⟩ := right✝
+  let ⟨yexpand, right✝²⟩ := right✝¹
+  let ⟨length, right✝³⟩ := right✝²
+  let ⟨wide, claim⟩ := right✝³
+  let D0 :=
+    AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+      (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D);
+  let t25 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q24Source.ratchet, hash := hash,
+      next_row := 25#u8 };
+  let ⟨cs, h✝⁵⟩ := AspisR1.JFm_RealTrace.frames D hash expanded pre expand parse
+  let ⟨trace, right✝⁴⟩ := h✝⁵
+  let ⟨rows, right✝⁵⟩ := right✝⁴
+  let ⟨values, frames⟩ := right✝⁵
+  let ⟨r25, h✝⁶⟩ :=
+    AspisR1.JFv_CirclePair.source D0 (AspisR1.JFv_OracleTotal.retained AspisR1.JFp_SHADigest.digest D) B pre t25 rfl
+  let ⟨r26, h✝⁷⟩ := h✝⁶
+  let ⟨z0, h✝⁸⟩ := h✝⁷
+  let ⟨t26, h✝⁹⟩ := h✝⁸
+  let ⟨z1, h✝¹⁰⟩ := h✝⁹
+  let ⟨t27, h✝¹¹⟩ := h✝¹⁰
+  let ⟨read25, right✝⁶⟩ := h✝¹¹
+  let ⟨call25, right✝⁷⟩ := right✝⁶
+  let ⟨read26, right✝⁸⟩ := right✝⁷
+  let ⟨call26, right✝⁹⟩ := right✝⁸
+  let ⟨next, right✝¹⁰⟩ := right✝⁹
+  let ⟨canon0, canon1⟩ := right✝¹⁰
+  Exists.intro expanded
+    (Exists.intro y1
+      (Exists.intro pre
+        (Exists.intro view
+          (Exists.intro claims
+            (Exists.intro cs
+              (Exists.intro r25
+                (Exists.intro r26
+                  (Exists.intro z0
+                    (Exists.intro t26
+                      (Exists.intro z1
+                        (Exists.intro t27
+                          ⟨expand,
+                            ⟨parse,
+                              ⟨yexpand,
+                                ⟨length,
+                                  ⟨wide,
+                                    ⟨claim,
+                                      ⟨AspisR1.JFp_SourceSeed.source D hash expanded pre expand parse,
+                                        ⟨AspisR1.JFm_Begin.source D hash expanded pre expand parse,
+                                          ⟨AspisR1.JFm_Rounds.source D hash expanded pre expand parse,
+                                            ⟨trace,
+                                              ⟨rows,
+                                                ⟨values,
+                                                  ⟨frames,
+                                                    ⟨read25,
+                                                      ⟨call25,
+                                                        ⟨read26,
+                                                          ⟨call26, ⟨next, ⟨canon0, canon1⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))))))))))

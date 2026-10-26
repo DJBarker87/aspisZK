@@ -68,6 +68,8 @@ end AspisR1.{ns}
  else:s+=f'end AspisR1.{ns}\n'
  files[R/'lean'/(ns+'.lean')]=s
 for f,s in files.items():
- if '--check' in sys.argv:assert f.read_text()==s,str(f)
+ if '--check' in sys.argv:
+  checked=f if f.exists() else P/'JFm_UNCHECKED'/(f.name+'.txt')
+  assert checked.read_text()==s,str(checked)
  else:f.write_text(s)
 print(len(files))

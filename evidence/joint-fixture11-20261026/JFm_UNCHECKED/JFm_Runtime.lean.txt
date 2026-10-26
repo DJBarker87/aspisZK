@@ -1,0 +1,33 @@
+import JFm_Installation
+import JFv_RuntimeWitness
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFm_Runtime
+open Aeneas Aeneas.Std Result S2Trust S2W_D189Entry S2W_D189Wrappers
+open JFv_World CPG_Projection CPP_BankState Hist_RuntimeEntry
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+
+/-- The approved game/runtime world with the same installed source-reference pair.
+Acceptance and association with a deployed artifact are separate obligations. -/
+theorem compatible {C : Type} (c : DrvC_Installation.Configuration FIo_Install.W C)
+    (err : C) (H : Bytes → State) (proofAccount : Slice U8) :
+    S2TrustedSdkBorrow (model (Nat → Record)) ∧
+    S2W_TrustedStd.TrustedStd CPH_FixtureData.copy ∧
+    S2W_D189Consolidation.RuntimeEntrypointAdmission
+      (model (Nat → Record)) (e1 proofAccount) (e1 proofAccount).heap 3 ∧
+    S2W_D189Consolidation.RuntimeEntrypointAdmission
+      (model (Nat → Record)) (e2 proofAccount) (e2 proofAccount).heap 7 ∧
+    CPH_Game.DeployedPairExecution (observations proofAccount) false true
+      (e1 proofAccount) (e2 proofAccount) saved []
+      (JFm_Installation.first c err H) (JFm_Installation.second c err H) CPH_FixtureData.copy
+      CPH_FixtureData.allocator CPH_Program.verifier ∧
+    CPR_DataPersistence.TwoTransactionLaw
+      (adjacent (observations proofAccount))
+      (ordinary (observations proofAccount) (Hist_Nonvacuity.key 0#u8))
+      (before (observations proofAccount)) (tentative (observations proofAccount))
+      (success (observations proofAccount)) (loaded (observations proofAccount)) :=
+  JFv_RuntimeWitness.compatible proofAccount (JFm_Installation.first c err H) (JFm_Installation.second c err H)
+
+#print axioms compatible
+end AspisR1.JFm_Runtime
+end

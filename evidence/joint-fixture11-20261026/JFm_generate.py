@@ -73,6 +73,8 @@ for row in range(15,27):
  files[R/f'lean/JFm_Q{row:02}Hashes.lean']=files.pop(absorb)+'\n'+files.pop(reads).replace('import JFp_SHABlocks\nset_option autoImplicit false\n','')
 files[P/'JFm_WINDOWS.json']=json.dumps(pins,indent=2)+'\n'
 for f,s in files.items():
- if '--check' in sys.argv:assert f.read_text()==s,str(f)
+ if '--check' in sys.argv:
+  checked=f if f.exists() else P/'JFm_UNCHECKED'/(f.name+'.txt')
+  assert checked.read_text()==s,str(checked)
  else:f.write_text(s)
 print(json.dumps(dict(files=len(files),check='--check' in sys.argv)))
