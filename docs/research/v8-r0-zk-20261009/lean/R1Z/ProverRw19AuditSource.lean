@@ -26,7 +26,7 @@ theorem continuation {S : Type}
   repeat' first
     | exact rejected _ _
     | exact residual _ _
-    | apply successful <;> simp_all
+    | apply successful <;> simp_all <;> scalar_tac
     | apply bind_good; intro x
     | dsimp only [Aeneas.Std.uncurry]
     | split
