@@ -1,0 +1,42 @@
+{"attempt": "ARQ_035", "exit_status": 0, "wall_seconds": 2.3537851130240597, "peak_rss_kib": "5392304", "swaps": "0", "print_axioms": []}
+structure AspisR1.ARQ_FirstFields.Facts (ops : AdapterRw.Ops) (accounts : S2W_ExtractionBoundary.Accounts)
+  (data : Slice U8) (saved : alloc.vec.Vec U8) (f : FirstCut) : Prop
+number of parameters: 5
+fields:
+  AspisR1.ARQ_FirstFields.Facts.proofIndex : Slice.index_usize accounts 0#usize = ok f.proofAccount
+  AspisR1.ARQ_FirstFields.Facts.publicIndex : Slice.index_usize accounts 1#usize = ok f.publicAccount
+  AspisR1.ARQ_FirstFields.Facts.rawRead : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops f.proofAccount =
+      ok (core.result.Result.Ok f.raw)
+  AspisR1.ARQ_FirstFields.Facts.pubRead : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops f.publicAccount =
+      ok (core.result.Re
+...
+ ok (core.result.Result.Ok f.pub)
+  AspisR1.ARQ_FirstFields.Facts.decode : ops.op47 f.pub = ok (core.result.Result.Ok f.statement)
+  AspisR1.ARQ_FirstFields.Facts.semantic : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+        f.statement =
+      ok f.semantic
+  AspisR1.ARQ_FirstFields.Facts.range : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+        f.raw { start := 688#usize, «end» := 58295#usize } =
+      ok f.proof
+  AspisR1.ARQ_FirstFields.Facts.first : AdapterRw.first_decoded ops f.semantic f.pub f.proof f.split =
+      ok (core.result.Result.Ok saved)
+constructor:
+  AspisR1.ARQ_FirstFields.Facts.mk {ops : AdapterRw.Ops} {accounts : S2W_ExtractionBoundary.Accounts} {data : Slice U8}
+    {saved : alloc.vec.Vec U8} {f : FirstCut} (proofIndex : Slice.index_usize accounts 0#usize = ok f.proofAccount)
+    (publicIndex : Slice.index_usize accounts 1#usize = ok f.publicAccount)
+    (rawRead : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops f.proofAccount = ok (core.result.Result.Ok f.raw))
+    (pubRead : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops f.publicAccount = ok (core.result.Result.Ok f.pub))
+    (decode : ops.op47 f.pub = ok (core.result.Result.Ok f.statement))
+    (semantic :
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+          f.statement =
+        ok f.semantic)
+    (range :
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) f.raw
+          { start := 688#usize, «end» := 58295#usize } =
+        ok f.proof)
+    (first : AdapterRw.first_decoded ops f.semantic f.pub f.proof f.split = ok (core.result.Result.Ok saved)) :
+    Facts ops accounts data saved f
+
+Running as unit: run-ra6a744ff252d47bda4cf1fe300a2e14e.scope; invocation ID: 01a99aff21064ffe8aa9f699f2eb2d57
+
