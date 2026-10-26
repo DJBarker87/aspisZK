@@ -10133,3 +10133,24 @@ force; LEAD RULING (e) for Stream B workers) for the prover timing gate (D209); 
 run-joint.sh gained the hold check before any attempt ID is consumed (backup
 run-joint.sh.bak-quietwin-20261026). Six jobs running: rw17, dict10, runjoin5, srcid, cb2, recount2.
 Rows removed outright: 0. Privacy target not yet established.
+
+## D211 (Stream B, 2026-10-26 17:00): recount 2 merged: 27 rows to CLOSED-ON-CANDIDATE, four lead corrections; cb3 launched
+
+pv-recount2 (`codex/pv-recount2-20261026`, merged into research; 15/15 Lean statement checks, 0 Kani;
+only design/PRIVACY-LEDGER-20261026.md and evidence/privacy-recount-20261026/ touched): 403 rows
+(26 T / 372 P / 5 C) after adding V400 (OS-entropy failure coverage, D206), V401 (fixture byte
+equality) and V402 (differential corpus). Status totals, recount 1 → recount 2: OPEN 138 → 110,
+REDUCED 152 → 154, EVIDENCED 10 → 12, CLOSED-ON-RESEARCH 87 → 87, CLOSED-ON-CANDIDATE 13 → 40.
+The 27 new candidate closures are complete extracted source equations under D188: 24 PV_CB_Op*Source
+theorems already produced by pv-cb2 (V169, V197-V199, V202-V206, V208-V216, V218, V223, V224, V226,
+V227), dict9's op78/op231 (V200, V248) and rw16's op247/coefficients (V255, V262); native composition
+stays V165-V167. OPEN buckets: independent 79 → 51, downstream of the native interpretation 51 → 50,
+owner decisions 8 → 9 (the OS-failure repair added). Corrections to the lead's LOG, recorded plainly:
+D199 overstated V047's fibre closure; D201's "29" should read 30; D203 does not support reducing the
+whole Formatter row V269; D206's disagreement theorem is conditional (D204 was already corrected by
+D205). The endpoint record (D204/D205) keeps runtime/boundary 2 → 2 and fields 8 → 8: REDUCED, not
+discharged. Endpoint premises removed: 0. The 51 independent OPEN rows are all owned by running jobs
+(callbacks: cb2; V152-V154: srcid; V163/V164: rw17), so the freed slot runs pv-cb3
+(`codex/pv-cb3-20261026` from the candidate, prefix PV_CB3_, IDs 24700-24999, 100 Lean/20 Kani) on
+the stage-2 callback rows from the top down (ops 258, 253-251, 230-205) while cb2 works upward.
+Six jobs running: rw17, dict10, runjoin5, srcid, cb2, cb3. Privacy target not yet established.
