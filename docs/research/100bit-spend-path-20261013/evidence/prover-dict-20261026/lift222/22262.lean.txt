@@ -1,0 +1,25 @@
+import R1Z.PDict_SemSumcheck222
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_Static222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap
+
+theorem semantic_sumcheck_record (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base)
+    (hw : @PDict_WorkTransport222.WorkExtensional base ops)
+    {H : Type} (digest : aspis_core.digest.Digest32 H)
+    (transcript : host_wire.SemanticTranscript H) (output : alloc.vec.Vec U8)
+    (initial : aspis_core.field.QM31) (public1 : @Public base)
+    (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
+    (ch : aspis_core.state_only_prefix.r0.Challenges)
+    (eta : aspis_core.field.QM31) (d : Array aspis_core.field.QM31 1024#usize) :
+    @host_sumcheck.prove_sumcheck (types base F) (selected base F ops) H _ digest
+      (@host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle (types base F) (selected base F ops))
+      transcript output initial (@host_semantic.SemanticOracle.mk (types base F) (pub base F public1) columns ch eta d) =
+    @host_sumcheck.prove_sumcheck base ops H _ digest
+      (@host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle base ops)
+      transcript output initial (@host_semantic.SemanticOracle.mk base public1 columns ch eta d) := by
+  simpa only [oracle] using
+    semantic_sumcheck base F ops hw digest transcript output initial
+      (@host_semantic.SemanticOracle.mk base public1 columns ch eta d)
+#print axioms semantic_sumcheck_record
+end R1Z.PDict_Static222

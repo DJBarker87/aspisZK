@@ -1,0 +1,147 @@
+import R1Z.PDict_Static222_09
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_Static222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap
+def oracle (base : ExternalTypes) (F : Type) (x : @host_semantic.SemanticOracle base) :
+    @host_semantic.SemanticOracle (types base F) :=
+  @host_semantic.SemanticOracle.mk (types base F)
+    (pub base F (@host_semantic.SemanticOracle.public base x))
+    (@host_semantic.SemanticOracle.columns base x)
+    (@host_semantic.SemanticOracle.challenges base x)
+    (@host_semantic.SemanticOracle.eta base x)
+    (@host_semantic.SemanticOracle.d base x)
+
+/-- Carrier transport candidate for `host_semantic.point_claims`. -/
+theorem erase_160 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.point_claims (types base F) (selected base F ops) = @host_semantic.point_claims base ops := by
+  delta host_semantic.point_claims
+  try simp only [erase_158 base F ops, erase_159 base F ops]
+  all_goals rfl
+#print axioms erase_160
+
+/-- Complete evaluation on the explicitly mapped oracle carrier. -/
+theorem erase_161 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base)
+    (x : @host_semantic.SemanticOracle base) (point : Array aspis_core.field.QM31 10#usize) :
+    @host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate (types base F) (selected base F ops) (oracle base F x) point = @host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate base ops x point := by
+  delta host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate
+  delta host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate.match_1
+  simp only [erase_150, erase_155, erase_160, oracle,
+    aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31,
+    selected, PDict_FormatterTypeMaps.public_roundtrip]
+  rfl
+#print axioms erase_161
+
+/-- Complete evaluation on the explicitly mapped oracle carrier. -/
+theorem erase_162 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base)
+    (x : @host_semantic.SemanticOracle base) (point : Array aspis_core.field.QM31 10#usize) :
+    @host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate (types base F) (selected base F ops) (oracle base F x) point = @host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate base ops x point := by
+  delta host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate
+  delta host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate.match_1
+  simp only [erase_150, erase_155, erase_160, oracle,
+    aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31,
+    selected, PDict_FormatterTypeMaps.public_roundtrip]
+  rfl
+#print axioms erase_162
+
+/-- Carrier transport candidate for `host_semantic.d_tail_sum`. -/
+theorem erase_163 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.d_tail_sum (types base F) (selected base F ops) = @host_semantic.d_tail_sum base ops := by
+  delta host_semantic.d_tail_sum
+  all_goals rfl
+#print axioms erase_163
+
+/-- Carrier transport candidate for `host_semantic.d_tail_side`. -/
+theorem erase_164 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.d_tail_side (types base F) (selected base F ops) = @host_semantic.d_tail_side base ops := by
+  delta host_semantic.d_tail_side
+  try simp only [erase_163 base F ops]
+  all_goals rfl
+#print axioms erase_164
+
+/-- Carrier transport candidate for `host_semantic.add_d_tail`. -/
+theorem erase_165 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.add_d_tail (types base F) (selected base F ops) = @host_semantic.add_d_tail base ops := by
+  delta host_semantic.add_d_tail
+  try simp only [erase_164 base F ops]
+  all_goals rfl
+#print axioms erase_165
+
+/-- Carrier transport candidate for `host_semantic.check_secure_column_loop.body`. -/
+theorem erase_166 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.check_secure_column_loop.body (types base F) (selected base F ops) = @host_semantic.check_secure_column_loop.body base ops := by
+  delta host_semantic.check_secure_column_loop.body
+  all_goals rfl
+#print axioms erase_166
+
+/-- Carrier transport candidate for `host_semantic.check_secure_column_loop`. -/
+theorem erase_167 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.check_secure_column_loop (types base F) (selected base F ops) = @host_semantic.check_secure_column_loop base ops := by
+  delta host_semantic.check_secure_column_loop
+  try simp only [erase_166 base F ops]
+  all_goals rfl
+#print axioms erase_167
+
+/-- Carrier transport candidate for `host_semantic.check_secure_column`. -/
+theorem erase_168 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.check_secure_column (types base F) (selected base F ops) = @host_semantic.check_secure_column base ops := by
+  delta host_semantic.check_secure_column
+  try simp only [erase_167 base F ops]
+  all_goals rfl
+#print axioms erase_168
+
+/-- Carrier transport candidate for `host_semantic.check_semantic_columns`. -/
+theorem erase_169 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.check_semantic_columns (types base F) (selected base F ops) = @host_semantic.check_semantic_columns base ops := by
+  delta host_semantic.check_semantic_columns
+  try simp only [erase_168 base F ops]
+  all_goals rfl
+#print axioms erase_169
+
+/-- Carrier transport candidate for `host_semantic.append_claim_bytes_loop.body`. -/
+theorem erase_170 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.append_claim_bytes_loop.body (types base F) (selected base F ops) = @host_semantic.append_claim_bytes_loop.body base ops := by
+  delta host_semantic.append_claim_bytes_loop.body
+  all_goals rfl
+#print axioms erase_170
+
+/-- Carrier transport candidate for `host_semantic.append_claim_bytes_loop`. -/
+theorem erase_171 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.append_claim_bytes_loop (types base F) (selected base F ops) = @host_semantic.append_claim_bytes_loop base ops := by
+  delta host_semantic.append_claim_bytes_loop
+  try simp only [erase_170 base F ops]
+  all_goals rfl
+#print axioms erase_171
+
+/-- Carrier transport candidate for `host_semantic.append_claim_bytes`. -/
+theorem erase_172 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.append_claim_bytes (types base F) (selected base F ops) = @host_semantic.append_claim_bytes base ops := by
+  delta host_semantic.append_claim_bytes
+  try simp only [erase_171 base F ops]
+  all_goals rfl
+#print axioms erase_172
+
+/-- Carrier transport candidate for `host_semantic.claim_bytes`. -/
+theorem erase_173 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_semantic.claim_bytes (types base F) (selected base F ops) = @host_semantic.claim_bytes base ops := by
+  delta host_semantic.claim_bytes
+  try simp only [erase_172 base F ops]
+  all_goals rfl
+#print axioms erase_173
+
+/-- Carrier transport candidate for `aspis_core.field.QM31.Insts.CoreCmpEq`. -/
+theorem erase_174 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @aspis_core.field.QM31.Insts.CoreCmpEq (types base F) (selected base F ops) = @aspis_core.field.QM31.Insts.CoreCmpEq base ops := by
+  delta aspis_core.field.QM31.Insts.CoreCmpEq
+  try simp only [erase_60 base F ops]
+  all_goals rfl
+#print axioms erase_174
+
+/-- Carrier transport candidate for `aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField`. -/
+theorem erase_175 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField (types base F) (selected base F ops) = @aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField base ops := by
+  delta aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField
+  try simp only [erase_174 base F ops, erase_136 base F ops]
+  all_goals rfl
+#print axioms erase_175
+end R1Z.PDict_Static222

@@ -1,0 +1,81 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_BuildMaterial222.lean:20:80: error: unsolved goals
+base : ExternalTypes
+F : Type
+ops : ExternalFuns
+hw : PDict_WorkTransport222.WorkExtensional ops
+h12 : PDict_MapErrTransport222.MapErrLaw base ops
+H T : Type
+digest : aspis_core.digest.Digest32 H
+ci : host_semantic.Commitments T
+public1 : Public
+compiled : Compilation
+noised : aspis_statement.state_only_trace.StateOnlyTraceFoundation
+mask_only : Std.Array (alloc.vec.Vec aspis_core.field.M31) 10#usize
+d g padding : Std.Array aspis_core.field.QM31 1024#usize
+commitments : T
+hash : H
+variant : transport.Variant
+hm :
+  ∀ (c1 : Std.Array (alloc.vec.Vec aspis_core.field.M31) 26#usize),
+    host_semantic.build_with_helper_mode digest
+        (host_semantic.build_with_material.closure.Insts.CoreOpsFunctionFnOncePairQM31QM31ResultVecQM31Error digest ci)
+        ci (pub base F public1) c1 d g padding (compilation base F compiled, pub base F public1) commitments hash
+        variant =
+      host_semantic.build_with_helper_mode digest
+        (host_semantic.build_with_material.closure.Insts.CoreOpsFunctionFnOncePairQM31QM31ResultVecQM31Error digest ci)
+        ci public1 c1 d g padding (compiled, public1) commitments hash variant
+⊢ (do
+      let s ← lift noised.c1.to_slice
+      if (s.len != 16#usize) = true then Result.ok (core.result.Result.Err r1_wire.Error.Public, commitments)
+        else do
+          let s1 ← lift compiled.semantic_c1.c1.to_slice
+          if (s1.len != 16#usize) = true then Result.ok (core.result.Result.Err r1_wire.Error.Public, commitments)
+            else do
+              let a ← aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.transition public1
+              let b ←
+                core.cmp.impls.PartialEqShared.ne
+                    aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.Insts.CoreCmpPartialEqPoolV1PairLatePublicStatementV1
+                    compiled.public_statement a
+              if b = true then Result.ok (core.result.Result.Err r1_wire.Error.Public, commitments)
+                else do
+                  let s2 ← lift noised.c1.to_slice
+                  let c1 ← host_semantic.clone_semantic_columns s2 mask_only
+                  host_semantic.build_with_helper_mode digest
+                      (host_semantic.build_with_material.closure.Insts.CoreOpsFunctionFnOncePairQM31QM31ResultVecQM31Error
+                        digest ci)
+                      ci (pub base F public1) c1 d g padding
+                      ({ trace := trace base F compiled.trace, semantic_c1 := compiled.semantic_c1,
+                          public_statement := late base F compiled.public_statement },
+                        pub base F public1)
+                      commitments hash variant) =
+    do
+    let s ← lift noised.c1.to_slice
+    if (s.len != 16#usize) = true then Result.ok (core.result.Result.Err r1_wire.Error.Public, commitments)
+      else do
+        let s1 ← lift compiled.semantic_c1.c1.to_slice
+        if (s1.len != 16#usize) = true then Result.ok (core.result.Result.Err r1_wire.Error.Public, commitments)
+          else do
+            let pvplpsv ← aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.transition public1
+            let b ←
+              core.cmp.impls.PartialEqShared.ne
+                  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.Insts.CoreCmpPartialEqPoolV1PairLatePublicStatementV1
+                  compiled.public_statement pvplpsv
+            if b = true then Result.ok (core.result.Result.Err r1_wire.Error.Public, commitments)
+              else do
+                let s2 ← lift noised.c1.to_slice
+                let c1 ← host_semantic.clone_semantic_columns s2 mask_only
+                host_semantic.build_with_helper_mode digest
+                    (host_semantic.build_with_material.closure.Insts.CoreOpsFunctionFnOncePairQM31QM31ResultVecQM31Error
+                      digest ci)
+                    ci public1 c1 d g padding (compiled, public1) commitments hash variant
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_BuildMaterial222.lean:36:56: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [PDict_FormatterTypeMaps.compilation, PDict_PublicLeaves222.transition,
+      PDict_ResultTransport.bind_map, late_ne, erase_256,̵ ̵h̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PDict_Static222.erase_257' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

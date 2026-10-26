@@ -1,0 +1,27 @@
+import R1Z.PDict_Static222_QueryOpenings
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_Static222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap
+open Lean Elab Tactic
+
+theorem erase_420 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.publish_compact (types base F) (selected base F ops) = @prover.publish_compact base ops := by
+  delta prover.publish_compact
+  run_tac do
+    let env ← getEnv
+    for (n, _) in env.constants.toList do
+      if "ProverRwFull.prover.publish_compact.match_".isPrefixOf n.toString then
+        logInfo m!"MATCHER {n}"
+        evalTactic (← `(tactic| try delta $(mkIdent n)))
+  simp only [Aeneas.Std.uncurry, erase_396 base F ops, erase_419 base F ops, erase_405 base F ops]
+  funext variant p
+  repeat first
+    | (apply PDict_FallibleTransport.bind_congr; intro x;
+        (try simp only [Aeneas.Std.uncurry, erase_396 base F ops, erase_419 base F ops, erase_405 base F ops]))
+    | (casesm* (_ × _), core.result.Result _ _, core.ops.control_flow.ControlFlow _ _, Bool <;>
+        (try simp only [Aeneas.Std.uncurry, erase_396 base F ops, erase_419 base F ops, erase_405 base F ops]))
+    | split
+    | rfl
+#print axioms erase_420
+end R1Z.PDict_Static222

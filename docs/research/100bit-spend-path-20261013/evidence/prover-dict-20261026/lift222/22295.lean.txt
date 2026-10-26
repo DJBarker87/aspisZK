@@ -1,0 +1,33 @@
+import R1Z.PDict_MaskedPublic222
+import R1Z.PDict_MaterialStore222
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_MaskedStore222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterDictionaryMap PDict_ResultTransport PDict_MaterialStore222
+open Lean Elab Tactic
+variable [ExternalTypes]
+
+theorem masked_store (ops : ExternalFuns) {A B : Type}
+    (sa : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore A)
+    (sb : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore B) (f : A → B)
+    (hr : ∀ s sd n, sb.reserve (f s) sd n = resultMap (pairMap f) (sa.reserve s sd n))
+    (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (variant : transport.Variant) (hash : Slice (Slice U8) → Result (Array U8 32#usize))
+    (ctx : aspis_core.state_only_hiding.StateOnlyHidingContext) (binding : Array U8 32#usize)
+    (attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s : A) :
+    @prover.prove_masked_with_attempt _ ops B sb public1 compiled variant hash ctx binding attempt (f s) =
+    resultMap (pairMap f) (@prover.prove_masked_with_attempt _ ops A sa public1 compiled variant hash ctx binding attempt s) := by
+  delta prover.prove_masked_with_attempt
+  run_tac do
+    let env ← getEnv
+    for (n, _) in env.constants.toList do
+      if "ProverRwFull.prover.prove_masked_with_attempt.match_".isPrefixOf n.toString then
+        evalTactic (← `(tactic| try delta $(mkIdent n)))
+  simp only [PDict_MaterialStore222.material_store ops sa sb f hr, map_bind, bind_map,
+    Aeneas.Std.uncurry, apply_ite, PDict_FallibleTransport.map_prod,
+    PDict_FallibleTransport.map_result, PDict_FallibleTransport.map_control, map_ok, pairMap]
+  all_goals rfl
+
+#print axioms masked_store
+end R1Z.PDict_MaskedStore222

@@ -1,0 +1,37 @@
+import R1Z.PDict_MaskedStore222
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_ConcreteMasked222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap PDict_FormatterStoreMap
+
+theorem current_work_iff (base : ExternalTypes)
+    (ops : @ExternalFuns (PDict_CodecDictionary.native base)) :
+    @PDict_WorkTransport222.WorkExtensional (PDict_CodecDictionary.native base) (PDict_CodecDictionary.selected base ops) ↔
+    @PDict_WorkTransport222.WorkExtensional (PDict_CodecDictionary.native base) ops := by rfl
+
+theorem masked_with_attempt (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base)
+    (hw : @PDict_WorkTransport222.WorkExtensional base ops)
+    (h12 : PDict_MapErrTransport222.MapErrLaw base ops)
+    (public1 : @Public base) (compiled : @Compilation base) (variant : transport.Variant)
+    (hash : Slice (Slice U8) → Result (Array U8 32#usize))
+    (ctx : aspis_core.state_only_hiding.StateOnlyHidingContext) (binding : Array U8 32#usize)
+    (attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s : @Store base) :
+    @prover.prove_masked_with_attempt (types base F) (selected base F ops) _
+      (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+        (types base F) (selected base F ops))
+      (pub base F public1) (compilation base F compiled) variant hash ctx binding attempt (store base F s) =
+    resultMap (pairStore base F)
+      (@prover.prove_masked_with_attempt base ops _
+        (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore base ops)
+        public1 compiled variant hash ctx binding attempt s) := by
+  rw [PDict_Static222.erase_423 base F ops hw h12]
+  exact PDict_MaskedStore222.masked_store ops
+    (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore base ops)
+    (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+      (types base F) (selected base F ops))
+    (store base F) (PDict_StoreTransport.reserve base F ops)
+    public1 compiled variant hash ctx binding attempt s
+
+#print axioms current_work_iff
+#print axioms masked_with_attempt
+end R1Z.PDict_ConcreteMasked222
