@@ -10171,3 +10171,21 @@ ratio below 1 is expected rather than a regression signal. Stream A has been ask
 remaining launcher(s) and name a second 30-minute window from 17:40 UTC; the orchestration script will
 be re-pointed at the new epoch with the same early-release rule. Six jobs running: rw17, dict10,
 runjoin5, srcid, cb2, cb3. Privacy target not yet established.
+
+## D213 (Stream B, 2026-10-26 17:10): srcid merged, V152-V154 reduced to five source premise families; srcid2 launched
+
+pv-srcid (`codex/pv-srcid-20261026`, merged into research; 100/100 Lean, 15/15 Kani; final audit 22689
+standard axioms; no crates/programs change): `R1Z.PV_Src_NativeIdentification` proves `public_eq`,
+`build_eq` and `transport_eq` (V152-V154) for successful returns of the extracted forest compiler and
+constructs the original `SourceIdentification` certificate, which the unchanged `BuilderPremises`
+consumer accepts (receipt 22677). The three rows are REDUCED, not closed: five `PV_Src_Premises`
+families remain (compile_call, words, publicCorr, admission, row_call) with their nested obligations
+explicit; both canonical fixture fibres are inhabited through the extracted bank/column stages; full
+native fixture inhabitance, callee association and deployed installation stay open. Kani: 11 of 15
+runs were charged to misnamed harnesses that exited before verification (worker's own report); ruling
+for successors: list harness names before charging, stop the queue on the first configuration
+failure. No endpoint premise removed. pv-srcid2 launched from research (IDs 25000-25299, 100 Lean/15
+Kani) to classify each family as pure-source or native-association and discharge the pure ones for
+both fixtures. Six jobs running: rw17, dict10, runjoin5, srcid2, cb2, cb3. Second quiet window
+17:45-18:15 UTC agreed (Stream A's systemd-run shim covers every bare launch; owner bypass for the
+timing driver). Privacy target not yet established.
