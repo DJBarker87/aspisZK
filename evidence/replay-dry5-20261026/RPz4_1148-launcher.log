@@ -1,0 +1,41 @@
+{"attempt": "RPz4_1148", "exit_status": 0, "wall_seconds": 1.8742361399927177, "peak_rss_kib": "4380084", "swaps": "0", "print_axioms": ["'AspisR1.S2W_LeadInterface.proof_suffix_bytes' depends on axioms: [propext]", "'AspisR1.S2W_LeadInterface.checkpoint_oracle' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_LeadInterface.checkpoint_binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_LeadInterface.compose' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_LeadInterface.multiproof_join' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_LeadInterface.y1_join' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_SuccessOracle.returned_raw' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_SuccessOracle.native_success_field' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_SuccessOracle.before_to_after' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_SuccessOracle.masked_success' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_WrapperLaws.copy_projection' depends on axioms: [propext]", "'AspisR1.S2W_WrapperLaws.lift_projection' depends on axioms: [Quot.sound]", "'AspisR1.S2W_WrapperLaws.native_snapshot_protocol' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_WrapperLaws.write_bracket' depends on axioms: [propext, Quot.sound]", "'AspisR1.S2W_WrapperLaws.checkpoint_write' depends on axioms: [propext, Quot.sound]", "'AspisR1.S2W_WrapperLaws.trusted_write_protocol' depends on axioms: [propext, Quot.sound]", "'AspisR1.S2W_EntryWriteHistory.written_bytes' depends on axioms: [propext, Quot.sound]", "'AspisR1.S2W_EntryWriteHistory.entry_write_history' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_ChildJoins.internal_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_Observation.accepted_observation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_Observation.accepted_segments' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.S2W_LeadInterface.proof_suffix_bytes' depends on axioms: [propext]
+'AspisR1.S2W_LeadInterface.checkpoint_oracle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_LeadInterface.checkpoint_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_LeadInterface.compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_LeadInterface.multiproof_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_LeadInterface.y1_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.returned_raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_Success
+...
+LeadInterface.Site.resume →
+            AspisR1.MultiproofConeCanonical.bytesOf ↑(c.checkpoint s) = savedBytes)
+    (checkpointLength : List.length savedBytes = 1768)
+    (nodeViews :
+      ∀ (b k : ℕ),
+        b < 2 →
+          k < 3 →
+            AspisR1.MultiproofConeCanonical.bytesOf ↑(c.nodes b k) =
+              AspisR1.OraclePortCompactDraft.slice parsed.wire (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+                (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k)))
+    (y1Input :
+      c.reached AspisR1.S2LeadInterface.Site.tx1 →
+        c.y1 = AspisR1.S8JoinFrozenScan.segment (c.proof AspisR1.S2LeadInterface.Site.tx1) 7031 464)
+    (observerNone : ∀ (s : AspisR1.S2LeadInterface.Site), c.reached s → c.observer s = none)
+    (reachedPrefix : ∀ (s t : AspisR1.S2LeadInterface.Site), s.rank < t.rank → c.reached t → c.reached s)
+    (callOrder :
+      ∀ (s t : AspisR1.S2LeadInterface.Site), s.rank < t.rank → c.reached s → c.reached t → c.clock s < c.clock t)
+    (accountFrame :
+      ∀ (s : AspisR1.S2LeadInterface.Site),
+        c.reached s → ∀ (a : ℕ), AspisR1.S2W_LeadInterface.dataWrite s a = false → c.after s a = c.before s a)
+    (writtenMetadata :
+      c.reached AspisR1.S2LeadInterface.Site.tx1 →
+        (let __src := c.after AspisR1.S2LeadInterface.Site.tx1 2;
+          { key := __src.key, owner := __src.owner, lamports := __src.lamports,
+            data := (c.before AspisR1.S2LeadInterface.Site.tx1 2).data, signer := __src.signer,
+            writable := __src.writable, executable := __src.executable, rentEpoch := __src.rentEpoch }) =
+          c.before AspisR1.S2LeadInterface.Site.tx1 2)
+    (oracle : AspisR1.CheckpointBytes5Inputs.Oracle D hash H) :
+    AspisR1.S2W_LeadInterface.S2CallerFacts c D hash H stored pub savedBytes parsed
+
+Running as unit: run-r1e1f86bdb51c426085b13f4860fee17c.scope; invocation ID: cde3a14c37d04b2cb40c72a1824dd88b

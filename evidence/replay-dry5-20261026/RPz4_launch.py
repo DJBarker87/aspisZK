@@ -13,7 +13,7 @@ def collect(name):
 plan=json.loads((E/'RPz4_source-plan.json').read_text());rows=[]
 for m in plan['order']:
  x=plan['modules'][m];rows.append(dict(module=m,imports=x['imports'],repository_source=x['source'],source='RPz4_sources/'+m.replace('.','/')+'.lean',object='RPz4_objects/'+m.replace('.','/')+'.olean'))
-focus=set(json.loads((E.parents[1]/'evidence/replay-dry4-20261026/RPz3_source-plan.json').read_text())['unresolved']) | {'R1NaturalProjection','ImportUnionNamedDiscriminant','AspisR1SemanticCallExtraction.Types','R1LiteralTranscript','AspisR1CircleSampleWrapper.Types','AspisR1CircleSampleWrapper.FunsExternal','AspisR1CircleFallback.Types','AspisR1CircleFallback.FunsExternal','AspisR1CircleFallback.Funs'}
+focus=set(json.loads((E.parents[1]/'evidence/replay-dry4-20261026/RPz3_source-plan.json').read_text())['unresolved']) | {'R1NaturalProjection','ImportUnionNamedDiscriminant','AspisR1SemanticCallExtraction.Types','R1LiteralTranscript','ClaimsUnrolledParentTypes','AspisR1CircleSampleWrapper.Types','AspisR1CircleSampleWrapper.FunsExternal','AspisR1CircleFallback.Types','AspisR1CircleFallback.FunsExternal','AspisR1CircleFallback.Funs'}
 focus_closure=set()
 def focus_visit(m):
  if m in focus_closure:return

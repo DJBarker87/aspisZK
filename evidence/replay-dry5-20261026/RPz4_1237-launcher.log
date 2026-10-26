@@ -1,0 +1,41 @@
+{"attempt": "RPz4_1237", "exit_status": 0, "wall_seconds": 1.8857425379683264, "peak_rss_kib": "4402464", "swaps": "0", "print_axioms": ["'AspisR1.S2W_DigestExtraction.digest_eq_hashv' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_DigestExtraction.native_binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_DigestExtraction.native_oracle' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+RPz4_sources/S2W_DigestExtraction.lean:23:44: warning: Variable name `self` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+RPz4_sources/S2W_DigestExtraction.lean:53:0: warning: Definition `sourceBoundary` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+'AspisR1.S2W_DigestExtraction.digest_eq_hashv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_DigestExtraction.native_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_DigestEx
+...
+.native_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_DigestExtraction.native_oracle' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_DigestExtraction.AeneasExtraction (ops : AdapterRw.Ops) (native1 : First) (native2 : Second)
+  (hashv : Parts → Result Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1 : ∀ (program : Program) (accounts : Accounts) (data : Slice U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage2 : ∀ (program : Program) (accounts : Accounts) (data : Slice U8)
+      (slot : Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Slice (Slice U8)), ops.op43 self parts = digest hashv self parts
+constructor:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.mk {ops : AdapterRw.Ops} {native1 : First} {native2 : Second}
+    {hashv : Parts → Result Digest}
+    (stage1 :
+      ∀ (program : Program) (accounts : Accounts) (data : Slice U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : Program) (accounts : Accounts) (data : Slice U8) (slot : Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Slice (Slice U8)), ops.op43 self parts = digest hashv self parts) :
+    AeneasExtraction ops native1 native2 hashv
+
+Running as unit: run-r9cae25c4f8cb44ee9be0a1861fbd9dcc.scope; invocation ID: 6d699e80930d4ddc835c1b3a94e59c14

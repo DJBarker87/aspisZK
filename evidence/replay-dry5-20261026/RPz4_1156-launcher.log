@@ -1,0 +1,42 @@
+{"attempt": "RPz4_1156", "exit_status": 0, "wall_seconds": 1.9985963919898495, "peak_rss_kib": "4403372", "swaps": "0", "print_axioms": ["'AspisR1.S2W_AuthenticatedInputs.authenticated_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_AuthenticatedInputs.authenticated_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.S2W_AuthenticatedInputs.authenticated_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_AuthenticatedInputs.authenticated_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin (ops : AdapterRw.Ops) (decode : HeaderDecode)
+  (H : Bytes → State) (semantic : Public) (pub proof : Slice U8) (split : Usize) : Prop
+number of parameters: 7
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.header : ∀ (checkpoint : alloc.vec.Vec U8),
+      AdapterRw.first_decoded ops semantic pub proof split = ok (core.result.Result.Ok checkpoint) →
+        decode (bytesOf ↑checkpoi
+...
+(AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+        ok (core.result.Result.Ok ()) →
+      decode (bytesOf ↑checkpoint) = some (H (bytesOf ↑proof), H (bytesOf ↑pub))
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.mk {ops : AdapterRw.Ops} {decode : HeaderDecode}
+    {H : Bytes → State} {pub proof checkpoint : Slice U8}
+    (checkedHeader :
+      ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+          ok (core.result.Result.Ok ()) →
+        decode (bytesOf ↑checkpoint) = some (H (bytesOf ↑proof), H (bytesOf ↑pub))) :
+    CheckpointReaderConeJoin ops decode H pub proof checkpoint
+structure AspisR1.S2W_AuthenticatedInputs.P2Prime (H : Bytes → State) (proof1 pub1 proof2 pub2 : Slice U8) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_AuthenticatedInputs.P2Prime.binding : R9PoolRuntimeBinding.P2Prime H
+      { proof := bytesOf ↑proof1, pub := bytesOf ↑pub1 } { proof := bytesOf ↑proof2, pub := bytesOf ↑pub2 }
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.P2Prime.mk {H : Bytes → State} {proof1 pub1 proof2 pub2 : Slice U8}
+    (binding :
+      R9PoolRuntimeBinding.P2Prime H { proof := bytesOf ↑proof1, pub := bytesOf ↑pub1 }
+        { proof := bytesOf ↑proof2, pub := bytesOf ↑pub2 }) :
+    P2Prime H proof1 pub1 proof2 pub2
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding (saved loaded : Bytes) : Type
+number of parameters: 2
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding.history : S2X.CheckpointVersionBinding saved loaded
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding.mk {saved loaded : Bytes}
+    (history : S2X.CheckpointVersionBinding saved loaded) : CheckpointVersionBinding saved loaded
+
+Running as unit: run-r93d14fb69f9c4044838749ea508131ce.scope; invocation ID: 9d185f33ad534a84a27d787b1b51587d

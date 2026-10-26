@@ -1,0 +1,7 @@
+# Explicit scalar token in Claims enum attributes
+
+RPz4_1316 retains the selected canonical ClaimsUnrolledParentTypes source failure at lines25,72,116. It calls the old bare `import_union_discriminant` syntax. The canonical selected adapter requires a scalar token.
+
+The evidence-only prototype at import-coll-20261021/prototype/ImportUnionNamedDiscriminant.lean explicitly invokes the pinned generator with `.Isize none` for these closed enums. The canonical adapter invokes that same generator with `elabTypeToken isize` and no tag list, also `.Isize none`, and preserves the emitted reader while naming its instance. Therefore RPz4_ClaimsUnrolledParentTypes.lean is the exact selected source with only three explicit `isize` tokens added to attribute calls. No enum constructor, record field, tag, binder, reader body, proof, trust item or theorem statement changes. The prototype adapter is not substituted for the canonical one.
+
+The original file and every other candidate remain untouched. The changed job-prefixed snapshot receives a fresh focused attempt before dependent work.1316's errors remain and no diagnostic proof is accepted. The scheduler stops at a completed receipt boundary, with no compiler interruption. This is the permitted trivial name/syntax repair; no caps/options/axioms are added. Top source statement, premise/ledger delta and non-vacuity status remain unchanged. The three c16 source-consumer failures remain stopped and unrelated to this syntax correction.
