@@ -6,25 +6,30 @@ This is the owner's requested route (2) decision packet. Proof modules have pref
 
 ## Exact proposed law
 
-`lean/CPR_Persistence.lean`, `AspisR1.CPR_Persistence.TwoTransactionLaw`:
+`lean/CPR_DataPersistence.lean`, `AspisR1.CPR_DataPersistence.TwoTransactionLaw`:
 
 ```lean
 ∀ t u, next t u → ∀ key, ordinary t key →
   loaded u key = visible (if success t then tentative t key else before t key)
 ```
 
-`Image` contains only the account's owner, data and lamports, not instruction
-privileges, temporary addresses, SDK borrow guards, verifier acceptance or
-checkpoint equalities. `visible` maps a zero-lamport image to absence and a
-positive-lamport image to that same image. `key` is one physical account key,
-shared across the two observations. `next` means the next transaction loading
-that account on the same bank lineage, with no intervening account transaction.
-`ordinary` excludes fee payer / durable nonce rollback exceptions. `success`
-is final **parent transaction** status after runtime postchecks, not CPI status.
-`tentative` is the complete parent-final account image; it is not the image at
-an internal source copy. `before` is the runtime image before that transaction.
-The proposed law is about consecutive transaction observations only. It does
-not identify an independently chosen Lean entry with a physical load.
+`Image` contains only account-data bytes and the lamport count used to test
+absence. `visible` maps zero lamports to absence and otherwise returns **data
+bytes only**. The law asserts no next-owner, next-balance, account-record,
+privilege, SDK-token, verifier-acceptance, checkpoint or source-trace equality.
+`key` is a physical account key shared by the two observations. `next` means the
+next transaction loading that account on the same bank lineage without another
+account transaction in between. `ordinary` excludes fee payer / durable nonce
+rollback special cases. `success` is final parent status after runtime checks,
+not CPI success. `tentative` is the complete parent-final data/balance projection;
+`before` is the pre-parent projection. Cleanup is at a transaction boundary only.
+
+The earlier `CPR_Persistence.TwoTransactionLaw` full-image formulation is retained
+as a checked sufficient alternative, not the proposed minimum.
+`CPR_DataPersistence.of_full` proves the implication.
+`CPR_DataGap.narrow_holds/full_fails` proves strictness: a changed positive
+balance with identical bytes satisfies the narrow observation law but violates
+full-image equality. Neither formulation is adopted as trust.
 
 ## Why existing items do not imply it
 
@@ -67,10 +72,10 @@ also cover accounts-db fallback / bank lineage and physical key mapping.
 
 ## Conditional composition and limits
 
-`CPR_ConditionalTop.deployed` composes the ACTUAL `T2R_Top.deployed` and
+`CPR_DataTop.deployed` composes the ACTUAL `T2R_Top.deployed` and
 returns `CPP_ProtectedResult.Outcome` on the SAME `f,s,run,tx2` witnesses.
 It preserves the driver/dictionary equalities and headline Claims/bounds exactly.
-`CPR_WriterLoad.on_cuts` derives the committed-byte history from the SAME accepted
+`CPR_DataWriter.on_cuts` derives the committed-byte history from the SAME accepted
 native TX1, CPP source-bank actions, the proposed law and actual TX2 entry view.
 `CPR_AtomicBank.protection` proves no intervening writes for owner-checked source
 actions, credits and cleanup; failed parents discard their tentative events.
@@ -95,3 +100,34 @@ history + law/load interpretation; L096 is derived from source protection;
 L180 is conditional on the stated correlated physical pair. **Actual deployed
 L094-L096/L180 remain OPEN; actual recount delta is zero.** No whole-execution
 equality, source-query allowance, crypto assumption or new trust record is added.
+
+
+## Source-event association is a separate gate
+
+Final account-image equality alone does not prove equality of ordered physical
+account events. The preferred `CPR_PhysicalTop.deployed` additionally takes an
+explicit local source-refinement obligation `eventsView`, and returns a history
+whose `version.events` equals that supplied physical event projection on the SAME
+source witnesses (`CPR_PhysicalResult.Outcome`). Its TX1 entry interpretation uses
+`CPP_BankState.layout initial layout1`, so input lamports are also the same bank
+projection. `eventsView` is NOT adopted trust; it remains to be proved from the
+actual executor/source trace. A callback named `physicalEvents` is not itself a
+certificate of a deployed recorder. The ordinary-key predicate, physical key
+mapping, final parent status, full source suffix and reader-buffer projection
+also need concrete instances.
+
+Thus the requested **universal removal with the single law alone** is not a
+valid claim on today's independently quantified root. `CPR_KeyGap.runtime_law`
+satisfies even the stronger law, while `no_cross_key_history` rules out the
+history between independently chosen unequal checkpoint images. This isolates
+pairing, not full accepted verifier executions. `CPR_AdmissionGap.gap` separately
+inhabits the complete SDK mathematical model and BOTH actual runtime admission
+records with same key metadata and equal CP lengths but unequal buffers; it does
+not claim native acceptance. `CPR_DataGap.old_items_do_not_supply_data_loader`
+is the checked separation for the exact proposed byte-only loader law.
+
+Do not turn any of these source-refinement obligations into runtime trust. The
+owner can consider the narrow law against an explicit validator/feature pin;
+the positive correlated branch's conditional composition is checked. Arbitrary
+physical lifetimes, zero-funded temporary CPs, cleanup/recreation, failed writer
+parents, source-event extraction and deployment adoption remain unclosed.

@@ -1,0 +1,34 @@
+CPR_DataPersistence.lean:51:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  loaded u key
+in the target expression
+  (fun t k => Option.map (fun a => bytesOf ↑a.cell.data) (loaded t k)) u key =
+    visible
+      (if success t = true then (fun t k => project (tentative t k)) t key else (fun t k => project (before t k)) t key)
+
+Tx Key : Type
+next : Tx → Tx → Prop
+ordinary : Tx → Key → Prop
+before tentative : Tx → Key → CPR_Persistence.Image
+success : Tx → Bool
+loaded : Tx → Key → Option CPR_Persistence.Image
+law : CPR_Persistence.TwoTransactionLaw next ordinary before tentative success loaded
+t u : Tx
+adjacent : next t u
+key : Key
+eligible : ordinary t key
+⊢ (fun t k => Option.map (fun a => bytesOf ↑a.cell.data) (loaded t k)) u key =
+    visible
+      (if success t = true then (fun t k => project (tentative t k)) t key else (fun t k => project (before t k)) t key)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a.cell.data
+  has type
+    Aeneas.Std.Slice Aeneas.Std.U8
+  but is expected to have type
+    { l // l.length ≤ Aeneas.Std.Usize.max }
+  in the application
+    ↑a.cell.data
+'AspisR1.CPR_DataPersistence.visible_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPR_DataPersistence.of_full' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
