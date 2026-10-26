@@ -56,7 +56,50 @@ theorem digits_canonical (base : Nat) (positive : 0 < base)
       exact Nat.mod_lt _ positive
     · exact ih _ d h
 
+/-- Canonical digits have the expected radix bound for every length. -/
+theorem value_lt_pow (base : Nat) (positive : 0 < base) (digits : List Nat)
+    (canonical : ∀ d, d ∈ digits → d < base) :
+    value base digits < base ^ digits.length := by
+  revert canonical
+  induction digits with
+  | nil => intro _; simp only [value, List.length_nil, Nat.pow_zero]; omega
+  | cons d ds ih =>
+    intro canonical
+    have hd := canonical d (List.mem_cons_self ..)
+    have ht := ih (fun x hx => canonical x (List.mem_cons_of_mem d hx))
+    have hm := Nat.mul_le_mul_left base (Nat.succ_le_of_lt ht)
+    simp only [Nat.succ_eq_add_one, Nat.mul_add, Nat.mul_one] at hm
+    simp only [value, List.length_cons, Nat.pow_succ]
+    rw [Nat.mul_comm (base ^ ds.length) base]
+    omega
+
+/-- The retained overflow is exactly the quotient, not a guessed Boolean. -/
+theorem carry_quotient (base : Nat) (positive : 0 < base)
+    (digits : List Nat) (carry : Nat) :
+    (value base digits + carry) / base ^ digits.length =
+      (addCarry base digits carry).2 := by
+  have bound := value_lt_pow base positive (addCarry base digits carry).1
+    (digits_canonical base positive digits carry)
+  rw [length_preserved] at bound
+  rw [← value_conserved base digits carry]
+  rw [Nat.add_mul_div_left _ _ (Nat.pow_pos positive), Nat.div_eq_of_lt bound]
+  rfl
+
+/-- The stored digits are exactly the low part modulo the full radix power. -/
+theorem digits_remainder (base : Nat) (positive : 0 < base)
+    (digits : List Nat) (carry : Nat) :
+    (value base digits + carry) % base ^ digits.length =
+      value base (addCarry base digits carry).1 := by
+  have bound := value_lt_pow base positive (addCarry base digits carry).1
+    (digits_canonical base positive digits carry)
+  rw [length_preserved] at bound
+  rw [← value_conserved base digits carry, Nat.add_mul_mod_self_left,
+    Nat.mod_eq_of_lt bound]
+
 #print axioms length_preserved
 #print axioms value_conserved
 #print axioms digits_canonical
+#print axioms value_lt_pow
+#print axioms carry_quotient
+#print axioms digits_remainder
 end R1Z.PV_CB3_SamplerCarry
