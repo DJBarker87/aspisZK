@@ -1,0 +1,135 @@
+FIw_PackArithmetic.lean:16:2: error: 'change' tactic failed, pattern
+  map qm
+      (match (↑a)[↑i]? with
+      | none => fail Error.arrayOutOfBounds
+      | some x => ok x) =
+    match (List.map qm ↑a)[↑i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+is not definitionally equal to target
+  map qm
+      (match a[i]? with
+      | none => fail Error.arrayOutOfBounds
+      | some x => ok x) =
+    match (array a)[i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+FIw_PackArithmetic.lean:115:58: error: unsolved goals
+a : Std.Array NQ 4#usize
+⊢ (do
+      let v ← a.index_usize 0#usize
+      let v_1 ← a.index_usize 1#usize
+      let v_2 ← a.index_usize 2#usize
+      let v_3 ← a.index_usize 3#usize
+      let v_4 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+      let v_5 ← ok (core.convert.num.FromU64U32.from v.c0.a)
+      let v_6 ← ok (core.convert.num.FromU64U32.from v_1.c0.b)
+      let v_7 ← v_4 - v_6
+      let v_8 ← v_5 + v_7
+      let v_9 ← ok (core.convert.num.FromU64U32.from v_2.c1.a)
+      let v_10 ← 2#u64 * v_9
+      let v_11 ← v_8 + v_10
+      let v_12 ← ok (core.convert.num.FromU64U32.from v_2.c1.b)
+      let v_13 ← v_4 - v_12
+      let v_14 ← v_11 + v_13
+      let v_15 ← ok (core.convert.num.FromU64U32.from v_3.c1.a)
+      let v_16 ← v_4 - v_15
+      let v_17 ← v_14 + v_16
+      let v_18 ← 2#u64 * v_4
+      let v_19 ← ok (core.convert.num.FromU64U32.from v_3.c1.b)
+      let v_20 ← 2#u64 * v_19
+      let v_21 ← v_18 - v_20
+      let v_22 ← v_17 + v_21
+      let v_23 ← ok (core.convert.num.FromU64U32.from v.c0.b)
+      let v_24 ← ok (core.convert.num.FromU64U32.from v_1.c0.a)
+      let v_25 ← v_23 + v_24
+      let v_26 ← v_25 + v_9
+      let v_27 ← 2#u64 * v_12
+      let v_28 ← v_26 + v_27
+      let v_29 ← 2#u64 * v_15
+      let v_30 ← v_28 + v_29
+      let v_31 ← v_4 - v_19
+      let v_32 ← v_30 + v_31
+      let v_33 ← ok (core.convert.num.FromU64U32.from v.c1.a)
+      let v_34 ← ok (core.convert.num.FromU64U32.from v_1.c1.b)
+      let v_35 ← v_4 - v_34
+      let v_36 ← v_33 + v_35
+      let v_37 ← ok (core.convert.num.FromU64U32.from v_2.c0.a)
+      let v_38 ← v_36 + v_37
+      let v_39 ← ok (core.convert.num.FromU64U32.from v_3.c0.b)
+      let v_40 ← v_4 - v_39
+      let v_41 ← v_38 + v_40
+      let v ← ok (core.convert.num.FromU64U32.from v.c1.b)
+      let v_42 ← ok (core.convert.num.FromU64U32.from v_1.c1.a)
+      let v ← v + v_42
+      let v_43 ← ok (core.convert.num.FromU64U32.from v_2.c0.b)
+      let v ← v + v_43
+      let v_44 ← ok (core.convert.num.FromU64U32.from v_3.c0.a)
+      let v ← v + v_44
+      let v_45 ← field.M31.reduce_u64 v_22
+      let v_46 ← field.M31.reduce_u64 v_32
+      let v_47 ← field.CM31.new v_45 v_46
+      let v_48 ← field.M31.reduce_u64 v_41
+      let v ← field.M31.reduce_u64 v
+      let v ← field.CM31.new v_48 v
+      ok { c0 := cm v_47, c1 := cm v }) =
+    do
+    let x ← a.index_usize 0#usize
+    let x_1 ← a.index_usize 1#usize
+    let x_2 ← a.index_usize 2#usize
+    let x_3 ← a.index_usize 3#usize
+    let p ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+    let i2 ← ok (core.convert.num.FromU64U32.from (cm x.c0).a)
+    let i3 ← ok (core.convert.num.FromU64U32.from (cm x_1.c0).b)
+    let i4 ← p - i3
+    let i5 ← i2 + i4
+    let i6 ← ok (core.convert.num.FromU64U32.from (cm x_2.c1).a)
+    let i7 ← 2#u64 * i6
+    let i8 ← i5 + i7
+    let i9 ← ok (core.convert.num.FromU64U32.from (cm x_2.c1).b)
+    let i10 ← p - i9
+    let i11 ← i8 + i10
+    let i12 ← ok (core.convert.num.FromU64U32.from (cm x_3.c1).a)
+    let i13 ← p - i12
+    let i14 ← i11 + i13
+    let i15 ← 2#u64 * p
+    let i16 ← ok (core.convert.num.FromU64U32.from (cm x_3.c1).b)
+    let i17 ← 2#u64 * i16
+    let i18 ← i15 - i17
+    let c0_a ← i14 + i18
+    let i19 ← ok (core.convert.num.FromU64U32.from (cm x.c0).b)
+    let i20 ← ok (core.convert.num.FromU64U32.from (cm x_1.c0).a)
+    let i21 ← i19 + i20
+    let i22 ← i21 + i6
+    let i23 ← 2#u64 * i9
+    let i24 ← i22 + i23
+    let i25 ← 2#u64 * i12
+    let i26 ← i24 + i25
+    let i27 ← p - i16
+    let c0_b ← i26 + i27
+    let i28 ← ok (core.convert.num.FromU64U32.from (cm x.c1).a)
+    let i29 ← ok (core.convert.num.FromU64U32.from (cm x_1.c1).b)
+    let i30 ← p - i29
+    let i31 ← i28 + i30
+    let i32 ← ok (core.convert.num.FromU64U32.from (cm x_2.c0).a)
+    let i33 ← i31 + i32
+    let i34 ← ok (core.convert.num.FromU64U32.from (cm x_3.c0).b)
+    let i35 ← p - i34
+    let c1_a ← i33 + i35
+    let i36 ← ok (core.convert.num.FromU64U32.from (cm x.c1).b)
+    let i37 ← ok (core.convert.num.FromU64U32.from (cm x_1.c1).a)
+    let i38 ← i36 + i37
+    let i39 ← ok (core.convert.num.FromU64U32.from (cm x_2.c0).b)
+    let i40 ← i38 + i39
+    let i41 ← ok (core.convert.num.FromU64U32.from (cm x_3.c0).a)
+    let c1_b ← i40 + i41
+    let m ← field.M31.reduce_u64 c0_a
+    let m1 ← field.M31.reduce_u64 c0_b
+    let x ← field.CM31.new m m1
+    let m2 ← field.M31.reduce_u64 c1_a
+    let m3 ← field.M31.reduce_u64 c1_b
+    let x_4 ← field.CM31.new m2 m3
+    ok { c0 := cm x, c1 := cm x_4 }
+'AspisR1.FIw_PackArithmetic.index' depends on axioms: [propext, sorryAx]
+'AspisR1.FIw_PackArithmetic.cm_new' does not depend on any axioms
+'AspisR1.FIw_PackArithmetic.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

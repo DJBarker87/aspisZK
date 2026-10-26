@@ -1,0 +1,7 @@
+# Native scalar/selector/update support and dependency result
+
+FIw_ScalarArithmetic (054) maps actual FIq scalar multiplication, proves canonical output and decoded multiplication by the same u32 scalar, and proves native lift value/canonicality. FIw_ArrayValue (055) proves the actual updated array's canonicality and complete Function.update decoded frame. FIw_SelectorIndices (057) proves native shift/mask index values; FIw_SelectorRow (058) uses those to prove the SAME native row read's canonicality and high*low value. Standard axioms only.
+
+The missing TerminalLiftM31Exact closure required focused unchanged dependencies. Attempts014-050 passed, reusing the pinned coherent workspace rather than creating another corpus. Attempt051 OccupancyGeneratedSlice failed to parse at line46, `@[import_union_discriminant isize]`. It was not edited or rerun. The chain was stopped. Native scalar lifting was instead proved directly in FIw_ScalarArithmetic; this source change removes that import dependency without weakening its scalar bound. Attempts052/053/056 were ordinary proof/syntax corrections, retained with failed audits excluded from evidence.
+
+The deployed top remains unchanged; no L142/L143/L146 or native-local L144/L145 removal is claimed. No compiled artifacts are committed; source snapshots, hashes and receipts only. One own capped scope at a time; no resource-killed or timed-out job, no raised cap/options, no Kani/Rust/SBF or shipped changes.
