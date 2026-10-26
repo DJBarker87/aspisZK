@@ -1,0 +1,244 @@
+P2P_Release.lean:88:39: error: don't know how to synthesize placeholder for argument `ops`
+context:
+W F CoreError : Type
+L : Library W (ℕ → Record)
+e1 e2 : Entry
+w1 w2 : W
+adapterOps : AdapterRw.Ops
+ops : Ops
+reserved : Bool
+queryOps : Port3_NativeQueryBody.Ops
+geoOps : Port3_NativeGeometryBody.Ops CoreError
+stageBase : VTop_Stages.Ops
+finishOps : AspisR1Stage2.Stage2Finish.FinishOps F
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+reservation : NP6_StdModel.Reservation
+program : S2W_ExtractionBoundary.Program
+data1 data2 : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+saved : alloc.vec.Vec U8
+post1 post2 : Heap (ℕ → Record)
+H : Bytes → State
+driver : OraclePortStoredExperimentC4.Input → Program Bytes State Bool
+prior : Program Bytes State Unit
+events : List S2X.AccountEvent
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+X : Type
+account : Program Bytes State X
+project : X → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)
+Q : ℕ
+budget : ∀ (H : Bytes → State), firstReads emptyTable (eval H account).1 ≤ Q + 1921
+f : FirstCut
+s : SecondCut
+outer : S2W_Trace.Log
+pre middle : List (S2W_SiteSchedule.Event (Option Unit))
+fs : S2W_SiteSchedule.FirstSegments (Option Unit)
+ss : S2W_SiteSchedule.SecondSegments (Option Unit)
+run :
+  Tx1Q_Execution.Run
+    (Tx1Q_Execution.actual (Op5T_Concrete.current ops) reserved queryOps geoOps (F3M_CircleSource.install B)
+      (NP6_StdModel.calls reservation))
+    reserved queryOps geoOps
+    (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps (F3M_CircleSource.install B)
+      (NP6_StdModel.calls reservation))
+    () (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved
+tx2 : Cons_Native.Witness
+origin :
+  P2P_Origin.Fact
+    (sdkOps
+      (Tx2I_Install.install adapterOps
+        (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps)
+      (Uni_Install.current ops reserved queryOps geoOps) (F3M_CircleSource.install B) (NP6_StdModel.calls reservation))
+    program (e2.second secondSizes) data2 slot s
+calls :
+  Cons_Native.Calls (AuS1_Install.base stageBase) finishOps reserved queryOps geoOps
+    (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+      (sdkOps
+        (Tx2I_Install.install adapterOps
+          (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps))
+          finishOps)
+        (Uni_Install.current ops reserved queryOps geoOps) (F3M_CircleSource.install B)
+        (NP6_StdModel.calls reservation)))
+    () s.pub s.proof s.checkpoint tx2
+encoding : TxS_Encoding.Facts run H
+base :
+  Rc2_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps
+    (F3M_CircleSource.install B) reservation program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run
+initial : NP6_Constructors.Contents run.initial run.pending
+selected :
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+      f.statement =
+    ok f.semantic
+publicFacts : TxS_RawPublic.Facts f.pub f.proof
+parser : T2R_Parser.Facts f.proof
+version :
+  S2X.CheckpointVersionBinding (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) (bytesOf ↑s.checkpoint)
+writerKey : version.key = (e1.handles 2).1
+readerKey : version.key = (e2.handles 6).1
+physical : version.events = events
+persistent : bytesOf ↑s.checkpoint = payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768
+acceptance :
+  CPP_Acceptance.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
+    (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+nonvacuity :
+  Rc5_Nonvacuity.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
+    (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+packet : PFin_Packet.Facts (bytesOf ↑f.pub) (bytesOf ↑f.proof) (Tx1Q_Carriers.prepared run.p) H
+safe :
+  P6C_OnCuts.SafeBatches
+    { adapter := adapterOps, currentBase := ops, stageBase := stageBase, finish := finishOps, reserved := reserved,
+      query := queryOps, geometry := geoOps, boundaries := F3M_CircleSource.install B,
+      std := NP6_StdModel.calls reservation }
+    hashv H f s
+whole :
+  P6C_FullBoundary.Facts
+    { adapter := adapterOps, currentBase := ops, stageBase := stageBase, finish := finishOps, reserved := reserved,
+      query := queryOps, geometry := geoOps, boundaries := F3M_CircleSource.install B,
+      std := NP6_StdModel.calls reservation }
+    hashv H saved f s
+caller :
+  Rc6_Caller.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B
+    (NP6_StdModel.calls reservation) program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run prior
+    tx2
+association :
+  P2P_NativeSelection.pair
+      (sdkOps
+        (Tx2I_Install.install adapterOps
+          (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps))
+          finishOps)
+        (Uni_Install.current ops reserved queryOps geoOps) (F3M_CircleSource.install B)
+        (NP6_StdModel.calls reservation))
+      program e1 e2 data2 slot =
+    Hist_PairExperiment.select { first := f, second := s }
+x✝ : X
+⊢ AdapterRw.Ops
+P2P_Release.lean:87:7: error: failed to infer `have` declaration type
+P2P_Release.lean:80:72: error: unsolved goals
+W F CoreError : Type
+L : Library W (ℕ → Record)
+e1 e2 : Entry
+w1 w2 : W
+adapterOps : AdapterRw.Ops
+ops : Ops
+reserved : Bool
+queryOps : Port3_NativeQueryBody.Ops
+geoOps : Port3_NativeGeometryBody.Ops CoreError
+stageBase : VTop_Stages.Ops
+finishOps : AspisR1Stage2.Stage2Finish.FinishOps F
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+reservation : NP6_StdModel.Reservation
+program : S2W_ExtractionBoundary.Program
+data1 data2 : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+saved : alloc.vec.Vec U8
+post1 post2 : Heap (ℕ → Record)
+H : Bytes → State
+driver : OraclePortStoredExperimentC4.Input → Program Bytes State Bool
+prior : Program Bytes State Unit
+events : List S2X.AccountEvent
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+X : Type
+account : Program Bytes State X
+project : X → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)
+Q : ℕ
+budget : ∀ (H : Bytes → State), firstReads emptyTable (eval H account).1 ≤ Q + 1921
+f : FirstCut
+s : SecondCut
+outer : S2W_Trace.Log
+pre middle : List (S2W_SiteSchedule.Event (Option Unit))
+fs : S2W_SiteSchedule.FirstSegments (Option Unit)
+ss : S2W_SiteSchedule.SecondSegments (Option Unit)
+run :
+  Tx1Q_Execution.Run
+    (Tx1Q_Execution.actual (Op5T_Concrete.current ops) reserved queryOps geoOps (F3M_CircleSource.install B)
+      (NP6_StdModel.calls reservation))
+    reserved queryOps geoOps
+    (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps (F3M_CircleSource.install B)
+      (NP6_StdModel.calls reservation))
+    () (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved
+tx2 : Cons_Native.Witness
+origin :
+  P2P_Origin.Fact
+    (sdkOps
+      (Tx2I_Install.install adapterOps
+        (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps)
+      (Uni_Install.current ops reserved queryOps geoOps) (F3M_CircleSource.install B) (NP6_StdModel.calls reservation))
+    program (e2.second secondSizes) data2 slot s
+calls :
+  Cons_Native.Calls (AuS1_Install.base stageBase) finishOps reserved queryOps geoOps
+    (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+      (sdkOps
+        (Tx2I_Install.install adapterOps
+          (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps))
+          finishOps)
+        (Uni_Install.current ops reserved queryOps geoOps) (F3M_CircleSource.install B)
+        (NP6_StdModel.calls reservation)))
+    () s.pub s.proof s.checkpoint tx2
+encoding : TxS_Encoding.Facts run H
+base :
+  Rc2_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps
+    (F3M_CircleSource.install B) reservation program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run
+initial : NP6_Constructors.Contents run.initial run.pending
+selected :
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+      f.statement =
+    ok f.semantic
+publicFacts : TxS_RawPublic.Facts f.pub f.proof
+parser : T2R_Parser.Facts f.proof
+version :
+  S2X.CheckpointVersionBinding (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) (bytesOf ↑s.checkpoint)
+writerKey : version.key = (e1.handles 2).1
+readerKey : version.key = (e2.handles 6).1
+physical : version.events = events
+persistent : bytesOf ↑s.checkpoint = payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768
+acceptance :
+  CPP_Acceptance.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
+    (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+nonvacuity :
+  Rc5_Nonvacuity.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
+    (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+packet : PFin_Packet.Facts (bytesOf ↑f.pub) (bytesOf ↑f.proof) (Tx1Q_Carriers.prepared run.p) H
+safe :
+  P6C_OnCuts.SafeBatches
+    { adapter := adapterOps, currentBase := ops, stageBase := stageBase, finish := finishOps, reserved := reserved,
+      query := queryOps, geometry := geoOps, boundaries := F3M_CircleSource.install B,
+      std := NP6_StdModel.calls reservation }
+    hashv H f s
+whole :
+  P6C_FullBoundary.Facts
+    { adapter := adapterOps, currentBase := ops, stageBase := stageBase, finish := finishOps, reserved := reserved,
+      query := queryOps, geometry := geoOps, boundaries := F3M_CircleSource.install B,
+      std := NP6_StdModel.calls reservation }
+    hashv H saved f s
+caller :
+  Rc6_Caller.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B
+    (NP6_StdModel.calls reservation) program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run prior
+    tx2
+association :
+  P2P_NativeSelection.pair
+      (sdkOps
+        (Tx2I_Install.install adapterOps
+          (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps))
+          finishOps)
+        (Uni_Install.current ops reserved queryOps geoOps) (F3M_CircleSource.install B)
+        (NP6_StdModel.calls reservation))
+      program e1 e2 data2 slot =
+    Hist_PairExperiment.select { first := f, second := s }
+⊢ BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q + 2965)
+      (eval H
+        (Hiq_RecordedJoint.program account project fun x =>
+          P2P_NativeSelection.pair
+            (sdkOps
+              (Tx2I_Install.install adapterOps
+                (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps))
+                finishOps)
+              (Uni_Install.current ops reserved queryOps geoOps) (F3M_CircleSource.install B)
+              (NP6_StdModel.calls reservation))
+            program e1 e2 data2 slot)) ∨
+    P2P_Acceptance.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
+        (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) ∧
+      P2P_Acceptance.Nonrejecting driver H f.pub f.proof ∧
+        P2P_Caller.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B
+          (NP6_StdModel.calls reservation) program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run
+          prior tx2
+'AspisR1.P2P_Release.remove' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

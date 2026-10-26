@@ -85,7 +85,7 @@ theorem remove {W F CoreError : Type}
     version,writerKey,readerKey,physical,persistent,packet,safe,whole,?_⟩
   have association := P2P_NativeSelection.on_cuts _ program e1 e2 data2 slot saved f s base.1 origin
   have alternative := P2P_Charge.binding_or_collision account project
-    (fun _ => P2P_NativeSelection.pair _ program e1 e2 data2 slot) Q budget H
+    (fun _ => P2P_NativeSelection.pair (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) (F3M_CircleSource.install B) (NP6_StdModel.calls reservation)) program e1 e2 data2 slot) Q budget H
   rcases alternative with bad | good
   · exact Or.inl bad
   · right
