@@ -1,0 +1,159 @@
+JFr_TX2_DotStep.lean:87:33: error: unsolved goals
+q : Std.Array U8 608#usize
+g : Std.Array NE 29#usize
+slot : Usize
+iter : core.ops.range.Range Usize
+sums : Std.Array U64 8#usize
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done sums)
+        | some term => do
+          let i ← slot * 120#usize
+          let i1 ← term * 4#usize
+          let i2 ← i + i1
+          let i3 ← i + i1
+          let i4 ← i3 + 4#usize
+          let s ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+                { start := i2, «end» := i4 }
+          let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+          let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+          let o1 ← FIp_DotDecode.field.M31.from_le_bytes a
+          let scalar ← core.option.Option.unwrap o1
+          let we ← g.index_usize term
+          let coefficient ← we.to_limbs
+          let i5 ← coefficient.index_usize 0#usize
+          let i6 ← lift (core.convert.num.FromU64U32.from i5)
+          let i7 ← lift (core.convert.num.FromU64U32.from scalar)
+          let i8 ← i6 * i7
+          let i9 ← sums.index_usize 0#usize
+          let i10 ← i9 + i8
+          let sums1 ← sums.update 0#usize i10
+          let i11 ← coefficient.index_usize 1#usize
+          let i12 ← lift (core.convert.num.FromU64U32.from i11)
+          let i13 ← lift (core.convert.num.FromU64U32.from scalar)
+          let i14 ← i12 * i13
+          let i15 ← sums1.index_usize 1#usize
+          let i16 ← i15 + i14
+          let sums2 ← sums1.update 1#usize i16
+          let i17 ← coefficient.index_usize 2#usize
+          let i18 ← lift (core.convert.num.FromU64U32.from i17)
+          let i19 ← lift (core.convert.num.FromU64U32.from scalar)
+          let i20 ← i18 * i19
+          let i21 ← sums2.index_usize 2#usize
+          let i22 ← i21 + i20
+          let sums3 ← sums2.update 2#usize i22
+          let i23 ← coefficient.index_usize 3#usize
+          let i24 ← lift (core.convert.num.FromU64U32.from i23)
+          let i25 ← lift (core.convert.num.FromU64U32.from scalar)
+          let i26 ← i24 * i25
+          let i27 ← sums3.index_usize 3#usize
+          let i28 ← i27 + i26
+          let sums4 ← sums3.update 3#usize i28
+          let i29 ← coefficient.index_usize 4#usize
+          let i30 ← lift (core.convert.num.FromU64U32.from i29)
+          let i31 ← lift (core.convert.num.FromU64U32.from scalar)
+          let i32 ← i30 * i31
+          let i33 ← sums4.index_usize 4#usize
+          let i34 ← i33 + i32
+          let sums5 ← sums4.update 4#usize i34
+          let i35 ← coefficient.index_usize 5#usize
+          let i36 ← lift (core.convert.num.FromU64U32.from i35)
+          let i37 ← lift (core.convert.num.FromU64U32.from scalar)
+          let i38 ← i36 * i37
+          let i39 ← sums5.index_usize 5#usize
+          let i40 ← i39 + i38
+          let sums6 ← sums5.update 5#usize i40
+          let i41 ← coefficient.index_usize 6#usize
+          let i42 ← lift (core.convert.num.FromU64U32.from i41)
+          let i43 ← lift (core.convert.num.FromU64U32.from scalar)
+          let i44 ← i42 * i43
+          let i45 ← sums6.index_usize 6#usize
+          let i46 ← i45 + i44
+          let sums7 ← sums6.update 6#usize i46
+          let i47 ← coefficient.index_usize 7#usize
+          let i48 ← lift (core.convert.num.FromU64U32.from i47)
+          let i49 ← lift (core.convert.num.FromU64U32.from scalar)
+          let i50 ← i48 * i49
+          let i51 ← sums7.index_usize 7#usize
+          let i52 ← i51 + i50
+          let sums8 ← sums7.update 7#usize i52
+          ok (cont (iter1, sums8))) =
+    do
+    let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok (done sums)
+      | some term => do
+        let x ← slot * 120#usize
+        let x_1 ← term * 4#usize
+        let x_2 ← x + x_1
+        let x ← x + x_1
+        let x ← x + 4#usize
+        let x ←
+          core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+              { start := x_2, «end» := x }
+        let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+        let x ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x
+        let x ← FIp_DotDecode.field.M31.from_le_bytes x
+        let scalar ← core.option.Option.unwrap x
+        let x ← g.index_usize term
+        let x ← FIo_Native.aspis_core.field.wide_exact.WideExact.to_limbs x
+        let x_3 ← x.index_usize 0#usize
+        let x_4 ← lift (core.convert.num.FromU64U32.from x_3)
+        let x_5 ← lift (core.convert.num.FromU64U32.from scalar)
+        let x_6 ← x_4 * x_5
+        let x_7 ← sums.index_usize 0#usize
+        let x_8 ← x_7 + x_6
+        let x_9 ← sums.update 0#usize x_8
+        let x_10 ← x.index_usize 1#usize
+        let x_11 ← lift (core.convert.num.FromU64U32.from x_10)
+        let x_12 ← lift (core.convert.num.FromU64U32.from scalar)
+        let x_13 ← x_11 * x_12
+        let x_14 ← x_9.index_usize 1#usize
+        let x_15 ← x_14 + x_13
+        let x_16 ← x_9.update 1#usize x_15
+        let x_17 ← x.index_usize 2#usize
+        let x_18 ← lift (core.convert.num.FromU64U32.from x_17)
+        let x_19 ← lift (core.convert.num.FromU64U32.from scalar)
+        let x_20 ← x_18 * x_19
+        let x_21 ← x_16.index_usize 2#usize
+        let x_22 ← x_21 + x_20
+        let x_23 ← x_16.update 2#usize x_22
+        let x_24 ← x.index_usize 3#usize
+        let x_25 ← lift (core.convert.num.FromU64U32.from x_24)
+        let x_26 ← lift (core.convert.num.FromU64U32.from scalar)
+        let x_27 ← x_25 * x_26
+        let x_28 ← x_23.index_usize 3#usize
+        let x_29 ← x_28 + x_27
+        let x_30 ← x_23.update 3#usize x_29
+        let x_31 ← x.index_usize 4#usize
+        let x_32 ← lift (core.convert.num.FromU64U32.from x_31)
+        let x_33 ← lift (core.convert.num.FromU64U32.from scalar)
+        let x_34 ← x_32 * x_33
+        let x_35 ← x_30.index_usize 4#usize
+        let x_36 ← x_35 + x_34
+        let x_37 ← x_30.update 4#usize x_36
+        let x_38 ← x.index_usize 5#usize
+        let x_39 ← lift (core.convert.num.FromU64U32.from x_38)
+        let x_40 ← lift (core.convert.num.FromU64U32.from scalar)
+        let x_41 ← x_39 * x_40
+        let x_42 ← x_37.index_usize 5#usize
+        let x_43 ← x_42 + x_41
+        let x_44 ← x_37.update 5#usize x_43
+        let x_45 ← x.index_usize 6#usize
+        let x_46 ← lift (core.convert.num.FromU64U32.from x_45)
+        let x_47 ← lift (core.convert.num.FromU64U32.from scalar)
+        let x_48 ← x_46 * x_47
+        let x_49 ← x_44.index_usize 6#usize
+        let x_50 ← x_49 + x_48
+        let x_51 ← x_44.update 6#usize x_50
+        let x ← x.index_usize 7#usize
+        let x ← lift (core.convert.num.FromU64U32.from x)
+        let x_52 ← lift (core.convert.num.FromU64U32.from scalar)
+        let x ← x * x_52
+        let x_53 ← x_51.index_usize 7#usize
+        let x ← x_53 + x
+        let out ← x_51.update 7#usize x
+        ok (cont (next, out))
+'AspisR1.JFr_TX2_DotStep.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
