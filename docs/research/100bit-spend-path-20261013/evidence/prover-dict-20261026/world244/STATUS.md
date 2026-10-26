@@ -37,3 +37,24 @@ but never accepted as proof evidence.
 These lemmas remove no dictionary, native carrier, or root premise. They are a
 generic predecessor for the effect-aware OS route. No OS law or source
 correspondence is inferred. Entry/type counts remain unchanged.
+
+## Checked event and sink predecessors
+
+ThroughJ24410:11local invocations,5accepted/6rejected,70Lean remaining,
+0/10Kani. The five accepted new modules are TapeCore244, TapeTrace244,
+EventWorld244, SinkCore244, EventReplay244. Complete local receipts include
+all errors; each rejected input was changed before retry, except the CLI-root
+failure whose invocation configuration was changed. No limit increase.
+
+| Entry / carrier | Ledger | Checked theorem | Receipt | Effect |
+|---|---|---|---|---|
+|File/OS world|V171/V172/V174/V175/V267/V271|PDict_EventWorld244.inventory / replay_inventory / replay_laws|local/24406 and24410|generic event/cursor predecessor only; source/OS association retained|
+|Formatter27|V269; avoidsV270|PDict_SinkCore244.writes_inventory / transport|local/24408|safe sink quotient predecessor; native association retained|
+|Error3|V176/V268|PDict_EventWorld244.success|local/24406|complete reply preserved, including error data; native association retained|
+
+The sink model preserves options, arbitrary sink state transitions and requested
+bytes even on failure. The event model proves request matching, exhaustion,
+entropy frames, and sequential cursor advancement without any condition on the
+reply value. Laws are arbitrary named leaf predicates, not source equality,
+entropy availability, freshness, or native operational assumptions disguised
+as theorems. The specialized sibling-world/source instantiation is pending.

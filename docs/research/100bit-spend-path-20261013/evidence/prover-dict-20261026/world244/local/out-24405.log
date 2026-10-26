@@ -1,0 +1,185 @@
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:32:14: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type) → Tape x_0 → Option (x_0 × Tape x_0)
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:31:72: error: unsolved goals
+T Q R : Type
+inst✝ : DecidableEq Q
+world : World T Q R
+event : Event Q R
+h : world.files[world.fileUsed]? = some event
+⊢ ((PDict_TapeCore244.read { replies := world.files, used := world.fileUsed }).bind fun __x =>
+      if __x.fst.request = event.request then
+        some
+          (__x.fst.reply,
+            { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+              fileUsed := world.fileUsed + 1 })
+      else none) =
+    some
+      (event.reply,
+        { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+          fileUsed := world.fileUsed + 1 })
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:32:26: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [step, read, tape,̵ ̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:37:13: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type) → Tape x_0 → Option (x_0 × Tape x_0)
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:36:33: error: unsolved goals
+T Q R : Type
+inst✝ : DecidableEq Q
+world : World T Q R
+request : Q
+h : world.files[world.fileUsed]? = none
+⊢ ∀ (a : Event Q R) (b : Tape (Event Q R)),
+    PDict_TapeCore244.read { replies := world.files, used := world.fileUsed } = some (a, b) → ¬a.request = request
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:37:23: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [step, ̲read, ̲tape,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:43:13: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type) → Tape x_0 → Option (x_0 × Tape x_0)
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:42:33: error: unsolved goals
+T Q R : Type
+inst✝ : DecidableEq Q
+world : World T Q R
+request : Q
+event : Event Q R
+h : world.files[world.fileUsed]? = some event
+different : event.request ≠ request
+⊢ ∀ (a : Event Q R) (b : Tape (Event Q R)),
+    PDict_TapeCore244.read { replies := world.files, used := world.fileUsed } = some (a, b) → ¬a.request = request
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:43:23: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [step, ̲read, ̲tape,h̵,̵ ̲different]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:43:25: warning: This simp argument is unused:
+  different
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵r̵e̵a̵d̵,̵t̵a̵p̵e̵,̵h̵,̵d̵i̵f̵f̵e̵r̵e̵n̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲r̲e̲a̲d̲,̲ ̲t̲a̲p̲e̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:51:23: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type) → Tape x_0 → Option (x_0 × Tape x_0)
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:51:9: error: unsolved goals
+case none
+T Q R : Type
+inst✝ : DecidableEq Q
+world next : World T Q R
+request : Q
+reply : R
+run :
+  ((PDict_TapeCore244.read { replies := world.files, used := world.fileUsed }).bind fun __x =>
+      if __x.fst.request = request then
+        some
+          (__x.fst.reply,
+            { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+              fileUsed := world.fileUsed + 1 })
+      else none) =
+    some (reply, next)
+h : world.files[world.fileUsed]? = none
+⊢ ∃ event,
+    none = some event ∧
+      event.request = request ∧
+        event.reply = reply ∧
+          next =
+            { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+              fileUsed := world.fileUsed + 1 }
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:56:20: error: Ambiguous term
+  read
+Possible interpretations:
+  PDict_TapeCore244.read : Tape ?m.126 → Option (?m.126 × Tape ?m.126)
+  
+  MonadReader.read : ?m.127 ?m.126
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:56:8: error: Type mismatch: After simplification, term
+  run
+ has type
+  ((PDict_TapeCore244.read { replies := world.files, used := world.fileUsed }).bind fun __x =>
+      if __x.fst.request = request then
+        some
+          (__x.fst.reply,
+            { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+              fileUsed := world.fileUsed + 1 })
+      else none) =
+    some (reply, next)
+but is expected to have type
+  event.reply = reply ∧
+    { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+        fileUsed := world.fileUsed + 1 } =
+      next
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:57:19: error: Application type mismatch: The argument
+  h
+has type
+  world.files[world.fileUsed]? = some event
+but is expected to have type
+  some event = some event
+in the application
+  And.intro h
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:58:17: error: Ambiguous term
+  read
+Possible interpretations:
+  PDict_TapeCore244.read : Tape ?m.147 → Option (?m.147 × Tape ?m.147)
+  
+  MonadReader.read : ?m.148 ?m.147
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:58:4: error: unsolved goals
+case neg
+T Q R : Type
+inst✝ : DecidableEq Q
+world next : World T Q R
+request : Q
+reply : R
+run :
+  ((PDict_TapeCore244.read { replies := world.files, used := world.fileUsed }).bind fun __x =>
+      if __x.fst.request = request then
+        some
+          (__x.fst.reply,
+            { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+              fileUsed := world.fileUsed + 1 })
+      else none) =
+    some (reply, next)
+event : Event Q R
+h : world.files[world.fileUsed]? = some event
+same : ¬event.request = request
+⊢ ∃ event_1,
+    some event = some event_1 ∧
+      event_1.request = request ∧
+        event_1.reply = reply ∧
+          next =
+            { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+              fileUsed := world.fileUsed + 1 }
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:51:33: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [step, ̲read, ̲tape,̵h̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:58:27: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [step, ̲read, ̲tape,h̵,̵ ̲same] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_EventWorld244.lean:58:29: warning: This simp argument is unused:
+  same
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵r̵e̵a̵d̵,̵t̵a̵p̵e̵,̵h̵,̵s̵a̵m̵e̵]̵[̲s̲t̲e̲p̲,̲ ̲r̲e̲a̲d̲,̲ ̲t̲a̲p̲e̲,̲ ̲h̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PDict_EventWorld244.step_at' depends on axioms: [propext, sorryAx]
+'R1Z.PDict_EventWorld244.exhausted' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PDict_EventWorld244.mismatch' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PDict_EventWorld244.success' depends on axioms: [propext, sorryAx]
+'R1Z.PDict_EventWorld244.inventory' depends on axioms: [propext, sorryAx]
+'R1Z.PDict_EventWorld244.law_at' depends on axioms: [propext, sorryAx]
+'R1Z.PDict_EventWorld244.admission_frame' depends on axioms: [propext, sorryAx]
