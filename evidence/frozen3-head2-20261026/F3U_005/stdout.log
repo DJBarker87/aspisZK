@@ -1,0 +1,509 @@
+F3U_InitCall.lean:33:14: error: unsolved goals
+case Err
+H : Type
+D : aspis_core.Digest32 H
+hash : H
+pub : Slice U8
+root : Std.Array U8 32#usize
+out : r1_wire.SemanticTranscript H
+log : Option (Bytes × State) := RawK_Head.head (S1SemanticCode.newTranscript D hash pub root)
+r1 : core.result.Result U32 r1_wire.Error
+len : U32
+e : core.num.error.TryFromIntError
+success :
+  (erase do
+      let r ← liftM (ok (core.result.Result.Err e))
+      let r1 ←
+        liftM
+            (core.result.Result.map_err
+              (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D) r ())
+      let cf ←
+        liftM
+            (match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest D hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+inc :
+  ∀ (a : Bytes) (b : State),
+    (RawK_Head.head do
+          let r ← liftM (ok (core.result.Result.Err e))
+          let r1 ←
+            liftM
+                (core.result.Result.map_err
+                  (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D) r ())
+          let cf ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b) →
+      log = some (a, b)
+s2 :
+  (erase do
+      let cf ← liftM (ok (core.ops.control_flow.ControlFlow.Continue len))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest D hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+hcf :
+  (match r1 with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue len)
+s3 :
+  (erase do
+      let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+      let a ← liftM (lift (core.num.U32.to_le_bytes len))
+      let s1 ← liftM (lift a.to_slice)
+      let s2 ← liftM (lift root.to_slice)
+      let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+      let a1 ← effects.digest D hash s3
+      pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })) =
+    ok (core.result.Result.Ok out)
+sub3 :
+  ∀ (a : Bytes) (b : State),
+    (RawK_Head.head do
+          let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes len))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest D hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })) =
+        some (a, b) →
+      (RawK_Head.head do
+          let cf ← liftM (ok (core.ops.control_flow.ControlFlow.Continue len))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b)
+hr : core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len = ok (core.result.Result.Err e)
+s1 :
+  (erase do
+      let r1 ←
+        liftM
+            (core.result.Result.map_err
+              (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D)
+              (core.result.Result.Err e) ())
+      let cf ←
+        liftM
+            (match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest D hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+sub1 :
+  ∀ (a : Bytes) (b : State),
+    (RawK_Head.head do
+          let r1 ←
+            liftM
+                (core.result.Result.map_err
+                  (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D)
+                  (core.result.Result.Err e) ())
+          let cf ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b) →
+      (RawK_Head.head do
+          let r ← liftM (ok (core.result.Result.Err e))
+          let r1 ←
+            liftM
+                (core.result.Result.map_err
+                  (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D) r ())
+          let cf ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b)
+hr1 :
+  ∃ x,
+    r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError.call_once D () e =
+        ok x ∧
+      core.result.Result.Err x = r1
+sub2 :
+  ∀ (a : Bytes) (b : State),
+    (RawK_Head.head do
+          let cf ← liftM (ok (core.ops.control_flow.ControlFlow.Continue len))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b) →
+      (RawK_Head.head do
+          let r1 ←
+            liftM
+                (core.result.Result.map_err
+                  (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D)
+                  (core.result.Result.Err e) ())
+          let cf ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b)
+⊢ False
+F3U_InitCall.lean:36:13: error: unsolved goals
+case Ok
+H : Type
+D : aspis_core.Digest32 H
+hash : H
+pub : Slice U8
+root : Std.Array U8 32#usize
+out : r1_wire.SemanticTranscript H
+log : Option (Bytes × State) := RawK_Head.head (S1SemanticCode.newTranscript D hash pub root)
+r1 : core.result.Result U32 r1_wire.Error
+len n : U32
+success :
+  (erase do
+      let r ← liftM (ok (core.result.Result.Ok n))
+      let r1 ←
+        liftM
+            (core.result.Result.map_err
+              (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D) r ())
+      let cf ←
+        liftM
+            (match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest D hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+inc :
+  ∀ (a : Bytes) (b : State),
+    (RawK_Head.head do
+          let r ← liftM (ok (core.result.Result.Ok n))
+          let r1 ←
+            liftM
+                (core.result.Result.map_err
+                  (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D) r ())
+          let cf ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b) →
+      log = some (a, b)
+s2 :
+  (erase do
+      let cf ← liftM (ok (core.ops.control_flow.ControlFlow.Continue len))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest D hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+hcf :
+  (match r1 with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue len)
+s3 :
+  (erase do
+      let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+      let a ← liftM (lift (core.num.U32.to_le_bytes len))
+      let s1 ← liftM (lift a.to_slice)
+      let s2 ← liftM (lift root.to_slice)
+      let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+      let a1 ← effects.digest D hash s3
+      pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })) =
+    ok (core.result.Result.Ok out)
+sub3 :
+  ∀ (a : Bytes) (b : State),
+    (RawK_Head.head do
+          let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes len))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest D hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })) =
+        some (a, b) →
+      (RawK_Head.head do
+          let cf ← liftM (ok (core.ops.control_flow.ControlFlow.Continue len))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b)
+hr : core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len = ok (core.result.Result.Ok n)
+s1 :
+  (erase do
+      let r1 ←
+        liftM
+            (core.result.Result.map_err
+              (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D)
+              (core.result.Result.Ok n) ())
+      let cf ←
+        liftM
+            (match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest D hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+sub1 :
+  ∀ (a : Bytes) (b : State),
+    (RawK_Head.head do
+          let r1 ←
+            liftM
+                (core.result.Result.map_err
+                  (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D)
+                  (core.result.Result.Ok n) ())
+          let cf ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b) →
+      (RawK_Head.head do
+          let r ← liftM (ok (core.result.Result.Ok n))
+          let r1 ←
+            liftM
+                (core.result.Result.map_err
+                  (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D) r ())
+          let cf ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b)
+hr1 : core.result.Result.Ok n = r1
+sub2 :
+  ∀ (a : Bytes) (b : State),
+    (RawK_Head.head do
+          let cf ← liftM (ok (core.ops.control_flow.ControlFlow.Continue len))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b) →
+      (RawK_Head.head do
+          let r1 ←
+            liftM
+                (core.result.Result.map_err
+                  (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError D)
+                  (core.result.Result.Ok n) ())
+          let cf ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+              let a ← liftM (lift (core.num.U32.to_le_bytes val))
+              let s1 ← liftM (lift a.to_slice)
+              let s2 ← liftM (lift root.to_slice)
+              let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+              let a1 ← effects.digest D hash s3
+              pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)) =
+        some (a, b)
+⊢ n = len
+F3U_InitCall.lean:34:46: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.map_err,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at hr1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3U_InitCall.reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

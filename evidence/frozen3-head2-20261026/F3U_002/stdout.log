@@ -1,0 +1,32 @@
+F3U_Slice.lean:17:4: error: Tactic `assumption` failed
+
+s : Slice U8
+bound : List.length (bytesOf ↑s) ≤ Usize.max
+⊢ List.map (fun b => b) ↑s = ↑s
+F3U_Slice.lean:19:2: error: Tactic `apply` failed: could not unify the conclusion of `@Subtype.ext`
+  ?a1 = ?a2
+with the goal
+  (if h : (List.map decodeByte ↑s).length ≤ Usize.max then
+      some ⟨List.map ((fun b => UScalar.ofNatCore ↑b ⋯) ∘ decodeByte) ↑s, ⋯⟩
+    else none) =
+    some s
+
+Note: The full type of `@Subtype.ext` is
+  ∀ {α : Sort ?u.32} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 = ↑a2 → a1 = a2
+
+s : Slice U8
+bound : List.length (bytesOf ↑s) ≤ Usize.max
+words : List.map (fun b => UScalar.ofNatCore ↑(decodeByte b) ⋯) ↑s = ↑s
+⊢ (if h : (List.map decodeByte ↑s).length ≤ Usize.max then
+      some ⟨List.map ((fun b => UScalar.ofNatCore ↑b ⋯) ∘ decodeByte) ↑s, ⋯⟩
+    else none) =
+    some s
+F3U_Slice.lean:15:34: warning: This simp argument is unused:
+  dif_pos bound
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵1̵_̵D̵r̵i̵v̵e̵r̵.̵a̵s̵S̵l̵i̵c̵e̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵b̵o̵u̵n̵d̵,̵b̵y̵t̵e̵s̵O̵f̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵]̵[̲P̲o̲r̲t̲1̲_̲D̲r̲i̲v̲e̲r̲.̲a̲s̲S̲l̲i̲c̲e̲,̲ ̲b̲y̲t̲e̲s̲O̲f̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3U_Slice.decode_encode' depends on axioms: [propext]
+'AspisR1.F3U_Slice.roundtrip' depends on axioms: [propext, sorryAx]
