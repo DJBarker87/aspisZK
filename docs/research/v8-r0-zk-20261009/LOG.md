@@ -10539,3 +10539,22 @@ the symbolic subtype-cardinality route, never an unchanged retry (Stream A confi
 Stream B's). cb3's continuation (op51 arbitrary-carrier correspondence, remaining top-down ops) takes the
 next free slot on range 35600-35899. Six slots: cb4, srcid4, runjoin8, join2, rw20, envfix. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D227 (Stream B) 2026-10-26 22:40 UTC: envfix: both rebuilt-env failures were stale source variants; research unchanged; cb5 launched
+
+pv-envfix (`codex/pv-envfix-20261026`, 4/60 Lean, no Kani, evidence + one audit module PV_Env_Axioms,
+merged into research). Diagnosis (evidence/pv-envfix-20261026/AUDIT.md): the rebuild selected STALE
+historical variants of the two target files; every strict R0Z/R1Z dependency in both import chains
+byte-matches research HEAD and has a shared object. The unchanged research sources compile against the
+restored objects into the job's private objects dir: SimCostOuterRetry6 attempt 35901 exit 0 / 1.75 s /
+peak 3.43 GiB / swap 0; EventsR1P2 attempt 35902 exit 0 / 2.13 s / 3.44 GiB / 0; axioms audit of all 19
+theorems standard. So "environment repaired, source unchanged": no research proof change, no sorry, no
+cap change; AGENTS.md resource rule 5 satisfied because the retry was against changed inputs (correct
+source variant), not an unchanged rerun. Downstream modules (EventsR1P3/4, AgreeR1P/2, FinalR1P,
+PrivacyR1P, SimCostPass6Audit) still need replay against the correct objects; neither target is on the
+current headline endpoint's import path. Stream A told: envj-rebuild2's variant selection can prefer a
+historical hash over research HEAD, which bears on the remaining 1,007 entries. Launched pv-cb5
+(continuation of cb3 on `codex/pv-cb3-20261026`, IDs 35600-35899, 100 Lean / 15 Kani: op51's
+arbitrary-carrier correspondence first, op223 early for rw20's source_law, then the remaining top-down
+ops). Six slots: cb4, srcid4, runjoin8, join2, rw20, cb5. Rows removed outright: 0. Privacy target not
+yet established.
