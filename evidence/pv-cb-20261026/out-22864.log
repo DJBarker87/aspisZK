@@ -1,0 +1,78 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:20:66: error: unsolved goals
+data : Std.Array Q 16#usize
+iter : Range
+coeff : Coeff
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    do
+    let (column, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match column with
+      | none => ok (done coeff)
+      | some column => do
+        let x ← data.index_usize column
+        let x_1 ← lift (column &&& 3#usize)
+        let x ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis x x_1
+        let x_2 ← PV_CB_MaskSource.state_only_hiding.FACTOR_EXPONENTS.index_usize column
+        let x_3 ← lift (core.convert.num.FromUsizeU8.from x_2)
+        let out ← Array.update coeff x_3 x
+        ok (cont (iter1, out))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:22:62: warning: This simp argument is unused:
+  PV_CB_MaskIndices.S.maskFactors
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop0.body, r̵e̵p̵l̵y̵,̵c̵e̵l̵l̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵n̵e̵x̵t̵,̵P̵V̵_̵C̵B̵_̵M̵a̵s̵k̵I̵n̵d̵i̵c̵e̵s̵.̵S̵.̵f̵a̵c̵t̵o̵r̵s̵,̵P̵V̵_̵C̵B̵_̵M̵a̵s̵k̵I̵n̵d̵i̵c̵e̵s̵.̵S̵.̵m̵a̵s̵k̵F̵a̵c̵t̵o̵r̵s̵]̵r̲e̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲e̲l̲l̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲n̲e̲x̲t̲,̲ ̲P̲V̲_̲C̲B̲_̲M̲a̲s̲k̲I̲n̲d̲i̲c̲e̲s̲.̲S̲.̲f̲a̲c̲t̲o̲r̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:25:70: error: unsolved goals
+data : Std.Array Q 10#usize
+iter : Range
+coeff : Coeff
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.MASK_ONLY_FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    do
+    let (column, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match column with
+      | none => ok (done coeff)
+      | some column => do
+        let x ← data.index_usize column
+        let x_1 ← lift (column &&& 3#usize)
+        let x ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis x x_1
+        let x_2 ← PV_CB_MaskSource.state_only_hiding.MASK_ONLY_FACTOR_EXPONENTS.index_usize column
+        let x_3 ← lift (core.convert.num.FromUsizeU8.from x_2)
+        let out ← Array.update coeff x_3 x
+        ok (cont (iter1, out))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:27:34: warning: This simp argument is unused:
+  PV_CB_MaskIndices.S.factors
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop1.body, r̵e̵p̵l̵y̵,̵c̵e̵l̵l̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵n̵e̵x̵t̵,̵P̵V̵_̵C̵B̵_̵M̵a̵s̵k̵I̵n̵d̵i̵c̵e̵s̵.̵S̵.̵f̵a̵c̵t̵o̵r̵s̵,̵P̵V̵_̵C̵B̵_̵M̵a̵s̵k̵I̵n̵d̵i̵c̵e̵s̵.̵S̵.̵m̵a̵s̵k̵F̵a̵c̵t̵o̵r̵s̵]̵r̲e̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲e̲l̲l̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲n̲e̲x̲t̲,̲ ̲P̲V̲_̲C̲B̲_̲M̲a̲s̲k̲I̲n̲d̲i̲c̲e̲s̲.̲S̲.̲m̲a̲s̲k̲F̲a̲c̲t̲o̲r̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB_MaskFillBody.c1_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_MaskFillBody.mask_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_MaskFillBody.c1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_MaskFillBody.mask' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

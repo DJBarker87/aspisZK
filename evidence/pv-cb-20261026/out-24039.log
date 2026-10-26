@@ -1,0 +1,71 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskRootEq.lean:13:91: error: unsolved goals
+c1 : Std.Array Q 16#usize
+mask : Std.Array Q 10#usize
+g : Q
+point : Std.Array Q 10#usize
+⊢ (do
+      let (linear, explicit_linear) ← PV_CB_MaskSource.state_only_hiding.selected_mask_linears point
+      let coefficients ←
+        PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop0 { start := 0#usize, «end» := 16#usize }
+            c1 (Array.repeat 27#usize ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO)
+      let coefficients1 ←
+        PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop1 { start := 0#usize, «end» := 10#usize }
+            mask coefficients
+      let prepared ← ProverRwP7CurrentFieldSource.aspis_core.field.PreparedQm31Multiplier.new linear
+      let q ← coefficients1.index_usize 26#usize
+      let shared ← PV_CB_MaskHorner.S.loop { iter := { start := 0#usize, «end» := 26#usize } } coefficients1 prepared q
+      let x2 ← explicit_linear.square
+      let x4 ← x2.square
+      let x8 ← x4.square
+      let x16 ← x8.square
+      let q1 ← x16.mul x8
+      let q2 ← q1.mul x2
+      let q3 ← ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ONE.add q2
+      let q4 ← q3.mul g
+      shared.add q4) =
+    do
+    let (linear, explicit_linear) ← PV_CB_MaskSource.state_only_hiding.selected_mask_linears point
+    let coefficients1 ←
+      PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop0 { start := 0#usize, «end» := 16#usize } c1
+          (Array.repeat 27#usize ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO)
+    let coefficients2 ←
+      PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop1 { start := 0#usize, «end» := 10#usize }
+          mask coefficients1
+    let prepared_linear ← ProverRwP7CurrentFieldSource.aspis_core.field.PreparedQm31Multiplier.new linear
+    let shared ← coefficients2.index_usize 26#usize
+    let shared1 ←
+      PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop2
+          { iter := { start := 0#usize, «end» := 26#usize } } coefficients2 prepared_linear shared
+    let q ←
+      do
+        let x2 ← explicit_linear.square
+        let x4 ← x2.square
+        let x8 ← x4.square
+        let x16 ← x8.square
+        let q ← x16.mul x8
+        q.mul x2
+    let q1 ← ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ONE.add q
+    let q2 ← q1.mul g
+    shared1.add q2
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskRootEq.lean:23:4: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_OwnedMask.owned.mask,
+      PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value,
+      PV_CB_OwnedMaskLinearsEq.source, ̲PV_CB_FillLoopsEq.c1, ̲PV_CB_FillLoopsEq.mask,
+      PV_CB_OwnedMaskHornerEq.source,
+  ̵  ̵ ̵ ̵PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,
+      core.iter.traits.iterator.Iterator.rev.default,
+      core.iter.traits.iterator.Iterator.rev.trait_default,
+  ̵  ̵ ̵ ̵l̵i̵f̵t̵,̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲PV_CB_MaskSource.state_only_hiding.mask_power_26,
+  ̵  ̵ ̵ ̵ProverRwSuccessReverseRange.before,
+  ̲ ̲ ̲ ̲ ̲PV_CB_ForwardRange.between]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB_MaskRootEq.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

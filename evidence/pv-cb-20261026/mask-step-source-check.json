@@ -1,0 +1,35 @@
+{
+  "shipped_source": "crates/aspis-core/src/state_only_hiding.rs",
+  "shipped_source_sha256": "cc1039531cfe07518542d386668e9572e3eacf5127e8ec441c32bec20d116cd2",
+  "wrapper_sha256": "89970063abcf5cf03fa1566c645fdd074fc0a1ad8b7986d63b298e87ca788c64",
+  "snippets": [
+    {
+      "text": "coefficients[usize::from(FACTOR_EXPONENTS[column])] =\n            mul_tower_basis(c1[column], column & 3);",
+      "sha256": "52853c2b769f58f15a00a23deae172e16b5bc3d376665aa0d7461f2c7d2c48dd"
+    },
+    {
+      "text": "coefficients[usize::from(MASK_ONLY_FACTOR_EXPONENTS[column])] =\n            mul_tower_basis(mask_only_c1[column], column & 3);",
+      "sha256": "2e735d3654d1d7a98568d87a6e994c09abea9c0e1704f01669d69a1119ce6216"
+    },
+    {
+      "text": "suffix = suffix.add(point[variable]);\n        if variable != 0 {\n            weighted = weighted.add(suffix);\n        }",
+      "sha256": "f9701c0a00680397dee56e5956c4f63d2e752fe68a88e7c2b15d635a67b95054"
+    },
+    {
+      "text": "shared = prepared_linear.mul(shared).add(coefficients[exponent]);",
+      "sha256": "d84b7414c161e8586300a542ab642ae048351182cd09d2410b4969d2d3d650fd"
+    }
+  ],
+  "status": "PREPARED exact source-body wrappers, not a P6 result",
+  "bounds": {
+    "c1": "column<16; coeff length27; exponent table slots0..26",
+    "mask": "column<10; coeff length27; exponent table slots1..21",
+    "linear": "variable<10",
+    "horner": "exponent<26; coeff length27"
+  },
+  "no_stubs": true,
+  "captured_prefix_sha256": "6a9a2aee58b029b89700dce7943fdaa7a9929ba80b0020685d1f4734d8451382",
+  "captured_module_sha256": "122beb50befb34e06bdb3fa8e48c8ca695414e976f8304717d4049de49a9eb4f",
+  "capture_change": "only inner //! documentation comments changed to ordinary // comments; all shipped function/constant bodies are byte-identical; proof step exports appended",
+  "binding_gate": "checks::captured_source with all37 raw QM31 values and unwind40; not yet run"
+}

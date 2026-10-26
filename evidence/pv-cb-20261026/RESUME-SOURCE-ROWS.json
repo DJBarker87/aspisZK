@@ -1,0 +1,586 @@
+[
+  {
+    "op": 3,
+    "row": "V169",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_TakeSource.op3_source",
+    "receipt": "24043.json",
+    "note": "Direct std::mem::take extraction with --include core::mem::take; no P6 bound used. Reset options removed; changed source recompiled at24043."
+  },
+  {
+    "op": 25,
+    "row": "V177",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-path25-001/collected-receipt.json",
+    "note": "Direct shipped deref extraction rejects &raw const (*_5), std/src/path.rs:2414. Existing P6 borrow16 gate lacks a universal or proved-sufficient reach bound."
+  },
+  {
+    "op": 26,
+    "row": "V178",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op26-after-mask/collected-receipt.json;aeneas-source-op26-canonical-helper/collected-receipt.json",
+    "note": "Actual generic Path.join emits only AsRef then opaque private Path._join; Funs imports an external axiom template for _join. Template is not accepted or installed. Generic source-body/P6 relation still missing. Canonical include spelling did not expose the helper (wrapper now keeps join itself opaque); this is not accepted source semantics."
+  },
+  {
+    "op": 28,
+    "row": "V179",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "kani-string-003/collected-receipt.json",
+    "note": "String AsRef<Path> reaches Path::new pointer reinterpretation; direct path primitive extraction failure retained. Existing ASCII/scalar gates do not cover arbitrary UTF8 String."
+  },
+  {
+    "op": 29,
+    "row": "V180",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-path25-001/collected-receipt.json",
+    "note": "PathBuf AsRef<Path> delegates to deref; same Path::new pointer primitive extraction obstruction, bounded P6 gate insufficient."
+  },
+  {
+    "op": 30,
+    "row": "V181",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op30-001/collected-receipt.json",
+    "note": "Focused direct String::with_capacity extraction attempted; see retained emitter failure. Bounded capacity16 native gate alone supplies no general source equation."
+  },
+  {
+    "op": 31,
+    "row": "V182",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op31-module-helper/collected-receipt.json",
+    "note": "Broad alloc::string include reaches shipped push_str, then Aeneas rejects transmute<&str,&[u8]> at core/src/str/mod.rs500 (InterpExpressions.ml1003). Narrow wrapper-only/canonical include attempts are retained, not accepted. General UTF8 source/P6 law missing."
+  },
+  {
+    "op": 32,
+    "row": "V183",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op32-module-helper/collected-receipt.json",
+    "note": "Broad alloc::vec include reaches shipped reserve_exact, but Aeneas fails on the extracted allocator/Vec source. Exact retained error in receipt; wrapper-only attempt not accepted. Full generic source/P6 law not supplied."
+  },
+  {
+    "op": 33,
+    "row": "V184",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op33-001/collected-receipt.json",
+    "note": "Aeneas rejects Charon allocator-parametric Vec type at alloc/src/vec/mod.rs:438 (TypesAnalysis.ml:484). Existing selected list interpretation and bounded gates alone do not prove the extracted shipped body. Next: narrow opacity for Vec type, or per-step P6 with a proved-sufficient bound."
+  },
+  {
+    "op": 34,
+    "row": "V185",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op34-001/collected-receipt.json",
+    "note": "Aeneas rejects Charon allocator-parametric Vec type at alloc/src/vec/mod.rs:438 (TypesAnalysis.ml:484). Existing selected list interpretation and bounded gates alone do not prove the extracted shipped body. Next: narrow opacity for Vec type, or per-step P6 with a proved-sufficient bound."
+  },
+  {
+    "op": 35,
+    "row": "V186",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op35-001/collected-receipt.json",
+    "note": "Aeneas rejects Charon allocator-parametric Vec type at alloc/src/vec/mod.rs:438 (TypesAnalysis.ml:484). Existing selected list interpretation and bounded gates alone do not prove the extracted shipped body. Next: narrow opacity for Vec type, or per-step P6 with a proved-sufficient bound."
+  },
+  {
+    "op": 36,
+    "row": "V187",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op36-001/collected-receipt.json",
+    "note": "Aeneas rejects Charon allocator-parametric Vec type at alloc/src/vec/mod.rs:438 (TypesAnalysis.ml:484). Existing selected list interpretation and bounded gates alone do not prove the extracted shipped body. Next: narrow opacity for Vec type, or per-step P6 with a proved-sufficient bound."
+  },
+  {
+    "op": 51,
+    "row": "V195",
+    "status": "SKIPPED(sibling source installation)",
+    "theorem": "ProverRwP6FlatInstall.source",
+    "receipt": "op51-sibling-check-resume-retained.json",
+    "note": "Sibling source reuse; full ledger/endpoint closure not claimed."
+  },
+  {
+    "op": 71,
+    "row": "V197",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op71Exact.op71_source",
+    "receipt": "24052.json",
+    "note": "Fresh shipped field parser and core::option extraction; no external-function template. Native/raw QM31 carrier maps proved bijective in24051. Result failure, None and Some are preserved. Types24048;Funs24050 (failed missing logical tag instance24049 retained)."
+  },
+  {
+    "op": 72,
+    "row": "V198",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op72Exact.op72_source",
+    "receipt": "24056.json",
+    "note": "Fresh shipped write_le_bytes extraction, no external template; Types/Funs24053/24054, bijective field carrier24055. Sequential slice bounds and mutation-back semantics retained."
+  },
+  {
+    "op": 77,
+    "row": "V199",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op77Source.op77_source",
+    "receipt": "24004.json",
+    "note": "Exact extracted function equation; all Result cases and arbitrary callback instances retained. D188 extraction trust only."
+  },
+  {
+    "op": 79,
+    "row": "V201",
+    "status": "OBSTRUCTED",
+    "theorem": "PV_CB_EncoderInstall.source",
+    "receipt": "aeneas-source-op79-after-mask/collected-receipt.json",
+    "note": "Focused direct shipped generic encoder extraction reaches Aeneas and fails; exact error retained. Prior owned extraction/totality and bounded native gate do not supply the generic shipped=reference law."
+  },
+  {
+    "op": 80,
+    "row": "V202",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op80Exact.op80_source",
+    "receipt": "24060.json",
+    "note": "Fresh candidate generic phi_inverse extraction. CodeField callback conversion is bijective (24059), retains every callback/Result; no extra totality or algebra hypotheses. Types/Funs24057/24058."
+  },
+  {
+    "op": 81,
+    "row": "V203",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op81-fresh-provenance/collected-receipt.json",
+    "note": "Fresh shipped filled plus Vec extraction fails at allocator-parametric Vec, alloc/src/vec/mod.rs438, TypesAnalysis.ml484. Existing source-port selection is not fresh source discharge. Generic allocator/value P6 reference law remains missing."
+  },
+  {
+    "op": 82,
+    "row": "V204",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op82Source.op82_source",
+    "receipt": "24007.json",
+    "note": "Exact extracted source equation. Existing pure callbacks retained explicitly; no V165/V167 boundary charged to this row."
+  },
+  {
+    "op": 83,
+    "row": "V205",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op83Source.op83_source",
+    "receipt": "24008.json",
+    "note": "Exact extracted source equation. Existing pure callbacks retained explicitly; no V165/V167 boundary charged to this row."
+  },
+  {
+    "op": 84,
+    "row": "V206",
+    "status": "PARTIAL(extracted callee equation)",
+    "theorem": "R1Z.PV_CB_Op84Source.op84_source",
+    "receipt": "24009.json",
+    "note": "Lean equation to emitted leaf_with_digest with extracted LegacyHashFn implementation passes. Aeneas emission omitted leaf wrapper despite its presence in LLBC; require exact wrapper extraction equation before claiming row discharge."
+  },
+  {
+    "op": 86,
+    "row": "V208",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op86Source.op86_source",
+    "receipt": "24010.json",
+    "note": "Exact extracted source equation. Existing pure callbacks retained explicitly; no V165/V167 boundary charged to this row."
+  },
+  {
+    "op": 100,
+    "row": "V209",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op100Exact.op100_source",
+    "receipt": "24064.json",
+    "note": "Fresh shipped scalar trait neg plus complete CT field helper extraction; no external template. Arbitrary raw fields retained by bijective QM31/WideExact carrier maps (24063); Types/Funs24061/24062."
+  },
+  {
+    "op": 101,
+    "row": "V210",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op101Exact.op101_source",
+    "receipt": "24068.json",
+    "note": "Fresh shipped scalar trait QM31 neg and complete CT neg helper extraction; no external template. Bijective all-raw carrier maps (24067); Types/Funs24065/24066."
+  },
+  {
+    "op": 105,
+    "row": "V211",
+    "status": "PARTIAL(extraction complete, Lean pending)",
+    "theorem": null,
+    "receipt": "24069.json;24070.json;24071-transport-failure.json",
+    "note": "Fresh shipped M31 scalar inverse and pow loop extracted without external template. Types compile24069. Funs24070 fails on emitted wrapping_shr exp1#i32; local shift-count1#u32 fix prepared, not checked after shared host paths vanished. Next target Funs then Op105Exact; no source-row discharge yet."
+  },
+  {
+    "op": 107,
+    "row": "V212",
+    "status": "PARTIAL(candidate extraction provenance pending)",
+    "theorem": "R1Z.PV_CB_Op107Source.op107_source",
+    "receipt": "24014.json",
+    "note": "Compiled equation to an older extracted/ported definition only; fresh candidate source comparison or P6 shipped/reference gate still required. Supersedes earlier ROW-DISCHARGED label. No V165/V167 native-composition boundary is inferred. Current shipped scalar.rs75-84 source inspected and cfg(kani) wrapper prepared. Fresh extraction is awaiting restoration of the vanished shared host workspace; older port is not accepted as current provenance."
+  },
+  {
+    "op": 109,
+    "row": "V213",
+    "status": "PARTIAL(candidate extraction provenance pending)",
+    "theorem": "R1Z.PV_CB_Op109Source.op109_source",
+    "receipt": "24015.json",
+    "note": "Compiled equation to an older extracted/ported definition only; fresh candidate source comparison or P6 shipped/reference gate still required. Supersedes earlier ROW-DISCHARGED label. No V165/V167 native-composition boundary is inferred."
+  },
+  {
+    "op": 110,
+    "row": "V214",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op110Source.op110_source",
+    "receipt": "24017.json",
+    "note": "Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row. New source selection replaces old hand-written embedding; old-selection equality is not used. Generated shift literal31 is rendered U32 because pinned backend wrapping_shr requires U32; original literal is I32, same nonnegative shift count."
+  },
+  {
+    "op": 111,
+    "row": "V215",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op111Source.op111_source",
+    "receipt": "24019.json",
+    "note": "Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row."
+  },
+  {
+    "op": 114,
+    "row": "V216",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op114Source.op114_source",
+    "receipt": "24020.json",
+    "note": "Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row. New source selection preserves shipped field comparison order; old hand-written contextEq is not used."
+  },
+  {
+    "op": 117,
+    "row": "V217",
+    "status": "PARTIAL(candidate)",
+    "theorem": "R1Z.PV_CB_MaskRootEq.reference; R1Z.PV_CB_MaskPreparedInstall.prepared_reference",
+    "receipt": "24041.json;24042.json;MASK-STEPS-RESUME.md",
+    "note": "Prepared root equality by Lean induction; c1/mask/linear per-step no-stub native checks pass. Whole mirror and Horner timeout retained. Fresh shipped-control/reference binding and final extracted source equation not supplied. Fresh root Charon succeeds; Aeneas Not_found at InterpReduceCollapse.ml1991 loop join (fresh-root-003). Horner locality and body/reachable-index proofs green24044/24046/24047."
+  },
+  {
+    "op": 118,
+    "row": "V218",
+    "status": "PARTIAL(candidate extraction provenance pending)",
+    "theorem": "R1Z.PV_CB_Op118Source.op118_source",
+    "receipt": "24021.json",
+    "note": "Compiled equation to an older extracted/ported definition only; fresh candidate source comparison or P6 shipped/reference gate still required. Supersedes earlier ROW-DISCHARGED label. No V165/V167 native-composition boundary is inferred."
+  },
+  {
+    "op": 120,
+    "row": "V219",
+    "status": "SKIPPED(sibling source installation)",
+    "theorem": null,
+    "receipt": "op120-sibling-check-resume-retained.json",
+    "note": "Sibling source reuse; full ledger/endpoint closure not claimed."
+  },
+  {
+    "op": 121,
+    "row": "V220",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op121-001/collected-receipt.json",
+    "note": "Direct candidate extraction rejects field.rs539-542 at InterpBorrows.ml2731. A recursive Horner reference plus a checked no-stub P6 bound and source equation is still required."
+  },
+  {
+    "op": 122,
+    "row": "V221",
+    "status": "DEFERRED(pv-runjoin3)",
+    "theorem": null,
+    "receipt": "op122-sibling-check-resume-retained.json",
+    "note": "zeroize1.8.1 lib.rs369\u2013388 array iterator invokes each arbitrary Zeroize implementation and a fence. Element erasure effects and native call association require effect-aware route; no full effect law supplied."
+  },
+  {
+    "op": 123,
+    "row": "V222",
+    "status": "DEFERRED(pv-runjoin3)",
+    "theorem": null,
+    "receipt": "op123-sibling-check-resume-retained.json",
+    "note": "zeroize1.8.1 lib.rs301\u2013304 performs volatile_write(Default) and atomic_fence. Native memory erasure/fence effects require effect-aware route; no unconditional native equation installed."
+  },
+  {
+    "op": 127,
+    "row": "V223",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op127Source.op127_source",
+    "receipt": "24022.json",
+    "note": "Extracted Zeroizing VALUE equation only, including arbitrary callback fail/div outcomes. Erasure, volatile writes, fences and Drop remain DEFERRED to pv-runjoin; this value law does not discharge those effects."
+  },
+  {
+    "op": 128,
+    "row": "V224",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op128Source.op128_source",
+    "receipt": "24023.json",
+    "note": "Extracted Zeroizing VALUE equation only, including arbitrary callback fail/div outcomes. Erasure, volatile writes, fences and Drop remain DEFERRED to pv-runjoin; this value law does not discharge those effects."
+  },
+  {
+    "op": 130,
+    "row": "V226",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op130Source.op130_source",
+    "receipt": "24025.json",
+    "note": "Extracted Zeroizing VALUE equation only, including arbitrary callback fail/div outcomes. Erasure, volatile writes, fences and Drop remain DEFERRED to pv-runjoin; this value law does not discharge those effects."
+  },
+  {
+    "op": 131,
+    "row": "V227",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op131Source.op131_source",
+    "receipt": "24027.json",
+    "note": "Extracted Zeroizing VALUE equation only, including arbitrary callback fail/div outcomes. Erasure, volatile writes, fences and Drop remain DEFERRED to pv-runjoin; this value law does not discharge those effects."
+  },
+  {
+    "op": 132,
+    "row": "V228",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op132-005/collected-receipt.json",
+    "note": "Direct root extraction succeeds after restoring omitted cfg(kani) reference inputs and restricting kani cfg to root crate; Aeneas fails at pair_forest_hiding.rs107-110, TypesAnalysis.ml229. No source equation or P6 supplied."
+  },
+  {
+    "op": 133,
+    "row": "V229",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op133-002/collected-receipt.json",
+    "note": "Candidate Charon root extraction passes; Aeneas rejects current statement closure/type control shape. P6 universal source equation remains required; no effects deferral inferred."
+  },
+  {
+    "op": 134,
+    "row": "V230",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op134-002/collected-receipt.json",
+    "note": "Candidate Charon root extraction passes; Aeneas rejects current statement closure/type control shape. P6 universal source equation remains required; no effects deferral inferred."
+  },
+  {
+    "op": 205,
+    "row": "V231",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op205-002/collected-receipt.json",
+    "note": "Shared SHA finalization closure extraction fails: nested mutable ADT (sha2/core_api.rs63) with narrow inclusion, mixed generic-array iterator/trait recursion with expanded inclusion. Generic dictionary law is not supplied by a concrete Sha256 finalization probe. No P6 source law installed."
+  },
+  {
+    "op": 208,
+    "row": "V232",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op208-003/collected-receipt.json",
+    "note": "Corrected direct shipped UpdateCore wrapper reaches sha256.rs37, whose GenericArray-to-[u8;64] raw pointer cast is unsupported. No P6 owned safe compressor/reference correspondence has been supplied."
+  },
+  {
+    "op": 209,
+    "row": "V233",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op209-001/collected-receipt.json",
+    "note": "SHA update path reaches nested mutable ADT at digest/core_api/wrapper.rs150; generic buffer/update source equation remains open, without a P6 no-stub reference gate."
+  },
+  {
+    "op": 212,
+    "row": "V234",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op205-002/collected-receipt.json",
+    "note": "Shared SHA finalization closure extraction fails: nested mutable ADT (sha2/core_api.rs63) with narrow inclusion, mixed generic-array iterator/trait recursion with expanded inclusion. Generic dictionary law is not supplied by a concrete Sha256 finalization probe. No P6 source law installed."
+  },
+  {
+    "op": 215,
+    "row": "V235",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op205-002/collected-receipt.json",
+    "note": "Shared SHA finalization closure extraction fails: nested mutable ADT (sha2/core_api.rs63) with narrow inclusion, mixed generic-array iterator/trait recursion with expanded inclusion. Generic dictionary law is not supplied by a concrete Sha256 finalization probe. No P6 source law installed."
+  },
+  {
+    "op": 216,
+    "row": "V236",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op209-001/collected-receipt.json",
+    "note": "SHA update path reaches nested mutable ADT at digest/core_api/wrapper.rs150; generic buffer/update source equation remains open, without a P6 no-stub reference gate."
+  },
+  {
+    "op": 217,
+    "row": "V237",
+    "status": "OBSTRUCTED",
+    "theorem": "R1Z.PV_CB_ArrayCarrierObstruction.no_wrapper_total",
+    "receipt": "24028.json; aeneas-source-op217-001/collected-receipt.json",
+    "note": "Direct GENERIC CoreWrapper default extraction passes. Its BlockBuffer child needs a generic_array.GenericArray.default callback absent from ExternalFuns and not constructible for arbitrary associated carriers; no new callback or representation assumption is introduced. PV_CB_ArrayCarrierObstruction.no_wrapper_total proves only a Lean-model obstruction for Empty carriers; NOT a checked counterexample against shipped Rust."
+  },
+  {
+    "op": 219,
+    "row": "V238",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op205-002/collected-receipt.json",
+    "note": "Shared full SHA finalization extraction fails on nested mutable ADTs / generic-array mixed recursion. A concrete SHA fixture does not supply the generic FixedOutputCore law. No P6 equation supplied."
+  },
+  {
+    "op": 222,
+    "row": "V239",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op222-003/collected-receipt.json",
+    "note": "Candidate extraction reaches multilinear evaluator; Aeneas raises Not_found in loop join/collapse (InterpReduceCollapse.ml1991). No reference/source equation supplied."
+  },
+  {
+    "op": 223,
+    "row": "V240",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op223-003/collected-receipt.json",
+    "note": "Candidate tagged tuple loop extraction raises the same loop join/collapse Not_found. Slice length is generic; existing bounded fixtures are not a proved-sufficient universal P6 gate."
+  },
+  {
+    "op": 224,
+    "row": "V241",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op224-001/collected-receipt.json",
+    "note": "Candidate forest copy helper extraction raises loop join/collapse Not_found; owned reference/native no-stub gate not supplied."
+  },
+  {
+    "op": 225,
+    "row": "V242",
+    "status": "SKIPPED(sibling candidate source selection)",
+    "theorem": null,
+    "receipt": "op225-sibling-check-resume-source.json",
+    "note": "Candidate already contains ProverRwP6TransitionInstall.selected op225 / ProverRwP6TransitionSource. Preserve sibling-owned source selection; do not turn reuse into a newly discharged row."
+  },
+  {
+    "op": 226,
+    "row": "V243",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op226-003/collected-receipt.json",
+    "note": "Correct explicit wrapper reaches shipped public_bytes. Aeneas Unexpected at pair_forest_semantic_terminal.rs2054-2056 (InterpMatchCtxs.ml477). Earlier zero-exit empty emission is retained and explicitly not a source-law pass."
+  },
+  {
+    "op": 227,
+    "row": "V244",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op227-001/collected-receipt.json",
+    "note": "Aeneas cannot copy a non-Option builtin at pair_forest_semantic_terminal.rs1271:54-64 (InterpExpressions.ml193). No P6 source equation supplied."
+  },
+  {
+    "op": 228,
+    "row": "V245",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op228-001/collected-receipt.json",
+    "note": "Candidate registry extraction fails; exact emitter error retained. No checked owned reference/no-stub gate or source equation supplied."
+  },
+  {
+    "op": 229,
+    "row": "V246",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_Op229Source.op229_source",
+    "receipt": "24034.json",
+    "note": "Direct candidate equality extraction includes M31 and verified-afterstate Eq bodies; no external function template imported. Exact pointwise dictionary law uses a proved bijective nominal record conversion (PV_CB_Op229Codec). All Result cases preserved."
+  },
+  {
+    "op": 230,
+    "row": "V247",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op230-001/collected-receipt.json",
+    "note": "Direct candidate copy-helper-sum extraction fails in Aeneas; no owned-reference/native gate and source equation supplied. See exact retained emitter error; no effect/native-composition deferral inferred."
+  },
+  {
+    "op": 232,
+    "row": "V249",
+    "status": "DEFERRED(pv-runjoin3)",
+    "theorem": null,
+    "receipt": "op232-sibling-check-resume-retained.json",
+    "note": "z4/z9e.rs p_r1_check returns R1CheckTimes populated from std::time::Instant elapsed; native time is part of the selected output."
+  },
+  {
+    "op": 246,
+    "row": "V254",
+    "status": "SKIPPED(sibling source installation)",
+    "theorem": null,
+    "receipt": "op246-sibling-check-resume-retained.json",
+    "note": "ProverRwSuccessHashes.parent_source; retained exact node tag18 and ordered digest frames"
+  },
+  {
+    "op": 249,
+    "row": "V256",
+    "status": "SKIPPED(sibling source installation)",
+    "theorem": null,
+    "receipt": "op249-sibling-check-resume-retained.json",
+    "note": "ProverRwDictionarySamplers.gamma_installed/gamma_rank; source-policy only, native checked/wrapping traversal remains"
+  },
+  {
+    "op": 250,
+    "row": "V257",
+    "status": "SKIPPED(sibling source installation)",
+    "theorem": null,
+    "receipt": "op250-sibling-check-resume-retained.json",
+    "note": "ProverRwDictionarySamplers.ordinary_installed/ordinary_rank; source-policy only"
+  },
+  {
+    "op": 251,
+    "row": "V258",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op251-003/collected-receipt.json",
+    "note": "Explicit candidate root reaches Charon; Aeneas fails on the retained native body. No owned-safe-reference P6 gate plus source equation is supplied. Exact error is in the receipt log; this is not classified as an effect deferral."
+  },
+  {
+    "op": 252,
+    "row": "V259",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op252-001/collected-receipt.json",
+    "note": "Explicit candidate root reaches Charon; Aeneas fails on the retained native body. No owned-safe-reference P6 gate plus source equation is supplied. Exact error is in the receipt log; this is not classified as an effect deferral."
+  },
+  {
+    "op": 253,
+    "row": "V260",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op253-001/collected-receipt.json",
+    "note": "Explicit candidate root reaches Charon; Aeneas fails on the retained native body. No owned-safe-reference P6 gate plus source equation is supplied. Exact error is in the receipt log; this is not classified as an effect deferral."
+  },
+  {
+    "op": 254,
+    "row": "V261",
+    "status": "SKIPPED(sibling source installation)",
+    "theorem": null,
+    "receipt": "op254-sibling-check-resume-retained.json",
+    "note": "Existing sibling powers installation"
+  },
+  {
+    "op": 257,
+    "row": "V263",
+    "status": "DEFERRED(pv-runjoin3)",
+    "theorem": null,
+    "receipt": "op257-sibling-check-resume-retained.json",
+    "note": "host_work.rs map invokes native_workers ordered_families and a real worker pool; scheduling/thread panic and optional trace mutex effects require the effect-aware route even though ordered values admit a separate law."
+  },
+  {
+    "op": 258,
+    "row": "V264",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-op258-002/collected-receipt.json",
+    "note": "Explicit candidate root reaches Charon; Aeneas fails on the retained native body. No owned-safe-reference P6 gate plus source equation is supplied. Exact error is in the receipt log; this is not classified as an effect deferral."
+  },
+  {
+    "op": 259,
+    "row": "V265",
+    "status": "OPEN",
+    "theorem": null,
+    "receipt": "op259-sibling-check-resume-retained.json",
+    "note": "No checked owned-reference/source correspondence supplied within remaining stage; not classified as a native-effect deferral."
+  },
+  {
+    "op": 261,
+    "row": "V267",
+    "status": "DEFERRED(pv-runjoin3)",
+    "theorem": null,
+    "receipt": "op261-sibling-check-resume-retained.json",
+    "note": "std::fs::File::write_all performs native filesystem writes and can return partial-write/error outcomes; emitted File carrier supplies no filesystem world."
+  }
+]

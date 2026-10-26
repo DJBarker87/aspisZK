@@ -1,0 +1,35 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb-20261026/source-kani-target",
+    "RUSTFLAGS=--cfg kani",
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb-20261026/step-proof/Cargo.toml",
+    "--lib",
+    "--harness",
+    "checks::c1_step",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "terse",
+    "-j",
+    "4"
+  ],
+  "source_revision": "1db675d8345e1aedb06267d8e4019caef0d10503",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A Kani; separate Lean source/axioms receipts",
+  "harness": "c1_step",
+  "no_stubs": true,
+  "expected_time": "cached optimized compilation, then CBMC proof generation for this one named harness",
+  "profile": "step-proof profile.dev opt-level3, overflow-checks=false, debug-assertions=false; source uses explicit wrapping CT arithmetic"
+}

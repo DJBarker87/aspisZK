@@ -1,0 +1,162 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:20:66: error: unsolved goals
+data : Std.Array Q 16#usize
+iter : Range
+coeff : Coeff
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    do
+    let (column, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match column with
+      | none => ok (done coeff)
+      | some column => do
+        let x ← data.index_usize column
+        let x_1 ← lift (column &&& 3#usize)
+        let x ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis x x_1
+        let x_2 ← PV_CB_MaskIndices.S.factors.index_usize column
+        let x_3 ← lift (core.convert.num.FromUsizeU8.from x_2)
+        let out ← Array.update coeff x_3 x
+        ok (cont (iter1, out))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:25:70: error: unsolved goals
+data : Std.Array Q 10#usize
+iter : Range
+coeff : Coeff
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.MASK_ONLY_FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    do
+    let (column, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match column with
+      | none => ok (done coeff)
+      | some column => do
+        let x ← data.index_usize column
+        let x_1 ← lift (column &&& 3#usize)
+        let x ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis x x_1
+        let x_2 ← PV_CB_MaskIndices.S.maskFactors.index_usize column
+        let x_3 ← lift (core.convert.num.FromUsizeU8.from x_2)
+        let out ← Array.update coeff x_3 x
+        ok (cont (iter1, out))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:36:4: error: unsolved goals
+data : Std.Array Q 16#usize
+coeff : Coeff
+i stop : Usize
+more : ↑i < ↑stop
+⊢ (do
+      let out ← cell data PV_CB_MaskIndices.S.factors i coeff
+      ok (cont ({ start := advance i, «end» := stop }, out))) =
+    if i < stop then do
+      let out ← cell data PV_CB_MaskIndices.S.factors i coeff
+      ok (cont ({ start := advance i, «end» := stop }, out))
+    else ok (done coeff)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:39:4: error: unsolved goals
+data : Std.Array Q 16#usize
+coeff : Coeff
+i stop : Usize
+more : ¬↑i < ↑stop
+⊢ ok (done coeff) =
+    if i < stop then do
+      let out ← cell data PV_CB_MaskIndices.S.factors i coeff
+      ok (cont ({ start := advance i, «end» := stop }, out))
+    else ok (done coeff)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:36:84: warning: This simp argument is unused:
+  more
+
+Hint: Omit it from the simp argument list.
+  simp only [reply, ̲bind_tc_ok, ̲Aeneas.Std.uncurry, ̲PV_CB_ForwardLoop.body, ̲between,m̵o̵r̵e̵,̵ ̲if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:36:89: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [reply, ̲bind_tc_ok, ̲Aeneas.Std.uncurry, ̲PV_CB_ForwardLoop.body, ̲between, ̲more,̵i̵f̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:39:84: warning: This simp argument is unused:
+  more
+
+Hint: Omit it from the simp argument list.
+  simp only [reply, ̲bind_tc_ok, ̲Aeneas.Std.uncurry, ̲PV_CB_ForwardLoop.body, ̲between,m̵o̵r̵e̵,̵ ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:39:89: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [reply, ̲bind_tc_ok, ̲Aeneas.Std.uncurry, ̲PV_CB_ForwardLoop.body, ̲between, ̲more,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:48:4: error: unsolved goals
+data : Std.Array Q 10#usize
+coeff : Coeff
+i stop : Usize
+more : ↑i < ↑stop
+⊢ (do
+      let out ← cell data PV_CB_MaskIndices.S.maskFactors i coeff
+      ok (cont ({ start := advance i, «end» := stop }, out))) =
+    if i < stop then do
+      let out ← cell data PV_CB_MaskIndices.S.maskFactors i coeff
+      ok (cont ({ start := advance i, «end» := stop }, out))
+    else ok (done coeff)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:51:4: error: unsolved goals
+data : Std.Array Q 10#usize
+coeff : Coeff
+i stop : Usize
+more : ¬↑i < ↑stop
+⊢ ok (done coeff) =
+    if i < stop then do
+      let out ← cell data PV_CB_MaskIndices.S.maskFactors i coeff
+      ok (cont ({ start := advance i, «end» := stop }, out))
+    else ok (done coeff)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:48:84: warning: This simp argument is unused:
+  more
+
+Hint: Omit it from the simp argument list.
+  simp only [reply, ̲bind_tc_ok, ̲Aeneas.Std.uncurry, ̲PV_CB_ForwardLoop.body, ̲between,m̵o̵r̵e̵,̵ ̲if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:48:89: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [reply, ̲bind_tc_ok, ̲Aeneas.Std.uncurry, ̲PV_CB_ForwardLoop.body, ̲between, ̲more,̵i̵f̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:51:84: warning: This simp argument is unused:
+  more
+
+Hint: Omit it from the simp argument list.
+  simp only [reply, ̲bind_tc_ok, ̲Aeneas.Std.uncurry, ̲PV_CB_ForwardLoop.body, ̲between,m̵o̵r̵e̵,̵ ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:51:89: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [reply, ̲bind_tc_ok, ̲Aeneas.Std.uncurry, ̲PV_CB_ForwardLoop.body, ̲between, ̲more,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB_MaskFillBody.c1_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_MaskFillBody.mask_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_MaskFillBody.c1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_MaskFillBody.mask' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
