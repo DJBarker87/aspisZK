@@ -24,3 +24,22 @@ All five theorems print only propext/Classical.choice/Quot.sound. Failed
 SCI_002 (missing Option simplifiers) and SCI_004 (List.noConfusion invocation)
 are retained as excluded development failures with exact sources; SCI_003
 passed the intermediate source. No timeout, memory kill or cap change.
+
+## First-read obstruction, checked after the initial B commit
+
+OrderWitness.reordered_event uses the ACTUAL BinRawByteCollisionTargets.pred
+and event (all five parsers). One oracle answers 1 at the empty address and
+2 at a 32-byte all-1 address, with initial state 0. The source order
+[32-byte address, empty] has the event; [empty,32-byte address] does not.
+OrderWitness.deleting_uncached strengthens this to literal sublist deletion:
+[32-byte address,empty] is a sublist of [empty,32-byte address,empty], yet
+only the smaller log has the event. Both use <=2 distinct reads and are
+consistent with the SAME H. No arbitrary map/predicate replaces the charged
+event. This rules out the tempting same-world/sublist shortcut for deleting
+adaptive second-choice reads. It is not a deployed accepted-source/account
+counterexample or a proof that the intended ordered association is impossible.
+
+SCI_007/008 are excluded elaboration failures with snapshots; SCI_009/010 pass.
+SCI_010: exit0, wall3.2476406680070795s, peakRSS5519136KiB, swap0, standard
+axioms for all11 current Projection theorems. SCI_008 reservation hit a vanished
+foreign cgroup, waited30s and retried once, then admitted. Launcher unchanged.
