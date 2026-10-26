@@ -28,3 +28,18 @@ respectively a nonexistent simp lemma and explicit native-carrier instance scope
 All successful theorem audits use only propext, Classical.choice, Quot.sound.
 The receipt collector fingerprints direct import objects after the focused run;
 this is not a coherent dependency-closure replay. Ledger before/after:0 removed.
+
+## Second checkpoint (source preparation during admission hold)
+
+| op | row | disposition at checkpoint | theorem / receipt |
+|---:|---|---|---|
+|30|V181|OPEN: owned-reference gate pending; allocation alone is not treated as sufficient reason to defer value work|String::with_capacity; current carrier omits capacity; retain capacity-overflow/native allocation outcomes|
+|31|V182|OPEN: owned-reference gate pending|String::push_str; UTF-8 concatenation plus capacity/overflow behavior must be preserved|
+|32|V183|OPEN: native allocation-result gate pending|Vec::try_reserve_exact; do not replace allocation error with unconditional success|
+|33|V184|statement prepared, NOT CHECKED; native gate pending|PV_CB_Pop.op33_installed; safe borrowed-slice reference prepared|
+
+Before each of these ops the sibling heads/tables were recorded in
+opN-sibling-check.json. No sibling installation found. No row removed.
+First native gate remains unstarted: initial admission and two retries denied
+on aggregate reservation. Three-minute intervals respected; caps not bypassed.
+The owned reference is cfg(kani)-only and no shipped crate was changed.
