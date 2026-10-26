@@ -1,0 +1,278 @@
+def R0P.PublicBase : {K : Type} → [inst : Field K] → Subfield K → R0P.Public K → Prop :=
+fun {K} [Field K] F pub =>
+  (∀ (i : Fin 8), pub.anchor i ∈ F) ∧
+    (∀ (i : Fin 8), pub.nullifier i ∈ F) ∧
+      pub.assetId ∈ F ∧
+        (∀ (r : R0P.Digest K), pub.recipient = Option.some r → ∀ (i : Fin 8), r i ∈ F) ∧
+          (∀ (i : Fin 8), pub.change i ∈ F) ∧
+            (∀ (a : K), pub.withdrawalAmount = Option.some a → a ∈ F) ∧
+              (∀ (l : Fin 20) (i : Fin 8), pub.snapshotFrontier l i ∈ F) ∧
+                (∀ (i : Fin 8), pub.nextRoot i ∈ F) ∧ ∀ (l : Fin 20) (i : Fin 8), pub.nextFrontier l i ∈ F
+def R0P.BaseTyped : {K : Type} → [inst : Field K] → Subfield K → R0P.Trace K → Prop :=
+fun {K} [Field K] F A => ∀ (c : Fin 29), ↑c < 26 → ∀ (b : Fin 1024), A c b ∈ F
+structure R0Z.BuilderModel.ModelRel {K : Type} [Field K] (F : Subfield K) (pub : R0P.Public K)
+  (w : R0Z.BuilderModel.ModelWitness K) : Prop
+number of parameters: 5
+fields:
+  R0Z.BuilderModel.ModelRel.pubBase : R0P.PublicBase F pub
+  R0Z.BuilderModel.ModelRel.witBase : R0Z.BuilderModel.WitnessBase F w
+  R0Z.BuilderModel.ModelRel.aux : R0Z.BuilderModel.AuxPremises pub w
+  R0Z.BuilderModel.ModelRel.digest : R0Z.BuilderModel.DigestPremises pub w
+  R0Z.BuilderModel.ModelRel.pairRight : R0Z.BuilderModel.PairRight pub w
+constructor:
+  R0Z.BuilderModel.ModelRel.mk {K : Type} [Field K] {F : Subfield K} {pub : R0P.Public K}
+    {w : R0Z.BuilderModel.ModelWitness K} (pubBase : R0P.PublicBase F pub) (witBase : R0Z.BuilderModel.WitnessBase F w)
+    (aux : R0Z.BuilderModel.AuxPremises pub w) (digest : R0Z.BuilderModel.DigestPremises pub w)
+    (pairRight : R0Z.BuilderModel.PairRight pub w) : R0Z.BuilderModel.ModelRel F pub w
+structure R0Z.BuilderModel.WitnessBase {K : Type} [Field K] (F : Subfield K) (w : R0Z.BuilderModel.ModelWitness K) :
+  Prop
+number of parameters: 4
+fields:
+  R0Z.BuilderModel.WitnessBase.sk : ∀ (i : Fin 8), w.sk i ∈ F
+  R0Z.BuilderModel.WitnessBase.salt : ∀ (i : Fin 8), w.salt i ∈ F
+  R0Z.BuilderModel.WitnessBase.path : ∀ (l : Fin 24) (i : Fin 8), (w.path l).2 i ∈ F
+  R0Z.BuilderModel.WitnessBase.pairOccupied : w.pairOccupied ∈ F
+  R0Z.BuilderModel.WitnessBase.pairSecond : ∀ (i : Fin 8), w.pairSecond i ∈ F
+  R0Z.BuilderModel.WitnessBase.pairInverse : w.pairInverse ∈ F
+  R0Z.BuilderModel.WitnessBase.recipientOwner : ∀ (i : Fin 8), w.recipientOwner i ∈ F
+  R0Z.BuilderModel.WitnessBase.recipientSalt : ∀ (i : Fin 8), w.recipientSalt i ∈ F
+  R0Z.BuilderModel.WitnessBase.changeOwner : ∀ (i : Fin 8), w.changeOwner i ∈ F
+  R0Z.BuilderModel.WitnessBase.changeSalt : ∀ (i : Fin 8), w.changeSalt i ∈ F
+constructor:
+  R0Z.BuilderModel.WitnessBase.mk {K : Type} [Field K] {F : Subfield K} {w : R0Z.BuilderModel.ModelWitness K}
+    (sk : ∀ (i : Fin 8), w.sk i ∈ F) (salt : ∀ (i : Fin 8), w.salt i ∈ F)
+    (path : ∀ (l : Fin 24) (i : Fin 8), (w.path l).2 i ∈ F) (pairOccupied : w.pairOccupied ∈ F)
+    (pairSecond : ∀ (i : Fin 8), w.pairSecond i ∈ F) (pairInverse : w.pairInverse ∈ F)
+    (recipientOwner : ∀ (i : Fin 8), w.recipientOwner i ∈ F) (recipientSalt : ∀ (i : Fin 8), w.recipientSalt i ∈ F)
+    (changeOwner : ∀ (i : Fin 8), w.changeOwner i ∈ F) (changeSalt : ∀ (i : Fin 8), w.changeSalt i ∈ F) :
+    R0Z.BuilderModel.WitnessBase F w
+structure R0Z.BuilderModel.AuxPremises {K : Type} [Field K] (pub : R0P.Public K) (w : R0Z.BuilderModel.ModelWitness K) :
+  Prop
+number of parameters: 4
+fields:
+  R0Z.BuilderModel.AuxPremises.conservation : ↑w.inputValue = ↑w.outputValue + ↑w.changeValue
+  R0Z.BuilderModel.AuxPremises.pairValid : R0Z.BuilderModel.OccValid (R0Z.BuilderModel.inOccOf w)
+  R0Z.BuilderModel.AuxPremises.spendable : R0Z.BuilderModel.dirK (w.path 0).1 * (1 - w.pairOccupied) = 0
+  R0Z.BuilderModel.AuxPremises.changeSentinel : pub.variant = R0P.Variant.privateTransfer →
+      R0Z.BuilderModel.changeDigest pub w 7 ≠ 0
+  R0Z.BuilderModel.AuxPremises.amount : pub.variant = R0P.Variant.withdrawal →
+      ∀ (a : K), pub.withdrawalAmount = Option.some a → a = ↑↑w.outputValue
+constructor:
+  R0Z.BuilderModel.AuxPremises.mk {K : Type} [Field K] {pub : R0P.Public K} {w : R0Z.BuilderModel.ModelWitness K}
+    (conservation : ↑w.inputValue = ↑w.outputValue + ↑w.changeValue)
+    (pairValid : R0Z.BuilderModel.OccValid (R0Z.BuilderModel.inOccOf w))
+    (spendable : R0Z.BuilderModel.dirK (w.path 0).1 * (1 - w.pairOccupied) = 0)
+    (changeSentinel : pub.variant = R0P.Variant.privateTransfer → R0Z.BuilderModel.changeDigest pub w 7 ≠ 0)
+    (amount :
+      pub.variant = R0P.Variant.withdrawal → ∀ (a : K), pub.withdrawalAmount = Option.some a → a = ↑↑w.outputValue) :
+    R0Z.BuilderModel.AuxPremises pub w
+structure R0Z.BuilderModel.DigestPremises {K : Type} [Field K] (pub : R0P.Public K)
+  (w : R0Z.BuilderModel.ModelWitness K) : Prop
+number of parameters: 4
+fields:
+  R0Z.BuilderModel.DigestPremises.anchor : pub.anchor = R0Z.BuilderModel.treeCur w (R0Z.BuilderModel.inputLeaf pub w) 24
+  R0Z.BuilderModel.DigestPremises.nullifier : pub.nullifier = R0Z.BuilderModel.nullifierDigest w
+  R0Z.BuilderModel.DigestPremises.recipient : ∀ (r : R0P.Digest K),
+      pub.recipient = Option.some r → r = R0Z.BuilderModel.recipientDigest pub w
+  R0Z.BuilderModel.DigestPremises.change : pub.change = R0Z.BuilderModel.changeDigest pub w
+  R0Z.BuilderModel.DigestPremises.nextRoot : pub.nextRoot =
+      R0Z.BuilderModel.appCur pub (R0Z.BuilderModel.outPair pub w) 20
+  R0Z.BuilderModel.DigestPremises.carry : ∀ (hc : R0P.digestCarry pub.nextPairIndex < 20),
+      pub.nextFrontier ⟨R0P.digestCarry pub.nextPairIndex, hc⟩ =
+        R0Z.BuilderModel.appCur pub (R0Z.BuilderModel.outPair pub w) (R0P.digestCarry pub.nextPairIndex)
+constructor:
+  R0Z.BuilderModel.DigestPremises.mk {K : Type} [Field K] {pub : R0P.Public K} {w : R0Z.BuilderModel.ModelWitness K}
+    (anchor : pub.anchor = R0Z.BuilderModel.treeCur w (R0Z.BuilderModel.inputLeaf pub w) 24)
+    (nullifier : pub.nullifier = R0Z.BuilderModel.nullifierDigest w)
+    (recipient : ∀ (r : R0P.Digest K), pub.recipient = Option.some r → r = R0Z.BuilderModel.recipientDigest pub w)
+    (change : pub.change = R0Z.BuilderModel.changeDigest pub w)
+    (nextRoot : pub.nextRoot = R0Z.BuilderModel.appCur pub (R0Z.BuilderModel.outPair pub w) 20)
+    (carry :
+      ∀ (hc : R0P.digestCarry pub.nextPairIndex < 20),
+        pub.nextFrontier ⟨R0P.digestCarry pub.nextPairIndex, hc⟩ =
+          R0Z.BuilderModel.appCur pub (R0Z.BuilderModel.outPair pub w) (R0P.digestCarry pub.nextPairIndex)) :
+    R0Z.BuilderModel.DigestPremises pub w
+def R0Z.BuilderModel.PairRight : {K : Type} → [Field K] → R0P.Public K → R0Z.BuilderModel.ModelWitness K → Prop :=
+fun {K} [Field K] pub w =>
+  w.pairSecond = (R0Z.BuilderModel.ordered (R0Z.BuilderModel.inputLeaf pub w) (w.path 0).2 (w.path 0).1).2
+structure R0Z.WriterRefine.PubCorr {K : Type} [Field K] (P : R0Z.WriterRefine.RustPublic) (pub : R0P.Public K) : Prop
+number of parameters: 4
+fields:
+  R0Z.WriterRefine.PubCorr.variant : P.variant = pub.variant
+  R0Z.WriterRefine.PubCorr.asset : R0Z.WriterRefine.liftU P.asset = pub.assetId
+  R0Z.WriterRefine.PubCorr.next : P.nextPairIndex = pub.nextPairIndex
+  R0Z.WriterRefine.PubCorr.frontier : ∀ (l : Fin 20),
+      R0Z.WriterRefine.DigestLift (↑P.frontier)[↑l]! (pub.snapshotFrontier l)
+  R0Z.WriterRefine.PubCorr.empty : ∀ (l : Fin 20),
+      R0Z.WriterRefine.DigestLift (↑P.empty)[↑l]! (R0Z.BuilderModel.emptyRootK l)
+  R0Z.WriterRefine.PubCorr.frontierCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.frontier)[↑l]!
+  R0Z.WriterRefine.PubCorr.emptyCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.empty)[↑l]!
+constructor:
+  R0Z.WriterRefine.PubCorr.mk {K : Type} [Field K] {P : R0Z.WriterRefine.RustPublic} {pub : R0P.Public K}
+    (variant : P.variant = pub.variant) (asset : R0Z.WriterRefine.liftU P.asset = pub.assetId)
+    (next : P.nextPairIndex = pub.nextPairIndex)
+    (frontier : ∀ (l : Fin 20), R0Z.WriterRefine.DigestLift (↑P.frontier)[↑l]! (pub.snapshotFrontier l))
+    (empty : ∀ (l : Fin 20), R0Z.WriterRefine.DigestLift (↑P.empty)[↑l]! (R0Z.BuilderModel.emptyRootK l))
+    (frontierCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.frontier)[↑l]!)
+    (emptyCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.empty)[↑l]!) : R0Z.WriterRefine.PubCorr P pub
+structure R0Z.WriterRefine.WitnessOk (W : R0Z.WriterRefine.RustWitness) : Prop
+number of parameters: 1
+fields:
+  R0Z.WriterRefine.WitnessOk.values : ↑W.inputValue < 2 ^ 30 ∧ ↑W.outputValue < 2 ^ 30 ∧ ↑W.changeValue < 2 ^ 30
+  R0Z.WriterRefine.WitnessOk.bits : ∀ l < 24, ↑(↑W.bits)[l]! = 0 ∨ ↑(↑W.bits)[l]! = 1
+  R0Z.WriterRefine.WitnessOk.sibs : ∀ l < 24, R0Z.WriterRefine.Canon8 (↑W.sibs)[l]!
+constructor:
+  R0Z.WriterRefine.WitnessOk.mk {W : R0Z.WriterRefine.RustWitness}
+    (values : ↑W.inputValue < 2 ^ 30 ∧ ↑W.outputValue < 2 ^ 30 ∧ ↑W.changeValue < 2 ^ 30)
+    (bits : ∀ l < 24, ↑(↑W.bits)[l]! = 0 ∨ ↑(↑W.bits)[l]! = 1)
+    (sibs : ∀ l < 24, R0Z.WriterRefine.Canon8 (↑W.sibs)[l]!) : R0Z.WriterRefine.WitnessOk W
+structure R1Z.BuilderRefinement.Admitted {K : Type} [Field K] (F : Subfield K) (pub : R0P.Public K)
+  (W : R0Z.WriterRefine.RustWitness) (P : R0Z.WriterRefine.RustPublic) : Prop
+number of parameters: 6
+fields:
+  R1Z.BuilderRefinement.Admitted.publicCorr : R0Z.WriterRefine.PubCorr P pub
+  R1Z.BuilderRefinement.Admitted.words : R0Z.WriterRefine.WitnessOk W
+  R1Z.BuilderRefinement.Admitted.semantic : R0Z.BuilderModel.ModelRel F pub (R0Z.WriterRefine.toModel W)
+constructor:
+  R1Z.BuilderRefinement.Admitted.mk {K : Type} [Field K] {F : Subfield K} {pub : R0P.Public K}
+    {W : R0Z.WriterRefine.RustWitness} {P : R0Z.WriterRefine.RustPublic} (publicCorr : R0Z.WriterRefine.PubCorr P pub)
+    (words : R0Z.WriterRefine.WitnessOk W) (semantic : R0Z.BuilderModel.ModelRel F pub (R0Z.WriterRefine.toModel W)) :
+    R1Z.BuilderRefinement.Admitted F pub W P
+def R1Z.BuilderCanonical.Instance : {K : Type} → [inst : Field K] → [CharP K 2147483647] → Type :=
+fun {K} [Field K] [CharP K 2147483647] =>
+  { p // R1Z.BuilderSpendRelation.RspendPlus (R1J.SpendWitnessMap.mapPub p.1) (R1Z.BuilderCanonical.liftWitness p.2) }
+structure R1Z.BuilderSource.SourceIdentification {K : Type} [Field K] [CharP K 2147483647]
+  (source : R0Z.ZkStatement.HonestProver K) (toInstance : source.Instance → R1Z.BuilderCanonical.Instance) : Prop
+number of parameters: 5
+fields:
+  R1Z.BuilderSource.SourceIdentification.public_eq : ∀ (w : source.Instance),
+      source.public w = R1Z.BuilderSource.prover.public (toInstance w)
+  R1Z.BuilderSource.SourceIdentification.build_eq : ∀ (w : source.Instance),
+      source.build w = R1Z.BuilderSource.prover.build (toInstance w)
+  R1Z.BuilderSource.SourceIdentification.transport_eq : source.transport = R1Z.BuilderSource.π
+constructor:
+  R1Z.BuilderSource.SourceIdentification.mk {K : Type} [Field K] [CharP K 2147483647]
+    {source : R0Z.ZkStatement.HonestProver K} {toInstance : source.Instance → R1Z.BuilderCanonical.Instance}
+    (public_eq : ∀ (w : source.Instance), source.public w = R1Z.BuilderSource.prover.public (toInstance w))
+    (build_eq : ∀ (w : source.Instance), source.build w = R1Z.BuilderSource.prover.build (toInstance w))
+    (transport_eq : source.transport = R1Z.BuilderSource.π) : R1Z.BuilderSource.SourceIdentification source toInstance
+def R1Z.BuilderSpendRelation.RspendPlus : {K : Type} →
+  [Field K] → R0P.Public K → AspisR1.SpendRelation.Witness K → Prop :=
+fun {K} [Field K] pub w =>
+  AspisR1.SpendRelation.Rspend pub w ∧ (pub.variant = R0P.Variant.privateTransfer → pub.change 7 ≠ 0)
+def AspisR1.SpendRelation.Rspend : {K : Type} → [Field K] → R0P.Public K → AspisR1.SpendRelation.Witness K → Prop :=
+fun {K} [Field K] pub w =>
+  AspisR1.PublicOptionShape.canonical pub ∧
+    AspisR1.InputWitnessCore.Relation pub (↑↑w.inputValue) w.sk w.salt w.path w.pair ∧
+      ↑w.inputValue = ↑w.outputValue + ↑w.changeValue ∧
+        pub.change = AspisR1.SpendRelation.changeCommitment pub w ∧
+          AspisR1.SpendRelation.variantOutput pub w ∧ AspisR1.SpendRelation.AppendBinding pub
+structure AspisR1.InputWitnessCore.Relation {K : Type} [Field K] (pub : R0P.Public K) (value : K)
+  (sk salt : R0P.Digest K) (path : Fin 24 → Bool × R0P.Digest K) (pair : AspisPool.V7PairLeafOccupancy.PairLeaf K) :
+  Prop
+number of parameters: 8
+fields:
+  AspisR1.InputWitnessCore.Relation.valid : pair.Valid
+  AspisR1.InputWitnessCore.Relation.spendable : pair.SelectedSlotIsSpendable (path 0).1
+  AspisR1.InputWitnessCore.Relation.commitment : pair.selectedCommitment (path 0).1 =
+      R0P.noteCommitment (R0P.ownerKey sk) value pub.assetId salt
+  AspisR1.InputWitnessCore.Relation.sibling : (path 0).2 =
+      if (path 0).1 = Bool.true then pair.firstCommitment else pair.secondCommitment
+  AspisR1.InputWitnessCore.Relation.nullifier : pub.nullifier = R0P.nullifierHash sk salt
+  AspisR1.InputWitnessCore.Relation.membership : pub.anchor =
+      R0P.merkleRoot (R0P.noteCommitment (R0P.ownerKey sk) value pub.assetId salt) path
+constructor:
+  AspisR1.InputWitnessCore.Relation.mk {K : Type} [Field K] {pub : R0P.Public K} {value : K} {sk salt : R0P.Digest K}
+    {path : Fin 24 → Bool × R0P.Digest K} {pair : AspisPool.V7PairLeafOccupancy.PairLeaf K} (valid : pair.Valid)
+    (spendable : pair.SelectedSlotIsSpendable (path 0).1)
+    (commitment : pair.selectedCommitment (path 0).1 = R0P.noteCommitment (R0P.ownerKey sk) value pub.assetId salt)
+    (sibling : (path 0).2 = if (path 0).1 = Bool.true then pair.firstCommitment else pair.secondCommitment)
+    (nullifier : pub.nullifier = R0P.nullifierHash sk salt)
+    (membership : pub.anchor = R0P.merkleRoot (R0P.noteCommitment (R0P.ownerKey sk) value pub.assetId salt) path) :
+    AspisR1.InputWitnessCore.Relation pub value sk salt path pair
+def AspisR1.PublicOptionShape.canonical : {K : Type} → [Field K] → R0P.Public K → Prop :=
+fun {K} [Field K] pub =>
+  match pub.variant with
+  | R0P.Variant.privateTransfer => pub.recipient.isSome = Bool.true ∧ pub.withdrawalAmount = Option.none
+  | R0P.Variant.withdrawal =>
+    pub.recipient.isNone = Bool.true ∧ pub.withdrawalAmount.isSome = Bool.true ∧ pub.withdrawalAmount ≠ Option.some 0
+def AspisR1.SpendRelation.AppendBinding : {K : Type} → [Field K] → R0P.Public K → Prop :=
+fun {K} [Field K] pub =>
+  ∃ pair,
+    AspisR1.SpendRelation.outputPair pub = Option.some pair ∧
+      pub.nextRoot = AspisR1.AppendPath.pathPrefix pub pair 20 ∧
+        ∀ (hc : R0P.digestCarry pub.nextPairIndex < 20),
+          pub.nextFrontier ⟨R0P.digestCarry pub.nextPairIndex, hc⟩ =
+            AspisR1.AppendPath.pathPrefix pub pair (R0P.digestCarry pub.nextPairIndex)
+def R1Z.ProverCommitSeedEvent19.augmented : {M : Type} →
+  (Fin 8 → M → Prop) → (M → List R1Z.ProverCommitSeedEvent19.Entry) → Fin 8 → M × R0Z.FsStatement.OracleAnswer → Prop :=
+fun {M} old queries i r => old i r.1 ∨ i = 0 ∧ R1Z.ProverCommitSeedEvent19.seedGuess (queries r.1) r.2
+def R1Z.ProverCommitSeedEvent19.seedGuess : List R1Z.ProverCommitSeedEvent19.Entry →
+  R0Z.FsStatement.OracleAnswer → Prop :=
+fun queries seed => ∃ entry ∈ queries, R1Z.ProverCommitSeedEvent19.seedPoint entry.1 seed
+def R1Z.ProverCommitSeedEvent19.seedPoint : List UInt8 → R0Z.FsStatement.OracleAnswer → Prop :=
+fun a seed =>
+  List.take ((List.map R1Z.ProverCommitSaltBytes.byte ↑R1Z.ProverCommitSimulatorCoin18.domain).length + 32) a =
+    List.map R1Z.ProverCommitSaltBytes.byte ↑R1Z.ProverCommitSimulatorCoin18.domain ++ List.ofFn seed
+def R1Z.ProverCommitFuelJoin22.failure : Fin R1Z.ProverCommitFuelMass22.count →
+  R1Z.ProverCommitFuelJoin22.Tape → Prop :=
+fun i t => R1Z.ProverCommitFuelMass22.exhausted (fun x => 0) (t i)
+def R1Z.ProverCommitObserverQueries19.real : {K CommitHandle Aux : Type} →
+  [inst : Field K] →
+    [Fintype K] →
+      [DecidableEq K] →
+        [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+          {F : Subfield K} →
+            (W : R1Z.GamesR1.R1Wire K CommitHandle Aux) →
+              R1Z.GamesR1PBin.R1ProverP K CommitHandle Aux F W →
+                (N : ℕ) →
+                  (R0Z.JointView.Challenges K → Prop) →
+                    ((h : R0Z.JointView.HonestProver K) → R0Z.JointView.Challenges K → h.Instance → Prop) →
+                      (h : R0Z.JointView.HonestProver K) →
+                        R0P.PackBasis F →
+                          (R0Z.JointView.Statement K CommitHandle → R0Z.JointView.Challenges K → Aux) →
+                            R1Z.GamesR1.R1Adv K CommitHandle Aux →
+                              R0Z.JointView.Statement K CommitHandle →
+                                h.Instance →
+                                  W.Tab × (Fin N → R1Z.GamesR1PBin.SecP) → List R1Z.ProverCommitSeedEvent19.Entry :=
+fun {K CommitHandle Aux} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] {F} W Pr N P
+    Vp h B outputs adv x w r =>
+  have H := W.look r.1;
+  have out := R1Z.GamesR1PBin.realOut W Pr h B outputs x w H r.2;
+  match R0Z.FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = Bool.false) out with
+  | Option.none => R1Z.GamesR1.runLog (adv.prog W.failView []) H W.qmax
+  | Option.some k => R1Z.GamesR1.runLog (adv.prog (out k).view (out k).log) H W.qmax
+def R1Z.ProverCommitFixedObserver.self_join : {R : Type} →
+  [inst : Fintype R] →
+    [Nonempty R] → (f : R → ℚ) → (bad : Fin 8 → R → Prop) → R1Z.QueryScanHistorySplit.ModelExecutionJoin f f bad :=
+fun {R} [Fintype R] [Nonempty R] f bad => { cp := R1Z.GamesR1.idCoupling R, agreement := ⋯ }
+def R1Z.PrivacyR1AcctModel.base : {CommitHandle Aux : Type} →
+  R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctModel.K CommitHandle Aux →
+    ((R1Z.GamesR1PBin.RIdx → R0Z.FsStatement.OracleAnswer) →
+        (Fin 3 → R0Z.FsStatement.OracleAnswer) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctModel.K CommitHandle Aux R1Z.Batched.R1Bat →
+            R0Z.JointView.Challenges R1Z.PrivacyR1AcctModel.K → List (List UInt8 × R0Z.FsStatement.OracleAnswer)) →
+      R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctModel.K CommitHandle Aux :=
+fun {CommitHandle Aux} template log =>
+  { Cm := R1Z.GamesR1PBin.RIdx → R0Z.FsStatement.OracleAnswer, finCm := inferInstance,
+    neCm := R1Z.PrivacyR1AcctModel.base._proof_1, Tab := template.Tab, finTab := template.finTab, neTab := ⋯,
+    look := template.look, frame := template.frame, payload := template.payload, final := template.final,
+    pubBytes := template.pubBytes, vtag := template.vtag, dec := template.dec, kstarOf := template.kstarOf,
+    comLog := log, failView := template.failView, qmax := template.qmax }
+def R1Z.PrivacyR1AcctModel.seed : {CommitHandle Aux : Type} →
+  (W : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctModel.K CommitHandle Aux) →
+    ((Fin R1Z.PrivacyR1AcctModel.E₁ → R0Z.FsStatement.OracleAnswer) →
+        (Fin R1Z.PrivacyR1AcctModel.E₂ → R0Z.FsStatement.OracleAnswer) →
+          Option (R0Z.JointView.Tape R1Z.PrivacyR1AcctModel.K R1Z.PrivacyR1AcctModel.F)) →
+      (R0Z.JointView.Challenges R1Z.PrivacyR1AcctModel.K → Fin 3 → Finset R1Z.GamesR1PBin.Fib) →
+        (R0Z.JointView.Challenges R1Z.PrivacyR1AcctModel.K → List (Fin 3 ⊕ R1Z.GamesR1PBin.RIdx)) →
+          R1Z.GamesR1PBin.R1ProverP R1Z.PrivacyR1AcctModel.K CommitHandle Aux R1Z.PrivacyR1AcctModel.F W :=
+fun {CommitHandle Aux} W decode fib opens =>
+  { E₁ := R1Z.PrivacyR1AcctModel.E₁, E₂ := R1Z.PrivacyR1AcctModel.E₂,
+    caddr := fun x x_1 x_2 x_3 x_4 x_5 x_6 x_7 x_8 => [], leafVal := fun x x_1 x_2 x_3 x_4 x_5 x_6 => [],
+    tapeOf := decode, openFib := fib, openList := opens,
+    ord := R1Z.PhaseScheduleBin.ord R1Z.PrivacyR1AcctModel.E₁ R1Z.PrivacyR1AcctModel.E₂ }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_Ledger_Fields.lean:31:7: error(lean.unknownIdentifier): Unknown constant `R1Z.ProverCommitPublicNonce40.E1`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_Ledger_Fields.lean:32:7: error(lean.unknownIdentifier): Unknown constant `R1Z.ProverCommitLedger36.E2`
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
