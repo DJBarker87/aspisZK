@@ -14,8 +14,12 @@ for r in rs:
   if p.exists():files['EJS_'+p.name]=p.read_text()
  p=Path(r['admission']['receipt'])
  if p.exists(): files['EJS_'+p.name]=p.read_text()
-for p in T.glob('EJS_*.json'):
- files[p.name]=p.read_text()
+ for retry in range(r['admission'].get('retries',0)+1):
+  for ext in ['json','log']:
+   q=T/('EJR-'+str(r['attempt'])+'-reservation-'+str(retry)+'.'+ext)
+   if q.exists():files['EJS_'+q.name]=q.read_text()
+for p in list(T.glob('EJS_*.json'))+list(T.glob('EJS_*.log')):
+ if 'payload' not in p.name:files[p.name]=p.read_text()
 for name in ['EJS_builder.log','EJS_initial-reservation.json','EJS_initial-reservation.log','EJS_executed-builder.py','EJR_progress.json']:
  p=T/name
  if p.exists():files['EJS_'+name.removeprefix('EJS_')]=p.read_text()
@@ -29,6 +33,9 @@ for r in d['records']:
  r['full_axioms_reports']=re.findall(r"'[^\n]*?' (?:depends on axioms:\s*\[[^]]*\]|does not depend on any axioms)",s,re.S)
  r['unsupported_printed_axioms']=sorted({a for b in re.findall(r'depends on axioms:\s*\[([^]]*)\]',s,re.S) for a in b.replace(',',' ').split()}-{'propext','Classical.choice','Quot.sound'})
  r['continuation_revision']='a38d3dc536'
+ r['canonical_recovery_revision']=r['source_revision']
+ r['source_revision']=r['source_blob_revision'] if re.fullmatch('[0-9a-f]{40}',r['source_blob_revision']) else 'fbda5d86aa33abba917a064a44f89b9ed806d625'
+ if not re.fullmatch('[0-9a-f]{40}',r['source_blob_revision']):r['source_revision_qualification']='Committed EJS diagnostic source or exact archive member pinned by formatter profile manifest; historical origin qualifier retained in source_blob_revision.'
  if not r['errors'] and r['lean_exit']!=0:r['errors']=[l for l in s.splitlines() if 'error' in l.lower() or 'must be contained' in l]
  if r['unsupported_printed_axioms']:r['validation_exit']=90
 (O/'EJS_reuses.json').write_text(json.dumps(d['reuses'],indent=2)+'\n')

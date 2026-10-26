@@ -16,5 +16,6 @@ fail=[r for k,r in latest.items() if r['exit'] and k not in reused]
 plan=dict(next_attempt=30000+len(a),cumulative_attempts=len(a),additional_budget_used=len(a)-800,additional_budget_remaining=1600-len(a),allowed_attempt_range=[30800,34999],cumulative_limit=1600,unattempted_sources=unattempted,latest_failed=fail,canonical_progress=d['progress'],excluded_modules=['R1Z/EventsR1P2','R1Z/SimCostOuterRetry6'],no_unchanged_resource_retry=True,profile_followups=['CertBuildExtracted d7e06b9f7a29e903f7cf24c2305b80b91658dc8a86ae6aaaecca8a815f26a776 and dependent chain before CertOwnFill','Explicit repaired Formatter profile then two SamplerWordRead consumers; historical selected receipt was nonstandard'],profile_sources=d.get('profiles',{}), status=('Budget exhausted; no further compile authorized' if len(a)>=1600 else d['progress']['reason']))
 for k,v in old.items():
  if 'unresolved' in k:plan[k]=v
+plan['unresolved_historical_hashes']=json.loads((O.parent/'envj-rebuild-20261026/EJR_final-inventory.json').read_text())['unresolved_historical_hashes']
 (O/'EJS_resume-plan.json').write_text(json.dumps(plan,indent=2)+'\n')
 print(json.dumps({k:v for k,v in plan.items() if k in ['next_attempt','cumulative_attempts','additional_budget_used','additional_budget_remaining','status']}));print('unattempted',len(unattempted),'latest failed',len(fail))

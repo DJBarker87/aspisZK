@@ -3,8 +3,8 @@ from pathlib import Path
 import subprocess,json,hashlib,re,time,datetime,os,sys,shutil
 B=Path('/home/dombarker/project-offloads'); T=B/'aspis-fs-generic-20261006/evidence';H=B/'r1-privacy-build-integration-20261019';J=B/'aspis-joint-20261019';U=B/'codex-cx-import-union-20261022'
 rows=json.loads((T/'EJR_all-restored-sources.json').read_text());env=json.loads((H/'env/J.json').read_text());paths=[Path(p) for p in env['LEAN_PATH'].split(':')]; roots={'joint':J,'union':U}
-roots.update({n:U/n for n in ['EJS_formatter_joint','EJS_formatter_union']})
-rows.extend(json.loads((T/'EJS_formatter-sources.json').read_text()))
+roots['EJS_missing']=U/'EJS_missing'
+rows.extend(json.loads((T/'EJS_missing-sources.json').read_text()))
 REV=(T/'EJR_revision.txt').read_text().strip();budget=int(os.environ.get('EJR_CUMULATIVE_BUILD_LIMIT','799'))
 
 _hash_cache={}
@@ -55,7 +55,7 @@ def mirror_namespaces():
      seen.add(rel)
      if dest.exists() and not dest.is_symlink():continue
      if dest.is_symlink():
-      if dest.resolve()==canonical:continue
+      if dest.is_file():continue
       dest.unlink()
      dest.parent.mkdir(parents=True,exist_ok=True);dest.symlink_to(canonical)
   # A dangling earlier .olean symlink also shadows a later valid file.
@@ -73,7 +73,7 @@ def mirror_namespaces():
     if candidate!=dest:canonical=candidate;break
    if canonical is None:continue
    if dest.is_symlink():
-    if dest.resolve()==canonical:continue
+    if dest.is_file():continue
     dest.unlink()
    dest.symlink_to(canonical)
 
@@ -88,12 +88,7 @@ succeeded.update(r['key'] for r in reuses);attempted.update(r['key'] for r in re
 latest_by_key={r['key']:r for r in past}
 repair_keys={r['key'] for r in latest_by_key.values() if r['exit']!=0 and any('error: object file' in e and 'does not exist' in e for e in r['errors'])} - {r['key'] for r in reuses}
 
-fmt_targets={'ImportUnionNamedDiscriminant','AspisR72Sampler/Types','AspisR72Sampler/Funs','AspisV8R19/SamplerWordRead'}
-fmt_rebuild={r['key'] for r in rows if r['workspace']=='EJS_formatter_union' and r['module'] in fmt_targets and (r['key'] not in latest_by_key or latest_by_key[r['key']]['attempt']<31046)}
-repair_keys.update(fmt_rebuild);succeeded.difference_update(fmt_rebuild)
-repair_keys.update(r['key'] for r in latest_by_key.values() if r['attempt'] in (31019,31020) and r['exit']==90)
 def try_reuse(r,ds):
- if r['key'] in fmt_rebuild:return False
  fingerprint=lambda dd:[(d['module'].replace('.','/'),d['sha256']) for d in dd]
  for old in past:
   if old['exit'] or old['workspace'] not in roots or old['module']!=r['module'] or old['source_sha256']!=r['source_sha256'] or fingerprint(old['deps'])!=fingerprint(ds):continue
@@ -131,6 +126,22 @@ def admit(label):
   if retry==10:raise RuntimeError('reservation refused ten retries')
   print('reservation wait',label,retry,flush=True);time.sleep(180)
 
+def publish_missing(r):
+ if r['workspace']!='EJS_missing':return
+ published=[]
+ for root in [J,U]:
+  for ext in ['.olean','.olean.private','.olean.server','.ir']:
+   src=roots['EJS_missing']/'objects'/(r['module']+ext)
+   if not src.is_file():continue
+   dest=root/'objects'/(r['module']+ext)
+   if dest.exists():
+    if sha(dest)!=sha(src):published.append(dict(path=str(dest),status='existing different object retained',existing_sha256=sha(dest)))
+    continue
+   old_link=str(dest.readlink()) if dest.is_symlink() else None
+   if dest.is_symlink():dest.unlink()
+   dest.parent.mkdir(parents=True,exist_ok=True);os.link(src.resolve(),dest)
+   published.append(dict(path=str(dest),sha256=sha(dest),source=str(src),old_dangling_link=old_link))
+ with (T/'EJS_missing-publications.jsonl').open('a') as f:f.write(json.dumps(dict(module=r['module'],source_sha256=r['source_sha256'],bindings=published))+chr(10))
 def save_state(pending,reason):
  (T/'EJR_progress.json').write_text(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),attempts=len(past),successes=len(succeeded),budget=budget,next_attempt=attempt,reason=reason,pending=[dict(key=r['key'],missing=[d['module'] for d in deps(r) if not d['path']]) for r in pending]),indent=2)+'\n')
 assert 30800 <= attempt <= 31600, attempt
@@ -174,7 +185,7 @@ while pending and len(past)<budget:
  label='EJR-'+str(attempt);admission=admit(label);root=roots[r['workspace']];src=Path(r['host_path']);assert sha(src)==r['source_sha256'];obj=root/'objects'/(r['module']+'.olean');obj.parent.mkdir(parents=True,exist_ok=True)
  if obj.is_symlink():obj.unlink()
  elif obj.exists():raise RuntimeError('refuse overwriting existing regular object '+str(obj))
- context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json','EJS_formatter-loader-repair.json']}
+ context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json','EJS_missing-sources.json']}
  fp=hashlib.sha256(json.dumps(dict(direct_dependencies=ds,physical_library_context=context),sort_keys=True).encode()).hexdigest();start=time.monotonic()
  if r['workspace']=='joint':
   cmd=['sh',str(H/'tools/run-joint.sh'),str(attempt),r['module'],'J','7000','8',fp]
@@ -193,7 +204,8 @@ while pending and len(past)<budget:
  record=dict(key=r['key'],attempt=attempt,module=r['module'],workspace=r['workspace'],source_sha256=r['source_sha256'],source_revision=REV,source_blob_revision=r['revision'],command=cmd,driver_command=[env['LEAN'],'-j1','-M7000','-DElab.async=false','-R',str(root/'sources'),'-o',str(obj),str(src)],deps=ds,deps_fingerprint=fp,exit=ec,lean_exit=lean_exit,validation_exit=ec,outer_exit=outer,wall_seconds=time.monotonic()-start,time_log=ts,peak_rss_kib=int(re.search(r'Maximum resident set size \(kbytes\):\s*(\d+)',ts)[1]) if 'Maximum resident' in ts else None,swaps=int(re.search(r'Swaps:\s*(\d+)',ts)[1]) if 'Swaps:' in ts else None,axioms=axioms,errors=[l for l in s.splitlines() if 'error:' in l],admission=admission,caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,lean_M=7000),object_sha256=sha(obj) if obj.exists() and ec==0 else None,object_bytes=obj.stat().st_size if obj.exists() and ec==0 else None,namespace_loader_repair=r['key'] in repair_keys,physical_library_context=context)
  with results.open('a') as f:f.write(json.dumps(record)+'\n')
  past.append(record);attempted.add(r['key']);pending.remove(r)
- if ec==0:succeeded.add(r['key'])
+ if ec==0:
+  succeeded.add(r['key']);publish_missing(r)
  # Failed outputs must not become dependency providers. Preserve diagnostics, not a bad olean.
  elif obj.exists():obj.rename(obj.with_suffix('.EJR-failed-olean'))
  print(label,r['key'],'exit',ec,'successes',len(succeeded),'wall',record['wall_seconds'],flush=True)

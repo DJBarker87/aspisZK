@@ -12,6 +12,9 @@ def replace(old,new):
  global s
  assert s.count(old)==1, old
  s=s.replace(old,new)
+# Preserve valid pinned reuse aliases; replace dangling fallback aliases only.
+assert s.count("if dest.resolve()==canonical:continue")==2
+s=s.replace("if dest.resolve()==canonical:continue", "if dest.is_file():continue")
 if os.environ.get('EJS_PROFILE'):
  profile=os.environ['EJS_PROFILE']
  assert profile in {'provider','formatter','missing'}
@@ -42,8 +45,8 @@ def save_state(pending,reason):""")
  replace("if ec==0:succeeded.add(r['key'])", "if ec==0:\n  succeeded.add(r['key']);publish_missing(r)")
  replace("context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json']}", "context={n:sha(T/n) for n in ['EJR-namespace-bindings.json','EJR-library-published.json','EJR-library-ir-restored.json','EJS_missing-sources.json']}")
 if os.environ.get('EJS_PROFILE')=='formatter':
- replace("def try_reuse(r,ds):", """fmt_targets={'ImportUnionNamedDiscriminant','AspisR72Sampler/Types','AspisR72Sampler/Funs','AspisV8R19/SamplerWordRead'}
-fmt_rebuild={r['key'] for r in rows if r['workspace']=='EJS_formatter_union' and r['module'] in fmt_targets and (r['key'] not in latest_by_key or latest_by_key[r['key']]['attempt']<31046)}
+ replace("def try_reuse(r,ds):", """fmt_targets={'Aeneas','Aeneas/Std','Aeneas/Std/Core','Aeneas/Std/Array','Aeneas/Std/Array/ArraySlice','ImportUnionNamedDiscriminant','AspisR72Sampler/Types','AspisR72Sampler/Funs','AspisV8R19/SamplerWordRead'}
+fmt_rebuild={r['key'] for r in rows if r['workspace']=='EJS_formatter_union' and r['module'] in fmt_targets and (r['key'] not in latest_by_key or latest_by_key[r['key']]['attempt']<31066)}
 repair_keys.update(fmt_rebuild);succeeded.difference_update(fmt_rebuild)
 def try_reuse(r,ds):
  if r['key'] in fmt_rebuild:return False""")
