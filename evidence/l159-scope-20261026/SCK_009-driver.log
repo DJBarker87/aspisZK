@@ -1,0 +1,39 @@
+{"attempt": "SCK_009", "exit_status": 0, "wall_seconds": 2.1756138509954326, "peak_rss_kib": "5365732", "swaps": "0", "print_axioms": ["'AspisR1.SCE_Execution.account_def' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCE_Execution.accepted_eval' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.SCE_Execution.account_def {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) :
+  AspisR1.SCE_Experiment.account c hashv copy allocator id a =
+    AspisV8R19.OracleProgramOps.bind a.first fun i =>
+      AspisV8R19.OracleProgramOps.bind (AspisR1.SCE_Execution.firstCode c hashv 
+...
+reply, some (next, out))
+        | x => AspisV8R19.MemoizedProgramLaw.Program.done (i, reply, none)
+'AspisR1.SCE_Execution.account_def' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCE_Execution.accepted_eval {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (final : A)
+  (first :
+    (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+            (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final))) :
+  have i := AspisV8R19.MemoizedProgramLaw.eval H a.first;
+  have f := AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Execution.firstCode c hashv copy allocator id i.2);
+  have s := AspisV8R19.MemoizedProgramLaw.eval H (a.second i.2 saved post final);
+  have t := AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Execution.secondCode c hashv allocator id s.2);
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a) =
+    (i.1 ++ (f.1 ++ (s.1 ++ t.1)), i.2, f.2, some (s.2, t.2))
+'AspisR1.SCE_Execution.accepted_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8c59a36c7b704fd1ba21540871e4d9a9.scope; invocation ID: 49b111271f1845baa53d26af0bf3975c
+
