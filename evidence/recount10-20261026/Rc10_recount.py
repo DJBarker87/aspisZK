@@ -60,6 +60,10 @@ for old in b['rows']:
   if leaf in ['L142','L143','L144','L145','L146']:
    r['blocker']='SAME native-local or source-global Pair/matching/semantic family remains; full operands, canonicality and exact masked terminal association are not supplied by concrete primitive installation.'
    if not rid.startswith('F3Y_G_'):r['definition']='lean/FIs_Finish.lean#Outcome; lean/FIs_Pair.lean#Law'
+  if rid=='L181':
+   r['meaning']='Residual full deployed native/source rejected-prefix and ordered-query association. Accepted source ordered-log/result join OR the charged collision is already composed under frozen3; no exact frozen2 log premise is required.'
+  if rid=='L142':
+   r['meaning']='For the SAME native view/prepared/data, every successful newWeights, alpha-slice and pair return decodes to the model dot of final values with both dual folds of FunctionalWeights.'
   if rid=='L159':
    r['definition']='lean/F3T_Runtime.lean#StoredCarrierBinding'
    r['meaning']='∀ H run, (eval H runtime).2 = some run → run.2.2 = true → run = eval H (annotatedWith D rust (F3T_Canon.canon (lift c P))). Entire accepted runtime run equals the canonical installed-source experiment on the SAME P.'
@@ -78,6 +82,10 @@ assert counts['actual antecedent']['classes']==dict(T=83,P=12,G=13,C=0)
 assert counts['deduplicated actual plus non-alias deployment']['classes']==dict(T=89,P=16,G=13,C=0)
 assert [r['id'] for r in rows if r['classification']=='P' and r['owner']=='external']==['L154']
 diff=[dict(id=r['id'],change='removed' if r['id'] in removed else 'retained',classification=r['classification'],owner=r['owner'],scope=r['scope'],meaning=r.get('meaning'),definition=r.get('definition')) for r in b['rows']]
+for d in diff:
+ if d['change']=='retained':
+  new=next(r for r in rows if r['id']==d['id'])
+  d['after_meaning']=new.get('meaning');d['after_definition']=new.get('definition')
 result=dict(actual_theorem='AspisR1.Rc10_Top.deployed',baseline='AspisR1.Rc9_Top.deployed',method=b['method'],baseline_sha256=sha(basefile),counts=counts,raw_counts=raw,distinct_delta=dict(T=0,P=-6,G=0,C=0),raw_nonalias_delta=dict(T=0,P=-7,G=0,C=0),removed=sorted(removed),added=[],rows=rows,diff=diff,aliases={'L185':'L159'},removed_alias={'L137':'L134'},fixture_gate={'job':'JFr_','status':'OPEN; separate joint inhabitation gate, no fictional extra premise'},native_removals=sorted(removed),global_removals=[],dictionary_change='None from Rc9: SAME FIp_Install.configuration. Rc10_Install.compatible and finish_preserved.',reverse='Rc10_Reverse.transport maps the supplied complete Rc10 result to Rc9 conclusion through Rc10_Result/Caller/Cont/Literal.forget and FIs_Finish.forget; all existential tuples, guards and collision branches preserved.',nonvacuity='Rc10_Nonvacuity.composed invokes this root conditionally on SAME accepted native cuts/snapshots; Rc10_Clean.exists_world excludes universal charged event; full JFr fixture remains OPEN.')
 (E/'Rc10_premises.json').write_text(json.dumps(result,indent=2)+'\n')
 (E/'Rc10_row-diff.json').write_text(json.dumps(diff,indent=2)+'\n')

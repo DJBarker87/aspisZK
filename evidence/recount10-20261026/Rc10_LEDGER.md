@@ -23,7 +23,7 @@ Every remaining P row, including deployment aliases and external conditions:
 
 | Row | Scope | Owner | Exact statement summary | Covering job |
 |---|---|---|---|---|
-| L142 | actual antecedent | session A | source returned pair decodes to exact model dual-fold dot | FIr_ |
+| L142 | actual antecedent | session A | For the SAME native view/prepared/data, every successful newWeights, alpha-slice and pair return decodes to the model dot of final values with both dual folds of FunctionalWeights. | FIr_ |
 | L143 | actual antecedent | session A | ∀ j : Fin 22, foldWord alpha0 (batchedWord W gamma) (q j) = V(q j) | FIr_ |
 | L144 | actual antecedent | session A | first semantic polynomial boundary equals claim; under SAME EquationEndpoint view/claim/polys parsing guards | FIr_ |
 | L145 | actual antecedent | session A | ∀ j : Fin 9, next boundary equals previous evaluation at challenge; under SAME EquationEndpoint view/claim/polys parsing guards | FIr_ |
@@ -31,7 +31,7 @@ Every remaining P row, including deployment aliases and external conditions:
 | L154 | actual antecedent | external | ∀ H : Bytes → State, (eval H P).1.length ≤ Q0 + Q1. Bound on all issued ByteProver oracle queries including repeats, uniformly over ideal worlds; external adversary budget condition, not a cryptographic axiom or proved concrete deployment budget. | UNCOVERED |
 | L159 | actual antecedent | lead | ∀ H run, (eval H runtime).2 = some run → run.2.2 = true → run = eval H (annotatedWith D rust (F3T_Canon.canon (lift c P))). Entire accepted runtime run equals the canonical installed-source experiment on the SAME P. | ARQ_ |
 | L166 | deployment only | lead | Accepted-path source Result/effects association; both rejected prefixes reject and every earlier oracle read is counted, under the owner-approved success-conditioned ruling. | BEh_ |
-| L181 | deployment only | lead | Complete source Program equality is proved; ordered source-to-frozen2 model event/projection association remains raw L157/GExq work. | ARQ_ |
+| L181 | deployment only | lead | Residual full deployed native/source rejected-prefix and ordered-query association. Accepted source ordered-log/result join OR the charged collision is already composed under frozen3; no exact frozen2 log premise is required. | ARQ_ |
 | L185 | deployment alias | lead | Same obligation as literal L159 at this installed source, not a second independent gate. | ARQ_ |
 | L187 | deployment only | lead | Only coherent cached focused composition audited; full frozen dependency release replay not run. | RPz3_ |
 | L188 | deployment only | lead | Current top standard-axiom audit passes; final release dependency/trust/adoption audit remains. | UNCOVERED |

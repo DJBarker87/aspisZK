@@ -31,6 +31,13 @@ if final:
  assert len(attempts)==60
  checked={name for a in attempts if a['exit_status']==0 for name in a['source_hashes']}
  assert checked=={p.name for p in (R/'lean').glob('Rc10_*.lean')},'Unchecked new module'
+ objects=json.loads((E/'Rc10_final-object-manifest.json').read_text())
+ assert set(objects)=={p.stem for p in (R/'lean').glob('Rc10_*.lean')}
+ for name,data in objects.items():assert data['.lean']['sha256']==sha(R/'lean'/(name+'.lean'))
+ for a in attempts:
+  for name,data in a['deps_fingerprint'].get('selected_objects',{}).items():
+   stem=name.removesuffix('.olean')
+   if stem in objects:assert data['sha256']==objects[stem]['.olean']['sha256'],('Task object changed',name)
  axioms=(E/'Rc10_060/stdout.log').read_text()
  for name in ['Rc10_Top.deployed','Rc10_Install.compatible','Rc10_Install.finish_preserved','Rc10_Install.owners','Rc10_Literal.forget','Rc10_Cont.forget','Rc10_Caller.forget','Rc10_Result.forget','Rc10_Reverse.transport','Rc10_Nonvacuity.composed','Rc10_Clean.exists_world']:
   assert "'AspisR1."+name+"' depends on axioms: [propext, Classical.choice, Quot.sound]" in axioms,name
