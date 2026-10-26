@@ -747,5 +747,34 @@
       "span": "lines 257-302 (the two named Debug definitions and generated helper declarations)"
     }
   },
-  "removal_performed": false
+  "removal_performed": false,
+  "kernel_audit_external_consumers": [
+    {
+      "module": "AspisR1PrefixAggregateParser.Funs",
+      "name": "AspisR1PrefixAggregateParser.r1_wire.Error.Insts.CoreCmpPartialEqError.eq",
+      "reference": "AspisR1PrefixAggregateParser.r1_wire.Error.Insts.CoreFmtDebug.fmt.match_1",
+      "audit_attempt": "RPz3_587"
+    },
+    {
+      "module": "AspisR1RecordParser.Funs",
+      "name": "AspisR1RecordParser.r1_wire.Error.Insts.CoreCmpPartialEqError.eq",
+      "reference": "AspisR1RecordParser.r1_wire.Error.Insts.CoreFmtDebug.fmt.match_1",
+      "audit_attempt": "RPz3_588"
+    }
+  ],
+  "protected_axiom_free_matchers": [
+    {
+      "axioms": [],
+      "module": "AspisR1PrefixAggregateParser.Funs",
+      "name": "AspisR1PrefixAggregateParser.r1_wire.Error.Insts.CoreFmtDebug.fmt.match_1",
+      "audit_attempt": "RPz3_587"
+    },
+    {
+      "axioms": [],
+      "module": "AspisR1RecordParser.Funs",
+      "name": "AspisR1RecordParser.r1_wire.Error.Insts.CoreFmtDebug.fmt.match_1",
+      "audit_attempt": "RPz3_588"
+    }
+  ],
+  "proposed_removal_qualification": "Only a separate lead-approved source regeneration may remove the two Debug definitions per parser and their native proof helpers. Existing equality functions share fmt.match_1; preserve or regenerate those pure matchers and rebuild consumers. No blanket prefix deletion is justified. Whole-top reachability remains unknown."
 }
