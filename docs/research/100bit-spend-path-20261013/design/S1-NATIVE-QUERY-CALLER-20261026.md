@@ -74,3 +74,46 @@ focused validation and honest failure/qualification record. Full literal
 matching-data / SessionAPrepare identification and shared actual stage1
 binding still require their same-source joins; this packet does not close
 those or duplicate the lead's S2/import work.
+
+## Addendum: callee contract audit and retained whole-stage failure
+
+The passed constructor's weak scan poststate contract is now checked against
+existing concrete callee evidence by check.py. The frozen native block proof
+explicitly asserts n1<=22 and d1<=64 for every bounded input scanner, arbitrary
+full22-word array/block and common arbitrary membership replies. Its COMPLETE
+native/owned poststate and per-call prefix arguments are compared. The23
+prefix-partition checks prove actual Std membership equals the exact owned
+callee, with no membership cuts. The actual native default and eight-call
+driver establish the starting0/0 state and bounded call chain; the checked
+owned/source loop and driver inductions retain the complete same state.
+This is modular source-tool composition of the weak poststate contract, not
+a new assumed caller/range law or a claim that an uncut parent replay passed.
+The remaining Kani/Std/native-model/SDK/runtime/source/artifact boundaries
+remain explicit. The separate mathematical full-result decoder installation
+and row31 byte-oracle TOTAL theorem remain the existing Lean facts.
+
+A focused uncut constructor candidate was also compiled: scan, word decoding
+and Std membership all execute; no query-result, scan or membership value
+cut remains (the name-only driver observational hook still executes the
+frozen body). This candidate has NO accepted whole-stage verification:
+
+1. Initial33 unwinding failed on the33-element arbitrary digest-array generator
+   exit step:29.499421039s/875872KiB, no pressure/swap.
+2. Reusing exact compilation, named generator bound34 retained all unwinding
+   assertions; the existing224-byte same_bytes observer then failed bound33:
+   46.846774936s/1587212KiB, no pressure/swap.
+3. With only that observer's exact named bound225 added and all assertions
+   retained, the uncut stage timed out:304.634796211s/8413780KiB, cgroup peak
+   8641048576B, MemoryMax12GiB/High11GiB/SwapMax0; no high/max/OOM event.
+
+Both corrections affect checked harness loop bounds only, not production or
+native algorithm bodies. Successful compilation was reused, sources and tools
+matched before/after, and no larger-cap/time unchanged retry follows the
+whole-stage timeout. These results do not show a semantic counterexample or
+establish the uncut candidate. They motivate retaining the checked callee
+composition, as requested for timed-out whole-stage Kani operations.
+
+All three terminal packets and complete source snapshot are retained in
+s1-native-prepared-query-full-v1 and s1-native-query-full-terminal-v2.
+check-full.py reports EVIDENCE_AUDIT_PASS with uncut_enclosing_verification
+NOT_ESTABLISHED, distinctly from the passed bounded-contract constructor.

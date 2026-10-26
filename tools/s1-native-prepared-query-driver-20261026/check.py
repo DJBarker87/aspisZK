@@ -36,4 +36,12 @@ assert r['cgroup']['memory.max']==str(12*2**30) and r['cgroup']['memory.high']==
 for k in ['high','max','oom','oom_kill']:assert re.search(r'^'+k+r' 0$',r['cgroup']['memory.events'],re.M)
 o=(p/'verify-stdout.log').read_text();assert 'VERIFICATION:- SUCCESSFUL'in o and re.search(r'0 of \d+ failed',o)
 assert '--unwinding-assertions'in r['command'] and '--unwindset'in r['command']
-print(json.dumps(dict(status='PASS',scope='Complete native constructor/claim and exact native query driver; bounded scan-state + unchanged sampler/arithmetic/dot cuts. Query result and selected state are same actual driver output. No whole S1/SDK/runtime/release closure.',wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=0)))
+# Discharge the weak scan-poststate contract from already checked concrete
+# native block/Std membership packets; no new caller law is assumed.
+for tool in ['s1-query-block-cut-20261025','s1-query-membership-current-20261025']:
+ checked=subprocess.run(['python3',str(R/'tools'/tool/'check.py')],text=True,capture_output=True)
+ assert checked.returncode==0,(tool,checked.stderr)
+block=(R/'tools/s1-query-block-cut-20261025/proofs.rs').read_text()
+assert 'assert!(n1<=22);assert!(d1<=64);' in block
+assert 'kani::assume(n<=22);kani::assume(d<=64);' in block
+print(json.dumps(dict(status='PASS',scope='Complete native constructor/claim and exact native query driver; bounded scan-state contract backed by concrete native block/Std membership evidence + unchanged sampler/arithmetic/dot cuts. Query result and selected state are same actual driver output. No whole S1/SDK/runtime/release closure.',wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=0)))
