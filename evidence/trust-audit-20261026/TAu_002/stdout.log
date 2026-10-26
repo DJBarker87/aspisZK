@@ -1,0 +1,518 @@
+structure AspisR1.S2Trust.S2TrustedSdkBorrow {W F : Type} (L : AspisR1.S2Trust.Library W F) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          ∀ (a b : ℕ),
+            L.accountData w a = (s.accounts a).1 ∧
+              L.accountLamports w a = (s.accounts a).2 ∧
+                ((s.accounts a).1 = (s.accounts b).1 → L.accountData w a = L.accountData w b) ∧
+                  (s.ownerLive a = true → L.accountData w a ≠ L.accountLamports w a)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.cell_payload : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s → AspisR1.S2Trust.Valid s → ∀ (c : ℕ), L.cellPayload w c = s.payload c
+  AspisR1.S2Trust.S2TrustedSdkBorrow.cell_counter : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          ∀ (c : ℕ), L.cellCounter w c = s.counter c ∧ ∀ (t : ℕ), L.liveGuard w t = AspisR1.S2Trust.lookup s t
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_ok : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+            0 ≤ s.counter (s.accounts a).1 →
+              s.counter (s.accounts a).1 < AspisR1.S2Trust.maxCounter →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o)
+                  (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.shared,
+                    AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_err : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+            s.counter (s.accounts a).1 < 0 ∨ s.counter (s.accounts a).1 = AspisR1.S2Trust.maxCounter →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o) (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_ok : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+            s.counter (s.accounts a).1 = 0 →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive,
+                  AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_err : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+            s.counter (s.accounts a).1 ≠ 0 →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o) (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_deref : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = some g →
+            g.kind = AspisR1.S2Trust.Kind.shared →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_deref : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = some g →
+            g.kind = AspisR1.S2Trust.Kind.exclusive →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                  (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)) ∧
+                ∀ (i : ℕ) (v : UInt8),
+                  i < (s.payload g.cell).descriptor.length →
+                    AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.write t i v)
+                      (AspisR1.S2Trust.writeAt s g i v, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.guard_move : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.move t o) →
+            AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.move t o)
+              (AspisR1.S2Trust.relocate s t o, AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = some g →
+            g.kind = AspisR1.S2Trust.Kind.shared →
+              0 < s.counter g.cell →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                  (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = some g →
+            g.kind = AspisR1.S2Trust.Kind.exclusive →
+              s.counter g.cell = -1 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                  (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.error_move_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Matches L w AspisR1.S2Trust.Op.errorMoveDrop (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.borrow_frame : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s op → AspisR1.S2Trust.Matches L w op (AspisR1.S2Trust.run s op)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.guard_liveness : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = some g →
+            L.liveGuard w t = some g ∧ L.allocated w g.cell = true ∧ (L.cellPayload w g.cell).descriptor = g.descriptor
+constructor:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.mk {W F : Type} {L : AspisR1.S2Trust.Library W F}
+    (account_data_cell :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            ∀ (a b : ℕ),
+              L.accountData w a = (s.accounts a).1 ∧
+                L.accountLamports w a = (s.accounts a).2 ∧
+                  ((s.accounts a).1 = (s.accounts b).1 → L.accountData w a = L.accountData w b) ∧
+                    (s.ownerLive a = true → L.accountData w a ≠ L.accountLamports w a))
+    (cell_payload :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s → AspisR1.S2Trust.Valid s → ∀ (c : ℕ), L.cellPayload w c = s.payload c)
+    (cell_counter :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            ∀ (c : ℕ), L.cellCounter w c = s.counter c ∧ ∀ (t : ℕ), L.liveGuard w t = AspisR1.S2Trust.lookup s t)
+    (shared_ok :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+              0 ≤ s.counter (s.accounts a).1 →
+                s.counter (s.accounts a).1 < AspisR1.S2Trust.maxCounter →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o)
+                    (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.shared,
+                      AspisR1.S2Trust.Reply.guard t))
+    (shared_err :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+              s.counter (s.accounts a).1 < 0 ∨ s.counter (s.accounts a).1 = AspisR1.S2Trust.maxCounter →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o) (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (exclusive_ok :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+              s.counter (s.accounts a).1 = 0 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                  (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive,
+                    AspisR1.S2Trust.Reply.guard t))
+    (exclusive_err :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+              s.counter (s.accounts a).1 ≠ 0 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                  (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (shared_deref :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = some g →
+              g.kind = AspisR1.S2Trust.Kind.shared →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                  (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)))
+    (exclusive_deref :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = some g →
+              g.kind = AspisR1.S2Trust.Kind.exclusive →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                    (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)) ∧
+                  ∀ (i : ℕ) (v : UInt8),
+                    i < (s.payload g.cell).descriptor.length →
+                      AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.write t i v)
+                        (AspisR1.S2Trust.writeAt s g i v, AspisR1.S2Trust.Reply.unit))
+    (guard_move :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.move t o) →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.move t o)
+                (AspisR1.S2Trust.relocate s t o, AspisR1.S2Trust.Reply.guard t))
+    (shared_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = some g →
+              g.kind = AspisR1.S2Trust.Kind.shared →
+                0 < s.counter g.cell →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (exclusive_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = some g →
+              g.kind = AspisR1.S2Trust.Kind.exclusive →
+                s.counter g.cell = -1 →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (error_move_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Matches L w AspisR1.S2Trust.Op.errorMoveDrop (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (borrow_frame :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s op → AspisR1.S2Trust.Matches L w op (AspisR1.S2Trust.run s op))
+    (guard_liveness :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = some g →
+              L.liveGuard w t = some g ∧
+                L.allocated w g.cell = true ∧ (L.cellPayload w g.cell).descriptor = g.descriptor) :
+    AspisR1.S2Trust.S2TrustedSdkBorrow L
+'AspisR1.S2Trust.S2TrustedSdkBorrow' does not depend on any axioms
+structure AspisR1.S2W_TrustedStd.TrustedStd {F : Type}
+  (copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice : ∀ (s : AspisR1.S2Trust.Heap F) (dst : ℕ)
+      (src : AspisR1.S2Trust.Payload), copy s dst src = AspisR1.S2W_TrustedStd.specification s dst src
+constructor:
+  AspisR1.S2W_TrustedStd.TrustedStd.mk {F : Type}
+    {copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F}
+    (slice_copy_from_slice :
+      ∀ (s : AspisR1.S2Trust.Heap F) (dst : ℕ) (src : AspisR1.S2Trust.Payload),
+        copy s dst src = AspisR1.S2W_TrustedStd.specification s dst src) :
+    AspisR1.S2W_TrustedStd.TrustedStd copy
+'AspisR1.S2W_TrustedStd.TrustedStd' does not depend on any axioms
+def AspisR1.S2W_TrustedStd.specification : {F : Type} →
+  AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F :=
+fun {F} s dst src =>
+  if (s.payload dst).descriptor.length = src.descriptor.length then
+    AspisR1.S2W_TrustedStd.Outcome.returned (AspisR1.S2W_TrustedStd.copyHeap s dst src)
+  else AspisR1.S2W_TrustedStd.Outcome.panic
+'AspisR1.S2W_TrustedStd.specification' does not depend on any axioms
+structure AspisR1.S2W_D189Wrappers.Allocator (A : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1.S2W_D189Wrappers.Allocator.allocate : A → ℕ → Aeneas.Std.Result A
+  AspisR1.S2W_D189Wrappers.Allocator.cleanup : A → Aeneas.Std.Result A
+constructor:
+  AspisR1.S2W_D189Wrappers.Allocator.mk {A : Type} (allocate : A → ℕ → Aeneas.Std.Result A)
+    (cleanup : A → Aeneas.Std.Result A) : AspisR1.S2W_D189Wrappers.Allocator A
+'AspisR1.S2W_D189Wrappers.Allocator' does not depend on any axioms
+structure AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission {W : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (e : AspisR1.S2W_D189Entry.Entry) (w : W) (n : ℕ) :
+  Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.entry : AspisR1.AdapterRw.RuntimeEntrypointAdmission e.heap
+      (fun a => List.map AspisR1.S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles a).1).owned.key) n
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.related : L.related w e.heap
+constructor:
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.mk {W : Type}
+    {L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)} {e : AspisR1.S2W_D189Entry.Entry} {w : W} {n : ℕ}
+    (entry :
+      AspisR1.AdapterRw.RuntimeEntrypointAdmission e.heap
+        (fun a => List.map AspisR1.S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles a).1).owned.key) n)
+    (related : L.related w e.heap) : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e w n
+'AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.AdapterRw.RuntimeEntrypointAdmission {F : Type} (s : AspisR1.S2Trust.Heap F) (keys : ℕ → List UInt8)
+  (accountCount : ℕ) : Prop
+number of parameters: 4
+fields:
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.valid : AspisR1.S2Trust.Valid s
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.freshGuards : s.guards = []
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.noExternalBorrows : ∀ (c : ℕ), s.external c = 0
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.liveAccount : ∀ a < accountCount, s.ownerLive a = true
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.counterZero : ∀ a < accountCount, s.counter (s.accounts a).1 = 0
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.sharedCellsOnlyEqualKeys : ∀ (a b : ℕ),
+      a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.duplicateKeysShareCell : ∀ (a b : ℕ),
+      a < accountCount → b < accountCount → keys a = keys b → (s.accounts a).1 = (s.accounts b).1
+constructor:
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.mk {F : Type} {s : AspisR1.S2Trust.Heap F} {keys : ℕ → List UInt8}
+    {accountCount : ℕ} (valid : AspisR1.S2Trust.Valid s) (freshGuards : s.guards = [])
+    (noExternalBorrows : ∀ (c : ℕ), s.external c = 0) (liveAccount : ∀ a < accountCount, s.ownerLive a = true)
+    (counterZero : ∀ a < accountCount, s.counter (s.accounts a).1 = 0)
+    (sharedCellsOnlyEqualKeys :
+      ∀ (a b : ℕ), a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b)
+    (duplicateKeysShareCell :
+      ∀ (a b : ℕ), a < accountCount → b < accountCount → keys a = keys b → (s.accounts a).1 = (s.accounts b).1) :
+    AspisR1.AdapterRw.RuntimeEntrypointAdmission s keys accountCount
+'AspisR1.AdapterRw.RuntimeEntrypointAdmission' does not depend on any axioms
+structure AspisR1.S2W_DigestExtraction.AeneasExtraction (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage2 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+      (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts
+constructor:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.mk {ops : AdapterRw.Ops}
+    {native1 : AspisR1.S2W_ExtractionBoundary.First} {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest}
+    (stage1 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts) :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv
+'AspisR1.S2W_DigestExtraction.AeneasExtraction' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_ExtractionBoundary.P1
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.P1.realization : AspisR1.S2Z.Oracle.P1Realization sha256 H
+constructor:
+  AspisR1.S2W_ExtractionBoundary.P1.mk {sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (realization : AspisR1.S2Z.Oracle.P1Realization sha256 H) : AspisR1.S2W_ExtractionBoundary.P1 sha256 H
+'AspisR1.S2W_ExtractionBoundary.P1' does not depend on any axioms
+structure AspisR1.S2W_ExtractionBoundary.RuntimeSyscall
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk
+    {hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest}
+    {sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256) :
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+'AspisR1.S2W_ExtractionBoundary.RuntimeSyscall' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.S2Z.Oracle.P1Realization : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun sha256 H => ∀ (bytes : AspisV8R19.DuplexFrames.Bytes), sha256 bytes = H bytes
+'AspisR1.S2Z.Oracle.P1Realization' does not depend on any axioms
+def AspisR1.S2Z.Oracle.RuntimeSyscall : (AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun hashv sha256 =>
+  ∀ (parts : AspisR1.S2Z.Oracle.Parts) (digest : AspisR1.S2Z.Oracle.Digest),
+    hashv parts = Aeneas.Std.Result.ok digest →
+      AspisV8R19.SqueezeOracleBridge.decodeState digest = sha256 (AspisV8R19.SqueezeOracleBridge.flatten parts)
+'AspisR1.S2Z.Oracle.RuntimeSyscall' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2X.CheckpointVersionBinding (saved loaded : AspisV8R19.DuplexFrames.Bytes) : Type
+number of parameters: 2
+fields:
+  AspisR1.S2X.CheckpointVersionBinding.key : ℕ
+  AspisR1.S2X.CheckpointVersionBinding.ledger : ℕ → AspisV8R19.DuplexFrames.Bytes
+  AspisR1.S2X.CheckpointVersionBinding.events : List AspisR1.S2X.AccountEvent
+  AspisR1.S2X.CheckpointVersionBinding.savedAtCommit : self.ledger self.key = saved
+  AspisR1.S2X.CheckpointVersionBinding.loadedAtEntry : loaded = AspisR1.S2X.history self.ledger self.events self.key
+  AspisR1.S2X.CheckpointVersionBinding.noInterveningWrite : ∀ event ∈ self.events, AspisR1.S2X.Preserves self.key event
+constructor:
+  AspisR1.S2X.CheckpointVersionBinding.mk {saved loaded : AspisV8R19.DuplexFrames.Bytes} (key : ℕ)
+    (ledger : ℕ → AspisV8R19.DuplexFrames.Bytes) (events : List AspisR1.S2X.AccountEvent)
+    (savedAtCommit : ledger key = saved) (loadedAtEntry : loaded = AspisR1.S2X.history ledger events key)
+    (noInterveningWrite : ∀ event ∈ events, AspisR1.S2X.Preserves key event) :
+    AspisR1.S2X.CheckpointVersionBinding saved loaded
+'AspisR1.S2X.CheckpointVersionBinding' does not depend on any axioms
+def AspisR1.CPR_DataPersistence.TwoTransactionLaw : {Tx Key : Type} →
+  (Tx → Tx → Prop) →
+    (Tx → Key → Prop) →
+      (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+        (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+          (Tx → Bool) → (Tx → Key → Option AspisV8R19.DuplexFrames.Bytes) → Prop :=
+fun {Tx Key} next ordinary before tentative success loaded =>
+  ∀ (t u : Tx),
+    next t u →
+      ∀ (key : Key),
+        ordinary t key →
+          loaded u key =
+            AspisR1.CPR_DataPersistence.visible (if success t = true then tentative t key else before t key)
+'AspisR1.CPR_DataPersistence.TwoTransactionLaw' does not depend on any axioms
+structure AspisR1.CPH_Game.DeployedPairExecution {Tx A : Type} (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (sourceActions : List (AspisR1.CPP_BankState.Action A)) (n1 : AspisR1.S2W_ExtractionBoundary.First)
+  (n2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program) : Prop
+number of parameters: 14
+fields:
+  AspisR1.CPH_Game.DeployedPairExecution.consecutive : p.next t u ∧
+      e1 = AspisR1.CPG_Projection.entry p t ∧ e2 = AspisR1.CPG_Projection.entry p u
+  AspisR1.CPH_Game.DeployedPairExecution.checkpoint : ((p.layout t).handles 2).1 = ((p.layout u).handles 6).1 ∧
+      AspisR1.CPS_PhysicalKey.key e1 2 = AspisR1.CPS_PhysicalKey.key e2 6 ∧
+        ((p.layout t).handles 2).1 ∉ p.intervening t u
+  AspisR1.CPH_Game.DeployedPairExecution.parent : AspisR1.CPG_Projection.success p t = true
+  AspisR1.CPH_Game.DeployedPairExecution.recorded : (p.copied t = saved ∧
+        p.actions t = sourceActions ∧
+          AspisR1.CPG_RuntimeTrace.Executes n1 n2 copy allocator id
+            (AspisR1.CPR_SourceBank.afterCopy (AspisR1.CPG_Projection.cached (p.bank t)) ((p.layout t).handles 2).1
+              saved)
+            sourceActions (p.parentTentative t) (p.physicalEvents t)) ∧
+      AspisR1.CPG_RuntimeTrace.Executes n1 n2 copy allocator id (AspisR1.CPG_Projection.cached (p.bank u)) (p.actions u)
+        (p.parentTentative u) (p.physicalEvents u)
+constructor:
+  AspisR1.CPH_Game.DeployedPairExecution.mk {Tx A : Type} {p : AspisR1.CPG_Projection.Observations Tx A} {t u : Tx}
+    {e1 e2 : AspisR1.S2W_D189Entry.Entry} {saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8}
+    {sourceActions : List (AspisR1.CPP_BankState.Action A)} {n1 : AspisR1.S2W_ExtractionBoundary.First}
+    {n2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {copy :
+      AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+        ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)}
+    {allocator : AspisR1.S2W_D189Wrappers.Allocator A} {id : AspisR1.S2W_ExtractionBoundary.Program}
+    (consecutive : p.next t u ∧ e1 = AspisR1.CPG_Projection.entry p t ∧ e2 = AspisR1.CPG_Projection.entry p u)
+    (checkpoint :
+      ((p.layout t).handles 2).1 = ((p.layout u).handles 6).1 ∧
+        AspisR1.CPS_PhysicalKey.key e1 2 = AspisR1.CPS_PhysicalKey.key e2 6 ∧
+          ((p.layout t).handles 2).1 ∉ p.intervening t u)
+    (parent : AspisR1.CPG_Projection.success p t = true)
+    (recorded :
+      (p.copied t = saved ∧
+          p.actions t = sourceActions ∧
+            AspisR1.CPG_RuntimeTrace.Executes n1 n2 copy allocator id
+              (AspisR1.CPR_SourceBank.afterCopy (AspisR1.CPG_Projection.cached (p.bank t)) ((p.layout t).handles 2).1
+                saved)
+              sourceActions (p.parentTentative t) (p.physicalEvents t)) ∧
+        AspisR1.CPG_RuntimeTrace.Executes n1 n2 copy allocator id (AspisR1.CPG_Projection.cached (p.bank u))
+          (p.actions u) (p.parentTentative u) (p.physicalEvents u)) :
+    AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved sourceActions n1 n2 copy allocator id
+'AspisR1.CPH_Game.DeployedPairExecution' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.CPG_Projection.ordinary : {Tx A : Type} →
+  AspisR1.CPG_Projection.Observations Tx A → AspisR1.S2W_ExtractionBoundary.Program → Tx → ℕ → Prop :=
+fun {Tx A} p system t key =>
+  ((AspisR1.CPG_Projection.entry p t).records key).owned.is_signer = false ∧
+    ((AspisR1.CPG_Projection.entry p t).records key).owned.owner ≠ system
+'AspisR1.CPG_Projection.ordinary' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.CPG_Projection.adjacent : {Tx A : Type} → AspisR1.CPG_Projection.Observations Tx A → Tx → Tx → Prop :=
+fun {Tx A} p t u => p.next t u ∧ ((p.layout t).handles 2).1 ∉ p.intervening t u
+'AspisR1.CPG_Projection.adjacent' depends on axioms: [propext, Classical.choice, Quot.sound]
+inductive AspisR1.CPG_RuntimeTrace.Executes : {A : Type} →
+  AspisR1.S2W_ExtractionBoundary.First →
+    AspisR1.S2W_ExtractionBoundary.Second →
+      (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+        AspisR1.S2W_D189Wrappers.Allocator A →
+          AspisR1.S2W_ExtractionBoundary.Program →
+            AspisR1.CPP_BankState.Bank →
+              List (AspisR1.CPP_BankState.Action A) → AspisR1.CPP_BankState.Bank → List AspisR1.S2X.AccountEvent → Prop
+number of parameters: 6
+constructors:
+AspisR1.CPG_RuntimeTrace.Executes.nil : ∀ {A : Type} {n1 : AspisR1.S2W_ExtractionBoundary.First}
+  {n2 : AspisR1.S2W_ExtractionBoundary.Second}
+  {copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)}
+  {allocator : AspisR1.S2W_D189Wrappers.Allocator A} {id : AspisR1.S2W_ExtractionBoundary.Program}
+  (bank : AspisR1.CPP_BankState.Bank), AspisR1.CPG_RuntimeTrace.Executes n1 n2 copy allocator id bank [] bank []
+AspisR1.CPG_RuntimeTrace.Executes.cons : ∀ {A : Type} {n1 : AspisR1.S2W_ExtractionBoundary.First}
+  {n2 : AspisR1.S2W_ExtractionBoundary.Second}
+  {copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)}
+  {allocator : AspisR1.S2W_D189Wrappers.Allocator A} {id : AspisR1.S2W_ExtractionBoundary.Program}
+  {initial middle final : AspisR1.CPP_BankState.Bank} {action : AspisR1.CPP_BankState.Action A}
+  {rest : List (AspisR1.CPP_BankState.Action A)} {event : AspisR1.S2X.AccountEvent}
+  {events : List AspisR1.S2X.AccountEvent},
+  AspisR1.CPG_RuntimeTrace.Step n1 n2 copy allocator id initial action middle event →
+    AspisR1.CPG_RuntimeTrace.Executes n1 n2 copy allocator id middle rest final events →
+      AspisR1.CPG_RuntimeTrace.Executes n1 n2 copy allocator id initial (action :: rest) final (event :: events)
+'AspisR1.CPG_RuntimeTrace.Executes' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.FGl_PreparedAt.Owners : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C → AspisR1PublicPreparation.FinishModel.Boundaries → Prop :=
+fun {F C} c B =>
+  ∀ (s : AspisR1.F3T_ByteCarrier.Submission) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+    (e : AspisR1.F3V_RunEvidence.Evidence c B s H) (i : AspisR1.F3_Model.Input)
+    (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+    (data : AspisR1.RecordedBinaryExperimentBin.SourceInputs) (t : AspisR1.Cons_Native.Witness),
+    AspisR1.FGl_PreparedAt.At c B s H e i p q data →
+      AspisR1.Cons_Native.Calls (AspisR1.Op5T_Concrete.stage (AspisR1.AuS1_Install.base c.stageBase)) c.finish
+          c.reserved c.query c.geometry (AspisR1.F3V_RunEvidence.D2 c H) () e.pub e.proof e.saved.deref t →
+        ∀
+          (x :
+            AspisR1.F3S_FinishWitness.Primitives c.finish t.v2 t.p2
+              (have __src := t.returned2;
+              { weights := t.back2 t.flushed2, rhs := __src.rhs, power := __src.power, next := __src.next })),
+          AspisR1.FGl_FinishLeaves.Holds c.finish t.v2 t.p2
+            (have __src := t.returned2;
+            { weights := t.back2 t.flushed2, rhs := __src.rhs, power := __src.power, next := __src.next })
+            x q p
+            (AspisR1.LiteralTranscript.erasePrefix
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)
+            data
+'AspisR1.FGl_PreparedAt.Owners' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.FGl_FinishLeaves.Holds : {W : Type} →
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps W) →
+    (v : AspisR1Stage2.verifier.View) →
+      (p : AspisR1Stage2.verifier.Prepared) →
+        (a : AspisR1Stage2.verifier.Accumulator) →
+          AspisR1.F3S_FinishWitness.Primitives finish v p a →
+            (Fin 22 → Fin 262144) →
+              AspisR1.OraclePortCompactDraft.Parsed →
+                AspisR1.RawCutTranscriptRun.ErasedPrefix → AspisR1.RecordedBinaryExperimentBin.SourceInputs → Prop :=
+fun {W} finish v p a x q parsed tr input =>
+  AspisR1.FGl_FinishLeaves.PairingRemaining finish v p input.data ∧
+    (∀ (j : Fin 22), AspisR1.MatchingSupport.match0 input.data (q j)) ∧
+      AspisR1.R3SemanticRemainingJoins.EquationEndpoint input.decoded
+          (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) input.data ∧
+        AspisR1.CheckpointBytes5Output.ofE x.dot =
+          ∑ l, input.data.f l * AspisR1.LiteralOpeningView.eK ((AspisR1.CheckpointBytes5Output.accumulator a).weights l)
+'AspisR1.FGl_FinishLeaves.Holds' depends on axioms: [propext, Classical.choice, Quot.sound]

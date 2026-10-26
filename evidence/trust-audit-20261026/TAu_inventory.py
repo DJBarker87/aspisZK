@@ -56,6 +56,10 @@ def visit(m):
  r['raw_declarations']=decl.get(m,[])
  if m in graph:
   p=Path(graph[m]['raw_path']);r['census_same_object']=p.exists() and sha(p)==r['object_sha256']
+ if m in manifest and manifest[m].get('sha256')==r['object_sha256']:
+  r['imports']=manifest[m]['imports'];r['imports_basis']='hash-matched pinned object manifest'
+ elif r.get('census_same_object'):
+  r['imports']=graph[m]['imports'];r['imports_basis']='hash-matched raw object census'
  selected[m]=r
  for x in r['imports']:visit(x)
 for m in ['FGl_Headline','Rc6_Top']:visit(m)
