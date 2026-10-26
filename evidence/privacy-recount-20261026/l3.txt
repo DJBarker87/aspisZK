@@ -1,0 +1,331 @@
+# PV L3 x86_64 Linux evidence — 2026-10-26
+
+Status: platform pins and partial disassembly recorded; timing awaiting quiet host. No L3 result is proved. Evidence targets V372–V374;
+V370 and V371 remain explicit trust items for owner acceptance. No security
+contract or shipped implementation is changed. Source baseline:
+`619e192e0a6d940a3291319b2ce3ddc941854fe4`, branch `codex/pv-l3-20261026`.
+The sibling pv-rebase workspace is read-only and is not used for execution.
+
+## Method registered before measurements
+
+Scope: v2 canonical M31/CM31/QM31/WideExact arithmetic, CT full-width
+reducers and eager zero tests; raw pole equality/folding and the fixed
+1024-row/4096-comparison scan; tagged 16-limb compression; actual linked
+witness row-reader/no-pole call sites, TLS omission and retry callers.
+Canonical/nonzero operands and valid fixed public geometry are preconditions;
+public exponents/lengths are held fixed. Inversion validity and the final
+retry decision are separate boundaries, never silently classified CT.
+
+Build the unmodified host libraries with `optimized-terminal,ct-host-prover`
+in release mode, four Cargo jobs, default native x86_64 target, no target-cpu
+override. An evidence-only executable under this directory retains named
+non-inlined wrappers for individual kernel entry points and also links and
+can execute the actual fixture prover. Wrapper lowering is supplementary:
+a wrapper audit alone does not certify an inlined copy in the prover. Audit
+the linked actual call sites separately. No shipped source patch is permitted.
+Record SHA-256/size for every executable; do not commit binaries or keys.
+
+Disassembly: GNU objdump Intel syntax and nm symbol sizes. For each retained
+kernel record symbol/start/end/instruction count, branch/operand-index/latency
+findings and callees. Review conditional branches with operand provenance,
+not a grep-based assertion. DIV/IDIV on secret operands or a secret-derived
+branch/address is STOP for that kernel, with instruction retained. CPU
+instruction-latency coverage that cannot be justified stays unresolved.
+
+Timing pre-registration: one primary run per kernel, 100,000 observations
+per class (200,000 total), after 10,000 untimed warmup calls. Balanced class
+labels are shuffled with a reproducible PRNG before measurement. Class 0
+uses all-zero canonical operands (one for nonzero inversion); class 1 uses
+uniform pseudorandom canonical operands (reject zero for inversion).
+Reducers use fixed zero vs full-width pseudorandom integers. Public exponents
+are fixed at 31. Pole scan classes are no pole vs one pole at the last active
+slot, identical public masks and array lengths; equality/fold use unequal vs
+equal secrets. Scan data are prepared outside the timed interval. Tagged
+compression uses fixed vs random 16-limb tuples with fixed nonzero lambda.
+One call per observation; compiler black_box barriers retain inputs/outputs.
+Use serialized x86 RDTSC/RDTSCP with LFENCE and record TSC ticks; bind to one
+allowed logical CPU, record sibling topology/governor/current frequency/turbo
+state, and retain raw class/tick samples. No outlier trimming or post-hoc
+choice of sample size/classes. Welch two-sided t statistic on raw ticks is
+the primary statistic: |t| >= 4.5 is DETECTED; |t| < 4.5 is NO DETECTION IN
+THIS EXPERIMENT, never proof of no leakage. Zero pooled variance is reported
+explicitly. Multiple kernels and first-order sensitivity are limitations;
+no claim of an experiment-wide false-positive bound is made.
+
+Quiet-host prerequisite: record uptime/load and populated scopes immediately
+before and after. Launch timing only with no competing compute scopes and
+1-minute load <= 1.0; no changing this threshold after seeing timings.
+MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scope at a time,
+reservation against 55 GiB; never raise caps. CPU policy is observed, not
+modified globally. A contended/interrupted run is INVALID, retain it and
+report why rather than accepting its statistic.
+
+Whole-proof comparison: require two distinct valid witnesses for the exact
+same serialized public statement, checked before timing. Different public
+statements or merely changing masking coins does not satisfy this test.
+If such a pair is available, randomized balanced order, 100 proofs per class,
+fresh reproducible fixture coins per proof, proof generation timed separately
+from preparation/verification; verify every resulting proof. Report means,
+standard deviations, medians, range, Welch t and empirical CDF maximum gap.
+Use the same |t|=4.5 threshold as a distribution diagnostic, not a privacy
+proof. If no valid pair is available, report NOT RUN with the exact missing
+fixture; never substitute transfer versus withdrawal. If the shared host
+cannot become quiet, leave timing open and retain the preflight evidence.
+
+## Stage results
+
+Final platform build/pins and partial disassembly are recorded below. Timing remains gated on a quiet host; trust items remain for owner acceptance.
+Lean/Kani attempts: zero; #print axioms: N/A (no new theorem).
+
+## Stage 1 — V372 platform pins (MEASUREMENT / artifact identity)
+
+| Pin | Exact value / evidence |
+|---|---|
+| Source | `b07624802f864b91395c7c405ee041f4279c4055` (see authoritative full revision in platform/pins.json); libraries unchanged from baseline `619e192e0a6d940a3291319b2ce3ddc941854fe4` |
+| Executable | Evidence-only native host prover `pv-l3-evidence`, 2,871,856 bytes |
+| SHA-256 | `4735ed37062fef000af06563a1661767a9142884f4439abfecd9557f4a61da58` |
+| Features | defaults + `aspis-r1-cost-probe/{optimized-terminal,ct-host-prover}`; resolved `aspis-core/{r0,ct-host-prover}`; full tree in platform/features.txt |
+| rustc | 1.94.1, commit `e408947bfd200af42db322daf0fadfe7e26d3bd1`, LLVM 21.1.8 |
+| Target | `x86_64-unknown-linux-gnu`, native default, no target-cpu override |
+| Profile / flags | release defaults (opt-level=3, codegen-units=16, LTO=false, debug assertions/overflow checks=false; certificate checker/build overflow checks=true); `RUSTFLAGS=-C link-arg=-Wl,--threads=4`; `-j 4` |
+| Linker | cc driver, `-fuse-ld=lld`, bundled LLD 21.1.8; full actual link argv in l3-native-build-004/stdout.log, ELF .comment corroboration |
+| CPU / microcode / kernel | See raw platform/cpuinfo.txt, lscpu.txt and uname.txt; summarized below |
+| CPU timing mode | CPU0: DOITM supported, **DISABLED**; IA32_ARCH_CAPABILITIES `0xdc9fd6b`, IA32_UARCH_MISC_CTL `0x0`; read-only MSR receipts, no writes |
+
+This pins a newly built research executable, not a deployed native release.
+The binary includes unmodified host prover libraries, real fixture-prover
+calls and supplementary wrappers. It is not byte-identical to the sibling's
+executable; no sibling timing/disassembly evidence is silently transferred.
+The linked-source hashes and generated harness lock are retained. The standard
+host receipt does not hash this deeply nested harness, so platform/source-pins.json
+supplies that missing hash inventory explicitly.
+
+Reproduction: export the pinned commit's root Cargo manifests, .cargo, crates,
+programs, xtask, audit, z4/c3/refine dependencies and this harness to the owned
+host directory. Use its retained Cargo.lock, PATH with the pinned rustup stable
+toolchain, CARGO_NET_OFFLINE=true, CARGO_BUILD_JOBS=4, RUSTFLAGS as above, and
+CARGO_TARGET_DIR in the owned host directory. After the existing 55-GiB
+reservation check, use the existing tools/ct-kernels-20261022/run-host.py to
+launch `cargo rustc --release -j 4 -vv --manifest-path
+ docs/research/100bit-spend-path-20261013/evidence/pv-l3-20261026/harness/Cargo.toml
+ -- --print link-args` inside the required 6G/8G/swap0/tasks64 scope.
+Exact path strings may affect Rust panic metadata and therefore artifact hash;
+recheck binary identity rather than assuming reproducible bytes across paths.
+Build receipts record successful exits, wall, RSS, swaps and N/A axioms.
+No Lean/Kani, verifier rebuild or implementation edit was performed here.
+
+CPU: Intel Core Ultra 7 155H, family 6 model 170 stepping 4, microcode `0x28`; 22 logical CPUs, hybrid topology. Kernel: `Linux nuc 6.8.0-147-generic #147-Ubuntu SMP PREEMPT_DYNAMIC Thu Sep 24 11:33:16 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux`. Flags and per-CPU frequency/topology snapshots are in platform/pins.json and cpuinfo.txt.
+
+## Stage 2 — V373 disassembly audit (MEASUREMENT, partial)
+
+The complete per-symbol table is
+[per-symbol findings](../docs/research/100bit-spend-path-20261013/evidence/pv-l3-20261026/disassembly/findings.md).
+It records 84 symbols, exact ranges, instruction counts, callees, all 385
+conditional-branch sites and candidate scaled-address sites in machine-readable
+inventories. The selected disassembly and complete nm/relocation tables are
+retained; no binary is committed. Zero DIV/IDIV instructions occur in the
+collected symbols; this alone is not an audit verdict.
+
+| Boundary | Result and exact instruction evidence |
+|---|---|
+| 52 named arithmetic/pole/compression wrappers | No Jcc in wrapper bodies; fixed offsets; callees reviewed separately. Named wrapper inventory is authoritative for count. |
+| M31 leaves / tower arithmetic / eager zero / raw WideExact constructors | Scalar CMOV/SETcc or SSE mask selection, no observed secret branch/index in these retained entry points; full-width reducers included. M31 CT add/sub/neg/zero map to wrappers; reduce_u62/u64 share reduce64; ct::is_zero maps to m31_is_zero. |
+| Tagged 16-limb compression | Actual linked symbol `0x194ec0–0x1954af`, 335 instructions; length-zero Jcc at `0x194edb` and public loop limit at `0x195495`; tuple load indexed by public byte counter. |
+| Actual pole scan | `0xe1490–0xe15e5`, 76 instructions; three Jcc inspect slice length/row bounds/public loop limit. All four values per row are compared eagerly using SSE and folded with AND. |
+| Fixed witness reader | Inlined lean_copy_row_values in build_with_material closure, plus copy_endpoint_values (`0xa76a0–0xa800b`, 516 instructions) and copy_tuple_limb (`0xa42b0–0xa4322`, 33). Registry indices/enum/bank/arity and shape checks are public; secret loads feed CMOV/SSE arithmetic, not address calculation. |
+| Pole verdict caller | **STOP for unconditional caller CT** at `0xa739d: je 0xa7404`, following `test sil,1`; the actual scan verdict flows through r12d/esi to this branch and selects ActivePole. This is the explicitly retained L1 retry boundary, not a newly introduced arithmetic failure. No patch made. |
+| Inversion validity | **STOP outside nonzero domain**: M31 `0x1fc102: je`, QM31::try_inv `0x1fd5c8: je`, WideExact::try_inv `0x20521d: jne` on zero/Option validity. Nonzero-domain tests do not certify the zero boundary. |
+| Exponentiation | Linked generic CM31/QM31/WideExact pow branches use PUBLIC exponent; fixed exponent 31 in measurement wrappers. No secret-exponent claim. |
+| TLS | VALUES/CHECK_TIMES storage symbols absent; source cfg disables retention. Empty take outputs asserted by proof modes, not yet executed as proof measurements. |
+| CPU latency | **UNRESOLVED**: no DIV/IDIV in selected code, but CPU0 DOITM is disabled in the read-only MSR snapshot and instruction list membership alone cannot justify latency for this CPU/mode. |
+
+The supplementary wrappers are not every optimizer-created inlined copy in
+the whole prover. Actual pole/compression/row-reader copies above were reviewed,
+but other whole-prover control flow (including retry/certificate work) is not
+certified. V373 receives a reviewable partial audit with explicit STOPs and
+CPU-mode limitation, not a blanket PASS or premise removal.
+
+Intel's [DOIT instruction list](https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/resources/data-operand-independent-timing-instructions.html)
+and [DOIT ISA guidance](https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/best-practices/data-operand-independent-timing-isa-guidance.html)
+were consulted on 2026-10-26. The guidance qualifies data-independent timing
+by instruction subset and mode, and excludes power/thermal/frequency effects
+from that property. This packet does not assume the pre-Ice-Lake implicit
+mode rule applies to Meteor Lake. A later read-only MSR snapshot found CPU0 DOITM supported but disabled; no mode write was made.
+
+### Pre-measurement profile correction
+
+The standalone workspace initially omitted root package-level release
+`overflow-checks=true` for aspis-r1-cert-check/build. Builds 001/002 and the
+first disassembly therefore pin an evidence-only profile that differs from
+the intended root native profile. They are superseded, not adopted. No timing
+was run. The harness now copies those two package overrides exactly; rebuild,
+repin and re-extract before using any final machine-code result. This is a
+harness configuration correction only; no crates/programs file changed.
+
+Final operand-batched build is `l3-native-build-004`; its exact source revision is
+`b07624802f864b91395c7c405ee041f4279c4055`. Historical profile-002 pins and
+assembly are retained under `superseded/build002/`. The final 84-symbol
+extraction has identical instruction counts and operand/control provenance
+under relocation normalization (receipt: disassembly/relocation-review.json).
+This is not binary equality: certificate code elsewhere changed under the
+corrected overflow profile. All tables above now refer to build 003.
+The final same-public pair check also exits 0 (l3-pair-check-002).
+
+## Stage 3 — V374 timing status (no timing samples yet)
+
+The guard was exercised in the required capped scope and exits **78 before
+any sample** because the host is not quiet. This is an expected preflight
+refusal, not a timing-test failure, memory kill, or reservation-barrier refusal.
+There were no reservation refusals and no cap increases. Retained evidence:
+measurement-preflights/quiet-001.json (load 22.16), quiet-002.json (19.80),
+timing-gate-001/before.json and receipts/l3-quiet-gate-001/. Other users' scopes
+were not changed or stopped. Frequency state is recorded: CPU0 powersave,
+balance_performance, turbo enabled, 400–4500 MHz policy range; these are
+observations, not controlled frequency settings. A later read-only MSR snapshot establishes CPU0 DOITM is supported but disabled.
+
+| Requested MEASUREMENT | Planned counts per class | Actual counts | Welch t | Verdict |
+|---|---:|---:|---|---|
+| 51 scalar/tower/pole/compression entry points | 100,000 | 0 / 0 | N/A | NOT RUN: quiet-host prerequisite |
+| 1024-row pole scan, no pole vs last-slot pole | 100,000 | 0 / 0 | N/A | NOT RUN: quiet-host prerequisite |
+| Whole proof, same public statement / distinct selection witnesses | 100 | 0 / 0 | N/A | NOT RUN: quiet-host prerequisite |
+
+`measurements.json` lists every requested kernel separately, with null t and
+zero actual samples. No NO-DETECTION/PASS verdict is inferred from missing
+samples. The analyzer's synthetic arithmetic check is not a timing result.
+
+The final optimized pair validation (0.0381 s, 3696 KiB RSS, zero swaps)
+checks distinct selection witnesses, both honest zero-residual compilations,
+equal compilation public state and a shared 1880-byte public encoding,
+SHA-256 `31e58069ff40f1b6a94489cb7abeca49a16d75536829ba29cd1b127637703b03`.
+It does not yet verify proofs for this pair: that is part of the registered
+whole-proof run. The pair uses a duplicate commitment in the two input slots,
+following the repository's existing honest diagnostic, not a transfer versus
+withdrawal substitution and not a mere change of masking coins.
+
+When quiet, run the existing capped runner once with
+`python3 ../timing-guard.py kernels timing-kernels-001`, then (after another
+quiet preflight and with no simultaneous own scope)
+`python3 ../timing-guard.py whole timing-whole-001`. The guard rechecks the
+exact binary hash, affinity, caps and quiet condition and retains before,
+during (one-second resolution), after, raw samples and statistics. Raw CSVs
+stay on the owned host with SHA-256/size indexes; only summary/index receipts
+need committing. A competing scope invalidates that run without changing
+thresholds or discarding the raw evidence. After-load includes the
+experiment's own work; it is recorded without treating that as competition.
+
+## Stage 4 — V370/V371 explicit TRUST ITEMS
+
+V370 — Compiler-preservation TRUST ITEM, proposed exact scoped statement for owner acceptance: For the host-prover library entry points linked into native executable SHA-256 4735ed37062fef000af06563a1661767a9142884f4439abfecd9557f4a61da58 (2,871,856 bytes), built from b07624802f864b91395c7c405ee041f4279c4055 with rustc e408947bfd200af42db322daf0fadfe7e26d3bd1 / LLVM 21.1.8, x86_64-unknown-linux-gnu, the recorded release/package profiles, feature closure, cc/LLD link and RUSTFLAGS, assume compilation and linking preserve the established source leakage semantics. Specifically, for every pair of valid executions satisfying each source boundary's canonicality, public-geometry, public-exponent and nonzero premises, compiler-introduced instruction choices, control transfers, spills and memory addresses reveal no additional secret information beyond the selected source leakage observer. Thus any source trace equality or joint simulatable-trace law that is actually established transports to this machine-code observer under a fixed public trace interpretation. This does not assume that such a source law already holds for the whole prover, erase the pole-verdict/retry/abort paths, or turn a local kernel theorem into a whole-prover theorem.
+
+V371 — CPU data-independent-latency TRUST ITEM, proposed exact scoped statement for owner acceptance: On the pinned Intel Core Ultra 7 155H, family 6/model 170/stepping 4, microcode and Linux kernel recorded in platform/cpuinfo.txt and uname.txt, for the instruction encodings on the audited witness/pole arithmetic paths of executable SHA-256 4735ed37062fef000af06563a1661767a9142884f4439abfecd9557f4a61da58, assume that changing secret data operands while holding the instruction stream, memory-address trace, public operands and initial public hardware/environment state fixed does not change instruction latency or introduce additional operand-dependent timing effects. Apply this only under the recorded CPU0 affinity, frequency policy and actual CPU operating mode; CPU0 DOITM is supported but DISABLED in the read-only MSR snapshot (IA32_ARCH_CAPABILITIES=0xdc9fd6b; IA32_UARCH_MISC_CTL=0x0); no mode write was made. This is a hardware trust assumption rather than an inference from the instruction list. It does not assert that secret-dependent addresses, power/thermal/frequency behavior, speculative execution, or concurrent-system effects are absent. Their treatment in the complete D159 observer and execution/trace transport must remain explicit; a fixed-environment latency assumption alone does not close them.
+
+Support and limits: the retained machine code shows branchless operand
+selection at the reviewed kernel entries, public-counter scans/compression,
+and the explicit pole/zero validity branches. It supports a limited code
+review, not universal compiler preservation. There is currently **no timing
+support from this job**. Vendor guidance and absence of selected DIV/IDIV
+instructions do not prove operand-independent latency on this CPU/mode.
+Neither item is accepted on the owner's behalf or inserted into a security
+contract; both remain named external trust items per D162.
+
+## Ledger disposition and adoption changes
+
+| Ledger row | Before | This packet supplies | After |
+|---|---|---|---|
+| V370 compiler preservation | External trust item | Exact binary/toolchain-scoped statement and partial disassembly support | RETAINED; not proved or owner-accepted here |
+| V371 CPU latency | External trust item | CPU/microcode/kernel pins, qualified vendor references, explicit disabled-DOITM limit | RETAINED; not proved or owner-accepted here |
+| V372 platform pins | Native binary/compiler/flags/CPU pin obligation | Fresh corrected-profile research-native executable pin and reproduction record | Evidence supplied for this executable; adopted-release connection still required |
+| V373 disassembly | Actual compiled witness/pole kernel/call-site audit obligation | Per-symbol audit, instruction counts, STOPs and coverage limits | PARTIAL; no blanket PASS, no premise removal |
+| V374 timing | Retained timing experiments/statistics obligation | Pre-registration, executable harness/analyzer, valid same-public witness pair, quiet-host refusal receipts | OPEN; no samples/statistics and no timing verdict |
+
+Premises removed: **none**. Premises added to the security contract: **none**.
+No theorem statement, carrier, quantifier, simulator, observer or failure event
+was weakened. L1 joint retry law, L2 simulatable-trace/source refinement and
+the two L3 trust items remain separate. The deployed headline
+`PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` is **not established**
+by this packet. No Lean or Kani attempts were consumed (0/10 each).
+
+When the adopted revision, feature closure, compiler/LLVM/linker, optimization
+profile, RUSTFLAGS or target changes: rebuild and hash the adopted native
+executable; repeat machine-code extraction and per-kernel/call-site provenance
+review; rerun the pre-registered measurements and witness-pair/proof validation;
+review source L2 proof bindings and both trust statements. A documentation-only
+change with demonstrably unchanged compiled inputs can retain this historical
+packet with that explicit source mapping; do not pretend its source revision
+or executable hash changed. CPU model/stepping/microcode, kernel, operating
+mode, affinity/topology or frequency-policy changes require new platform pins,
+a fresh CPU-latency assessment and timing runs. A future release executable
+that omits this research harness requires its own actual-call-site audit and
+identity evidence; wrapper results do not automatically transfer.
+
+The sibling's committed report was read via `git show
+codex/pv-rebase-20261026:design/PV-REBASE-20261026.md`: its three ELF identity
+and fixed-coin fixture gates are separate evidence, while its differential
+continuation and quiet-host performance gate were pending there. This branch
+makes no new claim about those gates and does not touch the sibling worktree.
+There are no source changes under crates/ or programs/ relative to this job's
+baseline; no verifier repin, wallet cleanup, fund operation or deployment was
+performed. No binaries, keys, ELF files, tarballs or Lean objects are committed.
+
+### Read-only CPU-mode refinement
+
+`platform/cpu0-msr.json` refines the initial unknown mode: CPU0 reports
+IA32_ARCH_CAPABILITIES `0xdc9fd6b` (DOITM support bit 12 = 1) and
+IA32_UARCH_MISC_CTL `0` (DOITM enable bit 0 = 0). Both `sudo -n rdmsr`
+commands exit 0; GNU-time receipts are retained. This snapshot is not a
+mode guarantee for a later scheduling/context state; re-read around any
+measurement. No MSR or frequency policy was written. Intel's documented
+DOITM-enabled guarantee cannot be claimed from this disabled-mode snapshot.
+Intel also documents [data-dependent prefetching](https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/data-dependent-prefetcher.html)
+on supporting processors; this packet does not establish DDP presence or
+enablement on this CPU and does not infer it merely from DOITM support.
+V371 therefore remains a substantive trust item, even for branchless code.
+
+### Pre-sampling harness preparation refinement
+
+Before collecting any timing sample, operand preparation was moved into a
+batch before each kernel's warmup/timed loop. This keeps random-number
+generation and class-specific preparation out of the immediately preceding
+measurement interval. It preserves the registered classes, uniform canonical
+operand sampler, shuffled balanced labels, 10,000 warmups, 100,000 observations
+per class, TSC fences, and |t|=4.5 criterion. The maximum prepared batch is
+about 51.2 MB. The pole scan keeps one fixed array and changes only its last
+slot outside timing, avoiding class-dependent base addresses or a huge
+per-observation scan allocation. The idle queue was stopped before this
+harness edit; no sampling scope or other job was touched. Rebuild/re-audit
+is required before restarting that queue.
+
+
+The final compiled artifact is now **build 004** (operand batching); build 003
+is superseded by this new harness input, with its earlier pins/audit retrievable
+from commit `d8f368dae2`. Build 004 changes neither library source nor package
+profiles. Its 84 retained symbols have exactly matching operand/control flow
+under fixed relocation normalization, with unchanged instruction/branch counts.
+The 52 final symbols/ranges are in the updated per-symbol table; trust-item
+binary scope is updated to this executable. The validated witness-pair source
+is unchanged, so pair-check-002 is reused explicitly rather than rerun.
+
+
+Current retained executable path is recorded in `retained-binary.json`: a
+SHA-named copy under the owned host's `bin/`, mode 0555. The timing guard uses
+that copy and verifies its SHA-256 before execution; no executable is committed.
+The re-armed queue is `await-quiet.py`, with live state in the owned host's
+`await-quiet-state.json`. It checks every 180 seconds, holds no build-RAM
+reservation while idle, and uses the existing reservation/capped runner for
+exactly one experiment at a time. Reservation refusals use fresh run names,
+180-second waits and at most ten retries. Any executed invalid measurement
+stops for review; there is no repeat-until-passing statistical loop. Before any
+new manual host build from this job, inspect the live state to preserve the
+one-scope rule. The current revision has zero collected timing observations.
+
+
+`collect-when-ready.py` is the guarded collector for this queued work. It
+waits for the controller's completed/invalid terminal state, checks the exact
+binary pin, branch, expected HEAD, clean worktree and unchanged report, then
+copies only this job's summaries/receipts (never raw binaries or proof files),
+checks the registered sample counts, appends the actual findings, and makes
+one local commit. It never pushes or reruns an experiment. If another session
+changes this worktree, it stops for review rather than overwriting the report.
+The waiting controller and collector have no Lean/Kani budget allocation and
+hold no build-memory reservation. Their live state/log paths are recorded in
+`queue-handoff.json` when launched.
