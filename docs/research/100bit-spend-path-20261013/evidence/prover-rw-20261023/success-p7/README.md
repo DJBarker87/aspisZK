@@ -30,3 +30,25 @@ after and diff are adjacent; all other bytes remain identical. Existing
 5G/7G/swap0/Tasks64/-M7000 limits are stricter than6G/8G. Its barrier explicitly
 requires5G/7G, so those are retained without infrastructure repair. Native jobs
 use the existing6G/8G/swap0/Tasks64 wrapper. One own scope at a time.
+
+## Stage2: owned compression totality, shipped comparison still open
+
+14800–14802 pass. `ProverRwP7CompressTotal.total` proves the indexed P6
+reference terminates and succeeds for every slice length, tag, raw lambda and
+installed release dictionary. The finite proof establishes valid reads and a
+nonwrapping index step symbolically; separate scalar/complex/quartic totality
+lemmas discharge every primitive-success premise. Eight axiom reports are
+standard. No op223 implementation, success output or field-canonicality premise
+is supplied. This closes reference totality, not native equivalence.
+
+`success-p7-compress-b-001` compares one raw output coordinate for a one-element
+native compression against a smaller reference omitting the unused final power
+update. It times out240s; no completed harness result. Its exact reference is
+hash-checked against preflight. The scope is confirmed inactive afterwards.
+No unchanged retry, cap or timeout increase; no op223 installation. The prior
+full-coordinate and c0.a failures remain retained in the P6 evidence.
+
+Late-public equality extraction succeeds, but Full's afterstate is the opaque
+`ExternalTypes.op20`. The emitted comparator reads its fields. No accessor map
+or equality-preservation premise is silently supplied to install op229. Its
+fresh source is retained for the representation owner; installation remains open.

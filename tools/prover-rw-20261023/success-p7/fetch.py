@@ -1,7 +1,7 @@
 """Copy immutable receipts only; no jobs launched or infrastructure changed."""
 from pathlib import Path
 import subprocess,sys
-r=Path(__file__).resolve().parents[3];e=r/'docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/success-p6'
+r=Path(__file__).resolve().parents[3];e=r/'docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/success-p7'
 h='dombarker@100.108.41.90:';b='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023';t='/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
 for arg in sys.argv[1:]:
  if arg.isdigit():

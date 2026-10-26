@@ -1,0 +1,134 @@
+{
+  "attempts": [
+    {
+      "attempt": 14800,
+      "module": "R1Z/ProverRwP7CompressFiniteTotal",
+      "exit": 0,
+      "wall": [
+        "0:01.88"
+      ],
+      "peak_rss_kib": [
+        "4300272"
+      ],
+      "swaps": [
+        "0"
+      ],
+      "axiom_reports": 2
+    },
+    {
+      "attempt": 14801,
+      "module": "R1Z/ProverRwP7CompressPrimitives",
+      "exit": 0,
+      "wall": [
+        "0:02.47"
+      ],
+      "peak_rss_kib": [
+        "4306108"
+      ],
+      "swaps": [
+        "0"
+      ],
+      "axiom_reports": 5
+    },
+    {
+      "attempt": 14802,
+      "module": "R1Z/ProverRwP7CompressTotal",
+      "exit": 0,
+      "wall": [
+        "0:01.81"
+      ],
+      "peak_rss_kib": [
+        "4302040"
+      ],
+      "swaps": [
+        "0"
+      ],
+      "axiom_reports": 1
+    }
+  ],
+  "native": [
+    {
+      "attempt": "success-p7-compress-b-001",
+      "kind": "Kani",
+      "command": [
+        "timeout",
+        "240",
+        "/home/dombarker/.cargo/bin/cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-rw-20261023/success-p7/proof/Cargo.toml",
+        "--lib",
+        "--harness",
+        "one_b",
+        "--no-overflow-checks",
+        "--solver",
+        "kissat",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "exit": 124,
+      "wall": 240.00296890398022,
+      "peak_rss_kib": 16360,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 640425984,
+      "source_revision_label": "aeec7331d8+native-entropy-drop-probe",
+      "scope": "Exact source hashes pin inputs; historical host revision label is not this branch revision"
+    },
+    {
+      "attempt": "success-p7-late-eq-aeneas-001",
+      "kind": "extraction",
+      "command": [
+        "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-strict-joins",
+        "-backend",
+        "lean",
+        "-namespace",
+        "ProverRwP7LateEq",
+        "-dest",
+        "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/success-p7-late-eq-generated",
+        "-split-files",
+        "-emit-json",
+        "ProverRwP7late_eq.llbc"
+      ],
+      "exit": 0,
+      "wall": 0.29621584399137646,
+      "peak_rss_kib": 63008,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 52207616,
+      "source_revision_label": "aeec7331d8+native-entropy-drop-probe",
+      "scope": "Exact source hashes pin inputs; historical host revision label is not this branch revision"
+    },
+    {
+      "attempt": "success-p7-late-eq-charon-001",
+      "kind": "extraction",
+      "command": [
+        "python3",
+        "tools/prover-rw-20261023/success-p7/extract.py",
+        "late_eq"
+      ],
+      "exit": 0,
+      "wall": 0.21148179098963737,
+      "peak_rss_kib": 142736,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 70512640,
+      "source_revision_label": "aeec7331d8+native-entropy-drop-probe",
+      "scope": "Exact source hashes pin inputs; historical host revision label is not this branch revision"
+    }
+  ],
+  "lean_compiles": 3,
+  "lean_passes": 3,
+  "kani_runs": 1,
+  "lean_budget": 100,
+  "kani_budget": 15,
+  "root_premises_removed": 0,
+  "target_established": false
+}
