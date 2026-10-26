@@ -71,6 +71,30 @@ is queued unchanged, and no Kani slot has been charged. List replacement
 harness names before running; stop the queue on its first configuration
 failure. Native-effect deferrals remain as recorded in RESUME-SOURCE-ROWS.
 
+Additional compile-free checks: `RESUME3-OP105-NORMALIZATION-CHECK.json`
+reconstructs the raw Funs bytes by reversing exactly the documented import
+and three shift-count type adaptations; the raw SHA matches. A read-only
+host directory inspection found the own workspace and restored joint objects,
+but **no own `lean-objects` directory** (`RESUME3-HOST-CACHE-INSPECTION.json`).
+Thus own cache restoration from joint objects is expected after the flag;
+neither completeness nor usable build provenance is inferred from directory
+existence. The flag remains authoritative.
+
+Op118 fallback preparation is retained separately in
+`RESUME3-OP118-P6-PREPARED.json`: named harness
+`checks::statement_points_reference`, no stubs, arbitrary 40 raw u32 limbs,
+all 30 output records compared, recursive safe reference and bounded shipped
+loop. Its cfg(kani)-only source is prepared, not type-checked or run. Direct
+source extraction remains first. A passing native gate alone will not be
+reported as source-row discharge; extraction and the complete Result source
+equation remain required. The queue stops on its first configuration failure.
+
+The row-recording utility now accepts an explicit Exact module and checks
+the receipt target, current source SHA and qualified theorem/standard axioms
+before writing an accepted row. No row was rewritten by this change. The
+dictionary generator has groups for future accepted ops 105/107/109/118 and
+rejects any accepted row lacking a group. Its current 18-row `--check` passes.
+
 Next concrete deliverable: host receipt for corrected op105 Funs, followed
 by its exact current-candidate source equation. Until the flag appears,
 continue compile-free work and poll its existence every ten minutes.

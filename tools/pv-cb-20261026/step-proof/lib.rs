@@ -3,6 +3,7 @@ pub use aspis_core::{field,transcript};
 #[path="../source-proof/owned.rs"]
 pub mod owned;
 pub mod captured_mask;
+pub mod owned_points;
 #[cfg(not(pv_cb_extract))]
 mod checks {
     use aspis_core::field::{M31,CM31,QM31,PreparedQm31Multiplier};
@@ -91,6 +92,22 @@ mod checks {
         let i:usize=kani::any();kani::assume(i<26);
         let prepared=PreparedQm31Multiplier::new(q(kani::any()));let state=q(kani::any());
         same(shipped::horner_step(&coeff,prepared,i,state),reference::horner_step(&coeff,prepared,i,state));
+    }
+
+    // PREPARED fallback for op118: unrestricted raw QM31 inputs, real shipped
+    // call, no stubs. Ten decreasing recursive calls and the ten-coordinate
+    // production loop fit unwind 12; the comparison loops have bounds 3/10.
+    #[kani::proof]
+    #[kani::unwind(12)]
+    fn statement_points_reference() {
+        let point = kani::any::<[[u32; 4]; 10]>().map(q);
+        let actual = aspis_core::state_only_prefix::r0::statement_points(&point);
+        let expected = super::owned_points::statement_points(&point);
+        for row in 0..3 {
+            for coordinate in 0..10 {
+                same(actual[row][coordinate], expected[row][coordinate]);
+            }
+        }
     }
 
 }

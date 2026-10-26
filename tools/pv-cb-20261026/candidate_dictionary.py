@@ -34,7 +34,8 @@ source+='\n'.join(f'    op{n} := @ExternalFuns.op{n} _ ({selector})'+(',' if i<l
 source+='end R1Z.PV_CB_CandidateDictionary\n'
 outputs[lean/'PV_CB_CandidateDictionary.lean']=source
 # Families provide useful focused checks before the final combined audit.
-groups=[('Core',[3,77,82,83,86]),('Codecs',[71,72,80]),('Field',[100,101,110,111,114]),('Zeroizing',[127,128,130,131]),('Public',[229])]
+groups=[('Core',[3,77,82,83,86]),('Codecs',[71,72,80]),('Field',[100,101,105,107,109,110,111,114]),('Zeroizing',[127,128,130,131]),('Public',[118,229])]
+assert {n for n,_,_,_,_ in items}<={n for _,ids in groups for n in ids}, 'Assign each accepted row to a projection group'
 for label,ids in groups:
  text='import R1Z.PV_CB_CandidateDictionary\n'+header.split('abbrev native',1)[0]
  for n,module,stmt,selector,theorem in items:
@@ -47,7 +48,7 @@ for label,ids in groups:
   if n==229:explicit=['base','ops','a','b']
   if n!=229:stmt=stmt.replace('(ops : ExternalFuns)','(base : ExternalTypes) (ops : @ExternalFuns (native base))',1)
   # All exact carriers/functions are qualified, including the LatePublic transport.
-  for name in ['encodeW','decodeW','encode','decode']:
+  for name in ['encodeW','decodeW','encodeArray','decodePoints','encode','decode']:
    stmt=re.sub(r'(?<![\w.])'+name+r'\b',f'PV_CB_Op{n}Transport.'+name,stmt)
   if n==229:stmt=re.sub(r'(?<![\w.])source\b','PV_CB_Op229Source.source',stmt)
   stmt=re.sub(r'\([^()]*\)\.op'+str(n)+r'\b',f'(selected base ops).op{n}',stmt,count=1)
