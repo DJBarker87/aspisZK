@@ -128,3 +128,31 @@ printed audit. These scope audits are explicit zero-progress diagnostics, not
 additional premise removals or repeated package regressions. Focused cached
 validation is not a fresh coherent frozen-release replay. Final invocations101
 and102 record the combined axioms and full root/proposal/key-theorem statements.
+
+## Final receipts and next deliverable
+
+Budget EXHAUSTED: **100/100 actual Lean invocations,0/0 Kani**;89 pass,11 excluded failures;0 dependency builds. No further Lean invocation is allowed. Total Lean wall263.64599359576823s; maximumRSS5573064KiB;swap0.
+
+Final target **ARV_FinalAudit.lean** (101): exit0,wall2.341367647983134s,peakRSS5546216KiB,swap0; source revision115b9ed785a9d4896b544aea99d293b45f4e972e with dirty source snapshotSHA2569c8095325b5e931c13dcaafc9a725d74ceda89e7288b2c4183e5929bb39ac23e. Complete printed axiom lines are in that receipt/stdout; every set is a subset of propext/Classical.choice/Quot.sound.
+
+Final target **ARV_FinalStatements.lean** (102): exit0,wall2.3247158899903297s,peakRSS5547720KiB,swap0; source revision115b9ed785a9d4896b544aea99d293b45f4e972e with dirty source snapshotSHA25692d8c3ce272614ea8cefd9482b28bd1da42dd2cc8cdf2a32dfc9e0c825e5913b. Complete printed axiom lines are in that receipt/stdout; every set is a subset of propext/Classical.choice/Quot.sound.
+
+ARV_BEFORE_KERNEL.lean.txt and ARV_AFTER_KERNEL.lean.txt (type plus root axioms)
+are byte-identical. The before is inherited from ARU; the after is freshly
+extracted from102, with exact provenance in ARV_KERNEL_PROVENANCE.json.
+ARV_HOST_MANIFEST.json freshly verifies all89 own host source/object pairs.
+No binary is copied or committed. ARV_validate.py --final passes all budgets,
+caps, exact current-source snapshots, public/final axiom audits, all48 complete
+statement audits, atomic recount, source/kernel equality, fixture pins, host
+hashes and own-prefix scope. ARV_VALIDATION.json and ARV_attempts.jsonl retain
+all results. Raw diagnostics preserve their original presentation whitespace.
+
+Next concrete deliverable: a bank-generated/source-refined execution experiment
+whose admitted accepted runs are supported with the original unconditioned law,
+and a root work interface that charges adaptive choices as the approved game
+requires. Alternatively, the lead can explicitly evaluate an equivalence and
+adoption route for the NONCOMPUTABLE filtered mathematical proposal; the current
+original-cylinder weighted preservation is not that global equivalence. Neither
+adding Supported as a promise nor silently upgrading P's query bound is closure.
+Root adoption and the full JFm/JFn/JFr/JFs accepted pair remain open. Target not
+yet established; actual premises removed0.

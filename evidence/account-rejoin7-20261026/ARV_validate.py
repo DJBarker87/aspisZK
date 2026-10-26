@@ -56,6 +56,21 @@ changed=subprocess.check_output(['git','diff','--name-only',base],cwd=R,text=Tru
 changed+=subprocess.check_output(['git','ls-files','--others','--exclude-standard'],cwd=R,text=True).splitlines()
 for name in changed:check(name.startswith('lean/ARV_') or name.startswith('evidence/account-rejoin7-20261026/'),'foreign scope: '+name)
 check(not re.search(r'^theorem deployed\b',(R/'lean/ARV_Root.lean').read_text(),re.M),'unproved root renamed deployed')
+manifest=json.loads((P/'ARV_HOST_MANIFEST.json').read_text())
+check(set(manifest['rows'])=={Path(n).stem for n in modules},'host manifest module selection')
+for name,pins in manifest['rows'].items():
+    check(pins['.lean']['sha256']==modules[name+'.lean'],'host source mismatch: '+name)
+    check(len(pins['.olean']['sha256'])==64 and pins['.olean']['bytes']>0,'host object pin: '+name)
+check((P/'ARV_BEFORE_KERNEL.lean.txt').read_bytes()==(P/'ARV_AFTER_KERNEL.lean.txt').read_bytes(),'kernel type/axioms changed')
+combined=json.loads((P/'ARV_101/receipt.json').read_text())
+for name in theorem_names:check(any("'"+name+"'" in line for line in combined['print_axioms']),'final combined axiom audit missing '+name)
+plan=json.loads((P/'ARV_AUDIT_PLAN.json').read_text())
+check(len(plan)==48,'distinct complete statement audit count')
+for row in plan:
+    item=json.loads((P/f"ARV_{row['attempt']:03}"/'receipt.json').read_text())
+    check(item['exit_status']==0,'rejected final statement audit: '+row['theorem'])
+for label in ['009','019']:
+    check(json.loads((P/f'ARV_{label}_PRELAUNCH.json').read_text())['lean_invoked'] is False,'prelaunch count')
 summary=dict(status='PASS' if not errors else 'FAIL',errors=errors,lean_invocations=len(records),kani_runs=0,
     passing=sum(x['exit_status']==0 for x in records),excluded_failures=sum(x['exit_status']!=0 for x in records),
     wall_seconds=sum(float(x['wall_seconds']) for x in records),peak_rss_kib=max(int(x['peak_rss_kib']) for x in records),
