@@ -9921,3 +9921,32 @@ evidence now on research (ELF identities, fixture fibres, client route). Ledger 
 report's "V380 (inversion)" collides with the ledger's existing V380 (TrustedStd
 `btree_entry_or_insert_with`); the recount assigns the inversion row a fresh ID. Six jobs running:
 rw16, dict8, runjoin3, recount, rebase2, l1b. Privacy target not yet established.
+
+## D201 (Stream B, 2026-10-26 16:30): first privacy recount; dependency buckets; source-identification job
+
+Merged `codex/pv-recount-20261026` (322afc54f7; audit only, 0 Lean, 0 Kani): a dated "Recount
+2026-10-26 (B)" section appended to `design/PRIVACY-LEDGER-20261026.md`, per-row audit in
+`evidence/privacy-recount-20261026/ROWS.md`, original rows intact. The inversion obligation from D197
+is recorded as `V380-inversion` (the ledger's V380 already names TrustedStd `btree_entry_or_insert_with`),
+so there are 400 obligations. T/P/C 26/370/4.
+
+| Status | Baseline (normalised) | Recount 1 |
+|---|---:|---:|
+| OPEN | 167 | 138 |
+| REDUCED (to named premise fields) | 145 | 152 |
+| EVIDENCED (gate/measurement passed) | 0 | 10 |
+| CLOSED on research | 87 | 87 |
+| CLOSED on the unmerged candidate | 0 | 13 |
+
+The 29 rows that left OPEN went to REDUCED (7), EVIDENCED (10: the three ELF identities, fixture
+bytes, client route rows V392–V395 and others) and CLOSED-ON-CANDIDATE (13, the candidate's proved
+callbacks/replays, which count only once the candidate is adopted). No endpoint premise changed.
+Dependency audit of the 138 OPEN rows: 79 independent of the native refinement; 51 downstream of the
+native interpretation (cannot close before the extracted deployed caller is interpreted, including all
+inherited L2 whole rows); 8 downstream of named owner decisions (V370 compiler trust, V371 DOITM,
+V373 inversion zero-domain handling, V396 client bundle pin, and related). Most valuable independent
+row per the audit: V164 compression correspondence (already pv-rw16's stage 2). The freed slot goes to
+the independent rows V152–V154 (`BuilderSource.SourceIdentification`: public_eq, build_eq,
+transport_eq), consumed by the headline via `builder_premises`: job pv-srcid (`codex/pv-srcid-20261026`,
+prefix PV_Src_, IDs 22550–22799). Six jobs running: rw16, dict8, runjoin3, srcid, rebase2, l1b.
+Privacy target not yet established.
