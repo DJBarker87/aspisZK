@@ -32,7 +32,7 @@ s=src.read_text();revision=subprocess.check_output(['git','rev-parse','HEAD'],cw
 committed=subprocess.run(['git','show',revision+':'+str(src.relative_to(r))],cwd=r,capture_output=True)
 source_uncommitted=committed.returncode!=0 or committed.stdout!=src.read_bytes()
 revision+=('+uncommitted' if source_uncommitted else '')
-x={'attempt':a,'module':module,'source_revision':revision,'source_path':str(src),'source_sha256':hashlib.sha256(s.encode()).hexdigest(),'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'gate_flag_contents':flag.read_text(),'limits':{'lean_memory_mb':7000,'memory_high':'6G','memory_max':'8G','swap_max':0,'tasks_max':'shared launcher setting'},'launcher':'/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh'}
+x={'attempt':a,'module':module,'source_revision':revision,'source_path':str(src),'source_sha256':hashlib.sha256(s.encode()).hexdigest(),'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'gate_flag_contents':flag.read_text(),'limits':{'lean_memory_mb':7000,'memory_high':'6G','memory_max':'8G','swap_max':0,'tasks_max':64},'launcher':'/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh'}
 q=ssh('mkdir -p '+d+'; python3 '+b+'/src/tools/prover-rw-20261023/native-entropy/reservation.py '+d+f'/{a}-admission.json > '+d+f'/{a}-admission.log 2>&1; pv_rw_status=$?; cat '+d+f'/{a}-admission.log; exit $pv_rw_status')
 (e/f'{a}-admission.log').write_text(q.stdout+q.stderr)
 ad=ssh('cat '+d+f'/{a}-admission.json');(e/f'{a}-admission.json').write_text(ad.stdout)
