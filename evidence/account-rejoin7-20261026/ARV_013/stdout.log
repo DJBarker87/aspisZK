@@ -1,0 +1,179 @@
+ARV_AdaptiveAccepted.lean:51:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H
+      (ART_PartialAccount.wrapper hashv
+        (ARS_NativeAccount.firstSyntax (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier
+          i))).2
+in the target expression
+  SCE_Experiment.accepted
+      (eval H
+          (match
+            (eval H
+                (ART_PartialAccount.wrapper hashv
+                  (GExq_InstalledWrapper.first (FIp_Install.configuration err c r).adapter
+                    (FIp_Install.configuration err c r).currentBase (FIp_Install.configuration err c r).stageBase
+                    (FIp_Install.configuration err c r).finish (FIp_Install.configuration err c r).reserved
+                    (FIp_Install.configuration err c r).query (FIp_Install.configuration err c r).geometry
+                    (FIp_Install.configuration err c r).boundaries (FIp_Install.configuration err c r).std hashv copy
+                    allocator i.entry CPH_Program.verifier i.data i.state))).2 with
+          | ok (core.result.Result.Ok (saved, post, final)) =>
+            AspisV8R19.OracleProgramOps.bind
+              (Program.ask address fun value =>
+                Program.done
+                  (if value = original then j
+                  else { entry := ARV_Poison.entry j.entry, data := j.data, slot := j.slot, state := j.state }))
+              fun j =>
+              AspisV8R19.OracleProgramOps.bind
+                (ART_PartialAccount.wrapper hashv
+                  (GExq_InstalledWrapper.second (FIp_Install.configuration err c r).adapter
+                    (FIp_Install.configuration err c r).currentBase (FIp_Install.configuration err c r).stageBase
+                    (FIp_Install.configuration err c r).finish (FIp_Install.configuration err c r).reserved
+                    (FIp_Install.configuration err c r).query (FIp_Install.configuration err c r).geometry
+                    (FIp_Install.configuration err c r).boundaries (FIp_Install.configuration err c r).std hashv
+                    allocator j.entry CPH_Program.verifier j.data j.slot j.state))
+                fun out =>
+                Program.done
+                  (i,
+                    (eval H
+                        (ART_PartialAccount.wrapper hashv
+                          (GExq_InstalledWrapper.first (FIp_Install.configuration err c r).adapter
+                            (FIp_Install.configuration err c r).currentBase
+                            (FIp_Install.configuration err c r).stageBase (FIp_Install.configuration err c r).finish
+                            (FIp_Install.configuration err c r).reserved (FIp_Install.configuration err c r).query
+                            (FIp_Install.configuration err c r).geometry (FIp_Install.configuration err c r).boundaries
+                            (FIp_Install.configuration err c r).std hashv copy allocator i.entry CPH_Program.verifier
+                            i.data i.state))).2,
+                    some (j, out))
+          | x =>
+            Program.done
+              (i,
+                (eval H
+                    (ART_PartialAccount.wrapper hashv
+                      (GExq_InstalledWrapper.first (FIp_Install.configuration err c r).adapter
+                        (FIp_Install.configuration err c r).currentBase (FIp_Install.configuration err c r).stageBase
+                        (FIp_Install.configuration err c r).finish (FIp_Install.configuration err c r).reserved
+                        (FIp_Install.configuration err c r).query (FIp_Install.configuration err c r).geometry
+                        (FIp_Install.configuration err c r).boundaries (FIp_Install.configuration err c r).std hashv
+                        copy allocator i.entry CPH_Program.verifier i.data i.state))).2,
+                none))).2 =
+    true
+
+A C : Type
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+c : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+r : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+    hashv
+H : Bytes → State
+address : Bytes
+original : State
+different : H address ≠ original
+i : FirstInputs A
+j : SecondInputs A
+saved : alloc.vec.Vec U8
+post1 post2 : Heap (ℕ → Record)
+final1 final2 : A
+firstAgrees :
+  ARS_QueryTransport.Agrees H
+    (SdkC_Source.run hashv
+        (ARS_NativeAccount.firstSyntax (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier i)
+        []).2
+secondAgrees :
+  ARS_QueryTransport.Agrees H
+    (SdkC_Source.run hashv
+        (ARS_NativeAccount.secondSyntax (FIp_Install.configuration err c r) hashv allocator CPH_Program.verifier
+          (ARV_Constant.poison j))
+        []).2
+yes1 :
+  first native1 copy allocator i.entry CPH_Program.verifier i.data i.state =
+    ok (core.result.Result.Ok (saved, post1, final1))
+yes2 :
+  second native2 allocator j.entry CPH_Program.verifier j.data j.slot j.state =
+    ok (core.result.Result.Ok (post2, final2))
+cfg : DrvC_Installation.Configuration FIo_Install.W C := FIp_Install.configuration err c r
+ext :
+  S2W_DigestExtraction.AeneasExtraction
+    (GExq_Caller.sdk cfg.adapter cfg.currentBase cfg.stageBase cfg.finish cfg.reserved cfg.query cfg.geometry
+      cfg.boundaries cfg.std)
+    native1 native2 hashv
+f :
+  (eval H
+        (ART_PartialAccount.wrapper hashv
+          (ARS_NativeAccount.firstSyntax (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier
+            i))).2 =
+    ok (core.result.Result.Ok (saved, post1, final1))
+poisoned :
+  second native2 allocator (ARV_Poison.entry j.entry) CPH_Program.verifier j.data j.slot j.state =
+    ok (core.result.Result.Ok ((ARV_Poison.entry j.entry).heap, final2))
+s :
+  (eval H
+        (ART_PartialAccount.wrapper hashv
+          (ARS_NativeAccount.secondSyntax (FIp_Install.configuration err c r) hashv allocator CPH_Program.verifier
+            (ARV_Constant.poison j)))).2 =
+    ok (core.result.Result.Ok ((ARV_Poison.entry j.entry).heap, final2))
+⊢ SCE_Experiment.accepted
+      (eval H
+          (match
+            (eval H
+                (ART_PartialAccount.wrapper hashv
+                  (GExq_InstalledWrapper.first (FIp_Install.configuration err c r).adapter
+                    (FIp_Install.configuration err c r).currentBase (FIp_Install.configuration err c r).stageBase
+                    (FIp_Install.configuration err c r).finish (FIp_Install.configuration err c r).reserved
+                    (FIp_Install.configuration err c r).query (FIp_Install.configuration err c r).geometry
+                    (FIp_Install.configuration err c r).boundaries (FIp_Install.configuration err c r).std hashv copy
+                    allocator i.entry CPH_Program.verifier i.data i.state))).2 with
+          | ok (core.result.Result.Ok (saved, post, final)) =>
+            AspisV8R19.OracleProgramOps.bind
+              (Program.ask address fun value =>
+                Program.done
+                  (if value = original then j
+                  else { entry := ARV_Poison.entry j.entry, data := j.data, slot := j.slot, state := j.state }))
+              fun j =>
+              AspisV8R19.OracleProgramOps.bind
+                (ART_PartialAccount.wrapper hashv
+                  (GExq_InstalledWrapper.second (FIp_Install.configuration err c r).adapter
+                    (FIp_Install.configuration err c r).currentBase (FIp_Install.configuration err c r).stageBase
+                    (FIp_Install.configuration err c r).finish (FIp_Install.configuration err c r).reserved
+                    (FIp_Install.configuration err c r).query (FIp_Install.configuration err c r).geometry
+                    (FIp_Install.configuration err c r).boundaries (FIp_Install.configuration err c r).std hashv
+                    allocator j.entry CPH_Program.verifier j.data j.slot j.state))
+                fun out =>
+                Program.done
+                  (i,
+                    (eval H
+                        (ART_PartialAccount.wrapper hashv
+                          (GExq_InstalledWrapper.first (FIp_Install.configuration err c r).adapter
+                            (FIp_Install.configuration err c r).currentBase
+                            (FIp_Install.configuration err c r).stageBase (FIp_Install.configuration err c r).finish
+                            (FIp_Install.configuration err c r).reserved (FIp_Install.configuration err c r).query
+                            (FIp_Install.configuration err c r).geometry (FIp_Install.configuration err c r).boundaries
+                            (FIp_Install.configuration err c r).std hashv copy allocator i.entry CPH_Program.verifier
+                            i.data i.state))).2,
+                    some (j, out))
+          | x =>
+            Program.done
+              (i,
+                (eval H
+                    (ART_PartialAccount.wrapper hashv
+                      (GExq_InstalledWrapper.first (FIp_Install.configuration err c r).adapter
+                        (FIp_Install.configuration err c r).currentBase (FIp_Install.configuration err c r).stageBase
+                        (FIp_Install.configuration err c r).finish (FIp_Install.configuration err c r).reserved
+                        (FIp_Install.configuration err c r).query (FIp_Install.configuration err c r).geometry
+                        (FIp_Install.configuration err c r).boundaries (FIp_Install.configuration err c r).std hashv
+                        copy allocator i.entry CPH_Program.verifier i.data i.state))).2,
+                none))).2 =
+    true
+ARV_AdaptiveAccepted.lean:50:109: warning: This simp argument is unused:
+  if_neg different
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵e̵v̵a̵l̵,̵A̵R̵S̵_̵N̵a̵t̵i̵v̵e̵A̵c̵c̵o̵u̵n̵t̵.̵f̵i̵r̵s̵t̵S̵y̵n̵t̵a̵x̵,̵A̵R̵S̵_̵N̵a̵t̵i̵v̵e̵A̵c̵c̵o̵u̵n̵t̵.̵s̵e̵c̵o̵n̵d̵S̵y̵n̵t̵a̵x̵,̵A̵R̵V̵_̵C̵o̵n̵s̵t̵a̵n̵t̵.̵p̵o̵i̵s̵o̵n̵,̵i̵f̵_̵n̵e̵g̵ ̵d̵i̵f̵f̵e̵r̵e̵n̵t̵]̵[̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲e̲v̲a̲l̲,̲ ̲A̲R̲S̲_̲N̲a̲t̲i̲v̲e̲A̲c̲c̲o̲u̲n̲t̲.̲f̲i̲r̲s̲t̲S̲y̲n̲t̲a̲x̲,̲ ̲A̲R̲S̲_̲N̲a̲t̲i̲v̲e̲A̲c̲c̲o̲u̲n̲t̲.̲s̲e̲c̲o̲n̲d̲S̲y̲n̲t̲a̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲R̲V̲_̲C̲o̲n̲s̲t̲a̲n̲t̲.̲p̲o̲i̲s̲o̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ARV_AdaptiveAccepted.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

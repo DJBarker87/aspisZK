@@ -1,0 +1,37 @@
+{"attempt": "ARV_058", "exit_status": 0, "wall_seconds": 2.2646797060151584, "peak_rss_kib": "5538816", "swaps": "0", "print_axioms": ["'AspisR1.ARV_Constant.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARV_Constant.accepted : ∀ {A C : Type}
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configurat
+...
+.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv H →
+        ∀ (i : AspisR1.GExq_AccountExperiment.FirstInputs A) (j : AspisR1.GExq_AccountExperiment.SecondInputs A)
+          (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final1 final2 : A),
+          AspisR1.S2W_D189Wrappers.first native1 copy allocator i.entry AspisR1.CPH_Program.verifier i.data i.state =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+            AspisR1.S2W_D189Wrappers.second native2 allocator j.entry AspisR1.CPH_Program.verifier j.data j.slot
+                  j.state =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+              AspisR1.SCE_Experiment.accepted
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy
+                        allocator AspisR1.CPH_Program.verifier
+                        (AspisR1.ARV_Constant.adversary i (AspisR1.ARV_Constant.poison j)))).2 =
+                Bool.true
+'AspisR1.ARV_Constant.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r692e5644b398499691bcbeb26076e765.scope; invocation ID: 90da7f3790574513add78a7ac6e6314a
+

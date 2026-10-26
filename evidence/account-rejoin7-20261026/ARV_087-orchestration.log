@@ -1,0 +1,35 @@
+{"attempt": "ARV_087", "exit_status": 0, "wall_seconds": 2.139067033014726, "peak_rss_kib": "5371564", "swaps": "0", "print_axioms": ["'AspisR1.ARV_NativePartial.second' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARV_NativePartial.second : ∀ {F C : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops C)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.GExq_Caller.sdk adapter ops stage finish reserved
+...
+.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops C)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.GExq_Caller.sdk adapter ops stage finish reserved query geo B std) native1 native2 hashv →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv H →
+        ∀ {A : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e : AspisR1.S2W_D189Entry.Entry)
+          (id : AspisR1.S2W_ExtractionBoundary.Program) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+          (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state : A)
+          (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final : A),
+          AspisR1.S2W_D189Wrappers.second native2 allocator e id data slot state =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post, final)) →
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.ART_PartialAccount.wrapper hashv
+                    (AspisR1.GExq_InstalledWrapper.second adapter ops stage finish reserved query geo B std hashv
+                      allocator e id data slot state))).2 =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post, final))
+'AspisR1.ARV_NativePartial.second' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r96d73a978a06498e93acb9b861939b06.scope; invocation ID: 68b9799bdade40748c8376b80d12cc50
+

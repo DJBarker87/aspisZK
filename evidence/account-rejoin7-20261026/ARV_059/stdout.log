@@ -1,0 +1,45 @@
+@AspisR1.ARV_Counterexample.accepted_without_support : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (native : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv native →
+        ∀ (i : AspisR1.GExq_AccountExperiment.FirstInputs A) (j : AspisR1.GExq_AccountExperiment.SecondInputs A)
+          (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final1 final2 : A),
+          AspisR1.S2W_D189Wrappers.first native1 copy allocator i.entry AspisR1.CPH_Program.verifier i.data i.state =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+            AspisR1.S2W_D189Wrappers.second native2 allocator j.entry AspisR1.CPH_Program.verifier j.data j.slot
+                  j.state =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+              ∀ (address : AspisV8R19.DuplexFrames.Bytes) (value : AspisV8R19.SourceDuplexStep.State),
+                value ≠ native address →
+                  address ∉
+                      List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+                        (AspisR1.SdkC_Source.run hashv
+                            (AspisR1.ARS_NativeAccount.firstSyntax (AspisR1.FIp_Install.configuration err c r) hashv
+                              copy allocator AspisR1.CPH_Program.verifier i)
+                            []).2 →
+                    address ∉
+                        List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+                          (AspisR1.SdkC_Source.run hashv
+                              (AspisR1.ARS_NativeAccount.secondSyntax (AspisR1.FIp_Install.configuration err c r) hashv
+                                allocator AspisR1.CPH_Program.verifier (AspisR1.ARV_Constant.poison j))
+                              []).2 →
+                      have a := AspisR1.ARV_Adaptive.adversary i j address (native address);
+                      have H := AspisR1.ART_QueryCylinder.change native address value;
+                      AspisR1.SCE_Experiment.accepted
+                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv
+                                  copy allocator AspisR1.CPH_Program.verifier a)).2 =
+                          Bool.true ∧
+                        ¬Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a H) ∧
+                          ¬AspisR1.ARU_AllWorld.Supported L copy allocator c err r native1 native2 hashv a
+'AspisR1.ARV_Counterexample.accepted_without_support' depends on axioms: [propext, Classical.choice, Quot.sound]

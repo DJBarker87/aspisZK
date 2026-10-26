@@ -1,0 +1,39 @@
+{"attempt": "ARV_085", "exit_status": 0, "wall_seconds": 2.3631971839931794, "peak_rss_kib": "5536632", "swaps": "0", "print_axioms": ["'AspisR1.ARV_NativeCostGap.obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARV_NativeCostGap.obstruction : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.Aen
+...
+easExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A)
+      (native : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a native)
+      (address : AspisV8R19.DuplexFrames.Bytes) (Q : ℕ),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1.length ≤ Q) →
+        ∃ b,
+          AspisR1.SCE_Experiment.submission b = AspisR1.SCE_Experiment.submission a ∧
+            (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission b)).1.length ≤ Q) ∧
+              Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv b native) ∧
+                AspisR1.SCE_Experiment.accepted
+                      (AspisV8R19.MemoizedProgramLaw.eval native
+                          (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy
+                            allocator AspisR1.CPH_Program.verifier b)).2 =
+                    Bool.true ∧
+                  Q <
+                      AspisR1.ART_AdversaryWork.work (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                        AspisR1.CPH_Program.verifier b native ∧
+                    ¬AspisR1.ART_AdversaryWork.Bound (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                        AspisR1.CPH_Program.verifier b Q
+'AspisR1.ARV_NativeCostGap.obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r732753e7b0614b3497a41de11704e68d.scope; invocation ID: a78c9b89a91c488983c944823432cee6
+

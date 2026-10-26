@@ -1,0 +1,37 @@
+{"attempt": "ARV_090", "exit_status": 0, "wall_seconds": 2.3142628640052862, "peak_rss_kib": "5539888", "swaps": "0", "print_axioms": ["'AspisR1.ARV_OneTuple.obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARV_OneTuple.obstruction : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasEx
+...
+ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A)
+      (native : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv native →
+        ∀ (n : AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a native),
+          ∃ b,
+            Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv b native) ∧
+              ∃ H,
+                AspisR1.SCE_Experiment.accepted
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy
+                            allocator AspisR1.CPH_Program.verifier b)).2 =
+                    Bool.true ∧
+                  ¬Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv b H) ∧
+                    ¬AspisR1.ARU_AllWorld.Supported L copy allocator c err r native1 native2 hashv b ∧
+                      ¬AspisR1.ARU_CoverageQuantifiers.OriginalCoverage L copy allocator c err r native1 native2 hashv b
+'AspisR1.ARV_OneTuple.obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7e2d4d9d668f4a97a6f8d7f824e295dd.scope; invocation ID: 41d65dc228d744979a287c0a4ab0f740

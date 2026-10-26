@@ -1,0 +1,22 @@
+{"attempt": "ARV_055", "exit_status": 0, "wall_seconds": 2.1758407930028625, "peak_rss_kib": "5538268", "swaps": "0", "print_axioms": ["'AspisR1.ARV_AdaptiveChoice.exact' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARV_AdaptiveChoice.exact : ∀ {A : Type} (i : AspisR1.GExq_AccountExperiment.FirstInputs A)
+  (j : AspisR1.GExq_AccountExperiment.SecondInputs A) (address : AspisV8R19.DuplexFrames.Bytes)
+  (original : AspisV8R19.SourceDuplexStep.State) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (input : AspisR1.GExq_AccountExperiment.FirstInputs A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final : A),
+  AspisV8R19.MemoizedProgramLaw.eval H
+      ((AspisR1.ARV_Adaptive.adversary i j address original).second input saved post final) =
+    ([(address, H address)], if H address = original then j else
+...
+@AspisR1.ARV_AdaptiveChoice.exact : ∀ {A : Type} (i : AspisR1.GExq_AccountExperiment.FirstInputs A)
+  (j : AspisR1.GExq_AccountExperiment.SecondInputs A) (address : AspisV8R19.DuplexFrames.Bytes)
+  (original : AspisV8R19.SourceDuplexStep.State) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (input : AspisR1.GExq_AccountExperiment.FirstInputs A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final : A),
+  AspisV8R19.MemoizedProgramLaw.eval H
+      ((AspisR1.ARV_Adaptive.adversary i j address original).second input saved post final) =
+    ([(address, H address)], if H address = original then j else AspisR1.ARV_Constant.poison j)
+'AspisR1.ARV_AdaptiveChoice.exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rfc21460016b04a178596b3d8548ea331.scope; invocation ID: 8bca8e15323348b893e6a696f9eb4eb5
+

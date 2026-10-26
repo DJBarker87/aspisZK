@@ -1,0 +1,40 @@
+{"attempt": "ARV_072", "exit_status": 0, "wall_seconds": 2.246354218979832, "peak_rss_kib": "5535108", "swaps": "0", "print_axioms": ["'AspisR1.ARV_FilterOriginal.preserved' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARV_FilterOriginal.preserved : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (a : AspisR1.SCE_Experiment.Advers
+...
+@AspisR1.ARV_FilterOriginal.preserved : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (a : AspisR1.SCE_Experiment.Adversary A),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (native H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a native),
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv native →
+        AspisR1.ARS_AccountReplay.Consistent
+            (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+              AspisR1.CPH_Program.verifier a)
+            native H →
+          AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.ARV_Filter.runtime L copy allocator c err r native1 native2 hashv a) =
+            AspisV8R19.MemoizedProgramLaw.eval native
+              (AspisR1.ART_Runtime.runtime (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                AspisR1.CPH_Program.verifier a)
+'AspisR1.ARV_FilterOriginal.preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra1a04b4c7b10491fb3dce7f61126b513.scope; invocation ID: b9bdb9dc925d4c698d8561a7fb892123
+
