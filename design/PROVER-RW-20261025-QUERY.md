@@ -1210,3 +1210,22 @@ still needs history-conditioned E1/E2, full native terminal coverage and actual
 Drop composition. The final per-adversary/per-witness real RunJoin must prove
 both marginals and bad-event transport to the exact root conjecture. The new
 local store/control/arithmetic facts do not supply any of those joint laws.
+
+## Stage 3 ordered continuation: retained heap fill (12800–12802)
+
+New `ProverRwSuccessHeapSource` retains the allocation/error/resize body and
+`ProverRwSuccessHeapInstall.source` supplies op81 in the candidate dictionary.
+The allocator op32 is unchanged, not presumed successful. Global is erased to
+Unit, matching the allocator carrier convention; native allocator/library/ABI
+association remains open. This removes one unsupplied retained-body callback
+(43 to42); it removes zero root/headline premises. The candidate stays unmerged.
+
+Three focused attempts: two passes, one changed elaboration failure (a missing
+explicit type argument in the allocator-preservation statement). Standard axioms,
+zero swaps; exact snapshots, hashes, dependency fingerprints, commands and
+wall/RSS in `success-next`. No previous proved module/object was replaced.
+Only the authorized launcher ID range was extended through13199; the exact host
+before/after and one-line diff are retained. Existing5G/7G/zero-swap/Tasks64 and
+-M7000 are unchanged. No native run or frozen artifact changed. Native adequacy,
+remaining42 references and complete proof/audit data equality remain open.
+Current allocation use3/100Lean,0/15Kani. Target not yet established.
