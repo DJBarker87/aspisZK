@@ -1,6 +1,6 @@
 # Finish-law row table
 
-Counted successor: `AspisR1.SAG_Deployed.deployed` at the explicit native scalar installation (see SAG_STAGE3.md); baseline: `AspisR1.Rc3_Top.deployed`.
+Counted successor: `AspisR1.SAG_Deployed.deployed` at `SAG_ScaleConfig.configuration`. Baseline: `AspisR1.Rc3_Top.deployed`. See SAG_STAGE3.md for the explicit source-instance scope.
 
 | Row | Law | Status | Theorem or exact blocker |
 |---|---|---|---|
@@ -20,10 +20,10 @@ Counted successor: `AspisR1.SAG_Deployed.deployed` at the explicit native scalar
 | L127 | hp | removed | `AspisR1.SAF_Returns.finish`: Derived by inversion of the SAME successful installed finish body; primitive operands/results are existential outputs, with no replacement Prop-law guard. |
 | L128 | hd | removed | `AspisR1.SAF_Returns.finish`: Derived by inversion of the SAME successful installed finish body; primitive operands/results are existential outputs, with no replacement Prop-law guard. |
 | L133 | pairing_S3_S5_S9.round0.boundary | open | Round0: Configuration.finish.field/add remain abstract, and the actual source View.round0 coefficients are not identified with i.data.p0 by a checked installed primitive/data join. |
-| L134 | pairing_S3_S5_S9.round0.quarter | removed | `AspisR1.SAG_StageScale.quarter`: ALL-INPUT native mul_m31 semantics and symbolic quarter identity at `SAG_ScaleConfig.configuration`; `SAG_ScaleNonvacuity.quarter` proves actual successful operands exist for every claim. |
+| L134 | pairing_S3_S5_S9.round0.quarter | removed | `AspisR1.SAG_StageScale.quarter`: ALL-INPUT native wide mul_m31 semantics plus symbolic quarter identity, at SAG_ScaleConfig.configuration; actual multiplication is total on every raw input. |
 | L135 | pairing_S3_S5_S9.round0.eval | open | Round0: finish.polynomial remains abstract; the candidate unrolled-polynomial value theorem uses a different concrete dictionary/carrier and needs an explicit source-byte/model p0 join. |
 | L136 | pairing_S3_S5_S9.round1.boundary | open | Round1: Configuration.finish.field/add remain abstract, and the actual source View.round1 coefficients are not identified with i.data.p1 by a checked installed primitive/data join. |
-| L137 | pairing_S3_S5_S9.round1.quarter | removed | `AspisR1.SAG_StageScale.quarter`: ALL-INPUT native mul_m31 semantics and symbolic quarter identity at `SAG_ScaleConfig.configuration`; `SAG_ScaleNonvacuity.quarter` proves actual successful operands exist for every claim. |
+| L137 | pairing_S3_S5_S9.round1.quarter | removed | `AspisR1.SAG_StageScale.quarter`: ALL-INPUT native wide mul_m31 semantics plus symbolic quarter identity, at SAG_ScaleConfig.configuration; actual multiplication is total on every raw input. |
 | L138 | pairing_S3_S5_S9.round1.eval | open | Round1: finish.polynomial remains abstract; concrete candidate polynomial semantics are not instantiated at this exact dictionary and model p1. |
 | L139 | pairing_S3_S5_S9.claim | removed | `AspisR1.SAF_PreparedPairing.identities`: Derived from actual saved-Vec encoding, existing reached-TX2 byte identity, installed reader BodyMatches and the SAME literal Context. |
 | L140 | pairing_S3_S5_S9.alpha0 | removed | `AspisR1.SAF_PreparedPairing.identities`: Derived from actual saved-Vec encoding, existing reached-TX2 byte identity, installed reader BodyMatches and the SAME literal Context. |
@@ -33,13 +33,10 @@ Counted successor: `AspisR1.SAG_Deployed.deployed` at the explicit native scalar
 | L144 | semantic_S3_S9.EquationEndpoint.initial | open | The actual semantic first boundary/claim at the same literal parser/view/polynomials is not joined to the source semantic execution. Config.boundaries installs circle only, not this arithmetic endpoint. |
 | L145 | semantic_S3_S9.EquationEndpoint.chain | open | Nine successive source semantic round equations are not composed with the same EquationEndpoint parsed view/polynomials and challenge sequence. |
 | L146 | semantic_S3_S9.EquationEndpoint.terminal | open | The terminal source call has not been identified with the exact masked spend terminal on i.decoded and i.data.Y at the same literal transcript. |
-| L147 | dot_S5 | open | finish.dot is abstract. S5 returned-residue/indexed-source-sum theorems apply to withConcreteDot/finishConcreteField/QRaw, requiring a concrete sourceDot installation, decoder agreement, 64 matching final-message reads and actual accumulator-weight bindings. |
+| L147 | dot_S5 | open | finish.dot remains abstract at SAG_ScaleConfig. SAG_ShapeDot.value proves the sourceDot meaning on the SAME enriched native witness; SAG_NativeFull/SecondFull retain its message ranges. Install sourceDot, propagate that enriched witness through the deployed chain, and derive its 64-weight length from reader/query/flush shape. Decoder agreement and all 64 field/weight reader meanings are now proved, not remaining arithmetic assumptions. |
 | L148 | canonical_S3_S4_S5_S9 | removed | `AspisR1.SAF_AcceptedValue.value`: Unnecessary on this already-accepted source run: transport physical equality forward. Canonicality itself is not claimed true for arbitrary raw values. |
 
-Actual: **82T+113P →82T+92P**. Session A92→71; lead18/external3P unchanged.
-Deduplicated actual plus non-alias deployment: **88T+126P →88T+105P**.
-Assigned finish31→10: pairing5, matching1, semantic3, dot1. No T/C removal or new law family.
-Canonicality is unnecessary in the accepted-only argument; it is not asserted as a derived source fact.
-Full before/after statements and all nested field expansions are in the final focused audits; raw source/dependency-pinned receipts are authoritative.
-
-Scope: delta2 is source-instance-specific. The unrestricted `SAG_SharedDeployed` removes only the duplicate quarter row. No source-instance equality is silently asserted for arbitrary `c.finish`.
+Source-specific actual: **82T+113P →82T+92P**; relative SAF **82T+94P →82T+92P**.
+Session A92→71; lead18/external3 unchanged. Actual+non-alias deployment **88T+126P →88T+105P**.
+Assigned31→10: pairing5, matching1, semantic3, dot1. Nineteen removals are inherited; two are this source-instance discharge.
+The unrestricted SAG_SharedDeployed has only the duplicate-row delta1. No blanket source equality or deployed100-bit claim.
