@@ -239,3 +239,35 @@ remaining callbacks, whole proof/audit model equality, PrefixContract/BodyContra
 E1/E2, ordered effects/ROM/TLS and real RunJoin remain open. Conjunct1/headline
 premises removed0; target not yet established. No keys, shipped Rust, frozen
 artifacts, existing proved modules, caps or infrastructure changed on this resume.
+
+## Final focused audit and exhausted continuation allowance
+
+Final audit14069 checks proof revision3d9c171101 plus the new audit source,
+whose exact hash is retained. Exit0,1.66s,4,280,428KiB RSS,zero swaps,
+-M7000,one own scope at a time,existing stricter5G/7G/swap0/Tasks64 launcher.
+All90 reports use subsets of propext/Classical.choice/Quot.sound. This imports
+all45 accepted P6 modules and audits their current theorem declarations;
+it does not replay their full dependency source closure or frozen manifest.
+The input pins1,127 dependency objects. `final.py` verifies every current P6
+source against a successful immutable snapshot and confirms both original
+security roots remain byte-identical to e180462278. Native passing evidence
+retains exact reference snapshots and the earlier stated domain restrictions.
+
+Budget accounting includes interrupted attempts:14005–14069 consume all65
+continuation Lean attempts (44passes,20elaboration failures,1intentional stop).
+The preceding14000–14004 are the separate five-attempt baseline, giving70
+retained compiles overall. All7 continuation Kani runs were already spent;
+none is run during the capacity resume. Next unused assigned env-J14070.
+No budget remains. No reservation retry, cap change, infrastructure repair,
+new native gate, full regression, push, merge or artifact replacement occurred
+on this resume. The read-only evidence finalizer now records the continuation
+rather than the obsolete reservation-stop state.
+
+Next consuming obligation: replace the still-supplied whole proof/audit data
+identity in `BodyData.refinement_of_data` with the actual source/model proof,
+using the installed gamma producer equation. Compression still needs a proved
+shipped/reference correspondence before installation; its rejected/timed-out
+native comparisons are retained. Remaining35 callbacks, representation and
+physical effect/compiler/artifact adequacy, concrete PrefixContract/BodyContract,
+E1/E2 and real RunJoin still block conjunct1. Root/headline premises removed0;
+**target not yet established**. No weaker security claim is substituted.

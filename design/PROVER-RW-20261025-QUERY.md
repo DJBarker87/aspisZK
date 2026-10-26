@@ -1408,3 +1408,24 @@ extraction plus its denied native check,smaller compression transition proofs;
 then remaining39 entries. Whole native effects,actual security-model proof/audit
 equality,PrefixContract/BodyContract,E1/E2,ordered ROM/TLS,real RunJoin and frozen
 artifact association remain open and unchanged.
+
+## Capacity-resume final checkpoint (14005–14069)
+
+The continuation allowance is exhausted, including attempts before the capacity
+error:65/65 Lean,7/7 Kani. Final proof checkpoint3d9c171101 installs the exact
+retained gamma producer into the complete caller after proving the29-element
+value law; it preserves full Result and reservation writeback. Source/P6
+candidate callbacks225,51,120,254 are supplied,35 of39 remain. Compression
+is not installed: passing owned-reference control does not discharge the
+shipped/reference equivalence after native comparisons timed out.
+
+Final focused audit14069:exit0,1.66s,4,280,428KiB RSS,zero swaps;90 standard
+axiom reports,1,127 pinned dependency objects. Exact snapshots/commands/revisions,
+resource receipts and remaining obligations are in
+`evidence/prover-rw-20261023/success-p6/{README.md,summary.json,final-state.json}`
+(relative to docs/research/100bit-spend-path-20261013). Next unused env-J14070.
+No full frozen replay or native/artifact gate was repeated. Both security roots
+remain byte-identical. The complete proof/audit data equation,35 callbacks,
+native representation/effects/compiler/artifact adequacy,PrefixContract/
+BodyContract,E1/E2,ordered ROM/TLS and real RunJoin remain open. Conjunct1/root
+premises removed0; target not yet established. No push or merge.

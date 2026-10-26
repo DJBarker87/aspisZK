@@ -21,5 +21,5 @@ for p in sorted(e.glob('*-input.json')):
  if a==12485: x['pre_launch_note']='Local bounds-generator parse failure fixed before any input receipt or launcher invocation. One Lean launch.'
  (e/f'{a}-receipt.json').write_text(json.dumps(x,indent=2)+'\n')
  rows.append(dict(attempt=a,module=x['module'],exit=status,wall=re.findall(r'Elapsed .*: (.*)',t),peak_rss_kib=re.findall(r'Maximum resident set size \(kbytes\): (.*)',t),swaps=re.findall(r'Swaps: (.*)',t),axiom_reports=len(axioms)))
-(e/'summary.json').write_text(json.dumps(dict(attempts=rows,lean_compiles=sum(x['exit'] is not None for x in rows),passes=sum(x['exit']==0 for x in rows),root_premises_removed=0,budget=dict(Lean=70,Kani=15)),indent=2)+'\n')
+(e/'summary.json').write_text(json.dumps(dict(attempts=rows,lean_compiles=sum(x['exit'] is not None for x in rows),passes=sum(x['exit']==0 for x in rows),root_premises_removed=0,budget=dict(Lean=70,Kani=15),continuation_budget=dict(Lean=65,Lean_used=sum(x['attempt']>=14005 and x['exit'] is not None for x in rows),Lean_remaining=65-sum(x['attempt']>=14005 and x['exit'] is not None for x in rows),Kani=7,Kani_used=7,Kani_remaining=0,Lean_baseline_attempts=list(range(14000,14005)),next_unused_env_J=max(x['attempt'] for x in rows)+1)),indent=2)+'\n')
 print([(x['attempt'],x['exit']) for x in rows])
