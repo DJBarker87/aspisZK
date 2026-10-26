@@ -1,0 +1,25 @@
+import R1Z.ProverRw18FieldFiniteSum
+import R0P.LogUpCompress
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw18CopyPolynomial
+open Aeneas Aeneas.Std ProverRw18FieldMeaning
+open scoped BigOperators
+
+def tuple (tag : U32) (values : Fin 16 → U32) : K × (Fin 16 → K) :=
+  ((tag.val : K),fun i => ((values i).val : K))
+
+theorem value (tag : U32) (values : Fin 16 → U32) (lambda : K) :
+    ProverRw18FieldReference.value tag (List.ofFn values) lambda=
+      (R0P.compressPoly (tuple tag values)).eval lambda := by
+  rw [ProverRw18FieldReference.value,ProverRw18FieldFiniteSum.eval_ofFn,R0P.compressPoly_eval]
+  change (tag.val : K)+lambda*(∑ i : Fin 16, lambda^i.val*((values i).val : K))=
+    (tag.val : K)+∑ i : Fin 16, R0P.copyPowers lambda i*((values i).val : K)
+  congr 1
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [R0P.copy_powers_eq,← mul_assoc,← pow_succ']
+
+#print axioms value
+end R1Z.ProverRw18CopyPolynomial

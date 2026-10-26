@@ -183,3 +183,30 @@ for-loop extraction and op223 source law remain open.
 The complete Kani allocation is now20/20:16 passes and4 timeouts
 (014,015,016,020). No counterexample, timeout promotion or unchanged timed-out
 rerun. No further Kani invocation is authorized in this allocation.
+
+## Stage 3: existing compression polynomial and Copy registry
+
+Before: `FieldReference.value` used an independently defined Horner recurrence.
+After: `ProverRw18CopyPolynomial.value` identifies it with the existing
+`R0P.compressPoly` arity16 polynomial. `CopyReference.closed/context` return
+its exact canonical encoding, and `CopyTaggedReference` discharges tag<P
+for every member of the frozen136-entry registry using `copy_tags_indexed`.
+`CopyWide.value` maps this identity into the headline WideExact field through
+the existing algebraMap; no smaller field is substituted for that carrier.
+`FieldSuffix.field` covers arbitrary iterator positions, including exhausted
+positions, and `FieldPowerPure.projection` needs no ExternalTypes instance.
+
+All are component theorems: the original-root identity and op223 source law
+remain arguments to `ContextJoin.callback`. Both V163 data comparisons and
+the concrete whole model remain absent. The earlier native816 comparisons
+per fixture are the non-vacuity measurement; `FieldFixtures` separately
+specializes the mathematical reference on the two measured sample tuples.
+No endpoint premise is removed.
+
+Focused failures25937/25940/25944 exposed normalization/recursion limits at
+the concrete field bridge. The replacement isolates generic Horner algebra,
+a scalar specialization, and unfolds the tuple before applying that theorem.
+No recursion/heartbeat cap was raised.25945--25949 are green with standard
+axioms only. Exact snapshots, statuses, wall/RSS/swap/revision and axiom lines
+are in their receipts. Sibling op223 remains OPEN on the stage5 read-only
+branch inspection.

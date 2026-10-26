@@ -1,0 +1,41 @@
+import R1Z.ProverRw18FieldEncode
+import R1Z.PV_RW_CompressPowerFold
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw18FieldPower
+open Aeneas Aeneas.Std Result ProverRw18FieldMeaning
+
+theorem run (n : Nat) (lambda power : Raw) (hlambda : Canonical lambda) (hpower : Canonical power) :
+    ∃ final : Raw, PV_RW_CompressPowerFold.powerRun (full lambda) n (full power)=ok (full final) ∧
+      Canonical final ∧ decode final=decode power*(decode lambda)^n := by
+  induction n generalizing power with
+  | zero => exact ⟨power,rfl,hpower,by simp⟩
+  | succ n ih =>
+    obtain ⟨next,hs,hc,hd⟩ := ProverRw18FieldMeaning.mul power lambda hpower hlambda
+    obtain ⟨final,hr,hcf,hdf⟩ := ih next hc
+    refine ⟨final,?_,hcf,?_⟩
+    · rw [PV_RW_CompressPowerFold.powerRun,hs]
+      exact hr
+    · rw [hdf,hd,pow_succ]
+      ring
+
+variable [ProverRwFull.ExternalTypes]
+
+-- No accumulator canonicality premise: the closed source is total there,
+-- and the existing projection law separates the complete power recurrence.
+theorem projection (values : List U32) (lambda power : Raw) (out : Q)
+    (hlambda : Canonical lambda) (hpower : Canonical power) :
+    ProverRwDictionaryTower.mapResult Prod.snd
+      (PV_RW_CompressClosedFold.owned values (full lambda) (out,full power))=
+        ok (full (ProverRw18FieldEncode.encode (decode power*(decode lambda)^values.length))) := by
+  rw [← PV_RW_CompressClosedFold.owned_equal,PV_RW_CompressPowerFold.projection]
+  obtain ⟨final,hr,hc,hd⟩ := run values.length lambda power hlambda hpower
+  have same : final=ProverRw18FieldEncode.encode (decode power*(decode lambda)^values.length) := by
+    apply ProverRw18FieldInjective.raw _ _ hc (ProverRw18FieldEncode.canonical _)
+    rw [ProverRw18FieldEncode.decoded]
+    exact hd
+  rw [hr,same]
+
+#print axioms run
+#print axioms projection
+end R1Z.ProverRw18FieldPower

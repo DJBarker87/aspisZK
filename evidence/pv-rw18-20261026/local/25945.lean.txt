@@ -1,0 +1,22 @@
+import R1Z.ProverRw18FieldFiniteSum
+import R1Z.ProverRw18HornerBridge
+import R1Z.ProverRw18CopySpecialized
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw18CopyPolynomial
+open Aeneas Aeneas.Std ProverRw18FieldMeaning
+open scoped BigOperators
+
+def tuple (tag : U32) (values : Fin 16 → U32) : K × (Fin 16 → K) :=
+  ((tag.val : K),fun i => ((values i).val : K))
+
+theorem value (tag : U32) (values : Fin 16 → U32) (lambda : K) :
+    ProverRw18FieldReference.value tag (List.ofFn values) lambda=
+      (R0P.compressPoly (tuple tag values)).eval lambda := by
+  unfold ProverRw18FieldReference.value
+  rw [ProverRw18HornerBridge.eval,List.map_ofFn]
+  unfold tuple
+  apply ProverRw18CopySpecialized.copy
+
+#print axioms value
+end R1Z.ProverRw18CopyPolynomial
