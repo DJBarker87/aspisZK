@@ -1,0 +1,63 @@
+FIx_HighSumInner.lean:27:4: error: 'change' tactic failed, pattern
+  (match (↑a)[↑i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some y => ok y) =
+    ok x
+is not definitionally equal to target
+  (match (↑a)[↑i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok x
+FIx_HighSumInner.lean:50:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  s.high.index_usize iter.start
+in the target expression
+  (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (s, acc)
+    | some block => do
+      let q ← s.high.index_usize block
+      let sum1 ← field.QM31.add acc q
+      pool_v1.pair_forest_semantic_terminal.sum_high_loop0_loop0 iter1 s sum1) =
+    ok (s, out)
+
+case succ.refine_1
+s : Selectors
+hh : ∀ x ∈ ↑s.high, Canon x
+n : ℕ
+ih :
+  ∀ (iter : Range) (acc : NQ),
+    ↑iter.end ≤ 64 →
+      ↑iter.start + n = ↑iter.end →
+        Canon acc → ∃ out, loop iter s acc = ok (s, out) ∧ Canon out ∧ decode out = model s n (↑iter.start) (decode acc)
+iter : Range
+acc : NQ
+hend : ↑iter.end ≤ 64
+hspan : ↑iter.start + (n + 1) = ↑iter.end
+ha : Canon acc
+iter1 : OccupancyRangeTraversal.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+hb : ↑iter.start + 1 ≤ Usize.max
+q : NQ
+hq : s.high.index_usize iter.start = ok q
+hcq : Canon q
+hvq : decode q = FIv_NativeArray.value s.high ↑iter.start
+next : field.QM31
+ha1 : field.QM31.add acc q = ok next
+hca : Canon next
+hva : decode next = decode acc + decode q
+out : field.QM31
+hr : loop iter1 s next = ok (s, out)
+hco : Canon out
+hvo : decode out = model s n (↑iter1.start) (decode next)
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (s, acc)
+    | some block => do
+      let q ← s.high.index_usize block
+      let sum1 ← field.QM31.add acc q
+      pool_v1.pair_forest_semantic_terminal.sum_high_loop0_loop0 iter1 s sum1) =
+    ok (s, out)
+'AspisR1.FIx_HighSumInner.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIx_HighSumInner.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

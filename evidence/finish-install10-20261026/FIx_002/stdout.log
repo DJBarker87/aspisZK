@@ -1,0 +1,63 @@
+FIx_HighSumInner.lean:24:62: error: Type mismatch: After simplification, term
+  hi
+ has type
+  ↑i < ↑N
+but is expected to have type
+  ?m.48 < List.length ?m.47
+FIx_HighSumInner.lean:23:44: error: unsolved goals
+N : Usize
+a : Std.Array NQ N
+i : Usize
+hi : ↑i < ↑N
+hc : ∀ x ∈ ↑a, Canon x
+x : NQ := (↑a)[↑i]
+⊢ (match a[i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok x
+FIx_HighSumInner.lean:33:9: error: unsolved goals
+case zero
+s : Selectors
+hh : ∀ x ∈ ↑s.high, Canon x
+iter : Range
+acc : NQ
+hend : ↑iter.end ≤ 64
+hspan : ↑iter.start + 0 = ↑iter.end
+ha : Canon acc
+⊢ (let (o, iter1) := (none, iter)
+    match o with
+    | none => ok (s, acc)
+    | some block => do
+      let q ← s.high.index_usize block
+      let sum1 ← field.QM31.add acc q
+      pool_v1.pair_forest_semantic_terminal.sum_high_loop0_loop0 iter1 s sum1) =
+    ok (s, acc)
+FIx_HighSumInner.lean:45:6: error: Type mismatch
+  hr
+has type
+  loop iter1 s next = ok (s, out)
+but is expected to have type
+  (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (s, acc)
+    | some block => do
+      let q ← s.high.index_usize block
+      let sum1 ← field.QM31.add acc q
+      pool_v1.pair_forest_semantic_terminal.sum_high_loop0_loop0 iter1 s sum1) =
+    ok (s, out)
+FIx_HighSumInner.lean:44:31: warning: This simp argument is unused:
+  hq
+
+Hint: Omit it from the simp argument list.
+  simp only [hn, ̲bind_tc_ok, ̲hq̵,̵h̵a1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIx_HighSumInner.lean:44:34: warning: This simp argument is unused:
+  ha1
+
+Hint: Omit it from the simp argument list.
+  simp only [hn, ̲bind_tc_ok, ̲hq,̵h̵a̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIx_HighSumInner.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIx_HighSumInner.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
