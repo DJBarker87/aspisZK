@@ -30,3 +30,12 @@ pub fn owned_step_matched(mut compressed:QM31,mut power:QM31,value:&M31,lambda:Q
         power = power.mul(lambda);
     (compressed,power)
 }
+
+pub fn compress_fission(tag: M31, values: &[M31], lambda: QM31) -> QM31 {
+    let mut compressed = lift(tag);
+    let mut power = lambda;
+    for value in values {
+        (compressed,power)=shipped_step(compressed,power,value,lambda);
+    }
+    compressed
+}

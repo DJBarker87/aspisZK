@@ -24,6 +24,8 @@ pub fn reference16(tag:M31,values:[M31;16],lambda:QM31)->QM31 {
 '''
 text=text.replace('pub fn shipped_step(', '#[inline(always)]\npub fn shipped_step(')
 text+='#[inline(always)]\npub fn owned_step_matched(mut compressed:QM31,mut power:QM31,value:&M31,lambda:QM31)->(QM31,QM31) {\n'+body+'\n    (compressed,power)\n}\n'
+fission=f.replace('pub fn compress_tagged_tuple(', 'pub fn compress_fission(').replace(body,'        (compressed,power)=shipped_step(compressed,power,value,lambda);')
+text+='\n'+fission+'\n'
 p=d/'proof/generated.rs'
 if '--check' in sys.argv:assert p.read_text()==text
 else:p.write_text(text)

@@ -1,0 +1,44 @@
+import R1Z.PV_RW_Cursor
+set_option autoImplicit false
+namespace R1Z.PV_RW_CursorMap
+open PV_RW_Cursor
+
+def map {T U : Type} (f : T → U) (cursor : Cursor T) : Cursor U :=
+  ⟨cursor.values.map f,cursor.index⟩
+
+theorem index {T U : Type} (f : T → U) (cursor : Cursor T) : (map f cursor).index=cursor.index := rfl
+
+theorem length {T U : Type} (f : T → U) (cursor : Cursor T) :
+    (map f cursor).values.length=cursor.values.length := by
+  exact List.length_map f
+
+theorem remaining {T U : Type} (f : T → U) (cursor : Cursor T) :
+    PV_RW_Cursor.remaining (map f cursor)=(PV_RW_Cursor.remaining cursor).map f := by
+  unfold PV_RW_Cursor.remaining map
+  rw [List.map_drop]
+
+theorem remaining_length {T U : Type} (f : T → U) (cursor : Cursor T) :
+    (PV_RW_Cursor.remaining (map f cursor)).length=(PV_RW_Cursor.remaining cursor).length := by
+  rw [remaining]
+  exact List.length_map f
+
+theorem next {T U : Type} (f : T → U) (cursor : Cursor T) :
+    PV_RW_Cursor.next (map f cursor)=
+      ((PV_RW_Cursor.next cursor).1.map f,map f (PV_RW_Cursor.next cursor).2) := by
+  by_cases active : cursor.index<cursor.values.length
+  · have mapped : (map f cursor).index<(map f cursor).values.length := by
+      simpa only [map,List.length_map] using active
+    rw [PV_RW_Cursor.some_step _ mapped,PV_RW_Cursor.some_step cursor active]
+    simp only [map,List.getElem_map,Option.map_some]
+  · have stopped : cursor.values.length≤cursor.index := by omega
+    have mapped : (map f cursor).values.length≤(map f cursor).index := by
+      simpa only [map,List.length_map] using stopped
+    rw [PV_RW_Cursor.none_step _ mapped,PV_RW_Cursor.none_step cursor stopped]
+    rfl
+
+#print axioms index
+#print axioms length
+#print axioms remaining
+#print axioms remaining_length
+#print axioms next
+end R1Z.PV_RW_CursorMap

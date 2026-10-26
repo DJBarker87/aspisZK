@@ -177,3 +177,60 @@ pv-cb head3a16c923fddca9f2d48004fdff6318587ea237e1. Its final status marks op223
 OPEN and op250 as a skipped earlier source-policy installation,with native
 correspondence retained. No sibling-installed callback is edited or replaced.
 The new compression dictionaries are auxiliary; no live callback installed.
+
+## Closed compression and complete caller/data transport
+
+23716/23717 reject record-update congruence inference;23718 instead rewrites the
+explicit function equality and passes1.95s/4316324KiB/zero swap/standard axioms.
+23720 complete auxiliary caller and BodyData transport passes1.74s/4309032KiB.
+The whole proof/audit data equation is still an explicit antecedent,not supplied.
+
+23719's closed arithmetic facts check,but binding through the full dictionary
+hits the default200000-heartbeat whnf limit. This failed module is not accepted.
+The replacement splits closed arithmetic(23722,1.76s/4316896KiB),selectors
+(23721,1.75s/4304788KiB),and symbolic binding(23723,1.77s/4308916KiB). All pass
+with standard axioms and zero swap; no limits raised. The emitted current step
+is now proved equal to closed current field operations,total for every raw
+input,and independent of every remaining ExternalFuns callback.
+
+23724 rejects missing import/unused class inference;23725 rejects a redundant
+tactic after simplification solved the goal;23726 passes1.79s/4315068KiB,
+proving the complete closed arithmetic fold and its source-loop equation.
+23727 rejects opaque-zero rfl;23728 explicitly reduces only the constructor and
+zero constants and passes2.44s/4302428KiB.23729 passes3.03s/4300888KiB: complete
+source-model compression=closed owned reference,all slices and typed arity16,
+without arithmetic/canonicality/output assumptions. Native association remains
+separate and the timed-out Kani gates are never promoted to certificates.
+
+23730 rejects an unused ExternalTypes requirement on a reused theorem.23732
+proves the closed equality directly and passes2.06s/4303760KiB: fold/compression/
+owned reference totality is independent of ExternalTypes and ExternalFuns.
+23731 passes2.33s/4302576KiB: closed compression equality is consumed through
+complete caller equality and BodyData.refinement_of_data. This transports the
+source-model dictionary; it does not identify it with the live native dictionary
+or discharge the remaining whole-data antecedent. All accepted reports standard.
+
+## Actual iterator control continuation
+
+Env-J 23748 (Outcome), 23749 (Cursor), 23750 (CursorLoop), and 23751
+(IteratorSource) passed. These replay the small locally checked prerequisites
+into the pinned host object environment and prove the exact emitted iterator
+step and initializer, including full backing data and remaining-tail equality.
+23752 was refused by the separate read-only reservation preflight at
+17:26:12 UTC (projected 60,532,195,328 bytes > safe 59,055,800,320 bytes).
+No compiler or capped scope started; zero attempts charged. The next attempt
+will use a fresh ID after at least three minutes. No admission mechanism changed.
+The composed native-control compression module explicitly retains association
+of the original whole helper as a separate obligation; its source definition
+is not the reference output, and it does not upgrade a Kani timeout to a pass.
+
+### Quiet-window timing exception retained
+
+The proof-local fission Aeneas probe was admitted at 16:50:18.455686 UTC,
+inside the subsequently learned 16:50–17:20 cross-stream quiet window. It
+failed in 0.386 seconds with `Not_found` in
+`InterpReduceCollapse.collapse_ctx_following_sequence`; no whole-helper output
+or certificate was accepted. The quiet hold became known at the 23739 launcher
+refusal at 16:50:34. No further host capped scope was started until 17:21:32.
+This timing overlap is retained as a deviation, not hidden as a successful
+admission. The marker and launchers were never edited.

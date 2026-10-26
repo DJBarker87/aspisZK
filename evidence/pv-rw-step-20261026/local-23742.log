@@ -1,0 +1,69 @@
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorLoop.lean:31:6: error: Tactic `apply` failed: could not unify the conclusion of `ih`
+  bounded step fuel ?cursor ?state = listRun step (remaining ?cursor) ?state
+with the goal
+  bounded step fuel { values := cursor.values, index := cursor.index + 1 } next =
+    listRun step (remaining (PV_RW_Cursor.next cursor).snd) next
+
+Note: The full type of `ih` is
+  ∀ (cursor : Cursor T) (state : S),
+    (remaining cursor).length < fuel → bounded step fuel cursor state = listRun step (remaining cursor) state
+
+case pos
+E T S : Type
+step : T → S → Outcome E S
+fuel : Nat
+ih :
+  ∀ (cursor : Cursor T) (state : S),
+    (remaining cursor).length < fuel → bounded step fuel cursor state = listRun step (remaining cursor) state
+cursor : Cursor T
+state : S
+bound : (remaining cursor).length < fuel + 1
+active : cursor.index < cursor.values.length
+next : S
+⊢ bounded step fuel { values := cursor.values, index := cursor.index + 1 } next =
+    listRun step (remaining (PV_RW_Cursor.next cursor).snd) next
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorLoop.lean:65:25: error: unsolved goals
+case cons
+E T S : Type
+step : T → S → Outcome E S
+right : List T
+value : T
+values : List T
+ih :
+  ∀ (state : S),
+    listRun step (values ++ right) state = PV_RW_Outcome.bind (listRun step values state) (listRun step right)
+state : S
+⊢ PV_RW_Outcome.bind (step value state) (listRun step (values ++ right)) =
+    PV_RW_Outcome.bind (step value state) fun a => PV_RW_Outcome.bind (listRun step values a) (listRun step right)
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CursorLoop.lean:66:40: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [List.cons_append, ̲listRun,i̵h̵,̵ ̲PV_RW_Outcome.assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RW_CursorLoop.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RW_CursorLoop.exact_fuel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RW_CursorLoop.arity16' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RW_CursorLoop.congr' does not depend on any axioms
+'R1Z.PV_RW_CursorLoop.append' depends on axioms: [sorryAx]
+'R1Z.PV_RW_CursorLoop.fail_head' depends on axioms: [propext]
+'R1Z.PV_RW_CursorLoop.div_head' depends on axioms: [propext]
+        1.67 real         0.27 user         0.30 sys
+           646889472  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               36256  page reclaims
+                9382  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2347  voluntary context switches
+               10596  involuntary context switches
+           412951314  instructions retired
+           167072118  cycles elapsed
+            11338520  peak memory footprint
