@@ -1,0 +1,27 @@
+PoolS2_PlannerReady.lean:12:95: error: unsolved goals
+m : Master
+lanes : Lanes
+root : Root
+bump : U8
+next : U64
+valid : PoolS2_MasterValidFacts.Valid m
+mask : m.initialized_lane_mask = 255#u8
+canonical : ∀ limb ∈ ↑root, ↑limb < 2147483647
+lanesValid : PoolS2_LaneFacts.Valid m.identity.pool 0 ↑lanes
+chrono :
+  PoolV_Chronology.chronology (Array.to_slice (sequences lanes)) m.last_checkpoint_lane_sequences.to_slice
+      m.has_checkpoint m.next_checkpoint_sequence =
+    ok (0#u8, next)
+before : PoolS2_MasterValidation.run m = ok (core.result.Result.Ok ())
+checked : check m.identity.pool 0 ↑lanes = core.result.Result.Ok ()
+after : PoolS2_MasterValidation.run (nextMaster m lanes next) = ok (core.result.Result.Ok ())
+after' : PoolS2_MasterValidation.run (assembled m lanes root bump next).next_master = ok (core.result.Result.Ok ())
+⊢ ∀ x ∈ ↑root, ↑x < 2147483647
+PoolS2_PlannerReady.lean:18:66: warning: This simp argument is unused:
+  canonical
+
+Hint: Omit it from the simp argument list.
+  simp [̵P̵o̵o̵l̵S̵2̵_̵P̵l̵a̵n̵n̵e̵r̵M̵o̵d̵e̵l̵.̵r̵u̵n̵,̵b̵e̵f̵o̵r̵e̵,̵m̵a̵s̵k̵,̵c̵h̵e̵c̵k̵e̵d̵,̵c̵h̵r̵o̵n̵o̵,̵a̵f̵t̵e̵r̵'̵,̵c̵a̵n̵o̵n̵i̵c̵a̵l̵]̵[̲P̲o̲o̲l̲S̲2̲_̲P̲l̲a̲n̲n̲e̲r̲M̲o̲d̲e̲l̲.̲r̲u̲n̲,̲ ̲b̲e̲f̲o̲r̲e̲,̲ ̲m̲a̲s̲k̲,̲ ̲c̲h̲e̲c̲k̲e̲d̲,̲ ̲c̲h̲r̲o̲n̲o̲,̲ ̲a̲f̲t̲e̲r̲'̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PoolS2_PlannerReady.ready' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
