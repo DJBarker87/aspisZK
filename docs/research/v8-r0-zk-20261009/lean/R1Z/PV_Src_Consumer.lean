@@ -18,7 +18,7 @@ local instance : CharP K 2147483647 :=
 soundness conclusions. The map's admission proof remains an explicit input. -/
 theorem of_identification {CommitHandle : Type} {F : Subfield K}
     (B : PackBasis F) (x : Statement K CommitHandle) (source : HonestProver K)
-    (toInstance : source.Instance → BuilderCanonical.Instance (K := K))
+    (toInstance : source.Instance → BuilderCanonical.Instance («K» := K))
     (identification : BuilderSource.SourceIdentification source toInstance) :
     PrivacyR1Headline.BuilderPremises source B x := by
   intro w hw
@@ -31,13 +31,13 @@ theorem of_identification {CommitHandle : Type} {F : Subfield K}
 theorem extracted_stages {CommitHandle : Type} {F : Subfield K}
     (B : PackBasis F) (x : Statement K CommitHandle) :
     PrivacyR1Headline.BuilderPremises
-      (PV_Src_Identification.prover (PV_Src_Canonical.inputs (K := K)) PV_Src_Transport.transport) B x :=
+      (PV_Src_Identification.prover (PV_Src_Canonical.inputs («K» := K)) PV_Src_Transport.transport) B x :=
   of_identification B x _ _ PV_Src_Canonical.identification
 
 theorem forest_stages {CommitHandle : Type} {F : Subfield K}
     (B : PackBasis F) (x : Statement K CommitHandle) :
     PrivacyR1Headline.BuilderPremises
-      (PV_Src_ForestIdentification.prover (PV_Src_ForestCanonical.inputs (K := K)) PV_Src_Transport.transport) B x :=
+      (PV_Src_ForestIdentification.prover (PV_Src_ForestCanonical.inputs («K» := K)) PV_Src_Transport.transport) B x :=
   of_identification B x _ _ PV_Src_ForestCanonical.identification
 
 /-- This is the existing endpoint contract, reused without changing its
@@ -45,10 +45,10 @@ statement. It does not consume SourceIdentification as an argument. -/
 theorem existing_consumer {CommitHandle : Type}
     (x : Statement K CommitHandle) :
     PrivacyR1Headline.BuilderPremises
-      (PhaseWireLog2Bin.honest (BuilderSource.prover (K := K)))
+      (PhaseWireLog2Bin.honest (BuilderSource.prover («K» := K)))
       PrivacyR1AcctBasis.basis x := by
   change PrivacyR1Headline.BuilderPremises
-    (BuilderSource.prover (K := K)) PrivacyR1AcctBasis.basis x
+    (BuilderSource.prover («K» := K)) PrivacyR1AcctBasis.basis x
   exact PrivacyR1Headline.builder_premises_canonical _ _
 
 #print axioms of_identification

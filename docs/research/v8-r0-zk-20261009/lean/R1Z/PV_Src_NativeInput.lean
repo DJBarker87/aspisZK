@@ -69,7 +69,7 @@ def newRecords [BuilderForestAdmissionPort.Records] (i : Input) :=
 
 /-- Pure projection of the actual returned merged columns. -/
 def columns {K : Type} [Field K]
-    (read : Array (alloc.vec.Vec U32) 16#usize → Nat → Nat → U32)
+    (read : Array (alloc.vec.Vec U32) 16#usize → Fin 29 → Fin 1024 → U32)
     (out : Array (alloc.vec.Vec U32) 16#usize) : R0P.Trace K :=
   fun c r => R0Z.WriterRefine.liftU (read out c r)
 

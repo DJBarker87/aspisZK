@@ -30,6 +30,8 @@ for n in order:
  s=s.replace('AspisBuilderGlueSource','BuilderForestAdmissionPort').replace('AspisBuilderColumnsSource','BuilderForestAdmissionPort')
  s=s.replace('BuilderForestAdmissionPort.core.','BuilderForestStdPort.core.')
  for a,b in sorted(mapping.items(),key=lambda x:-len(x[0])):s=re.sub(r'\b'+a+r'\b',b,s)
+ if n=='BuilderBankRange':
+  s=s.replace('import Aeneas.Std.RangeIter','import R1Z.BuilderBankRange')
  if n=='BuilderInverse':
   a=s.index('theorem loop ');b=s.index('theorem field_power_value',a)
   block=s[a:b].replace(' (m : U32) (hm : 1 < m.val)','')

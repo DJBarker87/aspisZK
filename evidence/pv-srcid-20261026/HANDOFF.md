@@ -1,4 +1,31 @@
-# Resume checkpoint, 2026-10-26 14:05 UTC
+# Latest checkpoint, 2026-10-26 14:27 UTC
+
+HEAD 6aaa34be2b. The older checkpoint below is historical; current queue is
+exec session32786, paused after22613 reservation refusal (14:24:04 UTC), next
+ID22614 no earlier than14:27:07 UTC. It resumes ForestBankMaterialization and
+remaining provenance[13:] through ForestBanks and NativeInput. Do not launch
+another scope while it runs. Charged count is authoritative attempts.jsonl.
+New passes: ForestInverse22599, InverseResult22600, PrimitiveDigests22601,
+DigestArguments22603, DigestTotal22604, BankShape22605, BankCells22607,
+BankRange22610, BankStep22611, BankCollect22612. 22608 stopped BEFORE Lean:
+receipt helper missing external objects/Aeneas/Std/RangeIter.olean. Generator
+uses existing compiled R1Z.BuilderBankRange as import; no infrastructure edit.
+ForestStdPort.core prefix is now mapped correctly. Fixed inverse uses literal
+ZMod prime but exact source cast-divisor expression. Generator --check passes.
+
+New UNCOMPILED NativeInput, NativePremises, NativeIdentification, NativeConsumer.
+NativeInput is queued at end. NativePremises has exact five fields compile_call,
+words, publicCorr, admission, row_call; NativeIdentification uses actual returned
+compiler columns and selects same records/banks for all fields via returned_bank.
+Dependency ForestCompilation.returned_bank remains UNCOMPILED and its finite
+outer-control-flow tactic may need substantial repair/splitting. Compile
+NativePremises separately before NativeIdentification so field statements get
+validated even if compiler composition is hard. NativeConsumer targets unchanged
+BuilderPremises including PhaseWireLog2Bin.honest override. No deployed row closed.
+Fixtures still uncompiled. All sources under PV_Src_; no existing proved file,
+crates/programs, sibling worktree or infrastructure edit. Kani remains0/15.
+
+# Historical checkpoint, 2026-10-26 14:05 UTC
 
 Read pv-common/r1p-common/local-lean first. Branch codex/pv-srcid-20261026;
 work only here. No crates/programs edits, no keys, no sibling worktree edits.

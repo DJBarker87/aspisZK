@@ -38,3 +38,49 @@ public guard, field carrier, basis and raw-trace soundness conclusions.
 `BuilderSource.prover` and has no certificate parameter. Its existing body and
 the deployed endpoint remain unchanged; no RunJoin or operational source
 installation follows from type compatibility alone.
+
+## Validated extracted-stage result (15:10 UTC)
+
+The direct forest certificate `PV_Src_ForestCanonical.identification` and its
+public/build/transport equations passed attempt22632. `PV_Src_Consumer` passed
+22644: `of_identification`, `extracted_stages`, `forest_stages`, and the exact
+existing consumer contract all have standard axioms. This is compatibility
+with the unchanged BuilderPremises type, not installation into the fixed
+`PrivacyR1HeadlineDeployedReal` input. Neither that endpoint nor its observer,
+simulator, random carriers, failure event or numerical bound is changed.
+
+`PV_Src_NativePremises` passed22642 after the native-input reader was corrected
+to the actual Fin29/Fin1024 signature (NativeInput22641; old shared object/source
+snapshotted, hashes/sizes retained). The five final native premise families are:
+
+```lean
+compile_call : ∀ i, run (inputs i) = ok (.Ok (inputs i).compiled)
+words : ∀ i records, newRecords (inputs i) = ok records →
+  WitnessOk (wordWitness records.w)
+publicCorr : ∀ i records, newRecords (inputs i) = ok records →
+  PubCorr (wordPublic records.p)
+    (mapPub (K := K) (PV_Src_Public.canonicalPublic (publicInput (inputs i))))
+admission : ∀ i records, newRecords (inputs i) = ok records →
+  BuilderSpendRelation.RspendPlus
+    (mapPub (K := K) (PV_Src_Public.canonicalPublic (publicInput (inputs i))))
+    (BuilderCanonical.liftWitness
+      (BuilderRecordCanonical.witness (wordWitness records.w)))
+row_call : ∀ j, transport j = PV_Src_Transport.row j
+```
+
+Here `run` is the actual extracted `compile_forest_from_copies` call, with
+request-selected out-value/recipient and native snapshot; `publicInput` calls
+the actual extracted transfer/withdrawal projection with the returned compiler
+public statement's transition. `newRecords` is the actual constructor using
+the same arguments and Records dictionary. ExternalLinear/Records are existing
+source-port parameters, not new Lean axioms or discharged native associations.
+The source prover reads the returned `compiled.semantic_c1.c1`, not a canonical
+trace substituted into its definition. The unfinished native certificate must
+obtain its internal record/bank from that same execution. No raw_trace_eq field
+is assumed. Its compiler-return theorem remains pending validation.
+
+These are FIVE named families, not a claim that only five atomic native laws
+remain: WitnessOk retains values/bits/siblings; PubCorr retains its seven fields;
+RspendPlus retains the original spend relation plus sentinel. These definitions
+will be printed in the final audit so their conjunction leaves remain visible.
+No native V152–V154 deployment row has yet been removed from the ledger.

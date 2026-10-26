@@ -174,3 +174,18 @@ source wrappers do; public transition comes from the compiler's returned
 payload. A native-output certificate, if completed, must expose compile_call,
 words, publicCorr, admission and row_call as named premises, and must prove
 raw trace equality through returned_bank rather than assume it.
+
+22608 stopped before launcher invocation: sha256sum could not find joint
+objects/Aeneas/Std/RangeIter.olean, an external base-library object. Zero Lean
+attempt. No infrastructure was changed. The new BankRange proof instead
+imports existing R1Z.BuilderBankRange, which supplies the same generic Aeneas
+range-spec dependency through its already compiled object.
+
+22640 typed all five NativePremises fields but failed the prover projection:
+NativeInput.columns expected a Nat-index reader while actual Columns.read is
+Fin29/Fin1024. The adapter is corrected to the actual finite index types.
+This overwrites our own PV_Src_NativeInput source/object in the shared tree;
+old source/object are snapshotted under the branch-named job snapshots dir
+22641/R1Z, with hashes/sizes in native-input-before-fin-reader.log. Only our
+new module has this name; NativePremises had no successful object yet. Rebuild
+NativeInput and all consumers needed for the final proof with fresh attempts.
