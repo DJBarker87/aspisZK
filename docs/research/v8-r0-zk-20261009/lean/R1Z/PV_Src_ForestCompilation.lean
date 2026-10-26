@@ -1,4 +1,5 @@
 import R1Z.PV_Src_ForestBanks
+import R1Z.PV_Src_CompilerTactic
 
 /-! Successful forest compilation returns the very merged bank obtained from
 its record object. Only the finite outer control flow is split: no hash,
@@ -25,19 +26,24 @@ theorem returned_bank [ExternalLinear] [Records]
         publicInput.asset = ok records ∧
       pair_forest_copy_builder.CopyRecords.banks records = ok (some banks) ∧
       compiled.semantic_c1.c1 = banks.merged := by
-  unfold pair_forest_trace.compile_forest_from_copies at h
-  obtain ⟨records,hr,h⟩ := bind_ok_inv h
-  refine ⟨records,?_⟩
+  rcases publicInput with ⟨pubAnchor,pubNullifier,pubRecipient,pubChange,pubAsset⟩
+  cases pubRecipient <;> unfold pair_forest_trace.compile_forest_from_copies at h
   all_goals
+    pv_peel h with records hr
+    refine ⟨records,?_⟩
     repeat' first
-      | obtain ⟨value,hvalue,h⟩ := bind_ok_inv h
-      | split at h
-      | contradiction
-      | cases h
-    all_goals simp_all only [core.option.Option.ok_or,
-      core.result.Result.Insts.CoreOpsTry.branch,
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
-      core.convert.FromSame,bind_tc_ok]
+      | (pv_peel h with value hvalue; trace "bind")
+      | exact False.elim (PV_Src_ResultControl.error_ne_ok _ _ h)
+      | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
+      | (have _test : Bool := value; cases value <;> simp only [Bool.false_eq_true, ↓reduceIte] at h; trace "bool")
+      | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value; trace "flow")
+      | (have _test : _ × _ := value; rcases value with ⟨value,rest⟩; trace "pair")
+      | (cases h; trace "end")
+    all_goals
+      have ho := PV_Src_ResultControl.option_continue (by assumption) (by assumption)
+      cases ho
+      exact ⟨_, hr, by assumption, rfl⟩
+
 
 #print axioms returned_bank
 end R1Z.PV_Src_ForestCompilation

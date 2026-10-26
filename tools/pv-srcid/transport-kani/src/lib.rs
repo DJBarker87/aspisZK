@@ -33,3 +33,17 @@ fn s2_qm31_coefficients_cell() {
     let coefficients = shipped::Variant::S2.coefficients(&rows);
     assert_eq!(coefficients[j], rows[aspis_r1_builder_reference::row_arithmetic(j)]);
 }
+
+/// Actual unmasked builder carrier, one arbitrary raw M31 word per cell.
+#[cfg(kani)]
+#[kani::proof]
+#[kani::unwind(1025)]
+fn s2_m31_coefficients_cell() {
+    use aspis_core::field::M31;
+    let words: [u32; 1024] = kani::any();
+    let rows: [M31; 1024] = core::array::from_fn(|i| M31(words[i]));
+    let j: usize = kani::any();
+    kani::assume(j < 1024);
+    let coefficients = shipped::Variant::S2.coefficients(&rows);
+    assert_eq!(coefficients[j], rows[aspis_r1_builder_reference::row_arithmetic(j)]);
+}

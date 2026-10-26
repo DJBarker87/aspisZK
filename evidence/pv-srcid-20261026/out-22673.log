@@ -1,0 +1,756 @@
+bind
+bind
+bind
+bool
+bind
+bind
+bind
+bind
+flow
+bind
+bool
+bind
+bind
+bool
+bind
+bind
+bool
+bind
+bind
+bool
+bind
+bind
+bool
+bind
+bind
+bind
+flow
+bind
+bind
+bind
+flow
+bind
+bind
+bind
+bind
+pair
+bool
+bind
+bind
+bool
+bind
+bind
+bind
+flow
+bind
+bind
+flow
+bind
+bind
+bind
+bind
+end
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ForestCompilation.lean:45:13: error: don't know how to synthesize implicit argument `b`
+  @And.intro
+    (pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot
+        { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none, change_commitment := pubChange,
+            asset := pubAsset }.asset =
+      ok records)
+    (records.banks = ok (some ?m.1854) ∧
+      {
+              trace :=
+                { stable := { c1 := a✝¹.stable }, late := a✝¹.late,
+                  variant := pair_trace.PoolV1PairTraceVariantV1.Withdrawal, private_directions := value✝²,
+                  value_bits :=
+                    Array.make 3#usize [value✝¹, value✝, value]
+                      (pair_forest_trace.compile_forest_from_copies._proof_1 value✝¹ value✝ value),
+                  public_outputs :=
+                    pair_trace.PoolV1PairTracePublicOutputsV1.Withdrawal value✝⁵ value✝¹⁵ value✝¹³ value✝¹⁰,
+                  afterstate := a✝² },
+              semantic_c1 := { c1 := a✝¹.merged },
+              public_statement := { live_snapshot := snapshot, candidate_afterstate := a✝² } }.semantic_c1.c1 =
+        pair_forest_copy_builder.CopyBanks.merged ?m.1854)
+    hr ⟨?m.1859, ?m.1860⟩
+context:
+inst✝¹ : ExternalLinear
+inst✝ : Records
+input : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1
+out : U32
+recipient : Option payment_relation.PoolV1OutputNoteWitnessV1
+change : payment_relation.PoolV1OutputNoteWitnessV1
+anchor : Std.Array aspis_core.field.M31 8#usize
+snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1
+pubAnchor pubNullifier pubChange : Std.Array aspis_core.field.M31 8#usize
+pubAsset : aspis_core.field.M31
+records : pair_forest_copy_builder.CopyRecords
+hr :
+  pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot
+      { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none, change_commitment := pubChange,
+          asset := pubAsset }.asset =
+    ok records
+value✝²¹ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³⁵ : input.pair.pair_leaf.selected_commitment input.pair.selected_second = ok value✝²¹
+value✝²⁰ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³⁴ : records.input_leaf = ok value✝²⁰
+_test✝¹² : Bool
+hvalue✝³³ :
+  core.cmp.impls.PartialEqShared.ne
+      (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray 8#usize aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+      value✝²¹ value✝²⁰ =
+    ok false
+value✝¹⁹ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³² : records.path_digest 1#usize = ok value✝¹⁹
+value✝¹⁸ : core.result.Result (Std.Array aspis_core.field.M31 8#usize) pair_tree_profile.PoolV1PairLeafErrorV1
+hvalue✝³¹ : input.pair.pair_leaf.leaf_digest = ok value✝¹⁸
+value✝¹⁷ : core.result.Result (Std.Array aspis_core.field.M31 8#usize) pair_trace.PoolV1PairTraceErrorV1
+hvalue✝³⁰ :
+  BuilderForestStdPort.core.result.Result.map_err
+      (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) value✝¹⁸
+      pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor =
+    ok value✝¹⁷
+_test✝¹¹ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    (Std.Array aspis_core.field.M31 8#usize)
+a✝⁴ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁹ : core.result.Result.Insts.CoreOpsTry.branch value✝¹⁷ = ok (core.ops.control_flow.ControlFlow.Continue a✝⁴)
+_test✝¹⁰ : Bool
+hvalue✝²⁸ : core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁹ a✝⁴ = ok false
+value✝¹⁶ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁷ : records.path_digest 21#usize = ok value✝¹⁶
+_test✝⁹ : Bool
+hvalue✝²⁶ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁶ anchor = ok false
+value✝¹⁵ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁵ : records.nullifier = ok value✝¹⁵
+_test✝⁸ : Bool
+hvalue✝²⁴ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁵ pubNullifier = ok false
+value✝¹⁴ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²³ : format.pool_v1_nullifier input.pair.nullifier_key input.pair.salt = ok value✝¹⁴
+_test✝⁷ : Bool
+hvalue✝²² :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁵ value✝¹⁴ = ok false
+value✝¹³ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²¹ : records.change = ok value✝¹³
+_test✝⁶ : Bool
+hvalue✝²⁰ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹³ pubChange = ok false
+value✝¹² : core.result.Result pair_tree_profile.PoolV1PairLeafWitnessV1 pair_tree_profile.PoolV1PairLeafErrorV1
+hvalue✝¹⁹ : pair_tree_profile.PoolV1PairLeafWitnessV1.single_output value✝¹³ = ok value✝¹²
+value✝¹¹ : core.result.Result pair_tree_profile.PoolV1PairLeafWitnessV1 pair_trace.PoolV1PairTraceErrorV1
+hvalue✝¹⁸ :
+  BuilderForestStdPort.core.result.Result.map_err
+      (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) value✝¹²
+      pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor =
+    ok value✝¹¹
+_test✝⁵ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_tree_profile.PoolV1PairLeafWitnessV1
+a✝³ : pair_tree_profile.PoolV1PairLeafWitnessV1
+hvalue✝¹⁷ : core.result.Result.Insts.CoreOpsTry.branch value✝¹¹ = ok (core.ops.control_flow.ControlFlow.Continue a✝³)
+value✝¹⁰ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝¹⁶ : records.output_pair = ok value✝¹⁰
+value✝⁹ : core.result.Result pair_terminal.PoolV1PairVerifiedAfterstateV1 pair_trace.PoolV1PairTraceErrorV1
+hvalue✝¹⁵ : pair_forest_trace.late_append records snapshot value✝¹⁰ = ok value✝⁹
+_test✝⁴ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_terminal.PoolV1PairVerifiedAfterstateV1
+a✝² : pair_terminal.PoolV1PairVerifiedAfterstateV1
+hvalue✝¹⁴ : core.result.Result.Insts.CoreOpsTry.branch value✝⁹ = ok (core.ops.control_flow.ControlFlow.Continue a✝²)
+value✝⁸ : Slice (Std.Array aspis_core.field.M31 8#usize)
+hvalue✝¹³ : lift input.super_root_siblings.to_slice = ok value✝⁸
+value✝⁷ : core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)
+hvalue✝¹² : core.slice.Slice.iter value✝⁸ = ok value✝⁷
+value✝⁶ :
+  BuilderForestStd.Flatten (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize))
+    (Std.Array aspis_core.field.M31 8#usize) aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+hvalue✝¹¹ :
+  BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+      (core.iter.traits.iterator.IteratorSliceIter (Std.Array aspis_core.field.M31 8#usize))
+      (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize) value✝⁷ =
+    ok value✝⁶
+_test✝³ :
+  Bool ×
+    BuilderForestStdPort.core.iter.adapters.flatten.Flatten
+      (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)) (Std.Array aspis_core.field.M31 8#usize)
+      aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+rest :
+  BuilderForestStdPort.core.iter.adapters.flatten.Flatten
+    (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)) (Std.Array aspis_core.field.M31 8#usize)
+    aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+_test✝² : Bool
+hvalue✝¹⁰ :
+  BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+      (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+        (core.iter.traits.iterator.IteratorSliceIter (Std.Array aspis_core.field.M31 8#usize))
+        (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize)
+        (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31))
+      pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool value✝⁶ () =
+    ok (false, rest)
+value✝⁵ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝⁹ : records.path_digest 24#usize = ok value✝⁵
+_test✝¹ : Bool
+hvalue✝⁸ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝⁵ pubAnchor = ok false
+value✝⁴ : core.result.Result pair_forest_copy_builder.CopyBanks pair_trace.PoolV1PairTraceErrorV1
+_test✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_forest_copy_builder.CopyBanks
+a✝¹ : pair_forest_copy_builder.CopyBanks
+hvalue✝⁷ : core.result.Result.Insts.CoreOpsTry.branch value✝⁴ = ok (core.ops.control_flow.ControlFlow.Continue a✝¹)
+value✝³ : core.result.Result Unit pair_trace.PoolV1PairTraceErrorV1
+hvalue✝⁶ : pair_forest_trace.validate_forest_poseidon_rows a✝¹ = ok value✝³
+_test :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1) Unit
+a✝ : Unit
+hvalue✝⁵ : core.result.Result.Insts.CoreOpsTry.branch value✝³ = ok (core.ops.control_flow.ControlFlow.Continue a✝)
+value✝² : Std.Array aspis_core.field.M31 24#usize
+hvalue✝⁴ :
+  BuilderForestStdPort.core.array.from_fn 24#usize
+      pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+      (input.pair, input) =
+    ok value✝²
+value✝¹ : Std.Array aspis_core.field.M31 30#usize
+hvalue✝³ : pair_trace.value_bits input.pair.value = ok value✝¹
+value✝ : Std.Array aspis_core.field.M31 30#usize
+hvalue✝² : pair_trace.value_bits out = ok value✝
+value : Std.Array aspis_core.field.M31 30#usize
+hvalue✝¹ : pair_trace.value_bits change.value = ok value
+hvalue✝ : records.banks = ok (some a✝¹)
+hvalue : BuilderForestStdPort.core.option.Option.ok_or (some a✝¹) pair_trace.PoolV1PairTraceErrorV1.Shape = ok value✝⁴
+⊢ Prop
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ForestCompilation.lean:45:13: error: don't know how to synthesize implicit argument `b`
+  @And.intro (records.banks = ok (some ?m.1854))
+    ({
+            trace :=
+              { stable := { c1 := a✝¹.stable }, late := a✝¹.late,
+                variant := pair_trace.PoolV1PairTraceVariantV1.Withdrawal, private_directions := value✝²,
+                value_bits :=
+                  Array.make 3#usize [value✝¹, value✝, value]
+                    (pair_forest_trace.compile_forest_from_copies._proof_1 value✝¹ value✝ value),
+                public_outputs :=
+                  pair_trace.PoolV1PairTracePublicOutputsV1.Withdrawal value✝⁵ value✝¹⁵ value✝¹³ value✝¹⁰,
+                afterstate := a✝² },
+            semantic_c1 := { c1 := a✝¹.merged },
+            public_statement := { live_snapshot := snapshot, candidate_afterstate := a✝² } }.semantic_c1.c1 =
+      pair_forest_copy_builder.CopyBanks.merged ?m.1854)
+    ?m.1859 ?m.1860
+context:
+inst✝¹ : ExternalLinear
+inst✝ : Records
+input : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1
+out : U32
+recipient : Option payment_relation.PoolV1OutputNoteWitnessV1
+change : payment_relation.PoolV1OutputNoteWitnessV1
+anchor : Std.Array aspis_core.field.M31 8#usize
+snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1
+pubAnchor pubNullifier pubChange : Std.Array aspis_core.field.M31 8#usize
+pubAsset : aspis_core.field.M31
+records : pair_forest_copy_builder.CopyRecords
+hr :
+  pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot
+      { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none, change_commitment := pubChange,
+          asset := pubAsset }.asset =
+    ok records
+value✝²¹ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³⁵ : input.pair.pair_leaf.selected_commitment input.pair.selected_second = ok value✝²¹
+value✝²⁰ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³⁴ : records.input_leaf = ok value✝²⁰
+_test✝¹² : Bool
+hvalue✝³³ :
+  core.cmp.impls.PartialEqShared.ne
+      (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray 8#usize aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+      value✝²¹ value✝²⁰ =
+    ok false
+value✝¹⁹ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³² : records.path_digest 1#usize = ok value✝¹⁹
+value✝¹⁸ : core.result.Result (Std.Array aspis_core.field.M31 8#usize) pair_tree_profile.PoolV1PairLeafErrorV1
+hvalue✝³¹ : input.pair.pair_leaf.leaf_digest = ok value✝¹⁸
+value✝¹⁷ : core.result.Result (Std.Array aspis_core.field.M31 8#usize) pair_trace.PoolV1PairTraceErrorV1
+hvalue✝³⁰ :
+  BuilderForestStdPort.core.result.Result.map_err
+      (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) value✝¹⁸
+      pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor =
+    ok value✝¹⁷
+_test✝¹¹ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    (Std.Array aspis_core.field.M31 8#usize)
+a✝⁴ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁹ : core.result.Result.Insts.CoreOpsTry.branch value✝¹⁷ = ok (core.ops.control_flow.ControlFlow.Continue a✝⁴)
+_test✝¹⁰ : Bool
+hvalue✝²⁸ : core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁹ a✝⁴ = ok false
+value✝¹⁶ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁷ : records.path_digest 21#usize = ok value✝¹⁶
+_test✝⁹ : Bool
+hvalue✝²⁶ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁶ anchor = ok false
+value✝¹⁵ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁵ : records.nullifier = ok value✝¹⁵
+_test✝⁸ : Bool
+hvalue✝²⁴ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁵ pubNullifier = ok false
+value✝¹⁴ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²³ : format.pool_v1_nullifier input.pair.nullifier_key input.pair.salt = ok value✝¹⁴
+_test✝⁷ : Bool
+hvalue✝²² :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁵ value✝¹⁴ = ok false
+value✝¹³ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²¹ : records.change = ok value✝¹³
+_test✝⁶ : Bool
+hvalue✝²⁰ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹³ pubChange = ok false
+value✝¹² : core.result.Result pair_tree_profile.PoolV1PairLeafWitnessV1 pair_tree_profile.PoolV1PairLeafErrorV1
+hvalue✝¹⁹ : pair_tree_profile.PoolV1PairLeafWitnessV1.single_output value✝¹³ = ok value✝¹²
+value✝¹¹ : core.result.Result pair_tree_profile.PoolV1PairLeafWitnessV1 pair_trace.PoolV1PairTraceErrorV1
+hvalue✝¹⁸ :
+  BuilderForestStdPort.core.result.Result.map_err
+      (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) value✝¹²
+      pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor =
+    ok value✝¹¹
+_test✝⁵ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_tree_profile.PoolV1PairLeafWitnessV1
+a✝³ : pair_tree_profile.PoolV1PairLeafWitnessV1
+hvalue✝¹⁷ : core.result.Result.Insts.CoreOpsTry.branch value✝¹¹ = ok (core.ops.control_flow.ControlFlow.Continue a✝³)
+value✝¹⁰ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝¹⁶ : records.output_pair = ok value✝¹⁰
+value✝⁹ : core.result.Result pair_terminal.PoolV1PairVerifiedAfterstateV1 pair_trace.PoolV1PairTraceErrorV1
+hvalue✝¹⁵ : pair_forest_trace.late_append records snapshot value✝¹⁰ = ok value✝⁹
+_test✝⁴ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_terminal.PoolV1PairVerifiedAfterstateV1
+a✝² : pair_terminal.PoolV1PairVerifiedAfterstateV1
+hvalue✝¹⁴ : core.result.Result.Insts.CoreOpsTry.branch value✝⁹ = ok (core.ops.control_flow.ControlFlow.Continue a✝²)
+value✝⁸ : Slice (Std.Array aspis_core.field.M31 8#usize)
+hvalue✝¹³ : lift input.super_root_siblings.to_slice = ok value✝⁸
+value✝⁷ : core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)
+hvalue✝¹² : core.slice.Slice.iter value✝⁸ = ok value✝⁷
+value✝⁶ :
+  BuilderForestStd.Flatten (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize))
+    (Std.Array aspis_core.field.M31 8#usize) aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+hvalue✝¹¹ :
+  BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+      (core.iter.traits.iterator.IteratorSliceIter (Std.Array aspis_core.field.M31 8#usize))
+      (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize) value✝⁷ =
+    ok value✝⁶
+_test✝³ :
+  Bool ×
+    BuilderForestStdPort.core.iter.adapters.flatten.Flatten
+      (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)) (Std.Array aspis_core.field.M31 8#usize)
+      aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+rest :
+  BuilderForestStdPort.core.iter.adapters.flatten.Flatten
+    (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)) (Std.Array aspis_core.field.M31 8#usize)
+    aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+_test✝² : Bool
+hvalue✝¹⁰ :
+  BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+      (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+        (core.iter.traits.iterator.IteratorSliceIter (Std.Array aspis_core.field.M31 8#usize))
+        (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize)
+        (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31))
+      pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool value✝⁶ () =
+    ok (false, rest)
+value✝⁵ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝⁹ : records.path_digest 24#usize = ok value✝⁵
+_test✝¹ : Bool
+hvalue✝⁸ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝⁵ pubAnchor = ok false
+value✝⁴ : core.result.Result pair_forest_copy_builder.CopyBanks pair_trace.PoolV1PairTraceErrorV1
+_test✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_forest_copy_builder.CopyBanks
+a✝¹ : pair_forest_copy_builder.CopyBanks
+hvalue✝⁷ : core.result.Result.Insts.CoreOpsTry.branch value✝⁴ = ok (core.ops.control_flow.ControlFlow.Continue a✝¹)
+value✝³ : core.result.Result Unit pair_trace.PoolV1PairTraceErrorV1
+hvalue✝⁶ : pair_forest_trace.validate_forest_poseidon_rows a✝¹ = ok value✝³
+_test :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1) Unit
+a✝ : Unit
+hvalue✝⁵ : core.result.Result.Insts.CoreOpsTry.branch value✝³ = ok (core.ops.control_flow.ControlFlow.Continue a✝)
+value✝² : Std.Array aspis_core.field.M31 24#usize
+hvalue✝⁴ :
+  BuilderForestStdPort.core.array.from_fn 24#usize
+      pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+      (input.pair, input) =
+    ok value✝²
+value✝¹ : Std.Array aspis_core.field.M31 30#usize
+hvalue✝³ : pair_trace.value_bits input.pair.value = ok value✝¹
+value✝ : Std.Array aspis_core.field.M31 30#usize
+hvalue✝² : pair_trace.value_bits out = ok value✝
+value : Std.Array aspis_core.field.M31 30#usize
+hvalue✝¹ : pair_trace.value_bits change.value = ok value
+hvalue✝ : records.banks = ok (some a✝¹)
+hvalue : BuilderForestStdPort.core.option.Option.ok_or (some a✝¹) pair_trace.PoolV1PairTraceErrorV1.Shape = ok value✝⁴
+⊢ Prop
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ForestCompilation.lean:45:13: error: don't know how to synthesize implicit argument `a`
+  @And.intro (records.banks = ok (some ?m.1854))
+    ({
+            trace :=
+              { stable := { c1 := a✝¹.stable }, late := a✝¹.late,
+                variant := pair_trace.PoolV1PairTraceVariantV1.Withdrawal, private_directions := value✝²,
+                value_bits :=
+                  Array.make 3#usize [value✝¹, value✝, value]
+                    (pair_forest_trace.compile_forest_from_copies._proof_1 value✝¹ value✝ value),
+                public_outputs :=
+                  pair_trace.PoolV1PairTracePublicOutputsV1.Withdrawal value✝⁵ value✝¹⁵ value✝¹³ value✝¹⁰,
+                afterstate := a✝² },
+            semantic_c1 := { c1 := a✝¹.merged },
+            public_statement := { live_snapshot := snapshot, candidate_afterstate := a✝² } }.semantic_c1.c1 =
+      pair_forest_copy_builder.CopyBanks.merged ?m.1854)
+    ?m.1859 ?m.1860
+context:
+inst✝¹ : ExternalLinear
+inst✝ : Records
+input : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1
+out : U32
+recipient : Option payment_relation.PoolV1OutputNoteWitnessV1
+change : payment_relation.PoolV1OutputNoteWitnessV1
+anchor : Std.Array aspis_core.field.M31 8#usize
+snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1
+pubAnchor pubNullifier pubChange : Std.Array aspis_core.field.M31 8#usize
+pubAsset : aspis_core.field.M31
+records : pair_forest_copy_builder.CopyRecords
+hr :
+  pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot
+      { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none, change_commitment := pubChange,
+          asset := pubAsset }.asset =
+    ok records
+value✝²¹ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³⁵ : input.pair.pair_leaf.selected_commitment input.pair.selected_second = ok value✝²¹
+value✝²⁰ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³⁴ : records.input_leaf = ok value✝²⁰
+_test✝¹² : Bool
+hvalue✝³³ :
+  core.cmp.impls.PartialEqShared.ne
+      (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray 8#usize aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+      value✝²¹ value✝²⁰ =
+    ok false
+value✝¹⁹ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³² : records.path_digest 1#usize = ok value✝¹⁹
+value✝¹⁸ : core.result.Result (Std.Array aspis_core.field.M31 8#usize) pair_tree_profile.PoolV1PairLeafErrorV1
+hvalue✝³¹ : input.pair.pair_leaf.leaf_digest = ok value✝¹⁸
+value✝¹⁷ : core.result.Result (Std.Array aspis_core.field.M31 8#usize) pair_trace.PoolV1PairTraceErrorV1
+hvalue✝³⁰ :
+  BuilderForestStdPort.core.result.Result.map_err
+      (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) value✝¹⁸
+      pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor =
+    ok value✝¹⁷
+_test✝¹¹ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    (Std.Array aspis_core.field.M31 8#usize)
+a✝⁴ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁹ : core.result.Result.Insts.CoreOpsTry.branch value✝¹⁷ = ok (core.ops.control_flow.ControlFlow.Continue a✝⁴)
+_test✝¹⁰ : Bool
+hvalue✝²⁸ : core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁹ a✝⁴ = ok false
+value✝¹⁶ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁷ : records.path_digest 21#usize = ok value✝¹⁶
+_test✝⁹ : Bool
+hvalue✝²⁶ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁶ anchor = ok false
+value✝¹⁵ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁵ : records.nullifier = ok value✝¹⁵
+_test✝⁸ : Bool
+hvalue✝²⁴ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁵ pubNullifier = ok false
+value✝¹⁴ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²³ : format.pool_v1_nullifier input.pair.nullifier_key input.pair.salt = ok value✝¹⁴
+_test✝⁷ : Bool
+hvalue✝²² :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁵ value✝¹⁴ = ok false
+value✝¹³ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²¹ : records.change = ok value✝¹³
+_test✝⁶ : Bool
+hvalue✝²⁰ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹³ pubChange = ok false
+value✝¹² : core.result.Result pair_tree_profile.PoolV1PairLeafWitnessV1 pair_tree_profile.PoolV1PairLeafErrorV1
+hvalue✝¹⁹ : pair_tree_profile.PoolV1PairLeafWitnessV1.single_output value✝¹³ = ok value✝¹²
+value✝¹¹ : core.result.Result pair_tree_profile.PoolV1PairLeafWitnessV1 pair_trace.PoolV1PairTraceErrorV1
+hvalue✝¹⁸ :
+  BuilderForestStdPort.core.result.Result.map_err
+      (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) value✝¹²
+      pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor =
+    ok value✝¹¹
+_test✝⁵ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_tree_profile.PoolV1PairLeafWitnessV1
+a✝³ : pair_tree_profile.PoolV1PairLeafWitnessV1
+hvalue✝¹⁷ : core.result.Result.Insts.CoreOpsTry.branch value✝¹¹ = ok (core.ops.control_flow.ControlFlow.Continue a✝³)
+value✝¹⁰ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝¹⁶ : records.output_pair = ok value✝¹⁰
+value✝⁹ : core.result.Result pair_terminal.PoolV1PairVerifiedAfterstateV1 pair_trace.PoolV1PairTraceErrorV1
+hvalue✝¹⁵ : pair_forest_trace.late_append records snapshot value✝¹⁰ = ok value✝⁹
+_test✝⁴ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_terminal.PoolV1PairVerifiedAfterstateV1
+a✝² : pair_terminal.PoolV1PairVerifiedAfterstateV1
+hvalue✝¹⁴ : core.result.Result.Insts.CoreOpsTry.branch value✝⁹ = ok (core.ops.control_flow.ControlFlow.Continue a✝²)
+value✝⁸ : Slice (Std.Array aspis_core.field.M31 8#usize)
+hvalue✝¹³ : lift input.super_root_siblings.to_slice = ok value✝⁸
+value✝⁷ : core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)
+hvalue✝¹² : core.slice.Slice.iter value✝⁸ = ok value✝⁷
+value✝⁶ :
+  BuilderForestStd.Flatten (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize))
+    (Std.Array aspis_core.field.M31 8#usize) aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+hvalue✝¹¹ :
+  BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+      (core.iter.traits.iterator.IteratorSliceIter (Std.Array aspis_core.field.M31 8#usize))
+      (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize) value✝⁷ =
+    ok value✝⁶
+_test✝³ :
+  Bool ×
+    BuilderForestStdPort.core.iter.adapters.flatten.Flatten
+      (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)) (Std.Array aspis_core.field.M31 8#usize)
+      aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+rest :
+  BuilderForestStdPort.core.iter.adapters.flatten.Flatten
+    (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)) (Std.Array aspis_core.field.M31 8#usize)
+    aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+_test✝² : Bool
+hvalue✝¹⁰ :
+  BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+      (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+        (core.iter.traits.iterator.IteratorSliceIter (Std.Array aspis_core.field.M31 8#usize))
+        (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize)
+        (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31))
+      pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool value✝⁶ () =
+    ok (false, rest)
+value✝⁵ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝⁹ : records.path_digest 24#usize = ok value✝⁵
+_test✝¹ : Bool
+hvalue✝⁸ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝⁵ pubAnchor = ok false
+value✝⁴ : core.result.Result pair_forest_copy_builder.CopyBanks pair_trace.PoolV1PairTraceErrorV1
+_test✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_forest_copy_builder.CopyBanks
+a✝¹ : pair_forest_copy_builder.CopyBanks
+hvalue✝⁷ : core.result.Result.Insts.CoreOpsTry.branch value✝⁴ = ok (core.ops.control_flow.ControlFlow.Continue a✝¹)
+value✝³ : core.result.Result Unit pair_trace.PoolV1PairTraceErrorV1
+hvalue✝⁶ : pair_forest_trace.validate_forest_poseidon_rows a✝¹ = ok value✝³
+_test :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1) Unit
+a✝ : Unit
+hvalue✝⁵ : core.result.Result.Insts.CoreOpsTry.branch value✝³ = ok (core.ops.control_flow.ControlFlow.Continue a✝)
+value✝² : Std.Array aspis_core.field.M31 24#usize
+hvalue✝⁴ :
+  BuilderForestStdPort.core.array.from_fn 24#usize
+      pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+      (input.pair, input) =
+    ok value✝²
+value✝¹ : Std.Array aspis_core.field.M31 30#usize
+hvalue✝³ : pair_trace.value_bits input.pair.value = ok value✝¹
+value✝ : Std.Array aspis_core.field.M31 30#usize
+hvalue✝² : pair_trace.value_bits out = ok value✝
+value : Std.Array aspis_core.field.M31 30#usize
+hvalue✝¹ : pair_trace.value_bits change.value = ok value
+hvalue✝ : records.banks = ok (some a✝¹)
+hvalue : BuilderForestStdPort.core.option.Option.ok_or (some a✝¹) pair_trace.PoolV1PairTraceErrorV1.Shape = ok value✝⁴
+⊢ Prop
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ForestCompilation.lean:45:14: error: don't know how to synthesize placeholder for argument `w`
+context:
+inst✝¹ : ExternalLinear
+inst✝ : Records
+input : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1
+out : U32
+recipient : Option payment_relation.PoolV1OutputNoteWitnessV1
+change : payment_relation.PoolV1OutputNoteWitnessV1
+anchor : Std.Array aspis_core.field.M31 8#usize
+snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1
+pubAnchor pubNullifier pubChange : Std.Array aspis_core.field.M31 8#usize
+pubAsset : aspis_core.field.M31
+records : pair_forest_copy_builder.CopyRecords
+hr :
+  pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot
+      { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none, change_commitment := pubChange,
+          asset := pubAsset }.asset =
+    ok records
+value✝²¹ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³⁵ : input.pair.pair_leaf.selected_commitment input.pair.selected_second = ok value✝²¹
+value✝²⁰ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³⁴ : records.input_leaf = ok value✝²⁰
+_test✝¹² : Bool
+hvalue✝³³ :
+  core.cmp.impls.PartialEqShared.ne
+      (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray 8#usize aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+      value✝²¹ value✝²⁰ =
+    ok false
+value✝¹⁹ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝³² : records.path_digest 1#usize = ok value✝¹⁹
+value✝¹⁸ : core.result.Result (Std.Array aspis_core.field.M31 8#usize) pair_tree_profile.PoolV1PairLeafErrorV1
+hvalue✝³¹ : input.pair.pair_leaf.leaf_digest = ok value✝¹⁸
+value✝¹⁷ : core.result.Result (Std.Array aspis_core.field.M31 8#usize) pair_trace.PoolV1PairTraceErrorV1
+hvalue✝³⁰ :
+  BuilderForestStdPort.core.result.Result.map_err
+      (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) value✝¹⁸
+      pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor =
+    ok value✝¹⁷
+_test✝¹¹ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    (Std.Array aspis_core.field.M31 8#usize)
+a✝⁴ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁹ : core.result.Result.Insts.CoreOpsTry.branch value✝¹⁷ = ok (core.ops.control_flow.ControlFlow.Continue a✝⁴)
+_test✝¹⁰ : Bool
+hvalue✝²⁸ : core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁹ a✝⁴ = ok false
+value✝¹⁶ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁷ : records.path_digest 21#usize = ok value✝¹⁶
+_test✝⁹ : Bool
+hvalue✝²⁶ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁶ anchor = ok false
+value✝¹⁵ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²⁵ : records.nullifier = ok value✝¹⁵
+_test✝⁸ : Bool
+hvalue✝²⁴ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁵ pubNullifier = ok false
+value✝¹⁴ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²³ : format.pool_v1_nullifier input.pair.nullifier_key input.pair.salt = ok value✝¹⁴
+_test✝⁷ : Bool
+hvalue✝²² :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹⁵ value✝¹⁴ = ok false
+value✝¹³ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝²¹ : records.change = ok value✝¹³
+_test✝⁶ : Bool
+hvalue✝²⁰ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝¹³ pubChange = ok false
+value✝¹² : core.result.Result pair_tree_profile.PoolV1PairLeafWitnessV1 pair_tree_profile.PoolV1PairLeafErrorV1
+hvalue✝¹⁹ : pair_tree_profile.PoolV1PairLeafWitnessV1.single_output value✝¹³ = ok value✝¹²
+value✝¹¹ : core.result.Result pair_tree_profile.PoolV1PairLeafWitnessV1 pair_trace.PoolV1PairTraceErrorV1
+hvalue✝¹⁸ :
+  BuilderForestStdPort.core.result.Result.map_err
+      (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) value✝¹²
+      pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor =
+    ok value✝¹¹
+_test✝⁵ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_tree_profile.PoolV1PairLeafWitnessV1
+a✝³ : pair_tree_profile.PoolV1PairLeafWitnessV1
+hvalue✝¹⁷ : core.result.Result.Insts.CoreOpsTry.branch value✝¹¹ = ok (core.ops.control_flow.ControlFlow.Continue a✝³)
+value✝¹⁰ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝¹⁶ : records.output_pair = ok value✝¹⁰
+value✝⁹ : core.result.Result pair_terminal.PoolV1PairVerifiedAfterstateV1 pair_trace.PoolV1PairTraceErrorV1
+hvalue✝¹⁵ : pair_forest_trace.late_append records snapshot value✝¹⁰ = ok value✝⁹
+_test✝⁴ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_terminal.PoolV1PairVerifiedAfterstateV1
+a✝² : pair_terminal.PoolV1PairVerifiedAfterstateV1
+hvalue✝¹⁴ : core.result.Result.Insts.CoreOpsTry.branch value✝⁹ = ok (core.ops.control_flow.ControlFlow.Continue a✝²)
+value✝⁸ : Slice (Std.Array aspis_core.field.M31 8#usize)
+hvalue✝¹³ : lift input.super_root_siblings.to_slice = ok value✝⁸
+value✝⁷ : core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)
+hvalue✝¹² : core.slice.Slice.iter value✝⁸ = ok value✝⁷
+value✝⁶ :
+  BuilderForestStd.Flatten (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize))
+    (Std.Array aspis_core.field.M31 8#usize) aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+hvalue✝¹¹ :
+  BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+      (core.iter.traits.iterator.IteratorSliceIter (Std.Array aspis_core.field.M31 8#usize))
+      (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize) value✝⁷ =
+    ok value✝⁶
+_test✝³ :
+  Bool ×
+    BuilderForestStdPort.core.iter.adapters.flatten.Flatten
+      (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)) (Std.Array aspis_core.field.M31 8#usize)
+      aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+rest :
+  BuilderForestStdPort.core.iter.adapters.flatten.Flatten
+    (core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)) (Std.Array aspis_core.field.M31 8#usize)
+    aspis_core.field.M31 (core.slice.iter.Iter aspis_core.field.M31)
+_test✝² : Bool
+hvalue✝¹⁰ :
+  BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+      (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+        (core.iter.traits.iterator.IteratorSliceIter (Std.Array aspis_core.field.M31 8#usize))
+        (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize)
+        (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31))
+      pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool value✝⁶ () =
+    ok (false, rest)
+value✝⁵ : Std.Array aspis_core.field.M31 8#usize
+hvalue✝⁹ : records.path_digest 24#usize = ok value✝⁵
+_test✝¹ : Bool
+hvalue✝⁸ :
+  core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 value✝⁵ pubAnchor = ok false
+value✝⁴ : core.result.Result pair_forest_copy_builder.CopyBanks pair_trace.PoolV1PairTraceErrorV1
+_test✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1)
+    pair_forest_copy_builder.CopyBanks
+a✝¹ : pair_forest_copy_builder.CopyBanks
+hvalue✝⁷ : core.result.Result.Insts.CoreOpsTry.branch value✝⁴ = ok (core.ops.control_flow.ControlFlow.Continue a✝¹)
+value✝³ : core.result.Result Unit pair_trace.PoolV1PairTraceErrorV1
+hvalue✝⁶ : pair_forest_trace.validate_forest_poseidon_rows a✝¹ = ok value✝³
+_test :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible pair_trace.PoolV1PairTraceErrorV1) Unit
+a✝ : Unit
+hvalue✝⁵ : core.result.Result.Insts.CoreOpsTry.branch value✝³ = ok (core.ops.control_flow.ControlFlow.Continue a✝)
+value✝² : Std.Array aspis_core.field.M31 24#usize
+hvalue✝⁴ :
+  BuilderForestStdPort.core.array.from_fn 24#usize
+      pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+      (input.pair, input) =
+    ok value✝²
+value✝¹ : Std.Array aspis_core.field.M31 30#usize
+hvalue✝³ : pair_trace.value_bits input.pair.value = ok value✝¹
+value✝ : Std.Array aspis_core.field.M31 30#usize
+hvalue✝² : pair_trace.value_bits out = ok value✝
+value : Std.Array aspis_core.field.M31 30#usize
+hvalue✝¹ : pair_trace.value_bits change.value = ok value
+hvalue✝ : records.banks = ok (some a✝¹)
+hvalue : BuilderForestStdPort.core.option.Option.ok_or (some a✝¹) pair_trace.PoolV1PairTraceErrorV1.Shape = ok value✝⁴
+⊢ pair_forest_copy_builder.CopyBanks
+bind
+bind
+bind
+bool
+bind
+bind
+bind
+bind
+flow
+bind
+bool
+bind
+bind
+bool
+bind
+bind
+bool
+bind
+bind
+bool
+bind
+bind
+bind
+bool
+bind
+bool
+bind
+bind
+bind
+flow
+bind
+bind
+bind
+flow
+bind
+bind
+bind
+bind
+pair
+bool
+bind
+bind
+bool
+bind
+bind
+bind
+flow
+bind
+bind
+flow
+bind
+bind
+bind
+bind
+end
+'R1Z.PV_Src_ForestCompilation.returned_bank' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

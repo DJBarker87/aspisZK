@@ -1,0 +1,51 @@
+import R1Z.PV_Src_ForestBanks
+import R1Z.PV_Src_CompilerTactic
+
+/-! Successful forest compilation returns the very merged bank obtained from
+its record object. Only the finite outer control flow is split: no hash,
+recurrence cell, or validator computation is evaluated by this proof. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_ForestCompilation
+open Aeneas Aeneas.Std Result
+open BuilderForestAdmissionPort BuilderRecordsFields
+open BuilderForestAdmissionPort.pool_v1
+
+/-- Every successful path shares the record object and returned bank. -/
+theorem returned_bank [ExternalLinear] [Records]
+    (input : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1)
+    (out : U32) (recipient : Option payment_relation.PoolV1OutputNoteWitnessV1)
+    (change : payment_relation.PoolV1OutputNoteWitnessV1)
+    (publicInput : pair_forest_trace.ForestPublic)
+    (anchor : Array aspis_core.field.M31 8#usize)
+    (snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1)
+    (compiled : pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (h : pair_forest_trace.compile_forest_from_copies input out recipient change
+      publicInput anchor snapshot = ok (.Ok compiled)) :
+    ∃ records banks,
+      pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot
+        publicInput.asset = ok records ∧
+      pair_forest_copy_builder.CopyRecords.banks records = ok (some banks) ∧
+      compiled.semantic_c1.c1 = banks.merged := by
+  rcases publicInput with ⟨pubAnchor,pubNullifier,pubRecipient,pubChange,pubAsset⟩
+  cases pubRecipient <;> unfold pair_forest_trace.compile_forest_from_copies at h
+  all_goals
+    pv_peel h with records hr
+    refine ⟨records,?_⟩
+    repeat' first
+      | (pv_peel h with value hvalue; trace "bind")
+      | exact False.elim (PV_Src_ResultControl.error_ne_ok _ _ h)
+      | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
+      | (have _test : Bool := value; cases value; trace "bool")
+      | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value; trace "flow")
+      | (have _test : _ × _ := value; rcases value with ⟨value,rest⟩; trace "pair")
+      | (cases h; trace "end")
+    all_goals
+      have ho := PV_Src_ResultControl.option_continue (by assumption) (by assumption)
+      cases ho
+      refine ⟨_,hr,?_,?_⟩
+      · assumption
+      · rfl
+
+
+#print axioms returned_bank
+end R1Z.PV_Src_ForestCompilation

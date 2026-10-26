@@ -189,3 +189,25 @@ old source/object are snapshotted under the branch-named job snapshots dir
 22641/R1Z, with hashes/sizes in native-input-before-fin-reader.log. Only our
 new module has this name; NativePremises had no successful object yet. Rebuild
 NativeInput and all consumers needed for the final proof with fresh attempts.
+
+Proof-local CompilerTactic22669 compiled, but its invocation22670 exposed an
+unimported quotation constant. Add explicit BuilderRecordsFields import and
+splice the resolved inversion constant. Before overwriting our shared source/
+object, both were snapshotted in branch-named snapshots22671/R1Z; hashes/sizes
+are in compiler-tactic-before-import.log. Compiler and native consumers must
+use the new dependency fingerprint. No source/objects on other prefixes change.
+
+Kani1 staging/launch reservations passed at16:02 and16:05 UTC. A pinned git
+archive of HEAD4517536926 Rust inputs (including all root workspace members
+and reference dependencies) was staged in this job's own repo. One Kani scope
+was launched for s2_qm31_coefficients_cell, no stubs, unwind1025, under exact
+6G/8G/swap0/TasksMax64 caps. No Lean scope runs concurrently. Time/RSS/cgroup
+peak/swap/source/tool hashes will be collected by the scope process itself.
+
+## Resume checkpoint 16:27 UTC
+
+Charged Lean count before this resume:83; Kani count2, including one missing-include compilation failure and the subsequent QM31 solver timeout. Kani2 terminated124 after600.856s, peak cgroup6,745,079,808bytes, swap0; this proves no coefficient-wrapper claim. Frozen missing include was staged between Kani1 and2; no implementation changed. The next M31 carrier gate is a different scope, not a retry at larger limits.
+
+CompilerTactic22671 passes after explicit theorem import/hygienic quotation fix. ForestCompilation22672 exposed unreduced Boolean branches;22673 traverses both outer variants but fails existential elaboration. The revised witness construction is pending22675 after reservation refusal22674 (zero charged attempts, wait183s). Only kernel-checked successful attempts may be cited as proofs; failed diagnostic `sorryAx` output is not accepted evidence. Shared successful CompilerTactic source/object were snapshotted before its import change, hashes/sizes in compiler-tactic-before-import.log.
+
+Fixtures22662 passed all printed axioms, including both canonical release fibres and successful actual forest bank/column stages. Native compile_call fixture inhabitance remains unproved.

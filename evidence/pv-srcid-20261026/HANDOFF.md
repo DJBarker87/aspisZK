@@ -1,3 +1,61 @@
+# Latest checkpoint, 2026-10-26 15:19 UTC
+
+HEAD4517536926; older checkpoints below are historical. 72/100 charged Lean,
+54 passed; Kani0/15. Source/native framework has 5 exact premise families,
+not five atomic leaf laws; nested WitnessOk(3)/PubCorr(7)/RspendPlus remain visible.
+All direct forest pipeline modules PASSED through ForestCanonical22632,
+ForestBanks22633. NativeInput reader corrected Nat->Fin29/Fin1024; its old
+source/object snapshotted (native-input-before-fin-reader.log). NativeInput22641,
+NativePremises22642, Consumer22644 PASSED standard axioms. Consumer labels must
+use escaped `(«K» := K)` because local notation K is reserved; NativeConsumer
+was fixed likewise (not yet compiled). NativePremises imports PrimitiveArguments
+explicitly and opens R0Z.ZkStatement. Exact 5-field print in out-22642.log.
+
+Current sole queue is tool exec session75728. It has passed fixture graph
+through SentinelPermutation2 attempt22656, including Preflight22653 and all
+maps. TransferSentinel preflights22657/22658 refused; next fresh22659 at or after
+15:19:47 UTC, then CanonicalFixtures, Fixtures, ForestCompilation,
+NativeIdentification, NativeConsumer, LowBits, NativeValueBits,
+NativeValueReconstruction, NativeDirections. Stops on Lean error; three-minute
+fresh-ID reservation retries. DO NOT duplicate an in-flight scope. No other
+job scope of ours active. Inspect current output/receipts before any launch.
+
+Native compiler-return proof is UNTESTED: ForestCompilation.returned_bank has
+finite outer control-flow peeling. Likely need more precise Result/Option/Try
+inversion if it fails (never evaluate actual hashes/recurrences). NativeIdentification
+selects shared actual records/banks from returned_bank, then derives 3 fields
+with no raw_trace_eq premise. NativeConsumer targets original BuilderPremises
+and phase override; no deployed endpoint install. Native input has request
+variants, compiled payload DATA, actual run/newRecords and transition adapter;
+compile success remains named compile_call, not hidden in the carrier.
+
+New UNCOMPILED helper modules: LowBits generic binary sum (symbolic n induction);
+NativeValueBits actual value_bits source for arbitrary U32, 30 output cells;
+NativeValueReconstruction bound<2^30 sum; NativeDirections actual compile closure
+vs owned reference bit map, boolean all24. All print axioms. Priority remains
+native certificate + both fixture fibres + final audit, not extra wrappers.
+
+Kani tool metadata: absolute /home/dombarker/.cargo/bin/cargo kani --version
+returns0.67.0. Noninteractive PATH has no cargo; no infra repair needed.
+Test-only crate/harness is committed (QM31 + raw4word variants), no Kani run.
+Preferred s2_qm31_coefficients_cell, unwind1025, no stubs. Only run once Lean
+queue has no scope. Reservation receipt BEFORE any staging/scp. Own scope
+6G/8G/swap0/TasksMax64, -j4, timeout600, time/RSS/swaps/source/tool hashes.
+Kani dev profile is verification compilation, not native arithmetic execution.
+Expected work compilation then array-copy SSA/solver. Own job repo can be
+staged by git archive of root Cargo files, crates/programs, tools reference,
+own transport-kani and docs/.../refine/(writers,blockwriters,poseidon). No binaries
+committed. Native source unchanged, no three-ELF rebuild needed from tools edits.
+Historical native row proof source/harness unchanged per transport-reuse.json.
+
+Final ReleaseAudit exists but NEVER RAN. Wait for all required focused files
+including both fixtures/consumer; include native theorem if it compiles, print
+nested premise definitions, then ONE final import/audit closure. Do not rerun
+unchanged tests. Never claim target established or any native ledger row removed
+without actual closure; currently SourceIdentification is constructed for the
+actual extracted bank/public stages on canonical encodings, while native
+compiler primitive facts/fixture byte association and deployed RunJoin remain.
+
 # Latest checkpoint, 2026-10-26 14:27 UTC
 
 HEAD 6aaa34be2b. The older checkpoint below is historical; current queue is

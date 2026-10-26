@@ -33,19 +33,19 @@ theorem fixture_run (b : Bool) :
   exact ⟨out,ho⟩
 
 theorem transfer_public :
-    (PV_Src_ForestIdentification.prover PV_Src_ForestCanonical.inputs PV_Src_Transport.transport).public
+    (PV_Src_ForestIdentification.prover (K := Scalar) (PV_Src_ForestCanonical.inputs (K := Scalar)) PV_Src_Transport.transport).public
       (fixture false) = mapPub (PV_Src_Fixture_FixtureRecords.fixturePublic false) :=
   (PV_Src_ForestCanonical.public_eq (fixture false)).trans
     PV_Src_Fixture_CanonicalFixtures.transfer_public
 
 theorem withdrawal_public :
-    (PV_Src_ForestIdentification.prover PV_Src_ForestCanonical.inputs PV_Src_Transport.transport).public
+    (PV_Src_ForestIdentification.prover (K := Scalar) (PV_Src_ForestCanonical.inputs (K := Scalar)) PV_Src_Transport.transport).public
       (fixture true) = mapPub (PV_Src_Fixture_FixtureRecords.fixturePublic true) :=
   (PV_Src_ForestCanonical.public_eq (fixture true)).trans
     PV_Src_Fixture_CanonicalFixtures.withdrawal_public
 
 theorem fixture_build (b : Bool) :
-    (PV_Src_ForestIdentification.prover PV_Src_ForestCanonical.inputs PV_Src_Transport.transport).build
+    (PV_Src_ForestIdentification.prover (K := Scalar) (PV_Src_ForestCanonical.inputs (K := Scalar)) PV_Src_Transport.transport).build
       (fixture b) = BuilderSource.prover.build (fixture b).canonical :=
   PV_Src_ForestCanonical.build_eq _
 
@@ -58,8 +58,8 @@ theorem fibres {CommitHandle : Type} (ht hw : CommitHandle) :
       (mapPub (PV_Src_Fixture_FixtureRecords.fixturePublic true),hw)
     ∃ wt ww : (PV_Src_ForestIdentification.prover (K := Scalar) (PV_Src_ForestCanonical.inputs (K := Scalar))
       PV_Src_Transport.transport).Instance,
-      (PV_Src_ForestIdentification.prover PV_Src_ForestCanonical.inputs PV_Src_Transport.transport).public wt = xt.1 ∧
-      (PV_Src_ForestIdentification.prover PV_Src_ForestCanonical.inputs PV_Src_Transport.transport).public ww = xw.1 :=
+      (PV_Src_ForestIdentification.prover (K := Scalar) (PV_Src_ForestCanonical.inputs (K := Scalar)) PV_Src_Transport.transport).public wt = xt.1 ∧
+      (PV_Src_ForestIdentification.prover (K := Scalar) (PV_Src_ForestCanonical.inputs (K := Scalar)) PV_Src_Transport.transport).public ww = xw.1 :=
   ⟨fixture false,fixture true,transfer_public,withdrawal_public⟩
 
 #print axioms fixture
