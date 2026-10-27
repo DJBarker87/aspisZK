@@ -229,3 +229,12 @@ fn pv_srcid7_helper_suffix10() {
         for lane in 0..8 { assert_eq!(actual[level][lane].0, ROOTS[level][lane]); }
     }
 }
+
+// Allocation 8 splits the timed-out prefix11 assertion to its initial cell.
+// The complete source helper still executes, with no stubbed callees.
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid8_helper_prefix01() {
+    let actual = pair_empty_roots();
+    for lane in 0..8 { assert_eq!(actual[0][lane].0, ROOTS[0][lane]); }
+}
