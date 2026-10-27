@@ -36,7 +36,7 @@ theorem kind0 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
   have hib : i.val < (64#usize).val := by change i.val < 64; omega
   obtain ⟨mask,hm⟩ := read aspis_core.r0.opening.COPY_ACTIVE_ROW_MASKS i hib
   unfold host_weights.raw_value
-  simp only [if_pos rfl,hr,hi,bind_tc_ok,hm,hd,lift]
+  simp only [show (0#usize = 0#usize) = True from by decide,if_true,hr,hi,bind_tc_ok,hm,hd,lift]
   split <;> exact ⟨_,rfl⟩
 
 theorem kind4 (w : host_weights.Weights) (j : Usize) :
@@ -72,8 +72,8 @@ theorem kind1 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
     exact ⟨_,rfl⟩)
   intro bit
   cases bit
-  · simpa only [Bool.false_eq_true,if_false] using ht
-  · simp only [if_true]
+  · simpa only [Bool.false_eq_true,if_false,bind_tc_ok] using ht
+  · simp only [if_true,lift,bind_tc_ok]
     obtain ⟨r,hr,_⟩ := PV_B2_D_RowRange.source w.variant j hj
     have hb3 : (Usize.wrapping_sub 1#usize 1#usize).val < (3#usize).val := by
       rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
@@ -100,8 +100,8 @@ theorem kind2 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
     exact ⟨_,rfl⟩)
   intro bit
   cases bit
-  · simpa only [Bool.false_eq_true,if_false] using ht
-  · simp only [if_true]
+  · simpa only [Bool.false_eq_true,if_false,bind_tc_ok] using ht
+  · simp only [if_true,lift,bind_tc_ok]
     obtain ⟨r,hr,_⟩ := PV_B2_D_RowRange.source w.variant j hj
     have hb3 : (Usize.wrapping_sub 2#usize 1#usize).val < (3#usize).val := by
       rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
@@ -128,8 +128,8 @@ theorem kind3 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
     exact ⟨_,rfl⟩)
   intro bit
   cases bit
-  · simpa only [Bool.false_eq_true,if_false] using ht
-  · simp only [if_true]
+  · simpa only [Bool.false_eq_true,if_false,bind_tc_ok] using ht
+  · simp only [if_true,lift,bind_tc_ok]
     obtain ⟨r,hr,_⟩ := PV_B2_D_RowRange.source w.variant j hj
     have hb3 : (Usize.wrapping_sub 3#usize 1#usize).val < (3#usize).val := by
       rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
