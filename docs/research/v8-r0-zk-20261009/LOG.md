@@ -10642,3 +10642,25 @@ Stream B copy (pv-codex-run.sh / pv-codex-retry.sh in my scratchpad, same codex 
 join4 with it at 00:05; Stream A restored the original byte-equal at 00:05 and will keep the launcher
 scripts in the repo under evidence. join4 is running normally. Six slots: cb4, runjoin8, rw20, cb5,
 join4, srcid6. Rows removed outright: 0. Privacy target not yet established.
+
+## D232 (Stream B) 2026-10-27 00:25 UTC: runjoin8 exhausted: constructed-candidate P shrank by two (initial, causal); deployed P unchanged; runjoin9 launched
+
+pv-runjoin8 (`codex/pv-runjoin-20261026`, head e896c81133; 100/100 Lean = 78 accepted / 22 rejected, 8/8
+Kani = 7 passed / 1 timeout, focused trust audit 1.79 s / 4.42 GB / swap 0, standard axioms; no forbidden
+tokens). crates/ change: `crates/aspis-statement/src/pool_v1/pair_trace.rs` gains a `#[cfg(kani)]` mod
+declaration pointing at the new harness file pair_trace_pv_runjoin8_roots.rs (bounded no-stub root checks
+calling the frozen pool_v1_tree_parent); cfg(kani)-only, so excluded from every release build by
+construction; it lives on a candidate-sibling branch and is covered by the candidate's ELF gate before any
+adoption. Result (evidence/pv-runjoin8-20261026/P-before-after.json): the CONSTRUCTED candidate's P
+record went from {identity, common_public, initial, causal, trace} to {identity, common_public, trace}:
+initial-ledger independence (`ledger (initialState (coordinates.symm (t,rest))) = ledger (… (u,rest))`)
+and causal frames (`frame i` depends only on draws j < i) are PROVED for the constructed candidate. T
+unchanged at three fields. The DEPLOYED instance's P obligations (actual selection/compiler/admission
+installation, runtime/carrier/observer installation, release identity) remain open; record counts
+2 → 2 / 8 → 8 / 6 → 6; P ∧ T non-vacuity OPEN on both fixtures. Installation closure stopped at
+PDict_Static222_13 (missing installation dependency from the dict branch); the compiler public-binding
+obstruction is recorded exactly. Launched pv-runjoin9 (same branch, IDs 37400-37699, 100 Lean / 6 Kani):
+resume the installation closure through the PDict_ objects, discharge identity/common_public for the
+installed proof-account inputs using PV_Src_*/PV_Join_*, construct the fixture Runtime/Boundary for
+deployed non-vacuity, then `trace` via PV_L2_*. Six slots: cb4, rw20, cb5, join4, srcid6, runjoin9. Rows
+removed outright: 0. Privacy target not yet established.
