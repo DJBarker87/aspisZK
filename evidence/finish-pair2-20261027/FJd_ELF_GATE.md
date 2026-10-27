@@ -24,3 +24,17 @@ historical `/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src`
 and its wrapper no longer exist (read-only inspection returned No such file
 or directory). The recapture corpus and its retained wrapper exist. No
 workspace or launcher was rebuilt to recreate the missing historical paths.
+
+Corrected default command: historical retained compiler wrapper supplied via
+RUSTC_WRAPPER, with S10_DIAGNOSTICS under this job. Exit0,3.404863581s,
+204760KiB,swap0. SAME ff089599... hash; expected f8c0ec72... still fails.
+This reused existing cached dependencies; it is not a forced clean replay.
+No unchanged timeout/memory failure was rerun. This was an explicit environment
+correction to a successful diagnostic compile with a failed pin comparison.
+
+Further build-environment restoration is left to the lead under local-lean.txt
+rule5 ("Do NOT build or repair build/launcher/monitoring infrastructure").
+Missing historical paths are recorded verbatim in FJd_missing_replay_workspace.log.
+The mismatch cause is NOT established; missing logical source roots, codegen
+flags, dependency/compiler/cache provenance have not been isolated. No inference
+that the frozen release is broken, and no alternative artifact is adopted.
