@@ -18,7 +18,8 @@ theorem value (c : Array (Array MQ 29#usize) 3#usize) (j : Fin 3) (l : Fin 29) :
     simp only [List.length_map]
     rw [(c.val[j.val]'(by rw [c.property];exact j.isLt)).property]
     exact l.isLt)]
-  rfl
+  dsimp only
+  simp only [List.getElem_map] <;> rfl
 #print axioms value
 end AspisR1.FJn_MainClaims
 end
