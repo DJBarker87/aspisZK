@@ -1,0 +1,3 @@
+Stage 2: canonical composition gathers and native selector expansion.
+
+JFy_CompositionGathers.source constructs the three 16-cell and one 10-cell arrays with canonicality. JFy_FieldTotal and JFy_ArrayTotal prove source arithmetic/array success for canonical operands. JFy_SelectorInner/Outer/Expand/Selectors prove actual native boxed selector success, using bounded symbolic loops. JFy_PointCanonical instantiates the retained alpha canonicality. Every accepted theorem is audited; only propext/Classical.choice/Quot.sound. No top premise removed; Rc7/Rc10 unchanged. Rejections 008–010,012,014–016,018,021 are retained, not accepted evidence. No timeout/memory kill/cap increase.

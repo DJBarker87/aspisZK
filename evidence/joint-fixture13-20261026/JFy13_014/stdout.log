@@ -1,0 +1,110 @@
+JFy_SelectorOuter.lean:19:17: error: Application type mismatch: The argument
+  iter.i
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬iter.i
+JFy_SelectorOuter.lean:19:25: error(lean.unknownIdentifier): Unknown identifier `ter.slice.val.length`
+JFy_SelectorOuter.lean:22:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+where
+ a := ↑2 ^ level
+ b := ↑↑N
+ c := ↑2 ^ (level + [].length)
+ d := ↑iter.i
+JFy_SelectorOuter.lean:25:68: error: Invalid argument: Variable `stop` is not a proposition or let-declaration
+JFy_SelectorOuter.lean:18:8: error: unsolved goals
+case nil
+N : Usize
+iter : core.slice.iter.Iter NQ
+weights : Std.Array NQ N
+len : Usize
+level : ℕ
+hd : List.drop iter.i ↑iter.slice = []
+hl : ↑len = 2 ^ level
+cap : 2 ^ (level + [].length) ≤ ↑N
+hc : FIw_ArrayValue.canonical weights
+hxs : ∀ x ∈ [], Canon x
+stop : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ (do
+      let (o, iter1) ←
+        if h : iter.i < iter.slice.length then ok (some iter.slice[iter.i], { slice := iter.slice, i := iter.i + 1 })
+          else ok (none, iter)
+      match o with
+        | none => ok weights
+        | some coordinate => do
+          let prepared ← field.PreparedQm31Multiplier.new coordinate
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := len }
+          let weights1 ← Selectors.expand_loop0_loop0 iter2 weights prepared
+          let len1 ← len * 2#usize
+          Selectors.expand_loop0 iter1 weights1 len1) =
+    ok weights
+JFy_SelectorOuter.lean:32:40: error: Invalid argument name `a` for function `Nat.pow_le_pow_right`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `n`: a̵n̲
+  • `hx`: a̵h̲x̲
+  • `i`: a̵i̲
+  • `j`: a̵j̲
+JFy_SelectorOuter.lean:32:51: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+where
+ a := ↑2 ^ level
+ b := ↑↑N
+ c := ↑2 ^ (level + (x :: xs).length)
+JFy_SelectorOuter.lean:32:101: error: No goals to be solved
+JFy_SelectorOuter.lean:52:4: error: Type mismatch
+  tail
+has type
+  Selectors.expand_loop0 { slice := iter.slice, i := iter.i + 1 } w1 len1 = ok out
+but is expected to have type
+  (let (o, iter1) := (some x, { slice := iter.slice, i := iter.i + 1 })
+    match o with
+    | none => ok weights
+    | some coordinate => do
+      let prepared ← field.PreparedQm31Multiplier.new coordinate
+      let weights1 ← Selectors.expand_loop0_loop0 range weights prepared
+      Selectors.expand_loop0 iter1 weights1 len1) =
+    ok out
+JFy_SelectorOuter.lean:25:73: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.iter.IteratorSliceIter.next, ̲Slice.len_val, ̲stop,d̵i̵f̵_̵n̵e̵g̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFy_SelectorOuter.lean:25:81: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.iter.IteratorSliceIter.next, ̲Slice.len_val, ̲stop, ̲dif_neg,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFy_SelectorOuter.lean:51:32: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [hnext, ̲bind_tc_ok,h̵p̵,̵ ̲rev, ̲hi, ̲hm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFy_SelectorOuter.lean:51:39: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp only [hnext, ̲bind_tc_ok, ̲hp, ̲rev, ̲hi̵,̵h̵m]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFy_SelectorOuter.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,103 @@
+JFy_SelectorOuter.lean:18:8: error: unsolved goals
+case nil
+N : Usize
+iter : core.slice.iter.Iter NQ
+weights : Std.Array NQ N
+len : Usize
+level : ℕ
+hd : List.drop iter.i ↑iter.slice = []
+hl : ↑len = 2 ^ level
+cap : 2 ^ (level + [].length) ≤ ↑N
+hc : FIw_ArrayValue.canonical weights
+hxs : ∀ x ∈ [], Canon x
+stop : ¬iter.i < (↑iter.slice).length
+⊢ (let (o, iter1) := (none, iter)
+    match o with
+    | none => ok weights
+    | some coordinate => do
+      let prepared ← field.PreparedQm31Multiplier.new coordinate
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+            { start := 0#usize, «end» := len }
+      let weights1 ← Selectors.expand_loop0_loop0 iter2 weights prepared
+      let len1 ← len * 2#usize
+      Selectors.expand_loop0 iter1 weights1 len1) =
+    ok weights
+JFy_SelectorOuter.lean:52:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  field.PreparedQm31Multiplier.new x
+in the target expression
+  (let (o, iter1) := (some x, { slice := iter.slice, i := iter.i + 1 })
+    match o with
+    | none => ok weights
+    | some coordinate => do
+      let prepared ← field.PreparedQm31Multiplier.new coordinate
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+            { start := 0#usize, «end» := len }
+      let weights1 ← Selectors.expand_loop0_loop0 iter2 weights prepared
+      let len1 ← len * 2#usize
+      Selectors.expand_loop0 iter1 weights1 len1) =
+    ok out
+
+case cons
+N : Usize
+x : NQ
+xs : List NQ
+ih :
+  ∀ (iter : core.slice.iter.Iter NQ) (weights : Std.Array NQ N) (len : Usize) (level : ℕ),
+    List.drop iter.i ↑iter.slice = xs →
+      ↑len = 2 ^ level →
+        2 ^ (level + xs.length) ≤ ↑N →
+          FIw_ArrayValue.canonical weights →
+            (∀ x ∈ xs, Canon x) → ∃ out, Selectors.expand_loop0 iter weights len = ok out ∧ FIw_ArrayValue.canonical out
+iter : core.slice.iter.Iter NQ
+weights : Std.Array NQ N
+len : Usize
+level : ℕ
+hd : List.drop iter.i ↑iter.slice = x :: xs
+hl : ↑len = 2 ^ level
+cap : 2 ^ (level + (x :: xs).length) ≤ ↑N
+hc : FIw_ArrayValue.canonical weights
+hxs : ∀ x_1 ∈ x :: xs, Canon x_1
+hnext : core.slice.iter.IteratorSliceIter.next iter = ok (some x, { slice := iter.slice, i := iter.i + 1 })
+hdrop : List.drop (iter.i + 1) ↑iter.slice = xs
+hx : Canon x
+p : FIv_PreparedNew.NP
+hp : field.PreparedQm31Multiplier.new x = ok p
+hvalid : ExtractedMaskPreparedState.PreparedFor (FIv_PreparedNew.prepared p) (FIv_NativeArithmetic.qm x)
+innercap : 2 * ↑len ≤ ↑N
+range : ExtractedMaskReverseRange.ReverseRange := { iter := { start := 0#usize, «end» := len } }
+w1 : Std.Array field.QM31 N
+hi : Selectors.expand_loop0_loop0 range weights p = ok w1
+hw1 : FIw_ArrayValue.canonical w1
+len1 : UScalar UScalarTy.Usize
+hm : len * 2#usize = ok len1
+hlen1 : ↑len1 = ↑len * ↑2#usize
+lenval : ↑len1 = 2 ^ (level + 1)
+out : Std.Array field.QM31 N
+tail : Selectors.expand_loop0 { slice := iter.slice, i := iter.i + 1 } w1 len1 = ok out
+hout : FIw_ArrayValue.canonical out
+rev :
+  core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := len } =
+    ok range
+⊢ (let (o, iter1) := (some x, { slice := iter.slice, i := iter.i + 1 })
+    match o with
+    | none => ok weights
+    | some coordinate => do
+      let prepared ← field.PreparedQm31Multiplier.new coordinate
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+            { start := 0#usize, «end» := len }
+      let weights1 ← Selectors.expand_loop0_loop0 iter2 weights prepared
+      let len1 ← len * 2#usize
+      Selectors.expand_loop0 iter1 weights1 len1) =
+    ok out
+'AspisR1.JFy_SelectorOuter.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

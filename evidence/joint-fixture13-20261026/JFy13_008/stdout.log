@@ -1,0 +1,26 @@
+JFy_SelectorNames.lean:3:7: error(lean.unknownIdentifier): Unknown constant `core.ops.range.Range.Insts.DoubleEndedIterator.next_back`
+def Aeneas.Std.core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next : {I Item : Type} →
+  core.iter.traits.double_ended.DoubleEndedIterator I Item →
+    core.iter.adapters.rev.Rev I → Result (Option Item × core.iter.adapters.rev.Rev I) :=
+fun {I Item} DEInst self => do
+  let __x ← DEInst.next_back self.iter
+  match __x with
+    | (o, it) => Result.ok (o, { iter := it })
+def Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  core.slice.iter.Iter T → Result (Option T × core.slice.iter.Iter T) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    Result.ok (some x, it)
+  else Result.ok (none, it)
+def Aeneas.Std.core.iter.traits.iterator.Iterator.rev.trait_default : {Self Item0 Item1 : Type} →
+  core.iter.traits.iterator.Iterator Self Item0 →
+    core.iter.traits.double_ended.DoubleEndedIterator Self Item1 → Self → Result (core.iter.adapters.rev.Rev Self) :=
+fun {Self Item0 Item1} _IteratorInst _DEInst => core.iter.traits.iterator.Iterator.rev.default
+@[irreducible] def FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 : {N : Usize} →
+  core.iter.adapters.rev.Rev (core.ops.range.Range Usize) →
+    Std.Array FIq_Native.field.QM31 N →
+      FIq_Native.field.PreparedQm31Multiplier → Result (Std.Array FIq_Native.field.QM31 N) :=
+fun {N} iter weights prepared =>
+  FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0.mutual prepared iter weights
