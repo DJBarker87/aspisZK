@@ -1,0 +1,18 @@
+import JGl_WordProof
+import JGl_NumericData
+import FIy_NativeCoefficients
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGl_Semantic00
+open Aeneas Aeneas.Std FIq_Native
+open FIw_ArrayValue (decoded)
+attribute [local irreducible] HAdd.hAdd HSub.hSub HMul.hMul HPow.hPow
+/-- One bounded packed semantic coefficient on the diagnostic candidate
+operands; the separate source-operand identification is still required. -/
+theorem value : FIy_NativeCoefficients.model JFu_PublicSemantic.value
+    JGl_NumericData.openings JGl_NumericData.selectors ⟨0,by decide⟩=
+    decoded JGl_NumericData.semantic ⟨0,by decide⟩ := by
+  jgl_words
+#print axioms value
+end AspisR1.JGl_Semantic00
+end
