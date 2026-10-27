@@ -22,4 +22,12 @@ ids=json.loads(ssh('python3 -c '+shlex.quote(code)));log=(out/f'out-{a}.log').re
 def field(p):
  m=re.search(p,t);return m[1] if m else None
 r=dict(attempt=int(a),module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(src.encode()).hexdigest(),dependency_objects=ids,deps_fingerprint=hashlib.sha256(json.dumps(ids,sort_keys=True).encode()).hexdigest(),exit=int(re.search(r'^exit=(\d+)',log,re.M)[1]),wall=field(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.+)'),peak_rss_kib=field(r'Maximum resident set size \(kbytes\): (\d+)'),swap=field(r'Swaps: (\d+)'),axioms=re.findall(r"'[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",log,re.S),target=['run-joint.sh',a,module,'J','7000','8'],limits=dict(lean_M=7000,MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),cache_caveat='Restored shared/union objects; direct imports resolved in effective search order. No cb3 lean-objects survived.')
+prepath=out/f'{a}-preflight.json'
+if prepath.exists():
+ pre=json.loads(prepath.read_text());actual=pre['deps_fingerprint'];r['dependency_objects_before_run']=pre['dependency_objects'];r['post_dependency_fingerprint']=r['deps_fingerprint'];r['dependency_identity_changed_during_run']={k:({'missing':True} if v=='MISSING' else v) for k,v in pre['dependency_objects'].items()}!=ids
+else:actual='none'
+r['actual_launcher_fingerprint']=actual
+r['target']=[base+'/r1-privacy-build-integration-20261019/tools/run-joint.sh',a,module,'J','7000','8']+([] if actual=='none' else [actual])
+r['source_pin']='source_revision is the actual checkout HEAD; source_sha256 pins the compiled working source, including pre-commit additions.'
+if not r['axioms']:r['axioms_status']='N/A extraction-definition rebuild or declaration-only inspection; see downstream audits.'
 (out/f'{a}.json').write_text(json.dumps(r,indent=2)+'\n');print(a,r['exit'],r['wall'])

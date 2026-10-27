@@ -127,4 +127,28 @@ dependent successful35617. Later dependent queues check prerequisite receipts.
 |253|V260|OPEN|current-crate graph still refused structured Drop|aeneas-source-op253-built-resume|
 |223|V240|OPEN|escaping-reference loan-validation guard|aeneas-source-op223-built-resume|
 |34|V185|OPEN|native Vec layout incompatible; opaque carrier cannot be expanded|aeneas-source-op34-hide-allocator-resume;aeneas-source-op34-method-resume|
-|35|V186|OPEN|constructor-only extraction prepared; admission currently refused|op35-sibling-check-resume-default.json|
+|35|V186|OPEN|constructor-only extraction refused std Alignment-to-NonNull transmute|op35-sibling-check-resume-default.json|
+
+
+## Final focused stage
+
+The staged sampler now has checked machine pass/carry projections, final wrap
+arithmetic, four-byte little-endian value, and closed canonical constructor
+normalization. The constructor link reuses the read-only candidate's retained
+ProverRwSuccessNativeNormalize object. Tuple binders in the final assembly
+use Aeneas.Std.uncurry; diagnostic print logs retain earlier failed hypotheses.
+The full staged reference source equation is the last focused target, followed
+by the missing14 frozen manifest modules and one combined axioms audit.
+No additional row credit is assigned to these helper theorems.
+
+Second premature dependent attempt35655 failed after35654; it is charged and
+retained. New launcher wrapper now propagates the compiler exit status.
+All receipts record the actual launcher argument vector and pre/post direct
+import identities; source_revision is the checkout HEAD and source_sha256
+pins dirty pre-commit additions. No material import identity changed mid-run.
+
+35686 checked PV_CB3_StagedKernel.source: complete Result for every input,
+with only propext/Classical.choice/Quot.sound. Failed35685 needed explicit
+ite_true/ite_false reduction after Boolean proposition simplification; no
+recurrence unfolding or larger resource cap was used. KernelInspect's failed
+print probe is retained as .lean.txt evidence and excluded from release imports.

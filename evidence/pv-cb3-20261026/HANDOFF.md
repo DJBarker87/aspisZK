@@ -1,3 +1,6 @@
+> Resumed results supersede the op51 withdrawal below. See RESUME_ROWS.md and
+> RESUME_FINAL.json for the fresh100-attempt run. Historical receipts remain intact.
+
 # PV CB3 handoff
 
 Branch `codex/pv-cb3-20261026`; base `09df2340e24cdcc86fe4ef272eed9994562fcda9`.

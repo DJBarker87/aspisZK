@@ -27,6 +27,7 @@ r=ssh(f'{base}/r1-privacy-build-integration-20261019/tools/run-joint.sh {a} {mod
 (out/f'launch-{a}-resume.log').write_text(r.stdout+r.stderr);print(r.stdout+r.stderr)
 if 'exit=' in r.stdout:
  subprocess.run([sys.executable,str(root/'tools/pv-cb3-20261026/resume_receipt.py'),a,module],check=True)
+ sys.exit(json.loads((out/f'{a}.json').read_text())['exit'])
 else:
  (out/f'{a}-refusal.json').write_text(json.dumps(dict(attempt=int(a),charged=False,exit=r.returncode,reason=r.stdout+r.stderr,module=module),indent=2)+'\n')
  sys.exit(r.returncode)
