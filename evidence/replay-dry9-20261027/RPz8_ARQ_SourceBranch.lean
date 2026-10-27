@@ -1,0 +1,109 @@
+import RPz8_ARQ_Canonical
+import RPz8_ARQ_AccountPreparation
+import RPz8_ARQ_SavedQueries
+import RPz8_ARQ_Charge
+import RPz8_SCG_AcceptedPair
+import RPz8_FIp_Canonical
+import RPz8_FIp_GlobalOwners
+import RPz8_F3Y_Canonical
+import RPz8_F3X_Charge
+import RPz8_F3X_AccountReads
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ARQ_SourceBranch
+open Aeneas Aeneas.Std Result MultiproofConeCanonical
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw
+open DrvC_Installation F3T_ByteCarrier F3V_RunEvidence
+
+/-- Direct account-recorder proof of the canonical branch, retaining source
+acceptance as a local input to be supplied by ARQ_SourceAlternative. There is
+no event-transport assumption and no source-recorder collision in the result. -/
+theorem accepted {A F C : Type} (base : Configuration F C)
+    (seed : AspisR1Stage2.Stage2Finish.FinishOps F)
+    (installed : base.finish=FIn_Install.finishOps seed)
+    (positions : base.stageBase.op22=ok 7527#usize ∧ base.stageBase.op21=ok 8007#usize ∧ base.stageBase.op20=ok 10055#usize)
+    (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+    (D : LiteralByteProtocol.Decoder) (w : CanonicalCutEnrichedTranscript.Words)
+    (copy : S2Trust.Heap (Nat → S2W_D189Entry.Record) → Nat → S2Trust.Payload →
+      S2W_TrustedStd.Outcome (Nat → S2W_D189Entry.Record))
+    (allocator : S2W_D189Wrappers.Allocator A) (id : S2W_ExtractionBoundary.Program)
+    (a : SCE_Experiment.Adversary A) (Q0 Q1 : Nat)
+    (prefixBound : ∀ H, (eval H a.first).1.length ≤ Q0)
+    (choiceBound : ∀ i saved post final H, (eval H (a.second i saved post final)).1.length ≤ Q1) :
+    let c := F3V_Install.configuration base
+    ∀ (prepareOwner : WAdm_Domain.SessionAPrepare
+      (Tx1Q_Execution.actual (Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry c.boundaries c.std))
+    (primitiveOwner : Port5Q1_QueryPorts.SessionAPrimitives c.query)
+    (canonicalOwner : Port5Q1_GeometryCanonical.SessionAPrimitives c.geometry)
+    (domainOwner : Port5Q1_Domain.SessionADomain c.geometry)
+    (multiply : c.geometry.op9=AspisR1Qm31ArithmeticProbe.field.M31.mul)
+    (one : c.geometry.op7=ok (1#u32)) (inverse : c.geometry.op11=Port4C_InverseExecution.inverse_owned)
+    (finishOwners : FIp_GlobalOwners.Owners c base.boundaries),
+    ∀ (aligned : sdk c = GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish
+      c.reserved c.query c.geometry c.boundaries c.std)
+    (H : Bytes → State),
+    SCE_Experiment.accepted (eval H (SCE_Experiment.account c hashv copy allocator id a)).2 = true →
+    (eval H (F3T_Installed.source c hashv (input c (eval H (SCE_Experiment.submission a)).2))).2=true →
+      eval H (F3T_Installed.source c hashv (input c (eval H (SCE_Experiment.submission a)).2)) =
+        eval H (F3_Model.verifier D (input c (eval H (SCE_Experiment.submission a)).2)) ∨
+      BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0+Q1+2965)
+        (eval H (Hiq_RecordedJoint.program (SCE_Experiment.account c hashv copy allocator id a)
+          ARQ_Observer.project (ARQ_Observer.select c id))) := by
+  dsimp only
+  let c := F3V_Install.configuration base
+  intro prepareOwner primitiveOwner canonicalOwner domainOwner multiply one inverse finishOwners aligned H accepted sourceSuccess
+  obtain ⟨saved,post,final,post2,final2,reply,reply2⟩ :=
+    SCG_AcceptedPair.replies c hashv copy allocator id a H accepted
+  let s := SCE_Experiment.submitted (eval H a.first).2
+  have success : (eval H (F3T_Installed.source c hashv (input c s))).2=true := by
+    simpa only [SCE_Experiment.submission_eval] using sourceSuccess
+  let account := SCE_Experiment.account c hashv copy allocator id a
+  obtain ⟨e,first,i,p,q,data,t,physical,stored,parser,query,found,calls,aux,shape,atPrepared,result⟩ :=
+    ARQ_Canonical.accepted base seed installed positions hashv s H w (F3X_Account.prior account)
+      prepareOwner D primitiveOwner canonicalOwner domainOwner multiply one inverse success
+  have inclusion := ARQ_AccountPreparation.included c aligned base.boundaries hashv copy allocator id
+    a saved post final H reply e first
+  have parsed : OraclePortCompactDraft.parse s.stored=some p := by
+    have hp := (OraclePortStoredParserC4.parsed _ _ _ parser).1
+    rw [stored,e.proofBytes] at hp
+    exact hp
+  have port := atPrepared.2.2.2.2.2.1
+  obtain ⟨out,v,output,opening,prepared,log,guard⟩ := atPrepared.2.2.2.2.2.2
+  have savedQueries := ARQ_SavedQueries.decoded c base.boundaries s H e prepareOwner primitiveOwner
+    out output data.data q (SelectedChallengeMap.rhoOf data.rho) port
+  have actualQueries : OraclePortCheckpointPreparedC5.decodeQueries
+      (OraclePortCompactDraft.slice (bytesOf saved.val) 320 88)=some q := by
+    rw [inclusion.1]
+    exact savedQueries
+  have project := ARQ_QueryProjection.on_reply c hashv copy allocator id a H saved post final p q reply parsed actualQueries
+  have charge : AuS1_Finish.Collision H
+      (F3V_Checkpoint.trace c base.boundaries s H e (F3X_Account.prior account)) p q →
+      BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0+Q1+2965)
+        (eval H (Hiq_RecordedJoint.program account ARQ_Observer.project (ARQ_Observer.select c id))) := by
+    intro collision
+    apply ARQ_Charge.cached_preparation c hashv copy allocator id a Q0 Q1 prefixBound choiceBound
+      (F3X_Account.prior (F3X_Preparation.program c s)) H p q project
+    · intro addr read
+      rw [F3X_Account.prior_log] at read
+      exact inclusion.2 addr read
+    · rw [F3X_Account.prior_log]
+      have preparation := congrArg Prod.fst (F3X_Preparation.on_evidence c base.boundaries s H e)
+      dsimp only at preparation
+      unfold F3V_Checkpoint.trace at collision
+      rw [F3X_Account.prior_log,←preparation] at collision
+      exact collision
+  have branch : eval H (F3T_Installed.source c hashv (input c s)) =
+      eval H (F3_Model.verifier D (input c s)) ∨
+      BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0+Q1+2965)
+        (eval H (Hiq_RecordedJoint.program account ARQ_Observer.project (ARQ_Observer.select c id))) := by
+    rcases result with collision | ⟨x,continuation⟩
+    · exact Or.inr (charge collision)
+    · rcases continuation (finishOwners s H e i p q data t atPrepared calls shape x) with collision | same
+      · exact Or.inr (charge collision)
+      · exact Or.inl same
+  simpa only [SCE_Experiment.submission_eval] using branch
+
+#print axioms accepted
+end AspisR1.ARQ_SourceBranch
+end
