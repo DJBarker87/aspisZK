@@ -76,7 +76,12 @@ partial def spine (owner : Name) (root e outer eqRoot forward : Expr) (params : 
       let p ← mkEqTrans eqRoot p
       spine (owner ++ `no) root (if dep then no.beta #[h] else no) outer p forward (params.push h) index
     return left ++ right
-  else if let some matcher ← matchMatcherApp? e (alsoCasesOn := true) then
+  else if let some matcher ← (do
+    let m ← matchMatcherApp? e (alsoCasesOn := true)
+    let env ← getEnv
+    -- Constructor recursors are symbolic. Generated literal matchers can
+    -- normalize large scalar terms and require a separate shape lemma.
+    pure (m.filter (fun a => isCasesOnRecursor env a.matcherName))) then
     if matcher.discrs.size != 1 then
       logInfo m!"PREFIX_CONTEXT_STOP_MULTI_MATCH {owner} after {index}"
       return #[]
