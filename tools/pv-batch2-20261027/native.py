@@ -10,6 +10,8 @@ note=('optimized compilation' if cmd[0]=='cargo' or any('build-function-cost.py'
 # Receipt classification only; caps, admission and command execution are unchanged.
 if any('run2.py' in x for x in cmd):note='Lean single-module formal check under env J, -M7000; no Rust arithmetic gate'
 elif any('extract-' in x for x in cmd):note='optimized Rust/Charon compilation followed by pinned Aeneas symbolic extraction; no elimination'
+elif any('rowcheck-batch2b.py' in x for x in cmd):note='optimized Rust test compilation followed by finite frozen-row/copy comparison; no elimination'
+elif any('isolate-batch2b.py' in x for x in cmd):note='optimized Rust/Charon compilation followed by isolated pinned Aeneas extraction; no elimination'
 elif any('count-calls.py' in x for x in cmd):note='optimized scratch compilation followed by two instrumented complete prover calls including P_R1'
 (out/'command.json').write_text(json.dumps(dict(command=cmd,source_revision=(W/'source-revision.txt').read_text().strip(),env={k:env[k] for k in ['PATH','CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','RUSTFLAGS']},expected_time=note),indent=2)+'\n')
 run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3','/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py',str(out/'admission-barrier.json'),'python3',str(W/'capped.py'),str(out/'receipt'),note,'--',*cmd]

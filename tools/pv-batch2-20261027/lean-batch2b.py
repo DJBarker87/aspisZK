@@ -11,7 +11,17 @@ t['next_env_j_id']=n+1;t['attempts'].append(dict(id=n,module=module));tp.write_t
 imports=re.findall(r'^import (\S+)',p.read_text(),re.M)
 code='''from pathlib import Path
 import json,hashlib
-D=Path(DIR);B=D.parent;e=json.loads((B/'r1-privacy-build-integration-20261019/env/J.json').read_text());e['LEAN_PATH']=str(B/'aspis-joint-20261019/objects')+':'+e['LEAN_PATH'];(D/'env-J.json').write_text(json.dumps(e));r={}
+D=Path(DIR);B=D.parent
+sent=B/'r1-privacy-build-integration-20261019/evidence/sent.txt'
+if sent.exists():
+ for line in sent.read_text().splitlines():
+  cols=line.split()
+  if len(cols)>2 and cols[2]==str(ATTEMPT):raise SystemExit('used env-J ID in shared sent.txt')
+if (B/'aspis-fs-generic-20261006/evidence'/('out-'+str(ATTEMPT)+'.log')).exists():raise SystemExit('used env-J output ID')
+for root in B.glob('codex-*'):
+ for pat in ['*'+str(ATTEMPT)+'*.json','candidate/*'+str(ATTEMPT)+'*']:
+  for q in root.glob(pat):raise SystemExit('existing private receipt for ID: '+str(q))
+e=json.loads((B/'r1-privacy-build-integration-20261019/env/J.json').read_text());e['LEAN_PATH']=str(B/'aspis-joint-20261019/objects')+':'+e['LEAN_PATH'];(D/'env-J.json').write_text(json.dumps(e));r={}
 for m in IMPORTS:
  for d in [str(D/'lean-objects')]+e['LEAN_PATH'].split(':'):
   p=Path(d)/(m.replace('.','/')+'.olean')
@@ -24,10 +34,18 @@ for root in e['LEAN_PATH'].split(':'):
   if src.exists() and not dst.exists() and not dst.is_symlink():dst.symlink_to(src)
 (D/'lean-sources/R1Z').mkdir(parents=True,exist_ok=True);(D/'lean-objects/R1Z').mkdir(parents=True,exist_ok=True)
 print(json.dumps(r,sort_keys=True))
-'''.replace('DIR',repr(D)).replace('IMPORTS',repr(imports))
+'''.replace('DIR',repr(D)).replace('IMPORTS',repr(imports)).replace('ATTEMPT',str(n))
 r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True)
 if r.returncode:(E/f'{n}-preflight-error.txt').write_text(r.stderr+r.stdout);raise SystemExit(r.stderr+r.stdout)
 deps=json.loads(r.stdout);fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest();meta=dict(attempt=n,module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),worktree_source_dirty=bool(subprocess.check_output(['git','status','--porcelain','--',str(p)],text=True).strip()),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),deps_fingerprint=fp,dependency_objects=deps)
+# Refuse every previously charged identical source/dependency pair, including failures.
+charged_ids={a['id'] for a in t['attempts'] if a.get('charged')}
+for prior in E.glob('*-submission.json'):
+ q=json.loads(prior.read_text())
+ if q.get('attempt') in charged_ids and q.get('source_sha256')==meta['source_sha256'] and q.get('deps_fingerprint')==fp:
+  t['attempts'][-1]['uncharged_reason']='duplicate source/dependency refusal before compiler launch'
+  tp.write_text(json.dumps(t,indent=2)+'\n')
+  raise SystemExit('REFUSED unchanged charged source/dependency pair from '+str(q['attempt']))
 (E/f'{n}-submission.json').write_text(json.dumps(meta,indent=2)+'\n');(E/f'{n}-source.lean.txt').write_bytes(p.read_bytes())
 subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+module+'.lean'],check=True)
 cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+module+'.olean',D+'/lean-sources/'+module+'.lean','7000']
@@ -47,4 +65,8 @@ for name in ['stdout.log','stderr.log','time.log']:
   if rec['exit_status']==0:print('\n'.join(line for line in v.splitlines() if 'axioms' in line))
   else:print(v)
 rec['print_axioms']=[line for line in meta.get('axiom_output','').splitlines() if 'axioms' in line] if rec['exit_status']==0 else 'compile failed; no accepted theorem from this attempt'
-rec['native_wrapper_revision']=rec.pop('source_revision');meta.update(rec);meta['accepted_axioms']=not any(x in meta.get('axiom_output','') for x in ['sorryAx','_native.','axiom ']);(E/f'{n}.json').write_text(json.dumps(meta,indent=2)+'\n');sys.exit(rec['exit_status'] if meta['accepted_axioms'] else 1)
+rec['native_wrapper_revision']=rec.pop('source_revision');meta.update(rec)
+ax=[dict(declaration=m[1],axioms=[] if m[3] is None else [s.strip() for s in m[3].replace('\n',' ').split(',') if s.strip()]) for m in re.finditer(r"^'([^'\n]+)' (does not depend on any axioms|depends on axioms:\s*\[([^\]]*)\])",meta.get('axiom_output',''),re.M)]
+meta['parsed_axioms']=ax
+meta['accepted_axioms']=all(set(q['axioms'])<={'propext','Classical.choice','Quot.sound'} for q in ax) and (rec['exit_status']!=0 or len(ax)==len(re.findall(r'^#print axioms ',p.read_text(),re.M)))
+(E/f'{n}.json').write_text(json.dumps(meta,indent=2)+'\n');sys.exit(rec['exit_status'] if meta['accepted_axioms'] else 1)

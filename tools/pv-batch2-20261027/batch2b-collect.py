@@ -7,7 +7,7 @@ code="""from pathlib import Path
 import io,sys,tarfile
 D=Path(DIR)
 with tarfile.open(fileobj=sys.stdout.buffer,mode='w|') as t:
- for root in list((D/'candidate').glob('batch2b-*'))+list(D.glob('batch2b-extraction*')):
+ for root in list((D/'candidate').glob('batch2b-*'))+list(D.glob('batch2b-extraction*'))+[D/'batch2b-rowcheck']:
   if not root.exists():continue
   for p in root.rglob('*'):
    if not p.is_file() or any(x in p.parts for x in ['artifacts','diagnostics']):continue
