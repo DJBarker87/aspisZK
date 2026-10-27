@@ -1,0 +1,53 @@
+import LPh_RawNat
+import XRk_DotModel
+import RPu_FJf_DotPushValue
+set_option autoImplicit false
+namespace AspisR1.LPh.Bridge
+open Aeneas Aeneas.Std Result
+open JFs_TX2_RawMap (pack)
+open FJf_U64Array (cell)
+
+theorem model_raw (a b c d e f g h : U32) :
+    XRk_raw (pack a b c d) (pack e f g h)=
+      RawSpec.rawNat a.val b.val c.val d.val e.val f.val g.val h.val := rfl
+
+/-- The emitted native raw definition and the formerly opaque model have the
+same Nat words on the SAME input arrays. No canonicality or success premise. -/
+theorem raw_model (a b : XRk_Release.fast_pairing.canonical.Q) :
+    ∃ out, FIo_Native.fast_pairing.canonical.Q.raw a b=ok out ∧
+      out.val.map UScalar.val=XRk_raw a b := by
+  obtain ⟨a0,a1,a2,a3,rfl⟩ := JFs_TX2_RawMap.shape a
+  obtain ⟨b0,b1,b2,b3,rfl⟩ := JFs_TX2_RawMap.shape b
+  obtain ⟨out,run,value⟩ := Raw.raw_nat a0 a1 a2 a3 b0 b1 b2 b3
+  exact ⟨out,run,value.trans (model_raw a0 a1 a2 a3 b0 b1 b2 b3).symm⟩
+
+theorem cell_value (a : Array U64 4#usize) (j : Nat) :
+    (cell a j).val=(a.val.map UScalar.val)[j]?.getD 0 := by
+  unfold cell
+  rw [List.getElem?_map]
+  cases a.val[j]? <;> rfl
+
+/-- Actual emitted four-cell loop, not a freely chosen native callback.
+The only execution premise is the observed native call on these same inputs. -/
+theorem push_words (dot out : FIo_Native.fast_pairing.canonical.Dot)
+    (a b : XRk_Release.fast_pairing.canonical.Q)
+    (run : FIo_Native.fast_pairing.canonical.Dot.push dot a b=ok out) :
+    ∀ j, j<4 → (cell out.sums j).val=
+      RawSpec.wrap64 ((cell dot.sums j).val+XRk_partial ((XRk_raw a b)[j]?.getD 0)) := by
+  obtain ⟨raw,hr,post⟩ := FJf_DotPushValue.source dot out a b run
+  obtain ⟨raw',hr',value⟩ := raw_model a b
+  have same : raw'=raw := Result.ok.inj (hr'.symm.trans hr)
+  subst raw'
+  intro j hj
+  have at := cell_value raw j
+  rw [value] at at
+  rw [post j hj]
+  change (U64.wrapping_add (cell dot.sums j) (FIo_ReduceBounds.fold (cell raw j))).val=_
+  rw [U64.wrapping_add_val_eq,Raw.partial_nat,Raw.size64,at]
+  rfl
+
+#print axioms model_raw
+#print axioms raw_model
+#print axioms cell_value
+#print axioms push_words
+end AspisR1.LPh.Bridge

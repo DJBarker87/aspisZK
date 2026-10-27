@@ -1,0 +1,135 @@
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -207,3 +207,5 @@
+ #[cfg(kani)] mod LPc_compact { include!("LPc_compact.rs"); }
+ 
+ #[cfg(kani)] mod LPg_compact { include!("LPg_compact.rs"); }
++
++#[cfg(kani)] mod LPh_compact { include!("LPh_compact.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -534,3 +534,5 @@
+ #[cfg(kani)] mod LPc_verifier { include!("LPc_verifier.rs"); }
+ 
+ #[cfg(kani)] mod LPg_verifier { include!("LPg_verifier.rs"); }
++
++#[cfg(kani)] mod LPh_verifier { include!("LPh_verifier.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -856,3 +856,5 @@
+ #[cfg(kani)] mod LPc_wire { include!("LPc_wire.rs"); }
+ 
+ #[cfg(kani)] mod LPg_r1_wire { include!("LPg_r1_wire.rs"); }
++
++#[cfg(kani)] mod LPh_wire { include!("LPh_wire.rs"); }
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPh_verifier.rs
+@@ -0,0 +1,12 @@
++use super::*;
++fn step<const K:bool>(){
++ let b:[u8;928]=kani::any();let i:usize=kani::any();kani::assume(i<29);
++ let prior:bool=kani::any();let suffix=&b[32*i..];let mut it=suffix.chunks_exact(32);
++ let before=it.len();let c=it.next().unwrap();assert_eq!(it.len()+1,before);
++ assert_eq!(c.len(),32);assert!(core::ptr::eq(c.as_ptr(),b[32*i..].as_ptr()));
++ let expected=match E::from_le_bytes(c){None=>Err(Error::Parse),Some(x)=>if K&&x.c1()!=K::ZERO{Err(Error::Parse)}else{Ok(())}};
++ let native=if prior{echeck(c,K)}else{Err(Error::Parse)};
++ assert_eq!(native,if prior{expected}else{Err(Error::Parse)});
++}
++#[kani::proof] #[kani::unwind(10)] fn LPh_echeck0(){step::<false>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_echeck1(){step::<true>()}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPh_compact.rs
+@@ -0,0 +1,31 @@
++use super::*;
++#[kani::proof] #[kani::unwind(8)] fn LPh_check_window(){
++ let b:[u8;464]=kani::any();let i:usize=kani::any();kani::assume(i<29);let prior:bool=kani::any();
++ let mut it=b[16*i..].chunks_exact(16);let n=it.len();let c=it.next().unwrap();assert_eq!(it.len()+1,n);
++ assert!(core::ptr::eq(c.as_ptr(),b[16*i..].as_ptr()));
++ assert_eq!(if prior{check_values(c)}else{Err(CodecError::NonCanonical)},if prior&&QM31::from_le_bytes(c).is_some(){Ok(())}else{Err(CodecError::NonCanonical)});
++}
++fn expand<const PART:usize>(){
++ let input:[u8;464]=kani::any();let mut output:[u8;928]=kani::any();let i:usize=kani::any();kani::assume(i<29);
++ let j:usize=kani::any();kani::assume(j<928);kani::assume(if PART==0{j<32*i}else if PART==1{j>=32*i&&j<32*i+16}else if PART==2{j>=32*i+16&&j<32*i+32}else{j>=32*i+32});
++ let old=output[j];
++ {let mut src=input[16*i..].chunks_exact(16);let mut dst=output[32*i..].chunks_exact_mut(32);
++  let c=src.next().unwrap();let o=dst.next().unwrap();assert_eq!(expand_values(c,o),Ok(()));}
++ let expected=if j>=32*i&&j<32*i+16{input[16*i+j-32*i]}else if j>=32*i+16&&j<32*i+32{0}else{old};
++ assert_eq!(output[j],expected);
++}
++#[kani::proof] #[kani::unwind(18)] fn LPh_expand_before(){expand::<0>()}
++#[kani::proof] #[kani::unwind(18)] fn LPh_expand_low(){expand::<1>()}
++#[kani::proof] #[kani::unwind(18)] fn LPh_expand_high(){expand::<2>()}
++#[kani::proof] #[kani::unwind(18)] fn LPh_expand_after(){expand::<3>()}
++
++fn live_window<const PART:usize>(){
++ let input:[u8;16]=kani::any();let mut out:[u8;96]=kani::any();let j:usize=kani::any();kani::assume(j<96);
++ kani::assume(if PART==0{j<32}else if PART==1{j>=32&&j<48}else if PART==2{j>=48&&j<64}else{j>=64});
++ let old=out[j];assert_eq!(expand_values(&input,&mut out[32..64]),Ok(()));
++ assert_eq!(out[j],if j>=32&&j<48{input[j-32]}else if j>=48&&j<64{0}else{old});
++}
++#[kani::proof] #[kani::unwind(18)] fn LPh_live_before(){live_window::<0>()}
++#[kani::proof] #[kani::unwind(18)] fn LPh_live_low(){live_window::<1>()}
++#[kani::proof] #[kani::unwind(18)] fn LPh_live_high(){live_window::<2>()}
++#[kani::proof] #[kani::unwind(18)] fn LPh_live_after(){live_window::<3>()}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPh_wire.rs
+@@ -0,0 +1,59 @@
++use super::*;
++#[kani::proof] #[kani::unwind(10)] fn LPh_validate_window(){
++ let b:[u8;3712]=kani::any();let i:usize=kani::any();kani::assume(i<116);let row:u8=kani::any();
++ let prior:Result<(),Error>=if kani::any(){Ok(())}else{let earlier:usize=kani::any();kani::assume(earlier<=i);Err(Error::NonCanonical{row,value:earlier})};
++ let mut chunks=b[32*i..].chunks_exact(32);let n=chunks.len();let c=chunks.next().unwrap();assert_eq!(chunks.len()+1,n);assert!(core::ptr::eq(c.as_ptr(),b[32*i..].as_ptr()));
++ // Exact one iteration from validate_record_fields, on the arbitrary enumeration pre-state i.
++ let actual=prior.and_then(|()|{let x=WideExact::from_le_bytes(c).ok_or(Error::NonCanonical{row,value:i})?;if x.c1()!=QM31::ZERO{return Err(Error::NonCanonical{row,value:i});}Ok(())});
++ let step=validate_record_fields(row,c).map_err(|_|Error::NonCanonical{row,value:i});
++ assert_eq!(actual,prior.and(step));
++}
++fn decode_fixed<const OFF:usize>(){
++ let b:[u8;5+32*116]=kani::any();let row:u8=kani::any();kani::assume(row>=14);
++ let got=ValidatedRecord{row,framed:&b}.decode_k::<1>(OFF);let expected=QM31::from_le_bytes(&b[5+32*OFF..21+32*OFF]);
++ match(got,expected){(Ok([a]),Some(b))=>{assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);},(Err(e),None)=>assert_eq!(e,Error::NonCanonical{row,value:OFF}),_=>panic!("LPh fixed decode disagreement")}
++}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode0(){decode_fixed::<0>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode1(){decode_fixed::<1>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode14(){decode_fixed::<14>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode16(){decode_fixed::<16>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode27(){decode_fixed::<27>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode30(){decode_fixed::<30>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode43(){decode_fixed::<43>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode44(){decode_fixed::<44>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode57(){decode_fixed::<57>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode58(){decode_fixed::<58>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode59(){decode_fixed::<59>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode72(){decode_fixed::<72>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode74(){decode_fixed::<74>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode85(){decode_fixed::<85>()}
++
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode_class16(){let k:u8=kani::any();kani::assume(k<6);match k{0=>decode_fixed::<16>(),1=>decode_fixed::<17>(),2=>decode_fixed::<18>(),3=>decode_fixed::<19>(),4=>decode_fixed::<20>(),5=>decode_fixed::<21>(),_=>unreachable!()}}
++
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode_class22(){let k:u8=kani::any();kani::assume(k<6);match k{0=>decode_fixed::<22>(),1=>decode_fixed::<23>(),2=>decode_fixed::<24>(),3=>decode_fixed::<25>(),4=>decode_fixed::<26>(),5=>decode_fixed::<27>(),_=>unreachable!()}}
++
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode_class74(){let k:u8=kani::any();kani::assume(k<6);match k{0=>decode_fixed::<74>(),1=>decode_fixed::<75>(),2=>decode_fixed::<76>(),3=>decode_fixed::<77>(),4=>decode_fixed::<78>(),5=>decode_fixed::<79>(),_=>unreachable!()}}
++
++#[kani::proof] #[kani::unwind(10)] fn LPh_decode_class80(){let k:u8=kani::any();kani::assume(k<6);match k{0=>decode_fixed::<80>(),1=>decode_fixed::<81>(),2=>decode_fixed::<82>(),3=>decode_fixed::<83>(),4=>decode_fixed::<84>(),5=>decode_fixed::<85>(),_=>unreachable!()}}
++
++#[kani::proof] #[kani::unwind(10)] fn LPh_validate_index(){
++ let c:[u8;32]=kani::any();let i:usize=kani::any();kani::assume(i<116);let row:u8=kani::any();
++ let prior:Result<(),Error>=if kani::any(){Ok(())}else{let earlier:usize=kani::any();kani::assume(earlier<=i);Err(Error::NonCanonical{row,value:earlier})};
++ let actual=prior.and_then(|()|{let x=WideExact::from_le_bytes(&c).ok_or(Error::NonCanonical{row,value:i})?;if x.c1()!=QM31::ZERO{return Err(Error::NonCanonical{row,value:i});}Ok(())});
++ let expected=prior.and(validate_record_fields(row,&c).map_err(|_|Error::NonCanonical{row,value:i}));assert_eq!(actual,expected);
++}
++fn decode_write<const PART:usize>(){
++ let b:[u8;37]=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<29&&j<29);
++ kani::assume(if PART==0{j<i}else if PART==1{j==i}else{j>i});
++ let raw:[u8;464]=kani::any();let old:[[u32;4];29]=unsafe{core::mem::transmute(raw)};let mut out=old;
++ let decoded=ValidatedRecord{row:25,framed:&b}.decode_k::<1>(0);
++ let value=QM31::from_le_bytes(&b[5..21]);
++ let status=match decoded{Ok([q])=>{out[i]=[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0];Ok(())},Err(e)=>Err(e)};
++ match value{
++ Some(q)=>{assert_eq!(status,Ok(()));let expected=if i==j{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}else{old[j]};for k in 0..4{assert_eq!(out[j][k],expected[k]);}},
++ None=>{assert_eq!(status,Err(Error::NonCanonical{row:25,value:0}));for k in 0..4{assert_eq!(out[j][k],old[j][k]);}}
++ }
++}
++#[kani::proof] #[kani::unwind(10)] fn LPh_write_before(){decode_write::<0>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_write_cell(){decode_write::<1>()}
++#[kani::proof] #[kani::unwind(10)] fn LPh_write_after(){decode_write::<2>()}

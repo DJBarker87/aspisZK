@@ -1,0 +1,90 @@
+{"attempt": "LPh_K023", "exit_status": 1, "wall_seconds": 2.8404668149887584, "peak_rss_kib": "392124", "swaps": "0", "cgroup_memory_peak_bytes": "348581888", "print_axioms": "N/A: kani"}
+--> crates/aspis-r1-cost-probe/src/LPg_compact.rs:14:39
+   |
+14 | #[kani::proof] #[kani::unwind(18)] fn LPg_expand_low(){expansion::<0,16>()}
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpg_expand_low`
+
+warning: function `LPg_expand_high` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPg_compact.rs:15:39
+   |
+15 | #[kani::proof] #[kani::unwind(18)] fn LPg_expand_high(){expansion::<16,32>()}
+   |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpg_expand_high`
+
+warning: function `LPh_check_window` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:2:38
+  |
+2 | #[kani::proof] #[kani::unwind(8)] fn LPh_check_window(){
+  |                                      ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_check_window`
+
+warning: function `LPh_expand_before` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:17:39
+   |
+17 | #[kani::proof] #[kani::unwind(18)] fn LPh_expand_before(){expand::<0>()}
+   |                                       ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_expand_before`
+
+warning: function `LPh_expand_low` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:18:39
+   |
+18 | #[kani::proof] #[kani::unwind(18)] fn LPh_expand_low(){expand::<1>()}
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_expand_low`
+
+warning: function `LPh_expand_high` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:19:39
+   |
+19 | #[kani::proof] #[kani::unwind(18)] fn LPh_expand_high(){expand::<2>()}
+   |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_expand_high`
+
+warning: function `LPh_expand_after` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:20:39
+   |
+20 | #[kani::proof] #[kani::unwind(18)] fn LPh_expand_after(){expand::<3>()}
+   |                                       ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_expand_after`
+
+warning: function `LPh_live_before` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:28:39
+   |
+28 | #[kani::proof] #[kani::unwind(18)] fn LPh_live_before(){live_window::<0>()}
+   |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_live_before`
+
+warning: function `LPh_live_low` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:29:39
+   |
+29 | #[kani::proof] #[kani::unwind(18)] fn LPh_live_low(){live_window::<1>()}
+   |                                       ^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_live_low`
+
+warning: function `LPh_live_high` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:30:39
+   |
+30 | #[kani::proof] #[kani::unwind(18)] fn LPh_live_high(){live_window::<2>()}
+   |                                       ^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_live_high`
+
+warning: function `LPh_live_after` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:31:39
+   |
+31 | #[kani::proof] #[kani::unwind(18)] fn LPh_live_after(){live_window::<3>()}
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_live_after`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.09s
+Checking harness r1_wire::LPh_wire::LPh_write_before...
+
+VERIFICATION RESULT:
+ ** 1 of 529 failed (528 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs", line 897, in core::array::try_from_fn_erased::<[u32; 4], core::ops::try_trait::NeverShortCircuit<[u32; 4]>, {closure@core::array::try_from_trusted_iterator::next<core::ops::try_trait::NeverShortCircuit<[u32; 4]>, core::iter::Map<core::array::drain::Drain<'_, ()>, {closure@core::ops::try_trait::NeverShortCircuit<[u32; 4]>::wrap_mut_1<(), {closure@<[u32; 4] as kani::Arbitrary>::any_array<29>::{closure#0}}>::{closure#0}}>>::{closure#0}}>
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 0.51047826s
+
+Manual Harness Summary:
+Verification failed for - r1_wire::LPh_wire::LPh_write_before
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+

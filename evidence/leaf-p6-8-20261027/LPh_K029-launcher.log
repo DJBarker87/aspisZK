@@ -1,0 +1,48 @@
+{"attempt": "LPh_K029", "exit_status": 1, "wall_seconds": 1.0780009659938514, "peak_rss_kib": "218160", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+e::LPh_zst_identity line 17 thread 0
+----------------------------------------------------
+  b=INVALID-65535 (11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111)
+
+State 128 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs function core::ptr::eq::<u8> line 2411 thread 0
+----------------------------------------------------
+  var_0=FALSE (00000000)
+
+State 129 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs function core::ptr::eq::<u8> line 2412 thread 0
+----------------------------------------------------
+  goto_symex$$return_value$$_RINvNtCsci0VKyKEi6N_4core3ptr2eqhECs1GU5KHMolKr_19aspis_r1_cost_probe=FALSE (00000000)
+
+State 131 file crates/aspis-r1-cost-probe/src/LPh_candidate.rs function verifier::candidate::LPh_candidate::LPh_zst_identity line 17 thread 0
+----------------------------------------------------
+  var_20=FALSE (00000000)
+
+Violated property:
+  file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/mod.rs function core::fmt::Arguments::<'_>::from_str line 820 thread 0
+  KANI_CHECK_ID_aspis_r1_cost_probe.13b5395805766875::aspis_r1_cost_probe_0
+  FALSE
+
+
+Violated property:
+  file crates/aspis-r1-cost-probe/src/LPh_candidate.rs function verifier::candidate::LPh_candidate::LPh_zst_identity line 17 thread 0
+  This is a placeholder message; Kani doesn't support message formatted at runtime
+  FALSE
+
+
+
+** 3 of 6 failed (3 iterations)
+VERIFICATION FAILED
+Manual Harness Summary:
+Verification failed for - verifier::candidate::LPh_candidate::LPh_zst_identity
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r1753432158b843568f9c3ced1953e10f.scope; invocation ID: 036416037594401094f48da83c3f9117
