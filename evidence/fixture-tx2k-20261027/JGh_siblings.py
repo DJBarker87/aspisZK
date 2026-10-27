@@ -37,6 +37,9 @@ for h,rows in levels.items():
   ro=f'JGf_TX2_Count{k}'
   s+=f'theorem count{k}_frontier : OraclePortFrozenOrder.countLevel {ro}.indices{h:02}.length {ro}.indices{h:02}=({ro}.indices{h+1:02},'+str(sum(1 for row in data['trees'][0 if k==0 else 2]['hashes'] if row['kind']=='parent' and row['level']==h and row['source']!='occupied'))+') := by\n'
   s+=f'  rw [←MultiproofConeCountGroups.source_level_eq _ _ (by decide : {ro}.indices{h:02}.Pairwise (·<·))]\n  exact {ro}.level{h:02}\n#print axioms count{k}_frontier\n'
+ for kind,base,cursor,bs,start in rows:
+  n=f'k{kind}c{cursor:03}';ro='JGf_TX2_M0Roots' if kind==0 else 'JGh_TX2_M1Roots' if kind==1 else 'JGc_TX2_M2Roots'
+  s+=f'theorem {n}_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes{kind} {cursor}={ro}.siblingAt {h} {base} :=\n  (JGh_TX2_NodeViews.read_selected _ _ {n} {n}_selected).trans {n}_decode\n#print axioms {n}_read\n'
  s+=f'end AspisR1.{name}\nend\n'
  files[P/'JGh_UNCHECKED'/(name+'.lean.txt')]=s
 for f,s in files.items():
