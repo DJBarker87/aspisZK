@@ -12101,3 +12101,28 @@ remaining obligation now waits on runjoin17 (the records identification and the 
 interpretation), on batches 2-3, or on the owner decisions in design/PV-OWNER-PACKET-20261027.md; more
 jobs aimed at the same gaps would be wrappers (AGENTS.md §7). Four live slots: runjoin17, batch2b,
 batch3, dudect2. Rows removed outright: 0. Privacy target not yet established.
+
+## D300 (Stream B) 2026-10-27 15:40 UTC: Stream A's D188-P3 finding (the pinned emission drops a mutable write-back); Stream B fidelity suspension and audit; dudect plan v2.2 ready
+
+Stream A (docs/research/100bit-spend-path-20261013/design/D188-PROVENANCE-FINDING-20261027.md, D188-P3):
+the pinned Charon/Aeneas emission of sampler::low_base_p_digits binds `let (o, iter1, next_back, _)`
+and DISCARDS the mutable restoration callback, so the frozen Rust's `*limb = quotient` write is lost;
+measured on block P native Rust and the cohort sampler give digits [0,1,0,…] with quotient 0, the
+emission gives all zeros with quotient 2147483647 (also P+1 and all-ff diverge). D188 credit is withdrawn
+for that body and suspended for multiproof::verify_in_place, verifier::update_residue_row,
+sampler::add_small_base_p and BatchedWeights::finish pending Stream A's per-function check (SDY_);
+repair route is an owner decision (D188-FIDELITY-DECISION-20261027.md; Stream A recommends narrowing D188
+and bridging affected bodies natively as opaque leaves; the Stream B lead agrees). Consequence for
+Stream B: every candidate source law is a theorem about an emission, and the native fixture and
+differential gates check the Rust, not the emission, so an emission defect would go undetected. LEAD
+RULING (n): no Stream B theorem about an emission counts as a source law for a body that writes through a
+mutable borrow from an iterator, slice or array element until the emission is shown to preserve every
+such write (static scan for discarded backward/restoration results plus a native comparison on inputs
+where the write matters). Launched pv-d188 (new worktree from b3d109c8ff; IDs 28100-28299): inventory of
+every Stream B emission consumed by a source law, static scan, differentials, per-row classification
+(stands / suspended / withdrawn), and which rows rely on the five Stream A functions (batch 2's sampler
+copies especially). Also: pv-dudect2 committed plan v2.2 (fresh-buffer preparation by default for all
+twelve experiments, four sanity controls first; harness sha256 dfd5222a…; one 25-minute window when both
+streams are lighter; compressor and QM31 try_inv leaves match the recommended build); the candidate was
+fast-forwarded to it and the pv-cb worktree removed. Four live slots: runjoin17, batch2b, batch3, d188.
+Rows removed outright: 0. Privacy target not yet established.
