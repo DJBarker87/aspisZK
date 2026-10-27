@@ -1,16 +1,26 @@
-import PV_B3_ZeroArithmetic
+import PV_B3_ZeroArrays
 namespace PV_B3_ZeroPolynomial
-open Aeneas Aeneas.Std Result PV_B3_Copy_117 PV_B3_ZeroArithmetic
+open Aeneas Aeneas.Std Result PV_B3_Copy_117 PV_B3_ZeroArithmetic PV_B3_ZeroArrays
 set_option autoImplicit false
 abbrev channels := Array.repeat 3#usize (Array.repeat 3#usize 0#u64)
 abbrev triple := Array.repeat 3#usize Z
 abbrev polynomial := Array.repeat 28#usize Z
--- Nine zero-channel leaves, with no traversal or large recurrence reduction.
+theorem madd_zero : aspis_core.field.M31.add 0#u32 0#u32 = ok 0#u32 := by with_unfolding_all rfl
+#print axioms madd_zero
+-- Nine independent writes use generic constant-array restoration lemmas.
 theorem accumulate : host_arithmetic.accumulate_channels channels Z Z = ok channels := by
+  simp (disch := decide) only [host_arithmetic.accumulate_channels,
+    aspis_core.field.QM31.ZERO,cadd_zero,madd_zero,triple_repeat,
+    index_repeat,mutable_repeat,update_repeat,set_repeat,lift,bind_tc_ok]
+
+theorem reconstruct_component : host_arithmetic.reconstruct_component (Array.repeat 3#usize 0#u64) = ok CZero := by
   with_unfolding_all rfl
+#print axioms reconstruct_component
 
 theorem reconstruct : host_arithmetic.reconstruct_channels channels = ok Z := by
-  with_unfolding_all rfl
+  simp (disch := decide) only [host_arithmetic.reconstruct_channels,
+    index_repeat,reconstruct_component,hostr_zero,cadd_zero,csub_zero,bind_tc_ok]
+  rfl
 
 theorem product3 : host_arithmetic.qm31_sum_products3 triple triple = ok Z := by
   simp (disch := decide) only [host_arithmetic.qm31_sum_products3,index_repeat,
