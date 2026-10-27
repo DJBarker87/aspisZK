@@ -13,6 +13,10 @@ def iterator : core.iter.traits.iterator.Iterator Iter (Usize × State) where
   next := core.iter.adapters.enumerate.IteratorEnumerate.next
     (core.iter.traits.iterator.IteratorSliceIter (Array U32 16#usize))
 
+def result {F : Type} (r : Result (Output F)) : Result (State × F) := do
+  let (s,trace,_,_) ← r
+  ok (s,trace)
+
 theorem source {F : Type}
     (callback : core.ops.function.FnMut F poseidon2.Poseidon2RoundTransition Unit)
     (iter : Iter) (xs : List (Usize × State)) (ht : FiniteTrace iterator iter xs)
@@ -20,8 +24,8 @@ theorem source {F : Type}
     (hc : ∀ p ∈ xs, Canonical p.2) :
     poseidon2.permute_optimized_with_trace_loop2
       (sourceExternalLinear := PV_Src_ExternalReference.dictionary) callback iter s trace round input =
-      fullSteps callback (fun i => poseidon2.Poseidon2RoundKind.ExternalFinal (UScalar.cast .U8 i))
-        xs s trace round input := by
+      result (fullSteps callback (fun i => poseidon2.Poseidon2RoundKind.ExternalFinal (UScalar.cast .U8 i))
+        xs s trace round input) := by
   letI : ExternalLinear := PV_Src_ExternalReference.dictionary
   induction ht generalizing s input trace round with
   | done it it' hn =>
@@ -35,7 +39,7 @@ theorem source {F : Type}
     have htail : ∀ p ∈ xs, Canonical p.2 := fun p hp => hc p (by simp [hp])
     rw [PV_Src_PortFinalRoundStep.source callback it it' s input trace round index c hn hs hconst]
     obtain ⟨out,ho,hcan⟩ := full_total s c
-    simp only [fullSteps,ho,bind_tc_ok]
+    simp only [fullSteps,ho,bind_tc_ok,result,bind_assoc_eq]
     congr 1
     funext p
     exact ih out out p.2 (U8.wrapping_add round 1#u8) hcan htail
