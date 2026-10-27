@@ -12,7 +12,7 @@ B={k:H/k/'bin/prover_rw_differential' for k in ['baseline','candidate']}
 assert not O.exists(), 'Never duplicate or silently resume an existing corpus'
 O.mkdir()
 assert hashlib.sha256(B['baseline'].read_bytes()).hexdigest()=='3c31fe5786de3197c66c4fae5a3897599a2c2e94b449780903fd18cb672a96c1'
-pin=json.loads((H/'build-differential/binary-pins.json').read_text())['prover_rw_differential']
+pin=json.loads((H/'build-differential-inputs-002/binary-pins.json').read_text())['prover_rw_differential']
 assert hashlib.sha256(B['candidate'].read_bytes()).hexdigest()==pin['sha256'] and B['candidate'].stat().st_size==pin['bytes']
 slots=asyncio.Semaphore(3)
 sems={k:slots for k in ['baseline','candidate']}
@@ -46,7 +46,7 @@ async def side(coin,who):
 async def pair(coin):
  comparison=O/f'comparison-{coin}.json'
  if not comparison.exists():
-  await asyncio.gather(side(coin,'research'),side(coin,'candidate'))
+  await asyncio.gather(side(coin,'baseline'),side(coin,'candidate'))
   await execute(['python3',H/'source/tools/prover-rw-20261023/compare-corpus.py',O/f'{coin}-baseline',O/f'{coin}-candidate',comparison],O/f'compare-{coin}.log')
  r=json.loads(comparison.read_text());assert r['passed'] and r['paired_runs']==1,r
  check_resources()
