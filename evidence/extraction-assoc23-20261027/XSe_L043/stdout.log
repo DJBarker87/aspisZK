@@ -1,0 +1,1772 @@
+XSe_generated/XSe_PrepareVariant.lean:35:10: error: unsolved goals
+case Ok.Err.refl
+low : XRz_HybridSampler.Low
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+out : verifier.Prepared
+n : Usize
+left✝¹⁰ : compact.LOGICAL_SEMANTIC = ok n
+m : Usize
+left✝⁹ : compact.LOGICAL_Y1 = ok m
+size : UScalar UScalarTy.Usize
+left✝⁸ : n + m = ok size
+raw : core.result.Result (alloc.vec.Vec U8) aspis_core.r0.Error
+left✝⁷ : aspis_core.r0.heap.filled core.marker.CopyU8 size 0#u8 = ok raw
+buffer : alloc.vec.Vec U8
+left✝⁶ :
+  core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) raw () =
+    ok (core.result.Result.Ok buffer)
+s : Slice U8
+back : Slice U8 → alloc.vec.Vec U8
+left✝⁵ : lift buffer.deref_mut = ok (s, back)
+restore : Slice U8 × Slice U8 → Slice U8
+semantic y1 : Slice U8
+left✝⁴ : core.slice.Slice.split_at_mut s n = ok ((semantic, y1), restore)
+off : Usize
+left✝³ : compact.OFF_Y1 = ok off
+input : Slice U8
+left✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := compact.OFF_SEMANTIC, «end» := off } =
+    ok input
+semantic1 : Slice U8
+e : compact.CodecError
+left✝¹ : compact.expand_semantic input semantic = ok (core.result.Result.Err e, semantic1)
+left✝ :
+  (do
+      let v ← verifier.Error.Insts.CoreConvertFromCodecError.from e
+      ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Ok out)
+run✝⁹ :
+  (do
+      let i ← compact.LOGICAL_SEMANTIC
+      let i1 ← compact.LOGICAL_Y1
+      let i2 ← i + i1
+      let r ← aspis_core.r0.heap.filled core.marker.CopyU8 i2 0#u8
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s i
+          let i3 ← compact.OFF_Y1
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := compact.OFF_SEMANTIC, «end» := i3 }
+          let (r2, semantic1) ← compact.expand_semantic s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← compact.expand_values s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := i }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := i }
+                  let r4 ← verifier.candidate.wide_view proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          XRz_HybridPrepared.prepared low D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        verifier.Error.Insts.CoreConvertFromCodecError residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁸ :
+  (do
+      let i1 ← compact.LOGICAL_Y1
+      let i2 ← n + i1
+      let r ← aspis_core.r0.heap.filled core.marker.CopyU8 i2 0#u8
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+          let i3 ← compact.OFF_Y1
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := compact.OFF_SEMANTIC, «end» := i3 }
+          let (r2, semantic1) ← compact.expand_semantic s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← compact.expand_values s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := n }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := n }
+                  let r4 ← verifier.candidate.wide_view proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          XRz_HybridPrepared.prepared low D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        verifier.Error.Insts.CoreConvertFromCodecError residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁷ :
+  (do
+      let i2 ← n + m
+      let r ← aspis_core.r0.heap.filled core.marker.CopyU8 i2 0#u8
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+          let i3 ← compact.OFF_Y1
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := compact.OFF_SEMANTIC, «end» := i3 }
+          let (r2, semantic1) ← compact.expand_semantic s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← compact.expand_values s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := n }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := n }
+                  let r4 ← verifier.candidate.wide_view proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          XRz_HybridPrepared.prepared low D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        verifier.Error.Insts.CoreConvertFromCodecError residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁶ :
+  (do
+      let r ← aspis_core.r0.heap.filled core.marker.CopyU8 size 0#u8
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+          let i3 ← compact.OFF_Y1
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := compact.OFF_SEMANTIC, «end» := i3 }
+          let (r2, semantic1) ← compact.expand_semantic s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← compact.expand_values s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := n }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := n }
+                  let r4 ← verifier.candidate.wide_view proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          XRz_HybridPrepared.prepared low D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        verifier.Error.Insts.CoreConvertFromCodecError residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁵ :
+  (do
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) raw
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+          let i3 ← compact.OFF_Y1
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := compact.OFF_SEMANTIC, «end» := i3 }
+          let (r2, semantic1) ← compact.expand_semantic s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← compact.expand_values s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := n }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := n }
+                  let r4 ← verifier.candidate.wide_view proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          XRz_HybridPrepared.prepared low D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        verifier.Error.Insts.CoreConvertFromCodecError residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁴ :
+  (do
+      let (s, deref_mut_back) ← lift buffer.deref_mut
+      let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+      let i3 ← compact.OFF_Y1
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := compact.OFF_SEMANTIC, «end» := i3 }
+      let (r2, semantic1) ← compact.expand_semantic s1 semantic
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i4 ← compact.OFF_INACTIVE
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := i3, «end» := i4 }
+          let (r3, y11) ← compact.expand_values s2 y1
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let s4 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                    (deref_mut_back (split_at_mut_back (semantic1, y11))) { «end» := n }
+              let s5 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                    (deref_mut_back (split_at_mut_back (semantic1, y11))) { start := n }
+              let r4 ← verifier.candidate.wide_view proof s4 s5
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                  let r6 ←
+                    core.result.Result.map_err
+                        (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                  let cf4 ←
+                    match r6 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      verifier.mark obs verifier.Phase.Semantic
+                      XRz_HybridPrepared.prepared low D val2 v hash g
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r7, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝³ :
+  (do
+      let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+      let i3 ← compact.OFF_Y1
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := compact.OFF_SEMANTIC, «end» := i3 }
+      let (r2, semantic1) ← compact.expand_semantic s1 semantic
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i4 ← compact.OFF_INACTIVE
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := i3, «end» := i4 }
+          let (r3, y11) ← compact.expand_values s2 y1
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let s4 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                    (back (split_at_mut_back (semantic1, y11))) { «end» := n }
+              let s5 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                    (back (split_at_mut_back (semantic1, y11))) { start := n }
+              let r4 ← verifier.candidate.wide_view proof s4 s5
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                  let r6 ←
+                    core.result.Result.map_err
+                        (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                  let cf4 ←
+                    match r6 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      verifier.mark obs verifier.Phase.Semantic
+                      XRz_HybridPrepared.prepared low D val2 v hash g
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r7, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝² :
+  (let (semantic, y1) := (semantic, y1)
+    do
+    let i3 ← compact.OFF_Y1
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+          { start := compact.OFF_SEMANTIC, «end» := i3 }
+    let (r2, semantic1) ← compact.expand_semantic s1 semantic
+    let cf1 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let i4 ← compact.OFF_INACTIVE
+        let s2 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := i3, «end» := i4 }
+        let (r3, y11) ← compact.expand_values s2 y1
+        let cf2 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf2 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let s4 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (back (restore (semantic1, y11)))
+                  { «end» := n }
+            let s5 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back (restore (semantic1, y11)))
+                  { start := n }
+            let r4 ← verifier.candidate.wide_view proof s4 s5
+            let cf3 ←
+              match r4 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf3 with
+              | core.ops.control_flow.ControlFlow.Continue v => do
+                let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                let r6 ←
+                  core.result.Result.map_err
+                      (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                let cf4 ←
+                  match r6 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf4 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    verifier.mark obs verifier.Phase.Semantic
+                    XRz_HybridPrepared.prepared low D val2 v hash g
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r7 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r7, g)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r7 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r7, g)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r7 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  verifier.Error.Insts.CoreConvertFromCodecError residual
+            ok (r7, g)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r7 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              verifier.Error.Insts.CoreConvertFromCodecError residual
+        ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝¹ :
+  (do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := compact.OFF_SEMANTIC, «end» := off }
+      let (r2, semantic1) ← compact.expand_semantic s1 semantic
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i4 ← compact.OFF_INACTIVE
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := off, «end» := i4 }
+          let (r3, y11) ← compact.expand_values s2 y1
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let s4 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (back (restore (semantic1, y11)))
+                    { «end» := n }
+              let s5 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                    (back (restore (semantic1, y11))) { start := n }
+              let r4 ← verifier.candidate.wide_view proof s4 s5
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                  let r6 ←
+                    core.result.Result.map_err
+                        (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                  let cf4 ←
+                    match r6 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      verifier.mark obs verifier.Phase.Semantic
+                      XRz_HybridPrepared.prepared low D val2 v hash g
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r7, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝ :
+  (do
+      let (r2, semantic1) ← compact.expand_semantic input semantic
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i4 ← compact.OFF_INACTIVE
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := off, «end» := i4 }
+          let (r3, y11) ← compact.expand_values s2 y1
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let s4 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (back (restore (semantic1, y11)))
+                    { «end» := n }
+              let s5 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                    (back (restore (semantic1, y11))) { start := n }
+              let r4 ← verifier.candidate.wide_view proof s4 s5
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                  let r6 ←
+                    core.result.Result.map_err
+                        (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                  let cf4 ←
+                    match r6 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      verifier.mark obs verifier.Phase.Semantic
+                      XRz_HybridPrepared.prepared low D val2 v hash g
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r7, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run :
+  (do
+      let r7 ←
+        do
+          let v ← verifier.Error.Insts.CoreConvertFromCodecError.from e
+          ok (core.result.Result.Err v)
+      ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+⊢ out.variant = transport.Variant.S2
+XSe_generated/XSe_PrepareVariant.lean:46:11: error: unsolved goals
+case Ok.Ok.Err.refl
+low : XRz_HybridSampler.Low
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+out : verifier.Prepared
+n : Usize
+left✝¹³ : compact.LOGICAL_SEMANTIC = ok n
+m : Usize
+left✝¹² : compact.LOGICAL_Y1 = ok m
+size : UScalar UScalarTy.Usize
+left✝¹¹ : n + m = ok size
+raw : core.result.Result (alloc.vec.Vec U8) aspis_core.r0.Error
+left✝¹⁰ : aspis_core.r0.heap.filled core.marker.CopyU8 size 0#u8 = ok raw
+buffer : alloc.vec.Vec U8
+left✝⁹ :
+  core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) raw () =
+    ok (core.result.Result.Ok buffer)
+s : Slice U8
+back : Slice U8 → alloc.vec.Vec U8
+left✝⁸ : lift buffer.deref_mut = ok (s, back)
+restore : Slice U8 × Slice U8 → Slice U8
+semantic y1 : Slice U8
+left✝⁷ : core.slice.Slice.split_at_mut s n = ok ((semantic, y1), restore)
+off : Usize
+left✝⁶ : compact.OFF_Y1 = ok off
+input : Slice U8
+left✝⁵ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := compact.OFF_SEMANTIC, «end» := off } =
+    ok input
+semantic1 : Slice U8
+unit : Unit
+left✝⁴ : compact.expand_semantic input semantic = ok (core.result.Result.Ok unit, semantic1)
+off1 : Usize
+left✝³ : compact.OFF_INACTIVE = ok off1
+input1 : Slice U8
+left✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof { start := off, «end» := off1 } =
+    ok input1
+y11 : Slice U8
+e : compact.CodecError
+left✝¹ : compact.expand_values input1 y1 = ok (core.result.Result.Err e, y11)
+left✝ :
+  (do
+      let v ← verifier.Error.Insts.CoreConvertFromCodecError.from e
+      ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Ok out)
+run✝¹² :
+  (do
+      let i ← compact.LOGICAL_SEMANTIC
+      let i1 ← compact.LOGICAL_Y1
+      let i2 ← i + i1
+      let r ← aspis_core.r0.heap.filled core.marker.CopyU8 i2 0#u8
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s i
+          let i3 ← compact.OFF_Y1
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := compact.OFF_SEMANTIC, «end» := i3 }
+          let (r2, semantic1) ← compact.expand_semantic s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← compact.expand_values s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := i }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := i }
+                  let r4 ← verifier.candidate.wide_view proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          XRz_HybridPrepared.prepared low D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        verifier.Error.Insts.CoreConvertFromCodecError residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝¹¹ :
+  (do
+      let i1 ← compact.LOGICAL_Y1
+      let i2 ← n + i1
+      let r ← aspis_core.r0.heap.filled core.marker.CopyU8 i2 0#u8
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+          let i3 ← compact.OFF_Y1
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := compact.OFF_SEMANTIC, «end» := i3 }
+          let (r2, semantic1) ← compact.expand_semantic s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← compact.expand_values s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := n }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := n }
+                  let r4 ← verifier.candidate.wide_view proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          XRz_HybridPrepared.prepared low D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        verifier.Error.Insts.CoreConvertFromCodecError residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝¹⁰ :
+  (do
+      let i2 ← n + m
+      let r ← aspis_core.r0.heap.filled core.marker.CopyU8 i2 0#u8
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+          let i3 ← compact.OFF_Y1
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := compact.OFF_SEMANTIC, «end» := i3 }
+          let (r2, semantic1) ← compact.expand_semantic s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← compact.expand_values s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := n }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := n }
+                  let r4 ← verifier.candidate.wide_view proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          XRz_HybridPrepared.prepared low D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        verifier.Error.Insts.CoreConvertFromCodecError residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁹ :
+  (do
+      let r ← aspis_core.r0.heap.filled core.marker.CopyU8 size 0#u8
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+          let i3 ← compact.OFF_Y1
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := compact.OFF_SEMANTIC, «end» := i3 }
+          let (r2, semantic1) ← compact.expand_semantic s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← compact.expand_values s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := n }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := n }
+                  let r4 ← verifier.candidate.wide_view proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          XRz_HybridPrepared.prepared low D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        verifier.Error.Insts.CoreConvertFromCodecError residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁸ :
+  (do
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) raw
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+          let i3 ← compact.OFF_Y1
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := compact.OFF_SEMANTIC, «end» := i3 }
+          let (r2, semantic1) ← compact.expand_semantic s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i4 ← compact.OFF_INACTIVE
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i3, «end» := i4 }
+              let (r3, y11) ← compact.expand_values s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have s3 := split_at_mut_back (semantic1, y11);
+                  have val1 := deref_mut_back s3;
+                  do
+                  let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := n }
+                  let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := n }
+                  let r4 ← verifier.candidate.wide_view proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark obs verifier.Phase.Semantic
+                          XRz_HybridPrepared.prepared low D val2 v hash g
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, g)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r5, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        verifier.Error.Insts.CoreConvertFromCodecError residual
+                  ok (r4, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r3, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁷ :
+  (do
+      let (s, deref_mut_back) ← lift buffer.deref_mut
+      let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+      let i3 ← compact.OFF_Y1
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := compact.OFF_SEMANTIC, «end» := i3 }
+      let (r2, semantic1) ← compact.expand_semantic s1 semantic
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i4 ← compact.OFF_INACTIVE
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := i3, «end» := i4 }
+          let (r3, y11) ← compact.expand_values s2 y1
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let s4 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                    (deref_mut_back (split_at_mut_back (semantic1, y11))) { «end» := n }
+              let s5 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                    (deref_mut_back (split_at_mut_back (semantic1, y11))) { start := n }
+              let r4 ← verifier.candidate.wide_view proof s4 s5
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                  let r6 ←
+                    core.result.Result.map_err
+                        (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                  let cf4 ←
+                    match r6 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      verifier.mark obs verifier.Phase.Semantic
+                      XRz_HybridPrepared.prepared low D val2 v hash g
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r7, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁶ :
+  (do
+      let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s n
+      let i3 ← compact.OFF_Y1
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := compact.OFF_SEMANTIC, «end» := i3 }
+      let (r2, semantic1) ← compact.expand_semantic s1 semantic
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i4 ← compact.OFF_INACTIVE
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := i3, «end» := i4 }
+          let (r3, y11) ← compact.expand_values s2 y1
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let s4 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                    (back (split_at_mut_back (semantic1, y11))) { «end» := n }
+              let s5 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                    (back (split_at_mut_back (semantic1, y11))) { start := n }
+              let r4 ← verifier.candidate.wide_view proof s4 s5
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                  let r6 ←
+                    core.result.Result.map_err
+                        (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                  let cf4 ←
+                    match r6 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      verifier.mark obs verifier.Phase.Semantic
+                      XRz_HybridPrepared.prepared low D val2 v hash g
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r7, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁵ :
+  (let (semantic, y1) := (semantic, y1)
+    do
+    let i3 ← compact.OFF_Y1
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+          { start := compact.OFF_SEMANTIC, «end» := i3 }
+    let (r2, semantic1) ← compact.expand_semantic s1 semantic
+    let cf1 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let i4 ← compact.OFF_INACTIVE
+        let s2 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := i3, «end» := i4 }
+        let (r3, y11) ← compact.expand_values s2 y1
+        let cf2 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf2 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let s4 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (back (restore (semantic1, y11)))
+                  { «end» := n }
+            let s5 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back (restore (semantic1, y11)))
+                  { start := n }
+            let r4 ← verifier.candidate.wide_view proof s4 s5
+            let cf3 ←
+              match r4 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf3 with
+              | core.ops.control_flow.ControlFlow.Continue v => do
+                let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                let r6 ←
+                  core.result.Result.map_err
+                      (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                let cf4 ←
+                  match r6 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf4 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    verifier.mark obs verifier.Phase.Semantic
+                    XRz_HybridPrepared.prepared low D val2 v hash g
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r7 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r7, g)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r7 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r7, g)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r7 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  verifier.Error.Insts.CoreConvertFromCodecError residual
+            ok (r7, g)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r7 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              verifier.Error.Insts.CoreConvertFromCodecError residual
+        ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝⁴ :
+  (do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := compact.OFF_SEMANTIC, «end» := off }
+      let (r2, semantic1) ← compact.expand_semantic s1 semantic
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i4 ← compact.OFF_INACTIVE
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := off, «end» := i4 }
+          let (r3, y11) ← compact.expand_values s2 y1
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let s4 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (back (restore (semantic1, y11)))
+                    { «end» := n }
+              let s5 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                    (back (restore (semantic1, y11))) { start := n }
+              let r4 ← verifier.candidate.wide_view proof s4 s5
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                  let r6 ←
+                    core.result.Result.map_err
+                        (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                  let cf4 ←
+                    match r6 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      verifier.mark obs verifier.Phase.Semantic
+                      XRz_HybridPrepared.prepared low D val2 v hash g
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r7, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝³ :
+  (do
+      let (r2, semantic1) ← compact.expand_semantic input semantic
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i4 ← compact.OFF_INACTIVE
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := off, «end» := i4 }
+          let (r3, y11) ← compact.expand_values s2 y1
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let s4 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (back (restore (semantic1, y11)))
+                    { «end» := n }
+              let s5 ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                    (back (restore (semantic1, y11))) { start := n }
+              let r4 ← verifier.candidate.wide_view proof s4 s5
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+                  let r6 ←
+                    core.result.Result.map_err
+                        (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                  let cf4 ←
+                    match r6 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      verifier.mark obs verifier.Phase.Semantic
+                      XRz_HybridPrepared.prepared low D val2 v hash g
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r7, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    verifier.Error.Insts.CoreConvertFromCodecError residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝² :
+  (do
+      let i4 ← compact.OFF_INACTIVE
+      let s2 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof { start := off, «end» := i4 }
+      let (r3, y11) ← compact.expand_values s2 y1
+      let cf2 ←
+        match r3 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let s4 ←
+            alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (back (restore (semantic1, y11)))
+                { «end» := n }
+          let s5 ←
+            alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back (restore (semantic1, y11)))
+                { start := n }
+          let r4 ← verifier.candidate.wide_view proof s4 s5
+          let cf3 ←
+            match r4 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf3 with
+            | core.ops.control_flow.ControlFlow.Continue v => do
+              let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+              let r6 ←
+                core.result.Result.map_err
+                    (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+              let cf4 ←
+                match r6 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf4 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  verifier.mark obs verifier.Phase.Semantic
+                  XRz_HybridPrepared.prepared low D val2 v hash g
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝¹ :
+  (do
+      let s2 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := off, «end» := off1 }
+      let (r3, y11) ← compact.expand_values s2 y1
+      let cf2 ←
+        match r3 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let s4 ←
+            alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (back (restore (semantic1, y11)))
+                { «end» := n }
+          let s5 ←
+            alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back (restore (semantic1, y11)))
+                { start := n }
+          let r4 ← verifier.candidate.wide_view proof s4 s5
+          let cf3 ←
+            match r4 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf3 with
+            | core.ops.control_flow.ControlFlow.Continue v => do
+              let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+              let r6 ←
+                core.result.Result.map_err
+                    (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+              let cf4 ←
+                match r6 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf4 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  verifier.mark obs verifier.Phase.Semantic
+                  XRz_HybridPrepared.prepared low D val2 v hash g
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run✝ :
+  (do
+      let (r3, y11) ← compact.expand_values input1 y1
+      let cf2 ←
+        match r3 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let s4 ←
+            alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (back (restore (semantic1, y11)))
+                { «end» := n }
+          let s5 ←
+            alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back (restore (semantic1, y11)))
+                { start := n }
+          let r4 ← verifier.candidate.wide_view proof s4 s5
+          let cf3 ←
+            match r4 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf3 with
+            | core.ops.control_flow.ControlFlow.Continue v => do
+              let r5 ← r1_semantic.verify_observed D pub v.semantic hash obs
+              let r6 ←
+                core.result.Result.map_err
+                    (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+              let cf4 ←
+                match r6 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf4 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  verifier.mark obs verifier.Phase.Semantic
+                  XRz_HybridPrepared.prepared low D val2 v hash g
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r7, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r7, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                verifier.Error.Insts.CoreConvertFromCodecError residual
+          ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+run :
+  (do
+      let r7 ←
+        do
+          let v ← verifier.Error.Insts.CoreConvertFromCodecError.from e
+          ok (core.result.Result.Err v)
+      ok (r7, g)) =
+    ok (core.result.Result.Ok out, g)
+⊢ out.variant = transport.Variant.S2
+XSe_generated/XSe_PrepareVariant.lean:40:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+XSe_generated/XSe_PrepareVariant.lean:51:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+XSe_generated/XSe_PrepareVariant.lean:36:15: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XSe_generated/XSe_PrepareVariant.lean:41:14: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XSe_generated/XSe_PrepareVariant.lean:47:16: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XSe_generated/XSe_PrepareVariant.lean:52:15: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XSe_generated/XSe_PrepareVariant.lean:58:17: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵.̵f̵r̵o̵m̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲F̲r̲o̲m̲S̲a̲m̲e̲.̲f̲r̲o̲m̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XSe_generated/XSe_PrepareVariant.lean:63:16: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XSe_generated/XSe_PrepareVariant.lean:68:18: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵.̵f̵r̵o̵m̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲F̲r̲o̲m̲S̲a̲m̲e̲.̲f̲r̲o̲m̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XSe_generated/XSe_PrepareVariant.lean:73:17: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSe_PrepareVariant.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
