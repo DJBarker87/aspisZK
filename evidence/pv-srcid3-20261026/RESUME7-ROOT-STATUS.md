@@ -27,3 +27,11 @@ The deployed publicCorr boundary remains the actual root-helper equation,
 canonical snapshot frontier, same selected compilation and deployed public/
 snapshot association. Literal recorded public data from RunJoin11 is not an
 installed native input or a returned compilation. This row stays REDUCED.
+
+Accepted internal-layer completion: PortInternalTotal.total proves totality and
+canonicality for arbitrary U32 input lanes. PortInternalModel.source proves the
+full field-model equation for canonical inputs; PortInternalCopy.source proves
+exact complete-Result equality with R0PoseidonCopy.internal_linear at its frozen
+shift table. Accepted final targets: 40107 and 40108; all printed axioms are
+standard. No external-layer, full permutation/parent or 21 Lean cell claim is
+inferred from this internal-layer completion.

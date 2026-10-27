@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortInternalTotal.lean:52:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Array.update ?m.130 0#usize ?m.134
+in the target expression
+  (do
+      let r ← ok reduced
+      let a ← Array.update state 0#usize r
+      ok (PV_Src_PortInternalLoop.steps 15 1#usize a full)) =
+    ok (PV_Src_PortInternalLoop.steps 15 1#usize (Std.Array.set state 0#usize reduced) full)
+
+case refine_1
+state : State
+part : U64
+hpart : PV_Src_PortSumTrace.fold (List.map (UScalar.cast UScalarTy.U64) ↑(tail state)) 0#u64 = ok part
+right✝ : ↑part = PV_Src_PortSumTotal.natSum (List.map (UScalar.cast UScalarTy.U64) ↑(tail state))
+first : U32 := (↑state)[0]!
+full : U64 := part.wrapping_add (UScalar.cast UScalarTy.U64 first)
+x : U64 :=
+  (part.wrapping_add (UScalar.cast UScalarTy.U64 aspis_core.field.P)).wrapping_sub (UScalar.cast UScalarTy.U64 first)
+reduced : U32 := PV_Src_ScalarReduce.value x
+hr : aspis_core.field.M31.reduce_u62 x = ok reduced
+⊢ (do
+      let r ← ok reduced
+      let a ← Array.update state 0#usize r
+      ok (PV_Src_PortInternalLoop.steps 15 1#usize a full)) =
+    ok (PV_Src_PortInternalLoop.steps 15 1#usize (Std.Array.set state 0#usize reduced) full)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortInternalTotal.lean:52:58: error: Expected type must not contain metavariables
+  ↑0#usize < ↑?m.129
+'R1Z.PV_Src_PortInternalTotal.tail_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PortInternalTotal.tail_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PortInternalTotal.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

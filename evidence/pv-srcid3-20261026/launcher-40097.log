@@ -1,0 +1,21 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0401); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortInternalSumField.lean:40:8: error(lean.unknownIdentifier): Unknown constant `List.getElem!_eq_getElem`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortInternalSumField.lean:51:92: error: unsolved goals
+K : Type
+inst✝ : Field K
+state : State
+part : U64
+hp : ↑part = PV_Src_PortSumTotal.natSum (List.map (UScalar.cast UScalarTy.U64) ↑(tail state))
+⊢ List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn (liftU ∘ fun j => (↑state)[↑j + 1]!)) =
+    List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun j => liftU (↑state)[↑j + 1]!)
+'R1Z.PV_Src_PortInternalSumField.fold_cast' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_Src_PortInternalSumField.cast_sum' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_Src_PortInternalSumField.tail_eq_ofFn' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PortInternalSumField.part_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.72
+	Maximum resident set size (kbytes): 4124364
+	Swaps: 0
+	Exit status: 1
