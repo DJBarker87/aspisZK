@@ -3,7 +3,15 @@ from pathlib import Path
 import json,subprocess,sys,time,shlex
 P=Path(__file__).resolve().parent; R=P.parents[1]
 B='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'; HOST='dombarker@100.108.41.90'
-def ssh(cmd,**kw):return subprocess.run(['ssh',HOST,cmd],**kw)
+def ssh(cmd,**kw):
+ for retry in range(11):
+  result=subprocess.run(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',HOST,cmd],**kw)
+  if result.returncode!=255 or 'systemd-run' in cmd or retry==10:return result
+  with (P/'JHf_TRANSPORT.jsonl').open('a') as f:
+   f.write(json.dumps(dict(step=cmd,exit=255,retry=retry+1,wait_seconds=60,time=time.time()))+'\n')
+  print('Transient SSH failure before submission; retry after 60s',flush=True)
+  time.sleep(60)
+
 n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and (mod.startswith('JHf_'))
 a=f'JHf_TX2_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/recount8-20261026/Rc8_002/receipt.json').read_text())
