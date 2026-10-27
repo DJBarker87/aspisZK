@@ -1,0 +1,1858 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_StagedKernel.lean:39:4: error: Tactic `rfl` failed: The left-hand side
+  let (rank1, d0) := PV_CB3_StagedMachinePass.pass rank0
+  let (rank2, d1) := PV_CB3_StagedMachinePass.pass rank1
+  let (rank3, d2) := PV_CB3_StagedMachinePass.pass rank2
+  let (rank4, d3) := PV_CB3_StagedMachinePass.pass rank3
+  let (rank5, d4) := PV_CB3_StagedMachinePass.pass rank4
+  let (rank6, d5) := PV_CB3_StagedMachinePass.pass rank5
+  let (rank7, d6) := PV_CB3_StagedMachinePass.pass rank6
+  let (rank8, d7) := PV_CB3_StagedMachinePass.pass rank7
+  let (digits, wrapped) :=
+    PV_CB3_StagedMachineCarry.carry (Array.make 8#usize [d0, d1, d2, d3, d4, d5, d6, d7] ⋯)
+      ((limb rank8 ⟨0, ⋯⟩).wrapping_add 1#u32)
+  do
+  let digits1 ←
+    if wrapped = true then
+        let (digits2, _) := PV_CB3_StagedMachineCarry.carry digits 1#u32
+        ok digits2
+      else ok digits
+  PV_CB3_StagedSource.aspis_core.field.wide_exact.WideExact.new
+      { c0 := { a := limb digits1 ⟨0, ⋯⟩, b := limb digits1 ⟨1, ⋯⟩ },
+        c1 := { a := limb digits1 ⟨2, ⋯⟩, b := limb digits1 ⟨3, ⋯⟩ } }
+      { c0 := { a := limb digits1 ⟨4, ⋯⟩, b := limb digits1 ⟨5, ⋯⟩ },
+        c1 := { a := limb digits1 ⟨6, ⋯⟩, b := limb digits1 ⟨7, ⋯⟩ } }
+is not definitionally equal to the right-hand side
+  PV_CB3_StagedFields.aspis_core.field.wide_exact.WideExact.new
+    {
+      c0 :=
+        {
+          a :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (PV_CB3_StagedMachineCarry.carry
+                      (Array.make 8#usize
+                        [(PV_CB3_StagedMachinePass.pass rank0).2,
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                        ⋯)
+                      ((limb
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                            ⟨0, pipeline._proof_3⟩).wrapping_add
+                        1#u32)).1
+                  1#u32).1
+              ⟨0, PV_CB3_StagedDecode.decode._proof_2⟩,
+          b :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (PV_CB3_StagedMachineCarry.carry
+                      (Array.make 8#usize
+                        [(PV_CB3_StagedMachinePass.pass rank0).2,
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                        ⋯)
+                      ((limb
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                            ⟨0, pipeline._proof_3⟩).wrapping_add
+                        1#u32)).1
+                  1#u32).1
+              ⟨1, PV_CB3_StagedDecode.decode._proof_3⟩ },
+      c1 :=
+        {
+          a :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (PV_CB3_StagedMachineCarry.carry
+                      (Array.make 8#usize
+                        [(PV_CB3_StagedMachinePass.pass rank0).2,
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                        ⋯)
+                      ((limb
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                            ⟨0, pipeline._proof_3⟩).wrapping_add
+                        1#u32)).1
+                  1#u32).1
+              ⟨2, PV_CB3_StagedDecode.decode._proof_4⟩,
+          b :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (PV_CB3_StagedMachineCarry.carry
+                      (Array.make 8#usize
+                        [(PV_CB3_StagedMachinePass.pass rank0).2,
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                        ⋯)
+                      ((limb
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                            ⟨0, pipeline._proof_3⟩).wrapping_add
+                        1#u32)).1
+                  1#u32).1
+              ⟨3, PV_CB3_StagedDecode.decode._proof_5⟩ } }
+    {
+      c0 :=
+        {
+          a :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (PV_CB3_StagedMachineCarry.carry
+                      (Array.make 8#usize
+                        [(PV_CB3_StagedMachinePass.pass rank0).2,
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                        ⋯)
+                      ((limb
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                            ⟨0, pipeline._proof_3⟩).wrapping_add
+                        1#u32)).1
+                  1#u32).1
+              ⟨4, PV_CB3_StagedDecode.decode._proof_6⟩,
+          b :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (PV_CB3_StagedMachineCarry.carry
+                      (Array.make 8#usize
+                        [(PV_CB3_StagedMachinePass.pass rank0).2,
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                        ⋯)
+                      ((limb
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                            ⟨0, pipeline._proof_3⟩).wrapping_add
+                        1#u32)).1
+                  1#u32).1
+              ⟨5, PV_CB3_StagedDecode.decode._proof_7⟩ },
+      c1 :=
+        {
+          a :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (PV_CB3_StagedMachineCarry.carry
+                      (Array.make 8#usize
+                        [(PV_CB3_StagedMachinePass.pass rank0).2,
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                        ⋯)
+                      ((limb
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                            ⟨0, pipeline._proof_3⟩).wrapping_add
+                        1#u32)).1
+                  1#u32).1
+              ⟨6, PV_CB3_StagedDecode.decode._proof_8⟩,
+          b :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (PV_CB3_StagedMachineCarry.carry
+                      (Array.make 8#usize
+                        [(PV_CB3_StagedMachinePass.pass rank0).2,
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                        ⋯)
+                      ((limb
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                            ⟨0, pipeline._proof_3⟩).wrapping_add
+                        1#u32)).1
+                  1#u32).1
+              ⟨7, PV_CB3_StagedDecode.decode._proof_9⟩ } }
+
+case isTrue
+block : Std.Array U8 32#usize
+rank0 : Std.Array U32 8#usize
+hr : PV_CB3_StagedSource.staged_reference.words block = ok rank0
+hc :
+  (PV_CB3_StagedMachineCarry.carry
+        (Array.make 8#usize
+          [(PV_CB3_StagedMachinePass.pass rank0).2,
+            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+            (PV_CB3_StagedMachinePass.pass
+                (PV_CB3_StagedMachinePass.pass
+                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+            (PV_CB3_StagedMachinePass.pass
+                (PV_CB3_StagedMachinePass.pass
+                    (PV_CB3_StagedMachinePass.pass
+                        (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+            (PV_CB3_StagedMachinePass.pass
+                (PV_CB3_StagedMachinePass.pass
+                    (PV_CB3_StagedMachinePass.pass
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+            (PV_CB3_StagedMachinePass.pass
+                (PV_CB3_StagedMachinePass.pass
+                    (PV_CB3_StagedMachinePass.pass
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+            (PV_CB3_StagedMachinePass.pass
+                (PV_CB3_StagedMachinePass.pass
+                    (PV_CB3_StagedMachinePass.pass
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+          ⋯)
+        ((limb
+              (PV_CB3_StagedMachinePass.pass
+                  (PV_CB3_StagedMachinePass.pass
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+              ⟨0, pipeline._proof_3⟩).wrapping_add
+          1#u32)).2 =
+    true
+⊢ (let (rank1, d0) := PV_CB3_StagedMachinePass.pass rank0
+    let (rank2, d1) := PV_CB3_StagedMachinePass.pass rank1
+    let (rank3, d2) := PV_CB3_StagedMachinePass.pass rank2
+    let (rank4, d3) := PV_CB3_StagedMachinePass.pass rank3
+    let (rank5, d4) := PV_CB3_StagedMachinePass.pass rank4
+    let (rank6, d5) := PV_CB3_StagedMachinePass.pass rank5
+    let (rank7, d6) := PV_CB3_StagedMachinePass.pass rank6
+    let (rank8, d7) := PV_CB3_StagedMachinePass.pass rank7
+    let (digits, wrapped) :=
+      PV_CB3_StagedMachineCarry.carry (Array.make 8#usize [d0, d1, d2, d3, d4, d5, d6, d7] ⋯)
+        ((limb rank8 ⟨0, ⋯⟩).wrapping_add 1#u32)
+    do
+    let digits1 ←
+      if wrapped = true then
+          let (digits2, _) := PV_CB3_StagedMachineCarry.carry digits 1#u32
+          ok digits2
+        else ok digits
+    PV_CB3_StagedSource.aspis_core.field.wide_exact.WideExact.new
+        { c0 := { a := limb digits1 ⟨0, ⋯⟩, b := limb digits1 ⟨1, ⋯⟩ },
+          c1 := { a := limb digits1 ⟨2, ⋯⟩, b := limb digits1 ⟨3, ⋯⟩ } }
+        { c0 := { a := limb digits1 ⟨4, ⋯⟩, b := limb digits1 ⟨5, ⋯⟩ },
+          c1 := { a := limb digits1 ⟨6, ⋯⟩, b := limb digits1 ⟨7, ⋯⟩ } }) =
+    PV_CB3_StagedFields.aspis_core.field.wide_exact.WideExact.new
+      {
+        c0 :=
+          {
+            a :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (PV_CB3_StagedMachineCarry.carry
+                        (Array.make 8#usize
+                          [(PV_CB3_StagedMachinePass.pass rank0).2,
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                          ⋯)
+                        ((limb
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass
+                                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                              ⟨0, pipeline._proof_3⟩).wrapping_add
+                          1#u32)).1
+                    1#u32).1
+                ⟨0, PV_CB3_StagedDecode.decode._proof_2⟩,
+            b :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (PV_CB3_StagedMachineCarry.carry
+                        (Array.make 8#usize
+                          [(PV_CB3_StagedMachinePass.pass rank0).2,
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                          ⋯)
+                        ((limb
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass
+                                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                              ⟨0, pipeline._proof_3⟩).wrapping_add
+                          1#u32)).1
+                    1#u32).1
+                ⟨1, PV_CB3_StagedDecode.decode._proof_3⟩ },
+        c1 :=
+          {
+            a :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (PV_CB3_StagedMachineCarry.carry
+                        (Array.make 8#usize
+                          [(PV_CB3_StagedMachinePass.pass rank0).2,
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                          ⋯)
+                        ((limb
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass
+                                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                              ⟨0, pipeline._proof_3⟩).wrapping_add
+                          1#u32)).1
+                    1#u32).1
+                ⟨2, PV_CB3_StagedDecode.decode._proof_4⟩,
+            b :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (PV_CB3_StagedMachineCarry.carry
+                        (Array.make 8#usize
+                          [(PV_CB3_StagedMachinePass.pass rank0).2,
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                          ⋯)
+                        ((limb
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass
+                                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                              ⟨0, pipeline._proof_3⟩).wrapping_add
+                          1#u32)).1
+                    1#u32).1
+                ⟨3, PV_CB3_StagedDecode.decode._proof_5⟩ } }
+      {
+        c0 :=
+          {
+            a :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (PV_CB3_StagedMachineCarry.carry
+                        (Array.make 8#usize
+                          [(PV_CB3_StagedMachinePass.pass rank0).2,
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                          ⋯)
+                        ((limb
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass
+                                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                              ⟨0, pipeline._proof_3⟩).wrapping_add
+                          1#u32)).1
+                    1#u32).1
+                ⟨4, PV_CB3_StagedDecode.decode._proof_6⟩,
+            b :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (PV_CB3_StagedMachineCarry.carry
+                        (Array.make 8#usize
+                          [(PV_CB3_StagedMachinePass.pass rank0).2,
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                          ⋯)
+                        ((limb
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass
+                                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                              ⟨0, pipeline._proof_3⟩).wrapping_add
+                          1#u32)).1
+                    1#u32).1
+                ⟨5, PV_CB3_StagedDecode.decode._proof_7⟩ },
+        c1 :=
+          {
+            a :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (PV_CB3_StagedMachineCarry.carry
+                        (Array.make 8#usize
+                          [(PV_CB3_StagedMachinePass.pass rank0).2,
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                          ⋯)
+                        ((limb
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass
+                                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                              ⟨0, pipeline._proof_3⟩).wrapping_add
+                          1#u32)).1
+                    1#u32).1
+                ⟨6, PV_CB3_StagedDecode.decode._proof_8⟩,
+            b :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (PV_CB3_StagedMachineCarry.carry
+                        (Array.make 8#usize
+                          [(PV_CB3_StagedMachinePass.pass rank0).2,
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass
+                                                        (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                          ⋯)
+                        ((limb
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass
+                                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                              ⟨0, pipeline._proof_3⟩).wrapping_add
+                          1#u32)).1
+                    1#u32).1
+                ⟨7, PV_CB3_StagedDecode.decode._proof_9⟩ } }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_StagedKernel.lean:42:4: error: Tactic `rfl` failed: The left-hand side
+  let (rank1, d0) := PV_CB3_StagedMachinePass.pass rank0
+  let (rank2, d1) := PV_CB3_StagedMachinePass.pass rank1
+  let (rank3, d2) := PV_CB3_StagedMachinePass.pass rank2
+  let (rank4, d3) := PV_CB3_StagedMachinePass.pass rank3
+  let (rank5, d4) := PV_CB3_StagedMachinePass.pass rank4
+  let (rank6, d5) := PV_CB3_StagedMachinePass.pass rank5
+  let (rank7, d6) := PV_CB3_StagedMachinePass.pass rank6
+  let (rank8, d7) := PV_CB3_StagedMachinePass.pass rank7
+  let (digits, wrapped) :=
+    PV_CB3_StagedMachineCarry.carry (Array.make 8#usize [d0, d1, d2, d3, d4, d5, d6, d7] ⋯)
+      ((limb rank8 ⟨0, ⋯⟩).wrapping_add 1#u32)
+  do
+  let digits1 ←
+    if wrapped = true then
+        let (digits2, _) := PV_CB3_StagedMachineCarry.carry digits 1#u32
+        ok digits2
+      else ok digits
+  PV_CB3_StagedSource.aspis_core.field.wide_exact.WideExact.new
+      { c0 := { a := limb digits1 ⟨0, ⋯⟩, b := limb digits1 ⟨1, ⋯⟩ },
+        c1 := { a := limb digits1 ⟨2, ⋯⟩, b := limb digits1 ⟨3, ⋯⟩ } }
+      { c0 := { a := limb digits1 ⟨4, ⋯⟩, b := limb digits1 ⟨5, ⋯⟩ },
+        c1 := { a := limb digits1 ⟨6, ⋯⟩, b := limb digits1 ⟨7, ⋯⟩ } }
+is not definitionally equal to the right-hand side
+  PV_CB3_StagedFields.aspis_core.field.wide_exact.WideExact.new
+    {
+      c0 :=
+        {
+          a :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (Array.make 8#usize
+                    [(PV_CB3_StagedMachinePass.pass rank0).2,
+                      (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                    ⋯)
+                  ((limb
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                        ⟨0, pipeline._proof_3⟩).wrapping_add
+                    1#u32)).1
+              ⟨0, PV_CB3_StagedDecode.decode._proof_2⟩,
+          b :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (Array.make 8#usize
+                    [(PV_CB3_StagedMachinePass.pass rank0).2,
+                      (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                    ⋯)
+                  ((limb
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                        ⟨0, pipeline._proof_3⟩).wrapping_add
+                    1#u32)).1
+              ⟨1, PV_CB3_StagedDecode.decode._proof_3⟩ },
+      c1 :=
+        {
+          a :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (Array.make 8#usize
+                    [(PV_CB3_StagedMachinePass.pass rank0).2,
+                      (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                    ⋯)
+                  ((limb
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                        ⟨0, pipeline._proof_3⟩).wrapping_add
+                    1#u32)).1
+              ⟨2, PV_CB3_StagedDecode.decode._proof_4⟩,
+          b :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (Array.make 8#usize
+                    [(PV_CB3_StagedMachinePass.pass rank0).2,
+                      (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                    ⋯)
+                  ((limb
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                        ⟨0, pipeline._proof_3⟩).wrapping_add
+                    1#u32)).1
+              ⟨3, PV_CB3_StagedDecode.decode._proof_5⟩ } }
+    {
+      c0 :=
+        {
+          a :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (Array.make 8#usize
+                    [(PV_CB3_StagedMachinePass.pass rank0).2,
+                      (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                    ⋯)
+                  ((limb
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                        ⟨0, pipeline._proof_3⟩).wrapping_add
+                    1#u32)).1
+              ⟨4, PV_CB3_StagedDecode.decode._proof_6⟩,
+          b :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (Array.make 8#usize
+                    [(PV_CB3_StagedMachinePass.pass rank0).2,
+                      (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                    ⋯)
+                  ((limb
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                        ⟨0, pipeline._proof_3⟩).wrapping_add
+                    1#u32)).1
+              ⟨5, PV_CB3_StagedDecode.decode._proof_7⟩ },
+      c1 :=
+        {
+          a :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (Array.make 8#usize
+                    [(PV_CB3_StagedMachinePass.pass rank0).2,
+                      (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                    ⋯)
+                  ((limb
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                        ⟨0, pipeline._proof_3⟩).wrapping_add
+                    1#u32)).1
+              ⟨6, PV_CB3_StagedDecode.decode._proof_8⟩,
+          b :=
+            limb
+              (PV_CB3_StagedMachineCarry.carry
+                  (Array.make 8#usize
+                    [(PV_CB3_StagedMachinePass.pass rank0).2,
+                      (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                    ⋯)
+                  ((limb
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                        ⟨0, pipeline._proof_3⟩).wrapping_add
+                    1#u32)).1
+              ⟨7, PV_CB3_StagedDecode.decode._proof_9⟩ } }
+
+case isFalse
+block : Std.Array U8 32#usize
+rank0 : Std.Array U32 8#usize
+hr : PV_CB3_StagedSource.staged_reference.words block = ok rank0
+hc :
+  ¬(PV_CB3_StagedMachineCarry.carry
+          (Array.make 8#usize
+            [(PV_CB3_StagedMachinePass.pass rank0).2,
+              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+              (PV_CB3_StagedMachinePass.pass
+                  (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+              (PV_CB3_StagedMachinePass.pass
+                  (PV_CB3_StagedMachinePass.pass
+                      (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+              (PV_CB3_StagedMachinePass.pass
+                  (PV_CB3_StagedMachinePass.pass
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+              (PV_CB3_StagedMachinePass.pass
+                  (PV_CB3_StagedMachinePass.pass
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+              (PV_CB3_StagedMachinePass.pass
+                  (PV_CB3_StagedMachinePass.pass
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+              (PV_CB3_StagedMachinePass.pass
+                  (PV_CB3_StagedMachinePass.pass
+                      (PV_CB3_StagedMachinePass.pass
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+            ⋯)
+          ((limb
+                (PV_CB3_StagedMachinePass.pass
+                    (PV_CB3_StagedMachinePass.pass
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                ⟨0, pipeline._proof_3⟩).wrapping_add
+            1#u32)).2 =
+      true
+⊢ (let (rank1, d0) := PV_CB3_StagedMachinePass.pass rank0
+    let (rank2, d1) := PV_CB3_StagedMachinePass.pass rank1
+    let (rank3, d2) := PV_CB3_StagedMachinePass.pass rank2
+    let (rank4, d3) := PV_CB3_StagedMachinePass.pass rank3
+    let (rank5, d4) := PV_CB3_StagedMachinePass.pass rank4
+    let (rank6, d5) := PV_CB3_StagedMachinePass.pass rank5
+    let (rank7, d6) := PV_CB3_StagedMachinePass.pass rank6
+    let (rank8, d7) := PV_CB3_StagedMachinePass.pass rank7
+    let (digits, wrapped) :=
+      PV_CB3_StagedMachineCarry.carry (Array.make 8#usize [d0, d1, d2, d3, d4, d5, d6, d7] ⋯)
+        ((limb rank8 ⟨0, ⋯⟩).wrapping_add 1#u32)
+    do
+    let digits1 ←
+      if wrapped = true then
+          let (digits2, _) := PV_CB3_StagedMachineCarry.carry digits 1#u32
+          ok digits2
+        else ok digits
+    PV_CB3_StagedSource.aspis_core.field.wide_exact.WideExact.new
+        { c0 := { a := limb digits1 ⟨0, ⋯⟩, b := limb digits1 ⟨1, ⋯⟩ },
+          c1 := { a := limb digits1 ⟨2, ⋯⟩, b := limb digits1 ⟨3, ⋯⟩ } }
+        { c0 := { a := limb digits1 ⟨4, ⋯⟩, b := limb digits1 ⟨5, ⋯⟩ },
+          c1 := { a := limb digits1 ⟨6, ⋯⟩, b := limb digits1 ⟨7, ⋯⟩ } }) =
+    PV_CB3_StagedFields.aspis_core.field.wide_exact.WideExact.new
+      {
+        c0 :=
+          {
+            a :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (Array.make 8#usize
+                      [(PV_CB3_StagedMachinePass.pass rank0).2,
+                        (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                      ⋯)
+                    ((limb
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                          ⟨0, pipeline._proof_3⟩).wrapping_add
+                      1#u32)).1
+                ⟨0, PV_CB3_StagedDecode.decode._proof_2⟩,
+            b :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (Array.make 8#usize
+                      [(PV_CB3_StagedMachinePass.pass rank0).2,
+                        (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                      ⋯)
+                    ((limb
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                          ⟨0, pipeline._proof_3⟩).wrapping_add
+                      1#u32)).1
+                ⟨1, PV_CB3_StagedDecode.decode._proof_3⟩ },
+        c1 :=
+          {
+            a :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (Array.make 8#usize
+                      [(PV_CB3_StagedMachinePass.pass rank0).2,
+                        (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                      ⋯)
+                    ((limb
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                          ⟨0, pipeline._proof_3⟩).wrapping_add
+                      1#u32)).1
+                ⟨2, PV_CB3_StagedDecode.decode._proof_4⟩,
+            b :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (Array.make 8#usize
+                      [(PV_CB3_StagedMachinePass.pass rank0).2,
+                        (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                      ⋯)
+                    ((limb
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                          ⟨0, pipeline._proof_3⟩).wrapping_add
+                      1#u32)).1
+                ⟨3, PV_CB3_StagedDecode.decode._proof_5⟩ } }
+      {
+        c0 :=
+          {
+            a :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (Array.make 8#usize
+                      [(PV_CB3_StagedMachinePass.pass rank0).2,
+                        (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                      ⋯)
+                    ((limb
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                          ⟨0, pipeline._proof_3⟩).wrapping_add
+                      1#u32)).1
+                ⟨4, PV_CB3_StagedDecode.decode._proof_6⟩,
+            b :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (Array.make 8#usize
+                      [(PV_CB3_StagedMachinePass.pass rank0).2,
+                        (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                      ⋯)
+                    ((limb
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                          ⟨0, pipeline._proof_3⟩).wrapping_add
+                      1#u32)).1
+                ⟨5, PV_CB3_StagedDecode.decode._proof_7⟩ },
+        c1 :=
+          {
+            a :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (Array.make 8#usize
+                      [(PV_CB3_StagedMachinePass.pass rank0).2,
+                        (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                      ⋯)
+                    ((limb
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                          ⟨0, pipeline._proof_3⟩).wrapping_add
+                      1#u32)).1
+                ⟨6, PV_CB3_StagedDecode.decode._proof_8⟩,
+            b :=
+              limb
+                (PV_CB3_StagedMachineCarry.carry
+                    (Array.make 8#usize
+                      [(PV_CB3_StagedMachinePass.pass rank0).2,
+                        (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).2,
+                        (PV_CB3_StagedMachinePass.pass
+                            (PV_CB3_StagedMachinePass.pass
+                                (PV_CB3_StagedMachinePass.pass
+                                    (PV_CB3_StagedMachinePass.pass
+                                        (PV_CB3_StagedMachinePass.pass
+                                            (PV_CB3_StagedMachinePass.pass
+                                                (PV_CB3_StagedMachinePass.pass
+                                                    (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).2]
+                      ⋯)
+                    ((limb
+                          (PV_CB3_StagedMachinePass.pass
+                              (PV_CB3_StagedMachinePass.pass
+                                  (PV_CB3_StagedMachinePass.pass
+                                      (PV_CB3_StagedMachinePass.pass
+                                          (PV_CB3_StagedMachinePass.pass
+                                              (PV_CB3_StagedMachinePass.pass
+                                                  (PV_CB3_StagedMachinePass.pass
+                                                      (PV_CB3_StagedMachinePass.pass rank0).1).1).1).1).1).1).1).1
+                          ⟨0, pipeline._proof_3⟩).wrapping_add
+                      1#u32)).1
+                ⟨7, PV_CB3_StagedDecode.decode._proof_9⟩ } }
+'R1Z.PV_CB3_StagedKernel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

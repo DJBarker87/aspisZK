@@ -1,0 +1,64 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0437); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_Op258Fold.lean:41:4: error: Type mismatch: After simplification, term
+  PV_CB3_LoopEquations.done_step
+    (fun x =>
+      match x with
+      | (clear1, row1) => PV_CB3_Op258Ref.reference.all_slots_clear_loop.body values masks chi clear1 row1)
+    (clear, row) clear (PV_CB3_Op258End.body_done values masks chi clear row hr)
+ has type
+  @Eq (Result Bool)
+    (loop
+      (fun x =>
+        match x with
+        | (clear1, row1) => PV_CB3_Op258Ref.reference.all_slots_clear_loop.body values masks chi clear1 row1)
+      (clear, row))
+    (ok clear)
+but is expected to have type
+  @Eq (Result Bool) (PV_CB3_Op258Ref.reference.all_slots_clear_loop values masks chi clear row) (ok clear)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_Op258Fold.lean:51:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  loop ?m.112 (clear, row)
+in the target expression
+  PV_CB3_Op258Ref.reference.all_slots_clear_loop values masks chi clear row =
+    ok (clear && scan values masks chi (n + 1) row)
+
+case succ
+values : Rows
+masks : Std.Array U16 64#usize
+chi : aspis_core.field.QM31
+bound : (↑values).length ≤ 1024
+n : ℕ
+ih :
+  ∀ (row : Usize) (clear : Bool),
+    ↑row + n = (↑values).length →
+      PV_CB3_Op258Ref.reference.all_slots_clear_loop values masks chi clear row =
+        ok (clear && scan values masks chi n row)
+row : Usize
+clear : Bool
+hlen : ↑row + (n + 1) = (↑values).length
+hr : row < Slice.len values
+hm : ↑row < 1024
+hi : ↑(row.wrapping_add 1#usize) = ↑row + 1
+hstep :
+  PV_CB3_Op258Ref.reference.all_slots_clear_loop.body values masks chi clear row =
+    ok (cont (clear && keep values masks chi row, row.wrapping_add 1#usize))
+⊢ PV_CB3_Op258Ref.reference.all_slots_clear_loop values masks chi clear row =
+    ok (clear && scan values masks chi (n + 1) row)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_Op258Fold.lean:51:59: error: Application type mismatch: The argument
+  hstep
+has type
+  PV_CB3_Op258Ref.reference.all_slots_clear_loop.body values masks chi clear row =
+    ok (cont (clear && keep values masks chi row, row.wrapping_add 1#usize))
+but is expected to have type
+  ?m.112 (clear, row) = ok (cont ?m.115)
+in the application
+  PV_CB3_LoopEquations.continue_step ?m.112 (clear, row) ?m.115 hstep
+'R1Z.PV_CB3_Op258Fold.body_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_Op258Fold.loop_scan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_Op258Fold.source_scan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.14
+	Maximum resident set size (kbytes): 2629412
+	Swaps: 0
+	Exit status: 1

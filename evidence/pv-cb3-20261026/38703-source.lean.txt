@@ -1,0 +1,34 @@
+import R1Z.PV_CB3_StagedBits
+import R1Z.PV_CB3_MachineDigits
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_CB3_StagedIterate
+open Aeneas Aeneas.Std
+open PV_CB3_StagedPacking PV_CB3_StagedBits
+
+def passes : Nat → Array U32 8#usize → List U32 × Array U32 8#usize
+  | 0, rank => ([],rank)
+  | n+1, rank =>
+    let first := PV_CB3_StagedMachinePass.pass rank
+    let rest := passes n first.1
+    (first.2 :: rest.1,rest.2)
+
+theorem projection (n : Nat) (rank : Array U32 8#usize) :
+    (passes n rank).1.map UScalar.bv = (PV_CB3_MachineDigits.split n (bits rank)).1 ∧
+    bits (passes n rank).2 = (PV_CB3_MachineDigits.split n (bits rank)).2 := by
+  induction n generalizing rank with
+  | zero => exact ⟨rfl,rfl⟩
+  | succ n ih =>
+    have h := ih (PV_CB3_StagedMachinePass.pass rank).1
+    simp only [passes,PV_CB3_MachineDigits.split,List.map_cons] at h ⊢
+    rw [pass_digit, h.1, h.2, pass_bits]
+    exact ⟨rfl,rfl⟩
+
+theorem digits_length (n : Nat) (rank : Array U32 8#usize) :
+    (passes n rank).1.length = n := by
+  induction n generalizing rank with
+  | zero => rfl
+  | succ n ih => simp only [passes,List.length_cons,ih]
+#print axioms projection
+#print axioms digits_length
+end R1Z.PV_CB3_StagedIterate

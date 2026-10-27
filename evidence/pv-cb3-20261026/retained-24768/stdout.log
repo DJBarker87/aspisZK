@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/codex-pv-cb3-20261026/lean-sources/R1Z/PV_CB3_WordArithmetic.lean:8:82: error: Tactic `rfl` failed: The left-hand side
+  ↑PV_CB3_SamplerWordSource.denominator
+is not definitionally equal to the right-hand side
+  base
+
+⊢ ↑PV_CB3_SamplerWordSource.denominator = base
+/home/dombarker/project-offloads/codex-pv-cb3-20261026/lean-sources/R1Z/PV_CB3_WordArithmetic.lean:17:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ d ≤ 18446744073709551615
+  c ≥ 0
+  c - d ≤ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+  a - c ≤ -1
+where
+ a := ↑base
+ b := ↑↑prior
+ c := ↑radix
+ d := ↑prior.bv.toNat
+/home/dombarker/project-offloads/codex-pv-cb3-20261026/lean-sources/R1Z/PV_CB3_WordArithmetic.lean:33:35: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑q
+in the target expression
+  q.bv.toNat < 2 ^ 32
+
+word : U32
+prior : U64
+bound : ↑prior < base
+q r : U64
+hr : PV_CB3_ShippedOp249word.reference_split.word_step word prior = ok (UScalar.cast UScalarTy.U32 q, r)
+hqv : ↑q = PV_CB3_SamplerWord.dividend ↑prior ↑word / base
+hrv : ↑r = PV_CB3_SamplerWord.dividend ↑prior ↑word % base
+hw : ↑word < radix
+hqb : PV_CB3_SamplerWord.dividend ↑prior ↑word / base < radix
+⊢ q.bv.toNat < 2 ^ 32
+'R1Z.PV_CB3_WordArithmetic.denominator_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_WordArithmetic.dividend_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_WordArithmetic.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

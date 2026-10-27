@@ -1,0 +1,55 @@
+import R1Z.PV_CB3_StagedByteWord
+import R1Z.PV_CB3_SamplerCarry
+import R1Z.PV_CB3_SamplerWord
+set_option autoImplicit false
+namespace R1Z.PV_CB3_ByteGroups
+open Aeneas Aeneas.Std
+open PV_CB3_SamplerCarry
+
+def word (a b c d : U8) : U32 := core.num.U32.from_le_bytes (Array.make 4#usize [a,b,c,d])
+
+def groups : List U8 → List U32
+  | a::b::c::d::rest => word a b c d :: groups rest
+  | _ => []
+
+theorem four_value (base a b c d : Nat) (rest : List Nat) :
+    value base (a::b::c::d::rest) =
+      (a + base*(b + base*(c + base*d))) + base^4 * value base rest := by
+  simp only [value]
+  ring
+
+theorem radix_four : (256 : Nat)^4 = PV_CB3_SamplerWord.radix := by
+  rfl
+
+theorem group_value (xs : List U8) (shape : xs.length % 4 = 0) :
+    value PV_CB3_SamplerWord.radix ((groups xs).map UScalar.val) =
+      value 256 (xs.map UScalar.val) := by
+  fun_induction groups xs with
+  | case1 a b c d rest ih =>
+    have hs : rest.length % 4 = 0 := by
+      simp only [List.length_cons] at shape
+      omega
+    change (word a b c d).val + PV_CB3_SamplerWord.radix *
+      value PV_CB3_SamplerWord.radix ((groups rest).map UScalar.val) =
+      value 256 (a.val::b.val::c.val::d.val::rest.map UScalar.val)
+    rw [show (word a b c d).val = a.val+256*(b.val+256*(c.val+256*d.val)) from
+      PV_CB3_StagedByteWord.value a b c d,ih hs]
+    rw [four_value]
+    rfl
+  | case2 xs h =>
+    cases xs with
+    | nil => rfl
+    | cons a xs =>
+      cases xs with
+      | nil => simp at shape
+      | cons b xs =>
+        cases xs with
+        | nil => simp at shape
+        | cons c xs =>
+          cases xs with
+          | nil => simp at shape
+          | cons d xs => exact False.elim (h a b c d xs rfl)
+#print axioms four_value
+#print axioms radix_four
+#print axioms group_value
+end R1Z.PV_CB3_ByteGroups

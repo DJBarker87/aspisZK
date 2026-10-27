@@ -1,0 +1,50 @@
+../../../docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB3_GammaDigits.lean:15:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+base : Nat
+digits : List Nat
+high : Nat
+⊢ (have first := addCarry base digits (high + 1);
+      if first.snd = 0 then first.fst else (addCarry base first.fst 1).fst).length =
+    digits.length
+../../../docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB3_GammaDigits.lean:21:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+base : Nat
+positive : 0 < base
+digits : List Nat
+high : Nat
+⊢ ∀ (d : Nat),
+    (d ∈
+        have first := addCarry base digits (high + 1);
+        if first.snd = 0 then first.fst else (addCarry base first.fst 1).fst) →
+      d < base
+../../../docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB3_GammaDigits.lean:39:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (addCarry base digits (high + 1)).snd
+in the target expression
+  value base
+      (have first := addCarry base digits (high + 1);
+      if first.snd = 0 then first.fst else (addCarry base first.fst 1).fst) =
+    if value base digits + high + 1 < base ^ digits.length then value base digits + high + 1
+    else value base digits + high + 2 - base ^ digits.length
+
+base : Nat
+positive : 0 < base
+digits : List Nat
+high : Nat
+canonical : ∀ (d : Nat), d ∈ digits → d < base
+high_bound : high < base ^ digits.length - 1
+low_bound : value base digits < base ^ digits.length
+first_rem : (value base digits + (high + 1)) % base ^ digits.length = value base (addCarry base digits (high + 1)).fst
+first_carry : (value base digits + (high + 1)) / base ^ digits.length = (addCarry base digits (high + 1)).snd
+power_pos : 0 < base ^ digits.length
+⊢ value base
+      (have first := addCarry base digits (high + 1);
+      if first.snd = 0 then first.fst else (addCarry base first.fst 1).fst) =
+    if value base digits + high + 1 < base ^ digits.length then value base digits + high + 1
+    else value base digits + high + 2 - base ^ digits.length
+'R1Z.PV_CB3_GammaDigits.finish_length' depends on axioms: [sorryAx]
+'R1Z.PV_CB3_GammaDigits.finish_canonical' depends on axioms: [sorryAx]
+'R1Z.PV_CB3_GammaDigits.finish_value' depends on axioms: [propext, sorryAx, Quot.sound]

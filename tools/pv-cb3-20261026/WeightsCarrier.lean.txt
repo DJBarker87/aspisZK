@@ -1,0 +1,14 @@
+-- Provisional carrier installation pattern. Not a proved source law.
+-- The generated Weights record must first be adapted using aliases to the
+-- existing field / transport / error carriers, with retained adaptation diff.
+namespace R1Z.PV_CB3_WeightsCarrier
+open ProverRwFull
+@[reducible] def selectedTypes (base : ExternalTypes) : ExternalTypes :=
+  {base with op25 := PV_CB3_ShippedOp253.weights.Weights}
+-- The external ops argument is supplied AT this concrete carrier choice.
+-- No arbitrary opaque carrier equivalence is assumed, and no output premise.
+-- @[reducible] def selected (base : ExternalTypes)
+--     (ops : @ExternalFuns (selectedTypes base)) :
+--     @ExternalFuns (selectedTypes base) :=
+--   {ops with op253 := PV_CB3_ShippedOp253.weights.Weights.raw}
+end R1Z.PV_CB3_WeightsCarrier

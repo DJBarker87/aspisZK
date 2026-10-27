@@ -1,0 +1,45 @@
+"""Run one named, capped P6 harness through the standing admission/barrier tools."""
+from pathlib import Path
+import subprocess,sys,json,shlex,hashlib,time,datetime
+root=Path(__file__).resolve().parents[2];name,harness=sys.argv[1:3]; project=sys.argv[3] if len(sys.argv)>3 else 'core'
+assert project in ('core','kani-proof','source-proof')
+base='/home/dombarker/project-offloads/codex-pv-cb3-20261026'; gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
+out=root/'evidence/pv-cb3-20261026'
+# Own-job cooldown only; shared admission infrastructure is unchanged.
+state=out/'RESUME6_ADMISSION_STATE.json'
+if state.exists():
+ d=json.loads(state.read_text())
+ when=datetime.datetime.fromisoformat(d['utc']).timestamp()
+ left=when+180-time.time()
+ if not d.get('allowed',False) and left>0:
+  print(f'LOCAL COOLDOWN HOLD {left:.1f}s; no ID or compiler charged');sys.exit(78)
+
+# Respect the three-minute cooldown without a blocking sleep or ID reuse.
+for old in sorted(out.glob('38*-refusal.json'),reverse=True):
+ record=json.loads(old.read_text())
+ raw=record.get('output','')
+ try:
+  admission=json.loads(raw)
+  when=datetime.datetime.fromisoformat(admission['utc']).timestamp()
+ except (ValueError,KeyError,TypeError):continue
+ remaining=when+180-time.time()
+ if remaining>0:
+  print(f'LOCAL COOLDOWN HOLD {remaining:.1f}s; no ID or compiler charged')
+  sys.exit(78)
+ break
+
+out=root/'evidence/pv-cb3-20261026'/name;out.mkdir(exist_ok=True)
+def remote(cmd):return subprocess.run(['ssh','dombarker@100.108.41.90',cmd],text=True,capture_output=True)
+p=remote(f'mkdir -p {base}/{name}; python3 {gate}/reservation.py {base}/{name}/admission-before.json > {base}/{name}/reservation.log 2>&1; cat {base}/{name}/reservation.log')
+(out/'admission-transport.log').write_text(p.stdout+p.stderr)
+r=json.loads(p.stdout)
+if not r['allowed']:
+ (root/'evidence/pv-cb3-20261026/RESUME6_ADMISSION_STATE.json').write_text(json.dumps(dict(r,origin=name))+'\n')
+ print('REFUSED',r);sys.exit(78)
+cmd=['timeout','180','taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3','CARGO_PROFILE_DEV_DEBUG_ASSERTIONS=false','CARGO_PROFILE_DEV_OVERFLOW_CHECKS=false','RUSTFLAGS=--cfg kani',f'CARGO_TARGET_DIR={base}/kani-target','cargo','kani','--manifest-path',f'{base}/source/crates/aspis-core/Cargo.toml' if project=='core' else f'{base}/{project}/Cargo.toml',*(['--features','r0,ct-host-prover'] if project=='core' else []),'--lib','--exact','--harness',harness,'--solver','kissat',*(['--no-overflow-checks'] if harness.endswith('mixed_kind') else []),'--no-assertion-reach-checks','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions']
+target=dict(target=cmd,harness=harness,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),expected_phase=f'Optimized compilation then CBMC for {harness}; exact harness bound retained in source. No stubs. CPU affinity0-3 per sibling KANI-CONFIG mitigation.',print_axioms='N/A native P6 gate',limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
+assert not (out/'target.json').exists();(out/'target.json').write_text(json.dumps(target,indent=2)+'\n')
+run=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',gate+'/barrier.py',f'{base}/{name}/admission-barrier.json','/usr/bin/time','-v','-o',f'{base}/{name}/time.log',*cmd]
+p=remote(shlex.join(run)+f' > {base}/{name}/output.log 2>&1');(out/'transport.log').write_text(p.stdout+p.stderr)
+subprocess.run([sys.executable,str(root/'tools/pv-cb3-20261026/collect_native.py'),name,'source-proof/lib.rs','source-proof/resume6_weights.rs','source-proof/Cargo.toml','source-proof/Cargo.lock','source/crates/aspis-r1-cost-probe/src/weights.rs','source/crates/aspis-r1-cost-probe/src/transport.rs','source/crates/aspis-core/src/r0/opening.rs','source/crates/aspis-core/src/r0/transport.rs','source/crates/aspis-core/src/field/wide_exact.rs','kani-proof/lib.rs','kani-proof/reference_split.rs','kani-proof/Cargo.toml','kani-proof/Cargo.lock','kani-proof/resume6_mask_reference.rs','source/crates/aspis-r1-cost-probe/src/sampler.rs','source/crates/aspis-r1-cost-probe/src/ct_pole.rs','source/crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs','source/crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs','source/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs'],check=True)
+receipt=out/'collected-receipt.json';r=json.loads(receipt.read_text());r.update(target);receipt.write_text(json.dumps(r,indent=2)+'\n');print(r['exit'])
