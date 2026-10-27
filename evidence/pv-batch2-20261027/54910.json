@@ -1,0 +1,48 @@
+{
+  "attempt": 54910,
+  "module": "R1Z/PV_B2_Digits",
+  "source_revision": "1d769fff0a273ca9fe15a1ae18a10c3bf8223c47",
+  "source_sha256": "1c738d82b36120a3700c966da13c3967ba24944fc822d026d501ba34829b6ea1",
+  "deps_fingerprint": "dec7ad1e0893dd2bc22c7fcc6bc9e67b3baf57e8e0ce4a8adca4a2064052449a",
+  "dependency_objects": {
+    "R1Z.PV_B2_Division": {
+      "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Division.olean",
+      "sha256": "96cd0fa8c0e8dca8b3a77ebebd310db16f015b4d58fc6a08e6f88412cea47877"
+    }
+  },
+  "axiom_output": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_Digits.lean:14:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  PV_B2_Division.N.run ?rank ?r ?j\nin the target expression\n  (if i < 8#usize then do\n      let (quotient1, remainder) \u2190 PV_B2_Sampler.host_sampler.low_base_p_digits_loop1_loop0 q 0#u64 8#usize\n      let i_1 \u2190 lift (UScalar.cast UScalarTy.U32 remainder)\n      let digits1 \u2190 digits.update i i_1\n      let d1 \u2190 lift (i.wrapping_add 1#usize)\n      ok (cont (quotient1, digits1, d1))\n    else ok (done (q, digits))) =\n    if i < 8#usize then do\n      let (quotient, digit) \u2190\n        do\n          let (rank1, remainder) \u2190 PV_B2_OrdinaryReference.sampler_owned.qm31_div_pass_loop q 0#u64 8#usize\n          let i \u2190 lift (UScalar.cast UScalarTy.U32 remainder)\n          ok (rank1, i)\n      let digits1 \u2190 digits.update i digit\n      let i1 \u2190 lift (i.wrapping_add 1#usize)\n      ok (cont (quotient, digits1, i1))\n    else ok (done (q, digits))\n\nq digits : Std.Array U32 8#usize\ni : Usize\n\u22a2 (if i < 8#usize then do\n      let (quotient1, remainder) \u2190 PV_B2_Sampler.host_sampler.low_base_p_digits_loop1_loop0 q 0#u64 8#usize\n      let i_1 \u2190 lift (UScalar.cast UScalarTy.U32 remainder)\n      let digits1 \u2190 digits.update i i_1\n      let d1 \u2190 lift (i.wrapping_add 1#usize)\n      ok (cont (quotient1, digits1, d1))\n    else ok (done (q, digits))) =\n    if i < 8#usize then do\n      let (quotient, digit) \u2190\n        do\n          let (rank1, remainder) \u2190 PV_B2_OrdinaryReference.sampler_owned.qm31_div_pass_loop q 0#u64 8#usize\n          let i \u2190 lift (UScalar.cast UScalarTy.U32 remainder)\n          ok (rank1, i)\n      let digits1 \u2190 digits.update i digit\n      let i1 \u2190 lift (i.wrapping_add 1#usize)\n      ok (cont (quotient, digits1, i1))\n    else ok (done (q, digits))\n\nNote: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    Eq.refl true\n  has type\n    @Eq Bool true true\n  but is expected to have type\n    @Eq Bool (decide (8 \u2264 UScalar.cMax UScalarTy.Usize)) true\n  in the application\n    id (Eq.refl true)\n'PV_B2_Digits.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'PV_B2_Digits.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "command": [
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Digits.olean",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_Digits.lean",
+    "7000"
+  ],
+  "cwd": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src",
+  "expected_time": "optimized complete retry-owner proof generation and P_R1 elimination",
+  "exit_status": 1,
+  "wall_seconds": 1.139,
+  "peak_rss_kib": 2623528,
+  "swaps": 0,
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r3a45bc61f4cf4e04a65851af2c7729b2.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": 284028928,
+  "env": {
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "SBF_TRACE_DIR": null
+  },
+  "print_axioms": "compile failed; no accepted theorem from this attempt",
+  "native_wrapper_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482"
+}

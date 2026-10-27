@@ -1,0 +1,19 @@
+import R1Z.PV_B2_Sampler
+set_option autoImplicit false
+namespace PV_B2_ByteWord
+open Aeneas Aeneas.Std
+
+def word (a b c d : U8) : U32 :=
+  (UScalar.cast .U32 a) ||| (U32.wrapping_shl (UScalar.cast .U32 b) 8#u32) |||
+  (U32.wrapping_shl (UScalar.cast .U32 c) 16#u32) |||
+  (U32.wrapping_shl (UScalar.cast .U32 d) 24#u32)
+
+/-- The copy's explicit byte shifts equal the original four-byte parser. -/
+theorem source (a b c d : U8) :
+    word a b c d = core.num.U32.from_le_bytes (Array.make 4#usize [a,b,c,d]) := by
+  simp only [word,core.num.U32.from_le_bytes,Array.make,BitVec.fromLEBytes,
+    UScalar.cast,U32.wrapping_shl,UScalar.wrapping_shl]
+  congr 1
+  bv_decide
+#print axioms source
+end PV_B2_ByteWord

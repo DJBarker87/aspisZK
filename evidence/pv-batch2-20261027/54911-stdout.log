@@ -1,0 +1,19 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_Digits.lean:10:35: error: unsolved goals
+q digits : Std.Array U32 8#usize
+i : Usize
+hf : PV_B2_Sampler.host_sampler.low_base_p_digits_loop1_loop0 = PV_B2_OrdinaryReference.sampler_owned.qm31_div_pass_loop
+⊢ (if i < 8#usize then do
+      let (quotient1, remainder) ← PV_B2_OrdinaryReference.sampler_owned.qm31_div_pass_loop q 0#u64 8#usize
+      let digits1 ← digits.update i (UScalar.cast UScalarTy.U32 remainder)
+      ok (cont (quotient1, digits1, i.wrapping_add 1#usize))
+    else ok (done (q, digits))) =
+    if i < 8#usize then do
+      let x ← PV_B2_OrdinaryReference.sampler_owned.qm31_div_pass_loop q 0#u64 8#usize
+      let (quotient, digit) ←
+        let (rank1, remainder) := x
+          ok (rank1, UScalar.cast UScalarTy.U32 remainder)
+      let digits1 ← digits.update i digit
+      ok (cont (quotient, digits1, i.wrapping_add 1#usize))
+    else ok (done (q, digits))
+'PV_B2_Digits.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B2_Digits.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
