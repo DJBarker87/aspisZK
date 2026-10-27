@@ -1142,3 +1142,184 @@ indices and shift amounts are in bounds. No raw call or optional borrow
 is carried through a loop. No returned value, panic/abort, allocation, I/O,
 signature/type/other-function changes. Copy derives remain as recorded.
 This differs from repair 5 by removing raw helper calls and their loans.
+
+15. D277, destructure the fixed outer arrays and construct output literals,
+verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index 7e5b3290af..a6407c57cf 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -231,26 +231,64 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+     let snapshot = *snapshot;
+     let pair = input.pair;
+     let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
+-    let mut bits = [0u32; 24];
+-    let mut sibs = [[0u32; 8]; 24];
+-    bits[0] = u32::from(pair.selected_second);
+-    sibs[0] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = other; [w0, w1, w2, w3, w4, w5, w6, w7] };
+-    let mut level = 1;
+-    while level < 21 {
+-        bits[level] = ((pair.membership.index >> (level - 1)) & 1) as u32;
+-        let sib = pair.membership.siblings[level - 1];
+-        let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = sib;
+-        sibs[level] = [w0, w1, w2, w3, w4, w5, w6, w7];
+-        level += 1;
+-    }
+-    while level < 24 {
+-        bits[level] = u32::from(input.super_root_directions[level - 21]);
+-        let sib = input.super_root_siblings[level - 21];
+-        let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = sib;
+-        sibs[level] = [w0, w1, w2, w3, w4, w5, w6, w7];
+-        level += 1;
+-    }
++    let [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20] = pair.membership.siblings;
++    let [s21, s22, s23] = input.super_root_siblings;
++    let [d0, d1, d2] = input.super_root_directions;
++    let bits = [
++        u32::from(pair.selected_second),
++        ((pair.membership.index >> 0) & 1) as u32,
++        ((pair.membership.index >> 1) & 1) as u32,
++        ((pair.membership.index >> 2) & 1) as u32,
++        ((pair.membership.index >> 3) & 1) as u32,
++        ((pair.membership.index >> 4) & 1) as u32,
++        ((pair.membership.index >> 5) & 1) as u32,
++        ((pair.membership.index >> 6) & 1) as u32,
++        ((pair.membership.index >> 7) & 1) as u32,
++        ((pair.membership.index >> 8) & 1) as u32,
++        ((pair.membership.index >> 9) & 1) as u32,
++        ((pair.membership.index >> 10) & 1) as u32,
++        ((pair.membership.index >> 11) & 1) as u32,
++        ((pair.membership.index >> 12) & 1) as u32,
++        ((pair.membership.index >> 13) & 1) as u32,
++        ((pair.membership.index >> 14) & 1) as u32,
++        ((pair.membership.index >> 15) & 1) as u32,
++        ((pair.membership.index >> 16) & 1) as u32,
++        ((pair.membership.index >> 17) & 1) as u32,
++        ((pair.membership.index >> 18) & 1) as u32,
++        ((pair.membership.index >> 19) & 1) as u32,
++        u32::from(d0),
++        u32::from(d1),
++        u32::from(d2),
++    ];
++    let sibs = [
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = other; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s1; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s2; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s3; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s4; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s5; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s6; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s7; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s8; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s9; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s10; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s11; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s12; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s13; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s14; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s15; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s16; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s17; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s18; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s19; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s20; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s21; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s22; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s23; [w0, w1, w2, w3, w4, w5, w6, w7] },
++    ];
+     let empty = pair_empty_roots();
++    let [f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19] = snapshot.frontier;
++    let [e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, _] = empty;
+     let mut w = RW {
+         input_value: pair.value,
+         output_value: out,
+@@ -272,28 +310,50 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+         transfer: false,
+         asset: asset.0,
+         next_pair_index: snapshot.next_pair_index,
+-        frontier: {
+-            let mut frontier = [[0u32; 8]; 20];
+-            let mut l = 0;
+-            while l < 20 {
+-                let sib = snapshot.frontier[l];
+-                let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = sib;
+-                frontier[l] = [w0, w1, w2, w3, w4, w5, w6, w7];
+-                l += 1;
+-            }
+-            frontier
+-        },
+-        empty: {
+-            let mut roots = [[0u32; 8]; 20];
+-            let mut l = 0;
+-            while l < 20 {
+-                let sib = empty[l];
+-                let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = sib;
+-                roots[l] = [w0, w1, w2, w3, w4, w5, w6, w7];
+-                l += 1;
+-            }
+-            roots
+-        },
++        frontier: [
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f0; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f1; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f2; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f3; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f4; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f5; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f6; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f7; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f8; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f9; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f10; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f11; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f12; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f13; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f14; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f15; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f16; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f17; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f18; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = f19; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        ],
++        empty: [
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e0; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e1; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e2; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e3; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e4; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e5; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e6; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e7; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e8; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e9; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e10; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e11; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e12; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e13; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e14; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e15; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e16; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e17; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e18; [w0, w1, w2, w3, w4, w5, w6, w7] },
++            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = e19; [w0, w1, w2, w3, w4, w5, w6, w7] },
++        ],
+     };
+     match rec {
+         Some(r) => {
+```
+
+Repair 14 fails with Not_found in InterpReduceCollapse.ml:1991, called
+from loop matching, exit 2 in 2.230s, 156,557,312 bytes, zero swap. This
+replacement binds s1..s20 to exactly membership siblings 0..19, s21..s23
+to exactly super siblings 0..2, d0..d2 to their directions, f0..f19 to
+frontier 0..19, and e0..e19 to empty roots 0..19 (the 21st remains unused).
+Bits and sibling literals list exactly the old ascending cells. Frontier
+and empty literals list the same projected words. All patterns are
+irrefutable for the fixed array lengths; no index/shift is out of bounds.
+Destructuring and construction are pure Copy operations (M31 field.rs:22;
+other Copy types as previously recorded). Empty-root evaluation and final
+recipient branch remain; field computations may move across pure field
+reads only. Same RW/RP and same panics/aborts; no new allocation or I/O.
+No signature/type/other-function changes.
