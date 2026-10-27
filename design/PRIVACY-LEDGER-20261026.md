@@ -899,3 +899,37 @@ runtime suites, Aeneas/SBF/Rust builds or full manifest replay. No sibling/root
 worktree edit, merge, push, or key/account/fund operation. Premises
 removed/added/weakened: **0/0/0**. Stop: all rows re-derived, statement budget
 exhausted. **Target not yet established.**
+
+## Owner decisions 2026-10-27 (B)
+
+The owner accepted every pending Stream B recommendation on 2026-10-27 ("agree with all your
+recommendations"). Effect on this ledger:
+
+1. **Trust list T adopted and capped.** `R1Z.PV_RunJoin_TrustItems` (codex/pv-runjoin-20261026,
+   evidence/pv-runjoin6-20261026/trust-items.md) is the privacy trust list, class T, OS-kernel contract:
+   `entropy_law` (E1: 64 successful getrandom bytes uniform given the complete prior context),
+   `entropy_kernel` (joint density of the 128 draws), `observation` (native getrandom/file/time/worker
+   outcomes, filesystem state and the complete D159 observer payload equal the extracted execution; NOT an
+   equality with the security experiment). No further T field may be added: any new native fact is a P
+   obligation. Every P obligation of `PV_RunJoin_TrustEndpoint.ProofObligations` remains proof work.
+2. **OS-failure repair: option B adopted** (D215): the environment-failure signal becomes a public input
+   to BOTH the real and the ideal experiment, the error bound unchanged; the observer stays complete. The
+   recommendation was conditional on the failure event being witness-independent; that is now a P row of
+   this ledger (to be proved; option A, an `OsAvailable` trust item, applies only if it fails).
+3. **V371 (CPU-latency trust item).** Adopted: enable DOITM on the pinned build/prover host and accept
+   V371 only in DOITM mode. Status 2026-10-27: NOT ENABLED. The host boots with Secure Boot, so the kernel
+   is in lockdown integrity mode and refuses raw MSR writes (`Lockdown: wrmsr: raw MSR access is
+   restricted`); IA32_ARCH_CAPABILITIES (0x10a = 0xdc9fd6b) reports DOITM support, IA32_UARCH_MISC_CTL
+   (0x1b01) = 0 on every CPU. Until firmware or kernel configuration changes, V371 stays a substantive T
+   item for L3.
+4. **Inversion zero-boundary (V380-inversion).** Adopted as proof work: every `try_inv` operand on a
+   witness-bearing path is nonzero except on an already-charged bad event; a reachable witness-dependent
+   zero is a protocol-level leak to be reported, not absorbed.
+5. **Docker-cap barrier.** Adopted: three over-provisioned container caps shrunk at runtime (crypto-tax
+   worker 6 GiB → 2.5 GiB, LaTeX server 4 GiB → 512 MiB, crypto-tax reports 2 GiB → 512 MiB; each ≥ 2×
+   its observed peak; Postgres, API and other caps unchanged); finite container caps 24,576 → 15,872 MiB.
+6. **Client bundle pin.** Adopted: pin `client-pins.json` in the release ledger (Stream A's file; handed
+   to Stream A).
+7. **Corpus archival.** Done: the invalidated corpus-overparallel-v2 and the superseded smoke and phase
+   paired outputs deleted (4,060 files, 23 GiB; sha256 manifest evidence/pv-archive-20261027/
+   deleted-files.sha256); corpus-1000-002 and focused-paired-001 kept.

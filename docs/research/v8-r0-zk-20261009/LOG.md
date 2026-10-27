@@ -10979,3 +10979,29 @@ Lean / 2 Kani): the three gaps first (resolve via the pin table, compile from HE
 full audit, MERGE-GATE "CLEAN" so the lead can merge), then the 21 cells, the deployed identification
 from runjoin12's publication, and the prefix comparison under ruling (i). Six slots: cb7, cblib, cbmid,
 runjoin12, cb8, srcid8. Rows removed outright: 0. Privacy target not yet established.
+
+## D248 (Stream B) 2026-10-27 06:45 UTC: owner adopts all seven Stream B recommendations; actions taken
+
+The owner: "agree with all your recommendations". Recorded in design/PRIVACY-LEDGER-20261026.md "Owner
+decisions 2026-10-27 (B)". (1) T = the three fields of PV_RunJoin_TrustItems adopted as the privacy trust
+list and CAPPED (no new T field; native facts become P). (2) OS-failure repair option B adopted (failure
+signal public to both experiments, bound unchanged), conditional on proving the failure event
+witness-independent, now a P obligation. (3) V371: enable DOITM and accept V371 only in DOITM mode. NOT
+ENABLED: the build host runs Secure Boot, kernel lockdown (integrity) refuses `wrmsr -a 0x1b01 1`
+("Lockdown: wrmsr: raw MSR access is restricted"); ARCH_CAPABILITIES 0xdc9fd6b has the DOITM bit;
+UARCH_MISC_CTL = 0 on all 22 CPUs. Needs a firmware/kernel change the lead cannot make remotely; V371
+stays a substantive trust item meanwhile. (4) Inversion zero-boundary: proof work (try_inv operands
+nonzero on witness-bearing paths outside charged bad events). (5) Docker caps shrunk at runtime with
+`docker update` (reversible; compose files under ~/crypto-tax/infra and ~/maths-revision/services still
+hold the old values and would restore them on recreate): crypto-tax-worker-1 6144 → 2560 MiB (peak 1304),
+latex-server-latex-server-1 4096 → 512 MiB (peak 92), crypto-tax-reports-1 2048 → 512 MiB (peak 218);
+swap limits kept at 2× memory; crypto-tax-db-1 (peak 7784 of 8192), api, hausklar, gateway, link
+unchanged; finite container caps 24,576 → 15,872 MiB, about one more 8 GiB scope under the 55 GiB
+barrier. (6) Client bundle: pin client-pins.json in the release ledger: handed to Stream A, who own that
+file. (7) Archival: deleted, after a sha256 manifest of all 4,060 files (evidence/pv-archive-20261027/
+deleted-files.sha256, manifest sha256 8bb802cd…), the invalidated codex-pv-rebase-20261026/
+corpus-overparallel-v2 (6.2 GiB) and the superseded smoke-baseline/candidate-001 and
+phase-paired-002-baseline/candidate (16.9 GiB) under codex-cx-prover-rw-20261023; corpus-1000-002 and
+focused-paired-001 kept; nothing had them open. Host free 620 → 643 GiB. Worker rule (j) added. New jobs
+queued for the next free slots: option B endpoint (statement + witness-independence of the failure event)
+and the inversion zero-boundary proof. Rows removed outright: 0. Privacy target not yet established.
