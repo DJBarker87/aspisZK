@@ -6,4 +6,4 @@ Reuse the pinned workspace and predecessor overlays without overwrites or cleanu
 
 Budget: 150 Lean attempts (job-specific final instruction), 0 Kani. No shipped files changed; three ELF pins inherited, not rebuilt. No premise removal claimed. This stage is preparation, not verified theorem evidence.
 
-Focused helper RPx_0001 passes (exit 0, wall 3.058 s approximately; exact receipt authoritative), peak RSS 3883524 KiB, swaps 0, source revision 3e44cc6712. The complete existing conclusion is retained; the repaired premise and proof call use observerToFirst. All printed helper axioms are standard only. All 6605 inherited pins matched before admission. See RPx_0001/receipt.json and stdout.log for exact release fields.
+Focused helper RPx_0001 passes (exit 0, wall 3.058523621992208 s), peak RSS 3883524 KiB, swaps 0, source revision 3e44cc6712. The complete existing conclusion is retained; the repaired premise and proof call use observerToFirst. All printed helper axioms are standard only. All 6605 inherited pins matched before admission. See RPx_0001/receipt.json and stdout.log for exact release fields.
