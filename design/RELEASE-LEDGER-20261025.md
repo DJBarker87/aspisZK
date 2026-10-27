@@ -218,6 +218,24 @@ Endpoint: [`R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`](../doc
 
 Privacy boundaries and candidate evidence: [REAL-R1-20261023.md](../docs/research/v8-r0-zk-20261009/r1p-final/REAL-R1-20261023.md), [PROVER-SPEED-20261022.md](../docs/research/100bit-spend-path-20261013/design/PROVER-SPEED-20261022.md), [CLIENT-ROUTE-ADOPTION-GATE-20261024.md](../docs/research/100bit-spend-path-20261013/design/CLIENT-ROUTE-ADOPTION-GATE-20261024.md), LOG D159/D162/D185/D187/D191 and later native-factory reviews. L1/L2/L3 are part of the privacy contract; the older side-channel exclusion is superseded. The latest DATA setup and scope-cleanup success is operational evidence only, not a native proof or producer/runtime adoption.
 
+### Pinned client bundle (owner-approved 2026-10-27)
+
+The proof-account client route (LOG D162) is pinned by
+[`client-pins.json`](../evidence/pv-client-20261026/client-pins.json),
+sha256 `16bd80682bd6b8a489413eed725802d1539e41c1804f8b374cd4b77b0697a7c2`
+(added in 0ac32f5cc1; schema `aspis.pv-client-pins.v1`; source revision
+`5228877938c7e42a1c87aa35f69f9a110ee9a4d6`; implementation base `149855299b`).
+It pins 1,295 tracked source files under 12 roots and the 16-step entry/call
+chain from `devnet_spend::main` (prove branch, called by
+`scripts/r1_devnet_spend.py`). Its own scope note applies: a conservative
+tracked source/build/dependency superset, not a minimal reachability theorem.
+Pinning records which client the release argument is about; it proves nothing
+about that client. The headline binding obligation stated in the file
+(instantiate `FSExperiments.real` and `observe` with the complete client
+execution) stays an open privacy obligation. Authority: owner, 2026-10-27,
+LOG D248 (Stream B) item 6. A change to any pinned file invalidates this pin
+and needs a new owner-approved pin.
+
 ## Exact release gates
 
 | Gate | Owner | Required evidence / current disposition |
