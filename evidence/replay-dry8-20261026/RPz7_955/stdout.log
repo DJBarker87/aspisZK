@@ -1,0 +1,109 @@
+RPz7_sources/RPz7_Par_Headline.lean:69:9: warning: Variable name `history` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+RPz7_sources/RPz7_Par_Headline.lean:71:9: warning: Variable name `p2prime` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.Par_Headline.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Par_Headline.deployed : ∀ {W A F CoreError : Type} (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : Configuration F CoreError) (native1 : S2W_ExtractionBoundary.First)
+                (native2 : S2W_ExtractionBoundary.Second),
+                WAdm_Domain.SessionAPrepare
+                    (Tx1Q_Execution.actual (Op5T_Concrete.current (DrvC_FirstConstants.configuration c).currentBase)
+                      (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query
+                      (DrvC_FirstConstants.configuration c).geometry (DrvC_FirstConstants.configuration c).boundaries
+                      (DrvC_FirstConstants.configuration c).std) →
+                  Port5Q1_QueryPorts.SessionAPrimitives (DrvC_FirstConstants.configuration c).query →
+                    ∀ (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                      S2W_DigestExtraction.AeneasExtraction
+                          (sdkOps
+                            (Tx2I_Install.install (DrvC_FirstConstants.configuration c).adapter
+                              (Op5T_Concrete.stage
+                                (Tx2N_Execution.control
+                                  (AuS1_Install.base (DrvC_FirstConstants.configuration c).stageBase)
+                                  (DrvC_FirstConstants.configuration c).reserved
+                                  (DrvC_FirstConstants.configuration c).query
+                                  (DrvC_FirstConstants.configuration c).geometry))
+                              (DrvC_FirstConstants.configuration c).finish)
+                            (Uni_Install.current (DrvC_FirstConstants.configuration c).currentBase
+                              (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query
+                              (DrvC_FirstConstants.configuration c).geometry)
+                            (DrvC_FirstConstants.configuration c).boundaries (DrvC_FirstConstants.configuration c).std)
+                          native1 native2 hashv →
+                        ∀ (sha256 H : Bytes → State),
+                          S2W_ExtractionBoundary.P1 sha256 H →
+                            S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                              ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                                (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                                (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                                first native1 copy allocator e1 program data1 state1 =
+                                    ok (core.result.Result.Ok (saved, post1, final1)) →
+                                  second native2 allocator e2 program data2 slot state2 =
+                                      ok (core.result.Result.Ok (post2, final2)) →
+                                    ∀ (root : Std.Array U8 32#usize) (length : U32) (D : LiteralByteProtocol.Decoder)
+                                      (P : ByteProver) (Q0 Q1 : ℕ),
+                                      (∀ (H : Bytes → State), (eval H P).1.length ≤ Q0 + Q1) →
+                                        ∀ (runtime : Runtime),
+                                          Port1_CanonicalJoin.AcceptedVerifierJoin D
+                                              (DrvC_Implementation.driver (DrvC_FirstConstants.configuration c)) →
+                                            StoredCarrierBinding D
+                                                (DrvC_Implementation.driver (DrvC_FirstConstants.configuration c))
+                                                (Port1_StoredCarrier.lift P) runtime →
+                                              ∀ (adversary : Program Bytes State GExp_Experiment.FirstInputs)
+                                                (chooseSecond :
+                                                  GExp_Experiment.FirstInputs →
+                                                    alloc.vec.Vec U8 →
+                                                      Program Bytes State GExp_Experiment.SecondInputs),
+                                                (∀ (H : Bytes → State), (eval H adversary).1.length ≤ Q0) →
+                                                  (∀ (input : GExp_Experiment.FirstInputs) (saved : alloc.vec.Vec U8)
+                                                      (H : Bytes → State),
+                                                      (eval H (chooseSecond input saved)).1.length ≤ Q1) →
+                                                    ∀
+                                                      (project :
+                                                        GExp_Experiment.Outcome →
+                                                          OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)),
+                                                      (∃ f s i,
+                                                          SourceCuts
+                                                              (DrvC_Installation.sdk
+                                                                (DrvC_FirstConstants.configuration c))
+                                                              e1.first (e2.second secondSizes) saved f s ∧
+                                                            Port1_Driver.decodeSemantic
+                                                                  (DrvC_Installation.sdk
+                                                                    (DrvC_FirstConstants.configuration c))
+                                                                  f.pub =
+                                                                ok (some f.semantic) ∧
+                                                              i.statement.pubBytes = bytesOf ↑f.pub ∧
+                                                                i.stored = bytesOf ↑f.proof ∧ i.statement.tag = 2 ∧ ⋯) ∧
+                                                        have r := DrvC_FirstConstants.configuration c;
+                                                        have source :=
+                                                          GExp_Experiment.program
+                                                            (GExp_FirstPair.base r.currentBase r.reserved r.query
+                                                              r.geometry)
+                                                            (stage r) r.reserved r.boundaries r.std hashv
+                                                            (currentDigest r) (digest r) adversary chooseSecond;
+                                                        Claims D (Port1_StoredCarrier.lift P) (Q0 + Q1) runtime ∧
+                                                          failureModel runtime + EndP_AuthMass.mass source project ≤
+                                                              ↑(Q0 + Q1 + 34) * PerAttemptEnvelope.B + ⋯ + 1 / 2 ^ 126 +
+                                                                1 / 2 ^ 454 ∧
+                                                            (Q0 + Q1 = 0 →
+                                                              failureModel runtime + EndP_AuthMass.mass source project ≤
+                                                                1 / 2 ^ 100) :=
+fun {W A F CoreError} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c native1 native2 prepareOwner
+    primitiveOwner hashv extraction sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1
+    post2 accepted1 accepted2 root length D P Q0 Q1 hqueries runtime raw binding adversary chooseSecond prefixBound
+    choiceBound project =>
+  ⟨Par_NativePair.accepted_pair L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c native1 native2
+      prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall program data1 data2 slot state1 state2 final1
+      final2 saved post1 post2 accepted1 accepted2 root length,
+    DrvC_Headline.deployed_headline_installed (DrvC_FirstConstants.configuration c) D P Q0 Q1 hqueries runtime raw
+      binding hashv adversary chooseSecond prefixBound choiceBound project⟩

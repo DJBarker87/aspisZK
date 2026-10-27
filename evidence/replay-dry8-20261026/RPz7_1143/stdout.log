@@ -1,0 +1,3 @@
+bind_good : ∀ (hashv : SdkC_Source.Parts → Aeneas.Std.Result SdkC_Source.Digest) {A B : Type} (p : S2W_Trace.Code A)
+  (k : A → S2W_Trace.Code B),
+  GExq_OuterLower.Good hashv p → (∀ (a : A), GExq_OuterLower.Good hashv (k a)) → GExq_OuterLower.Good hashv (p >>= k)

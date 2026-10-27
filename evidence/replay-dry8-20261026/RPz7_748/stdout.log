@@ -1,0 +1,158 @@
+'AspisR1.Tx2N_Twelve.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Tx2N_Twelve.accepted : ∀ {CoreError W Hash : Type} (base : VTop_Stages.Ops) (finish : FinishOps W)
+  (reserved : Bool) (queryOps : Port3_NativeQueryBody.Ops),
+  Port5Q1_QueryPorts.SessionAPrimitives queryOps →
+    ∀ (geoOps : Port3_NativeGeometryBody.Ops CoreError),
+      Port5Q1_GeometryCanonical.SessionAPrimitives geoOps →
+        Port5Q1_Domain.SessionADomain geoOps →
+          geoOps.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+            geoOps.op7 = ok 1#u32 →
+              geoOps.op11 = Port4C_InverseExecution.inverse_owned →
+                ∀ (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (pub proof checkpoint : Slice U8)
+                  (savedVec : alloc.vec.Vec U8) (H : Bytes → State) (stored publicBytes : Bytes),
+                  bytesOf ↑checkpoint = bytesOf ↑savedVec →
+                    VTop_Stages.verifier.candidate.tx2_authenticated
+                          (Tx2I_Install.stage (Tx2N_Execution.control base reserved queryOps geoOps) finish) D pub proof
+                          checkpoint hash none =
+                        ok (core.result.Result.Ok ()) →
+                      ∃ p saved g geometry pending returned after flushed back v,
+                        Port4A_ReaderInstall.reader reserved D checkpoint proof pub transport.Variant.S2 hash =
+                            ok (core.result.Result.Ok (p, saved)) ∧
+                          Port3_QueryStage.query (Port4C_RowStd.install (Port5Q1_QueryPorts.install queryOps)) proof p
+                                saved g none geometry pending 22#usize =
+                              ok (core.result.Result.Ok (returned, after)) ∧
+                            returned.weights.deref_mut = (returned.weights.deref, back) ∧
+                              Port3_FlushInstall.flush after returned.weights.deref = ok flushed ∧
+                                Port4D_FinishInstall.finish finish v p
+                                      { weights := back flushed, rhs := returned.rhs, power := returned.power,
+                                        next := returned.next }
+                                      none =
+                                    ok (core.result.Result.Ok ()) ∧
+                                  ∀ (semantic : List Bytes) (q : Fin 22 → Fin 262144)
+                                    (tr : RawCutTranscriptRun.ErasedPrefix)
+                                    (data : MatchingSupport.Data OraclePortCheckpointAbiC5.E)
+                                    (rho : OraclePortCheckpointAbiC5.K) (c : Context),
+                                    LiteralMatchingData.read
+                                          (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) =
+                                        some data →
+                                      ∀ (recovered : ℕ → Option Bytes),
+                                        (∀ pos < 22,
+                                            recovered (index q 2 pos) =
+                                              some
+                                                (OraclePortPackedChoiceC4.payload
+                                                  { wire := bytesOf ↑proof, semantic := semantic } 2 pos)) →
+                                          savedVec =
+                                              Tx2N_Reader.writer H stored publicBytes (prepared c data rho q)
+                                                (OraclePortCheckpointStateC3.write (model data rho q)).accumulator →
+                                            CheckpointBytes5Output.accumulator saved =
+                                                (OraclePortCheckpointStateC3.write (model data rho q)).accumulator ∧
+                                              CheckpointBytes5Output.accumulator
+                                                  { weights := back flushed, rhs := returned.rhs,
+                                                    power := returned.power, next := returned.next } =
+                                                OraclePortCheckpointStateC3.advance (model data rho q) 12
+                                                  (CheckpointBytes5Output.accumulator saved) :=
+fun {CoreError W Hash} base finish reserved queryOps queryLeaves geoOps geoLeaves domain multiply one inverse D hash pub
+    proof checkpoint savedVec H stored publicBytes same success =>
+  let ⟨variant, h✝⟩ :=
+    Tx2I_Cuts.authenticated_reached (Tx2I_Install.stage (Tx2N_Execution.control base reserved queryOps geoOps) finish) D
+      hash pub proof checkpoint none success
+  let ⟨shape, common⟩ := h✝
+  let ⟨left✝, right✝⟩ := Tx2I_Install.shape_header proof variant shape
+  Eq.ndrec (motive := fun variant =>
+    (Tx2I_Install.stage (Tx2N_Execution.control base reserved queryOps geoOps) finish).op3 proof =
+        ok (core.result.Result.Ok variant) →
+      ∃ p saved g geometry pending returned after flushed back v,
+        Port4A_ReaderInstall.reader reserved D checkpoint proof pub transport.Variant.S2 hash =
+            ok (core.result.Result.Ok (p, saved)) ∧
+          Port3_QueryStage.query (Port4C_RowStd.install (Port5Q1_QueryPorts.install queryOps)) proof p saved g none
+                geometry pending 22#usize =
+              ok (core.result.Result.Ok (returned, after)) ∧
+            returned.weights.deref_mut = (returned.weights.deref, back) ∧
+              Port3_FlushInstall.flush after returned.weights.deref = ok flushed ∧
+                Port4D_FinishInstall.finish finish v p
+                      { weights := back flushed, rhs := returned.rhs, power := returned.power, next := returned.next }
+                      none =
+                    ok (core.result.Result.Ok ()) ∧
+                  ∀ (semantic : List Bytes) (q : Fin 22 → Fin 262144) (tr : RawCutTranscriptRun.ErasedPrefix)
+                    (data : MatchingSupport.Data OraclePortCheckpointAbiC5.E) (rho : OraclePortCheckpointAbiC5.K)
+                    (c : Context),
+                    LiteralMatchingData.read (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) =
+                        some data →
+                      ∀ (recovered : ℕ → Option Bytes),
+                        (∀ pos < 22,
+                            recovered (index q 2 pos) =
+                              some
+                                (OraclePortPackedChoiceC4.payload { wire := bytesOf ↑proof, semantic := semantic } 2
+                                  pos)) →
+                          savedVec =
+                              Tx2N_Reader.writer H stored publicBytes (prepared c data rho q)
+                                (OraclePortCheckpointStateC3.write (model data rho q)).accumulator →
+                            CheckpointBytes5Output.accumulator saved =
+                                (OraclePortCheckpointStateC3.write (model data rho q)).accumulator ∧
+                              CheckpointBytes5Output.accumulator
+                                  { weights := back flushed, rhs := returned.rhs, power := returned.power,
+                                    next := returned.next } =
+                                OraclePortCheckpointStateC3.advance (model data rho q) 12
+                                  (CheckpointBytes5Output.accumulator saved))
+    (fun shape =>
+      let ⟨headerSource, header⟩ := right✝
+      have size :=
+        have len := (OraclePortHeader.accepts_iff (bytesOf ↑proof)).mp header;
+        Eq.mp (congrFun' (congrArg Eq (List.length_map AspisV8R19.SqueezeOracleBridge.decodeByte)) 57607) len.left;
+      have commonRun := common;
+      let ⟨p, h✝¹⟩ :=
+        Tx2N_Execution.common (Tx2I_Install.stage base finish) reserved queryOps geoOps D hash pub proof checkpoint
+          commonRun
+      let ⟨saved, h✝²⟩ := h✝¹
+      let ⟨g, h✝³⟩ := h✝²
+      let ⟨geometry, h✝⁴⟩ := h✝³
+      let ⟨pending, h✝⁵⟩ := h✝⁴
+      let ⟨returned, h✝⁶⟩ := h✝⁵
+      let ⟨after, h✝⁷⟩ := h✝⁶
+      let ⟨flushed, h✝⁸⟩ := h✝⁷
+      let ⟨back, h✝⁹⟩ := h✝⁸
+      let ⟨v, h✝¹⁰⟩ := h✝⁹
+      let ⟨hr, right✝¹⟩ := h✝¹⁰
+      let ⟨hnext, right✝²⟩ := right✝¹
+      let ⟨hg, right✝³⟩ := right✝²
+      let ⟨hgeo, right✝⁴⟩ := right✝³
+      let ⟨hpending, right✝⁵⟩ := right✝⁴
+      let ⟨hquery, right✝⁶⟩ := right✝⁵
+      let ⟨hback, right✝⁷⟩ := right✝⁶
+      let ⟨hflush, hfinish⟩ := right✝⁷
+      Exists.intro p
+        (Exists.intro saved
+          (Exists.intro g
+            (Exists.intro geometry
+              (Exists.intro pending
+                (Exists.intro returned
+                  (Exists.intro after
+                    (Exists.intro flushed
+                      (Exists.intro back
+                        (Exists.intro v
+                          ⟨hr,
+                            ⟨hquery,
+                              ⟨hback,
+                                ⟨hflush,
+                                  ⟨hfinish, fun semantic q tr data rho c read recovered authenticated tx1_saved =>
+                                    have savedFields :=
+                                      Tx2N_Reader.saved_ten base reserved queryOps D hash checkpoint proof pub savedVec
+                                        p saved H stored publicBytes c data rho q same tx1_saved hr;
+                                    have geo :=
+                                      Port5Q1_GeometryReads.accepted geoOps geoLeaves domain multiply one inverse
+                                        p.queries 10#usize 22#usize geometry (of_decide_eq_true (id (Eq.refl true)))
+                                        (Eq.mp
+                                          (congrArg
+                                            (fun _a =>
+                                              Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install geoOps)
+                                                  p.queries _a ⋯ =
+                                                ok (core.result.Result.Ok geometry))
+                                            hnext)
+                                          hgeo);
+                                    ⟨savedFields.right.left,
+                                      Tx2N_Query.twelve queryOps queryLeaves proof p saved returned g geometry pending
+                                        after flushed back { wire := bytesOf ↑proof, semantic := semantic } q tr data
+                                        rho c (OraclePortCheckpointStateC3.write (model data rho q)).accumulator
+                                        savedFields.left hnext read rfl size recovered authenticated geo reserved
+                                        hpending hquery hback hflush⟩⟩⟩⟩⟩⟩))))))))))
+    (Eq.symm left✝) shape
