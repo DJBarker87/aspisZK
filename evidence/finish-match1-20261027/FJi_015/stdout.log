@@ -1,0 +1,81 @@
+FJi_TermValue.lean:14:58: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ↑next.start = ↑iter.start + 1 ∧ ↑iter.start
+FJi_TermValue.lean:14:74: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+FJi_TermValue.lean:18:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+q : Std.Array U8 608#usize
+g : Std.Array NE 29#usize
+slot : Usize
+iter next : FIo_RangeNext.Range
+s out : Sums
+stop : ↑iter.end ≤ 26
+run :
+  (do
+      let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done s)
+        | some term => do
+          let scalar ← JFr_TX2_ScalarRead.read q slot term
+          let out ← JFr_TX2_DotStep.update g term scalar s
+          ok (cont (next, out))) =
+    ok (cont (next, out))
+x✝ :
+  ∃ x,
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok x ∧
+      (let (o, next) := x
+        match o with
+        | none => ok (done s)
+        | some term => do
+          let scalar ← JFr_TX2_ScalarRead.read q slot term
+          let out ← JFr_TX2_DotStep.update g term scalar s
+          ok (cont (next, out))) =
+        ok (cont (next, out))
+⊢ PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+FJi_TermValue.lean:39:24: error: Application type mismatch: The argument
+  ↑iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.20
+of sort `Type (?u.20 + 1)` in the application
+  @InitialSeg ↑iter.end
+FJi_TermValue.lean:39:38: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+FJi_TermValue.lean:42:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+q : Std.Array U8 608#usize
+g : Std.Array NE 29#usize
+slot : Usize
+iter : FIo_RangeNext.Range
+s out : Sums
+run :
+  (do
+      let (o, next) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (ControlFlow.done s)
+        | some term => do
+          let scalar ← JFr_TX2_ScalarRead.read q slot term
+          let out ← JFr_TX2_DotStep.update g term scalar s
+          ok (cont (next, out))) =
+    ok (ControlFlow.done out)
+x✝ :
+  ∃ x,
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok x ∧
+      (let (o, next) := x
+        match o with
+        | none => ok (ControlFlow.done s)
+        | some term => do
+          let scalar ← JFr_TX2_ScalarRead.read q slot term
+          let out ← JFr_TX2_DotStep.update g term scalar s
+          ok (cont (next, out))) =
+        ok (ControlFlow.done out)
+⊢ InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+FJi_TermValue.lean:51:14: error(lean.unknownIdentifier): Unknown constant `value`
+'Aeneas.Std.ControlFlow.done' does not depend on any axioms
