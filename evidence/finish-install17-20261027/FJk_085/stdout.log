@@ -1,0 +1,48 @@
+FJk_MaskValueStep.lean:32:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mask - 1#u16
+in the target expression
+  selector_mask_sum_16_loop a (mask &&& s) false q = ok out
+
+a : Std.Array field.QM31 16#usize
+sum out : field.QM31
+mask sub next : U16
+pos : U32
+index : Usize
+is : List ℕ
+ha : canonical a
+hs : Canon sum
+hi : ↑index < 16
+hnz : (mask != 0#u16) = true
+hpos : core.num.U16.trailing_zeros mask = ok pos
+hindex : UScalar.cast UScalarTy.Usize pos = index
+hsub : mask - 1#u16 = ok sub
+hnext : mask &&& sub = next
+tail :
+  ∀ (s : FIv_NativeArithmetic.NQ),
+    Canon s → selector_mask_sum_16_loop a next false s = ok out → Canon out ∧ decode out = model a is (decode s)
+run✝¹ :
+  (do
+      let sum1 ←
+        do
+          let q ← a.index_usize index
+          sum.add q
+      let i1 ← mask - 1#u16
+      selector_mask_sum_16_loop a (mask &&& i1) false sum1) =
+    ok out
+q : field.QM31
+rq :
+  (do
+      let q ← a.index_usize index
+      sum.add q) =
+    ok q
+run✝ :
+  (do
+      let i1 ← mask - 1#u16
+      selector_mask_sum_16_loop a (mask &&& i1) false q) =
+    ok out
+s : UScalar UScalarTy.U16
+rs : mask - 1#u16 = ok s
+run : selector_mask_sum_16_loop a (mask &&& s) false q = ok out
+⊢ Canon out ∧ decode out = model a (↑index :: is) (decode sum)
+'AspisR1.FJk_MaskValueStep.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJk_MaskValueStep.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -48,3 +48,21 @@ RSS,swap,cgroup and full printed axioms/errors. Every admitted run used one
 split or replaced;no cap/depth/heartbeat raises,OOM,wall timeout or unchanged
 resource-failure retry. No shipped/cfg(kani),ELF,SessionA/other-prefix or key
 change. ELF pins are inherited,not reproduced. Work continues to100.
+
+## Final update after100
+
+Full original powers,all14 descriptor records,all16-cell pattern folds and
+all14 output VALUES now checked through084. Every actual seven-mask low sum
+and64-word mask registry is checked through092;COMPLETE original active-loop
+VALUE is checked098. Its actual fixed-seed outer wrapper/full evaluator assembly
+is an archived UNCHECKED draft,not a delivered theorem. Complete same-execution
+copy-seed composition,masked terminal,literal transport and actual top installation
+remain unproved. Both native/global L146 rows remain;both-ledger delta ZERO.
+
+099 statement/owner/non-vacuity audit and100 combined121-root axiom audit PASS.
+100/100 charged,97 compiler starts,63 passes,34 compiler errors,3 missing-object
+preflights;0/20 Kani. All62 current FJk modules have exact-source passing receipts.
+No further compile launch. Full adopted before/after kernel signature is reused
+from accepted Rc11 after exact source/object matching;fresh099 default display
+elides deep terms and is retained separately. This limitation is explicit in
+FJk_TOP_BEFORE_AFTER.md. No fresh complete release replay is claimed.

@@ -1,0 +1,138 @@
+FJk_PatternCellValue.lean:29:2: error: unsolved goals
+case isTrue
+a powers : Std.Array field.QM31 16#usize
+p : CompiledPoolV1PairForestPattern
+i : Usize
+before out : field.QM31
+hi : ↑i < 16
+ha : canonical a
+hp : canonical powers
+hb : Canon before
+hg : JGa_PatternBounds.Good p
+run✝⁸ :
+  (do
+      let kind ← p.kinds.index_usize i
+      if kind = 1#u8 then do
+          let column ← p.columns.index_usize i
+          let index ← lift (core.convert.num.FromUsizeU8.from column)
+          let q ← a.index_usize index
+          let offset ← p.offsets.index_usize i
+          let q1 ← lift_m31 offset
+          let source ← q.add q1
+          let q2 ← powers.index_usize i
+          let q3 ← q2.mul source
+          before.add q3
+        else ok before) =
+    ok out
+kind : U8
+rkind : p.kinds.index_usize i = ok kind
+vk : (FJk_CopyPatternDescriptor.model p).kinds ⟨↑i, hi⟩ = ↑kind
+hk : kind = 1#u8
+run✝⁷ :
+  (do
+      let column ← p.columns.index_usize i
+      let index ← lift (core.convert.num.FromUsizeU8.from column)
+      let q ← a.index_usize index
+      let offset ← p.offsets.index_usize i
+      let q1 ← lift_m31 offset
+      let source ← q.add q1
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+col : U8
+rcol : p.columns.index_usize i = ok col
+run✝⁶ :
+  (do
+      let index ← lift (core.convert.num.FromUsizeU8.from col)
+      let q ← a.index_usize index
+      let offset ← p.offsets.index_usize i
+      let q1 ← lift_m31 offset
+      let source ← q.add q1
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+idx : Usize
+ridx : lift (core.convert.num.FromUsizeU8.from col) = ok idx
+run✝⁵ :
+  (do
+      let q ← a.index_usize idx
+      let offset ← p.offsets.index_usize i
+      let q1 ← lift_m31 offset
+      let source ← q.add q1
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+q : field.QM31
+rq : a.index_usize idx = ok q
+run✝⁴ :
+  (do
+      let offset ← p.offsets.index_usize i
+      let q1 ← lift_m31 offset
+      let source ← q.add q1
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+offset : U32
+roff : p.offsets.index_usize i = ok offset
+run✝³ :
+  (do
+      let q1 ← lift_m31 offset
+      let source ← q.add q1
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+lifted : field.QM31
+run✝² :
+  (do
+      let source ← q.add lifted
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+source : field.QM31
+rsource : q.add lifted = ok source
+run✝¹ :
+  (do
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+power : field.QM31
+rpower : powers.index_usize i = ok power
+run✝ :
+  (do
+      let q3 ← power.mul source
+      before.add q3) =
+    ok out
+product : field.QM31
+rproduct : power.mul source = ok product
+run : before.add product = ok out
+cb : ↑col < 16
+vc : (FJk_CopyPatternDescriptor.model p).columns ⟨↑i, hi⟩ = ⟨↑col, cb⟩
+vo : (FJk_CopyPatternDescriptor.model p).offsets ⟨↑i, hi⟩ = ↑offset
+ob : ↑offset < 2147483647
+ix : ↑idx = ↑col
+rlift : ok (FIw_ScalarArithmetic.lifted offset) = ok lifted
+lifted_eq : lifted = FIw_ScalarArithmetic.lifted offset
+lv : Canon lifted ∧ decode lifted = ↑↑offset
+qv : Canon q
+pw : Canon power
+sv : Canon source ∧ decode source = decode q + decode lifted
+mv : Canon product ∧ decode product = decode power * decode source
+result : Canon out ∧ decode out = decode before + decode product
+⊢ decode before + FIv_NativeArray.value powers ↑i * (FIv_NativeArray.value a ↑col + ↑↑offset) =
+    if True then decode before + FIv_NativeArray.value powers ↑i * (FIv_NativeArray.value a ↑col + ↑↑offset)
+    else decode before
+FJk_PatternCellValue.lean:59:40: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [UScalar.ofNatCore_val_eq,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJk_PatternCellValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
