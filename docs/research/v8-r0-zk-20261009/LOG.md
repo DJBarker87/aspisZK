@@ -12739,3 +12739,27 @@ integ5 resumes: the 1,000-pair differential against c57a344726 (seeds 6000-6999)
 whole-prover ratio (D289) and a scratch per-call measurement for batch 1, giving the full projection;
 the quiet-window timing gate is planned, not run. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D329 (Stream B) 2026-10-27 22:26 UTC: runjoin23 result: universal source identification conditional; V152 may need only Admission; runjoin merged into the candidate; runjoin24 launched
+
+runjoin23 (99 charged attempts: 91 passed, 8 rejected; audits 38997-38999 with standard axioms)
+read the exact quantifiers: V152 and V153 range over every w : source.Instance, and V154 equates the
+whole Fin 1024 transport with D18. It lifts the all-argument records identification to universal
+form without fixtures (UniversalDictionary22, UniversalRecords22) and builds SourceIdentification
+for arbitrary input families (UniversalBuild22): public_eq needs only semantic Admission; build_eq
+still needs universal compiler-return success, Checked and canonical frontier words. It proves the
+source snapshot/afterstate association, direction and value bits, variant and late_append result on
+every successful return (UniversalTransition22, UniversalCompilerFrame22, UniversalReturnedLate22),
+lifts the constructor and append laws beyond the zero-index fixtures, and shows aggregate bank
+success iff all 57 blocks pass. Fixtures are used only as non-vacuity evidence. PayloadAssociation22
+records a conditional diagnostic (changing cached trace metadata keeps Admission but breaks the
+cached-payload association); the modified payload is not a compiler return, so it is not a
+counterexample to V153. The broader admission audit was blocked by 11 R1Z.PV_Src_* modules missing
+from the runjoin branch. V152-V154 retained; endpoint premises removed 0/0/0.
+
+The 11 modules exist on research and on the prover candidate (identical blobs); the runjoin branch
+predated them. The lead merged codex/pv-runjoin-20261026 into the candidate (b3ad0edf5b; 57 commits;
+no crates/ change; no forbidden tokens; pushed) and fast-forwarded the runjoin branch to it.
+runjoin24 (IDs 38100-38199) first decides whether Admission follows from w : source.Instance, which
+would prove V152 outright, then the admission audit, V153's universal compiler-return success and
+V154's transport. Rows removed outright: 0. Privacy target not yet established.
