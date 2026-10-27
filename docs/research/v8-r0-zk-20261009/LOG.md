@@ -11436,3 +11436,20 @@ client source and (B) the candidate source, audit every secret-dependent kernel 
 results labelled "devnet R1 recipe, toolchain unpinned", findings linked to their L2/L3 rows, the
 differing files mapped to kernels, and a V374 dudect plan for (B). Six slots: op223, canon, cblib3, op134,
 runjoin13, l3dis3. Rows removed outright: 0. Privacy target not yet established.
+
+## D270 (Stream B) 2026-10-27 10:25 UTC: client build recipe recorded in the release ledger; toolchain pin escalated to the owner with a recommendation
+
+Stream A added "Native client build: recipe of record, toolchain NOT pinned" to the release ledger's
+client-bundle section: the devnet R1 command (release, offline, locked, -j 4, --features r1p-check, --bin
+devnet_spend, RUSTFLAGS `-C link-arg=-Wl,--threads=4` from the receipt wrapper, host default
+~/.cargo/bin/cargo), "the shipped client binary" undefined until an exact toolchain pin is approved, L3
+client-binary results labelled "toolchain unpinned", and the bundle re-pinned at candidate adoption.
+Choosing the toolchain defines a release artifact, so it is an owner decision. Host facts (2026-10-27
+10:20 UTC): the default is the MOVING `stable` channel, currently rustc 1.94.1 (e408947bf 2026-03-25,
+commit e408947bfd200af42db322daf0fadfe7e26d3bd1), LLVM 21.1.8, cargo 1.94.1 (29ea6fb6a 2026-03-24),
+host/target x86_64-unknown-linux-gnu. LEAD RECOMMENDATION to the owner: pin exactly that toolchain
+(rustc/cargo 1.94.1 by version and commit, target x86_64-unknown-linux-gnu, RUSTFLAGS as recorded, no
+target-cpu change) as the client build, because it is the toolchain the candidate's timing, differential
+and L3 evidence were produced with, and pinning anything else would invalidate that evidence; record it
+as a rust-toolchain file for the client build and in the release ledger; the pin is re-confirmed at
+candidate adoption. Privacy target not yet established.
