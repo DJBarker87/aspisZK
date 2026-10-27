@@ -1,0 +1,35 @@
+import JGz_DefaultPool
+import Hist_ValidateCut
+import Hist_Asq8Guards
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGz_ValidationOwner
+open Aeneas Aeneas.Std Result S2W_D189Entry S2W_D189Wrappers
+
+theorem source (base : AdapterRw.Ops) (proofAccount data : Slice U8)
+    (slot : S2W_ExtractionBoundary.Slot) (out : AdapterRw.r1_pool_adapter.ValidatedAsqa)
+    (accepted : AdapterRw.r1_pool_adapter.owned.validate_asq8 (Hist_Authority.install base)
+      CPH_Program.verifier ((JFv_World.e2 proofAccount).second secondSizes) data slot=ok (.Ok out)) :
+    ∃ pool lane current authenticated,
+      AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts (Hist_Authority.install base)
+        CPH_Program.verifier ((JFv_World.e2 proofAccount).second secondSizes)
+        pool lane current=ok (.Ok authenticated) ∧ pool=CPH_Program.verifier := by
+  obtain ⟨pool,lane,current,authenticated,auth⟩ := Hist_ValidateCut.authenticated
+    (Hist_Authority.install base) _ _ data slot out accepted
+  obtain ⟨master,forest,selected,checkpoint,im,_,_,_,_,guard,_,_⟩ :=
+    Hist_Asq8Guards.guards (Hist_Authority.install base) _ pool _ lane current authenticated auth
+  have same : master=(JFv_World.e2 proofAccount).snapshot 1 384 384 :=
+    Result.ok.inj (im.symm.trans (JGz_AccountOwners.master_index proofAccount))
+  subst master
+  have owners := (Hist_Metadata.readonly_owner base _ pool guard).1
+  exact ⟨pool,lane,current,authenticated,auth,owners.symm⟩
+#print axioms source
+end AspisR1.JGz_ValidationOwner
+end
+
+#print axioms AspisR1.JGz_AccountOwners.owner
+#print axioms AspisR1.JGz_AccountOwners.master_index
+#print axioms AspisR1.JGz_AccountOwners.master_rejects
+#print axioms AspisR1.JGz_AuthenticationObstruction.source
+#print axioms AspisR1.JGz_DefaultPool.different
+#print axioms AspisR1.JGz_DefaultPool.rejects
