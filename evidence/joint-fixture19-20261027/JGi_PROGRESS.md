@@ -43,3 +43,25 @@ JGi_ClaimFixture.inhabited (068) joins expansion/parser/View/powers and the
 actual claim return; its ONLY conditional conjunct is guarded by the EXACT
 JGe_TerminalCondition.Identified. The guard is not asserted inhabited.
 Full preparation and accepted1/checkpoint identity remain open at this stage.
+
+## Full preparation stage
+
+084: JGi_PreparationFixture.inhabited proves PreparedScratchModel.prepare's
+complete successful Result and29-element returned scratch on the SAME retained
+real proof/public initialization, strict prefix, actual View and semantic finish.
+Its sole guard is JGe_TerminalCondition.Identified. The inherited095 constructor
+is repaired by JGi_PrepareReturn (separate final-branch record theorem) and
+JGi_PrepareForward. Attempt082's recursion-depth failure at query dictionary
+unfolding was replaced by the projected named equality JGi_ClosedQueries;
+no maxRecDepth/heartbeat increase and no unchanged failed compile was used.
+
+088: JGi_OriginalPreparation.source/inhabited transports that actual success
+through originalNew_eq_transport, preserving complete current Prepared/scratch
+and every semantic carrier field. 089–092 reuse real public initialization/begin
+on the SAME parsed prefix and compose the whole semantic verification.
+093: JGi_CurrentFixture.inhabited jointly constructs the actual current semantic
+verify return and full current originalNew return on that View and that input
+scratch. The only guard remains the exact named terminal identification.
+This establishes requested stages1–2. It does not establish enclosing
+candidate.prepare, TX1 acceptance, returned checkpoint equality or a deployed
+accepted-pair fixture. No premise-removal credit is assigned.
