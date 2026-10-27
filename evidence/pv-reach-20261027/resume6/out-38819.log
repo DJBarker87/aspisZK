@@ -1,0 +1,46 @@
+/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/sources/R1Z/PV_RE_ClientPrefix6.lean:9:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RE_ClientPrefix6.pair_identity`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/sources/R1Z/PV_RE_ClientPrefix6.lean:28:2: error: 'change' tactic failed, pattern
+  (do
+      let a ← ExternalFuns.op233 transport.Variant.S2 transport.Variant.S2
+      let a ← ok (decide ¬a = true)
+      have __do_jp :
+        core.result.Result prover.RetriedProof verifier.Error × Store →
+          Result (core.result.Result prover.RetriedProof verifier.Error × Store) :=
+        fun __x =>
+        match __x with
+        | (r, s) => ok (r, s)
+      if a = true then do
+          let __x ← ok (core.result.Result.Err verifier.Error.Semantic, store)
+          __do_jp __x
+        else do
+          let __x ←
+            prover.retry_attempt
+                (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                  entropy)
+                pub compiled transport.Variant.S2 hash store state 0#usize
+          __do_jp __x) =
+    ?m.35
+is not definitionally equal to target
+  (do
+      let a ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq transport.Variant.S2 transport.Variant.S2
+      let a ← ok (decide ¬a = true)
+      let (r, nonce_store1) ←
+        if a = true then ok (core.result.Result.Err verifier.Error.Semantic, store)
+          else
+            prover.retry_attempt
+              (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                entropy)
+              pub compiled transport.Variant.S2 hash store state 0#usize
+      ok (r, nonce_store1)) =
+    prover.retry_attempt
+      (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+        entropy)
+      pub compiled transport.Variant.S2 hash store state 0#usize
+'R1Z.PV_RE_ClientPrefix6.pair_identity' does not depend on any axioms
+'R1Z.PV_RE_ClientPrefix6.client_to_retry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RE_ClientPrefix6.retry_to_attempt' depends on axioms: [propext, Classical.choice, Quot.sound]

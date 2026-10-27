@@ -57,6 +57,9 @@ def visit(m,parent=None):
  for i in imports:visit(i,path)
  order.append(m)
 visit('R1Z.PV_CB_CandidateCore')
+extra={r['module']:r for r in json.loads((E/'additional-freeze-matches.json').read_text())} if (E/'additional-freeze-matches.json').exists() else {}
+for m,r in rows.items():
+ if m in extra:r['authority']='freeze';r['authority_record']=extra[m]['authority_record']
 (E/'project-closure.json').write_text(json.dumps([rows[m] for m in order],indent=2)+'\n')
 print('closure',len(rows),'h5',sum(r['authority']=='h5' for r in rows.values()))
 for m in order:

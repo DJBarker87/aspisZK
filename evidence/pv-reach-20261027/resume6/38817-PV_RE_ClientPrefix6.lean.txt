@@ -1,0 +1,50 @@
+import R1Z.PV_RE_ClientEntry
+import R1Z.PV_RE_EntropyBoundaryFrames
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RE_ClientPrefix6
+open Aeneas Aeneas.Std Result ProverRwFull PV_RE_RetryStep
+variable [ExternalTypes]
+
+theorem pair_identity {A B : Type} (run : Result (A × B)) :
+    (run >>= fun (a,b) => .ok (a,b)) = run := by
+  cases run <;> rfl
+
+/-- Exact transport past the client's variant guard to the original retry.
+The successful guard is an explicit source-prefix equation. -/
+theorem client_to_retry {C : Type} (D : ExternalFuns)
+    (entropy : core.ops.function.FnMut C Usize (Array U8 32#usize))
+    (pub : Public) (compiled : Compiled) (hash : Hash) (store : Store) (state : C)
+    (guard : D.op233 .S2 .S2 = .ok true) :
+    @RealR1_client.prove_for_proof_accounts _ D C entropy pub compiled hash store state =
+      @prover.retry_attempt _ D C
+        (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError entropy)
+        pub compiled .S2 hash store state 0#usize := by
+  unfold RealR1_client.prove_for_proof_accounts prover.prove_masked_retrying_with
+    core.cmp.PartialEq.ne.trait_default core.cmp.PartialEq.ne.default
+    transport.Variant.Insts.CoreCmpPartialEqVariant
+  simp only [PV_RE_ClientEntry.bind_assoc]
+  rw [guard]
+  exact pair_identity _
+
+/-- One actual retry iteration enters the extracted attempt after a successful
+entropy call returning an Ok secret. The retry continuation stays symbolic. -/
+theorem retry_to_attempt {C : Type} (D : ExternalFuns)
+    (entropy : Entropy C) (pub : Public) (compiled : Compiled)
+    (variant : transport.Variant) (hash : Hash) (store : Store) (state state1 : C)
+    (k : Usize) (secret : Secrets)
+    (active : ¬ k >= prover.ATTEMPT_CAP)
+    (prefix : entropy.call_mut state k = .ok (.Ok secret,state1)) :
+    ∃ next,
+      @prover.retry_attempt _ D C entropy pub compiled variant hash store state k =
+        (@prover.prove_masked_attempt _ D pub compiled variant hash secret store >>= next) := by
+  letI : ExternalFuns := D
+  rw [unfold_retry]
+  unfold step
+  rw [if_neg active, prefix]
+  exact ⟨_,rfl⟩
+
+#print axioms pair_identity
+#print axioms client_to_retry
+#print axioms retry_to_attempt
+end R1Z.PV_RE_ClientPrefix6
