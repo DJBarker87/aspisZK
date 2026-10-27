@@ -1,0 +1,52 @@
+{"attempt": "XRy_L065", "exit_status": 0, "wall_seconds": 1.6566697630332783, "peak_rss_kib": "4751972", "swaps": "0", "print_axioms": []}
+def AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop.body : {D : Type} →
+  AspisR1CurrentPreparedClaim.ClaimDotOps D →
+    {H : Type} →
+      AspisR1CurrentPreparedClaim.aspis_core.Digest32 H →
+        AspisR1CurrentPreparedClaim.r1_semantic.Verified H →
+          Slice U8 →
+            Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 29#usize →
+              Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 7#usize →
+                core.ops.range.Range Usize →
+                  Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 7#usize →
+                    Result
+                      (ControlFlow
+                        (core.ops.range
+...
+ideExact)
+            AspisR1CurrentPreparedClaim.aspis_core.field.WideExact) :=
+fun k parts iter claim => do
+  let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+    | none => ok (ControlFlow.done claim)
+    | some i => do
+      let we ← parts.index_usize i
+      AspisR1CurrentPreparedClaim.trace.value 14#u16 i we
+      let we1 ← k.index_usize i
+      let we2 ← we1.mul we
+      let claim1 ← claim.add we2
+      ok (ControlFlow.cont (iter1, claim1))
+def AspisR1CurrentPreparedClaim.aspis_core.field.WideExact.mul : AspisR1CurrentPreparedClaim.Concrete.E →
+  AspisR1CurrentPreparedClaim.Concrete.E → Result AspisR1CurrentPreparedClaim.Concrete.E :=
+fun x y => do
+  let z ←
+    AspisR1CurrentWide.field.wide_exact.WideExact.mul (AspisR1CurrentPreparedClaim.Concrete.toFull x)
+        (AspisR1CurrentPreparedClaim.Concrete.toFull y)
+  ok (AspisR1CurrentPreparedClaim.Concrete.fromFull z)
+def AspisR1CurrentPreparedClaim.aspis_core.field.WideExact.add : AspisR1CurrentPreparedClaim.Concrete.E →
+  AspisR1CurrentPreparedClaim.Concrete.E → Result AspisR1CurrentPreparedClaim.Concrete.E :=
+fun x y => do
+  let z ←
+    AspisR1CurrentWide.field.wide_exact.WideExact.add (AspisR1CurrentPreparedClaim.Concrete.toFull x)
+        (AspisR1CurrentPreparedClaim.Concrete.toFull y)
+  ok (AspisR1CurrentPreparedClaim.Concrete.fromFull z)
+def AspisR1CurrentPreparedClaim.ClaimParser.field : Slice U8 →
+  Usize → Result AspisR1CurrentPreparedClaim.ClaimParser.E :=
+fun bytes i => do
+  let x ← AspisR1CurrentWide.Proof.finishField bytes i
+  ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x)
+def AspisR1CurrentPreparedClaim.ClaimParser.c0 : AspisR1CurrentPreparedClaim.ClaimParser.E →
+  Result AspisR1CurrentPreparedClaim.aspis_core.field.QM31 :=
+fun x => ok x.c0
+
+Running as unit: run-r4597709f1a8d4fdfaf32378817f5798f.scope; invocation ID: 6991a454518249ff9ac16b41894b80c3

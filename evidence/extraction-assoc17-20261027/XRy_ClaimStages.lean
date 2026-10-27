@@ -1,0 +1,9 @@
+import XRy_PreparePowers
+open Aeneas Aeneas.Std Result
+#print AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop.body
+#print AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum
+#print AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop.body
+#print AspisR1CurrentPreparedClaim.aspis_core.field.WideExact.mul
+#print AspisR1CurrentPreparedClaim.aspis_core.field.WideExact.add
+#print AspisR1CurrentPreparedClaim.ClaimParser.field
+#print AspisR1CurrentPreparedClaim.ClaimParser.c0
