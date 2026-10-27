@@ -11390,3 +11390,29 @@ followed by the quiet-window timing gate. Launched pv-runjoin13 (same branch, ID
 and generally, then compiler-return, transition, deployed public binding and non-vacuity. Six slots:
 op223, canon, cblib3, op134, l3dis, runjoin13. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D268 (Stream B) 2026-10-27 10:10 UTC: L3 disassembly round 1: checked secret-dependent branches classified; shipped binary not yet audited; l3dis2 launched
+
+pv-l3dis (`codex/pv-l3-20261026`, head 5eba6495dd; 0/30 Lean, no Kani; capped release build 67.1 s / 932
+MB / swap 0; no crates/programs change). Built the unmodified r1p_retry_gate EXAMPLE (release,
+features optimized-terminal,ct-host-prover; rustc 1.94.1, LLVM 21.1.8, x86_64 Linux; sha256
+c7f359d4da1c5a759a3ddf4b83c7cccd602b9e0c104e85170a593f82116b516a) and audited the linked disassembly
+(evidence/pv-l3-20261027/DISASSEMBLY-AUDIT.md). CHECKED findings: F1/F2 private-mask rejection branch in
+SeedExpander::m31 (state_only_hiding.rs:424-426: a 31-bit candidate equal to P is rejected); F3 cursor
+addressing that depends on the rejection history (:409-416); F4 witness-dependent pole verdict branch at
+0x9483d; F5 operand-zero branches in M31::inv; F6 a gamma-sampler carry branch on the raw Fiat-Shamir
+answer; F7 seed zero/short-circuit comparisons in `generate` (state_only_entropy.rs:193); DIV in sumcheck
+on public operands; ct_pole::all_slots_clear and logup::compress_tagged_tuple clean in body (V371 for
+ALU/IMUL/SSE timing; DOITM off). LEAD ASSESSMENT: F1-F3 and F7 are rejection-sampler patterns that reveal
+only rejection counts (probability 2^-31 per word, 2^-256 per seed), independent of the accepted mask
+values and of the witness, so they are simulatable in principle: that is exactly ledger row V354 (L2 F3
+SeedExpander) and V352 (generate_for_mask_nonce), which must PROVE it; F4 differs between witnesses only
+on the charged poleBad event; F5 is covered by the inversion containment (D259/D261); F6 depends on public
+data. No new leak is claimed or excluded: audits never prove absence of leakage. V373 stays OPEN because
+the audited binary is a diagnostic example, not the shipped executable, and it lacks the 64-byte
+generate_for_mask_nonce route. Launched pv-l3dis2 (same branch, IDs 50900-51199, 30 Lean): build
+devnet_spend exactly as pinned by client-pins.json (release ledger, owner-approved client bundle) and
+audit every secret-dependent kernel reached from devnet_spend::main, including generate_for_mask_nonce,
+mask application/balancing and the hashing internals on secret data, each finding linked to its L2/L3
+row; new non-rejection findings are reported as such. Six slots: op223, canon, cblib3, op134, runjoin13,
+l3dis2. Rows removed outright: 0. Privacy target not yet established.
