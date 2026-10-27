@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """One focused proof check through the lead's existing launcher; collect receipts."""
-import datetime, hashlib, json, pathlib, re, shlex, subprocess, sys, time
+import atexit, datetime, hashlib, json, pathlib, re, shlex, subprocess, sys, time
 root=pathlib.Path(__file__).resolve().parents[2]
 e=root/'evidence/pv-runjoin10-20261027'
+atexit.register(lambda: subprocess.run([sys.executable,str(root/'tools/pv-runjoin10-20261027/tally.py')],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL))
 flag=pathlib.Path('/private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/pv-host-restored.flag')
 assert flag.is_file(), 'host rebuild gate closed'
 assert 'HOST RESTORED' in flag.read_text()
