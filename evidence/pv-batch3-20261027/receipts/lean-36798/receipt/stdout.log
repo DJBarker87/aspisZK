@@ -1,0 +1,63 @@
+theorem PV_B3_FiniteLoopTransport.source : ∀ {A B C D : Type}
+  (newBody : A → Aeneas.Std.Result (Aeneas.Std.ControlFlow A B))
+  (oldBody : C → Aeneas.Std.Result (Aeneas.Std.ControlFlow C D)) (f : A → C) (g : B → D),
+  (∀ (x : A), oldBody (f x) = PV_B3_ArrayCarrier.resultMap (PV_B3_FiniteLoopTransport.controlMap f g) (newBody x)) →
+    ∀ (rank : A → ℕ),
+      (∀ (x y : A), newBody x = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont y) → rank y < rank x) →
+        ∀ (x : A), Aeneas.Std.loop oldBody (f x) = PV_B3_ArrayCarrier.resultMap g (Aeneas.Std.loop newBody x) :=
+fun {A B C D} newBody oldBody f g comm rank decreases x =>
+  Eq.trans (PV_B3_FiniteLoopTransport.bounded newBody oldBody f g comm rank decreases (rank x) x (Nat.le_refl (rank x)))
+    (congrArg (PV_B3_ArrayCarrier.resultMap g)
+      (Eq.symm (PV_B3_BoundedLoop.source_eq_bounded newBody rank decreases (rank x) x (Nat.le_refl (rank x)))))
+theorem PV_B3_RawInputPacket.mask117_bounded : ∀ (c : Aeneas.Std.Array PV_B3_FieldTransport.Old.Q 16#usize)
+  (m : Aeneas.Std.Array PV_B3_FieldTransport.Old.Q 10#usize) (g : PV_B3_FieldTransport.Old.Q)
+  (p : Aeneas.Std.Array PV_B3_FieldTransport.Old.Q 10#usize),
+  PV_B3_RawInputPacket.mask117 c m g p =
+    PV_B3_FieldTransport.map PV_B3_FieldTransport.toQ
+      (PV_B3_Mask117Finite.reference (PV_B3_QArrayCarrier.fromArray c) (PV_B3_QArrayCarrier.fromArray m)
+        (PV_B3_FieldTransport.fromQ g) (PV_B3_QArrayCarrier.fromArray p)) :=
+fun c m g p =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            PV_B3_FieldTransport.map PV_B3_FieldTransport.toQ _a =
+              PV_B3_FieldTransport.map PV_B3_FieldTransport.toQ
+                (PV_B3_Mask117Finite.reference (PV_B3_QArrayCarrier.fromArray c) (PV_B3_QArrayCarrier.fromArray m)
+                  (PV_B3_FieldTransport.fromQ g) (PV_B3_QArrayCarrier.fromArray p)))
+          (PV_B3_BoundedPacket.mask117 (PV_B3_QArrayCarrier.fromArray c) (PV_B3_QArrayCarrier.fromArray m)
+            (PV_B3_FieldTransport.fromQ g) (PV_B3_QArrayCarrier.fromArray p))))
+      (Eq.refl
+        (PV_B3_FieldTransport.map PV_B3_FieldTransport.toQ
+          (PV_B3_Mask117Finite.reference (PV_B3_QArrayCarrier.fromArray c) (PV_B3_QArrayCarrier.fromArray m)
+            (PV_B3_FieldTransport.fromQ g) (PV_B3_QArrayCarrier.fromArray p)))))
+theorem PV_B3_RawInputPacket.polynomial121_bounded : ∀ (p : Aeneas.Std.Array PV_B3_FieldTransport.Old.Q 28#usize)
+  (x : PV_B3_FieldTransport.Old.Q),
+  PV_B3_RawInputPacket.polynomial121 p x =
+    PV_B3_FieldTransport.map PV_B3_FieldTransport.toQ
+      (PV_B3_PolynomialFinite.reference (PV_B3_QArrayCarrier.fromArray p) (PV_B3_FieldTransport.fromQ x)) :=
+fun p x =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            PV_B3_FieldTransport.map PV_B3_FieldTransport.toQ _a =
+              PV_B3_FieldTransport.map PV_B3_FieldTransport.toQ
+                (PV_B3_PolynomialFinite.reference (PV_B3_QArrayCarrier.fromArray p) (PV_B3_FieldTransport.fromQ x)))
+          (PV_B3_BoundedPacket.polynomial121 (PV_B3_QArrayCarrier.fromArray p) (PV_B3_FieldTransport.fromQ x))))
+      (Eq.refl
+        (PV_B3_FieldTransport.map PV_B3_FieldTransport.toQ
+          (PV_B3_PolynomialFinite.reference (PV_B3_QArrayCarrier.fromArray p) (PV_B3_FieldTransport.fromQ x)))))
+'PV_B3_ArrayCarrier.index' depends on axioms: [propext]
+'PV_B3_ArrayUpdateCarrier.update' depends on axioms: [propext, Quot.sound]
+'PV_B3_QArrayCarrier.left' depends on axioms: [propext, Quot.sound]
+'PV_B3_QArrayCarrier.right' depends on axioms: [propext, Quot.sound]
+'PV_B3_BoundedPacket.forest134' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_BoundedPacket.mask117' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_BoundedPacket.polynomial121' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_FiniteLoopTransport.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_RawInputPacket.mask117_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_RawInputPacket.polynomial121_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_RawInputPacket.nonvacuity117' depends on axioms: [propext, Classical.choice, Quot.sound]
