@@ -12410,3 +12410,42 @@ callback occurrence (each opaque higher-order boundary justified by its own lemm
 poisoning on actual invocations, native success witnesses conditional on the named V163/V167
 associations, a proved minimal reached set per shape, then comparison with the row records (IDs
 37300-37399). Rows removed outright: 0. Privacy target not yet established.
+
+## D315 (Stream B) 2026-10-27 19:49 UTC: network outage on the coordinating Mac; pv-reach5 and pv-alib2 stopped on it; V233 and V265 provisionally closed on the candidate
+
+From about 19:20 UTC the coordinating Mac's network degraded: internet round trips of 0.9-3.6 s,
+100% ping loss to the build host over its direct LAN Tailscale path, SSH connections taking 17-72 s
+or closing, and Codex API timeouts. The build host stayed healthy (no reboot, 52 GB available, near
+idle). Workers stopped host work under local-lean rule 5. A recovery monitor is running; no job is
+relaunched until the link is stable.
+
+pv-reach5 (35 IDs submitted: 25 passed, 9 failed, 37334 unknown; 65 attempts unspent; all 5,673
+external objects verified under (h4) first) adds composed source-context proofs and finds that the
+op84 interface can catch a callback error. That is a checked limitation of the no-catch proof
+method at that boundary, not a counterexample in shipped source; exclusion by poisoning cannot pass
+through op84 until it is handled. V404/V405 stay OPEN; head 48cd6d0193.
+
+pv-alib2 (25 Lean attempts and 4 Kani runs unspent; no crates/ or programs/ change; no forbidden
+tokens in its 40 Lean files) reports:
+- V233 / op209 split_blocks: OPEN -> CLOSED-ON-CANDIDATE by the P6 route. Closing theorems
+  PV_AL_SplitSelected.native_callback/.consumed with PV_AL_SplitBridge; complete source law
+  PV_AL_SplitObservation.complete over arbitrary slices and block sizes, including the
+  division-by-zero failure; no-stub Kani gate kani-split64-02 (lengths 0-129, 389 checks) plus
+  1,026 native prefixes; no conclusion-shaped hypotheses; standard axioms (52753/52755). The bounded
+  gate scope is explicit; SHA-NI semantics (V232) untouched.
+- V265 / op259 circle_sample: OPEN -> CLOSED-ON-CANDIDATE by the structural route that ruling (k)
+  permits for chained field arithmetic. PV_AL_CircleNative.source_reference and
+  PV_AL_CircleSelected.native_source/.consumed cover every block and both rows with complete Result
+  behaviour; PV_AL_CircleControl.native_owned proves the control transport; the link between the
+  shipped bodies and the owned reference is the script-checked STRUCTURAL-CIRCLE-GATE.json plus
+  8,712 native wrapper comparisons, and is recorded as a structural argument, not a machine proof of
+  shipped-equals-reference. Standard axioms (52756-52767). The defective low_base_p_digits body is
+  absent from the op259 graph.
+- V184 / op33 Vec.pop: OPEN. Move-reference value and zero-copy laws are proved and 99 native
+  non-Copy cases show zero allocations; the native/world bridge is unverified; the [17,29]
+  counterexample is retained.
+Both closures are provisional: attempt 52775's output and axioms were lost when SSH closed, and the
+combined audit and candidate closure replay have not run. They are counted in the next recount only
+after those pass. Process fault: pv-alib2 used IDs in 52700-52799, which pv-batch3 had already
+spent, despite the D307 correction; receipts stay unambiguous by job directory, and its next run is
+restricted to a fresh block. Rows removed outright: 0. Privacy target not yet established.
