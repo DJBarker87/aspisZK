@@ -1,0 +1,38 @@
+{"attempt": "JHa28_091", "exit_status": 1, "wall_seconds": 2.86781989200972, "peak_rss_kib": "6254556", "swaps": "0", "print_axioms": ["'AspisR1.JHa_Pending.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHa_Pending.lean:29:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port3_PendingInstall.pending true (Tx1Q_Carriers.accumulator a).weights
+in the target expression
+  Port3_PendingInstall.pending true (Tx1Q_Carriers.accumulator a).weights.deref =
+    ok (core.result.Result.Ok (Tx1Q_Carriers.pending b))
+
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+initial : installed.op20 transport.Variant.S2 = ok (core.result.Result.Ok a)
+call : Tx1Q_PrefixInstall.newPending true a.weights.deref = ok (core.result.Result.Ok b)
+facts :
+  ↑(Tx1Q_Carriers.accumulator a).weights = List.replicate 64 Port2_Initial.zeroK ∧
+    (Tx1Q_Carriers.accumulator a).rhs = Port2_Initial.
+...
+JHa_Pending.lean:29:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port3_PendingInstall.pending true (Tx1Q_Carriers.accumulator a).weights
+in the target expression
+  Port3_PendingInstall.pending true (Tx1Q_Carriers.accumulator a).weights.deref =
+    ok (core.result.Result.Ok (Tx1Q_Carriers.pending b))
+
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+initial : installed.op20 transport.Variant.S2 = ok (core.result.Result.Ok a)
+call : Tx1Q_PrefixInstall.newPending true a.weights.deref = ok (core.result.Result.Ok b)
+facts :
+  ↑(Tx1Q_Carriers.accumulator a).weights = List.replicate 64 Port2_Initial.zeroK ∧
+    (Tx1Q_Carriers.accumulator a).rhs = Port2_Initial.zeroE ∧
+      (Tx1Q_Carriers.accumulator a).power = Port2_Initial.oneK ∧ a.next = 0#usize
+size : (↑(Tx1Q_Carriers.accumulator a).weights).length = 64
+native :
+  Port3_NativePendingInstall.source true (Tx1Q_Carriers.slice Tx1Q_Carriers.k a.weights.deref) =
+    ok (core.result.Result.Ok (Tx1Q_Carriers.pending b))
+⊢ Port3_PendingInstall.pending true (Tx1Q_Carriers.accumulator a).weights.deref =
+    ok (core.result.Result.Ok (Tx1Q_Carriers.pending b))
+'AspisR1.JHa_Pending.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9bd1da96bb5a4eb08fa3e10d13b55074.scope; invocation ID: a07a784cc4b9405f9f045d59bca08beb
