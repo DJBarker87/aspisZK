@@ -1,0 +1,27 @@
+import JGk_TX2_Group0_01
+set_option autoImplicit false
+namespace AspisR1.JGk_TX2_Group0_00
+open JGk_TX2_OrderTools
+def group : List (Nat × Nat) := [(0,14296),(0,21249),(0,42159),(0,55376),(0,63861),(0,132354),(0,149625),(0,166164),(0,178081),(0,179623),(0,185636),(0,218095)]
+theorem ordered : group.Pairwise le := by decide
+#print axioms ordered
+theorem height : ∀ x ∈ group, x.1=0 := by
+  simp only [group,List.mem_cons,List.mem_singleton,List.not_mem_nil,or_false]
+  intro x hx
+  rcases hx with hx | hx | hx | hx | hx | hx | hx | hx | hx | hx | hx | hx
+  all_goals subst x; rfl
+#print axioms height
+def stream := group++JGk_TX2_Group0_01.stream
+theorem stream_ordered : stream.Pairwise le := by
+  apply append_groups 0 group JGk_TX2_Group0_01.stream ordered JGk_TX2_Group0_01.stream_ordered height
+  intro x hx
+  have := JGk_TX2_Group0_01.lower x hx
+  omega
+theorem lower : ∀ x ∈ stream, 0≤x.1 := by
+  intro x hx
+  rcases List.mem_append.mp hx with hx|hx
+  · have := height x hx; omega
+  · have := JGk_TX2_Group0_01.lower x hx; omega
+#print axioms stream_ordered
+#print axioms lower
+end AspisR1.JGk_TX2_Group0_00
