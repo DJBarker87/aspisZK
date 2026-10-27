@@ -10,7 +10,7 @@ inputs has been checked. No absence-of-leakage claim is made.
 | V354 m31 | state_only_hiding.rs:419–433 | IID masked 31-bit candidates under the E2 ROM/expander association; public number/order of requested cells. 16-draw cap, one rejected value P. |
 | V354 next_word | state_only_hiding.rs:409–417 | word in 0..8, initial word=8; refills at public position within the simulated consumed-word history. Counter wraps as u64. Full hash-call observation law still required. |
 | V354 qm31 | state_only_hiding.rs:435–440 | Four left-to-right capped scalar calls, stopping at first exhausted limb; preserve failed prefix, not just successful four-limb outputs. |
-| V352 entropy | state_only_entropy.rs:211–242 | Public nonzero nonce; IID independent 64-byte OS fills under E1, including status/partial-fill/failure schedule. Zero predicate scans all 32 bytes. First-zero short-circuits the second predicate. OS failure independence remains P under option B. |
+| V352 entropy | state_only_entropy.rs:211–242 | Public nonce guard is directly simulatable (zero nonce exits without an OS draw); otherwise IID independent 64-byte OS fills under E1, including status/partial-fill/failure schedule. Zero predicate scans all 32 bytes. First-zero short-circuits the second predicate. OS failure independence remains P under option B. |
 | N2 padding | state_only_hiding.rs:289–309 | 1024-row shape, active padding cells zero; inactive padding sum zero. Generated padding and balance must be associated with actual produced buffers. Public active mask controls the first conjunct. |
 | N3 canonical | host_semantic.rs:144–175 | Every 26×1024 base cell is <P; D/G's four limbs are canonical and byte round-trip parser accepts. Compiler output and every applied-mask arithmetic result must preserve this domain. Successful guard checks alone do not prove it on honest input. |
 | N4 balance | prover.rs:200–208 | 16 noised compiler C1 columns and 10 mask-only columns have inactive sum zero; D/G/H1 padding too. The caller rebalances the whole noised C1 column after applying masks; no zero-sum premise on the original compiler C1 column is required. Audit and rebalance must use the same inactive-row set and canonical field operations. |
@@ -38,7 +38,7 @@ stop on the first failure. Maintain the cumulative consumed-word count n:
 read offset 4(n mod 8), block index floor(n/8); refill before a read when the
 source word cursor is 8. Do not resample or hide failed limb prefixes.
 
-Entropy: B=2^256 and z=1/B. Per successful OS fill, first-zero rejection has
+Entropy: first test the public nonce; if it is zero, reproduce the immediate error and make no OS draw. Otherwise B=2^256 and z=1/B. Per successful OS fill, first-zero rejection has
 mass z; first-nonzero/second-zero rejection has mass (1-z)z; acceptance mass
 (1-z)^2. Thus q=2z-z². Draw the capped geometric rejection count (cap 16), and
 for each rejected draw sample its class with probabilities z/q and (1-z)z/q.
