@@ -11,7 +11,7 @@ sharing the arithmetic step (including fail/div), and restores to the SAME
 seed array. This is a kernel association result, not new native/D188 trust.
 SDY's existing credited body status is retained, not re-tested here.
 
-L001-L026: 26 attempts, 7 accepted modules (plus inspection), no timeout or
+L001-L026: 26 attempts, 6 accepted proof modules (plus inspection), no timeout or
 memory kill. Each exact target, argv, source/dependency hashes and revision,
 exit/wall/RSS/swap/cgroup and axioms appears in its receipt. Every successful
 new theorem has only propext/Classical.choice/Quot.sound, or a subset.
