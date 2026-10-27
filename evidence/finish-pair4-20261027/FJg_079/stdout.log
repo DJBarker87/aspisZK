@@ -1,0 +1,13 @@
+@[implicit_reducible] def QuadraticAlgebra.instField.{u_1} : {K : Type u_1} →
+  [inst : Field K] → {a b : K} → [Hab : Fact (∀ (r : K), r ^ 2 ≠ a + b * r)] → Field (QuadraticAlgebra K a b) :=
+fun {K} [Field K] {a b} [Fact (∀ (r : K), r ^ 2 ≠ a + b * r)] =>
+  { toCommRing := QuadraticAlgebra.instCommRing, toInv := QuadraticAlgebra.instInv, toDiv := QuadraticAlgebra.instDiv,
+    zpow := zpowRec, div_eq_mul_inv := ⋯, zpow_zero' := ⋯, zpow_succ' := ⋯, zpow_neg' := ⋯, toNontrivial := ⋯,
+    toNNRatCast := QuadraticAlgebra.instNNRatCast, toRatCast := QuadraticAlgebra.instRatCast, mul_inv_cancel := ⋯,
+    inv_zero := ⋯, nnratCast_def := ⋯, nnqsmul := fun x1 x2 => x1 • x2, nnqsmul_def := ⋯, ratCast_def := ⋯,
+    qsmul := fun x1 x2 => x1 • x2, qsmul_def := ⋯ }
+@[implicit_reducible] def QuadraticAlgebra.instMul.{u_1} : {R : Type u_1} →
+  {a b : R} → [Mul R] → [Add R] → Mul (QuadraticAlgebra R a b) :=
+fun {R} {a b} [Mul R] [Add R] =>
+  { mul := fun z w => { re := z.re * w.re + a * z.im * w.im, im := z.re * w.im + z.im * w.re + b * z.im * w.im } }
+FJg_FieldDefinitions.lean:4:7: error(lean.unknownIdentifier): Unknown constant `QuadraticAlgebra.instPow`
