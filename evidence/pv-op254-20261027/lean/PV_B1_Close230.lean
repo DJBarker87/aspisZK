@@ -22,10 +22,10 @@ theorem nonvacuity (ops : ExternalFuns) (x : HQ) :
   have h : Slice.len (sliceMap PV_B1_ActualCarrier230.toQ xs)=1024#usize := by
     rw [slice_length]; apply UScalar.eq_of_val_eq
     simp only [Slice.len_val,Slice.length,xs,List.length_replicate]; rfl
-  refine ⟨_,?_⟩
-  change resultMap _ (PV_B1_230.state_only_copy_helper_sum _) = _
-  rw [PV_B1_SumOriginal.exact_length _ h]
-  rfl
+  have hs := selected_callback ops xs
+  unfold PV_B1_SumOriginal.original_row at hs
+  rw [if_pos h] at hs
+  exact ⟨_,hs⟩
 #print axioms selected_callback
 #print axioms nonvacuity
 end PV_B1_Close230
