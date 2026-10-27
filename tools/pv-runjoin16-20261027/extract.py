@@ -82,6 +82,11 @@ if phase=='charon':
   del cmd[idx-1:idx+1]
   cmd[2:2]=['--precise-drops','--desugar-drops','--duplicate-defaulted-methods']
 
+ if len(sys.argv)>3 and sys.argv[3]=='abort-records':
+  cmd[cmd.index('built')]='optimized'
+  start=cmd.index('--opaque');end=cmd.index('--start-from');cmd[start:end]=['--include','aspis_core::field::*']
+  cmd[2:2]=['--precise-drops','--desugar-drops','--duplicate-defaulted-methods','--rustc-arg=-Cpanic=abort','--rustc-arg=-Zmir-enable-passes=+Inline,+GVN,+CopyProp,+DataflowConstProp,+SimplifyLocals-final,+SimplifyCfg-final','--rustc-arg=-Zinline-mir=yes']
+
 else:
  cmd=[aeneas,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','PV_RunJoin_Records','-dest',H+'/evidence/'+name+'-generated','-split-files','-emit-json',llbc]
 if phase=='aeneas' and len(sys.argv)>4:
