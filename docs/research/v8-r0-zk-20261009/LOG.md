@@ -12599,3 +12599,22 @@ six closures, and updates the owner packet: the client toolchain pin and the D18
 approved; the recipe features and constant-time decoding, N7 custody, SHA-NI, DOITM and client
 scope stay open, with D320's finding that the endpoint's selection is caller-supplied. Deployed
 endpoint premises removed: 0. Privacy target not yet established.
+
+## D322 (Stream B) 2026-10-27 21:45 UTC: pv-reach7 result; a pinned module beats a differently tracked file (ruling (h5')); pv-reach8 launched
+
+pv-reach7 used its 100 attempts (81 accepted, 19 failures retained; IDs 38800-38899; audits pass with
+standard axioms). It compiles source/suffix context chunks 064-073 (all of 000-073 now compile),
+proves op84 Result forwarding at the extracted level, and proves conditional actual client prefixes
+with public and hash poisoning. The six candidate modules resolve under (h5), but the installed-op84
+lemma stayed uncompiled at the stop (h5) prescribes: the transitive dependency
+R1Z.BuilderAdmissionExtracted is resolved by EJR_final-inventory.json to the real-r1 dependency-audit
+host copy (sha256 bbddadb0…) while the tracked docs/research/v8-r0-zk-20261009/lean/R1Z file (19d637fa…,
+identical on research and the candidate) differs. V404/V405 stay OPEN.
+
+The lead checked which variant the passing endpoint audit used: runjoin21's endpoint resolution
+(evidence/pv-runjoin20-20261027/endpoint-resolution.json) took the EJR variant. Ruling (h5'): the
+EJR or freeze resolution wins over a differently tracked file, both hashes are recorded, and a
+candidate module that needs declarations only in the tracked variant is reported as a cohort
+inconsistency rather than resolved by switching. This keeps one privacy closure. pv-reach8 (IDs
+39400-39499) builds the installed-op84 cohort on that basis, then the exclusions, conditional native
+witnesses and minimal reached sets. Rows removed outright: 0. Privacy target not yet established.
