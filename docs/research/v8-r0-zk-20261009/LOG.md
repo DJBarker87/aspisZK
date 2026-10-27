@@ -11060,3 +11060,21 @@ option-B endpoint statement with its diff against privacy_headline_deployed, the
 proof of the OS-failure event (a counterexample stops it and selects option A), and the derivation. Six
 slots: cb7, cblib, cbmid, runjoin12, srcid8, optb. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D252 (Stream B) 2026-10-27 07:25 UTC: cb7 exhausted (rows 5 → 5); extraction-obstruction diagnosis launched
+
+pv-cb7 (`codex/pv-cb3-20261026`, head a436dadfee; 100/100 Lean, 10/10 Kani; final replay 38842 exit 0 /
+2.13 s / 4.29 GB / swap 0, 382 axiom outputs over 372 targets all standard; no crates/programs change; no
+forbidden tokens). No new row: the cb3-track count stays 5. Proved support: the shipped pole-comparator
+correspondence, complete pole-reference Result laws, sampler-reference rank / canonicality / nonzero
+results, typed weight-read index domains; an emitted 18-function tensor closure awaits Lean checking.
+Native callback associations remain open, and its report isolates "source loan obstructions": the same
+extractor refusal as op223 (D251). Since the obstruction is now shared by at least two tracks, the freed
+slot goes to pv-extract (new branch `codex/pv-extract-20261027` from pv-cb @ 7599dff5b2, reusing the idle
+pv-cb worktree to save disk; IDs 42400-42699, 60 Lean, no Kani): inventory every row blocked by
+`ProverRwRngExtractor006`, find the preflight and why it was added, test whether the pinned Charon/Aeneas
+accept the functions on a copy of the pipeline (diagnostic; use for a row only with an argument that the
+preflight's concern does not apply), close op223/V164 if so, otherwise a design comparison of repairing
+the extraction versus prover-local index-loop copies under D187 (verifier path unchanged; candidate gates
+to re-run). Six slots: cblib, cbmid, runjoin12, srcid8, optb, extract. The inversion job (D248) takes the
+next slot in the idle pv-cb3 worktree. Rows removed outright: 0. Privacy target not yet established.
