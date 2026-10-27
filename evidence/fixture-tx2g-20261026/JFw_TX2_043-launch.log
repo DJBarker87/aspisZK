@@ -1,0 +1,51 @@
+{"attempt": "JFw_TX2_043", "exit_status": 1, "wall_seconds": 2.363326918974053, "peak_rss_kib": "5510240", "swaps": "0", "print_axioms": ["'AspisR1.JFw_TX2_PushStep.next0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JFw_TX2_PushStep.source0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFw_TX2_PushStep.lean:9:92: error: Tactic `rfl` failed: The left-hand side
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 0#usize, «end» := 4#usize }
+is not definitionally equal to the right-hand side
+  ok (some 0#usize, { start := 1#usize, «end» := 4#usize })
+
+⊢ core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 0#usize, «end» := 4#usize } =
+    ok (some 0#usize, { start := 1#usize, «end» := 4#usize })
+JFw_TX2_PushStep.lean:17:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (o, iter1) ← ok (some 0#usize, { start := 1#usize, «end» := 4#usize })
+    match o with
+      | none => ok (done { sums := pack a b c d })
+      | some j => 
+...
+ok (some 0#usize, { start := 1#usize, «end» := 4#usize })
+    match o with
+      | none => ok (done { sums := pack a b c d })
+      | some j => do
+        let i ← { sums := pack a b c d }.sums.index_usize j
+        let i1 ← (pack r0 r1 r2 r3).index_usize j
+        let i2 ← lift (core.convert.num.FromU64U32.from FIo_Native.fast_pairing.canonical.P)
+        let i3 ← lift (i1 &&& i2)
+        let i4 ← lift (i1.wrapping_shr 31#u32)
+        let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+        let i6 ← lift (core.num.U64.wrapping_add i i5)
+        let a ← { sums := pack a b c d }.sums.update j i6
+        ok (cont (iter1, { sums := a }))
+is not definitionally equal to the right-hand side
+  ok (cont ({ start := 1#usize, «end» := 4#usize }, { sums := pack (plus a r0) b c d }))
+
+a b c d r0 r1 r2 r3 : U64
+⊢ (do
+      let (o, iter1) ← ok (some 0#usize, { start := 1#usize, «end» := 4#usize })
+      match o with
+        | none => ok (done { sums := pack a b c d })
+        | some j => do
+          let i ← { sums := pack a b c d }.sums.index_usize j
+          let i1 ← (pack r0 r1 r2 r3).index_usize j
+          let i2 ← lift (core.convert.num.FromU64U32.from FIo_Native.fast_pairing.canonical.P)
+          let i3 ← lift (i1 &&& i2)
+          let i4 ← lift (i1.wrapping_shr 31#u32)
+          let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+          let i6 ← lift (core.num.U64.wrapping_add i i5)
+          let a ← { sums := pack a b c d }.sums.update j i6
+          ok (cont (iter1, { sums := a }))) =
+    ok (cont ({ start := 1#usize, «end» := 4#usize }, { sums := pack (plus a r0) b c d }))
+'AspisR1.JFw_TX2_PushStep.next0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFw_TX2_PushStep.source0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r772a968b0d6445f38ffac746b2124ee9.scope; invocation ID: ab0a5f9970e745c4bd87a5ed42dc3c1b

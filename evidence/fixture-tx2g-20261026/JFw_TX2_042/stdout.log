@@ -1,0 +1,19 @@
+JFw_TX2_FoldPush.lean:16:2: error: 'change' tactic failed, pattern
+  loopCall { start := 1#usize, «end» := 4#usize } { sums := pack (plus a r0) b c d } (pack r0 r1 r2 r3) = ?m.34
+is not definitionally equal to target
+  (match
+      match ({ start := 0#usize, «end» := 4#usize }, { sums := pack a b c d }) with
+      | (iter1, self1) => FIo_Native.fast_pairing.canonical.Dot.push_loop.body (pack r0 r1 r2 r3) iter1 self1 with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, self1) => FIo_Native.fast_pairing.canonical.Dot.push_loop.body (pack r0 r1 r2 r3) iter1 self1)
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok { sums := pack (plus a r0) (plus b r1) (plus c r2) (plus d r3) }
+'AspisR1.JFw_TX2_FoldPush.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
