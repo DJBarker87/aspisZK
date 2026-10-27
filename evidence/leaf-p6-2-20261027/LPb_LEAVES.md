@@ -1,4 +1,4 @@
-# LPb P6 leaves — final native status; Lean audit pending
+# LPb P6 leaves — final handoff
 
 **Both bridges OPEN. Target not yet established. Actual-top premises removed: zero.**
 This job uses the final 20-Kani/60-Lean scope, not the superseded L187 replay.
@@ -63,7 +63,7 @@ item, source adoption, shipped cfg(kani) edit, or release artifact is introduced
 No ELF rebuild trigger fires; the three historical ELF hashes are inherited,
 not reproduced. The two leaves remain visible P6 obligations for XRn_.
 
-Further validation and final per-stage results will be appended below.
+Final validation and per-stage results follow below.
 
 ## Final native stage table (20/20 budget used)
 
@@ -96,3 +96,47 @@ peak process RSS5713764KiB, cgroup memory peak5862879232bytes, swap0.
 Every receipt retains the exact argv, revision/source hashes, admission, verified
 6G/8G/swap0/tasks64 limits, exit, wall, RSS, cgroup peak, and complete output.
 No further Kani invocation is permitted in this scope.
+
+## Active harness lock qualification
+
+Final inspection found cfg-if/libc version drift in the active standalone
+harness lock despite exact direct native source/root-lock pins. See
+LPb_LOCK-FINDING.md and the retained LPb_Cargo.lock. All native outcomes above
+are for that recorded HOST graph; they are NOT frozen-dependency or ELF
+certificates. This is another open replay gate, not a trusted item and not
+silently repaired after budget exhaustion. Both full P6 leaves stay OPEN.
+
+## Final Lean audit, accounting and stop
+
+L037 imports the current18 proof modules, checks all47 theorem statements and
+prints all47 axiom sets. All use only propext/Classical.choice/Quot.sound or a
+subset. Source creation is explicit (`autoImplicit false`) throughout. The
+same-run model result is `LPb_CheckpointNativeGap.model_trace_bytes`; six-part/
+seven-power bounds are `LPb_PreparedWitness.trace`; the actual model payload
+width is `LPb_PayloadWidth.payload_width` (1736 at64 weights/six wide bytes).
+
+Lean used37/60:31PASS/6FAIL. Wall66.500490579s, peak RSS2655912KiB,
+cgroup peak323878912bytes, swap0. Failed candidates are retained and excluded
+from accepted evidence. No cap increase, memory kill, unchanged timeout retry,
+parallel own scope, reservation bypass or full release replay occurred.
+
+Kani20/20 is exhausted. The other23 Lean attempts are unused; the remaining
+native-stage and active-lock replay gates need native evidence, not more model
+wrappers. No further native invocation is made. This is an OPEN handoff, not a
+claim that the requested complete per-stage native bridges were delivered.
+
+LPb_recount.json pins identical complete FJv_Top.deployed before/after sources.
+Removed/added/changed0/0/0; ledger method atomic quantified families, SAME
+witness, shared once, L185=L159 alias; deltaT0/P0/G0/C0. No quantifier, carrier,
+failure event, conclusion, game, metric, trust item or security target changed.
+Local Kani covers and LPb_Nonvacuity witness nonempty stage domains only;
+no joint actual-top inhabitant is asserted. S2/100-bit target not established.
+
+LPb_cleanup.json records322169210 bytes of own build/object/.lake/crate cache
+removed after checking the final selected object hashes. No own live compiler
+or solver remained. All16 /tmp solver candidates predate this job and were left
+untouched; shared coherent/XRn caches and every source/receipt/key are retained.
+No shipped/cfg(kani) file changed; no ELF rebuild trigger. Inherited, NOT newly
+reproduced: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
+devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
+Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
