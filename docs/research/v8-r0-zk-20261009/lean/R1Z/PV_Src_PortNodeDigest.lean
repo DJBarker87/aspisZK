@@ -14,7 +14,7 @@ theorem source (s : Array U32 16#usize) :
     rw [poseidon2.merkle_node_compress_v3.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut,
       index_ok s i (by simp only [UScalar.ofNatCore_val_eq];omega)]
     rfl
-  rw [PV_Src_Forest_DigestArguments.from_fn_nat 8#usize _ s (fun i => s.val[i]!) hf]
+  rw [PV_Src_Forest_DigestArguments.from_fn_nat 8#usize poseidon2.merkle_node_compress_v3.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31 s (fun i => s.val[i]!) hf]
   rfl
 
 #print axioms source

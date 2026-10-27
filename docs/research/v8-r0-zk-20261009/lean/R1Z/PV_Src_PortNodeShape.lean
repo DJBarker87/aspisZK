@@ -1,4 +1,4 @@
-import R1Z.PV_Src_PortNodeCopy
+import R1Z.PV_Src_PortBindPair
 set_option autoImplicit false
 namespace R1Z.PV_Src_PortNodeShape
 open Aeneas Aeneas.Std Result BuilderForestStdPort BuilderForestAdmissionPort
@@ -17,8 +17,11 @@ def finish (s : Array U32 16#usize) : Result (Array U32 8#usize) := do
 theorem source (left right : Array U32 8#usize) :
     poseidon2.merkle_node_compress_v3
       (sourceExternalLinear := PV_Src_ExternalReference.dictionary) left right =
-    (do let s ← PV_Src_PortNodeCopy.run left right;finish s) := by
-  simp only [poseidon2.merkle_node_compress_v3,PV_Src_PortNodeCopy.run,finish,bind_assoc_eq,bind_tc_ok]
+    finish (PV_Src_PortNodeCopy.joined left right) := by
+  rw [PV_Src_PortDigestEta.source left,PV_Src_PortDigestEta.source right]
+  simp only [poseidon2.merkle_node_compress_v3,finish,PV_Src_PortNodeCopy.joined,
+    poseidon2.DIGEST_ELEMS,aspis_core.field.M31.ZERO]
+  rfl
 
 #print axioms source
 end R1Z.PV_Src_PortNodeShape

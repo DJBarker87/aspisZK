@@ -21,7 +21,11 @@ theorem source (s : State) : ∃ out : State,
     Canonical out ∧ liftA (K := K) out = R0P.poseidonPermutation (liftA s) := by
   obtain ⟨out,ho,hc,hm⟩ := PV_Src_PortThreadedResult.source (K := K) s
   refine ⟨out.1,?_,hc,?_⟩
-  · rw [poseidon2.permute_optimized_with_trace,ho]
+  · change (do
+      let p ← poseidon2.permute_optimized_with_trace_threaded
+        (sourceExternalLinear := PV_Src_ExternalReference.dictionary) PV_Src_PortNoop.callback s ()
+      ok p.1) = ok out.1
+    rw [ho]
     rfl
   · exact hm.trans (model _)
 
