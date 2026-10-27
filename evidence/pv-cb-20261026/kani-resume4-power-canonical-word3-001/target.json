@@ -1,0 +1,39 @@
+{
+  "target": [
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb-20261026/source-kani-target",
+    "RUSTFLAGS=--cfg kani",
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb-20261026/step-proof/Cargo.toml",
+    "--lib",
+    "--harness",
+    "checks::canonical_power26_word3",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "terse",
+    "-j",
+    "4"
+  ],
+  "source_revision": "8a754e7607088a507a112e8192dd49f1a4c7b26e",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A Kani; separate Lean source/axioms receipts",
+  "harness": "canonical_power26_word3",
+  "no_stubs": true,
+  "expected_time": "cached optimized compilation, then CBMC proof generation for this one named harness",
+  "configuration_change": "Restrict CPU affinity to four host CPUs to bound compiler thread fanout within TasksMax64; no cap increase",
+  "profile": "step-proof profile.dev opt-level3, overflow-checks=false, debug-assertions=false; source uses explicit wrapping CT arithmetic"
+}
