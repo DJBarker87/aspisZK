@@ -22,3 +22,11 @@ supply validation evidence, row credit, or endpoint-premise removal.
    deviation, not a compliant wait. A driver-level fail-closed wait guard is
    added before any subsequent compile/extraction/native admission so a shell
    continuation cannot bypass it. The receipt remains charged as executed.
+
+
+3. The candidate-only Audit1 source initially repeated an earlier audit hash;
+   the shared launcher refused41299 before a scope. No charged unchanged
+   regression ran. The source was changed to audit the new sampled forest
+   caller alongside the prior dictionary, the old manifest was retained as
+   SUPERSEDED, the updated manifest passed --check, and fresh41300 passed.
+   This is a recorded preflight correction, not a resource/cap deviation.
