@@ -15,9 +15,9 @@ for path in paths:
   if not isinstance(r,dict):continue
   m=(r.get('target') or r.get('module') or '').replace('/','.')
   if m.startswith('PV_'):m='R1Z.'+m
-  if 'RootModel' in m or m=='R1Z.PV_RunJoin_FixtureRecords':receipts.append((m,path,r))
+  receipts.append((m,path,r))
 rows=[]
-for m in sorted({m for m,_,_ in receipts}):
+for m in sorted({m for m,_,_ in receipts if 'RootModel' in m or m=='R1Z.PV_RunJoin_FixtureRecords'}):
  source='docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean'
  b=subprocess.check_output(['git','show',rev+':'+source]);sha=hashlib.sha256(b).hexdigest()
  good=[(p,r) for mm,p,r in receipts if mm==m and r.get('source_sha256')==sha and (r.get('exit')==0 and (r.get('accepted') or r.get('validation_exit')==0) or r.get('exit')==['exit=0'])]
@@ -31,6 +31,15 @@ for row in rows:
   for mm,pp,rr in receipts:
    dep=rr.get('dependencies',{}).get(row['module'])
    if dep and isinstance(dep,dict):row['object_sha256']=dep.get('sha256');row['object_hash_from_consumer_receipt']=pp;break
+
+ if not row['object_sha256']:
+  own=[json.loads(l) for l in (e/'resume9-attempts.jsonl').read_text().splitlines()]
+  for rr in own:
+   if not rr.get('accepted'):continue
+   for dep in rr['dependency_objects']:
+    if dep.endswith('/'+row['module'].replace('.','/')+'.olean'):
+     row['object_sha256']=dep.split()[0];row['object_hash_from_own_focused_consumer']=rr['attempt'];break
+   if row['object_sha256']:break
  assert row['object_sha256'],row['module']
 assert len(rows)==24,(len(rows),[r['module'] for r in rows])
 (e/'resume9-model-pins.json').write_text(json.dumps(rows,indent=2)+'\n')
