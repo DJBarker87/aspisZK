@@ -1,0 +1,939 @@
+diff --git a/crates/aspis-r1-cost-probe/src/fast_pairing.rs b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+index 9cd6813fa4..12eba5134d 100644
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -8,8 +8,8 @@ mod canonical {
+     #[derive(Clone,Copy,Debug,PartialEq,Eq,Default)]
+     pub struct Q([u32;4]);
+     #[inline(always)] pub(crate) fn reduce(mut x:u64)->u32 {
+-        x=(x & u64::from(P))+(x>>31);
+-        x=(x & u64::from(P))+(x>>31);
++        x=(x & u64::from(P))+(x>>31u32);
++        x=(x & u64::from(P))+(x>>31u32);
+         if x>=u64::from(P) {(x-u64::from(P)) as u32}else{x as u32}
+     }
+     #[inline(always)] pub(crate) fn add(a:u32,b:u32)->u32 {
+@@ -17,13 +17,23 @@ mod canonical {
+     }
+     #[inline(always)] fn pair(a:u32,b:u32)->u64 {u64::from(a)|(u64::from(b)<<32)}
+     #[inline(always)] fn reduce_pair(s:u64)->u64 {
+-        (s.wrapping_add(((s.wrapping_add(ONES))>>31)&ONES))&MASK
++        (s.wrapping_add(((s.wrapping_add(ONES))>>31u32)&ONES))&MASK
+     }
+     impl Q {
+         pub const ZERO:Self=Self([0;4]);pub const ONE:Self=Self([1,0,0,0]);
+-        pub fn from_limbs(x:[u32;4])->Option<Self>{if x.iter().all(|&v|v<P){Some(Self(x))}else{None}}
++        pub fn from_limbs(x:[u32;4])->Option<Self>{
++            let [a,b,c,d]=x;
++            if a<P && b<P && c<P && d<P {Some(Self([a,b,c,d]))}else{None}
++        }
+         pub fn from_m31(x:u32)->Option<Self>{if x<P{Some(Self([x,0,0,0]))}else{None}}
+         pub const fn limbs(self)->[u32;4]{self.0}
++        /// WideExact owns private, canonical coordinates; this constructor
++        /// accepts only that validated type, never raw QM31 limbs or bytes.
++        #[inline(always)]
++        pub(super) fn from_wide(value:super::E)->[Self;2] {
++            let [a,b,c,d,e,f,g,h]=value.to_limbs();
++            [Self([a,b,c,d]),Self([e,f,g,h])]
++        }
+         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+             let a=reduce_pair(pair(self.0[0],self.0[1]).wrapping_add(pair(rhs.0[0],rhs.0[1])));
+             let b=reduce_pair(pair(self.0[2],self.0[3]).wrapping_add(pair(rhs.0[2],rhs.0[3])));
+@@ -35,21 +45,27 @@ mod canonical {
+             Self([a as u32,(a>>32) as u32,b as u32,(b>>32) as u32])
+         }
+         #[inline(always)] pub fn half(self)->Self {
+-            let h=|x:u32|(x>>1)|((x&1)<<30);Self(self.0.map(h))
++            let h=|x:u32|(x>>1)|((x&1)<<30);
++            let mut out=[0u32;4]; for i in 0..4 {out[i]=h(self.0[i]);} Self(out)
+         }
+         pub fn half_pow(self,n:u8)->Option<Self>{
+             if n>30{return None}if n==0{return Some(self)}
+-            Some(Self(self.0.map(|x|(x>>n)|((x&((1u32<<n)-1))<<(31-n)))))
++            let mut out=[0u32;4];
++            for i in 0..4 {let x=self.0[i];out[i]=(x>>n)|((x&((1u32<<n)-1))<<(31-n));}
++            Some(Self(out))
+         }
+         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+-            if rhs>=P{return None}Some(Self(self.0.map(|x|reduce(u64::from(x)*u64::from(rhs)))))
++            if rhs>=P{return None}
++            let mut out=[0u32;4]; for i in 0..4 {out[i]=reduce(u64::from(self.0[i])*u64::from(rhs));}
++            Some(Self(out))
+         }
+         /// Benchmark candidate, not an assertion of superiority over staged R19.
+         /// All intermediates are nonnegative and strictly below 2^64.
+         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+-            let [a,b,c,d]=self.0.map(u64::from);let [e,f,g,h]=rhs.0.map(u64::from);
++            let [a,b,c,d]=[u64::from(self.0[0]),u64::from(self.0[1]),u64::from(self.0[2]),u64::from(self.0[3])];
++            let [e,f,g,h]=[u64::from(rhs.0[0]),u64::from(rhs.0[1]),u64::from(rhs.0[2]),u64::from(rhs.0[3])];
+             const PP:u64=(P as u64)*(P as u64);
+-            let partial=|x:u64|(x&u64::from(P)).wrapping_add(x>>31);
++            let partial=|x:u64|(x&u64::from(P)).wrapping_add(x>>31u32);
+             let u=partial((c*g).wrapping_add(PP).wrapping_sub(d*h));
+             let v=partial((c*h).wrapping_add(d*g));
+             Self([reduce((a*e).wrapping_add(PP).wrapping_sub(b*f).wrapping_add(2*u).wrapping_add(3*u64::from(P)).wrapping_sub(v)),
+@@ -64,9 +80,10 @@ mod canonical {
+     impl Q {
+         #[inline(always)]
+         fn raw(self,rhs:Self)->[u64;4] {
+-            let [a,b,c,d]=self.0.map(u64::from);let [e,f,g,h]=rhs.0.map(u64::from);
++            let [a,b,c,d]=[u64::from(self.0[0]),u64::from(self.0[1]),u64::from(self.0[2]),u64::from(self.0[3])];
++            let [e,f,g,h]=[u64::from(rhs.0[0]),u64::from(rhs.0[1]),u64::from(rhs.0[2]),u64::from(rhs.0[3])];
+             const PP:u64=(P as u64)*(P as u64);
+-            let partial=|x:u64|(x&u64::from(P)).wrapping_add(x>>31);
++            let partial=|x:u64|(x&u64::from(P)).wrapping_add(x>>31u32);
+             let u=partial((c*g).wrapping_add(PP).wrapping_sub(d*h));
+             let v=partial((c*h).wrapping_add(d*g));
+             [(a*e).wrapping_add(PP).wrapping_sub(b*f).wrapping_add(2*u).wrapping_add(3*u64::from(P)).wrapping_sub(v),
+@@ -79,10 +96,10 @@ mod canonical {
+             assert!(N<=4);let mut sums=[0u64;4];
+             for i in 0..N {
+                 let raw=left[i].raw(right[i]);
+-                for j in 0..4 {sums[j]=sums[j].wrapping_add((raw[j]&u64::from(P)).wrapping_add(raw[j]>>31));}
++                for j in 0..4 {sums[j]=sums[j].wrapping_add((raw[j]&u64::from(P)).wrapping_add(raw[j]>>31u32));}
+             }
+             // Retained R59 bounds: each folded raw value <2^34, N<=4.
+-            Self(sums.map(reduce))
++            Self([reduce(sums[0]),reduce(sums[1]),reduce(sums[2]),reduce(sums[3])])
+         }
+         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+@@ -90,19 +107,20 @@ mod canonical {
+ 
+     // Private canonical operands; bounded raw representatives, canonical result.
+     // At most 4096 partial folds, each <2^34, sum <2^46. No u64 wrap.
+-    pub struct Dot { sums:[u64;4], count:usize }
++    pub struct Dot { sums:[u64;4] }
+     impl Dot {
+-        pub fn new()->Self {Self{sums:[0;4],count:0}}
++        pub fn new()->Self {Self{sums:[0;4]}}
+         #[inline(always)]
+         pub fn push(&mut self,a:Q,b:Q) {
+-            assert!(self.count<4096);self.count+=1;
++            // Both enclosing public accumulators check the 4096-term bound.
++            // This private accumulator cannot be reached by raw callers.
+             let raw=a.raw(b);
+             for j in 0..4 {
+                 self.sums[j]=self.sums[j].wrapping_add(
+-                    (raw[j]&u64::from(P)).wrapping_add(raw[j]>>31));
++                    (raw[j]&u64::from(P)).wrapping_add(raw[j]>>31u32));
+             }
+         }
+-        pub fn finish(self)->Q {Q(self.sums.map(reduce))}
++        pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+     }
+ }
+ 
+@@ -118,7 +136,7 @@ fn limbs_of(k: QM31) -> [u32; 4] {
+ 
+ #[inline(always)]
+ fn checked_q(k: QM31) -> Result<canonical::Q, ()> {
+-    canonical::Q::from_limbs(limbs_of(k)).ok_or(())
++    match canonical::Q::from_limbs(limbs_of(k)) { Some(q) => Ok(q), None => Err(()) }
+ }
+ 
+ #[inline(always)]
+@@ -146,8 +164,7 @@ impl EbyKDot {
+     #[inline(always)]
+     pub fn push(&mut self, value: E, scalar: QM31) -> Result<(), ()> {
+         if self.count >= MAX_TERMS { return Err(()); }
+-        let value_c0 = checked_q(value.c0())?;
+-        let value_c1 = checked_q(value.c1())?;
++        let [value_c0,value_c1] = canonical::Q::from_wide(value);
+         let scalar = checked_q(scalar)?;
+         self.c0.push(value_c0, scalar);
+         self.c1.push(value_c1, scalar);
+@@ -157,7 +174,10 @@ impl EbyKDot {
+ 
+     #[inline(always)]
+     pub fn finish(self) -> E {
+-        E::new(qm31_of(self.c0.finish()), qm31_of(self.c1.finish()))
++        let [a,b,c,d]=self.c0.finish().limbs();
++        let [e,f,g,h]=self.c1.finish().limbs();
++        // The private accumulator produces canonical coordinates already.
++        E::from_limbs([a,b,c,d,e,f,g,h]).unwrap()
+     }
+ }
+ 
+@@ -182,10 +202,8 @@ impl EbyEDot {
+     #[inline(always)]
+     pub fn push(&mut self, left: E, right: E) -> Result<(), ()> {
+         if self.count >= MAX_TERMS { return Err(()); }
+-        let a = checked_q(left.c0())?;
+-        let b = checked_q(left.c1())?;
+-        let c = checked_q(right.c0())?;
+-        let d = checked_q(right.c1())?;
++        let [a,b] = canonical::Q::from_wide(left);
++        let [c,d] = canonical::Q::from_wide(right);
+         self.ac.push(a, c);
+         self.bd.push(b, d);
+         self.ad.push(a, d);
+diff --git a/crates/aspis-r1-cost-probe/src/r1_semantic.rs b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+index c65170c76f..6a0d717bcf 100644
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -72,41 +72,168 @@ pub fn public_transcript<H: Digest32>(
+     )
+ }
+ 
+-#[inline(never)]
+-pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
+-    fn mark(obs: crate::verifier::Observer, i: u8) {
+-        #[cfg(feature="detail-phases")]
+-        if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}
+-        #[cfg(not(feature="detail-phases"))]
+-        let _=(obs,i);
+-    }
+-    let prefix = Prefix::parse(bytes)?;
+-    mark(obs, 0);
+-    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;
+-    let challenges = wire::begin(&prefix, &mut transcript)?;
+-    mark(obs, 1);
+-    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
+-    let mut alpha = [QM31::ZERO; 10];
+-    #[cfg(feature = "prover")]
+-    let mut round_checks = [[QM31::ZERO; 3]; 10];
+-    for round in 0..10 {
++fn mark(obs: crate::verifier::Observer, i: u8) {
++    #[cfg(feature="detail-phases")]
++    if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}
++    #[cfg(not(feature="detail-phases"))]
++    let _=(obs,i);
++}
++
++fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
++        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
++    boundary
++}
++
++fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
++        let value = polynomial
++            .iter()
++            .rev()
++            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
++    value
++}
++
++#[cfg(not(feature = "prover"))]
++fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
+         let row = 15 + round as u8;
+         let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
++        let boundary = semantic_boundary(&polynomial);
+         if boundary != running {
+             return Err(Error::Boundary { round });
+         }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+-        let value = polynomial
+-            .iter()
+-            .rev()
+-            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
++        let value = semantic_value(&polynomial, &alpha, round);
++        #[cfg(feature = "prover")]
++        {
++            round_checks[round] = [running, boundary, value];
++        }
++        running = value;
++    Ok((running, alpha, transcript))
++}
++
++#[cfg(feature = "prover")]
++fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize, mut round_checks: [[QM31; 3]; 10]) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {
++        let row = 15 + round as u8;
++        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
++        let boundary = semantic_boundary(&polynomial);
++        if boundary != running {
++            return Err(Error::Boundary { round });
++        }
++        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
++        let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+         {
+             round_checks[round] = [running, boundary, value];
+         }
+         running = value;
++    Ok((running, alpha, transcript, round_checks))
++}
++
++#[cfg(not(feature = "prover"))]
++#[inline(never)]
++fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
++    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
++    let mut alpha = [QM31::ZERO; 10];
++    #[cfg(feature = "prover")]
++    let mut round_checks = [[QM31::ZERO; 3]; 10];
++    {
++        let round = 0usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 1usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+     }
++    {
++        let round = 2usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 3usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 4usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 5usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 6usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 7usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 8usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 9usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    Ok((running, alpha, transcript))
++}
++
++#[cfg(feature = "prover")]
++#[inline(never)]
++fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {
++    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
++    let mut alpha = [QM31::ZERO; 10];
++    #[cfg(feature = "prover")]
++    let mut round_checks = [[QM31::ZERO; 3]; 10];
++    {
++        let round = 0usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 1usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 2usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 3usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 4usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 5usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 6usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 7usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 8usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 9usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    Ok((running, alpha, transcript, round_checks))
++}
++
++#[inline(never)]
++fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
++    #[cfg(not(feature = "prover"))]
++    let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;
++    #[cfg(feature = "prover")]
++    let (running, alpha, mut transcript, round_checks) = semantic_rounds(&prefix, transcript)?;
+     mark(obs, 2);
+     let claims = claims(&prefix)?;
+     let original_challenges = aspis_core::state_only_prefix::r0::Challenges {
+@@ -179,3 +306,13 @@ pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, o
+         masked_terminal,
+     })
+ }
++
++#[inline(never)]
++pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
++    let prefix = Prefix::parse(bytes)?;
++    mark(obs, 0);
++    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;
++    let challenges = wire::begin(&prefix, &mut transcript)?;
++    mark(obs, 1);
++    verify_finish(public, prefix, transcript, challenges, obs)
++}
+diff --git a/crates/aspis-r1-cost-probe/src/verifier.rs b/crates/aspis-r1-cost-probe/src/verifier.rs
+index 54a30376f7..d8e2588d33 100644
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -3,7 +3,7 @@ use aspis_core::r0::CodeField;
+ use alloc::{boxed::Box,vec::Vec};
+ use aspis_core::{Digest32,field::{WideExact as E,QM31 as K,M31},circle::SecureCirclePoint,r0::{domain,merkle}};
+ use aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public;
+-use crate::{transport::Variant,weights::{self,Weights,field,powers,QUARTER},transcript::Transcript};
++use crate::{transport::Variant,weights::{Weights,field,powers,QUARTER},transcript::Transcript};
+ 
+ pub const SEMANTIC_BYTES:usize=12903+29*32;
+ pub const HEADER:usize=16;
+@@ -17,7 +17,14 @@ pub const SECOND_QUERY_BYTES:usize=4*32+6*7*32;
+ pub const SECOND_QUERY_BYTES:usize=4*32+32+6*7*32;
+ pub const CHECKPOINT_FIXED:usize=16+32*3+64+32*4+16+88+160+64+32*2+16+32;
+ #[derive(Debug,Clone,Copy,PartialEq,Eq)]
+-pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation }
++pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation,
++    /// Host prover only (LOG D38.3): this attempt's challenges fail the public
++    /// P_R1 check. Carries no challenge and no conjunct.
++    #[cfg(feature="prover")] Rejected,
++    /// Host prover only (D38.3): all N = 8 attempts were rejected; nothing is published.
++    #[cfg(feature="prover")] AttemptsExhausted,
++    /// Host prover only: the operating-system entropy source failed.
++    #[cfg(feature="prover")] Entropy }
+ #[derive(Debug,Clone,Copy,PartialEq,Eq)]
+ pub enum Phase { Parsed,Semantic,SemanticPart(u8),Prepare,CheckpointRead,Merkle(usize),Query(usize),QueryPart(usize,u8),CheckpointWrite,Relation,Final }
+ pub type Observer=Option<fn(Phase)>;
+@@ -34,56 +41,17 @@ fn echeck(b:&[u8],k:bool)->Result<(),Error> {
+     Ok(())
+ }
+ impl<'a> View<'a> {
+-    pub fn proof_bytes(v:Variant)->usize {HEADER+SEMANTIC_BYTES+29*32+32+7*32+if v.folds()==2 {32+7*32}else{0}+v.final_len()*32+22*(INITIAL_QUERY_BYTES+if v.folds()==2 {SECOND_QUERY_BYTES}else{0})}
+-    #[inline(never)]
+-    fn parse_shape(bytes:&'a[u8])->Result<Self,Error> {
+-        #[cfg(not(feature = "private-leaf-salts"))]
+-        let magic = b"R1P2COST";
+-        #[cfg(feature = "private-leaf-salts")]
+-        let magic = b"R1P3COST";
+-        if bytes.len()<HEADER||&bytes[..8]!=magic||bytes[9..16].iter().any(|&x|x!=0) {return Err(Error::Parse);}
+-        let v=Variant::from_tag(bytes[8]).ok_or(Error::Parse)?;
+-        if bytes.len()!=Self::proof_bytes(v) {return Err(Error::Parse);}
+-        let mut at=HEADER;
+-        let semantic=&bytes[at..at+SEMANTIC_BYTES];at+=SEMANTIC_BYTES;
+-        let y1=&bytes[at..at+29*32];at+=29*32;
+-        let inactive=E::from_le_bytes(&bytes[at..at+32]).ok_or(Error::Parse)?;at+=32;
+-        let round0=&bytes[at..at+7*32];at+=7*32;
+-        let (folded_root,round1)=if v.folds()==2 {
+-            let root=bytes[at..at+32].try_into().unwrap();at+=32;
+-            let round=&bytes[at..at+7*32];at+=7*32;(Some(root),round)
+-        }else{(None,&[][..])};
+-        let final_message=&bytes[at..at+v.final_len()*32];at+=v.final_len()*32;
+-        let query_bytes=&bytes[at..];
+-        Ok(Self{variant:v,semantic,y1,inactive,round0,folded_root,round1,final_message,query_bytes})
+-    }
+-    #[inline(never)]
+-    pub fn parse(bytes:&'a[u8])->Result<Self,Error> {
+-        let out=Self::parse_shape(bytes)?;
+-        echeck(out.y1,true)?;
+-        echeck(out.round0,false)?;
+-        if let Some(round1)=out.folded_root.map(|_|out.round1) {echeck(round1,false)?;}
+-        echeck(out.final_message,false)?;
+-        for i in 0..22 {
+-            let q=out.query(i);
+-            for s in 0..4 {
+-                for l in 0..26 {M31::from_le_bytes(q[s*120+l*4..s*120+l*4+4].try_into().unwrap()).ok_or(Error::Parse)?;}
+-                K::from_le_bytes(&q[s*120+104..s*120+120]).ok_or(Error::Parse)?;
+-                for l in 0..2 {K::from_le_bytes(&q[480+s*32+l*16..480+s*32+l*16+16]).ok_or(Error::Parse)?;}
+-            }
+-            if out.variant.folds()==2 {echeck(&q[INITIAL_QUERY_BYTES..INITIAL_QUERY_BYTES+128],false)?;}
+-        }
+-        Ok(out)
+-    }
+-    pub fn query(&self,i:usize)->&'a[u8] {let width=INITIAL_QUERY_BYTES+if self.variant.folds()==2 {SECOND_QUERY_BYTES}else{0};&self.query_bytes[i*width..(i+1)*width]}
++    /// Length of the retired eight-way stored proof for `v` (124,343 bytes for
++    /// S2). A layout figure only: the adopted stored length is `PROOF_BYTES`.
++    pub fn eight_way_proof_bytes(v:Variant)->usize {HEADER+SEMANTIC_BYTES+29*32+32+7*32+if v.folds()==2 {32+7*32}else{0}+v.final_len()*32+22*(INITIAL_QUERY_BYTES+if v.folds()==2 {SECOND_QUERY_BYTES}else{0})}
+ }
+ 
+ pub struct Prepared {
+     pub variant:Variant,pub roots:[[u8;32];2],pub gamma:E,pub kappa:E,pub alpha:[E;2],pub rho:K,
+     pub queries:[u32;22],pub semantic_alpha:[K;10],pub z:[SecureCirclePoint;2],pub claim:E,pub state:[u8;32],
+ }
+-fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,gamma:E,kappa:E)->Result<E,Error> {
+-        let g=powers::<29>(gamma);let k=powers::<7>(kappa);
++fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {
++        let k=powers::<7>(kappa);
+         let mut parts=[E::ZERO;7];parts[0]=inactive;
+         for point in 0..6 {
+             let mut dot=crate::fast_pairing::EbyKDot::new();
+@@ -101,7 +69,7 @@ fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inac
+ 
+ impl Prepared {
+     #[inline(never)]
+-    pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H)->Result<Box<Self>,Error> {
++    pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut [E;29])->Result<Box<Self>,Error> {
+         let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);
+         let gamma=t.scalar(27,v.y1,true);
+         let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);
+@@ -114,7 +82,9 @@ impl Prepared {
+         };
+         let queries=t.queries(row,v.final_message)?;
+         let rho=t.scalar_k(row+1,&[]);
+-        let claim=prepared_claim(sem,v.y1,v.inactive,gamma,kappa)?;
++        // Reuse this caller-owned scratch array in tx1; it is never serialized.
++        *g=powers::<29>(gamma);
++        let claim=prepared_claim(sem,v.y1,v.inactive,g,kappa)?;
+         Ok(Box::new(Self{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))
+     }
+ }
+@@ -123,16 +93,6 @@ impl Accumulator {
+     pub fn new(v:Variant)->Result<Self,Error> {Ok(Self{weights:aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?,rhs:E::ZERO,power:K::ONE,next:0})}
+ }
+ 
+-fn merkle_path<H:Digest32>(hash:H,root:&[u8;32],mut index:usize,mut node:[u8;32],path:&[u8])->bool {
+-    for d in 0..6 {
+-        let slot=index%8;
+-        let children=core::array::from_fn(|s| {
+-            if s==slot {node}else{let j=s-usize::from(s>slot);path[d*224+j*32..d*224+j*32+32].try_into().unwrap()}
+-        });
+-        node=merkle::parent_with_digest(hash,&children);index/=8;
+-    }
+-    node==*root&&index==0
+-}
+ pub fn four_dots(q:&[u8],g:&[E;29])->[E;4] {
+     core::array::from_fn(|s| {
+         let mut a=E::ZERO;
+@@ -168,30 +128,43 @@ pub fn line_fold(alpha:E,v:usize,a:[E;4])->E {
+ /// The five base-field denominators used to fold one sampled query: circle
+ /// x/y, followed by line x/y/z. Their inverses are batch-computed once per
+ /// transaction so each query avoids five independent field inversions.
+-struct QueryGeometry { start:usize, inverses:Vec<[M31;5]> }
++struct QueryGeometry { start:usize, inverses:Vec<[M31;5]>, line_z:Vec<M31> }
++
++#[inline(always)]
++fn batch_prefix_products(flat:&[M31])->(Vec<M31>,M31) {
++    let mut prefixes=Vec::with_capacity(flat.len());
++    let mut product=M31::ONE;
++    let mut index=0;
++    while index<flat.len() {
++        let value=flat[index];
++        prefixes.push(product);
++        product=product.mul(value);
++        index+=1;
++    }
++    (prefixes,product)
++}
++
+ impl QueryGeometry {
+     fn for_range(queries:&[u32;22],start:usize,end:usize)->Result<Self,Error> {
+         if start>end||end>queries.len(){return Err(Error::Query);}
+-        let mut denominators=Vec::with_capacity(end-start);
++        let mut line_z_values=Vec::with_capacity(end-start);
+         let mut flat=Vec::with_capacity((end-start)*5);
+         for &query in &queries[start..end] {
+             let u=query as usize;
+             let fibre=domain::FibreIndex::new(u).map_err(|_|Error::Query)?;
+-            let point=crate::fast_domain::fibre_point(fibre);
++            let domain::Point{x:circle_x,y:circle_y}=crate::fast_domain::fibre_point(fibre);
+             let line_x=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4).map_err(|_|Error::Query)?);
+             let line_y=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4+3).map_err(|_|Error::Query)?);
+             let line_z=line_x.mul(line_x).double().sub(M31::ONE);
+-            let values=[point.x,point.y,line_x,line_y,line_z];
++            let values=[circle_x,circle_y,line_x,line_y,line_z];
+             if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
+             flat.extend_from_slice(&values);
+-            denominators.push(values);
++            line_z_values.push(line_z);
+         }
+-        if flat.is_empty(){return Ok(Self{start,inverses:Vec::new()});}
++        if flat.is_empty(){return Ok(Self{start,inverses:Vec::new(),line_z:line_z_values});}
+         // Standard prefix-product/backward batch inversion. The only `inv`
+         // in this routine is applied to the product of all nonzero entries.
+-        let mut prefixes=Vec::with_capacity(flat.len());
+-        let mut product=M31::ONE;
+-        for &value in &flat {prefixes.push(product);product=product.mul(value);}
++        let (prefixes,product)=batch_prefix_products(&flat);
+         let mut suffix_inverse=product.inv();
+         let mut flat_inverse=Vec::with_capacity(flat.len());
+         flat_inverse.resize(flat.len(),M31::ZERO);
+@@ -199,8 +172,8 @@ impl QueryGeometry {
+             flat_inverse[i]=suffix_inverse.mul(prefixes[i]);
+             suffix_inverse=suffix_inverse.mul(flat[i]);
+         }
+-        let inverses=(0..denominators.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect();
+-        Ok(Self{start,inverses})
++        let inverses=(0..line_z_values.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect();
++        Ok(Self{start,inverses,line_z:line_z_values})
+     }
+     #[inline(always)]
+     fn for_query(&self,index:usize)->&[M31;5] {&self.inverses[index-self.start]}
+@@ -225,79 +198,124 @@ fn line_fold_with_inverses(alpha:E,a:[E;4],inverse:&[M31;5])->E {
+     let h3=c0.sub(c1).mul_m31(half.mul(iz));
+     h0.add(alpha.mul(h1.add(alpha.mul(h2.add(alpha.mul(h3))))))
+ }
++/// Transaction-local residues. At a group boundary each limb is <2^34.
++/// Four products add at most 4*(P-1)^2; adding the retained folded residue
++/// still fits u64 because 4*(P-1)^2+2^34 < 2^64. Flush after each four queries.
++struct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }
++impl BatchedWeights {
++    fn new(weights:&[K])->Result<Self,Error> {
++        let mut raw=aspis_core::r0::heap::filled(weights.len(),[0u64;4]).map_err(|_|Error::Allocation)?;
++        let mut index=0;
++        while index<weights.len() {
++            let w=weights[index];
++            raw[index]=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];
++            index+=1;
++        }
++        Ok(Self{raw,terms:0})
++    }
++    #[inline(always)]
++    fn push(&mut self,index:usize,power:K,basis:M31) {
++        let flush=self.terms&3==3;
++        update_residue_row(&mut self.raw[index],power,basis,flush);
++    }
++
++    fn value(&self,index:usize)->K {
++        let [a,b,c,d]=self.raw[index].map(M31::reduce_u64);
++        K{c0:aspis_core::field::CM31{a,b},c1:aspis_core::field::CM31{a:c,b:d}}
++    }
++    fn finish(&self,weights:&mut[K]) {for (i,w) in weights.iter_mut().enumerate(){*w=self.value(i);}}
++}
++
++
++#[inline(always)]
++fn residue_limb_at(row:&[u64;4],index:usize)->u64 {row[index]}
++#[inline(always)]
++fn power_limb_at(limbs:&[u32;4],index:usize)->u32 {limbs[index]}
++#[inline(always)]
++fn update_residue_row(row:&mut [u64;4],power:K,basis:M31,flush:bool) {
++    let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
++    for j in 0..4 {
++        let old=residue_limb_at(row,j);
++        let limb=power_limb_at(&limbs,j);
++        row[j]=old+u64::from(limb)*u64::from(basis.0);
++    }
++    if flush {
++        for limb in row {*limb=(*limb&0x7fff_ffff)+(*limb>>31);}
++    }
++}
++
+ #[inline(never)]
+ pub fn accumulate(p:&Prepared,a:&mut Accumulator,index:usize,value:E) {
+     let mut node=crate::fast_domain::line_node(domain::FibreIndex::new(if p.variant.folds()==1 {index}else{index/4*4}).unwrap());
+     if p.variant.folds()==2 {for _ in 0..2 {node=node.mul(node).double().sub(M31::ONE);}}
++    accumulate_with_node(p,a,node,value,None)
++}
++#[inline(never)]
++fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,mut pending:Option<&mut BatchedWeights>) {
+     let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;
+     while n<a.weights.len() {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
+     for j in 0..a.weights.len() {
+-        a.weights[j]=a.weights[j].add(a.power.mul_m31(basis[j]));
++        if let Some(weights)=pending.as_deref_mut() {
++            weights.push(j,a.power,basis[j]);
++            #[cfg(feature="prover")] {a.weights[j]=weights.value(j);}
++        } else {a.weights[j]=a.weights[j].add(a.power.mul_m31(basis[j]));}
+         crate::trace::value(12,a.next*a.weights.len()+j,E::from_qm31(a.weights[j]));
+         crate::trace::value(13,a.next*a.weights.len()+j,E::from_m31(basis[j]));
+     }
++    if let Some(weights)=pending {weights.terms+=1;}
+     a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);
+     a.power=a.power.mul(p.rho);a.next+=1;
+ }
++
++
++#[inline(always)]
++fn basis_at(basis:&[M31;256],index:usize)->M31 {basis[index]}
++#[inline(always)]
++fn accumulated_weight_at(weights:&[K],index:usize)->K {weights[index]}
++
+ #[inline(never)]
+-pub fn query<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer)->Result<(),Error> {
+-    let geometry=QueryGeometry::for_range(&p.queries,a.next,a.next+1)?;
+-    query_with_geometry(v,p,a,g,hash,obs,&geometry)
+-}
+-#[inline(never)]
+-fn query_with_geometry<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry)->Result<(),Error> {
+-    let i=a.next;let u=p.queries[i] as usize;let q=v.query(i);
+-    #[cfg(not(feature = "private-leaf-salts"))]
+-    let (c1,c2,path_at) = (merkle::leaf_with_digest(hash,merkle::C1_TAG,&q[..480]),merkle::leaf_with_digest(hash,merkle::C2_TAG,&q[480..608]),608);
+-    #[cfg(feature = "private-leaf-salts")]
+-    let (c1,c2,path_at) = (
+-        aspis_core::state_only_private_merkle::private_leaf_hash_with_digest(hash,merkle::C1_TAG,&q[..480],q[608..640].try_into().unwrap()),
+-        aspis_core::state_only_private_merkle::private_leaf_hash_with_digest(hash,merkle::C2_TAG,&q[480..608],q[640..672].try_into().unwrap()),
+-        672,
+-    );
+-    if !merkle_path(hash,&p.roots[0],u,c1,&q[path_at..path_at+1344])||!merkle_path(hash,&p.roots[1],u,c2,&q[path_at+1344..INITIAL_QUERY_BYTES]) {return Err(Error::Merkle);}
+-    if p.variant.folds()==2 {
+-        let folded=&q[INITIAL_QUERY_BYTES..INITIAL_QUERY_BYTES+128];
+-        #[cfg(not(feature = "private-leaf-salts"))]
+-        let (leaf,path_offset)=(merkle::leaf_with_digest(hash,0x72,folded),INITIAL_QUERY_BYTES+128);
+-        #[cfg(feature = "private-leaf-salts")]
+-        let (leaf,path_offset)=(
+-            aspis_core::state_only_private_merkle::private_leaf_hash_with_digest(hash,0x72,folded,q[INITIAL_QUERY_BYTES+128..INITIAL_QUERY_BYTES+160].try_into().unwrap()),
+-            INITIAL_QUERY_BYTES+160,
+-        );
+-        if !merkle_path(hash,v.folded_root.unwrap(),u/4,leaf,&q[path_offset..]) {return Err(Error::Merkle);}
+-    }
+-    mark(obs,Phase::Merkle(i));
+-    let dots=crate::fast_dots::four_dots(q,g);#[cfg(feature="detail-phases")]mark(obs,Phase::QueryPart(i,0));for s in 0..4 {crate::trace::value(9,4*i+s,dots[s]);}
+-    let inverse=geometry.for_query(i);
+-    let mut folded=circle_fold_with_inverses(p.alpha[0],dots,inverse);crate::trace::value(10,2*i,folded);#[cfg(feature="detail-phases")]mark(obs,Phase::QueryPart(i,1));
+-    if p.variant.folds()==2 {
+-        let values=core::array::from_fn(|s|field(&q[INITIAL_QUERY_BYTES..],s));
+-        if folded!=values[u%4] {return Err(Error::Query);}
+-        folded=line_fold_with_inverses(p.alpha[1],values,inverse);crate::trace::value(10,2*i+1,folded);
++fn accumulate_batched_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,weights:&mut BatchedWeights) {
++    let width=a.weights.len();
++    let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;
++    while n<width {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
++    for j in 0..width {
++        weights.push(j,a.power,basis_at(&basis,j));
++        #[cfg(feature="prover")] {a.weights[j]=weights.value(j);}
++        crate::trace::value(12,a.next*width+j,E::from_qm31(accumulated_weight_at(&a.weights,j)));
++        crate::trace::value(13,a.next*width+j,E::from_m31(basis_at(&basis,j)));
+     }
+-    #[cfg(feature="detail-phases")]mark(obs,Phase::QueryPart(i,2));
+-    accumulate(p,a,u,folded);mark(obs,Phase::Query(i));Ok(())
++    weights.terms+=1;
++    a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);
++    a.power=a.power.mul(p.rho);a.next+=1;
+ }
++
+ pub fn polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}
+-#[inline(never)]
+-pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {
+-    let mut claim=p.claim;
+-    for round in 0..p.variant.folds() {
+-        let poly=if round==0 {v.round0}else{v.round1};
++fn finish_relation_round(poly:&[u8],alpha:E,mut claim:E,round:usize)->Result<E,Error> {
+         let lhs=field(poly,0).add(field(poly,4));let rhs=claim.mul_m31(QUARTER);
+         crate::trace::value(15,3*round,lhs);crate::trace::value(15,3*round+1,rhs);
+         if lhs!=rhs {return Err(Error::Relation);}
+-        claim=polynomial(poly,p.alpha[round]);crate::trace::value(15,3*round+2,claim);
+-    }
++        claim=polynomial(poly,alpha);crate::trace::value(15,3*round+2,claim);
++    Ok(claim)
++}
++
++fn finish_query_dot(final_message:&[u8],weights:&[K])->Result<E,Error> {
++    let mut dot=crate::fast_pairing::EbyKDot::new();
++    let mut j=0;
++    while j<weights.len() {dot.push(field(final_message,j),weights[j]).map_err(|_|Error::Parse)?;j+=1;}
++    Ok(dot.finish())
++}
++
++#[inline(never)]
++pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {
++    let mut claim=p.claim;
++    claim=finish_relation_round(v.round0,p.alpha[0],claim,0)?;
++    if p.variant.folds()==2 {claim=finish_relation_round(v.round1,p.alpha[1],claim,1)?;}
+     let weights=Weights::new(p.variant,&p.semantic_alpha,&p.z)?;
+     let pair=weights.pair(&p.alpha[..p.variant.folds()],v.final_message,p.kappa)?;
+     crate::trace::value(16,0,pair);crate::trace::value(16,1,claim);
+     if pair!=claim {return Err(Error::Relation);}
+     mark(obs,Phase::Relation);
+-    let mut dot=crate::fast_pairing::EbyKDot::new();
+-    for (j,w) in a.weights.iter().enumerate() {dot.push(field(v.final_message,j),*w).map_err(|_|Error::Parse)?;}
+-    let actual=dot.finish();
++    let actual=finish_query_dot(v.final_message,&a.weights)?;
+     crate::trace::value(17,0,actual);crate::trace::value(17,1,a.rhs);
+     if a.next!=22||actual!=a.rhs {return Err(Error::Query);}
+     mark(obs,Phase::Final);Ok(())
+@@ -325,8 +343,52 @@ struct Reader<'a>{bytes:&'a[u8],at:usize}
+ impl<'a> Reader<'a>{
+     fn raw<const N:usize>(&mut self)->[u8;N] {let b=self.bytes[self.at..self.at+N].try_into().unwrap();self.at+=N;b}
+     fn e(&mut self)->Result<E,Error>{E::from_le_bytes(&self.raw::<32>()).ok_or(Error::Checkpoint)}
++    #[inline(always)]
+     fn k(&mut self)->Result<K,Error>{K::from_le_bytes(&self.raw::<16>()).ok_or(Error::Checkpoint)}
+ }
++
++
++#[inline(always)]
++fn validate_checkpoint_queries(queries:&[u32;22])->Result<(),Error> {
++    let mut i=0;
++    while i<queries.len() {
++        let q=queries[i];
++        if q>=1<<18||queries[..i].contains(&q){return Err(Error::Checkpoint);}
++        i+=1;
++    }
++    Ok(())
++}
++
++#[inline(always)]
++fn read_checkpoint_weights(bytes:&[u8],mut at:usize,mut weights:Vec<K>)->Result<(Vec<K>,usize),Error> {
++    for out in &mut weights {
++        let mut reader=Reader{bytes,at};
++        let value=reader.k()?;
++        at=reader.at;
++        *out=value;
++    }
++    Ok((weights,at))
++}
++
++
++#[inline(always)]
++fn read_checkpoint_semantic_alpha(bytes:&[u8],at:usize)->Result<([K;10],usize),Error> {
++    let mut r=Reader{bytes,at};
++    let values=[
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++    ];
++    Ok((values,r.at))
++}
++
+ #[inline(never)]
+ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(Box<Prepared>,Accumulator),Error> {
+     if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b"R1P2CKP2"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}
+@@ -334,66 +396,40 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)
+     if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b"UNPROVED:R1:checkpoint",&bytes[..end]]) {return Err(Error::Checkpoint);}
+     let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];
+     let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];let rho=r.k()?;
+-    let queries=core::array::from_fn(|_|u32::from_le_bytes(r.raw()));
+-    for (i,q) in queries.iter().enumerate(){if *q>=1<<18||queries[..i].contains(q){return Err(Error::Checkpoint);}}
+-    let mut semantic_alpha=[K::ZERO;10];for x in &mut semantic_alpha {*x=r.k()?;}
++    let queries=[
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++    ];
++    validate_checkpoint_queries(&queries)?;
++    let (semantic_alpha,at)=read_checkpoint_semantic_alpha(bytes,r.at)?;
++    r.at=at;
+     let z=[SecureCirclePoint{x:r.k()?,y:r.k()?},SecureCirclePoint{x:r.k()?,y:r.k()?}];
+     let claim=r.e()?;let rhs=r.e()?;let power=r.k()?;
+-    let mut weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
+-    for x in &mut weights {*x=r.k()?;}
+-    if r.at!=end {return Err(Error::Checkpoint);}
++    let weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
++    let (weights,at)=read_checkpoint_weights(bytes,r.at,weights)?;
++    if at!=end {return Err(Error::Checkpoint);}
+     Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))
+ }
+-fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {
+-    let geometry=QueryGeometry::for_range(&p.queries,0,k)?;
+-    while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}
+-    let bytes=checkpoint(&p,&a,proof,public_bytes,hash);mark(obs,Phase::CheckpointWrite);Ok(bytes)
+-}
+-
+-#[inline(never)]
+-pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {
+-    if k>22 {return Err(Error::Parse);}
+-    let v=View::parse(proof)?;mark(obs,Phase::Parsed);
+-    let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);
+-    let p=Prepared::new(&sem,&v,hash)?;let mut a=Accumulator::new(v.variant)?;let g=powers::<29>(p.gamma);mark(obs,Phase::Prepare);
+-    tx1_finish(v,p,a,g,public_bytes,proof,k,hash,obs)
+-}
+-/// Complete strict verification of an R1 proof and its checkpoint.
+-///
+-/// Runtime precondition: the checkpoint must be an authentic output of `tx1`
+-/// for the proof and public statement bound by its hashes. `resume` recomputes
+-/// both hashes from the current buffers: changes reject except for a collision.
+-/// The checkpoint checksum is an unkeyed hash, not a MAC, and
+-/// does not establish checkpoint provenance by itself. This strict entrypoint
+-/// repeats the full canonical scan of proof fields and query values.
+-#[inline(never)]
+-pub fn tx2<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {
+-    let v=View::parse(proof)?;mark(obs,Phase::Parsed);
+-    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);
+-    let geometry=QueryGeometry::for_range(&p.queries,a.next,22)?;
+-    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}
+-    finish_relation(&v,&p,&a,obs)
+-}
+-
+-/// Complete verification using proof bytes whose checkpoint provenance was
+-/// established by the caller.
+-///
+-/// Runtime precondition: the checkpoint must be an authentic output of `tx1`
+-/// for the proof and public statement bound by its hashes. This is also a
+-/// precondition of strict `tx2`. `resume` recomputes the proof/public hashes;
+-/// changed buffers reject except for a collision. The checkpoint checksum is
+-/// an unkeyed hash, not a MAC, and does not
+-/// establish checkpoint provenance by itself. This entrypoint only skips the
+-/// redundant per-field canonical scan of the proof; use strict `tx2` when that
+-/// scan is required.
+-#[inline(never)]
+-pub fn tx2_authenticated<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {
+-    let v=View::parse_shape(proof)?;mark(obs,Phase::Parsed);
+-    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);
+-    let geometry=QueryGeometry::for_range(&p.queries,a.next,22)?;
+-    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}
+-    finish_relation(&v,&p,&a,obs)
+-}
+ 
+ #[cfg(test)]
+ mod query_geometry_tests {
+@@ -450,3 +486,43 @@ mod query_geometry_tests {
+         }
+     }
+ }
++
++#[cfg(test)]
++mod batched_weight_tests {
++    use super::*;
++    #[test]
++    fn bounded_rho_residues_match_all_canonical_prefixes() {
++        let hi=M31(aspis_core::field::P-1);
++        let max=K{c0:aspis_core::field::CM31{a:hi,b:hi},c1:aspis_core::field::CM31{a:hi,b:hi}};
++        for power in [K::ZERO,K::ONE,max] {
++            let mut reference=alloc::vec![max;64];let mut pending=BatchedWeights::new(&reference).unwrap();
++            for _ in 0..22 {
++                for j in 0..64 {
++                    pending.push(j,power,hi);
++                    reference[j]=reference[j].add(power.mul_m31(hi));
++                    assert_eq!(pending.value(j),reference[j]);
++                }
++                pending.terms+=1;
++            }
++            let mut actual=alloc::vec![K::ZERO;64];pending.finish(&mut actual);assert_eq!(actual,reference);
++        }
++    }
++}
++
++// The adopted R1 verifier (PREREG-PROOF-SIZE-2, 2026-10-19): the compact
++// binary-multiproof format of `crate::compact`. These are the only R1
++// verification entrypoints of a default build.
++#[path="candidate.rs"]
++pub mod candidate;
++pub use candidate::{parse_shape,tx1,tx2,tx2_authenticated};
++/// The one stored proof length of the adopted format (57,607 bytes).
++pub const PROOF_BYTES:usize=crate::compact::PROOF_BYTES;
++/// The one stage-1 split of the adopted format (queries 0..10 in stage 1).
++pub const SPLIT:usize=crate::compact::SPLIT;
++const _:()=assert!(PROOF_BYTES==57_607&&SPLIT==10);
++
++// AUDIT ONLY: the retired eight-way verifier, for differential evidence on
++// saved eight-way fixtures. Never in a prover or SBF build (lib.rs guards).
++#[cfg(feature="audit-eight-way")]
++#[path="eight_way.rs"]
++pub mod eight_way;

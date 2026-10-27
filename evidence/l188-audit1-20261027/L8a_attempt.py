@@ -28,7 +28,7 @@ def run(a,m,src,imports,roots=None):
  rel='L8a_sources/'+m+'.lean';obj='L8a_objects/'+m+'.olean'
  r=subprocess.run(['scp','-q',*SSH,str(src),H+':'+B+'/'+rel],capture_output=True,text=True)
  if r.returncode:raise RuntimeError(r.stderr)
- cfg=dict(kind='lean',module=m,env={'LEAN_PATH':':'.join(roots) if roots else T+'/lib/lean:'+B+'/L8a_overlay:'+B+'/RPz7_overlay:'+B+'/RPz4_trusted:'+B+'/RPz_trusted'},timeout=540,command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','L8a_sources','-o',obj,rel],sources=[rel],attempt=a,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,deps_fingerprint={'scope':'L188 audit of unchanged RPz8 fresh coherent cohort; no proof replacement','toolchain':'leanprover/lean4:v4.32.0'},expected_time='one source module elaboration and kernel checking; no heavy arithmetic expansion planned',repository_source=str(src.relative_to(R)),reservation_retries=retry)
+ cfg=dict(kind='lean',module=m,env={'LEAN_PATH':':'.join(roots) if roots else T+'/lib/lean:'+B+'/RPz8_overlay:'+B+'/RPz7_overlay:'+B+'/RPz4_trusted:'+B+'/RPz_trusted'},timeout=540,command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','L8a_sources','-o',obj,rel],sources=[rel],attempt=a,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,deps_fingerprint={'scope':'L188 audit of unchanged RPz8 fresh coherent cohort; no proof replacement','toolchain':'leanprover/lean4:v4.32.0'},expected_time='one source module elaboration and kernel checking; no heavy arithmetic expansion planned',repository_source=str(src.relative_to(R)),reservation_retries=retry)
  payload="""import json,hashlib
 from pathlib import Path
 B=Path(%r);T=Path(%r);cfg=json.loads(%r);objs={}
@@ -46,23 +46,6 @@ cfg['deps_fingerprint']['selected_objects']=objs
  (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
  for f in ['receipt.json','stdout.log','time.log']:collect(a+'/'+f)
  receipt=json.loads((E/a/'receipt.json').read_text())
- if receipt['exit_status']==0:
-  payload="""from pathlib import Path
-import json,hashlib
-B=Path(%r);m=%r;out={}
-p=B/'L8a_objects'/(m+'.olean');assert p.is_file() and not p.is_symlink()
-for ext in ['', '.server','.private','IR']:
- src=p.with_suffix('.ir') if ext=='IR' else Path(str(p)+ext)
- if not src.is_file():continue
- dst=B/'L8a_overlay'/src.name
- assert not dst.exists() and not dst.is_symlink(),dst
- dst.symlink_to(src)
- out[str(dst)]={'target':str(src),'sha256':hashlib.sha256(src.read_bytes()).hexdigest(),'bytes':src.stat().st_size}
-print(json.dumps(out))
-"""%(B,m)
-  r=ssh('python3 -',payload)
-  if r.returncode:raise RuntimeError('STOP view install: '+r.stderr)
-  with (E/'L8a_overlay-additions.jsonl').open('a') as f:f.write(json.dumps({'attempt':a,'module':m,'artifacts':json.loads(r.stdout)})+'\n')
  print(a,m,'exit',receipt['exit_status'],'wall',round(receipt['wall_seconds'],2),'rss',receipt['peak_rss_kib'],flush=True)
  return receipt
 if __name__=='__main__':
