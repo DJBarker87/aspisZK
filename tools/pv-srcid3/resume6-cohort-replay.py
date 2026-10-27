@@ -38,7 +38,7 @@ for m in queue:
  # Existing successful/failed module attempts are left for a specifically reviewed retry.
  if any(x['module']==m.replace('.','/') for x in a):continue
  seen=e/'resume6-cohort-launch-results.jsonl';done=[json.loads(x) for x in seen.read_text().splitlines()] if seen.exists() else []
- if any(x['module']==m for x in done):continue
+ if any(x['module']==m and x['exit'] not in {75,78} for x in done):continue
  evidence=[dict(module=x,before=initial[x]['object_sha256'],after=changed[x]) for x in sorted(set(changed)&closure(m))]
  assert evidence
  with (e/'resume6-cohort-input-changes.jsonl').open('a') as f:f.write(json.dumps(dict(module=m,changed_transitive_inputs=evidence))+'\n')
