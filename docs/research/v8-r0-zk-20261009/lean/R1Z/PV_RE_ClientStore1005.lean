@@ -1,0 +1,35 @@
+import R1Z.PV_RE_StorePrefix1005
+import R1Z.PV_RE_ReserveGuards9
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RE_ClientStore1005
+open Aeneas Aeneas.Std Result ProverRwFull
+open PV_RE_RetryStep PV_RE_PublicPrefix6 PV_RE_AttemptHashPrefix6 PV_RE_AttemptBindingHash7
+variable [ExternalTypes]
+theorem prefix {C : Type} (ops : ExternalFuns)
+    (entropy : RawEntropy C) (pub : Public) (compiled : Compiled) (hash : Hash)
+    (store : Store) (state state1 : C) (secret : Secrets)
+    (entropy_prefix : (EntropyWrapper (ProverRwOuterMapErr.selected ops) entropy).call_mut state 0#usize =
+      .ok (.Ok secret,state1))
+    (bytes : alloc.vec.Vec U8) (digest binding : Array U8 32#usize)
+    (serialization : (ProverRwOuterMapErr.selected ops).op226 pub = .ok (.Ok bytes))
+    (first_hash : hash (publicFrame bytes) = .ok digest)
+    (second_hash : hash (bindingFrame bytes 2#u8
+      (ProverRwOuterEncode.value (ProverRwOuterContextModel.context digest secret.mask_nonce))) = .ok binding) :
+    letI : ExternalFuns := ProverRwOuterMapErr.selected ops
+    ∀ (path : std.path.PathBuf) (h0 : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path {store with last_error := none} secret.mask_nonce = .ok (path))
+    (options : std.fs.OpenOptions) (h1 : std.fs.OpenOptions.new = .ok (options))
+    (written : std.fs.OpenOptions × (std.fs.OpenOptions → std.fs.OpenOptions)) (h2 : std.fs.OpenOptions.write options true = .ok (written))
+    (created : std.fs.OpenOptions × (std.fs.OpenOptions → std.fs.OpenOptions)) (h3 : std.fs.OpenOptions.create_new written.1 true = .ok (created))
+    (moded : std.fs.OpenOptions × (std.fs.OpenOptions → std.fs.OpenOptions)) (h4 : std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode (written.2 (created.2 created.1)) 384#u32 = .ok (moded)),
+    ∃ next, @RealR1_client.prove_for_proof_accounts _ (ProverRwOuterMapErr.selected ops) C entropy pub compiled hash store state = (std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath (moded.2 moded.1) path >>= next) := by
+  letI : ExternalFuns := ProverRwOuterMapErr.selected ops
+  intro path h0 options h1 written h2 created h3 moded h4
+  obtain ⟨next,hn⟩ := PV_RE_ReserveGuards9.client_to_store ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash
+  unfold aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve at hn
+  rw [PV_RE_ClientEntry.bind_assoc] at hn
+  obtain ⟨tail,ht⟩ := PV_RE_StorePrefix1005.prefix store digest secret.mask_nonce path h0 options h1 written h2 created h3 moded h4
+  rw [ht,PV_RE_ClientEntry.bind_assoc] at hn
+  exact ⟨_,hn⟩
+#print axioms prefix
+end R1Z.PV_RE_ClientStore1005
