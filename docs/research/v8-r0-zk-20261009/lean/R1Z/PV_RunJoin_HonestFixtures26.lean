@@ -8,15 +8,15 @@ local instance : CharP K 2147483647 :=
   charP_of_injective_algebraMap (algebraMap (ZMod AspisCircleGroupOrder.P) K).injective
     AspisCircleGroupOrder.P
 
-def transfer : Honest (K := K) :=
+def transfer : Honest («K» := K) :=
   ⟨PV_RunJoin_AdmittedCarrier23.transfer, PV_RunJoin_ConsumerBoundary25.transfer_honest⟩
-def withdrawal : Honest (K := K) :=
+def withdrawal : Honest («K» := K) :=
   ⟨PV_RunJoin_AdmittedCarrier23.withdrawal, PV_RunJoin_ConsumerBoundary25.withdrawal_honest⟩
 
-def statement (i : Honest (K := K)) : Statement K Unit := (source_honest.public i, ())
+def statement (i : Honest («K» := K)) : Statement K Unit := (source_honest.public i, ())
 
 /-- Non-vacuity is constructive: both original fixtures are in the carrier. -/
-theorem inhabited : Nonempty (Honest (K := K)) := ⟨transfer⟩
+theorem inhabited : Nonempty (Honest («K» := K)) := ⟨transfer⟩
 #print axioms inhabited
 
 theorem transfer_identified :
@@ -32,26 +32,34 @@ theorem withdrawal_identified :
 #print axioms withdrawal_identified
 
 /-- V047 non-vacuity on the exact public of either honest fixture. -/
-theorem fibre (i : Honest (K := K)) :
-    (∃ w : (source_honest (K := K)).Instance, source_honest.public w = (statement i).1) ∧
-    (∃ p : BuilderCanonical.Instance (K := K),
+theorem fibre (i : Honest («K» := K)) :
+    (∃ w : (source_honest («K» := K)).Instance, source_honest.public w = (statement i).1) ∧
+    (∃ p : BuilderCanonical.Instance («K» := K),
       BuilderSource.prover.public p = (statement i).1 ∧
       source_honest.build i = BuilderSource.prover.build p) :=
   ⟨⟨i,rfl⟩,⟨target i,PV_RunJoin_HonestConsumer26.canonical_fibre (statement i) i rfl⟩⟩
 #print axioms fibre
 
-theorem transfer_fibre := fibre transfer
+theorem transfer_fibre :
+    (∃ w : (source_honest («K» := K)).Instance, source_honest.public w = (statement transfer).1) ∧
+    (∃ p : BuilderCanonical.Instance («K» := K),
+      BuilderSource.prover.public p = (statement transfer).1 ∧
+      source_honest.build transfer = BuilderSource.prover.build p) := fibre transfer
 #print axioms transfer_fibre
 
-theorem withdrawal_fibre := fibre withdrawal
+theorem withdrawal_fibre :
+    (∃ w : (source_honest («K» := K)).Instance, source_honest.public w = (statement withdrawal).1) ∧
+    (∃ p : BuilderCanonical.Instance («K» := K),
+      BuilderSource.prover.public p = (statement withdrawal).1 ∧
+      source_honest.build withdrawal = BuilderSource.prover.build p) := fibre withdrawal
 #print axioms withdrawal_fibre
 
 /-- Both public fibres can actually invoke the unchanged consumer. -/
 theorem fixture_consumers {F : Subfield K} (B : PackBasis F) :
     (PublicBase F (statement transfer).1 ∧
-      BuilderSoundOn (source_honest (K := K)) B (statement transfer)) ∧
+      BuilderSoundOn (source_honest («K» := K)) B (statement transfer)) ∧
     (PublicBase F (statement withdrawal).1 ∧
-      BuilderSoundOn (source_honest (K := K)) B (statement withdrawal)) :=
+      BuilderSoundOn (source_honest («K» := K)) B (statement withdrawal)) :=
   ⟨PV_RunJoin_HonestConsumer26.at_honest_input B _ transfer rfl,
    PV_RunJoin_HonestConsumer26.at_honest_input B _ withdrawal rfl⟩
 #print axioms fixture_consumers
