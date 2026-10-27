@@ -1,0 +1,41 @@
+@[reducible] def AspisR0.ChordGeometry.Point.{u_2} : (K : Type u_2) → [Field K] → Type (max 0 u_2) :=
+fun K [Field K] => { z // z.1 ^ 2 + z.2 ^ 2 = 1 }
+structure AspisR1.LiteralOpeningView.View : Type
+number of parameters: 0
+fields:
+  AspisR1.LiteralOpeningView.View.c1 : AspisR1.LiteralTranscript.C1Word
+  AspisR1.LiteralOpeningView.View.c2 : AspisR1.LiteralTranscript.C2Word
+  AspisR1.LiteralOpeningView.View.word : AspisR1.LiteralOpeningView.W
+  AspisR1.LiteralOpeningView.View.semantic : List
+      (R0P.Mask.SemMsgZ AspisR1.LiteralOpeningView.E × AspisR1.LiteralOpeningView.E)
+  AspisR1.LiteralOpeningView.View.semantic_length : self.semantic.length = 25
+  AspisR1.LiteralOpeningView.View.challenge25 : AspisR1.LiteralOpeningView.E
+  AspisR1.LiteralOpeningView.View.challenge26 : AspisR1.LiteralOpeningView.E
+  AspisR1.LiteralOpeningView.View.circlePoints : Fin 2 → AspisR0.ChordGeometry.Point AspisWideTower.WideExact
+  AspisR1.LiteralOpeningView.View.functionals : Fin 6 → AspisR1.LiteralOpeningView.Functional
+  AspisR1.LiteralOpeningView.View.baseFunctional : AspisR1.LiteralOpeningView.Functional
+constructor:
+  AspisR1.LiteralOpeningView.View.mk (c1 : AspisR1.LiteralTranscript.C1Word) (c2 : AspisR1.LiteralTranscript.C2Word)
+    (word : AspisR1.LiteralOpeningView.W)
+    (semantic : List (R0P.Mask.SemMsgZ AspisR1.LiteralOpeningView.E × AspisR1.LiteralOpeningView.E))
+    (semantic_length : semantic.length = 25) (challenge25 challenge26 : AspisR1.LiteralOpeningView.E)
+    (circlePoints : Fin 2 → AspisR0.ChordGeometry.Point AspisWideTower.WideExact)
+    (functionals : Fin 6 → AspisR1.LiteralOpeningView.Functional)
+    (baseFunctional : AspisR1.LiteralOpeningView.Functional) : AspisR1.LiteralOpeningView.View
+AspisR1.FJs_FunctionalWeights.rows : ∀ (a : AspisR1.FJs_LiteralRows.Alpha) (p0 p1 : AspisR1.FJs_LiteralRows.P)
+  (cs : List AspisR1.FJs_LiteralRows.E) (z : Fin 2 → AspisR0.ChordGeometry.Point AspisR1.FJs_LiteralRows.E),
+  (AspisR1.SelectedOpeningFunctionals.alpha cs = fun i =>
+      AspisR1.FJs_LiteralRows.embed (AspisR1.FJs_LiteralRows.point a i)) →
+    (↑(z 0)).1 = AspisR1.FJs_LiteralRows.embed (AspisR1.FJc_WeightValues.decode p0.x) →
+      (↑(z 0)).2 = AspisR1.FJs_LiteralRows.embed (AspisR1.FJc_WeightValues.decode p0.y) →
+        (↑(z 1)).1 = AspisR1.FJs_LiteralRows.embed (AspisR1.FJc_WeightValues.decode p1.x) →
+          (↑(z 1)).2 = AspisR1.FJs_LiteralRows.embed (AspisR1.FJc_WeightValues.decode p1.y) →
+            AspisR1.FJr_PairRows.rows a p0 p1 = AspisR1.SelectedOpeningFunctionals.rows cs z
+@[reducible] def AspisR1.FJs_LiteralRows.E : Type :=
+AspisR1.OraclePortCheckpointAbiC5.E
+@[reducible] def AspisR1.OraclePortCheckpointAbiC5.E : Type :=
+AspisR1.LiteralTranscript.E
+@[reducible] def AspisR1.LiteralTranscript.E : Type :=
+AspisWideTower.WideExact
+AspisR1.LiteralOpeningView.View.circlePoints (self : AspisR1.LiteralOpeningView.View) :
+  Fin 2 → AspisR0.ChordGeometry.Point AspisWideTower.WideExact
