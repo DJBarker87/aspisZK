@@ -16,7 +16,8 @@ theorem constructed [ExternalLinear] (index : U64) (root : Digest) (frontier : F
   | Err error => cases h
   | Ok owned =>
     have frame := construct index root frontier roots owned hr
-    change ok (.Ok owned.inner) = ok (.Ok tree) at h
+    change (ok (.Ok owned.inner) : Result (core.result.Result
+      incremental_merkle.IncrementalMerkleTreeV1 incremental_merkle.PoolV1TreeError)) = ok (.Ok tree) at h
     exact (core.result.Result.Ok.inj (Result.ok.inj h)).symm.trans frame.1
 #print axioms constructed
 
