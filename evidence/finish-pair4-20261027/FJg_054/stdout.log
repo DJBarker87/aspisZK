@@ -1,0 +1,44 @@
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+FJg_TensorProduct.lean:16:87: error: unsolved goals
+E : Type
+inst✝ : Field E
+f : Fin 5 → Fin 4 → E
+i : Fin 64
+s t : Fin 4
+⊢ f 0 ⟨↑t, ⋯⟩ * f (Fin.succ 0) ⟨↑(FJg_TensorDigits.index i s t) / 4 % 4, ⋯⟩ * f (Fin.succ 0).succ ⟨↑i % 4, ⋯⟩ *
+        f (Fin.succ 0).succ.succ ⟨↑i / 4 % 4, ⋯⟩ *
+      f (Fin.succ 0).succ.succ.succ ⟨↑i / 16, ⋯⟩ =
+    f 0 ⟨↑t, ⋯⟩ * f 1 s * f 2 ⟨↑i % 4, ⋯⟩ * f 3 ⟨↑i / 4 % 4, ⋯⟩ * f 4 ⟨↑i / 16, ⋯⟩
+FJg_TensorProduct.lean:19:13: warning: This simp argument is unused:
+  pow_one
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵i̵n̵.̵p̵r̵o̵d̵_̵u̵n̵i̵v̵_̵s̵u̵c̵c̵,̵F̵i̵n̵.̵p̵r̵o̵d̵_̵u̵n̵i̵v̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵s̵u̵c̵c̵,̵
+  ̵ ̵ ̵ ̵ ̵p̵o̵w̵_̵z̵e̵r̵o̵,̵p̵o̵w̵_̵o̵n̵e̵,̵s̵h̵o̵w̵ ̵4̵^̵2̵=̵1̵6̵[̲F̲i̲n̲.̲p̲r̲o̲d̲_̲u̲n̲i̲v̲_̲s̲u̲c̲c̲,̲ ̲F̲i̲n̲.̲p̲r̲o̲d̲_̲u̲n̲i̲v̲_̲z̲e̲r̲o̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲z̲e̲r̲o̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲s̲u̲c̲c̲,̲ ̲p̲o̲w̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲4̲ ̲^̲ ̲2̲ ̲=̲ ̲1̲6̲ from by d̵e̵c̵i̵d̵e̵,̵s̵h̵o̵w̵ ̵4̵^̵3̵=̵6̵4̵d̲e̲c̲i̲d̲e̲,̲ ̲s̲h̲o̲w̲ ̲4̲ ̲^̲ ̲3̲ ̲=̲ ̲6̲4̲ from by decide, s̵h̵o̵w̵ ̵4̵^̵4̵=̵2̵5̵6̵ ̵f̵r̵o̵m̵ ̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵,̵N̵a̵t̵.̵d̵i̵v̵_̵o̵n̵e̵,̵m̵u̵l̵_̵o̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵F̵J̵g̵_̵T̵e̵n̵s̵o̵r̵D̵i̵g̵i̵t̵s̵.̵z̵e̵r̵o̵,̵F̵J̵g̵_̵T̵e̵n̵s̵o̵r̵D̵i̵g̵i̵t̵s̵.̵o̵n̵e̵,̵F̵J̵g̵_̵T̵e̵n̵s̵o̵r̵D̵i̵g̵i̵t̵s̵.̵t̵w̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵F̵J̵g̵_̵T̵e̵n̵s̵o̵r̵D̵i̵g̵i̵t̵s̵.̵t̵h̵r̵e̵e̵,̵F̵J̵g̵_̵T̵e̵n̵s̵o̵r̵D̵i̵g̵i̵t̵s̵.̵f̵o̵u̵r̵]̵s̲h̲o̲w̲ ̲4̲ ̲^̲ ̲4̲ ̲=̲ ̲2̲5̲6̲ ̲f̲r̲o̲m̲ ̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲d̲i̲v̲_̲o̲n̲e̲,̲ ̲m̲u̲l̲_̲o̲n̲e̲,̲ ̲F̲J̲g̲_̲T̲e̲n̲s̲o̲r̲D̲i̲g̲i̲t̲s̲.̲z̲e̲r̲o̲,̲ ̲F̲J̲g̲_̲T̲e̲n̲s̲o̲r̲D̲i̲g̲i̲t̲s̲.̲o̲n̲e̲,̲ ̲F̲J̲g̲_̲T̲e̲n̲s̲o̲r̲D̲i̲g̲i̲t̲s̲.̲t̲w̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲F̲J̲g̲_̲T̲e̲n̲s̲o̲r̲D̲i̲g̲i̲t̲s̲.̲t̲h̲r̲e̲e̲,̲ ̲F̲J̲g̲_̲T̲e̲n̲s̲o̲r̲D̲i̲g̲i̲t̲s̲.̲f̲o̲u̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJg_TensorProduct.lean:21:26: warning: This simp argument is unused:
+  FJg_TensorDigits.one
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵i̵n̵.̵p̵r̵o̵d̵_̵u̵n̵i̵v̵_̵s̵u̵c̵c̵,̵F̵i̵n̵.̵p̵r̵o̵d̵_̵u̵n̵i̵v̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵s̵u̵c̵c̵,̵
+  ̵ ̵ ̵ ̵ ̵p̵o̵w̵_̵z̵e̵r̵o̵,̵p̵o̵w̵_̵o̵n̵e̵,̵s̵h̵o̵w̵ ̵4̵^̵2̵=̵1̵6̵[̲F̲i̲n̲.̲p̲r̲o̲d̲_̲u̲n̲i̲v̲_̲s̲u̲c̲c̲,̲ ̲F̲i̲n̲.̲p̲r̲o̲d̲_̲u̲n̲i̲v̲_̲z̲e̲r̲o̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲z̲e̲r̲o̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲s̲u̲c̲c̲,̲ ̲p̲o̲w̲_̲z̲e̲r̲o̲,̲ ̲p̲o̲w̲_̲o̲n̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲4̲ ̲^̲ ̲2̲ ̲=̲ ̲1̲6̲ from by d̵e̵c̵i̵d̵e̵,̵s̵h̵o̵w̵ ̵4̵^̵3̵=̵6̵4̵d̲e̲c̲i̲d̲e̲,̲ ̲s̲h̲o̲w̲ ̲4̲ ̲^̲ ̲3̲ ̲=̲ ̲6̲4̲ from by decide, s̵h̵o̵w̵ ̵4̵^̵4̵=̵2̵5̵6̵ ̵f̵r̵o̵m̵ ̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵,̵N̵a̵t̵.̵d̵i̵v̵_̵o̵n̵e̵,̵m̵u̵l̵_̵o̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵F̵J̵g̵_̵T̵e̵n̵s̵o̵r̵D̵i̵g̵i̵t̵s̵.̵z̵e̵r̵o̵,̵F̵J̵g̵_̵T̵e̵n̵s̵o̵r̵D̵i̵g̵i̵t̵s̵.̵o̵n̵e̵,̵F̵J̵g̵_̵T̵e̵n̵s̵o̵r̵D̵i̵g̵i̵t̵s̵.̵t̵w̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵F̵J̵g̵_̵T̵e̵n̵s̵o̵r̵D̵i̵g̵i̵t̵s̵.̵t̵h̵r̵e̵e̵,̵F̵J̵g̵_̵T̵e̵n̵s̵o̵r̵D̵i̵g̵i̵t̵s̵.̵f̵o̵u̵r̵]̵s̲h̲o̲w̲ ̲4̲ ̲^̲ ̲4̲ ̲=̲ ̲2̲5̲6̲ ̲f̲r̲o̲m̲ ̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲d̲i̲v̲_̲o̲n̲e̲,̲ ̲m̲u̲l̲_̲o̲n̲e̲,̲ ̲F̲J̲g̲_̲T̲e̲n̲s̲o̲r̲D̲i̲g̲i̲t̲s̲.̲z̲e̲r̲o̲,̲ ̲F̲J̲g̲_̲T̲e̲n̲s̲o̲r̲D̲i̲g̲i̲t̲s̲.̲t̲w̲o̲,̲ ̲F̲J̲g̲_̲T̲e̲n̲s̲o̲r̲D̲i̲g̲i̲t̲s̲.̲t̲h̲r̲e̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲F̲J̲g̲_̲T̲e̲n̲s̲o̲r̲D̲i̲g̲i̲t̲s̲.̲f̲o̲u̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJg_TensorProduct.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJg_TensorProduct.children' depends on axioms: [propext, Quot.sound]

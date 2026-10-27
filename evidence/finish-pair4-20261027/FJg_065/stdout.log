@@ -1,0 +1,32 @@
+FJg_PartialSum.lean:20:41: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i, ?f ↑i
+in the target expression
+  ∑ j ∈ Finset.range 16, FJf_PartialCell.term f common s j =
+    ∑ j,
+      FJc_InactiveCoefficientsModel.field f (16 * ↑i + ↑j) *
+        (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E) (FJf_QMArray.value common ↑j)
+
+f : Slice U8
+common : Std.Array NQ 16#usize
+p : Std.Array NE 4#usize
+hv : FJg_PartialsValue.Values f common p 4
+i : Fin 4
+s : Usize := (↑i)#usize
+hs : ↑s = ↑i
+src : FIp_ArrayValue.value p ↑i = FJf_PartialCell.sumPrefix f common s 16
+⊢ ∑ j ∈ Finset.range 16, FJf_PartialCell.term f common s j =
+    ∑ j,
+      FJc_InactiveCoefficientsModel.field f (16 * ↑i + ↑j) *
+        (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E) (FJf_QMArray.value common ↑j)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJg_PartialSum.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
