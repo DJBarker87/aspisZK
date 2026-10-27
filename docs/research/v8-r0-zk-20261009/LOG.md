@@ -12717,3 +12717,25 @@ against the runjoin endpoint cohort's recorded hashes first, then compiles the i
 and continues. Because this is the ninth round on V404/V405, it must give a concrete estimate rather
 than spend its budget on partial wrappers if the remainder cannot finish. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D328 (Stream B) 2026-10-27 22:18 UTC: integration gate on the merged candidate: ELF pins match, pinned client built, fixture gate passes on the deterministic criterion; integ5 runs the differential
+
+pv-integ4 (no source change; no Lean or IDs used) on the merged prover candidate 03905a5259:
+- All three verifier ELFs match the release pins (default f8c0ec72…, devnet 63ad3e9c…, Pool 121f3e29…).
+- devnet_spend built from tools/r1-cost-probe with the owner-approved pinned toolchain 1.94.1 and the
+  recommended features: sha256 3a1b03d0eb2bbffb59631631d065d7a0dda2a57e5ca3e36d782abe49540b2ffa;
+  resolved symbols show main reaching generate_for_mask_nonce and the op223 and batch 1/2/3 prover-local
+  routes. Recipe features remain pending owner approval.
+- Fixed-coin fixture gate against 37e5e133f8: proof, public and ledger bytes and the deterministic
+  canonical result records match for both fixtures; the raw result.json bytes differ only in the
+  elapsed-seconds field (transfer 16.44 s control vs 14.53 s candidate; withdrawal 15.28 vs 14.86;
+  single uncoordinated samples, not a timing result). The worker applied the lead's literal
+  "byte-identical result records" wording and stopped before the differential. Lead ruling: elapsed
+  time is a measurement, already excluded in D298, so the gate passes on the deterministic criterion;
+  the raw difference stays visible in the evidence.
+- Cost: batches 2 and 3 project +1.636% (transfer) and +1.642% (withdrawal) of 14.38 s; op223 and
+  batch 1 have no per-call tables, so the full projection is unknown and no term is assumed zero.
+integ5 resumes: the 1,000-pair differential against c57a344726 (seeds 6000-6999), op223's recorded
+whole-prover ratio (D289) and a scratch per-call measurement for batch 1, giving the full projection;
+the quiet-window timing gate is planned, not run. Rows removed outright: 0. Privacy target not yet
+established.
