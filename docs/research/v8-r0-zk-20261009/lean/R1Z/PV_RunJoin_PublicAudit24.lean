@@ -1,0 +1,12 @@
+import R1Z.PV_RunJoin_PremiseTruth24
+#print R1Z.BuilderSource.SourceIdentification
+#print R1Z.BuilderSource.builder_refinement_D46_D51
+#print R1Z.PV_RunJoin_PremiseTruth24.bad_public_projection
+#print R1Z.PV_RunJoin_PremiseTruth24.bad_public_eq_false_of_witness
+#print R1Z.PV_RunJoin_PremiseTruth24.variant_build_eq
+#print R1Z.PV_RunJoin_PremiseTruth24.variant_public_eq
+#print axioms R1Z.PV_RunJoin_PremiseTruth24.bad_public_projection
+#print axioms R1Z.PV_RunJoin_PremiseTruth24.bad_public_eq_false_of_witness
+#print axioms R1Z.PV_RunJoin_PremiseTruth24.variant_build_eq
+#print axioms R1Z.PV_RunJoin_PremiseTruth24.variant_public_eq
+#print axioms R1Z.PV_RunJoin_PremiseTruth24.raw_transport_eq
