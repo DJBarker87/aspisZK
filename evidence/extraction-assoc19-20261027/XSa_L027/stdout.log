@@ -1,0 +1,44 @@
+XSa_generated/XSa_RawFolds.lean:17:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  XRn_Join_wrap64 (c * g + (2 ^ 31 - 1) ^ 2)
+in the target expression
+  XRn_Join_partial (XRn_Join_sub64 (XRn_Join_wrap64 (c * g + 2147483647 * 2147483647)) (d * h)) =
+    AspisR1BatchedFoldArithmetic.fold (c * g + 2147483647 * 2147483647 - d * h)
+
+case left
+c d g h : ℕ
+hc : c ≤ 2147483646
+hd : d ≤ 2147483646
+hg : g ≤ 2147483646
+hh : h ≤ 2147483646
+hcg : c * g + (2 ^ 31 - 1) ^ 2 < 2 ^ 64
+hdh : d * h ≤ c * g + (2 ^ 31 - 1) ^ 2
+hch : c * h + d * g < 2 ^ 64
+right✝ :
+  0 * 0 + (2 ^ 31 - 1) ^ 2 < 2 ^ 64 ∧
+    0 * 0 ≤ 0 * 0 + (2 ^ 31 - 1) ^ 2 ∧
+      0 * 0 + (2 ^ 31 - 1) ^ 2 - 0 * 0 + 2 * AspisR1BatchedFoldArithmetic.fold (c * g + (2 ^ 31 - 1) ^ 2 - d * h) <
+          2 ^ 64 ∧
+        0 * 0 + (2 ^ 31 - 1) ^ 2 - 0 * 0 + 2 * AspisR1BatchedFoldArithmetic.fold (c * g + (2 ^ 31 - 1) ^ 2 - d * h) +
+              3 * (2 ^ 31 - 1) <
+            2 ^ 64 ∧
+          AspisR1BatchedFoldArithmetic.fold (c * h + d * g) ≤
+              0 * 0 + (2 ^ 31 - 1) ^ 2 - 0 * 0 +
+                  2 * AspisR1BatchedFoldArithmetic.fold (c * g + (2 ^ 31 - 1) ^ 2 - d * h) +
+                3 * (2 ^ 31 - 1) ∧
+            0 * 0 + 0 * 0 < 2 ^ 64 ∧
+              0 * 0 + 0 * 0 + AspisR1BatchedFoldArithmetic.fold (c * g + (2 ^ 31 - 1) ^ 2 - d * h) < 2 ^ 64 ∧
+                0 * 0 + 0 * 0 + AspisR1BatchedFoldArithmetic.fold (c * g + (2 ^ 31 - 1) ^ 2 - d * h) +
+                      2 * AspisR1BatchedFoldArithmetic.fold (c * h + d * g) <
+                    2 ^ 64 ∧
+                  0 * g + c * 0 < 2 ^ 64 ∧
+                    0 * g + c * 0 + 2 * (2 ^ 31 - 1) ^ 2 < 2 ^ 64 ∧
+                      0 * h ≤ 0 * g + c * 0 + 2 * (2 ^ 31 - 1) ^ 2 ∧
+                        d * 0 ≤ 0 * g + c * 0 + 2 * (2 ^ 31 - 1) ^ 2 - 0 * h ∧
+                          0 * h + 0 * g < 2 ^ 64 ∧
+                            0 * h + 0 * g + c * 0 < 2 ^ 64 ∧
+                              0 * h + 0 * g + c * 0 + d * 0 < 2 ^ 64 ∧
+                                2 * AspisR1BatchedFoldArithmetic.fold (c * g + (2 ^ 31 - 1) ^ 2 - d * h) < 2 ^ 64 ∧
+                                  2 * AspisR1BatchedFoldArithmetic.fold (c * h + d * g) < 2 ^ 64
+⊢ XRn_Join_partial (XRn_Join_sub64 (XRn_Join_wrap64 (c * g + 2147483647 * 2147483647)) (d * h)) =
+    AspisR1BatchedFoldArithmetic.fold (c * g + 2147483647 * 2147483647 - d * h)
+'XSa_RawFolds.uv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
