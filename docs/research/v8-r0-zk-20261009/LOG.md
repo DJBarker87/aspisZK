@@ -11030,3 +11030,33 @@ the candidate stays unmerged until its adoption gates pass), and the finished rw
 /private/tmp. A future job on any of them recreates its worktree. The option-B and inversion jobs (D248)
 create their worktrees when their slots open. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D251 (Stream B) 2026-10-27 07:05 UTC: cb8 exhausted: op223 still open by both routes; diagnosis of the shared obstruction; ruling (k); option-B job launched
+
+pv-cb8 (`codex/pv-cb-20261026`, head 7599dff5b2; 100/100 Lean = 80 passed / 20 rejected; 12/12 Kani all
+timed out, exit 124, no verdict, no counterexample: compress16 canonical/reference at 900 s unwind 18,
+four per-lane compress16 splits and four Horner splits at 180 s, circle_sample_reference and
+pole1024_reference at 900 s; no crates/programs change; no forbidden tokens; final audits 41300-41302
+standard axioms, ≤1.65 s / 4.30 GB / swap 0). Proved: the canonical sixteen-value compressor producer
+invariant, the actual legacy/forest tuple-constructor invariants, the numerical compressor caller
+transport (conditional canonical16). NOT proved: `PV_CB_Op223Source.op223_source`; the transparent
+by-value shim extraction fails with `ProverRwRngExtractor006: fail-closed preflight: escaping reference
+output requires loan validation`. V164 unchanged: {P_source_p6} (with P_proof_bytes and the reservation
+equation from the consumer); rows 23/73; endpoint premises removed 0. LEAD DIAGNOSIS (AGENTS.md §7, the
+third round at the same point): the shipped function (crates/aspis-statement/src/logup.rs,
+`compress_tagged_tuple(tag, values: &[M31], lambda) = lift(tag) + Σ λ^(i+1)·values[i]`) is a tiny pure
+fold. Kani fails because sixteen chained bit-precise QM31 multiplications are SAT-hard (the same cause
+as the op117/op258/op259 timeouts), so no bound or split will finish; the extraction fails on the slice
+iterator's borrowed element (`for value in values`), not on the arithmetic. LEAD RULING (k): no Kani
+shipped = reference gates for chained field arithmetic; such rows go to Lean on an extraction. The two
+real routes for op223 are (i) make the pinned extraction accept slice iteration (the Aeneas backend
+models core.slice.iter; the refusal is the pipeline's own fail-closed preflight) and (ii) under the D187
+prover rewrite route, a prover-local index-loop copy of the function (verifier bytes untouched, since the
+shared aspis-statement function is also used on SBF), which would require re-running the candidate's
+differential, fixture and timing gates. A focused diagnosis job will compare both before any source
+change; (ii) would come to the owner only if it changes verifier bytes, which by construction it does
+not. Launched pv-optb (`codex/pv-optb-20261027`, research base, IDs 41800-42099, 100 Lean / 6 Kani): the
+option-B endpoint statement with its diff against privacy_headline_deployed, the witness-independence
+proof of the OS-failure event (a counterexample stops it and selects option A), and the derivation. Six
+slots: cb7, cblib, cbmid, runjoin12, srcid8, optb. Rows removed outright: 0. Privacy target not yet
+established.
