@@ -1,0 +1,63 @@
+structure Aeneas.Std.core.slice.iter.ChunksExact (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.ChunksExact.chunks : List (Aeneas.Std.Slice T)
+  Aeneas.Std.core.slice.iter.ChunksExact.remainder : Aeneas.Std.Slice T
+constructor:
+  Aeneas.Std.core.slice.iter.ChunksExact.mk {T : Type} (chunks : List (Aeneas.Std.Slice T))
+    (remainder : Aeneas.Std.Slice T) : Aeneas.Std.core.slice.iter.ChunksExact T
+def Aeneas.Std.core.slice.iter.IteratorChunksExact.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.ChunksExact T →
+    Aeneas.Std.Result (Option (Aeneas.Std.Slice T) × Aeneas.Std.core.slice.iter.ChunksExact T) :=
+fun {T} self =>
+  match self.chunks with
+  | [] => Aeneas.Std.Result.ok (none, self)
+  | chunk :: chunks => Aeneas.Std.Result.ok (some chunk, { chunks := chunks, remainder := self.remainder })
+def Aeneas.Std.core.slice.Slice.chunks_exact : {T : Type} →
+  Aeneas.Std.Slice T → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.core.slice.iter.ChunksExact T) :=
+fun {T} s chunk_size =>
+  if hcs : ↑chunk_size > 0 then
+    let result := Aeneas.Std.List.toChunksExact (↑chunk_size) hcs ↑s;
+    have sliceChunks :=
+      List.map
+        (fun x =>
+          match x with
+          | ⟨c, hc⟩ => ⟨c, ⋯⟩)
+        result.1.attach;
+    Aeneas.Std.Result.ok { chunks := sliceChunks, remainder := ⟨result.2, ⋯⟩ }
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+structure Aeneas.Std.core.iter.adapters.enumerate.Enumerate.{u} (I : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.iter : I
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.count : Aeneas.Std.Usize
+constructor:
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.mk.{u} {I : Type u} (iter : I) (count : Aeneas.Std.Usize) :
+    Aeneas.Std.core.iter.adapters.enumerate.Enumerate I
+def Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next : {I Item : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator I Item →
+    Aeneas.Std.core.iter.adapters.enumerate.Enumerate I →
+      Aeneas.Std.Result (Option (Aeneas.Std.Usize × Item) × Aeneas.Std.core.iter.adapters.enumerate.Enumerate I) :=
+fun {I Item} IteratorInst self => do
+  let __x ← IteratorInst.next self.iter
+  match __x with
+    | (opt, iter') =>
+      match opt with
+      | none => Aeneas.Std.Result.ok (none, { iter := iter', count := self.count })
+      | some a => do
+        let count' ← self.count + 1#usize
+        Aeneas.Std.Result.ok (some (self.count, a), { iter := iter', count := count' })
+@[reducible] def AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31 : Aeneas.Std.core.cmp.PartialEq
+  AspisR1PrefixAggregateParser.field.QM31 AspisR1PrefixAggregateParser.field.QM31 :=
+{ eq := AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31.eq,
+  ne := fun self other =>
+    Aeneas.Std.core.cmp.PartialEq.ne.default AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31.eq self
+      other }
+XSe_generated/XSe_ValidatorInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PrefixAggregateParser.field.QM31.impl.c1`
+def AspisR1PrefixAggregateParser.field.wide_exact.WideExact.impl.c1 : AspisR1PrefixAggregateParser.field.wide_exact.WideExact →
+  Aeneas.Std.Result AspisR1PrefixAggregateParser.field.QM31 :=
+fun self => Aeneas.Std.Result.ok self.c1
+@[irreducible] def AspisR1PrefixAggregateParser.field.QM31.ZERO : AspisR1PrefixAggregateParser.field.QM31 :=
+{ c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }
+XSe_generated/XSe_ValidatorInspect.lean:11:7: error(lean.unknownIdentifier): Unknown identifier `Aeneas.Std.loop_unfold`
+XSe_generated/XSe_ValidatorInspect.lean:12:7: error(lean.unknownIdentifier): Unknown identifier `Aeneas.Std.loop_eq`

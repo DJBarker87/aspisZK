@@ -1,0 +1,50 @@
+{"attempt": "XSe_L022", "exit_status": 1, "wall_seconds": 1.2178344090352766, "peak_rss_kib": "2655980", "swaps": "0", "print_axioms": ["'XSe_ValidatorBody.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSe_generated/XSe_ValidatorBody.lean:38:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.cmp.PartialEq.ne.trait_default AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31 ?q
+    AspisR1PrefixAggregateParser.field.QM31.ZERO
+in the target expression
+  (fun iter1 =>
+      let (value, bytes) := w
+      do
+      let o1 ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_le_bytes bytes
+      let r ←
+        match o1 with
+          | none => ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value))
+          | some v => ok (core.result.Result.Ok v)
+      let cf ←
+        match r with
+          | core
+...
+sult.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            core.cmp.PartialEq.ne.trait_default AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31
+                val.c1 AspisR1PrefixAggregateParser.field.QM31.ZERO
+          if b = true then
+              ok (done (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value)))
+            else ok (cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+          ok (done r1)) =
+    fun after => do
+    let status ←
+      do
+        let value ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_le_bytes w.2
+        match value with
+          | none => ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row w.1))
+          | some w_1 =>
+            if
+                (w_1.c1.c0.a == 0#u32 && w_1.c1.c0.b == 0#u32 && w_1.c1.c1.a == 0#u32 && w_1.c1.c1.b == 0#u32) =
+                  true then
+              ok (core.result.Result.Ok ())
+            else ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row w.1))
+    match status with
+      | core.result.Result.Err e => ok (done (core.result.Result.Err e))
+      | core.result.Result.Ok a => ok (cont after)
+'XSe_ValidatorBody.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7e6db1ca72604f7baafbcc9a9e70ac7f.scope; invocation ID: 22e45588dfc54a1687e37a6740e8b64a
