@@ -1,0 +1,28 @@
+JGb_Sum3.lean:26:5: error: unsolved goals
+left : Std.Array NP 3#usize
+right : Std.Array NQ 3#usize
+sums : JGb_Sum3Channel.Sums := Array.repeat 3#usize (Array.repeat 3#usize 0#u64)
+outer :
+  JGb_Sum3Outer.loop { start := 0#usize, «end» := 3#usize } left right sums =
+    JGb_Sum3Outer.probe { start := 0#usize, «end» := 3#usize } (JGb_ArrayMap.array prepared left)
+      (JGb_ArrayMap.array qm right) sums
+⊢ (do
+      let s ←
+        JGb_Sum3Outer.probe { start := 0#usize, «end» := 3#usize } (JGb_ArrayMap.array prepared left)
+            (JGb_ArrayMap.array qm right) sums
+      AspisR1PoseidonPreparedSum3Source.field.qm31_from_karatsuba_channel_sums s) =
+    ?m.56
+'AspisR1.JGb_Sum3.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGb_Sum3.lean:35:59: error: Type mismatch: After simplification, term
+  i.isLt
+ has type
+  @LT.lt ℕ instLTNat (↑i) 3
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑i ↑3#usize
+JGb_Sum3.lean:40:52: error: Type mismatch: After simplification, term
+  i.isLt
+ has type
+  @LT.lt ℕ instLTNat (↑i) 3
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑i ↑3#usize
+'AspisR1.JGb_Sum3.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

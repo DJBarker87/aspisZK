@@ -1,0 +1,54 @@
+{"attempt": "JGb15_077", "exit_status": 1, "wall_seconds": 1.4845593469799496, "peak_rss_kib": "3029616", "swaps": "0", "print_axioms": ["'AspisR1.JGb_Sum3.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGb_Sum3.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGb_Sum3.lean:19:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JGb_Sum3Outer.loop { start := 0#usize, «end» := 3#usize } left right ?m.28
+in the target expression
+  map qm
+      (have a := Array.repeat 3#usize 0#u64;
+      have sums := Array.repeat 3#usize a;
+      do
+      let sums1 ← field.qm31_sum_products3_prepared_loop0 { start := 0#usize, «end» := 3#usize } left right sums
+      field.qm31_from_karatsuba_channel_sums sums1) =
+    have a := Array.repeat 3#usize 0#u64;
+    have sums := Array.repeat 3#usize a;
+    do
+    let sums1 ←
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0 { start := 0#usize, «end» := 3#usize }
+      
+...
+ums sums1
+
+left : Std.Array NP 3#usize
+right : Std.Array NQ 3#usize
+⊢ map qm
+      (have a := Array.repeat 3#usize 0#u64;
+      have sums := Array.repeat 3#usize a;
+      do
+      let sums1 ← field.qm31_sum_products3_prepared_loop0 { start := 0#usize, «end» := 3#usize } left right sums
+      field.qm31_from_karatsuba_channel_sums sums1) =
+    have a := Array.repeat 3#usize 0#u64;
+    have sums := Array.repeat 3#usize a;
+    do
+    let sums1 ←
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0 { start := 0#usize, «end» := 3#usize }
+          (JGb_ArrayMap.array prepared left) (JGb_ArrayMap.array qm right) sums
+    AspisR1PoseidonPreparedSum3Source.field.qm31_from_karatsuba_channel_sums sums1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGb_Sum3.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGb_Sum3.lean:29:52: error: unexpected token ']''; expected ':' or ']'
+JGb_Sum3.lean:29:8: error(lean.invalidField): Invalid field `size`: The environment does not contain `List.size`, so it is not possible to project the field `size` from an expression
+  a✝
+of type `List FIv_PreparedNew.PP`
+JGb_Sum3.lean:26:7: error: Missing cases:
+'AspisR1.JGb_Sum3.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6a515a7426bb4c22b26096d38766268b.scope; invocation ID: bfba6f2c47794bdb91c8f86cec327148
