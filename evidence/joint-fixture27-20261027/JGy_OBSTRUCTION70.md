@@ -64,3 +64,21 @@ MemoryHigh6G/MemoryMax8G/Swap0/Tasks64,-M7000.0 Kani/Rust/SBF runs, no shipped o
 cfg(kani) change, no ELF rebuild trigger, no key operation. Current budgets and
 exact receipts are in JGy_ATTEMPTS.jsonl / JGy_VALIDATION.json. Stop at100 Lean
 compile attempts; no101st attempt.
+
+## Checked update before launch070
+
+065/066 three-level replacements PASS;067/068 remaining six-level bundles
+PASS;069 complete new first-tree adapter PASS, with all roots audited using
+standard axioms. The failed064 source was not retried. The sequencer refused
+a request to use070 for Tree1Part0 BEFORE any admission/upload/Lean;070 stays
+reserved for the actual top audit. This refusal is not an extra Lean process.
+The first still-unchecked tree is1; the three-tree probe remains pending.
+
+##070 actual-root result
+
+PASS:2.504355836950708s,5728616KiB RSS,swap0. The exact printed axioms are
+[propext,Classical.choice,Quot.sound]. Full kernel statement/theorem and command,
+source/dependency hashes,caps and revision are in070. Before/after statement
+artifacts are identical. This satisfies the separate actual-root audit, and
+is not an instance of the fixed-byte accepted pair. No second unchanged top
+audit or full regression is needed. Budget after070:70/100 Lean,0/60 Kani.
