@@ -1,0 +1,101 @@
+import XRn_Join_Funs
+import XRn_Join_ResultTools
+open Aeneas Aeneas.Std Result
+open XRn_Join_Release XRn_Join_ResultTools
+namespace XRo_Join_PreparedCuts
+/- Accepted-result projection from the actual emitted Prepared.new. This is
+   one local component, not the full source/reference/effects association. -/
+theorem source {H : Type} (D : aspis_core.digest.Digest32 H)
+    (sem : r1_semantic.Verified H) (v : verifier.View) (hash : H)
+    (old scratch : Array aspis_core.field.wide_exact.WideExact 29#usize)
+    (out : verifier.Prepared)
+    (h : verifier.Prepared.new D sem v hash old = ok (.Ok out,scratch)) :
+    ∃ (start t1 : transcript.Transcript H) (inactiveBytes : Array U8 32#usize)
+      (t2 : transcript.Transcript H) (alpha0 : aspis_core.field.wide_exact.WideExact)
+      (t3 : transcript.Transcript H),
+      transcript.Transcript.new D hash sem.transcript.state v.variant=ok start ∧
+      transcript.Transcript.scalar D start 27#u8 v.y1 true=ok (out.gamma,t1) ∧
+      aspis_core.field.wide_exact.WideExact.to_le_bytes v.inactive=ok inactiveBytes ∧
+      transcript.Transcript.scalar D t1 28#u8 (Array.to_slice inactiveBytes) false=ok (out.kappa,t2) ∧
+      transcript.Transcript.scalar D t2 29#u8 v.round0 false=ok (alpha0,t3) := by
+  unfold verifier.Prepared.new at h
+  simp only [r1_wire.SemanticTranscript.impl.state,bind_tc_ok] at h
+  obtain ⟨start,hstart,h⟩ := bind_success _ _ _ h
+  obtain ⟨gamma,t1,hgamma,h⟩ := pair_bind_success _ _ _ h
+  obtain ⟨inactiveBytes,hinactive,h⟩ := bind_success _ _ _ h
+  try simp only [lift,bind_tc_ok] at h
+  obtain ⟨kappa,t2,hkappa,h⟩ := pair_bind_success _ _ _ h
+  obtain ⟨alpha0,t3,halpha,h⟩ := pair_bind_success _ _ _ h
+  obtain ⟨folds,_,h⟩ := bind_success _ _ _ h
+  split at h
+  · obtain ⟨capacity,_,h⟩ := bind_success _ _ _ h
+    obtain ⟨root,_,h⟩ := bind_success _ _ _ h
+    try simp only [lift,bind_tc_ok] at h
+    obtain ⟨bytes1,_,h⟩ := bind_success _ _ _ h
+    obtain ⟨bytes2,_,h⟩ := bind_success _ _ _ h
+    obtain ⟨alpha1,afterAlpha,_,h⟩ := pair_bind_success _ _ _ h
+    obtain ⟨ret,afterQueries,_,h⟩ := pair_bind_success _ _ _ h
+    cases ret with
+    | Err e =>
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame.from,bind_tc_ok] at h
+      cases h
+    | Ok queries =>
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
+      obtain ⟨row,_,h⟩ := bind_success _ _ _ h
+      try simp only [lift,bind_tc_ok] at h
+      obtain ⟨rho,last,_,h⟩ := pair_bind_success _ _ _ h
+      obtain ⟨computed,hpowers,h⟩ := bind_success _ _ _ h
+      obtain ⟨ret,_,h⟩ := bind_success _ _ _ h
+      cases ret with
+      | Err e =>
+        simp only [core.result.Result.Insts.CoreOpsTry.branch,
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+          core.convert.FromSame.from,bind_tc_ok] at h
+        cases h
+      | Ok claim =>
+        simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
+        have same := Result.ok.inj h
+        have hp := core.result.Result.Ok.inj (congrArg Prod.fst same)
+        have hg := congrArg verifier.Prepared.gamma hp
+        have hk := congrArg verifier.Prepared.kappa hp
+        change gamma = out.gamma at hg
+        change kappa = out.kappa at hk
+        refine ⟨start,t1,inactiveBytes,t2,alpha0,t3,hstart,?_,hinactive,?_,halpha⟩
+        · simpa only [←hg] using hgamma
+        · simpa only [←hk] using hkappa
+  · obtain ⟨zero,_,h⟩ := bind_success _ _ _ h
+    obtain ⟨ret,afterQueries,_,h⟩ := pair_bind_success _ _ _ h
+    cases ret with
+    | Err e =>
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame.from,bind_tc_ok] at h
+      cases h
+    | Ok queries =>
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
+      obtain ⟨row,_,h⟩ := bind_success _ _ _ h
+      try simp only [lift,bind_tc_ok] at h
+      obtain ⟨rho,last,_,h⟩ := pair_bind_success _ _ _ h
+      obtain ⟨computed,hpowers,h⟩ := bind_success _ _ _ h
+      obtain ⟨ret,_,h⟩ := bind_success _ _ _ h
+      cases ret with
+      | Err e =>
+        simp only [core.result.Result.Insts.CoreOpsTry.branch,
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+          core.convert.FromSame.from,bind_tc_ok] at h
+        cases h
+      | Ok claim =>
+        simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
+        have same := Result.ok.inj h
+        have hp := core.result.Result.Ok.inj (congrArg Prod.fst same)
+        have hg := congrArg verifier.Prepared.gamma hp
+        have hk := congrArg verifier.Prepared.kappa hp
+        change gamma = out.gamma at hg
+        change kappa = out.kappa at hk
+        refine ⟨start,t1,inactiveBytes,t2,alpha0,t3,hstart,?_,hinactive,?_,halpha⟩
+        · simpa only [←hg] using hgamma
+        · simpa only [←hk] using hkappa
+#print axioms source
+end XRo_Join_PreparedCuts
