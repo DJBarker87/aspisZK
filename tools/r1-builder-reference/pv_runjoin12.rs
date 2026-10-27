@@ -11,7 +11,7 @@ fn inputs(transfer: bool) -> (PoolV1PairForestInputNoteWitnessV1, u32, Option<Po
             nullifier_key: digest(10), salt: digest(100), value: 1000,
             pair_leaf: PoolV1PairLeafWitnessV1 {
                 first_commitment: any_digest(), second_occupied: M31(1),
-                second_commitment: digest(900), second_occupancy_inverse: M31(1),
+                second_commitment: digest(900), second_occupancy_inverse: M31(kani::any()),
             }, selected_second: false,
             membership: PoolV1MembershipWitnessV1 {
                 siblings: core::array::from_fn(|l| digest(2000 + 20*l as u32)), index: 0x5_4321,
