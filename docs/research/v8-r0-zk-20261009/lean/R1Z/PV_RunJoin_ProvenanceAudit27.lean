@@ -1,0 +1,20 @@
+import R1Z.PV_RunJoin_SpendDomain27
+import R1Z.PV_RunJoin_HonestAudit26
+set_option autoImplicit false
+#print R1Z.PV_RunJoin_SpendDomain27.witness
+#print R1Z.PV_RunJoin_SpendDomain27.base
+#print R1Z.PV_RunJoin_SpendDomain27.statement
+#print R1Z.PV_RunJoin_SpendDomain27.admitted
+#print R1Z.PV_RunJoin_SpendDomain27.positive_change_does_not_follow
+#print R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput
+#print R1Z.PV_RunJoin_HonestIdentification26.Honest
+#print R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement
+#check @R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
+#print axioms R1Z.PV_RunJoin_SpendDomain27.input_relation
+#print axioms R1Z.PV_RunJoin_SpendDomain27.append
+#print axioms R1Z.PV_RunJoin_SpendDomain27.admitted
+#print axioms R1Z.PV_RunJoin_SpendDomain27.change_zero
+#print axioms R1Z.PV_RunJoin_SpendDomain27.positive_change_does_not_follow
+#print axioms R1Z.PV_RunJoin_SpendDomain27.every_value_preserving_encoding_zero
+#print axioms R1Z.PV_RunJoin_HonestIdentification26.identification
+#print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
