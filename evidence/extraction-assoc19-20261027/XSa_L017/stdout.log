@@ -1,0 +1,33 @@
+XSa_generated/XSa_CheckedQ.lean:16:59: error: unsolved goals
+case pos
+q : E.Q
+h✝ : ↑q.c0.a < 2147483647 ∧ ↑q.c0.b < 2147483647 ∧ ↑q.c1.a < 2147483647 ∧ ↑q.c1.b < 2147483647
+⊢ (∃ x,
+      allRun
+          { FnOnceInst := fromLimbsClosureFnOnce,
+            call_mut := fun c tupled_args => ok (decide (↑tupled_args < 2147483647), c) }
+          [q.c0.b, q.c1.a, q.c1.b] () =
+        ok (true, x)) ∧
+    ⟨[q.c0.a, q.c0.b, q.c1.a, q.c1.b], ⋯⟩ = Array.make 4#usize [q.c0.a, q.c0.b, q.c1.a, q.c1.b] ⋯
+
+case neg
+q : E.Q
+h✝ : ↑q.c0.a < 2147483647 → ↑q.c0.b < 2147483647 → ↑q.c1.a < 2147483647 → 2147483647 ≤ ↑q.c1.b
+⊢ ∃ x,
+    (if ↑q.c0.a < 2147483647 then do
+        let (tail, n) ←
+          allRun
+              { FnOnceInst := fromLimbsClosureFnOnce,
+                call_mut := fun c tupled_args => ok (decide (↑tupled_args < 2147483647), c) }
+              [q.c0.b, q.c1.a, q.c1.b] ()
+        ok (tail, n + 1)
+      else ok (false, 1)) =
+      ok (false, x)
+XSa_generated/XSa_CheckedQ.lean:22:49: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵o̵p̵t̵i̵o̵n̵O̵k̵O̵r̵,̵X̵R̵n̵_̵J̵o̵i̵n̵_̵t̵o̵Q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲o̲p̲t̲i̲o̲n̲O̲k̲O̲r̲,̲ ̲X̲R̲n̲_̲J̲o̲i̲n̲_̲t̲o̲Q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSa_CheckedQ.checked' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
