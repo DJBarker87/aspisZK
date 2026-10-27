@@ -1,0 +1,43 @@
+import JGu_LeafIteration0
+import JGp_Opening0
+import JGp_Opening1
+import JGp_Opening2
+import JGp_Opening3
+import JGp_Opening4
+import JGp_Opening5
+import JGp_Opening6
+import JGp_Opening7
+import JGp_Opening8
+import JGp_Opening9
+set_option autoImplicit false
+namespace AspisR1.JGu_OpeningViews
+open Aeneas Aeneas.Std Result
+
+def physical (i : Fin 10) : Slice U8 := match i.val with
+  | 0 => JGp_Opening0.value
+  | 1 => JGp_Opening1.value
+  | 2 => JGp_Opening2.value
+  | 3 => JGp_Opening3.value
+  | 4 => JGp_Opening4.value
+  | 5 => JGp_Opening5.value
+  | 6 => JGp_Opening6.value
+  | 7 => JGp_Opening7.value
+  | 8 => JGp_Opening8.value
+  | _ => JGp_Opening9.value
+
+theorem returned_view (i : Fin 10) : JGu_LeafIteration0.opening i=physical i := by
+  have read := JFo_Opening.call (⟨i.val,by have := i.isLt;omega⟩ : Fin 22)
+  fin_cases i
+  all_goals dsimp only [JGu_LeafIteration0.opening,physical]
+  · exact Result.ok.inj (read.symm.trans JGp_Opening0.source)
+  · exact Result.ok.inj (read.symm.trans JGp_Opening1.source)
+  · exact Result.ok.inj (read.symm.trans JGp_Opening2.source)
+  · exact Result.ok.inj (read.symm.trans JGp_Opening3.source)
+  · exact Result.ok.inj (read.symm.trans JGp_Opening4.source)
+  · exact Result.ok.inj (read.symm.trans JGp_Opening5.source)
+  · exact Result.ok.inj (read.symm.trans JGp_Opening6.source)
+  · exact Result.ok.inj (read.symm.trans JGp_Opening7.source)
+  · exact Result.ok.inj (read.symm.trans JGp_Opening8.source)
+  · exact Result.ok.inj (read.symm.trans JGp_Opening9.source)
+#print axioms returned_view
+end AspisR1.JGu_OpeningViews

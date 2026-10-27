@@ -6,7 +6,7 @@ s=s.replace('JGm_TX2_Supplied','JGu_Supplied').replace('JGk_TX2_Scratch','JGu_Sc
 s=s.replace('JGm_TX2_Initial{t}','JGu_Initial{t}').replace('import JGm_TX2_Initial','import JGu_Initial{t}')
 s=s.replace('5216 if t<2 else 4512','4416 if t<2 else 3840')
 exec(compile(s,str(P/'JGu_joins_emitter'),'exec'),globals())
-(P/'JGu_joins_template.py.txt').write_text(s)
+(P/'JGu_joins_generated.lean.txt').write_text(s)
 # Append the finite native index scan and owned verifier in the same tree-local
 # compilation unit; preserve one tree's imports and exact returned output.
 import re

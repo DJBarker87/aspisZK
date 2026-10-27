@@ -17,4 +17,4 @@ s=s.replace('JGu_Keys.advance_loop D hash','JGu_Keys.advance_loop (JGc_TX2_RealL
 # Drop obsolete irreducibility attributes for foreign fixture values.
 s=s.replace(' JGk_TX2_NativeLeaves.value0 JGk_TX2_NativeLeaves.value1 JGc_TX2_RealLeaves.value','')
 exec(compile(s,str(P/'JGu_scratch_emitter'),'exec'),globals())
-(P/'JGu_scratch_template.py.txt').write_text(s)
+(P/'JGu_scratch_generated.lean.txt').write_text(s)

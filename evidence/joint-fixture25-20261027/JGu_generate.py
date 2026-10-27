@@ -63,4 +63,4 @@ def select_body(off,expected):
  body=selected(off,32,f'(encodeState ({expected})).val')
  return '\n'.join('    '+line for line in body.rstrip().splitlines())
 if '--levels' in sys.argv:exec(compile(s,str(P/'JGu_levels_emitter'),'exec'),globals())
-(P/'JGu_levels_template.py.txt').write_text(s)
+(P/'JGu_levels_generated.lean.txt').write_text(s)
