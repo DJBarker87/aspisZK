@@ -10748,3 +10748,21 @@ D209-D235 claims, and the most valuable independent row. Launched pv-cb7 (cb3 br
 100 Lean / 10 Kani): op249 correspondence and law, then the remaining top-down ops; op223 stays with cb6.
 Six slots: srcid6, runjoin9, rw21, cb6, recount3, cb7. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D237 (Stream B) 2026-10-27 01:35 UTC: runjoin9 exhausted: installation closure through the dictionary, constructed-candidate P down to two; runjoin10 launched
+
+pv-runjoin9 (`codex/pv-runjoin-20261026`, head ab9f1bfb8f; 100/100 Lean = 86 accepted / 14 rejected, 6/6
+Kani passed (configuration works in its host dir), three reserved focused audits standard axioms, swap 0;
+no forbidden tokens; the only crates/ change extends the existing cfg(kani) child module
+pair_trace_pv_runjoin8_roots.rs by 24 lines of fixed-cell root checks, excluded from release builds). The
+installation closure now passes through PDict_ReachCaller (dictionary objects pinned and replayed); the
+joined-selector identity (`identity`) and `common_public` are PROVED for the installed caller, so the
+constructed-candidate P record is {source public binding, trace} (from {identity, common_public, trace}).
+The DEPLOYED public binding remains OPEN; T unchanged (three fields); record 2 → 2 / 8 → 8 / 6 → 6; P ∧ T
+non-vacuity OPEN on both fixtures with the exact missing deployment facts recorded (0dbc560f6c); 4 F5 and
+21 multiproof dependency objects are missing from the shared cache. Endpoint premises removed: 0. Launched
+pv-runjoin10 (same branch, IDs 39000-39299, 100 Lean / 6 Kani): actual selected compiler records and the
+deployed public binding from PV_Src_*, concrete runtime/observer per fixture for non-vacuity, the 25
+missing objects and the L2 source closure toward `trace`. Stream B's agreed range 35000-39999 has 700 IDs
+left (39300-39999); a further range will be agreed with Stream A before it runs out. Six slots: srcid6,
+rw21, cb6, recount3, cb7, runjoin10. Rows removed outright: 0. Privacy target not yet established.
