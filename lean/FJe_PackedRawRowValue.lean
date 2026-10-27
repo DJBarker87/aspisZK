@@ -25,25 +25,41 @@ theorem value (input : Input) (row limb : Usize) (hr : row.val<4) (hl : limb.val
     subst row
     have eo : out=z0 := congrArg Prod.fst (Result.ok.inj (oldRun.symm.trans r0))
     rw [eo]
-    simpa only [RawPoseidonExternalRows.rawRowNat,RawPoseidonExternalRowReads.rawRowNat,
+    simpa only [show (0#usize).val=0 from rfl,show (1#usize).val=1 from rfl,
+      show (2#usize).val=2 from rfl,show (3#usize).val=3 from rfl,
+      show (0 : Fin 4).val=0 from rfl,show (1 : Fin 4).val=1 from rfl,
+      show (2 : Fin 4).val=2 from rfl,show (3 : Fin 4).val=3 from rfl,
+      RawPoseidonExternalRows.rawRowNat,RawPoseidonExternalRowReads.rawRowNat,
       words,cell,RawPoseidonExternalRowReads.limbValue,RawPoseidonExternalRowReads.rowValue] using v0
   · have e : row=1#usize := UScalar.eq_of_val_eq h
     subst row
     have eo : out=z1 := congrArg Prod.fst (Result.ok.inj (oldRun.symm.trans r1))
     rw [eo]
-    simpa only [RawPoseidonExternalRows.rawRowNat,words,cell,
+    simpa only [show (0#usize).val=0 from rfl,show (1#usize).val=1 from rfl,
+      show (2#usize).val=2 from rfl,show (3#usize).val=3 from rfl,
+      show (0 : Fin 4).val=0 from rfl,show (1 : Fin 4).val=1 from rfl,
+      show (2 : Fin 4).val=2 from rfl,show (3 : Fin 4).val=3 from rfl,
+      RawPoseidonExternalRows.rawRowNat,words,cell,
       RawPoseidonExternalRowReads.limbValue,RawPoseidonExternalRowReads.rowValue] using v1
   · have e : row=2#usize := UScalar.eq_of_val_eq h
     subst row
     have eo : out=z2 := congrArg Prod.fst (Result.ok.inj (oldRun.symm.trans r2))
     rw [eo]
-    simpa only [RawPoseidonExternalRows.rawRowNat,words,cell,
+    simpa only [show (0#usize).val=0 from rfl,show (1#usize).val=1 from rfl,
+      show (2#usize).val=2 from rfl,show (3#usize).val=3 from rfl,
+      show (0 : Fin 4).val=0 from rfl,show (1 : Fin 4).val=1 from rfl,
+      show (2 : Fin 4).val=2 from rfl,show (3 : Fin 4).val=3 from rfl,
+      RawPoseidonExternalRows.rawRowNat,words,cell,
       RawPoseidonExternalRowReads.limbValue,RawPoseidonExternalRowReads.rowValue] using v2
   · have e : row=3#usize := UScalar.eq_of_val_eq h
     subst row
     have eo : out=z3 := congrArg Prod.fst (Result.ok.inj (oldRun.symm.trans r3))
     rw [eo]
-    simpa only [RawPoseidonExternalRows.rawRowNat,words,cell,
+    simpa only [show (0#usize).val=0 from rfl,show (1#usize).val=1 from rfl,
+      show (2#usize).val=2 from rfl,show (3#usize).val=3 from rfl,
+      show (0 : Fin 4).val=0 from rfl,show (1 : Fin 4).val=1 from rfl,
+      show (2 : Fin 4).val=2 from rfl,show (3 : Fin 4).val=3 from rfl,
+      RawPoseidonExternalRows.rawRowNat,words,cell,
       RawPoseidonExternalRowReads.limbValue,RawPoseidonExternalRowReads.rowValue] using v3
 #print axioms value
 end AspisR1.FJe_PackedRawRowValue

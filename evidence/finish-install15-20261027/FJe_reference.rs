@@ -184,6 +184,49 @@ mod FJe_reference {
         let c=b.add(p[2]); assume_q(c);
         let d=c.add(p[3]); assume_q(d);
     }
+    fn leading_bounds(o:&StateOnlyPoseidonOpenings) {
+        let mut s=o.z;
+        for j in 0..RATE { s[j]=s[j].add(o.xor12_z[j]); assume_q(s[j]); }
+        external_linear_lazy(&mut s);
+        for x in s { assume_q(x); }
+        let mut n=full_round_m31_constants(s,EXTERNAL_INITIAL[0]);
+        for x in n { assume_q(x); }
+        for j in 0..16 {
+            n[j].c0.a=n[j].c0.a.add(M31(EXTERNAL_INITIAL[1][j]));
+            n[j]=pow5(n[j]); assume_q(n[j]);
+        }
+        assume_external_intermediates(n);
+    }
+    fn full_bounds(s:[QM31;16],l:&[QM31;16]) {
+        let w=[l[1],l[9],l[10]];
+        let even=interpolate_three_constant_columns(w,EXTERNAL_INITIAL[2],EXTERNAL_FINAL[0],EXTERNAL_FINAL[2]);
+        let odd=interpolate_three_constant_columns(w,EXTERNAL_INITIAL[3],EXTERNAL_FINAL[1],EXTERNAL_FINAL[3]);
+        for x in even { assume_q(x); } for x in odd { assume_q(x); }
+        let mut n=full_round(s,even);
+        for x in n { assume_q(x); }
+        for j in 0..16 { n[j]=pow5(n[j].add(odd[j])); assume_q(n[j]); }
+        assume_external_intermediates(n);
+    }
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn full_word0_derived() {
+        let s=any_state(); let l=any_state();
+        full_bounds(s,&l);
+        kani::cover!(true, "same full canonical domain with derived interpolation bounds");
+        let a=interpolated_full_pair_packed(s,&l); let b=full(s,&l);
+        assert_eq!(a[0].c0.a.0,b[0].c0.a.0);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn leading_word0_derived() {
+        let o=StateOnlyPoseidonOpenings {z:any_state(),succ_z:any_state(),xor12_z:any_state()};
+        leading_bounds(&o);
+        kani::cover!(true, "same leading canonical domain with derived prefix bounds");
+        let a=leading_pair_packed(&o); let b=leading(&o);
+        assert_eq!(a[0].c0.a.0,b[0].c0.a.0);
+    }
+
     #[kani::proof]
     #[kani::unwind(18)]
     fn external_group3_word3() {

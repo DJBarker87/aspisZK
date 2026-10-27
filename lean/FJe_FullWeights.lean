@@ -23,7 +23,7 @@ theorem value (l : State) (q0 q1 q2 : NQ) (hl : canonical l)
   have c2 := FIv_NativeArray.canonical l 10#usize q2 hl r2
   refine ⟨?_,?_,?_,?_⟩
   · intro x hx
-    simp only [weights,Array.make,List.mem_cons,List.mem_singleton] at hx
+    simp only [weights,Array.make,List.mem_cons,List.not_mem_nil,or_false] at hx
     rcases hx with rfl | rfl | rfl
     · exact c0
     · exact c1
