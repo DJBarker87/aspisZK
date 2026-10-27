@@ -1,3 +1,28 @@
+# Resume: gate (a) repaired and passed
+
+Source repair `ccf87ccecd`; see MODULE-GATES.md, weights-restored.json,
+revised-applied.diff and gate-a-resume.json. All three rebuilt ELFs exactly
+match their pins. Scope caps6G/8G/swap0/Tasks64; optimized SBF builds:
+
+| ELF | Exit | Wall seconds | Peak RSS KiB | Swaps |
+|---|---|---|---|---|
+| default |0|41.435|686356|0|
+| devnet |0|50.679|685640|0|
+| Pool |0|39.930|678204|0|
+
+Revision ccf87ccecd8e0463a53bbedd0fc995837937dac9; #print axioms N/A
+(no Lean in these runs). Full target/commands/environment and hashes are in
+each candidate/*prover-local*/ receipt. Four admission refusals preceded the
+successful default build; no scope started on a refusal. RESUME.md records
+the four-second-early retry and its subsequent full wait.
+
+Lean0/100,Kani0/0,next53600,audit53897–53899 untouched. Fresh extraction,
+complete source laws, equality/row bridges, shift nonfailure, native client,
+fixture bytes and audit are next. No endpoint premise removed, added,
+weakened or transferred to T. Target not yet established.
+
+The original stop report below is historical and retained verbatim.
+
 # Batch 1 stopped at gate (a)
 
 Branch `codex/pv-batch1-20261027`, base `c57a344726745387efb38d1571d885c69ce829ee`, applied revision `138cf2cf7d`. Target not yet established.

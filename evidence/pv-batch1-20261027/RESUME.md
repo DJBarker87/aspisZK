@@ -18,3 +18,13 @@ The first retry was sent at12:31:35 UTC, four seconds before the required
 12:31:39 deadline. It also refused before a scope started. This was a wait
 policy deviation; next retry is no earlier than12:34:35 UTC (three minutes
 after the fresh refusal). No compile ran and no cap was bypassed.
+
+Gate (a) default passed on retry4 at source ccf87ccecd: exact f8c0ec72…,
+1,563,728bytes; exit0,41.435s,peak686356KiB,swap0. Devnet passed:
+exact63ad3e9c…,1,563,728bytes; exit0,50.679s,peak685640KiB,swap0.
+Pool is the remaining gate. No extraction or Lean scope started yet.
+Retry3 refused at12:38:07 UTC with51,405,389,824bytes reserved; retry4
+admitted after the next full wait with34,225,520,640bytes reserved.
+
+Pool passed: exact121f3e29…,605704bytes; exit0,39.930s,peak678204KiB,swap0.
+All three gate(a) pins passed; gate-a-resume.json contains the complete receipts.

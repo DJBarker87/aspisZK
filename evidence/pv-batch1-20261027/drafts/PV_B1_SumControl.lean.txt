@@ -1,6 +1,6 @@
 -- Draft pending fresh extraction and gate (a); not a checked theorem.
 import PV_B1_230_Funs
-import R1Z.ProverRw19LoopBind
+import PV_B1_Loop
 set_option autoImplicit false
 noncomputable section
 namespace PV_B1_SumControl
@@ -19,7 +19,7 @@ def dispatch (recur : Q → Usize → Result Q) (h1 : Slice Q)
 theorem source_unfold (h1 : Slice Q) (sum : Q) (i : Usize) :
     Src h1 sum i = dispatch (Src h1) h1 sum i := by
   unfold Src state_only_copy_helper_sum_loop
-  rw [R1Z.ProverRw19LoopBind.loop_bind]
+  rw [PV_B1_Loop.bind]
   unfold state_only_copy_helper_sum_loop.body dispatch
   dsimp only
   by_cases h : i < Slice.len h1
