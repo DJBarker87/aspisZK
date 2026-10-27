@@ -1,0 +1,63 @@
+{"attempt": "KSC1_L003", "exit_status": 1, "wall_seconds": 2.2296267420169897, "peak_rss_kib": "2626252", "swaps": "0", "print_axioms": ["'KSC1.P7.slice_array_eq' depends on axioms: [propext, Quot.sound]", "'KSC1.P7.slice_array_ne' depends on axioms: [propext, sorryAx, Quot.sound]", "'KSC1.P7.next_projection' depends on axioms: [propext, Quot.sound]", "'KSC1.P7.restored_array' depends on axioms: [propext]"]}
+KSC1_generated/KSC1_P7.lean:14:59: error: Type mismatch
+  rfl
+has type
+  ?m.10 = ?m.10
+but is expected to have type
+  KSA_Isolated.Slice.Insts.CoreCmpPartialEqArray.ne cmp s a = core.slice.cmp.PartialEqSlice.ne cmp s a.to_slice
+KSC1_generated/KSC1_P7.lean:11:8: error: Not a definitional equality: the left-hand side
+  KSA_Isolated.Slice.Insts.CoreCmpPartialEqArray.ne cmp s a
+is not definitionally equal to the right-hand side
+  core.slice.cmp.PartialEqSlice.ne cmp s a.to_slice
+'KSC1.P7.slice_array_eq' depends on axioms: [propext, Quot.sound]
+'KSC1.P7.slice_array_ne' depends on axioms: [propext, sorryAx, Quot.sound]
+'KSC1.P7.next_projection' depends on axioms: [propext, Quot.sound]
+'KSC1.P7.res
+...
+finitionally equal to the right-hand side
+  core.slice.cmp.PartialEqSlice.ne cmp s a.to_slice
+'KSC1.P7.slice_array_eq' depends on axioms: [propext, Quot.sound]
+'KSC1.P7.slice_array_ne' depends on axioms: [propext, sorryAx, Quot.sound]
+'KSC1.P7.next_projection' depends on axioms: [propext, Quot.sound]
+'KSC1.P7.restored_array' depends on axioms: [propext]
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          ok (decide ¬b = true))
+      ((↑s0).zip ↑s1)
+  else ok false
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.ne : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.anyM
+      (fun x =>
+        match x with
+        | (x, y) => partialEqInst.ne x y)
+      ((↑s0).zip ↑s1)
+  else ok true
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+
+Running as unit: run-re22207bc6bdd4c72bcfaac81d45c7135.scope; invocation ID: 48a9094f82814572a20b5702e125f375
