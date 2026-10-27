@@ -1,0 +1,82 @@
+XRp_generated/XRp_FromFnState.lean:25:9: error: unsolved goals
+case zero
+T F : Type
+fn : core.ops.function.FnMut F Usize T
+i : Usize
+c : F
+out : List T
+⊢ ok (out, c) =
+    let (xs, c') := ([], c)
+    ok (out ++ xs, c')
+XRp_generated/XRp_FromFnState.lean:28:11: error: unsolved goals
+case succ.zero
+T F : Type
+fn : core.ops.function.FnMut F Usize T
+i : Usize
+c : F
+out : List T
+ih :
+  ∀ (i : Usize) (c : F) (out : List T),
+    indexed fn 0 i c out = do
+      let (xs, c') ← core.array.fromFnList fn 0 i c
+      ok (out ++ xs, c')
+⊢ (do
+      let (v, c') ← fn.call_mut c i
+      ok (out ++ [v], c')) =
+    do
+    let x ← fn.call_mut c i
+    let (xs, c') ←
+      let (value, closureNext) := x
+        ok ([value], closureNext)
+    ok (out ++ xs, c')
+XRp_generated/XRp_FromFnState.lean:30:17: warning: Possibly looping simp theorem: `indexed.eq_2`
+
+Note: Possibly caused by: `indexed`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+XRp_generated/XRp_FromFnState.lean:30:26: warning: Possibly looping simp theorem: `core.array.fromFnList.eq_2`
+
+Note: Possibly caused by: `core.array.fromFnList`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+XRp_generated/XRp_FromFnState.lean:30:6: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+XRp_generated/XRp_FromFnState.lean:25:67: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [indexed, core.array.fromFnList, bind_tc_ok,̵ ̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:28:72: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [indexed, core.array.fromFnList, bind_assoc_eq,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:42:84: error: unsolved goals
+T F : Type
+fn : core.ops.function.FnMut F Usize T
+N : Usize
+c : F
+⊢ (do
+      let (xs, c) ← core.array.fromFnList fn (↑N) 0#usize c
+      if h : xs.length = ↑N then ok (⟨xs, h⟩, c) else fail Error.panic) =
+    do
+    let x ← core.array.fromFnList fn (↑N) 0#usize c
+    let (xs, c) ←
+      let (xs, c') := x
+        ok (xs, c')
+    if h : xs.length = ↑N then ok (⟨xs, h⟩, c) else fail Error.panic
+XRp_generated/XRp_FromFnState.lean:44:50: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [XRn_Join_fromFnState, bind_assoc_eq, b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̵List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRp_FromFnState.indexed_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRp_FromFnState.from_fn_state_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

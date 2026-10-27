@@ -1,0 +1,22 @@
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Result (ControlFlow α β)) → α → Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | ok r =>
+        match r with
+        | cont x => f x
+        | done x => ok x
+      | fail e => fail e
+      | div => div)
+    ⋯
+XRp_generated/XRp_LoopInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `loop_unfold`
+XRp_generated/XRp_LoopInspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `loop_eq`
+XRp_generated/XRp_LoopInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `loop_eq_def`
+XRp_generated/XRp_LoopInspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `loop.induct`
+XRp_generated/XRp_LoopInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_assoc_eq`
+Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+Aeneas.Std.core.slice.Slice.iter_mut {T : Type} (slice : Slice T) :
+  Result (core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Slice T))
+Aeneas.Std.Array.to_slice_mut.{u} {α : Type u} {n : Usize} (a : Std.Array α n) : Slice α × (Slice α → Std.Array α n)

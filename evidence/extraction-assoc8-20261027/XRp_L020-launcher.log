@@ -1,0 +1,79 @@
+{"attempt": "XRp_L020", "exit_status": 1, "wall_seconds": 1.4839408000116237, "peak_rss_kib": "2638252", "swaps": "0", "print_axioms": ["'XRp_FromFnState.indexed_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRp_FromFnState.from_fn_state_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRp_generated/XRp_FromFnState.lean:40:18: error: unsolved goals
+case succ.ok.succ.ok
+T F : Type
+fn : core.ops.function.FnMut F Usize T
+i : Usize
+c : F
+out : List T
+v : T
+c' : F
+hc : fn.call_mut c i = ok (v, c')
+rest : ℕ
+ih :
+  ∀ (i : Usize) (c : F) (out : List T),
+    indexed fn (rest + 1) i c out = do
+      let (xs, c') ← core.array.fromFnList fn (rest + 1) i c
+      ok (out ++ xs, c')
+next : UScalar UScalarTy.Usize
+hn : i + 1#usize = ok next
+⊢ (let (v, c') := (v, c')
+    indexed fn (rest + 1) next c' (out ++ [v])) =
+    do
+    let (xs, c') ←
+      let (value, closureNext) := (v, c')
+        do
+        let (rest, closureFinal) ← core.array.fromFnList fn (rest + 1) next closureNext
+        o
+...
+e simp argument list.
+  simp only [h̵c̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:38:26: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:39:23: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:41:21: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:42:14: error: unexpected identifier; expected command
+XRp_generated/XRp_FromFnState.lean:56:20: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:57:17: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:58:43: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRp_FromFnState.indexed_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRp_FromFnState.from_fn_state_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r69f8d5a6aebb48849f42f83c503d3ed8.scope; invocation ID: 13e36435a8e34e83b64fb68cf3b00ad6
