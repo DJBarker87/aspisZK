@@ -1,0 +1,52 @@
+{"attempt": "JHf_TX2_004", "exit_status": 1, "wall_seconds": 2.20372721797321, "peak_rss_kib": "5401008", "swaps": "0", "print_axioms": ["'AspisR1.JHf_Scan.real' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHf_Scan.lean:43:85: error: Type mismatch
+  rfl
+has type
+  ?m.48 = ?m.48
+but is expected to have type
+  Usize.checked_add 688#usize 57607#usize = some 58295#usize
+JHf_Scan.lean:46:75: error(lean.unknownIdentifier): Unknown identifier `beq_self_eq_false`
+JHf_Scan.lean:48:2: error: Tactic `rfl` failed: The left-hand side
+  match Usize.checked_add 688#usize 57607#usize with
+  | none => ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+  | some size =>
+    if (58295#usize != size) = true then
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+    else
+      if (↑JHb_Header.value != ↑JHb_Header.value.to_slice) 
+...
+lly equal to the right-hand side
+  ok (core.result.Result.Ok JHd_ScanValue.value)
+
+size : JHb_Header.account.len = 58295#usize
+⊢ (match Usize.checked_add 688#usize 57607#usize with
+    | none => ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+    | some size =>
+      if (58295#usize != size) = true then
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      else
+        if (↑JHb_Header.value != ↑JHb_Header.value.to_slice) = true then
+          ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        else
+          ok
+            (core.result.Result.Ok
+              {
+                candidate_afterstate :=
+                  AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1 JFt_AfterstateValue.value,
+                proof_length := 57607#usize })) =
+    ok (core.result.Result.Ok JHd_ScanValue.value)
+JHf_Scan.lean:44:20: warning: This simp argument is unused:
+  show (58295#usize != 58295#usize) = false from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [lift, ̲show Usize.checked_add 688#usize 57607#usize ̲= ̲some 58295#usize from rfl,
+      bind_tc_ok,s̵i̵z̵e̵,̵s̵h̵o̵w̵ (̵5̵8̵2̵9̵5̵#̵u̵size ̵!̵=̵5̵8̵2̵9̵5̵#̵u̵s̵i̵z̵e̵)̵=̵f̵a̵l̵s̵e̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵, ̲Bool.false_eq_true, ̲↓reduceIte,
+  ̵  ̵ ̵ ̵JHf_ProofWindow.first, ̲JHb_Header.candidate,
+  ̲ ̲ ̲ ̲ ̲JHf_ScanCodec.encoded,
+      show (JHb_Header.value.val != ̲JHb_Header.value.to_slice.val) ̲= ̲false from beq_self_eq_false _,
+      JHf_ProofWindow.tag, ̲show (2#u8 != ̲2#u8) ̲= ̲false from rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHf_Scan.real' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf8ad54cc70ff46bfab0089d19d619644.scope; invocation ID: 01961dbd6dfe4b27bfa84203604e8141
