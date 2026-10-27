@@ -11236,3 +11236,21 @@ M31/CM31/QM31 reaching op121 on the deployed path is canonical (producers invent
 operations preserve canonicality, composed over the extracted caller), and the op121 row obligation on
 the canonical domain stated exactly. Six slots: runjoin12, optb, cblib2, op223, inv3, canon. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D261 (Stream B) 2026-10-27 09:05 UTC: inversion round 3 merged; inversion track paused on its dependencies; recount 4 launched
+
+pv-inv3 (`codex/pv-inv3-20261027`, research-based; 100/100 Lean = 97 pass / 3 corrected failures, 6/6
+control-only Kani; final audits standard axioms, swap 0; no crates/programs change; no forbidden tokens)
+merged into research (a6cd27379d), branch deleted. Proved: the model mask gap for blocks 48-63 closed, the
+full mask table, row-order/dedup transport, conditional same-coupling guard containment and Boolean trace
+laws; retained charge exactly 8 · (4096 / ((2^31 − 1)^4 − 1)) inside the existing poleBad. V380 still OPEN
+on the native dynamic registry/schedule refinement, the selected caller and the complete D159
+observation law; no protocol counterexample. These depend on runjoin12's selected-record identification
+(D245) and on the extraction route for ops 132/133 (D251/D257), so per AGENTS.md §7 the inversion track
+pauses until one of them lands rather than a fourth round against the same dependencies. Launched
+pv-recount4 (`codex/pv-recount4-20261027` from research in the reused pv-cb3 worktree; IDs 44500-44599,
+statement checks only): recount 4 with the D248 owner decisions applied to the T/P/C classes, a P6 versus
+extraction split of candidate closures, the headline-closure column set from the wire IMPORT-CHAIN, a new
+bucket for rows blocked by the shared extraction obstruction, and corrections to D236-D261. Six slots:
+runjoin12, optb, cblib2, op223, canon, recount4. Rows removed outright: 0. Privacy target not yet
+established.
