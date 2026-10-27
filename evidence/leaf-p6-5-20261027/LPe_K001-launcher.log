@@ -1,0 +1,52 @@
+{"attempt": "LPe_K001", "exit_status": 0, "wall_seconds": 33.924167361983564, "peak_rss_kib": "960984", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-5-20261027/LPe_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt
+...
+tes` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPe_replay.rs:83:39
+   |
+83 | #[kani::proof] #[kani::unwind(34)] fn LPe_replay_bytes(){LPe_scalar_bytes();LPe_wide_bytes();LPe_wide_six();LPe_scalar_frame();LPe_f...
+   |                                       ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpe_replay_bytes`
+
+warning: function `LPe_powers_one` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPe_replay.rs:84:39
+   |
+84 | #[kani::proof] #[kani::unwind(10)] fn LPe_powers_one(){let x=any_e();assert_eq!(powers::<1>(x),[E::ONE]);kani::cover!(x.to_limbs()[7...
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpe_powers_one`
+
+warning: function `LPe_powers_two` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPe_replay.rs:85:39
+   |
+85 | #[kani::proof] #[kani::unwind(10)] fn LPe_powers_two(){let x=any_e();assert_eq!(powers::<2>(x),[E::ONE,E::ONE.mul(x)]);kani::cover!(...
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpe_powers_two`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 9.01s
+Checking harness LPe_replay::LPe_replay_dot...
+
+VERIFICATION RESULT:
+ ** 0 of 299 failed (2 unreachable)
+
+ ** 3 of 3 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 23.72116s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r12815237438c48f48e3ff5b316d7e445.scope; invocation ID: c98a692c29cf4a7286785c0e48c0220b
