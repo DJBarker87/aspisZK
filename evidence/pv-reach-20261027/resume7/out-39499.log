@@ -1,0 +1,73 @@
+R1Z.PV_RE_ClientReserve7.client_to_reserve [ProverRwFull.ExternalTypes] {C : Type} (D : ProverRwFull.ExternalFuns)
+  (entropy : R1Z.PV_RE_PublicPrefix6.RawEntropy C) (pub : R1Z.PV_RE_RetryStep.Public)
+  (compiled : R1Z.PV_RE_RetryStep.Compiled) (hash : R1Z.PV_RE_RetryStep.Hash) (store : R1Z.PV_RE_RetryStep.Store)
+  (state state1 : C) (secret : R1Z.PV_RE_RetryStep.Secrets)
+  (guard :
+    ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 =
+      Aeneas.Std.Result.ok true)
+  (entropy_prefix :
+    (R1Z.PV_RE_PublicPrefix6.EntropyWrapper D entropy).call_mut state 0#usize =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok secret, state1))
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (serialization : ProverRwFull.ExternalFuns.op226 pub = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes))
+  (map_error :
+    ProverRwFull.ExternalFuns.op12
+        ProverRwFull.prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+        (Aeneas.Std.core.result.Result.Ok bytes) () =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes))
+  (first_hash : hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) = Aeneas.Std.Result.ok digest)
+  (context : R1Z.PV_RE_AttemptContext7.Context)
+  (context_prefix : ProverRwFull.ExternalFuns.op115 digest secret.mask_nonce = Aeneas.Std.Result.ok context)
+  (tag : Aeneas.Std.U8)
+  (tag_prefix : ProverRwFull.ExternalFuns.op234 ProverRwFull.transport.Variant.S2 = Aeneas.Std.Result.ok tag)
+  (encoded : Aeneas.Std.Array Aeneas.Std.U8 81#usize)
+  (encode_prefix : ProverRwFull.ExternalFuns.op116 context = Aeneas.Std.Result.ok encoded)
+  (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (second_hash : hash (R1Z.PV_RE_AttemptBindingHash7.bindingFrame bytes tag encoded) = Aeneas.Std.Result.ok binding) :
+  ∃ next,
+    ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+      ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+          ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+          secret hash binding context store >>=
+        next
+R1Z.PV_RE_ClientMapError7.client_to_maperror [ProverRwFull.ExternalTypes] {C : Type} (D : ProverRwFull.ExternalFuns)
+  (entropy : R1Z.PV_RE_PublicPrefix6.RawEntropy C) (pub : R1Z.PV_RE_RetryStep.Public)
+  (compiled : R1Z.PV_RE_RetryStep.Compiled) (hash : R1Z.PV_RE_RetryStep.Hash) (store : R1Z.PV_RE_RetryStep.Store)
+  (state state1 : C) (secret : R1Z.PV_RE_RetryStep.Secrets)
+  (guard :
+    ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 =
+      Aeneas.Std.Result.ok true)
+  (entropy_prefix :
+    (R1Z.PV_RE_PublicPrefix6.EntropyWrapper D entropy).call_mut state 0#usize =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok secret, state1))
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (serialization :
+    ProverRwFull.ExternalFuns.op226 pub = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes)) :
+  ∃ next,
+    ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+      ProverRwFull.ExternalFuns.op12
+          ProverRwFull.prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+          (Aeneas.Std.core.result.Result.Ok bytes) () >>=
+        next
+R1Z.PV_RE_ExcludedPrefixes7.excluded_poison_prefix [ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns) (entropy : R1Z.PV_RE_PublicPrefix6.RawEntropy C) (pub : R1Z.PV_RE_RetryStep.Public)
+  (compiled : R1Z.PV_RE_RetryStep.Compiled) (hash : R1Z.PV_RE_RetryStep.Hash) (store : R1Z.PV_RE_RetryStep.Store)
+  (state state1 : C) (secret : R1Z.PV_RE_RetryStep.Secrets)
+  (guard :
+    ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 =
+      Aeneas.Std.Result.ok true)
+  (entropy_prefix :
+    (R1Z.PV_RE_PublicPrefix6.EntropyWrapper D entropy).call_mut state 0#usize =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok secret, state1))
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (serialization : ProverRwFull.ExternalFuns.op226 pub = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes))
+  (map_error :
+    ProverRwFull.ExternalFuns.op12
+        ProverRwFull.prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+        (Aeneas.Std.core.result.Result.Ok bytes) () =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes))
+  (first_hash : hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) = Aeneas.Std.Result.ok digest)
+  (entry : R1Z.PV_RE_ExcludedPoison.ExcludedField) (e : Aeneas.Std.Error) :
+  ∃ next,
+    ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+      ProverRwFull.ExternalFuns.op115 digest secret.mask_nonce >>= next

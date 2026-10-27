@@ -4,7 +4,7 @@ R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-reach-20261027/re
 latest={}
 for p in sorted(E.glob('receipt-[0-9]*.json')):
  r=json.loads(p.read_text())
- if r['accepted'] and 'PV_RE_' in r['target']:
+ if r['accepted'] and 'PV_RE_' in r['target'] and 'FinalAudit7' not in r['target']:
   q=R/'docs/research/v8-r0-zk-20261009/lean'/(r['target']+'.lean')
   if q.is_file() and hashlib.sha256(q.read_bytes()).hexdigest()==r['source_sha256']:latest[r['target']]=r
 assert len(latest)==17,('expected current original-prefix proof modules',len(latest))
