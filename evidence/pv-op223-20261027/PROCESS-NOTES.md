@@ -19,3 +19,10 @@ replaced or repaired.
 orchestration error. Subsequent reservation retries use three explicit
 60-second cooldown intervals and fresh IDs. No resource barrier was bypassed
 and no caps were raised. IDs are never reused. Kani budget is zero.
+
+Source-revision receipt convention: the host capped runner records the Rust
+implementation pin (6be26e38fddd78c4a97027689ffa329e4a8e8038). For Lean,
+each *-submission.json independently records the actual worktree revision
+and exact source SHA256; PROOF-RECEIPTS additionally exposes that revision as
+lean_submission_revision. The immutable source snapshots identify uncommitted
+proof edits at submission without attributing them to the Rust pin.

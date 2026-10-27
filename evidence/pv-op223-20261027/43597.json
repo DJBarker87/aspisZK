@@ -1,0 +1,52 @@
+{
+  "attempt": 43597,
+  "module": "R1Z/PV_Op223_AuditSource",
+  "source_revision": "6be26e38fddd78c4a97027689ffa329e4a8e8038",
+  "source_sha256": "d7a9ec857e8a55aee00cf90b9f01710966f3704ca8daf5e2461cadb1910ed2c1",
+  "deps_fingerprint": "0991a9dc2ca3d4be184bd615a20771f846d1e8e3aa138ec86c8c1827974b2ad1",
+  "dependency_objects": {
+    "R1Z.PV_Op223_V164": {
+      "path": "/home/dombarker/project-offloads/codex-pv-op223-20261027/lean-objects/R1Z/PV_Op223_V164.olean",
+      "sha256": "679b860a34f98ae51ad4ba919564c6cbe716f7c821d718f65168bd31b97e3f8f"
+    }
+  },
+  "axiom_output": "@[defeq] theorem R1Z.PV_Op223_Source.op223_source : \u2200 [inst : ProverRwFull.ExternalTypes]\n  (ops : ProverRwFull.ExternalFuns),\n  ProverRwFull.ExternalFuns.op223 = PV_Op223_Applied.prover_shared.compress_tagged_tuple :=\nfun [ProverRwFull.ExternalTypes] ops => rfl\n'R1Z.PV_Op223_Source.op223_source' depends on axioms: [propext, Classical.choice, Quot.sound]\ntheorem R1Z.PV_Op223_Source.op223_p6 : \u2200 [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns),\n  ProverRwFull.ExternalFuns.op223 = R1Z.ProverRwP6CompressSource.compress :=\nfun [ProverRwFull.ExternalTypes] ops => R1Z.PV_Op223_P6Bridge.reference ops\n'R1Z.PV_Op223_Source.op223_p6' depends on axioms: [propext, Classical.choice, Quot.sound]\ntheorem R1Z.PV_Op223_Source.P_source_p6 : \u2200 [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns),\n  ProverRwFull.ExternalFuns.op223 = R1Z.ProverRwP6CompressSource.compress :=\nfun [ProverRwFull.ExternalTypes] ops => R1Z.PV_Op223_P6Bridge.reference (R1Z.PV_Op223_Source.selected ops)\n'R1Z.PV_Op223_Source.P_source_p6' depends on axioms: [propext, Classical.choice, Quot.sound]\ntheorem R1Z.PV_Op223_V164.refinement : \u2200 [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)\n  {S : Type} (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)\n  (pub : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)\n  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)\n  (v : ProverRwFull.transport.Variant)\n  (hash :\n    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) \u2192 Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))\n  (binding digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)\n  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool),\n  store.reserve s digest attempt.mask_nonce = Aeneas.Std.Result.ok (accepted, after) \u2192\n    \u2200 (modelBytes : Aeneas.Std.Result R1Z.ProverRw19AuditData.ByteStatus),\n      R1Z.PV_RW_DataProduct.observe R1Z.PV_RW_DataProduct.first\n            (R1Z.ProverRwBodyDataCriterion.data\n              (R1Z.ProverRwP6BodyStore.execute (R1Z.PV_RW_CombinedBodyData.closed (R1Z.PV_Op223_Source.selected ops))\n                store pub compiled v hash binding digest attempt s)) =\n          modelBytes \u2192\n        R1Z.ProverRwP6BodyStore.execute (R1Z.ProverRw18ContextJoin.original (R1Z.PV_Op223_Source.selected ops)) store\n            pub compiled v hash binding digest attempt s =\n          R1Z.ProverRwBodyCandidateData.withState after (R1Z.ProverRw19AuditData.attachAudit modelBytes) :=\nfun [ProverRwFull.ExternalTypes] ops {S} store pub compiled v hash binding digest attempt s after accepted reservation\n    modelBytes P_proof_bytes =>\n  R1Z.ProverRw19CanonicalAuditRefinement.refinement (R1Z.PV_Op223_Source.selected ops)\n    (R1Z.PV_Op223_Source.P_source_p6 ops) store pub compiled v hash binding digest attempt s after accepted reservation\n    modelBytes P_proof_bytes\n'R1Z.PV_Op223_V164.refinement' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+  "command": [
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-op223-20261027/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-op223-20261027/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-op223-20261027/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-op223-20261027/lean-objects/R1Z/PV_Op223_AuditSource.olean",
+    "/home/dombarker/project-offloads/codex-pv-op223-20261027/lean-sources/R1Z/PV_Op223_AuditSource.lean",
+    "7000"
+  ],
+  "cwd": "/home/dombarker",
+  "expected_time": "lean-43597",
+  "exit_status": 0,
+  "wall_seconds": 1.788,
+  "peak_rss_kib": 4293240,
+  "swaps": 0,
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r6b50fbcdb6d644c4b0bb6bd47af227a7.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": 443375616,
+  "env": {
+    "CARGO_TARGET_DIR": null,
+    "CARGO_BUILD_JOBS": null,
+    "CARGO_NET_OFFLINE": null,
+    "SBF_TRACE_DIR": null
+  },
+  "print_axioms": [
+    "'R1Z.PV_Op223_Source.op223_source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.PV_Op223_Source.op223_p6' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.PV_Op223_Source.P_source_p6' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.PV_Op223_V164.refinement' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ]
+}
