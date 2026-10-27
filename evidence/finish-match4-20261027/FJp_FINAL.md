@@ -50,8 +50,47 @@ native/SDK/runtime premises is newly constructed or claimed.
 
 ## Validation and limits
 
-Final budget, combined audit and exact source-hash validation are appended
-below after the remaining focused checks. No package replay, Rust/Kani/SBF or
+Final budget, combined audit and exact source-hash validation are recorded
+below. The staged whitespace check passed (FJp_whitespace.json). No package replay, Rust/Kani/SBF or
 shipped/cfg(kani) change occurred. FJp_FREEZE.md records source/toolchain and
 inherited ELF pins, not freshly reproduced artifacts. Other workers/session A
 were not edited. No wallet/key operation occurred.
+
+## Final validation and budget
+
+Budget exhausted exactly: **100/100 Lean compiler starts,79 passes,21 retained
+failed elaborations;0/20 Kani**. No101st compile was run. All79 delivered
+modules have passing exact-source-hash receipts. FJp_validation.json,
+FJp_sources.json and FJp_attempts.json mechanically verify budget, source
+snapshots, direct dependency fingerprints, caps, swaps and axiom reports.
+
+Root087 source revision `8d78fbd221694aaa955ee2038d231ffe0d3caeae` plus its recorded dirty-source
+hash `862ca57d1812d3f223d09622668bceb2cd53127a6c7192131ed60e4c50fd5e36`. Final ClosureAudit100:
+exit0,wall7.466258281026967s,peak5654572KiB,swap0,
+source revision `8fccf8fd47becf67cd5371a9a36ea9101dbd259c` plus exact audit hash
+`9848d727bb6e66210937c32b1080a2552cf04e561726932635dd860d5f622e88`.
+All88 new theorem audits and original ARX root (89 reports) use only
+`[propext, Classical.choice, Quot.sound]`. The audit imports every prefix
+module and the retained complete FJo/FJl/FJi closure, using coherent SInt2
+objects. FJp_delivered-objects.json pins the final audit's selected objects.
+This is a focused composed replay, not a fresh full frozen release rebuild.
+
+KernelComparison096 passes: exact root type after exactly two predicate
+substitutions; exact/definitional native wrapper bodies; precisely the native
+matching binder and global matching leaf removed.097–099 print complete
+component scopes. Recount and source-schema checks pass. Every scope uses
+MemoryHigh6G/MemoryMax8G/SwapMax0/TasksMax64 and Lean-M7000; all swaps zero,
+maximum peakRSS5677236KiB. No cap/heartbeat/depth/unsafe option increase,
+OS wall-timeout, memory kill, unchanged compile rerun or package replay.
+Reservation011 waited180s and retried. All failed sources/errors remain in
+receipts; no failing draft is a delivered unchecked module.
+
+Canonical SInt2 delivery objects are retained for lead reuse; no Rust/Kani
+solver/target scratch was created. All keys were untouched. No shipped,
+cfg(kani), artifact, other worker or session-A file changed. ELF reproduction
+was not triggered; full inherited pins and source assessment are in FJp_FREEZE.
+
+All stage commits remain local, no push/merge. The requested L143 closure is
+complete on the checked replacement root. Other retained premises, release
+association and joint non-vacuity still block an unconditional deployed100-bit
+release claim; see FJp_ROWS.md and the unmodified Rc12 deployment inventory.
