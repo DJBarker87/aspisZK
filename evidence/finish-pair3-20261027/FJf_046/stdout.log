@@ -1,0 +1,40 @@
+FJf_InstalledPointCell.lean:34:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJf_FactorArray.value w.factors ↑0#usize ↑d ↑s
+in the target expression
+  FJf_FactorArray.value w.factors 0 ↑⟨↑d, hd⟩ ↑⟨↑s, hs⟩ =
+    FJf_PointCell.point (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ alpha) ↑⟨↑d, hd⟩ ⟨↑s, hs⟩
+
+v : transport.Variant
+alpha : Std.Array K 10#usize
+z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize
+w : FIo_Install.W
+hc : FJc_WeightArray.canonical (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ alpha)
+hw : FIn_WeightsInstall.newWeights v alpha z = ok (core.result.Result.Ok w)
+d s : Usize
+hd : ↑d < 5
+hs : ↑s < 4
+q : NQ
+sr : Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize
+hsr : w.factors.index_usize 0#usize = ok sr
+hr :
+  (FIo_Install.toWeights w).factors.index_usize 0#usize =
+    ok (FIn_WeightsInstall.mapArray (FIn_WeightsInstall.mapArray FIo_Install.toQ) sr)
+sd : Std.Array FIn_WeightsExtract.field.QM31 4#usize
+hsd : sr.index_usize d = ok sd
+hsi : (FIn_WeightsInstall.mapArray FIo_Install.toQ sd).index_usize s = ok q
+hdi :
+  (FIn_WeightsInstall.mapArray (FIn_WeightsInstall.mapArray FIo_Install.toQ) sr).index_usize d =
+    ok (FIn_WeightsInstall.mapArray FIo_Install.toQ sd)
+sq : FIn_WeightsExtract.field.QM31
+hsq : sd.index_usize s = ok sq
+eq : FIo_Install.toQ sq = q
+cr : FJf_FactorArray.rowCanon sr
+cd : FJc_WeightArray.canonical sd
+cq : FJc_WeightValues.Canon sq
+hv :
+  FJf_FactorArray.value w.factors 0 ↑⟨↑d, hd⟩ ↑⟨↑s, hs⟩ =
+    FJf_PointCell.point (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ alpha) ↑⟨↑d, hd⟩ ⟨↑s, hs⟩
+rv : FJf_FactorArray.value w.factors ↑0#usize ↑d ↑s = FJf_FactorArray.rowValue sr ↑d ↑s
+⊢ FIo_QMValues.Canon q ∧
+    decodeQM (qm q) = FJf_PointCell.point (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ alpha) ↑d ⟨↑s, hs⟩
+'AspisR1.FJf_InstalledPointCell.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

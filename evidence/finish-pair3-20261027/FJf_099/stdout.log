@@ -1,0 +1,52 @@
+theorem AspisR1.FJf_PartialInstalled.value : ∀ (alpha : Aeneas.Std.Array AspisR1Stage2.Stage2Finish.K 10#usize)
+  (z : Aeneas.Std.Array AspisR1Stage2.aspis_core.circle.SecureCirclePoint 2#usize) (w : AspisR1.FIo_Install.W),
+  AspisR1.FJc_WeightArray.canonical (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toQ alpha) →
+    AspisR1.FIn_WeightsInstall.newWeights AspisR1Stage2.transport.Variant.S2 alpha z =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w) →
+      ∀ (nativeSelf : FIo_Native.weights.Weights) (common : Aeneas.Std.Array AspisR1.FIo_FieldBridge.NQ 16#usize),
+        FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } (AspisR1.FIo_Install.toWeights w)
+              (Aeneas.Std.Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO) =
+            Aeneas.Std.Result.ok (nativeSelf, common) →
+          ∀ (f : Aeneas.Std.Slice Aeneas.Std.U8) (s : Aeneas.Std.Usize),
+            ↑s < 4 →
+              ∀ (out : AspisR1.FIo_FieldBridge.NE),
+                FIo_Native.weights.partial_dot f common s =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+                  nativeSelf = AspisR1.FIo_Install.toWeights w ∧
+                    AspisR1.FJf_QMArray.canon common ∧
+                      (∀ j < 16,
+                          AspisR1.FJf_QMArray.value common j =
+                            AspisR1.FJf_CommonCell.model
+                              (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toQ alpha) j) ∧
+                        AspisR1.FIo_WideValues.Canon out ∧
+                          AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide out) =
+                            AspisR1.FJf_PartialCell.sumPrefix f common s 16 :=
+fun alpha z w hc hw nativeSelf common hcommon f s hs out hpartial =>
+  let ⟨same, right✝⟩ := AspisR1.FJf_CommonValue.sixteen alpha z w hc hw (nativeSelf, common) hcommon
+  let ⟨canon, values⟩ := right✝
+  have partialValue := AspisR1.FJf_PartialValue.sixteen f common s hs canon out hpartial;
+  ⟨same, ⟨canon, ⟨values, ⟨partialValue.left, partialValue.right⟩⟩⟩⟩
+theorem AspisR1.FJf_PartialReference.value : ∀ (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (common : Aeneas.Std.Array AspisR1.FIo_FieldBridge.NQ 16#usize) (s : Aeneas.Std.Usize),
+  ↑s < 4 →
+    AspisR1.FJf_QMArray.canon common →
+      ∀ (out : AspisR1.FIo_FieldBridge.NE),
+        FIo_Native.weights.partial_dot f common s = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+          AspisR1.FIo_WideValues.Canon out ∧
+            AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide out) =
+              ∑ j ∈ Finset.range 16, AspisR1.FJf_PartialCell.term f common s j :=
+fun f common s hs hc out run =>
+  have h := AspisR1.FJf_PartialValue.sixteen f common s hs hc out run;
+  ⟨h.left, Eq.trans h.right (AspisR1.FJf_PartialReference.sumPrefix f common s 16)⟩
+'AspisR1.FJf_OriginalFactors.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_ModelPoint.tensor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_InstalledPointCell.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_CommonValue.sixteen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_RawDecode.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_DotMeaning.push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_DotMeaning.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_EbyKPush.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_EbyKFinish.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_PartialValue.sixteen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_PartialInstalled.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_PartialReference.value' depends on axioms: [propext, Classical.choice, Quot.sound]
