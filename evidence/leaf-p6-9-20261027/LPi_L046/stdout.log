@@ -1,0 +1,83 @@
+LPi_generated/LPi_PowersStep.lean:21:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+N : Usize
+x p : NE
+a : Std.Array NE N
+i : Usize
+hi : ↑i < ↑N
+hx : canonE x
+hp : canonE p
+old : NE
+left✝ : old = (↑a)[↑i]
+hmut : a.index_mut_usize i = ok (old, a.set i)
+i' : Usize := i.wrapping_add 1#usize
+⊢ ↑i + ↑1#usize < UScalar.size UScalarTy.Usize
+LPi_generated/LPi_PowersStep.lean:25:21: error: unsolved goals
+N : Usize
+x p : NE
+a : Std.Array NE N
+i : Usize
+hi : ↑i < ↑N
+hx : canonE x
+hp : canonE p
+old : NE
+left✝ : old = (↑a)[↑i]
+hmut : a.index_mut_usize i = ok (old, a.set i)
+i' : Usize := i.wrapping_add 1#usize
+inc : ↑i' = ↑i + 1
+hlt : i < N
+he : i' = N
+⊢ (let (_, index_mut_back) := (old, a.set i)
+    ok (done (index_mut_back p))) =
+    ok (done (a.set i p))
+LPi_generated/LPi_PowersStep.lean:27:2: error: unsolved goals
+case neg
+N : Usize
+x p : NE
+a : Std.Array NE N
+i : Usize
+hi : ↑i < ↑N
+hx : canonE x
+hp : canonE p
+old : NE
+left✝ : old = (↑a)[↑i]
+hmut : a.index_mut_usize i = ok (old, a.set i)
+i' : Usize := i.wrapping_add 1#usize
+inc : ↑i' = ↑i + 1
+hlt : i < N
+he : ¬i' = N
+p' : FIo_Native.aspis_core.field.wide_exact.WideExact
+hm : FIo_Native.aspis_core.field.wide_exact.WideExact.mul p x = ok p'
+hc : canonE p'
+hv : ew p' = mulE (ew p) (ew x)
+⊢ (let (_, index_mut_back) := (old, a.set i)
+    ok (cont (index_mut_back p, p', i'))) =
+    ok (cont (a.set i p, p', i'))
+LPi_generated/LPi_PowersStep.lean:33:10: error: Application type mismatch: The argument
+  ↑N
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.10
+of sort `Type (?u.10 + 1)` in the application
+  @InitialSeg ↑N
+LPi_generated/LPi_PowersStep.lean:33:17: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.9
+LPi_generated/LPi_PowersStep.lean:34:23: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+N : Usize
+x p : NE
+a : Std.Array NE N
+i : Usize
+hi : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ ¬i < N
+'AspisR1.LPi_PowersStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPi_PowersStep.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -6,7 +6,8 @@ All accepted audits use only propext, Classical.choice, Quot.sound. Failed
 error-recovery sorryAx reports are retained and excluded.
 
 Exact total emitted natural-coordinate laws now cover M31/CM31/QM31/WideExact
-multiplication, mul_by_r and QM31.mul_m31. CM31/QM31 mutable serialization laws
+multiplication and mul_by_r on canonical higher-field inputs; M31 and
+QM31.mul_m31 allow raw inputs. CM31/QM31 mutable serialization laws
 allow arbitrary initial exact8/exact16 slices and raw limbs. They do not by
 themselves establish native source-to-model association or whole leaf closure.
 

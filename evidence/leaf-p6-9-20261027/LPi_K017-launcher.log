@@ -1,0 +1,64 @@
+{"attempt": "LPi_K017", "exit_status": 0, "wall_seconds": 26.64703788497718, "peak_rss_kib": "1818180", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+r([a[2],a[3]]);[r[0],r[1],a[0],a[1]]}
+   |    ^^
+
+warning: function `emul_spec` is never used
+  --> crates/aspis-r1-cost-probe/src/LPi_contracts.rs:80:4
+   |
+80 | fn emul_spec(a:[u32;8],b:[u32;8])->[u32;8] {
+   |    ^^^^^^^^^
+
+warning: function `emul` is never used
+  --> crates/aspis-r1-cost-probe/src/LPi_contracts.rs:86:8
+   |
+86 | pub fn emul(a:aspis_core::field::WideExact,b:aspis_core::field::WideExact)->aspis_core::field::WideExact {
+   |        ^^^^
+
+warning: module `LPi_contracts` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/lib.rs:48:18
+   |
+48 | #[cfg(kani)] mod LPi_contracts;
+   |                  ^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpi_contracts`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `LPi_verifier` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:531:44
+    |
+531 | #[cfg(kani)] #[path="LPi_verifier.rs"] mod LPi_verifier;
+    |                                            ^^^^^^^^^^^^ help: convert the identifier to snake case: `lpi_verifier`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.03s
+Checking harness verifier::LPi_verifier::joined_digest_cut_small...
+
+VERIFICATION RESULT:
+ ** 0 of 769 failed (11 unreachable)
+
+ ** 2 of 2 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 23.759031s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r1c29a0fa8fec420a9e094ca43eb8a7e3.scope; invocation ID: fcda796824514e549ba4da71bd072dd9

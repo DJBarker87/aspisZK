@@ -1,0 +1,41 @@
+{"attempt": "LPi_K001", "exit_status": 1, "wall_seconds": 9.867339132993948, "peak_rss_kib": "560208", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-9-20261027/LPi_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt
+...
+f_cbytes_low16_contract` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPf_replay.rs:26:4
+   |
+26 | fn LPf_cbytes_low16_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;16]=kani::any();let bef...
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_cbytes_low16_contract`
+
+warning: function `LPf_cbytes_high16_contract` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPf_replay.rs:28:4
+   |
+28 | fn LPf_cbytes_high16_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;16]=kani::any();let be...
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_cbytes_high16_contract`
+
+warning: function `LPf_mul_canonical_local_contract` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPf_replay.rs:32:4
+   |
+32 | fn LPf_mul_canonical_local_contract(){let a=M31(kani::any());let b=M31(kani::any());let _=a.mul(b);}
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_mul_canonical_local_contract`
+
+warning: function `LPf_powers7_canonical` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPf_replay.rs:35:4
+   |
+35 | fn LPf_powers7_canonical(){let x=any_e();let out=crate::weights::powers::<7>(x);for e in out{for w in e.to_limbs(){assert!(w<P);}}ka...
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_powers7_canonical`
+
+error: Failed to find contract closure `__kani_recursion_check_to_le_bytes` in function `aspis_core::field::M31::to_le_bytes`
+
+error: could not compile `aspis-r1-cost-probe` (lib) due to 1 previous error; 35 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-rd6e29a9cb5b945729ea00eb67a5e9d8c.scope; invocation ID: 8ef018ca8f64426b82ba252f2c182de2

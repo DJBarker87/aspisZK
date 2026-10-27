@@ -1,0 +1,70 @@
+{"attempt": "LPi_K005", "exit_status": 0, "wall_seconds": 2.805271357006859, "peak_rss_kib": "335448", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: function `word` is never used
+ --> crates/aspis-r1-cost-probe/src/LPi_contracts.rs:3:4
+  |
+3 | fn word(x:M31)->[u8;4] { [x.0 as u8,(x.0>>8) as u8,(x.0>>16) as u8,(x.0>>24) as u8] }
+  |    ^^^^
+
+warning: function `mbytes` is never used
+ --> crates/aspis-r1-cost-probe/src/LPi_contracts.rs:4:8
+  |
+4 | pub fn mbytes(x:M31)->[u8;4] {
+  |        ^^^^^^
+
+warning: function `cbytes` is never used
+ --> crates/aspis-r1-cost-probe/src/LPi_contracts.rs:7:8
+  |
+7 | pub fn cbytes(x:CM31,out:&mut[u8]) {
+  |        ^^^^^^
+
+warning: function `qbytes` is never used
+  --> crates/aspis-r1-cost-probe/src/LPi_contracts.rs:13:8
+   |
+13 | pub fn qbytes(x:QM31,out:&mut[u8]) {
+   |        ^^^^^^
+
+warning: module `LPi_contracts` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/lib.rs:48:18
+   |
+48 | #[cfg(kani)] mod LPi_contracts;
+   |                  ^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpi_contracts`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.92s
+Checking harness LPi_contracts::q_owned16...
+
+VERIFICATION RESULT:
+ ** 0 of 68 failed (6 unreachable)
+
+ ** 2 of 2 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.6545118s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r0f43ff35f5874b6dbfe82411c5cd9768.scope; invocation ID: c256e31f1f6541c986f782c74b73996e

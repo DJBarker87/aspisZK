@@ -1,0 +1,59 @@
+{"attempt": "LPi_L056", "exit_status": 1, "wall_seconds": 1.8610733030363917, "peak_rss_kib": "4430300", "swaps": "0", "print_axioms": ["'AspisR1.LPi_PublicPush.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+LPi_generated/LPi_PublicPush.lean:23:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let value_c0 ←
+      (Array.make 2#usize [LPi_CheckedInputs.q value.c0, LPi_CheckedInputs.q value.c1] ⋯).index_usize 0#usize
+    let value_c1 ←
+      (Array.make 2#usize [LPi_CheckedInputs.q value.c0, LPi_CheckedInputs.q value.c1] ⋯).index_usize 1#usize
+    let d ← self.c0.push value_c0 (LPi_CheckedInputs.q scalar)
+    let d1 ← self.c1.push value_c1 (LPi_CheckedInputs.q scalar)
+    ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := self.count.wrapping_add 1#usize })
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok (), { c0 := a, c1 := b, count := self.count.w
+...
+o prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+self : FIo_Native.fast_pairing.EbyKDot
+value : NE
+scalar : NQ
+hv : canonE value
+hq : canonQ scalar
+count : ↑self.count < 4096
+ca : LPi_RawValues.Canon (LPi_CheckedInputs.q value.c0)
+cb : LPi_RawValues.Canon (LPi_CheckedInputs.q value.c1)
+cq : LPi_RawValues.Canon (LPi_CheckedInputs.q scalar)
+a : FIo_Native.fast_pairing.canonical.Dot
+ha : self.c0.push (LPi_CheckedInputs.q value.c0) (LPi_CheckedInputs.q scalar) = ok a
+b : FIo_Native.fast_pairing.canonical.Dot
+hb : self.c1.push (LPi_CheckedInputs.q value.c1) (LPi_CheckedInputs.q scalar) = ok b
+below : ¬self.count ≥ FIo_Native.fast_pairing.MAX_TERMS
+⊢ ↑self.count + ↑1#usize < UScalar.size UScalarTy.Usize
+LPi_generated/LPi_PublicPush.lean:22:49: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.fast_pairing.EbyKDot.push, ̲if_neg below,
+  ̵  ̵ ̵ ̵ ̵ ̵LPi_CheckedInputs.from_wide,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲LPi_CheckedInputs.checked scalar hq,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, ̲ha̵,̵h̵b,
+  ̲ ̲ ̲ ̲ ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPi_generated/LPi_PublicPush.lean:22:52: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.fast_pairing.EbyKDot.push, ̲if_neg below,
+  ̵  ̵ ̵ ̵ ̵ ̵LPi_CheckedInputs.from_wide,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲LPi_CheckedInputs.checked scalar hq,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, ̲ha,h̵b̵,̵
+  ̲ ̲ ̲ ̲ ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.LPi_PublicPush.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r11cf70875e3a43879c9cbabf79a479a2.scope; invocation ID: a6861ef6cca84ec7a31c57e96f4de9ea
