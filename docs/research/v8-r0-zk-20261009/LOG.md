@@ -12909,3 +12909,30 @@ with the other fields proved unchanged, non-vacuity, and a same-input native dif
 as finite validation. batch3f (IDs 40500-40599; still no source change) does op134, op222, op117
 (V217) and op121 (V220) in that order, then a combined audit and a focused closure replay. Rows
 removed outright: 0. Privacy target not yet established.
+
+## D337 (Stream B) 2026-10-27 23:31 UTC: V152-V154 discharged at the honest-input family; scope statement for the owner; runjoin28 proves that compiler provenance implies the honesty guards
+
+runjoin27 (5 attempts: 4 accepted; final audit 38140 with standard axioms; 24 new theorems; peak
+5.02 GB; no swap) defines Honest = {i : PV_Src_NativeInput.Input // HonestInput i} and proves the
+unchanged three-field BuilderSource.SourceIdentification contract for source_honest (the native
+prover over that family) and target (UniversalBuild22.toInstance): public_eq, build_eq and
+transport_eq for every honest input, with no remaining identification premise
+(PV_RunJoin_HonestIdentification26). The generic consumers apply unchanged
+(PV_RunJoin_HonestConsumer26: builder_refinement_D46_D51, join_of_identification,
+builder_sound_of_join, PV_Src_Consumer.of_identification); both fixtures are honest inputs and
+discharge V047's Association at their native publics (PV_RunJoin_HonestFixtures26). The raw-family
+unsatisfiability theorems stay valid and are re-checked in the audit. V152-V154 are discharged at
+the honest family; the endpoint, the contract and the consumers are unchanged, and no
+RustRealRefinement conjunct or RunJoin field is removed by this alone (V038, V045 and the coupling
+laws remain). The recount, not this entry, decides the ledger effect.
+
+Scope, as written by the worker for the owner: the honest source handoff covers every input carrying
+semantic Admission, a successful full compiler return equal to its cached compiled payload, Checked,
+and canonical frontier words; it is privacy for users whose prover inputs are produced by the
+compiler and satisfy those guards, not for arbitrary caller-supplied cached compilations. It does
+not restrict the adversary, the observer, simE, the bound or the bad event. Compiler provenance has
+not yet been shown to imply Checked and the frontier guards, so runjoin28 (remaining 59 attempts)
+proves first that every input the honest pipeline builds satisfies HonestInput (a guard that fails
+for some admitted honest witness is a stop and an owner item), then the native execution and
+observable agreement toward RustRealRefinement. Rows removed outright: 0. Privacy target not yet
+established.
