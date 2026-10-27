@@ -260,10 +260,9 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
         w.bits[level] = ((membership_index >> (level - 1)) & 1) as u32;
         level += 1;
     }
-    while level < 24 {
-        w.bits[level] = u32::from(directions[level - 21]);
-        level += 1;
-    }
+    w.bits[21] = u32::from(directions[0]);
+    w.bits[22] = u32::from(directions[1]);
+    w.bits[23] = u32::from(directions[2]);
     let mut j = 0;
     while j < 8 {
         w.sk[j] = key[j].0;

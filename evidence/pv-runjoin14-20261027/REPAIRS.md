@@ -1871,3 +1871,34 @@ now expanded before the first loop instead of during its first iteration,
 which targets the observed context mismatch. No values, loop bounds,
 recipient handling, failure behavior, signature, allocation, I/O or bytes
 outside records change. D287 caller remains identical.
+
+21. D277, expand the three direction assignments, verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index 2a6ceb7585..0e0650a526 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -260,10 +260,9 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+         w.bits[level] = ((membership_index >> (level - 1)) & 1) as u32;
+         level += 1;
+     }
+-    while level < 24 {
+-        w.bits[level] = u32::from(directions[level - 21]);
+-        level += 1;
+-    }
++    w.bits[21] = u32::from(directions[0]);
++    w.bits[22] = u32::from(directions[1]);
++    w.bits[23] = u32::from(directions[2]);
+     let mut j = 0;
+     while j < 8 {
+         w.sk[j] = key[j].0;
+```
+
+Extraction 07 passes the first loop and fails in the second at
+263:4–266:5, InterpBorrows.ml:2731. The first loop exits at level 21;
+the second writes exactly bits[21..23] from directions[0..2]. These
+three assignments write exactly those cells with the same conversion
+and bounded indices. The dead level value after that loop is unused.
+No other value, behavior, signature or outside-records change. Arrays
+and bool are Copy; other derives remain as recorded.
