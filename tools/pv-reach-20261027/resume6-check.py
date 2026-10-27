@@ -2,13 +2,27 @@
 import pathlib,sys,subprocess,json,hashlib,shlex,time,re,datetime,atexit
 R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-reach-20261027/resume6'
 H='/home/dombarker/project-offloads/codex-pv-reach-20261027'; P=H+'/lean';host='dombarker@100.108.41.90'
-A=int(sys.argv[1]);M=sys.argv[2];assert 38800<=A<=38899 and ('PV_RE_' in M or M in [x['module'].replace('.','/') for x in json.loads((E/'project-closure.json').read_text()) if x['authority']=='h5'])
+A=int(sys.argv[1]);M=sys.argv[2];assert 38800<=A<=38899 and ('PV_RE_' in M or M in [x['module'].replace('.','/') for x in json.loads((E/'project-closure.json').read_text())])
 assert subprocess.check_output(['git','branch','--show-current'],text=True).strip()=='codex/pv-reach-20261027'
 assert str(R)=='/Users/dominic/ZK/.worktrees/pv-reach'
 assert json.loads((E/'h4-verification.json').read_text())['mismatches']==[]
 rows=[json.loads(p.read_text()) for folder in [E] for p in folder.glob('receipt-[0-9]*.json')];charged=sum(r.get('exit') is not None for r in rows)
 assert charged<100 and (A<38897 or 'Audit' in M)
 assert not (E/f'used-{A}.json').exists()
+if (E/'pinned-cache-links.json').exists() and 'PV_RE_' not in M:
+ authority_rows={x['module']:x for x in json.loads((E/'project-closure.json').read_text())}
+ conflicts={x['module'] for x in json.loads((E/'pinned-cache-links.json').read_text())['held'] if x.get('actual') is not None and x.get('actual')!=x.get('expected')}
+ def authority_dependencies(n,seen=None):
+  seen=set() if seen is None else seen
+  if n not in authority_rows:return seen
+  for d in authority_rows[n]['imports']:
+   if d not in seen:seen.add(d);authority_dependencies(d,seen)
+  return seen
+ if (E/'source-cohort-conflicts.json').exists():conflicts|={x['module'] for x in json.loads((E/'source-cohort-conflicts.json').read_text())}
+ assert not authority_dependencies(M.replace('/','.'))&conflicts,'Affected module held: conflicting shared EJR source hashes are retained in pinned-cache-links.json'
+
+if A>=38844 and 'PV_RE_' not in M:
+ assert (E/'pinned-cache-links.json').exists(),'Hold private prerequisites for source-verified EJR cache-link restoration'
 S=R/'docs/research/v8-r0-zk-20261009/lean'/(M+'.lean')
 if len(sys.argv)>3:S=R/sys.argv[3]
 assert S.is_file();sha=hashlib.sha256(S.read_bytes()).hexdigest()
@@ -50,7 +64,7 @@ for m in ['Aeneas','Aeneas.Command','AeneasMeta.Extensions','Init.Prelude','Math
  q=next((r/pathlib.Path(*m.split('.')).with_suffix('.olean') for r in roots if (r/pathlib.Path(*m.split('.')).with_suffix('.olean')).is_file()),None);d[m]=dict(path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest()) if q else None
 print(json.dumps(d))
 '''
-r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr;deps=json.loads(r.stdout);deps['private_cache_environment']={'companion_restoration':'resume4/cache-links.json','authority':'resume6/project-closure.json'};fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest()
+r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr;deps=json.loads(r.stdout);deps['private_cache_environment']={'companion_restoration':'resume4/cache-links.json','authority':'resume6/project-closure.json','pinned_links_sha256':hashlib.sha256((E/'pinned-cache-links.json').read_bytes()).hexdigest() if (E/'pinned-cache-links.json').exists() else None};fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest()
 assert not any(r.get('source_sha256')==sha and r.get('deps_fingerprint')==fp and r.get('exit') is not None for r in rows),'unchanged input already compiled'
 snapshot=f'{A}-{S.name}.txt';(E/snapshot).write_bytes(S.read_bytes());rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 cmd=['systemd-run','--user','--scope','--quiet','--unit=pvre-lean-'+str(A),'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+f'/evidence/pvre-time-{A}.log','timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',P+'/J.json',P+'/objects',P+'/sources',P+'/objects/'+M+'.olean',P+'/sources/'+M+'.lean','7000']

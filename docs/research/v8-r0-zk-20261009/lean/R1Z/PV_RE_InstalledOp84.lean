@@ -15,9 +15,13 @@ theorem installed_noCatch (base : ExternalTypes)
         (fun _ => pending) tag values) := by
   constructor
   · intro e
+    change (PV_CB_CandidateDictionary.selected base ops).op84
+      (fun _ => .fail e) tag values = .fail e
     rw [PV_CB_CandidateDictionary.op84]
     rfl
-  · rw [PV_CB_CandidateDictionary.op84]
+  · change (PV_CB_CandidateDictionary.selected base ops).op84
+      (fun _ => .div) tag values = .div
+    rw [PV_CB_CandidateDictionary.op84]
     rfl
 
 #print installed_noCatch

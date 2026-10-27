@@ -19,4 +19,4 @@ sent=base/'r1-privacy-build-integration-20261019/sent.txt'
 lines=[x for x in sent.read_text().splitlines() if re.search(r'(?<![0-9])388[0-9]{2}(?![0-9])',x)] if sent.is_file() else []
 print(json.dumps(dict(hits=hits,sent=lines)))
 '''
-r=subprocess.run(['ssh',host,'python3 -c '+shlex.quote(script)],capture_output=True,text=True,check=True);d=json.loads(r.stdout);(E/'cross-job-id-check.json').write_text(json.dumps(d,indent=2)+'\n');used={i for r in d['hits'] for i in r['ids']};print('used',sorted(used));assert not used.intersection(range(38800,37400))
+r=subprocess.run(['ssh',host,'python3 -c '+shlex.quote(script)],capture_output=True,text=True,check=True);d=json.loads(r.stdout);(E/'cross-job-id-check.json').write_text(json.dumps(d,indent=2)+'\n');used={i for r in d['hits'] for i in r['ids']};print('used',sorted(used));assert not used.intersection(range(38800,38900))

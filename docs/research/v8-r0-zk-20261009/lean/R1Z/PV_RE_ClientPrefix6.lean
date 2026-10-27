@@ -25,15 +25,9 @@ theorem client_to_retry {C : Type} (D : ExternalFuns)
     core.cmp.PartialEq.ne.trait_default core.cmp.PartialEq.ne.default
     transport.Variant.Insts.CoreCmpPartialEqVariant
   simp only [PV_RE_ClientEntry.bind_assoc]
-  change (do
-    let a ← D.op233 .S2 .S2
-    let a ← Result.ok (decide (¬ a = true))
-    let (r,s) ← if a then Result.ok ((core.result.Result.Err verifier.Error.Semantic : core.result.Result prover.RetriedProof verifier.Error),store) else
-      prover.retry_attempt
-        (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError entropy)
-        pub compiled .S2 hash store state 0#usize
-    Result.ok (r,s)) = _
-  rw [guard]
+  have eq_call : @transport.Variant.Insts.CoreCmpPartialEqVariant.eq _ D .S2 .S2 =
+      D.op233 .S2 .S2 := rfl
+  rw [eq_call, guard]
   exact pair_identity _
 
 /-- One actual retry iteration enters the extracted attempt after a successful

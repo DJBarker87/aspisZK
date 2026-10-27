@@ -1,7 +1,9 @@
 """Resolve the actual installed dictionary closure, in lead-authority order."""
 import pathlib,json,subprocess,hashlib,re
 R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-reach-20261027/resume6'
-inv=json.loads((E/'EJR_final-inventory.json').read_text());pins={r['module'].replace('/','.'):r for r in inv['selected'] if r.get('resolution')}
+inv=json.loads((E/'EJR_final-inventory.json').read_text());pins={}
+for r in sorted(inv['selected'],key=lambda r:r.get('workspace')=='joint'):
+ if r.get('resolution'):pins[r['module'].replace('/','.')]=r
 freeze=json.loads((E/'final-source-freeze.json').read_text());fr={r['module']:r for r in freeze['sources']}
 ext={r['module'].replace('/','.') for r in json.loads((E/'external-object-manifest.json').read_text())}
 tracked=subprocess.check_output(['git','ls-files','*.lean','*.lean.txt'],text=True).splitlines();L='docs/research/v8-r0-zk-20261009/lean/'
