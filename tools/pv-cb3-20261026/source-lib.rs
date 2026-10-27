@@ -152,3 +152,7 @@ pub mod resume6_digest;
 #[cfg(kani)]
 #[path="resume6_owned_weights.rs"]
 pub mod resume6_owned_weights;
+
+#[cfg(kani)]
+#[path="resume6_tensor_reference.rs"]
+pub mod resume6_tensor_reference;

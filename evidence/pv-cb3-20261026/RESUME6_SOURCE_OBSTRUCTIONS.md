@@ -36,9 +36,13 @@ baseline receipts remain failures/obstructions, not counterexamples.
   and folds only selected rows. A dense replacement needs arithmetic/order
   correspondence and preservation of noncanonical QM31 representatives.
 * op219/V238: direct transitive-path extraction returned an empty Aeneas
-  translation (zero functions). Exit0 is not source coverage. New cfg(kani)
-  generic wrappers are prepared to force concrete impl bodies into the graph.
-* op217/V237,216/V236,215/V235,212/V234: digest default/finalization
+  translation (zero functions). Exit0 is not source coverage. The forced real impl root passes Charon, then Aeneas refuses escaping
+  references and structured Drop (aeneas-source-op219-wrapper-resume6host002).
+* op217/V237: forced real Default impl graph reaches escaping-reference and
+  structured-Drop guards (aeneas-source-op217-wrapper-resume6host002).
+* op216/V236: forced real Update impl graph reaches the loan-validation
+  guard (aeneas-source-op216-wrapper-resume6host003).
+* op215/V235,212/V234: digest finalization
   and generic-array/buffer representation boundaries. Generic trait methods
   are legitimate input dictionaries; opaque missing concrete defaults are
   not discharged by giving them a new name.

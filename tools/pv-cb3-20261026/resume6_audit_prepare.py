@@ -15,6 +15,7 @@ for p in sorted(lean.glob('PV_CB3_*.lean')):
     for receipt in out.glob('*.json'):
         try:d=json.loads(receipt.read_text())
         except ValueError:continue
+        if not isinstance(d,dict):continue
         if d.get('module')=='R1Z/'+p.stem and d.get('exit')==0 and d.get('source_sha256')==h:
             matches.append((receipt.name,d))
     if matches:

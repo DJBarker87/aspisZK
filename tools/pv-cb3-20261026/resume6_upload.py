@@ -26,7 +26,7 @@ if not d['allowed']:
  (out/'RESUME6_ADMISSION_STATE.json').write_text(json.dumps(dict(d,origin=name))+'\n')
  print('REFUSED',d['utc']);sys.exit(78)
 mapping={'kani-lib.rs':'kani-proof/lib.rs','resume6_mask_reference.rs':'kani-proof/resume6_mask_reference.rs',
- 'source-Cargo.toml':'source-proof/Cargo.toml','resume6_digest.rs':'source-proof/resume6_digest.rs','resume6_owned_weights.rs':'source-proof/resume6_owned_weights.rs','source-lib.rs':'source-proof/lib.rs','resume6_weights.rs':'source-proof/resume6_weights.rs'}
+ 'source-Cargo.toml':'source-proof/Cargo.toml','resume6_digest.rs':'source-proof/resume6_digest.rs','resume6_owned_weights.rs':'source-proof/resume6_owned_weights.rs','resume6_tensor_reference.rs':'source-proof/resume6_tensor_reference.rs','source-lib.rs':'source-proof/lib.rs','resume6_weights.rs':'source-proof/resume6_weights.rs'}
 files=sys.argv[2:] or ['kani-lib.rs','resume6_mask_reference.rs']
 assert set(files)<=set(mapping)
 for file in files:

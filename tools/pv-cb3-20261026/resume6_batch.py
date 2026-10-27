@@ -53,7 +53,7 @@ for row in spec:
         (out/f'{attempt}-refusal.json').write_text(json.dumps(refusal,indent=2)+'\n')
         if a.returncode==0:
             d=json.loads(a.stdout)
-            if not d.get('allowed',False):state.write_text(json.dumps(dict(d,origin=f'Env-J {attempt} batch'))+'\n')
+            if not d.get('allowed',False):state.write_text(json.dumps(dict({k:v for k,v in d.items() if k not in ('cgroups','uncapped_background')},origin=f'Env-J {attempt} batch'))+'\n')
         if a.returncode==0 or log:r.setdefault('reservation_refusals',[]).append(attempt)
         else:r.setdefault('retired_unlaunched',[]).append(attempt)
 r['lean_inflight']=[];ledger.write_text(json.dumps(r,indent=2)+'\n')

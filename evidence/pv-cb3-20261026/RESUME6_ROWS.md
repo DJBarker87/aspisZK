@@ -5,7 +5,7 @@ Worker candidate rows5→5; endpoint premises removed0. Target not established.
 |op|row|status|theorem|receipt|
 |---:|---|---|---|---|
 |258|V264|OPEN: complete reference Result/fold and shipped comparator helper proved; full-loop native association timed out|R1Z.PV_CB3_Op258Staged.op258_reference (reference only)|38711.json;38714.json;38745.json;38769.json;38770.json;38780.json;38783.json;38785.json;38787.json;kani-resume6-pole1024-001/collected-receipt.json|
-|253|V260|OPEN: zero-kind native correspondence passed; numeric branches timed out; borrowed extraction refused context join, owned successor also refused internal shared-loan cleanup|—|kani-resume6-weight-zero-002/collected-receipt.json;kani-resume6-weight-extra-001/collected-receipt.json;kani-resume6-weight-mixed-001/collected-receipt.json|
+|253|V260|OPEN: tensor/extra typed domains proved; owned-loop extraction fails shared-loan cleanup; owned selector extracted, field closure pending|— (support: PV_CB3_WeightsTensorRead.total / WeightsExtraRead.total)|38810.json;38811.json;38812.json;aeneas-source-op253-split-resume6host006/collected-receipt.json;aeneas-source-op253-tensor-ref-resume6host007/collected-receipt.json|
 |252|V259|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op252-001/collected-receipt.json|
 |251|V258|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op251-001/collected-receipt.json|
 |249|V256|OPEN: complete reference byte-rank/result proved; native eight-limb pass timed out|R1Z.PV_CB3_StagedGammaRank.source / rank (reference only)|38743.json; kani-resume6-pass-001/collected-receipt.json|
@@ -19,17 +19,17 @@ Worker candidate rows5→5; endpoint premises removed0. Target not established.
 |224|V241|OPEN: sibling extraction failure reused; P6 pending|—|op224-reused-obstruction.json|
 |223|V240|SKIP(sibling): current branch has compressor and callsite work|—|codex/pv-cb-20261026:PV_CB_Op223Callsite.lean|
 |222|V239|OPEN: sibling extraction failure reused; P6 pending|—|op222-reused-obstruction.json|
-|219|V238|OPEN: pinned extraction executable unavailable|—|charon-source-op219-001/collected-receipt.json|
-|217|V237|OPEN: extracted skeleton retains generic-array default cut|—|—|
-|216|V236|OPEN|—|—|
-|215|V235|OPEN|—|—|
-|212|V234|OPEN|—|—|
+|219|V238|OPEN: forced concrete impl rejected loan/Drop guard; earlier empty translation gets no credit|—|aeneas-source-op219-wrapper-resume6host002/collected-receipt.json|
+|217|V237|OPEN: forced Default impl rejected loan/Drop guard|—|aeneas-source-op217-wrapper-resume6host002/collected-receipt.json|
+|216|V236|OPEN: forced Update impl rejected loan/Drop guard|—|aeneas-source-op216-wrapper-resume6host003/collected-receipt.json|
+|215|V235|OPEN: forced finalize_into impl rejected loan/Drop guard|—|aeneas-source-op215-wrapper-resume6host006/collected-receipt.json|
+|212|V234|OPEN: generic finalize impl rejected loan/Drop guard|—|aeneas-source-op212-wrapper-resume6host006/collected-receipt.json|
 |209|V233|OPEN|—|—|
 |208|V232|OPEN|—|—|
 |205|V231|OPEN|—|—|
 |134|V230|OPEN: static mask reference has matching source fingerprint; full native gate timed out|—|RESUME6_MASK_CANDIDATE.json;kani-resume6-mask-002/collected-receipt.json|
-|133|V229|OPEN|—|—|
-|132|V228|OPEN|—|—|
+|133|V229|OPEN: current source rejected loan/Drop guard|—|aeneas-source-op133-source-resume6host007/collected-receipt.json|
+|132|V228|OPEN: current source rejected loan/Drop guard|—|aeneas-source-op132-source-resume6host007/collected-receipt.json|
 |121|V220|OPEN: native whole/cell gates timed out; extraction refused structured Drop|—|aeneas-source-op121-001/collected-receipt.json|
 |120|V219|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op120_source|35701.json; RESUME_FINAL_MANIFEST.json|
 |79|V201|OPEN: direct Charon passed; Aeneas refused escaping loans and structured Drop|—|charon-source-op79-source-resume6-retry1/collected-receipt.json;aeneas-source-op79-source-resume6-retry2/collected-receipt.json|

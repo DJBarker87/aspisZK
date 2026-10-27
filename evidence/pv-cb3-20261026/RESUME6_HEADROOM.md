@@ -1,0 +1,5 @@
+# Reservation headroom review
+
+The hierarchical reservation scanner records24.375GiB in populated capped service/container ancestors in these snapshots. Three8GiB proof scopes make48.375GiB total; four make56.375GiB, above its strict55GiB safe limit. Thus a requested8GiB scope needs at most two other8GiB scopes at the preliminary check. The before/inside snapshots in charon-source-op258-opt-resume6host001 show a race: projected48.375GiB initially,56.375GiB after another reservation arrived. The inside barrier correctly refused before the compiler/time command ran.
+
+This is reservation waiting, not a large Lean reduction. No shared scanner, launcher, cgroup cap, or quiet marker was edited. All Lean invocations remain one module per call through the existing run-joint.sh. Native invocations remain separately capped6G/8G/swap0/Tasks64 scopes. A direct Lean runner or outer nested scope is not used. The proof-specific host drivers only sequence those existing commands and retain their per-target receipts.

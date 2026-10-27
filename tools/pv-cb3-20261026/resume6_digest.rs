@@ -16,7 +16,7 @@ where T:BufferKindUser+UpdateCore, T::BlockSize:IsLess<U256>, Le<T::BlockSize,U2
 }
 
 pub fn core_default<T>()->CoreWrapper<T>
-where T:BufferKindUser+Default, T::BlockSize:IsLess<U256>, Le<T::BlockSize,U256>:NonZero {
+where T:BufferKindUser+Default, T::BufferKind:Default, T::BlockSize:IsLess<U256>, Le<T::BlockSize,U256>:NonZero {
     CoreWrapper::<T>::default()
 }
 
