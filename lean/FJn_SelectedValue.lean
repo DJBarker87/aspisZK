@@ -1,4 +1,5 @@
 import FIw_SelectedValue
+import FIw_CompositionOrigins
 import FJn_H1Origin
 set_option autoImplicit false
 noncomputable section
@@ -13,6 +14,7 @@ theorem helper (pub : FIw_CompositionOrigins.SemPub) (claims : Array field.QM31 
     decode h=FIv_NativeArray.value claims 26 := by
   have called:=FJn_H1Origin.reached pub claims point lambda chi theta comp g h active c1 mask run
   have v:=FIw_SelectedValue.value claims 0#usize 26#usize h called
+  change decode h=FIv_NativeArray.value claims (0*28+26) at v
   simpa only [Nat.zero_mul,Nat.zero_add] using v
 #print axioms helper
 end AspisR1.FJn_SelectedValue

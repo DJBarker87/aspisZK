@@ -23,10 +23,12 @@ theorem selected (c : Claims) (i : Usize) (out : field.QM31) (after : Claims)
   obtain ⟨q,rq,run⟩:=FIv_Map.bind_success _ _ _ run
   obtain ⟨rfl,rfl⟩:=Prod.mk.inj (Result.ok.inj run)
   have rv:=FIx_WordArithmetic.div i 28#usize ri (by decide) hr
+  change ri.val=i.val/28 at rv
   have cv:=FJn_WordRemainder.value i ci hc
   refine ⟨?_,rfl⟩
   unfold value
-  rw [←rv,FIv_NativeArray.slot c ri row rr]
+  rw [←rv,FIr_ArrayRead.slot c ri row rr]
+  dsimp only
   rw [←cv,FIv_NativeArray.read row ci q rq]
 #print axioms selected
 end AspisR1.FJn_GatherCell

@@ -1,5 +1,6 @@
 import FJk_OpeningSelected
 import FJk_CopyRowTransport
+import FIw_PublicModel
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.FJn_ClaimsModel
@@ -25,10 +26,11 @@ theorem value (a : Array field.QM31 84#usize) (z s x : Array field.QM31 16#usize
   have vs:=FJk_OpeningSelected.succ a s hs
   have vx:=FJk_OpeningSelected.xor12 a x hx
   have cells (b : Array field.QM31 16#usize) :
-      (fun i : Fin 16=>FIv_NativeArray.value b i.val)=decoded b := funext (fun i=>(FJk_CopyRowTransport.cell b i).symm)
+      (fun i : Fin 16=>FIv_NativeArray.value b i.val)=decoded b := funext (fun i=>(FJk_CopyRowTransport.cell b i))
   unfold FIw_PublicModel.openings
   rw [cells z,cells s,cells x,vz,vs,vx]
-  rfl
+  simp only [openings,claims]
+  congr 1 <;> funext i <;> congr 1 <;> change _=_*28+i.val <;> omega
 #print axioms value
 end AspisR1.FJn_ClaimsModel
 end

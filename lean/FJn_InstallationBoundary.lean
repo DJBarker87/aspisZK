@@ -1,5 +1,4 @@
 import ARX_Root
-import FIp_Blockers
 import FIr_FinalInstall
 set_option autoImplicit false
 noncomputable section
@@ -23,7 +22,7 @@ theorem arbitrary {C : Type} (err : C) (c : Configuration FIo_Install.W C)
     (challenges : AspisR1PublicPreparation.r1_wire.Challenges) :
     let chosen := {c with boundaries:={c.boundaries with terminal:=fun _ _ _ _ => ok (.Ok value)}}
     (FIp_Install.configuration err chosen r).boundaries.terminal pub claims alpha challenges=ok (.Ok value) :=
-  FIp_Blockers.arbitrary_terminal err c r value pub claims alpha challenges
+  rfl
 #print axioms adopted
 #print axioms fixed
 #print axioms arbitrary
