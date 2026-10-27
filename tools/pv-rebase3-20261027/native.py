@@ -9,8 +9,9 @@ assert pre.returncode==0,pre.returncode
 env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='4',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(H/'native-target'),RUSTFLAGS='-C link-arg=-Wl,--threads=4')
 toolchain=subprocess.check_output(['/home/dombarker/.cargo/bin/rustc','-Vv'],text=True,cwd=W/'src')
 assert toolchain.startswith('rustc 1.94.1 '),toolchain
-(out/'command.json').write_text(json.dumps(dict(command=cmd,toolchain=toolchain,source_revision=(W/'source-revision.txt').read_text().strip(),env={k:env[k] for k in ['PATH','CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','RUSTFLAGS']},expected_time='optimized compilation' if cmd[0]=='cargo' else 'optimized complete retry-owner proof generation and P_R1 elimination'),indent=2)+'\n')
-run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(W/'capped.py'),str(out/'receipt'),'optimized compilation' if cmd[0]=='cargo' else 'optimized complete retry-owner proof generation and P_R1 elimination','--',*cmd]
+note='optimized compilation' if cmd[0]=='cargo' else ('static symbol/call extraction from the built binary' if any('binary-route.py' in x for x in cmd) else 'optimized complete retry-owner proof generation and P_R1 elimination')
+(out/'command.json').write_text(json.dumps(dict(command=cmd,toolchain=toolchain,source_revision=(W/'source-revision.txt').read_text().strip(),env={k:env[k] for k in ['PATH','CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','RUSTFLAGS']},expected_time=note),indent=2)+'\n')
+run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(W/'capped.py'),str(out/'receipt'),note,'--',*cmd]
 status=subprocess.run(run,cwd=W/'src',env=env).returncode
 if status:sys.exit(status)
 if cmd[0]=='cargo':

@@ -19,6 +19,8 @@ if mode in ['sbf','sbf-remaining']:
  for m in (['default','devnet','pool'] if mode=='sbf' else ['devnet','pool']):run('build.py','candidate','build-'+m+'-configured',m)
 elif mode=='native':
  run('native.py','candidate','build-devnet','cargo','build','--manifest-path','tools/r1-cost-probe/Cargo.toml','--release','--offline','--locked','-j','4','--features','r1p-check,aspis-r1-cost-probe/ct-host-prover','--bin','devnet_spend')
+elif mode=='route':
+ run('native.py','candidate','binary-route-audit','python3',str(H/'binary-route.py'))
 elif mode=='fixture':
  for who in ['research','candidate']:
   run('native.py',who,'build-fixture','cargo','build','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--example','prover_rw_gate','--features','optimized-terminal,r1p-check,ct-host-prover')
