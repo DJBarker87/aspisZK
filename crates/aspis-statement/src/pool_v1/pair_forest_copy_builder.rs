@@ -226,6 +226,7 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
 
 fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
+    let rec = match rec { Some(r) => Some(*r), None => None };
     let input = *input;
     let chg = *chg;
     let snapshot = *snapshot;

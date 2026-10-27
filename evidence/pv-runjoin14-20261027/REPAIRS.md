@@ -660,3 +660,28 @@ Repeated evaluation of the argument projection cannot panic or change values.
 All 72 returned arrays are identical, including zero recipient digests. No
 new allocation, I/O, panic/abort, signature or type change. M31 Copy derive
 is field.rs:22; witness Copy derives remain as recorded above.
+
+11. D277, own the optional note at entry, verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index 63b88b2ca0..06df9cddcb 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -226,6 +226,7 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
+ 
+ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
+            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
++    let rec = match rec { Some(r) => Some(*r), None => None };
+     let input = *input;
+     let chg = *chg;
+     let snapshot = *snapshot;
+```
+
+Repair 10 exits 2 (196.723s, 6,273,101,824 bytes peak, zero swap) at
+records:286:20–31 / InterpBorrowsCore.ml:629, copying r.salt from the
+borrowed optional note. Entry match now maps None to None and Some(&r)
+to Some(r), using its Copy derive payment_relation.rs:88. All later
+recipient reads and transfer discrimination operate on an identical owned
+optional value. The signature, types, returned values, panics/aborts,
+allocation and I/O behavior remain identical; no other function changes.
