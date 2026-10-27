@@ -1,0 +1,41 @@
+import RPt_FIo_M31MulBridge
+import ExtractedCurrentReducer
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.LPh.Native
+open Aeneas Aeneas.Std Result
+namespace F
+abbrev M := FIo_Native.aspis_core.field.M31
+abbrev C := FIo_Native.aspis_core.field.CM31
+abbrev Q := FIo_Native.aspis_core.field.QM31
+end F
+
+theorem m31_value (x y : U32) :
+    ∃ z, FIo_Native.aspis_core.field.M31.mul x y = ok z ∧
+      z.val = (x.val*y.val)%2147483647 ∧ z.val<2147483647 := by
+  rw [FIo_M31MulBridge.same, AspisR1CurrentWide.Proof.m31_mul_same]
+  exact ExtractedCurrentReducer.current_mul_mod x y
+
+theorem cm_scalar_value (x : F.C) (s : U32) :
+    ∃ z, FIo_Native.aspis_core.field.CM31.mul_m31 x s = ok z ∧
+      z.a.val = (x.a.val*s.val)%2147483647 ∧ z.a.val<2147483647 ∧
+      z.b.val = (x.b.val*s.val)%2147483647 ∧ z.b.val<2147483647 := by
+  obtain ⟨a,ha,va,ca⟩ := m31_value x.a s
+  obtain ⟨b,hb,vb,cb⟩ := m31_value x.b s
+  exact ⟨⟨a,b⟩,by simp only [FIo_Native.aspis_core.field.CM31.mul_m31,ha,hb,bind_tc_ok],va,ca,vb,cb⟩
+
+theorem qm_scalar_value (x : F.Q) (s : U32) :
+    ∃ z, FIo_Native.aspis_core.field.QM31.mul_m31 x s = ok z ∧
+      z.c0.a.val = (x.c0.a.val*s.val)%2147483647 ∧ z.c0.a.val<2147483647 ∧
+      z.c0.b.val = (x.c0.b.val*s.val)%2147483647 ∧ z.c0.b.val<2147483647 ∧
+      z.c1.a.val = (x.c1.a.val*s.val)%2147483647 ∧ z.c1.a.val<2147483647 ∧
+      z.c1.b.val = (x.c1.b.val*s.val)%2147483647 ∧ z.c1.b.val<2147483647 := by
+  obtain ⟨a,ha,va,ca,vb,cb⟩ := cm_scalar_value x.c0 s
+  obtain ⟨b,hb,vc,cc,vd,cd⟩ := cm_scalar_value x.c1 s
+  exact ⟨⟨a,b⟩,by simp only [FIo_Native.aspis_core.field.QM31.mul_m31,ha,hb,bind_tc_ok],va,ca,vb,cb,vc,cc,vd,cd⟩
+
+#print axioms m31_value
+#print axioms cm_scalar_value
+#print axioms qm_scalar_value
+end AspisR1.LPh.Native
+end
