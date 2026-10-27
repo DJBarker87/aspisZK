@@ -12449,3 +12449,25 @@ combined audit and candidate closure replay have not run. They are counted in th
 after those pass. Process fault: pv-alib2 used IDs in 52700-52799, which pv-batch3 had already
 spent, despite the D307 correction; receipts stay unambiguous by job directory, and its next run is
 restricted to a fresh block. Rows removed outright: 0. Privacy target not yet established.
+
+## D316 (Stream B) 2026-10-27 20:21 UTC: network recovered; batch3b result; alib3, reach6 and batch3c launched
+
+The coordinating Mac's link recovered at 20:18 UTC (round trip 21 ms, SSH under 1 s, three
+consecutive good checks); D315 was pushed after recovery. runjoin21 and batch2d resumed compiling on
+their own.
+
+batch3b used its 100-attempt budget (72 accepted, 28 rejected; audits 36797-36799 exit 0, standard
+axioms, revision 11d80043ca; ELF pins match; worst-case projected cost unchanged at +1.64%; no sorry in
+its 152 committed Lean files, the sorryAx seen mid-run being a rejected draft). It proves op134's
+emitted copy equal to the reference masks with complete Result behaviour, the mask-bit and row laws,
+sparse count bounds and non-vacuity, and adds arbitrary-carrier array/update and finite-loop
+transports for ops 117/121. Native original/copy association, dictionary installation and the
+op117/op121 universal equalities remain open; the seven extraction rewrites were not reached. Rows
+closed: 0.
+
+Relaunched with recorded unspent or fresh budgets: alib3 (25 attempts, 4 Kani; IDs 37600-37699; first
+the combined audit and focused closure replay that make V233/V265 non-provisional, then V184);
+reach6 (65 attempts; remainder of 37300-37399; first whether the INSTALLED op84 instance can catch
+on an admitted input, as a lemma or as a located finding); batch3c (100 attempts; IDs 37900-37999;
+the seven extraction rewrites first, capped at 40 attempts, then op134's native association and the
+op117/op121 equalities). Rows removed outright: 0. Privacy target not yet established.
