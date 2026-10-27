@@ -65,3 +65,10 @@ Attempt070 completed: FJe_FullPackedValue.value PASS,standard axioms only.
 Thus all three original packed VALUE/canonicality theorems are now checked in
 Lean(068/069/070). Step(2),and the requested whole-function Kani receipts,
 remain open. This changes no deployed premise or ledger count.
+
+Post-checkpoint:071 public packed interface PASS. 073 native channel row and
+whole converter correspondence PASS. Channel loop 074-077 exposed native
+pair-pattern versus projection-pattern normalization;077 hit the default
+200000-heartbeat isDefEq limit (15.4233s,3231024KiB,zero swap). No cap/heartbeat
+increase;the replacement isolates tuple reduction before recursive composition.
+K016 full first-word with actual-prefix bounds TIMEOUT180.2561s;receipt retained.
