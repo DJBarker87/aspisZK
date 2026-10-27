@@ -233,11 +233,11 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
     let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
     let mut w = RW {
         input_value: pair.value, output_value: out, change_value: chg.value,
-        sk: ZERO8, salt: ZERO8, bits: [0; 24], sibs: [[0; 8]; 24],
-        pair_first: ZERO8, pair_occupied: pair.pair_leaf.second_occupied.0,
-        pair_second: ZERO8, pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
-        recipient_owner: ZERO8, recipient_salt: ZERO8,
-        change_owner: ZERO8, change_salt: ZERO8,
+        sk: [0u32; 8], salt: [0u32; 8], bits: [0; 24], sibs: [[0; 8]; 24],
+        pair_first: [0u32; 8], pair_occupied: pair.pair_leaf.second_occupied.0,
+        pair_second: [0u32; 8], pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
+        recipient_owner: [0u32; 8], recipient_salt: [0u32; 8],
+        change_owner: [0u32; 8], change_salt: [0u32; 8],
     };
     let mut p = RP {
         transfer: false, asset: asset.0, next_pair_index: snapshot.next_pair_index,
