@@ -1,0 +1,9 @@
+# Broader admission audit repaired
+
+All 11 modules missing from the prior admission source resolution are git-tracked at entry HEAD b3ad0edf5b43d879f7b36abffdcb2d2fd30d0213. Their exact paths, blobs and sha256 are in admission-build-order.json, under h5; the complete 1,263-project-module source resolution has no unpinned module. The focused source resolution additionally records EJR/freeze precedence conflicts under h5'. No alternate cohort was selected.
+
+Every one of the 11 modules was rebuilt privately in runjoin23-lean/objects, in dependency order, in attempts38104–38114. Their original shared cache copies were excluded from the private link view for this rebuild. Attempt38101's missing companion import was retained; its replacement differs by the completed private companion cache view, without a cap increase. Refusals38100/38102/38103 launched no Lean and consumed zero compile budget; the three-minute retry intervals were enforced.
+
+Attempt38116 checks PV_RunJoin_AdmissionAudit23, including all six NativeFibre21 and NativeAdmitted21 roots. Exit0; axioms exactly propext, Classical.choice, Quot.sound; peakRSS4,957,917,184bytes, swap0. Per-module source revision/blob/hash, dependencies, wall time, RSS and axioms are in the indexed individual receipts. All5,673 external objects were verified under h4/SCOPE before the first compile; no external object was rebuilt. Previously accepted own private-cache proof sources are retained, with current authority/source checks and original receipt references. No other job's h5 object is reused for the 11 repaired modules.
+
+This is a focused closure-import/axioms audit, not a fresh full release dependency replay. The endpoint audit37099 remains reused at its recorded scope. No whole ledger row or endpoint premise is removed by this audit repair; deployed P and the capped three T fields are unchanged. Recount6 remains407 rows, OPEN86, CLOSED-ON-CANDIDATE44.
