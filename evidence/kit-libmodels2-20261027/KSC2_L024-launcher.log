@@ -1,0 +1,48 @@
+{"attempt": "KSC2_L024", "exit_status": 0, "wall_seconds": 4.378405255032703, "peak_rss_kib": "2627848", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.iter.traits.iterator.Iterator.collect.default : {Self B Item : Type} →
+  core.iter.traits.iterator.Iterator Self Item → core.iter.traits.collect.FromIterator B Item → Self → Result B :=
+fun {Self B Item} IteratorInst collectFromIteratorInst self =>
+  collectFromIteratorInst.from_iter (core.iter.traits.collect.IntoIterator.Blanket IteratorInst) self
+def Aeneas.Std.core.iter.traits.iterator.Iterator.rev.default : {Self : Type} →
+  Self → Result (core.iter.adapters.rev.Rev Self) :=
+fun {Self} self => Result.ok { iter := self }
+def Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate.default : {Self : Type} →
+  Self → Result (core.iter.adapters.enumerate.Enumerate Self) :=
+...
+r := self, count := 0#usize }
+def Aeneas.Std.core.iter.traits.iterator.Iterator.step_by.default : {Self : Type} →
+  Self → Usize → Result (core.iter.adapters.step_by.StepBy Self) :=
+fun {Self} self step_by =>
+  if ↑step_by = 0 then Result.fail Error.panic else Result.ok { iter := self, step_by := step_by }
+def Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  core.slice.iter.Iter T → Result (Option T × core.slice.iter.Iter T) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    Result.ok (some x, it)
+  else Result.ok (none, it)
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    Result.ok (some x, it, back)
+  else Result.ok (none, it, fun it x => it)
+KSC2_P7_PRESENT Aeneas.Std.core.iter.traits.iterator.Iterator.any.default: false
+KSC2_P7_PRESENT Aeneas.Std.core.iter.traits.iterator.Iterator.all.default: false
+KSC2_P7_PRESENT Aeneas.Std.core.iter.traits.iterator.Iterator.fold.default: false
+KSC2_P7_PRESENT Aeneas.Std.core.iter.traits.iterator.Iterator.map.default: false
+KSC2_P7_PRESENT Aeneas.Std.core.option.Option.ok_or: false
+KSC2_P7_PRESENT Aeneas.Std.core.result.Result.unwrap_or_else: false
+KSC2_P7_PRESENT Aeneas.Std.core.slice.iter.IterMut.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorMutT.next_back: false
+
+Running as unit: run-r506d3ff15d534259b965cb999dce8b21.scope; invocation ID: c67844f1b7c5436eaf55d2a9b57c8866

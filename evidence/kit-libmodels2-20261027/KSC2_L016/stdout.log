@@ -1,0 +1,51 @@
+KSC2_generated/KSC2_MutFold.lean:46:2: error: Tactic `apply` failed: could not unify the conclusion of `congrArg fun r => ?m.29`
+  ?m.30 ?m.27 = ?m.30 ?m.28
+with the goal
+  (do
+      let result ←
+        loop
+            (fun x =>
+              match x with
+              | (acc, state, closureState) => do
+                let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next state
+                match item with
+                  | none => ok (done (acc, stateNext, closureState))
+                  | some value => do
+                    let (accNext, closureNext) ← mutatingFoldValue.call_mut closureState (acc, value)
+                    ok (cont (accNext, stateNext, closureNext)))
+            (a, s, ())
+      ok (result.1, result.2.1)) =
+    do
+    let result ← loop foldStep (a, s, ())
+    ok (result.1, result.2.1)
+
+Note: The full type of `congrArg fun r => ?m.29` is
+  ?m.27 = ?m.28 → ?m.30 ?m.27 = ?m.30 ?m.28
+
+a : ℕ
+s : core.slice.iter.IterMut ℕ
+⊢ (do
+      let result ←
+        loop
+            (fun x =>
+              match x with
+              | (acc, state, closureState) => do
+                let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next state
+                match item with
+                  | none => ok (done (acc, stateNext, closureState))
+                  | some value => do
+                    let (accNext, closureNext) ← mutatingFoldValue.call_mut closureState (acc, value)
+                    ok (cont (accNext, stateNext, closureNext)))
+            (a, s, ())
+      ok (result.1, result.2.1)) =
+    do
+    let result ← loop foldStep (a, s, ())
+    ok (result.1, result.2.1)
+'KSC2.fold_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'KSC2.mutable_fold_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'KSC2.fold_body_eq' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step0' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step1' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step2' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KSC2.mutable_fold_loses_writeback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

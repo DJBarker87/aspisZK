@@ -1,0 +1,60 @@
+KSC2_generated/KSC2_MutFold.lean:33:4: error: Invalid `←` modifier: `foldStep` is a declaration name to be unfolded
+
+Hint: The simplifier cannot "refold" definitions by name. Use `rw` for this instead,
+                      or use the `←` simp modifier with an equational lemma for `foldStep`.
+KSC2_generated/KSC2_MutFold.lean:34:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (n, s) ←
+      do
+        let result ←
+          loop
+              (fun x => do
+                let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next x.2.1
+                match item with
+                  | none => ok (done (x.1, stateNext, x.2.2))
+                  | some value => do
+                    let (accNext, closureNext) ← mutatingFoldValue.call_mut x.2.2 (x.1, value)
+                    ok (cont (accNext, stateNext, closureNext)))
+              (0, { slice := two }, ())
+        ok (result.1, result.2.1)
+    ok (n, ↑s.slice)
+is not definitionally equal to the right-hand side
+  ok (23, [1, 2])
+
+⊢ (do
+      let (n, s) ←
+        do
+          let result ←
+            loop
+                (fun x => do
+                  let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next x.2.1
+                  match item with
+                    | none => ok (done (x.1, stateNext, x.2.2))
+                    | some value => do
+                      let (accNext, closureNext) ← mutatingFoldValue.call_mut x.2.2 (x.1, value)
+                      ok (cont (accNext, stateNext, closureNext)))
+                (0, { slice := two }, ())
+          ok (result.1, result.2.1)
+      ok (n, ↑s.slice)) =
+    ok (23, [1, 2])
+KSC2_generated/KSC2_MutFold.lean:33:16: warning: This simp argument is unused:
+  fold_loop
+
+Hint: Omit it from the simp argument list.
+  simp only [KSA_Isolated.core.slice.iter.IterMut.Insts.CoreIterTraitsIteratorIteratorMutAT.fold,
+      ← foldStep, f̵o̵l̵d̵_̵l̵o̵o̵p̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+KSC2_generated/KSC2_MutFold.lean:33:27: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [KSA_Isolated.core.slice.iter.IterMut.Insts.CoreIterTraitsIteratorIteratorMutAT.fold,
+      ← foldStep, fold_loop,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'KSC2.fold_step0' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step1' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step2' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KSC2.mutable_fold_loses_writeback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

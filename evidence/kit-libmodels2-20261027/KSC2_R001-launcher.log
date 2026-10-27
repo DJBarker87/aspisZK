@@ -1,0 +1,43 @@
+{"attempt": "KSC2_R001", "exit_status": 1, "wall_seconds": 1.746737649955321, "peak_rss_kib": "119636", "swaps": "0", "print_axioms": "N/A: rust"}
+OPTIMIZED STD-ONLY DIFFERENTIAL ['/home/dombarker/.cargo/bin/rustc', '--edition=2021', '--test', '-C', 'opt-level=3', '-C', 'overflow-checks=yes', '/home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs', '-o', '/home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_std_tests']
+error[E0369]: binary operation `==` cannot be applied to type `Result<[i32; 3], TryFromSliceError>`
+  --> /home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs:71:16
+   |
+71 |  let s=[1,2,3];assert_eq!(<[i32;3]>::try_from(s.as_slice()),Ok(s));assert!(<[i32;2]>::try_from(s.as_slice()).is_err());assert_eq!(<[...
+   |                ^^^^^^^
+...
+t<[i32; 3], TryFromSliceError>`
+  --> /home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs:71:16
+   |
+71 |  let s=[1,2,3];assert_eq!(<[i32;3]>::try_from(s.as_slice()),Ok(s));assert!(<[i32;2]>::try_from(s.as_slice()).is_err());assert_eq!(<[...
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                |
+   |                Result<[i32; 3], TryFromSliceError>
+   |                Result<[i32; 3], TryFromSliceError>
+   |
+note: `TryFromSliceError` does not implement `PartialEq`
+  --> /rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1/library/core/src/array/mod.rs:182:0
+   |
+   = note: `TryFromSliceError` is defined in another crate
+   = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0369]: binary operation `==` cannot be applied to type `Result<[i32; 0], TryFromSliceError>`
+  --> /home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs:71:120
+   |
+71 | ....as_slice()).is_err());assert_eq!(<[i32;0]>::try_from(&[][..]),Ok([]));
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                           |
+   |                           Result<[i32; 0], TryFromSliceError>
+   |                           Result<[i32; 0], TryFromSliceError>
+   |
+note: `TryFromSliceError` does not implement `PartialEq`
+  --> /rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1/library/core/src/array/mod.rs:182:0
+   |
+   = note: `TryFromSliceError` is defined in another crate
+   = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0369`.
+
+Running as unit: run-r445a0beff4fb4550a4ffa77370f0c8e0.scope; invocation ID: 3e6aaac54ca744d89587c1beef9912e3

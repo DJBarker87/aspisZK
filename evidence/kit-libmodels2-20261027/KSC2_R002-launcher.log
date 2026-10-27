@@ -1,0 +1,42 @@
+{"attempt": "KSC2_R002", "exit_status": 0, "wall_seconds": 1.5772943299962208, "peak_rss_kib": "151128", "swaps": "0", "print_axioms": "N/A: rust"}
+OPTIMIZED STD-ONLY DIFFERENTIAL ['/home/dombarker/.cargo/bin/rustc', '--edition=2021', '--test', '-C', 'opt-level=3', '-C', 'overflow-checks=yes', '/home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs', '-o', '/home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_std_tests']
+
+running 5 tests
+test KSC2::from_fn_and_array_slice_controls ... 
+thread 'KSC2::from_fn_and_array_slice_controls' (3836294) panicked at /home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs:70:115:
+expected from_fn panic
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+from_fn ascending state/empty/panic; sli
+...
+ct-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs:26:40:
+expected any closure panic
+
+thread 'KSC2::iterator_defaults_and_range' (3836295) panicked at /home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs:27:45:
+expected fold closure panic
+range/default: empty, exhaustive, early stop, stateful, lazy, zero step and closure panic
+ok
+test KSC2::mutable_borrow_writeback_counterexamples ... next_back after next on [7]: native None, kit Some(7)
+any/all short-circuit retain [11,2]; fold retains [11,12]; kit callbacks have no item write-back channel
+
+thread 'KSC2::mutable_borrow_writeback_counterexamples' (3836296) panicked at /rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1/library/core/src/iter/adapters/step_by.rs:35:9:
+assertion failed: step != 0
+collect/enumerate/step_by/rev/chunks_exact_mut preserve mutable aliases; zero step panics
+ok
+test KSC2::option_result_branches ... 
+thread 'KSC2::option_result_branches' (3836297) panicked at /home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs:9:60:
+expected unwrap closure panic
+ok_or: Some/None; unwrap_or_else: skip/call/panic
+ok
+test KSC2::shared_slice_and_windows_chunks ... 
+thread 'KSC2::shared_slice_and_windows_chunks' (3836298) panicked at /home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs:48:36:
+window size must be non-zero
+
+thread 'KSC2::shared_slice_and_windows_chunks' (3836298) panicked at /home/dombarker/project-offloads/codex-cx-libmodel2-cache-20261027/KSC2_native_test.rs:49:36:
+chunk size must be non-zero
+shared next_back incl crossed cursors; windows empty/one/overlap/oversize/zero; chunks remainder/zero
+ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+Running as unit: run-rb47b4c5f90b64f87b50bba04525e6751.scope; invocation ID: 934ee0bd318d4c619238993a9df49398

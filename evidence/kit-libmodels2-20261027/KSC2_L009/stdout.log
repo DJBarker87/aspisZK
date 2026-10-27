@@ -1,0 +1,56 @@
+KSC2_generated/KSC2_MutFold.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  loop foldStep (0, { slice := two }, ())
+in the target expression
+  (do
+      let (n, s) ←
+        do
+          let result ←
+            loop
+                (fun x =>
+                  match x with
+                  | (acc, state, closureState) => do
+                    let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next state
+                    match item with
+                      | none => ok (done (acc, stateNext, closureState))
+                      | some value => do
+                        let (accNext, closureNext) ← mutatingFoldValue.call_mut closureState (acc, value)
+                        ok (cont (accNext, stateNext, closureNext)))
+                (0, { slice := two }, ())
+          ok (result.1, result.2.1)
+      ok (n, ↑s.slice)) =
+    ok (23, [1, 2])
+
+⊢ (do
+      let (n, s) ←
+        do
+          let result ←
+            loop
+                (fun x =>
+                  match x with
+                  | (acc, state, closureState) => do
+                    let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next state
+                    match item with
+                      | none => ok (done (acc, stateNext, closureState))
+                      | some value => do
+                        let (accNext, closureNext) ← mutatingFoldValue.call_mut closureState (acc, value)
+                        ok (cont (accNext, stateNext, closureNext)))
+                (0, { slice := two }, ())
+          ok (result.1, result.2.1)
+      ok (n, ↑s.slice)) =
+    ok (23, [1, 2])
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s.slice
+  has type
+    Slice ℕ
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s.slice
+'KSC2.fold_step0' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step1' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step2' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KSC2.mutable_fold_loses_writeback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
