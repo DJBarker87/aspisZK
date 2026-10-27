@@ -26,7 +26,9 @@ theorem payload [ExternalLinear] [Records]
   rcases publicInput with ⟨pubAnchor,pubNullifier,pubRecipient,pubChange,pubAsset⟩
   cases pubRecipient <;> unfold pair_forest_trace.compile_forest_from_copies at h
   all_goals
-    rw [PV_Src_NativeDirections.run_eq input] at h
+    have hd := PV_Src_NativeDirections.run_eq input
+    unfold PV_Src_NativeDirections.run at hd
+    with_unfolding_all rw [hd] at h
     simp only [PV_RunJoin_ValueBits20.source,bind_tc_ok] at h
     repeat' first
       | (pv_peel h with value hvalue)
