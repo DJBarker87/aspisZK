@@ -1,0 +1,67 @@
+{
+  "sources": [
+    "LPe_src/Cargo.lock",
+    "LPe_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "LPe_src/crates/aspis-r1-cost-probe/src/LPe_replay.rs",
+    "LPe_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+  ],
+  "source_revision": "c8dc278c5f4028d718db83f5c7e40e87d9790cb5",
+  "source_tree_dirty": true,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "LPe_K009",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-5-20261027/LPe_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-5-20261027/LPe_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "LPe_replay::LPe_powers_three_limb0",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation, then named solver stage powers_three_limb0",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "LPe_K009-graph-check.json"
+  },
+  "reservation_retries": 0,
+  "exit_status": 1,
+  "wall_seconds": 92.04759692895459,
+  "peak_rss_kib": "662548",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rb3e796c682da439f955945b6b67fb9f8.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "699482112",
+  "source_hashes": {
+    "LPe_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "LPe_src/crates/aspis-r1-cost-probe/src/lib.rs": "fc3f37a78b53b6ec0c867c94d08f02ff5d28bdc3f303e812d92bc524da912336",
+    "LPe_src/crates/aspis-r1-cost-probe/src/LPe_replay.rs": "a29a36838f323607f8a7eded7462e6d63be23fd5820177659133a175198d96e0",
+    "LPe_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs": "d1bab7ff74d880cb89a4ec7fa93ea1e79797fcec73b74cc1c390659b8468f73b"
+  },
+  "print_axioms": "N/A: kani"
+}
