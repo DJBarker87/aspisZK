@@ -5,6 +5,8 @@ P=Path(__file__).resolve().parent; R=P.parents[1]
 B='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'; HOST='dombarker@100.108.41.90'
 def ssh(cmd,**kw):return subprocess.run(['ssh',HOST,cmd],**kw)
 n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100
+if n==70 and mod!='JGy_Review70':
+ print('Attempt70 is reserved for the required current-root/obstruction audit; no Lean launched.');sys.exit(70)
 relative_source=mod.replace('.','/')+'.lean'
 source_file=R/'lean'/relative_source
 assert mod.startswith('JGy_')

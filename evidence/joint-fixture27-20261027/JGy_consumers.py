@@ -30,6 +30,8 @@ for i in range(3):
   layers[k].append(m)
  for k,ms in enumerate(layers):
   if ms:parts.append((f'JGy_Tree{i}Part{k}',ms))
+splits=json.loads((P/'JGy_SPLITS.json').read_text()) if (P/'JGy_SPLITS.json').exists() else {}
+parts=[entry for mod,ms in parts for entry in ([(mod+'A',ms[:splits[mod]]),(mod+'B',ms[splits[mod]:])] if mod in splits else [(mod,ms)])]
 modmap={**certs,**{m:mod for mod,ms in parts for m in ms}}
 # Identify namespace roots exported by the replaced modules, including multi-namespace files.
 nsmap={}
