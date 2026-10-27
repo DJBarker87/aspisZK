@@ -8,6 +8,13 @@ Stopped at the literal fixture-record gate; differential0/1,000. Timing gate was
 
 Fresh candidate rebuilds match all three requested SHA256 pins; see `elf-summary.json` and per-build receipts. Default 1,563,728 bytes,54.250s,684,548KiB RSS; devnet 1,563,728 bytes,35.294s,685,392KiB; Pool605,704 bytes,47.509s,677,856KiB. All exit0/swap0. The initial default launch failed before compilation on a non-executable job-local diagnostic wrapper; mode corrected, distinct retry receipt retained. No pin mismatch. `source-identity.json` verifies every exported input (7,290 files) against exact git source bytes.
 
+
+|ELF|SHA256|
+|---|---|
+|default|`f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`|
+|devnet|`63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`|
+|pool|`121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`|
+
 ## Stage 2: pinned client and route — PASS
 
 **recipe features pending owner approval; toolchain pinned 1.94.1**
@@ -43,3 +50,15 @@ Stopped before differential submission under the requested fixture disagreement 
 |withdrawal|+0.236111878519|+1.641946304%|
 
 Full op223+batch1+batch2+batch3 projection is **unknown**: no per-call timing table for op223 or batch1(230/254/258) is present in their inherited packets, route2 or design. Available per-call JSON tables in inherited evidence cover only batches2/3. Those missing terms are not assumed zero. Batch2 inclusive materialize/raw accounting overlaps; tables also use different fixture coins. The subtotal is a mixed-fixture projection, neither an independent whole-prover measurement nor a worst-case/formal cost bound. No new benchmark was launched.
+
+## Stage 6: timing plan, cleanup and premise accounting
+
+**No timing gate was run.** `TIMING-PLAN.md` retains the exact future quiet command, setup, controls,5 same-coin processes per side,median<15s and<=1.10×shipped prover requirements, and quiet/admission guards. It also retains the exact not-run differential command and inherited corpus driver. Future setup and prerequisite acceptance are required; this stopped job has not installed or run the combined cohort.
+
+`cleanup.json` records deletion of this job’s SBF/native Cargo targets and retention of all3 generated SBF keys in place at mode0600. Keys destroyed0; deployments0;transactions0;refundsN/A because keys were retained. Candidate outputs,binaries and artifacts remain host-side at `/home/dombarker/project-offloads/codex-pv-integ4-20261027/`; no binary/key/ELF/olean is committed. Root checkout,other worktrees,and shared sources/objects untouched.
+
+Only job-private evidence and runner files changed. No implementation or Lean source changed. No Lean module needed recompiling:0/20 attempts,IDs39500–39599 entirely unused;Kani0/0. `scope-and-premises.json` records before/after obligations:removed0,added0,weakened0,changed0;T stays exactly entropy_law,entropy_kernel,observation. Runtime checks do not remove source/executable adequacy,E1/E2,real RunJoin,OS failure independence,inversion boundary,client proof-account adoption,L1/L2/L3 or coherent endpoint/deployment replay/axioms obligations. No simulator or observer was weakened. **Target not yet established.**
+
+Stop reason: raw result record bytes disagree in elapsed seconds only under the literal task criterion. Next deliverable: lead resolution of that criterion, then the fresh1,000-pair differential againstc57a344726; supply missing op223/batch1 cost tables for a full projection; quiet timing remains a separate lead-coordinated gate. No push.
+
+`COMMIT-LOG.txt` records stage commits before the final handoff commit. `validation.json` records receipt/limit/source checks and the runner syntax check.
