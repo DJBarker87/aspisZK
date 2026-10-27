@@ -19,12 +19,14 @@ chunks=[ordered[i:i+30] for i in range(0,200,30)]
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();selected=chunks[idx] if single is None else [];sources={}
 if single:
  import re
- m=single.replace('/','.');path='docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean'
- data=subprocess.check_output(['git','show',rev+':'+path]);blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip()
- imports=re.findall(r'^import\s+(\S+)',data.decode(),re.M)
- row=dict(module=m,authority='h5',path=path,revision=rev,blob=blob,sha256=hashlib.sha256(data).hexdigest(),imports=imports)
+ m=single.replace('/','.')
  if m in mapping:
   row=mapping[m]
+ else:
+  path='docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean'
+  data=subprocess.check_output(['git','show',rev+':'+path]);blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip()
+  imports=re.findall(r'^import\s+(\S+)',data.decode(),re.M)
+  row=dict(module=m,authority='h5',path=path,revision=rev,blob=blob,sha256=hashlib.sha256(data).hexdigest(),imports=imports)
  mapping[m]=row;selected=[row]
 
 def trans(m,s):
