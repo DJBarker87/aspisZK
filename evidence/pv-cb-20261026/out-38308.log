@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_Op223LimbSupport.lean:12:56: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+f : Compressor
+trace : Trace
+value : Limb
+⊢ (match value with
+    | aspis_statement.pool_v1.pair_trace.PoolV1PairTupleLimbV1.Zero => do
+      let m ← aspis_core.field.M31.ZERO
+      ok (core.result.Result.Ok m)
+    | aspis_statement.pool_v1.pair_trace.PoolV1PairTupleLimbV1.Cell source offset => do
+      let column ← lift (UScalar.cast UScalarTy.Usize source.cell.column)
+      let row ← lift (UScalar.cast UScalarTy.Usize source.cell.row)
+      match source.bank with
+        | aspis_statement.pool_v1.pair_trace.PoolV1PairTraceBankV1.Stable => do
+          let s ← lift trace.stable.c1.to_slice
+          host_semantic.copy_cell s column row offset
+        | aspis_statement.pool_v1.pair_trace.PoolV1PairTraceBankV1.Late => do
+          let s ← lift trace.late.to_slice
+          host_semantic.copy_cell s column row offset) =
+    match value with
+    | aspis_statement.pool_v1.pair_trace.PoolV1PairTupleLimbV1.Zero => do
+      let m ← aspis_core.field.M31.ZERO
+      ok (core.result.Result.Ok m)
+    | aspis_statement.pool_v1.pair_trace.PoolV1PairTupleLimbV1.Cell source offset => do
+      let column ← lift (UScalar.cast UScalarTy.Usize source.cell.column)
+      let row ← lift (UScalar.cast UScalarTy.Usize source.cell.row)
+      match source.bank with
+        | aspis_statement.pool_v1.pair_trace.PoolV1PairTraceBankV1.Stable => do
+          let s ← lift trace.stable.c1.to_slice
+          host_semantic.copy_cell s column row offset
+        | aspis_statement.pool_v1.pair_trace.PoolV1PairTraceBankV1.Late => do
+          let s ← lift trace.late.to_slice
+          host_semantic.copy_cell s column row offset
+'R1Z.PV_CB_Op223LimbSupport.limb' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

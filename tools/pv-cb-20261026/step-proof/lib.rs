@@ -6,6 +6,9 @@ pub mod captured_mask;
 pub mod owned_points;
 pub mod owned_wide_new;
 pub mod owned_compress;
+pub mod owned_pole;
+#[path="../source/crates/aspis-r1-cost-probe/src/ct_pole.rs"]
+pub mod shipped_pole;
 #[path="../source-proof/owned_circle.rs"]
 pub mod owned_circle;
 #[cfg(not(pv_cb_extract))]
@@ -14,6 +17,33 @@ mod checks {
     use super::captured_mask as shipped;
     use super::owned::steps as reference;
     fn q(x:[u32;4])->QM31 {QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
+    fn cq(words:[u32;4])->QM31 {
+        for word in words { kani::assume(word < aspis_core::field::P); }
+        q(words)
+    }
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn pole1024_reference() {
+        let words:[[[[u32;4];2];2];1024]=kani::any();
+        let mut values=[[[QM31::ZERO;2];2];1024];
+        for row in 0..1024 { for side in 0..2 { for slot in 0..2 {
+            values[row][side][slot]=q(words[row][side][slot]);
+        } } }
+        let masks:[u16;64]=kani::any(); let chi=q(kani::any());
+        assert_eq!(super::shipped_pole::all_slots_clear(&values,&masks,chi),
+                   super::owned_pole::all_slots_clear(&values,&masks,chi));
+    }
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn compress16_canonical_reference() {
+        let tag_word:u32=kani::any(); kani::assume(tag_word<aspis_core::field::P);
+        let tag=M31(tag_word);
+        let words:[u32;16]=kani::any(); let mut values=[M31::ZERO;16];
+        for i in 0..16 { kani::assume(words[i]<aspis_core::field::P); values[i]=M31(words[i]); }
+        let lambda=cq(kani::any());
+        same(aspis_statement::logup::compress_tagged_tuple(tag,&values,lambda),
+             super::owned_compress::compress(tag,&values,lambda));
+    }
     fn same(a:QM31,b:QM31) {
         assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);
         assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
@@ -183,6 +213,44 @@ mod checks {
     power_word!(power26_word1, 1);
     power_word!(power26_word2, 2);
     power_word!(power26_word3, 3);
+
+    macro_rules! canonical_horner_word {
+        ($name:ident, $coordinate:expr) => {
+            #[kani::proof]
+            #[kani::unwind(30)]
+            fn $name() {
+                let term = cq(kani::any());
+                let coefficients = [term; 27];
+                let index: usize = kani::any();
+                kani::assume(index < 26);
+                let prepared = PreparedQm31Multiplier::new(cq(kani::any()));
+                let state = cq(kani::any());
+                let actual = shipped::horner_step(&coefficients, prepared, index, state);
+                let expected = reference::horner_step(&coefficients, prepared, index, state);
+                assert_eq!(limb(actual, $coordinate), limb(expected, $coordinate));
+            }
+        };
+    }
+    macro_rules! canonical_power_word {
+        ($name:ident, $coordinate:expr) => {
+            #[kani::proof]
+            #[kani::unwind(6)]
+            fn $name() {
+                let input = cq(kani::any());
+                let actual = shipped::power26(input);
+                let expected = reference::power26_step(input);
+                assert_eq!(limb(actual, $coordinate), limb(expected, $coordinate));
+            }
+        };
+    }
+    canonical_horner_word!(canonical_horner_word0, 0);
+    canonical_horner_word!(canonical_horner_word1, 1);
+    canonical_horner_word!(canonical_horner_word2, 2);
+    canonical_horner_word!(canonical_horner_word3, 3);
+    canonical_power_word!(canonical_power26_word0, 0);
+    canonical_power_word!(canonical_power26_word1, 1);
+    canonical_power_word!(canonical_power26_word2, 2);
+    canonical_power_word!(canonical_power26_word3, 3);
 
     #[kani::proof]
     #[kani::unwind(40)]
