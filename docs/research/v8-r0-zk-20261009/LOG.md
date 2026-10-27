@@ -10783,3 +10783,28 @@ c1fa8fe3cbd248ef01cf2cc7a54496bb16fe7722ad655599e31c7a60a27d6d27), new file sha2
 ```
 Stream B's next job ranges: 39300-39599, 39600-39899, then 40000+ in blocks of 300. Privacy target not
 yet established.
+
+## D239 (Stream B) 2026-10-27 01:50 UTC: Recount 3 merged (OPEN 110 → 103, CLOSED-ON-CANDIDATE 40 → 27 after corrections); lead claims corrected; wire job launched
+
+pv-recount3 (`codex/pv-recount3-20261027`, merged a77e372c08; 20/20 statement checks, 19 green, one
+missing-object diagnostic; no proofs, no Kani; worktree and branch removed). Totals recount 2 → 3: rows
+403 → 407 (T/P/C 26/376/5); OPEN 110 → 103; REDUCED 154 → 176; EVIDENCED 12 → 14 (timing D216 EVIDENCED);
+CLOSED-ON-RESEARCH 87 → 87; CLOSED-ON-CANDIDATE 40 → 27. OPEN buckets a/b/c 51/50/9 → 44/51/8. New rows:
+V403 (M31 canonical domain at op121 callers, D234), V404/V405 (transfer/withdrawal per-fixture execution
+reachability). "In headline closure?" for the 27 candidate closures: research 0, candidate 17, neither
+10: import paths are organisation, not deployed discharge. CORRECTIONS ACCEPTED by the lead: (1) 18
+candidate "source closure" labels were installed/selected-reference equations, not complete
+extracted-source theorems, and are REDUCED (reporting correction, no equation disproved); (2) D226 double-
+counted op229 (cb and cb3); (3) D235 mapped five operation numbers to wrong row IDs: the cb4 closures are
+ops 84, 105, 107, 109, 118 and their row IDs are those in ROWS3.md, not the V-numbers I wrote; (4) D219's
+whole-row V269 Formatter closure is unsupported (only the axiom slice is closed; V270's scoped diagnostic
+is the 27th closure); (5) D223's inventory correction is supported. Op51 is recorded OPEN at the recount's
+pinned heads; the later cb5 arbitrary-carrier repair (29297acd5c) is disclosed and will be credited at
+recount 4 after audit. RunJoin stays 2 → 2 / 8 → 8 / 6 → 6: the constructed-candidate reductions
+(initial, causal, identity, common_public) do not reduce deployed P; T remains three proposed fields
+awaiting owner adoption. Next independent target named by the recount: V240/op223 (= V164's
+`P_source_p6`), already assigned to cb6. Launched pv-wire on the pv-join worktree (IDs 39300-39599, 60
+Lean): merge pv-cb and pv-cb3 heads into the join branch (git-only), wire every unconsumed candidate
+closure into the aggregate caller's closure with per-op consumer theorems, write IMPORT-CHAIN.md for
+recount 4, combined audit. Six slots: srcid6, rw21, cb6, cb7, runjoin10, wire. Rows removed outright: 0.
+Privacy target not yet established.
