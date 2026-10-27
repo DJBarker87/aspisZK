@@ -84,4 +84,6 @@ all own scopes were inactive. Exact cleanup receipt FJd_cleanup.json. Other
 jobs' solver files, the read-only corpus and coherent Lean objects were kept.
 The final harness source matches K004's compiled snapshot; its unrun16-cell
 split proposal is archived separately. No kernel/source trust is claimed from
-that timeout. `git diff --check` passed before the final evidence commit.
+that timeout. `git diff --check -- lean` passes. Full evidence whitespace checking flags
+one trailing-space line in the raw K004 compiler stdout; that original
+measurement log is deliberately retained byte-for-byte.
