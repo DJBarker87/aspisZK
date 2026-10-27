@@ -6,7 +6,7 @@ Ledger method: atomic quantified families, SAME witness, shared once, L185=L159
 alias. Removed/added/changed 0/0/0; delta T0/P0/G0/C0. No game, carrier,
 failure event, quantifier, security metric or trust change.
 
-This is an in-progress ledger. No entire native leaf is CLOSED yet.
+Final ledger. No entire native leaf is CLOSED. The K009 tail stage and native28-value canonical-producer stage are CLOSED on their exact domains; whole-source/native carrier joins below remain open.
 
 | Leaf | Exact open stage |
 |---|---|
@@ -25,3 +25,35 @@ Inherited checks/proofs are in LPa_LEAVES.md. A new passing stage is only that
 stage on its documented domain, never a deployment certificate. Local zero
 and nonzero canonical witnesses exist; no SAME-witness joint inhabitant of
 all top premises is currently supplied. No Kani result is made a Lean axiom.
+
+## Final validation and non-vacuity
+
+Budgets EXHAUSTED:60/60 Lean (51PASS/9FAIL,including40 unchanged builds),
+20/20 Kani (8PASS/11TIMEOUT/1compile failure). Stop; no further prover run under
+this allocation. LPc_Verification.json reports zero consistency errors. The
+final L060 audit checks21 new theorem names and10 inherited leaf models:
+only propext/Classical.choice/Quot.sound (or none). Failed sorryAx diagnostics
+are excluded. L060 waited for two refused quiet-window admissions, then ran
+with the unchanged caps; no marker, launcher or limit was edited.
+
+LPc.Nonvacuity.boundary_inhabited constructs an actual28-entry canonical zero
+polynomial accepted by the supplied boundary model, using symbolic fold
+induction. Native domains admit canonical zero inputs; early error classes
+admit a P limb in their first value. These are local witnesses. The failed
+L059 N1 decoder witness is NOT a result, and no joint SAME-witness inhabitant
+of all deployed premises is supplied.
+
+Per-run receipts include exact command,target,revision,source/dependency hashes,
+exit,wall,RSS,cgroup peak,swap and printed axioms. Lean wall sum78.669769853s,
+peak2710992KiB,swap0. Kani wall sum1363.493775003s,peak6495652KiB,cgroup peak
+6667509760B,swap0. One scope at a time,6G/8G/swap0/tasks64,-M7000,optimized
+native profile. All input variants are retained as patches. Shipped crates/
+and programs/ remain byte-identical; scratch-only rule waives ELF rebuild.
+Inherited ELF pins are not freshly confirmed. No L187/full-release replay or
+whole-top formatter reachability result is claimed.
+
+Own384268614-byte Rust cache and6298616-byte Lean cache were hashed and removed.
+Shared coherent objects, source snapshots, other workers and wallet/account
+keys are untouched. No binaries are committed. Source/runtime/source-to-ELF
+association and SAME actual caller installation remain required before any
+whole-leaf or security-top credit. Target not yet established.

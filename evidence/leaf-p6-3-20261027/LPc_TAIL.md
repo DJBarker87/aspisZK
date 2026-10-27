@@ -25,8 +25,8 @@ exact five-range model readset law. All accepted theorem axioms are standard.
 
 Nine failed Lean elaborations among L001..059 are diagnostic only; their
 sorryAx outputs are rejected. L059's separate zero-canonical/N1 non-vacuity
-attempt fails and is not imported. The final attempt is reserved for a smaller
-local witness plus batched audit; the failed N1 witness is not a result.
+attempt fails and is not imported. The final L060 smaller full28 local witness and batched audit PASS; the failed
+N1 witness is not a result.
 No top premise removed, no whole leaf or deployment association credited.
 Before/after ARX_Root.deployed and ledger remain unchanged; joint top
 non-vacuity and the100-bit target are not established.
