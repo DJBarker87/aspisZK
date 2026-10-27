@@ -54,5 +54,44 @@
     "Kani": 0
   },
   "no_tool_or_library_change": true,
-  "pending_clarification": "Can pinned Charon rerun on identical source/features with different kit selectors to expose required bodies?"
+  "pending_clarification": "Can pinned Charon rerun on identical source/features with different kit selectors to expose required bodies?",
+  "feasibility_runs": [
+    {
+      "attempt": "XRc_001",
+      "mask": [
+        26,
+        27
+      ],
+      "result": "Failure: Markers remain after collapsing a context",
+      "failing_function": "compact::expand_values",
+      "source": "compact.rs:131:4-134:5",
+      "status": "incomplete kit; missing required bodies unchanged"
+    },
+    {
+      "attempt": "XRc_002",
+      "mask": [
+        26,
+        27,
+        40
+      ],
+      "status": "failed",
+      "result": "Failure: There should be no bottoms in the value",
+      "failing_function": "candidate::wide_view",
+      "source": "candidate.rs:76:0-88:1"
+    },
+    {
+      "attempt": "XRc_003",
+      "mask": [
+        26,
+        27,
+        40,
+        42
+      ],
+      "result": "exit 0; emitted incomplete Types/Funs",
+      "status": "NOT complete requested kit; original required body gaps remain"
+    }
+  ],
+  "additional_bisection_runs_used": 2,
+  "extraction_invocations_used": 3,
+  "further_same_LLBC_bisection": "not authorized; two additional runs used"
 }
