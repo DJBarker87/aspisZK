@@ -1,0 +1,52 @@
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Prod (Option T)
+        (Prod (core.slice.iter.IterMut T) (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T))) :=
+fun {T} it =>
+  @dite
+    (Result
+      (Prod (Option T)
+        (Prod (core.slice.iter.IterMut T) (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T))))
+    (@LT.lt Nat instLTNat (@core.slice.iter.IterMut.i T it)
+      (@UScalar.val UScalarTy.Usize (@Slice.len T (@core.slice.iter.IterMut.slice T it))))
+    ((@core.slice.iter.IterMut.i T it).decLt
+      (@UScalar.val UScalarTy.Usize (@Slice.len T (@core.slice.iter.IterMut.slice T it))))
+    (fun h =>
+      have x :=
+        @getElem (Slice T) Nat T
+          (fun a i =>
+            @LT.lt Nat instLTNat i
+              (@List.length T (@Subtype.val (List T) (fun l => @LE.le Nat instLENat (@List.length T l) Usize.max) a)))
+          (@instGetElemSliceNatLtLengthValListLeMax T) (@core.slice.iter.IterMut.slice T it)
+          (@core.slice.iter.IterMut.i T it) h;
+      have i := @core.slice.iter.IterMut.i T it;
+      have it :=
+        @core.slice.iter.IterMut.mk T (@core.slice.iter.IterMut.slice T it)
+          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) i
+            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))));
+      have back := fun it' x =>
+        @core.slice.iter.IteratorIterMut.next.match_1 T (fun x => core.slice.iter.IterMut T) x (fun _ => it') fun x =>
+          @core.slice.iter.IterMut.mk T (@Slice.setAtNat T (@core.slice.iter.IterMut.slice T it') i x)
+            (@core.slice.iter.IterMut.i T it');
+      @ok
+        (Prod (Option T)
+          (Prod (core.slice.iter.IterMut T) (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)))
+        (@Prod.mk (Option T)
+          (Prod (core.slice.iter.IterMut T) (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T))
+          (@some T x)
+          (@Prod.mk (core.slice.iter.IterMut T) (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T) it
+            back)))
+    fun h =>
+    @ok
+      (Prod (Option T)
+        (Prod (core.slice.iter.IterMut T) (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)))
+      (@Prod.mk (Option T)
+        (Prod (core.slice.iter.IterMut T) (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) (@none T)
+        (@Prod.mk (core.slice.iter.IterMut T) (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T) it
+          fun it x => it))
+XRz_generated/XRz_NextDiag.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.getElem_eq`
+XRz_generated/XRz_NextDiag.lean:6:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.getElem_val`
+XRz_generated/XRz_NextDiag.lean:7:7: error(lean.unknownIdentifier): Unknown identifier `core.slice.iter.IteratorIterMut.next_spec`
+Lean.Meta.withTransparency.{u_1} {n : Type → Type u_1} [MonadControlT Lean.MetaM n] [Monad n] {α : Type}
+  (mode : Lean.Meta.TransparencyMode) : n α → n α

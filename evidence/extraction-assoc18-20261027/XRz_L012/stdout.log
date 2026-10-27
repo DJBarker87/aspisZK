@@ -1,0 +1,50 @@
+XRz_generated/XRz_FinishBody.lean:24:21: error: Tactic `rfl` failed: The left-hand side
+  have x := { slice := w, i := ↑i }.slice[{ slice := w, i := ↑i }.i];
+  have i_1 := { slice := w, i := ↑i }.i;
+  have it := { slice := { slice := w, i := ↑i }.slice, i := i_1 + 1 };
+  have back := fun it' x =>
+    match x with
+    | none => it'
+    | some x => { slice := it'.slice.setAtNat i_1 x, i := it'.i };
+  ok (some x, it, back)
+is not definitionally equal to the right-hand side
+  ok
+    (some w[↑i], { slice := w, i := ↑i + 1 }, fun t item =>
+      match item with
+      | none => t
+      | some x => { slice := t.slice.setAtNat (↑i) x, i := t.i })
+
+b : verifier.BatchedWeights
+w : Slice Q
+i : Usize
+back : Back
+active : ↑i < w.length
+q : Q
+value : b.value i = ok q
+cap : ↑i + 1 ≤ Usize.max
+hs : i + 1#usize ⦃ n => ↑n = ↑i + 1 ⦄
+next : UScalar UScalarTy.Usize
+hnext : i + 1#usize = ok next
+hval : ↑next = ↑i + 1
+⊢ (have x := { slice := w, i := ↑i }.slice[{ slice := w, i := ↑i }.i];
+    have i_1 := { slice := w, i := ↑i }.i;
+    have it := { slice := { slice := w, i := ↑i }.slice, i := i_1 + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i_1 x, i := it'.i };
+    ok (some x, it, back)) =
+    ok
+      (some w[↑i], { slice := w, i := ↑i + 1 }, fun t item =>
+        match item with
+        | none => t
+        | some x => { slice := t.slice.setAtNat (↑i) x, i := t.i })
+XRz_generated/XRz_FinishBody.lean:27:37: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲Option.isSome,i̵f̵_̵t̵r̵u̵e̵,̵ ̲hnext, ̲Option.map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRz_FinishBody.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRz_FinishBody.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]

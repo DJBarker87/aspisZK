@@ -1,0 +1,53 @@
+{"attempt": "XRz_L017", "exit_status": 1, "wall_seconds": 1.5462587280198932, "peak_rss_kib": "3875580", "swaps": "0", "print_axioms": ["'XRz_FinishLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRz_generated/XRz_FinishLoop.lean:30:2: error: Tactic `rfl` failed: The left-hand side
+  ok fun t => back (put (↑i) (f ↑i) (fill f (↑next) n t))
+is not definitionally equal to the right-hand side
+  ok fun t => back (fill f (↑i) (n + 1) t)
+
+case succ
+b : verifier.BatchedWeights
+w : Slice Q
+f : ℕ → Q
+values : ∀ (i : Usize), ↑i < w.length → b.value i = ok (f ↑i)
+n : ℕ
+ih :
+  ∀ (i : Usize) (back : Back),
+    w.length = ↑i + n →
+      verifier.BatchedWeights.finish_loop { iter := { slice := w, i := ↑i }, count := i } back b =
+        ok fun t => back (fill f (↑i) n t)
+i : Usize
+back : Back
+len : w.length = ↑i + (n + 1)
+next : Usize
+hnext : ↑next = ↑i + 1
+hbody :
+  verifier.BatchedWeights.finish_l
+...
+XRz_generated/XRz_FinishLoop.lean:30:2: error: Tactic `rfl` failed: The left-hand side
+  ok fun t => back (put (↑i) (f ↑i) (fill f (↑next) n t))
+is not definitionally equal to the right-hand side
+  ok fun t => back (fill f (↑i) (n + 1) t)
+
+case succ
+b : verifier.BatchedWeights
+w : Slice Q
+f : ℕ → Q
+values : ∀ (i : Usize), ↑i < w.length → b.value i = ok (f ↑i)
+n : ℕ
+ih :
+  ∀ (i : Usize) (back : Back),
+    w.length = ↑i + n →
+      verifier.BatchedWeights.finish_loop { iter := { slice := w, i := ↑i }, count := i } back b =
+        ok fun t => back (fill f (↑i) n t)
+i : Usize
+back : Back
+len : w.length = ↑i + (n + 1)
+next : Usize
+hnext : ↑next = ↑i + 1
+hbody :
+  verifier.BatchedWeights.finish_loop.body b { iter := { slice := w, i := ↑i }, count := i } back =
+    ok (cont ({ iter := { slice := w, i := ↑i + 1 }, count := next }, fun t => back (put (↑i) (f ↑i) t)))
+⊢ (ok fun t => back (put (↑i) (f ↑i) (fill f (↑next) n t))) = ok fun t => back (fill f (↑i) (n + 1) t)
+'XRz_FinishLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf58087a4719b4426bc22a3a48d6d19e6.scope; invocation ID: 8ef9e927420744beb6c7cc76929cdc6f

@@ -1,0 +1,47 @@
+{"attempt": "XRz_L020", "exit_status": 1, "wall_seconds": 1.7068715919740498, "peak_rss_kib": "3877244", "swaps": "0", "print_axioms": ["'XRz_FillCells.length' depends on axioms: [propext]", "'XRz_FillCells.cell' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRz_generated/XRz_FillCells.lean:23:47: error: Invalid `←` modifier: `Slice.length` is a declaration name to be unfolded
+
+Hint: The simplifier cannot "refold" definitions by name. Use `rw` for this instead,
+                      or use the `←` simp modifier with an equational lemma for `Slice.length`.
+XRz_generated/XRz_FillCells.lean:26:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if _a then some (f j) else (↑t.iter.slice)[j]?) =
+      if i ≤ j ∧ j < i + (n + 1) then some (f j) else (↑t.iter.slice)[j]?
+Error: Application type mismatch: The argument
+  instDecidableAnd
+has type
+  Decidable (i + 1 ≤ j ∧ j < i + 1 + n)
+but is expected to have type
+  Decidable _
+...
+ies to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case neg
+f : ℕ → Q
+t : It
+j : ℕ
+bound : j < t.iter.slice.length
+n : ℕ
+ih : ∀ (i : ℕ), (↑(fill f i n t).iter.slice)[j]? = if i ≤ j ∧ j < i + n then some (f j) else (↑t.iter.slice)[j]?
+i : ℕ
+same : ¬i = j
+eq : i + 1 ≤ j ∧ j < i + 1 + n ↔ i ≤ j ∧ j < i + (n + 1)
+⊢ (if i + 1 ≤ j ∧ j < i + 1 + n then some (f j) else (↑t.iter.slice)[j]?) =
+    if i ≤ j ∧ j < i + (n + 1) then some (f j) else (↑t.iter.slice)[j]?
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    t.iter.slice
+  has type
+    Slice Q
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑t.iter.slice
+'XRz_FillCells.length' depends on axioms: [propext]
+'XRz_FillCells.cell' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2f5726f7235943619b7a73546373939d.scope; invocation ID: cce454ba4e624315aa1f097d1b09d00b

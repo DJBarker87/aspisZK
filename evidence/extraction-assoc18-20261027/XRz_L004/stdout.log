@@ -1,0 +1,120 @@
+XRz_generated/XRz_FinishBody.lean:16:2: error: Type mismatch: After simplification, term
+  cap
+ has type
+  ↑i < Usize.max
+but is expected to have type
+  ↑i < UScalar.max UScalarTy.Usize
+XRz_generated/XRz_FinishBody.lean:22:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (o, iter1, next_back) ←
+      let (v, i, restore) :=
+          (some w[↑i], { slice := w, i := ↑i + 1 }, fun it' x =>
+            match x with
+            | none => it'
+            | some x => { slice := it'.slice.setAtNat (↑i) x, i := it'.i })
+        do
+        let n ←
+          if
+                (match v with
+                  | some val => true
+                  | none => false) =
+                  true then
+              ok next
+            else ok i
+        ok
+            (match v with
+              | some x => some (i, x)
+              | none => none,
+              { iter := i, count := n }, fun r item =>
+              {
+                iter :=
+                  restore r.iter
+                    (match item with
+                    | some x => some x.2
+                    | none => none),
+                count := r.count })
+    match o with
+      | none => ok (done fun e => back (next_back e none))
+      | some p =>
+        let (i, _) := p
+        do
+        let w ← b.value i
+        ok (cont (iter1, fun e => back (next_back e (some (i, w)))))
+is not definitionally equal to the right-hand side
+  ok (cont ({ iter := { slice := w, i := ↑i + 1 }, count := next }, fun t => back (put (↑i) q t)))
+
+b : verifier.BatchedWeights
+w : Slice Q
+i : Usize
+back : Back
+active : ↑i < w.length
+q : Q
+value : b.value i = ok q
+cap : ↑i + 1 ≤ Usize.max
+hs : i + 1#usize ⦃ n => ↑n = ↑i + 1 ⦄
+next : UScalar UScalarTy.Usize
+hnext : i + 1#usize = ok next
+hval : ↑next = ↑i + 1
+⊢ (do
+      let (o, iter1, next_back) ←
+        let (v, i, restore) :=
+            (some w[↑i], { slice := w, i := ↑i + 1 }, fun it' x =>
+              match x with
+              | none => it'
+              | some x => { slice := it'.slice.setAtNat (↑i) x, i := it'.i })
+          do
+          let n ←
+            if
+                  (match v with
+                    | some val => true
+                    | none => false) =
+                    true then
+                ok next
+              else ok i
+          ok
+              (match v with
+                | some x => some (i, x)
+                | none => none,
+                { iter := i, count := n }, fun r item =>
+                {
+                  iter :=
+                    restore r.iter
+                      (match item with
+                      | some x => some x.2
+                      | none => none),
+                  count := r.count })
+      match o with
+        | none => ok (done fun e => back (next_back e none))
+        | some p =>
+          let (i, _) := p
+          do
+          let w ← b.value i
+          ok (cont (iter1, fun e => back (next_back e (some (i, w)))))) =
+    ok (cont ({ iter := { slice := w, i := ↑i + 1 }, count := next }, fun t => back (put (↑i) q t)))
+XRz_generated/XRz_FinishBody.lean:20:87: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [show i.val < ↑w.len from active, _root_.dite_true, ̲bind_tc_ok, ̲Option.isSome,i̵f̵_̵t̵r̵u̵e̵,̵ ̲hnext,
+     ̲Option.map, ̲value]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRz_generated/XRz_FinishBody.lean:21:13: warning: This simp argument is unused:
+  value
+
+Hint: Omit it from the simp argument list.
+  simp only [show i.val < ↑w.len from active, _̵r̵o̵o̵t̵_̵.̵d̵i̵t̵e̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵h̵n̵e̵x̵t̵,̵
+  ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵,̵v̵a̵l̵u̵e̵]̵_̲r̲o̲o̲t̲_̲.̲d̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲i̲s̲S̲o̲m̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲h̲n̲e̲x̲t̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRz_generated/XRz_FinishBody.lean:28:86: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [show ¬i.val < ↑w.len from stop, ̲_root_.dite_false, ̲bind_tc_ok, ̲Option.isSome,i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̲ ̲ ̲ ̲Option.map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRz_FinishBody.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRz_FinishBody.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]

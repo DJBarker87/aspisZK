@@ -1,0 +1,51 @@
+{"attempt": "XRz_L006", "exit_status": 1, "wall_seconds": 1.646725653030444, "peak_rss_kib": "3876156", "swaps": "0", "print_axioms": ["'XRz_FinishBody.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRz_FinishBody.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+XRz_generated/XRz_FinishBody.lean:22:1: error: 'change' tactic failed, pattern
+  (do
+      let n ← i + 1#usize
+      let value ← b.value i
+      ok (cont ({ iter := { slice := w, i := ↑i + 1 }, count := n }, fun t => back (put (↑i) value t)))) =
+    ?m.146
+is not definitionally equal to target
+  (do
+      let (o, iter1, next_back) ←
+        let (v, i, restore) :=
+            (some w[↑i], { slice := w, i := ↑i + 1 }, fun it' x =>
+              match x with
+              | none => it'
+              | some x => { slice := it'.slice.setAtNat (↑i) x, i := it'.i })
+          do
+          let n ← if v.isSome = true then i + 1#usize else ok i
+          ok
+              (Option.map (fun x => (i, x)) 
+...
+XRz_generated/XRz_FinishBody.lean:22:1: error: 'change' tactic failed, pattern
+  (do
+      let n ← i + 1#usize
+      let value ← b.value i
+      ok (cont ({ iter := { slice := w, i := ↑i + 1 }, count := n }, fun t => back (put (↑i) value t)))) =
+    ?m.146
+is not definitionally equal to target
+  (do
+      let (o, iter1, next_back) ←
+        let (v, i, restore) :=
+            (some w[↑i], { slice := w, i := ↑i + 1 }, fun it' x =>
+              match x with
+              | none => it'
+              | some x => { slice := it'.slice.setAtNat (↑i) x, i := it'.i })
+          do
+          let n ← if v.isSome = true then i + 1#usize else ok i
+          ok
+              (Option.map (fun x => (i, x)) v, { iter := i, count := n }, fun r item =>
+                { iter := restore r.iter (Option.map Prod.snd item), count := r.count })
+      match o with
+        | none => ok (done fun e => back (next_back e none))
+        | some p =>
+          let (i, _) := p
+          do
+          let w ← b.value i
+          ok (cont (iter1, fun e => back (next_back e (some (i, w)))))) =
+    ok (cont ({ iter := { slice := w, i := ↑i + 1 }, count := next }, fun t => back (put (↑i) q t)))
+'XRz_FinishBody.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRz_FinishBody.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r62f0245792e941758a9fc8c6a9553c5d.scope; invocation ID: 23b231e9537f452fa7b178212b96de90
