@@ -12,7 +12,18 @@ theorem three {S I : Type} (step : S → I → Result S) (s : S) (a b c : I) :
       let s1 ← step s a
       let s2 ← step s1 b
       step s2 c) := by
-  simp only [walk, bind_tc_ok, bind_tc_pure]
+  simp only [walk]
+  cases h1 : step s a with
+  | fail e => rfl
+  | div => rfl
+  | ok s1 =>
+    simp only [bind_tc_ok]
+    cases h2 : step s1 b with
+    | fail e => rfl
+    | div => rfl
+    | ok s2 =>
+      simp only [bind_tc_ok]
+      cases step s2 c <;> rfl
 
 theorem append {S I : Type} (step : S → I → Result S) (xs ys : List I) (s : S) :
     walk step (xs++ys) s = (do let next ← walk step xs s; walk step ys next) := by
