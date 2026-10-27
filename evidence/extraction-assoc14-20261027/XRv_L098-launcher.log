@@ -1,0 +1,53 @@
+{"attempt": "XRv_L098", "exit_status": 1, "wall_seconds": 1.7396437560091726, "peak_rss_kib": "4736940", "swaps": "0", "print_axioms": ["'XRv_PairedStep.same_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRv_generated/XRv_PairedStep.lean:25:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.foldl XRn_Join_scanWord (List.take ↑s.accepted_len ↑s.accepted, ↑s.draws, false)
+    (XRt_QueryWords.words (↑blocks)[i])
+in the target expression
+  (let (accepted, draws, stopped, _) := (List.take ↑s.accepted_len ↑s.accepted, ↑s.draws, false, oldState)
+    if stopped = true then ok (List.take ↑s.accepted_len ↑s.accepted, ↑s.draws, false, oldState)
+    else
+      let (accepted, draws, stop) :=
+        List.foldl XRn_Join_scanWord (accepted, draws, false) (XRt_QueryWords.words (↑blocks)[i])
+      ok (accepted, draws, stop, (↑advances)[i])) =
+    ok (List.take ↑sf.accepted_le
+...
+ake ↑sf.accepted_len ↑sf.accepted, ↑sf.draws, optionStop pending, (↑advances)[i])
+
+blocks advances : Blocks
+i : ℕ
+hi : i < 8
+s : Query31ExplicitScanBody.CurrentScan
+valid : validState s
+oldState : Block
+hlen : (↑blocks).length = 8
+sf : Query31ModelScanCall.QueryScan
+pending : Option Bool
+hr :
+  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords s (↑blocks)[i] =
+    ok (optionStop pending, sf)
+he :
+  List.foldl XRn_Join_scanWord (List.take ↑s.accepted_len ↑s.accepted, ↑s.draws, false)
+      (XRt_QueryWords.words (↑blocks)[i]) =
+    (List.take ↑sf.accepted_len ↑sf.accepted, ↑sf.draws, optionStop pending)
+hv : validState sf
+⊢ (let (accepted, draws, stopped, _) := (List.take ↑s.accepted_len ↑s.accepted, ↑s.draws, false, oldState)
+    if stopped = true then ok (List.take ↑s.accepted_len ↑s.accepted, ↑s.draws, false, oldState)
+    else
+      let (accepted, draws, stop) :=
+        List.foldl XRn_Join_scanWord (accepted, draws, false) (XRt_QueryWords.words (↑blocks)[i])
+      ok (accepted, draws, stop, (↑advances)[i])) =
+    ok (List.take ↑sf.accepted_len ↑sf.accepted, ↑sf.draws, optionStop pending, (↑advances)[i])
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XRv_PairedStep.same_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfc6cbe0edfdf40debae85f0241c08560.scope; invocation ID: 8c9bfe029b95430a9841a3f7f87024e5

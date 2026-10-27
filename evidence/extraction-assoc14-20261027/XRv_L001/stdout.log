@@ -1,0 +1,49 @@
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+XRv_generated/XRv_FromFnTotal.lean:27:17: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+value : ℕ → T
+f : F
+stable : ∀ (j : Usize), ↑j < ↑N → callback.call_mut f j = ok (value ↑j, f)
+fuel : ℕ
+ih :
+  ∀ (i : Usize) (acc : List T), ↑i ≤ ↑N → ↑N - ↑i ≤ fuel → ∃ out, arrayFromFnLoop N callback fuel i f acc = ok (out, f)
+i : Usize
+acc : List T
+hi : ↑i ≤ ↑N
+budget : ↑N - ↑i ≤ fuel + 1
+hlt : i < N
+hv : ↑i < ↑N
+hmax : ↑N ≤ Usize.max
+hadd : i + 1#usize ⦃ z => ↑z = ↑i + 1 ⦄
+j : UScalar UScalarTy.Usize
+hj : i + 1#usize = ok j
+hv' : ↑j = ↑i + 1
+out : List T
+hout : arrayFromFnLoop N callback fuel j f (value ↑i :: acc) = ok (out, f)
+⊢ (let (value, f') := (value ↑i, f)
+    arrayFromFnLoop N callback fuel j f' (value :: acc)) =
+    ok (out, f)
+XRv_generated/XRv_FromFnTotal.lean:27:89: warning: This simp argument is unused:
+  hout
+
+Hint: Omit it from the simp argument list.
+  simp only [arrayFromFnLoop, ̲hlt, ̲↓reduceDIte, ̲stable i hv, ̲bind_tc_ok, ̲hj,̵h̵o̵u̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRv_generated/XRv_FromFnTotal.lean:36:1: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ⟨values, ⋯⟩
+  has type
+    { l // l.length = ↑N }
+  but is expected to have type
+    Std.Array T N
+  in the application
+    ok ⟨values, ⋯⟩
+'XRv_FromFnTotal.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRv_FromFnTotal.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
