@@ -810,4 +810,5 @@ theorem preserved_op260 (base : ExternalTypes) (ops : @ExternalFuns (Types base)
 theorem preserved_op261 (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
     @ExternalFuns.op261 (Types base) (install base ops) = @ExternalFuns.op261 (Types base) ops := rfl
 #print axioms preserved_op261
+end
 end PV_B3_Close134
