@@ -62,8 +62,19 @@ Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scop
 | 40067 | R1Z/PV_Src_MapperBody | 0 | standard | 0:01.94 | 4114052 | 0 | e75a239390 | 3/3 |
 | 40068 | R1Z/PV_Src_MapperWords | 1 | REJECTED | 0:01.87 | 4085668 | 0 | e75a239390 | 2/2 |
 | 40069 | R1Z/PV_Src_MapperWords | 0 | standard | 0:01.72 | 4101392 | 0 | e75a239390 | 2/2 |
+| 40070 | R1Z/PV_Src_PortInternalStep | 0 | standard | 0:02.14 | 4143244 | 0 | 9ed1987bc5 | 2/2 |
+| 40071 | R1Z/PV_Src_PortInternalLoop | 0 | standard | 0:02.21 | 4147392 | 0 | 9ed1987bc5 | 2/2 |
+| 40072 | R1Z/PV_Src_PortInternalCanonical | 0 | standard | 0:01.99 | 4146420 | 0 | 9ed1987bc5 | 2/2 |
+| 40073 | R1Z/PV_Src_PortInternalCells | 1 | REJECTED | 0:01.96 | 4125344 | 0 | 9ed1987bc5 | 2/2 |
+| 40076 | R1Z/PV_Src_PortInternalCells | 1 | REJECTED | 0:01.68 | 4134488 | 0 | 9ed1987bc5 | 2/2 |
+| 40077 | R1Z/PV_Src_PortInternalCells | 0 | standard | 0:02.08 | 4155136 | 0 | 9ed1987bc5 | 2/2 |
+| 40079 | R1Z/PV_Src_PortSumTrace | 0 | standard | 0:01.57 | 4102940 | 0 | 9ed1987bc5 | 3/3 |
+| 40080 | R1Z/PV_Src_PortSumTotal | 0 | standard | 0:01.87 | 4114308 | 0 | 9ed1987bc5 | 3/3 |
+| 40082 | R1Z/PV_Src_PortInternalBody | 1 | REJECTED | 0:01.71 | 4132068 | 0 | 9ed1987bc5 | 1/1 |
+| 40086 | R1Z/PV_Src_PortSumAdapter | 1 | REJECTED | 0:01.54 | 4075072 | 0 | 9ed1987bc5 | 2/2 |
+| 40087 | R1Z/PV_Src_PortSumAdapter | 0 | standard | 0:01.67 | 4094004 | 0 | 9ed1987bc5 | 3/3 |
 
-Charged Lean attempts: 58/100. Reservation refusals: 12, uncharged. Next unused ID: 40070.
+Charged Lean attempts: 69/100. Reservation refusals: 20, uncharged. Next unused ID: 40089.
 
 ## Shared replacements
 
