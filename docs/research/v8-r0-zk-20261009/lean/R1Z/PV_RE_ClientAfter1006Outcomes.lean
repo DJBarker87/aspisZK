@@ -18,15 +18,15 @@ theorem failure {C : Type} (ops : ExternalFuns)
       (ProverRwOuterEncode.value (ProverRwOuterContextModel.context digest secret.mask_nonce))) = .ok binding) :
     letI : ExternalFuns := ProverRwOuterMapErr.selected ops
     ∀ (store1 : Store) (h0 : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve store (ProverRwOuterContextModel.context digest secret.mask_nonce).statement_digest (ProverRwOuterContextModel.context digest secret.mask_nonce).mask_nonce = .ok (true,store1))
-    (entropy : Array U8 32#usize) (h1 : zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref Z secret.field_mask_entropy = .ok entropy)
-    (material : Material) (h2 : aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore hash binding (ProverRwOuterContextModel.context digest secret.mask_nonce) entropy ({statement_digest := (ProverRwOuterContextModel.context digest secret.mask_nonce).statement_digest,mask_nonce := (ProverRwOuterContextModel.context digest secret.mask_nonce).mask_nonce,consumed := false} : Pre) = .ok (.Ok material,({statement_digest := (ProverRwOuterContextModel.context digest secret.mask_nonce).statement_digest,mask_nonce := (ProverRwOuterContextModel.context digest secret.mask_nonce).mask_nonce,consumed := true} : Pre)))
+    (private_entropy : Array U8 32#usize) (h1 : zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref Z secret.field_mask_entropy = .ok private_entropy)
+    (material : Material) (h2 : aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore hash binding (ProverRwOuterContextModel.context digest secret.mask_nonce) private_entropy ({statement_digest := (ProverRwOuterContextModel.context digest secret.mask_nonce).statement_digest,mask_nonce := (ProverRwOuterContextModel.context digest secret.mask_nonce).mask_nonce,consumed := false} : Pre) = .ok (.Ok material,({statement_digest := (ProverRwOuterContextModel.context digest secret.mask_nonce).statement_digest,mask_nonce := (ProverRwOuterContextModel.context digest secret.mask_nonce).mask_nonce,consumed := true} : Pre)))
     (encoded : Array U8 81#usize) (h3 : aspis_core.state_only_hiding.StateOnlyHidingContext.encode (ProverRwOuterContextModel.context digest secret.mask_nonce) = .ok encoded)
     (borrowed : Slice U8) (h4 : zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize) Z secret.field_mask_entropy = .ok borrowed)
     (seed : Array U8 32#usize) (h5 : hash (Array.to_slice (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN,Array.to_slice binding,Array.to_slice encoded,borrowed])) = .ok seed) (e : Error) (stopped : zeroize.Zeroizing.new Z seed = .fail e),
     @RealR1_client.prove_for_proof_accounts _ (ProverRwOuterMapErr.selected ops) C entropy pub compiled hash store state = .fail e := by
   letI : ExternalFuns := ProverRwOuterMapErr.selected ops
-  intro store1 h0 entropy h1 material h2 encoded h3 borrowed h4 seed h5 e stopped
-  obtain ⟨next,hn⟩ := PV_RE_ClientAfter1006.entered ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash store1 h0 entropy h1 material h2 encoded h3 borrowed h4 seed h5
+  intro store1 h0 private_entropy h1 material h2 encoded h3 borrowed h4 seed h5 e stopped
+  obtain ⟨next,hn⟩ := PV_RE_ClientAfter1006.entered ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash store1 h0 private_entropy h1 material h2 encoded h3 borrowed h4 seed h5
   rw [stopped] at hn
   exact hn
 #print axioms failure
@@ -42,15 +42,15 @@ theorem divergence {C : Type} (ops : ExternalFuns)
       (ProverRwOuterEncode.value (ProverRwOuterContextModel.context digest secret.mask_nonce))) = .ok binding) :
     letI : ExternalFuns := ProverRwOuterMapErr.selected ops
     ∀ (store1 : Store) (h0 : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve store (ProverRwOuterContextModel.context digest secret.mask_nonce).statement_digest (ProverRwOuterContextModel.context digest secret.mask_nonce).mask_nonce = .ok (true,store1))
-    (entropy : Array U8 32#usize) (h1 : zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref Z secret.field_mask_entropy = .ok entropy)
-    (material : Material) (h2 : aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore hash binding (ProverRwOuterContextModel.context digest secret.mask_nonce) entropy ({statement_digest := (ProverRwOuterContextModel.context digest secret.mask_nonce).statement_digest,mask_nonce := (ProverRwOuterContextModel.context digest secret.mask_nonce).mask_nonce,consumed := false} : Pre) = .ok (.Ok material,({statement_digest := (ProverRwOuterContextModel.context digest secret.mask_nonce).statement_digest,mask_nonce := (ProverRwOuterContextModel.context digest secret.mask_nonce).mask_nonce,consumed := true} : Pre)))
+    (private_entropy : Array U8 32#usize) (h1 : zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref Z secret.field_mask_entropy = .ok private_entropy)
+    (material : Material) (h2 : aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore hash binding (ProverRwOuterContextModel.context digest secret.mask_nonce) private_entropy ({statement_digest := (ProverRwOuterContextModel.context digest secret.mask_nonce).statement_digest,mask_nonce := (ProverRwOuterContextModel.context digest secret.mask_nonce).mask_nonce,consumed := false} : Pre) = .ok (.Ok material,({statement_digest := (ProverRwOuterContextModel.context digest secret.mask_nonce).statement_digest,mask_nonce := (ProverRwOuterContextModel.context digest secret.mask_nonce).mask_nonce,consumed := true} : Pre)))
     (encoded : Array U8 81#usize) (h3 : aspis_core.state_only_hiding.StateOnlyHidingContext.encode (ProverRwOuterContextModel.context digest secret.mask_nonce) = .ok encoded)
     (borrowed : Slice U8) (h4 : zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize) Z secret.field_mask_entropy = .ok borrowed)
     (seed : Array U8 32#usize) (h5 : hash (Array.to_slice (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN,Array.to_slice binding,Array.to_slice encoded,borrowed])) = .ok seed) (stopped : zeroize.Zeroizing.new Z seed = .div),
     @RealR1_client.prove_for_proof_accounts _ (ProverRwOuterMapErr.selected ops) C entropy pub compiled hash store state = .div := by
   letI : ExternalFuns := ProverRwOuterMapErr.selected ops
-  intro store1 h0 entropy h1 material h2 encoded h3 borrowed h4 seed h5 stopped
-  obtain ⟨next,hn⟩ := PV_RE_ClientAfter1006.entered ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash store1 h0 entropy h1 material h2 encoded h3 borrowed h4 seed h5
+  intro store1 h0 private_entropy h1 material h2 encoded h3 borrowed h4 seed h5 stopped
+  obtain ⟨next,hn⟩ := PV_RE_ClientAfter1006.entered ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash store1 h0 private_entropy h1 material h2 encoded h3 borrowed h4 seed h5
   rw [stopped] at hn
   exact hn
 #print axioms divergence
