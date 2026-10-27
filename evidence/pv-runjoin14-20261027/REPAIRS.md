@@ -1,4 +1,4 @@
-# Authorized records extraction repairs (D274)
+# Authorized records extraction repairs (D274 and D275)
 
 Entry revision: 9128568ac068bee9527806edc32982a35010c706.
 
@@ -58,3 +58,9 @@ only field values are read from `input`. The signature remains unchanged.
 This targets the next shared-loan failure in the loop branch at records:237–241,
 `InterpBorrows.ml:2731`, recorded by `pv14-records-aeneas-02`. No body, bounds,
 iteration order, output, other function, signature, or type changes.
+
+Final D275 source revision: `c58e0473ac60090f016a59e3b7953f429de2d5c2`.
+Entry-copy repair 3 retained in the LLBC but did not clear the branch-join
+blocker. No further repair applied. See `BLOCKER-D275.md` and its explicitly
+unapplied branch restructuring proposal; final ELF results are reported in
+`REPORT-D275.md` / `gate-a-d275.json`.

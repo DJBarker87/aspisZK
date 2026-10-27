@@ -1,3 +1,8 @@
+> Superseded for the D275 resume by [REPORT-D275.md](REPORT-D275.md).
+> Final source `c58e0473ac`: three ELF pins match; extraction now stops at
+> `records:238–242`, `InterpBorrows.ml:2731` (unapproved branch-body repair).
+> The original runjoin14 report below is retained as historical evidence.
+
 # pv-runjoin14 — copy repair clears borrow; range iterator stops extraction
 
 **Target not yet established. Stage 3 remains open.** Branch
