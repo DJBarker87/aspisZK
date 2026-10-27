@@ -1,0 +1,48 @@
+{"attempt": "JGe17_084", "exit_status": 1, "wall_seconds": 4.7546499550226144, "peak_rss_kib": "6024516", "swaps": "0", "print_axioms": ["'AspisR1.JGe_Semantic.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGe_Semantic.lean:57:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIq_Terminal.terminal JFs_PublicSerialization.value JFu_ClaimsData.claims JFm_PartialAlpha.a10 JFm_Begin.challenges
+in the target expression
+  (let (running, alpha, transcript1) :=
+      (genToMain JFr_Data09.output, JFm_PartialAlpha.a10,
+        { state := encodeState JFm_Q24Source.ratchet, hash := hash, next_row := 25#u8 })
+    do
+    let r2 ← FIq_Terminal.terminal JFs_PublicSerialization.value JFu_ClaimsData.claims alpha JFm_Begin.challenges
+    let r3 ←
+      core.result.Result.map_err
+          (FinishModel.closureFn11
+            (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+
+...
+e r1_wire.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified Hash) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_semantic.Verified Hash) (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified Hash)
+          (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Ok sem)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGe_Semantic.lean:56:26: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGe_Semantic.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2796bbc62ea94979909e1ebaab091da7.scope; invocation ID: 89cc355750154f4a8be25f92de156e16
+
