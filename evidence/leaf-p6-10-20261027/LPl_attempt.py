@@ -65,4 +65,4 @@ if kind!='kani':
  local=Path(next(x['repository_source'] for x in json.loads((E/'LPl_inherited-plan.json').read_text()) if x['module']==target)) if kind=='inherited' else E/(target+'.lean')
  (E/a/'source.lean.txt').write_bytes(local.read_bytes())
 rc=json.loads((E/a/'receipt.json').read_text());print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','cgroup_memory_peak_bytes','print_axioms']}),flush=True)
-print((E/a/'stdout.log').read_text()[-5000:],flush=True)
+print((E/a/'stdout.log').read_text()[-1500:],flush=True)

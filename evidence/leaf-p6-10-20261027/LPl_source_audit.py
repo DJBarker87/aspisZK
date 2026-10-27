@@ -2,7 +2,7 @@ from pathlib import Path
 import subprocess,hashlib,json,tempfile,re
 E=Path(__file__).resolve().parent;root=E.parent.parent;release='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 mp=json.loads((root/'evidence/leaf-p6-3-20261027/LPc_INPUTS/LPc_input-map.json').read_text())
-patches=[root/'evidence/leaf-p6-1-20261027/LPa_kani_harness.patch',root/'evidence/leaf-p6-3-20261027/LPc_INPUTS'/mp['LPc_K020']['patch'],root/'evidence/leaf-p6-7-20261027/LPg_K030-harness.patch',root/'evidence/leaf-p6-8-20261027/LPh_K030-harness.patch',E/'LPl_harness.patch']
+patches=[root/'evidence/leaf-p6-1-20261027/LPa_kani_harness.patch',root/'evidence/leaf-p6-3-20261027/LPc_INPUTS'/mp['LPc_K020']['patch'],root/'evidence/leaf-p6-7-20261027/LPg_K030-harness.patch',root/'evidence/leaf-p6-8-20261027/LPh_K030-harness.patch',E/'LPl_K004-harness.patch']
 files=set()
 for p in patches:
  files.update(re.findall(r'^\+\+\+ b/(.+)$',p.read_text(),re.M))

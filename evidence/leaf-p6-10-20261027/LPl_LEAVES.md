@@ -6,7 +6,7 @@ and owner-approved game unchanged. S2 and100-bit target not yet established.
 
 | Leaf | Status |
 |---|---|
-| verifier::echeck | CLOSED on all928-byte inputs/both k; LPl_echeck_LEAF.md. Native step/iterator/decoder, SAME bytes/Result, full induction, uniqueness and non-vacuity; no caller/headline installation claimed. Generic Lean theorem is not promoted to an unmeasured native arbitrary-length certificate. |
+| verifier::echeck | CLOSED on all adopted release inputs (all lengths0..2272,both k); LPl_echeck_LEAF.md. Native step/iterator/decoder, SAME bytes/Result, full induction, uniqueness and non-vacuity; no caller/headline installation claimed. K008/K009 correct the initial928-only domain and cover all adopted caller lengths. No native claim beyond2272. |
 | compact::check_values | OPEN: next priority; join K011 native16-byte decoder and464-byte iterator carriers to complete29-stage model and NonCanonical Result. |
 | validate_record_fields | OPEN: join native local K022 and full3712-byte iterator/enumeration carriers to LPg first-error preservation/full116-stage model. |
 | compact::expand_values | OPEN: full464/928 source/destination window/frame association and29-step native/model output join. |

@@ -1,6 +1,7 @@
 # LPl verifier::echeck native P6 bridge
 
-CLOSED on the requested release scanner domain: every 928-byte input and both
+CLOSED on all adopted release scanner domains: every input of length at most
+2272 bytes and both
 values of k, including every rejected prefix. No headline premise removed.
 
 Porting the SAME native slice bytes by their U8 natural values and the native
@@ -16,8 +17,9 @@ association below. It has no whole-function equality field, arbitrary native
 accepted run, independent input, canonicality assumption or supplied model
 result. As in LPk, Rust/Kani/Lean association is part of the hybrid P6 argument;
 Lean does not itself elaborate Rust. The theorem is generic in slice length;
-the native full-carrier certificate here is specifically 928 bytes. Other
-lengths are not silently credited as new native full-carrier results.
+the native full-carrier certificate K008 covers every length0..2272, including
+all tails. K009 checks the actual adopted caller constants:32,224,2272,128.
+Audit-only eight_way callers are outside this adopted release closure.
 
 ## Source and model pins
 
@@ -41,12 +43,13 @@ No old theorem is silently reassigned to a different nominal type.
 | Stage | Evidence | Scope |
 |---|---|---|
 | Native decoder | K001 | Every32-byte chunk, both k; canonicality of all8 words and conditional high-half zero equal the nonwrapping u64 base256 predicate. No assumptions/stubs. |
-| Immutable iterator | K002; inherited LPh K009/K010 | Every index0..29 of arbitrary928 bytes: exact SAME backing pointer,32-byte window, remaining count, next-front pointer and empty terminal. Prior-good/error cases inherited, independently joined by K003. |
+| Immutable iterator | K002; inherited LPh K009/K010 | Every index0..29 of arbitrary928 bytes; K008 additionally covers every index
+of every length0..2272: exact SAME backing pointer,32-byte window, remaining count, next-front pointer and empty terminal. Prior-good/error cases inherited, independently joined by K003. |
 | Native local Result | K003 | Every32-byte chunk, both k, arbitrary prior-good state; source echeck Result is exactly the local polynomial predicate, preserving Parse. No decoder/multiplication stub. |
 | Byte-value join | L023 `word_eq_le32/chunk_eq/window` | Explicit little-endian base256 polynomial equals model foldr on all byte lists; exact pointer-selected window becomes the model's SAME drop/take window. |
 | Cursor/early exit | L024 `read_eq/read_size/advance/trace_result` | Pointer displacement32*i, remaining count, read width, terminal and both local Results; induction on the source-shaped execution, no whole-output premise. |
 | Model induction | inherited LPg29-stage and LPa fold laws; L026 `run_all/run_loop/native_result` | Source cursor order joins the model's complete chunk fold and full outer Result, including early rejection. All29 windows included. |
-| Tail | inherited LPc K013–K016 and `LPl_C.Echeck.append_tail/count_with_tail` | Native0..63 tail gates and model count/window law retained unchanged. No new native result outside the stated928-byte domain. |
+| Tail | inherited LPc K013–K016 and `LPl_C.Echeck.append_tail/count_with_tail` | Native0..63 tail gates and model count/window law retained unchanged; K008 also checks every tail and its exact pointer for lengths0..2272. |
 | Uniqueness | L026 `unique` | Two compatible traces for the SAME input/index/k have the SAME result. |
 | Non-vacuity | K004; L027 | Native zero success, canonical nonzero-high rejection only when k, P rejection and empty success. Lean total trace existence for every input, zero canonical chunk, rejected chunk and empty Result. No accepted-only precondition. |
 
@@ -86,3 +89,15 @@ devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299,
 Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548
 are inherited pins, not newly reproduced. No full manifest replay, source-to-ELF
 proof or headline installation claimed. No key cleanup, push or merge.
+
+## Caller-domain correction
+
+The first committed packet established every928-byte input. Source inspection
+then found adopted canonical_scan also calls echeck on32,224,2272 and128-byte
+segments. Claiming whole release closure from928 alone would be too narrow.
+That claim is superseded here. K008 proves immutable iterator transitions for
+every length0..2272 and every reached cursor (no field loop); K009 checks the
+actual adopted caller constants. Existing arbitrary32-byte decoder/Result gates
+and the generic Lean trace/induction apply unchanged. No partial larger field
+loop or timed-out shape was rerun. Check_values work paused for this correction.
+LPl_DOMAINS.json pins the exact caller source and lengths. No assumption added.

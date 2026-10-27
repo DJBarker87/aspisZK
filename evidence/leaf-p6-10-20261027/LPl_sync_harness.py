@@ -8,6 +8,9 @@ for local in E.glob('LPl_*.rs'):
 code=f'''from pathlib import Path
 import difflib,json,hashlib
 B=Path('{B}');base=Path('/home/dombarker/project-offloads/codex-cx-leaf-p6-8-20261027/LPh_src');scratch=B/'LPl_src'
+for harness in (scratch/'crates/aspis-r1-cost-probe/src').glob('LPl_*.rs'):
+ parent=scratch/'crates/aspis-r1-cost-probe/src'/('verifier.rs' if harness.stem=='LPl_echeck' else 'compact.rs')
+ if ('mod '+harness.stem) not in parent.read_text():parent.write_text(parent.read_text()+'\\n#[cfg(kani)] mod '+harness.stem+' {{ include!("'+harness.name+'"); }}\\n')
 a={{str(p.relative_to(base)):p for p in base.rglob('*') if p.is_file()}}
 b={{str(p.relative_to(scratch)):p for p in scratch.rglob('*') if p.is_file()}}
 diff=''
@@ -21,3 +24,7 @@ print(json.dumps({{'sha256':hashlib.sha256(diff.encode()).hexdigest(),'bytes':le
 r=subprocess.run(['ssh',H,"python3 - <<'REMOTE'\n"+code+'\nREMOTE'],capture_output=True,text=True,check=True)
 print(r.stdout)
 subprocess.run(['scp','-q',H+':'+B+'/LPl_harness.patch',str(E/'LPl_harness.patch')],check=True)
+
+files=json.loads((E/'LPl_sources.json').read_text())
+files=sorted(set(files+['crates/aspis-r1-cost-probe/src/'+p.name for p in E.glob('LPl_*.rs')]))
+(E/'LPl_sources.json').write_text(json.dumps(files,indent=2)+'\n')
