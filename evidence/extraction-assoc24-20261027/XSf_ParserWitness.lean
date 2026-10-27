@@ -12,6 +12,10 @@ theorem parsed_zero : _root_.aspis_core.field.wide_exact.WideExact.from_le_bytes
  have h : AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes (Array.to_slice zeroBytes)=
    ok (some (AspisR1.ExtractedRecordLimbCanonicality.packed 0#u32 0#u32 0#u32 0#u32 0#u32 0#u32 0#u32 0#u32)) := by
    rw [AspisR1.ExtractedRecordByteCanonicality.fixed_reads]
+   simp only [AspisR1.ExtractedRecordByteCanonicality.wordArray8,
+     AspisR1.ExtractedRecordByteCanonicality.wordLE,
+     AspisR1.ExtractedRecordByteCanonicality.byteAt,zeroBytes,Array.repeat,List.getElem_replicate]
+   rw [AspisR1.ExtractedRecordLimbCanonicality.from_limbs_make]
    rfl
  rw [h]
  rfl

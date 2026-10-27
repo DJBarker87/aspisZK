@@ -29,7 +29,7 @@ theorem weighted {H : Type} (D : C.D H) (before after : C.T H)
  (parts : XRy_ClaimSumStep.Seven) (hc : XRy_ClaimSumStep.canonical parts) :
  ∃ k : XRy_ClaimSumStep.Seven,
  XRn_Join_powers kappa 7 XRy_Powers.one=ok k.val ∧
- ops.powers 7#usize (toClaimE kappa)=ok (arr toClaimE k) ∧
+ XSa_DotCarriers.ops.powers 7#usize (toClaimE kappa)=ok (arr toClaimE k) ∧
  XRy_ClaimSumStep.canonical k ∧
  ∃ out, XRy_WideMultiply.Canonical out ∧
  (k.val.zip parts.val).foldlM XSa_ClaimPairs.addTerm XRy_Powers.zero=ok out ∧

@@ -34,6 +34,10 @@ theorem construct {H : Type} (D : C.D H) (sem : C.Sem H)
    (XSf_A3Ports.back v.inactive) (XSf_A3Ports.back kappa) hi hkc
  have run := congrFun eqn (toClaimDigest D)
  simp only [LPq_PreparedClaim.program,XSf_A3Ports.roundtrip] at run
+ change AspisR1CurrentPreparedClaim.verifier.prepared_claim
+   (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+   (toClaimDigest D) (toClaimSem sem) v.y1 (toClaimE v.inactive) (mapArray toClaimE g) (toClaimE kappa)=
+   ok (.Ok (LPq_Powers.claim out)) at run
  have actual : XRo_Join_Installed.actual.claim D sem v.y1 v.inactive g kappa=
    ok (.Ok (fromClaimE (LPq_Powers.claim out))) := by
    rw [XRo_Join_Installed.cached_claim_slot]

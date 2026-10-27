@@ -1,0 +1,52 @@
+{"attempt": "XSf_L080", "exit_status": 1, "wall_seconds": 2.031208008003887, "peak_rss_kib": "5246976", "swaps": "0", "print_axioms": ["'XSf_A3Trace.construct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSf_generated/XSf_A3Trace.lean:41:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim LPm_PointLoop.ops (toClaimDigest D) (toClaimSem sem) v.y1
+    (toClaimE v.inactive) (arr toClaimE g) (toClaimE kappa)
+in the target expression
+  (do
+      let r ←
+        AspisR1CurrentPreparedClaim.verifier.prepared_claim
+            (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw) (toClaimDigest D)
+            (toClaimSem sem) v.y1 (toClaimE v.inactive) (mapArray toClaimE g) (toClaimE kappa)
+      ok
+          (match r with
+          | core.result.Result.Ok x => core.result.Result.Ok (from
+...
+U8 32#usize
+hg :
+  AspisR1PublicPreparation.PreparedModel.scalar XRo_Join_Installed.actual.sampling D t 27#u8 v.y1 true = ok (gamma, t1)
+hb : XRo_Join_Installed.actual.sampling.toBytes v.inactive = ok bytes
+hk :
+  AspisR1PublicPreparation.PreparedModel.scalar XRo_Join_Installed.actual.sampling D t1 28#u8 bytes.to_slice false =
+    ok (kappa, t2)
+g : XSa_DotRun.Coeff
+hp : powersPublic 29#usize gamma = ok g
+hi : XRy_WideMultiply.Canonical (cview v).inactive
+hkc : XRy_WideMultiply.Canonical kappa
+hgc : XSa_DotRun.canonical g
+out : LPi_FieldValues.NE
+tr :
+  LPq_PreparedTrace.Trace (toClaimSem sem) v.y1 (arr toClaimE g) (XSf_A3Ports.back v.inactive) (XSf_A3Ports.back kappa)
+    out
+co : LPi_FieldValues.canonE out
+eqn :
+  LPq_PreparedClaim.program (toClaimSem sem) v.y1 (arr toClaimE g) (XSf_A3Ports.back v.inactive)
+      (XSf_A3Ports.back kappa) =
+    fun x => ok (core.result.Result.Ok (LPq_Powers.claim out))
+run :
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim LPm_PointLoop.ops (toClaimDigest D) (toClaimSem sem) v.y1
+      (toClaimE v.inactive) (arr toClaimE g) (toClaimE kappa) =
+    ok (core.result.Result.Ok (LPq_Powers.claim out))
+⊢ (do
+      let r ←
+        AspisR1CurrentPreparedClaim.verifier.prepared_claim
+            (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw) (toClaimDigest D)
+            (toClaimSem sem) v.y1 (toClaimE v.inactive) (mapArray toClaimE g) (toClaimE kappa)
+      ok
+          (match r with
+          | core.result.Result.Ok x => core.result.Result.Ok (fromClaimE x)
+          | core.result.Result.Err e => core.result.Result.Err (fromClaimError e))) =
+    ok (core.result.Result.Ok (fromClaimE (LPq_Powers.claim out)))
+'XSf_A3Trace.construct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r61bab729ee164acdb68f5d32439dac54.scope; invocation ID: f83a4c4f0746420399f3d4c64bf9b103
