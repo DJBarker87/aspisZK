@@ -1,0 +1,7 @@
+# Resource failures and replacements
+
+090: JGq_LowGroup0, kernel -M7000 excessive memory in step0/1/2/3. Arithmetic multiplication/scale facts printed, but the module FAILED and its custom-placeholder axiom diagnostics receive zero proof credit. It was not rerun unchanged. The replacement is the abstract outer control theorem JGq_LowTools.step (091), then regenerated concrete applications in092–095 and the loop closure096, all green at the original caps. The generator permanently emits the abstract theorem application.
+
+100: JGq_PairAfterShared, exit134, wall10.332822692987975s, peakRSS7172264KiB, swap0. Lean threw memory_exception at interpreter, before any axiom lines. The current target closure included the final FJp audit imports. The log does not isolate whether import/evaluation/elaboration caused the failure; no unsupported phase diagnosis is asserted. It is not an accepted final composed audit, no resource limit was raised, and no101st attempt occurred. Its exact source is retained in the receipt and JGq_UNCHECKED/JGq_PairAfterShared.lean.txt.
+
+Next under a NEW budget: isolate the smallest abstract Pair suffix/variant step, prove it before concretizing the large installed weight object, and check the minimal local module before importing the current top for a separate audit. Keep -M7000 and6G/8G/Swap0/Tasks64. Do not rerun the100 source unchanged. This is a proof/resource boundary, not a demonstrated mathematical counterexample.

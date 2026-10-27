@@ -1,0 +1,48 @@
+{"attempt": "JGq_TX2_084", "exit_status": 1, "wall_seconds": 7.562792067008559, "peak_rss_kib": "5935868", "swaps": "0", "print_axioms": ["'AspisR1.JGq_PairPrefix.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGq_PairPrefix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGq_PairPrefix.lean:158:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.weights.shared_two_point_guard (FIo_Install.toWeights JGo_TX2_WeightData.value) 2#usize
+in the target expression
+  (match core.result.Result.Ok scratch with
+    | core.result.Result.Ok v => do
+      let shared_two_point ← FIo_Native.weights.shared_two_point_guard w 2#usize
+      let (r1, _, parts1) ←
+        FIo_Native.weights.process_regular_kinds w shared_two_point alpha f 2#usize 64#usize JGq_Powers0.a4
+            JGq_Powers1.a4 v (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      mat
+...
+l =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error) residual
+    | core.result.Result.Err a => ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)) =
+    remaining
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGq_PairPrefix.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGq_PairPrefix.lean:169:70: error: unsolved goals
+call :
+  (FIo_Install.toWeights JGo_TX2_WeightData.value).pair (FIo_Install.toSlice JGo_TX2_FinishPrefix.alphas)
+      (JFw_Frames.window 8007 2048) (FIo_Install.toE JFo_Prepared.value.kappa) =
+    remaining
+⊢ (do
+      let result ← remaining
+      match result with
+        | core.result.Result.Ok out => ok (core.result.Result.Ok (FIo_Install.fromE out))
+        | core.result.Result.Err e => ok (core.result.Result.Err (FIo_Install.error e))) =
+    do
+    let r ← remaining
+    match r with
+      | core.result.Result.Ok out => ok (core.result.Result.Ok (FIo_Install.fromE out))
+      | core.result.Result.Err e => ok (core.result.Result.Err (FIo_Install.error e))
+'AspisR1.JGq_PairPrefix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf7130fa3de474678812d6275b2e3c071.scope; invocation ID: 70d0df4a61204e0cb3b705a310d2c82a

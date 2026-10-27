@@ -1,0 +1,56 @@
+{"attempt": "JGq_TX2_007", "exit_status": 1, "wall_seconds": 5.452159675012808, "peak_rss_kib": "5440428", "swaps": "0", "print_axioms": ["'AspisR1.JGq_DotLoop.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGq_DotLoop.lean:16:29: error: unexpected token 'then'; expected term
+JGq_DotLoop.lean:16:3: error: unsolved goals
+self : Dot
+raw : Std.Array U64 4#usize
+i : ℕ
+⊢ (sorry ()).length = 4
+JGq_DotLoop.lean:29:21: error: Tactic `rfl` failed: The left-hand side
+  let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 4#usize })
+  match o with
+  | none => ok (done { sums := JFs_TX2_RawMap.pack x0 x1 x2 x3 })
+  | some j => do
+    let i ← { sums := JFs_TX2_RawMap.pack x0 x1 x2 x3 }.sums.index_usize j
+    let i1 ← (JFs_TX2_RawMap.pack r0 r1 r2 r3).index_usize j
+    let i2 ← lift (core.convert.num.FromU64U32.from FIo_Native.fast_pairing.canonical.P)
+    let i3 ← lift (i1 &&& i2)
+    let i4 ← lift
+...
+  | none => ok (done { sums := JFs_TX2_RawMap.pack x0 x1 x2 x3 })
+  | some j => do
+    let i ← { sums := JFs_TX2_RawMap.pack x0 x1 x2 x3 }.sums.index_usize j
+    let i1 ← (JFs_TX2_RawMap.pack r0 r1 r2 r3).index_usize j
+    let i2 ← lift (core.convert.num.FromU64U32.from FIo_Native.fast_pairing.canonical.P)
+    let i3 ← lift (i1 &&& i2)
+    let i4 ← lift (i1.wrapping_shr 31#u32)
+    let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+    let i6 ← lift (core.num.U64.wrapping_add i i5)
+    let a ← { sums := JFs_TX2_RawMap.pack x0 x1 x2 x3 }.sums.update j i6
+    ok (cont (iter1, { sums := a }))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ({ start := 1#usize, «end» := 4#usize },
+        a { sums := JFs_TX2_RawMap.pack x0 x1 x2 x3 } (JFs_TX2_RawMap.pack r0 r1 r2 r3) 1))
+
+x0 x1 x2 x3 r0 r1 r2 r3 : U64
+⊢ (let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 4#usize })
+    match o with
+    | none => ok (done { sums := JFs_TX2_RawMap.pack x0 x1 x2 x3 })
+    | some j => do
+      let i ← { sums := JFs_TX2_RawMap.pack x0 x1 x2 x3 }.sums.index_usize j
+      let i1 ← (JFs_TX2_RawMap.pack r0 r1 r2 r3).index_usize j
+      let i2 ← lift (core.convert.num.FromU64U32.from FIo_Native.fast_pairing.canonical.P)
+      let i3 ← lift (i1 &&& i2)
+      let i4 ← lift (i1.wrapping_shr 31#u32)
+      let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+      let i6 ← lift (core.num.U64.wrapping_add i i5)
+      let a ← { sums := JFs_TX2_RawMap.pack x0 x1 x2 x3 }.sums.update j i6
+      ok (cont (iter1, { sums := a }))) =
+    ok
+      (cont
+        ({ start := 1#usize, «end» := 4#usize },
+          a { sums := JFs_TX2_RawMap.pack x0 x1 x2 x3 } (JFs_TX2_RawMap.pack r0 r1 r2 r3) 1))
+'AspisR1.JGq_DotLoop.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb2b5d00b041744609277391650115ad0.scope; invocation ID: cbb03c1c0619432b932449fac4c9f633

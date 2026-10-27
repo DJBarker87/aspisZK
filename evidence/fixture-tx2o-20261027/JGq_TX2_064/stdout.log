@@ -1,0 +1,70 @@
+'AspisR1.JGq_Partial.finish0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_8' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_9' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_10' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_11' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_12' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_13' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_14' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.step0_15' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGq_Partial0.lean:300:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 16#usize, «end» := 16#usize }
+in the target expression
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize (states0 16).1
+      match o with
+        | none => do
+          let we ← (states0 16).2.finish
+          ok (done (core.result.Result.Ok we))
+        | some j => do
+          let i ← lift (Usize.wrapping_mul 16#usize 0#usize)
+          let i1 ← lift (i.wrapping_add j)
+          let we ← FIo_Native.weights.field f i1
+          let q ← JGq_Common.a16.index_usize j
+          let (r, dot1) ← (states0 16).2.push we q
+          match r with
+            | core.result.Result.Ok a => ok (cont (iter1, dot1))
+            | core.result.Result.Err a => ok (done (core.result.Result.Err FIo_Native.verifier.Error.Parse))) =
+    ok (done (core.result.Result.Ok value0))
+
+case last
+new : FIo_Native.fast_pairing.EbyKDot.new = ok d0_0
+stop :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 16#usize, «end» := 16#usize } =
+    ok (none, { start := 16#usize, «end» := 16#usize })
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize (states0 16).1
+      match o with
+        | none => do
+          let we ← (states0 16).2.finish
+          ok (done (core.result.Result.Ok we))
+        | some j => do
+          let i ← lift (Usize.wrapping_mul 16#usize 0#usize)
+          let i1 ← lift (i.wrapping_add j)
+          let we ← FIo_Native.weights.field f i1
+          let q ← JGq_Common.a16.index_usize j
+          let (r, dot1) ← (states0 16).2.push we q
+          match r with
+            | core.result.Result.Ok a => ok (cont (iter1, dot1))
+            | core.result.Result.Err a => ok (done (core.result.Result.Err FIo_Native.verifier.Error.Parse))) =
+    ok (done (core.result.Result.Ok value0))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGq_Partial.source0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

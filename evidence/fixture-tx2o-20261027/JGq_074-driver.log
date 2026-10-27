@@ -1,0 +1,60 @@
+{"attempt": "JGq_TX2_074", "exit_status": 1, "wall_seconds": 6.744572640978731, "peak_rss_kib": "5460672", "swaps": "0", "print_axioms": ["'AspisR1.JGq_Scale0.call0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Scale0.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGq_Scale0.call1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Scale0.step1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGq_Scale0.call2' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Scale0.step2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGq_Scale0.call3' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Scale0.step3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGq_Scale0.folded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGq_Scale0.scaled' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Scale0.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGq_Scale0.call0' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGq_Scale0.lean:28:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (do
+      let (accum1, f1) ← ok (v1, JGq_Powers0.a4, row)
+      ok (cont ({ start := 1#usize, «end» := 4#usize }, f1, accum1))) =
+    ok (cont ({ start := 1#usize, «end» := 4#usize }, (JGq_Powers0.a4, row), v1))
+
+⊢ (do
+      let (accum1, f1) ← ok (v1, JGq_Powers0.a4, row)
+      ok (cont ({ start := 1#usize, «end» := 4#usize }, f1, accum1))) =
+    ok (cont ({ start := 1#usize, «end» := 4#usize }, (JGq_Powers0.a4, row), v1))
+
+Note: The target expression is
+...
+n:70:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (do
+      let (accum1, f1) ← ok (v4, JGq_Powers0.a4, row)
+      ok (cont ({ start := 4#usize, «end» := 4#usize }, f1, accum1))) =
+    ok (cont ({ start := 4#usize, «end» := 4#usize }, (JGq_Powers0.a4, row), v4))
+
+⊢ (do
+      let (accum1, f1) ← ok (v4, JGq_Powers0.a4, row)
+      ok (cont ({ start := 4#usize, «end» := 4#usize }, f1, accum1))) =
+    ok (cont ({ start := 4#usize, «end» := 4#usize }, (JGq_Powers0.a4, row), v4))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGq_Scale0.step3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGq_Scale0.folded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGq_Scale0.scaled' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGq_Scale0.lean:102:4: error: Type mismatch
+  folded
+has type
+  loop FJg_ScalarFold.body (states 0) = ok v4
+but is expected to have type
+  loop FJg_ScalarFold.body
+      ({ start := 0#usize, «end» := 4#usize }, (JGq_Powers0.a4, row),
+        FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok v4
+'AspisR1.JGq_Scale0.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7c451e2e38214b1280bcebdb90d3976c.scope; invocation ID: ec6fb92594fc409993aeaba4272ecbb3
+

@@ -1,0 +1,56 @@
+{"attempt": "JGq_TX2_083", "exit_status": 1, "wall_seconds": 5.315629252989311, "peak_rss_kib": "5934252", "swaps": "0", "print_axioms": ["'AspisR1.JGq_PairPrefix.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGq_PairPrefix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGq_PairPrefix.lean:152:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  2048#usize / 32#usize
+in the target expression
+  (have i := 2048#usize;
+    do
+    let n ← i / 32#usize
+    have folds : Usize := alpha.len
+    let expected_n ← FIo_Native.weights.Weights.pair_loop0 { start := 0#usize, «end» := folds } 1024#usize
+    if (n != expected_n) = true then ok (core.result.Result.Err FIo_Native.verifier.Error.Parse)
+      else do
+        let we ← alpha.index_usize 0#usize
+        let ap0 ← FIo_Native.weights.powers 4#usize we
+        let ap1 ←
+          if folds = 2#usize then do
+              let we1 ← alpha.index_usize 1#usize
+              FIo_Native.weights.po
+...
+q Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2048 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGq_PairPrefix.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGq_PairPrefix.lean:170:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  w.pair alpha f kappa
+in the target expression
+  (do
+      let result ←
+        (FIo_Install.toWeights JGo_TX2_WeightData.value).pair (FIo_Install.toSlice JGo_TX2_FinishPrefix.alphas)
+            (JFw_Frames.window 8007 2048) (FIo_Install.toE JFo_Prepared.value.kappa)
+      match result with
+        | core.result.Result.Ok out => ok (core.result.Result.Ok (FIo_Install.fromE out))
+        | core.result.Result.Err e => ok (core.result.Result.Err (FIo_Install.error e))) =
+    do
+    let r ← remaining
+    match r with
+      | core.result.Result.Ok out => ok (core.result.Result.Ok (FIo_Install.fromE out))
+      | core.result.Result.Err e => ok (core.result.Result.Err (FIo_Install.error e))
+
+⊢ (do
+      let result ←
+        (FIo_Install.toWeights JGo_TX2_WeightData.value).pair (FIo_Install.toSlice JGo_TX2_FinishPrefix.alphas)
+            (JFw_Frames.window 8007 2048) (FIo_Install.toE JFo_Prepared.value.kappa)
+      match result with
+        | core.result.Result.Ok out => ok (core.result.Result.Ok (FIo_Install.fromE out))
+        | core.result.Result.Err e => ok (core.result.Result.Err (FIo_Install.error e))) =
+    do
+    let r ← remaining
+    match r with
+      | core.result.Result.Ok out => ok (core.result.Result.Ok (FIo_Install.fromE out))
+      | core.result.Result.Err e => ok (core.result.Result.Err (FIo_Install.error e))
+'AspisR1.JGq_PairPrefix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r601d2413771b4abdb72a9ab0b54b5adc.scope; invocation ID: 9c953b5b05f34a3b857749dd0c5cf346
+
