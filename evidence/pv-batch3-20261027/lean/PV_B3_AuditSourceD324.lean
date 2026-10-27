@@ -384,8 +384,8 @@ def reference (c1 : Array Q 16#usize) (mask : Array Q 10#usize)
     PV_B3_Range117.horner coefficients prepared PV_B3_Range117.hornerIndices shared)
   let power ← host_arithmetic.mask_power_26 explicit_linear
   let factor ← aspis_core.field.QM31.add aspis_core.field.QM31.ONE power
-  let explicit ← aspis_core.field.QM31.mul factor g
-  aspis_core.field.QM31.add shared explicit
+  let explicit_value ← aspis_core.field.QM31.mul factor g
+  aspis_core.field.QM31.add shared explicit_value
 
 theorem source (c1 : Array Q 16#usize) (mask : Array Q 10#usize)
     (g : Q) (point : Array Q 10#usize) :
