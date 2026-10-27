@@ -1,0 +1,5 @@
+# Combined installed-validation/verifier importer obstruction
+
+080, JHg_RealNative.lean: exit134, wall4.708334394963458s, peakRSS7170256KiB, swap0; Lean memory_exception at interpreter, -M7000. Required systemd limits were unchanged. This was a new union of the separately passing corrected installed-validation, reference/key fixed-point, emission and full-verifier suffix closures; it failed before a theorem/axioms result. No acceptance credit is assigned.
+
+No retry of that unchanged import union or increased cap. The exact failed source and uncompiled dependent wrapper are retained as JHg_UNCHECKED_RealNative.lean.txt and JHg_UNCHECKED_TX2.lean.txt. Replacement: JHg_NativeAfterValidation imports the verifier suffix and source prefix only; validation remains its exact explicit observation. JHg_InstalledValidation separately provides the affected corrected-tuple child theorem. This split retains, rather than hides, the composition gap. The named JGz_Realizes : JFn_HashBoundary.Realizes JFp_SHADigest.digest hypothesis remains explicit; no SHA closure/module-system trial is repeated.
