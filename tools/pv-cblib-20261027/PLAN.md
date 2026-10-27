@@ -17,3 +17,15 @@ Source law route, in order of dependency:
 Path.join/as_ref/deref are pure path/string operations. They perform no
 filesystem lookup, open, stat or other OS effect. Any extraction difficulty
 is a source/backend difficulty, not a reason for native-effect deferral.
+
+Digest route preparation:
+- Preserve wrapping u64 block-count arithmetic from the frozen optimized
+  profile. Do not call a debug-overflow panic a counterexample to the release
+  source law.
+- A native SHA-256 P6 gate must execute the shipped compress256 selection,
+  including CPU-feature/intrinsic behavior; no force-soft substitution, no
+  CPUID/compression stub. Any unsupported instruction remains a gate frontier.
+- An independent per-block reference can compare the actual private core's
+  complete state and block counter under a cfg(kani) module in an owned,
+  byte-pinned library snapshot. Allocation or CPU-world association, if needed,
+  remains named separately rather than becoming an equality premise.

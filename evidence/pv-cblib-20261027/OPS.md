@@ -1,6 +1,6 @@
 # Library row table
 
-Rows discharged: **0 → 0**. Every row remains OPEN until a complete source law and its required extraction/P6 evidence are present. Target not yet established.
+Candidate source callback laws supplied: **0 → 2** (V185/V186), through `PV_CBL_CallbackBundle`. Native P6 bounds and the distinct extraction/Kani toolchains remain explicit. The canonical recount and endpoint are not edited here; RunJoin/deployment integration remains open. Target not yet established.
 
 | op | row | status | theorem | crate/version; source hash | receipt |
 |---|---|---|---|---|---|
@@ -18,8 +18,10 @@ Rows discharged: **0 → 0**. Every row remains OPEN until a complete source law
 | 29 | V180 | OPEN; queued | — | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | — |
 | 30 | V181 | OPEN; queued | — | `alloc/src/string.rs` sha256 `d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d` | — |
 | 31 | V182 | OPEN; queued | — | `alloc/src/string.rs` sha256 `d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d` | — |
-| 32 | V183 | OPEN; queued | — | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | — |
+| 32 | V183 | DEFER(pv-runjoin): recoverable native allocation effects | NATIVE-EFFECTS.md | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | — |
 | 33 | V184 | OPEN; queued | — | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | — |
-| 34 | V185 | OPEN; extraction frontier retained | PV_CBL_Op34Source.op34_source (draft selection only) | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | 39604 (reference shape only) |
-| 35 | V186 | OPEN; queued | — | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | — |
+| 34 | V185 | SOURCE LAW SUPPLIED; P6 bounded native check | R1Z.PV_CBL_CallbackBundle.op34_source | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | 39604–39610; bundle 39622; kani-op34-exact-006 |
+| 35 | V186 | SOURCE LAW SUPPLIED; native default check | R1Z.PV_CBL_CallbackBundle.op35_source | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | 39611/39614/39622; kani-op35-exact-002 |
 | 36 | V187 | OPEN; queued | — | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | — |
+
+Std/alloc source corpus: rustc **1.98.0-nightly (14210df0e, 2026-05-31)**, toolchain nightly-2026-06-01. Kani gates use their separately pinned rustc **1.93.0-nightly (53732d5e0)**; no deployed std/ELF association is inferred. Cargo library rows use the versions in the file column. Full source SHA-256 values above are retained.

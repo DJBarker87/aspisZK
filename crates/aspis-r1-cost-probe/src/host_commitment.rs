@@ -431,6 +431,14 @@ mod pv_cblib_library_checks {
         (v,w)
     }
     #[kani::proof]
+    fn op35_exact_word() {
+        let native = Vec::<Result<Word, Error>>::default();
+        let reference = Vec::<Result<Word, Error>>::new();
+        assert_eq!(native.len(), reference.len());
+        assert_eq!(native.capacity(), reference.capacity());
+        assert_eq!(native.len(), 0);
+    }
+    #[kani::proof]
     #[kani::unwind(4)]
     fn op34_exact_word() {
         let (v,_) = paired_vectors();

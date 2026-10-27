@@ -1,10 +1,20 @@
 """Focused extraction of frozen library methods and owned safe references."""
 from pathlib import Path
-import subprocess,sys,json,shlex
+import subprocess,sys,json,shlex,re
 root=Path(__file__).resolve().parents[2];stage=sys.argv[1]; variant=sys.argv[2] if len(sys.argv)>2 else 'op223-built'
 assert stage in ('charon','aeneas')
 base='/home/dombarker/project-offloads/codex-pv-cblib-20261027';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy';pinned='/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools'
 entries={
+'join-ref':('pv_cblib_source::join_bytes_reference','pv_cblib_source::join_bytes_reference','PV_CBL_JoinBytesReference'),
+'op33-owned-opt':('pv_cblib_source::pop_owned_reference','pv_cblib_source::pop_owned_reference','PV_CBL_Op33OwnedReference'),
+'op36-ref-opt':('pv_cblib_source::array_reference','pv_cblib_source::array_reference','PV_CBL_Op36Reference'),
+'path-ref-opt':('pv_cblib_source::path_bytes_reference','pv_cblib_source::path_bytes_reference','PV_CBL_PathBytesReference'),
+'op205-opt':('pv_cblib_source::sha_finalize_variable','sha2::core_api::{impl digest::core_api::VariableOutputCore for sha2::core_api::Sha256VarCore}::finalize_variable_core+sha2::core_api::Sha256VarCore','PV_CBL_Op205Opt'),
+'op208-opt':('pv_cblib_source::sha_update_blocks','sha2::core_api::{impl digest::core_api::UpdateCore for sha2::core_api::Sha256VarCore}::update_blocks+sha2::core_api::Sha256VarCore','PV_CBL_Op208Opt'),
+'op215-opt':('pv_cblib_source::sha_finalize_into','digest::core_api::wrapper::{impl digest::FixedOutput for _}::finalize_into','PV_CBL_Op215Opt'),
+'op216-opt':('pv_cblib_source::sha_update','digest::core_api::wrapper::{impl digest::Update for _}::update','PV_CBL_Op216Opt'),
+'op217-opt':('pv_cblib_source::sha_default','digest::core_api::wrapper::{impl core::default::Default for _}::default','PV_CBL_Op217Opt'),
+'op219-opt':('pv_cblib_source::sha_finalize_fixed','digest::core_api::ct_variable::{impl digest::core_api::FixedOutputCore for _}::finalize_fixed_core','PV_CBL_Op219Opt'),
 'op35-opt':('pv_cblib_source::vec_default','alloc::vec::{impl core::default::Default for alloc::vec::Vec<_>}::default','PV_CBL_Op35Opt'),
 'op212-opt':('pv_cblib_source::finalize','digest::digest::_::finalize','PV_CBL_Op212Opt'),
 'op212':('{impl digest::digest::Digest for _}::finalize','digest::digest::{impl digest::digest::Digest for _}::finalize','PV_CBL_Op212'),
@@ -23,6 +33,9 @@ entries={
 'op26':('pv_cblib_source::path_join','std::path::Path::join','PV_CBL_Op26'),
 }
 assert variant in entries
+m=re.match(r'op(\d+)',variant)
+op=int(m[1]) if m else (26 if variant=='join-ref' else 25)
+subprocess.run([sys.executable,str(root/'tools/pv-cblib-20261027/precheck.py'),str(op)],check=True)
 entry,include,namespace=entries[variant]
 name=stage+'-source-'+variant+'-'+(sys.argv[3] if len(sys.argv)>3 else '001')
 out=root/'evidence/pv-cblib-20261027'/name;out.mkdir(exist_ok=True)
@@ -31,7 +44,7 @@ def ssh(c):return subprocess.run(['ssh','dombarker@100.108.41.90',c],text=True,c
 r=ssh(f'mkdir -p {base}/{name}; python3 {gate}/reservation.py {base}/{name}/admission-before.json > {base}/{name}/reservation.log 2>&1; cat {base}/{name}/reservation.log');(out/'admission-transport.log').write_text(r.stdout+r.stderr)
 if not json.loads(r.stdout)['allowed']:print('REFUSED');sys.exit(78)
 if stage=='charon':
- args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',pinned+'/charon','cargo','--preset','aeneas',*(['--hide-allocator'] if True else []),'--mir',('optimized' if variant.endswith('-opt') else 'built'),'--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry,*sum((['--include',x] for x in include.split('+')),[]),*(['--opaque','alloc::vec::Vec','--opaque','alloc::vec::_::new','--opaque','alloc::vec::_::len','--opaque','alloc::vec::_::remove'] if variant in ('op34','op35','op35-opt','op33','op36','op34-ref','op35-ref','op33-ref') else []),'--dest-file',base+'/'+namespace+'.llbc','--','--manifest-path',base+'/source-proof/Cargo.toml','--release','--offline','--lib','--jobs','4']
+ args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',pinned+'/charon','cargo','--preset','aeneas',*(['--hide-allocator'] if True else []),'--mir',('optimized' if variant.endswith('-opt') else 'built'),'--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry,*sum((['--include',x] for x in include.split('+')),[]),*(['--opaque','alloc::vec::Vec','--opaque','alloc::vec::_::new','--opaque','alloc::vec::_::len','--opaque','alloc::vec::_::remove'] if variant in ('op34','op35','op35-opt','op33','op36','op34-ref','op35-ref','op33-ref','op33-owned-opt') else []),'--dest-file',base+'/'+namespace+'.llbc','--','--manifest-path',base+'/source-proof/Cargo.toml','--release','--offline','--lib','--jobs','4']
 else:
  args=['timeout','120',pinned+'/aeneas','-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',namespace,'-dest',base+'/'+variant+'-generated','-split-files','-emit-json',base+'/'+namespace+'.llbc']
  assert ssh(f'mkdir -p {base}/{variant}-generated').returncode==0

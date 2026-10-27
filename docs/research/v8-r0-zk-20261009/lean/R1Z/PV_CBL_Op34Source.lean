@@ -1,5 +1,6 @@
 import R1Z.PV_CBL_Op34Transport
 open Aeneas Aeneas.Std Result
+noncomputable section
 namespace R1Z.PV_CBL_Op34Source
 open ProverRwFull
 set_option autoImplicit false

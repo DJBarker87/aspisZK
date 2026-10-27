@@ -1,5 +1,6 @@
-import R1Z.PV_CBL_Op34Source
+import R1Z.PV_CBL_Op35Source
 open Aeneas Aeneas.Std Result
+noncomputable section
 namespace R1Z.PV_CBL_CallbackBundle
 open ProverRwFull
 set_option autoImplicit false
@@ -8,10 +9,13 @@ variable [ExternalTypes]
 /-- Stable publication dictionary. Source/P6 evidence determines row credit;
 this definition by itself is not a shipped/native execution instance. -/
 @[reducible] def selected (ops : ExternalFuns) : ExternalFuns :=
-  PV_CBL_Op34Source.selected ops
+  PV_CBL_Op35Source.selected (PV_CBL_Op34Source.selected ops)
 
 theorem op34_source (ops : ExternalFuns) {T : Type} (A : Type)
     (v : alloc.vec.Vec T) :
     (selected ops).op34 A v = PV_CBL_Op34Reference.empty_reference v := rfl
+theorem op35_source (ops : ExternalFuns) (T : Type) :
+    (selected ops).op35 T = PV_CBL_Op35Reference.default_reference T := rfl
+#print axioms op35_source
 #print axioms op34_source
 end R1Z.PV_CBL_CallbackBundle
