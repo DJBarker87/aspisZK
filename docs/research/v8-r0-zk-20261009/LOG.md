@@ -10820,3 +10820,36 @@ stays unreachable because its scoped Formatter diagnostic has no closing operati
 evidence/pv-join-20261026/wire/IMPORT-CHAIN.md gives every row's import path for recount 4. This is
 organisation of proved facts into the consumer closure, not premise discharge; the research headline
 imports none of it; no headline credit. Rows removed outright: 0. Privacy target not yet established.
+
+## D241 (Stream B) 2026-10-27 02:40 UTC: srcid6 exhausted; merge gate redefined (project vs external provenance); R1NaturalProjection at HEAD does not compile; cblib launched earlier; srcid7 launched
+
+pv-srcid6 (`codex/pv-srcid3-20261026`, head 6f0741bb10; 100/100 Lean, 4/4 Kani mapper partitions timed
+out, no counterexample; no crates/programs change; no forbidden tokens in branch modules (the two `sorry`
+hits are in copied upstream Aeneas.Std.Slice sources under evidence/, not ours); full audit 147 modules /
+616 standard reports, three final targets exit 0 / ≤2.01 s / ≤4.27 GB / swap 0). Reference Rust gating
+confirmed: parent cfg(kani) declarations, records_reference.rs under cfg(any(kani, aeneas_ref)). The
+obsolete Formatter profile was rejected and quarantined, the repaired HEAD formatter rebuilt with an
+empty axiom set. Families: compile_call: pure Records.call reference equation PROVED for arbitrary inputs,
+deployed dictionary association OPEN; publicCorr REDUCED to the root-helper equation, 21 parent cells and
+the deployed snapshot association (symbolic root recurrence proved); words: full unstubbed mapper
+equality unproved (Kani route exhausted, moves to Lean); admission/row_call REDUCED (unchanged
+interfaces). PV_Src_Premises deployed 5 → 5. MERGE GATE BLOCKED with a provenance inventory of 6,499
+imported objects: 810 accepted source links, 48 PROJECT gaps, 5,641 EXTERNAL gaps. FINDING:
+`R1NaturalProjection.lean` (docs/research/100bit-spend-path-20261013/evidence/lean-natural-projection-
+20261013/remote-evidence/, Stream A's tree, unchanged since a29d480477) does NOT compile at research HEAD
+under the current toolchain (unsolved goals at 28:35 and 58:67; attempts 37102, 37260); the cached object
+came from a historical variant. The worker left a two-line tactic repair UNAPPLIED
+(evidence/pv-srcid3-20261026/PROJECTION-REPAIR.patch); the lead has sent it to Stream A and will not
+touch the file. LEAD RULING: the merge gate distinguishes PROJECT objects (must be compiled from a source
+byte-equal to research HEAD) from EXTERNAL objects (Lean core, Mathlib, Aeneas backend: linked to the
+pinned toolchain/lake-manifest revision, not to repository sources); the 48 project gaps are the real
+blocker, the projection cone is a single named exception until research changes. Launched pv-srcid7
+(same branch, IDs 40000-40299, 100 Lean / 2 Kani): MERGE-GATE v2, the 48 project gaps, words by Lean from
+the variant decomposition, compile_call's deployed association, publicCorr's root helper and cells. Also
+launched at 02:06 UTC (not yet logged): pv-cblib (`codex/pv-cblib-20261027`, candidate sibling, IDs
+39600-39899, 100 Lean / 10 Kani) on the two independent library families nobody held: digest/SHA-2 ops
+205/208/209/212/215/216/217/219 (V231-V238) and std/alloc ops 25/26/28/29/30-36 (V177-V187), against the
+extracted third-party source at the pinned dependency revision, published through PV_CBL_CallbackBundle.
+Housekeeping: the merged pv-l2-sim worktree and branch were removed; pv-l1 and pv-l3 are candidate
+siblings and stay. Six slots: rw21, cb6, cb7, runjoin10, cblib, srcid7. Rows removed outright: 0. Privacy
+target not yet established.
