@@ -933,3 +933,239 @@ recommendations"). Effect on this ledger:
 7. **Corpus archival.** Done: the invalidated corpus-overparallel-v2 and the superseded smoke and phase
    paired outputs deleted (4,060 files, 23 GiB; sha256 manifest evidence/pv-archive-20261027/
    deleted-files.sha256); corpus-1000-002 and focused-paired-001 kept.
+
+## Recount 4 2026-10-27 (B)
+
+**Target not yet established.** All 407 rows have been re-derived at the immutable
+[branch pins](../evidence/privacy-recount-20261026/recount4/pins.json). Original rows,
+recounts 1–3 and owner decisions are intact. This is a mechanical statement/source
+audit: no proof or implementation change and no endpoint premise removed, added or
+weakened. [ROWS4](../evidence/privacy-recount-20261026/ROWS4.md) records every row;
+[rows4.json](../evidence/privacy-recount-20261026/recount4/rows4.json) retains exact
+source/definition hashes, residuals, classifications, routes and import paths.
+[Method](../evidence/privacy-recount-20261026/recount4/METHOD4.md) and
+[D236–D261 corrections](../evidence/privacy-recount-20261026/recount4/CORRECTIONS4.md)
+define the scope of these counts.
+
+| Inventory / status | Recount 1 | Recount 2 | Recount 3 | Recount 4 |
+|---|---:|---:|---:|---:|
+| Rows | 400 | 403 | 407 | 407 |
+| T | 26 | 26 | 26 | 3 |
+| P | 370 | 372 | 376 | 400 |
+| C | 4 | 5 | 5 | 4 |
+| OPEN | 138 | 110 | 103 | 95 |
+| REDUCED | 152 | 154 | 176 | 176 |
+| EVIDENCED | 10 | 12 | 14 | 14 |
+| CLOSED-ON-RESEARCH | 87 | 87 | 87 | 87 |
+| CLOSED-ON-CANDIDATE | 13 | 40 | 27 | 35 |
+
+The denominator is unchanged. Eight newly credited candidate ledger scopes are
+V195/op51, V177/V179/V180/V185/V186, V240/op223 and its V164 bridge; seven
+were OPEN and one REDUCED. V406 owner adoption moves OPEN→REDUCED: accepted
+trust is retained, not proved. Hence OPEN 103→95, candidate closures 27→35.
+V164 and V240 are two ledger scopes but one callback inventory decrement.
+
+D248 classes are applied in additional recount fields. T rows are V329
+(entropy_law), V406 (the aggregate entropy_law/entropy_kernel/observation), and
+the explicitly retained V371 L3 hardware item. **Three T rows do not mean three
+independent fields**: V329 overlaps V406; the RunJoin record remains exactly three
+fields, with no fourth field. V371 remains substantive T until DOITM is enabled.
+Former native T rows are P with their unresolved residuals retained; V391
+classical ROM/P1 is P (instantiate/associate the fixed ideal-oracle model; no
+computational SHA proof inferred). C retains its contradictory/vacuity-suspect meaning.
+V400 is now P for the adopted option-B independence obligation. Original T/P/C
+values remain visible in ROWS4 and the historical rows. REDUCED is not closure.
+
+| Candidate closure route | Ledger rows |
+|---|---:|
+| extraction bridge | 1 |
+| extraction | 27 |
+| P6 gate | 6 |
+| axiom diagnostic | 1 |
+
+There are 27 extracted operation laws (23 cb + three unique CB3 + applied op223),
+six P6-gate operation laws (op51 and five CBL), one dependent extraction bridge
+(V164), and the V270 axiom diagnostic. cb3 track five plus cb 23 yields 27
+unique operations after op229 deduplication; adding CBL five and applied op223
+gives 33 unique operation laws. No SHA/library/native/deployed closure is inferred
+from supporting reference equations.
+
+The four D256 CBL rows are **CLOSED-ON-CANDIDATE (P6 gate)**, not extraction:
+owned references + no-stub bounded Kani + selected dictionary laws. PathBuf/Path
+uses an explicit candidate carrier (Path=retained PathBuf), not a native borrowed/
+owned layout/lifetime proof. Path gate bytes≤4, actual Vec gate length≤2, default
+is loop-free. Loop-free leaves support the structural route, but bounded harnesses
+remain bounded; extraction and Kani rustc differ and deployment association is
+open. The ongoing CBL continuation has additionally published op28/V179, with a
+two-byte UTF-8 gate and selectedString carrier; it is credited at the same explicit
+P6-gate scope, not promoted to an arbitrary-length native proof or a completed
+CBLib2 campaign. See the per-row qualifications.
+
+Applied op223 publishes `PV_Op223_Source.op223_source` and `P_source_p6`.
+`PV_Op223_V164.refinement` supplies that hypothesis on the selected candidate;
+reservation and P_proof_bytes remain. V163 still needs the deployed model input
+and full proof/audit equation. Adoption gates remain open, including final artifact/
+fixture/differential/timing/release binding; the verifier helper is unchanged.
+
+| in headline closure? | All 407 rows | Candidate closure rows |
+|---|---:|---:|
+| research | 160 | 0 |
+| candidate | 137 | 29 |
+| neither | 110 | 6 |
+
+On the SAME 27 recount-3 closures, the wire IMPORT-CHAIN changes 0/17/10 to
+**0/26/1** (research/candidate/neither), mechanically checked edge by edge.
+V270 has no closing operation theorem and stays neither. The eight new closure
+scopes add op51 and the two op223/bridge scopes to candidate membership; five CBL
+publication laws remain neither. Thus the 35 closures split **0/29/6**. The
+candidate root includes the actual wire caller definition and the applied V164
+consumer; publication modules alone are not invented roots. Non-closure row
+membership means defining-source presence only, not discharge.
+
+| OPEN dependency | Recount 3 | Recount 4 | Change |
+|---|---:|---:|---:|
+| (a) independent source / proof / evidence | 44 | 23 | -21 |
+| (b) native / RunJoin / D245 Records / V163 model | 51 | 55 | +4 |
+| (c) owner action (DOITM firmware/kernel only) | 8 | 1 | -7 |
+| (d) shared extraction obstruction; route(ii) candidates | 0 | 16 | +16 |
+| Total OPEN | 103 | 95 | -8 |
+
+The buckets are exclusive; every OPEN row is assigned individually in ROWS4.
+D257 identifies 15 exact escaping-reference-guard operation failures, of which
+applied op223 is now candidate-closed. The remaining 14 are bucket d; the
+subsequent CBL op26 adapter and op31 exact-source failures add two, for **16**.
+op36 concerns owned conversion adapters, not a claimed rejection theorem for
+the generic std function. op253 has a separate internal shared-loan failure and
+stays a; Drop-only failures and arithmetic timeouts are not silently folded into
+the exact shared-guard bucket. Only op223 route(ii) is approved/applied; all other
+route(ii) entries remain design candidates. Kani is not a pending arithmetic route.
+
+Bucket b gains V370 compiler preservation, V396 client integration and
+V380-inversion after D248, and op32/V183 native allocator effects. Bucket c
+retains only V371: Secure Boot lockdown prevents enabling DOITM. Inversion,
+disassembly, final dudect, option-B independence and client execution binding no
+longer await an owner policy decision. Docker caps and the client bundle pin are
+done; the release ledger pin does not prove the client execution theorem.
+
+Source identification on research has CLEAN (h′) merge gate, 21 source cells
+and publicCorr source-root closure. V152–V154 stay REDUCED: compile_call and
+deployed Records/snapshot/installed compiler identification survive. RunJoin8–12
+constructed P={source public binding, trace}; deployed P and record counts
+2/8/6 are unchanged. D245 exact missing equation is: on the SAME fixture arguments,
+`Records.call R_shipped w 600 (some recipient) change snapshot 77 =
+@PV_Src_RecordDynamic.call E_shipped w 600 (some recipient) change snapshot 77`.
+The shipped R_shipped extraction/identification is absent. Literal recorded
+public values do not supply it, the native compiler-return equation, transition
+association or fixture non-vacuity.
+
+V380-inversion remains OPEN/P: conditional same-coin containment is in the
+existing poleBad at the same attempt with P and original coupling; charge remains
+`8*(4096/((2^31-1)^4-1))`. Model tail masks/order/dedup are closed; native
+registry/banks/caller/Records, P-false branches and full limb/address/latency
+observation remain. Option B has a checked fixed-signal statement but its
+endogenous reached-failure independence/transport is open; no admitted native
+counterexample or option-A selection is inferred.
+
+Per-row changes since recount 3 (status, class, bucket or import membership;
+all unchanged rows are nevertheless re-derived in ROWS4):
+
+| Row | Status 3 → 4 | Class 3 → 4 | OPEN bucket 3 → 4 | headline membership 3 → 4 |
+|---|---|---|---|---|
+| V164 | REDUCED → CLOSED-ON-CANDIDATE | P → P | — → — | candidate → candidate |
+| V177 | OPEN → CLOSED-ON-CANDIDATE | P → P | a → — | candidate → neither |
+| V178 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V179 | OPEN → CLOSED-ON-CANDIDATE | P → P | a → — | candidate → neither |
+| V180 | OPEN → CLOSED-ON-CANDIDATE | P → P | a → — | candidate → neither |
+| V182 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V183 | OPEN → OPEN | P → P | a → b | candidate → candidate |
+| V185 | OPEN → CLOSED-ON-CANDIDATE | P → P | a → — | candidate → neither |
+| V186 | OPEN → CLOSED-ON-CANDIDATE | P → P | a → — | candidate → neither |
+| V187 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V195 | OPEN → CLOSED-ON-CANDIDATE | P → P | a → — | candidate → candidate |
+| V197 | CLOSED-ON-CANDIDATE → CLOSED-ON-CANDIDATE | P → P | — → — | neither → candidate |
+| V201 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V206 | CLOSED-ON-CANDIDATE → CLOSED-ON-CANDIDATE | P → P | — → — | neither → candidate |
+| V209 | CLOSED-ON-CANDIDATE → CLOSED-ON-CANDIDATE | P → P | — → — | neither → candidate |
+| V210 | CLOSED-ON-CANDIDATE → CLOSED-ON-CANDIDATE | P → P | — → — | neither → candidate |
+| V212 | CLOSED-ON-CANDIDATE → CLOSED-ON-CANDIDATE | P → P | — → — | neither → candidate |
+| V213 | CLOSED-ON-CANDIDATE → CLOSED-ON-CANDIDATE | P → P | — → — | neither → candidate |
+| V214 | CLOSED-ON-CANDIDATE → CLOSED-ON-CANDIDATE | P → P | — → — | neither → candidate |
+| V218 | CLOSED-ON-CANDIDATE → CLOSED-ON-CANDIDATE | P → P | — → — | neither → candidate |
+| V219 | CLOSED-ON-CANDIDATE → CLOSED-ON-CANDIDATE | P → P | — → — | neither → candidate |
+| V228 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V229 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V231 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V234 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V235 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V236 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V237 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V238 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V239 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V240 | OPEN → CLOSED-ON-CANDIDATE | P → P | a → — | candidate → candidate |
+| V241 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V256 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V264 | OPEN → OPEN | P → P | a → d | candidate → candidate |
+| V330 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V331 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V332 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V333 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V334 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V335 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V370 | OPEN → OPEN | T → P | c → b | neither → neither |
+| V373 | OPEN → OPEN | P → P | c → a | neither → neither |
+| V374 | OPEN → OPEN | P → P | c → a | neither → neither |
+| V375 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V376 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V377 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V378 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V379 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V380 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V381 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V382 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V383 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V384 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V385 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V386 | REDUCED → REDUCED | T → P | — → — | candidate → candidate |
+| V387 | REDUCED → REDUCED | T → P | — → — | neither → neither |
+| V388 | REDUCED → REDUCED | T → P | — → — | neither → neither |
+| V389 | REDUCED → REDUCED | T → P | — → — | neither → neither |
+| V390 | REDUCED → REDUCED | T → P | — → — | neither → neither |
+| V391 | REDUCED → REDUCED | T → P | — → — | neither → neither |
+| V396 | OPEN → OPEN | P → P | c → b | neither → neither |
+| V380-inversion | OPEN → OPEN | P → P | c → b | neither → neither |
+| V400 | OPEN → OPEN | C → P | c → a | neither → neither |
+| V406 | OPEN → REDUCED | P → T | c → — | neither → neither |
+
+Unchanged-status material updates: V152–V154 source-ID CLEAN/publicCorr source
+half; V163 rw21 serializer with D245 residual; V038/V045/V336–V339 constructed
+RunJoin reductions with deployed P unchanged; V380-inversion model tail closure.
+
+Corrections are explicit in CORRECTIONS4.md: D241/D254 wrong-source gap claims
+are withdrawn by D243/D255; D236 inherits the old op229 duplicate baseline;
+D256 bounded P6/native/carrier scope must be retained; D257 op36 adapters are not
+the generic shipped conversion. No other assessed D236–D261 closure claim is
+promoted beyond its actual statement. V270 is not native Formatter closure;
+source parent cells, trust-field overlaps and fixture slices are not new callback
+decrements. No existing soundness contract or target has been weakened.
+
+Three valuable independent next rows (current bucket a): **V403**, canonical
+op121 producer/domain composition; **V400**, reached-failure signal synchronization
+for option B against the existing headline bad-event accounting; **V230/op134**,
+exact active-row-mask shipped/source correspondence, with Lean extraction or a
+structural source bridge rather than another chained-arithmetic Kani gate.
+D245 selected Records is the highest shared dependency but belongs to b.
+
+Validation: **20/20 statement-only Lean invocations**, Env-J44500–44519,
+16 exit 0; four exit 1 (44501 helper namespace typo; 44510/44511 missing
+PV_Op223 source/bridge objects; 44518 missing PV_Inv_GuardCoupling object).
+Failed helpers are retained, not rewritten or reported passing; no unchanged
+rerun. [Receipts](../evidence/privacy-recount-20261026/recount4/receipts.json)
+record target, command, exit, wall, peak RSS, swap, revision/source/dependency
+hashes, direct-source equality and complete axioms/errors. Successful reports
+have only standard axioms. Original source-law/bridge receipts are reused and
+kept distinct from these checks; missing shared objects do not negate their
+private-cache proofs. No shared source was overwritten, local Lean compile,
+Kani/proof/runtime/Rust/SBF build, full regression, key/fund operation, merge or
+push. Resource caps remain 6G/8G/no swap/-M7000, one scope at a time.
+Stop: every row re-derived and the statement budget exhausted. **Target not yet
+established.**
