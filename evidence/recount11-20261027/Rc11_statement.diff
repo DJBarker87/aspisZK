@@ -1,0 +1,24 @@
+--- Rc10_Top.deployed
++++ ARX_Root.deployed
+@@ -30,16 +30,15 @@
+       (CPG_Projection.adjacent p) (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p)
+       (CPG_Projection.tentative p)
+       (CPG_Projection.success p) (CPG_Projection.loaded p))
+-    (D : LiteralByteProtocol.Decoder) (P : F3T_ByteCarrier.ByteProver) (Q0 Q1 : Nat)
+-    (queries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q0+Q1)
+-    (runtime : F3T_Runtime.Runtime)
++    (D : LiteralByteProtocol.Decoder) (a : SCE_Experiment.Adversary A) (Q0 Q1 : Nat)
++    (queries : ∀ H : Bytes → State,
++      (ARW_Induced.issued native1 copy allocator CPH_Program.verifier a H).length ≤ Q0+Q1)
+     (finishOwners : FIp_GlobalOwners.Owners
+       (FIp_Install.configuration indexError c reservation)
+       (Rc2_Install.configuration (Rc5_Install.seed indexError (FIp_Install.select reservation c)) reservation).boundaries)
+-    (binding : F3T_Runtime.StoredCarrierBinding
+-      (FIp_Install.configuration indexError c reservation) D
+-      (F3T_Installed.source (FIp_Install.configuration indexError c reservation) hashv) P runtime)
+     :
++    let P := ARW_Induced.program native1 copy allocator CPH_Program.verifier a;
++    let runtime := ARX_AdmittedRuntime.runtime (Tx := Tx) L copy allocator c indexError reservation native1 native2 hashv a;
+     let select : F3X_Projection.Output → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs :=
+       fun _ => P2P_NativeSelection.pair
+         (DrvC_Installation.sdk (FIp_Install.configuration indexError c reservation))
