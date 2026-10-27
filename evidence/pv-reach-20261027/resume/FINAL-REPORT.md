@@ -50,5 +50,50 @@ native associations; they earn no row closure. No fact is moved into T.
 
 ## Validation and stop
 
-Receipts, final audit results and stop accounting will be populated after the
-remaining sequential focused checks and three reserved audit attempts.
+Fresh budget **100/100 Lean**: **85 passed / 15 failed**; **0 Kani**.
+IDs **44200–44299**, unique; no admission refusals and no unchanged failing
+source/environment replay. Each failed candidate is retained in its numbered
+source snapshot and receipt. The Option-returning validation suffix shape is
+now recognized by the generator and proved by symbolic Result/Option cases,
+without unfolding either recursive validation loop.
+
+`receipt-index.json` records every exact target, exit status, wall time, peak
+RSS, swap, source revision/hash, dependency fingerprint and full axioms output.
+All scopes were sequential, 6G/8G/swap0, TasksMax64, Lean -M7000.
+
+Final audit revision: `f3e613f7f86ca8515bd22d7182617ead947aaa8f`.
+Target prefix `R1Z/PV_RE_`:
+
+| Target / ID | Exit | Wall | Peak RSS KiB | Swap | Axioms reports |
+|---|---:|---|---:|---:|---:|
+| ResumeAuditA / 44297 | 0 | 0:01.24 | 2633244 | 0 | 226 |
+| ResumeAuditB / 44298 | 0 | 0:01.20 | 2582632 | 0 | 175 |
+| ResumeCombinedAudit / 44299 | 0 | 0:01.91 | 4235568 | 0 | 402 |
+
+All 401 retained resume declarations plus the existing headline have only
+standard axioms. The combined log also prints the full outer-control theorem
+signatures. This is a focused audit against retained objects, **not a clean
+release manifest replay**. All retained source bytes have a matching green
+receipt; source hashes and audit receipts are frozen in `new-source-pins.json`,
+`pre-audit-source-check.json` and `final-audits.json`. Generator checks pass. `whitespace-check.json` records trailing spaces in two
+checked declaration lines and retained historical transcripts; their exact
+bytes are preserved.
+
+The uncompiled `PV_RE_Continue063`, `PV_RE_Continue064`, and
+`PV_RE_RetryTerminal` drafts remain under the job's tools directory and are
+excluded from the audited theory. No credit is taken for them.
+
+No shipped code, endpoint/simE/observer source, shared env-J source, sibling
+worktree, wallet or key was changed. The four extracted candidate source
+hashes remain equal to the inherited pins. Private object scratch was hashed
+and removed after auditing; sources and all receipts remain. No push/merge.
+
+Stopped on **fresh Lean budget exhaustion**, not a failed candidate or checked
+source counterexample. The next concrete deliverable is a callback-invocation
+trace semantics/refinement through the retained attempt suffixes, including
+failure/divergence prefixes, composed with `whole_client`; then finite-set
+membership and per-entry exclusion for each fixture, with actual native
+association non-vacuity. See `next-obligation.md`.
+
+Resume commit log before the final evidence commit: `commits-before-final.txt`.
+The prior report is retained in `prior-final-report.md`.
