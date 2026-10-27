@@ -1,0 +1,64 @@
+LPs_generated/LPs_ClaimsDomain.lean:90:14: error: Application type mismatch: The argument
+  success
+has type
+  (toMainStatus do
+      let record ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8
+      match record with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok vr =>
+          AspisR1ClaimsUnrolledParent.decodeRows (external (NP6_StdModel.calls (core.result.Result.Ok ()))) vr) =
+    ok (core.result.Result.Ok out)
+but is expected to have type
+  (toMainStatus do
+      let r ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => first a) =
+    ok (core.result.Result.Ok out)
+in the application
+  step_success ((external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8) first
+    out success
+LPs_generated/LPs_ClaimsDomain.lean:92:89: error: Application type mismatch: The argument
+  success
+has type
+  toMainStatus (first r) = ok (core.result.Result.Ok out)
+but is expected to have type
+  (toMainStatus do
+      let r_1 ← sourceDecode 29#usize r 0#usize
+      match r_1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => second r a) =
+    ok (core.result.Result.Ok out)
+in the application
+  step_success (sourceDecode 29#usize r 0#usize) (second r) out success
+LPs_generated/LPs_ClaimsDomain.lean:93:91: error: Application type mismatch: The argument
+  success
+has type
+  toMainStatus (second r a) = ok (core.result.Result.Ok out)
+but is expected to have type
+  (toMainStatus do
+      let r_1 ← sourceDecode 29#usize r 29#usize
+      match r_1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a_1 => third r a a_1) =
+    ok (core.result.Result.Ok out)
+in the application
+  step_success (sourceDecode 29#usize r 29#usize) (third r a) out success
+LPs_generated/LPs_ClaimsDomain.lean:95:46: error: Application type mismatch: The argument
+  success
+has type
+  toMainStatus (third r a b) = ok (core.result.Result.Ok out)
+but is expected to have type
+  (toMainStatus do
+      let r ← sourceDecode 29#usize r 58#usize
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a_1 => ok (core.result.Result.Ok ⟨[a, b, a_1], ⋯⟩)) =
+    ok (core.result.Result.Ok out)
+in the application
+  step_success (sourceDecode 29#usize r 58#usize) (fun c => ok (core.result.Result.Ok ⟨[a, b, c], ?m.126⟩)) out success
+'_private.LPs_ClaimsDomain.0.AspisR1.LPs_ClaimsDomain.step_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LPs_ClaimsDomain.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPs_ClaimsDomain.claims' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
