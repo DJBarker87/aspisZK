@@ -1,0 +1,35 @@
+'AspisR1.JGx_DecodeInjective.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_DecodeInjective.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_DotMeaning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_DotGate.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JGx_DotGate.source : ∀ {C : Type} (err : C) (geometry : AspisR1.Port3_NativeGeometryBody.Ops C)
+  (seed : AspisR1.Port3_NativeQueryBody.Ops) (a : AspisR1Stage2.verifier.Accumulator)
+  (b : AspisR1Stage2.verifier.BatchedWeights) (flushed : Aeneas.Std.Slice AspisR1.SAQ_WideABI.K),
+  AspisR1.JFz_TX2_AccumulationChain.updates seed 12 = Aeneas.Std.Result.ok (a, b) →
+    AspisR1.Port3_FlushInstall.flush b a.weights.deref = Aeneas.Std.Result.ok flushed →
+      (↑flushed).length = 64 →
+        (∀ q ∈ ↑flushed, AspisR1.Port3_FlushInstall.Canonical q) →
+          AspisR1.SAG_DotClosed.source (AspisR1.JFw_Frames.window 8007 2048) flushed =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a.rhs) :=
+fun {C} err geometry seed a b flushed updates flush size canonical =>
+  have scalars := AspisR1.JGv_QueryScalars.source err geometry seed a b updates;
+  have weights := AspisR1.JGv_WeightsExact.source err geometry seed a b flushed updates flush size canonical;
+  let ⟨dot, call⟩ :=
+    AspisR1.JGv_DotTotal.source (AspisR1.JFw_Frames.window 8007 2048) flushed size AspisR1.JGv_DotFields.source
+      canonical
+  have dotCanon :=
+    AspisR1.JGv_DotCanonical.source (AspisR1.JFw_Frames.window 8007 2048) flushed dot size AspisR1.JGv_DotFields.source
+      canonical call;
+  have interpreted := AspisR1.JGx_DotMeaning.source dot (weights ▸ call);
+  let ⟨left✝, right✝⟩ :=
+    AspisR1.JGv_QueryRows.source err geometry seed 12
+      (Decidable.byContradiction fun a => AspisR1.JGx_DotGate.source._proof_1 flushed a) a b updates
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨cr, right✝²⟩ := right✝¹
+  let ⟨left✝², right✝³⟩ := right✝²
+  let ⟨left✝³, right✝⁴⟩ := right✝³
+  let ⟨left✝⁴, right✝⁵⟩ := right✝⁴
+  have same :=
+    AspisR1.JGx_DecodeInjective.source dot a.rhs dotCanon cr
+      (Eq.trans interpreted (congrArg AspisR1.CheckpointBytes5Output.ofE (Eq.symm scalars.left)));
+  same ▸ call

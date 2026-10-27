@@ -1,0 +1,45 @@
+{"attempt": "JGx_TX2_098", "exit_status": 0, "wall_seconds": 3.271181995049119, "peak_rss_kib": "7161356", "swaps": "0", "print_axioms": ["'AspisR1.JGx_AdoptedStage.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGx_Authenticated.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGx_Saved.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGx_RealStatement.native' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGx_RealStatement.encode' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGx_RealStatement.decode' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGx_LocalNonvacuity.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.JGx_AdoptedStage.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_Authenticated.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_Saved.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_RealStatement.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_RealStatement.encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_RealStatement.decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_LocalNonvacuity.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JGx_AdoptedStage.source : ∀ {C : 
+...
+ration.value c err)) () realizes;
+    Eq.mp
+      (congrArg
+        (fun _a =>
+          VTop_Stages.verifier.candidate.tx2_authenticated
+              (AspisR1.JGx_StageDictionary.source c.stageBase c.finish err c.geometry c.query) _a
+              AspisR1.JFx_NativeBytes.publicInput AspisR1.JFx_NativeBytes.proof AspisR1.JFx_NativeBytes.checkpoint ()
+              none =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+        (Eq.symm (AspisR1.JGx_Configuration.digest c err)))
+      computed)
+theorem AspisR1.JGx_Saved.source : ∀ {C : Type} (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C)
+  (err : C) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  ↑saved = ↑AspisR1.JFx_NativeBytes.checkpoint →
+    AspisR1.JFn_HashBoundary.Realizes AspisR1.JFp_SHADigest.digest →
+      VTop_Stages.verifier.candidate.tx2_authenticated
+          (AspisR1.DrvC_Installation.stage (AspisR1.JGx_Configuration.value c err))
+          (AspisR1.DrvC_Installation.digest (AspisR1.JGx_Configuration.value c err)) AspisR1.JFx_NativeBytes.publicInput
+          AspisR1.JFx_NativeBytes.proof ⟨↑saved, ⋯⟩ () none =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) :=
+fun {C} c err saved same realizes =>
+  have cp := Subtype.ext same;
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          VTop_Stages.verifier.candidate.tx2_authenticated
+              (AspisR1.DrvC_Installation.stage (AspisR1.JGx_Configuration.value c err))
+              (AspisR1.DrvC_Installation.digest (AspisR1.JGx_Configuration.value c err))
+              AspisR1.JFx_NativeBytes.publicInput AspisR1.JFx_NativeBytes.proof _a () none =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+        cp))
+    (AspisR1.JGx_AdoptedStage.source c err realizes)
+
+Running as unit: run-r9d5ad4477f8041c48308845c490fd7d7.scope; invocation ID: e57388dd9f734c9794229564953cf498

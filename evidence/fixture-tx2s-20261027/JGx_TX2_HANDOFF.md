@@ -20,7 +20,7 @@ The physical encoder, reader checkpoint bytes, caller range and verifier return 
 
 ## Actual top, ledger and non-vacuity
 
-BEFORE/AFTER FJv_Top.deployed sources are identical, including all quantifiers, common witnesses, installation/extraction tuple, native functions, carriers, guards, game, frozen3, RuntimePersistence, failure events, bounds and constants. `JGx_LEDGER_DELTA.json` uses the inherited quantified atomic-law-family/conjunction-leaf method. Actual83T/3P/13G/0C →83T/3P/13G/0C; non-alias deployment-inclusive89T/20P/13G/0C →89T/20P/13G/0C. Removed/added/changed EACH0T/0P/0G/0C. No fixture/helper/conditional composition is booked as top-premise discharge.
+BEFORE/AFTER FJv_Top.deployed sources are identical, including all quantifiers, common witnesses, installation/extraction tuple, native functions, carriers, guards, game, frozen3, RuntimePersistence, failure events, bounds and constants. `JGx_LEDGER_DELTA.json` uses the inherited quantified atomic-law-family/conjunction-leaf method. Actual83T/3P/13G/0C →83T/3P/13G/0C; normalized current-ledger deployment-inclusive89T/18P/13G/0C →89T/18P/13G/0C. Removed/added/changed EACH0T/0P/0G/0C. No fixture/helper/conditional composition is booked as top-premise discharge. The read-only authoritative ledger at the pinned research revision has a later L187-booked row18P; earlier JGv20P/JGw19P reporting is superseded for this normalized recount. That external correction/replay credit is NOT this task’s progress. JGx_LEDGER_READONLY.md retains the source.
 
 `JGx_LocalNonvacuity.source` constructs unconditional SAME-byte batch/query/actual flush/installed finish and physical encoder returns. Complete native wrapper, joint-pair, real SHA realization and top non-vacuity remain unproved. No real-byte premise was shown uninhabitable. EmissionObstruction refutes only uniform success over arbitrary rejecting emit dictionaries; it is not a vacuity counterexample for the retained fixture or release target.
 
@@ -34,7 +34,7 @@ Every numbered receipt pins source revision/dirty flag/hash, selected dependency
 
 ## Remaining joint obligations
 
-Read-only research prefix check is in JGx_JGw_RESEARCH_CHECK.json. No JGw accepted1 or saved-checkpoint equality was imported. JGx_JointPair.source is only the SAME-native/SAME-entry composition interface. The undischarged joint conjunction remains exactly:
+Read-only research prefix check is in JGx_JGw_RESEARCH_CHECK.json. The late-merged JGw packet at the pinned revision was read through git show, including its complete handoff and actual WriterCall/InstalledSlots sources. It has88 modules but NO completed batch0, query acceptance chain, writer success, saved-checkpoint equality or accepted1. No successful TX1 result is available to compose, and none is imported as one. JGx_JGw_HANDOFF_READONLY.md preserves that status. JGx_JointPair.source is only the SAME-native/SAME-entry composition interface. The undischarged joint conjunction remains exactly:
 
 ```lean
 S2W_D189Wrappers.first native1 copy allocator e1 CPH_Program.verifier data1 state1 =
@@ -53,3 +53,15 @@ No shipped or cfg(kani) change triggered rebuilds. INHERITED pins only, not newl
 - default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4
 - devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299
 - Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548
+
+## Final budget stop and audits
+
+**100/100 charged requests used:99 Lean processes (74pass,25reject) plus1 pre-Lean closure rejection021;0/10 Kani. No further compile is authorized.** All70 delivered current JGx modules have exact-current-source-hash passing receipts. Every new theorem has an accepted full axiom line containing only propext,Classical.choice,Quot.sound or subsets. JGx_VALIDATION.json maps sources to accepted receipts; rejected recovery output is retained without credit.
+
+Grouped audits PASS:095 std/native/runtime,096 dot,097 finish/query,098 actual installed source/saved bytes/local non-vacuity/physical encoder,099 conditional wrapper/joint interface.100 imports ONLY actual FJv_Top and passes its separate axioms audit. This is focused cached composition, not this job’s full frozen-release replay. No package replay ran.
+
+100 target JGx_TopAudit.lean:exit0,wall2.4786429409869015s,peakRSS5726124KiB,swap0;source revision `9e33edf68421b16ea047f7041f71ba41df10b391`,dirty-source flag and exact hash in receipt100. Its printed axioms: `[propext, Classical.choice, Quot.sound]`. Total Lean wall327.32542712037684s;maximumRSS7218172KiB;total swap0. All100 admission receipts have allowed:true;no reservation bypass or cap increase.
+
+Strongest checked native formula:JGx_StdNative.source leaves actual ASQ8 validate_asq8 return explicit and returns the ACTUAL emit_result Result, including rejection. JGx_StdTX2.accepted2 additionally requires emit_result success and Realizes. These are not closed native-wrapper acceptance or joint non-vacuity. The requested actual-top premise removal is ZERO; target not yet established.
+
+Static/current-hash/theorem-axiom/scope/admission checks and git diff --check pass. All own compilation scopes are terminal. Canonical prefix objects are retained for downstream reuse;no task scratch/Cargo/solver corpus was created. Task compile wrapper is retired as text at budget exhaustion.

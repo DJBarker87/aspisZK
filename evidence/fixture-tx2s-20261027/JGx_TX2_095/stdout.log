@@ -1,0 +1,58 @@
+'AspisR1.JGx_RequestBytes.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_RequestRead.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_MagicStd.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_CallerStd.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_StdNative.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_StdTX2.accepted2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGx_Runtime.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JGx_StdNative.source : ∀ {C : Type}
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C)
+  (headerBytes : Aeneas.Std.Array Aeneas.Std.U8 688#usize) (payload : Aeneas.Std.Array Aeneas.Std.U8 316#usize)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+  AdapterRw.r1_pool_adapter.owned.validate_asq8
+        (AspisR1.DrvC_Installation.sdk
+          (AspisR1.JGx_Configuration.value (AspisR1.JGx_CallerSeed.value (AspisR1.JGx_CallerStd.value c)) err))
+        AspisR1.CPH_Program.verifier
+        ((AspisR1.JFv_World.e2 (AspisR1.JGx_ProofAccount.value headerBytes)).second
+          AspisR1.S2W_D189Wrappers.secondSizes)
+        (AspisR1.JGx_RequestBytes.value payload) slot =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JGx_Validated.value) →
+    AspisR1.JFn_HashBoundary.Realizes AspisR1.JFp_SHADigest.digest →
+      AspisR1.JGx_Natives.second (AspisR1.JGx_CallerSeed.value (AspisR1.JGx_CallerStd.value c)) err
+          AspisR1.CPH_Program.verifier
+          ((AspisR1.JFv_World.e2 (AspisR1.JGx_ProofAccount.value headerBytes)).second
+            AspisR1.S2W_D189Wrappers.secondSizes)
+          (AspisR1.JGx_RequestBytes.value payload) slot =
+        (AspisR1.DrvC_Installation.sdk
+              (AspisR1.JGx_Configuration.value (AspisR1.JGx_CallerSeed.value (AspisR1.JGx_CallerStd.value c)) err)).op53
+          AspisR1.JGx_RealStatement.value :=
+fun {C} c err headerBytes payload slot validation realizes =>
+  AspisR1.JGx_RealNative.source (AspisR1.JGx_CallerStd.value c) err headerBytes (AspisR1.JGx_RequestBytes.value payload)
+    slot (AspisR1.JGx_CallerStd.source (AspisR1.JGx_CallerSeed.value c) err payload) validation realizes
+theorem AspisR1.JGx_StdTX2.accepted2 : ∀ {C : Type}
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C)
+  (headerBytes : Aeneas.Std.Array Aeneas.Std.U8 688#usize) (payload : Aeneas.Std.Array Aeneas.Std.U8 316#usize)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+  AdapterRw.r1_pool_adapter.owned.validate_asq8
+        (AspisR1.DrvC_Installation.sdk
+          (AspisR1.JGx_Configuration.value (AspisR1.JGx_CallerSeed.value (AspisR1.JGx_CallerStd.value c)) err))
+        AspisR1.CPH_Program.verifier
+        ((AspisR1.JFv_World.e2 (AspisR1.JGx_ProofAccount.value headerBytes)).second
+          AspisR1.S2W_D189Wrappers.secondSizes)
+        (AspisR1.JGx_RequestBytes.value payload) slot =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JGx_Validated.value) →
+    (AspisR1.DrvC_Installation.sdk
+              (AspisR1.JGx_Configuration.value (AspisR1.JGx_CallerSeed.value (AspisR1.JGx_CallerStd.value c)) err)).op53
+          AspisR1.JGx_RealStatement.value =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+      AspisR1.JFn_HashBoundary.Realizes AspisR1.JFp_SHADigest.digest →
+        AspisR1.S2W_D189Wrappers.second
+            (AspisR1.JGx_Natives.second (AspisR1.JGx_CallerSeed.value (AspisR1.JGx_CallerStd.value c)) err)
+            AspisR1.CPH_FixtureData.allocator (AspisR1.JFv_World.e2 (AspisR1.JGx_ProofAccount.value headerBytes))
+            AspisR1.CPH_Program.verifier (AspisR1.JGx_RequestBytes.value payload) slot () =
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Ok
+              ((AspisR1.JFv_World.e2 (AspisR1.JGx_ProofAccount.value headerBytes)).heap, ())) :=
+fun {C} c err headerBytes payload slot validation emitted realizes =>
+  AspisR1.JGx_TX2.accepted2 (AspisR1.JGx_CallerStd.value c) err headerBytes (AspisR1.JGx_RequestBytes.value payload)
+    slot (AspisR1.JGx_CallerStd.source (AspisR1.JGx_CallerSeed.value c) err payload) validation emitted realizes
