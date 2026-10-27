@@ -1,0 +1,35 @@
+'AspisR1.JGo_TX2_Partial.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJr_BodyPairMeaning.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJp_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.FJr_BodyPairMeaning.value (r : AspisR1.NP6_StdModel.Reservation) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E)
+  (fields : AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am) (w : AspisR1.FIo_Install.W)
+  (alpha : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (out : AspisR1Stage2.Stage2Finish.E)
+  (hw :
+    AspisR1.FIn_WeightsInstall.newWeights p.variant p.semantic_alpha p.z =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w))
+  (prefixRun :
+    Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice
+          (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+        p.alpha { «end» := 2#usize } =
+      Aeneas.Std.Result.ok alpha)
+  (len : (↑f).length = 2048)
+  (run : AspisR1.FIo_Install.pair r w alpha f p.kappa = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out)) :
+  ∃ a0 a1 p0 p1,
+    (AspisR1.FIo_Install.toSlice alpha).index_usize 0#usize = Aeneas.Std.Result.ok a0 ∧
+      (AspisR1.FIo_Install.toSlice alpha).index_usize 1#usize = Aeneas.Std.Result.ok a1 ∧
+        (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toPoint p.z).index_usize 0#usize =
+            Aeneas.Std.Result.ok p0 ∧
+          (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toPoint p.z).index_usize 1#usize =
+              Aeneas.Std.Result.ok p1 ∧
+            AspisR1.CheckpointBytes5Output.ofE out =
+              AspisR1.RoundPairing.dot (fun i => AspisR1.FJc_InactiveCoefficientsModel.field f ↑i)
+                (AspisR1.RoundPairing.dualFold (AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide a1))
+                  (AspisR1.RoundPairing.dualFold (AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide a0))
+                    fun i =>
+                    ∑ j,
+                      AspisR1.CheckpointBytes5Output.ofE p.kappa ^ ↑j *
+                        AspisR1.FJr_PairRows.rows p.semantic_alpha p0 p1 j i))
