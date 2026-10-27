@@ -2778,3 +2778,69 @@ outside records, signature, type, output, bounded access, allocation or
 I/O changes. Both local helpers must extract concretely. Copy derives
 remain field.rs:22, pair_trace.rs:71, pair_forest_trace.rs:53,
 payment_relation.rs:88, pair_tree_profile.rs:403.
+
+26. D277, make constant shift operand types explicit, verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index b827c6ef4f..fc0ef838e3 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -240,26 +240,26 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+         let [d0, d1, d2] = input.super_root_directions;
+         let bits = [
+             u32::from(pair.selected_second),
+-            ((pair.membership.index >> 0) & 1) as u32,
+-            ((pair.membership.index >> 1) & 1) as u32,
+-            ((pair.membership.index >> 2) & 1) as u32,
+-            ((pair.membership.index >> 3) & 1) as u32,
+-            ((pair.membership.index >> 4) & 1) as u32,
+-            ((pair.membership.index >> 5) & 1) as u32,
+-            ((pair.membership.index >> 6) & 1) as u32,
+-            ((pair.membership.index >> 7) & 1) as u32,
+-            ((pair.membership.index >> 8) & 1) as u32,
+-            ((pair.membership.index >> 9) & 1) as u32,
+-            ((pair.membership.index >> 10) & 1) as u32,
+-            ((pair.membership.index >> 11) & 1) as u32,
+-            ((pair.membership.index >> 12) & 1) as u32,
+-            ((pair.membership.index >> 13) & 1) as u32,
+-            ((pair.membership.index >> 14) & 1) as u32,
+-            ((pair.membership.index >> 15) & 1) as u32,
+-            ((pair.membership.index >> 16) & 1) as u32,
+-            ((pair.membership.index >> 17) & 1) as u32,
+-            ((pair.membership.index >> 18) & 1) as u32,
+-            ((pair.membership.index >> 19) & 1) as u32,
++            ((pair.membership.index >> 0u32) & 1) as u32,
++            ((pair.membership.index >> 1u32) & 1) as u32,
++            ((pair.membership.index >> 2u32) & 1) as u32,
++            ((pair.membership.index >> 3u32) & 1) as u32,
++            ((pair.membership.index >> 4u32) & 1) as u32,
++            ((pair.membership.index >> 5u32) & 1) as u32,
++            ((pair.membership.index >> 6u32) & 1) as u32,
++            ((pair.membership.index >> 7u32) & 1) as u32,
++            ((pair.membership.index >> 8u32) & 1) as u32,
++            ((pair.membership.index >> 9u32) & 1) as u32,
++            ((pair.membership.index >> 10u32) & 1) as u32,
++            ((pair.membership.index >> 11u32) & 1) as u32,
++            ((pair.membership.index >> 12u32) & 1) as u32,
++            ((pair.membership.index >> 13u32) & 1) as u32,
++            ((pair.membership.index >> 14u32) & 1) as u32,
++            ((pair.membership.index >> 15u32) & 1) as u32,
++            ((pair.membership.index >> 16u32) & 1) as u32,
++            ((pair.membership.index >> 17u32) & 1) as u32,
++            ((pair.membership.index >> 18u32) & 1) as u32,
++            ((pair.membership.index >> 19u32) & 1) as u32,
+             u32::from(d0),
+             u32::from(d1),
+             u32::from(d2),
+```
+
+The extraction completes, but kernel attempt 50602 reports that the
+generated wrapping_shr expects U32 and receives I32 literals. Explicit
+u32 RHS literals 0..19 select the same Rust u32 right-shift values; each
+count is nonnegative and strictly below 32, so values and panics are
+identical for every input. This fixes the source operand type rather than
+editing generated semantics or the pinned extractor/backend. No other
+computation, signature, type declaration, helper or caller changes. Copy
+locations remain as previously recorded. Final ELF gate must be repeated
+after this last source edit.
