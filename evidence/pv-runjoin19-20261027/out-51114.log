@@ -1,0 +1,73 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:23:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(Usize.wrapping_add ?m.122 ?m.123)
+in the target expression
+  (if 4#usize < poseidon2.EXTERNAL_INITIAL.to_slice.len.wrapping_add poseidon2.INTERNAL.to_slice.len then do
+      let constant1 ←
+        poseidon2.INTERNAL.index_usize (Usize.wrapping_sub 4#usize poseidon2.EXTERNAL_INITIAL.to_slice.len)
+      let m ← Array.index_usize s 0#usize
+      let m1 ← m.add constant1
+      let m2 ← poseidon2.pow5 m1
+      let state1 ← Array.update s 0#usize m2
+      let state2 ← poseidon2.internal_linear_lazy state1
+      ok (some (), state2)
+    else
+      if 4#usize < poseidon2.POSEIDON2_ROUNDS then do
+        let constants1 ←
+          poseidon2.EXTERNAL_FINAL.index_usize
+              ((Usize.wrapping_sub 4#usize poseidon2.EXTERNAL_INITIAL.to_slice.len).wrapping_sub
+                poseidon2.INTERNAL.to_slice.len)
+        let state1 ←
+          poseidon2.apply_round_by_index_loop1 { start := 0#usize, «end» := poseidon2.POSEIDON2_WIDTH } s constants1
+        let state2 ← poseidon2.external_linear_lazy state1
+        ok (some (), state2)
+      else ok (none, s)) =
+    do
+    let out ← R0PoseidonCopy.internal_round s (↑poseidon2.INTERNAL)[0]! R0PoseidonCopy.INTERNAL_SHIFTS
+    ok (some (), out)
+
+s : State
+hs : Canonical s
+hc : ↑(↑poseidon2.INTERNAL)[0]! < 2147483647
+hlen : ∀ {α : Type} {n : Usize} (a : Std.Array α n), a.to_slice.len = n
+⊢ (if 4#usize < poseidon2.EXTERNAL_INITIAL.to_slice.len.wrapping_add poseidon2.INTERNAL.to_slice.len then do
+      let constant1 ←
+        poseidon2.INTERNAL.index_usize (Usize.wrapping_sub 4#usize poseidon2.EXTERNAL_INITIAL.to_slice.len)
+      let m ← Array.index_usize s 0#usize
+      let m1 ← m.add constant1
+      let m2 ← poseidon2.pow5 m1
+      let state1 ← Array.update s 0#usize m2
+      let state2 ← poseidon2.internal_linear_lazy state1
+      ok (some (), state2)
+    else
+      if 4#usize < poseidon2.POSEIDON2_ROUNDS then do
+        let constants1 ←
+          poseidon2.EXTERNAL_FINAL.index_usize
+              ((Usize.wrapping_sub 4#usize poseidon2.EXTERNAL_INITIAL.to_slice.len).wrapping_sub
+                poseidon2.INTERNAL.to_slice.len)
+        let state1 ←
+          poseidon2.apply_round_by_index_loop1 { start := 0#usize, «end» := poseidon2.POSEIDON2_WIDTH } s constants1
+        let state2 ← poseidon2.external_linear_lazy state1
+        ok (some (), state2)
+      else ok (none, s)) =
+    do
+    let out ← R0PoseidonCopy.internal_round s (↑poseidon2.INTERNAL)[0]! R0PoseidonCopy.INTERNAL_SHIFTS
+    ok (some (), out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:19:13: warning: This simp argument is unused:
+  hlen
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵l̵e̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_IndexedRound0419.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:19:36: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : State
+hs : Canonical s
+hc : ↑(↑poseidon2.INTERNAL)[0]! < 2147483647
+⊢ 4#usize < poseidon2.EXTERNAL_INITIAL.to_slice.len.wrapping_add poseidon2.INTERNAL.to_slice.len
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:22:23: error: Tactic `rfl` failed: The left-hand side
+  poseidon2.INTERNAL.index_usize (Usize.wrapping_sub 4#usize poseidon2.EXTERNAL_INITIAL.to_slice.len)
+is not definitionally equal to the right-hand side
+  ok (↑poseidon2.INTERNAL)[0]!
+
+s : State
+hs : Canonical s
+hc : ↑(↑poseidon2.INTERNAL)[0]! < 2147483647
+⊢ poseidon2.INTERNAL.index_usize (Usize.wrapping_sub 4#usize poseidon2.EXTERNAL_INITIAL.to_slice.len) =
+    ok (↑poseidon2.INTERNAL)[0]!
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:26:2: error: 'change' tactic failed, pattern
+  (do
+      let b ← PV_Src_PortInternalRoundCopy.run s (↑poseidon2.INTERNAL)[0]!
+      ok (some (), b)) =
+    ?m.143
+is not definitionally equal to target
+  (do
+      let state2 ←
+        (do
+                  let x ← Array.index_usize s 0#usize
+                  x.add (↑poseidon2.INTERNAL)[0]!) >>=
+                poseidon2.pow5 >>=
+              Array.update s 0#usize >>=
+            poseidon2.internal_linear_lazy
+      ok (some (), state2)) =
+    do
+    let out ← R0PoseidonCopy.internal_round s (↑poseidon2.INTERNAL)[0]! R0PoseidonCopy.INTERNAL_SHIFTS
+    ok (some (), out)
+'R1Z.PV_RunJoin_IndexedRound0419.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
