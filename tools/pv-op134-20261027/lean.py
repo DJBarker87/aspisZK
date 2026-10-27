@@ -13,7 +13,8 @@ if state.exists():
  if left>0:print('COOLDOWN',left);sys.exit(78)
 a=r['next_id']
 if len(r['lean_charged']) >= 97:
- a=next(i for i in r['reserved_audit_ids'] if i not in r['used_ids'])
+ a=next((i for i in r['reserved_audit_ids'] if i not in r['used_ids']),
+        next(i for i in range(50000,50297) if i not in r['used_ids']))
 if a>=50297:assert any(x in module for x in ['Audit','Manifest','Bundle'])
 assert 50000<=a<=50299 and a not in r['used_ids']
 r['used_ids'].append(a);r['next_id']=a+1;p.write_text(json.dumps(r,indent=2)+'\n')

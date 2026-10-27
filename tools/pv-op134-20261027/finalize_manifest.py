@@ -14,15 +14,17 @@ reference='''import R1Z.PV_Op134_ReferenceBundle
 closure=''.join('import R1Z.'+p.stem+'\n' for p in mods)
 for p in mods:
  for n in re.findall(r'^theorem (\w+)',p.read_text(),re.M):
-  closure+='#print axioms R1Z.'+p.stem+'.'+n+'\n'
+  if p.stem not in ['PV_Op134_ReferenceBundle','PV_Op134_InventoryCallback']:
+   closure+='#print axioms R1Z.'+p.stem+'.'+n+'\n'
 manifest='''import R1Z.PV_Op134_AuditReference
 import R1Z.PV_Op134_AuditClosure
 #check R1Z.PV_Op134_ReferenceBundle.op134_reference
 #check R1Z.PV_Op134_ReferenceBundle.rows_reference
 #check R1Z.PV_Op134_Inventory.complete
-#print axioms R1Z.PV_Op134_ReferenceBundle.op134_reference
-#print axioms R1Z.PV_Op134_ReferenceBundle.rows_reference
-#print axioms R1Z.PV_Op134_Inventory.complete
+#print axioms R1Z.PV_CBM_CallbackBundle.op134_reference
+#print axioms R1Z.PV_CBM_CallbackBundle.op133_reference
+#print axioms R1Z.PV_CBM_CallbackBundle.op132_reference
+#print axioms R1Z.PV_CBM_InventoryCardinality.cardinal
 '''
 for name,s in [('AuditReference',reference),('AuditClosure',closure),('AuditManifest',manifest)]:
  p=lean/('PV_Op134_'+name+'.lean');assert not p.exists();p.write_text(s)

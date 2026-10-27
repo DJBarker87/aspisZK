@@ -7,7 +7,7 @@ Target not yet established. Branch codex/pv-op134-20261027, base 8483406290.
   shipped source file is the exact prefix of the prior extraction context.
 * Proposed only: ROUTE-II.md. No shipped change, new prover-local Rust helper,
   verifier change, or new trust field.
-* Checked so far: PV_Op134_Order, PV_Op134_Coverage, CellOrder00–10. Every
+* Checked so far: PV_Op134_Order, PV_Op134_Coverage, CellOrder00–31. Every
   successful receipt has standard axioms and zero swaps.
 * Draft/queued: remaining cell order blocks, concrete inventory uniqueness
   and coverage, row materialization/order/dedup, bitwise masks/rows equality,

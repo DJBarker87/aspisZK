@@ -16,6 +16,12 @@ Aeneas exits 2 with exactly:
 
 > ProverRwRngExtractor006: fail-closed preflight: escaping reference output requires loan validation; structured Drop requires destructor semantics
 
+The previous native comparison receipts remain at
+`evidence/pv-cbmid-20261027/kani-masks-001/receipt.json` and
+`evidence/pv-cbmid-20261027/kani-masks-900-001/receipt.json` (180 s and
+900 s timeouts). They are reused historical evidence, not pending retries
+and not charged again to this job. The present job has no Kani run.
+
 No extraction equation is claimed. The guard scans the included closure:
 op134 calls active_rows, which calls schedule; schedule uses mutable iterator
 reference outputs and endpoint_counts borrows slices. active_rows also uses
