@@ -30,4 +30,28 @@ Budget tally: Lean 0/60, Kani 0/0. Next unused Env-J ID 42400; no ID allocated b
 
 ## CB9 direct-root additions
 
-Pending direct-root extraction receipts. Historical cb3 failures are not rerun unchanged.
+Pinned extractor unchanged; preflight enabled. These are extraction obstructions, not checked counterexamples. No Kani arithmetic retry or prover-local copy is authorized.
+
+### op226 / V243
+
+Status: REFUSED (OPEN). Direct shipped root `aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public::public_bytes`.
+
+```text
+   "ProverRwRngExtractor006: fail-closed preflight: escaping reference output requires loan validation; structured Drop requires destructor semantics")
+```
+
+Receipt: `cb9-op226-aeneas/receipt.json`; full log: `cb9-op226-aeneas/output.log`. No source theorem, no row credit, no counterexample.
+
+### op254 / V261
+
+Status: REFUSED (OPEN). Direct shipped root `aspis_r1_cost_probe::weights::powers`.
+
+```text
+[Error] Nested-loop returns require exactly one Option language item
+Source: '/home/dombarker/project-offloads/codex-pv-cb3-20261026/source/crates/aspis-r1-cost-probe/src/weights.rs', lines 7:0-7:40
+Compiler source: PrePasses.ml, line 840
+   \nSource: '/home/dombarker/project-offloads/codex-pv-cb3-20261026/source/crates/aspis-r1-cost-probe/src/weights.rs', lines 7:0-7:40\
+   \nCompiler source: PrePasses.ml, line 840")
+```
+
+Receipt: `cb9-op254-aeneas/receipt.json`; full log: `cb9-op254-aeneas/output.log`. No source theorem, no row credit, no counterexample.

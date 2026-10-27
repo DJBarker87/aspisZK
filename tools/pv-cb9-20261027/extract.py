@@ -11,7 +11,15 @@ op=int(sys.argv[1]);stage=sys.argv[2];entry,inc=entries[op];assert stage in ('ch
 # Check each sibling immediately before every operation.
 r=subprocess.run(['git','grep','-n',f'op{op}_source','codex/pv-cb-20261026','codex/pv-cb3-20261026','codex/pv-cbmid-20261027','codex/pv-cblib-20261027','--','*.lean'],cwd=root,text=True,capture_output=True)
 (out/f'op{op}-siblings.txt').write_text(r.stdout+r.stderr); assert r.returncode==1, 'SKIP(sibling) or grep failure'
-name=f'cb9-op{op}-{stage}';d=out/name;d.mkdir();remote=base+'/'+name
+name=f'cb9-op{op}-{stage}';d=out/name
+if d.exists():
+ assert (d/'refusal.json').exists(), 'Never rerun a completed extraction unchanged'
+ old=json.loads((d/'refusal.json').read_text());assert not old['charged']
+ import time
+ left=(d/'refusal.json').stat().st_mtime+180-time.time()
+ assert left<=0, f'Reservation cooldown: {left:.1f} seconds remain'
+ archive=d.with_name(name+'-refusal-'+str(len(list(out.glob(name+'-refusal-*')))+1));d.rename(archive)
+d.mkdir();remote=base+'/'+name
 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
 quiet="import pathlib,json,time; p=pathlib.Path('/home/dombarker/project-offloads/QUIET_WINDOW.json'); u=float(json.loads(p.read_text()).get('until',0)) if p.exists() else 0; print('quiet until',u); raise SystemExit(78 if time.time()<u else 0)"
 r=ssh(f'mkdir -p {remote}; python3 -c {shlex.quote(quiet)} > {remote}/reservation.log 2>&1 && python3 {gate}/reservation.py {remote}/admission-before.json >> {remote}/reservation.log 2>&1; result=$?; cat {remote}/reservation.log; exit $result');(d/'reservation.log').write_text(r.stdout)
@@ -42,4 +50,4 @@ t=s['logs'].get('time.log','')
 def m(k):
  a=re.search(re.escape(k)+r':\s*(.+)',t);return a[1] if a else None
 target.update(exit=m('Exit status'),transport_exit=r.returncode,wall=m('Elapsed (wall clock) time (h:mm:ss or m:ss)'),peak_rss_kib=m('Maximum resident set size (kbytes)'),swap=m('Swaps'),hashes=s['hashes'])
-(d/'receipt.json').write_text(json.dumps(target,indent=2)+'\n');print(name,json.dumps({k:target[k] for k in ('exit','wall','peak_rss_kib','swap')}));print(s['logs'].get('output.log','')[-4500:]);sys.exit(r.returncode)
+(d/'receipt.json').write_text(json.dumps(target,indent=2)+'\n');print(name,json.dumps({k:target[k] for k in ('exit','wall','peak_rss_kib','swap')}));print(s['logs'].get('output.log','')[-4500:] if stage=='aeneas' else 'Full Charon log retained');sys.exit(r.returncode)
