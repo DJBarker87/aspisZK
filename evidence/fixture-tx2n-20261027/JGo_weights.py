@@ -99,7 +99,7 @@ open Aeneas Aeneas.Std Result ControlFlow FIn_WeightsExtract JGo_TX2_WeightData
     UScalar.eq_of_val_eq ix.2
   unfold weights_new_loop0_loop0.body
   rw [JGo_TX2_Range.next {d}#usize 5#usize {d+1}#usize (by decide) (by decide),bind_tc_ok]
-  dsimp only
+  simp only [Aeneas.Std.uncurry]
   rw [show Array.index_usize TAU {d}#usize=ok {tau[d]}#usize from by unfold TAU;rfl,bind_tc_ok]
   simp only [lift,bind_tc_ok,ix9,ix8]
   with_unfolding_all rfl
@@ -118,7 +118,7 @@ open Aeneas Aeneas.Std Result ControlFlow FIn_WeightsExtract JGo_TX2_WeightData
     UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value 3#usize {point}#usize (by decide))
   unfold weights_new_loop1_loop0.body
   rw [JGo_TX2_Range.next {d}#usize 5#usize {d+1}#usize (by decide) (by decide),bind_tc_ok]
-  dsimp only
+  simp only [Aeneas.Std.uncurry]
   simp only [lift,bind_tc_ok,index]
   with_unfolding_all rfl
 #print axioms step{d}
