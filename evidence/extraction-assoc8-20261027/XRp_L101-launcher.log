@@ -1,0 +1,43 @@
+{"attempt": "XRp_L101", "exit_status": 0, "wall_seconds": 1.775196379981935, "peak_rss_kib": "4733880", "swaps": "0", "print_axioms": ["'XRp_CheckedWrapping.add' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_CheckedWrapping.sub' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_PowersScalar.add' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_PowersScalarSub.normalize' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_PowersScalarSub.subtract' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_PowersScalarSub.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_PowersScalarSub.target' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_PowersComplex.add' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_PowersQAdd.add' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_PowersNonvacuity.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_PowersNonvacuity.source_zero' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_PowersNonvacuity.both_succeed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'XRp_CheckedWrapping.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_CheckedWrapping.sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_PowersScalar.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_PowersScalarSub.normalize' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_PowersScalarSub.subtract' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_PowersScalarSub.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_PowersScalarSub.target' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_PowersComplex.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_Pow
+...
+izer
+      AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling)
+    AspisS1M31Embedding.Total.embed)
+def AspisR1ClaimPreparedBridge.powersPublic : (N : Aeneas.Std.Usize) →
+  AspisR1ClaimPreparedBridge.PE → Aeneas.Std.Result (Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE N) :=
+fun N x => do
+  let ys ← AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x)
+  Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE ys)
+def AspisR1ClaimPreparedBridge.claimPublic : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_semantic.Verified H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1ClaimPreparedBridge.PE →
+          Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE 29#usize →
+            AspisR1ClaimPreparedBridge.PE →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1ClaimPreparedBridge.PE AspisR1PublicPreparation.verifier.Error) :=
+fun {H} D sem y1 inactive g kappa => do
+  let r ←
+    AspisR1CurrentPreparedClaim.verifier.prepared_claim
+        (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+        (AspisR1ClaimPreparedBridge.toClaimDigest D) (AspisR1ClaimPreparedBridge.toClaimSem sem) y1
+        (AspisR1ClaimPreparedBridge.toClaimE inactive)
+        (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE g)
+        (AspisR1ClaimPreparedBridge.toClaimE kappa)
+  Aeneas.Std.Result.ok
+      (match r with
+      | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok (AspisR1ClaimPreparedBridge.fromClaimE x)
+      | Aeneas.Std.core.result.Result.Err e =>
+        Aeneas.Std.core.result.Result.Err (AspisR1ClaimPreparedBridge.fromClaimError e))
+
+Running as unit: run-r2c95bf2b4bd74bcd8c4a50d3fb45aa96.scope; invocation ID: 7c6d8e7c1167449ebf8368f9a4d899e3

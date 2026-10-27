@@ -1,0 +1,43 @@
+XRp_generated/XRp_IndexedWitness.lean:14:2: error: Tactic `rfl` failed: The left-hand side
+  1#usize - 1#usize = ok 0#usize
+is not definitionally equal to the right-hand side
+  ∃ x,
+    0#u64 <<< 32#i32 = ok x ∧
+      ∃ x_1,
+        Array.index_usize ⟨[2147483647#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32], ⋯⟩ 0#usize = ok x_1 ∧
+          ∃ x_2,
+            lift (core.convert.num.FromU64U32.from x_1) = ok x_2 ∧
+              ∃ x_3,
+                lift (x ||| x_2) = ok x_3 ∧
+                  ∃ x,
+                    lift (core.convert.num.FromU64U32.from 2147483647#u32) = ok x ∧
+                      ∃ x_4,
+                        x_3 / x = ok x_4 ∧
+                          ∃ x,
+                            lift (UScalar.cast UScalarTy.U32 x_4) = ok x ∧
+                              Array.update ⟨[2147483647#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32], ⋯⟩
+                                    0#usize x =
+                                  ok ⟨[1#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32], ⋯⟩ ∧
+                                ∃ x, lift (core.convert.num.FromU64U32.from 2147483647#u32) = ok x ∧ x_3 % x = ok 0#u64
+
+⊢ 1#usize - 1#usize = ok 0#usize ∧
+    ∃ x,
+      0#u64 <<< 32#i32 = ok x ∧
+        ∃ x_1,
+          Array.index_usize ⟨[2147483647#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32], ⋯⟩ 0#usize = ok x_1 ∧
+            ∃ x_2,
+              lift (core.convert.num.FromU64U32.from x_1) = ok x_2 ∧
+                ∃ x_3,
+                  lift (x ||| x_2) = ok x_3 ∧
+                    ∃ x,
+                      lift (core.convert.num.FromU64U32.from 2147483647#u32) = ok x ∧
+                        ∃ x_4,
+                          x_3 / x = ok x_4 ∧
+                            ∃ x,
+                              lift (UScalar.cast UScalarTy.U32 x_4) = ok x ∧
+                                Array.update ⟨[2147483647#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32], ⋯⟩
+                                      0#usize x =
+                                    ok ⟨[1#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32], ⋯⟩ ∧
+                                  ∃ x,
+                                    lift (core.convert.num.FromU64U32.from 2147483647#u32) = ok x ∧ x_3 % x = ok 0#u64
+'XRp_IndexedWitness.writes_quotient' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

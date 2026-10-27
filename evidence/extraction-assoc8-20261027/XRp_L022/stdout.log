@@ -1,0 +1,104 @@
+XRp_generated/XRp_FromFnState.lean:42:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  indexed fn (rest + 1) ?i ?c ?out
+in the target expression
+  (let (v, c') := (v, c')
+    indexed fn (rest + 1) next c' (out ++ [v])) =
+    do
+    let (xs, c') ←
+      let (value, closureNext) := (v, c')
+        do
+        let (rest, closureFinal) ← core.array.fromFnList fn (rest + 1) next closureNext
+        ok (value :: rest, closureFinal)
+    ok (out ++ xs, c')
+
+case succ.ok.succ.ok
+T F : Type
+fn : core.ops.function.FnMut F Usize T
+i : Usize
+c : F
+out : List T
+v : T
+c' : F
+hc : fn.call_mut c i = ok (v, c')
+rest : ℕ
+ih :
+  ∀ (i : Usize) (c : F) (out : List T),
+    indexed fn (rest + 1) i c out = do
+      let (xs, c') ← core.array.fromFnList fn (rest + 1) i c
+      ok (out ++ xs, c')
+next : UScalar UScalarTy.Usize
+hn : i + 1#usize = ok next
+⊢ (let (v, c') := (v, c')
+    indexed fn (rest + 1) next c' (out ++ [v])) =
+    do
+    let (xs, c') ←
+      let (value, closureNext) := (v, c')
+        do
+        let (rest, closureFinal) ← core.array.fromFnList fn (rest + 1) next closureNext
+        ok (value :: rest, closureFinal)
+    ok (out ++ xs, c')
+XRp_generated/XRp_FromFnState.lean:29:22: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:30:19: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:33:17: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵c̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:38:26: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:39:23: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:41:21: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:56:20: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:57:17: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRp_generated/XRp_FromFnState.lean:58:43: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRp_FromFnState.indexed_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRp_FromFnState.from_fn_state_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

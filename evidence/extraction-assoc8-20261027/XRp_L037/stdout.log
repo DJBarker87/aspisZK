@@ -1,0 +1,92 @@
+'XRo_Join_PreparedBoundaries.legacy_claim_unused' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1PublicPreparation.PreparedScratchModel.prepare : AspisR1PublicPreparation.PreparedScratchModel.Boundaries →
+  {H : Type} →
+    AspisR1PublicPreparation.aspis_core.Digest32 H →
+      AspisR1PublicPreparation.r1_semantic.Verified H →
+        AspisR1PublicPreparation.verifier.View →
+          H →
+            Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize →
+              Result
+                (core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+                  Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize) :=
+fun B {H} aspis_coreDigest32Inst sem v hash g => do
+  let a ← AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state aspis_coreDigest32Inst sem.transcript
+  let t ← AspisR1PublicPreparation.transcript.Transcript.new aspis_coreDigest32Inst hash a v.variant
+  let (gamma, t1) ← AspisR1PublicPreparation.PreparedModel.scalar B.sampling aspis_coreDigest32Inst t 27#u8 v.y1 true
+  let a1 ← B.sampling.toBytes v.inactive
+  let s ← lift a1.to_slice
+  let (kappa, t2) ← AspisR1PublicPreparation.PreparedModel.scalar B.sampling aspis_coreDigest32Inst t1 28#u8 s false
+  let (alpha0, t3) ←
+    AspisR1PublicPreparation.PreparedModel.scalar B.sampling aspis_coreDigest32Inst t2 29#u8 v.round0 false
+  let i ← v.variant.folds
+  if i = 2#usize then do
+      let i1 ← 32#usize + 224#usize
+      have bytes : alloc.vec.Vec U8 := alloc.vec.Vec.with_capacity U8 i1
+      let a2 ← core.option.Option.unwrap v.folded_root
+      let s1 ← lift a2.to_slice
+      let bytes1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes s1
+      let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+      have s2 : Slice U8 := bytes2.deref
+      let (we, t4) ← AspisR1PublicPreparation.PreparedModel.scalar B.sampling aspis_coreDigest32Inst t3 30#u8 s2 false
+      let (r, t5) ← B.sampling.queries aspis_coreDigest32Inst t4 31#u8 v.final_message
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i2 ← 31#u8 + 1#u8
+          let s3 ← lift (Std.Array.empty U8).to_slice
+          let (rho, t6) ← AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling aspis_coreDigest32Inst t5 i2 s3
+          let g1 ← B.powers 29#usize gamma
+          let r1 ← B.claim aspis_coreDigest32Inst sem v.y1 v.inactive g1 kappa
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 =>
+              ok
+                (core.result.Result.Ok
+                    { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                      alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                      semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state },
+                  g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1PublicPreparation.verifier.Prepared
+                    (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+              ok (r2, g1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR1PublicPreparation.verifier.Prepared
+                (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+          ok (r1, g)
+    else do
+      let (r, t4) ← B.sampling.queries aspis_coreDigest32Inst t3 30#u8 v.final_message
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i1 ← 30#u8 + 1#u8
+          let s1 ← lift (Std.Array.empty U8).to_slice
+          let (rho, t5) ← AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling aspis_coreDigest32Inst t4 i1 s1
+          let g1 ← B.powers 29#usize gamma
+          let r1 ← B.claim aspis_coreDigest32Inst sem v.y1 v.inactive g1 kappa
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 =>
+              ok
+                (core.result.Result.Ok
+                    { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                      alpha := Array.make 2#usize [alpha0, AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO] ⋯,
+                      rho := rho, queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1,
+                      state := t5.state },
+                  g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1PublicPreparation.verifier.Prepared
+                    (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+              ok (r2, g1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR1PublicPreparation.verifier.Prepared
+                (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+          ok (r1, g)

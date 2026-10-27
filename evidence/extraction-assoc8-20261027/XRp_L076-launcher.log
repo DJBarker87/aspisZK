@@ -1,0 +1,48 @@
+{"attempt": "XRp_L076", "exit_status": 1, "wall_seconds": 2.540829723002389, "peak_rss_kib": "4724068", "swaps": "0", "print_axioms": []}
+theorem Aeneas.Std.UScalar.wrapping_add_val_eq : ∀ {ty : UScalarTy} (x y : UScalar ty),
+  ↑(x.wrapping_add y) = (↑x + ↑y) % UScalar.size ty :=
+fun {ty} x y =>
+  Eq.mpr (id (congrArg (Eq (x.bv + y.bv).toNat) (congrArg (HMod.hMod (x.bv.toNat + y.bv.toNat)) (UScalar.size_def ty))))
+    (have this := of_eq_true (pow_pos._simp_1 (of_eq_true Nat.ofNat_pos._simp_1) ty.numBits);
+    have this := Decidable.byContradiction fun a => UScalar.wrapping_add_val_eq._proof_1_2 this a;
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (congrFun' (congrArg HMod.hMod (congr (congrArg HAdd.hAdd (UScalar.bv_toNat x)) (UScalar.bv_toNat y)))
+              (2 ^ ty.numBits)))
+          
+...
+tic.RingNF.nat_rawCast_1) (pow_one ↑x)))
+                                Mathlib.Tactic.RingNF.nat_rawCast_1)
+                              (mul_one ↑x))))
+                        0)
+                      (add_zero (2 ^ ty.numBits - ↑y + ↑x))))))
+              (2 ^ ty.numBits)))
+          (eq_self ((2 ^ ty.numBits - ↑y + ↑x) % 2 ^ ty.numBits)))))
+theorem Aeneas.Std.UScalar.wrapping_mul_val_eq : ∀ {ty : UScalarTy} (x y : UScalar ty),
+  ↑(x.wrapping_mul y) = ↑x * ↑y % UScalar.size ty :=
+fun {ty} x y =>
+  Eq.mpr (id (congrArg (Eq (x.bv * y.bv).toNat) (congrArg (HMod.hMod (x.bv.toNat * y.bv.toNat)) (UScalar.size_def ty))))
+    (have this := of_eq_true (pow_pos._simp_1 (of_eq_true Nat.ofNat_pos._simp_1) ty.numBits);
+    have this := Decidable.byContradiction fun a => UScalar.wrapping_mul_val_eq._proof_1_2 this a;
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (congrFun' (congrArg HMod.hMod (congr (congrArg HMul.hMul (UScalar.bv_toNat x)) (UScalar.bv_toNat y)))
+              (2 ^ ty.numBits)))
+          (congrFun' (congrArg HMod.hMod (congr (congrArg HMul.hMul (UScalar.bv_toNat x)) (UScalar.bv_toNat y)))
+            (2 ^ ty.numBits)))
+        (eq_self (↑x * ↑y % 2 ^ ty.numBits))))
+def Aeneas.Std.U32.wrapping_add : U32 → U32 → U32 :=
+fun x y => UScalar.wrapping_add x y
+def Aeneas.Std.U32.wrapping_sub : U32 → U32 → U32 :=
+UScalar.wrapping_sub
+def Aeneas.Std.UScalar.wrapping_add : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv + y.bv)#uscalar
+def Aeneas.Std.UScalar.wrapping_sub : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv - y.bv)#uscalar
+XRp_generated/XRp_ArithmeticInspect.lean:10:7: error(lean.unknownIdentifier): Unknown constant `AspisR1Qm31ArithmeticProbe.field.QM31.sub`
+
+Running as unit: run-rd54e29645a8b4c0a80ce3dc1423c7dcf.scope; invocation ID: 8f7cb88aea4d418587ab26d7ad1508c7

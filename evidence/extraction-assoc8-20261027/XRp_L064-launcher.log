@@ -1,0 +1,43 @@
+{"attempt": "XRp_L064", "exit_status": 0, "wall_seconds": 1.8760517699993216, "peak_rss_kib": "4735892", "swaps": "0", "print_axioms": []}
+def AspisR1CurrentWideMul.field.wide_exact.WideExact.mul : AspisR1CurrentWideMul.field.wide_exact.WideExact →
+  AspisR1CurrentWideMul.field.wide_exact.WideExact → Result AspisR1CurrentWideMul.field.wide_exact.WideExact :=
+fun self rhs => do
+  let ac ← AspisR1CurrentWideMul.field.QM31.mul self.c0 rhs.c0
+  let bd ← AspisR1CurrentWideMul.field.QM31.mul self.c1 rhs.c1
+  let q ← AspisR1CurrentWideMul.field.QM31.add self.c0 self.c1
+  let q1 ← AspisR1CurrentWideMul.field.QM31.add rhs.c0 rhs.c1
+  let cross ← AspisR1CurrentWideMul.field.QM31.mul q q1
+  let q2 ← AspisR1CurrentWideMul.field.wide_exact.mul_u bd
+  let q3 ← AspisR1CurrentWideMul.field.QM31.add ac q2
+  let q4 ← AspisR1CurrentWideMul.field.
+...
+         ↑point < 6 →
+            ∃ i value,
+              ∃ (hi : ↑i < 7),
+                ∃ xs,
+                  point + 1#usize = Result.ok i ∧
+                    AspisR1CurrentPreparedClaim.cell final i hi = value ∧
+                      xs.length = 29 ∧
+                        (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                          (∀ t ∈ xs,
+                              AspisR1ClaimPreparedBridge.PublicSelectedSource sem y1 point t.1
+                                  (AspisR1ClaimPreparedBridge.fromClaimQ t.2.2) ∧
+                                AspisR1CurrentPreparedClaim.ClaimScalar.read
+                                      (AspisR1S5ClaimDotConcreteAdapter.concreteOps
+                                        AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                      (AspisR1ClaimPreparedBridge.toClaimSem sem) y1 point t.1 =
+                                    Result.ok t.2.2 ∧
+                                  g.index_usize t.1 = Result.ok t.2.1 ∧
+                                    AspisR1CurrentPreparedClaim.Concrete.decode t.2.1 =
+                                      AspisR1CurrentPreparedClaim.Concrete.decode gamma ^ ↑t.1) ∧
+                            AspisR1CurrentPreparedClaim.Concrete.decode value =
+                              (List.map
+                                  (fun t =>
+                                    AspisR1CurrentPreparedClaim.Concrete.decode gamma ^ ↑t.1 *
+                                      AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                                  xs).sum) ∧
+        AspisR1CurrentPreparedClaim.Concrete.Canonical out ∧
+          AspisR1CurrentPreparedClaim.Concrete.decode out =
+            AspisR1CurrentPreparedClaim.ClaimParts.kappaPolynomial kappa final
+
+Running as unit: run-r2beb1c9ba5a04f7c98b09ab6de212c7d.scope; invocation ID: f74ee13ed9084bcfa548748471d8a00f

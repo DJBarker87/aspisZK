@@ -1,0 +1,68 @@
+{"attempt": "XRp_L028", "exit_status": 0, "wall_seconds": 1.2455412889830768, "peak_rss_kib": "2646132", "swaps": "0", "print_axioms": []}
+theorem Aeneas.Std.loop.eq_def.{u, v} : ∀ {α : Type u} {β : Type v} (body : α → Result (ControlFlow α β)) (x : α),
+  loop body x =
+    match body x with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x => loop body x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div :=
+fun {α} {β} body x =>
+  id
+    (Eq.trans (congrFun (Lean.Order.fix_eq (loop._proof_1 body)) x)
+      (Eq.refl
+        (match body x with
+        | Result.ok r =>
+          match r with
+          | ControlFlow.cont x =>
+            Lean.Order.fix
+              (fun f x =>
+                match body x with
+                | Result.ok r =>
+             
+...
+        | Result.ok r =>
+                  match r with
+                  | ControlFlow.cont x => f x
+                  | ControlFlow.done x => Result.ok x
+                | Result.fail e => Result.fail e
+                | Result.div => Result.div)
+              (loop._proof_1 body) x
+          | ControlFlow.done x => Result.ok x
+        | Result.fail e => Result.fail e
+        | Result.div => Result.div)))
+theorem Aeneas.Std.loop.spec_decr_nat.{u, v} : ∀ {α : Type u} {β : Type v} (measure : α → ℕ) (inv : α → Prop)
+  (post : β → Prop) (body : α → Result (ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        body x ⦃ r =>
+          match r with
+          | ControlFlow.done y => post y
+          | ControlFlow.cont x' => inv x' ∧ measure x' < measure x ⦄) →
+    inv x → loop body x ⦃ post ⦄ :=
+fun {α} {β} measure inv post body x hBody hInv =>
+  have this := loop.spec measure inv post body x hBody hInv;
+  this
+theorem Aeneas.Std.loop.fixpoint_induct.{u, v} : ∀ {α : Type u} {β : Type v} (body : α → Result (ControlFlow α β))
+  (motive : (α → Result β) → Prop),
+  Lean.Order.admissible motive →
+    (∀ (loop : α → Result β),
+        motive loop →
+          motive fun x =>
+            match body x with
+            | Result.ok r =>
+              match r with
+              | ControlFlow.cont x => loop x
+              | ControlFlow.done x => Result.ok x
+            | Result.fail e => Result.fail e
+            | Result.div => Result.div) →
+      motive (loop body) :=
+fun {α} {β} body motive adm h =>
+  id (Lean.Order.fix_induct (loop._proof_1 body) (fun x => motive x) adm fun approx ih => h approx ih)
+@[irreducible] def Aeneas.Std.Usize.max : ℕ :=
+wrapped✝.1
+Aeneas.Std.UScalar.ofNatCore {ty : UScalarTy} (x : ℕ) (h : x < 2 ^ ty.numBits) : UScalar ty
+UScalarTy.Usize.numBits : ℕ
+
+Running as unit: run-rc33e6958e2ff400a8da2ca3840a798ea.scope; invocation ID: 13576aca6d8e4aea8ed56983f39d190c

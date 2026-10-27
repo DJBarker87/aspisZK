@@ -1,0 +1,36 @@
+{"attempt": "XRp_L085", "exit_status": 1, "wall_seconds": 1.9228562050266191, "peak_rss_kib": "4061080", "swaps": "0", "print_axioms": ["'XRp_SeedArray.suffix7' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_SeedArray.suffix6' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_SeedArray.suffix5' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_SeedArray.suffix4' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_SeedArray.suffix3' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_SeedArray.suffix2' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_SeedArray.suffix1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_SeedArray.suffix0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_SeedArray.list_seed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_SeedArray.init' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'XRp_SeedArray.suffix7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_SeedArray.suffix6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_SeedArray.suffix5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_SeedArray.suffix4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_SeedArray.suffix3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_SeedArray.suffix2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_SeedArray.suffix1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_SeedArray.suffix0' depends on axioms: [propext, Classical.choice, Quot.sound]
+XRp_generated/XRp_SeedArray.lean:161
+...
+ity 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+h8 : ↑8#usize = 8
+⊢ (match core.array.fromFnList fn (↑8#usize) 0#usize block with
+    | fail error => fail error
+    | div => div
+    | ok (values, snd) => if h : values.length = ↑8#usize then ok ⟨values, h⟩ else fail Error.panic) =
+    ok rank
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XRp_SeedArray.list_seed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_SeedArray.init' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r31d31360d66a41de8ee41d255c243a47.scope; invocation ID: 3141cf03588c4654a6d85f9fb14142d1

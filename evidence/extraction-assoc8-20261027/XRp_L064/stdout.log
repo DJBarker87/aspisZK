@@ -1,0 +1,63 @@
+def AspisR1CurrentWideMul.field.wide_exact.WideExact.mul : AspisR1CurrentWideMul.field.wide_exact.WideExact →
+  AspisR1CurrentWideMul.field.wide_exact.WideExact → Result AspisR1CurrentWideMul.field.wide_exact.WideExact :=
+fun self rhs => do
+  let ac ← AspisR1CurrentWideMul.field.QM31.mul self.c0 rhs.c0
+  let bd ← AspisR1CurrentWideMul.field.QM31.mul self.c1 rhs.c1
+  let q ← AspisR1CurrentWideMul.field.QM31.add self.c0 self.c1
+  let q1 ← AspisR1CurrentWideMul.field.QM31.add rhs.c0 rhs.c1
+  let cross ← AspisR1CurrentWideMul.field.QM31.mul q q1
+  let q2 ← AspisR1CurrentWideMul.field.wide_exact.mul_u bd
+  let q3 ← AspisR1CurrentWideMul.field.QM31.add ac q2
+  let q4 ← AspisR1CurrentWideMul.field.QM31.sub cross ac
+  let q5 ← q4.sub bd
+  Result.ok { c0 := q3, c1 := q5 }
+@[reducible] def AspisR1CurrentWideMul.field.QM31.mul : AspisR1Qm31ArithmeticProbe.field.QM31 →
+  AspisR1Qm31ArithmeticProbe.field.QM31 → Result AspisR1Qm31ArithmeticProbe.field.QM31 :=
+AspisR1Qm31ArithmeticProbe.field.QM31.mul
+@[reducible] def AspisR1CurrentWideMul.field.QM31.add : AspisR1Qm31ArithmeticProbe.field.QM31 →
+  AspisR1Qm31ArithmeticProbe.field.QM31 → Result AspisR1Qm31ArithmeticProbe.field.QM31 :=
+AspisR1Qm31ArithmeticProbe.field.QM31.add
+def AspisR1PowersConcreteMul.toWide : AspisR1PowersConcreteMul.CallbackWide → AspisR1PowersConcreteMul.SourceWide :=
+fun x => { c0 := AspisR1PowersConcreteMul.toQM x.c0, c1 := AspisR1PowersConcreteMul.toQM x.c1 }
+def AspisR1PowersConcreteMul.fromWide : AspisR1PowersConcreteMul.SourceWide → AspisR1PowersConcreteMul.CallbackWide :=
+fun x => { c0 := AspisR1PowersConcreteMul.fromQM x.c0, c1 := AspisR1PowersConcreteMul.fromQM x.c1 }
+def AspisR1ClaimPreparedBridge.OriginalPayloadClaimMeaning : {H : Type} →
+  AspisR1PublicPreparation.r1_semantic.Verified H →
+    Slice U8 →
+      AspisR1CurrentPreparedClaim.Concrete.E →
+        AspisR1CurrentPreparedClaim.Concrete.E →
+          AspisR1CurrentPreparedClaim.Concrete.E →
+            AspisR1CurrentPreparedClaim.Concrete.E → Std.Array AspisR1CurrentPreparedClaim.Concrete.E 29#usize → Prop :=
+fun {H} sem y1 inactive gamma kappa out g =>
+  ∃ final,
+    AspisR1CurrentPreparedClaim.cell final 0#usize AspisR1ClaimPreparedBridge.OriginalPayloadClaimMeaning._proof_1 =
+        inactive ∧
+      (∀ (point : Usize),
+          ↑point < 6 →
+            ∃ i value,
+              ∃ (hi : ↑i < 7),
+                ∃ xs,
+                  point + 1#usize = Result.ok i ∧
+                    AspisR1CurrentPreparedClaim.cell final i hi = value ∧
+                      xs.length = 29 ∧
+                        (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                          (∀ t ∈ xs,
+                              AspisR1ClaimPreparedBridge.PublicSelectedSource sem y1 point t.1
+                                  (AspisR1ClaimPreparedBridge.fromClaimQ t.2.2) ∧
+                                AspisR1CurrentPreparedClaim.ClaimScalar.read
+                                      (AspisR1S5ClaimDotConcreteAdapter.concreteOps
+                                        AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                      (AspisR1ClaimPreparedBridge.toClaimSem sem) y1 point t.1 =
+                                    Result.ok t.2.2 ∧
+                                  g.index_usize t.1 = Result.ok t.2.1 ∧
+                                    AspisR1CurrentPreparedClaim.Concrete.decode t.2.1 =
+                                      AspisR1CurrentPreparedClaim.Concrete.decode gamma ^ ↑t.1) ∧
+                            AspisR1CurrentPreparedClaim.Concrete.decode value =
+                              (List.map
+                                  (fun t =>
+                                    AspisR1CurrentPreparedClaim.Concrete.decode gamma ^ ↑t.1 *
+                                      AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                                  xs).sum) ∧
+        AspisR1CurrentPreparedClaim.Concrete.Canonical out ∧
+          AspisR1CurrentPreparedClaim.Concrete.decode out =
+            AspisR1CurrentPreparedClaim.ClaimParts.kappaPolynomial kappa final

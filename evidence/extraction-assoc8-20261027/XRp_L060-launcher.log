@@ -1,0 +1,61 @@
+{"attempt": "XRp_L060", "exit_status": 1, "wall_seconds": 1.891588539001532, "peak_rss_kib": "2637540", "swaps": "0", "print_axioms": ["'XRp_RestoreChain.finish_append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRp_generated/XRp_RestoreChain.lean:15:57: error: simp_all made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    r.iter.slice
+  has type
+    Slice U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑r.iter.slice
+XRp_generated/XRp_RestoreChain.lean:28:22: error: Ambiguous term
+  dite_true
+Possible interpretations:
+  _root_.dite_
+...
+ usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    r.iter.slice
+  has type
+    Slice U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑r.iter.slice
+XRp_generated/XRp_RestoreChain.lean:28:22: error: Ambiguous term
+  dite_true
+Possible interpretations:
+  _root_.dite_true : dite True ?m.164 ?m.165 = ?m.164 True.intro
+  
+  Aeneas.dite_true : dite True ?m.164 ?m.165 = ?m.164 True.intro
+XRp_generated/XRp_RestoreChain.lean:32:4: error: Tactic `apply` failed: could not unify the conclusion of `@Subtype.ext`
+  ?a1 = ?a2
+with the goal
+  (if h : True then { slice := ⟨↑r.iter.slice ++ limbs n ++ [0#u32], ⋯⟩, i := r.iter.i } else (state (n + 1) hn).iter) =
+    { slice := ⟨↑r.iter.slice ++ limbs (n + 1), hcap⟩, i := r.iter.i }
+
+Note: The full type of `@Subtype.ext` is
+  ∀ {α : Sort ?u.76} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 = ↑a2 → a1 = a2
+
+case succ
+r : Iter
+n : ℕ
+ih :
+  ∀ (hn : n ≤ 7) (back : Back) (hcap : (↑r.iter.slice ++ limbs n).length ≤ Usize.max),
+    finish n hn back r = back (appendIter r (limbs n) hcap)
+hn : n + 1 ≤ 7
+back : Back
+hcap : (↑r.iter.slice ++ limbs (n + 1)).length ≤ Usize.max
+hn' : n ≤ 7
+hlist : limbs (n + 1) = limbs n ++ [0#u32]
+hsmall : (↑r.iter.slice ++ limbs n).length ≤ Usize.max
+hnext : (↑r.iter.slice ++ limbs n ++ [0#u32]).length ≤ Usize.max
+⊢ (if h : True then { slice := ⟨↑r.iter.slice ++ limbs n ++ [0#u32], ⋯⟩, i := r.iter.i } else (state (n + 1) hn).iter) =
+    { slice := ⟨↑r.iter.slice ++ limbs (n + 1), hcap⟩, i := r.iter.i }
+'XRp_RestoreChain.finish_append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8cd96d466fe84dfeb4c2063ed787f663.scope; invocation ID: b5b570319cfb4c24b3ba280711915658

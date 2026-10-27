@@ -1,0 +1,82 @@
+XRp_generated/XRp_ReverseStep.lean:9:79: error: Tactic `decide` failed for proposition
+  1 ≤ Usize.max
+because its `Decidable` instance
+  Nat.decLe 1 Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match Nat.ble 1 Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+XRp_generated/XRp_ReverseStep.lean:21:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let result ←
+      do
+        let (o, iter1, next_back, _) ←
+          XRn_Join_reverseNext
+              (XRn_Join_Release.core.slice.iter.IterMut.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorMutT U32)
+              (singleton 2147483647#u32)
+        match o with
+          | none =>
+            ok
+              (done
+                (0#u64, fun r =>
+                  have r1 := next_back r;
+                  id r1))
+          | some limb => do
+            let i ← 0#u64 <<< 32#i32
+            let i1 ← lift (core.convert.num.FromU64U32.from limb)
+            let dividend ← lift (i ||| i1)
+            let i2 ← ok 2147483647#u32
+            let i3 ← lift (core.convert.num.FromU64U32.from i2)
+            let _ ← dividend / i3
+            let i4 ← lift (core.convert.num.FromU64U32.from i2)
+            let remainder1 ← dividend % i4
+            ok
+                (cont
+                  (iter1, fun r =>
+                    have r1 := next_back r;
+                    id r1,
+                    remainder1))
+    match result with
+      | cont (next, back, rem) => ok (↑(back next).iter.slice, rem)
+      | done v => fail Error.panic
+is not definitionally equal to the right-hand side
+  ok ([2147483647#u32], 0#u64)
+
+⊢ (do
+      let result ←
+        do
+          let (o, iter1, next_back, _) ←
+            XRn_Join_reverseNext
+                (XRn_Join_Release.core.slice.iter.IterMut.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorMutT U32)
+                (singleton 2147483647#u32)
+          match o with
+            | none =>
+              ok
+                (done
+                  (0#u64, fun r =>
+                    have r1 := next_back r;
+                    id r1))
+            | some limb => do
+              let i ← 0#u64 <<< 32#i32
+              let i1 ← lift (core.convert.num.FromU64U32.from limb)
+              let dividend ← lift (i ||| i1)
+              let i2 ← ok 2147483647#u32
+              let i3 ← lift (core.convert.num.FromU64U32.from i2)
+              let _ ← dividend / i3
+              let i4 ← lift (core.convert.num.FromU64U32.from i2)
+              let remainder1 ← dividend % i4
+              ok
+                  (cont
+                    (iter1, fun r =>
+                      have r1 := next_back r;
+                      id r1,
+                      remainder1))
+      match result with
+        | cont (next, back, rem) => ok (↑(back next).iter.slice, rem)
+        | done v => fail Error.panic) =
+    ok ([2147483647#u32], 0#u64)
+'XRp_ReverseStep.restores_P' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

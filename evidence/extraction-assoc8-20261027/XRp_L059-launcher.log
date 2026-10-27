@@ -1,0 +1,49 @@
+{"attempt": "XRp_L059", "exit_status": 0, "wall_seconds": 2.2748932609683834, "peak_rss_kib": "4730924", "swaps": "0", "print_axioms": []}
+def AspisR1PowersConcreteMul.sourceMul : AspisR1PowersConcreteMul.CallbackWide →
+  AspisR1PowersConcreteMul.CallbackWide → Result AspisR1PowersConcreteMul.CallbackWide :=
+fun x y => do
+  let z ←
+    AspisR1CurrentWideMul.field.wide_exact.WideExact.mul (AspisR1PowersConcreteMul.toWide x)
+        (AspisR1PowersConcreteMul.toWide y)
+  Result.ok (AspisR1PowersConcreteMul.fromWide z)
+def AspisR1LoopPowers.toOld : AspisR1LoopPowers.field.WideExact → AspisR1PowersConcreteMul.CallbackWide :=
+fun x => { c0 := AspisR1LoopPowers.toOldQM x.c0, c1 := AspisR1LoopPowers.toOldQM x.c1 }
+def AspisR1LoopPowers.fromOld : AspisR1PowersConcreteMul.CallbackWide → AspisR1LoopPowers.field.WideExact :=
+fun x => { c0 
+...
+ x.c1 }
+@[irreducible] def AspisR1LoopPowers.field.WideExact.ONE : AspisR1LoopPowers.field.WideExact :=
+{ c0 := AspisR1LoopPowers.field.QM31.ONE, c1 := AspisR1LoopPowers.field.QM31.ZERO }
+def AspisR1LoopPowers.weights.early_powers_loop.body : {N : Usize} →
+  AspisR1LoopPowers.field.WideExact →
+    Std.Array AspisR1LoopPowers.field.WideExact N →
+      AspisR1LoopPowers.field.WideExact →
+        Usize →
+          Result
+            (ControlFlow (Std.Array AspisR1LoopPowers.field.WideExact N × AspisR1LoopPowers.field.WideExact × Usize)
+              (Std.Array AspisR1LoopPowers.field.WideExact N)) :=
+fun {N} x out p i =>
+  if i < N then do
+    let (_, index_mut_back) ← out.index_mut_usize i
+    let i1 ← i + 1#usize
+    if i1 = N then
+        have out1 := index_mut_back p;
+        Result.ok (ControlFlow.done out1)
+      else do
+        let p1 ← p.mul x
+        have a : Std.Array AspisR1LoopPowers.field.WideExact N := index_mut_back p
+        Result.ok (ControlFlow.cont (a, p1, i1))
+  else Result.ok (ControlFlow.done out)
+def AspisR1ClaimPreparedBridge.CurrentQueryRho.withConcreteQueries : AspisR1PublicPreparation.PreparedModel.Boundaries →
+  (AspisR1PublicPreparation.aspis_core.field.M31 → Result AspisR1PublicPreparation.aspis_core.field.WideExact) →
+    AspisR1PublicPreparation.PreparedModel.Boundaries :=
+fun sampling embed =>
+  { toBytes := sampling.toBytes, fromQm := sampling.fromQm, ordinary := sampling.ordinary, gamma := sampling.gamma,
+    queries := fun {H} D self row payload =>
+      AspisR1PublicPreparation.QueriesModel.queries
+        (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+          embed)
+        D self row payload,
+    claim := @AspisR1PublicPreparation.PreparedModel.Boundaries.claim sampling }
+
+Running as unit: run-rb83458bfd33b4bf69420797157cfc7a4.scope; invocation ID: d9ed91dfec9d413b815dce081c95e587
