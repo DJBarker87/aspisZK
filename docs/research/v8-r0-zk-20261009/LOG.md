@@ -11875,3 +11875,27 @@ consolidation) and pv-l3 (evidence already on research). Integration removes no 
 the candidate are the records and batch-1 changes, then the combined differential and timing gates. The
 op223 timing gate (pv-quiet) measures the fixed revision 8873306db1 and is unaffected by this
 evidence/cfg(kani)-only merge. Rows removed outright: 0. Privacy target not yet established.
+
+## D289 (Stream B) 2026-10-27 13:50 UTC: op223 timing gate PASSES; op223 has cleared every adoption gate; timing headroom noted; dudect harness and dictionary integration launched
+
+pv-quiet (`codex/pv-quiet-20261027`, merged into the candidate 73070ddd51, branch deleted; no source
+change; cargo targets deleted). Quiet window 13:34:48.9 → 13:39:35.9 UTC (marker written after running
+scopes drained, removed by the measurement's exit at 13:39:35.920 and verified absent; never extended;
+Stream A told). Five alternating pairs per fixture, 20/20 quiet guards passed, all public and proof
+bytes identical. Control c57a344726 (sha256 1975a5d1…) vs candidate 8873306db1 (sha256 6f561a4d…):
+transfer median 14.384 s vs 14.378 s (candidate p10-p90 14.302-14.488 s), ratio 0.9995; withdrawal 14.239 s
+vs 14.248 s (p10-p90 14.044-14.437 s), ratio 1.0006. Gate: medians < 15 s and ratios ≤ 1.10: PASS. op223
+has now passed all four D187 adoption gates (ELF pins, fixture bytes, 1,000-pair differential, timing).
+Headroom: the rebased control (14.38 s) is ~0.64 s slower than the D216 candidate (13.74 s), the cost of
+the research merge and client route; the remaining batch-1 and records changes together must stay within
+about +4% to keep the 15 s target. Launched pv-dudect (`codex/pv-dudect-20261027` from 73070ddd51, pv-l3
+worktree; no Lean/Kani): an in-process dudect harness in tools/ linking the candidate's actual kernels
+(mask rejection path, CT pole scan, M31/QM31 inversion path, the op223 compressor, the mask-nonce seed
+checks), fixed-vs-random classes over the secret input, an instruction-equivalence check against the
+recommended devnet_spend build, a preregistered plan V374-PLAN-v2 aiming at ≤ 45 minutes, and a
+labelled dry run; no samples, no window. Launched pv-dict2 (new worktree from 73070ddd51; IDs
+54600-54899, 60 Lean): integrate codex/cx-prover-dict-20261026 (cfg(kani)-only shipped changes, D286),
+keep production code byte-identical on conflicts, gate (a), re-check PDict_ entries and consumers,
+classify installed equations versus source laws. Six slots: route2b, batch1b, runjoin17, dudect, dict2
+(five live; the sixth was held for the quiet window and is being refilled). Rows removed outright: 0.
+Privacy target not yet established.
