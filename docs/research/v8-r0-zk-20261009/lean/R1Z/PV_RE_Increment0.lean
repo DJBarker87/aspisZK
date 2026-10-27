@@ -1,0 +1,23 @@
+import R1Z.PV_RE_RetryStep
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RE_Increment0
+open Aeneas Aeneas.Std Result ProverRwFull
+
+theorem increment : Aeneas.Std.lift (Usize.wrapping_add 0#usize 1#usize) = (Result.ok 1#usize) := by
+  apply congrArg Result.ok
+  apply (Usize.eq_equiv_bv_eq _ _).mpr
+  unfold Usize.wrapping_add UScalar.wrapping_add
+  simp only [Usize.ofNat_bv]
+  exact BitVec.zero_add _
+
+theorem active : ¬ (0#usize) >= prover.ATTEMPT_CAP := PV_RE_CapValue.below_cap
+
+#print Usize.wrapping_add
+#print UScalar.wrapping_add
+#print Aeneas.Std.lift
+#print core.result.Result.Insts.CoreOpsTry.branch
+#print core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+#print axioms increment
+#print axioms active
+end R1Z.PV_RE_Increment0
