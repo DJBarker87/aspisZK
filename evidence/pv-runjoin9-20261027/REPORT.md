@@ -45,3 +45,15 @@ Record counts unchanged 2→2 / 8→8 / 6→6; T exactly three unchanged fields.
 ## New optimized Kani leaves
 
 6/6 checks accepted: source_root_04, _05, _06, _08, _09, _10. No stubs, all unwinding assertions retained, opt-level 3, single 6G/8G/swap-0/TasksMax64 scope at a time. New peak aggregate RSS 1,143,177,216B; swap 0. Combined with retained runjoin8 evidence: 13/21 fixed source parent cells. This does not prove a whole source parent, root helper, compiler or privacy trace. Timed-out runjoin8 aggregate was not rerun. Raw checks, source pins, limits and metrics retained per leaf.
+
+## L2 replay and cache-inventory correction
+
+F3 recorded/count/array/budget/completion/disintegration/absorption/source/full-retry and endpoint HeadlineF3/Premises/HeadlineJoint passed. F6Sharing 37500 failed before elaboration: missing R1Z.ProverCommitMultiproof46.olean. The old preflight counted dangling .olean directory entries and preferred older local sources; its local-only inventory now requires is_file() and prioritizes pinned snapshots. No host launcher/cache infrastructure was edited. Validated multiproof-validated-preflight.json lists 21 missing predecessor objects, no unknown sources. These are missing objects, not an alleged nonexistent theorem or a ROW counterexample.
+
+Eight remaining working attempts are allocated to pinned Record/RecordCompact/RecordRefinement and F6KDotStep/F6KDot/RecordBind/F6ImageStep/F6Image; final three remain reserved for focused trust audits. Full F6Sharing/multiproof closure and deployed extracted trace remain open.
+
+## Stage 4 delivered source/model closure
+
+F3 recorded scalar/array/count/full-source/full-retry and HeadlineF3/Premises/HeadlineJoint all accepted. Record/RecordCompact/RecordRefinement and F6KDotStep/F6KDot/RecordBind/F6ImageStep/F6Image accepted through 37508. No native event producer or full extracted trace is derived. Validated F5 preflight retains four missing objects (PV_L2_F5, F5Transport, F5Absorption, Headline); multiproof closure retains 21. Earlier inventories counting dangling entries do not establish those objects exist. No missing proof is inferred from absent objects.
+
+97/100 charged Lean attempts: 83 accepted, 14 rejected. The remaining three are exclusively TrustAudit9Records, TrustAudit9Joins, TrustAudit9Trace. They audit records, exact installed candidate signatures, and delivered L2 source/model lemmas. They are focused audits, not a coherent frozen-release replay. T and all deployed obligations/non-vacuity status remain unchanged.

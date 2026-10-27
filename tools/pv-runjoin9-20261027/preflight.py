@@ -5,7 +5,7 @@ root=pathlib.Path(__file__).resolve().parents[2];e=root/'evidence/pv-runjoin9-20
 prefix='docs/research/v8-r0-zk-20261009/lean/'
 refs=json.loads((e/'sibling-pins.json').read_text())
 rev=refs['codex/cx-prover-dict-20261026']
-r=subprocess.run(['ssh','-o','BatchMode=yes','dombarker@100.108.41.90','python3 -c '+__import__('shlex').quote("import json,pathlib; e=json.load(open('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json')); print(json.dumps([str(p.relative_to(r)) for s in e['LEAN_PATH'].split(':') for r in [pathlib.Path(s)] for p in r.rglob('*.olean')]))")],capture_output=True,text=True,check=True)
+r=subprocess.run(['ssh','-o','BatchMode=yes','dombarker@100.108.41.90','python3 -c '+__import__('shlex').quote("import json,pathlib; e=json.load(open('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json')); print(json.dumps([str(p.relative_to(r)) for s in e['LEAN_PATH'].split(':') for r in [pathlib.Path(s)] for p in r.rglob('*.olean') if p.is_file()]))")],capture_output=True,text=True,check=True)
 cached={p[:-6].replace('/','.') for p in json.loads(r.stdout)}
 seen=set();order=[];unknown=[];sources={}
 def visit(m):
@@ -17,6 +17,8 @@ def visit(m):
  candidates.append(root/'evidence/pv-runjoin8-20261026/pending-proof-sources'/(m.split('.')[-1]+'.lean.txt'))
  candidates += [e/'read-only'/(rel+'.txt')]
  candidates+=list((root/'evidence/pv-runjoin8-20261026/read-only').glob('*/'+rel+'.txt'))
+ pinned=e/'read-only'/(rel+'.txt')
+ if pinned.is_file():candidates.insert(0,pinned)
  p=next((p for p in candidates if p.is_file()),None)
  if p is None:
   snap=e/'read-only/next-source'/(rel+'.txt');snap.parent.mkdir(parents=True,exist_ok=True)
