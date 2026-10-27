@@ -1,0 +1,65 @@
+def XRn_Join_enumerateNext : {T : Type} →
+  core.iter.traits.iterator.Iterator (core.slice.iter.IterMut T) T →
+    core.iter.adapters.enumerate.Enumerate (core.slice.iter.IterMut T) →
+      Result
+        (Option (Usize × T) ×
+          core.iter.adapters.enumerate.Enumerate (core.slice.iter.IterMut T) ×
+            (core.iter.adapters.enumerate.Enumerate (core.slice.iter.IterMut T) →
+              Option (Usize × T) → core.iter.adapters.enumerate.Enumerate (core.slice.iter.IterMut T))) :=
+fun {T} x s => do
+  let (v, i, restore) ← core.slice.iter.IteratorIterMut.next s.iter
+  let n ← if v.isSome = true then s.count + 1#usize else ok s.count
+  ok
+      (Option.map (fun x => (s.count, x)) v, { iter := i, count := n }, fun r item =>
+        { iter := restore r.iter (Option.map Prod.snd item), count := r.count })
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.IterMut T
+structure Aeneas.Std.core.iter.adapters.enumerate.Enumerate.{u} (I : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.iter : I
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.count : Usize
+constructor:
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.mk.{u} {I : Type u} (iter : I) (count : Usize) :
+    core.iter.adapters.enumerate.Enumerate I
+def Aeneas.Std.Slice.setAtNat.{u} : {α : Type u} → Slice α → ℕ → α → Slice α :=
+fun {α} v i x => ⟨(↑v).set i x, ⋯⟩
+@[reducible] def S8OwnedP6.finish_owned : alloc.vec.Vec (Std.Array U64 4#usize) →
+  alloc.vec.Vec S8OwnedP6.aspis_core.field.QM31 → Result (alloc.vec.Vec S8OwnedP6.aspis_core.field.QM31) :=
+fun raw1 weights => S8OwnedP6.finish_owned_loop raw1 weights 0#usize
+Aeneas.Std.loop.spec_decr_nat.{u, v} {α : Type u} {β : Type v} (measure : α → ℕ) (inv : α → Prop) (post : β → Prop)
+  (body : α → Result (ControlFlow α β)) (x : α)
+  (hBody :
+    ∀ (x : α),
+      inv x →
+        body x ⦃ r =>
+          match r with
+          | ControlFlow.done y => post y
+          | ControlFlow.cont x' => inv x' ∧ measure x' < measure x ⦄)
+  (hInv : inv x) : loop body x ⦃ post ⦄
+List.getElem?_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} :
+  (l.set i a)[j]? = if i = j then if i < l.length then some a else none else l[j]?
+List.getElem?_set_self.{u_1} {α : Type u_1} {l : List α} {i : ℕ} {a : α} (h : i < l.length) : (l.set i a)[i]? = some a
+XRz_generated/XRz_Owners.lean:13:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.ext`
+XRz_generated/XRz_Owners.lean:14:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNat_val`
