@@ -75,3 +75,52 @@ missing full installed extracted accepted native pair or inhabit every release
 premise jointly. The root comparison names the exact JFm/JFn/JFr/JFs/JFu/JFv/JFw
 partial predecessor theorems, including the JFw expansion/typed-prefix/Y1
 inhabitants. All are partial; none is called a completed pair theorem.
+
+## Validation, budget and freeze
+
+Budget exhausted: **100/100 Lean attempts; 93 pass, 7 excluded development
+failures; 0/0 Kani**. Failures: 003,007,013,016,017,023,028 (elaboration/proof
+development only). No timeout, memory kill, cap raise or unchanged resource-
+failure rerun. No reservation retries or overlapping own scopes. The 64 distinct
+boundary inventories audit hidden statements/axioms; they earn no deletion
+credit. No package or frozen-manifest replay was run.
+
+Final target `ARX_FinalAudit.lean` imports every ARX module and every retained
+ARW module through ARW_FinalAudit. It audits all 40 new theorems: only subsets
+of [propext, Classical.choice, Quot.sound], or no axioms. Exit 0;
+wall 2.758090139s; peak RSS 5969392KiB; swaps 0.
+Source revision anchor `259b678ea73b0d272f8abf7cfbd774b846d5733b`, plus exact dirty-source hashes
+and snapshots in receipt100. Total compiler wall 246.707434708s;
+maximum peak RSS 5969392KiB; total swap0.
+
+Every invocation is one module, one own capped scope, using the unchanged
+S2W launcher and coherent SInt2 workspace/cache, with lake env lean -j1 -M7000
+and MemoryHigh6G, MemoryMax8G, MemorySwapMax0, TasksMax64. All reservation
+diagnostics were durable before scp; no barrier bypass. No launcher, monitor
+or build infrastructure was changed. Source-only orchestration reuses ARW's
+existing task script. No scratch build workspace or target directory was made.
+
+Each receipt records exact target/argv/revision/source and dependency hashes,
+exit, wall, RSS, swaps, scope limits, complete axioms and errors.
+`ARX_HOST_MANIFEST.json` verifies all93 own sources/objects plus current Rc10
+against local bytes; no binaries were transferred. Boundary manifest: all64
+objects,62 adjacent source matches, inherited provenance for the other2. This
+is focused cached validation, not a fresh coherent release rebuild.
+`ARX_validate.py --final` passes source snapshots/current passing receipts,
+standard axioms, budget/resource checks, scope, literal conclusion-tail identity
+and the atomic recount. The raw prover stdout/time/receipts are untouched;
+only trailing whitespace in DERIVED launch summaries was normalized, recorded
+in ARX_LOG_NORMALIZATION.json.
+
+No shipped Rust/cfg(kani), parameters, features, wire format, session-A files,
+other worker prefix, wallet/key/funds/authority or ELF changed. No SBF rebuild
+trigger fired. Inherited pins, not reproduced:
+
+- default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4
+- devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299
+- Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548
+
+No binaries, objects, archives or ELFs are committed. All stages are local plain
+commits; no push. The lead's next action is owner-facing statement/adoption
+review, then the joint same-installation real-byte fixture and release artifact
+connection. No further Lean invocation is permitted in this job.

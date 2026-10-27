@@ -41,7 +41,12 @@ assert x['actual_adopted_after']==x['before']
 paths=subprocess.check_output(['git','diff','--name-only','29ae49d040'],cwd=R,text=True).splitlines()
 assert all(p.startswith(('lean/ARX_','evidence/account-rejoin9-20261026/')) for p in paths)
 assert all(not p.endswith(('.olean','.elf','.tar','.tar.gz')) for p in paths)
-if '--final' in sys.argv:assert len(rs)==100
+if '--final' in sys.argv:
+ assert len(rs)==100
+ manifest=json.loads((P/'ARX_HOST_MANIFEST.json').read_text())
+ for item in manifest:
+  assert item['matches'] and item['source_sha256']==sha(R/'lean'/(item['module']+'.lean'))
+  assert item['object_sha256'] and item['object_bytes']>0
 summary={'status':'pass','scope':'Proposed admitted model theorem, focused cached validation only; no adoption or release rebuild',
  'lean_attempts':len(rs),'passed':sum(not r['exit_status'] for r in rs),'excluded_development_failures':[r['attempt'] for r in rs if r['exit_status']],
  'kani_runs':0,'wall_seconds':sum(r['wall_seconds'] for r in rs),'peak_rss_kib':max(int(r['peak_rss_kib']) for r in rs),'swaps':sum(int(r['swaps']) for r in rs),

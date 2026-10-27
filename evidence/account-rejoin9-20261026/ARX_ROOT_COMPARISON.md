@@ -300,3 +300,12 @@ checks that a pure-choice adversary can have an accepted ART RunView excluded
 from the admitted range. Thus even pure-choice conservativity does not erase
 the declared change of global runtime functional. This fact does not show a
 deployed attack or refute the unfiltered numeric inequality.
+
+## Validation receipt
+
+All100 attempts used;93 pass and7 excluded development failures. Final100:
+exit0, wall 2.758090139s, RSS5969392KiB, swap0, revision
+`259b678ea73b0d272f8abf7cfbd774b846d5733b` plus exact dirty hashes. All40 new theorems have
+standard-only axiom audits. No resource failure, cap raise, Kani, shipped edit,
+ELF rebuild or package replay. The final handoff/validation files contain the
+complete receipt index, source/object manifest and freeze qualifications.
