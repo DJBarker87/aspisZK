@@ -1,0 +1,48 @@
+FJh_ProjectedCall.lean:31:44: error: unsolved goals
+o : Openings
+internal : State
+block : NP
+p : Std.Array NP 3#usize
+l f : Packed
+g : Usize
+⊢ (let (sopo, a, pqm, a1, a2, a3) := (o, internal, block, p, l, f)
+    do
+    let start ← 4#usize * g
+    let i ← start + 4#usize
+    let s ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice field.QM31))
+          sopo.succ_z { start := start, «end» := i }
+    let target ← field.qm31_pack_base4 s
+    let s1 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice field.QM31)) a
+          { start := start, «end» := i }
+    let internal_1 ← field.qm31_pack_base4 s1
+    let q ← a2.index_usize g
+    let q1 ← target.sub q
+    let q2 ← a3.index_usize g
+    let q3 ← target.sub q2
+    let q4 ← target.sub internal_1
+    let q5 ← field.qm31_sum_products3_prepared a1 (Array.make 3#usize [q1, q3, q4] ⋯)
+    let q6 ← pqm.mul q5
+    ok (q6, o, internal, block, p, l, f)) =
+    do
+    let start ← 4#usize * g
+    let stop ← start + 4#usize
+    let ts ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice NQ)) o.succ_z
+          { start := start, «end» := stop }
+    let target ← field.qm31_pack_base4 ts
+    let ins ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice NQ)) internal
+          { start := start, «end» := stop }
+    let ip ← field.qm31_pack_base4 ins
+    let x ← Array.index_usize l g
+    let x ← target.sub x
+    let x_1 ← Array.index_usize f g
+    let x_2 ← target.sub x_1
+    let x_3 ← target.sub ip
+    let x ← field.qm31_sum_products3_prepared p (Array.make 3#usize [x, x_2, x_3] ⋯)
+    let out ← field.PreparedQm31Multiplier.mul block x
+    ok (out, o, internal, block, p, l, f)
+'AspisR1.FJh_ProjectedCall.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJh_ProjectedCall.reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
