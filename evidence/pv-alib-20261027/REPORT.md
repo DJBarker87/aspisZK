@@ -1,286 +1,192 @@
-# pv-alib resume3 — audit and candidate replay checkpoint
+# pv-alib resume3: audited source/library candidates
 
-Same worktree and branch, starting at `828c0ce4af`. Historical report follows
-and is superseded by this checkpoint wherever status or ID allocation differs.
+Worktree **exactly** `/Users/dominic/ZK/.worktrees/pv-alib`; branch
+`codex/pv-alib-20261027`; resume base `828c0ce4af884d1c7e062bd3d995b3c3603aec8b`.
+**Target not yet established. No deployed endpoint premise was removed.**
 
-52775 output and axioms were recovered read-only from `runs/52775`; no replay
-of its unchanged source occurred. Receipt `52775.json`: exit 0, 1.07 s,
-2,637,212 KiB peak RSS, zero swaps, source revision
-`80c2e3cfda4c696a740df920ff5e06f01c797a7c`, standard axioms only.
+The three assigned rows now have audited, cached-replayed **CLOSED-ON-CANDIDATE**
+results at the specified source/library-law boundary. This does not certify
+whole-machine native refinement, a coherent full release rebuild, or installation
+in `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`.
 
-Before the first resume compile, all 5,673 external objects were verified
-against research's coherent replay manifest, including actual LEAN_PATH
-selection. `resume3-external-verification.json` has zero mismatches. Project
-cone sources were checked against the EJR record and committed SHA source
-records; `resume3-project-preflight.json` has no missing module or mismatch.
-Own MoveWorld/MoveSelected drafts were absent remotely and await private staging.
+## Required recovery and checks, performed first
 
-V233 and V265: no longer provisional for the scoped library/source candidate
-claim. Combined audit `PV_AL_Rows233265Audit`, 37698: exit 0, 1.08 s,
-2,630,884 KiB, zero swaps, revision `828c0ce4af`, 159 axiom reports, all subsets
-of {propext, Classical.choice, Quot.sound}. It covers every closing theorem
-and own support declarations of both cones. Rejected 37697 had duplicate
-namespace qualification in generated queries; no theorem failure or credit.
+52775's existing `runs/52775/output.log` and `time.log` were recovered read-only.
+Its five axiom reports are standard; its source was **never rerun**. The recovered
+complete receipt is `52775.json`; `52775-INCOMPLETE.json` remains historical.
 
-One cached candidate cone replay `PV_AL_Rows233265Replay`, 37600: exit 0,
-0.97 s, 2,634,172 KiB, zero swaps, same revision. All 41 project modules
-import together; seven closing signatures check. Its axioms result is the
-combined audit 37698; this replay itself emits signature checks only.
-`resume3-candidate-cone.json` and 37600's dependency-object hashes freeze the
-exact cone. This is focused cached candidate evidence, not a full manifest
-or deployed endpoint replay. V232 and SHA-NI semantics remain untouched.
+Before the first resume compile, every one of the coherent privacy replay's
+5,673 external objects was SHA-256 checked, both at its authoritative manifest
+path and at the object actually selected by this job's Lean path. All match.
+The manifest SHA is `d9187c800b7479f66ec6147e3c8e91c1158d382c4aa467bf678e76901b9a8c0e`.
+Evidence: `resume3-external-manifest.json`, `resume3-external-verification.json`.
+No library object was rebuilt or substituted; no shared source was overwritten.
 
-V184: native/world/selected candidate bridges now pass focused checks.
-`PV_AL_MoveWorld.source_reference` and `.checked_observation` prove complete
-results and retained buffer, capacity, allocation world, data memory and frame.
-`PV_AL_MoveSelected.native_projection` links the selected op33/consumed callback.
-`PV_AL_MoveClosure.complete`, `.allocation_delta`, `.nonvacuous` combine the
-full observation, zero allocator increments, arbitrary initial history and a
-carrier for every representable generic vector; there is no Copy/Clone bound.
+Project source resolution and the complete three-row source import cone are
+recorded in `resume3-project-preflight.json`: 52 project modules, no missing
+source authority or hash mismatch. The authority records are the EJR resolved
+sources where applicable, CBL's committed SHA-pinned manifest9 source freeze,
+and the committed candidate ProverRwFull provenance/source-manifest records
+identified per module. Own new PV_AL sources are pinned directly. The two
+initially absent MoveWorld/MoveSelected drafts were staged only privately.
 
-The complete pinned nightly-2026-06-01 stdlib bodies of pop/remove/try_remove
-match `STRUCTURAL-POP-GATE.json`. The native control and source operations are
-interpreted by explicit Lean read/header/raw-copy library semantics; last-index
-bounds and zero-copy count are proved symbolically for all element widths.
-No native/reference or world-equality hypothesis was introduced. This is the
-scoped structural source/library boundary, not unbounded compiler/raw-pointer
-machine refinement. Existing 99-case native and 697-check bounded Kani gates
-are reused. `pop-zst-world-05` adds 33 non-Copy, Drop, zero-sized cases with
-zero allocator/destructor calls during either operation and retained pointers
-and capacity. The initial 04 test compile rejected an ambiguous integer type;
-05 explicitly types the loop index usize. No checked row counterexample.
+The combined V233/V265 audit (37698) and one focused cached cone replay (37600)
+were completed before V184 work. The audit has **159 standard axiom reports**;
+the replay imports **41 project modules** together and checks every closing
+signature. `resume3-candidate-cone.json` records the source cone; 37600's receipt
+records all its directly imported object hashes. This satisfies the requested
+candidate replay, not a full frozen-manifest or deployed endpoint replay.
 
-Focused receipts (all Lean standard axioms, zero swaps; revision dda503c2ed):
-37601 MoveWorld: exit 0, 1.11 s, 2,635,704 KiB.
-37602 MoveSelected: exit 0, 1.10 s, 2,641,956 KiB.
-37603 MoveClosure: exit 0, 1.15 s, 2,636,400 KiB.
-ZST native 05: exit 0, 0.11 s, 121,432 KiB, axioms N/A.
-Final V184 combined audit and cached cone replay are next. Until then, the
-new V184 candidate result is provisional. No endpoint premise or trust field
-changed. Target not yet established.
+## Row results and exact boundaries
 
-ID correction: all historical 52700-52775 uses were invalid cross-job reuse;
-their evidence is retained without reruns. Resume3 uses 37600-37699 ONLY,
-with 37697-37699 reserved for audits. 6 of the remaining 25 Lean attempts
-are now spent; 19 Lean attempts and 4 Kani runs remain.
+### V233 / op209: provisional -> CLOSED-ON-CANDIDATE
 
----
+Before: selected `split_blocks` source/value law for arbitrary representable
+byte slices and link to the consumed callback remained `ProverRwFull.ExternalFuns.op209`.
+The existing fixed soft digest did not supply this law.
 
-# pv-alib resume from 86aae376c0 — host-stop handoff
+After: `PV_AL_SplitSelected.native_callback` and `.consumed` give the complete
+successful Result for the constructed native 64-byte trait/storage specialization,
+for every input slice without a length bound. `PV_AL_SplitBridge.source_reference`
+identifies the extracted reference observation and `.consumed_reassembles` proves
+that the decoded blocks followed by the tail reconstruct the input. The generic
+`PV_AL_SplitObservation.complete` includes division-by-zero failure for other
+block sizes. There is no source-equality hypothesis; the actual native trait and
+its size are constructed and proved. No SHA-NI semantics or V232 credit.
 
-Worktree `/Users/dominic/ZK/.worktrees/pv-alib`, branch
-`codex/pv-alib-20261027`. **Target not yet established.**
+Audit/replay: 37698 / 37600, reconfirmed in the final 37699 audit. Reused native
+and bounded no-stub Kani gates retain their original scope: 1,026 prefixes
+through length 1025; arbitrary bytes/coordinates at lengths 0–129, unwind 132,
+389 Kani checks. The extraction and fidelity scan are unchanged.
 
-The initial report is retained verbatim in `REPORT-initial-stop.md`. Lead
-ruling D304 supersedes its stop decision: the checked `[17,29]` allocation
-mismatch refutes the proposed copy reference, not ledger row V184. Both pinned
-and initial native receipts remain in this directory and the counterexample
-remains part of this report. No ledger statement was weakened.
+### V265 / op259: provisional -> CLOSED-ON-CANDIDATE
 
-## V184 progress
+Before: the prepared selector lacked the native/reference source gate for
+`ProverRwFull.ExternalFuns.op259`.
 
-Before: `ProverRwFull.ExternalFuns.op33`, exact complete Result/value law with
-allocation/world carrier, arbitrary generic inputs.
+After: `PV_AL_CircleNative.source_reference` and
+`PV_AL_CircleSelected.native_source` / `.consumed` cover every input block and
+both rows with complete Result behavior. The structural gate preserves native
+field calls, order, errors, fallback parameters and row selection; it does not
+assume totality, arithmetic equality or source equivalence. Both row values and
+carrier roundtrips are inhabited/proved. This uses ruling (k)'s structural route,
+with no chained-field-arithmetic Kani run.
 
-The new safe `pop_move_reference<T>` has no Copy/Clone bound and uses
-`remove(len-1)` only on a nonempty vector. The optimized pinned nightly native
-differential `pop-move-world-03` passes 99 cases: lengths 0–32, capacities
-length+0/+1/+17, payload `Result<Vec<u32>,Vec<u8>>`. Native and reference retain
-their respective buffer identities and capacities, return identical complete
-values and remaining contents, and each make zero alloc/realloc/dealloc calls.
-This is a measurement, not an unbounded machine theorem.
+Audit/replay: 37698 / 37600, reconfirmed in 37699. Unchanged extraction,
+`STRUCTURAL-CIRCLE-GATE.json`, fidelity scan and 8,712 native wrapper comparisons
+are reused; `promote.py --check` passes. Bounded native measurements are not an
+unbounded machine theorem.
 
-No-stub Kani `kani-pop-noncopy-01` passes 697 checks (12 unreachable), arbitrary
-bytes and both Result variants, lengths 0–4, unwind 6. No arithmetic stubs or
-function replacement was used. Buffer/capacity preservation is checked; the
-allocator counts come from the separate native differential, not from Kani.
+### V184 / op33: OPEN -> CLOSED-ON-CANDIDATE
 
-Lean attempts 52706–52707 prove `PV_AL_PopWorld.complete`, `.retains_buffer`,
-`.remaining`, `.zero_allocations`, `.nonvacuous`, and
-`PV_AL_PopSelected.{callback,consumed,world_projection}`. These use an explicit
-world and retained buffer/capacity carrier; arbitrary pre-existing allocation
-history is preserved. Every vector has an admissible carrier, and the complete
-Result is `ok` without a conclusion-shaped premise. These are model and
-candidate installation theorems, not a completed native remove source law.
+Before: the generic move-reference value law and zero-copy facts were proved,
+but the native/world/selected bridge and frozen stdlib structural association
+were missing. Recovery of 52775 establishes the native-value prerequisite.
 
-The borrowed reference extracts with the unchanged pinned extractor, but
-`Vec::remove` remains external. Expanding native `remove`/`try_remove` is
-rejected by the fail-closed structured-Drop preflight; the owned wrapper is
-also rejected for structured Drop. The emitted external axiom template is
-retained as rejected extraction evidence, never installed or kernel-accepted.
-After: native remove fidelity remains; V184 stays **OPEN**, no closing theorem.
-The other two rows received real source-law attempts and candidate results below.
+After: `PV_AL_MoveWorld.source_reference` equates the native and move-reference
+library executions on an explicit world. `.checked_observation` proves returned
+last value, remaining dropLast contents, retained buffer and capacity, unchanged
+allocation history/counters, data memory and arbitrary external frame.
+`PV_AL_MoveSelected.native_projection` connects that observation to the selected
+op33 callback; `.consumed` checks the actual extracted pop callback wrapper.
 
-## V233 selected split-block law
+The closing theorem `PV_AL_MoveClosure.complete` combines both executions and
+the consumed callback into one complete Result/observation statement.
+`.allocation_delta` proves zero alloc/realloc/dealloc increments from arbitrary
+initial counters and retains history. `.nonvacuous` constructs a full carrier
+for every representable vector and address. Payloads are arbitrary Types with
+no Copy/Clone bound. Buffer.fits is an ordinary length/capacity invariant,
+satisfied by the explicit non-vacuity construction, not a hidden source law.
 
-Before: `ProverRwFull.ExternalFuns.op209`, selected split_blocks source/value
-law for arbitrary sized input slices and link to the consumed callback. CBL's
-fixed soft digest did not supply it.
+`STRUCTURAL-POP-GATE.json` pins and checks the complete nightly-2026-06-01
+stdlib pop/remove/try_remove bodies. Their read/header/copy operations are
+interpreted by the explicit Lean library semantics: last index bounds,
+capacity assertion and zero raw-copy count are proved symbolically, for all
+element widths including zero. The operations contain no allocator/destructor
+call. Native raw remove is still unextracted: this structural/library association
+is **not** a new unbounded Rust raw-pointer, compiler or allocator refinement.
+No iterator/element restoration continuation is silently credited; the source
+write classification and its boundary are recorded in the structural gate.
 
-After: the selected **library-law candidate** is supplied by
-`PV_AL_SplitSelected.native_callback` and `.consumed`, with
-`PV_AL_SplitBridge.source_reference` and `.consumed_reassembles`. Status:
-**OPEN -> CLOSED-ON-CANDIDATE** at this scoped library-law boundary. The complete
-source reference law is `PV_AL_SplitObservation.complete`; it covers arbitrary
-representable slices and arbitrary block sizes, including division-by-zero
-failure. The consumed native 64-byte specialization has no length premise.
+Reused gates: the 99-case pinned native allocation differential and 697-check
+no-stub bounded Kani gate (12 unreachable checks, lengths 0–4, unwind 6).
+New optimized `pop-zst-world-05`: **33 non-Copy Drop ZST cases pass**, with zero
+allocator and destructor calls during either operation, retained pointers and
+capacity. Rejected 04 had an ambiguous test-loop integer type; 05 changes it
+to usize. Its failed receipt and source snapshot are retained. The old [17,29]
+copy-reference allocation counterexample is retained as a failed approach,
+never relabeled as a row counterexample.
 
-The safe Drop-free reference extracts with unchanged pinned tools and has no
-external-function holes. `PV_AL_RangeLoop.source` proves its range-copy loop by
-induction; no concrete long input is kernel-normalized. `PV_AL_BlockCodec` and
-`PV_AL_SplitCarrier` prove exact bytes through the native generic-array storage.
-`PV_AL_SplitNativeShape.consumed_storage` identifies the pre-existing consumed
-block carrier. The native USIZE field is derived from literal typenum size
-expressions, not assumed. Four auxiliary numeric constants/expressions are
-installed (156/178/192/202); no additional ledger-row credit is claimed.
+Final audit/replay: 37699 / 37604. The audit covers **204 declarations across
+all three candidate rows**. The V184 replay loads its **15 project modules**
+from the verified cache and prints the three closing theorem axioms.
 
-`kani-split64-02` is a no-stub native/reference gate: arbitrary bytes and output
-coordinates, lengths 0–129, unwind 132; 389 checks pass. `native-split-02` checks
-1,026 prefixes through length 1025. `SPLIT-FIDELITY-SCAN.json` records restoration
-and output preservation. The rejected owned temporary-vector extraction and
-initial no_std import error are retained. One overbroad trait-record
-simplification (52735) was stopped after 76.29 s at 2,636,476 KiB, then replaced
-by a projected size recurrence and small scalar proof (52747/52748); no limits
-were raised. Attempts 52753/52755 print standard axioms only.
+## Receipts
 
-There are no conclusion-shaped or source-equality hypotheses. Every input
-slice has a concrete successful 64-byte callback result; the native trait and
-its size are constructed and checked. Other callback instantiations retain
-their original operation. This is not an unbounded native-machine refinement
-or a deployed endpoint instance: the bounded P6 gate's scope remains explicit,
-and whole native composition/replay remains separate. No SHA-NI semantics
-claim is made, and V232 is untouched.
+All Lean runs use -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
+TasksMax=64, one capped scope at a time. Every run below reports zero swaps.
+Exact commands, full source revisions, source snapshots, dependency fingerprints,
+full printed axioms and raw time/output/admission logs are in the numbered
+receipts and `resume3-receipts.json`; aggregate history is `RECEIPTS.json`.
 
-## V265 source callback and structural gate
+| Attempt | Target (R1Z/PV_AL_ prefix) | Exit | Wall s | Peak RSS KiB | Revision | Axioms |
+|---|---|---:|---:|---:|---|---|
+| 52775 recovered only | MoveNativeValue | 0 | 1.07 | 2637212 | 80c2e3cfda | 5 standard |
+| 37697 | Rows233265Audit | 1 | 1.12 | 2622348 | 828c0ce4af | rejected audit: query names duplicated namespaces |
+| 37698 | Rows233265Audit | 0 | 1.08 | 2630884 | 828c0ce4af | 159 standard |
+| 37600 | Rows233265Replay | 0 | 0.97 | 2634172 | 828c0ce4af | signature checks; paired axioms audit 37698 |
+| 37601 | MoveWorld | 0 | 1.11 | 2635704 | dda503c2ed | 9 standard |
+| 37602 | MoveSelected | 0 | 1.10 | 2641956 | dda503c2ed | 5 standard |
+| 37603 | MoveClosure | 0 | 1.15 | 2636400 | dda503c2ed | 3 standard |
+| 37699 | FinalRowsAudit | 0 | 1.21 | 2631908 | e9c42631f3 | 204 standard |
+| 37604 | MoveReplay | 0 | 1.13 | 2628560 | e9c42631f3 | 3 standard |
+| native 04 | pop-zst-world test compile | 1 | 0.05 | 113536 | dda503c2ed | N/A Rust |
+| native 05 | pop-zst-world test | 0 | 0.11 | 121432 | dda503c2ed | N/A Rust |
 
-Before: `ProverRwFull.ExternalFuns.op259`; the prepared selector lacked the
-native/reference source gate. After: **OPEN -> CLOSED-ON-CANDIDATE**, at the
-selected source/library-law boundary. Closing theorems:
-`PV_AL_CircleNative.source_reference` and
-`PV_AL_CircleSelected.{native_source,consumed}`. They cover every block and both
-rows with complete Result behavior. Both carrier roundtrips and both row
-images are proved. No totality, field equality, source-equivalence or
-conclusion-shaped hypothesis is assumed.
+Standard means a subset of {propext, Classical.choice, Quot.sound}; the accepted
+combined logs were parsed to check this explicitly. 37697 is retained and gets
+no audit credit; no failed candidate lemma is treated as a row counterexample.
+No sorry/admit/native_decide/implemented_by/axiom declaration was added.
 
-Ruling (k)'s structural route is used. The owned safe reference preserves every
-frozen arithmetic call and its order, singularity priority, both map errors,
-fallback constants and row selection. Explicit matches replace ok_or/? and
-unwrap_or_else outside shipped crates. `STRUCTURAL-CIRCLE-GATE.json` checks the
-complete pinned native control bodies and identical fallback parameters.
-`PV_AL_CircleControl.native_owned` proves the generic control transport with
-failure/divergence intact; the native map/fallback/wrapper equations specialize
-it to the same extracted arithmetic. The relative sampler source path in the
-extraction metadata is resolved against its proof crate, not the SSH login
-folder; `circle-native-input-pins.json` checks every relevant source file
-against this worktree.
+## Accounting, integration and next deliverable
 
-The unchanged pinned tools extract the reference with no external-function
-holes or opaque arithmetic leaves. Three positive shift-count literal ABI
-mismatches were normalized to the current scalar API; the generic U64 shift
-identities are proved in `PV_AL_ShiftLiterals`. Exact edits are recorded in
-`primitive-shift-normalization.json` and reproduced by `promote.py --check`.
-The extractor and release Rust are unchanged. Source, structural-link and
-selected-law checks print only standard axioms (52756/52758/52759/52760/
-52763/52764/52767).
+Resume3 used **8/25 Lean attempts**, seven accepted and one rejected, and **0/4
+Kani runs**. Total history: 83 charged Lean attempts, 48 accepted complete
+receipts, 35 rejected, zero incomplete; two of six Kani runs used. **17 Lean
+attempts and 4 Kani runs remain.** Stopped at completion of all three assigned
+scoped candidate rows and their requested audits/replays, not exhaustion.
 
-`native-circle-owned-03` passes 8,712 wrapper comparisons (8,582 accepted;
-130 rejected/fallback), direct map comparisons, directed ±i singular cases,
-and both row fallbacks. Earlier reference tests and failed closure/core/Drop
-extractions are retained separately. `CIRCLE-FIDELITY-SCAN.json` records all
-three live Array.update results and quotient reuse. The fresh Lean emission
-(52765) and native Rust agree on zero and FF digit fixtures, including
-`[255,2048,7168,14336]`, where quotient writes change the output. The legacy
-mut-iterator low_base_p_digits body is absent from this op259 graph. No
-chained-field-arithmetic Kani was attempted.
+Only **37600–37699** were used in this resume; 37697–37699 were audit IDs.
+Historical 52700–52775 allocations conflicted with pv-batch3 and were invalid
+cross-job reuse. They remain provenance evidence, never a justification to
+reuse any 52xxx ID. Fresh range checks found no existing receipt/submission
+hits before the first compile (`resume3-ID-PREFLIGHT.json`).
 
-This is a structural source/library result plus fresh extraction and native
-checks, not an unbounded whole-machine proof or a deployed endpoint instance.
-The final owner dependency replay and whole native composition remain separate.
-Final audit and closure replay remain pending at the host stop described below.
-
-No endpoint premise or T field changed. No `crates/` or `programs/` file changed,
-so no ELF rebuild is claimed; the three release pins remain inherited, not
-freshly checked. The initial `[17,29]` copy-reference counterexample is retained
-and is not relabeled as a row counterexample or a successful gate.
-
-## V184 further source work and exact remaining gap
-
-Attempts 52768/52769/52770/52772/52773 pass. In particular,
-`PV_AL_MoveLast.source` proves the complete generic Result law for the safe
-move reference using the explicit `Vec::remove` library model, for every
-representable vector and every payload Type, with no Copy/Clone bound.
-`PV_AL_MoveFacts` proves the last index bounds and that the suffix copy count
-is zero. `PV_AL_MoveMemory.last_copy` proves the data-buffer memory is unchanged
-for every element width, including zero-sized types. The explicit world model
-retains allocation history/counters, address, capacity, data bytes and an
-arbitrary external frame. No source-equality hypothesis is introduced.
-
-These facts do not yet close the native/world association. Attempt 52774's
-native-value bridge failed on a guard simplification; its failed log, including
-Lean's error-generated `sorryAx`, is retained and receives no proof credit.
-The adjusted 52775 source was admitted, and its fetched time log reports exit
-0, 1.07 s, peak 2,637,212 KiB and zero swaps. However, output/axioms collection
-failed, so it is **not accepted for closure**. `52775-INCOMPLETE.json` distinguishes
-the observed timed exit from the missing proof audit. `PV_AL_MoveWorld` and
-`PV_AL_MoveSelected` are written, uncompiled drafts; their statements are not
-claimed as theorems. `pop-zst-world.rs` is an unexecuted additional native test.
-
-V184 therefore remains **OPEN -> OPEN**. Before: exact selected op33 complete
-source/value law with explicit allocation world. After: generic move-reference
-value and zero-copy facts proved; native/world/selected bridge and frozen stdlib
-structural association still pending. There is no closing theorem credited.
-The 99-case allocation observation and 697-check Kani gate remain valid at
-their stated bounds. The old `[17,29]` copy-reference counterexample remains
-retained as a failed approach, never a counterexample to V184.
-
-## Host stop, accounting and handoff
-
-Host SSH receipt collection failed with a missing `52775-output.log`; a
-read-only follow-up exited 255 with `Connection closed by 100.108.41.90 port 22`.
-Per `local-lean.txt` rule 5 ("If the launcher or host misbehaves, stop and report
-the exact error ... the lead fixes infrastructure"), no further host scope was
-launched and no infrastructure was repaired. This is an infrastructure stop,
-not budget exhaustion, a row counterexample, or an ELF mismatch. `HOST-STOP.txt`
-records the exact failure. Own host cache cleanup is deferred because the
-host connection failed; preserve source, receipts and keys when cleaning caches.
-No wallet/account keys were created or removed.
-
-Total: **75/100 charged Lean attempts**, of which 40 have accepted complete
-receipts, 34 are rejected and 1 has incomplete receipt collection. The resume
-used 69 of its 94 remaining attempts. **2/6 Kani runs** passed; 25 Lean attempts
-and 4 Kani runs remain. IDs 52700–52775 are used, with 52727 uncharged; prior
-excluded IDs remain excluded. Audit IDs 52997–52999 are unused. The latest
-user instruction explicitly reauthorizes the full 52500–52999 block despite
-the earlier common-file range correction; no claim of global ID exclusivity
-is made. `TALLY.json` and per-attempt source snapshots retain exact accounting.
-
-`RECEIPTS.json` records exact targets, exits, wall/RSS/swap, revisions and
-printed axioms for all complete receipts. Accepted receipts print only standard
-axioms; failed logs are never treated as accepted proofs. The only incomplete
-receipt is identified separately. Capped scopes used 6G high / 8G max / zero
-swap / 64 tasks and Lean -M7000; no caps were raised. Generator promotion
-`--check` and the circle structural gate pass locally at handoff. No final
-combined axioms audit or frozen dependency-manifest replay was performed:
-focused V184 prerequisites are not yet fully audited. Candidate row results
-are not a coherent release replay.
-
-Endpoint assumptions removed: **zero**. Retained: all deployed endpoint,
-whole-native composition and owner-integration obligations. Added/changed:
-no endpoint premise, simulator/observer weakening or T field; only scoped
-candidate source laws and proof-only references. V233 and V265 are candidate
-library/source closures, subject to owner integration and final replay. No
-release Rust source changed. Inherited ELF pins (not freshly checked):
+Endpoint assumptions removed: **zero**. Retained: deployment, whole-native
+composition, E1/E2, real RunJoin and side-channel obligations around the deployed
+endpoint. Added/changed: no endpoint premise, no T field, no observer or simulator
+weakening. Changes are proof/evidence/reference tests only. No crates/ or programs/
+file changed; no ELF rebuild or fresh pin verification is claimed. Inherited pins:
 
 - default `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`
 - devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`
 - Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`
 
-Next: recover the existing 52775 output/axioms without rerunning its source;
-then compile the smallest changed native/world/selected bridges, check the
-frozen stdlib structural link, perform one combined axioms audit and one final
-candidate closure-manifest replay. Clean only own compiled caches after those
-checks. **Target not yet established.**
+After verification, own compiled objects were hash/size inventoried, then own
+Lean/Rust target caches and two executable caches were removed under local-lean
+rule 9. Sources, receipts, LLBC and extraction evidence remain; shared objects
+were untouched. `resume3-cache-cleanup.json` records this. No keys were created,
+removed or cleaned. No local Lean compile, full manifest replay, push or merge.
 
-Source/proof commit log from `aa27e73f99` is retained in `COMMITS.txt`;
-`f1db3be67a` contains the final V184 attempt and host-stop evidence.
-Working tree was clean after that path-limited commit. No push was performed.
+Next concrete deliverable: owner integration of these three source/library
+candidate callbacks into the consumed native composition and deployed endpoint
+conditions, retaining their stated primitive/structural and bounded-gate scope,
+then the owner's coherent dependency replay and deployment audit. These scoped
+results must not be reported as an unbounded whole-machine or deployed proof.
+
+Resume commits before this final evidence checkpoint:
+- `dda503c2ed` Audit and replay split and circle candidate closures
+- `e9c42631f3` Connect move reference callback to explicit allocation world
+
+`COMMITS.txt` records the source/proof history through that checkpoint. The prior
+reports are retained in `REPORT-resume2-host-stop.md` and `REPORT-initial-stop.md`.
