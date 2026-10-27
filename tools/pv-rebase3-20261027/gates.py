@@ -15,8 +15,8 @@ def run(script,who,label,*args):
    if retry<10:
     time.sleep(180);continue
   raise SystemExit(status)
-if mode=='sbf':
- for m in ['default','devnet','pool']:run('build.py','candidate','build-'+m+'-gate',m)
+if mode in ['sbf','sbf-remaining']:
+ for m in (['default','devnet','pool'] if mode=='sbf' else ['devnet','pool']):run('build.py','candidate','build-'+m+'-configured',m)
 elif mode=='native':
  run('native.py','candidate','build-devnet','cargo','build','--manifest-path','tools/r1-cost-probe/Cargo.toml','--release','--offline','--locked','-j','4','--features','r1p-check,aspis-r1-cost-probe/ct-host-prover','--bin','devnet_spend')
 elif mode=='fixture':
