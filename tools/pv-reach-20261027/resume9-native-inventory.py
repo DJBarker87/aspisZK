@@ -6,7 +6,7 @@ receipts={}
 for p in E.parent.rglob('receipt-*.json'):
  try:r=json.loads(p.read_text())
  except (ValueError,OSError):continue
- if r.get('accepted') and r.get('target'):receipts.setdefault(r['target'].replace('/','.'),[]).append(r)
+ if isinstance(r,dict) and r.get('accepted') and r.get('target'):receipts.setdefault(r['target'].replace('/','.'),[]).append(r)
 script='''import pathlib,json,hashlib,sys
 rows=json.load(sys.stdin);h=pathlib.Path('/home/dombarker/project-offloads/codex-pv-reach-20261027/lean');shared=pathlib.Path('/home/dombarker/project-offloads/aspis-joint-20261019');out=[]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
