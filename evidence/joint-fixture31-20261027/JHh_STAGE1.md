@@ -22,3 +22,11 @@ Attempts 001-004 rebuild missing unchanged JHe objects privately; 005 ordinary
 class-syntax error, fixed by 006; 007-010 exit0. No timeout/memory retry.
 Exact target, exit, wall, RSS, swap, source revision/hash and axioms are in
 each receipt. No shipped change, Rust, Kani, ELF rebuild, or release replay.
+
+Focused continuation: 052 proves the retained last32 bytes and SAME-body
+request identity; 053 inverts actual toSlice conversion; 054 proves full
+image identity from the explicitly retained actual-body premise and the
+named checksum equation. 049-051 are retained ordinary tactic failures;
+052 replaces concrete unfolding by opaque bytes and a named length fact.
+All three passing roots use only standard axioms. Stage1's requested
+SHA-only actual writer equality remains open; these helpers do not hide it.
