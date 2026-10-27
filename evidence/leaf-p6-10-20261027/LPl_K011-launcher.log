@@ -1,0 +1,56 @@
+{"attempt": "LPl_K011", "exit_status": 0, "wall_seconds": 2.7614878970198333, "peak_rss_kib": "366936", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:31:39
+   |
+31 | #[kani::proof] #[kani::unwind(18)] fn LPh_live_after(){live_window::<3>()}
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_live_after`
+
+warning: function `LPl_decoder` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/LPl_check.rs:4:38
+  |
+4 | #[kani::proof] #[kani::unwind(8)] fn LPl_decoder(){
+  |                                      ^^^^^^^^^^^ help: convert the identifier to snake case: `lpl_decoder`
+
+warning: function `LPl_iterator` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/LPl_check.rs:9:38
+  |
+9 | #[kani::proof] #[kani::unwind(8)] fn LPl_iterator(){
+  |                                      ^^^^^^^^^^^^ help: convert the identifier to snake case: `lpl_iterator`
+
+warning: function `LPl_nonvacuity` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPl_check.rs:17:38
+   |
+17 | #[kani::proof] #[kani::unwind(8)] fn LPl_nonvacuity(){
+   |                                      ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpl_nonvacuity`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.93s
+Checking harness r1_wire::LPl_validate::LPl_nonvacuity...
+
+VERIFICATION RESULT:
+ ** 0 of 463 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.8681259s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r4006b57e2b994a59bc7052ceb3e6fb97.scope; invocation ID: 55f17711a44c437d914f7c7a4bf6eeab

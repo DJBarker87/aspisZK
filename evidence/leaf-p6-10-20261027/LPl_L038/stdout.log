@@ -1,0 +1,26 @@
+LPl_generated/LPl_Validate.lean:32:80: error: unsolved goals
+row : U8
+bs : Slice U8
+out : Option ℕ
+size : (↑bs).length ≤ 3712
+trace : Scan.Trace (predicate ↑bs) ((↑bs).length / 32) 0 out
+⊢ (match out with
+    | none => ok (core.result.Result.Ok ())
+    | some i =>
+      if h : i ≤ UScalar.cMax UScalarTy.Usize then
+        ok (core.result.Result.Err (r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+      else fail Error.panic) =
+    match out, trace with
+    | none, trace => ok (core.result.Result.Ok ())
+    | some i, trace =>
+      if h : i ≤ UScalar.cMax UScalarTy.Usize then
+        ok (core.result.Result.Err (r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+      else fail Error.panic
+'LPl.Validate.bad_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPl.Validate.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPl.Validate.first_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPl.Validate.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LPl.Validate.error_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPl.Validate.earlier_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPl.Validate.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPl.Validate.total' depends on axioms: [propext, Classical.choice, Quot.sound]

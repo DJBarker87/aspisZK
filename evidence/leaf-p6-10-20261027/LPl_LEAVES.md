@@ -8,7 +8,7 @@ and owner-approved game unchanged. S2 and100-bit target not yet established.
 |---|---|
 | verifier::echeck | CLOSED on all adopted release inputs (all lengths0..2272,both k); LPl_echeck_LEAF.md. Native step/iterator/decoder, SAME bytes/Result, full induction, uniqueness and non-vacuity; no caller/headline installation claimed. K008/K009 correct the initial928-only domain and cover all adopted caller lengths. No native claim beyond2272. |
 | compact::check_values | CLOSED on all464-byte adopted caller inputs; LPl_check_values_LEAF.md. Actual decoder/iterator, byte-value join, complete first-error/Boolean model Result, uniqueness and non-vacuity. |
-| validate_record_fields | OPEN: join native local K022 and full3712-byte iterator/enumeration carriers to LPg first-error preservation/full116-stage model. |
+| validate_record_fields | CLOSED on every payload length0..3712 and every row; LPl_validate_record_fields_LEAF.md. Exact native enumeration/pointer/count, decoder/byte join, first-error preservation, row/index/scalar Result, uniqueness and non-vacuity. |
 | compact::expand_values | OPEN: full464/928 source/destination window/frame association and29-step native/model output join. |
 | ValidatedRecord::decode_k | OPEN: full record selected-window→N29 loop/output/error Result, validation-token and SAME returned-array join. |
 | r1_semantic::claims | OPEN: full29-step source decoder associations, all three Box writes/ownership/cleanup and SAME Prefix/caller provenance. |

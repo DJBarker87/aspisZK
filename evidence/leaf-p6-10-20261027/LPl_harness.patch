@@ -88,6 +88,33 @@
 + assert!(32<=2272&&224<=2272&&800-672<=2272);
 + assert_eq!(c::FINAL_LEN,64);
 +}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPl_validate.rs
+@@ -0,0 +1,24 @@
++use super::*;
++#[kani::proof] #[kani::unwind(10)]
++fn LPl_iterator(){
++ let b:[u8;3712]=kani::any();let n:usize=kani::any();kani::assume(n<=3712);
++ let i:usize=kani::any();kani::assume(i<=n/32);
++ let mut it=b[..n].chunks_exact(32).enumerate();
++ // nth on the raw byte iterator establishes the arbitrary reached enumeration
++ // pre-state without running any field-decoding loop.
++ if i>0 {let (j,_)=it.nth(i-1).unwrap();assert_eq!(j,i-1);}
++ assert_eq!(it.len(),n/32-i);
++ match it.next(){None=>{assert_eq!(i,n/32);assert_eq!(it.len(),0);},Some((index,c))=>{
++  assert!(i<n/32);assert_eq!(index,i);assert_eq!(c.len(),32);assert!(core::ptr::eq(c.as_ptr(),b[32*i..].as_ptr()));
++  assert_eq!(it.len(),n/32-(i+1));
++  match it.next(){None=>assert_eq!(i+1,n/32),Some((next_index,next))=>{
++   assert!(i+1<n/32);assert_eq!(next_index,i+1);assert!(core::ptr::eq(next.as_ptr(),b[32*(i+1)..].as_ptr()));}}
++ }}
++}
++#[kani::proof] #[kani::unwind(10)]
++fn LPl_nonvacuity(){
++ let row:u8=kani::any();if let Some((_,size))=row_shape(row){assert!(size<=3712&&size%32==0);}
++ let zero=[0u8;32];assert_eq!(validate_record_fields(row,&zero),Ok(()));assert_eq!(validate_record_fields(row,&[]),Ok(()));
++ let mut high=zero;high[16]=1;assert_eq!(validate_record_fields(row,&high),Err(Error::NonCanonical{row,value:0}));
++ let mut bad=zero;bad[0]=255;bad[1]=255;bad[2]=255;bad[3]=127;assert_eq!(validate_record_fields(row,&bad),Err(Error::NonCanonical{row,value:0}));
++}
 --- a/crates/aspis-r1-cost-probe/src/compact.rs
 +++ b/crates/aspis-r1-cost-probe/src/compact.rs
 @@ -209,3 +209,5 @@
@@ -96,6 +123,14 @@
  #[cfg(kani)] mod LPh_compact { include!("LPh_compact.rs"); }
 +
 +#[cfg(kani)] mod LPl_check { include!("LPl_check.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -858,3 +858,5 @@
+ #[cfg(kani)] mod LPg_r1_wire { include!("LPg_r1_wire.rs"); }
+ 
+ #[cfg(kani)] mod LPh_wire { include!("LPh_wire.rs"); }
++
++#[cfg(kani)] mod LPl_validate { include!("LPl_validate.rs"); }
 --- a/crates/aspis-r1-cost-probe/src/verifier.rs
 +++ b/crates/aspis-r1-cost-probe/src/verifier.rs
 @@ -536,3 +536,5 @@
