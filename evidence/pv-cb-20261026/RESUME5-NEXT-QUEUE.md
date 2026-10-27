@@ -1,29 +1,18 @@
-# Serial next queue (working, not validation evidence)
+# Serial next queue (plan, not validation evidence)
 
-Current native gate kani-resume5-compress16-raw-900 is the only live capped
-scope. Never launch a second scope alongside it. Its own sampled solver file
-is /tmp/external-sat3311970.Uw1pUG.cnf; preserve receipt and clean only after
-termination. Final aggregate peak remains unobserved; sampled cgroup counters
-are retained separately from wrapper GNU time.
+63/100 Lean attempts, next unused41264; final three attempts reserved for joint audit.
+5/12 Kani gates, all timeouts. No own capped scope currently live.
+Two auxiliary Charon admission refusals, no scope:resume5-aux-001/r02.
+Wait180s from the latest refusal before a fresh-name retry; driver-level guard enforces this.
 
-After the gate ends:
-- inspect verdict/counterexample, collect final metrics, confirm own scope gone;
-- compile new Op223CanonicalCallsite with next unused Env-J ID41231;
-- focused extraction config trial mir4: same cfg-only one-call wrapper, encode
-  dependency MIR and explicit MIR opt-level4/inlining flags, root-only include;
-  inspect actual emitted body and external template, never treat zero exit as
-  source acceptance when compressor remains opaque;
-- resume actual private tuple_cells / bank_for_row extraction to address the
-  remaining registry offset input invariant (one reservation refusal retained);
-- full canonical length16 output-lane0–3 Kani splits, unwind18, timeout180;
-- op117 fixed-index output-lane splits with arbitrary canonical coefficient
-  arrays, unwind30, timeout180;
-- ruling(i) circle/unwind40 and pole1024/unwind1026 retries, timeout900 each.
+Next:actual forest auxiliary row translation extraction; preserve exact source
+association or exact loan-validation error. Then guarded native queue, serial:
+compress16_lane3(unwind18,180s), op117 index/lane partitions0/0,0/1,25/2,25/3
+(unwind30,180s), circle(unwind40,900s), pole1024(unwind1026,900s).
+Kissat for the two ruling(i) old-harness retries; default solver for new splits.
 
-Planned total Kani:2 old compressor900 retries +4 compressor lane partitions
-+4 op117 partitions +circle/pole900=12. No third identical old harness run.
-No new gate has been executed merely because it appears in this queue.
-
-Lean budget30/100, next41231; final3 reserved. Continue meaningful focused
-proofs toward actual producer/caller/source association until the full budget
-is exhausted, or a checked canonical shipped-row counterexample is found.
+Legacy and forest tuple constructor offset/root/caller theorems are checked.
+Canonical producer words require trace-word validity; shipped compressor
+agreement remains open. No stable op223_source theorem, no V164 premise removal.
+At97 charged Lean attempts freeze/check focused manifest; spend final3 on audits.
+Retain checked own Lean objects/hashes and all proof/evidence. No keys touched.

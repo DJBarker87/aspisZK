@@ -1,0 +1,22 @@
+import R1Z.PV_CB_HornerScalarTransport
+import R1Z.PV_CB_HornerBody
+set_option autoImplicit false
+namespace R1Z.PV_CB_HornerScalarBodyTransport
+open Aeneas Aeneas.Std Result ControlFlow ProverRwSuccessReverseRange PV_CB_HornerCell
+
+theorem step (alternate : Prepared → Q → Q → Result Q)
+    (agreement : ∀ p shared coefficient,
+      PV_CB_CanonicalPreparedCtor.Valid p → PV_CB_CanonicalTower.Valid shared →
+      PV_CB_CanonicalTower.Valid coefficient → scalar p shared coefficient = alternate p shared coefficient)
+    (coeff : Coeff) (p : Prepared) (e : Usize) (shared : Q)
+    (positive : 0 < e.val) (bound : e.val ≤ 27)
+    (vc : PV_CB_CanonicalArrays.Valid PV_CB_CanonicalTower.Valid coeff)
+    (vp : PV_CB_CanonicalPreparedCtor.Valid p) (vs : PV_CB_CanonicalTower.Valid shared) :
+    ∃ coefficient, PV_CB_CanonicalTower.Valid coefficient ∧
+      PV_CB_MaskHorner.S.body coeff p (before e) shared =
+      (do let out ← alternate p shared coefficient;ok (cont (before (pred e),out))) := by
+  obtain ⟨value,vv,hv⟩ := PV_CB_HornerScalarTransport.lift alternate agreement coeff p (pred e) shared
+    (by rw [pred_val];omega) vc vp vs
+  exact ⟨value,vv,by rw [PV_CB_HornerBody.step coeff p e shared positive,hv]⟩
+#print axioms step
+end R1Z.PV_CB_HornerScalarBodyTransport

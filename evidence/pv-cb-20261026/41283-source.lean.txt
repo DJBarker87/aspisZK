@@ -1,0 +1,32 @@
+import R1Z.PV_CB_ProducerLocalCell
+import R1Z.PV_CB_ProducerLimb
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_CB_ProducerLocalLimb
+open Aeneas Aeneas.Std Result ProverRwFull PV_CB_ProducerLimb
+variable [ExternalTypes]
+
+def Reads (trace : Trace) : Limb → Prop
+  | .Zero => True
+  | .Cell source _ =>
+    PV_CB_ProducerLocalCell.ReadsAt
+      (match source.bank with | .Stable => Array.to_slice trace.stable.c1 | .Late => Array.to_slice trace.late)
+      (UScalar.cast .Usize source.cell.column) (UScalar.cast .Usize source.cell.row)
+
+theorem limb (ops : ExternalFuns) (trace : Trace) (input : Limb)
+    (vt : Reads trace input) (vo : OffsetValid input) :
+    PV_CB_ProducerPost.Good PV_CB_CanonicalM31.Valid
+      (@host_semantic.copy_tuple_limb _ (ProverRwDictionaryScalar.selected ops) trace input) := by
+  cases input with
+  | Zero =>
+    apply PV_CB_ProducerPost.pure
+    unfold AspisR1ProducerRelease47.field.M31.ZERO
+    change (0#u32).val < AspisCircleGroupOrder.P
+    decide
+  | Cell source offset =>
+    simp only [host_semantic.copy_tuple_limb,lift,bind_tc_ok]
+    cases source.bank with
+    | Stable => exact PV_CB_ProducerLocalCell.cell ops _ _ _ offset vt vo
+    | Late => exact PV_CB_ProducerLocalCell.cell ops _ _ _ offset vt vo
+#print axioms limb
+end R1Z.PV_CB_ProducerLocalLimb

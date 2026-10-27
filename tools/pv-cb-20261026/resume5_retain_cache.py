@@ -5,8 +5,8 @@ from pathlib import Path
 import subprocess,json,hashlib
 root=Path(__file__).resolve().parents[2];ev=root/'evidence/pv-cb-20261026'
 last={}
-for p in sorted(ev.glob('412*.json')):
- if p.stem.isdigit():
+for p in sorted(ev.glob('*.json')):
+ if p.stem.isdigit() and 41200 <= int(p.stem) <= 41499:
   r=json.loads(p.read_text())
   if r.get('exit')==0:last[r['module']]=r
 items=[dict(module=m,source_sha256=r['source_sha256'],receipt=r['attempt']) for m,r in sorted(last.items())]

@@ -1,0 +1,18 @@
+import R1Z.PV_CB_HornerCanonicalIndexed
+import R1Z.PV_CB_HornerBody
+set_option autoImplicit false
+namespace R1Z.PV_CB_HornerCanonicalBody
+open Aeneas Aeneas.Std Result ControlFlow ProverRwSuccessReverseRange PV_CB_HornerCell
+
+theorem step (coeff : Coeff) (p : Prepared) (e : Usize) (shared : Q)
+    (positive : 0 < e.val) (bound : e.val ≤ 27)
+    (vc : PV_CB_CanonicalArrays.Valid PV_CB_CanonicalTower.Valid coeff)
+    (vp : PV_CB_CanonicalPreparedCtor.Valid p) (vs : PV_CB_CanonicalTower.Valid shared) :
+    ∃ out, PV_CB_MaskHorner.S.body coeff p (before e) shared =
+      ok (cont (before (pred e),out)) ∧ PV_CB_CanonicalTower.Valid out := by
+  obtain ⟨out,ho,vo⟩ := PV_CB_HornerCanonicalIndexed.cell coeff p (pred e) shared
+    (by rw [pred_val];omega) vc vp vs
+  refine ⟨out,?_,vo⟩
+  rw [PV_CB_HornerBody.step coeff p e shared positive,ho,bind_tc_ok]
+#print axioms step
+end R1Z.PV_CB_HornerCanonicalBody

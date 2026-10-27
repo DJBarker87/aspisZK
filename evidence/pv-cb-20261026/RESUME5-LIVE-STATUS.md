@@ -1,20 +1,12 @@
 # Resume5 live status
 
-Branch codex/pv-cb-20261026. Target not yet established.
-56/100 charged Lean attempts:38 passed,18 failed. Next unused Env-J41257.
-The final three charged attempts remain reserved for joint audits.
-5/12 charged Kani gates:all timed out, no verification verdict or counterexample.
-Authoritative running tally:RESUME5-TALLY.json.
+97/100 charged Lean attempts:77 pass,20 reject. Next unused41299; final3 reserved
+for joint audit. Kani7/12, all timed out. Native controller38667 is paused with
+no native scope active. See RESUME5-FOCUSED-STAGE.md and RESUME5-TALLY.json.
 
-op223 source association remains open: direct transparent extraction fails
-escaping-reference loan validation; opaque wrapper extraction supplies no
-source equation. Canonical reference and caller transport are checked; actual
-legacy tuple producer offsets are now checked through its emitted loop/root.
-Forest helper and auxiliary translation coverage remain to be established.
-See RESUME5-ACTUAL-PRODUCER-STAGE.md and RESUME5-OBLIGATIONS.md.
-
-V164 hypotheses before/after are unchanged. P_source_p6 remains the exact
-compressor function equality; producer-domain transport does not prove it.
-23/73 candidate rows remain discharged; endpoint premises removed0.
-No shipped Rust, ELF, pin, ProverRw module, endpoint observer or simulator changed.
-No wallet/account keys were created, changed or deleted.
+Target not yet established. No stable PV_CB_Op223Source.op223_source theorem.
+Both actual tuple constructors supply checked canonical offsets. All16 returned
+words are canonical under selected-cell read validity. Sampled caller transport
+is proved under explicit native source16 equality; neither that native equality
+nor full compiled trace/auxiliary translation association is supplied.
+V164 P_source_p6/P_proof_bytes/reservation unchanged; rows23/73, endpoint removals0.

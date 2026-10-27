@@ -14,8 +14,8 @@ if '--check' in sys.argv:
 assert not manifest.exists()
 assert json.loads((ev/'RESUME5-TALLY.json').read_text())['lean_charged']==97,'Prepare final audits only after97 charged development attempts'
 last={}
-for p in sorted(ev.glob('412*.json')):
- if not p.stem.isdigit():continue
+for p in sorted(ev.glob('*.json')):
+ if not p.stem.isdigit() or not 41200 <= int(p.stem) <= 41499:continue
  r=json.loads(p.read_text())
  if r.get('exit')==0 and r['module'].split('/')[-1].startswith('PV_CB_'):last[r['module']]=r
 rows=[];groups=[[],[],[]]
