@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_BankAggregate18.lean:25:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  BuilderStdModels.rangeContains core.cmp.PartialOrdUsize core.cmp.PartialOrdUsize core.cmp.PartialOrdUsize ?r ?x
+in the target expression
+  (do
+      let b1 ←
+        BuilderForestStdPort.core.ops.range.Range.contains core.cmp.PartialOrdUsize core.cmp.PartialOrdUsize
+            core.cmp.PartialOrdUsize { start := 34#usize, «end» := 54#usize } block
+      if b1 = true then do
+          let result1 ← pair_forest_trace.validate_forest_poseidon_block banks.late block
+          let block1 ← lift (block.wrapping_add 1#usize)
+          pair_forest_trace.validate_forest_poseidon_rows_loop banks result1 block1
+        else do
+          let result1 ← pair_forest_trace.validate_forest_poseidon_block banks.stable block
+          let block1 ← lift (block.wrapping_add 1#usize)
+          pair_forest_trace.validate_forest_poseidon_rows_loop banks result1 block1) =
+    ok (core.result.Result.Ok ())
+
+case pos
+banks : pair_forest_copy_builder.CopyBanks
+blocks :
+  ∀ (block : Usize),
+    ↑block < 57 →
+      pair_forest_trace.validate_forest_poseidon_block (columns banks block) block = ok (core.result.Result.Ok ())
+remaining : ℕ
+ih :
+  ∀ m < remaining,
+    ∀ (block : Usize),
+      ↑block ≤ 57 →
+        57 - ↑block = m →
+          pair_forest_trace.validate_forest_poseidon_rows_loop banks (core.result.Result.Ok ()) block =
+            ok (core.result.Result.Ok ())
+block : Usize
+hb : ↑block ≤ 57
+hremaining : 57 - ↑block = remaining
+hlt : ↑block < 57
+⊢ (do
+      let b1 ←
+        BuilderForestStdPort.core.ops.range.Range.contains core.cmp.PartialOrdUsize core.cmp.PartialOrdUsize
+            core.cmp.PartialOrdUsize { start := 34#usize, «end» := 54#usize } block
+      if b1 = true then do
+          let result1 ← pair_forest_trace.validate_forest_poseidon_block banks.late block
+          let block1 ← lift (block.wrapping_add 1#usize)
+          pair_forest_trace.validate_forest_poseidon_rows_loop banks result1 block1
+        else do
+          let result1 ← pair_forest_trace.validate_forest_poseidon_block banks.stable block
+          let block1 ← lift (block.wrapping_add 1#usize)
+          pair_forest_trace.validate_forest_poseidon_rows_loop banks result1 block1) =
+    ok (core.result.Result.Ok ())
+'R1Z.PV_RunJoin_BankAggregate18.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_BankAggregate18.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

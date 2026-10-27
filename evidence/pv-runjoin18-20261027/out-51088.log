@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_BankInitial18.lean:15:35: error: unsolved goals
+columns : Columns
+base : Usize
+state : State
+reads :
+  ∀ (lane : Usize),
+    ↑lane < 16 →
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) (↑columns)[↑lane]! base = ok (↑state)[↑lane]!
+hc :
+  ∀ (lane : Usize),
+    ↑lane < ↑16#usize →
+      pair_forest_trace.validate_forest_poseidon_block.closure.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut
+          (columns, base) lane =
+        ok ((↑state)[↑lane]!, columns, base)
+h :
+  BuilderStdModels.fromFn 16#usize
+      pair_forest_trace.validate_forest_poseidon_block.closure.Insts.CoreOpsFunctionFnMutTupleUsizeM31 (columns, base) =
+    ok (Array.make 16#usize (List.map (fun lane => (↑state)[↑lane]!) (BuilderStdModels.indices 16#usize)) ⋯)
+j : ℕ
+hj : j < ↑16#usize
+⊢ [(↑state)[0], (↑state)[1], (↑state)[2], (↑state)[3], (↑state)[4], (↑state)[5], (↑state)[6], (↑state)[7], (↑state)[8],
+            (↑state)[9], (↑state)[10], (↑state)[11], (↑state)[12], (↑state)[13], (↑state)[14], (↑state)[15]][j]?.getD
+      default =
+    (↑state)[j]?.getD default
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_BankInitial18.lean:34:33: warning: This simp argument is unused:
+  List.map_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [̵B̵u̵i̵l̵d̵e̵r̵S̵t̵d̵M̵o̵d̵e̵l̵s̵.̵i̵n̵d̵i̵c̵e̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵o̵f̵F̵n̵,̵h̵j̵]̵[̲B̲u̲i̲l̲d̲e̲r̲S̲t̲d̲M̲o̲d̲e̲l̲s̲.̲i̲n̲d̲i̲c̲e̲s̲,̲ ̲h̲j̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_BankInitial18.lean:34:47: warning: This simp argument is unused:
+  hj
+
+Hint: Omit it from the simp argument list.
+  simp [BuilderStdModels.indices, ̲List.map_ofFn,̵h̵j̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_BankInitial18.initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

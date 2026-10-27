@@ -1,0 +1,59 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_BankBlock18.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pair_forest_trace.validate_forest_poseidon_block_loop0 { start := 0#usize, «end» := 8#usize } columns
+    (block.wrapping_mul 16#usize) (absorbed ↑{ start := 0#usize, «end» := 8#usize }.start)
+in the target expression
+  (do
+      let state1 ←
+        pair_forest_trace.validate_forest_poseidon_block_loop0 { start := 0#usize, «end» := 8#usize } columns
+            (block.wrapping_mul 16#usize) (absorbed 0)
+      let result ←
+        pair_forest_trace.validate_forest_poseidon_block_loop1 columns block state1 (core.result.Result.Ok ()) 0#usize
+      pair_forest_trace.validate_forest_poseidon_block_loop2 columns block result 13#usize) =
+    ok (core.result.Result.Ok ())
+
+columns : Columns
+block : Usize
+absorbed states : ℕ → State
+initial_reads :
+  ∀ (lane : Usize),
+    ↑lane < 16 →
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) (↑columns)[↑lane]! (block.wrapping_mul 16#usize) =
+        ok (↑(absorbed 0))[↑lane]!
+absorb_step :
+  ∀ (lane : Usize),
+    ↑lane < 8 →
+      ∃ word sum,
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) (↑columns)[↑lane]!
+              ((block.wrapping_mul 16#usize).wrapping_add 12#usize) =
+            ok word ∧
+          aspis_core.field.M31.add (↑(absorbed ↑lane))[↑lane]! word = ok sum ∧
+            Std.Array.set (absorbed ↑lane) lane sum = absorbed (↑lane + 1)
+hstart : states 0 = absorbed 8
+pair :
+  ∀ (n : Usize),
+    ↑n < 11 → ∃ first, poseidon2.evaluate_trace_round_pair (states ↑n) n = ok (some (first, states (↑n + 1)))
+round_reads :
+  ∀ (n : Usize),
+    ↑n < 11 →
+      ∀ (lane : Usize),
+        ↑lane < 16 →
+          alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) (↑columns)[↑lane]!
+              (rowIndex block (n.wrapping_add 1#usize)) =
+            ok (↑(states (↑n + 1)))[↑lane]!
+padding_reads :
+  ∀ (n : Usize),
+    13 ≤ ↑n →
+      ↑n < 16 →
+        ∀ (lane : Usize),
+          ↑lane < 16 →
+            alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) (↑columns)[↑lane]! (rowIndex block n) =
+              ok (↑(Array.repeat 16#usize aspis_core.field.M31.ZERO))[↑lane]!
+⊢ (do
+      let state1 ←
+        pair_forest_trace.validate_forest_poseidon_block_loop0 { start := 0#usize, «end» := 8#usize } columns
+            (block.wrapping_mul 16#usize) (absorbed 0)
+      let result ←
+        pair_forest_trace.validate_forest_poseidon_block_loop1 columns block state1 (core.result.Result.Ok ()) 0#usize
+      pair_forest_trace.validate_forest_poseidon_block_loop2 columns block result 13#usize) =
+    ok (core.result.Result.Ok ())
+'R1Z.PV_RunJoin_BankBlock18.block' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
