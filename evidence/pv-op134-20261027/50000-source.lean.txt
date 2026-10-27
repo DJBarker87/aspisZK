@@ -1,0 +1,26 @@
+import R1Z.PV_CBM_InventoryShape
+import Mathlib.Data.List.Pairwise
+namespace R1Z.PV_Op134_Order
+set_option autoImplicit false
+abbrev Cell := ProverRwFull.aspis_statement.trace_v4.TraceCell
+def key (c : Cell) : Nat := 1024 * c.column.val + c.row.val
+def increasing (xs : List Cell) : Prop := xs.Pairwise (fun a b => key a < key b)
+
+theorem append {xs ys : List Cell} (hx : increasing xs) (hy : increasing ys)
+    (hcross : ∀ a ∈ xs, ∀ b ∈ ys, key a < key b) : increasing (xs ++ ys) := by
+  exact List.pairwise_append.mpr ⟨hx,hy,hcross⟩
+
+theorem nodup {xs : List Cell} (h : increasing xs) : xs.Nodup := by
+  apply List.pairwise_iff_nodup.mp
+  exact h.imp (by intro a b hlt heq; subst b; exact (Nat.lt_irrefl _) hlt)
+
+theorem key_injective {a b : Cell} (ha : a.row.val < 1024)
+    (hb : b.row.val < 1024) (h : key a = key b) : a = b := by
+  have hr : a.row.val = b.row.val := by unfold key at h; omega
+  have hc : a.column.val = b.column.val := by unfold key at h; omega
+  cases a; cases b
+  congr 1 <;> apply Aeneas.Std.Scalar.eq_of_val_eq <;> assumption
+#print axioms append
+#print axioms nodup
+#print axioms key_injective
+end R1Z.PV_Op134_Order

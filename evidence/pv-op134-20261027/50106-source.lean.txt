@@ -1,0 +1,773 @@
+import R1Z.PV_Op134_Rows00
+import R1Z.PV_Op134_Rows01
+import R1Z.PV_Op134_Rows02
+import R1Z.PV_Op134_Rows03
+import R1Z.PV_Op134_Rows04
+import R1Z.PV_Op134_Rows05
+import R1Z.PV_Op134_Rows06
+import R1Z.PV_Op134_Rows07
+import R1Z.PV_Op134_Rows08
+import R1Z.PV_Op134_Rows09
+import R1Z.PV_Op134_Rows10
+import R1Z.PV_Op134_Rows11
+import R1Z.PV_Op134_Rows12
+import R1Z.PV_Op134_Rows13
+import R1Z.PV_CBM_RowsSelection
+namespace R1Z.PV_Op134_RowSpec
+open Aeneas Aeneas.Std Result
+set_option autoImplicit false
+def rows : List U16 := PV_Op134_Rows00.rows ++
+  PV_Op134_Rows01.rows ++
+  PV_Op134_Rows02.rows ++
+  PV_Op134_Rows03.rows ++
+  PV_Op134_Rows04.rows ++
+  PV_Op134_Rows05.rows ++
+  PV_Op134_Rows06.rows ++
+  PV_Op134_Rows07.rows ++
+  PV_Op134_Rows08.rows ++
+  PV_Op134_Rows09.rows ++
+  PV_Op134_Rows10.rows ++
+  PV_Op134_Rows11.rows ++
+  PV_Op134_Rows12.rows ++
+  PV_Op134_Rows13.rows
+abbrev Answer := Result ((core.result.Result Unit PV_CBM_CellsMaterializer.LayoutError) × alloc.vec.Vec U16)
+-- Proof-only factoring of the reference extraction, not a native implementation.
+def tail14 (out : alloc.vec.Vec U16) : Answer := ok (.Ok (),out)
+def tail13 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 1010#u16
+  let out2 ← alloc.vec.Vec.push out1 1012#u16
+  let out3 ← alloc.vec.Vec.push out2 1014#u16
+  let out4 ← alloc.vec.Vec.push out3 1015#u16
+  let out5 ← alloc.vec.Vec.push out4 1017#u16
+  let out6 ← alloc.vec.Vec.push out5 1018#u16
+  tail14 out6
+def tail12 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 978#u16
+  let out2 ← alloc.vec.Vec.push out1 981#u16
+  let out3 ← alloc.vec.Vec.push out2 982#u16
+  let out4 ← alloc.vec.Vec.push out3 985#u16
+  let out5 ← alloc.vec.Vec.push out4 986#u16
+  let out6 ← alloc.vec.Vec.push out5 989#u16
+  let out7 ← alloc.vec.Vec.push out6 990#u16
+  let out8 ← alloc.vec.Vec.push out7 993#u16
+  let out9 ← alloc.vec.Vec.push out8 994#u16
+  let out10 ← alloc.vec.Vec.push out9 997#u16
+  let out11 ← alloc.vec.Vec.push out10 998#u16
+  let out12 ← alloc.vec.Vec.push out11 1001#u16
+  let out13 ← alloc.vec.Vec.push out12 1002#u16
+  let out14 ← alloc.vec.Vec.push out13 1005#u16
+  let out15 ← alloc.vec.Vec.push out14 1006#u16
+  let out16 ← alloc.vec.Vec.push out15 1008#u16
+  tail13 out16
+def tail11 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 946#u16
+  let out2 ← alloc.vec.Vec.push out1 949#u16
+  let out3 ← alloc.vec.Vec.push out2 950#u16
+  let out4 ← alloc.vec.Vec.push out3 953#u16
+  let out5 ← alloc.vec.Vec.push out4 954#u16
+  let out6 ← alloc.vec.Vec.push out5 957#u16
+  let out7 ← alloc.vec.Vec.push out6 958#u16
+  let out8 ← alloc.vec.Vec.push out7 961#u16
+  let out9 ← alloc.vec.Vec.push out8 962#u16
+  let out10 ← alloc.vec.Vec.push out9 965#u16
+  let out11 ← alloc.vec.Vec.push out10 966#u16
+  let out12 ← alloc.vec.Vec.push out11 969#u16
+  let out13 ← alloc.vec.Vec.push out12 970#u16
+  let out14 ← alloc.vec.Vec.push out13 973#u16
+  let out15 ← alloc.vec.Vec.push out14 974#u16
+  let out16 ← alloc.vec.Vec.push out15 977#u16
+  tail12 out16
+def tail10 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 914#u16
+  let out2 ← alloc.vec.Vec.push out1 917#u16
+  let out3 ← alloc.vec.Vec.push out2 918#u16
+  let out4 ← alloc.vec.Vec.push out3 921#u16
+  let out5 ← alloc.vec.Vec.push out4 922#u16
+  let out6 ← alloc.vec.Vec.push out5 925#u16
+  let out7 ← alloc.vec.Vec.push out6 926#u16
+  let out8 ← alloc.vec.Vec.push out7 929#u16
+  let out9 ← alloc.vec.Vec.push out8 930#u16
+  let out10 ← alloc.vec.Vec.push out9 933#u16
+  let out11 ← alloc.vec.Vec.push out10 934#u16
+  let out12 ← alloc.vec.Vec.push out11 937#u16
+  let out13 ← alloc.vec.Vec.push out12 938#u16
+  let out14 ← alloc.vec.Vec.push out13 941#u16
+  let out15 ← alloc.vec.Vec.push out14 942#u16
+  let out16 ← alloc.vec.Vec.push out15 945#u16
+  tail11 out16
+def tail9 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 827#u16
+  let out2 ← alloc.vec.Vec.push out1 828#u16
+  let out3 ← alloc.vec.Vec.push out2 832#u16
+  let out4 ← alloc.vec.Vec.push out3 843#u16
+  let out5 ← alloc.vec.Vec.push out4 844#u16
+  let out6 ← alloc.vec.Vec.push out5 848#u16
+  let out7 ← alloc.vec.Vec.push out6 860#u16
+  let out8 ← alloc.vec.Vec.push out7 864#u16
+  let out9 ← alloc.vec.Vec.push out8 875#u16
+  let out10 ← alloc.vec.Vec.push out9 876#u16
+  let out11 ← alloc.vec.Vec.push out10 880#u16
+  let out12 ← alloc.vec.Vec.push out11 891#u16
+  let out13 ← alloc.vec.Vec.push out12 892#u16
+  let out14 ← alloc.vec.Vec.push out13 896#u16
+  let out15 ← alloc.vec.Vec.push out14 908#u16
+  let out16 ← alloc.vec.Vec.push out15 913#u16
+  tail10 out16
+def tail8 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 736#u16
+  let out2 ← alloc.vec.Vec.push out1 747#u16
+  let out3 ← alloc.vec.Vec.push out2 748#u16
+  let out4 ← alloc.vec.Vec.push out3 752#u16
+  let out5 ← alloc.vec.Vec.push out4 763#u16
+  let out6 ← alloc.vec.Vec.push out5 764#u16
+  let out7 ← alloc.vec.Vec.push out6 768#u16
+  let out8 ← alloc.vec.Vec.push out7 779#u16
+  let out9 ← alloc.vec.Vec.push out8 780#u16
+  let out10 ← alloc.vec.Vec.push out9 784#u16
+  let out11 ← alloc.vec.Vec.push out10 795#u16
+  let out12 ← alloc.vec.Vec.push out11 796#u16
+  let out13 ← alloc.vec.Vec.push out12 800#u16
+  let out14 ← alloc.vec.Vec.push out13 811#u16
+  let out15 ← alloc.vec.Vec.push out14 812#u16
+  let out16 ← alloc.vec.Vec.push out15 816#u16
+  tail9 out16
+def tail7 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 652#u16
+  let out2 ← alloc.vec.Vec.push out1 656#u16
+  let out3 ← alloc.vec.Vec.push out2 667#u16
+  let out4 ← alloc.vec.Vec.push out3 668#u16
+  let out5 ← alloc.vec.Vec.push out4 672#u16
+  let out6 ← alloc.vec.Vec.push out5 683#u16
+  let out7 ← alloc.vec.Vec.push out6 684#u16
+  let out8 ← alloc.vec.Vec.push out7 688#u16
+  let out9 ← alloc.vec.Vec.push out8 699#u16
+  let out10 ← alloc.vec.Vec.push out9 700#u16
+  let out11 ← alloc.vec.Vec.push out10 704#u16
+  let out12 ← alloc.vec.Vec.push out11 715#u16
+  let out13 ← alloc.vec.Vec.push out12 716#u16
+  let out14 ← alloc.vec.Vec.push out13 720#u16
+  let out15 ← alloc.vec.Vec.push out14 731#u16
+  let out16 ← alloc.vec.Vec.push out15 732#u16
+  tail8 out16
+def tail6 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 571#u16
+  let out2 ← alloc.vec.Vec.push out1 572#u16
+  let out3 ← alloc.vec.Vec.push out2 576#u16
+  let out4 ← alloc.vec.Vec.push out3 587#u16
+  let out5 ← alloc.vec.Vec.push out4 588#u16
+  let out6 ← alloc.vec.Vec.push out5 592#u16
+  let out7 ← alloc.vec.Vec.push out6 603#u16
+  let out8 ← alloc.vec.Vec.push out7 604#u16
+  let out9 ← alloc.vec.Vec.push out8 608#u16
+  let out10 ← alloc.vec.Vec.push out9 619#u16
+  let out11 ← alloc.vec.Vec.push out10 620#u16
+  let out12 ← alloc.vec.Vec.push out11 624#u16
+  let out13 ← alloc.vec.Vec.push out12 635#u16
+  let out14 ← alloc.vec.Vec.push out13 636#u16
+  let out15 ← alloc.vec.Vec.push out14 640#u16
+  let out16 ← alloc.vec.Vec.push out15 651#u16
+  tail7 out16
+def tail5 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 460#u16
+  let out2 ← alloc.vec.Vec.push out1 464#u16
+  let out3 ← alloc.vec.Vec.push out2 475#u16
+  let out4 ← alloc.vec.Vec.push out3 491#u16
+  let out5 ← alloc.vec.Vec.push out4 496#u16
+  let out6 ← alloc.vec.Vec.push out5 507#u16
+  let out7 ← alloc.vec.Vec.push out6 508#u16
+  let out8 ← alloc.vec.Vec.push out7 512#u16
+  let out9 ← alloc.vec.Vec.push out8 523#u16
+  let out10 ← alloc.vec.Vec.push out9 528#u16
+  let out11 ← alloc.vec.Vec.push out10 539#u16
+  let out12 ← alloc.vec.Vec.push out11 540#u16
+  let out13 ← alloc.vec.Vec.push out12 544#u16
+  let out14 ← alloc.vec.Vec.push out13 555#u16
+  let out15 ← alloc.vec.Vec.push out14 556#u16
+  let out16 ← alloc.vec.Vec.push out15 560#u16
+  tail6 out16
+def tail4 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 352#u16
+  let out2 ← alloc.vec.Vec.push out1 363#u16
+  let out3 ← alloc.vec.Vec.push out2 364#u16
+  let out4 ← alloc.vec.Vec.push out3 368#u16
+  let out5 ← alloc.vec.Vec.push out4 379#u16
+  let out6 ← alloc.vec.Vec.push out5 380#u16
+  let out7 ← alloc.vec.Vec.push out6 384#u16
+  let out8 ← alloc.vec.Vec.push out7 395#u16
+  let out9 ← alloc.vec.Vec.push out8 396#u16
+  let out10 ← alloc.vec.Vec.push out9 411#u16
+  let out11 ← alloc.vec.Vec.push out10 412#u16
+  let out12 ← alloc.vec.Vec.push out11 416#u16
+  let out13 ← alloc.vec.Vec.push out12 428#u16
+  let out14 ← alloc.vec.Vec.push out13 443#u16
+  let out15 ← alloc.vec.Vec.push out14 448#u16
+  let out16 ← alloc.vec.Vec.push out15 459#u16
+  tail5 out16
+def tail3 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 268#u16
+  let out2 ← alloc.vec.Vec.push out1 272#u16
+  let out3 ← alloc.vec.Vec.push out2 283#u16
+  let out4 ← alloc.vec.Vec.push out3 284#u16
+  let out5 ← alloc.vec.Vec.push out4 288#u16
+  let out6 ← alloc.vec.Vec.push out5 299#u16
+  let out7 ← alloc.vec.Vec.push out6 300#u16
+  let out8 ← alloc.vec.Vec.push out7 304#u16
+  let out9 ← alloc.vec.Vec.push out8 315#u16
+  let out10 ← alloc.vec.Vec.push out9 316#u16
+  let out11 ← alloc.vec.Vec.push out10 320#u16
+  let out12 ← alloc.vec.Vec.push out11 331#u16
+  let out13 ← alloc.vec.Vec.push out12 332#u16
+  let out14 ← alloc.vec.Vec.push out13 336#u16
+  let out15 ← alloc.vec.Vec.push out14 347#u16
+  let out16 ← alloc.vec.Vec.push out15 348#u16
+  tail4 out16
+def tail2 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 187#u16
+  let out2 ← alloc.vec.Vec.push out1 188#u16
+  let out3 ← alloc.vec.Vec.push out2 192#u16
+  let out4 ← alloc.vec.Vec.push out3 203#u16
+  let out5 ← alloc.vec.Vec.push out4 204#u16
+  let out6 ← alloc.vec.Vec.push out5 208#u16
+  let out7 ← alloc.vec.Vec.push out6 219#u16
+  let out8 ← alloc.vec.Vec.push out7 220#u16
+  let out9 ← alloc.vec.Vec.push out8 224#u16
+  let out10 ← alloc.vec.Vec.push out9 235#u16
+  let out11 ← alloc.vec.Vec.push out10 236#u16
+  let out12 ← alloc.vec.Vec.push out11 240#u16
+  let out13 ← alloc.vec.Vec.push out12 251#u16
+  let out14 ← alloc.vec.Vec.push out13 252#u16
+  let out15 ← alloc.vec.Vec.push out14 256#u16
+  let out16 ← alloc.vec.Vec.push out15 267#u16
+  tail3 out16
+def tail1 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 96#u16
+  let out2 ← alloc.vec.Vec.push out1 107#u16
+  let out3 ← alloc.vec.Vec.push out2 108#u16
+  let out4 ← alloc.vec.Vec.push out3 112#u16
+  let out5 ← alloc.vec.Vec.push out4 123#u16
+  let out6 ← alloc.vec.Vec.push out5 124#u16
+  let out7 ← alloc.vec.Vec.push out6 128#u16
+  let out8 ← alloc.vec.Vec.push out7 139#u16
+  let out9 ← alloc.vec.Vec.push out8 140#u16
+  let out10 ← alloc.vec.Vec.push out9 144#u16
+  let out11 ← alloc.vec.Vec.push out10 155#u16
+  let out12 ← alloc.vec.Vec.push out11 156#u16
+  let out13 ← alloc.vec.Vec.push out12 160#u16
+  let out14 ← alloc.vec.Vec.push out13 171#u16
+  let out15 ← alloc.vec.Vec.push out14 172#u16
+  let out16 ← alloc.vec.Vec.push out15 176#u16
+  tail2 out16
+def tail0 (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 11#u16
+  let out2 ← alloc.vec.Vec.push out1 12#u16
+  let out3 ← alloc.vec.Vec.push out2 27#u16
+  let out4 ← alloc.vec.Vec.push out3 28#u16
+  let out5 ← alloc.vec.Vec.push out4 32#u16
+  let out6 ← alloc.vec.Vec.push out5 43#u16
+  let out7 ← alloc.vec.Vec.push out6 44#u16
+  let out8 ← alloc.vec.Vec.push out7 48#u16
+  let out9 ← alloc.vec.Vec.push out8 59#u16
+  let out10 ← alloc.vec.Vec.push out9 60#u16
+  let out11 ← alloc.vec.Vec.push out10 64#u16
+  let out12 ← alloc.vec.Vec.push out11 75#u16
+  let out13 ← alloc.vec.Vec.push out12 76#u16
+  let out14 ← alloc.vec.Vec.push out13 80#u16
+  let out15 ← alloc.vec.Vec.push out14 91#u16
+  let out16 ← alloc.vec.Vec.push out15 92#u16
+  tail1 out16
+def prefix0 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 11#u16
+  let out2 ← alloc.vec.Vec.push out1 12#u16
+  let out3 ← alloc.vec.Vec.push out2 27#u16
+  let out4 ← alloc.vec.Vec.push out3 28#u16
+  let out5 ← alloc.vec.Vec.push out4 32#u16
+  let out6 ← alloc.vec.Vec.push out5 43#u16
+  let out7 ← alloc.vec.Vec.push out6 44#u16
+  let out8 ← alloc.vec.Vec.push out7 48#u16
+  let out9 ← alloc.vec.Vec.push out8 59#u16
+  let out10 ← alloc.vec.Vec.push out9 60#u16
+  let out11 ← alloc.vec.Vec.push out10 64#u16
+  let out12 ← alloc.vec.Vec.push out11 75#u16
+  let out13 ← alloc.vec.Vec.push out12 76#u16
+  let out14 ← alloc.vec.Vec.push out13 80#u16
+  let out15 ← alloc.vec.Vec.push out14 91#u16
+  let out16 ← alloc.vec.Vec.push out15 92#u16
+  f out16
+def prefix1 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 96#u16
+  let out2 ← alloc.vec.Vec.push out1 107#u16
+  let out3 ← alloc.vec.Vec.push out2 108#u16
+  let out4 ← alloc.vec.Vec.push out3 112#u16
+  let out5 ← alloc.vec.Vec.push out4 123#u16
+  let out6 ← alloc.vec.Vec.push out5 124#u16
+  let out7 ← alloc.vec.Vec.push out6 128#u16
+  let out8 ← alloc.vec.Vec.push out7 139#u16
+  let out9 ← alloc.vec.Vec.push out8 140#u16
+  let out10 ← alloc.vec.Vec.push out9 144#u16
+  let out11 ← alloc.vec.Vec.push out10 155#u16
+  let out12 ← alloc.vec.Vec.push out11 156#u16
+  let out13 ← alloc.vec.Vec.push out12 160#u16
+  let out14 ← alloc.vec.Vec.push out13 171#u16
+  let out15 ← alloc.vec.Vec.push out14 172#u16
+  let out16 ← alloc.vec.Vec.push out15 176#u16
+  f out16
+def prefix2 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 187#u16
+  let out2 ← alloc.vec.Vec.push out1 188#u16
+  let out3 ← alloc.vec.Vec.push out2 192#u16
+  let out4 ← alloc.vec.Vec.push out3 203#u16
+  let out5 ← alloc.vec.Vec.push out4 204#u16
+  let out6 ← alloc.vec.Vec.push out5 208#u16
+  let out7 ← alloc.vec.Vec.push out6 219#u16
+  let out8 ← alloc.vec.Vec.push out7 220#u16
+  let out9 ← alloc.vec.Vec.push out8 224#u16
+  let out10 ← alloc.vec.Vec.push out9 235#u16
+  let out11 ← alloc.vec.Vec.push out10 236#u16
+  let out12 ← alloc.vec.Vec.push out11 240#u16
+  let out13 ← alloc.vec.Vec.push out12 251#u16
+  let out14 ← alloc.vec.Vec.push out13 252#u16
+  let out15 ← alloc.vec.Vec.push out14 256#u16
+  let out16 ← alloc.vec.Vec.push out15 267#u16
+  f out16
+def prefix3 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 268#u16
+  let out2 ← alloc.vec.Vec.push out1 272#u16
+  let out3 ← alloc.vec.Vec.push out2 283#u16
+  let out4 ← alloc.vec.Vec.push out3 284#u16
+  let out5 ← alloc.vec.Vec.push out4 288#u16
+  let out6 ← alloc.vec.Vec.push out5 299#u16
+  let out7 ← alloc.vec.Vec.push out6 300#u16
+  let out8 ← alloc.vec.Vec.push out7 304#u16
+  let out9 ← alloc.vec.Vec.push out8 315#u16
+  let out10 ← alloc.vec.Vec.push out9 316#u16
+  let out11 ← alloc.vec.Vec.push out10 320#u16
+  let out12 ← alloc.vec.Vec.push out11 331#u16
+  let out13 ← alloc.vec.Vec.push out12 332#u16
+  let out14 ← alloc.vec.Vec.push out13 336#u16
+  let out15 ← alloc.vec.Vec.push out14 347#u16
+  let out16 ← alloc.vec.Vec.push out15 348#u16
+  f out16
+def prefix4 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 352#u16
+  let out2 ← alloc.vec.Vec.push out1 363#u16
+  let out3 ← alloc.vec.Vec.push out2 364#u16
+  let out4 ← alloc.vec.Vec.push out3 368#u16
+  let out5 ← alloc.vec.Vec.push out4 379#u16
+  let out6 ← alloc.vec.Vec.push out5 380#u16
+  let out7 ← alloc.vec.Vec.push out6 384#u16
+  let out8 ← alloc.vec.Vec.push out7 395#u16
+  let out9 ← alloc.vec.Vec.push out8 396#u16
+  let out10 ← alloc.vec.Vec.push out9 411#u16
+  let out11 ← alloc.vec.Vec.push out10 412#u16
+  let out12 ← alloc.vec.Vec.push out11 416#u16
+  let out13 ← alloc.vec.Vec.push out12 428#u16
+  let out14 ← alloc.vec.Vec.push out13 443#u16
+  let out15 ← alloc.vec.Vec.push out14 448#u16
+  let out16 ← alloc.vec.Vec.push out15 459#u16
+  f out16
+def prefix5 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 460#u16
+  let out2 ← alloc.vec.Vec.push out1 464#u16
+  let out3 ← alloc.vec.Vec.push out2 475#u16
+  let out4 ← alloc.vec.Vec.push out3 491#u16
+  let out5 ← alloc.vec.Vec.push out4 496#u16
+  let out6 ← alloc.vec.Vec.push out5 507#u16
+  let out7 ← alloc.vec.Vec.push out6 508#u16
+  let out8 ← alloc.vec.Vec.push out7 512#u16
+  let out9 ← alloc.vec.Vec.push out8 523#u16
+  let out10 ← alloc.vec.Vec.push out9 528#u16
+  let out11 ← alloc.vec.Vec.push out10 539#u16
+  let out12 ← alloc.vec.Vec.push out11 540#u16
+  let out13 ← alloc.vec.Vec.push out12 544#u16
+  let out14 ← alloc.vec.Vec.push out13 555#u16
+  let out15 ← alloc.vec.Vec.push out14 556#u16
+  let out16 ← alloc.vec.Vec.push out15 560#u16
+  f out16
+def prefix6 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 571#u16
+  let out2 ← alloc.vec.Vec.push out1 572#u16
+  let out3 ← alloc.vec.Vec.push out2 576#u16
+  let out4 ← alloc.vec.Vec.push out3 587#u16
+  let out5 ← alloc.vec.Vec.push out4 588#u16
+  let out6 ← alloc.vec.Vec.push out5 592#u16
+  let out7 ← alloc.vec.Vec.push out6 603#u16
+  let out8 ← alloc.vec.Vec.push out7 604#u16
+  let out9 ← alloc.vec.Vec.push out8 608#u16
+  let out10 ← alloc.vec.Vec.push out9 619#u16
+  let out11 ← alloc.vec.Vec.push out10 620#u16
+  let out12 ← alloc.vec.Vec.push out11 624#u16
+  let out13 ← alloc.vec.Vec.push out12 635#u16
+  let out14 ← alloc.vec.Vec.push out13 636#u16
+  let out15 ← alloc.vec.Vec.push out14 640#u16
+  let out16 ← alloc.vec.Vec.push out15 651#u16
+  f out16
+def prefix7 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 652#u16
+  let out2 ← alloc.vec.Vec.push out1 656#u16
+  let out3 ← alloc.vec.Vec.push out2 667#u16
+  let out4 ← alloc.vec.Vec.push out3 668#u16
+  let out5 ← alloc.vec.Vec.push out4 672#u16
+  let out6 ← alloc.vec.Vec.push out5 683#u16
+  let out7 ← alloc.vec.Vec.push out6 684#u16
+  let out8 ← alloc.vec.Vec.push out7 688#u16
+  let out9 ← alloc.vec.Vec.push out8 699#u16
+  let out10 ← alloc.vec.Vec.push out9 700#u16
+  let out11 ← alloc.vec.Vec.push out10 704#u16
+  let out12 ← alloc.vec.Vec.push out11 715#u16
+  let out13 ← alloc.vec.Vec.push out12 716#u16
+  let out14 ← alloc.vec.Vec.push out13 720#u16
+  let out15 ← alloc.vec.Vec.push out14 731#u16
+  let out16 ← alloc.vec.Vec.push out15 732#u16
+  f out16
+def prefix8 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 736#u16
+  let out2 ← alloc.vec.Vec.push out1 747#u16
+  let out3 ← alloc.vec.Vec.push out2 748#u16
+  let out4 ← alloc.vec.Vec.push out3 752#u16
+  let out5 ← alloc.vec.Vec.push out4 763#u16
+  let out6 ← alloc.vec.Vec.push out5 764#u16
+  let out7 ← alloc.vec.Vec.push out6 768#u16
+  let out8 ← alloc.vec.Vec.push out7 779#u16
+  let out9 ← alloc.vec.Vec.push out8 780#u16
+  let out10 ← alloc.vec.Vec.push out9 784#u16
+  let out11 ← alloc.vec.Vec.push out10 795#u16
+  let out12 ← alloc.vec.Vec.push out11 796#u16
+  let out13 ← alloc.vec.Vec.push out12 800#u16
+  let out14 ← alloc.vec.Vec.push out13 811#u16
+  let out15 ← alloc.vec.Vec.push out14 812#u16
+  let out16 ← alloc.vec.Vec.push out15 816#u16
+  f out16
+def prefix9 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 827#u16
+  let out2 ← alloc.vec.Vec.push out1 828#u16
+  let out3 ← alloc.vec.Vec.push out2 832#u16
+  let out4 ← alloc.vec.Vec.push out3 843#u16
+  let out5 ← alloc.vec.Vec.push out4 844#u16
+  let out6 ← alloc.vec.Vec.push out5 848#u16
+  let out7 ← alloc.vec.Vec.push out6 860#u16
+  let out8 ← alloc.vec.Vec.push out7 864#u16
+  let out9 ← alloc.vec.Vec.push out8 875#u16
+  let out10 ← alloc.vec.Vec.push out9 876#u16
+  let out11 ← alloc.vec.Vec.push out10 880#u16
+  let out12 ← alloc.vec.Vec.push out11 891#u16
+  let out13 ← alloc.vec.Vec.push out12 892#u16
+  let out14 ← alloc.vec.Vec.push out13 896#u16
+  let out15 ← alloc.vec.Vec.push out14 908#u16
+  let out16 ← alloc.vec.Vec.push out15 913#u16
+  f out16
+def prefix10 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 914#u16
+  let out2 ← alloc.vec.Vec.push out1 917#u16
+  let out3 ← alloc.vec.Vec.push out2 918#u16
+  let out4 ← alloc.vec.Vec.push out3 921#u16
+  let out5 ← alloc.vec.Vec.push out4 922#u16
+  let out6 ← alloc.vec.Vec.push out5 925#u16
+  let out7 ← alloc.vec.Vec.push out6 926#u16
+  let out8 ← alloc.vec.Vec.push out7 929#u16
+  let out9 ← alloc.vec.Vec.push out8 930#u16
+  let out10 ← alloc.vec.Vec.push out9 933#u16
+  let out11 ← alloc.vec.Vec.push out10 934#u16
+  let out12 ← alloc.vec.Vec.push out11 937#u16
+  let out13 ← alloc.vec.Vec.push out12 938#u16
+  let out14 ← alloc.vec.Vec.push out13 941#u16
+  let out15 ← alloc.vec.Vec.push out14 942#u16
+  let out16 ← alloc.vec.Vec.push out15 945#u16
+  f out16
+def prefix11 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 946#u16
+  let out2 ← alloc.vec.Vec.push out1 949#u16
+  let out3 ← alloc.vec.Vec.push out2 950#u16
+  let out4 ← alloc.vec.Vec.push out3 953#u16
+  let out5 ← alloc.vec.Vec.push out4 954#u16
+  let out6 ← alloc.vec.Vec.push out5 957#u16
+  let out7 ← alloc.vec.Vec.push out6 958#u16
+  let out8 ← alloc.vec.Vec.push out7 961#u16
+  let out9 ← alloc.vec.Vec.push out8 962#u16
+  let out10 ← alloc.vec.Vec.push out9 965#u16
+  let out11 ← alloc.vec.Vec.push out10 966#u16
+  let out12 ← alloc.vec.Vec.push out11 969#u16
+  let out13 ← alloc.vec.Vec.push out12 970#u16
+  let out14 ← alloc.vec.Vec.push out13 973#u16
+  let out15 ← alloc.vec.Vec.push out14 974#u16
+  let out16 ← alloc.vec.Vec.push out15 977#u16
+  f out16
+def prefix12 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 978#u16
+  let out2 ← alloc.vec.Vec.push out1 981#u16
+  let out3 ← alloc.vec.Vec.push out2 982#u16
+  let out4 ← alloc.vec.Vec.push out3 985#u16
+  let out5 ← alloc.vec.Vec.push out4 986#u16
+  let out6 ← alloc.vec.Vec.push out5 989#u16
+  let out7 ← alloc.vec.Vec.push out6 990#u16
+  let out8 ← alloc.vec.Vec.push out7 993#u16
+  let out9 ← alloc.vec.Vec.push out8 994#u16
+  let out10 ← alloc.vec.Vec.push out9 997#u16
+  let out11 ← alloc.vec.Vec.push out10 998#u16
+  let out12 ← alloc.vec.Vec.push out11 1001#u16
+  let out13 ← alloc.vec.Vec.push out12 1002#u16
+  let out14 ← alloc.vec.Vec.push out13 1005#u16
+  let out15 ← alloc.vec.Vec.push out14 1006#u16
+  let out16 ← alloc.vec.Vec.push out15 1008#u16
+  f out16
+def prefix13 (f : alloc.vec.Vec U16 → Answer) (out : alloc.vec.Vec U16) : Answer := do
+  let out1 ← alloc.vec.Vec.push out 1010#u16
+  let out2 ← alloc.vec.Vec.push out1 1012#u16
+  let out3 ← alloc.vec.Vec.push out2 1014#u16
+  let out4 ← alloc.vec.Vec.push out3 1015#u16
+  let out5 ← alloc.vec.Vec.push out4 1017#u16
+  let out6 ← alloc.vec.Vec.push out5 1018#u16
+  f out6
+theorem source (out : alloc.vec.Vec U16) :
+    PV_CBM_RowsRaw.reference.fill_rows out = tail0 out := by
+  conv_lhs => unfold PV_CBM_RowsRaw.reference.fill_rows
+  conv_rhs => unfold tail0
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix0 f out)
+  funext state1
+  conv_rhs => unfold tail1
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix1 f state1)
+  funext state2
+  conv_rhs => unfold tail2
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix2 f state2)
+  funext state3
+  conv_rhs => unfold tail3
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix3 f state3)
+  funext state4
+  conv_rhs => unfold tail4
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix4 f state4)
+  funext state5
+  conv_rhs => unfold tail5
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix5 f state5)
+  funext state6
+  conv_rhs => unfold tail6
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix6 f state6)
+  funext state7
+  conv_rhs => unfold tail7
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix7 f state7)
+  funext state8
+  conv_rhs => unfold tail8
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix8 f state8)
+  funext state9
+  conv_rhs => unfold tail9
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix9 f state9)
+  funext state10
+  conv_rhs => unfold tail10
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix10 f state10)
+  funext state11
+  conv_rhs => unfold tail11
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix11 f state11)
+  funext state12
+  conv_rhs => unfold tail12
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix12 f state12)
+  funext state13
+  conv_rhs => unfold tail13
+  apply congrArg (fun f : alloc.vec.Vec U16 → Answer => prefix13 f state13)
+  funext state14
+  conv_rhs => unfold tail14
+  all_goals rfl
+
+theorem last (out : alloc.vec.Vec U16) : tail14 out = ok (.Ok (),out) := rfl
+
+theorem bind_assoc {α β γ : Type} (r : Result α) (f : α → Result β) (g : β → Result γ) :
+    (do let b ← (do let a ← r; f a); g b) =
+      (do let a ← r; let b ← f a; g b) := by
+  cases r <;> rfl
+
+theorem bind_ok {α β : Type} {r : Result α} {v : α} (h : r = ok v)
+    (f : α → Result β) : (do let x ← r; f x) = f v := by
+  simp only [h,bind_tc_ok]
+attribute [local irreducible] tail0 tail1 tail2 tail3 tail4 tail5 tail6 tail7 tail8 tail9 tail10 tail11 tail12 tail13 tail14
+theorem segment0 (out : alloc.vec.Vec U16) :
+    tail0 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows00.rows out; tail1 next) := by
+  unfold tail0
+  simp only [PV_Op134_Rows00.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment1 (out : alloc.vec.Vec U16) :
+    tail1 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows01.rows out; tail2 next) := by
+  unfold tail1
+  simp only [PV_Op134_Rows01.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment2 (out : alloc.vec.Vec U16) :
+    tail2 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows02.rows out; tail3 next) := by
+  unfold tail2
+  simp only [PV_Op134_Rows02.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment3 (out : alloc.vec.Vec U16) :
+    tail3 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows03.rows out; tail4 next) := by
+  unfold tail3
+  simp only [PV_Op134_Rows03.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment4 (out : alloc.vec.Vec U16) :
+    tail4 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows04.rows out; tail5 next) := by
+  unfold tail4
+  simp only [PV_Op134_Rows04.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment5 (out : alloc.vec.Vec U16) :
+    tail5 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows05.rows out; tail6 next) := by
+  unfold tail5
+  simp only [PV_Op134_Rows05.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment6 (out : alloc.vec.Vec U16) :
+    tail6 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows06.rows out; tail7 next) := by
+  unfold tail6
+  simp only [PV_Op134_Rows06.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment7 (out : alloc.vec.Vec U16) :
+    tail7 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows07.rows out; tail8 next) := by
+  unfold tail7
+  simp only [PV_Op134_Rows07.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment8 (out : alloc.vec.Vec U16) :
+    tail8 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows08.rows out; tail9 next) := by
+  unfold tail8
+  simp only [PV_Op134_Rows08.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment9 (out : alloc.vec.Vec U16) :
+    tail9 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows09.rows out; tail10 next) := by
+  unfold tail9
+  simp only [PV_Op134_Rows09.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment10 (out : alloc.vec.Vec U16) :
+    tail10 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows10.rows out; tail11 next) := by
+  unfold tail10
+  simp only [PV_Op134_Rows10.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment11 (out : alloc.vec.Vec U16) :
+    tail11 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows11.rows out; tail12 next) := by
+  unfold tail11
+  simp only [PV_Op134_Rows11.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment12 (out : alloc.vec.Vec U16) :
+    tail12 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows12.rows out; tail13 next) := by
+  unfold tail12
+  simp only [PV_Op134_Rows12.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem segment13 (out : alloc.vec.Vec U16) :
+    tail13 out = (do let next ← PV_CBM_PushList.pushList PV_Op134_Rows13.rows out; tail14 next) := by
+  unfold tail13
+  simp only [PV_Op134_Rows13.rows,PV_CBM_PushList.pushList,bind_assoc,bind_tc_ok]
+theorem length : rows.length = 214 := by
+  simp only [rows,List.length_append,PV_Op134_Rows00.length,PV_Op134_Rows01.length,PV_Op134_Rows02.length,PV_Op134_Rows03.length,PV_Op134_Rows04.length,PV_Op134_Rows05.length,PV_Op134_Rows06.length,PV_Op134_Rows07.length,PV_Op134_Rows08.length,PV_Op134_Rows09.length,PV_Op134_Rows10.length,PV_Op134_Rows11.length,PV_Op134_Rows12.length,PV_Op134_Rows13.length]
+theorem run (out : alloc.vec.Vec U16) (hc : out.val.length + 214 ≤ 4096) :
+    ∃ result, PV_CBM_RowsRaw.reference.fill_rows out = ok (.Ok (),result) ∧
+      result.val = out.val ++ rows := by
+  have l0 : out.val.length = out.val.length+0 := by omega
+  obtain ⟨out1,h1,v1⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows00.rows out
+    (by rw [PV_Op134_Rows00.length]; have h := l0; omega)
+  have l1 : out1.val.length = out.val.length+16 := by
+    rw [v1,List.length_append,PV_Op134_Rows00.length,l0]
+    all_goals omega
+  obtain ⟨out2,h2,v2⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows01.rows out1
+    (by rw [PV_Op134_Rows01.length]; have h := l1; omega)
+  have l2 : out2.val.length = out.val.length+32 := by
+    rw [v2,List.length_append,PV_Op134_Rows01.length,l1]
+    all_goals omega
+  obtain ⟨out3,h3,v3⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows02.rows out2
+    (by rw [PV_Op134_Rows02.length]; have h := l2; omega)
+  have l3 : out3.val.length = out.val.length+48 := by
+    rw [v3,List.length_append,PV_Op134_Rows02.length,l2]
+    all_goals omega
+  obtain ⟨out4,h4,v4⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows03.rows out3
+    (by rw [PV_Op134_Rows03.length]; have h := l3; omega)
+  have l4 : out4.val.length = out.val.length+64 := by
+    rw [v4,List.length_append,PV_Op134_Rows03.length,l3]
+    all_goals omega
+  obtain ⟨out5,h5,v5⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows04.rows out4
+    (by rw [PV_Op134_Rows04.length]; have h := l4; omega)
+  have l5 : out5.val.length = out.val.length+80 := by
+    rw [v5,List.length_append,PV_Op134_Rows04.length,l4]
+    all_goals omega
+  obtain ⟨out6,h6,v6⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows05.rows out5
+    (by rw [PV_Op134_Rows05.length]; have h := l5; omega)
+  have l6 : out6.val.length = out.val.length+96 := by
+    rw [v6,List.length_append,PV_Op134_Rows05.length,l5]
+    all_goals omega
+  obtain ⟨out7,h7,v7⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows06.rows out6
+    (by rw [PV_Op134_Rows06.length]; have h := l6; omega)
+  have l7 : out7.val.length = out.val.length+112 := by
+    rw [v7,List.length_append,PV_Op134_Rows06.length,l6]
+    all_goals omega
+  obtain ⟨out8,h8,v8⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows07.rows out7
+    (by rw [PV_Op134_Rows07.length]; have h := l7; omega)
+  have l8 : out8.val.length = out.val.length+128 := by
+    rw [v8,List.length_append,PV_Op134_Rows07.length,l7]
+    all_goals omega
+  obtain ⟨out9,h9,v9⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows08.rows out8
+    (by rw [PV_Op134_Rows08.length]; have h := l8; omega)
+  have l9 : out9.val.length = out.val.length+144 := by
+    rw [v9,List.length_append,PV_Op134_Rows08.length,l8]
+    all_goals omega
+  obtain ⟨out10,h10,v10⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows09.rows out9
+    (by rw [PV_Op134_Rows09.length]; have h := l9; omega)
+  have l10 : out10.val.length = out.val.length+160 := by
+    rw [v10,List.length_append,PV_Op134_Rows09.length,l9]
+    all_goals omega
+  obtain ⟨out11,h11,v11⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows10.rows out10
+    (by rw [PV_Op134_Rows10.length]; have h := l10; omega)
+  have l11 : out11.val.length = out.val.length+176 := by
+    rw [v11,List.length_append,PV_Op134_Rows10.length,l10]
+    all_goals omega
+  obtain ⟨out12,h12,v12⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows11.rows out11
+    (by rw [PV_Op134_Rows11.length]; have h := l11; omega)
+  have l12 : out12.val.length = out.val.length+192 := by
+    rw [v12,List.length_append,PV_Op134_Rows11.length,l11]
+    all_goals omega
+  obtain ⟨out13,h13,v13⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows12.rows out12
+    (by rw [PV_Op134_Rows12.length]; have h := l12; omega)
+  have l13 : out13.val.length = out.val.length+208 := by
+    rw [v13,List.length_append,PV_Op134_Rows12.length,l12]
+    all_goals omega
+  obtain ⟨out14,h14,v14⟩ := PV_CBM_PushList.pushList_spec PV_Op134_Rows13.rows out13
+    (by rw [PV_Op134_Rows13.length]; have h := l13; omega)
+  have l14 : out14.val.length = out.val.length+214 := by
+    rw [v14,List.length_append,PV_Op134_Rows13.length,l13]
+    all_goals omega
+  have t14 : tail14 out14 = ok (.Ok (),out14) := last out14
+  have t13 : tail13 out13 = ok (.Ok (),out14) :=
+    (segment13 out13).trans ((bind_ok h14 (fun next => tail14 next)).trans t14)
+  have t12 : tail12 out12 = ok (.Ok (),out14) :=
+    (segment12 out12).trans ((bind_ok h13 (fun next => tail13 next)).trans t13)
+  have t11 : tail11 out11 = ok (.Ok (),out14) :=
+    (segment11 out11).trans ((bind_ok h12 (fun next => tail12 next)).trans t12)
+  have t10 : tail10 out10 = ok (.Ok (),out14) :=
+    (segment10 out10).trans ((bind_ok h11 (fun next => tail11 next)).trans t11)
+  have t9 : tail9 out9 = ok (.Ok (),out14) :=
+    (segment9 out9).trans ((bind_ok h10 (fun next => tail10 next)).trans t10)
+  have t8 : tail8 out8 = ok (.Ok (),out14) :=
+    (segment8 out8).trans ((bind_ok h9 (fun next => tail9 next)).trans t9)
+  have t7 : tail7 out7 = ok (.Ok (),out14) :=
+    (segment7 out7).trans ((bind_ok h8 (fun next => tail8 next)).trans t8)
+  have t6 : tail6 out6 = ok (.Ok (),out14) :=
+    (segment6 out6).trans ((bind_ok h7 (fun next => tail7 next)).trans t7)
+  have t5 : tail5 out5 = ok (.Ok (),out14) :=
+    (segment5 out5).trans ((bind_ok h6 (fun next => tail6 next)).trans t6)
+  have t4 : tail4 out4 = ok (.Ok (),out14) :=
+    (segment4 out4).trans ((bind_ok h5 (fun next => tail5 next)).trans t5)
+  have t3 : tail3 out3 = ok (.Ok (),out14) :=
+    (segment3 out3).trans ((bind_ok h4 (fun next => tail4 next)).trans t4)
+  have t2 : tail2 out2 = ok (.Ok (),out14) :=
+    (segment2 out2).trans ((bind_ok h3 (fun next => tail3 next)).trans t3)
+  have t1 : tail1 out1 = ok (.Ok (),out14) :=
+    (segment1 out1).trans ((bind_ok h2 (fun next => tail2 next)).trans t2)
+  have t0 : tail0 out = ok (.Ok (),out14) :=
+    (segment0 out).trans ((bind_ok h1 (fun next => tail1 next)).trans t1)
+  refine ⟨out14,(source out).trans t0,?_⟩
+  rw [v14,v13,v12,v11,v10,v9,v8,v7,v6,v5,v4,v3,v2,v1]
+  simp only [rows,List.append_assoc]
+
+theorem callback : ∃ result : alloc.vec.Vec U16,
+    PV_CBM_RowsSelection.callback = ok (.Ok result) ∧ result.val = rows := by
+  obtain ⟨result,hr,hv⟩ := run (alloc.vec.Vec.new U16) (by change 0+214≤4096; decide)
+  refine ⟨result,?_,?_⟩
+  · unfold PV_CBM_RowsSelection.callback
+    rw [hr]
+    rfl
+  · simpa only [alloc.vec.Vec.new,List.nil_append] using hv
+#print axioms source
+#print axioms last
+#print axioms bind_assoc
+#print axioms bind_ok
+#print axioms segment0
+#print axioms segment1
+#print axioms segment2
+#print axioms segment3
+#print axioms segment4
+#print axioms segment5
+#print axioms segment6
+#print axioms segment7
+#print axioms segment8
+#print axioms segment9
+#print axioms segment10
+#print axioms segment11
+#print axioms segment12
+#print axioms segment13
+#print axioms length
+#print axioms run
+#print axioms callback
+end R1Z.PV_Op134_RowSpec
