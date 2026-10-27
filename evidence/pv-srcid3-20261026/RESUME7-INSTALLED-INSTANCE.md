@@ -30,3 +30,12 @@ no field is removed, renamed, weakened, added, or inferred from a supplied paylo
 The exact source file is PV_Src_NativePremises.lean. L1/L2/L3, E1/E2, actual
 RunJoin, proof-account client route, simE and the complete observer remain open
 as recorded in the privacy ledger. Target not yet established.
+
+Stage 3 refresh: RunJoin branch advanced to 07b86d66f2be99a6fab94c3e5a237ef11fc39b6c. The new
+RecordedTransfer/RecordedWithdrawal values are literal public data only; no
+selected native Input, compiler-return or dictionary equation was published.
+RunJoin12 direct extraction failed closed on structured Drop destructor semantics;
+its adapter draft is explicitly P6/uninstalled. See resume7-runjoin-new-pin.json
+and retained reports. RunJoin11 source root leaves 18/19 passed, now 21/21;
+those existing Rust leaf receipts are reused, not rerun and not promoted to Lean
+parent-cell equations. Deployed premise count remains 5→5.
