@@ -84,3 +84,10 @@ range premise, or an entropy law. Its dictionary is exactly
 The stronger one-round instrumentation equality is being checked. Initial
 44253 failed on simplifying a let-pair before matching the semantic Result;
 no source/domain statement was weakened to resolve that elaboration issue.
+
+## Final status
+
+The final checked producer table and exact theorem scopes are in FINAL-REPORT.md.
+V403 remains OPEN. Native caller/prefix association and op121 source law are P
+obligations, never new T fields. Recursive caller transport was not established;
+its failed proof sources are archived and excluded from the accepted closure.

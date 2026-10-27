@@ -9,7 +9,7 @@ crates/aspis-r1-cost-probe/src/records.rs) agrees with the extracted caller,
 including its ExternalFuns dictionary and successful/failing semantic updates.
 The records P6 candidate is not a proof of this statement.
 
-P_oracle: in every invocation of the installed semantic oracle inside
+Auxiliary whole-prover property (not a premise of V403 or any accepted theorem here): in every invocation of the installed semantic oracle inside
 host_sumcheck::prove_sumcheck (host_sumcheck.rs:58), a successful returned QM31
 has each of its four underlying u32 representatives <2147483647. The oracle
 instance is built by host_semantic, not universally quantified arbitrary closures.
