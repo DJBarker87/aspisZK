@@ -28,8 +28,14 @@ Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scop
 | 41530 | R1Z/PV_Src_ExternalLaneModel | 0 | standard | 0:02.12 | 4151296 | 0 | dfbc7320a6 | 2/2 |
 | 41531 | R1Z/PV_Src_ExternalGroupsModel | 0 | standard | 0:01.69 | 4140876 | 0 | dfbc7320a6 | 1/1 |
 | 41532 | R1Z/PV_Src_ExternalModel | 1 | REJECTED | 0:01.94 | 4126512 | 0 | dfbc7320a6 | 1/1 |
+| 41534 | R1Z/PV_Src_ExternalModel | 1 | REJECTED | 0:02.07 | 4141892 | 0 | 7f491f7747 | 1/1 |
+| 41536 | R1Z/PV_Src_ExternalModel | 0 | standard | 0:02.06 | 4162200 | 0 | 8374857e63 | 1/1 |
+| 41540 | R1Z/PV_Src_ExternalCopy | 0 | standard | 0:01.72 | 4140968 | 0 | bc35a5225d | 1/1 |
+| 41541 | R1Z/PV_Src_CanonicalFieldEquality | 0 | standard | 0:01.64 | 4138908 | 0 | bc35a5225d | 2/2 |
+| 41542 | R1Z/PV_Src_PortSboxModel | 0 | standard | 0:01.68 | 4143232 | 0 | bc35a5225d | 2/2 |
+| 41543 | R1Z/PV_Src_PortSboxAgreement | 0 | standard | 0:01.80 | 4138932 | 0 | bc35a5225d | 1/1 |
 
-Charged Lean attempts: 24/60. Reservation refusals: 10, uncharged. Next unused ID: 41534.
+Charged Lean attempts: 30/60. Reservation refusals: 15, uncharged. Next unused ID: 41545.
 
 ## Shared replacements
 

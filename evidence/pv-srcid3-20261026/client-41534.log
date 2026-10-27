@@ -1,0 +1,53 @@
+Host restored; allocation 8, next unused ID 41534
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0546); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ExternalModel.lean:42:60: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : Std.Array U32 16#usize
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+gr : Std.Array aspis_core.field.M31 16#usize
+hgr : poseidon2.builder_reference.external_owned_loop0 s 0#usize = ok gr
+hG : ∀ (g c : ℕ) (hg : g < 4) (hc : c < 4), liftU (↑gr)[4 * g + c]! = PM s ⟨g, hg⟩ ⟨c, hc⟩
+sums : Std.Array U64 4#usize
+hsums : poseidon2.builder_reference.external_owned_loop1 gr (Array.repeat 4#usize 0#u64) 0#usize = ok sums
+hS : ∀ (j : Fin 4), (↑sums)[↑j]! = PV_Src_ExternalSumStep.cell gr (Usize.ofNatCore ↑j ⋯)
+out : Std.Array aspis_core.field.M31 16#usize
+hout : poseidon2.builder_reference.external_owned_loop2 gr sums 0#usize = ok out
+hcan : ∀ (j : Fin 16), ↑(↑out)[↑j]! < 2147483647
+hT : ∀ (j : Fin 16), liftU (↑out)[↑j]! = liftU (↑gr)[↑j]! + ↑↑(↑sums)[↑j % 4]!
+i : Fin 16
+G : liftU (↑gr)[↑i]! = PM s ⟨↑i / 4, ⋯⟩ ⟨↑i % 4, ⋯⟩
+G0 : liftU (↑gr)[↑i % 4]! = PM s ⟨0, ⋯⟩ ⟨↑i % 4, ⋯⟩
+G1 : liftU (↑gr)[4 + ↑i % 4]! = PM s ⟨1, ⋯⟩ ⟨↑i % 4, ⋯⟩
+G2 : liftU (↑gr)[8 + ↑i % 4]! = PM s ⟨2, ⋯⟩ ⟨↑i % 4, ⋯⟩
+G3 : liftU (↑gr)[12 + ↑i % 4]! = PM s ⟨3, ⋯⟩ ⟨↑i % 4, ⋯⟩
+this : ↑i < 16
+⊢ ↑i % 4 < 2 ^ UScalarTy.Usize.numBits
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ExternalModel.lean:40:15: warning: This simp argument is unused:
+  UScalar.ofNatCore_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵U̵S̵c̵a̵l̵a̵r̵.̵o̵f̵N̵a̵t̵C̵o̵r̵e̵_̵v̵a̵l̵_̵e̵q̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ExternalModel.lean:44:15: warning: This simp argument is unused:
+  liftN
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵N̵,̵h̵v̵,̵N̵a̵t̵.̵a̵d̵d̵_̵c̵o̵m̵m̵]̵[̲h̲v̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Src_ExternalModel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.07
+	Maximum resident set size (kbytes): 4141892
+	Swaps: 0
+	Exit status: 1
+
