@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 P=Path(__file__).resolve().parent;R=P.parents[1]
 mods={}
@@ -35,4 +36,7 @@ for k in range(5):
  s+='  · rfl\n'+f'#print axioms inner{k}\n'
 s+='end AspisR1.JGo_TX2_WeightRows\nend\n'
 mods['JGo_TX2_WeightRows.lean']=s
-for f,s in mods.items():(R/'lean'/f).write_text(s)
+for f,s in mods.items():
+ p=R/'lean'/f
+ if '--check' in sys.argv:assert p.read_text()==s
+ else:p.write_text(s)

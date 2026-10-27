@@ -29,6 +29,7 @@ def x : E := FIo_Install.toE {scalar}.scalar
   unfold FIo_Native.weights.powers_loop.body
   rw [if_pos (by decide : {i}#usize<{n}#usize)]
   simp only [lift,bind_tc_ok,inc,Aeneas.Std.uncurry]
+  rw [{'if_neg (by scalar_tac : '+str(i+1)+'#usize≠'+str(n)+'#usize)' if i<n-1 else 'if_pos rfl'}]
   with_unfolding_all rfl
 #print axioms step{i}
 '''
@@ -46,6 +47,8 @@ def x : E := FIo_Install.toE {scalar}.scalar
  for i in range(n-1):s+=f'    · exact step{i}\n'
  s+=f'  · exact step{n-1}\n#print axioms source\nend AspisR1.{mod}\nend\n'
  p=R/'lean'/(mod+'.lean')
- if '--check' in sys.argv:assert p.read_text()==s
+ if '--check' in sys.argv:
+  retained=p if p.exists() else P/'JGo_UNCHECKED'/(mod+'.lean.txt')
+  assert retained.read_text()==s
  else:p.write_text(s)
 print('three native pairing powers modules')

@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 P=Path(__file__).resolve().parent;R=P.parents[1]
 s='''import JGo_TX2_WeightRows
@@ -71,4 +72,6 @@ theorem secondLoop : weights_new_loop1 {start:=0#usize,«end»:=2#usize} z facto
 end AspisR1.JGo_TX2_WeightConstruct
 end
 '''
-(R/'lean/JGo_TX2_WeightConstruct.lean').write_text(s)
+p=R/'lean/JGo_TX2_WeightConstruct.lean'
+if '--check' in sys.argv:assert p.read_text()==s
+else:p.write_text(s)
