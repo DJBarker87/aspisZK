@@ -1,0 +1,38 @@
+{"attempt": "RPt_089", "exit_status": 0, "wall_seconds": 6.144925919012167, "peak_rss_kib": "5502396", "swaps": "0", "print_axioms": ["'AspisR1.Rc10_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEm_PaddingModel.zero' depends on axioms: [propext, Quot.sound]", "'AspisR1.BEm_PaddingModel.bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEm_PaddingModel.word' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEm_PaddingModel.traversal' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEm_ByteWord.admitted' depends on axioms: [propext, Quot.sound]", "'AspisR1.BEm_ByteWord.agreement' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEm_PaddingCut.cut' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEm_PaddingCut.domain' depends on axioms: [propext, Quot.sound]", "'AspisR1.BEm_PaddingNonvacuity.branches' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEm_PaddingGeometry.drop_words' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEm_PaddingGeometry.counted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.Rc10_Top.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c 
+...
+ingModel.nativeWord AspisR1.BEm_PaddingNonvacuity.zeroWord = Bool.false ∧
+      AspisR1.BEm_PaddingModel.referenceWord AspisR1.BEm_PaddingNonvacuity.zeroWord = Bool.false ∧
+        AspisR1.BEm_PaddingModel.nativeWord AspisR1.BEm_PaddingNonvacuity.oneWord = Bool.true ∧
+          AspisR1.BEm_PaddingModel.referenceWord AspisR1.BEm_PaddingNonvacuity.oneWord = Bool.true
+'AspisR1.Rc10_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEm_PaddingModel.zero' depends on axioms: [propext, Quot.sound]
+'AspisR1.BEm_PaddingModel.bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEm_PaddingModel.word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEm_PaddingModel.traversal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEm_ByteWord.admitted' depends on axioms: [propext, Quot.sound]
+'AspisR1.BEm_ByteWord.agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEm_PaddingCut.cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEm_PaddingCut.domain' depends on axioms: [propext, Quot.sound]
+'AspisR1.BEm_PaddingNonvacuity.branches' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.BEm_PaddingGeometry.counted : ∀ (words : List AspisR1.BEm_PaddingModel.Word),
+  (∀ w ∈ words, AspisR1.BEm_PaddingModel.valid w) →
+    ∀ (count : ℕ),
+      ((List.drop (32 * count) (List.flatMap AspisR1.BEm_PaddingModel.bytes words)).any fun b =>
+          Decidable.decide (b ≠ 0)) =
+        (List.drop (4 * count) words).any AspisR1.BEm_PaddingModel.nativeWord
+'AspisR1.BEm_PaddingGeometry.drop_words' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEm_PaddingGeometry.counted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r322042232f594c5ab7a353313fd3981e.scope; invocation ID: 085b51733d0946b2ba91f1f720414b3d
