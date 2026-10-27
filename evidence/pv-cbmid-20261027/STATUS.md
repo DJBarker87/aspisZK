@@ -50,3 +50,11 @@ InventoryCardinality.cardinal proves the mathematical classification has exactly
 Native classifier: kani-classifier-001 passed (0/61 failed), exact frozen source-prefix child harness vs owned classifier, all 1024×16 valid inputs, unwind25, no stubs. Full masks gate180 timed out; ruling(i) now permits one 900-second retry with identical bounds/caps.
 
 Current tally: Lean 20/100, Kani 2/10; next Env-J ID 40627. Last three charged Lean attempts remain reserved. No ROW counterexample. Rows0→0 and endpoint premises unchanged.
+
+## Mutable-output reference extraction
+
+Owned-by-value Vec functions were refused:61 declarations contain structured Drop (CELL-DROP-INSPECTION.json). No Drop was removed. The reference now uses unique mutable output parameters; the native wrapper retains vector ownership and destructors. Charon and Aeneas accepted fill_cells (charon-op132fill-001, aeneas-op132fill-001). Aeneas emitted owned Vec states and a complete Rust-result/state pair.
+
+prepare_cells.py --check passes. Generic PushList and Result right-identity lemmas compiled; first chunk fixed by equation rewriting and the named complete-Result right-identity theorem (no limits raised). Remaining chunks are independent, serial, first-time compiles; all staged pending modules are explicitly uncredited until their receipts pass.
+
+Checkpoint tally: Lean38/100, Kani3/10; nextID40652. Last3charged slots and IDs40897-40899 reserved for audit. Rows0→0.
