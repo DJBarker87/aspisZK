@@ -28,6 +28,23 @@ One scope at a time, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; 
 
 No shipped Rust/cfg(kani), source adoption, ELF, wallet or key changes. Conditional ELF rebuild trigger does not fire; inherited default f8c0ec72…, devnet 63ad3e9c…, Pool 121f3e29… pins are in RPv_ARTIFACT-SCOPE.md, not newly reproduced. Runtime/game/frozen3/D188 trust decisions and remaining deployment/source-to-ELF obligations are unchanged.
 
-## Stage 2 — pending
+## Stage 2 — independent replay complete; FJv_Deployed blocked
 
-591 additional source contexts remain for FJv_Deployed, then its fresh root/kernel/axiom/formatter gates and six declaration batches. Continue on the same cache, one scope at a time; do not delete predecessor objects. Budget remaining after stage 1: 680 Lean attempts, 0 Kani.
+RPv_0508 fails FIr_FinishComparison in the exact pinned cohort. At lines 44:66 and 61:74, obs has Option (verifier.Phase → Result Unit), but retained FinishModel.finish and S1SemanticFinishBounds.finish_success expect Option (RPz7_PhaseIso.Phase → Result Unit). See RPv_0508-failure.json and RPv_0508/{receipt.json,stdout.log,time.log}. The failed terminal theorem prints sorryAx as an elaboration-error artifact; that object was never installed or accepted. No source substitution, body edit or unchanged retry was performed. This is a type incompatibility of the replay cohort, not a counterexample to the security theorem.
+
+All independent vertices were attempted. Additional source results: 554 pass, 1 fail, 36 blocked downstream (including FJv_Deployed). No independently ready vertex remains. Fresh root compile, full statement comparison, #print axioms and formatter reachability for FJv_Deployed therefore did not run. Their reports explicitly preserve UNKNOWN/NOT RUN, with historical statement pin retained. FJv_Deployed is NOT bookable; no adopted-top result is weakened by this specialized-root failure.
+
+| Root | Historical planned contexts | Retained | Fresh pass | Failed | Blocked |
+|---|---:|---:|---:|---:|---:|
+| FJv_Top | 6439 | 6025 | 414 | 0 | 0 |
+| FJv_Deployed | 7040 | 6035 | 968 | 1 | 36 |
+
+Six additional declaration batches pass. Across both stages, all 968 accepted fresh source contexts have 6672 structured declaration queries with matching raw #print axioms output, no missing context and no nonstandard axioms. The failed context is excluded. RPv_axiom-audit.json contains the per-declaration records. Exact all-attempt fields and raw outputs are indexed in RPv_attempts.jsonl.
+
+Final usage: **981/1100 Lean attempts**, **980 pass, 1 fail**, **0 Kani**. Aggregate compiler wall 2785.36159306817 seconds; peak RSS 6177928 KiB; swaps 0; reservation retries 2. Two quiet-window refusals caused prescribed three-minute waits, with logs retained. No cap increases, timeout/memory kills, package replay or unchanged failed retries.
+
+The final pre-cleanup seal rehashes 6629 host paths without mismatch. Cleanup removes only 12 completed RPv query objects and their overlay links, preserving hashes in RPv_cleanup.json; every accepted source object and every predecessor object remains. The post-cleanup retained pin set has 6605 paths, rechecked in RPv_post-cleanup-check.json. No binaries/objects/archives/ELFs are committed. A failure of a concurrent receipt read and a root postprocessor selector were corrected without any compiler rerun; the first seal's one external reservation-script delta remains explicitly recorded rather than silently overwritten.
+
+Next deliverable: lead reconciliation of the phase-carrier mismatch at FIr_FinishComparison in the pinned cohort, then the affected dependent closure and fresh FJv_Deployed gates. RPv_next-gates.json and RPv_frontier.json enumerate every blocked vertex. Do not retry the unchanged failed source or substitute another source; retain the coherent cache. Budget remains 119 attempts but no independent vertex is ready under the exact-replay scope.
+
+**L187 is bookable for AspisR1.FJv_Top.deployed only.** This job removes/adds/changes zero premises. The 83T/3P/13G task top and all remaining implementation/deployment/trust obligations are unchanged; the deployed 100-bit target is not yet established. Local stage-one checkpoint: 876d354ff1. Commits remain local, no push.

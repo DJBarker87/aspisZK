@@ -1,0 +1,31 @@
+structure Aeneas.Std.core.ops.range.RangeInclusive.{u} (Idx : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.ops.range.RangeInclusive.start : Idx
+  Aeneas.Std.core.ops.range.RangeInclusive.end : Idx
+  Aeneas.Std.core.ops.range.RangeInclusive.exhausted : Bool
+constructor:
+  Aeneas.Std.core.ops.range.RangeInclusive.mk.{u} {Idx : Type u} (start «end» : Idx) (exhausted : Bool) :
+    core.ops.range.RangeInclusive Idx
+def Aeneas.Std.core.ops.range.RangeInclusive.new : {Idx : Type} →
+  Idx → Idx → Result (core.ops.range.RangeInclusive Idx) :=
+fun {Idx} start «end» => Result.ok { start := start, «end» := «end», exhausted := false }
+def Aeneas.Std.core.ops.range.RangeInclusive.Insts.CoreIterTraitsIteratorIterator.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.RangeInclusive A → Result (Option A × core.ops.range.RangeInclusive A) :=
+fun {A} StepInst self => do
+  let __do_lift ← core.ops.range.RangeInclusive.is_empty StepInst.partialOrdInst self
+  if __do_lift = true then Result.ok (none, self)
+    else do
+      let is_iterating ← StepInst.partialOrdInst.lt self.start self.end
+      if is_iterating = true then do
+          let n ← StepInst.forward_checked self.start 1#usize
+          match n with
+            | none => Result.fail Error.panic
+            | some n => Result.ok (some self.start, { start := n, «end» := self.end, exhausted := self.exhausted })
+        else do
+          let n ← StepInst.cloneInst.clone self.start
+          Result.ok (some n, { start := self.start, «end» := self.end, exhausted := true })
+def Aeneas.Std.core.iter.range.UScalarStep.forward_checked : {ty : UScalarTy} →
+  UScalar ty → Usize → Result (Option (UScalar ty)) :=
+fun {ty} start n =>
+  if h : ↑start + ↑n ≤ UScalar.max ty then Result.ok (some (UScalar.ofNatCore (↑start + ↑n) ⋯)) else Result.ok none

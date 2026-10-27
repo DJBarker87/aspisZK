@@ -1,0 +1,36 @@
+{"module": "RPv_FIr_AcceptedTerminal", "blocked": ["RPv_FIr_FinishComparison"]}
+{"module": "RPv_FJn_MaskC1Gather", "blocked": ["RPv_FIr_AcceptedTerminal"]}
+{"module": "RPv_FJq_MaskC1Callback", "blocked": ["RPv_FJn_MaskC1Gather"]}
+{"module": "RPv_FJq_ClaimZero", "blocked": ["RPv_FJq_MaskC1Callback"]}
+{"module": "RPv_FJq_MaskC1Value", "blocked": ["RPv_FJq_ClaimZero"]}
+{"module": "RPv_FJq_MaskOnlyCallback", "blocked": ["RPv_FJq_MaskC1Callback"]}
+{"module": "RPv_FJq_MaskOnlyValue", "blocked": ["RPv_FJq_MaskOnlyCallback", "RPv_FJq_ClaimZero"]}
+{"module": "RPv_FJn_MaskOnlyGather", "blocked": ["RPv_FJn_MaskC1Gather"]}
+{"module": "RPv_FJq_MaskedSourceFormula", "blocked": ["RPv_FJq_MaskC1Value", "RPv_FJq_MaskOnlyValue", "RPv_FJn_MaskOnlyGather"]}
+{"module": "RPv_FJq_MaskedMain", "blocked": ["RPv_FJq_MaskedSourceFormula"]}
+{"module": "RPv_FJq_ExtraCanonical", "blocked": ["RPv_FIr_AcceptedTerminal"]}
+{"module": "RPv_FJq_AcceptedExtra", "blocked": ["RPv_FJq_ExtraCanonical"]}
+{"module": "RPv_FJt_AcceptedMaskedMain", "blocked": ["RPv_FJq_MaskedMain", "RPv_FJq_AcceptedExtra"]}
+{"module": "RPv_FJq_AcceptedLiteralRows", "blocked": ["RPv_FJq_AcceptedExtra"]}
+{"module": "RPv_FJq_MaskedLiteral", "blocked": ["RPv_FJq_MaskedMain"]}
+{"module": "RPv_FJt_AcceptedMaskedLiteral", "blocked": ["RPv_FJt_AcceptedMaskedMain", "RPv_FJq_AcceptedLiteralRows", "RPv_FJq_MaskedLiteral"]}
+{"module": "RPv_FJt_Endpoint", "blocked": ["RPv_FJt_AcceptedMaskedLiteral"]}
+{"module": "RPv_FJt_RunEndpoint", "blocked": ["RPv_FJt_Endpoint"]}
+{"module": "RPv_FJt_GlobalTerminal", "blocked": ["RPv_FJt_RunEndpoint"]}
+{"module": "RPv_FJv_GlobalTerminal", "blocked": ["RPv_FJt_GlobalTerminal"]}
+{"module": "RPv_FJt_NativeDiscovery", "blocked": ["RPv_FJt_RunEndpoint"]}
+{"module": "RPv_FJt_NativeAttach", "blocked": ["RPv_FJt_NativeDiscovery"]}
+{"module": "RPv_FJt_SourceConsumer", "blocked": ["RPv_FJt_NativeAttach"]}
+{"module": "RPv_FJv_DLiteral", "blocked": ["RPv_FJt_GlobalTerminal", "RPv_FJt_SourceConsumer"]}
+{"module": "RPv_FJv_DDefinitions", "blocked": ["RPv_FJv_DLiteral"]}
+{"module": "RPv_FJv_DNativePair", "blocked": ["RPv_FJt_GlobalTerminal", "RPv_FJv_DDefinitions", "RPv_FJv_DLiteral"]}
+{"module": "RPv_FJv_DFinalSource", "blocked": ["RPv_FJv_DNativePair", "RPv_FJv_DDefinitions", "RPv_FJt_GlobalTerminal"]}
+{"module": "RPv_FJv_DCont", "blocked": ["RPv_FJv_DDefinitions"]}
+{"module": "RPv_FJv_DCaller", "blocked": ["RPv_FJv_DCont", "RPv_FJv_DDefinitions"]}
+{"module": "RPv_FJv_DR5Close", "blocked": ["RPv_FJv_DDefinitions", "RPv_FJv_DCaller", "RPv_FJv_DDefinitions", "RPv_FJv_DCaller"]}
+{"module": "RPv_FJv_DBoundCaller", "blocked": ["RPv_FJv_DCont"]}
+{"module": "RPv_FJv_DR6Caller", "blocked": ["RPv_FJv_DCaller", "RPv_FJv_DBoundCaller", "RPv_FJv_DCaller"]}
+{"module": "RPv_FJv_DR6Result", "blocked": ["RPv_FJv_DCaller", "RPv_FJv_DR6Caller", "RPv_FJv_DCaller", "RPv_FJv_DR6Caller"]}
+{"module": "RPv_FJv_DRelease", "blocked": ["RPv_FJv_DR6Result", "RPv_FJv_DBoundCaller", "RPv_FJv_DBoundCaller", "RPv_FJv_DR6Result"]}
+{"module": "RPv_FJv_DNativeAccepted", "blocked": ["RPv_FJv_DFinalSource", "RPv_FJv_DR5Close", "RPv_FJv_DR6Result", "RPv_FJv_DRelease", "RPv_FJt_GlobalTerminal"]}
+{"module": "RPv_FJv_Deployed", "blocked": ["RPv_FJv_GlobalTerminal", "RPv_FJv_DNativeAccepted"]}

@@ -1,0 +1,120 @@
+import Lean
+import RPv_JGa_PatternInner
+import RPv_JGa_PatternOuter
+import RPv_JGa_CopyPowers
+import RPv_JGa_CopyPatterns
+import RPv_JGa_MaskStep
+import RPv_JGa_MaskLoops
+import RPv_JGa_ActiveMaskKinds
+import RPv_JGa_ActiveMasks
+import RPv_JGa_ActiveLoop
+import RPv_JFy_CopyResidual
+import RPv_JGa_Copy
+import RPv_FJk_CopyCanonical
+import RPv_FJk_CopyRawValue
+import RPv_FJk_CopyPatternDescriptor
+import RPv_FJk_PatternDescriptorReads
+import RPv_FJk_PatternCellValue
+import RPv_FJk_PatternInnerValue
+import RPv_FJk_PatternOuterValue
+import RPv_FJk_CopyPowersValue
+import RPv_FJk_PatternValuesRaw
+import RPv_FJk_PatternRegistryA
+import RPv_FJk_PatternRegistryB
+import RPv_FJk_PatternRegistryC
+import RPv_FJk_PatternRegistryD
+import RPv_FJk_PatternRegistry
+import RPv_FJk_PatternModel
+import RPv_FJk_PatternValues
+import RPv_FJk_MaskNonzero
+import RPv_FJk_MaskValueStep
+import RPv_FJk_MaskValues
+import RPv_FJk_MaskModel
+import RPv_FJk_ActiveMaskValue
+import RPv_FJk_ActiveMaskRegistry
+import RPv_FJk_ActiveValue
+import RPv_FJn_ActiveValue
+import RPv_FJn_CopyFullValue
+import RPv_FJn_FoldMap
+import RPv_FJn_CopyMaskMap
+import RPv_FJn_CopySmallMap
+import RPv_FJn_CopyEndpointMap
+import RPv_FJn_CopyRowMap
+import RPv_FJn_CopyPatternMap
+import RPv_FJn_CopyEvaluatorMap
+import RPv_PoseidonPreparedSum3Source
+import RPv_FJb_ArrayTransport
+import RPv_FJe_Sum3BridgeBase
+import RPv_FJb_PairProjection
+import RPv_FJe_Sum3ChannelStep
+import RPv_FJe_Sum3ChannelEdges
+import RPv_FJe_Sum3ChannelBridge
+import RPv_FJe_Sum3ComponentBridge
+import RPv_FJe_Sum3IndexBridge
+import RPv_FJe_Sum3WrapperBridge
+import RPv_FJe_PreparedInjective
+import RPv_PoseidonPreparedChannelStep
+import RPv_PoseidonPreparedChannelGeneratedStep
+import RPv_PoseidonPreparedChannelLoopStep
+import RPv_AspisR1PoseidonPreparedChannelRunStepExact
+import RPv_AspisR1PoseidonPreparedChannelArraySpecs
+import RPv_AspisR1PoseidonPreparedChannelRunStepArrays
+import RPv_AspisR1PoseidonPreparedChannelRunStepLocal
+import RPv_AspisR1PoseidonPreparedChannelArraySet
+import RPv_AspisR1PoseidonPreparedChannelNestedSet
+import RPv_AspisR1PoseidonPreparedChannelUpdateInvariantV2
+import RPv_AspisR1PoseidonPreparedChannelLoopExact
+import RPv_AspisR1_PoseidonPreparedComponentLoopExact
+import RPv_AspisR1_PoseidonPreparedIndexLoopStep
+import RPv_AspisR1_PoseidonPreparedIndexComponents
+import RPv_AspisR1_PoseidonPreparedIndexComponentsCanonical
+import RPv_AspisR1_PoseidonPreparedIndexProductBounds
+import RPv_AspisR1_PoseidonPreparedIndexLoopExactV2Fix4
+import RPv_AspisR1PoseidonPreparedIndexActualLoopBuild
+import RPv_AspisR1_PoseidonPreparedPrefixField
+import RPv_AspisR1_PoseidonPreparedIndexActualLoop
+import RPv_AspisR1_PoseidonPreparedKaratsubaSuccess
+import RPv_AspisR1_PoseidonPreparedFieldArithmetic
+import RPv_AspisR1_PoseidonPreparedChannelRowValue
+import RPv_AspisR1_PoseidonPreparedKaratsubaValue
+import RPv_AspisR1_PoseidonPreparedSum3DecodedWithBuild
+import RPv_AspisR1PoseidonPreparedStateCells
+import RPv_AspisR1_PoseidonPreparedSum3PreparedCallerWithBuild
+import RPv_AspisR1_PoseidonPreparedProductCast
+import RPv_AspisR1_PoseidonPreparedValueCells
+import RPv_AspisR1_PoseidonPreparedInputCellValues
+import RPv_AspisR1_PoseidonPreparedLeftCellValues
+import RPv_AspisR1_PoseidonPreparedTableValues
+import RPv_AspisR1_PoseidonPreparedTableCellValues
+import RPv_AspisR1_PoseidonPreparedProductCells
+import RPv_AspisR1_PoseidonPreparedPrefixFieldThree
+import RPv_AspisR1_PoseidonPreparedAccumulatorThree
+import RPv_AspisR1_PoseidonPreparedSum3AccumulatorReads
+import RPv_AspisR1_PoseidonPreparedChannelRowProduct
+import RPv_AspisR1_PoseidonPreparedKaratsubaAggregateAlgebra
+import RPv_AspisR1_PoseidonPreparedRowSumAlgebra
+import RPv_AspisR1_PoseidonPreparedSum3ProductAlgebra
+import RPv_AspisR1_PoseidonPreparedKaratsubaRowAlgebra
+import RPv_AspisR1_PoseidonPreparedRowModelSumProducts
+import RPv_AspisR1_PoseidonPreparedConverterDecodedProducts
+import RPv_AspisR1_PoseidonPreparedSum3ActualValue
+import RPv_FJe_Sum3Value
+open Lean Elab Command
+run_cmd do
+  let env ← getEnv
+  let selected : Array Name := #[ `RPv_JGa_PatternInner, `RPv_JGa_PatternOuter, `RPv_JGa_CopyPowers, `RPv_JGa_CopyPatterns, `RPv_JGa_MaskStep, `RPv_JGa_MaskLoops, `RPv_JGa_ActiveMaskKinds, `RPv_JGa_ActiveMasks, `RPv_JGa_ActiveLoop, `RPv_JFy_CopyResidual, `RPv_JGa_Copy, `RPv_FJk_CopyCanonical, `RPv_FJk_CopyRawValue, `RPv_FJk_CopyPatternDescriptor, `RPv_FJk_PatternDescriptorReads, `RPv_FJk_PatternCellValue, `RPv_FJk_PatternInnerValue, `RPv_FJk_PatternOuterValue, `RPv_FJk_CopyPowersValue, `RPv_FJk_PatternValuesRaw, `RPv_FJk_PatternRegistryA, `RPv_FJk_PatternRegistryB, `RPv_FJk_PatternRegistryC, `RPv_FJk_PatternRegistryD, `RPv_FJk_PatternRegistry, `RPv_FJk_PatternModel, `RPv_FJk_PatternValues, `RPv_FJk_MaskNonzero, `RPv_FJk_MaskValueStep, `RPv_FJk_MaskValues, `RPv_FJk_MaskModel, `RPv_FJk_ActiveMaskValue, `RPv_FJk_ActiveMaskRegistry, `RPv_FJk_ActiveValue, `RPv_FJn_ActiveValue, `RPv_FJn_CopyFullValue, `RPv_FJn_FoldMap, `RPv_FJn_CopyMaskMap, `RPv_FJn_CopySmallMap, `RPv_FJn_CopyEndpointMap, `RPv_FJn_CopyRowMap, `RPv_FJn_CopyPatternMap, `RPv_FJn_CopyEvaluatorMap, `RPv_PoseidonPreparedSum3Source, `RPv_FJb_ArrayTransport, `RPv_FJe_Sum3BridgeBase, `RPv_FJb_PairProjection, `RPv_FJe_Sum3ChannelStep, `RPv_FJe_Sum3ChannelEdges, `RPv_FJe_Sum3ChannelBridge, `RPv_FJe_Sum3ComponentBridge, `RPv_FJe_Sum3IndexBridge, `RPv_FJe_Sum3WrapperBridge, `RPv_FJe_PreparedInjective, `RPv_PoseidonPreparedChannelStep, `RPv_PoseidonPreparedChannelGeneratedStep, `RPv_PoseidonPreparedChannelLoopStep, `RPv_AspisR1PoseidonPreparedChannelRunStepExact, `RPv_AspisR1PoseidonPreparedChannelArraySpecs, `RPv_AspisR1PoseidonPreparedChannelRunStepArrays, `RPv_AspisR1PoseidonPreparedChannelRunStepLocal, `RPv_AspisR1PoseidonPreparedChannelArraySet, `RPv_AspisR1PoseidonPreparedChannelNestedSet, `RPv_AspisR1PoseidonPreparedChannelUpdateInvariantV2, `RPv_AspisR1PoseidonPreparedChannelLoopExact, `RPv_AspisR1_PoseidonPreparedComponentLoopExact, `RPv_AspisR1_PoseidonPreparedIndexLoopStep, `RPv_AspisR1_PoseidonPreparedIndexComponents, `RPv_AspisR1_PoseidonPreparedIndexComponentsCanonical, `RPv_AspisR1_PoseidonPreparedIndexProductBounds, `RPv_AspisR1_PoseidonPreparedIndexLoopExactV2Fix4, `RPv_AspisR1PoseidonPreparedIndexActualLoopBuild, `RPv_AspisR1_PoseidonPreparedPrefixField, `RPv_AspisR1_PoseidonPreparedIndexActualLoop, `RPv_AspisR1_PoseidonPreparedKaratsubaSuccess, `RPv_AspisR1_PoseidonPreparedFieldArithmetic, `RPv_AspisR1_PoseidonPreparedChannelRowValue, `RPv_AspisR1_PoseidonPreparedKaratsubaValue, `RPv_AspisR1_PoseidonPreparedSum3DecodedWithBuild, `RPv_AspisR1PoseidonPreparedStateCells, `RPv_AspisR1_PoseidonPreparedSum3PreparedCallerWithBuild, `RPv_AspisR1_PoseidonPreparedProductCast, `RPv_AspisR1_PoseidonPreparedValueCells, `RPv_AspisR1_PoseidonPreparedInputCellValues, `RPv_AspisR1_PoseidonPreparedLeftCellValues, `RPv_AspisR1_PoseidonPreparedTableValues, `RPv_AspisR1_PoseidonPreparedTableCellValues, `RPv_AspisR1_PoseidonPreparedProductCells, `RPv_AspisR1_PoseidonPreparedPrefixFieldThree, `RPv_AspisR1_PoseidonPreparedAccumulatorThree, `RPv_AspisR1_PoseidonPreparedSum3AccumulatorReads, `RPv_AspisR1_PoseidonPreparedChannelRowProduct, `RPv_AspisR1_PoseidonPreparedKaratsubaAggregateAlgebra, `RPv_AspisR1_PoseidonPreparedRowSumAlgebra, `RPv_AspisR1_PoseidonPreparedSum3ProductAlgebra, `RPv_AspisR1_PoseidonPreparedKaratsubaRowAlgebra, `RPv_AspisR1_PoseidonPreparedRowModelSumProducts, `RPv_AspisR1_PoseidonPreparedConverterDecodedProducts, `RPv_AspisR1_PoseidonPreparedSum3ActualValue, `RPv_FJe_Sum3Value ]
+  for i in [:env.header.modules.size] do
+    let owner := env.header.modules[i]!.module
+    let data := env.header.moduleData[i]!
+    if selected.contains owner then
+      logInfo m!"RPV_IMPORTS {(Json.mkObj [("module", toJson owner.toString), ("imports", toJson (data.imports.map (·.module.toString)))]).compress}"
+  let mut count : Nat := 0
+  for (n, _) in env.toKernelEnv.constants.toList do
+    if let some mi := env.getModuleIdxFor? n then
+      let owner := env.header.modules[mi.toNat]!.module
+      if selected.contains owner then
+        let axs ← collectAxioms n
+        logInfo m!"RPV_DECL {(Json.mkObj [("module", toJson owner.toString), ("name", toJson n.toString), ("axioms", toJson (axs.map Name.toString))]).compress}"
+        elabCommand (← `(#print axioms $(mkIdent n)))
+        count := count + 1
+  logInfo m!"RPV_AUDIT_COMPLETE declarations={count} modules={selected.size}"

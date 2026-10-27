@@ -1,0 +1,42 @@
+def Aeneas.Std.core.array.Array.index : {T I Output : Type} →
+  {N : Usize} → core.ops.index.Index (Slice T) I Output → Std.Array T N → I → Result Output :=
+fun {T I Output} {N} inst a i => inst.index a.to_slice i
+def Aeneas.Std.core.ops.index.IndexSlice : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → core.ops.index.Index (Slice T) I Output :=
+fun {T I Output} inst => { index := core.slice.index.Slice.index inst }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.RangeTo Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeToUsize,
+    get := core.slice.index.SliceIndexRangeToUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeToUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeToUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeToUsizeSlice.index_mut }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.RangeFrom Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeFromUsize,
+    get := core.slice.index.SliceIndexRangeFromUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeFromUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeFromUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeFromUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeFromUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.Range Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeUsize,
+    get := core.slice.index.SliceIndexRangeUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeUsizeSlice.index_mut }
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Option (Slice T)) :=
+fun {T} r s => if ↑r.end ≤ s.length then Result.ok (some ⟨List.slice 0 ↑r.end ↑s, ⋯⟩) else Result.ok none
+def Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.get : {T : Type} →
+  core.ops.range.RangeFrom Usize → Slice T → Result (Option (Slice T)) :=
+fun {T} r s => if ↑r.start ≤ s.length then Result.ok (some (s.drop r.start)) else Result.ok none
