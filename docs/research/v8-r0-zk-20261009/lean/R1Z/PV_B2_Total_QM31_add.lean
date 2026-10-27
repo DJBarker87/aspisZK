@@ -12,7 +12,7 @@ def aspis_core.field.QM31.add
 end PV_B2_FieldValue
 namespace PV_B2_FieldTotal
 /-- Full Result, arbitrary raw inputs; shared symbolic operations avoid field-term reduction. -/
-theorem QM31_add (self : aspis_core.field.QM31) (rhs : aspis_core.field.QM31) : PV_B2_WeightsNative.aspis_core.field.QM31.add self rhs = ok (PV_B2_FieldValue.aspis_core.field.QM31.add self rhs) := by
+theorem QM31_add (self : ProverRwFull.aspis_core.field.QM31) (rhs : ProverRwFull.aspis_core.field.QM31) : PV_B2_WeightsNative.aspis_core.field.QM31.add self rhs = ok (PV_B2_FieldValue.aspis_core.field.QM31.add self rhs) := by
   unfold PV_B2_WeightsNative.aspis_core.field.QM31.add PV_B2_FieldValue.aspis_core.field.QM31.add
   simp only [PV_B2_FieldTotal.P, PV_B2_FieldTotal.ct_subtract_p, PV_B2_FieldTotal.ct_reduce64, PV_B2_FieldTotal.ct_add, PV_B2_FieldTotal.ct_sub, PV_B2_FieldTotal.reduce_u64, PV_B2_FieldTotal.M31_mul, PV_B2_FieldTotal.M31_reduce_u64, PV_B2_FieldTotal.M31_add, PV_B2_FieldTotal.M31_double, PV_B2_FieldTotal.CM31_add, PV_B2_FieldTotal.M31_sub, PV_B2_FieldTotal.CM31_sub, PV_B2_FieldTotal.CM31_mul, PV_B2_FieldTotal.mul_by_r, PV_B2_FieldTotal.QM31_ZERO, PV_B2_FieldTotal.QM31_ONE,lift,bind_tc_ok]
 #print axioms QM31_add

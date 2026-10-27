@@ -1,4 +1,5 @@
 import R1Z.ProverRwFullTypes
+open Aeneas Aeneas.Std
 namespace PV_B2_WeightsNative
 abbrev aspis_core.field.M31 := ProverRwFull.aspis_core.field.M31
 abbrev aspis_core.field.CM31 := ProverRwFull.aspis_core.field.CM31
@@ -13,3 +14,5 @@ structure host_weights.Weights where
   extra : Array aspis_core.field.QM31 2#usize
 
 end PV_B2_WeightsNative
+
+#print axioms PV_B2_WeightsNative.host_weights.Weights

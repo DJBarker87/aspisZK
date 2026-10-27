@@ -1,0 +1,48 @@
+import R1Z.PV_B2_ArrayDigits
+import R1Z.PV_B2_RankDigits
+set_option autoImplicit false
+noncomputable section
+namespace PV_B2_ordinary_sample
+open Aeneas Aeneas.Std Result
+open AspisR1.SamplerMachineBounds
+
+/-- Canonicality is a symbolic consequence of the recurrence, for any base,
+length and input rank. No concrete256-bit recurrence is reduced. -/
+theorem low_canonical (base n x : Nat) (positive : 0 < base) :
+    ∀ d, d ∈ AspisR1.SamplerNatModel.lowDigits base n x → d < base := by
+  induction n generalizing x with
+  | zero =>
+    intro d hd
+    simp only [AspisR1.SamplerNatModel.lowDigits,List.not_mem_nil] at hd
+  | succ n ih =>
+    intro d hd
+    simp only [AspisR1.SamplerNatModel.lowDigits,List.mem_cons] at hd
+    rcases hd with rfl | hd
+    · exact Nat.mod_lt _ positive
+    · exact ih _ d hd
+
+/-- Exact complete Result of the normalized source emission on every block,
+including its exact canonical base-P digit value and rank residue. This does
+not install the native callback or assert iterator/allocator association. -/
+theorem op250_source (block : Array U8 32#usize) :
+    ∃ digits : Array U32 8#usize,
+      PV_B2_Sampler.host_sampler.ordinary_sample block = ok (PV_B2_ArrayDigits.raw digits) ∧
+      AspisR1.ExtractedQM31SamplerIndexedGeneratedBridge.values digits =
+        AspisR1.SamplerNatModel.ordinaryDigits (AspisR1.SourceSamplerByteRank.rank block) := by
+  obtain ⟨digits,q,hlow,hvalues,_⟩ := PV_B2_RankDigits.source block
+  have hc : PV_B2_ArrayDigits.canonical digits := by
+    intro i
+    have hm : (PV_B2_ArrayDigits.limb digits i).val ∈
+        AspisR1.ExtractedQM31SamplerIndexedGeneratedBridge.values digits := by
+      change (PV_B2_ArrayDigits.limb digits i).val ∈ digits.val.map UScalar.val
+      apply List.mem_map.mpr
+      exact ⟨_,List.getElem_mem (by rw [digits.property]; exact i.isLt),rfl⟩
+    rw [hvalues] at hm
+    change (PV_B2_ArrayDigits.limb digits i).val < P
+    exact low_canonical P 8 _ P_pos _ hm
+  refine ⟨digits,?_,hvalues⟩
+  simp only [PV_B2_Sampler.host_sampler.ordinary_sample,hlow,bind_tc_ok,
+    PV_B2_ArrayDigits.decode digits hc]
+#print axioms low_canonical
+#print axioms op250_source
+end PV_B2_ordinary_sample

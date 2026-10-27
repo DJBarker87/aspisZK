@@ -7,6 +7,10 @@ if pre.returncode != 0 or json.loads((out/'reservation.json').read_text()).get('
 (W/'capped.py').write_text((H/'capped-template.py').read_text().replace('/home/dombarker/project-offloads/codex-cx-pin-20261020/source-revision.txt',str(W/'source-revision.txt')))
 env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='4',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(Path('/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target')),RUSTFLAGS='-C link-arg=-Wl,--threads=4')
 note=('optimized compilation' if cmd[0]=='cargo' or any('build-function-cost.py' in x for x in cmd) else ('optimized per-function sampler/weights microbenchmark; no elimination' if any('pv-batch2-function-cost' in x for x in cmd) else 'optimized complete retry-owner proof generation and P_R1 elimination'))
+# Receipt classification only; caps, admission and command execution are unchanged.
+if any('run2.py' in x for x in cmd):note='Lean single-module formal check under env J, -M7000; no Rust arithmetic gate'
+elif any('extract-' in x for x in cmd):note='optimized Rust/Charon compilation followed by pinned Aeneas symbolic extraction; no elimination'
+elif any('count-calls.py' in x for x in cmd):note='optimized scratch compilation followed by two instrumented complete prover calls including P_R1'
 (out/'command.json').write_text(json.dumps(dict(command=cmd,source_revision=(W/'source-revision.txt').read_text().strip(),env={k:env[k] for k in ['PATH','CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','RUSTFLAGS']},expected_time=note),indent=2)+'\n')
 run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3','/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py',str(out/'admission-barrier.json'),'python3',str(W/'capped.py'),str(out/'receipt'),note,'--',*cmd]
 with (out/'scope.log').open('w') as log:

@@ -1,0 +1,44 @@
+import R1Z.PV_B2_Sampler
+set_option autoImplicit false
+namespace PV_B2_ArrayDigits
+open Aeneas Aeneas.Std Result
+
+def limb (a : Array U32 8#usize) (i : Fin 8) : U32 :=
+  a.val[i.val]'(by rw [a.property]; exact i.isLt)
+
+def canonical (a : Array U32 8#usize) : Prop :=
+  ∀ i : Fin 8, (limb a i).val < 2147483647
+
+def raw (a : Array U32 8#usize) : ProverRwFull.aspis_core.field.wide_exact.WideExact :=
+  ⟨⟨⟨limb a 0,limb a 1⟩,⟨limb a 2,limb a 3⟩⟩,
+   ⟨⟨limb a 4,limb a 5⟩,⟨limb a 6,limb a 7⟩⟩⟩
+
+theorem read (a : Array U32 8#usize) (i : Usize) (h : i.val < 8) :
+    Array.index_usize a i = ok (limb a ⟨i.val,h⟩) := by
+  obtain ⟨x,hx,hv⟩ := WP.spec_imp_exists
+    (Array.index_usize_spec a i (by
+      change i.val < a.val.length
+      rw [a.property]
+      exact h))
+  have he : x = limb a ⟨i.val,h⟩ := by simpa only [limb] using hv
+  simpa only [he] using hx
+
+/-- The copied checked constructor agrees with raw limb assembly exactly on
+its canonical domain. The domain is proved for sampler outputs separately. -/
+theorem decode (a : Array U32 8#usize) (hc : canonical a) :
+    PV_B2_Sampler.host_sampler.decode8 a = ok (raw a) := by
+  have hn (i : Fin 8) : ¬ limb a i >= 2147483647#u32 := by
+    change ¬ 2147483647 ≤ (limb a i).val
+    exact Nat.not_le_of_gt (hc i)
+  unfold PV_B2_Sampler.host_sampler.decode8
+    PV_B2_Sampler.aspis_core.field.wide_exact.WideExact.from_limbs
+  simp only [PV_B2_Sampler.aspis_core.field.P]
+  rw [read a 0#usize (by decide),read a 1#usize (by decide),
+    read a 2#usize (by decide),read a 3#usize (by decide),
+    read a 4#usize (by decide),read a 5#usize (by decide),
+    read a 6#usize (by decide),read a 7#usize (by decide)]
+  simp only [bind_tc_ok,hn,if_false]
+  rfl
+#print axioms read
+#print axioms decode
+end PV_B2_ArrayDigits

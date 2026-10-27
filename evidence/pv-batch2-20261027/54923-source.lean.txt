@@ -1,0 +1,23 @@
+import Mathlib.Tactic.IntervalCases
+import R1Z.PV_B2_ByteShape
+import R1Z.PV_B2_ByteWord
+set_option autoImplicit false
+namespace PV_B2_ByteBits
+open Aeneas Aeneas.Std
+
+theorem shape (a b c d : U8) :
+    PV_B2_ByteWord.bits a b c d = PV_B2_ByteShape.assembled a b c d := by
+  unfold PV_B2_ByteWord.bits PV_B2_ByteShape.assembled PV_B2_ByteShape.tail3 PV_B2_ByteShape.tail2
+  apply BitVec.eq_of_getLsbD_eq
+  intro i
+  by_cases hi : i < 32
+  · interval_cases i <;>
+      simp [BitVec.getLsbD_or,BitVec.getLsbD_setWidth,BitVec.getLsbD_shiftLeft]
+  · simp [BitVec.getLsbD_of_ge _ _ (by omega : 32 ≤ i)]
+
+theorem source (a b c d : U8) : PV_B2_ByteWord.word a b c d =
+    core.num.U32.from_le_bytes (Array.make 4#usize [a,b,c,d]) := by
+  rw [PV_B2_ByteWord.machine,PV_B2_ByteShape.source,shape]
+#print axioms shape
+#print axioms source
+end PV_B2_ByteBits

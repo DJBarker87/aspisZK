@@ -1,0 +1,50 @@
+{
+  "attempt": 54939,
+  "module": "R1Z/PV_B2_ArrayInspect",
+  "source_revision": "53109e97dc9adcb5a59a32f59c732d1875892116",
+  "worktree_source_dirty": false,
+  "source_sha256": "08c8e3a1c7e08c43a2fb9fe2043109fc838c601eaed429c402fdbe935e1f3329",
+  "deps_fingerprint": "342834391b5dcde8671c6e2367b6f28eab1e9e8203141df88b9bcbdde6e797f7",
+  "dependency_objects": {
+    "Aeneas": {
+      "path": "/home/dombarker/project-offloads/aspis-joint-20261019/objects/Aeneas.olean",
+      "sha256": "d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d"
+    }
+  },
+  "axiom_output": "def Aeneas.Std.Array.update.{u} : {\u03b1 : Type u} \u2192\n  {n : Aeneas.Std.Usize} \u2192 Aeneas.Std.Array \u03b1 n \u2192 Aeneas.Std.Usize \u2192 \u03b1 \u2192 Aeneas.Std.Result (Aeneas.Std.Array \u03b1 n) :=\nfun {\u03b1} {n} v i x =>\n  match v[i]? with\n  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds\n  | some val => Aeneas.Std.Result.ok \u27e8(\u2191v).set (\u2191i) x, \u22ef\u27e9\ndef Aeneas.Std.Array.index_mut_usize.{u} : {\u03b1 : Type u} \u2192\n  {n : Aeneas.Std.Usize} \u2192\n    Aeneas.Std.Array \u03b1 n \u2192 Aeneas.Std.Usize \u2192 Aeneas.Std.Result (\u03b1 \u00d7 (\u03b1 \u2192 Aeneas.Std.Array \u03b1 n)) :=\nfun {\u03b1} {n} v i => do\n  let x \u2190 v.index_usize i\n  Aeneas.Std.Result.ok (x, v.set i)\ndef Aeneas.Std.Array.index_usize.{u} : {\u03b1 : Type u} \u2192\n  {n : Aeneas.Std.Usize} \u2192 Aeneas.Std.Array \u03b1 n \u2192 Aeneas.Std.Usize \u2192 Aeneas.Std.Result \u03b1 :=\nfun {\u03b1} {n} v i =>\n  match v[i]? with\n  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds\n  | some x => Aeneas.Std.Result.ok x\n",
+  "command": [
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_ArrayInspect.olean",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ArrayInspect.lean",
+    "7000"
+  ],
+  "cwd": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src",
+  "expected_time": "optimized complete retry-owner proof generation and P_R1 elimination",
+  "exit_status": 0,
+  "wall_seconds": 1.141,
+  "peak_rss_kib": 2618028,
+  "swaps": 0,
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r19dba44e37784cda80ff6384928c87b0.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": 288673792,
+  "env": {
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "SBF_TRACE_DIR": null
+  },
+  "print_axioms": [],
+  "native_wrapper_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
+  "accepted_axioms": true
+}

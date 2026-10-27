@@ -4,12 +4,12 @@ L=Path('docs/research/v8-r0-zk-20261009/lean/R1Z');E=Path('evidence/pv-batch2-20
 f=(D/'Funs.lean').read_text();t=(D/'Types.lean').read_text()
 namespace='PV_B2_WeightsNative'
 weights=re.search(r'structure host_weights.Weights where\n.*?(?=\n/--)',t,re.S)[0]
-carrier='import R1Z.ProverRwFullTypes\nnamespace '+namespace+'\n'
+carrier='import R1Z.ProverRwFullTypes\nopen Aeneas Aeneas.Std\nnamespace '+namespace+'\n'
 for n in ['field.M31','field.CM31','field.QM31','circle.SecureCirclePoint']:
  carrier+='abbrev aspis_core.'+n+' := ProverRwFull.aspis_core.'+n+'\n'
 for n in ['transport.Variant','verifier.Error']:
  carrier+='abbrev '+n+' := ProverRwFull.'+n+'\n'
-carrier+=weights+'\nend '+namespace+'\n'
+carrier+=weights+'\nend '+namespace+'\n\n#print axioms '+namespace+'.host_weights.Weights\n'
 (L/'PV_B2_WeightsNativeTypes.lean').write_text(carrier)
 header,rest=f.split('namespace PV_B2_252\n',1);rest=rest.rsplit('end PV_B2_252',1)[0]
 blocks=[b for b in re.split(r'(?=/-- \[)',rest) if b.strip()];prev='PV_B2_WeightsNativeTypes';rows=[]

@@ -12,7 +12,7 @@ for i,row in enumerate(rows):
   pure=body[:m.end()].replace('Result '+m[3],m[3]).replace(':= do',':=')+body[m.end():]
   pure=re.sub(r'let (\w+) ← lift \(([^\n]*)\)',r'let \1 := (\2)',pure)
   pure=pure.replace(' ← ', ' := ');pure=re.sub(r'\bok ', '',pure)
-  statement=args+': PV_B2_WeightsNative.'+name+' '+ ' '.join(names)+' = ok (PV_B2_FieldValue.'+name+' '+' '.join(names)+')'
+  statement=args.replace('aspis_core.field.','ProverRwFull.aspis_core.field.')+': PV_B2_WeightsNative.'+name+' '+ ' '.join(names)+' = ok (PV_B2_FieldValue.'+name+' '+' '.join(names)+')'
  else:
   pure=body;statement=': PV_B2_WeightsNative.'+name+' = PV_B2_FieldValue.'+name
  carrier='namespace PV_B2_FieldValue\n'+''.join('abbrev aspis_core.field.'+n+' := ProverRwFull.aspis_core.field.'+n+'\n' for n in ['M31','CM31','QM31']) if i==0 else 'namespace PV_B2_FieldValue\n'

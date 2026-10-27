@@ -14,19 +14,82 @@ theorem step (i : Usize) (h : i < 8#usize) :
 theorem done (i : Usize) (h : ¬ i < 8#usize) : run i = ok () := by
   unfold run PV_B2_Sampler.host_sampler.low_base_p_digits_loop2
   rw [Aeneas.Std.loop.eq_def]
-  simp only [PV_B2_Sampler.host_sampler.low_base_p_digits_loop2.body,h,if_neg,bind_tc_ok]
+  simp only [PV_B2_Sampler.host_sampler.low_base_p_digits_loop2.body,h,if_false,bind_tc_ok]
 
 /-- Release compilation removes assertions but keeps this seven-step empty loop.
 It terminates without affecting the full Result of the digit pass. -/
 theorem source : run 1#usize = ok () := by
   calc
-    run 1#usize = run 2#usize := step 1#usize (by decide)
-    _ = run 3#usize := step 2#usize (by decide)
-    _ = run 4#usize := step 3#usize (by decide)
-    _ = run 5#usize := step 4#usize (by decide)
-    _ = run 6#usize := step 5#usize (by decide)
-    _ = run 7#usize := step 6#usize (by decide)
-    _ = run 8#usize := step 7#usize (by decide)
+    run 1#usize = run 2#usize := by
+      have hn : Usize.wrapping_add 1#usize 1#usize = 2#usize := by
+        apply UScalar.eq_of_val_eq
+        rw [Usize.wrapping_add_val_eq]
+        have hs : (1#usize).val + (1#usize).val < (9#usize).val := by scalar_tac
+        have hb : (9#usize).val < UScalar.size .Usize := by
+          simpa only [UScalar.val,UScalar.size,UScalarTy.numBits] using (9#usize).bv.isLt
+        rw [Nat.mod_eq_of_lt (lt_trans hs hb)]
+        rfl
+      simpa only [hn] using step 1#usize (by decide)
+    _ = run 3#usize := by
+      have hn : Usize.wrapping_add 2#usize 1#usize = 3#usize := by
+        apply UScalar.eq_of_val_eq
+        rw [Usize.wrapping_add_val_eq]
+        have hs : (2#usize).val + (1#usize).val < (9#usize).val := by scalar_tac
+        have hb : (9#usize).val < UScalar.size .Usize := by
+          simpa only [UScalar.val,UScalar.size,UScalarTy.numBits] using (9#usize).bv.isLt
+        rw [Nat.mod_eq_of_lt (lt_trans hs hb)]
+        rfl
+      simpa only [hn] using step 2#usize (by decide)
+    _ = run 4#usize := by
+      have hn : Usize.wrapping_add 3#usize 1#usize = 4#usize := by
+        apply UScalar.eq_of_val_eq
+        rw [Usize.wrapping_add_val_eq]
+        have hs : (3#usize).val + (1#usize).val < (9#usize).val := by scalar_tac
+        have hb : (9#usize).val < UScalar.size .Usize := by
+          simpa only [UScalar.val,UScalar.size,UScalarTy.numBits] using (9#usize).bv.isLt
+        rw [Nat.mod_eq_of_lt (lt_trans hs hb)]
+        rfl
+      simpa only [hn] using step 3#usize (by decide)
+    _ = run 5#usize := by
+      have hn : Usize.wrapping_add 4#usize 1#usize = 5#usize := by
+        apply UScalar.eq_of_val_eq
+        rw [Usize.wrapping_add_val_eq]
+        have hs : (4#usize).val + (1#usize).val < (9#usize).val := by scalar_tac
+        have hb : (9#usize).val < UScalar.size .Usize := by
+          simpa only [UScalar.val,UScalar.size,UScalarTy.numBits] using (9#usize).bv.isLt
+        rw [Nat.mod_eq_of_lt (lt_trans hs hb)]
+        rfl
+      simpa only [hn] using step 4#usize (by decide)
+    _ = run 6#usize := by
+      have hn : Usize.wrapping_add 5#usize 1#usize = 6#usize := by
+        apply UScalar.eq_of_val_eq
+        rw [Usize.wrapping_add_val_eq]
+        have hs : (5#usize).val + (1#usize).val < (9#usize).val := by scalar_tac
+        have hb : (9#usize).val < UScalar.size .Usize := by
+          simpa only [UScalar.val,UScalar.size,UScalarTy.numBits] using (9#usize).bv.isLt
+        rw [Nat.mod_eq_of_lt (lt_trans hs hb)]
+        rfl
+      simpa only [hn] using step 5#usize (by decide)
+    _ = run 7#usize := by
+      have hn : Usize.wrapping_add 6#usize 1#usize = 7#usize := by
+        apply UScalar.eq_of_val_eq
+        rw [Usize.wrapping_add_val_eq]
+        have hs : (6#usize).val + (1#usize).val < (9#usize).val := by scalar_tac
+        have hb : (9#usize).val < UScalar.size .Usize := by
+          simpa only [UScalar.val,UScalar.size,UScalarTy.numBits] using (9#usize).bv.isLt
+        rw [Nat.mod_eq_of_lt (lt_trans hs hb)]
+        rfl
+      simpa only [hn] using step 6#usize (by decide)
+    _ = run 8#usize := by
+      have hn : Usize.wrapping_add 7#usize 1#usize = 8#usize := by
+        apply UScalar.eq_of_val_eq
+        rw [Usize.wrapping_add_val_eq]
+        have hs : (7#usize).val + (1#usize).val < (9#usize).val := by scalar_tac
+        have hb : (9#usize).val < UScalar.size .Usize := by
+          simpa only [UScalar.val,UScalar.size,UScalarTy.numBits] using (9#usize).bv.isLt
+        rw [Nat.mod_eq_of_lt (lt_trans hs hb)]
+        rfl
+      simpa only [hn] using step 7#usize (by decide)
     _ = ok () := done 8#usize (by decide)
 #print axioms step
 #print axioms done

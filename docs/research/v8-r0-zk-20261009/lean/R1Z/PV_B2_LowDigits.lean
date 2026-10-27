@@ -24,7 +24,8 @@ theorem source (block : Array U8 32#usize) :
   intro q _
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   rintro ⟨q,d⟩ _
-  rw [PV_B2_ReleaseCheck.source]
-  rfl
+  have hc : PV_B2_Sampler.host_sampler.low_base_p_digits_loop2 1#usize = ok () :=
+    PV_B2_ReleaseCheck.source
+  simp only [hc,bind_tc_ok]
 #print axioms source
 end PV_B2_LowDigits

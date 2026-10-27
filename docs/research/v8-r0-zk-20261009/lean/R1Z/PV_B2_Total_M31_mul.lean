@@ -14,7 +14,7 @@ def aspis_core.field.M31.mul
 end PV_B2_FieldValue
 namespace PV_B2_FieldTotal
 /-- Full Result, arbitrary raw inputs; shared symbolic operations avoid field-term reduction. -/
-theorem M31_mul (self : aspis_core.field.M31) (rhs : aspis_core.field.M31) : PV_B2_WeightsNative.aspis_core.field.M31.mul self rhs = ok (PV_B2_FieldValue.aspis_core.field.M31.mul self rhs) := by
+theorem M31_mul (self : ProverRwFull.aspis_core.field.M31) (rhs : ProverRwFull.aspis_core.field.M31) : PV_B2_WeightsNative.aspis_core.field.M31.mul self rhs = ok (PV_B2_FieldValue.aspis_core.field.M31.mul self rhs) := by
   unfold PV_B2_WeightsNative.aspis_core.field.M31.mul PV_B2_FieldValue.aspis_core.field.M31.mul
   simp only [PV_B2_FieldTotal.P, PV_B2_FieldTotal.ct_subtract_p, PV_B2_FieldTotal.ct_reduce64, PV_B2_FieldTotal.ct_add, PV_B2_FieldTotal.ct_sub, PV_B2_FieldTotal.reduce_u64,lift,bind_tc_ok]
 #print axioms M31_mul
