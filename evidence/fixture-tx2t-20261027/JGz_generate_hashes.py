@@ -3,6 +3,7 @@ from pathlib import Path
 import json,sys
 R=Path(__file__).resolve().parents[2];files={};manifest=json.loads((Path(__file__).resolve().parent/'JGz_SHA_MANIFEST.json').read_text())
 for kind,label,nfull,tailmod in [('P','Proof',900,'JGz_ProofNative14'),('U','Public',29,'JGz_PublicNative'),('C','Checksum',27,'JGz_ChecksumNative')]:
+ if kind=='P':continue  # Proof uses the separately generated symbolic native-chunk join.
  modules=manifest[kind]['modules'];name=f'JGz_{label}SHA';length=manifest[kind]['bytes'];last=nfull;lastgroup=last//16
  out=[f'import {m}' for m in modules]+(['import JGz_SHAC0Fold'] if kind=='C' else [])+[f'import {tailmod}','import JGz_HashTools','set_option autoImplicit false',f'namespace AspisR1.{name}','open JFp_SHA256']
  headgroups=[f'{m}.chunks' for m in modules[:-1]]
@@ -20,7 +21,9 @@ for kind,label,nfull,tailmod in [('P','Proof',900,'JGz_ProofNative14'),('U','Pub
  if len(modules)>1:out+=['  rcases hb with '+'|'.join(f'h{i}' for i in range(len(modules)))]
  for i,m in enumerate(modules):
   lengths='JGz_SHAC0Fold.lengths' if kind=='C' and i==0 else m+'.lengths';out += [f'  · exact {lengths} b '+(f'h{i}' if len(modules)>1 else 'hb')]
- out += ['#print axioms lengths',f'theorem checked : JFp_SHA256.hash raw={modules[-1]}.B{last:03}.result := by','  rw [JGz_HashTools.hash_chunks raw chunks padded lengths]','  unfold chunks','  simp only [List.foldl_append]',f'  rw [show initial={modules[0]}.B000.start from rfl]']
+ out += ['#print axioms lengths']
+ if kind=='P':out += ['attribute [local irreducible] '+' '.join(m+'.chunks' for m in modules)]
+ out += [f'theorem checked : JFp_SHA256.hash raw={modules[-1]}.B{last:03}.result := by','  rw [JGz_HashTools.hash_chunks raw chunks padded lengths]','  unfold chunks','  simp only [List.foldl_append]',f'  rw [show initial={modules[0]}.B000.start from rfl]']
  for i,m in enumerate(modules):
   if i:out += [f'  rw [show {modules[i-1]}.B{16*i-1:03}.result={m}.B{16*i:03}.start from rfl]']
   folded='JGz_SHAC0Fold.folded' if kind=='C' and i==0 else m+'.folded';out += ['  rw ['+folded+']']

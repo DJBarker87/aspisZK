@@ -12,7 +12,7 @@ for label,kind,count,hashname in [('Proof','P',57,'proofHash'),('Public','U',2,'
  if kind=='P':
   basic +=['JFx_NativeBytes.proof','JFx_NativeBytes.proofBytes']
   out += ['  simp only ['+','.join(basic)+']','  rw ['+','.join(f'JGz_ProofNative{i:02}.native' for i in range(15))+']']
-  unfold=[f'{sha}.raw',f'{sha}.head']+[f'JGz_ProofNative{i:02}.chunks' for i in range(15)]+[f'JGz_SHAP{i:02}.chunks' for i in range(56)]
+  unfold=[f'{sha}.raw',f'{sha}.head']
  elif kind=='U':
   basic +=['JFx_NativeBytes.publicInput','JFx_NativeBytes.publicBytes']
   out += ['  simp only ['+','.join(basic)+']','  rw [JGz_PublicNative.native]']

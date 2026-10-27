@@ -16,6 +16,15 @@ def step(s,k,w):
 def advance(w):return w[1:]+[(s1(w[14])+w[9]+s0(w[1])+w[0])&mask]
 ls=lambda xs:'['+','.join(map(str,xs))+']'
 reg=lambda xs:'⟨'+','.join(map(str,xs))+'⟩'
+def compact_certificate(bn,b,start,hist,hn):
+ out=[f'namespace {bn}',f'def input : List Nat := {ls(b)}',f'def start : Reg := {reg(start)}',f'def result : Reg := {reg(hn)}']
+ for j,(w,st) in enumerate(hist):out += [f'def q{j:02} : List Nat × Reg := ({ls(w)},{reg(st)})']
+ out += ['theorem checked : compress start (words input)=result := by','  have parsed : words input=q00.1 := by rfl','  unfold compress loop','  rw [parsed]','  change add start (constants.foldl transition q00).2=result']
+ for j,k in enumerate(K):out += [f'  have t{j:02} : transition q{j:02} {k}=q{j+1:02} := by rfl']
+ out += ['  unfold constants']
+ for j in range(64):out += [f'  rw [List.foldl_cons,t{j:02}]']
+ out += ['  rw [List.foldl_nil]','  rfl','#print axioms checked',f'end {bn}']
+ return out
 def retained(kind):
  b=bytearray()
  for f in sorted((R/'lean').glob(f'JFx_Data{kind}[0-9][0-9].lean')):
@@ -37,18 +46,29 @@ for kind,msg in messages.items():
   out=['import JFp_SHA256','set_option autoImplicit false',f'namespace AspisR1.{name}','open JFp_SHA256']
   block_names=[]
   for bi in range(16*group,min(16*(group+1),len(padded)//64)):
+   block_start=len(out)
    bn=f'B{bi:03}';block_names.append(bn+'.input');out += [f'namespace {bn}']
+   compact=kind=='P' and group>=28
+   localdefs=[]
    b=padded[64*bi:64*(bi+1)];w=[int.from_bytes(b[j:j+4],'big') for j in range(0,64,4)];s=h
-   out += [f'def input : List Nat := {ls(b)}',f'def start : Reg := {reg(h)}',f'def w00 : List Nat := {ls(w)}',f'def s00 : Reg := start']
+   hist=[(w,s)]
+   out += [f'def input : List Nat := {ls(b)}',f'def start : Reg := {reg(h)}']
+   if compact:localdefs += [f'  let w00 : List Nat := {ls(w)}', '  let s00 : Reg := start']
+   else:out += [f'def w00 : List Nat := {ls(w)}',f'def s00 : Reg := start']
    for j,k in enumerate(K):
     sn=step(s,k,w[0]);wn=advance(w)
-    out += [f'def w{j+1:02} : List Nat := {ls(wn)}',f'def s{j+1:02} : Reg := {reg(sn)}'];s,w=sn,wn
+    if compact:localdefs += [f'  let w{j+1:02} : List Nat := {ls(wn)}',f'  let s{j+1:02} : Reg := {reg(sn)}']
+    else:out += [f'def w{j+1:02} : List Nat := {ls(wn)}',f'def s{j+1:02} : Reg := {reg(sn)}']
+    s,w=sn,wn
+    hist.append((w,s))
    hn=[(x+y)&mask for x,y in zip(h,s)]
-   out += [f'def result : Reg := {reg(hn)}','theorem checked : compress start (words input)=result := by','  have parsed : words input=w00 := by rfl','  rw [parsed]','  unfold compress loop','  change add start (constants.foldl transition (w00,s00)).2=result']
+   out += [f'def result : Reg := {reg(hn)}','theorem checked : compress start (words input)=result := by']+localdefs+['  have parsed : words input=w00 := by rfl','  rw [parsed]','  unfold compress loop','  change add start (constants.foldl transition (w00,s00)).2=result']
    for j,k in enumerate(K):out += [f'  have t{j:02} : transition (w{j:02},s{j:02}) {k}=(w{j+1:02},s{j+1:02}) := by rfl']
    out += ['  unfold constants']
    for j in range(64):out += [f'  rw [List.foldl_cons,t{j:02}]']
-   out += ['  rw [List.foldl_nil]','  rfl','#print axioms checked',f'end {bn}'];h=hn
+   out += ['  rw [List.foldl_nil]','  rfl','#print axioms checked',f'end {bn}']
+   if compact:out[block_start:]=compact_certificate(bn,b,h,hist,hn)
+   h=hn
   out += ['def chunks : List (List Nat) := ['+','.join(block_names)+']']
   if not (kind=='C' and group==0):
    first=16*group;last=min(16*(group+1),len(padded)//64)-1
