@@ -310,17 +310,22 @@
     "shift_adaptations": []
   },
   {
-    "module": "PV_R2_D38_all_slots_clear_loop0_body",
+    "module": "PV_R2_D38_all_slots_clear_loop0_body_U32",
     "op": 258,
     "declaration": "all_slots_clear_loop0.body",
-    "file": "evidence/pv-route2-20261027/lean/PV_R2_D38_all_slots_clear_loop0_body.lean",
+    "file": "evidence/pv-route2-20261027/lean/PV_R2_D38_all_slots_clear_loop0_body_U32.lean",
     "raw_block_sha256": "7cb1708b081f3b427bdb24118a4c561284420ebd58a508494306e386a47294e3",
     "shift_adaptations": [
       [
         "Std.Usize.wrapping_shr row 4#i32",
         "Std.Usize.wrapping_shr row 4#u32"
       ]
-    ]
+    ],
+    "dynamic_shift_adapter": {
+      "before": "  let i4 \u2190 lift (Std.U16.wrapping_shl 1#u16 i3)",
+      "after": "  let shift \u2190 lift (UScalar.cast .U32 i3)\n  let i4 \u2190 lift (Std.U16.wrapping_shl 1#u16 shift)",
+      "side_condition": "i3 = row & 15; hence i3 <= 15, cast fits U32; source transport proof remains required"
+    }
   },
   {
     "module": "PV_R2_D39_all_slots_clear_loop0",

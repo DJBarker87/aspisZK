@@ -1,8 +1,8 @@
 from pathlib import Path
 import subprocess,hashlib,json,time,sys,re
 D=Path('/home/dombarker/project-offloads/codex-pv-route2-20261027');J=Path('/home/dombarker/project-offloads/aspis-joint-20261019');T=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence');L='/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh'
-rows=json.loads((D/'split.json').read_text());nextid=int(sys.argv[1]);budget=int(sys.argv[2]);done=[]
-for row in rows:
+rows=json.loads((D/'split.json').read_text());nextid=int(sys.argv[1]);budget=int(sys.argv[2]);done=json.loads((D/'TALLY.json').read_text())['receipts'] if (D/'TALLY.json').exists() else []
+for row in rows[int(sys.argv[3]) if len(sys.argv)>3 else 0:]:
  if len(done)>=budget:break
  module=row['module'];src=D/'lean'/(module+'.lean');dst=J/'sources'/(module+'.lean');assert not dst.exists(),str(dst);dst.write_bytes(src.read_bytes())
  deps={}
