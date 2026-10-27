@@ -1,0 +1,34 @@
+-- UNCOMPILED after the authoritative library pin mismatch. No credit claimed.
+import R1Z.PV_RE_DictSuffix073
+import R1Z.PV_RE_RetryRestored
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RE_DictionaryContinuation
+open Aeneas Aeneas.Std Result ProverRwFull PV_RE_RetryStep
+variable [ExternalTypes] [ExternalFuns]
+
+/-- Exactly the RHS of whole_client, keeping all outcomes. -/
+def equationResult {C : Type}
+    (entropy : core.ops.function.FnMut C Usize (Array U8 32#usize))
+    (pub : Public) (compiled : Compiled) (hash : Hash) (store : Store) (state : C) : Reply :=
+  ExternalFuns.op233 .S2 .S2 >>= fun equal =>
+    if !equal then .ok (.Err .Semantic,store)
+    else PV_RE_ContinuationRetry.runCPS
+      (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError entropy)
+      pub compiled .S2 hash 8 store state 0#usize
+
+theorem equation {C : Type}
+    (entropy : core.ops.function.FnMut C Usize (Array U8 32#usize))
+    (pub : Public) (compiled : Compiled) (hash : Hash) (store : Store) (state : C) :
+    RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+      equationResult entropy pub compiled hash store state :=
+  PV_RE_ContinuationRetry.whole_client entropy pub compiled hash store state
+end R1Z.PV_RE_DictionaryContinuation
+
+-- These produce function equalities with one explicit equality hypothesis
+-- per dictionary field, using symbolic body/callee congruence only.
+pv_dict_congr R1Z.PV_RE_ContinuationRetry.runCPS
+pv_dict_congr R1Z.PV_RE_DictionaryContinuation.equationResult
+#print axioms R1Z.PV_RE_DictionaryContinuation.equation
+#print axioms R1Z.PV_RE_DictCore.R1Z.PV_RE_ContinuationRetry.runCPS
+#print axioms R1Z.PV_RE_DictCore.R1Z.PV_RE_DictionaryContinuation.equationResult

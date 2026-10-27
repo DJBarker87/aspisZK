@@ -13,6 +13,7 @@ for i,row in enumerate(rows):
  text=old.read_text();text=text[:text.index('/-- No branch is discarded')]
  mod=f'PV_RE_DictSuffix{i:03}'
  text=text.replace('import R1Z.ProverRwFullFuns',f'import R1Z.PV_RE_DictSuffix{i-1:03}' if i else 'import R1Z.PV_RE_Dict000').replace(f'namespace R1Z.PV_RE_Continue{i:03}',f'namespace R1Z.{mod}')
+ if i==9:text='import R1Z.PV_RE_DictGenerator\n'+text
  text+=f'\nend R1Z.{mod}\npv_dict_congr ProverRwFull.{row["function"]}\npv_dict_congr R1Z.{mod}.continueAfter\n'
  for n in ['ProverRwFull.'+row['function'],f'R1Z.{mod}.continueAfter']:
   text+=f'#print axioms R1Z.PV_RE_DictCore.{n}\n'

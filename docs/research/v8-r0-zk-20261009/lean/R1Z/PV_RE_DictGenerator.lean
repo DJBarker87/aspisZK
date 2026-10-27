@@ -33,6 +33,8 @@ partial def withAgreements (ops : Array Name) (ty d1 d2 : Expr) (i : Nat)
 partial def symbolic (e ty d1 d2 : Expr) (support : Array Name) (hs : Array Expr) : MetaM Expr := do
   if !(e.find? (· == d1)).isSome then return ← mkEqRefl e
   if ← isProof e then return ← mkEqRefl e
+  if (← whnf (← inferType e)).isSort then
+    if ← isDefEq e (e.replaceFVar d1 d2) then return ← mkEqRefl e
   if e.isApp && e.getAppNumArgs == 2 then
     let args := e.getAppArgs
     if args[0]! == ty && args[1]! == d1 then
