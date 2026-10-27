@@ -11319,3 +11319,26 @@ behaviour, the 20000-27099 block and the duplicate guard unchanged. Host edit wi
 +  case "$A" in 5[0-7][0-9][0-9]|[6-9][0-9][0-9][0-9]|1[0-9][0-9][0-9][0-9]|2[0-9][0-9][0-9][0-9]|3[0-9][0-9][0-9][0-9]|4[0-9][0-9][0-9][0-9]|5[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
 ```
 Privacy target not yet established.
+
+## D265 (Stream B) 2026-10-27 09:25 UTC: Recount 4 merged (OPEN 103 → 95, CLOSED-ON-CANDIDATE 27 → 35); op134 job launched
+
+pv-recount4 (`codex/pv-recount4-20261027`, merged 4103b624f8; 20/20 statement checks, 16 passed, three
+missing-object failures and one helper namespace error retained; no proofs, no Kani; branch deleted after
+confirming it is in research). All 407 rows re-derived; original rows preserved. Totals recount 3 → 4:
+OPEN 103 → 95; REDUCED 176 → 176; EVIDENCED 14 → 14; CLOSED-ON-RESEARCH 87 → 87; CLOSED-ON-CANDIDATE
+27 → 35. Closure routes of the 35: 27 extracted operation laws, 1 extraction bridge, 6 P6 gates (the
+library rows; bounded links and the Path carrier qualified), 1 axiom diagnostic (V270). Headline
+membership of the candidate closures: research 0, candidate consumer 29, neither 6 (the original 27
+reproduce the wire job's 0/26/1). OPEN buckets a/b/c/d (d = blocked by the shared extraction
+obstruction, new): 23/55/1/16, change −21/+4/−7/+16; the single remaining owner-first blocker is DOITM
+(V371). D248 applied: the three trust fields class T (adopted, capped), option B's condition a P row,
+inversion P. Corrections recorded: the wrong-source withdrawals of D243/D255 preserved; op229
+deduplicated; bounded P6 links and Path carriers qualified; op36 adapter failures distinguished from the
+shipped generic conversion; V164/V240 count as one callback decrement. Next independent rows named: V403
+(canonical domain, pv-canon running), V400 (option-B failure synchronisation, pv-optb2 running), V230/op134
+(source correspondence). Launched pv-op134 (`codex/pv-op134-20261027` from pv-cbmid's branch in the
+reused pv-cb3 worktree; first IDs of Stream B's new range 50000-50299; 100 Lean / 4 Kani control only):
+direct extraction of the shipped function with the unchanged tool and its source law, or, if the tool
+refuses it, the exact refusal, a route (ii) design entry and the complete reference side. Six slots:
+runjoin12, op223, canon, optb2, cblib3, op134. Rows removed outright: 0. Privacy target not yet
+established.
