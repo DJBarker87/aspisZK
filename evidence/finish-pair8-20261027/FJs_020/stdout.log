@@ -1,0 +1,72 @@
+FJs_LiteralPair.lean:45:15: error(lean.unknownIdentifier): Unknown identifier `FJs_FunctionalWeights.rows`
+FJs_LiteralPair.lean:26:75: error: unsolved goals
+r : NP6_StdModel.Reservation
+seed : Stage2Finish.FinishOps FIo_Install.W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+parsed : OraclePortCompactDraft.Parsed
+data : RecordedBinaryExperimentBin.SourceInputs
+view : LiteralOpeningView.View
+q : Fin 22 → Fin 262144
+am : QueryAccumulator.State K E
+fields :
+  CheckpointBytes4SavedFields.BodyMatches p a
+    (OraclePortCheckpointResumeC5.prepared (OraclePortAcceptedContextC6.context parsed data view) data.data
+      (SelectedChallengeMap.rhoOf data.rho) q)
+    am
+rs : List (LiteralTranscript.Message × LiteralTranscript.Challenge)
+matching : LiteralMatchingData.read rs = some data.data
+opening : LiteralOpeningView.read rs = some view
+range : ∀ (j : Fin 10), FIr_SampleRange.InBase ((List.map Prod.snd view.semantic).getD (15 + ↑j) 0)
+encoded : SelectedFieldSequenceCodec.encodeWide data.data.f = MultiproofConeCanonical.bytesOf ↑v.final_message
+w : FIo_Install.W
+alpha : Slice Stage2Finish.E
+out : Stage2Finish.E
+hw : (FIo_Install.finishOps r seed).newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok w)
+hp :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice Stage2Finish.E))
+      p.alpha { «end» := 2#usize } =
+    ok alpha
+run : (FIo_Install.finishOps r seed).pair w alpha v.final_message p.kappa = ok (core.result.Result.Ok out)
+a0 a1 : FIo_FieldBridge.NE
+p0 p1 : FIn_WeightsExtract.circle.SecureCirclePoint
+h0 : (FIo_Install.toSlice alpha).index_usize 0#usize = ok a0
+h1 : (FIo_Install.toSlice alpha).index_usize 1#usize = ok a1
+hz0 : (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toPoint p.z).index_usize 0#usize = ok p0
+hz1 : (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toPoint p.z).index_usize 1#usize = ok p1
+body :
+  CheckpointBytes5Output.ofE out =
+    RoundPairing.dot (fun i => FJc_InactiveCoefficientsModel.field v.final_message ↑i)
+      (RoundPairing.dualFold (AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide a1))
+        (RoundPairing.dualFold (AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide a0)) fun i =>
+          ∑ j, CheckpointBytes5Output.ofE p.kappa ^ ↑j * FJr_PairRows.rows p.semantic_alpha p0 p1 j i))
+sem : SelectedOpeningFunctionals.alpha (List.map Prod.snd view.semantic) = fun j => embed (point p.semantic_alpha j)
+cz :
+  FJc_WeightValues.decode p0.x =
+      (OraclePortCheckpointResumeC5.prepared (OraclePortAcceptedContextC6.context parsed data view) data.data
+            (SelectedChallengeMap.rhoOf data.rho) q).coordinates
+        0 ∧
+    FJc_WeightValues.decode p0.y =
+        (OraclePortCheckpointResumeC5.prepared (OraclePortAcceptedContextC6.context parsed data view) data.data
+              (SelectedChallengeMap.rhoOf data.rho) q).coordinates
+          1 ∧
+      FJc_WeightValues.decode p1.x =
+          (OraclePortCheckpointResumeC5.prepared (OraclePortAcceptedContextC6.context parsed data view) data.data
+                (SelectedChallengeMap.rhoOf data.rho) q).coordinates
+            2 ∧
+        FJc_WeightValues.decode p1.y =
+          (OraclePortCheckpointResumeC5.prepared (OraclePortAcceptedContextC6.context parsed data view) data.data
+                (SelectedChallengeMap.rhoOf data.rho) q).coordinates
+            3
+rz0 : FIr_SampleRange.InBase (↑(view.circlePoints 0)).1 ∧ FIr_SampleRange.InBase (↑(view.circlePoints 0)).2
+rz1 : FIr_SampleRange.InBase (↑(view.circlePoints 1)).1 ∧ FIr_SampleRange.InBase (↑(view.circlePoints 1)).2
+x0 : (↑(view.circlePoints 0)).1 = embed (FJc_WeightValues.decode p0.x)
+y0 : (↑(view.circlePoints 0)).2 = embed (FJc_WeightValues.decode p0.y)
+x1 : (↑(view.circlePoints 1)).1 = embed (FJc_WeightValues.decode p1.x)
+y1 : (↑(view.circlePoints 1)).2 = embed (FJc_WeightValues.decode p1.y)
+⊢ CheckpointBytes5Output.ofE out =
+    RoundPairing.dot data.data.f
+      (RoundPairing.dualFold data.data.alpha1
+        (RoundPairing.dualFold data.data.alpha0 (FunctionalWeights.weights data.data.F data.data.F0 data.data.kappa)))
+'AspisR1.FJs_LiteralPair.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

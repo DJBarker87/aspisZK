@@ -1,0 +1,28 @@
+FJs_FinalMessage.lean:11:72: error: unsolved goals
+fm : Slice U8
+f : Fin 64 → AspisWideTower.WideExact
+encoded : SelectedFieldSequenceCodec.encodeWide f = MultiproofConeCanonical.bytesOf ↑fm
+decoded :
+  List.length (MultiproofConeCanonical.bytesOf ↑fm) = 64 * 32 ∧
+    ∀ (i : Fin 64),
+      FoldedLeafCodec.decodeWide (List.take 32 (List.drop (32 * ↑i) (MultiproofConeCanonical.bytesOf ↑fm))) = some (f i)
+i : Fin 64
+⊢ (FoldedLeafCodec.decodeWide (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑fm) (32 * ↑i) 32)).getD
+      0 =
+    f i
+FJs_FinalMessage.lean:16:49: warning: This simp argument is unused:
+  decoded.2 i
+
+Hint: Omit it from the simp argument list.
+  simp only [FJc_InactiveCoefficientsModel.field,d̵e̵c̵o̵d̵e̵d̵.̵2̵ i̵,̵Option.getD_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJs_FinalMessage.lean:16:61: warning: This simp argument is unused:
+  Option.getD_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵J̵c̵_̵I̵n̵a̵c̵t̵i̵v̵e̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵M̵o̵d̵e̵l̵.̵f̵i̵e̵l̵d̵,̵d̵e̵c̵o̵d̵e̵d̵.̵2̵ ̵i̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵[̲F̲J̲c̲_̲I̲n̲a̲c̲t̲i̲v̲e̲C̲o̲e̲f̲f̲i̲c̲i̲e̲n̲t̲s̲M̲o̲d̲e̲l̲.̲f̲i̲e̲l̲d̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲.̲2̲ ̲i̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJs_FinalMessage.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJs_FinalMessage.length' depends on axioms: [propext, Classical.choice, Quot.sound]

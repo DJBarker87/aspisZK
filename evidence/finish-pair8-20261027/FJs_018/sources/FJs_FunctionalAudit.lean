@@ -1,0 +1,10 @@
+import R1LiteralMatchingSemanticData
+import R1LiteralOpeningFunctionalFacts
+set_option pp.all true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#print AspisR1.LiteralMatchingSemanticData.read_matches_view
+#print AspisR1.LiteralOpeningFunctionalFacts.read_functionals
+#print AspisR1.SelectedOpeningFunctionals.functionals
+#print AspisR1.SelectedOpeningFunctionals.rawBase
+#print axioms AspisR1.LiteralMatchingSemanticData.read_matches_view
