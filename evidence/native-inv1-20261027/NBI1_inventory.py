@@ -80,7 +80,7 @@ for p,b in files.items():
      if re.search(r'\b(mul|mul_m31|mul_qm31|add|sub|inv|square|double|reduce_u64|neg|pow)\b',expr):field.append(expr)
     if c.type in ('for_expression','while_expression','loop_expression'):loops.append({'line':c.start_point.row+1,'head':t.split('{')[0].strip()})
     if c.type=='reference_expression' and t.startswith('&mut'):mut.append({'line':c.start_point.row+1,'expression':t[:180]})
-   funcs[key]={'id':key,'file':p,'line':n.start_point.row+1,'end_line':n.end_point.row+1,'name':name,'owner':owner,'body_sha256':sha(b[body.start_byte:body.end_byte]),'function_sha256':sha(b[n.start_byte:n.end_byte]),'calls':calls,'loops':loops,'mutable_borrows':mut,'mutable_signature': '&mut' in b[n.start_byte:body.start_byte].decode(),'field_arithmetic':sorted(set(field)),'oracle_digest_calls':sorted(set(digest))}
+   funcs[key]={'id':key,'file':p,'line':n.start_point.row+1,'end_line':n.end_point.row+1,'name':name,'owner':owner,'body_byte_range':[body.start_byte,body.end_byte],'function_byte_range':[n.start_byte,n.end_byte],'body_sha256':sha(b[body.start_byte:body.end_byte]),'function_sha256':sha(b[n.start_byte:n.end_byte]),'calls':calls,'loops':loops,'mutable_borrows':mut,'mutable_signature': '&mut' in b[n.start_byte:body.start_byte].decode(),'field_arithmetic':sorted(set(field)),'oracle_digest_calls':sorted(set(digest))}
    nodes[key]=(n,body,b)
    for c in body.named_children:
     if c.type=='function_item':visit(c,owners+(name,),off)
@@ -94,7 +94,7 @@ for mn in ('new','get'):
  while depth:
   depth+=(mb[end]==123)-(mb[end]==125);end+=1
  line=mb[:start].count(b'\n')+1;k=mp+'::FibreIndex::'+mn+'@'+str(line)
- funcs[k]={'id':k,'file':mp,'line':line,'end_line':mb[:end].count(b'\n')+1,'name':mn,'owner':'FibreIndex','body_sha256':sha(mb[op:end]),'function_sha256':sha(mb[start:end]),'calls':[],'loops':[],'mutable_borrows':[],'mutable_signature':False,'field_arithmetic':[],'oracle_digest_calls':[],'macro_origin':'index_type!(FibreIndex,FIBRE_COUNT), line24; template body SHA; bound=262144'}
+ funcs[k]={'id':k,'file':mp,'line':line,'end_line':mb[:end].count(b'\n')+1,'name':mn,'owner':'FibreIndex','body_byte_range':[op,end],'function_byte_range':[start,end],'body_sha256':sha(mb[op:end]),'function_sha256':sha(mb[start:end]),'calls':[],'loops':[],'mutable_borrows':[],'mutable_signature':False,'field_arithmetic':[],'oracle_digest_calls':[],'macro_origin':'index_type!(FibreIndex,FIBRE_COUNT), line24; template body SHA; bound=262144'}
 # Save index for review; selected inventory uses explicit call resolution below.
 (OUT/'NBI1_AST_INDEX.json').write_text(json.dumps({'files':{p:{'sha256':sha(b),'working_copy_matches':Path(p).read_bytes()==b} for p,b in files.items()},'functions':list(funcs.values())},indent=2)+'\n')
 print('Indexed',len(files),'source files,',len(funcs),'functions')
@@ -135,6 +135,11 @@ def resolve(f,c):
  name=re.search(r'([A-Za-z_]\w*)$',expr)
  if not name:return [],'builtin/constructor'
  name=name[1];cand=byname.get(name,[])
+ node_info=nodes.get(f['id'])
+ if node_info and '.' not in expr and '::' not in expr:
+  ni,bi,source=node_info;body_text=source[bi.start_byte:bi.end_byte].decode();sig=source[ni.start_byte:bi.start_byte].decode()
+  if re.search(r'\blet\s+'+re.escape(name)+r'\s*=\s*(?:move\s+)?\|',body_text):return [],'inline closure (body inventoried in parent)'
+  if re.search(r'\b'+re.escape(name)+r'\s*:\s*fn\b',sig):return [],'function-pointer parameter (caller must bind)'
  if name=='hashv':return [],'Solana SHA256 syscall boundary'
  if name=='digest':
   return [k for k in byname.get('digest',[]) if funcs[k]['file']=='programs/r1-cost-probe/src/lib.rs'],'concrete SolanaDigest backend'
@@ -161,13 +166,21 @@ def resolve(f,c):
    typed=[k for k in cand if simpleowner(funcs[k]['owner'])==qual and funcs[k]['file']=='crates/aspis-r1-cost-probe/src/r1_wire.rs']
    if typed:return typed,'R1 wire type'
   typed=[k for k in cand if simpleowner(funcs[k]['owner'])==qual]
-  if typed:return typed,'qualified type'
+  if typed:
+   own=[k for k in typed if funcs[k]['file']==f['file']]
+   if own:typed=own
+   elif qual in ('M31','CM31','QM31','WideExact'):typed=[k for k in typed if '/r0/scalar.rs' not in funcs[k]['file']]
+   elif qual=='Transcript' and 'aspis-r1-cost-probe' in f['file']:typed=[k for k in typed if 'aspis-r1-cost-probe' in funcs[k]['file']]
+   elif qual=='Selectors' and 'pair_forest' in f['file']:typed=[k for k in typed if funcs[k]['file'].endswith('pair_forest_copy_terminal.rs')]
+   return typed,'qualified type'
   module=[k for k in cand if Path(funcs[k]['file']).stem==qual or '/'+qual+'/' in funcs[k]['file'] or qual in funcs[k]['owner'].split('::')]
   if parts[0].startswith('aspis_'):module=[k for k in module if '/'+parts[0].replace('_','-')+'/' in funcs[k]['file']]
   if module:return module,'qualified module'
  if '.' in expr:
   receiver=expr.split('.')[0]
   owner=None
+  if name=='raw' and f['file'].endswith('fast_pairing.rs'):
+   return [k for k in cand if funcs[k]['file']==f['file'] and funcs[k]['owner']=='canonical::Q'],'canonical private-Q receiver'
   if receiver=='self':
    owner=simpleowner(f['owner'])
    if receiver+'.c' in expr and 'fast_pairing' in f['file']:owner='Dot'
@@ -193,7 +206,12 @@ def resolve(f,c):
     typed=[k for k in cand if simpleowner(funcs[k]['owner'])==owner and funcs[k]['file'].endswith('pair_forest_semantic_terminal.rs')]
     if typed:return typed,'R1 semantic public receiver'
    typed=[k for k in cand if simpleowner(funcs[k]['owner'])==owner]
-   if typed:return typed,'receiver owner'
+   if typed:
+    own=[k for k in typed if funcs[k]['file']==f['file']]
+    if own:typed=own
+    elif owner=='Transcript' and 'aspis-r1-cost-probe' in f['file']:typed=[k for k in typed if 'aspis-r1-cost-probe' in funcs[k]['file']]
+    elif owner=='Selectors' and 'pair_forest' in f['file']:typed=[k for k in typed if funcs[k]['file'].endswith('pair_forest_copy_terminal.rs')]
+    return typed,'receiver owner'
   if name in std or name in ('push','hash','trace','get'):return [],'standard library/runtime or callback'
   # Field operation overloads: record carrier candidates, do not choose one silently.
   if name in ('mul','add','sub','square','inv','double','neg','pow','half','mul_m31','mul_qm31','c0','c1','to_le_bytes','to_limbs','from_qm31','write_le_bytes'):
@@ -204,7 +222,9 @@ def resolve(f,c):
    return typed,'field-carrier overapproximation'
  else:
   local=[k for k in cand if funcs[k]['file']==f['file'] and (not funcs[k]['owner'] or funcs[k]['owner']==f['owner'])]
-  if local:return local,'lexical function'
+  if local:
+   free=[k for k in local if not funcs[k]['owner']]
+   return free or local,'lexical function'
   nested=[k for k in cand if funcs[k]['file']==f['file'] and funcs[k]['owner']==f['owner']+'::'+f['name']]
   if nested:return nested,'nested function'
   if f['owner']:
