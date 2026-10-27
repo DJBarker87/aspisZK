@@ -1,10 +1,10 @@
 {
-  "schema": "V374-D290-admission-abort-v1",
-  "status": "ABORTED_BEFORE_WINDOW",
+  "schema": "V374-D293-pre-sampling-monitor-abort-v1",
+  "status": "ABORTED_BEFORE_SAMPLING",
   "V374": "OPEN/P",
   "target": "not yet established",
   "branch": "codex/pv-dudect-20261027",
-  "source_revision": "22e752057b517274249cffaba8d8bbb74ba2f00e",
+  "source_revision": "30c33282edcabbfc0c21d93536cf2c9ddfbe2e9c",
   "candidate_revision": "73070ddd512bc4e79edfc0db714fb64dc74e87b8",
   "plan": "evidence/pv-l3-20261027/dual/V374-PLAN-v2.md",
   "binary_sha256": {
@@ -14,39 +14,31 @@
   "binary_identity_verified": true,
   "binary_rebuild": false,
   "drain": {
-    "start_epoch": 1793110231.6325622,
-    "start_utc": "2026-10-27T14:10:31.632562+00:00",
-    "deadline_epoch": 1793111131.6325622,
-    "end_epoch": 1793111131.6773162,
-    "end_utc": "2026-10-27T14:25:31.677316+00:00",
-    "elapsed_seconds": 900.0447540283203,
-    "initial_poll_count": 20,
-    "recheck_poll_count": 31,
-    "brief_idle_snapshot_epoch": 1793110802.408276,
-    "brief_idle_snapshot_elapsed": 570.7757136821747,
-    "reason": "A brief idle snapshot was lost before final recheck. At original 900-second deadline, PV batch2 Rust compilation and other capped scopes remained active.",
-    "final_scopes": [
-      "run-ra6187047cbf244d7a06b3c0bff678bc5.scope loaded active running /usr/bin/python3 S2W_run_host.py LPf_K019.json",
-      "run-rb075a03c157e4783a6e2e21cbde04dc6.scope loaded active running /usr/bin/python3 S2W_run_host.py RPv_0474.json",
-      "run-rc9f26b3e8c5b4106a2560c4522a947cd.scope loaded active running /usr/bin/python3 S2W_run_host.py LPg_K013.json",
-      "run-rdaa61bb2fb584761b2208b8761a31839.scope loaded active running /usr/bin/python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/build-baseline-001/admission-barrier.json python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/capped.py /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/build-baseline-001/receipt \"optimized compilation\" -- cargo build --release --offline --locked -j 4 -p aspis-r1-cost-probe --example prover_rw_gate --features optimized-terminal,r1p-check,ct-host-prover"
-    ],
-    "remote_recheck_gate_exit": 78,
-    "local_tee_pipeline_exit": 0
+    "start_epoch": 1793111417.5309672,
+    "end_epoch": 1793111507.5378428,
+    "elapsed_seconds": 90.00848629296524,
+    "poll_count": 4,
+    "interval_seconds": 30,
+    "final_scopes": []
   },
   "window": {
-    "created": false,
-    "start": null,
-    "until": null,
-    "marker_removal_time": null,
-    "marker_removal_reason": "Not applicable: marker never created",
-    "absence_verified_epoch": 1793111146.0945308,
-    "absence_verified_utc": "2026-10-27T14:25:46.094531+00:00",
-    "marker_absent": true,
-    "authorized_seconds": 1200,
+    "created": true,
+    "start_epoch": 1793111417.5075552,
+    "start_utc": "2026-10-27T14:30:17.507555+00:00",
+    "until_epoch": 1793112917.5075552,
+    "until_utc": "2026-10-27T14:55:17.507555+00:00",
+    "marker": {
+      "until": 1793112917.5075552,
+      "owner": "stream-b-pv-dudect",
+      "purpose": "V374 dudect"
+    },
+    "marker_removal_epoch": 1793111507.697368,
+    "marker_removal_utc": "2026-10-27T14:31:47.697368+00:00",
+    "removed": true,
+    "absent": true,
     "extended": false
   },
-  "measurement_scope_started": false,
+  "measurement_scope_started": true,
   "analysis_run": false,
   "raw_samples": 0,
   "threshold": 4.5,
@@ -54,15 +46,24 @@
   "DOITM": "OFF (V371 retained)",
   "print_axioms": "N/A: no Lean",
   "resources": {
-    "own_host_capped_scopes": 0,
-    "exit_status": "N/A: measurement not launched; remote read-only recheck exited 78",
-    "wall_seconds": null,
-    "peak_rss_bytes": null,
-    "swap_bytes": null
+    "scope": "run-rb8932905ec794872bd56b37d9e53158a.scope",
+    "entrypoint_exit": 1,
+    "worker_exit_status": 78,
+    "wall_seconds": 0.0006462269811891019,
+    "cgroup_memory_peak_bytes": 6631424,
+    "peak_process_RSS": "N/A: sampler never started; worker records cgroup memory.peak, not process RSS",
+    "swap_peak_bytes": 0,
+    "limits": {
+      "memory.high": "6442450944",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "pids.max": "64"
+    },
+    "print_axioms": "N/A: no Lean"
   },
-  "conformance": "Plan-compliant pre-window abort; no experiment executed and none qualifies for a pass.",
+  "conformance": "Required pre-sampling guard abort; no experiment ran and none qualifies as a pass. Authorized D293 orchestration supersedes requested 900-second marker with 1500 seconds, marker before drain.",
   "deviations": [
-    "No measurement deviation: the user-authorized 1200-second marker would supersede the plan's 900-second requested window, but no marker was written."
+    "Lead-authorized orchestration: fixed 1500-second marker before up-to-600-second drain instead of original lead-created 900-second marker. No experiment classes, counts, thresholds, kernels or analysis changed."
   ],
   "premises": {
     "removed": [],
@@ -75,11 +76,11 @@
       "existing three-field T unchanged"
     ]
   },
-  "next_deliverable": "Lead coordinates a genuine host drain and a new authorized window; execute the unchanged pinned plan, retain raw counts/status/environment, then run offline analysis and review any crossings.",
+  "next_deliverable": "Lead investigates unavailable thermal_zone6 temperature and supplies a reviewed monitor/configuration or newly scheduled qualified window; do not suppress the guard or rerun unchanged.",
   "experiments": {
     "mask-m31": {
       "classes": "fixed / random seed",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -1300,7 +1301,7 @@
     },
     "mask-qm31": {
       "classes": "fixed / random seed",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -2521,7 +2522,7 @@
     },
     "mask-m31-reject": {
       "classes": "fixed canonical internal block / random block with first word P",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -3742,7 +3743,7 @@
     },
     "mask-qm31-reject": {
       "classes": "fixed canonical internal block / random block with first word P",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -4963,7 +4964,7 @@
     },
     "pole": {
       "classes": "fixed / random nonzero QM31 repeated over slots",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -6184,7 +6185,7 @@
     },
     "m31-inv": {
       "classes": "fixed 7 / random nonzero canonical M31",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -7405,7 +7406,7 @@
     },
     "qm31-inv": {
       "classes": "fixed (7,0,0,0) / random nonzero QM31",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -8626,7 +8627,7 @@
     },
     "compress": {
       "classes": "sixteen fixed 7 / sixteen random canonical limbs",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -9847,7 +9848,7 @@
     },
     "seed-field": {
       "classes": "fixed / random private seed",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -11068,7 +11069,7 @@
     },
     "seed-salt": {
       "classes": "fixed / random private seed",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -12289,7 +12290,7 @@
     },
     "seed-field-zero": {
       "classes": "zero / random private seed",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -13510,7 +13511,7 @@
     },
     "seed-salt-zero": {
       "classes": "zero / random private seed",
-      "status": "NOT_RUN_ADMISSION_ABORT",
+      "status": "NOT_RUN_PRE_SAMPLING_MONITOR_ABORT",
       "preregistered_calls_per_class": 1000000,
       "observed_calls_per_class": [
         0,
@@ -14729,5 +14730,15 @@
         }
       ]
     }
-  }
+  },
+  "previous_attempt": "30c33282ed (D290: marker never created; no samples)",
+  "sampler_started": false,
+  "admission": {
+    "allowed": true,
+    "exit_status": 0,
+    "evidence": "d293/window-1793111507/admission.json",
+    "semantics": "Scanner exits 0 iff allowed=true; verified scanner source before launch, scope followed successful gate."
+  },
+  "abort_reason": "[Errno 61] No data available",
+  "abort_diagnostic": "Post-abort read of thermal_zone6/temp independently reproduced errno 61; initial guard reads this before metadata/sampler launch. No traceback identifies the original read, so attribution is an inference."
 }

@@ -1,19 +1,19 @@
-# D290 / V374 measurement admission abort
+# D290 / D293 — V374 pre-sampling monitor abort
 
-Target not yet established. **V374 remains OPEN/P.** No measurement was launched: the original 15-minute drain deadline expired with a PV batch Rust build and other capped workloads active. This is a plan-compliant pre-window abort, not a timing pass.
+Target not yet established. **V374 remains OPEN/P.** The corrected marker-before-drain order ran, admission succeeded, and the capped monitor aborted before launching the sampler with **`[Errno 61] No data available`**. No timing samples were collected. No rerun or infrastructure repair was attempted.
 
-Drain wait: **2026-10-27T14:10:31.632562+00:00 to 2026-10-27T14:25:31.677316+00:00** (900.045 seconds). The first inventory observed an idle snapshot after 570.776 seconds; new jobs started before the final recheck. The remaining wait used the original deadline, not a reset. At expiry, `codex-pv-batch2-20261027/candidate/build-baseline-001` was running optimized Cargo compilation; S2W capped jobs also remained active. Raw inventories are in `d290/drain.jsonl` and `d290/recheck.jsonl`.
+Marker created **2026-10-27T14:30:17.507555+00:00**, fixed expiry **2026-10-27T14:55:17.507555+00:00** (1,500 seconds, never extended). Drain completed **2026-10-27T14:31:47.537843+00:00**, after 90.008 seconds and 4 inventories at 30-second intervals; no capped workload remained in the final inventory. The initial scope was `run-r1887c3b2f17746f2a8b6bb3e99f9072e.scope`, running `LPg_K022` in `codex-cx-leaf-p6-7-20261027`. **The exit trap removed the marker at 2026-10-27T14:31:47.697368+00:00; absence was verified again after the abort.** Sampling start/end: N/A.
 
-**Window start/end: N/A. Marker removal time: N/A; never created.** Final absence was verified at 2026-10-27T14:25:46.094531+00:00. No window directory, entrypoint log or marker-created receipt exists. The authorized 1,200-second marker was never needed; no window was extended.
-
-Both binary hashes matched before the wait, with the harness reverified in the final-recheck driver. No rebuild occurred:
+Both binary hashes matched the preregistration before marker creation and were rechecked by the unchanged window entrypoint. No rebuild occurred:
 
 - Harness: `ede68055604cce057f3d0b96fa575b06f30290bba4bcdb50493b7b81a797eb02`.
 - Candidate: `161abfd8d155a2ccf35a461cd8e03fbf909e0f8b1c59efdddec1d76e74811472`.
 
-The remote read-only final-recheck gate exited 78 before marker creation/admission/sampling. Its local SSH-to-tee pipeline reported 0 because tee was the last command; that pipeline status is not admission. No capped scope was launched by this job. Sampling wall/RSS/swap and `#print axioms` are N/A. No Lean or Kani ran in this job.
+The exact planned entrypoint ran with `QUIET_WINDOW_OWNER=1`. Admission JSON says `allowed: true`; scanner exit was 0 (its inspected source returns 0 iff allowed is true). The monitor scope had MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, monitor CPU 0 and configured sampler CPU 2. Scope/entrypoint exit: 1; worker receipt status: 78. Worker wall: 0.000646227 s; cgroup memory peak: 6,631,424 bytes; swap peak: 0. This cgroup peak is not a process-RSS measurement. Sampler RSS/time and `#print axioms`: N/A; no sampler, Lean or Kani ran in this job.
 
-| Experiment | Raw counts (class 0 / 1) | Held-out/cropped counts | Maximum absolute t | Verdict |
+The initial guard failed before `metadata.py`, leaving no sampling `host.json`, CSV, status counts or calibration observations. The post-abort diagnostic independently reproduced errno 61 on `/sys/class/thermal/thermal_zone6/temp`; that is the likely failed read, inferred from the guard order rather than a captured traceback. Other readable thermal sensors were below 90 C. `d293/post-abort-host.json` records CPU identity/microcode, kernel, CPU policies/topology, frequency/temperature, ASLR, lockdown, rustc and processes; it is explicitly a post-abort snapshot. Admission identity/policy assertions passed; resolved features/toolchain provenance remain in the prepared metadata. No assertion of a quiet sampling environment follows.
+
+| Experiment | Raw class 0 / 1 | Held-out/cropped counts | Max absolute t | Verdict |
 |---|---:|---:|---:|---|
 | mask-m31 | 0 / 0 | 0 / 0 | N/A | Not run; no verdict |
 | mask-qm31 | 0 / 0 | 0 / 0 | N/A | Not run; no verdict |
@@ -28,9 +28,9 @@ The remote read-only final-recheck gate exited 78 before marker creation/admissi
 | seed-field-zero | 0 / 0 | 0 / 0 | N/A | Not run; no verdict |
 | seed-salt-zero | 0 / 0 | 0 / 0 | N/A | Not run; no verdict |
 
-`results.json` records every experiment and all 100 preregistered crop percentiles with zero counts and unavailable statistics/cutoffs. There are no raw CSVs, calibration samples, outcomes or t-tests, and offline analysis was not run. **No detected-difference finding can be made, and no no-leak verdict can be made.** The threshold remains absolute t < 4.5 for no leak DETECTED at the sample size (not proof of absence), and >= 4.5 for a timing difference DETECTED.
+`results.json` retains each experiment and all 100 crop percentiles, with zero counts and unavailable cutoffs, first-order/centered-square statistics and maxima. Analysis was not run because there are no samples. **No detected-difference finding and no no-leak verdict can be made.** The preregistered rule remains |t| < 4.5 = no leak DETECTED at this sample size (not proof of absence); |t| ≥ 4.5 = timing difference DETECTED. An incomplete budget is not a pass.
 
-**DOITM OFF (V371)** remains a substantive limitation. Pre-window host conditions are retained in `d290/host-before-window.json`: identity, microcode/kernel, governor/turbo/SMT topology, frequency/thermal snapshot, ASLR and running processes. These are not evidence of a quiet sampling environment.
+**DOITM OFF (V371)** remains a substantive retained limitation under Secure Boot lockdown.
 
 Kernel-specific instruction limits remain as follows; no result was obtained for any of them:
 
@@ -49,6 +49,8 @@ Kernel-specific instruction limits remain as follows; no result was obtained for
 
 See `INSTRUCTION-EQUIVALENCE.md` for the exact static comparisons. Any later timing result speaks directly for the pinned harness interval; matched leaves cannot establish whole-candidate or shipped-route timing equivalence.
 
-No source, class, count, threshold or kernel changed. No experiment was run non-conformingly. The user-authorized 20-minute marker would supersede the plan's requested 15-minute window, but it was never written. No wallet/account keys or funds were involved. No premise was removed, added, weakened or moved into T; V374, V371 and all independent endpoint/deployment obligations are retained.
+The D293-authorized fixed 1,500-second marker and marker-before-drain sequence supersede the plan's original 900-second marker scheduling. This orchestration change is recorded; no experiment ran non-conformingly. No implementation source, class, count, threshold or kernel changed. The evidence-only driver is retained as `d293/run-window.sh`; raw receipts are under `d293/window-1793111507/`. The previous D290 drain-before-marker failure remains in commit `30c33282ed` and `d290/`.
 
-Next deliverable: lead coordinates a genuine host drain and new authorized quiet window; execute the unchanged plan, retain raw samples/status/environment/monitor receipts, then run the preregistered offline analysis and review any threshold crossing.
+No premise was removed, added, weakened or moved into T. V374, V371 and every independent endpoint/deployment obligation remain retained. No keys or funds were involved.
+
+Next deliverable: lead investigates the unavailable thermal sensor and supplies a reviewed monitor/configuration or new qualified schedule. Do not suppress the guard or rerun unchanged. Then collect the full preregistered samples, analyze once after marker removal, and review any threshold crossings.
