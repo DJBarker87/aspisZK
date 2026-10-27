@@ -1,0 +1,25 @@
+import XRl_CheckpointLength
+import XRk_Tx1Association
+open Aeneas Aeneas.Std Result
+open XRk_Release
+namespace XRl_Tx1CheckpointSize
+/-- Compose the retained SAME prepared/checkpoint source cut with the newly
+checked external-model byte-size law. No native parser, authentication,
+expansion, physical account or chronological-effect premise is discharged. -/
+theorem accepted {H : Type} (d : aspis_core.digest.Digest32 H)
+    (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (physical proof : Slice U8) (split : Usize) (hash : H)
+    (obs : Option (verifier.Phase → Result Unit)) (bytes : alloc.vec.Vec U8)
+    (run : verifier.candidate.tx1 d pub physical proof split hash obs=ok (.Ok bytes)) :
+    ∃ (p : verifier.Prepared) (scratch : Array XRk_Wide 29#usize)
+      (zero : XRk_Wide) (a : verifier.Accumulator),
+      aspis_core.field.wide_exact.WideExact.ZERO=ok zero ∧
+      verifier.candidate.prepare d pub proof hash obs (Array.repeat 29#usize zero)=ok (.Ok p,scratch) ∧
+      verifier.checkpoint d p a proof physical hash=ok bytes ∧
+      bytes.val.length=(if p.variant matches .S1 then 4840 else 1768) := by
+  obtain ⟨p,scratch,zero,a,hzero,hprepare,hcheckpoint⟩ :=
+    XRk_Tx1Association.acceptedCandidateCheckpoint H d pub physical proof split hash obs bytes run
+  exact ⟨p,scratch,zero,a,hzero,hprepare,hcheckpoint,
+    XRl_CheckpointLength.accepted d p a proof physical hash bytes hcheckpoint⟩
+#print axioms accepted
+end XRl_Tx1CheckpointSize

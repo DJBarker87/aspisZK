@@ -1,0 +1,64 @@
+{"attempt": "XRl_L062", "exit_status": 1, "wall_seconds": 2.856287030968815, "peak_rss_kib": "2647308", "swaps": "0", "print_axioms": ["'XRl_WideBoundary.invalid_wide_accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRl_WideBoundary.invalid_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRl_WideBoundary.unchecked_wide_projection' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+XRl_generated/XRl_WideBoundary.lean:33:11: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.18 = ?m.18
+but is expected to have type
+  (if initial.count ≥ 4096#usize then ok (core.result.Result.Err (), initial)
+    else do
+      let a ← fast_pairing.canonical.Q.from_wide invalidWide
+      let value_c0 ← a.index_usize 0#usize
+      let value_c1 ← a.index_usize 1#usize
+      let r ← fast_pairing.checked_q qzero
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let d ←
+            ok
+                {
+                  sums :=
+                    ⟨List.map
+                    
+...
+al.Q.from_wide invalidWide
+      let value_c0 ← a.index_usize 0#usize
+      let value_c1 ← a.index_usize 1#usize
+      let r ← fast_pairing.checked_q qzero
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let d ←
+            ok
+                {
+                  sums :=
+                    ⟨List.map
+                        (fun i =>
+                          XRk_u64
+                            (↑((↑initial.c0.sums)[i]?.getD 0#u64) + XRk_partial ((XRk_raw value_c0 val)[i]?.getD 0)))
+                        (List.range 4),
+                      ⋯⟩ }
+          let d1 ←
+            ok
+                {
+                  sums :=
+                    ⟨List.map
+                        (fun i =>
+                          XRk_u64
+                            (↑((↑initial.c1.sums)[i]?.getD 0#u64) + XRk_partial ((XRk_raw value_c1 val)[i]?.getD 0)))
+                        (List.range 4),
+                      ⋯⟩ }
+          let i ← initial.count + 1#usize
+          ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame Unit) residual
+          ok (r1, initial)) =
+    ok (core.result.Result.Ok (), ?m.16)
+in the application
+  Exists.intro ?m.16 rfl
+'XRl_WideBoundary.invalid_wide_accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRl_WideBoundary.invalid_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRl_WideBoundary.unchecked_wide_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r32febee1dbdb4ad099f7293e5888af1f.scope; invocation ID: 3ca659d5bda046a2883444df547bf15e

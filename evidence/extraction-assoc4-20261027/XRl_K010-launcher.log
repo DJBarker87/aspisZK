@@ -1,0 +1,55 @@
+{"attempt": "XRl_K010", "exit_status": 0, "wall_seconds": 0.629834114050027, "peak_rss_kib": "142548", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` an
+...
+s.rs:29:39
+   |
+29 | #[kani::proof] #[kani::unwind(14)] fn XRl_checkpoint_query_word(){
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrl_checkpoint_query_word`
+
+warning: function `XRl_checkpoint_scalar_bytes` should have a snake case name
+  --> XRl_harnesses.rs:37:39
+   |
+37 | #[kani::proof] #[kani::unwind(18)] fn XRl_checkpoint_scalar_bytes(){
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrl_checkpoint_scalar_bytes`
+
+warning: function `XRl_checkpoint_wide_bytes` should have a snake case name
+  --> XRl_harnesses.rs:44:39
+   |
+44 | #[kani::proof] #[kani::unwind(34)] fn XRl_checkpoint_wide_bytes(){
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrl_checkpoint_wide_bytes`
+
+warning: function `XRl_checkpoint_next` should have a snake case name
+  --> XRl_harnesses.rs:50:39
+   |
+50 | #[kani::proof] #[kani::unwind(18)] fn XRl_checkpoint_next(){
+   |                                       ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrl_checkpoint_next`
+
+warning: function `XRl_checkpoint_layout` should have a snake case name
+  --> XRl_harnesses.rs:56:19
+   |
+56 | #[kani::proof] fn XRl_checkpoint_layout(){
+   |                   ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrl_checkpoint_layout`
+
+    Finished `dev` profile [optimized] target(s) in 0.22s
+Checking harness XRl_harnesses::XRl_checkpoint_layout...
+
+VERIFICATION RESULT:
+ ** 0 of 22 failed
+
+ ** 3 of 3 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.15733027s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r8da37561d19a4968b5cdc86c8f48cf75.scope; invocation ID: dfa6e0324ab84789b5b1c6aad31fe051

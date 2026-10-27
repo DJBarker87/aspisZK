@@ -1,0 +1,60 @@
+XRl_generated/XRl_ReverseCursor.lean:27:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case some
+T : Type
+s next : core.slice.iter.IterMut T
+v : Option T
+back : Back T
+run✝ :
+  (do
+      let (v, r) ←
+        core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back
+            { slice := s.slice, i := ↑0#usize }
+      ok
+          (v, { slice := r.slice, i := s.i }, fun updated item =>
+            match item with
+            | none => updated
+            | some x =>
+              if h : (↑updated.slice ++ [x]).length ≤ Usize.max then
+                { slice := ⟨↑updated.slice ++ [x], h⟩, i := updated.i }
+              else s)) =
+    ok (v, next, back)
+updated : core.slice.iter.IterMut T
+same : updated.i = s.i
+value : Option T
+state : core.slice.iter.Iter T
+left✝ :
+  core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back
+      { slice := s.slice, i := ↑0#usize } =
+    ok (value, state)
+run :
+  ok
+      (value, { slice := state.slice, i := s.i }, fun updated item =>
+        match item with
+        | none => updated
+        | some x =>
+          if h : (↑updated.slice ++ [x]).length ≤ Usize.max then { slice := ⟨↑updated.slice ++ [x], h⟩, i := updated.i }
+          else s) =
+    ok (v, next, back)
+backeq :
+  (fun updated item =>
+      match item with
+      | none => updated
+      | some x =>
+        if h : (↑updated.slice ++ [x]).length ≤ Usize.max then { slice := ⟨↑updated.slice ++ [x], h⟩, i := updated.i }
+        else s) =
+    back
+x : T
+⊢ ((fun updated item =>
+          match item with
+          | none => updated
+          | some x =>
+            if h : (↑updated.slice ++ [x]).length ≤ Usize.max then
+              { slice := ⟨↑updated.slice ++ [x], h⟩, i := updated.i }
+            else s)
+        updated (some x)).i =
+    s.i
+'XRl_Adapter.next_back_cursor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRl_Adapter.next_back_restoration_cursor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,76 @@
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.IterMut T
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+def Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next : {I Item : Type} →
+  core.iter.traits.iterator.Iterator I Item →
+    core.iter.adapters.enumerate.Enumerate I →
+      Result (Option (Usize × Item) × core.iter.adapters.enumerate.Enumerate I) :=
+fun {I Item} IteratorInst self => do
+  let __x ← IteratorInst.next self.iter
+  match __x with
+    | (opt, iter') =>
+      match opt with
+      | none => ok (none, { iter := iter', count := self.count })
+      | some a => do
+        let count' ← self.count + 1#usize
+        ok (some (self.count, a), { iter := iter', count := count' })
+def Aeneas.Std.core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next : {I Item : Type} →
+  core.iter.traits.double_ended.DoubleEndedIterator I Item →
+    core.iter.adapters.rev.Rev I → Result (Option Item × core.iter.adapters.rev.Rev I) :=
+fun {I Item} DEInst self => do
+  let __x ← DEInst.next_back self.iter
+  match __x with
+    | (o, it) => ok (o, { iter := it })
+def core.array.from_fn : {T F : Type} → (N : Usize) → core.ops.function.FnMut F Usize T → F → Result (Std.Array T N) :=
+fun {T F} N fnMut closure =>
+  match core.array.fromFnList fnMut (↑N) 0#usize closure with
+  | fail error => fail error
+  | div => div
+  | ok (values, snd) => if h : values.length = ↑N then ok ⟨values, h⟩ else fail Error.panic
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+structure Aeneas.Std.core.ops.function.FnMut.{u, v, w} (Self : Type u) (Args : Type v) (Output : Type w) :
+  Type (max (max u v) w)
+number of parameters: 3
+fields:
+  Aeneas.Std.core.ops.function.FnMut.FnOnceInst : core.ops.function.FnOnce Self Args Output
+  Aeneas.Std.core.ops.function.FnMut.call_mut : Self → Args → Result (Output × Self)
+constructor:
+  Aeneas.Std.core.ops.function.FnMut.mk.{u, v, w} {Self : Type u} {Args : Type v} {Output : Type w}
+    (FnOnceInst : core.ops.function.FnOnce Self Args Output) (call_mut : Self → Args → Result (Output × Self)) :
+    core.ops.function.FnMut Self Args Output
+def core.slice.iter.IterMut.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorMutT.next_back : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} s => do
+  let (v, r) ←
+    core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back
+        { slice := s.slice, i := ↑0#usize }
+  ok
+      (v, { slice := r.slice, i := s.i }, fun updated item =>
+        match item with
+        | none => updated
+        | some x =>
+          if h : (↑updated.slice ++ [x]).length ≤ Usize.max then { slice := ⟨↑updated.slice ++ [x], h⟩, i := updated.i }
+          else s)

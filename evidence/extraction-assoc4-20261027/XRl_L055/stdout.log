@@ -1,0 +1,40 @@
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Slice T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Usize.max then
+    match h' : Slice.clone cloneInst.clone s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div
+  else fail Error.panic
+@[reducible] def Aeneas.Std.alloc.vec.Vec.len.{u} : {α : Type u} → alloc.vec.Vec α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} → alloc.vec.Vec α → α → Result (alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then ok ⟨(↑v).concat x, ⋯⟩
+  else fail Error.maximumSizeExceeded
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some range', { start := n, «end» := range.end })
+    else ok (none, range)
+def Aeneas.Std.alloc.vec.FromIteratorVec.from_iter : {T I IntoIter : Type} →
+  core.iter.traits.collect.IntoIterator I T IntoIter → I → Result (alloc.vec.Vec T) :=
+fun {T I IntoIter} IntoIteratorInst input => do
+  let iter ← IntoIteratorInst.into_iter input
+  let list ← alloc.vec.FromIteratorVec.iterToList IntoIteratorInst.iteratorInst iter []
+  if h : list.length ≤ Usize.max then ok ⟨list, h⟩ else fail Error.panic
+def core.ops.range.Range.Insts.CoreIterTraitsIteratorIterator.map : {A B F : Type} →
+  core.iter.range.Step A →
+    core.ops.function.FnMut F A B →
+      core.ops.range.Range A → F → Result (core.iter.adapters.map.Map (core.ops.range.Range A) F) :=
+fun {A B F} StepInst opsfunctionFnMutFTupleABInst self f => ok { iter := self, f := f }
+def alloc.vec.Vec.is_empty : {T : Type} → Type → alloc.vec.Vec T → Result Bool :=
+fun {T} _allocator value => ok (↑value).isEmpty

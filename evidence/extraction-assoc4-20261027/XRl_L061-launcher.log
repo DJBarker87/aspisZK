@@ -1,0 +1,38 @@
+{"attempt": "XRl_L061", "exit_status": 0, "wall_seconds": 1.9846027989988215, "peak_rss_kib": "2645616", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Slice.clone : {T : Type} → (T → Result T) → Slice T → Result (Slice T) :=
+fun {T} clone s => do
+  let s' ← List.clone clone ↑s
+  ok ⟨↑s', ⋯⟩
+def List.mapM.{u, v, w} : {m : Type u → Type v} →
+  [Monad m] → {α : Type w} → {β : Type u} → (α → m β) → List α → m (List β) :=
+fun {m} [Monad m] {α} {β} f «as» => List.mapM.loop f «as» []
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+def Aeneas.Std.Array.to_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α :=
+fun {α} {n} v => ⟨↑v, ⋯⟩
+def Aeneas.Std.core.slice.Slice.iter : {T : Type} → Slice T → Result (core.slice.iter.Iter T) :=
+fun {T} s => ok { s
+...
+def Aeneas.Std.Slice.clone : {T : Type} → (T → Result T) → Slice T → Result (Slice T) :=
+fun {T} clone s => do
+  let s' ← List.clone clone ↑s
+  ok ⟨↑s', ⋯⟩
+def List.mapM.{u, v, w} : {m : Type u → Type v} →
+  [Monad m] → {α : Type w} → {β : Type u} → (α → m β) → List α → m (List β) :=
+fun {m} [Monad m] {α} {β} f «as» => List.mapM.loop f «as» []
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+def Aeneas.Std.Array.to_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α :=
+fun {α} {n} v => ⟨↑v, ⋯⟩
+def Aeneas.Std.core.slice.Slice.iter : {T : Type} → Slice T → Result (core.slice.iter.Iter T) :=
+fun {T} s => ok { slice := s, i := 0 }
+def Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  core.slice.iter.Iter T → Result (Option T × core.slice.iter.Iter T) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    ok (some x, it)
+  else ok (none, it)
+
+Running as unit: run-re0b274860b5b4782ae1f812cf9c5bee8.scope; invocation ID: 36a375cd9ba641a385dd65545c63fd72

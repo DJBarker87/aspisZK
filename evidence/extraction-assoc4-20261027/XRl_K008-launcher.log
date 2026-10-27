@@ -1,0 +1,56 @@
+{"attempt": "XRl_K008", "exit_status": 0, "wall_seconds": 19.998626186978072, "peak_rss_kib": "718080", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` an
+...
+37:39
+   |
+37 | #[kani::proof] #[kani::unwind(18)] fn XRl_checkpoint_scalar_bytes(){
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrl_checkpoint_scalar_bytes`
+
+warning: function `XRl_checkpoint_wide_bytes` should have a snake case name
+  --> XRl_harnesses.rs:44:39
+   |
+44 | #[kani::proof] #[kani::unwind(34)] fn XRl_checkpoint_wide_bytes(){
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrl_checkpoint_wide_bytes`
+
+warning: function `XRl_checkpoint_next` should have a snake case name
+  --> XRl_harnesses.rs:50:39
+   |
+50 | #[kani::proof] #[kani::unwind(18)] fn XRl_checkpoint_next(){
+   |                                       ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrl_checkpoint_next`
+
+warning: function `XRl_checkpoint_layout` should have a snake case name
+  --> XRl_harnesses.rs:56:19
+   |
+56 | #[kani::proof] fn XRl_checkpoint_layout(){
+   |                   ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrl_checkpoint_layout`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.71s
+Checking harness XRl_harnesses::XRl_checkpoint_wide_bytes...
+
+VERIFICATION RESULT:
+ ** 0 of 482 failed (5 unreachable)
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 16.959063s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rc5d7c514f7d94d5085f0cfa19208c2d0.scope; invocation ID: a2a9ff2f375b49949381d031f86160c7
