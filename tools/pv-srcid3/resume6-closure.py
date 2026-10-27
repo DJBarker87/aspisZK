@@ -4,6 +4,10 @@ import pathlib,subprocess,json,hashlib,re,sys
 root=pathlib.Path(__file__).resolve().parents[2];e=root/'evidence/pv-srcid3-20261026';rev=subprocess.check_output(['git','rev-parse','research'],text=True).strip()
 paths=subprocess.check_output(['git','ls-tree','-r','--name-only',rev],cwd=root,text=True).splitlines();paths=[p for p in paths if p.endswith('.lean')]
 manifest=json.loads(subprocess.check_output(['git','show',rev+':evidence/envj-rebuild-20261026/EJR_final-inventory.json'],cwd=root,text=True));selected={r['module'].replace('/','.'):r['sha256'] for r in manifest['selected'] if r['workspace']=='joint'}
+library_profiles=json.loads(subprocess.check_output(['git','show',rev+':evidence/envj-rebuild-20261026/EJR_library-source-provenance.json'],cwd=root,text=True))
+selected.update({r['module'].replace('/','.'):r['source_sha256'] for r in library_profiles})
+# The older Fmt archive has a type axiom; the existing repaired profile is required.
+selected['Aeneas.Std.Core.Fmt']='daeafff88224be0870aadb6c3bad73ae7c9375c2de9bbceb177ed2d183d6bdc5'
 cache={};rows={};external=set();visiting=set();branchbase=root/'docs/research/v8-r0-zk-20261009/lean'
 
 def lean_imports(data):

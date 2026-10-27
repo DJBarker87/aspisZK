@@ -19,7 +19,7 @@ for p in e.glob('*attempts.jsonl'):
   if isinstance(r,dict):receipts.append((str(p.relative_to(root)),r))
 by={}
 for p,r in receipts:
- if r.get('exit')!=0:continue
+ if r.get('exit')!=0 or r.get('nonstandard_axioms') or r.get('axiom_reports_complete') is False:continue
  m=r.get('module','').replace('/','.');src=r.get('source_sha256');obj=r.get('object_sha256')
  if not obj:
   retained=r.get('retained_own_object','');obj=retained.split()[0] if isinstance(retained,str) and re.match(r'^[a-f0-9]{64} ',retained) else None

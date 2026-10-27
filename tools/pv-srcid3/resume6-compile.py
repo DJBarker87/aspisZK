@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """One focused compile via the existing launcher, with task receipts."""
-import hashlib,json,pathlib,re,subprocess,sys,datetime
+import hashlib,json,pathlib,re,subprocess,sys,datetime,os
 root=pathlib.Path(__file__).resolve().parents[2]
 a=int(sys.argv[1]); m=sys.argv[2]
 assert 37100 <= a <= 37399 
@@ -14,7 +14,9 @@ t='/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
 e=root/'evidence/pv-srcid3-20261026';e.mkdir(exist_ok=True)
 ledger=e/'resume6-attempts.jsonl'
 prior=[json.loads(x) for x in ledger.read_text().splitlines()] if ledger.exists() else []
-if len(prior)>=97 and m!='PV_Src_FinalAudit':
+if len(prior)>=96 and os.environ.get('PV_SRCID6_CLOSURE')=='1' and module_name!='R1NaturalProjection':
+ print('COHORT CHECKPOINT: reserve one focused changed-input projection review before the last three audit attempts');sys.exit(75)
+if len(prior)>=97 and m not in {'PV_Src_FinalAudit6A','PV_Src_FinalAudit6B','PV_Src_FinalAudit6C'}:
  print('LAST THREE CHARGED ATTEMPTS RESERVED FOR FULL AUDIT');sys.exit(75)
 if ledger.is_file() and len(ledger.read_text().splitlines())>=100:
  print('LEAN BUDGET EXHAUSTED: no host action; zero charge')
@@ -57,11 +59,32 @@ prepare=ssh(f'mkdir -p {joint}/sources/{module_dir}')
 assert prepare.returncode==0
 subprocess.run(['scp','-q',str(src),f'{host}:{joint}/sources/{module_path}.lean'],check=True)
 imports=re.findall(r'^import (\S+)',src.read_text(),re.M)
+if os.environ.get('PV_SRCID6_CLOSURE')=='1':
+ graph=json.loads((e/'resume6-binary-import-graph.json').read_text())
+ edges={r['module']:r['imports'] for r in graph['modules']}
+ seen=set()
+ def visit_dep(x):
+  if x in seen:return
+  seen.add(x)
+  for y in edges.get(x,[]):visit_dep(y)
+ for x in imports+['Init']:visit_dep(x)
+ imports=sorted(seen)
+
 # Fingerprint exact imported objects; retain the individual hashes too.
-paths=' '.join(f'{joint}/objects/{i.replace(".","/")}.olean' for i in imports)
-d=ssh(f'sha256sum {paths}')
-# Missing objects are retained in the fingerprint and diagnosed by Lean.
-if d.returncode: d.stdout += d.stderr
+# Resolve imports exactly as run2.py does, including external package roots.
+# Keep sha256sum's byte format so all-joint fingerprints stay unchanged.
+resolve_code = """import pathlib,json,hashlib
+h=pathlib.Path('/home/dombarker/project-offloads')
+env=json.loads((h/'r1-privacy-build-integration-20261019/env/J.json').read_text())
+roots=[str(h/'aspis-joint-20261019/objects')]+env['LEAN_PATH'].split(':')
+for m in MODULES:
+ rel=m.replace('.','/')+'.olean'
+ p=next((pathlib.Path(r)/rel for r in roots if (pathlib.Path(r)/rel).is_file()),None)
+ if p:print(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+str(p))
+ else:print('MISSING effective import '+m)
+""".replace('MODULES',repr(imports))
+d=subprocess.run(['ssh',host,'python3 -'],input=resolve_code,capture_output=True,text=True)
+assert d.returncode==0,d.stderr
 fp=hashlib.sha256(d.stdout.encode()).hexdigest()[:16]
 r=ssh(f'sh /home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh {a} {module_path} J 7000 8 {fp}')
 (e/f'launcher-{a}.log').write_text(r.stdout+r.stderr)
@@ -83,10 +106,29 @@ reported_axioms={name.strip() for line in record['axioms'] for group in re.finda
 record['nonstandard_axioms']=sorted(reported_axioms-allowed_axioms)
 record['expected_axiom_reports']=len(re.findall(r'^#print axioms ',src.read_text(),re.M))
 record['axiom_reports_complete']=len(record['axioms'])==record['expected_axiom_reports']
-if record['exit']==0:
+record['validation_exit']=record['exit'] or (1 if record['nonstandard_axioms'] or not record['axiom_reports_complete'] else 0)
+record['accepted']=record['validation_exit']==0
+if record['accepted']:
  c=ssh(f'mkdir -p {job}/lean-objects/{module_dir}; cp {joint}/objects/{module_path}.olean {job}/lean-objects/{module_path}.olean; sha256sum {job}/lean-objects/{module_path}.olean')
  record['retained_own_object']=c.stdout.strip();record['object_sha256']=c.stdout.split()[0] if c.stdout.split() else None;assert c.returncode==0
+if record['exit']==0 and not record['accepted']:
+ # A kernel-success output can still fail the axiom/report gate. Never install it.
+ reject_code = """import pathlib,hashlib,shutil,json
+j=pathlib.Path('JOINT');p=pathlib.Path('JOB');rel='MODPATH.olean';dest=j/'objects'/rel
+q=p/'quarantine'/'resume6-ATTEMPT';q.mkdir(parents=True,exist_ok=True)
+result={}
+if dest.is_file():
+ result['rejected_object_sha256']=hashlib.sha256(dest.read_bytes()).hexdigest()
+ shutil.move(str(dest),str(q/dest.name))
+ snap=p/'snapshots'/'resume6-ATTEMPT'/pathlib.Path(rel).name
+ if snap.is_file():shutil.copy2(snap,dest);result['restored_object_sha256']=hashlib.sha256(dest.read_bytes()).hexdigest()
+print(json.dumps(result))
+""".replace('JOINT',joint).replace('JOB',job).replace('MODPATH',module_path).replace('ATTEMPT',str(a))
+ rejected=subprocess.run(['ssh',host,'python3 -'],input=reject_code,capture_output=True,text=True)
+ assert rejected.returncode==0,rejected.stderr
+ record['rejected_output_restoration']=json.loads(rejected.stdout)
+record['dependency_resolution']='effective env/J paths; '+('complete binary transitive import closure' if os.environ.get('PV_SRCID6_CLOSURE')=='1' else 'explicit source imports')
 record['research_revision']=plan['research_revision']
 record['research_source_exists']=row['research_source_exists'] if row else False
 with (e/'resume6-attempts.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
-sys.exit(record['exit'] or (1 if record['nonstandard_axioms'] or not record['axiom_reports_complete'] else 0))
+sys.exit(record['validation_exit'])

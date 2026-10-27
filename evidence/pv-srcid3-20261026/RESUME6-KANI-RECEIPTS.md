@@ -1,5 +1,7 @@
 # Kani receipts, resumed allocation 6
 
+`#print axioms`: N/A for Kani; no Lean theorem was installed from these runs.
+
 Four new exhaustive full-mapper partitions; no earlier failed harness was repeated unchanged. Each uses actual dynamic roots on both sides and compares all 20 fields. Unwind=33 with unwinding assertions, stubs=[], verified_stubs=[] in generated metadata. All 142 Rust compilation inputs match branch bytes. Actual compiler fingerprints include opt-level=3 and mir-opt-level=4. Heavy time was CBMC after compilation.
 
 | Partition | Exit | Wall seconds | GNU-time RSS KiB | Cgroup memory peak bytes | Swaps | Revision |
