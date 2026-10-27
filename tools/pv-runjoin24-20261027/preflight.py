@@ -4,8 +4,8 @@ R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin24-20261027'
 manifest=json.loads((R/'evidence/pv-runjoin20-20261027/external-object-manifest.json').read_text())
 code='''import pathlib,json,hashlib,sys
 rows=json.load(sys.stdin);out=[]
-e=json.load(open('/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin22-lean/J.json'))
-roots=[pathlib.Path('/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin22-lean/objects')]+[pathlib.Path(x) for x in e['LEAN_PATH'].split(':')]
+e=json.load(open('/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/J.json'))
+roots=[pathlib.Path('/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/objects')]+[pathlib.Path(x) for x in e['LEAN_PATH'].split(':')]
 for r in rows:
  rel=r['module'].replace('.','/')+'.olean'
  p=next((root/rel for root in roots if (root/rel).is_file()),pathlib.Path(r['path']))

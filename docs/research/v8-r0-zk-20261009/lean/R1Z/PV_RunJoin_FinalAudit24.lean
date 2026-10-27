@@ -4,6 +4,10 @@ import R1Z.PrivacyR1HeadlineDeployedReal
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_FinalAudit24
+local instance : CharP PrivacyR1AcctBasis.K 2147483647 :=
+  charP_of_injective_algebraMap
+    (algebraMap (ZMod AspisCircleGroupOrder.P) PrivacyR1AcctBasis.K).injective
+    AspisCircleGroupOrder.P
 /-- The endpoint's own input is canonical, rather than the raw native family. -/
 theorem endpoint_input_is_canonical :
     PrivacyR1HeadlineDeployedReal.input =
@@ -18,7 +22,7 @@ theorem canonical_identification :
 end R1Z.PV_RunJoin_FinalAudit24
 #print R1Z.PrivacyR1HeadlineDeployedReal.input
 #print R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement
-#print R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
+#check @R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
 #print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
 #print axioms R1Z.PV_RunJoin_PaddingCounterexample24.identification_unsatisfiable
 #print axioms R1Z.PV_RunJoin_PaddingCounterexample24.admitted_identification_unsatisfiable
