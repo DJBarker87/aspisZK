@@ -133,3 +133,14 @@ cited. Re-pinning D188 to a new translator remains the owner's decision.
   case-split on ok/fail/div do not transfer. Lead ruling: route A is NOT
   recommended and NOT requested from the owner; the pinned toolchain stays.
   Evidence: evidence/extraction-eval1-20261027/XRh_ROUTE-A-EVAL.md.
+
+## Update 2026-10-27 (XRi_): release definitions need hand-supplied externals
+
+extraction-assoc1 could not elaborate the emitted release Types: their
+imports TypesExternal/FunsExternal exist only as Aeneas axiom templates. No
+association proved. Ruling (extraction-assoc2, XRj_): supply the externals
+as definitions, never axioms: library operations reuse the repo's existing
+pinned external definitions; each of the twelve opaque leaves is defined as
+the Lean model of its owned reference, with its Kani bridge recorded as an
+open P6 obligation. Then prove the association items against the emitted
+release definitions.
