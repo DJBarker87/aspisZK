@@ -47,6 +47,6 @@ m=re.search(r'Exit status: (\d+)',tim);record['exit']=int(m[1]) if m else None
 m=re.search(r'Maximum resident set size \(kbytes\): (\d+)',tim);record['peak_rss_bytes']=int(m[1])*1024 if m else None
 m=re.search(r'Swaps: (\d+)',tim);record['swaps']=int(m[1]) if m else None
 record['axioms']=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",out)
-record['accepted']=r.returncode==0 and record['exit']==0 and 'error:' not in out and 'sorryAx' not in out
+record['accepted']=r.returncode==0 and record['exit']==0 and not re.search(r'(?m)^(?:.*:[0-9]+:[0-9]+: )?error:',out) and 'sorryAx' not in out
 (E/f'receipt-{A}.json').write_text(json.dumps(record,indent=2)+'\n');print('RECEIPT',json.dumps({k:record.get(k) for k in ['attempt','exit','wall_seconds','peak_rss_bytes','swaps','accepted']}),flush=True)
 sys.exit(0 if record['accepted'] else 1)

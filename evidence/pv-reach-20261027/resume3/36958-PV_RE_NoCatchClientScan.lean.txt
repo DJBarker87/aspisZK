@@ -1,0 +1,5 @@
+import R1Z.PV_RE_NoCatchScan
+pv_scan_no_catch ProverRwFull.RealR1_client.prove_for_proof_accounts
+pv_no_catch_binds ProverRwFull.RealR1_client.prove_for_proof_accounts
+pv_no_catch_binds ProverRwFull.prover.prove_masked_retrying_with
+pv_no_catch_binds ProverRwFull.prover.retry_attempt

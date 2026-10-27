@@ -1,0 +1,56 @@
+import R1Z.ProverRwFullFuns
+import R1Z.PV_RE_NoCatchCore
+import Lean
+open Lean Meta Elab Command Term
+namespace R1Z.PV_RE_NoCatchGenerator
+
+/-- Named certificates apply the generic absorption law to the exact symbolic
+continuation found at each Result bind in the elaborated source. -/
+partial def visit (owner : Name) (e : Expr) (params : Array Expr)
+    (count : Nat) : TermElabM (Nat × Array Name) := do
+  match e with
+  | .lam n t b bi =>
+    withLocalDecl n bi t fun x => visit owner (b.instantiate1 x) (params.push x) count
+  | .letE n t v b _ =>
+    let (count, names) ← visit owner v params count
+    withLetDecl n t v fun x => do
+      let (count, more) ← visit owner (b.instantiate1 x) (params.push x) count
+      return (count, names ++ more)
+  | .mdata _ b => visit owner b params count
+  | _ =>
+    let mut count := count
+    let mut names := #[]
+    if e.isApp then
+      let f := e.getAppFn
+      let args := e.getAppArgs
+      if (f.isConstOf ``Bind.bind || f.isConstOf ``Aeneas.Std.bind) && args.size ≥ 2 then
+        let k := args[args.size-1]!
+        let kt ← whnf (← inferType k)
+        if kt.isForall then
+          let body := kt.bindingBody!
+          if body.getAppFn.isConstOf ``Aeneas.Std.Result then
+            let proof ← mkAppM ``R1Z.PV_RE_NoCatchCore.bind_noCatch #[k]
+            let typ ← mkForallFVars params (← inferType proof)
+            let val ← mkLambdaFVars params proof
+            let tn := `R1Z.PV_RE_NoCatchSource ++ owner ++ Name.mkSimple ("bind" ++ toString count)
+            if proof.hasSorry then throwError "incomplete no-catch certificate"
+            addDecl (Declaration.thmDecl ⟨⟨tn, [], typ⟩, val, [tn]⟩)
+            names := names.push tn
+            count := count + 1
+      -- Traverse each argument once; never delta-reduce a source function.
+      for a in args do
+        let (c, ns) ← visit owner a params count
+        count := c
+        names := names ++ ns
+    return (count, names)
+
+elab "pv_no_catch_binds " n:ident : command => do
+  let names ← liftTermElabM do
+    let ci ← getConstInfo n.getId
+    let some value := ci.value? | throwError "no source body {n.getId}"
+    let (count,names) ← visit n.getId value #[] 0
+    logInfo m!"NO_CATCH_BINDS {n.getId}: {count}"
+    return names
+  for tn in names do
+    elabCommand (← `(command| #print axioms $(mkIdent tn)))
+end R1Z.PV_RE_NoCatchGenerator
