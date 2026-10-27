@@ -1,0 +1,18 @@
+[package]
+name="pv-b3-copies-extraction"
+version="0.0.0"
+edition="2021"
+[workspace]
+[lib]
+path="lib.rs"
+[features]
+default=["prover","optimized-terminal"]
+prover=[]
+optimized-terminal=[]
+[dependencies]
+aspis-core={path="../../../crates/aspis-core",features=["r0","ct-host-prover"]}
+aspis-prover={path="../../../crates/aspis-prover",features=["r0","prover","ct-host-prover"]}
+aspis-statement={path="../../../crates/aspis-statement",features=["r0", "pool-v1-kernel", "pool-v1-pair-forest-active-mask-basis-audit", "pool-v1-pair-forest-binary-copy-weights-audit", "pool-v1-pair-forest-copy-finish-dot-basis-audit", "pool-v1-pair-forest-copy-pattern-basis-audit", "pool-v1-pair-forest-copy-selector-tensor-basis-audit", "pool-v1-pair-forest-copy-tag-dot-basis-audit", "pool-v1-pair-forest-endpoint-selector-cache-audit", "pool-v1-pair-forest-packed-digest-audit", "pool-v1-pair-forest-packed-digest-selector-tensor-audit", "pool-v1-pair-forest-packed-range-audit", "pool-v1-pair-forest-pattern-window-audit", "pool-v1-pair-forest-semantic-factor-audit"]}
+[profile.release]
+opt-level=3
+overflow-checks=false
