@@ -11,6 +11,7 @@ open BuilderForestAdmissionPort PV_Src_PortSboxStep
 
 theorem canonical (r : Fin 4) : Canonical poseidon2.EXTERNAL_INITIAL.val[r.val]! := by
   intro j
+  unfold poseidon2.EXTERNAL_INITIAL
   fin_cases r <;> fin_cases j <;> decide
 
 #print axioms canonical

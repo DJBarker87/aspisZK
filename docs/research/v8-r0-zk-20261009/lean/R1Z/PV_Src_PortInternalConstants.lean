@@ -8,6 +8,7 @@ open Aeneas Aeneas.Std
 open BuilderForestAdmissionPort
 
 theorem canonical (r : Fin 14) : poseidon2.INTERNAL.val[r.val]!.val < 2147483647 := by
+  unfold poseidon2.INTERNAL
   fin_cases r <;> decide
 
 #print axioms canonical
