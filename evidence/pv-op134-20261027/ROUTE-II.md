@@ -47,6 +47,11 @@ aspis-prover/src/state_only_entropy.rs and v6_onefold_prover.rs before adoption.
 Keep crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs and its public
 re-export in pool_v1/mod.rs unchanged for the verifier/shared-statement path.
 Its inactive-mask helper continues to call the original active-mask function.
+The selected SBF verifier already uses the distinct static helper
+`pair_forest_copy_terminal.rs::pool_v1_pair_forest_copy_active_row_masks_compiled_v1`
+(line 42), which returns `constants::ACTIVE_ROW_MASKS`; v7_verifier.rs imports
+it at line 48. Preserve that compiled verifier path and its static schedule
+as well. Do not redirect it to the proposed host index-loop helper.
 No global alias, cfg substitution in the statement crate, or verifier redirect.
 
 ## Remaining proof gate
