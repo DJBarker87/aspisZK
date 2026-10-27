@@ -1,0 +1,3 @@
+Preflight-only IDs 44620, 44626, 44674, 44680 and 44694 hit transient vanished-cgroup/missing-receipt races; each was inspected and followed by a 30-second pause and a next-unused-ID retry. No Lean process launched and none was charged.
+
+Reserved audit ID 44899: aggregate reservation refusal, 48 GiB populated + 8 GiB requested > 55 GiB safe limit. The endpoint audit did not launch; this is uncharged and retired. Wait 3 minutes, then retry as unused ID 44702. The 98th and 99th actual compiles were model/source audits 44897/44898; the final (100th) actual compile remains the endpoint audit. No ID is reused. No barrier is bypassed.

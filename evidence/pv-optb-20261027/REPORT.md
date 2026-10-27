@@ -74,3 +74,31 @@ the named charged events at fixed HOST_HASH, OS world and raw coins; associate
 every reached entropy/file/time/worker observation with that proof; then build
 the joint real/ideal failure-aware coupling and instantiate the unchanged
 numerical headline. Target not yet established.
+
+## D262 final budget and audit receipts
+
+Stopped on Lean budget exhaustion: 100/100 attempts, 91 passes, 9 development
+failures; Kani 0/4. No IDs reused. Preflight-only IDs 44620, 44626, 44674,
+44680 and 44694 were transient cgroup races; ID 44899 was an aggregate
+reservation refusal (48G + 8G > 55G). It was retired; after the prescribed
+3-minute wait, unused ID 44702 performed the final audit. No refusal was
+charged and no barrier was bypassed.
+
+All audit source revision: `8453e32be5e87d2e1f631633fa410cfc7476a06b`.
+Module prefix below: `R1Z/PV_OptB_OffBadAudit`.
+
+| Target suffix | ID | Exit | Wall | Peak RSS KiB | Swap |
+|---|---:|---:|---|---:|---:|
+| Model | 44897 | 0 | 0:02.68 | 4137816 | 0 |
+| Source | 44898 | 0 | 0:04.49 | 4266392 | 0 |
+| Endpoint | 44702 | 0 | 0:04.74 | 4215464 | 0 |
+
+Every audit #print axioms set is a subset of propext, Classical.choice,
+Quot.sound. Exact outputs, caps, source hashes and timings are in
+`offbad/receipts.jsonl` and its raw logs. Source and selected-object hashes
+are retained without binaries. The private compiled cache and read-only
+symlink overlay were removed after hashing; all four task ledger directories
+and private Lean sources remain. No wallet or account key was removed.
+
+The full native off-bad source instance and endogenous B headline are still
+open. Original endpoint premises removed: zero. Privacy target not established.
