@@ -1,0 +1,12 @@
+theorem Nat.shiftLeft_add_eq_or_of_lt : ∀ {i b : ℕ}, b < 2 ^ i → ∀ (a : ℕ), a <<< i + b = a <<< i ||| b :=
+fun {i b} b_lt a =>
+  Eq.mpr (id (congrArg (fun _a => _a + b = _a ||| b) (Nat.shiftLeft_eq a i)))
+    (Eq.mpr (id (congrArg (fun _a => _a + b = _a ||| b) (Nat.mul_comm a (2 ^ i))))
+      (Eq.mpr (id (congrArg (fun _a => _a = 2 ^ i * a ||| b) (Nat.two_pow_add_eq_or_of_lt b_lt a)))
+        (Eq.refl (2 ^ i * a ||| b))))
+Nat.shiftLeft_eq: ∀ (a b : ℕ), a <<< b = a * 2 ^ b
+Nat.shiftLeft_eq_zero_iff: ∀ {a n : ℕ}, a <<< n = 0 ↔ a = 0
+Nat.shiftLeft_eq._f: ∀ (b : ℕ) (f : Nat.below (motive := fun b => ∀ (a : ℕ), a <<< b = a * 2 ^ b) b) (a : ℕ),
+  a <<< b = a * 2 ^ b
+Nat.shiftLeft_eq': ∀ {m n : ℕ}, m.shiftLeft n = m <<< n
+Nat.shiftLeft_eq_zero_iff._simp_1: ∀ {a n : ℕ}, (a <<< n = 0) = (a = 0)

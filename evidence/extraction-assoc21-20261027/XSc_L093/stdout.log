@@ -1,0 +1,9 @@
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+@[defeq] theorem BitVec.toNat_append : ∀ {m n : ℕ} (x : BitVec m) (y : BitVec n),
+  (x ++ y).toNat = x.toNat <<< n ||| y.toNat :=
+fun {m n} x y => rfl
+@[defeq] theorem BitVec.toNat_cast : ∀ {w v : ℕ} (h : w = v) (x : BitVec w), (BitVec.cast h x).toNat = x.toNat :=
+fun {w v} h x => rfl
+protected def BitVec.ofNat : (n : ℕ) → ℕ → BitVec n :=
+fun n i => { toFin := Fin.Internal.ofNat (2 ^ n) ⋯ i }
