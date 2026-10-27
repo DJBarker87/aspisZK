@@ -109,3 +109,9 @@ remain OPEN. XSd_OBLIGATIONS.md states A0–A8 individually. Prepared_claim
 remains OPEN after latest merged LPq; exact missing ByteDomain/native LE/slice
 and semantic nominal caller ports are pinned by XSd_LPq_inspection.json.
 Source security target remains not established.
+
+Terminal-state read-only check: no owned receipted scope remains populated;
+cache remains present (XSd_terminal_state.json). Final Git whitespace review
+normalized only convenience launcher/driver summaries; original/normalized
+hashes are in XSd_log_normalization.json. Raw stdout/time/receipts and all
+compiler source snapshots are untouched.
