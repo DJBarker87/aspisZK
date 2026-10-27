@@ -1,0 +1,125 @@
+FJa_SplitFold.lean:23:4: error: unsolved goals
+case pos.refl
+N : Usize
+out : Std.Array NQ N
+p : NP
+c : NQ
+hc : Canon c
+hp : field.PreparedQm31Multiplier.new c = ok p
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (weights : Std.Array NQ N) (e : Usize),
+      canonical weights →
+        FJa_SplitStep.Loop (cursor e) weights p = ok out →
+          ↑e = m → FIv_NativeArray.value out = FJa_SplitModel.fold (decode c) m (FIv_NativeArray.value weights)
+hz : n = 0
+he : ↑0#usize = n
+hs :
+  core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (cursor 0#usize) =
+    ok (none, cursor 0#usize)
+hw : canonical out
+run :
+  (let (o, iter1) := (none, cursor 0#usize)
+    match o with
+    | none => ok out
+    | some index => do
+      let parent ← out.index_usize index
+      let right ← field.PreparedQm31Multiplier.mul p parent
+      let q ← parent.sub right
+      let i ← 2#usize * index
+      let weights1 ← out.update i q
+      let i1 ← i + 1#usize
+      let a ← weights1.update i1 right
+      pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter1 a p) =
+    ok out
+⊢ FIv_NativeArray.value out = FJa_SplitModel.fold (decode c) (↑0#usize) (FIv_NativeArray.value out)
+FJa_SplitFold.lean:32:4: error: unsolved goals
+case rec
+N : Usize
+out : Std.Array NQ N
+p : NP
+c : NQ
+hc : Canon c
+hp : field.PreparedQm31Multiplier.new c = ok p
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (weights : Std.Array NQ N) (e : Usize),
+      canonical weights →
+        FJa_SplitStep.Loop (cursor e) weights p = ok out →
+          ↑e = m → FIv_NativeArray.value out = FJa_SplitModel.fold (decode c) m (FIv_NativeArray.value weights)
+weights : Std.Array NQ N
+e : Usize
+hw : canonical weights
+run : FJa_SplitStep.Loop (cursor e) weights p = ok out
+he : ↑e = n
+hz : ¬n = 0
+index : Usize
+hindex : ↑index + 1 = ↑e
+hn : FJa_ReverseStep.next (cursor e) = ok (some index, cursor index)
+parent right left : NQ
+i i1 : Usize
+middle afterWrite : Std.Array NQ N
+hparent : weights.index_usize index = ok parent
+hright : field.PreparedQm31Multiplier.mul p parent = ok right
+hleft : field.QM31.sub parent right = ok left
+hi : 2#usize * index = ok i
+hm : weights.update i left = ok middle
+hi1 : i + 1#usize = ok i1
+ha : middle.update i1 right = ok afterWrite
+ca : canonical afterWrite
+left✝ : decode left + decode right = decode parent
+tail : FJa_SplitStep.Loop (cursor index) afterWrite p = ok out
+v : FIv_NativeArray.value afterWrite = FJa_SplitModel.step (decode c) (FIv_NativeArray.value weights) ↑index
+⊢ ?m.278
+
+case neg
+N : Usize
+out : Std.Array NQ N
+p : NP
+c : NQ
+hc : Canon c
+hp : field.PreparedQm31Multiplier.new c = ok p
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (weights : Std.Array NQ N) (e : Usize),
+      canonical weights →
+        FJa_SplitStep.Loop (cursor e) weights p = ok out →
+          ↑e = m → FIv_NativeArray.value out = FJa_SplitModel.fold (decode c) m (FIv_NativeArray.value weights)
+weights : Std.Array NQ N
+e : Usize
+hw : canonical weights
+run : FJa_SplitStep.Loop (cursor e) weights p = ok out
+he : ↑e = n
+hz : ¬n = 0
+index : Usize
+hindex : ↑index + 1 = ↑e
+hn : FJa_ReverseStep.next (cursor e) = ok (some index, cursor index)
+parent right left : NQ
+i i1 : Usize
+middle afterWrite : Std.Array NQ N
+hparent : weights.index_usize index = ok parent
+hright : field.PreparedQm31Multiplier.mul p parent = ok right
+hleft : field.QM31.sub parent right = ok left
+hi : 2#usize * index = ok i
+hm : weights.update i left = ok middle
+hi1 : i + 1#usize = ok i1
+ha : middle.update i1 right = ok afterWrite
+ca : canonical afterWrite
+left✝ : decode left + decode right = decode parent
+tail : FJa_SplitStep.Loop (cursor index) afterWrite p = ok out
+v : FIv_NativeArray.value afterWrite = FJa_SplitModel.step (decode c) (FIv_NativeArray.value weights) ↑index
+rec : ?m.278
+⊢ FIv_NativeArray.value out = FJa_SplitModel.fold (decode c) n (FIv_NativeArray.value weights)
+FJa_SplitFold.lean:31:21: warning: This simp argument is unused:
+  FJa_SplitModel.fold
+
+Hint: Omit it from the simp argument list.
+  simp only [̵←̵h̵e̵,̵F̵J̵a̵_̵S̵p̵l̵i̵t̵M̵o̵d̵e̵l̵.̵f̵o̵l̵d̵]̵[̲←̲ ̲h̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJa_SplitFold.lean:36:15: error: unexpected token ':='; expected command
+'AspisR1.FJa_SplitFold.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
