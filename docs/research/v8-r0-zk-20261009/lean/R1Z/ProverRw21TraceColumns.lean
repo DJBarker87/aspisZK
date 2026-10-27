@@ -1,0 +1,53 @@
+import R1Z.ProverRw21ProtocolRun
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21TraceColumns
+open R0P ProverCommitValueRange47
+abbrev M := AspisV8R15.ExactTowerBase.M31Exact
+
+def liftBase (x : M) : Q := ⟨⟨x,0⟩,⟨0,0⟩⟩
+
+/-- Typed mathematical columns before the helper is inserted: sixteen semantic
+base columns, ten mask-only base columns, helper, balancing column, zero factor.
+The source caller's derivation of these values is not a field of this data. -/
+structure Columns where
+  semantic : Fin 16 → Fin 1024 → M
+  masks : Fin 10 → Fin 1024 → M
+  helper : Fin 1024 → Q
+  balance : Fin 1024 → Q
+  factor : Fin 1024 → Q
+
+def base (c : Columns) (lane : Fin 26) (row : Fin 1024) : M :=
+  if h : lane.val<16 then c.semantic ⟨lane.val,h⟩ row
+  else c.masks ⟨lane.val-16,by have := lane.isLt; omega⟩ row
+
+def trace (c : Columns) : Trace Q := fun lane row =>
+  if h : lane.val<26 then liftBase (base c ⟨lane.val,h⟩ row)
+  else if lane.val=26 then c.helper row
+  else if lane.val=27 then c.balance row
+  else c.factor row
+
+theorem semantic (c : Columns) (lane : Fin 16) (row : Fin 1024) :
+    trace c ⟨lane.val,by have := lane.isLt; omega⟩ row=liftBase (c.semantic lane row) := by
+  have h26 : lane.val<26 := by have := lane.isLt; omega
+  simp only [trace,base,Fin.val_mk,dif_pos h26,dif_pos lane.isLt]
+
+theorem mask (c : Columns) (lane : Fin 10) (row : Fin 1024) :
+    trace c ⟨16+lane.val,by have := lane.isLt; omega⟩ row=liftBase (c.masks lane row) := by
+  have h26 : 16+lane.val<26 := by have := lane.isLt; omega
+  have h16 : ¬16+lane.val<16 := by omega
+  simp only [trace,base,Fin.val_mk,dif_pos h26,dif_neg h16,Nat.add_sub_cancel_left]
+
+theorem helper (c : Columns) (row : Fin 1024) : trace c 26 row=c.helper row := by simp [trace]
+theorem balance (c : Columns) (row : Fin 1024) : trace c 27 row=c.balance row := by simp [trace]
+theorem factor (c : Columns) (row : Fin 1024) : trace c 28 row=c.factor row := by simp [trace]
+
+#print axioms liftBase
+#print axioms base
+#print axioms trace
+#print axioms semantic
+#print axioms mask
+#print axioms helper
+#print axioms balance
+#print axioms factor
+end R1Z.ProverRw21TraceColumns

@@ -1,0 +1,46 @@
+import R1Z.ProverRw21ProofOutput
+import R1Z.ProverRw21ModelObservations
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21ModelBytes
+open Aeneas Aeneas.Std Result ProverRwFull
+open ProverRw21ProtocolOutput ProverRw21ProofOutput
+
+/-- Mathematical nodes and pure serialization determine the entire byte result;
+this function contains no source execution or source-output projection. -/
+def bytes (t : Transcript) : Result ProverRw19AuditData.ByteStatus :=
+  match h : nodeResult t with
+  | .error e => .ok (.Err (ProverRw19MathematicalAssembly.error e))
+  | .ok raw => .ok (.Ok ⟨raw.map ProverRw19MathematicalAssembly.byte,by
+      rw [List.length_map,successful_length t raw h]
+      scalar_tac⟩)
+
+theorem instance_bytes (t : Transcript) :
+    ProverRw21ModelObservations.proofBytes (.ok (.Ok t))=bytes t := by
+  change ProverRw19MathematicalAssembly.proofBytes (fields t)
+    (List.ofFn (fun i => query (t.openings i))) (ProverRw21ProtocolOutput.slots t)=bytes t
+  unfold ProverRw19MathematicalAssembly.proofBytes bytes
+  rw [reference_proof]
+
+theorem output (t : Transcript) :
+    ProverRw21ModelInstance (.ok (.Ok t))=ProverRw19AuditData.attachAudit (bytes t) := by
+  rw [ProverRw21ModelObservations.output,instance_bytes]
+
+theorem rejected (t : Transcript) (e : ProverCommitPublish43.Error)
+    (h : nodeResult t=.error e) :
+    bytes t=.ok (.Err (ProverRw19MathematicalAssembly.error e)) := by
+  simp only [bytes,h]
+
+theorem successful (t : Transcript) (raw : ProverCommitPublish43.Bytes)
+    (h : nodeResult t=.ok raw) :
+    ∃ proof : alloc.vec.Vec U8, bytes t=.ok (.Ok proof) ∧
+      proof.val=raw.map ProverRw19MathematicalAssembly.byte := by
+  simp only [bytes,h]
+  exact ⟨_,rfl,rfl⟩
+
+#print axioms bytes
+#print axioms instance_bytes
+#print axioms output
+#print axioms rejected
+#print axioms successful
+end R1Z.ProverRw21ModelBytes

@@ -23,3 +23,10 @@ mod whole {
   assert_eq!(aspis_statement::logup::compress_tagged_tuple(tag,&values[n..],lambda),indexed(tag,&values[n..],lambda));
  }
 }
+
+#[cfg(kani)]
+mod small;
+
+#[cfg(kani)]
+#[path="../../pv-rw-step/proof/generated.rs"]
+mod literal;

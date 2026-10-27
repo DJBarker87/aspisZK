@@ -1,0 +1,33 @@
+import R1Z.ProverRw21CompactRows
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21CompactLengths
+open ProverRw21ProtocolOutput ProverRw21ParseRows ProverRw21SemanticRows ProverRw21CompactRows
+open ProverCommitCompact43 ProverCommitCompactSource46 ProverCommitCompactRows46
+open ProverRw21ByteLengths
+
+def rowSize (r : Nat) : Nat := 5 + if 14≤r then size r/32*16 else size r
+
+theorem compact_wire_length (s : Semantic) (r : Fin 27) :
+    (compactWire (rowData s r)).length=rowSize r.val := by
+  unfold compactWire rowSize
+  have hf := (formed s r).1
+  have hr := (formed s r).2
+  simp only [List.length_append,hf]
+  change 5+(if decide (14≤r.val) then ((chunks (payload s r)).map low).flatten else payload s r).length = _
+  by_cases hc : 14≤r.val
+  · simp only [hc,decide_true,if_true]
+    rw [flatten_length low _ 16 (fun _ _ => low_length _),chunks_length,ProverRw21SemanticLengths.payload_size]
+  · simp only [hc,decide_false,if_false,ProverRw21SemanticLengths.payload_size]
+
+theorem compact_semantic_length (s : Semantic) : (compactSemantic s).length=7015 := by
+  unfold compactSemantic
+  rw [List.length_append,List.length_ofFn,List.length_flatten,List.map_map,List.map_ofFn]
+  change 32+(List.ofFn (fun r : Fin 27 => (compactWire (rowData s r)).length)).sum=7015
+  simp only [compact_wire_length]
+  norm_num [List.ofFn_succ,rowSize,size]
+
+#print axioms rowSize
+#print axioms compact_wire_length
+#print axioms compact_semantic_length
+end R1Z.ProverRw21CompactLengths

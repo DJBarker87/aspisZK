@@ -1,8 +1,8 @@
 """One preflighted Kani harness; reuse real retained cache, exact filters."""
 from pathlib import Path
 import subprocess,json,shlex,sys,datetime
-r=Path(__file__).resolve().parents[3];e=r/'evidence/pv-rw21-20261027';n=int(sys.argv[1]);plan=json.loads((e/'KANI-PLAN.json').read_text());harness=plan['queue'][n-1];assert 1<=n<=10
-h='dombarker@100.108.41.90';b='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023';src=b+'/src';name=f'pv-rw21-kani-{n:02d}';out=e/name;out.mkdir()
+r=Path(__file__).resolve().parents[3];e=r/'evidence/pv-rw21-20261027';n=int(sys.argv[1]);plan=json.loads((e/'KANI-PLAN.json').read_text());harness=plan.get('replacement_route_after_timeouts',{}).get(str(n),plan['queue'][n-1]);assert 1<=n<=10
+h='dombarker@100.108.41.90';b='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023';src=b+'/src';name=f'pv-rw21-kani-{n:02d}'+('-retry'+sys.argv[2] if len(sys.argv)>2 else '');out=e/name;out.mkdir()
 def ssh(c):return subprocess.run(['ssh',h,c],text=True,capture_output=True)
 q=ssh('mkdir -p '+b+'/pv-rw21; python3 '+src+'/tools/prover-rw-20261023/native-entropy/reservation.py '+b+'/pv-rw21/'+name+'-admission.json > '+b+'/pv-rw21/'+name+'-admission.log 2>&1; pv_status=$?; cat '+b+'/pv-rw21/'+name+'-admission.log; exit $pv_status')
 (out/'admission.log').write_text(q.stdout+q.stderr)
@@ -12,7 +12,8 @@ target=src+'/tools/prover-rw-20261023/pv-rw-step/proof/target'
 q=ssh('test -d '+target+' && test ! -L '+target+' && test -x /home/dombarker/.cargo/bin/cargo && /home/dombarker/.cargo/bin/cargo kani --version');assert q.returncode==0,q.stderr
 (out/'configuration.txt').write_text(q.stdout+'\nreal target directory: '+target+'\n'+json.dumps(plan,indent=2))
 q=ssh('mkdir -p '+src+'/tools/prover-rw-20261023/pv-rw21/proof');assert q.returncode==0
-for f in ['Cargo.toml','lib.rs']:
+for f in ['Cargo.toml','lib.rs','small.rs']:
+ (out/(f+'.txt')).write_bytes((r/'tools/prover-rw-20261023/pv-rw21/proof'/f).read_bytes())
  subprocess.run(['scp',str(r/'tools/prover-rw-20261023/pv-rw21/proof'/f),h+':'+src+'/tools/prover-rw-20261023/pv-rw21/proof/'+f],check=True,capture_output=True)
 q=ssh('cd '+src+' && /home/dombarker/.cargo/bin/cargo metadata --offline --no-deps --format-version 1 --manifest-path tools/prover-rw-20261023/pv-rw21/proof/Cargo.toml');assert q.returncode==0,q.stderr
 (out/'metadata.json').write_text(q.stdout)

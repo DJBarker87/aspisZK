@@ -1,0 +1,52 @@
+import R1Z.ProverRw21TraceColumns
+import R1Z.ProverRwFullTypes
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21CallerFoundation
+open Aeneas Aeneas.Std ProverRwFull
+attribute [local instance] Classical.propDecidable
+abbrev M := ProverRw21TraceColumns.M
+abbrev Foundation := aspis_statement.state_only_trace.StateOnlyTraceFoundation
+
+def rawColumn (f : Foundation) (lane : Fin 16) : alloc.vec.Vec U32 :=
+  f.c1.val[lane.val]'(by rw [f.c1.property]; exact lane.isLt)
+
+def column (f : Foundation) (lane : Fin 16) : List M :=
+  (rawColumn f lane).val.map (fun x => (x.val : M))
+
+def Shape (f : Foundation) : Prop := ∀ lane, (column f lane).length=1024
+
+/-- This only decodes the deployed input's sixteen base columns. It preserves
+shape failure explicitly and does not read a prover output or assert that the
+masking/public preparation has been constructed. -/
+def decode (f : Foundation) : Option (Fin 16 → Fin 1024 → M) :=
+  if h : Shape f then some (fun lane row =>
+    (column f lane)[row.val]'(by rw [h lane]; exact row.isLt)) else none
+
+theorem column_length (f : Foundation) (lane : Fin 16) :
+    (column f lane).length=(rawColumn f lane).val.length := by
+  simp only [column,List.length_map]
+
+theorem reject (f : Foundation) (bad : ¬Shape f) : decode f=none := dif_neg bad
+
+theorem success (f : Foundation) (h : Shape f) :
+    decode f=some (fun lane row => (column f lane)[row.val]'(by rw [h lane];exact row.isLt)) := dif_pos h
+
+theorem success_iff (f : Foundation) : (∃ values, decode f=some values) ↔ Shape f := by
+  constructor
+  · rintro ⟨values,h⟩
+    by_contra bad
+    rw [reject f bad] at h
+    cases h
+  · intro h
+    exact ⟨_,success f h⟩
+
+#print axioms rawColumn
+#print axioms column
+#print axioms Shape
+#print axioms decode
+#print axioms column_length
+#print axioms reject
+#print axioms success
+#print axioms success_iff
+end R1Z.ProverRw21CallerFoundation

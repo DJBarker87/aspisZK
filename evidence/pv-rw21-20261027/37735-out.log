@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21TraceColumns.lean:31:89: error: unsolved goals
+c : Columns
+lane : Fin 16
+row : Fin 1024
+⊢ (if h : ↑lane < 26 then liftBase (c.semantic ⟨↑lane, ⋯⟩ row)
+    else if ↑lane = 26 then c.helper row else if ↑lane = 27 then c.balance row else c.factor row) =
+    liftBase (c.semantic lane row)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21TraceColumns.lean:39:2: error: Tactic `apply` failed: could not unify the conclusion of `@Fin.ext`
+  ?a = ?b
+with the goal
+  (if h : 16 + ↑lane < 26 then liftBase (c.masks ⟨16 + ↑lane - 16, ⋯⟩ row)
+    else if 16 + ↑lane = 26 then c.helper row else if 16 + ↑lane = 27 then c.balance row else c.factor row) =
+    liftBase (c.masks lane row)
+
+Note: The full type of `@Fin.ext` is
+  ∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+
+c : Columns
+lane : Fin 10
+row : Fin 1024
+⊢ (if h : 16 + ↑lane < 26 then liftBase (c.masks ⟨16 + ↑lane - 16, ⋯⟩ row)
+    else if 16 + ↑lane = 26 then c.helper row else if 16 + ↑lane = 27 then c.balance row else c.factor row) =
+    liftBase (c.masks lane row)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21TraceColumns.lean:36:24: warning: This simp argument is unused:
+  dif_pos (by have := lane.isLt; omega)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵r̵a̵c̵e̵,̵b̵a̵s̵e̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵(̵b̵y̵ ̵h̵a̵v̵e̵ ̵:̵=̵ ̵l̵a̵n̵e̵.̵i̵s̵L̵t̵;̵ ̵o̵m̵e̵g̵a̵)̵,̵[̲t̲r̲a̲c̲e̲,̲ ̲b̲a̲s̲e̲,̲ dif_neg (by omega : ¬̵1̵6̵+̵l̵a̵n̵e̵.̵v̵a̵l̵<̵1̵6̵)̵]̵¬̲1̲6̲ ̲+̲ ̲l̲a̲n̲e̲.̲v̲a̲l̲ ̲<̲ ̲1̲6̲)̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRw21TraceColumns.liftBase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRw21TraceColumns.base' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRw21TraceColumns.trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRw21TraceColumns.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRw21TraceColumns.mask' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRw21TraceColumns.helper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRw21TraceColumns.balance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRw21TraceColumns.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

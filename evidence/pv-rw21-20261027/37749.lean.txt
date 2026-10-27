@@ -1,0 +1,34 @@
+import R1Z.ProverRw21ArrayRead
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21FlatOutput
+open Aeneas Aeneas.Std Result ProverRwFull
+open ProverRw21ArrayRead
+abbrev W := aspis_core.field.wide_exact.WideExact
+
+def words (x : W) : Array U32 8#usize :=
+  Array.make 8#usize [x.c0.c0.a,x.c0.c0.b,x.c0.c1.a,x.c0.c1.b,
+    x.c1.c0.a,x.c1.c0.b,x.c1.c1.a,x.c1.c1.b]
+
+def bytes (x : W) : List U8 :=
+  (core.num.U32.to_le_bytes x.c0.c0.a).val ++
+  (core.num.U32.to_le_bytes x.c0.c0.b).val ++
+  (core.num.U32.to_le_bytes x.c0.c1.a).val ++
+  (core.num.U32.to_le_bytes x.c0.c1.b).val ++
+  (core.num.U32.to_le_bytes x.c1.c0.a).val ++
+  (core.num.U32.to_le_bytes x.c1.c0.b).val ++
+  (core.num.U32.to_le_bytes x.c1.c1.a).val ++
+  (core.num.U32.to_le_bytes x.c1.c1.b).val
+
+theorem length (x : W) : (bytes x).length=32 := by
+  unfold bytes
+  simp only [List.length_append,(core.num.U32.to_le_bytes _).property]
+  rfl
+
+def output (x : W) : Array U8 32#usize := ⟨bytes x,length x⟩
+
+#print axioms words
+#print axioms bytes
+#print axioms length
+#print axioms output
+end R1Z.ProverRw21FlatOutput

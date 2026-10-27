@@ -1,0 +1,33 @@
+import R1Z.ProverRw21TraceColumns
+import R1Z.ProverRw18FullCarrier
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21InputField
+open Aeneas Aeneas.Std ProverRw21TraceColumns ProverCommitValueRange47
+
+/-- Pure field decoding of an input word, including noncanonical words. This
+is not an assertion that arbitrary noncanonical source executions succeed. -/
+def decode (x : U32) : M := (x.val : M)
+
+theorem lift_injective (x y : M) (h : liftBase x=liftBase y) : x=y :=
+  congrArg (fun z : Q => z.re.re) h
+
+theorem source_initial (x : U32) :
+    ProverRw18FullCarrier.value (PV_RW_CompressLiftSelectors.initial x)=liftBase (decode x) := by
+  unfold ProverRw18FullCarrier.value ProverRw18FullCarrier.raw PV_RW_CompressLiftSelectors.initial
+    ProverRw18FieldMeaning.decode AspisR1.ExtractedCurrentQM31Exact.decode liftBase decode
+  simp only [show (0#u32).val=(0 : Nat) from rfl,Nat.cast_zero]
+
+theorem canonical_word_roundtrip (x : M) : decode (ProverRw18FieldEncode.word x)=x :=
+  ProverRw18FieldEncode.word_decoded x
+
+theorem encoded_initial (x : M) :
+    ProverRw18FullCarrier.value (PV_RW_CompressLiftSelectors.initial (ProverRw18FieldEncode.word x))=liftBase x := by
+  rw [source_initial,canonical_word_roundtrip]
+
+#print axioms decode
+#print axioms lift_injective
+#print axioms source_initial
+#print axioms canonical_word_roundtrip
+#print axioms encoded_initial
+end R1Z.ProverRw21InputField
