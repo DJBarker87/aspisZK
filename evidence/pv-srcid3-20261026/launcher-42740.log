@@ -1,0 +1,56 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0758); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortNodeResult.lean:26:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  joined.index_usize 15#usize
+in the target expression
+  (do
+      let m ← (PV_Src_PortNodeCopy.joined left right).index_usize (Usize.wrapping_sub 16#usize 1#usize)
+      let m1 ← aspis_core.field.M31.add m poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+      let s1 ← (PV_Src_PortNodeCopy.joined left right).update (Usize.wrapping_sub 16#usize 1#usize) m1
+      let s2 ← poseidon2.permute_optimized_with_trace PV_Src_PortNoop.callback s1 ()
+      BuilderForestStdPort.core.array.from_fn 8#usize
+          poseidon2.merkle_node_compress_v3.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31 s2) =
+    ok (digest8 out)
+
+case refine_1
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+left right : Std.Array U32 8#usize
+hr : ↑(↑right)[7]! < 2147483647
+z : aspis_core.field.M31
+hz : aspis_core.field.M31.add (↑right)[7]! poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK = ok z
+left✝ : ↑z < 2147483647
+hmz : liftU z = liftU (↑right)[7]! - 1051521018
+joined : Std.Array U32 16#usize := PV_Src_PortNodeCopy.joined left right
+hlast : (↑joined)[15]! = (↑right)[7]!
+out : State
+ho : poseidon2.permute_optimized_with_trace PV_Src_PortNoop.callback (joined.set 15#usize z) () = ok out
+hc : Canonical out
+hm : liftA out = R0P.poseidonPermutation (liftA (joined.set 15#usize z))
+⊢ (do
+      let m ← (PV_Src_PortNodeCopy.joined left right).index_usize (Usize.wrapping_sub 16#usize 1#usize)
+      let m1 ← aspis_core.field.M31.add m poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+      let s1 ← (PV_Src_PortNodeCopy.joined left right).update (Usize.wrapping_sub 16#usize 1#usize) m1
+      let s2 ← poseidon2.permute_optimized_with_trace PV_Src_PortNoop.callback s1 ()
+      BuilderForestStdPort.core.array.from_fn 8#usize
+          poseidon2.merkle_node_compress_v3.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31 s2) =
+    ok (digest8 out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_Src_PortNodeResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.64
+	Maximum resident set size (kbytes): 4141580
+	Swaps: 0
+	Exit status: 1

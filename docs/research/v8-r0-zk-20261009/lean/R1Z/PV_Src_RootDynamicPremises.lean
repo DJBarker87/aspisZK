@@ -11,6 +11,8 @@ variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
 
 abbrev external := PV_Src_ExternalReference.dictionary
 abbrev records := @PV_Src_RecordDynamic.dictionary external
+local instance : ExternalLinear := external
+local instance : Records := records
 
 /-! Three remaining obligations for the computed-root source dictionary on
 canonical encoded data. Installed input/mapper association is still separate. -/
@@ -26,7 +28,7 @@ structure Core {I : Type} (data : I → PV_Src_FrozenInput.Data (K := K))
 
 theorem source {I : Type} (data : I → PV_Src_FrozenInput.Data (K := K))
     (transport : Fin 1024 ≃ Fin 1024) (core : Core data transport) :
-    @PV_Src_NativeIdentification.PV_Src_Premises K _ _ _ _ _ external records I
+    @PV_Src_NativeIdentification.PV_Src_Premises K _ _ external records I
       (fun i => PV_Src_FrozenInput.input (data i)) transport where
   compile_call := core.compile_call
   words := fun i r hr => @PV_Src_RecordDynamic.words external _ (PV_Src_FrozenInput.checked (data i)) r hr

@@ -1,0 +1,47 @@
+import R1Z.PV_Src_PortNodeShape
+import R1Z.PV_Src_PortNodeDigest
+import R1Z.PV_Src_PortNodePreMeaning
+import R1Z.PV_Src_PortPermutation
+set_option autoImplicit false
+namespace R1Z.PV_Src_PortNodeResult
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.PoseidonRefine
+open BuilderForestAdmissionPort PV_Src_PortSboxStep
+variable {K : Type} [Field K] [CharP K 2147483647]
+
+theorem source (left right : Array U32 8#usize) (hr : (right.val[7]!).val < 2147483647) :
+    ∃ out : Array U32 8#usize,
+      poseidon2.merkle_node_compress_v3
+        (sourceExternalLinear := PV_Src_ExternalReference.dictionary) left right = ok out ∧
+      Canon8 out ∧
+      ∀ j : Fin 8, liftU (K := K) out.val[j.val]! =
+        R0P.nodeCompress (fun i => liftU left.val[i.val]!) (fun i => liftU right.val[i.val]!) j := by
+  obtain ⟨z,hz,_,hmz⟩ := PV_Src_PortNodeTweak.source (K := K) right.val[7]! hr
+  let joined := PV_Src_PortNodeCopy.joined left right
+  have hlast : joined.val[15]! = right.val[7]! := by
+    exact PV_Src_PortJoinedWords.source left right ⟨15,by decide⟩
+  obtain ⟨out,ho,hc,hm⟩ := PV_Src_PortPermutation.source (K := K) (joined.set 15#usize z)
+  refine ⟨digest8 out,?_,?_,?_⟩
+  · rw [PV_Src_PortNodeShape.source,PV_Src_PortNodeShape.finish]
+    have hi : Usize.wrapping_sub 16#usize 1#usize = 15#usize := by decide
+    simp only [poseidon2.POSEIDON2_WIDTH,lift,bind_tc_ok,hi]
+    change (do
+      let m ← Array.index_usize joined 15#usize
+      let m1 ← aspis_core.field.M31.add m poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+      let s1 ← Array.update joined 15#usize m1
+      let s2 ← poseidon2.permute_optimized_with_trace
+        (sourceExternalLinear := PV_Src_ExternalReference.dictionary) PV_Src_PortNoop.callback s1 ()
+      BuilderForestStdPort.core.array.from_fn 8#usize
+        poseidon2.merkle_node_compress_v3.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31 s2) = ok (digest8 out)
+    rw [index_ok joined 15#usize (by decide),hlast,hz]
+    simp only [bind_tc_ok,update_ok joined 15#usize z (by decide),ho,PV_Src_PortNodeDigest.source]
+  · intro j hj
+    rw [digest8_get out j hj]
+    exact hc ⟨j,by omega⟩
+  · intro j
+    rw [digest8_get out j.val j.isLt]
+    have h := congrFun hm ⟨j.val,by omega⟩
+    rw [PV_Src_PortNodePreMeaning.source left right z hmz] at h
+    exact h
+
+#print axioms source
+end R1Z.PV_Src_PortNodeResult

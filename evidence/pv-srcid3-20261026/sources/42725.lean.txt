@@ -1,0 +1,14 @@
+import R1Z.PV_Src_Forest_DigestArguments
+set_option autoImplicit false
+namespace R1Z.PV_Src_PortDigestEta
+open Aeneas Aeneas.Std Result
+
+theorem source (d : Array U32 8#usize) :
+    d = ⟨[d.val[0]!,d.val[1]!,d.val[2]!,d.val[3]!,d.val[4]!,d.val[5]!,d.val[6]!,d.val[7]!],by decide⟩ := by
+  apply BuilderRecordCanonical.array_ext
+  intro j hj
+  have h : j<8 := by simpa only [UScalar.ofNatCore_val_eq] using hj
+  interval_cases j <;> rfl
+
+#print axioms source
+end R1Z.PV_Src_PortDigestEta

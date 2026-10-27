@@ -4,6 +4,8 @@ noncomputable section
 namespace R1Z.PV_Src_RootDynamicIdentification
 open Aeneas Aeneas.Std Result R1J.SpendWitnessMap
 open PV_Src_RootDynamicPremises
+local instance : BuilderForestAdmissionPort.ExternalLinear := external
+local instance : BuilderForestAdmissionPort.Records := records
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]
 

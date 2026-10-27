@@ -24,7 +24,7 @@ theorem toPremises {I : Type} (external : ExternalLinear) (records : Records)
     (inputs : I → Input) (transport : Fin 1024 ≃ Fin 1024)
     (core : Core (K := K) external records inputs transport)
     (association : PV_Src_PublicDeploymentAssociation.Association records inputs) :
-    @PV_Src_NativeIdentification.PV_Src_Premises K _ _ _ _ _ external records I inputs transport where
+    @PV_Src_NativeIdentification.PV_Src_Premises K _ _ external records I inputs transport where
   compile_call := core.compile_call
   words := core.words
   publicCorr := PV_Src_PublicDeploymentAssociation.correspondence records inputs association

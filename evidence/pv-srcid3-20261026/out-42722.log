@@ -1,0 +1,68 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortThreadedResult.lean:34:2: error: unsolved goals
+case refine_1
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+s : State
+first : Std.Array U32 16#usize
+hfirst : R0PoseidonCopy.external_linear s = ok first
+hmeaning : ∀ (i : Fin 16), liftU (↑first)[↑i]! = R0P.poseidonExternalLinear (liftA s) i
+hcan : Canonical first
+sa : State
+ta : Unit
+ra : U8
+ia : State
+ha :
+  poseidon2.permute_optimized_with_trace_loop0 PV_Src_PortNoop.callback
+      { iter := { slice := poseidon2.EXTERNAL_INITIAL.to_slice, i := 0 }, count := 0#usize } first () 0#u8 s =
+    ok (sa, ta, ra, ia)
+hca : Canonical (sa, ta, ra, ia).1
+hma :
+  liftA (sa, ta, ra, ia).1 =
+    PV_Src_PortFullMeaning.model (PV_Src_PortEnumerateTrace.pairs (↑poseidon2.EXTERNAL_INITIAL) 0#usize) (liftA first)
+sb : State
+tb : Unit
+rb : U8
+ib : State
+hb :
+  poseidon2.permute_optimized_with_trace_loop1 PV_Src_PortNoop.callback
+      { iter := ↑poseidon2.INTERNAL, count := 0#usize } sa ta ra ia =
+    ok (sb, tb, rb, ib)
+hcb : Canonical (sb, tb, rb, ib).1
+hmb :
+  liftA (sb, tb, rb, ib).1 =
+    PV_Src_PortInternalMeaning.model (PV_Src_PortEnumerateTrace.pairs (↑poseidon2.INTERNAL) 0#usize) (liftA sa)
+c : State × Unit
+hc :
+  poseidon2.permute_optimized_with_trace_loop2 PV_Src_PortNoop.callback
+      { iter := { slice := poseidon2.EXTERNAL_FINAL.to_slice, i := 0 }, count := 0#usize } sb tb rb ib =
+    ok c
+hcc : Canonical c.1
+hmc :
+  liftA c.1 =
+    PV_Src_PortFullMeaning.model (PV_Src_PortEnumerateTrace.pairs (↑poseidon2.EXTERNAL_FINAL) 0#usize) (liftA sb)
+⊢ (let (a, t, r, i) := (sa, ta, ra, ia)
+    do
+    let (b, t1, r1, i1) ←
+      poseidon2.permute_optimized_with_trace_loop1 PV_Src_PortNoop.callback
+          { iter := ↑poseidon2.INTERNAL, count := 0#usize } a t r i
+    poseidon2.permute_optimized_with_trace_loop2 PV_Src_PortNoop.callback
+        { iter := { slice := poseidon2.EXTERNAL_FINAL.to_slice, i := 0 }, count := 0#usize } b t1 r1 i1) =
+    ok c
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortThreadedResult.lean:35:29: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲ha, ̲hb̵,̵h̵c]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortThreadedResult.lean:35:32: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲ha, ̲hb,̵h̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Src_PortThreadedResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

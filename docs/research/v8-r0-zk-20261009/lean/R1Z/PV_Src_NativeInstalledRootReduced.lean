@@ -14,7 +14,7 @@ theorem source {I : Type} (external : ExternalLinear) (records : Records)
     (records_law : PV_Src_RecordAssociation.Associated external records)
     (frontier : ∀ i (l : Fin 20), Canon8 (inputs i).snapshot.frontier.val[l.val]!)
     (core : PV_Src_NativeRootReduced.Core (K := K) external records inputs transport) :
-    @PV_Src_NativeIdentification.PV_Src_Premises K _ _ _ _ _ external records I inputs transport where
+    @PV_Src_NativeIdentification.PV_Src_Premises K _ _ external records I inputs transport where
   compile_call := core.compile_call
   words := core.words
   publicCorr := fun i r hr => PV_Src_PublicInstalledRoot.correspondence external records
