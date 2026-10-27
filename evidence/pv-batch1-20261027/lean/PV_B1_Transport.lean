@@ -48,9 +48,9 @@ theorem slice_length {A B : Type} (f : A → B) (v : Slice A) :
   simp only [Slice.len_val,Slice.length,sliceMap,List.length_map]
 
 theorem array_set {A B : Type} {N : Usize} (f : A → B) (v : Array A N) (i : Usize) (a : A) :
-    arrayMap f (Array.set v i a) = Array.set (arrayMap f v) i (f a) := by
+    arrayMap f (Aeneas.Std.Array.set v i a) = Aeneas.Std.Array.set (arrayMap f v) i (f a) := by
   apply Subtype.ext
-  simp only [arrayMap,Array.set,List.map_set]
+  simp only [arrayMap,Aeneas.Std.Array.set,List.map_set]
 
 theorem array_repeat {A B : Type} (N : Usize) (f : A → B) (a : A) :
     arrayMap f (Array.repeat N a) = Array.repeat N (f a) := by
