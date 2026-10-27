@@ -1,0 +1,55 @@
+{"attempt": "XRy_L038", "exit_status": 0, "wall_seconds": 1.8737398880184628, "peak_rss_kib": "4769344", "swaps": "0", "print_axioms": ["'XRy_LoopWide.canonical' does not depend on any axioms", "'XRy_LoopWide.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'XRy_LoopWide.canonical' does not depend on any axioms
+'XRy_LoopWide.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Aeneas.Std.Array.set.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Std.Array α n :=
+fun {α} {n} v i x => ⟨(↑v).set (↑i) x, ⋯⟩
+theorem Aeneas.Std.loop.eq_def.{u, v} : ∀ {α : Type u} {β : Type v} (body : α → Result (ControlFlow α β)) (x : α),
+  loop body x =
+    match body x with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x => loop body x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div :=
+fun {α} {β} body x =>
+  id
+    (Eq.trans (congrFun (Lean.Order.fix_eq (loop._proof_1 body)) x)
+      (Eq.refl
+...
+'XRy_LoopWide.canonical' does not depend on any axioms
+'XRy_LoopWide.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Aeneas.Std.Array.set.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Std.Array α n :=
+fun {α} {n} v i x => ⟨(↑v).set (↑i) x, ⋯⟩
+theorem Aeneas.Std.loop.eq_def.{u, v} : ∀ {α : Type u} {β : Type v} (body : α → Result (ControlFlow α β)) (x : α),
+  loop body x =
+    match body x with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x => loop body x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div :=
+fun {α} {β} body x =>
+  id
+    (Eq.trans (congrFun (Lean.Order.fix_eq (loop._proof_1 body)) x)
+      (Eq.refl
+        (match body x with
+        | ok r =>
+          match r with
+          | ControlFlow.cont x =>
+            Lean.Order.fix
+              (fun f x =>
+                match body x with
+                | ok r =>
+                  match r with
+                  | ControlFlow.cont x => f x
+                  | ControlFlow.done x => ok x
+                | fail e => fail e
+                | div => div)
+              (loop._proof_1 body) x
+          | ControlFlow.done x => ok x
+        | fail e => fail e
+        | div => div)))
+
+Running as unit: run-rd2d9758387f844dd8f9786a1f75d39ba.scope; invocation ID: 612c1501f70a4d52a977ad0b772f5ba2

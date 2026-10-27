@@ -1,0 +1,5 @@
+# Arithmetic dependencies for powers
+
+Accepted L024 reducer equality on every U64 plus checked/wrapping U64 bounds; L026 exact widened cross fragment; L029 canonical CM31 multiplication equality on XRt's inherited M31 equality; L030 canonical add/sub/mul outputs; L031 mul_by_r; L033 canonical QM31 multiplication; L035 canonical QM31 add/sub/mul_u; L036 wide multiplication; L038 transport to the installed LoopPowers carrier. All new theorem audits contain only standard axioms or none.
+
+These results supply the mathematical CM31/QM31/mul_u sub-obligations, with explicit canonical inputs. They do not close A3, which still needs installed claim/powers transport and whole prepared_claim native P6. They are required dependencies for stage3 powers; no claim that A2/whole prepare is closed. The remaining actual adopted-top premise delta is still zero. No trust, carrier or cohort statement was weakened. Total canonical arithmetic witnesses make the local statements non-vacuous; joint deployed root inhabitance remains open.

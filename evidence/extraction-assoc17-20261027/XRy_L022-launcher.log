@@ -1,0 +1,57 @@
+{"attempt": "XRy_L022", "exit_status": 1, "wall_seconds": 1.839382599981036, "peak_rss_kib": "4742988", "swaps": "0", "print_axioms": []}
+def AspisR1CurrentPreparedClaim.ClaimPowers.powers : (N : Usize) →
+  AspisR1CurrentPreparedClaim.Concrete.E → Result (Std.Array AspisR1CurrentPreparedClaim.Concrete.E N) :=
+fun N x => do
+  let out ← AspisR1LoopPowers.weights.early_powers N (AspisR1CurrentPreparedClaim.ClaimPowers.toPowers x)
+  ok (AspisR1CurrentPreparedClaim.ClaimPowers.mapArray out)
+def AspisR1ClaimPreparedBridge.powersPublic : (N : Usize) →
+  AspisR1ClaimPreparedBridge.PE → Result (Std.Array AspisR1ClaimPreparedBridge.PE N) :=
+fun N x => do
+  let ys ← AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x)
+  ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE ys)
+X
+...
+  Result AspisR1CurrentWideMul.field.QM31 :=
+fun value => do
+  let c ← AspisR1CurrentWideMul.field.mul_by_r value.c1
+  ok { c0 := c, c1 := value.c0 }
+def AspisR1Qm31ArithmeticProbe.field.CM31.mul : AspisR1Qm31ArithmeticProbe.field.CM31 →
+  AspisR1Qm31ArithmeticProbe.field.CM31 → Result AspisR1Qm31ArithmeticProbe.field.CM31 :=
+fun self rhs => do
+  let m0 ← self.a.mul rhs.a
+  let m1 ← self.b.mul rhs.b
+  have i : AspisR1Qm31ArithmeticProbe.field.M31 := self.a
+  let i1 ← lift (core.convert.num.FromU64U32.from i)
+  have i2 : AspisR1Qm31ArithmeticProbe.field.M31 := self.b
+  let i3 ← lift (core.convert.num.FromU64U32.from i2)
+  let i4 ← i1 + i3
+  have i5 : AspisR1Qm31ArithmeticProbe.field.M31 := rhs.a
+  let i6 ← lift (core.convert.num.FromU64U32.from i5)
+  have i7 : AspisR1Qm31ArithmeticProbe.field.M31 := rhs.b
+  let i8 ← lift (core.convert.num.FromU64U32.from i7)
+  let i9 ← i6 + i8
+  let i10 ← i4 * i9
+  let m2 ← AspisR1Qm31ArithmeticProbe.field.M31.reduce_u64 i10
+  let m ← m0.sub m1
+  let m3 ← m2.sub m0
+  let m4 ← m3.sub m1
+  ok { a := m, b := m4 }
+def AspisR1Qm31ArithmeticProbe.field.M31.sub : AspisR1Qm31ArithmeticProbe.field.M31 →
+  AspisR1Qm31ArithmeticProbe.field.M31 → Result AspisR1Qm31ArithmeticProbe.field.M31 :=
+fun self rhs => do
+  let i ← self + AspisR1Qm31ArithmeticProbe.field.P
+  let s ← i - rhs
+  if s ≥ AspisR1Qm31ArithmeticProbe.field.P then do
+      let s1 ← s - AspisR1Qm31ArithmeticProbe.field.P
+      ok s1
+    else ok s
+def AspisR1Qm31ArithmeticProbe.field.M31.add : AspisR1Qm31ArithmeticProbe.field.M31 →
+  AspisR1Qm31ArithmeticProbe.field.M31 → Result AspisR1Qm31ArithmeticProbe.field.M31 :=
+fun self rhs => do
+  let s ← self + rhs
+  if s ≥ AspisR1Qm31ArithmeticProbe.field.P then do
+      let s1 ← s - AspisR1Qm31ArithmeticProbe.field.P
+      ok s1
+    else ok s
+
+Running as unit: run-r7ae0066bf5dd42f5854b1f85ad87bc5b.scope; invocation ID: 78ccaff515f9422698223f441da007f6

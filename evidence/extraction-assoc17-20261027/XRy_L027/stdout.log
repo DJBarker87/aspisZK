@@ -1,0 +1,115 @@
+XRy_generated/XRy_ComplexMultiply.lean:37:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let a ←
+      do
+        let m2 ←
+          XRn_Join_Field.field.M31.reduce_u64
+              (((widen a.a).wrapping_add (widen a.b)).wrapping_mul ((widen b.a).wrapping_add (widen b.b)))
+        let high0 ← m2.sub m0
+        let high ← high0.sub m1
+        ok { a := low, b := high }
+    ok { a := a.a, b := a.b }
+is not definitionally equal to the right-hand side
+  do
+    let m2 ←
+      AspisR1Qm31ArithmeticProbe.field.M31.reduce_u64
+          (((widen a.a).wrapping_add (widen a.b)).wrapping_mul ((widen b.a).wrapping_add (widen b.b)))
+    let high0 ← m2.sub m0
+    let high ← high0.sub m1
+    ok { a := low, b := high }
+
+a b : EC
+ha : Canonical a
+hb : Canonical b
+m0 : XRn_Join_Field.field.M31
+e0 : XRn_Join_Field.field.M31.mul a.a b.a = ok m0
+c0 : AspisR1Qm31ArithmeticProbe.field.M31.mul a.a b.a = ok m0
+v0 : ↑m0 = ↑a.a * ↑b.a % 2147483647
+h0 : ↑m0 < 2147483647
+m1 : XRn_Join_Field.field.M31
+e1 : XRn_Join_Field.field.M31.mul a.b b.b = ok m1
+c1 : AspisR1Qm31ArithmeticProbe.field.M31.mul a.b b.b = ok m1
+v1 : ↑m1 = ↑a.b * ↑b.b % 2147483647
+h1 : ↑m1 < 2147483647
+product : U64 := ((widen a.a).wrapping_add (widen a.b)).wrapping_mul ((widen b.a).wrapping_add (widen b.b))
+m2 : AspisR1Qm31ArithmeticProbe.field.M31
+c2 : AspisR1Qm31ArithmeticProbe.field.M31.reduce_u64 product = ok m2
+v2 : ↑m2 = ↑product % AspisV8R17.RawReducer.P
+h2 : ↑m2 < AspisV8R17.RawReducer.P
+e2 : XRn_Join_Field.field.M31.reduce_u64 product = ok m2
+low : AspisR1Qm31ArithmeticProbe.field.M31
+cl : AspisR1Qm31ArithmeticProbe.field.M31.sub m0 m1 = ok low
+vl : ↑low = (↑m0 + AspisR1.ExtractedCurrentM31AddSub.P - ↑m1) % AspisR1.ExtractedCurrentM31AddSub.P
+hl : ↑low < AspisR1.ExtractedCurrentM31AddSub.P
+high0 : AspisR1Qm31ArithmeticProbe.field.M31
+ch0 : m2.sub m0 = ok high0
+vh0 : ↑high0 = (↑m2 + AspisR1.ExtractedCurrentM31AddSub.P - ↑m0) % AspisR1.ExtractedCurrentM31AddSub.P
+hh0 : ↑high0 < AspisR1.ExtractedCurrentM31AddSub.P
+high : AspisR1Qm31ArithmeticProbe.field.M31
+ch : high0.sub m1 = ok high
+vh : ↑high = (↑high0 + AspisR1.ExtractedCurrentM31AddSub.P - ↑m1) % AspisR1.ExtractedCurrentM31AddSub.P
+hh : ↑high < AspisR1.ExtractedCurrentM31AddSub.P
+el : m0.sub m1 = ok low
+eh0 : XRn_Join_Field.field.M31.sub m2 m0 = ok high0
+eh : XRn_Join_Field.field.M31.sub high0 m1 = ok high
+⊢ (do
+      let a ←
+        do
+          let m2 ←
+            XRn_Join_Field.field.M31.reduce_u64
+                (((widen a.a).wrapping_add (widen a.b)).wrapping_mul ((widen b.a).wrapping_add (widen b.b)))
+          let high0 ← m2.sub m0
+          let high ← high0.sub m1
+          ok { a := low, b := high }
+      ok { a := a.a, b := a.b }) =
+    do
+    let m2 ←
+      AspisR1Qm31ArithmeticProbe.field.M31.reduce_u64
+          (((widen a.a).wrapping_add (widen a.b)).wrapping_mul ((widen b.a).wrapping_add (widen b.b)))
+    let high0 ← m2.sub m0
+    let high ← high0.sub m1
+    ok { a := low, b := high }
+XRy_generated/XRy_ComplexMultiply.lean:36:22: warning: This simp argument is unused:
+  e2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵o̵C̵,̵e̵0̵,̵e̵1̵,̵e̵2̵,̵c̵0̵,̵c̵1̵,̵c̵2̵,̵e̵l̵,̵e̵h̵0̵,̵e̵h̵,̵c̵l̵,̵c̵h̵0̵,̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵m̵a̵p̵R̵]̵[̲t̲o̲C̲,̲ ̲e̲0̲,̲ ̲e̲1̲,̲ ̲c̲0̲,̲ ̲c̲1̲,̲ ̲c̲2̲,̲ ̲e̲l̲,̲ ̲e̲h̲0̲,̲ ̲e̲h̲,̲ ̲c̲l̲,̲ ̲c̲h̲0̲,̲ ̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲m̲a̲p̲R̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRy_generated/XRy_ComplexMultiply.lean:36:31: warning: This simp argument is unused:
+  c2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵o̵C̵,̵e̵0̵,̵e̵1̵,̵e̵2̵,̵c̵0̵,̵c̵1̵,̵c̵2̵,̵e̵l̵,̵e̵h̵0̵,̵e̵h̵,̵c̵l̵,̵c̵h̵0̵,̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵m̵a̵p̵R̵]̵[̲t̲o̲C̲,̲ ̲e̲0̲,̲ ̲e̲1̲,̲ ̲e̲2̲,̲ ̲c̲0̲,̲ ̲c̲1̲,̲ ̲e̲l̲,̲ ̲e̲h̲0̲,̲ ̲e̲h̲,̲ ̲c̲l̲,̲ ̲c̲h̲0̲,̲ ̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲m̲a̲p̲R̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRy_generated/XRy_ComplexMultiply.lean:36:37: warning: This simp argument is unused:
+  eh0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵o̵C̵,̵e̵0̵,̵e̵1̵,̵e̵2̵,̵c̵0̵,̵c̵1̵,̵c̵2̵,̵e̵l̵,̵e̵h̵0̵,̵e̵h̵,̵c̵l̵,̵c̵h̵0̵,̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵m̵a̵p̵R̵]̵[̲t̲o̲C̲,̲ ̲e̲0̲,̲ ̲e̲1̲,̲ ̲e̲2̲,̲ ̲c̲0̲,̲ ̲c̲1̲,̲ ̲c̲2̲,̲ ̲e̲l̲,̲ ̲e̲h̲,̲ ̲c̲l̲,̲ ̲c̲h̲0̲,̲ ̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲m̲a̲p̲R̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRy_generated/XRy_ComplexMultiply.lean:36:41: warning: This simp argument is unused:
+  eh
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵o̵C̵,̵e̵0̵,̵e̵1̵,̵e̵2̵,̵c̵0̵,̵c̵1̵,̵c̵2̵,̵e̵l̵,̵e̵h̵0̵,̵e̵h̵,̵c̵l̵,̵c̵h̵0̵,̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵m̵a̵p̵R̵]̵[̲t̲o̲C̲,̲ ̲e̲0̲,̲ ̲e̲1̲,̲ ̲e̲2̲,̲ ̲c̲0̲,̲ ̲c̲1̲,̲ ̲c̲2̲,̲ ̲e̲l̲,̲ ̲e̲h̲0̲,̲ ̲c̲l̲,̲ ̲c̲h̲0̲,̲ ̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲m̲a̲p̲R̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRy_generated/XRy_ComplexMultiply.lean:36:47: warning: This simp argument is unused:
+  ch0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵o̵C̵,̵e̵0̵,̵e̵1̵,̵e̵2̵,̵c̵0̵,̵c̵1̵,̵c̵2̵,̵e̵l̵,̵e̵h̵0̵,̵e̵h̵,̵c̵l̵,̵c̵h̵0̵,̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵m̵a̵p̵R̵]̵[̲t̲o̲C̲,̲ ̲e̲0̲,̲ ̲e̲1̲,̲ ̲e̲2̲,̲ ̲c̲0̲,̲ ̲c̲1̲,̲ ̲c̲2̲,̲ ̲e̲l̲,̲ ̲e̲h̲0̲,̲ ̲e̲h̲,̲ ̲c̲l̲,̲ ̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲m̲a̲p̲R̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRy_generated/XRy_ComplexMultiply.lean:36:51: warning: This simp argument is unused:
+  ch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵o̵C̵,̵e̵0̵,̵e̵1̵,̵e̵2̵,̵c̵0̵,̵c̵1̵,̵c̵2̵,̵e̵l̵,̵e̵h̵0̵,̵e̵h̵,̵c̵l̵,̵c̵h̵0̵,̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵m̵a̵p̵R̵]̵[̲t̲o̲C̲,̲ ̲e̲0̲,̲ ̲e̲1̲,̲ ̲e̲2̲,̲ ̲c̲0̲,̲ ̲c̲1̲,̲ ̲c̲2̲,̲ ̲e̲l̲,̲ ̲e̲h̲0̲,̲ ̲e̲h̲,̲ ̲c̲l̲,̲ ̲c̲h̲0̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲m̲a̲p̲R̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRy_ComplexMultiply.graph' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRy_ComplexMultiply.multiply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
