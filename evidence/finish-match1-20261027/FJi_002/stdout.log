@@ -1,0 +1,19 @@
+FJi_LaneValue.lean:18:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  a * b
+in the target expression
+  match UScalar.mul a b with
+  | ok z => ↑a * ↑b ≤ UScalar.max UScalarTy.U64 ∧ ↑z = ↑a * ↑b ∧ z.bv = a.bv * b.bv
+  | fail e => UScalar.max UScalarTy.U64 < ↑a * ↑b
+  | div => False
+
+a b c : U64
+run : a * b = ok c
+h :
+  match UScalar.mul a b with
+  | ok z => ↑a * ↑b ≤ UScalar.max UScalarTy.U64 ∧ ↑z = ↑a * ↑b ∧ z.bv = a.bv * b.bv
+  | fail e => UScalar.max UScalarTy.U64 < ↑a * ↑b
+  | div => False
+⊢ ↑c = ↑a * ↑b
+'AspisR1.FJi_LaneValue.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJi_LaneValue.mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJi_LaneValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
