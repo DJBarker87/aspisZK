@@ -1,0 +1,57 @@
+AspisR1DotPushLocal.Proof.push_total_from_raw
+  (rawFn :
+    AspisR1DotPushLocal.canonical.Q →
+      AspisR1DotPushLocal.canonical.Q → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U64 4#usize))
+  (self : AspisR1DotPushLocal.canonical.Dot) (left right : AspisR1DotPushLocal.canonical.Q)
+  (raw : Aeneas.Std.Array Aeneas.Std.U64 4#usize) (hraw : rawFn left right = Aeneas.Std.Result.ok raw) :
+  AspisR1DotPushLocal.canonical.Dot.push rawFn self left right =
+    Aeneas.Std.Result.ok { sums := AspisR1DotPushLocal.Proof.updatedSums self.sums raw }
+AspisR1DotPushLocal.Proof.push_success_raw_and_state
+  (rawFn :
+    AspisR1DotPushLocal.canonical.Q →
+      AspisR1DotPushLocal.canonical.Q → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U64 4#usize))
+  (self : AspisR1DotPushLocal.canonical.Dot) (left right : AspisR1DotPushLocal.canonical.Q)
+  (out : AspisR1DotPushLocal.canonical.Dot)
+  (hrun : AspisR1DotPushLocal.canonical.Dot.push rawFn self left right = Aeneas.Std.Result.ok out) :
+  ∃ raw, rawFn left right = Aeneas.Std.Result.ok raw ∧ out.sums = AspisR1DotPushLocal.Proof.updatedSums self.sums raw
+AspisR1DotPushLocal.Proof.push_four_coordinates
+  (rawFn :
+    AspisR1DotPushLocal.canonical.Q →
+      AspisR1DotPushLocal.canonical.Q → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U64 4#usize))
+  (left right : AspisR1DotPushLocal.canonical.Q) (a b c d r0 r1 r2 r3 : Aeneas.Std.U64)
+  (hraw : rawFn left right = Aeneas.Std.Result.ok (Aeneas.Std.Array.make 4#usize [r0, r1, r2, r3] ⋯)) :
+  AspisR1DotPushLocal.canonical.Dot.push rawFn { sums := Aeneas.Std.Array.make 4#usize [a, b, c, d] ⋯ } left right =
+    Aeneas.Std.Result.ok
+      {
+        sums :=
+          Aeneas.Std.Array.make 4#usize
+            [AspisR1DotPushLocal.Proof.updateWord a r0, AspisR1DotPushLocal.Proof.updateWord b r1,
+              AspisR1DotPushLocal.Proof.updateWord c r2, AspisR1DotPushLocal.Proof.updateWord d r3]
+            ⋯ }
+AspisR1EbyKPushConcreteCheckedQV1.push_concrete_checked_q_success (all : AspisR1EbyKPushConcreteCheckedQV1.All)
+  (pushDot :
+    AspisR1EbyKPushConcreteCheckedQV1.Dot →
+      AspisR1EbyKPushConcreteCheckedQV1.Q →
+        AspisR1EbyKPushConcreteCheckedQV1.Q → Aeneas.Std.Result AspisR1EbyKPushConcreteCheckedQV1.Dot)
+  (self : AspisR1EbyKPushConcreteCheckedQV1.State) (value : AspisR1EbyKPushConcreteCheckedQV1.Wide)
+  (scalar : AspisR1EbyKPushConcreteCheckedQV1.Qm) (out : AspisR1EbyKPushConcreteCheckedQV1.State)
+  (h :
+    AspisR1EbyKPushConcreteCheckedQV1.pushWithConcreteCheckedQ all pushDot self value scalar =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), out)) :
+  ∃ d0 d1 i,
+    pushDot self.c0 (AspisR1EbyKPushWideToQ.qFromCoords value.c0.c0.a value.c0.c0.b value.c0.c1.a value.c0.c1.b)
+          (Aeneas.Std.Array.make 4#usize [scalar.c0.a, scalar.c0.b, scalar.c1.a, scalar.c1.b] ⋯) =
+        Aeneas.Std.Result.ok d0 ∧
+      pushDot self.c1 (AspisR1EbyKPushWideToQ.qFromCoords value.c1.c0.a value.c1.c0.b value.c1.c1.a value.c1.c1.b)
+            (Aeneas.Std.Array.make 4#usize [scalar.c0.a, scalar.c0.b, scalar.c1.a, scalar.c1.b] ⋯) =
+          Aeneas.Std.Result.ok d1 ∧
+        out = { c0 := d0, c1 := d1, count := i } ∧
+          self.count < AspisR1EbyKPushExplicitOpsV1.maxTerms ∧ ↑out.count = ↑self.count + 1
+AspisR1EbyKPushDotBackend.dotViaRaw_success (rawFn : AspisR1EbyKPushDotBackend.RawFn)
+  (self : AspisR1EbyKPushDotBackend.PushDot) (a b : AspisR1EbyKPushDotBackend.PushQ)
+  (out : AspisR1EbyKPushDotBackend.PushDot)
+  (hrun : AspisR1EbyKPushDotBackend.dotViaRaw rawFn self a b = Aeneas.Std.Result.ok out) :
+  ∃ raw, rawFn a b = Aeneas.Std.Result.ok raw ∧ out.sums = AspisR1DotPushLocal.Proof.updatedSums self.sums raw
+def AspisR1CurrentPreparedClaim.ClaimParser.fromFinish : AspisR1CurrentPreparedClaim.ClaimParser.FinishE →
+  AspisR1CurrentPreparedClaim.ClaimParser.E :=
+fun x => AspisR1CurrentPreparedClaim.Concrete.fromFull (AspisR1CurrentWide.Proof.ofFinishE x)

@@ -18,3 +18,18 @@ with tempfile.TemporaryDirectory(prefix='LPm_upload_') as td:
 line='\n#[cfg(kani)] #[path="LPm_verifier.rs"] mod LPm_verifier;\n'
 script='from pathlib import Path; p=Path('+repr(B+'/LPm_src/crates/aspis-r1-cost-probe/src/verifier.rs')+'); s=p.read_text(); line='+repr(line)+'; p.write_text(s if line in s else s+line)'
 subprocess.run(['ssh',H,'python3 -c '+shlex.quote(script)],check=True)
+# A cfg(kani)-only child of canonical can observe the actual private caller ABI.
+active=False;out=[]
+for line in (E/'LPm_harness.patch').read_text().splitlines(True):
+ if line.startswith('--- '):active=False
+ elif line.startswith('+++ '):active=line.rstrip()=='+++ b/crates/aspis-r1-cost-probe/src/fast_pairing/canonical/LPm_pairing.rs'
+ elif active and line.startswith('+'):out.append(line[1:])
+if out:
+ remote=B+'/LPm_src/crates/aspis-r1-cost-probe/src/fast_pairing/canonical'
+ subprocess.run(['ssh',H,'mkdir -p '+remote],check=True)
+ with tempfile.TemporaryDirectory(prefix='LPm_pairing_upload_') as td:
+  p=Path(td)/'LPm_pairing.rs';p.write_text(''.join(out));subprocess.run(['scp','-q',str(p),H+':'+remote+'/LPm_pairing.rs'],check=True)
+ marker='\n    #[cfg(kani)] #[path="LPm_pairing.rs"] mod LPm_pairing;\n'
+ needle='\n}\n\n\nuse aspis_core::field'
+ script='from pathlib import Path; p=Path('+repr(B+'/LPm_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs')+'); s=p.read_text(); marker='+repr(marker)+'; needle='+repr(needle)+'; assert marker in s or s.count(needle)==1; p.write_text(s if marker in s else s.replace(needle,marker+"}\\n\\n\\nuse aspis_core::field"))'
+ subprocess.run(['ssh',H,'python3 -c '+shlex.quote(script)],check=True)

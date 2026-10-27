@@ -14,7 +14,7 @@ for f in files:
  p=base/f
  if not p.is_file():out[f]={'missing':True};continue
  data=p.read_bytes();normalized=data
- markers={'crates/aspis-r1-cost-probe/src/lib.rs':[b'\\n#[cfg(kani)] mod LPi_contracts;\\n'], 'crates/aspis-r1-cost-probe/src/verifier.rs':[b'\\n#[cfg(kani)] #[path="LPi_verifier.rs"] mod LPi_verifier;\\n',b'\\n#[cfg(kani)] #[path="LPm_verifier.rs"] mod LPm_verifier;\\n']}.get(f,[])
+ markers={'crates/aspis-r1-cost-probe/src/fast_pairing.rs':[b'\\n    #[cfg(kani)] #[path="LPm_pairing.rs"] mod LPm_pairing;\\n'], 'crates/aspis-r1-cost-probe/src/lib.rs':[b'\\n#[cfg(kani)] mod LPi_contracts;\\n'], 'crates/aspis-r1-cost-probe/src/verifier.rs':[b'\\n#[cfg(kani)] #[path="LPi_verifier.rs"] mod LPi_verifier;\\n',b'\\n#[cfg(kani)] #[path="LPm_verifier.rs"] mod LPm_verifier;\\n']}.get(f,[])
  for marker in markers:
   assert normalized.count(marker)==1,(f,'module count')
   normalized=normalized.replace(marker,b'\\n')

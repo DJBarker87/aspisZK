@@ -1,0 +1,39 @@
+{"attempt": "LPm_L061", "exit_status": 0, "wall_seconds": 1.9636149280122481, "peak_rss_kib": "5061128", "swaps": "0", "print_axioms": ["'AspisR1.LPm_RawPort.raw_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.LPm_RawPort.state_fields' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.LPm_RawPort.raw_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPm_RawPort.state_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1EbyKPushDecodedProductUpdate.successful_push_decoded_product_update
+  (self : AspisR1EbyKPushDecodedProductUpdate.PushState) (value : AspisR1EbyKPushDecodedProductUpdate.PushWide)
+  (scalar : AspisR1EbyKPushDecodedProductUpdate.PushQm) (out : AspisR1EbyKPushDecodedProductUpdate.PushState)
+  (hcanonical : AspisR1EbyKPowerValueCanonicalToPush.pushCanonical value) (hacc0 : ∀ x ∈ ↑self.c0.sums, ↑x < 2 ^ 46)
+  (hacc1 : ∀ x ∈ ↑self.c1.sums, ↑x < 2 ^ 46)
+  (hrun :
+    AspisR1EbyKPushDotBackend.pushWithDotBackend 
+...
+Sums out.c1.sums =
+      AspisR1EbyKPushDecodedProductUpdate.tupleAdd (AspisR1EbyKPushDecodedProductUpdate.castSums self.c1.sums)
+        (R22RawQmProductResidues.qmulCoefficients ((↑↑value.c1.c0.a, ↑↑value.c1.c0.b), ↑↑value.c1.c1.a, ↑↑value.c1.c1.b)
+          ((↑↑scalar.c0.a, ↑↑scalar.c0.b), ↑↑scalar.c1.a, ↑↑scalar.c1.b))
+AspisR1FinishDotSourceABI.finishFromPush_total (s : AspisR1FinishDotSourceABI.PushState) :
+  ∃ out,
+    AspisR1FinishDotSourceABI.finishFromPush s = ok out ∧
+      AspisR1CurrentWide.Proof.CanonicalFinish out ∧
+        AspisR1FinishDotSourceABI.finishWords out = List.map AspisR1EbyKFinish.Proof.word (↑s.c0.sums ++ ↑s.c1.sums)
+def AspisR1DotPushLocal.Proof.updatedSums : Std.Array U64 4#usize → Std.Array U64 4#usize → Std.Array U64 4#usize :=
+fun s r => ⟨List.zipWith AspisR1DotPushLocal.Proof.updateWord ↑s ↑r, ⋯⟩
+def AspisR1EbyKPushDecodedProductUpdate.castSums : Std.Array U64 4#usize →
+  AspisR1EbyKPushDecodedProductUpdate.M ×
+    AspisR1EbyKPushDecodedProductUpdate.M ×
+      AspisR1EbyKPushDecodedProductUpdate.M × AspisR1EbyKPushDecodedProductUpdate.M :=
+fun s => (↑↑(↑s)[0]!, ↑↑(↑s)[1]!, ↑↑(↑s)[2]!, ↑↑(↑s)[3]!)
+def AspisR1EbyKPushDecodedProductUpdate.tupleAdd : AspisR1EbyKPushDecodedProductUpdate.M ×
+    AspisR1EbyKPushDecodedProductUpdate.M ×
+      AspisR1EbyKPushDecodedProductUpdate.M × AspisR1EbyKPushDecodedProductUpdate.M →
+  AspisR1EbyKPushDecodedProductUpdate.M ×
+      AspisR1EbyKPushDecodedProductUpdate.M ×
+        AspisR1EbyKPushDecodedProductUpdate.M × AspisR1EbyKPushDecodedProductUpdate.M →
+    AspisR1EbyKPushDecodedProductUpdate.M ×
+      AspisR1EbyKPushDecodedProductUpdate.M ×
+        AspisR1EbyKPushDecodedProductUpdate.M × AspisR1EbyKPushDecodedProductUpdate.M :=
+fun x y => (x.1 + y.1, x.2.1 + y.2.1, x.2.2.1 + y.2.2.1, x.2.2.2 + y.2.2.2)
+
+Running as unit: run-r87bee25e4ecc4334a711a63f614565f9.scope; invocation ID: 72ac957dde3e492c9c5b79e02b649ba2

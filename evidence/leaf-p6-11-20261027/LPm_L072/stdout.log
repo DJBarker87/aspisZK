@@ -1,0 +1,49 @@
+LPm_generated/LPm_PointLoop.lean:58:4: error: Type mismatch
+  ih
+has type
+  verifier.prepared_claim_dot_loop ops inst iter' sem y1 g point (statePort s') = ok (core.result.Result.Ok (ePort out))
+but is expected to have type
+  (match do
+      let r1 ←
+        core.result.Result.map_err (verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError inst)
+            (core.result.Result.Ok ()) ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter', sem, point, statePort s'))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Concrete.E
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let __x ← core.iter.range.IteratorRange.next core.iter.range.StepUsize x.1
+            match __x.1 with
+              | none => do
+                let out ← ops.finishDot x.2.2.2
+                ok (done (core.result.Result.Ok out))
+              | some l => do
+                let scalar ← ClaimScalar.read ops x.2.1 y1 x.2.2.1 l
+                let coeff ← g.index_usize l
+                let __x_1 ← ops.pushDot x.2.2.2 coeff scalar
+                let r1 ←
+                  core.result.Result.map_err
+                      (verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError inst) __x_1.1 ()
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (cont (__x.2, x.2.1, x.2.2.1, __x_1.2))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r2 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Concrete.E
+                          (core.convert.FromSame verifier.Error) residual
+                    ok (done r2))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (ePort out))
+'AspisR1.LPm_PointLoop.model_push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPm_PointLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

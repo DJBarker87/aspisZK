@@ -1,0 +1,59 @@
+{
+  "sources": [
+    "LPm_src/Cargo.lock",
+    "LPm_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "LPm_src/crates/aspis-r1-cost-probe/src/LPi_contracts.rs",
+    "LPm_src/crates/aspis-r1-cost-probe/src/LPm_verifier.rs",
+    "LPm_src/crates/aspis-r1-cost-probe/src/LPi_verifier.rs",
+    "LPm_src/crates/aspis-r1-cost-probe/src/fast_pairing/canonical/LPm_pairing.rs",
+    "LPm_src/crates/aspis-core/src/field.rs",
+    "LPm_src/crates/aspis-core/src/field/wide_exact.rs",
+    "LPm_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+    "LPm_src/crates/aspis-r1-cost-probe/src/verifier.rs"
+  ],
+  "source_revision": "e4bfb7783d660a6e2a2fff3836603fa70c67b973",
+  "source_tree_dirty": true,
+  "env": {
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-leaf-p6-11-20261027/LPm_tmp",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "LPm_K016",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-11-20261027/LPm_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-11-20261027/LPm_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::LPm_verifier::weighted_add_tail",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation, then named solver stage weighted_add_tail",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "LPm_K016-graph-check.json"
+  },
+  "reservation_retries": 0
+}

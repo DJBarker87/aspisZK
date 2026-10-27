@@ -1,0 +1,59 @@
+{"attempt": "LPm_K014", "exit_status": 0, "wall_seconds": 9.056940027046949, "peak_rss_kib": "847888", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:531:44
+    |
+531 | #[cfg(kani)] #[path="LPi_verifier.rs"] mod LPi_verifier;
+    |                                            ^^^^^^^^^^^^ help: convert the identifier to snake case: `lpi_verifier`
+
+warning: module `LPm_verifier` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:533:44
+    |
+533 | #[cfg(kani)] #[path="LPm_verifier.rs"] mod LPm_verifier;
+    |                                            ^^^^^^^^^^^^ help: convert the identifier to snake case: `lpm_verifier`
+
+warning: module `LPm_emul` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPm_verifier.rs:88:5
+   |
+88 | mod LPm_emul {
+   |     ^^^^^^^^ help: convert the identifier to snake case: `lpm_emul`
+
+warning: function `LPm_any_e` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/LPm_verifier.rs:123:4
+    |
+123 | fn LPm_any_e()->E{let w:[u32;8]=kani::any();for v in w {kani::assume(v<0x7fff_ffff);}E::from_limbs(w).unwrap()}
+    |    ^^^^^^^^^ help: convert the identifier to snake case: `lpm_any_e`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.00s
+Checking harness verifier::LPm_verifier::semantic_direct_carriers...
+
+VERIFICATION RESULT:
+ ** 0 of 106 failed (2 unreachable)
+
+ ** 6 of 6 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 6.6395597s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r55dcc490887f44ddb6967e84438a0851.scope; invocation ID: 436a1be473d74f92b2394f04829d4bd8

@@ -1,0 +1,291 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -44,3 +44,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] mod LPi_contracts;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPi_contracts.rs
+@@ -0,0 +1,89 @@
++//! Lean-discharged byte stubs. Pairing: LPi_WriterValues.
++use aspis_core::field::{CM31,QM31,M31};
++fn word(x:M31)->[u8;4] { [x.0 as u8,(x.0>>8) as u8,(x.0>>16) as u8,(x.0>>24) as u8] }
++pub fn mbytes(x:M31)->[u8;4] {
++ let b:[u8;4]=kani::any();kani::assume(b==word(x));b
++}
++pub fn cbytes(x:CM31,out:&mut[u8]) {
++ assert!(out.len()==8);
++ let a=word(x.a);let b=word(x.b);let v:[u8;8]=kani::any();
++ kani::assume(v==[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3]]);
++ out.copy_from_slice(&v);
++}
++pub fn qbytes(x:QM31,out:&mut[u8]) {
++ assert!(out.len()==16);
++ let a=word(x.c0.a);let b=word(x.c0.b);let c=word(x.c1.a);let d=word(x.c1.b);
++ let v:[u8;16]=kani::any();
++ kani::assume(v==[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3],c[0],c[1],c[2],c[3],d[0],d[1],d[2],d[3]]);
++ out.copy_from_slice(&v);
++}
++fn q(x:[u32;4])->QM31 {QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn check_q<const N:usize,const AT:usize>() {
++ let x:[u32;4]=kani::any();let mut buf:[u8;N]=kani::any();let before=buf;
++ q(x).write_le_bytes(&mut buf[AT..AT+16]);
++ let j:usize=kani::any();kani::assume(j<N);
++ if j>=AT&&j<AT+16 {let k=j-AT;assert_eq!(buf[j],(x[k/4]>>((k%4)*8)) as u8);}
++ else {assert_eq!(buf[j],before[j]);}
++ kani::cover!(j==AT+15);kani::cover!(x[0]==u32::MAX);
++}
++macro_rules! qcase {($name:ident,$n:expr,$at:expr)=>{
++ #[kani::proof] #[kani::stub(CM31::write_le_bytes,cbytes)] #[kani::unwind(18)]
++ fn $name(){check_q::<$n,$at>();}
++}}
++qcase!(q_owned16,16,0);
++qcase!(q_parent32_left,32,0);
++qcase!(q_parent32_right,32,16);
++qcase!(q_parent32_middle,32,8);
++qcase!(q_parent48_middle,48,16);
++qcase!(q_parent48_right,48,32);
++fn check_c<const N:usize,const AT:usize>() {
++ let x:[u32;2]=kani::any();let mut buf:[u8;N]=kani::any();let before=buf;
++ CM31{a:M31(x[0]),b:M31(x[1])}.write_le_bytes(&mut buf[AT..AT+8]);
++ let j:usize=kani::any();kani::assume(j<N);
++ if j>=AT&&j<AT+8 {let k=j-AT;assert_eq!(buf[j],(x[k/4]>>((k%4)*8)) as u8);}
++ else {assert_eq!(buf[j],before[j]);}
++ kani::cover!(j==AT+7);kani::cover!(x[1]==u32::MAX);
++}
++macro_rules! ccase {($name:ident,$n:expr,$at:expr)=>{
++ #[kani::proof] #[kani::stub(M31::to_le_bytes,mbytes)] #[kani::unwind(10)]
++ fn $name(){check_c::<$n,$at>();}
++}}
++ccase!(c_parent16_left,16,0);
++ccase!(c_parent16_right,16,8);
++ccase!(c_parent32_middle,32,16);
++pub fn ebytes(x:aspis_core::field::WideExact)->[u8;32] {
++ let words=x.to_limbs();let bytes:[u8;32]=kani::any();
++ for i in 0..32 {kani::assume(bytes[i]==(words[i/4]>>((i%4)*8)) as u8);}
++ bytes
++}
++// Natural-coordinate specifications paired with LPi_FieldValues/TowerValues/MixedValues.
++const P:u64=2147483647;
++fn add(a:u32,b:u32)->u32 {((u64::from(a)+u64::from(b))%P) as u32}
++fn sub(a:u32,b:u32)->u32 {((u64::from(a)+P-u64::from(b))%P) as u32}
++fn cmul(a:[u32;2],b:[u32;2])->[u32;2] {
++ let m0=((u64::from(a[0])*u64::from(b[0]))%P) as u32;
++ let m1=((u64::from(a[1])*u64::from(b[1]))%P) as u32;
++ let m2=(((u64::from(a[0])+u64::from(a[1]))*(u64::from(b[0])+u64::from(b[1])))%P) as u32;
++ [sub(m0,m1),sub(sub(m2,m0),m1)]
++}
++fn ca(a:[u32;2],b:[u32;2])->[u32;2]{[add(a[0],b[0]),add(a[1],b[1])]}
++fn cs(a:[u32;2],b:[u32;2])->[u32;2]{[sub(a[0],b[0]),sub(a[1],b[1])]}
++fn cr(a:[u32;2])->[u32;2]{[sub(add(a[0],a[0]),a[1]),add(a[0],add(a[1],a[1]))]}
++fn qmul(a:[u32;4],b:[u32;4])->[u32;4] {
++ let ac=cmul([a[0],a[1]],[b[0],b[1]]);let bd=cmul([a[2],a[3]],[b[2],b[3]]);
++ let cross=cmul(ca([a[0],a[1]],[a[2],a[3]]),ca([b[0],b[1]],[b[2],b[3]]));
++ let lo=ca(ac,cr(bd));let hi=cs(cs(cross,ac),bd);[lo[0],lo[1],hi[0],hi[1]]
++}
++fn qa(a:[u32;4],b:[u32;4])->[u32;4]{[add(a[0],b[0]),add(a[1],b[1]),add(a[2],b[2]),add(a[3],b[3])]}
++fn qs(a:[u32;4],b:[u32;4])->[u32;4]{[sub(a[0],b[0]),sub(a[1],b[1]),sub(a[2],b[2]),sub(a[3],b[3])]}
++fn qu(a:[u32;4])->[u32;4]{let r=cr([a[2],a[3]]);[r[0],r[1],a[0],a[1]]}
++fn emul_spec(a:[u32;8],b:[u32;8])->[u32;8] {
++ let a0=[a[0],a[1],a[2],a[3]];let a1=[a[4],a[5],a[6],a[7]];
++ let b0=[b[0],b[1],b[2],b[3]];let b1=[b[4],b[5],b[6],b[7]];
++ let ac=qmul(a0,b0);let bd=qmul(a1,b1);let cross=qmul(qa(a0,a1),qa(b0,b1));
++ let lo=qa(ac,qu(bd));let hi=qs(qs(cross,ac),bd);[lo[0],lo[1],lo[2],lo[3],hi[0],hi[1],hi[2],hi[3]]
++}
++pub fn emul(a:aspis_core::field::WideExact,b:aspis_core::field::WideExact)->aspis_core::field::WideExact {
++ let w:[u32;8]=kani::any();for x in w{kani::assume(u64::from(x)<P);}
++ kani::assume(w==emul_spec(a.to_limbs(),b.to_limbs()));aspis_core::field::WideExact::from_limbs(w).unwrap()
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPm_verifier.rs
+@@ -0,0 +1,177 @@
++//! Frozen checkpoint weights: actual Vec carrier and one iterator transition.
++use super::*;
++use aspis_core::field::CM31;
++fn q(w:[u32;4])->K {K{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
++fn words(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++#[kani::proof] #[kani::unwind(66)]
++fn weights_iterator() {
++ let raw:[[u32;4];64]=kani::any();
++ let a=Accumulator{next:kani::any(),weights:raw.map(q).to_vec(),rhs:E::ZERO,power:q(kani::any())};
++ let i:usize=kani::any();kani::assume(i<=64);
++ let mut iter=a.weights[i..].iter();
++ let item=iter.next();
++ assert_eq!(item.is_none(),i==64);
++ if let Some(&x)=item {let limb:usize=kani::any();kani::assume(limb<4);assert_eq!(words(x)[limb],raw[i][limb]);}
++ assert_eq!(iter.as_slice().len(),if i==64{0}else{63-i});
++ if i<63 {let j:usize=kani::any();kani::assume(j<63-i);let limb:usize=kani::any();kani::assume(limb<4);assert_eq!(words(iter.as_slice()[j])[limb],raw[i+1+j][limb]);}
++ assert_eq!(a.weights.len(),64);
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i==64);
++}
++// One arbitrary reached iteration, retaining the actual Vec and native put_k call.
++#[kani::proof] #[kani::stub(K::write_le_bytes,crate::LPi_contracts::qbytes)] #[kani::unwind(1740)]
++fn weights_write_step() {
++ let raw:[[u32;4];64]=kani::any();
++ let a=Accumulator{next:kani::any(),weights:raw.map(q).to_vec(),rhs:E::ZERO,power:q(kani::any())};
++ let i:usize=kani::any();kani::assume(i<64);
++ let len=712+16*i;
++ let initial:[u8;1736]=kani::any();let mut out=initial[..len].to_vec();
++ let mut iter=a.weights[i..].iter();
++ if let Some(&x)=iter.next() {put_k(&mut out,x);}else{unreachable!()}
++ assert_eq!(out.len(),len+16);
++ let at:usize=kani::any();kani::assume(at<out.len());
++ assert_eq!(out[at],if at<len{initial[at]}else{let b=at-len;(raw[i][b/4]>>((b%4)*8)) as u8});
++ assert_eq!(iter.as_slice().len(),63-i);
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(at==len+15);
++}
++// Split after iterator.next: arbitrary selected shared reference, before put_k.
++// K001 identifies this reference and the remaining slice on the actual Vec.
++#[kani::proof] #[kani::stub(K::write_le_bytes,crate::LPi_contracts::qbytes)] #[kani::unwind(1740)]
++fn selected_reference_write() {
++ let raw:[u32;4]=kani::any();let selected=q(raw);let selected_ref=&selected;
++ let i:usize=kani::any();kani::assume(i<64);let len=712+16*i;
++ let initial:[u8;1736]=kani::any();let mut out=initial[..len].to_vec();
++ // Frozen for-pattern dereferences the shared reference before the private call.
++ let &x=selected_ref;put_k(&mut out,x);
++ assert_eq!(out.len(),len+16);
++ let at:usize=kani::any();kani::assume(at<out.len());
++ assert_eq!(out[at],if at<len{initial[at]}else{let b=at-len;(raw[b/4]>>((b%4)*8)) as u8});
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(at==len+15);
++}
++// Prefix-equivariant append primitives used by roots/state/digests and queries.
++fn check_append<const N:usize>() {
++ let initial:[u8;1736]=kani::any();let value:[u8;N]=kani::any();
++ let len:usize=kani::any();kani::assume(len<=1736-N);
++ let mut out=initial[..len].to_vec();out.extend_from_slice(&value);
++ assert_eq!(out.len(),len+N);
++ let at:usize=kani::any();kani::assume(at<out.len());
++ assert_eq!(out[at],if at<len{initial[at]}else{value[at-len]});
++ kani::cover!(len==0);kani::cover!(len==1736-N);kani::cover!(at==len+N-1);
++}
++#[kani::proof] #[kani::unwind(1740)] fn append32(){check_append::<32>();}
++#[kani::proof] #[kani::unwind(1740)] fn append4(){check_append::<4>();}
++#[kani::proof] #[kani::unwind(1740)]
++fn query_word_append() {
++ let initial:[u8;1736]=kani::any();let q:u32=kani::any();
++ let len:usize=kani::any();kani::assume(len<=1732);
++ let mut out=initial[..len].to_vec();out.extend_from_slice(&q.to_le_bytes());
++ assert_eq!(out.len(),len+4);let at:usize=kani::any();kani::assume(at<out.len());
++ assert_eq!(out[at],if at<len{initial[at]}else{(q>>(8*(at-len))) as u8});
++ kani::cover!(len==320);kani::cover!(len==404);kani::cover!(q==u32::MAX);
++}
++// Inspect the concrete E array IntoIter carrier (4 prepared fields / 2 tail fields).
++// Setup constructs an arbitrary reached suffix; only ONE source next is checked.
++fn e_iterator<const N:usize>() {
++ let raw:[[u32;8];N]=kani::any();
++ let values=raw.map(|w| {for v in w {kani::assume(v<0x7fff_ffff);}E::from_limbs(w).unwrap()});
++ let at:usize=kani::any();kani::assume(at<=N);
++ let mut iter=values.into_iter();for _ in 0..at {let _=iter.next();}
++ let item=iter.next();assert_eq!(item.is_none(),at==N);
++ if let Some(x)=item {let limb:usize=kani::any();kani::assume(limb<8);assert_eq!(x.to_limbs()[limb],raw[at][limb]);}
++ assert_eq!(iter.as_slice().len(),if at==N{0}else{N-at-1});
++ if at+1<N {let j:usize=kani::any();kani::assume(j<N-at-1);let limb:usize=kani::any();kani::assume(limb<8);assert_eq!(iter.as_slice()[j].to_limbs()[limb],raw[at+1+j][limb]);}
++ kani::cover!(at==0);kani::cover!(at==N-1);kani::cover!(at==N);
++}
++#[kani::proof] #[kani::unwind(66)] fn e_four_iterator(){e_iterator::<4>();}
++#[kani::proof] #[kani::unwind(66)] fn e_two_iterator(){e_iterator::<2>();}
++// Same natural formulas as LPi_FieldValues, with explicit nonoverflowing
++// wrapping reference instructions (LPm_StubBounds) to avoid safety-only SAT work.
++mod LPm_emul {
++ use super::*;
++ const P:u64=2147483647;
++ fn add(a:u32,b:u32)->u32{(u64::from(a).wrapping_add(u64::from(b))%P) as u32}
++ fn sub(a:u32,b:u32)->u32{(u64::from(a).wrapping_add(P).wrapping_sub(u64::from(b))%P) as u32}
++ fn cm(a:[u32;2],b:[u32;2])->[u32;2]{
++  let m0=(u64::from(a[0]).wrapping_mul(u64::from(b[0]))%P) as u32;
++  let m1=(u64::from(a[1]).wrapping_mul(u64::from(b[1]))%P) as u32;
++  let sa=u64::from(a[0]).wrapping_add(u64::from(a[1]));let sb=u64::from(b[0]).wrapping_add(u64::from(b[1]));
++  let m2=(sa.wrapping_mul(sb)%P) as u32;[sub(m0,m1),sub(sub(m2,m0),m1)]
++ }
++ fn ca(a:[u32;2],b:[u32;2])->[u32;2]{[add(a[0],b[0]),add(a[1],b[1])]}
++ fn cs(a:[u32;2],b:[u32;2])->[u32;2]{[sub(a[0],b[0]),sub(a[1],b[1])]}
++ fn cr(a:[u32;2])->[u32;2]{[sub(add(a[0],a[0]),a[1]),add(a[0],add(a[1],a[1]))]}
++ fn qm(a:[u32;4],b:[u32;4])->[u32;4]{
++  let ac=cm([a[0],a[1]],[b[0],b[1]]);let bd=cm([a[2],a[3]],[b[2],b[3]]);
++  let cross=cm(ca([a[0],a[1]],[a[2],a[3]]),ca([b[0],b[1]],[b[2],b[3]]));
++  let lo=ca(ac,cr(bd));let hi=cs(cs(cross,ac),bd);[lo[0],lo[1],hi[0],hi[1]]
++ }
++ fn qa(a:[u32;4],b:[u32;4])->[u32;4]{[add(a[0],b[0]),add(a[1],b[1]),add(a[2],b[2]),add(a[3],b[3])]}
++ fn qs(a:[u32;4],b:[u32;4])->[u32;4]{[sub(a[0],b[0]),sub(a[1],b[1]),sub(a[2],b[2]),sub(a[3],b[3])]}
++ fn qu(a:[u32;4])->[u32;4]{let r=cr([a[2],a[3]]);[r[0],r[1],a[0],a[1]]}
++ pub fn spec(a:[u32;8],b:[u32;8])->[u32;8]{
++  let a0=[a[0],a[1],a[2],a[3]];let a1=[a[4],a[5],a[6],a[7]];
++  let b0=[b[0],b[1],b[2],b[3]];let b1=[b[4],b[5],b[6],b[7]];
++  let ac=qm(a0,b0);let bd=qm(a1,b1);let cross=qm(qa(a0,a1),qa(b0,b1));
++  let lo=qa(ac,qu(bd));let hi=qs(qs(cross,ac),bd);[lo[0],lo[1],lo[2],lo[3],hi[0],hi[1],hi[2],hi[3]]
++ }
++ pub fn replacement(a:E,b:E)->E{
++  let av=a.to_limbs();let bv=b.to_limbs();
++  for v in av {assert!(u64::from(v)<P);}for v in bv {assert!(u64::from(v)<P);}
++  let w:[u32;8]=kani::any();for v in w {kani::assume(u64::from(v)<P);}
++  kani::assume(w==spec(av,bv));E::from_limbs(w).unwrap()
++ }
++}
++fn LPm_any_e()->E{let w:[u32;8]=kani::any();for v in w {kani::assume(v<0x7fff_ffff);}E::from_limbs(w).unwrap()}
++// Continuing-call cut only: the pre-call write/increment/frame is LPi_K016.
++// The final iteration is LPi_K015; LPi_PowersStep joins these to its value law.
++#[kani::proof] #[kani::stub(E::mul,LPm_emul::replacement)] #[kani::unwind(66)]
++fn powers_continuing_call(){
++ let mut p=LPm_any_e();let x=LPm_any_e();let old=p.to_limbs();let xv=x.to_limbs();
++ p=p.mul(x);
++ let limb:usize=kani::any();kani::assume(limb<8);
++ assert_eq!(p.to_limbs()[limb],LPm_emul::spec(old,xv)[limb]);
++ kani::cover!(old[0]==1);kani::cover!(xv[0]==0);
++}
++// After-call split: do not recheck the Lean-discharged multiply formula.
++// The paired full natural-value replacement remains installed unchanged.
++#[kani::proof] #[kani::stub(E::mul,LPm_emul::replacement)] #[kani::unwind(66)]
++fn powers_return_thread(){
++ let mut p=LPm_any_e();let x=LPm_any_e();
++ let returned=p.mul(x);p=returned;
++ let limb:usize=kani::any();kani::assume(limb<8);
++ assert_eq!(p.to_limbs()[limb],returned.to_limbs()[limb]);
++ assert!(p.to_limbs()[limb]<0x7fff_ffff);
++}
++// ONE exact private Dot::push coordinate from arbitrary pre-state.
++#[kani::proof] #[kani::unwind(6)]
++fn dot_word_iteration(){
++ let raw:[u64;4]=kani::any();let mut sums:[u64;4]=kani::any();let before=sums;
++ let j:usize=kani::any();kani::assume(j<4);
++ sums[j]=sums[j].wrapping_add((raw[j]&u64::from(0x7fff_ffffu32)).wrapping_add(raw[j]>>31u32));
++ let at:usize=kani::any();kani::assume(at<4);
++ let expected=(u128::from(before[j])+(u128::from(raw[j])%2147483648)+(u128::from(raw[j])/2147483648)) as u64;
++ assert_eq!(sums[at],if at==j{expected}else{before[at]});
++ kani::cover!(j==3);kani::cover!(raw[j]==u64::MAX);kani::cover!(before[j]!=0);
++}
++#[derive(Clone,Copy)]struct LPm_ZeroHash;
++impl Digest32 for LPm_ZeroHash{fn digest(&self,_:&[&[u8]])->[u8;32]{[0;32]}}
++// Native Verified carrier; all fields not read by this source cut are inert fillers.
++#[kani::proof] #[kani::unwind(90)]
++fn semantic_selections(){
++ let claims:[[[u32;4];29];3]=kani::any();let extra:[[u32;4];29]=kani::any();let before:[[u32;4];29]=kani::any();
++ let challenges=crate::r1_wire::Challenges{lambda:K::ZERO,chi:K::ZERO,theta:K::ZERO,zc:[K::ZERO;10],mu:K::ZERO,eta:K::ZERO};
++ let transcript=crate::r1_wire::SemanticTranscript::new(LPm_ZeroHash,&[],&[0;32]).unwrap();
++ let sem=crate::r1_semantic::Verified{roots:[[0;32];2],challenges,alpha:[K::ZERO;10],claims:Box::new(claims.map(|row|row.map(q))),extra:extra.map(q),before_z1:before.map(q),state_before_z0:[0;32],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],transcript};
++ let point:usize=kani::any();kani::assume(point<5);let l:usize=kani::any();kani::assume(l<29);
++ let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>unreachable!()};
++ let limb:usize=kani::any();kani::assume(limb<4);
++ assert_eq!(words(scalar)[limb],match point{0..=2=>claims[point][l][limb],3=>extra[l][limb],_=>before[l][limb]});
++ kani::cover!(point==0);kani::cover!(point==1);kani::cover!(point==2);kani::cover!(point==3);kani::cover!(point==4);kani::cover!(l==28);
++}
++#[kani::proof] #[kani::unwind(34)]
++fn y1_scalar_read(){
++ let bytes:[u8;928]=kani::any();let l:usize=kani::any();kani::assume(l<29);
++ for limb in 0..8 {let at=32*l+4*limb;let w=u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]]);kani::assume(w<0x7fff_ffff);}
++ let scalar=field(&bytes,l).c0();let limb:usize=kani::any();kani::assume(limb<4);let at=32*l+4*limb;
++ assert_eq!(words(scalar)[limb],u32::from_le_bytes([bytes[at],bytes[at+1],bytes[at+2],bytes[at+3]]));
++ kani::cover!(l==0);kani::cover!(l==28);kani::cover!(limb==3);
++}
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,8 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++
++#[cfg(kani)] #[path="LPi_verifier.rs"] mod LPi_verifier;
++
++#[cfg(kani)] #[path="LPm_verifier.rs"] mod LPm_verifier;

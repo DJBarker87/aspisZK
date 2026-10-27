@@ -1,0 +1,107 @@
+LPm_generated/LPm_SemanticSelections.lean:12:52: error: Type mismatch: After simplification, term
+  hp
+ has type
+  @LT.lt ℕ instLTNat (↑point) 3
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑point ↑3#usize
+LPm_generated/LPm_SemanticSelections.lean:10:113: error: unsolved goals
+Dot Hash : Type
+ops : ClaimDotOps Dot
+sem : r1_semantic.Verified Hash
+y1 : Slice U8
+point lane : Usize
+hp : ↑point < 3
+hl : ↑lane < 29
+small : point ≤ 2#usize
+prow : ↑point < (↑sem.claims).length
+plane : ↑lane < (↑(↑sem.claims)[↑point]).length
+⊢ (do
+      let a ←
+        match sem.claims[point]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      match a[lane]? with
+        | none => fail Error.arrayOutOfBounds
+        | some x => ok x) =
+    ok (↑(↑sem.claims)[↑point])[↑lane]
+LPm_generated/LPm_SemanticSelections.lean:17:4: warning: This simp argument is unused:
+  List.getElem?_eq_getElem prow
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵l̵a̵i̵m̵S̵c̵a̵l̵a̵r̵.̵r̵e̵a̵d̵,̵i̵f̵_̵p̵o̵s̵ ̵s̵m̵a̵l̵l̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵[̲C̲l̲a̲i̲m̲S̲c̲a̲l̲a̲r̲.̲r̲e̲a̲d̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲s̲m̲a̲l̲l̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+      List.getElem?_eq_getElem p̵r̵o̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵plane]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPm_generated/LPm_SemanticSelections.lean:17:34: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵l̵a̵i̵m̵S̵c̵a̵l̵a̵r̵.̵r̵e̵a̵d̵,̵i̵f̵_̵p̵o̵s̵ ̵s̵m̵a̵l̵l̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵[̲C̲l̲a̲i̲m̲S̲c̲a̲l̲a̲r̲.̲r̲e̲a̲d̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲s̲m̲a̲l̲l̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ List.getElem?_eq_getElem p̵r̵o̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵p̲r̲o̲w̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲ plane]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPm_generated/LPm_SemanticSelections.lean:17:45: warning: This simp argument is unused:
+  List.getElem?_eq_getElem plane
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵l̵a̵i̵m̵S̵c̵a̵l̵a̵r̵.̵r̵e̵a̵d̵,̵i̵f̵_̵p̵o̵s̵ ̵s̵m̵a̵l̵l̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵[̲C̲l̲a̲i̲m̲S̲c̲a̲l̲a̲r̲.̲r̲e̲a̲d̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲s̲m̲a̲l̲l̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ List.getElem?_eq_getElem p̵r̵o̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵p̵l̵a̵n̵e̵]̵p̲r̲o̲w̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPm_generated/LPm_SemanticSelections.lean:24:51: error: Type mismatch: After simplification, term
+  hl
+ has type
+  @LT.lt ℕ instLTNat (↑lane) 29
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑lane ↑29#usize
+LPm_generated/LPm_SemanticSelections.lean:22:79: error: unsolved goals
+Dot Hash : Type
+ops : ClaimDotOps Dot
+sem : r1_semantic.Verified Hash
+y1 : Slice U8
+point lane : Usize
+hp : ↑point = 3
+hl : ↑lane < 29
+large : ¬point ≤ 2#usize
+plane : ↑lane < (↑sem.extra).length
+⊢ (match sem.extra[lane]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑sem.extra)[↑lane]
+LPm_generated/LPm_SemanticSelections.lean:25:64: warning: This simp argument is unused:
+  List.getElem?_eq_getElem plane
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵l̵a̵i̵m̵S̵c̵a̵l̵a̵r̵.̵r̵e̵a̵d̵,̵i̵f̵_̵n̵e̵g̵ ̵l̵a̵r̵g̵e̵,̵h̵p̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵p̵l̵a̵n̵e̵]̵[̲C̲l̲a̲i̲m̲S̲c̲a̲l̲a̲r̲.̲r̲e̲a̲d̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲l̲a̲r̲g̲e̲,̲ ̲h̲p̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPm_generated/LPm_SemanticSelections.lean:32:55: error: Type mismatch: After simplification, term
+  hl
+ has type
+  @LT.lt ℕ instLTNat (↑lane) 29
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑lane ↑29#usize
+LPm_generated/LPm_SemanticSelections.lean:30:87: error: unsolved goals
+Dot Hash : Type
+ops : ClaimDotOps Dot
+sem : r1_semantic.Verified Hash
+y1 : Slice U8
+point lane : Usize
+hp : ↑point = 4
+hl : ↑lane < 29
+large : ¬point ≤ 2#usize
+plane : ↑lane < (↑sem.before_z1).length
+⊢ (match sem.before_z1[lane]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑sem.before_z1)[↑lane]
+LPm_generated/LPm_SemanticSelections.lean:33:64: warning: This simp argument is unused:
+  List.getElem?_eq_getElem plane
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵l̵a̵i̵m̵S̵c̵a̵l̵a̵r̵.̵r̵e̵a̵d̵,̵i̵f̵_̵n̵e̵g̵ ̵l̵a̵r̵g̵e̵,̵h̵p̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵p̵l̵a̵n̵e̵]̵[̲C̲l̲a̲i̲m̲S̲c̲a̲l̲a̲r̲.̲r̲e̲a̲d̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲l̲a̲r̲g̲e̲,̲ ̲h̲p̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.LPm_SemanticSelections.claims' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPm_SemanticSelections.extra' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPm_SemanticSelections.before_z1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
