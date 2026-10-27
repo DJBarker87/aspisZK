@@ -1,0 +1,58 @@
+{
+  "epoch": 1793110261.5305514,
+  "artifacts": {
+    "/home/dombarker/project-offloads/codex-pv-dudect-20261027/bin/pv-dudect": {
+      "sha256": "ede68055604cce057f3d0b96fa575b06f30290bba4bcdb50493b7b81a797eb02",
+      "bytes": 746840
+    },
+    "/home/dombarker/project-offloads/codex-pv-dudect-20261027/bin/devnet_spend": {
+      "sha256": "161abfd8d155a2ccf35a461cd8e03fbf909e0f8b1c59efdddec1d76e74811472",
+      "bytes": 2748096
+    },
+    "/home/dombarker/project-offloads/codex-pv-dudect-20261027/src/tools/pv-dudect/window.py": {
+      "sha256": "891e4cdbadb14c6db2e4acc9bf6374364eb10bd5dad2c7e49840dbad26fa36a1",
+      "bytes": 2427
+    },
+    "/home/dombarker/project-offloads/codex-pv-dudect-20261027/src/tools/pv-dudect/window_worker.py": {
+      "sha256": "e4979c08def77c40221600ad301ad7c172bd63b452f013b6ed3a8c070e94eb13",
+      "bytes": 3903
+    },
+    "/home/dombarker/project-offloads/codex-pv-dudect-20261027/src/tools/pv-dudect/analyze.py": {
+      "sha256": "f91ba6655d67a4b728ec6160835fb7e8efbad1e6182a7b7ef151ba25e4c28325",
+      "bytes": 2301
+    },
+    "/home/dombarker/project-offloads/codex-pv-dudect-20261027/src/tools/pv-dudect/metadata.py": {
+      "sha256": "b9cf7790ef50e3261188cf83cf13fbf479ff51d7e9fe1ddfefca1986e2d24d80",
+      "bytes": 3040
+    }
+  },
+  "marker_exists": false,
+  "ready": {
+    "status": "PREPARED; no qualified measurement; lead schedules window",
+    "source_revision": "73070ddd512bc4e79edfc0db714fb64dc74e87b8",
+    "binary_sha256": {
+      "pv-dudect": "ede68055604cce057f3d0b96fa575b06f30290bba4bcdb50493b7b81a797eb02",
+      "devnet_spend": "161abfd8d155a2ccf35a461cd8e03fbf909e0f8b1c59efdddec1d76e74811472"
+    },
+    "cpu_identity": {
+      "cpu family": "6",
+      "model": "170",
+      "model name": "Intel(R) Core(TM) Ultra 7 155H",
+      "stepping": "4",
+      "microcode": "0x28"
+    },
+    "window_seconds": 900,
+    "sampling_budget_seconds": 600,
+    "samples_per_class_per_experiment": 1000000,
+    "DOITM": "OFF (V371 retained)",
+    "plan": "evidence/pv-l3-20261027/dual/V374-PLAN-v2.md",
+    "cpu_policy": {
+      "/sys/devices/system/cpu/cpu2/cpufreq/scaling_governor": "powersave\n",
+      "/sys/devices/system/cpu/intel_pstate/no_turbo": "0\n",
+      "/sys/devices/system/cpu/smt/active": "1\n",
+      "/sys/devices/system/cpu/cpu2/topology/thread_siblings_list": "1-2\n"
+    }
+  },
+  "reservation_scanner": "#!/usr/bin/env python3\n\"\"\"Fail-closed cgroup-v2 hierarchical reservation admission (read-only).\n\nA finite populated ancestor reserves its whole subtree once. Uncapped\nbackground is visible by current usage, but is not invented as a reservation.\nThis is an instantaneous admission snapshot, not historical evidence or a\nhost-wide scheduler lock. Any missing/racing/unreadable necessary datum denies.\n\"\"\"\nfrom pathlib import Path\nimport argparse\nimport datetime\nimport hashlib\nimport json\nimport os\n\nGIB = 2**30\nLIMIT = 55 * GIB\n\n\ndef number(path):\n    value = path.read_text().strip()\n    if value == 'max':\n        return None\n    result = int(value)\n    if result < 0:\n        raise ValueError(f'negative cgroup value: {path}')\n    return result\n\n\ndef inventory(root):\n    rows = []\n\n    def visit(path, covering=None, memory_enabled=True):\n        # scandir propagates permission errors; pathlib.glob can suppress them.\n        with os.scandir(path) as entries:\n            children = sorted(Path(e.path) for e in entries if e.is_dir(follow_symlinks=False))\n        is_root = path == root\n        if is_root:\n            # The unified hierarchy root has no memory.max or cgroup.events.\n            row = dict(path=str(path), root=True, charged_bytes=0)\n            rows.append(row)\n        else:\n            events = dict(line.split() for line in (path/'cgroup.events').read_text().splitlines())\n            if events.get('populated') not in ('0', '1'):\n                raise ValueError(f'missing/invalid hierarchical populated: {path}')\n            populated = events['populated'] == '1'\n            cap = number(path/'memory.max') if memory_enabled else None\n            current = number(path/'memory.current') if memory_enabled else None\n            if memory_enabled and current is None:\n                raise ValueError(f'invalid current: {path}')\n            row = dict(path=str(path), populated=populated,\n                       memory_max=cap, memory_current=current,\n                       memory_controller_enabled=memory_enabled,\n                       memory_high=number(path/'memory.high') if memory_enabled else None,\n                       memory_swap_max=number(path/'memory.swap.max') if memory_enabled else None,\n                       covered_by=covering,\n                       charged_bytes=cap if populated and cap is not None and covering is None else 0)\n            rows.append(row)\n            if populated and cap is not None and covering is None:\n                covering = str(path)\n        delegated_memory = 'memory' in (path/'cgroup.subtree_control').read_text().split()\n        for child in children:\n            visit(child, covering, delegated_memory)\n        # Detect inconsistent snapshot: child alive while ancestor says empty.\n        if not is_root and not row['populated']:\n            if any(r.get('populated') and Path(r['path']).is_relative_to(path)\n                   for r in rows if r is not row):\n                raise ValueError(f'population changed during inventory: {path}')\n    visit(root)\n    return rows\n\n\ndef admission(root=Path('/sys/fs/cgroup'), requested=8*GIB):\n    if requested < 0:\n        raise ValueError('negative request')\n    out = dict(schema='ProverRwNativeEntropy-reservation-v1',\n               utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),\n               requested_bytes=requested, safe_limit_bytes=LIMIT,\n               scanner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),\n               print_axioms='N/A: read-only resource gate', allowed=False)\n    try:\n        rows = inventory(root)\n        total = sum(r['charged_bytes'] for r in rows)\n        out.update(cgroups=rows, bounded_reserved_bytes=total,\n                   projected_reserved_bytes=total+requested,\n                   uncapped_background=[r for r in rows if r.get('populated') and\n                                        r['memory_max'] is None and r['covered_by'] is None],\n                   allowed=total+requested < LIMIT)\n    except (OSError, ValueError) as error:\n        out['error'] = f'{type(error).__name__}: {error}'\n    return out\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument('output', type=Path)\n    parser.add_argument('--root', type=Path, default=Path('/sys/fs/cgroup'))\n    parser.add_argument('--requested-bytes', type=int, default=8*GIB)\n    args = parser.parse_args()\n    out = admission(args.root, args.requested_bytes)\n    args.output.write_text(json.dumps(out, indent=2)+'\\n')\n    print(json.dumps({k:v for k,v in out.items() if k not in ('cgroups','uncapped_background')}))\n    raise SystemExit(0 if out['allowed'] else 78)\n\n\nif __name__ == '__main__':\n    main()\n",
+  "host_time": "2026-10-27T14:11:01+00:00\n"
+}

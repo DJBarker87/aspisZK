@@ -1,0 +1,101 @@
+{
+  "binary_hashes": {
+    "/home/dombarker/project-offloads/codex-pv-dudect-20261027/bin/pv-dudect": "a00cb67fddac31b85a215f846e12c042e3518e58bb7d6c8070f13bcaee7cf0e1",
+    "/home/dombarker/project-offloads/codex-pv-dudect-20261027/bin/devnet_spend": "161abfd8d155a2ccf35a461cd8e03fbf909e0f8b1c59efdddec1d76e74811472"
+  },
+  "normalization": "addresses with resolved symbols only; local branch offsets, symbolic RIP references; all opcodes/registers/literal immediates preserved",
+  "families": {
+    "mask-m31": {
+      "harness_symbols": [
+        "pv_dudect::kernels::state_only_hiding::measure_m31"
+      ],
+      "candidate_symbols": [
+        "aspis_prover::state_only_hiding::sample_mask_cells"
+      ],
+      "comparisons": [],
+      "result": "NOT instruction-equivalent / no matched standalone symbol; harness binary only"
+    },
+    "mask-qm31": {
+      "harness_symbols": [
+        "pv_dudect::kernels::state_only_hiding::measure_qm31"
+      ],
+      "candidate_symbols": [
+        "aspis_prover::state_only_hiding::SeedExpander::qm31"
+      ],
+      "comparisons": [],
+      "result": "NOT instruction-equivalent / no matched standalone symbol; harness binary only"
+    },
+    "pole": {
+      "harness_symbols": [
+        "pv_dudect::kernels::ct_pole::all_slots_clear"
+      ],
+      "candidate_symbols": [
+        "aspis_r1_cost_probe::ct_pole::all_slots_clear"
+      ],
+      "comparisons": [],
+      "result": "NOT instruction-equivalent / no matched standalone symbol; harness binary only"
+    },
+    "m31-inv": {
+      "harness_symbols": [
+        "pv_dudect::inverse_m",
+        "aspis_core::field::M31::inv"
+      ],
+      "candidate_symbols": [
+        "aspis_core::field::M31::inv"
+      ],
+      "comparisons": [
+        {
+          "harness": "aspis_core::field::M31::inv",
+          "candidate": "aspis_core::field::M31::inv",
+          "equal": false,
+          "harness_instructions": 514,
+          "candidate_instructions": 514,
+          "diff": "m31-inv-0.diff"
+        }
+      ],
+      "result": "NOT instruction-equivalent / no matched standalone symbol; harness binary only"
+    },
+    "qm31-inv": {
+      "harness_symbols": [
+        "pv_dudect::inverse_q",
+        "aspis_core::field::QM31::inv",
+        "aspis_core::field::QM31::try_inv"
+      ],
+      "candidate_symbols": [
+        "aspis_core::field::QM31::try_inv"
+      ],
+      "comparisons": [
+        {
+          "harness": "aspis_core::field::QM31::try_inv",
+          "candidate": "aspis_core::field::QM31::try_inv",
+          "equal": false,
+          "harness_instructions": 308,
+          "candidate_instructions": 308,
+          "diff": "qm31-inv-0.diff"
+        }
+      ],
+      "result": "NOT instruction-equivalent / no matched standalone symbol; harness binary only"
+    },
+    "compress": {
+      "harness_symbols": [
+        "pv_dudect::kernels::prover_shared::compress_tagged_tuple"
+      ],
+      "candidate_symbols": [
+        "aspis_r1_cost_probe::host_semantic::copy_endpoint_values",
+        "aspis_r1_cost_probe::prover_shared::compress_tagged_tuple"
+      ],
+      "comparisons": [],
+      "result": "NOT instruction-equivalent / no matched standalone symbol; harness binary only"
+    },
+    "seed-checks": {
+      "harness_symbols": [
+        "pv_dudect::kernels::entropy::seed_check"
+      ],
+      "candidate_symbols": [
+        "aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce"
+      ],
+      "comparisons": [],
+      "result": "NOT instruction-equivalent / no matched standalone symbol; harness binary only"
+    }
+  }
+}
