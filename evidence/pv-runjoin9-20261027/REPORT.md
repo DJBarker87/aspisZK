@@ -1,3 +1,31 @@
+# pv-runjoin9 final status — budget exhausted
+
+Branch `codex/pv-runjoin-20261026`, entry `e896c811331a5fc3d953bdf641c75b22580ff8c0`. **Target not yet established.** Proof/audit source revision `6bbd9f2f37772f1442488b14b7bde6f79f6fae2a`; the final evidence-only commit follows it. No push.
+
+The installation dependency closure resumed at PDict_Static222_13 and passed through the full PDict retry/client/caller tail. No missing PDict theorem was found. SourceConstructor/SourceBoundary and the previously uncompiled installed/causal/selection/admission-reduction/callback drafts are checked. Corrected draft failures are retained in receipts; none was rerun unchanged or with raised resources.
+
+For the SAME joined proof-account selector, `PV_RunJoin_JoinedInstallation.identity` proves `PV_RunJoin_MapErrInstalled.Identity`. `public_iff` proves that equality of the joined installed public values is equivalent to equality of the full source public projections, including the SAME compiled transition. `JoinedCausalHeadline.proofs` composes this with the existing initial-ledger/causal constructor. Constructed-candidate P changes from `{identity, common_public, trace}` to `{fixed-endpoint source public binding, trace}` at this named installed constructor. Public binding is transported/equivalent, **not proved for the deployed selected records**. The PDict constructor's trace-only explicit argument list still carries PublicBinding inside its selection data. Exact statements, constructor/carrier distinctions and retained deployment conditions are in `P-before-after.json` and audits 37509–37511.
+
+Deployed P remains open: actual selected/returned compilation and compiler success; admission; native runtime/carrier/initializer/account callback/store/complete observer installation; complete extracted trace outside the unchanged bad event; release identity and coherent source/artifact closure. **Zero whole deployed endpoint rows removed.** Runtime/boundary **2→2**, fields **8→8**, residuals **6→6**. T is byte-identical, with exactly `entropy_law`, `entropy_kernel`, `observation`. No P was placed in T; A/B remain unadopted. Transfer **P∧T non-vacuity OPEN**; withdrawal **P∧T non-vacuity OPEN**, T hypothetical. Exact fixture obstructions are in `deployed-obligations.md`; no convenient model is labelled deployed.
+
+Pinned L2 replay checked F3 source/count/array/full-source/full-retry and endpoint model bridges, plus recorded erasure and F6 dot/image results. It does not construct the native event producer or discharge trace. Validated inventory retains **21 multiproof predecessor objects** and **4 F5 objects**. An earlier inventory counted dangling .olean entries; the local inventory script was corrected, without editing host infrastructure. No coherent frozen-release manifest was replayed. `trace-obligations.md` states the remaining same-coupling/full-run obligation.
+
+Validation: **100/100 Lean attempts: 86 accepted, 14 rejected; 6/6 Kani successful**. IDs **37400–37511** consumed once; **12** admission refusals were uncharged and observed the required waits. Next unused ID **37512**; no compile budget remains. Kani checked six new fixed parent cells, giving **13/21** combined with retained runjoin8 evidence. The timed-out aggregate was not rerun. Lean wall total **430.66s**, peak RSS **4,578,451,456B**; Kani wall total **190.7115s**, aggregate peak RSS **1,143,177,216B**; **swap 0 throughout**. All accepted axiom lists are subsets of `[propext, Classical.choice, Quot.sound]`. Rejected compiler-recovery output was never accepted.
+
+| Final focused target | Attempt | Exit | Wall | Peak RSS bytes | Swap |
+|---|---:|---:|---:|---:|---:|
+| PV_RunJoin_TrustAudit9Records | 37509 | 0 | 1.69s | 4,468,559,872 | 0 |
+| PV_RunJoin_TrustAudit9Joins | 37510 | 0 | 1.64s | 4,469,219,328 | 0 |
+| PV_RunJoin_TrustAudit9Trace | 37511 | 0 | 1.61s | 4,486,643,712 | 0 |
+
+Every target's exit, wall, peak RSS, swap, source revision/hash and complete axiom lines are retained in `receipt-index.tsv`, individual receipts and raw logs. `final-source-audit.json` confirms all active sources match accepted hashes, original T/P records are unchanged, and the only crate change is the already cfg(kani)-gated child module. `own-object-index.json` hashes 86 retained objects. Kani target/solver scratch is removed; no wallet/account key was created or destroyed. Production bodies and ELF pins are unchanged.
+
+Next concrete deliverable: construct the actual SAME transfer/withdrawal selected compiler records and prove `@PV_Src_NativeInput.run actualExternal actualRecords i = .ok (.Ok i.compiled)` with admission and fixed-endpoint source public binding; then install the actual Runtime/Boundary/event producers and prove complete extracted trace. Missing F5/multiproof object closures are explicitly inventoried for the next budget.
+
+---
+
+## Historical stage notes
+
 # pv-runjoin9 continuation
 
 Entry e896c811331a5fc3d953bdf641c75b22580ff8c0, branch codex/pv-runjoin-20261026. Target not yet established.
