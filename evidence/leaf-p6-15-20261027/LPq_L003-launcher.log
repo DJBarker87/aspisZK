@@ -1,0 +1,61 @@
+{"attempt": "LPq_L003", "exit_status": 1, "wall_seconds": 7.748707577993628, "peak_rss_kib": "4762640", "swaps": "0", "print_axioms": ["'AspisR1.LPq_FieldPorts.cm_add_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.LPq_FieldPorts.cm_sub_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.LPq_FieldPorts.cm_mul_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.LPq_FieldPorts.by_r_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.LPq_FieldPorts.cm_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.LPq_FieldPorts.cm_sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.LPq_FieldPorts.cm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.LPq_FieldPorts.by_r' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+LPq_generated/LPq_FieldPorts.lean:17:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x_1 ← x.a.add y.a
+    let x ← x.b.add y.b
+    ok { a := x_1, b := x }
+is not definitionally equal to the right-hand side
+  do
+    let m ← XRn_Join_Field.field.M31.add x.a y.a
+    let m1 ← XRn_Join_Field.field.M31.add x.b y.b
+    ok { a := m, b := m1 }
+
+x y : NC
+⊢ (do
+      let x_1 ← x.a.add y.a
+      let x ← x.b.add y.b
+      ok { a := x_1, b := x }) =
+    do
+    let m ← XRn_Join_Field.field.M31.add x.a y.a
+    let m1 ← XRn_Join_Field.field.M31.add x.b y.b
+    ok { a := m, b := m1 }
+LPq_generated/LPq_FieldPorts.lean:24:2: error: maximum recursion depth has been reached
+use `set_option maxRecDe
+...
+ ← lift (i1.wrapping_add i3)
+    let i6 ← lift (core.convert.num.FromU64U32.from y.a)
+    let i8 ← lift (core.convert.num.FromU64U32.from y.b)
+    let i9 ← lift (i6.wrapping_add i8)
+    let i10 ← lift (i4.wrapping_mul i9)
+    let m2 ← XRn_Join_Field.field.M31.reduce_u64 i10
+    let m ← m0.sub m1
+    let m3 ← m2.sub m0
+    let m4 ← m3.sub m1
+    ok { a := m, b := m4 }
+LPq_generated/LPq_FieldPorts.lean:38:2: error: Tactic `rfl` failed: [Error pretty printing: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information]
+
+x : NC
+⊢ (do
+      let x_1 ← x.a.double
+      let x_2 ← x_1.sub x.b
+      let x_3 ← x.b.double
+      let x ← x.a.add x_3
+      ok { a := x_2, b := x }) =
+    do
+    let m ← XRn_Join_Field.field.M31.double x.a
+    let m1 ← m.sub x.b
+    let m2 ← XRn_Join_Field.field.M31.double x.b
+    let m3 ← XRn_Join_Field.field.M31.add x.a m2
+    ok { a := m1, b := m3 }
+'AspisR1.LPq_FieldPorts.cm_add_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.cm_sub_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.cm_mul_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.by_r_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.cm_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.cm_sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.cm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.by_r' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6d6b742172414e22bc8b5f114b38099d.scope; invocation ID: eb8b3d0922b34c9785535924ad440052

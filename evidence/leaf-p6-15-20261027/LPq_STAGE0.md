@@ -8,7 +8,7 @@ removal, changed security metric, protocol change or release claim.
 Read: root AGENTS.md including Security and proof discipline; r1p-common and
 local-lean rules; S2 ownership/plan/diagnosis/interface and C3-BIN route-B,
 shared P6 method and Lean-discharged stubs rulings; both owner amendments;
-LPm handoff/prepared_claim/checkpoint packets, LPm/LPi/LPf modules and patches;
+LPm handoff/prepared_claim/checkpoint packets, selected LPm/LPi/LPf modules and patch handoff metadata;
 SInt2 coherent workspace handoff; LPn closed Dot packet; XRy claim arithmetic,
 powers, scalar selection and weighted-sum artifacts. All inspection is in this
 worktree or committed evidence; no other worktree or candidate is modified.

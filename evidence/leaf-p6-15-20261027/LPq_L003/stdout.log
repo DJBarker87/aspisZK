@@ -1,0 +1,112 @@
+LPq_generated/LPq_FieldPorts.lean:17:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x_1 ← x.a.add y.a
+    let x ← x.b.add y.b
+    ok { a := x_1, b := x }
+is not definitionally equal to the right-hand side
+  do
+    let m ← XRn_Join_Field.field.M31.add x.a y.a
+    let m1 ← XRn_Join_Field.field.M31.add x.b y.b
+    ok { a := m, b := m1 }
+
+x y : NC
+⊢ (do
+      let x_1 ← x.a.add y.a
+      let x ← x.b.add y.b
+      ok { a := x_1, b := x }) =
+    do
+    let m ← XRn_Join_Field.field.M31.add x.a y.a
+    let m1 ← XRn_Join_Field.field.M31.add x.b y.b
+    ok { a := m, b := m1 }
+LPq_generated/LPq_FieldPorts.lean:24:2: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+LPq_generated/LPq_FieldPorts.lean:31:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x_1 ← x.a.mul y.a
+    let x_2 ← x.b.mul y.b
+    let x_3 ← lift (core.convert.num.FromU64U32.from x.a)
+    let x ← lift (core.convert.num.FromU64U32.from x.b)
+    let x ← lift (x_3.wrapping_add x)
+    let x_4 ← lift (core.convert.num.FromU64U32.from y.a)
+    let x_5 ← lift (core.convert.num.FromU64U32.from y.b)
+    let x_6 ← lift (x_4.wrapping_add x_5)
+    let x ← lift (x.wrapping_mul x_6)
+    let x ← FIo_Native.aspis_core.field.M31.reduce_u64 x
+    let x_7 ← x_1.sub x_2
+    let x ← x.sub x_1
+    let x ← x.sub x_2
+    ok { a := x_7, b := x }
+is not definitionally equal to the right-hand side
+  do
+    let m0 ← XRn_Join_Field.field.M31.mul x.a y.a
+    let m1 ← XRn_Join_Field.field.M31.mul x.b y.b
+    let i1 ← lift (core.convert.num.FromU64U32.from x.a)
+    let i3 ← lift (core.convert.num.FromU64U32.from x.b)
+    let i4 ← lift (i1.wrapping_add i3)
+    let i6 ← lift (core.convert.num.FromU64U32.from y.a)
+    let i8 ← lift (core.convert.num.FromU64U32.from y.b)
+    let i9 ← lift (i6.wrapping_add i8)
+    let i10 ← lift (i4.wrapping_mul i9)
+    let m2 ← XRn_Join_Field.field.M31.reduce_u64 i10
+    let m ← m0.sub m1
+    let m3 ← m2.sub m0
+    let m4 ← m3.sub m1
+    ok { a := m, b := m4 }
+
+x y : NC
+⊢ (do
+      let x_1 ← x.a.mul y.a
+      let x_2 ← x.b.mul y.b
+      let x_3 ← lift (core.convert.num.FromU64U32.from x.a)
+      let x ← lift (core.convert.num.FromU64U32.from x.b)
+      let x ← lift (x_3.wrapping_add x)
+      let x_4 ← lift (core.convert.num.FromU64U32.from y.a)
+      let x_5 ← lift (core.convert.num.FromU64U32.from y.b)
+      let x_6 ← lift (x_4.wrapping_add x_5)
+      let x ← lift (x.wrapping_mul x_6)
+      let x ← FIo_Native.aspis_core.field.M31.reduce_u64 x
+      let x_7 ← x_1.sub x_2
+      let x ← x.sub x_1
+      let x ← x.sub x_2
+      ok { a := x_7, b := x }) =
+    do
+    let m0 ← XRn_Join_Field.field.M31.mul x.a y.a
+    let m1 ← XRn_Join_Field.field.M31.mul x.b y.b
+    let i1 ← lift (core.convert.num.FromU64U32.from x.a)
+    let i3 ← lift (core.convert.num.FromU64U32.from x.b)
+    let i4 ← lift (i1.wrapping_add i3)
+    let i6 ← lift (core.convert.num.FromU64U32.from y.a)
+    let i8 ← lift (core.convert.num.FromU64U32.from y.b)
+    let i9 ← lift (i6.wrapping_add i8)
+    let i10 ← lift (i4.wrapping_mul i9)
+    let m2 ← XRn_Join_Field.field.M31.reduce_u64 i10
+    let m ← m0.sub m1
+    let m3 ← m2.sub m0
+    let m4 ← m3.sub m1
+    ok { a := m, b := m4 }
+LPq_generated/LPq_FieldPorts.lean:38:2: error: Tactic `rfl` failed: [Error pretty printing: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information]
+
+x : NC
+⊢ (do
+      let x_1 ← x.a.double
+      let x_2 ← x_1.sub x.b
+      let x_3 ← x.b.double
+      let x ← x.a.add x_3
+      ok { a := x_2, b := x }) =
+    do
+    let m ← XRn_Join_Field.field.M31.double x.a
+    let m1 ← m.sub x.b
+    let m2 ← XRn_Join_Field.field.M31.double x.b
+    let m3 ← XRn_Join_Field.field.M31.add x.a m2
+    ok { a := m1, b := m3 }
+'AspisR1.LPq_FieldPorts.cm_add_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.cm_sub_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.cm_mul_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.by_r_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.cm_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.cm_sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.cm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_FieldPorts.by_r' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
