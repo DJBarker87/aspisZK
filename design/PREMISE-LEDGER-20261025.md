@@ -2917,3 +2917,23 @@ is now provable from the extracted program's attempted-call trace (owner-
 approved scope); its next job proves it.
 
 Status: the deployed 100-bit target is **not yet established**.
+
+## L166 discharged, 2026-10-27 (l166-trace1, BEn_)
+
+L166 (accepted-path native/source Result and ordered-effects association,
+both-reject and counted earlier reads on every rejected prefix) is REMOVED
+from the deployment-inclusive ledger, under the owner-approved trace-fidelity
+reading of D188. Evidence: `BEn_LocalAssociation.observation` (BEh_Scope.
+BothSlots for both ordinals at the reached cuts), `BEn_Final.joint` (the
+same admitted account supplies the local native/source laws and the global
+event/recorder alternative), `BEn_Final.unchanged_root : BEn_Top.deployed =
+ARX_Root.deployed := rfl` (adopted top unchanged; kernel statements
+byte-identical before/after). The single trace-trust attribution point is
+the definition `BEn_ExtractedTrace.native` (marker D188_TRACE_BOUNDARY); no
+axiom was added; all new theorems use propext/Classical.choice/Quot.sound.
+
+| Root | Actual antecedent | Deployment-inclusive |
+|---|---|---|
+| ARX_Root.deployed | 83T/11P/13G/0C (unchanged) | **89T/27P/13G/0C** (was 28P) |
+
+Deployed 100-bit target: **not yet established**.
