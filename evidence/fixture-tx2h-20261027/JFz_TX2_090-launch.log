@@ -1,0 +1,61 @@
+{"attempt": "JFz_TX2_090", "exit_status": 1, "wall_seconds": 2.259561209997628, "peak_rss_kib": "5297180", "swaps": "0", "print_axioms": ["'AspisR1.JFz_TX2_AccumulateStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFz_TX2_AccumulateStep.lean:53:2: error: unsolved goals
+case refine_1
+seed : Port3_NativeQueryBody.Ops
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+sum : S7Kani3CallerTrace.Sum
+t : ℕ
+node : U32
+value : SAQ_WideABI.E
+weights : a.weights = JFo_Prepared.accumulator.weights
+next : ↑a.next ≤ 22
+terms : t < 12
+crhs : Port4C_QueryArithmetic.CanonE a.rhs
+cpower : Port3_FlushInstall.Canonical a.power
+canonical : Port4C_QueryArithmetic.CanonE value
+history : PushTrace JFn_PendingHistory.old (toBW b) sum
+phase : Progress t 0 (toBW b)
+basis : Port4C_BasisMeaning.Basis
+hbasis : Port4C_BasisMeaning.source (JFn_ArrayBuilder.ops seed) node = ok basis
+cbasis : S7JoinBasisCanonical.Canonical basis
+rig
+...
+a.power) k) * ↑(S7JoinBasisBlock.cell basis i)
+      else sum i k
+product : SAQ_WideABI.E
+hproduct : SAQ_MixedSource.mulE value a.power = ok product
+cproduct : Port4C_QueryArithmetic.CanonE product
+rhs : SAQ_WideABI.E
+hrhs : SAQ_Arithmetic.add a.rhs product = ok rhs
+crhs' : Port4C_QueryArithmetic.CanonE rhs
+power : SAQ_WideABI.K
+hpower : SAQ_Arithmetic.mulK a.power JFo_Prepared.value.rho = ok power
+cpower' : Port3_FlushInstall.Canonical power
+hp : (JFn_ArrayBuilder.ops seed).op3 value a.power = ok product
+hr : (JFn_ArrayBuilder.ops seed).op2 a.rhs product = ok rhs
+hq : (JFn_ArrayBuilder.ops seed).op9 a.power JFo_Prepared.value.rho = ok power
+inc : Usize := (fromBW rows).terms.wrapping_add 1#usize
+hv : ↑inc = t + 1
+nv : ↑(a.next.wrapping_add 1#usize) = ↑a.next + 1
+⊢ (do
+      let b1 ←
+        Port3_NativeQueryBody.verifier.accumulate_batched_with_node_loop1 (JFn_ArrayBuilder.ops seed)
+            { start := 0#usize, «end» := 64#usize } a.weights a.power a.next b 64#usize basis
+      ok
+          ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+            { raw := b1.raw, terms := b1.terms.wrapping_add 1#usize })) =
+    ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := (fromBW rows).raw, terms := inc })
+JFz_TX2_AccumulateStep.lean:54:22: warning: This simp argument is unused:
+  hrows
+
+Hint: Omit it from the simp argument list.
+  simp only [hbasis, ̲hr̵o̵w̵s̵,̵h̵p, ̲hr, ̲hq, ̲bind_tc_ok, ̲lift,
+        show (JFn_ArrayBuilder.ops seed).op15 11#u16 a.next rhs ̲= ̲ok () from rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFz_TX2_AccumulateStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf4ab0a8a36844a6caae60af7cfea652a.scope; invocation ID: 82573601b4e2458ca2051043b3a47232
