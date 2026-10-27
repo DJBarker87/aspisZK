@@ -7,7 +7,7 @@ def ssh(cmd,**kw):return subprocess.run(['ssh',HOST,cmd],**kw)
 n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and (mod.startswith('JGk_TX2_'))
 a=f'JGk_TX2_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/recount8-20261026/Rc8_002/receipt.json').read_text())
-cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='Focused comparator transport and symbolic real-byte TX2 joins')
+cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','--no-optional-locks','status','--porcelain'])),expected_time='Focused comparator transport and symbolic real-byte TX2 joins')
 cfg['deps_fingerprint']['scope']='Pinned coherent SInt2 closure; JGk_TX2 per-stage source snapshots and inherited unchanged object pins'
 pin='/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects'
 cfg['env']['LEAN_PATH'] = pin+':'+':'.join(x for x in cfg['env']['LEAN_PATH'].split(':') if x!=pin)
