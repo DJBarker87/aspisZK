@@ -30,6 +30,11 @@ else:
  cfg.update(module=target,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R',('LPk_inherited' if kind=='inherited' else 'LPk_generated'),'-o',obj,src],env={'LEAN_PATH':B+'/LPk_objects:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'},deps_fingerprint={'scope':'coherent SInt2 objects plus LPk new modules'},expected_time='single symbolic module; no concrete large numeral normalization')
  r=ssh(f'mkdir -p {B}/LPk_generated {B}/LPk_objects');assert r.returncode==0,r.stderr
  if kind!='inherited':subprocess.run(['scp','-q',str(E/(target+'.lean')),H+':'+B+'/'+src],check=True)
+if kind=='kani' and target.endswith('LPk_wrapping_reconstruction'):
+ cfg['command'] += ['--solver','kissat']
+ cfg['env']['TMPDIR']=B+'/LPk_tmp'
+ r=ssh(f'mkdir -p {B}/LPk_tmp');assert r.returncode==0,r.stderr
+ cfg['expected_time']='optimized Kani then isolated wrapping reconstruction with bundled kissat; K008/K009 bounds supplied'
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 subprocess.run(['scp','-q',str(E/(a+'.json')),H+':'+B+'/'+a+'.json'],check=True)
 if kind=='kani':

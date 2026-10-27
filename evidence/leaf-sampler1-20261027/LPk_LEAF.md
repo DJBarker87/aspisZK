@@ -68,3 +68,26 @@ and cohort SDX_L032/L033 for zero, P, P+1, and 32 ff. No fresh fixture/release
 replay is claimed. K008/K009 passed quotient-fit and remainder-range checks.
 K010 (uncast widened reconstruction alone) timed out; it is replaced by a
 wrapping-word identity plus a separately proved Lean no-wrap lift, not rerun.
+
+## Stage 2 — accepted native subgates and precise remaining arithmetic
+K012/K013 pass the split reverse traversal: eight high-to-low calls, actual
+limb writes retained in the array, and bounded remainder threaded between
+calls. The step is stubbed by the paired natural relation in u128. K014 passes
+the frozen byte decoder expression for arbitrary block and arbitrary word
+index. Its little-endian natural specification joins the inherited
+SamplerBytePass.digits/SourceSamplerByteRank carrier.
+
+K015 timed out after 91.931 s at the same 90-second harness cap, using the
+bundled pinned kissat on a wrapping-word reconstruction with K008/K009 bounds.
+Its owned CNF was hashed and deleted after confirming its scope was terminal
+(LPk_SOLVER-CLEANUP.json). K005/K006/K010 used internal CaDiCaL, with no external
+solver files. No failed shape is rerun unchanged. Four disjoint 16-bit
+reconstruction goals are the final isolated native checks; LPk_Chunks.join
+(L010, standard axioms) composes them only if ALL pass.
+
+## Projection isolation
+K016 passed the low 16 bits of native reconstruction in 20.361 s (RSS 329708
+KiB, swap 0). K017 timed out on bits 16–31 in 91.895 s; neither result is a
+complete reconstruction proof. The higher two projections are separate gates.
+The final permitted shape for the middle region is an arbitrary byte (offset
+16 or 24), retaining the same full input domain and already proved bounds.

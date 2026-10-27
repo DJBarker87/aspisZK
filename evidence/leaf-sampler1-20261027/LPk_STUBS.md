@@ -17,3 +17,27 @@ induction. No field multiplication stub is used.
 
 The native single-step gate is still required; a paired Lean theorem alone
 does not verify the Rust step. See LPk_LEAF.md for final stage status.
+
+The accepted split traversal gates are K012 (order) and K013 (writeback).
+They use the same relation in u128, avoiding specification-only u64 overflow
+checks. q is u32 and r<P; `LPk_Modular.no_wrap` shows q*P+r<2^64, hence the
+wide relation is exactly the natural relation above. K006's combined harness
+timed out and is excluded. No timeout was raised. The domain remains rem<P
+and every u32 limb; no canonical-limb restriction was added.
+
+K008 verifies the native uncast quotient is at most u32::MAX; K009 verifies
+native remainder<P, so casting the quotient to u32 preserves its value.
+The wrapping-reconstruction gate uses only these already checked facts as
+assumptions. `LPk_Modular.lift_identity` supplies the no-wrap lift. Its success
+is still required before the native step can be considered verified.
+
+Final native step discharge: **K008 + K009 + K020**. K020 checks the identical
+native dividend/division/remainder expressions, with the constant specification
+product written `(q << 31) - q`. `LPk_Constant.product/shift_no_wrap/
+subtract_no_wrap/relation` prove this is exactly q*P and lift the wrapping word
+identity to `LPk_Step.Relation`. This replaces all failed multiplier shapes;
+the partial projection gates are not used to claim the full relation.
+`LPk_Casts.native_pack/native_cast/cohort_cast` give the bitwise-pack and
+scalar ports. Quotient cast uses K008; digit cast uses K009 and P<B.
+The paired cohort theorem remains `LPk_Cohort.step_result` on the full domain.
+No stub pairing or native arithmetic obligation is left open for this leaf.

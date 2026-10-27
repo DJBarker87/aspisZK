@@ -8,7 +8,7 @@
 +#[cfg(kani)] #[path = "LPk_harness.rs"] mod LPk_harness;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/LPk_harness.rs
-@@ -0,0 +1,133 @@
+@@ -0,0 +1,196 @@
 +// Scratch-only stage harnesses; inline fragments audited against frozen sampler.rs.
 +use aspis_core::field::P;
 +
@@ -68,7 +68,7 @@
 +// Abstract closure body: arbitrary state transitions, preserving the shared borrow.
 +#[kani::proof]
 +#[kani::unwind(10)]
-+fn LPk_from_fn_order() {
++fn LPk_from_fn_order_word() {
 +    let mut quotient:[u32;8]=kani::any();
 +    let initial=quotient;
 +    let mut count=0usize;
@@ -88,9 +88,10 @@
 +    assert_eq!(count,8);
 +    let at:usize=kani::any();kani::assume(at<8);
 +    assert_eq!(result[at],digits[at]);
-+    assert_eq!(inputs[0],initial);
-+    if at>0 {assert_eq!(inputs[at],outputs[at-1]);}
-+    assert_eq!(quotient,outputs[7]);
++    let word:usize=kani::any();kani::assume(word<8);
++    assert_eq!(inputs[0][word],initial[word]);
++    if at>0 {assert_eq!(inputs[at][word],outputs[at-1][word]);}
++    assert_eq!(quotient[word],outputs[7][word]);
 +}
 +
 +// Split K005: isolate the quotient cast bound, remainder bound, and
@@ -141,4 +142,66 @@
 + let at:usize=kani::any();kani::assume(at<8);
 + assert_eq!(quotient[7-at],qs[at]);
 + assert!(remainder<u64::from(P));
++}
++
++#[kani::proof] #[kani::unwind(10)]
++fn LPk_byte_decode() {
++ let block:[u8;32]=kani::any();
++ let quotient:[u32;8]=core::array::from_fn(|i|u32::from_le_bytes(block[4*i..4*i+4].try_into().unwrap()));
++ let i:usize=kani::any();kani::assume(i<8);
++ let word=u32::from(block[4*i])|(u32::from(block[4*i+1])<<8)|
++  (u32::from(block[4*i+2])<<16)|(u32::from(block[4*i+3])<<24);
++ assert_eq!(quotient[i],word);
++}
++
++// Split K010: only the low-word identity. The independent passed gates
++// K008/K009 supply these two assumptions; Lean supplies the no-wrap lift.
++#[kani::proof]
++fn LPk_wrapping_reconstruction() {
++ let rem:u64=kani::any();let limb:u32=kani::any();kani::assume(rem<u64::from(P));
++ let n=(rem<<32)|u64::from(limb);
++ let q=n/u64::from(P);let r=n%u64::from(P);
++ kani::assume(q<=u64::from(u32::MAX));
++ kani::assume(r<u64::from(P));
++ assert_eq!(q.wrapping_mul(u64::from(P)).wrapping_add(r),n);
++}
++
++fn LPk_reconstruction_words()->(u64,u64) {
++ let rem:u64=kani::any();let limb:u32=kani::any();kani::assume(rem<u64::from(P));
++ let n=(rem<<32)|u64::from(limb);
++ let q=n/u64::from(P);let r=n%u64::from(P);
++ kani::assume(q<=u64::from(u32::MAX)); // K008
++ kani::assume(r<u64::from(P)); // K009
++ (q.wrapping_mul(u64::from(P)).wrapping_add(r),n)
++}
++#[kani::proof]
++fn LPk_reconstruction_chunk0() {
++ let(w,n)=LPk_reconstruction_words();
++ assert_eq!((w>>0) as u16,(n>>0) as u16);
++}
++#[kani::proof]
++fn LPk_reconstruction_chunk1() {
++ let(w,n)=LPk_reconstruction_words();
++ assert_eq!((w>>16) as u16,(n>>16) as u16);
++}
++#[kani::proof]
++fn LPk_reconstruction_chunk2() {
++ let(w,n)=LPk_reconstruction_words();
++ assert_eq!((w>>32) as u16,(n>>32) as u16);
++}
++#[kani::proof]
++fn LPk_reconstruction_chunk3() {
++ let(w,n)=LPk_reconstruction_words();
++ assert_eq!((w>>48) as u16,(n>>48) as u16);
++}
++
++#[kani::proof]
++fn LPk_sparse_constant_reconstruction() {
++ let rem:u64=kani::any();let limb:u32=kani::any();kani::assume(rem<u64::from(P));
++ let n=(rem<<32)|u64::from(limb);
++ let q=n/u64::from(P);let r=n%u64::from(P);
++ kani::assume(q<=u64::from(u32::MAX)); // K008
++ kani::assume(r<u64::from(P)); // K009
++ let product=q.wrapping_shl(31).wrapping_sub(q);
++ assert_eq!(product.wrapping_add(r),n);
 +}
