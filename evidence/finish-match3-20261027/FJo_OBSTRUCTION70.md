@@ -64,3 +64,14 @@ was isolated further: the source fibre uses the generic model childIndex while
 the literal word theorem uses AspisR1.childIndex. The existing symbolic
 FoldStoredGeometry.child_eq_model transports them; no domain evaluation is
 needed. No top or recount credit is assigned to an unchecked draft.
+
+## Late-budget refinement
+
+PairDots078 checks all22 literal backend observations; ReaderLiteralAlpha082
+checks resumed literal alpha0. FoldedSelected091 checks the SAME literal V
+comparison, with its local recovery branch provided by RecoveryAt063.
+Tx1Geometry093 and PairSource094 respectively derive the actual TX1 geometry
+binding and retain TX2's actual geometry-constructor equation with all22 calls.
+The final combined matching consumer and native/global owner installation are
+not yet checked. The geometry inverse consumer's concrete-field elaboration
+was isolated for a generic-field replacement; failing drafts carry no credit.
