@@ -29,7 +29,6 @@ theorem source (a b : U32) : XRn_Join_Field.field.M31.sub a b =
     wrappingSub (U32.wrapping_add a 2147483647#u32) b := by
   simp only [XRn_Join_Field.field.M31.sub,XRn_Join_Field.field.P,
     lift,bind_tc_ok,wrappingSub,wrappingNormalize]
-  rfl
 
 theorem target (a b : U32) : AspisR1Qm31ArithmeticProbe.field.M31.sub a b =
     (do let x ← a+2147483647#u32; checkedSub x b) := by
