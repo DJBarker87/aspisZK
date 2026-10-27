@@ -54,3 +54,5 @@ no proof output containing sorryAx is accepted. Part1 remains incomplete and
 part2 is not started. The exact new model boundary is FJg_DualTensor.low,
 consuming the checked scalar_factor sum; installed arithmetic/final array
 remains051. Any final progress claim must preserve this distinction.
+
+Final100 combined audit passes. Budget100/100 exhausted (51 passed,49 failed),0/20 Kani. Native stages1–5 remain checked; concrete literal transport remains open. Final dispositions/metrics are in FJg_FINAL.md and FJg_ROWS.md. Part2 was never started.

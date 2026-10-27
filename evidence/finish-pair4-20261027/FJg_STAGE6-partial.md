@@ -52,3 +52,5 @@ hashes in FJg_archived_candidates.json. No unproved candidate remains in lean/.
 Part1 is still incomplete; parts2..7 were not touched. The final two attempts
 are reserved for a selected-root axioms audit and actual-top/non-vacuity kernel
 statement audit, without package replay.
+
+Final:100/100 Lean starts used,51 passed/49 failed,0/20 Kani. Combined100 passes selected-root axioms and actual-top/non-vacuity kernel audits;099 missing import corrected there. Full disposition is FJg_FINAL.md. No complete part1/model meaning or actual-top removal.

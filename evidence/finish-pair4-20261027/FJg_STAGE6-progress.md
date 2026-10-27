@@ -24,10 +24,12 @@ it is a failed diagnostic, not a proof.081 attempts explicit parent-structure
 normalization, never a cap increase or unchanged timed-out rerun. Every failed
 source snapshot is retained and excluded from successful-source inventory.
 
-The generic/native ScalaSum074 is now green. The separate Quarter064 is green,
+The generic/native ScaleSum074 is now green. The separate Quarter064 is green,
 but the final QuarterLow application still exposes an instance-coherence
 elaboration cost at the concrete finite sum (standard-axiom statement unchanged).
 081/082 targeted explicit Field parent normalization and failed quickly with
 no-progress diagnostics.083 expands only FOUR symbolic MODEL sum lanes before
 applying Quarter064, eliminating the large AddCommMonoid-instance comparison;
 no native source loop or numeral field recurrence is evaluated. No cap changes.
+
+Final:100/100 Lean starts used,51 passed/49 failed,0/20 Kani. Combined100 passes selected-root axioms and actual-top/non-vacuity kernel audits;099 missing import corrected there. Full disposition is FJg_FINAL.md. No complete part1/model meaning or actual-top removal.

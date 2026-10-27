@@ -1,0 +1,134 @@
+theorem AspisR1.FJg_Part1Final.value : ∀ (r : AspisR1.NP6_StdModel.Reservation)
+  (semAlpha : Aeneas.Std.Array AspisR1Stage2.Stage2Finish.K 10#usize)
+  (z : Aeneas.Std.Array AspisR1Stage2.aspis_core.circle.SecureCirclePoint 2#usize) (w : AspisR1.FIo_Install.W)
+  (alpha : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (f : Aeneas.Std.Slice Aeneas.Std.U8)
+  (kappa out : AspisR1Stage2.Stage2Finish.E),
+  AspisR1.FJc_WeightArray.canonical (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toQ semAlpha) →
+    AspisR1.FIn_WeightsInstall.newWeights AspisR1Stage2.transport.Variant.S2 semAlpha z =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok w) →
+      (AspisR1.FIo_Install.toSlice alpha).len = 2#usize →
+        (↑f).length = 2048 →
+          (∀ x ∈ ↑(AspisR1.FIo_Install.toSlice alpha), AspisR1.FIo_WideValues.Canon x) →
+            AspisR1.FIo_Install.pair r w alpha f kappa = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+              ∃ nativeOut a0 a1 ap0 ap1 common partials row coeff low0 low1 low parts k,
+                (AspisR1.FIo_Install.toWeights w).pair (AspisR1.FIo_Install.toSlice alpha) f
+                      (AspisR1.FIo_Install.toE kappa) =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok nativeOut) ∧
+                  AspisR1.FIo_Install.fromE nativeOut = out ∧
+                    (AspisR1.FIo_Install.toSlice alpha).index_usize 0#usize = Aeneas.Std.Result.ok a0 ∧
+                      (AspisR1.FIo_Install.toSlice alpha).index_usize 1#usize = Aeneas.Std.Result.ok a1 ∧
+                        FIo_Native.weights.powers 4#usize a0 = Aeneas.Std.Result.ok ap0 ∧
+                          FIo_Native.weights.powers 4#usize a1 = Aeneas.Std.Result.ok ap1 ∧
+                            AspisR1.FJf_QMArray.canon common ∧
+                              (∀ j < 16,
+                                  AspisR1.FJf_QMArray.value common j =
+                                    AspisR1.FJf_CommonCell.model
+                                      (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toQ semAlpha) j) ∧
+                                AspisR1.FJg_PartialsValue.Values f common partials 4 ∧
+                                  (AspisR1.FIo_Install.toWeights w).factors.index_usize 0#usize =
+                                      Aeneas.Std.Result.ok row ∧
+                                    row.index_usize 4#usize = Aeneas.Std.Result.ok coeff ∧
+                                      row.index_usize 0#usize = Aeneas.Std.Result.ok low0 ∧
+                                        row.index_usize 1#usize = Aeneas.Std.Result.ok low1 ∧
+                                          AspisR1.FIo_ArrayCanon.Holds low ∧
+                                            FIo_Native.weights.powers 7#usize (AspisR1.FIo_Install.toE kappa) =
+                                                Aeneas.Std.Result.ok k ∧
+                                              FIo_Native.weights.Weights.pair_loop17
+                                                    { start := 0#usize, «end» := 7#usize } parts k
+                                                    FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO =
+                                                  Aeneas.Std.Result.ok nativeOut ∧
+                                                AspisR1.FIp_ArrayValue.value parts 0 =
+                                                    AspisR1.FJc_InactiveValue.sumPrefix f low 12 ∧
+                                                  AspisR1.FIp_ArrayValue.value parts 1 =
+                                                    AspisR1CurrentWide.Proof.decodeM FIo_Native.weights.QUARTER •
+                                                          AspisR1.FJg_ScalarCell.sumPrefix ap0 low0 4 *
+                                                        AspisR1CurrentWide.Proof.decodeM FIo_Native.weights.QUARTER •
+                                                          AspisR1.FJg_ScalarCell.sumPrefix ap1 low1 4 *
+                                                      AspisR1.FJg_HighCell.sumPrefix partials coeff 4 :=
+fun r semAlpha z w alpha f kappa out hc hw folds len halpha run =>
+  let ⟨w✝, h✝⟩ := AspisR1.FJg_SharedProvenance.value r semAlpha z w alpha f kappa out hc hw folds run
+  let ⟨w✝¹, h✝¹⟩ := h✝
+  let ⟨w✝², h✝²⟩ := h✝¹
+  let ⟨w✝³, h✝³⟩ := h✝²
+  let ⟨w✝⁴, h✝⁴⟩ := h✝³
+  let ⟨w✝⁵, h✝⁵⟩ := h✝⁴
+  let ⟨guard, rest⟩ := h✝⁵
+  let ⟨nativeOut, h✝⁶⟩ := AspisR1.FIo_Install.reached r w alpha f kappa out run
+  let ⟨hn, he⟩ := h✝⁶
+  let ⟨a0, h✝⁷⟩ :=
+    AspisR1.FJg_Part1Trace.reached (AspisR1.FIo_Install.toWeights w) (AspisR1.FIo_Install.toSlice alpha) f
+      (AspisR1.FIo_Install.toE kappa) nativeOut folds guard hn
+  let ⟨a1, h✝⁸⟩ := h✝⁷
+  let ⟨ap0, h✝⁹⟩ := h✝⁸
+  let ⟨ap1, h✝¹⁰⟩ := h✝⁹
+  let ⟨nativeSelf, h✝¹¹⟩ := h✝¹⁰
+  let ⟨common, h✝¹²⟩ := h✝¹¹
+  let ⟨partials, h✝¹³⟩ := h✝¹²
+  let ⟨before, h✝¹⁴⟩ := h✝¹³
+  let ⟨highParts, h✝¹⁵⟩ := h✝¹⁴
+  let ⟨lowParts, h✝¹⁶⟩ := h✝¹⁵
+  let ⟨parts, h✝¹⁷⟩ := h✝¹⁶
+  let ⟨k, h✝¹⁸⟩ := h✝¹⁷
+  let ⟨low, h✝¹⁹⟩ := h✝¹⁸
+  let ⟨inactive, h✝²⁰⟩ := h✝¹⁹
+  let ⟨libra, h✝²¹⟩ := h✝²⁰
+  let ⟨status, h✝²²⟩ := h✝²¹
+  let ⟨h0, right✝⟩ := h✝²²
+  let ⟨hp0, right✝¹⟩ := right✝
+  let ⟨h1, right✝²⟩ := right✝¹
+  let ⟨hp1, right✝³⟩ := right✝²
+  let ⟨hcom, right✝⁴⟩ := right✝³
+  let ⟨same, right✝⁵⟩ := right✝⁴
+  let ⟨hpart, right✝⁶⟩ := right✝⁵
+  let ⟨hhigh, right✝⁷⟩ := right✝⁶
+  let ⟨hstatus, right✝⁸⟩ := right✝⁷
+  let ⟨hl, right✝⁹⟩ := right✝⁸
+  let ⟨hi, right✝¹⁰⟩ := right✝⁹
+  let ⟨hu, right✝¹¹⟩ := right✝¹⁰
+  let ⟨hlib, right✝¹²⟩ := right✝¹¹
+  let ⟨hk, hsum⟩ := right✝¹²
+  Eq.ndrec (motive := fun nativeSelf =>
+    FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } (AspisR1.FIo_Install.toWeights w)
+          (Aeneas.Std.Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO) =
+        Aeneas.Std.Result.ok (nativeSelf, common) →
+      FIo_Native.weights.shared_high partials nativeSelf ap0 ap1 before = Aeneas.Std.Result.ok (status, highParts) →
+        FIo_Native.weights.grouped_inactive_pair nativeSelf f low = Aeneas.Std.Result.ok inactive →
+          ∃ nativeOut a0 a1 ap0 ap1 common, ⋯)
+    (fun hcom hhigh hi =>
+      Eq.ndrec (motive := fun status =>
+        FIo_Native.weights.shared_high partials (AspisR1.FIo_Install.toWeights w) ap0 ap1 before =
+            Aeneas.Std.Result.ok (status, highParts) →
+          ∃ nativeOut a0 a1 ap0 ap1 common, ⋯)
+        (fun hhigh =>
+          have cv := AspisR1.FJf_CommonValue.sixteen semAlpha z w hc hw (AspisR1.FIo_Install.toWeights w, common) hcom;
+          have pv := AspisR1.FJg_PartialsValue.four f common cv.right.left partials hpart;
+          have ca0 := AspisR1.FJc_SliceCanonical.read (AspisR1.FIo_Install.toSlice alpha) 0#usize a0 halpha h0;
+          have ca1 := AspisR1.FJc_SliceCanonical.read (AspisR1.FIo_Install.toSlice alpha) 1#usize a1 halpha h1;
+          have cp0 := AspisR1.FIp_PowersValue.powers 4#usize a0 ap0 ca0 hp0;
+          have cp1 := AspisR1.FIp_PowersValue.powers ⋯ a1 ap1 ca1 hp1;
+          let ⟨row, h✝²³⟩ := ⋯
+          ⋯)
+        (Eq.symm hstatus) hhigh)
+    (Eq.symm same) hcom hhigh hi
+'AspisR1.FJg_PairProvenance.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_SharedGuard.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_SharedProvenance.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+FJg_FinalAudit.lean:18:14: error(lean.unknownIdentifier): Unknown constant `AspisR1.FJg_Part1High.value`
+'AspisR1.FJg_ScalarValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_SharedPart1.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_Part1Trace.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_FinalContinuation.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_Part1Final.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_DualTensor.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_LiteralTensor.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_ScaleSum.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_Quarter.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_ReaderScalarCanon.k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_ReaderScalarCanon.e' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_LowLane.semiring' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_LowLane.additive' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJg_LowLane.multiplicative' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJg_ReadSemanticCanon.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_ParsedPart1Final.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_LowHorner.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJg_QuarterHorner.value' depends on axioms: [propext, Classical.choice, Quot.sound]
