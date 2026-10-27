@@ -1,0 +1,15 @@
+AspisR1.LiteralMatchingSemanticData.read_matches_view
+  (rs : List (AspisR1.LiteralTranscript.Message × AspisR1.LiteralTranscript.Challenge))
+  (d : AspisR1.MatchingSupport.Data AspisR1.LiteralMatchingSemanticData.E)
+  (hread : AspisR1.LiteralMatchingData.read rs = some d) :
+  ∃ v, AspisR1.LiteralOpeningView.read rs = some v ∧ d.W = v.word ∧ d.F = v.functionals ∧ d.F0 = v.baseFunctional
+AspisR1.LiteralOpeningFunctionalFacts.read_functionals
+  (rs : List (AspisR1.LiteralTranscript.Message × AspisR1.LiteralTranscript.Challenge))
+  (v : AspisR1.LiteralOpeningView.View) (hread : AspisR1.LiteralOpeningView.read rs = some v) :
+  v.functionals = AspisR1.SelectedOpeningFunctionals.functionals (List.map Prod.snd v.semantic) v.circlePoints ∧
+    v.baseFunctional = AspisR1.SelectedOpeningFunctionals.rawBase (List.map Prod.snd v.semantic) v.circlePoints
+AspisR1.SelectedOpeningFunctionals.functionals {E : Type} [Field E] (cs : List E)
+  (z : Fin 2 → AspisR0.ChordGeometry.Point E) : Fin 6 → (Fin 1024 → E) →ₗ[E] E
+AspisR1.SelectedOpeningFunctionals.rawBase {E : Type} [Field E] (cs : List E)
+  (z : Fin 2 → AspisR0.ChordGeometry.Point E) : (Fin 1024 → E) →ₗ[E] E
+'AspisR1.LiteralMatchingSemanticData.read_matches_view' depends on axioms: [propext, Classical.choice, Quot.sound]
