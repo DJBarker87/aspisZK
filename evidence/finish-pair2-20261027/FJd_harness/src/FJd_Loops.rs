@@ -84,3 +84,13 @@ fn FJd_point1_d0_s0() {
  assert_eq!(w.factors[0][0][0],K::ONE.sub(a).mul(K::ONE.sub(b)));
  kani::cover!(true,"canonical original alpha, digit0 entry0");
 }
+
+#[kani::proof] #[kani::unwind(11)]
+fn FJd_point1_d0_s1() {
+ let alpha=core::array::from_fn(|_|any_k());
+ let z=[SecureCirclePoint{x:K::ZERO,y:K::ONE};2];
+ let w=Weights::new(Variant::S2,&alpha,&z).unwrap();
+ let a=alpha[9-2*TAU[0]];let b=alpha[8-2*TAU[0]];
+ assert_eq!(w.factors[0][0][1],a.mul(K::ONE.sub(b)));
+ kani::cover!(true,"canonical original alpha, digit0 entry1");
+}
