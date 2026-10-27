@@ -5,6 +5,7 @@ pub mod owned;
 pub mod captured_mask;
 pub mod owned_points;
 pub mod owned_wide_new;
+pub mod owned_compress;
 #[path="../source-proof/owned_circle.rs"]
 pub mod owned_circle;
 #[cfg(not(pv_cb_extract))]
@@ -16,6 +17,18 @@ mod checks {
     fn same(a:QM31,b:QM31) {
         assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);
         assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn compress16_reference() {
+        let tag = M31(kani::any());
+        let words: [u32;16] = kani::any();
+        let mut values = [M31::ZERO;16];
+        for i in 0..16 { values[i] = M31(words[i]); }
+        let lambda = q(kani::any());
+        same(aspis_statement::logup::compress_tagged_tuple(tag,&values,lambda),
+             super::owned_compress::compress(tag,&values,lambda));
     }
     #[kani::proof]
     #[kani::unwind(40)]
