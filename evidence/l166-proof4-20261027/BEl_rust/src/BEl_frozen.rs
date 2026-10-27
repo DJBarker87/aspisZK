@@ -383,4 +383,27 @@ pub(crate) fn leaf_step<H:Digest32>(keys:[u64;16],mut key_position:usize,lo:usiz
 (true,key_position,selected,d)
 }
 
+pub(crate) fn leaf_loop<H:Digest32>(proof:&[u8],keys:[u64;16],lo:usize,n:usize,tree:usize,idx:&mut [u32;16],val:&mut [[u8;32];16],hash:H)->(Result<(),Error>,usize) {
+    let mut d = 0;
+    let mut key_position = 0;
+    while key_position < n {
+        let key = batch_key_at(&keys, key_position);
+        key_position += 1;
+        let index = (key >> 8) as u32;
+        let q = opening(proof, lo + (key & 0xff) as usize);
+        let leaf = batch_leaf(hash, tree, q);
+        if d > 0 && same_batch_index(idx, d - 1, index) {
+            if !same_batch_leaf(val, d - 1, leaf) {
+                return (Err(Error::Merkle),d);
+            }
+            continue;
+        }
+        idx[d] = index;
+        val[d] = leaf;
+        d += 1;
+    }
+
+(Ok(()),d)
+}
+
 }

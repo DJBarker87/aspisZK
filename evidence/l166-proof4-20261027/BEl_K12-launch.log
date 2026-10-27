@@ -1,0 +1,46 @@
+{"attempt": "BEl_K12", "exit_status": 0, "wall_seconds": 0.5532381309894845, "peak_rss_kib": "161012", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling bel-batch-observation v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEl_rust)
+warning: unused import: `alloc::vec::Vec`
+  --> src/BEl_frozen.rs:86:5
+   |
+86 | use alloc::vec::Vec;
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` pr
+...
+e allocation: SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function kani::rustc_intrinsics::offset::<u8, *mut u8, usize>
+[kani::rustc_intrinsics::offset::<u8, *mut u8, usize>.safety_check.1] line 57 Offset in bytes overflows isize: SUCCESS
+[kani::rustc_intrinsics::offset::<u8, *mut u8, usize>.safety_check.2] line 57 Offset result and original pointer must point to the same allocation: SUCCESS
+
+/home/runner/work/kani/kani/library/kani_core/src/models.rs function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+[<usize as kani::rustc_intrinsics::ToISize>::to_isize.unreachable.1] line 176 unreachable code: SUCCESS
+
+src/BEl_reference.rs function BEl_reference::padding_word
+[BEl_reference::padding_word.assertion.1] line 206 assertion failed: shipped == reference: SUCCESS
+
+src/BEl_reference.rs function BEl_reference::padding_word::{closure#0}
+[BEl_reference::padding_word::{closure#0}.pointer_dereference.1] line 205 dereference failure: pointer NULL in *b: SUCCESS
+[BEl_reference::padding_word::{closure#0}.pointer_dereference.2] line 205 dereference failure: pointer invalid in *b: SUCCESS
+[BEl_reference::padding_word::{closure#0}.pointer_dereference.3] line 205 dereference failure: deallocated dynamic object in *b: SUCCESS
+[BEl_reference::padding_word::{closure#0}.pointer_dereference.4] line 205 dereference failure: dead object in *b: SUCCESS
+[BEl_reference::padding_word::{closure#0}.pointer_dereference.5] line 205 dereference failure: pointer outside object bounds in *b: SUCCESS
+[BEl_reference::padding_word::{closure#0}.pointer_dereference.6] line 205 dereference failure: invalid integer address in *b: SUCCESS
+
+** 0 of 70 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r0d2a84d5ae324d1f93ebe616ab2f4f87.scope; invocation ID: b0191cdf854541b38813aaacf036163a
