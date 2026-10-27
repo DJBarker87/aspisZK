@@ -12491,3 +12491,33 @@ associations at the actual deployment-selected i, the installed PublicBinding, a
 hypothetical-T non-vacuity. Endpoint premises removed/added/weakened 0/0/0; recount 5 unchanged.
 Branch pushed (0ec90874e3). runjoin22 continues with exactly those three steps (IDs 38200-38299).
 Rows removed outright: 0. Privacy target not yet established.
+
+## D318 (Stream B) 2026-10-27 20:49 UTC: V233, V265 and V184 closed on the candidate; pv-alib merged and retired; pv-op254 launched
+
+alib3 used 8 attempts (IDs 37600-37699; no 52xxx reuse). It recovered attempt 52775 read-only (exit
+0, five standard-axiom reports; not rerun), verified all 5,673 external objects under (h4) before
+compiling, and cleared the provisional status of V233 and V265: combined audit 37698 (159
+standard-axiom reports) and a focused cached replay of their 41-module cone, 37600, both pass.
+
+V184 / op33 Vec.pop: OPEN -> CLOSED-ON-CANDIDATE. PV_AL_MoveWorld.source_reference equates the
+native and move-reference library executions on an explicit world; .checked_observation proves the
+returned last value, remaining contents, retained buffer and capacity, unchanged allocation
+history and counters, data memory and an arbitrary external frame; PV_AL_MoveSelected links it to
+the selected and consumed op33 callback; PV_AL_MoveClosure.complete, .allocation_delta (zero
+alloc/realloc/dealloc increments) and .nonvacuous (a carrier for every representable vector) close
+it, with payloads of arbitrary non-Copy type. Scope, stated as such: the native link is the
+script-checked STRUCTURAL-POP-GATE.json over the pinned nightly-2026-06-01 stdlib bodies, whose raw
+operations are interpreted by an explicit Lean library semantics, plus the reused 99-case native
+allocation differential, a no-stub Kani gate for lengths 0-4, and 33 non-Copy Drop zero-sized-type
+cases. Native raw remove is not extracted; this is not an unbounded raw-pointer, compiler or
+allocator refinement. Final three-row audit 37699 (204 standard-axiom reports) and V184 replay 37604
+pass. The [17,29] copy-reference counterexample stays recorded as a failed approach.
+
+Candidate closures this session: V233, V265, V184 (bucket (a): 10 -> 7 OPEN, of which V404/V405 are
+pv-reach's, V217/V220 batch3's, V259/V260 batch2's and V261 now pv-op254's). They enter the ledger at
+the next recount; deployed endpoint premises removed: 0. codex/pv-alib-20261027 was merged into the
+prover candidate (1934d3b410, pushed) and its worktree and branch removed. New job pv-op254 (IDs
+38500-38599): the three rows batch 1 applied but never closed, V261 op254 powers, V247 op230 helper
+sum and V264 op258 all_slots_clear, finishing with a combined audit and a focused closure replay.
+A brief second DNS failure delayed one push; no job was affected. Rows removed outright: 0.
+Privacy target not yet established.
