@@ -11998,3 +11998,42 @@ experiment; dry-test 60 s outside any window. Stream A pre-approved ONE window (
 no further window within 30 minutes of it). Launched pv-dudect-run3 with drain ≤ 5 min, cool-down ≤ 5 min,
 then the 15-minute plan; an abort ends the job without a retry. Four live slots: batch1b, runjoin17,
 batch2, dudect-run3. Rows removed outright: 0. Privacy target not yet established.
+
+## D295 (Stream B) 2026-10-27 14:50 UTC: third V374 window: timing differences DETECTED on the mask sampler under non-conforming thermal conditions; diagnosis launched
+
+pv-dudect-run3 (`codex/pv-dudect-20261027`, cc5fdf3956 amendment v2.1 and a passing 60 s monitor dry test,
+d03e24018c findings; evidence only). One window: marker 14:39:11.704 → removed 14:39:23.326 UTC
+(verified absent; Stream A told; no second window). Both binary pins matched. RESULTS (fixed vs random
+seed; preregistered Welch |t| threshold 4.5): mask-m31 1,000,000 / 1,000,000 samples, max |t| 150.670
+(first order) / 176.948 (centred square), 591,954 / 648,844 after the peak crop; mask-qm31 921,729 /
+921,699 samples, max |t| 221.702 / 233.473, 595,316 / 626,231 after crop. A timing DIFFERENCE IS
+DETECTED on both. Both experiments are NON-CONFORMING: the package read 97-98 °C at the boundary
+observations, the 80 °C cool-down was not reached before sampling, the run aborted at 100 °C (above the
+95 °C limit), and qm31 is incomplete; the other ten experiments did not run (0 samples, no verdict).
+Stream A's host data: package_throttle_total_time ≈ 155,000 s (about a third of the 5.2-day uptime), max
+57 s per event, average clock ≈ 1.65 GHz of 4.5 GHz: the build host throttles routinely under normal
+load (recorded by Stream A in C3-BIN as an owner hardware question). LEAD ASSESSMENT: neither a
+qualified leak finding nor dismissible. |t| this large can be a harness artifact (cache-warm fixed
+buffer, branch-predictor training on fixed data), a property of the hash behind SeedExpander, or a real
+seed-dependent timing; DOITM is off (V371) and the result speaks for the harness build. Launched
+pv-dudect-diag (same branch, no window): interleaved controls (fixed A vs fixed B, random vs random,
+fixed-in-fresh-buffer vs random), the instruction trace of every seed-dependent branch, address or
+variable-latency op in SeedExpander and its hash, and a classification. Any future V374 window waits for
+lighter load on both streams and at least 15:09 UTC. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D296 (Stream B) 2026-10-27 14:55 UTC: batch 2 applied (ELF pins match); timing pre-check inconclusive on a throttling host; cost projection by call counts; batch2b launched
+
+pv-batch2 (`codex/pv-batch2-20261027`, head 5d8dfbebb2; 0/100 Lean; no Kani): ops 249-253 as prover-local
+Drop-free copies (crates/aspis-r1-cost-probe/src/host_weights.rs +100, behind #[cfg(feature = "prover")] at
+lib.rs:65; host callers in prover.rs and sim.rs redirected; 7 files +183/−8); all three ELF pins MATCH.
+It stopped at its +3% pre-check: transfer 15.5821 → 16.2286 s (+4.15%), withdrawal −2.43%, five pairs vs
+73070ddd51. Per-call costs original → copy (µs): 249 gamma 0.0563 → 0.0639; 250 ordinary 0.0302 → 0.0502;
+251 materialize 584.54 → 580.96; 252 new 1.446 → 1.540; 253 raw 0.0720 → 0.0709. LEAD RULING: the
+pre-check ran on a host throttling about a third of the time (control 15.58 s versus 14.38 s in the quiet
+window); opposite signs on the two fixtures and per-call deltas of hundredths of a microsecond make it
+INCONCLUSIVE, not a regression; non-window timing is no longer used as timing evidence by Stream B; the
+quiet-window gate on the combined candidate decides. Launched pv-batch2b (same branch): per-proof call
+counts and a projected cost (stop above +2% of 14.38 s), then extraction, source laws, copy-equals-original
+proofs, the V256-V260 bridges and the fixture gate. Four live slots: batch1b, runjoin17, dudect-diag,
+batch2b. Rows removed outright: 0. Privacy target not yet established.
