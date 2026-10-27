@@ -1,0 +1,85 @@
+import R1Z.ProverRw21Arity16NoPole
+import R1Z.ProverRw21FixCongruence
+import R1Z.ProverRw21SumcheckRound
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21Arity16HelperLeaves
+open Aeneas Aeneas.Std Result ProverRwFull ProverRw21Arity16Endpoint
+variable [ExternalTypes]
+
+theorem leaf0 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.check_semantic_columns _ {ops with op223 := f} =
+      @host_semantic.check_semantic_columns _ {ops with op223 := g} := rfl
+#print axioms leaf0
+
+theorem leaf1 (ops : ExternalFuns) (f g : Compression) :
+    @host_wire.SemanticTranscript.new _ {ops with op223 := f} =
+      @host_wire.SemanticTranscript.new _ {ops with op223 := g} := rfl
+#print axioms leaf1
+
+theorem leaf2 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.semantic_row _ {ops with op223 := f} =
+      @host_semantic.semantic_row _ {ops with op223 := g} := rfl
+#print axioms leaf2
+
+theorem leaf3 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.lift_columns _ {ops with op223 := f} =
+      @host_semantic.lift_columns _ {ops with op223 := g} := rfl
+#print axioms leaf3
+
+theorem leaf4 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.zc_rows _ {ops with op223 := f} =
+      @host_semantic.zc_rows _ {ops with op223 := g} := rfl
+#print axioms leaf4
+
+theorem leaf5 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.add_d_tail _ {ops with op223 := f} =
+      @host_semantic.add_d_tail _ {ops with op223 := g} := by
+  delta host_semantic.add_d_tail host_semantic.d_tail_side host_semantic.d_tail_sum
+  rfl
+#print axioms leaf5
+
+theorem leaf6 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.initial_mask_sum _ {ops with op223 := f} =
+      @host_semantic.initial_mask_sum _ {ops with op223 := g} := rfl
+#print axioms leaf6
+
+theorem leaf7 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.point_claims _ {ops with op223 := f} =
+      @host_semantic.point_claims _ {ops with op223 := g} := rfl
+#print axioms leaf7
+
+theorem leaf8 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.extra_claims _ {ops with op223 := f} =
+      @host_semantic.extra_claims _ {ops with op223 := g} := rfl
+#print axioms leaf8
+
+theorem leaf9 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.claim_bytes _ {ops with op223 := f} =
+      @host_semantic.claim_bytes _ {ops with op223 := g} := rfl
+#print axioms leaf9
+
+theorem leaf10 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.endpoint_bytes _ {ops with op223 := f} =
+      @host_semantic.endpoint_bytes _ {ops with op223 := g} := rfl
+#print axioms leaf10
+
+theorem leaf11 (ops : ExternalFuns) (f g : Compression) :
+    @host_sumcheck.prove_sumcheck _ {ops with op223 := f} =
+      @host_sumcheck.prove_sumcheck _ {ops with op223 := g} := by
+  delta host_sumcheck.prove_sumcheck host_sumcheck.prove_sumcheck_rounds
+    host_sumcheck.prove_sumcheck_rounds.mutual
+  simp only [ProverRw21SumcheckRound.round ops f g,
+    ProverRw21RoundLeaves.leaf0 ops f g,
+    ProverRw21RoundLeaves.leaf1 ops f g,
+    ProverRw21RoundLeaves.leaf2 ops f g,
+    ProverRw21RoundLeaves.leaf3 ops f g,
+    ProverRw21RoundLeaves.leaf4 ops f g]
+  rfl
+#print axioms leaf11
+
+theorem leaf12 (ops : ExternalFuns) (f g : Compression) :
+    @host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle _ {ops with op223 := f} =
+      @host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle _ {ops with op223 := g} := rfl
+#print axioms leaf12
+end R1Z.ProverRw21Arity16HelperLeaves

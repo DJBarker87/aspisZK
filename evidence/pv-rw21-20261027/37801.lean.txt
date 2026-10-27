@@ -1,0 +1,12 @@
+import R1Z.ProverRw21Arity16NoPole
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21SumcheckRound
+open Aeneas Aeneas.Std Result ProverRwFull ProverRw21Arity16Endpoint
+variable [ExternalTypes]
+
+theorem round (ops : ExternalFuns) (f g : Compression) :
+    @host_sumcheck.prove_sumcheck_round _ {ops with op223 := f} =
+      @host_sumcheck.prove_sumcheck_round _ {ops with op223 := g} := rfl
+#print axioms round
+end R1Z.ProverRw21SumcheckRound

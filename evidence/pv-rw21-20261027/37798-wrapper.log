@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0228); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+                        (Aeneas.Std.core.result.Result
+                            (Aeneas.Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) r1_wire.Error ×
+                          host_wire.SemanticTranscript H × Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) :=
+fun [ExternalTypes] [ExternalFuns] {H F} aspis_coredigestDigest32Inst OracleInst transcript output point running round
+    oracle =>
+  host_sumcheck.prove_sumcheck_rounds.mutual aspis_coredigestDigest32Inst OracleInst oracle transcript output point
+    running round
+ProverRwFull.host_semantic.d_tail_sum.eq_def [ExternalTypes] [ExternalFuns]
+  (dc : Aeneas.Std.Array aspis_core.field.QM31 1024#usize) (offset j : Aeneas.Std.Usize) (sum : aspis_core.field.QM31) :
+  host_semantic.d_tail_sum dc offset j sum =
+    if j = 28#usize then Aeneas.Std.Result.ok sum
+    else do
+      let i ← Aeneas.Std.lift (offset.wrapping_add j)
+      let q ← dc.index_usize i
+      let next ← sum.add q
+      let i1 ← Aeneas.Std.lift (j.wrapping_add 1#usize)
+      host_semantic.d_tail_sum dc offset i1 next
+ProverRwFull.host_sumcheck.prove_sumcheck_rounds.eq_def [ExternalTypes] [ExternalFuns] {H F : Type}
+  (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) (OracleInst : host_sumcheck.Oracle F)
+  (transcript : host_wire.SemanticTranscript H) (output : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (point : Aeneas.Std.Array aspis_core.field.QM31 10#usize) (running : aspis_core.field.QM31) (round : Aeneas.Std.Usize)
+  (oracle : F) :
+  host_sumcheck.prove_sumcheck_rounds aspis_coredigestDigest32Inst OracleInst transcript output point running round
+      oracle =
+    if round = 10#usize then do
+      let r ← OracleInst.evaluate oracle point
+      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            Aeneas.Std.core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+          if b = true then
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err r1_wire.Error.Terminal, transcript, output)
+            else Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (point, running), transcript, output)
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Aeneas.Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                (Aeneas.Std.core.convert.FromSame r1_wire.Error) residual
+          Aeneas.Std.Result.ok (r1, transcript, output)
+    else do
+      let (r, transcript1, output1) ←
+        host_sumcheck.prove_sumcheck_round aspis_coredigestDigest32Inst OracleInst transcript output point running round
+            oracle
+      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+          let (point1, running1) := val
+          do
+          let i ← Aeneas.Std.lift (round.wrapping_add 1#usize)
+          host_sumcheck.prove_sumcheck_rounds aspis_coredigestDigest32Inst OracleInst transcript1 output1 point1
+              running1 i oracle
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Aeneas.Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                (Aeneas.Std.core.convert.FromSame r1_wire.Error) residual
+          Aeneas.Std.Result.ok (r1, transcript1, output1)
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.00
+	Maximum resident set size (kbytes): 2628896
+	Swaps: 0
+	Exit status: 0

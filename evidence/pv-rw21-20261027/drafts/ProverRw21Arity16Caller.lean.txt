@@ -1,0 +1,15 @@
+import R1Z.ProverRw21Arity16Material
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21Arity16Caller
+open Aeneas Aeneas.Std Result ProverRwFull ProverRw21Arity16Endpoint
+variable [ExternalTypes]
+
+theorem caller (ops : ExternalFuns) (f g : Compression) (h : Agree16 f g) :
+    @prover.prove_masked_with_attempt _ {ops with op223 := f} =
+      @prover.prove_masked_with_attempt _ {ops with op223 := g} := by
+  funext S store pub compiled variant hash context binding attempt state
+  simp only [prover.prove_masked_with_attempt,ProverRw21Arity16Material.material ops f g h]
+  rfl
+#print axioms caller
+end R1Z.ProverRw21Arity16Caller

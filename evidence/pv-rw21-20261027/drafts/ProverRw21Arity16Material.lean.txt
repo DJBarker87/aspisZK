@@ -1,0 +1,45 @@
+import R1Z.ProverRw21Arity16HelperLeaves
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21Arity16Material
+open Aeneas Aeneas.Std Result ProverRwFull ProverRw21Arity16Endpoint
+variable [ExternalTypes]
+
+/-- The helper-mode orchestration has no direct compression callback access.
+Its supplied helper dictionary is held fixed on both sides. -/
+theorem helper (ops : ExternalFuns) (f g : Compression)
+    {H T U : Type} (D : aspis_core.digest.Digest32 H)
+    (F : core.ops.function.FnOnce T (aspis_core.field.QM31 × aspis_core.field.QM31)
+      (core.result.Result (alloc.vec.Vec aspis_core.field.QM31) r1_wire.Error))
+    (C : host_semantic.Commitments U) :
+    @host_semantic.build_with_helper_mode _ {ops with op223 := f} H T U D F C =
+      @host_semantic.build_with_helper_mode _ {ops with op223 := g} H T U D F C := by
+  funext pub c1 d gcol padding helperValue commitments hash variant
+  simp only [host_semantic.build_with_helper_mode,
+    ProverRw21Arity16HelperLeaves.leaf0 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf1 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf2 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf3 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf4 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf5 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf6 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf7 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf8 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf9 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf10 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf11 ops f g,
+    ProverRw21Arity16HelperLeaves.leaf12 ops f g]
+  rfl
+
+theorem material (ops : ExternalFuns) (f g : Compression) (h : Agree16 f g)
+    {H T : Type} (D : aspis_core.digest.Digest32 H) (C : host_semantic.Commitments T) :
+    @host_semantic.build_with_material _ {ops with op223 := f} H T D C =
+      @host_semantic.build_with_material _ {ops with op223 := g} H T D C := by
+  funext pub compiled noised mask d gcol padding commitments hash variant
+  simp only [host_semantic.build_with_material,
+    ProverRw21Arity16NoPole.closure_dictionary ops f g h,helper ops f g]
+  rfl
+
+#print axioms helper
+#print axioms material
+end R1Z.ProverRw21Arity16Material

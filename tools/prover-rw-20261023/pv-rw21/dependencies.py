@@ -25,7 +25,9 @@ def visit(name):
  if p:
   for dep in imports(p.read_text()):visit(dep)
  order.append(name)
-for target in ['R1Z.ProverRw21ProtocolOutput']:visit(target)
+frozen=e/'frozen-component-inputs.json'
+roots=[x['module'] for x in json.loads(frozen.read_text())['modules']] if frozen.exists() else ['R1Z.ProverRw21ProtocolOutput']
+for target in roots:visit(target)
 code="""from pathlib import Path
 import sys,json
 names=json.load(sys.stdin);j=Path('/home/dombarker/project-offloads/aspis-joint-20261019');env=json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text());roots=[j/'objects']+[Path(p) for p in env['LEAN_PATH'].split(':')]

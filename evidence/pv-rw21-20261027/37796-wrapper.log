@@ -1,0 +1,34 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0228); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21FiniteImage.lean:11:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverRw21FiniteImage.capacity`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21FiniteImage.lean:23:85: error: unsolved goals
+inst✝ : ExternalTypes
+n : ℕ
+ops : ExternalFuns
+values : Fin n → E
+bound : 32 * n ≤ Usize.max
+⊢ (List.ofFn fun i => encode (values i)) = List.ofFn (encode ∘ values)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21FiniteImage.lean:19:100: error: unsolved goals
+case e_l
+inst✝ : ExternalTypes
+n : ℕ
+ops : ExternalFuns
+values : Fin n → E
+bound : 32 * n ≤ Usize.max
+hin : (List.ofFn fun i => encode (values i)) = List.map encode (List.ofFn values)
+⊢ (List.ofFn (ProverRw21ProtocolOutput.wide ∘ values)).flatten =
+    (List.ofFn fun i => ProverRw21ProtocolOutput.wide (values i)).flatten
+'R1Z.ProverRw21FiniteImage.input' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRw21FiniteImage.capacity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRw21FiniteImage.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.71
+	Maximum resident set size (kbytes): 4293504
+	Swaps: 0
+	Exit status: 1

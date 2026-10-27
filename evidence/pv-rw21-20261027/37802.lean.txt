@@ -1,0 +1,32 @@
+import R1Z.ProverRw21Arity16NoPole
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21RoundLeaves
+open Aeneas Aeneas.Std Result ProverRwFull ProverRw21Arity16Endpoint
+variable [ExternalTypes]
+
+theorem leaf0 (ops : ExternalFuns) (f g : Compression) :
+    @host_sumcheck.merge_evaluations _ {ops with op223 := f} =
+      @host_sumcheck.merge_evaluations _ {ops with op223 := g} := rfl
+#print axioms leaf0
+
+theorem leaf1 (ops : ExternalFuns) (f g : Compression) :
+    @host_sumcheck.interpolate _ {ops with op223 := f} =
+      @host_sumcheck.interpolate _ {ops with op223 := g} := rfl
+#print axioms leaf1
+
+theorem leaf2 (ops : ExternalFuns) (f g : Compression) :
+    @host_sumcheck.encode_polynomial _ {ops with op223 := f} =
+      @host_sumcheck.encode_polynomial _ {ops with op223 := g} := rfl
+#print axioms leaf2
+
+theorem leaf3 (ops : ExternalFuns) (f g : Compression) :
+    @host_wire.SemanticTranscript.semantic _ {ops with op223 := f} =
+      @host_wire.SemanticTranscript.semantic _ {ops with op223 := g} := rfl
+#print axioms leaf3
+
+theorem leaf4 (ops : ExternalFuns) (f g : Compression) :
+    @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error _ {ops with op223 := f} =
+      @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error _ {ops with op223 := g} := rfl
+#print axioms leaf4
+end R1Z.ProverRw21RoundLeaves

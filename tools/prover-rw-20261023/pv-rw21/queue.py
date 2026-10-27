@@ -5,7 +5,10 @@ from pathlib import Path
 import datetime,json,subprocess,sys,time
 r=Path(__file__).resolve().parents[3]
 e=r/'evidence/pv-rw21-20261027'
-for module in sys.argv[1:]:
+audit='--audit' in sys.argv
+modules=[x for x in sys.argv[1:] if x!='--audit']
+if audit: assert all(x in ['R1Z.ProverRw21ComponentInputs','R1Z.ProverRw21AxiomsAudit','R1Z.ProverRw21FrozenManifest'] for x in modules)
+for module in modules:
  for retry in range(10):
   rows=[json.loads(p.read_text()) for p in e.glob('37???-input.json')]
   refused=[x for x in rows if x.get('preflight_exit')==78]
@@ -14,7 +17,7 @@ for module in sys.argv[1:]:
    until=latest+182
    while time.time()<until: time.sleep(min(30,until-time.time()))
   charged=sum(json.loads(p.read_text()).get('charged',False) for p in e.glob('37???-receipt.json'))
-  if charged>=97: raise SystemExit('Focused budget complete; preserve final three audit attempts')
+  if charged>=(100 if audit else 97): raise SystemExit('Compile budget boundary reached')
   attempt=max([x['attempt'] for x in rows]+[37699])+1
   result=subprocess.run([sys.executable,str(Path(__file__).with_name('attempt.py')),str(attempt),module],cwd=r)
   if result.returncode==0: break

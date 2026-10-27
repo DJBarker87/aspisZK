@@ -24,6 +24,9 @@ for p in sorted(d.glob('ProverRw21*.lean')):
  source=p.read_text();ns=re.search(r'^namespace (R1Z[\w.]*)$',source,re.M)
  assert ns,p
  audits=re.findall(r'^#print axioms ([\w.]+)$',source,re.M)
+ declared=re.findall(r'^theorem (\w+)',source,re.M)
+ assert set(declared)<=set(audits),(module,'missing theorem audit',set(declared)-set(audits))
+ assert not re.search(r'\b(sorry|admit|native_decide|implemented_by|axiom)\b',source),(module,'forbidden token')
  for name in audits:names.append(name if name.startswith('R1Z.') else ns[1]+'.'+name)
  rows.append(dict(module=module,path=str(p.relative_to(r)),source_sha256=sha(p),attempt=x['attempt'],axioms_declarations=names[-len(audits):] if audits else []))
 old=json.loads((r/'evidence/pv-rw19-resume-20261026/frozen-component-inputs.json').read_text())
