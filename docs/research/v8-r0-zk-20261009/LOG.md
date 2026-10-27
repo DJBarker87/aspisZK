@@ -12698,3 +12698,22 @@ transport, universal copy equality, the V256-V260 bridges and the fixture-byte g
 row moved. batch2e (fresh 100 attempts; IDs 39800-39899) fixes the collision in the generator, as
 research commit 317a687e34 did for the import unions, then continues in that order. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D327 (Stream B) 2026-10-27 22:17 UTC: pv-reach8 result; verified reuse of Stream B compiled objects allowed (ruling (h6)); pv-reach9 launched
+
+pv-reach8 (98 compiles: 79 passed, 19 failed; two handling errors consumed IDs before launch; IDs
+39400-39499 exhausted; final audit of 33 declarations in 17 new modules with standard axioms)
+compiled the EJR-pinned R1Z.BuilderAdmissionExtracted (bbddadb0…) under (h5') without
+inconsistency, and proved conditional whole-client callback prefixes and poisoning transports. The
+installed-op84 lemma remains blocked: its cohort has about 200 private prerequisite modules that
+(h5) required the job to build itself. V404/V405 stay OPEN.
+
+Ruling (h5)'s ban on importing another job's compiled objects contradicted AGENTS.md resource rule
+6 (reuse pinned compiled caches). Ruling (h6) permits read-only reuse of another Stream B job's
+compiled project object when its source sha256, complete transitive dependency fingerprint,
+toolchain and LEAN_PATH prefix all match and are recorded; anything else is built privately;
+Stream A's directories stay excluded. pv-reach9 (IDs 39900-39999) checks the 200 prerequisites
+against the runjoin endpoint cohort's recorded hashes first, then compiles the installed-op84 lemma
+and continues. Because this is the ninth round on V404/V405, it must give a concrete estimate rather
+than spend its budget on partial wrappers if the remainder cannot finish. Rows removed outright: 0.
+Privacy target not yet established.
