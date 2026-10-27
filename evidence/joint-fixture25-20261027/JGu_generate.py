@@ -46,9 +46,14 @@ s=s[:a]+'''    unfold JGu_Supplied.nodes{t}
       change (((JFw_Frames.window {data[t]['slot_start']} {32*[146,146,128][t]}).val.drop {32*before}).take 32)=_
       rw [JFw_Frames.window,JFq_Range.nested _ _ _ _ _ (by decide)]
 {select_body(data[t]['slot_start']+32*before,expected)}
-    have same : MultiproofConeSlices.sub JGp_Slot{t}.value {32*before}#usize {32*c}#usize=encodeState ({expected}) := Subtype.ext phys
-    rw [same]
-    rfl
+    obtain ⟨chunk,run,bytes⟩ := MultiproofConeRead32.read32_total
+      (MultiproofConeSlices.sub JGp_Slot{t}.value {32*before}#usize {32*c}#usize)
+      (by rw [phys,(encodeState ({expected})).property];decide)
+    have same : chunk=encodeState ({expected}) := by
+      apply Subtype.ext
+      rw [bytes,phys]
+      exact List.take_of_length_le (by rw [(encodeState ({expected})).property];decide)
+    exact same ▸ run
 '''+s[b:]
 # additional imports and reducibility barriers preserve the physical window until the isolated read.
 s=s.replace('import JGk_TX2_SiblingLaws','import JGk_TX2_SiblingLaws\nimport JFw_Frames\nimport JFq_Range')

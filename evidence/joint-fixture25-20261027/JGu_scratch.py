@@ -1,0 +1,20 @@
+from pathlib import Path
+P=Path(__file__).resolve().parent;R=P.parents[1]
+s=(R/'evidence/fixture-tx2l-20261027/JGk_scratch.py').read_text()
+s=s.replace('positions=[21,17,15,19,18,10,13,14,12,16,20,11]','positions=[6,0,1,9,7,5,8,4,2,3]')
+s=s.replace('values=[14297,21248,42158,55377,63860,132355,149624,166165,178080,179622,185637,218094]','values=[65593,93499,147529,159813,183859,192317,193093,209371,216823,245899]')
+s=s.replace('JGk_TX2_ScratchKeys','JGu_Keys').replace('JGk_TX2_Scratch','JGu_Scratch')
+s=s.replace('import JGu_Keys','import JGu_Keys\nimport JGu_LeafIteration{t}')
+s=s.replace('{"JGk_TX2_NativeLeaves.value"+str(t) if t<2 else "JGc_TX2_RealLeaves.value"}','{"JGu_LeafIteration"+str(t)+".value"}')
+s=s.replace('JGk_TX2_LeafIteration.source{t}','JGu_LeafIteration{t}.source')
+s=s.replace('{pos-10}','{pos}').replace('{positions[i-1]-10}','{positions[i-1]}')
+s=s.replace('JGu_Keys.q','JGr_Keys.q').replace('JGk_TX2_FrontierOrder.q','JGr_Keys.q')
+s=s.replace('q 1 {t}', 'q 0 {t}').replace('batchPositions 1','batchPositions 0')
+s=s.replace('10#usize 12#usize {t+3}#usize','0#usize 10#usize {t}#usize').replace('{t+3}#usize','{t}#usize')
+s=s.replace('member 10#usize','member 0#usize')
+s=s.replace('range(12)','range(10)').replace('s12','s10').replace('12#usize','10#usize').replace('if i<11','if i<9').replace("')'*11","')'*9")
+s=s.replace('JGu_Keys.advance_loop D hash','JGu_Keys.advance_loop (JGc_TX2_RealLeaves.dictionary D) hash')
+# Drop obsolete irreducibility attributes for foreign fixture values.
+s=s.replace(' JGk_TX2_NativeLeaves.value0 JGk_TX2_NativeLeaves.value1 JGc_TX2_RealLeaves.value','')
+exec(compile(s,str(P/'JGu_scratch_emitter'),'exec'),globals())
+(P/'JGu_scratch_template.py.txt').write_text(s)
