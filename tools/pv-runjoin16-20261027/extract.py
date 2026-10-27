@@ -16,7 +16,7 @@ if phase=='aeneas' and len(sys.argv)>3:
   root=data['translated']['fun_decls'][0]
   assert root['item_meta']['name'][-1]=={'Ident':['records',0]}, 'reject missing records root'
   assert isinstance(root['body'],dict), 'reject opaque root before extraction: no implementation body'
-  result=dict(llbc_sha256=pin,has_errors=False,records_body_present=True,root_name=root['item_meta']['name'],source_text_sha256=hashlib.sha256(root['item_meta']['source_text'].encode()).hexdigest(),functions=len(data['translated']['fun_decls']))
+  result=dict(llbc_sha256=pin,has_errors=False,records_body_present=True,root_name=root['item_meta']['name'],source_text_sha256=hashlib.sha256(root['item_meta']['source_text'].encode()).hexdigest(),functions=len(data['translated']['fun_decls']),local_function_bodies=[{'name':f['item_meta']['name'],'body_present':isinstance(f['body'],dict)} for f in data['translated']['fun_decls'] if f and f['item_meta']['is_local']])
   cached.write_text(json.dumps(result,indent=2)+'\n')
   del data,root
  assert result['has_errors']==False and result['records_body_present']==True
@@ -81,6 +81,10 @@ if phase=='charon':
   idx=cmd.index('crate::pool_v1::pair_forest_copy_builder::raw')
   del cmd[idx-1:idx+1]
   cmd[2:2]=['--precise-drops','--desugar-drops','--duplicate-defaulted-methods']
+
+ if len(sys.argv)>3 and sys.argv[3]=='plain-built':
+  start=cmd.index('--opaque');end=cmd.index('--start-from');cmd[start:end]=['--include','aspis_core::field::*']
+  cmd[2:2]=['--duplicate-defaulted-methods']
 
  if len(sys.argv)>3 and sys.argv[3]=='owned-closure':
   start=cmd.index('--opaque');end=cmd.index('--start-from');cmd[start:end]=['--include','aspis_core::field::*']
