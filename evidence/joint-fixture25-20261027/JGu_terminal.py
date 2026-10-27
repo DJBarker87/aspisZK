@@ -63,6 +63,7 @@ theorem source {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Has
     if_neg (by decide : ¬10#usize<10#usize),frontRead]
   have countRead := JGr_Count{ct}.source
   have nodeRead := JGp_Slot{t}.source
+  change Port4B_Install.leaves.op3 JFx_NativeBytes.proof {t}#usize=ok JGp_Slot{t}.value at nodeRead
   change Port4B_Install.leaves.op11 .Two _=_ at countRead
   simp only [bind_tc_ok,Port3_BatchStd.install,countRead,Port3_BatchStd.okOr,
     core.result.Result.Insts.CoreOpsTry.branch]
@@ -104,11 +105,15 @@ theorem tree {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
       JFx_NativeBytes.proof JFo_Prepared.value.queries (encodeState {root})
       0#usize {t}#usize s.idx s.val hash=
         ok (.Ok (), (JGu_Verify{t}.output D hash s).idx,(JGu_Verify{t}.output D hash s).val) := by
-  have splitCount : Usize.wrapping_sub 10#usize 0#usize=10#usize := rfl
-  have slot : Usize.wrapping_add (Usize.wrapping_mul 3#usize 0#usize) {t}#usize={t}#usize := rfl
+  have splitCount : Usize.wrapping_sub 10#usize 0#usize=10#usize :=
+    UScalar.eq_of_val_eq (Port4B_Bounds.count 0#usize).1
+  have slot : Usize.wrapping_add (Usize.wrapping_mul 3#usize 0#usize) {t}#usize={t}#usize :=
+    UScalar.eq_of_val_eq (Port4B_Bounds.slot 0#usize {t}#usize (by decide) (by decide))
   have hi : (Port3_BatchStd.install Port4B_Install.leaves).op13=ok 10#usize := rfl
   rw [Port3_NativeBatchBody.verifier.candidate.batch_tree,if_pos rfl]
-  simp only [hi,bind_tc_ok,lift,splitCount,slot]
+  simp only [hi,bind_tc_ok,lift,slot]
+  dsimp only []
+  rw [splitCount]
   have build : (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries
       0#usize 10#usize {t}#usize=ok (JGr_Keys.raw {t}) := JGr_Keys.build {t}#usize (by decide)
   have sort : (Port3_BatchStd.install Port4B_Install.leaves).op5 (JGr_Keys.raw {t}) 10#usize=
