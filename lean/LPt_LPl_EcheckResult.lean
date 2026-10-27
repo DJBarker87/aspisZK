@@ -1,0 +1,61 @@
+import LPt_LPl_EcheckTrace
+open Aeneas Aeneas.Std Result LPt_LPl_Kit_Release
+set_option autoImplicit false
+namespace LPt_LPl.Echeck
+
+theorem run_all (bs : List U8) (k : Bool) (n i : Nat) :
+    run bs k i n = (List.range n).all (fun j => LPt_LPl_A.Echeck.predicate bs k (i+j)) := by
+  induction n generalizing i with
+  | zero => rfl
+  | succ n ih =>
+    simp only [run,List.range_succ_eq_map,List.all_cons,List.all_map,ih,chunk_eq]
+    simp only [Function.comp_def,Nat.add_zero,Nat.succ_eq_add_one]
+    change (LPt_LPl_A.Echeck.predicate bs k i && _) = (LPt_LPl_A.Echeck.predicate bs k i && _)
+    congr 1
+    congr 1
+    funext j
+    congr 1 <;> omega
+
+theorem run_loop (bs : List U8) (k : Bool) :
+    run bs k 0 (bs.length/32) = LPt_LPl_A.Echeck.loop bs k := by
+  rw [run_all,LPt_LPl_A.Echeck.loop_eq_model]
+  simp only [Nat.zero_add,LPt_LPl_Kit_Bytes.chunksValid,LPt_LPl_A.Echeck.predicate]
+
+/-- Whole Result equality, including rejection, on every source-shaped trace
+    at the native initial cursor. Kani/source association constructs the trace;
+    no model whole-loop equality is an assumption. -/
+theorem native_result (bs : Slice U8) (k out : Bool)
+    (trace : Trace bs.val k 0 out) :
+    LPt_External.verifier.echeck bs k = ok (if out then .Ok () else .Err .Parse) := by
+  have eq := trace_result bs.val k 0 out trace
+  simp only [Nat.sub_zero] at eq
+  rw [run_loop] at eq
+  rw [LPt_LPl_A.Echeck.shipped_leaf_model,← eq]
+
+theorem unique (bs : List U8) (k : Bool) (i : Nat) (a b : Bool)
+    (left : Trace bs k i a) (right : Trace bs k i b) : a = b :=
+  (trace_result bs k i a left).trans (trace_result bs k i b right).symm
+
+/-- Existence for every input and every reached suffix; the trace interface is
+    total and cannot encode an unsatisfiable accepted-run precondition. -/
+theorem exists_trace (bs : List U8) (k : Bool) (n i : Nat)
+    (remaining : bs.length/32-i = n) (bound : i ≤ bs.length/32) :
+    ∃ out, Trace bs k i out := by
+  induction n generalizing i with
+  | zero => exact ⟨true,.done i (by omega)⟩
+  | succ n ih =>
+    let s := cursor bs i bound
+    have live : 0 < s.remaining := by simp only [s,cursor]; omega
+    obtain ⟨t,idx,ptr,cnt⟩ := advance bs s live
+    have nextBound := t.bound
+    obtain ⟨out,rest⟩ := ih t.index (by simp only [s,cursor] at idx; omega) nextBound
+    cases h : chunk (read bs s) k with
+    | false => exact ⟨false,.reject s live (read bs s) rfl h⟩
+    | true => exact ⟨out,.next s t live (read bs s) rfl h idx ptr cnt out rest⟩
+
+#print axioms run_all
+#print axioms run_loop
+#print axioms native_result
+#print axioms unique
+#print axioms exists_trace
+end LPt_LPl.Echeck
