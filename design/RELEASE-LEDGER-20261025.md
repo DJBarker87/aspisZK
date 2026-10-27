@@ -265,8 +265,10 @@ e408947bfd200af42db322daf0fadfe7e26d3bd1, 2026-03-25) and cargo 1.94.1
 x86_64-unknown-linux-gnu, the recorded RUSTFLAGS
 (`-C link-arg=-Wl,--threads=4`), and no target-cpu change. These are the
 toolchain the candidate's timing, differential and L3 evidence were produced
-with. A rust-toolchain file for the client build is still to be added (Stream B
-owns the client build). The pin is re-confirmed at prover candidate adoption.
+with. The client rust-toolchain file is tools/r1-cost-probe/rust-toolchain.toml
+(channel 1.94.1, target x86_64-unknown-linux-gnu; client-scoped, so the program
+builds are unaffected), on the prover candidate codex/cx-prover-rw-20261023 at
+ff50df39a8 (LOG D301). It reaches research when the candidate is adopted. The pin is re-confirmed at prover candidate adoption.
 This approval covers ONLY the toolchain. The release recipe's features (for
 example ct-host-prover, and removing insecure-spend-fixture) and constant-time
 private-input decoding (LOG D272) remain open owner decisions, so "the shipped
