@@ -1,0 +1,19 @@
+--- a/docs/research/100bit-spend-path-20261013/evidence/lean-natural-projection-20261013/remote-evidence/R1NaturalProjection.lean
++++ b/docs/research/100bit-spend-path-20261013/evidence/lean-natural-projection-20261013/remote-evidence/R1NaturalProjection.lean
+@@ -27,7 +27,7 @@
+     coefficientLane n slot (sparseLift m) =
+       if slot = 0 then m else 0 := by
+   funext i
+-  simp [sparseLift, coefficientLane_apply]
++  by_cases h : slot = 0 <;> simp [sparseLift, coefficientLane_apply, h]
+ 
+ theorem sparseLift_injective {n : Nat} :
+     Function.Injective (sparseLift (K := K) (n := n)) := by
+@@ -59,6 +59,7 @@
+   rw [naturalCoefficientPolynomial_eval_radix4 hn (sparseLift m) x]
+   simp_rw [coefficientLane_sparseLift]
+   rw [Fin.sum_univ_four]
++  simp only [Pi.zero_def]
+   simp [naturalCoefficientPolynomial_zero_eval hn]
+ 
+ /-- Sum of the four natural-basis evaluations on a child fibre. The four
