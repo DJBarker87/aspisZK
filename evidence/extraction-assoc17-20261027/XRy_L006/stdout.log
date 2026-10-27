@@ -1,0 +1,313 @@
+def AspisR1PublicPreparation.QueriesModel.queries : AspisR1PublicPreparation.QueriesModel.Boundaries →
+  {H : Type} →
+    AspisR1PublicPreparation.aspis_core.Digest32 H →
+      AspisR1PublicPreparation.transcript.Transcript H →
+        U8 →
+          Slice U8 →
+            Result
+              (core.result.Result (Std.Array U32 22#usize) AspisR1PublicPreparation.verifier.Error ×
+                AspisR1PublicPreparation.transcript.Transcript H) :=
+fun B {H} aspis_coreDigest32Inst self row payload => do
+  let self1 ← AspisR1PublicPreparation.transcript.Transcript.absorb aspis_coreDigest32Inst self row payload
+  have a : Std.Array (UScalar UScalarTy.U8) 32#usize := Array.repeat 32#usize 0#u8
+  have blocks : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize := Array.repeat 8#usize a
+  let s ← lift self1.state.to_slice
+  let s1 ← lift (Array.make 1#usize [1#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_7).to_slice
+  let s2 ← lift (Array.make 2#usize [s, s1] ⋯).to_slice
+  let a1 ← aspis_coreDigest32Inst.digest self1.hash s2
+  let (_, index_mut_back) ← blocks.index_mut_usize 0#usize
+  let s3 ← lift self1.state.to_slice
+  let s4 ← lift (Array.make 1#usize [2#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_12).to_slice
+  let s5 ← lift (Array.make 2#usize [s3, s4] ⋯).to_slice
+  let a2 ← aspis_coreDigest32Inst.digest self1.hash s5
+  have blocks1 : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize := index_mut_back a2
+  let state ← blocks1.index_usize 0#usize
+  let s6 ← lift state.to_slice
+  let s7 ← lift (Array.make 1#usize [1#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_7).to_slice
+  let s8 ← lift (Array.make 2#usize [s6, s7] ⋯).to_slice
+  let a3 ← aspis_coreDigest32Inst.digest self1.hash s8
+  have blocks2 : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize := index_mut_back a1
+  let blocks3 ← blocks2.update 1#usize a3
+  let s9 ← lift state.to_slice
+  let s10 ← lift (Array.make 1#usize [2#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_12).to_slice
+  let s11 ← lift (Array.make 2#usize [s9, s10] ⋯).to_slice
+  let a4 ← aspis_coreDigest32Inst.digest self1.hash s11
+  let blocks4 ← blocks1.update 1#usize a4
+  let state1 ← blocks4.index_usize 1#usize
+  let s12 ← lift state1.to_slice
+  let s13 ← lift (Array.make 1#usize [1#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_7).to_slice
+  let s14 ← lift (Array.make 2#usize [s12, s13] ⋯).to_slice
+  let a5 ← aspis_coreDigest32Inst.digest self1.hash s14
+  let blocks5 ← blocks3.update 2#usize a5
+  let s15 ← lift state1.to_slice
+  let s16 ← lift (Array.make 1#usize [2#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_12).to_slice
+  let s17 ← lift (Array.make 2#usize [s15, s16] ⋯).to_slice
+  let a6 ← aspis_coreDigest32Inst.digest self1.hash s17
+  let blocks6 ← blocks4.update 2#usize a6
+  let state2 ← blocks6.index_usize 2#usize
+  let s18 ← lift state2.to_slice
+  let s19 ← lift (Array.make 1#usize [1#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_7).to_slice
+  let s20 ← lift (Array.make 2#usize [s18, s19] ⋯).to_slice
+  let a7 ← aspis_coreDigest32Inst.digest self1.hash s20
+  let blocks7 ← blocks5.update 3#usize a7
+  let s21 ← lift state2.to_slice
+  let s22 ← lift (Array.make 1#usize [2#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_12).to_slice
+  let s23 ← lift (Array.make 2#usize [s21, s22] ⋯).to_slice
+  let a8 ← aspis_coreDigest32Inst.digest self1.hash s23
+  let blocks8 ← blocks6.update 3#usize a8
+  let state3 ← blocks8.index_usize 3#usize
+  let s24 ← lift state3.to_slice
+  let s25 ← lift (Array.make 1#usize [1#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_7).to_slice
+  let s26 ← lift (Array.make 2#usize [s24, s25] ⋯).to_slice
+  let a9 ← aspis_coreDigest32Inst.digest self1.hash s26
+  let blocks9 ← blocks7.update 4#usize a9
+  let s27 ← lift state3.to_slice
+  let s28 ← lift (Array.make 1#usize [2#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_12).to_slice
+  let s29 ← lift (Array.make 2#usize [s27, s28] ⋯).to_slice
+  let a10 ← aspis_coreDigest32Inst.digest self1.hash s29
+  let blocks10 ← blocks8.update 4#usize a10
+  let state4 ← blocks10.index_usize 4#usize
+  let s30 ← lift state4.to_slice
+  let s31 ← lift (Array.make 1#usize [1#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_7).to_slice
+  let s32 ← lift (Array.make 2#usize [s30, s31] ⋯).to_slice
+  let a11 ← aspis_coreDigest32Inst.digest self1.hash s32
+  let blocks11 ← blocks9.update 5#usize a11
+  let s33 ← lift state4.to_slice
+  let s34 ← lift (Array.make 1#usize [2#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_12).to_slice
+  let s35 ← lift (Array.make 2#usize [s33, s34] ⋯).to_slice
+  let a12 ← aspis_coreDigest32Inst.digest self1.hash s35
+  let blocks12 ← blocks10.update 5#usize a12
+  let state5 ← blocks12.index_usize 5#usize
+  let s36 ← lift state5.to_slice
+  let s37 ← lift (Array.make 1#usize [1#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_7).to_slice
+  let s38 ← lift (Array.make 2#usize [s36, s37] ⋯).to_slice
+  let a13 ← aspis_coreDigest32Inst.digest self1.hash s38
+  let blocks13 ← blocks11.update 6#usize a13
+  let s39 ← lift state5.to_slice
+  let s40 ← lift (Array.make 1#usize [2#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_12).to_slice
+  let s41 ← lift (Array.make 2#usize [s39, s40] ⋯).to_slice
+  let a14 ← aspis_coreDigest32Inst.digest self1.hash s41
+  let blocks14 ← blocks12.update 6#usize a14
+  let state6 ← blocks14.index_usize 6#usize
+  let s42 ← lift state6.to_slice
+  let s43 ← lift (Array.make 1#usize [1#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_7).to_slice
+  let s44 ← lift (Array.make 2#usize [s42, s43] ⋯).to_slice
+  let a15 ← aspis_coreDigest32Inst.digest self1.hash s44
+  let blocks15 ← blocks13.update 7#usize a15
+  let s45 ← lift state6.to_slice
+  let s46 ← lift (Array.make 1#usize [2#u8] AspisR1PublicPreparation.QueriesModel.queries._proof_12).to_slice
+  let s47 ← lift (Array.make 2#usize [s45, s46] ⋯).to_slice
+  let a16 ← aspis_coreDigest32Inst.digest self1.hash s47
+  let blocks16 ← blocks14.update 7#usize a16
+  let _ ← blocks16.index_usize 7#usize
+  let r ← B.decode blocks15 blocks16
+  let r1 ←
+    AspisR1PublicPreparation.core.result.Result.map_err
+        (AspisR1PublicPreparation.transcript.Transcript.queries.closure.Insts.CoreOpsFunctionFnOnceTupleQuerySampleErrorError
+          aspis_coreDigest32Inst)
+        r ()
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val =>
+      let (q, state7) := val
+      do
+      let u ← q.index_usize 0#usize
+      let we ← B.embed u
+      AspisR1PublicPreparation.trace.value 5#u16 0#usize we
+      let u1 ← q.index_usize 1#usize
+      let we1 ← B.embed u1
+      AspisR1PublicPreparation.trace.value 5#u16 1#usize we1
+      let u2 ← q.index_usize 2#usize
+      let we2 ← B.embed u2
+      AspisR1PublicPreparation.trace.value 5#u16 2#usize we2
+      let u3 ← q.index_usize 3#usize
+      let we3 ← B.embed u3
+      AspisR1PublicPreparation.trace.value 5#u16 3#usize we3
+      let u4 ← q.index_usize 4#usize
+      let we4 ← B.embed u4
+      AspisR1PublicPreparation.trace.value 5#u16 4#usize we4
+      let u5 ← q.index_usize 5#usize
+      let we5 ← B.embed u5
+      AspisR1PublicPreparation.trace.value 5#u16 5#usize we5
+      let u6 ← q.index_usize 6#usize
+      let we6 ← B.embed u6
+      AspisR1PublicPreparation.trace.value 5#u16 6#usize we6
+      let u7 ← q.index_usize 7#usize
+      let we7 ← B.embed u7
+      AspisR1PublicPreparation.trace.value 5#u16 7#usize we7
+      let u8 ← q.index_usize 8#usize
+      let we8 ← B.embed u8
+      AspisR1PublicPreparation.trace.value 5#u16 8#usize we8
+      let u9 ← q.index_usize 9#usize
+      let we9 ← B.embed u9
+      AspisR1PublicPreparation.trace.value 5#u16 9#usize we9
+      let u10 ← q.index_usize 10#usize
+      let we10 ← B.embed u10
+      AspisR1PublicPreparation.trace.value 5#u16 10#usize we10
+      let u11 ← q.index_usize 11#usize
+      let we11 ← B.embed u11
+      AspisR1PublicPreparation.trace.value 5#u16 11#usize we11
+      let u12 ← q.index_usize 12#usize
+      let we12 ← B.embed u12
+      AspisR1PublicPreparation.trace.value 5#u16 12#usize we12
+      let u13 ← q.index_usize 13#usize
+      let we13 ← B.embed u13
+      AspisR1PublicPreparation.trace.value 5#u16 13#usize we13
+      let u14 ← q.index_usize 14#usize
+      let we14 ← B.embed u14
+      AspisR1PublicPreparation.trace.value 5#u16 14#usize we14
+      let u15 ← q.index_usize 15#usize
+      let we15 ← B.embed u15
+      AspisR1PublicPreparation.trace.value 5#u16 15#usize we15
+      let u16 ← q.index_usize 16#usize
+      let we16 ← B.embed u16
+      AspisR1PublicPreparation.trace.value 5#u16 16#usize we16
+      let u17 ← q.index_usize 17#usize
+      let we17 ← B.embed u17
+      AspisR1PublicPreparation.trace.value 5#u16 17#usize we17
+      let u18 ← q.index_usize 18#usize
+      let we18 ← B.embed u18
+      AspisR1PublicPreparation.trace.value 5#u16 18#usize we18
+      let u19 ← q.index_usize 19#usize
+      let we19 ← B.embed u19
+      AspisR1PublicPreparation.trace.value 5#u16 19#usize we19
+      let u20 ← q.index_usize 20#usize
+      let we20 ← B.embed u20
+      AspisR1PublicPreparation.trace.value 5#u16 20#usize we20
+      let u21 ← q.index_usize 21#usize
+      let we21 ← B.embed u21
+      AspisR1PublicPreparation.trace.value 5#u16 21#usize we21
+      ok (core.result.Result.Ok q, { state := state7, hash := self1.hash })
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Std.Array U32 22#usize)
+            (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+      ok (r2, self1)
+structure AspisR1PublicPreparation.QueriesModel.Boundaries : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.QueriesModel.Boundaries.decode : Std.Array (Std.Array U8 32#usize) 8#usize →
+      Std.Array (Std.Array U8 32#usize) 8#usize →
+        Result
+          (core.result.Result (Std.Array U32 22#usize × Std.Array U8 32#usize)
+            AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError)
+  AspisR1PublicPreparation.QueriesModel.Boundaries.embed : AspisR1PublicPreparation.aspis_core.field.M31 →
+      Result AspisR1PublicPreparation.aspis_core.field.WideExact
+constructor:
+  AspisR1PublicPreparation.QueriesModel.Boundaries.mk
+    (decode :
+      Std.Array (Std.Array U8 32#usize) 8#usize →
+        Std.Array (Std.Array U8 32#usize) 8#usize →
+          Result
+            (core.result.Result (Std.Array U32 22#usize × Std.Array U8 32#usize)
+              AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError))
+    (embed :
+      AspisR1PublicPreparation.aspis_core.field.M31 → Result AspisR1PublicPreparation.aspis_core.field.WideExact) :
+    AspisR1PublicPreparation.QueriesModel.Boundaries
+def AspisS1M31Embedding.Total.embed : AspisR1PublicPreparation.aspis_core.field.M31 →
+  Result AspisS1M31Embedding.Total.PrepWide :=
+fun x => do
+  let out ← AspisS1M31Embedding.source_from_m31 x
+  ok (AspisS1M31Embedding.Total.toPrep out)
+XRy_generated/XRy_QueryDefinitions.lean:8:7: error(lean.unknownIdentifier): Unknown constant `XRn_Join_Release.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31`
+def Query31ConcreteMaterializedSchedule.actualConcreteDecode : Query31ModelDriverChain.QueryScan →
+  Std.Array (Std.Array U8 32#usize) 8#usize →
+    Std.Array (Std.Array U8 32#usize) 8#usize →
+      Result
+        (core.result.Result Query31ConcreteMaterializedSchedule.QueryOutput
+          Query31ConcreteMaterializedSchedule.ScheduleQueryError) :=
+fun scan0 blocks advances =>
+  Query31ConcreteMaterializedSchedule.adaptScanResult
+    (AspisR1Query31Transcript.queries_from_pairs_with_scan
+      (Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords) scan0 blocks advances)
+def AspisR1PublicPreparation.PreparedScratchModel.prepare : AspisR1PublicPreparation.PreparedScratchModel.Boundaries →
+  {H : Type} →
+    AspisR1PublicPreparation.aspis_core.Digest32 H →
+      AspisR1PublicPreparation.r1_semantic.Verified H →
+        AspisR1PublicPreparation.verifier.View →
+          H →
+            Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize →
+              Result
+                (core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+                  Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize) :=
+fun B {H} aspis_coreDigest32Inst sem v hash g => do
+  let a ← AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state aspis_coreDigest32Inst sem.transcript
+  let t ← AspisR1PublicPreparation.transcript.Transcript.new aspis_coreDigest32Inst hash a v.variant
+  let (gamma, t1) ← AspisR1PublicPreparation.PreparedModel.scalar B.sampling aspis_coreDigest32Inst t 27#u8 v.y1 true
+  let a1 ← B.sampling.toBytes v.inactive
+  let s ← lift a1.to_slice
+  let (kappa, t2) ← AspisR1PublicPreparation.PreparedModel.scalar B.sampling aspis_coreDigest32Inst t1 28#u8 s false
+  let (alpha0, t3) ←
+    AspisR1PublicPreparation.PreparedModel.scalar B.sampling aspis_coreDigest32Inst t2 29#u8 v.round0 false
+  let i ← v.variant.folds
+  if i = 2#usize then do
+      let i1 ← 32#usize + 224#usize
+      have bytes : alloc.vec.Vec U8 := alloc.vec.Vec.with_capacity U8 i1
+      let a2 ← core.option.Option.unwrap v.folded_root
+      let s1 ← lift a2.to_slice
+      let bytes1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes s1
+      let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+      have s2 : Slice U8 := bytes2.deref
+      let (we, t4) ← AspisR1PublicPreparation.PreparedModel.scalar B.sampling aspis_coreDigest32Inst t3 30#u8 s2 false
+      let (r, t5) ← B.sampling.queries aspis_coreDigest32Inst t4 31#u8 v.final_message
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i2 ← 31#u8 + 1#u8
+          let s3 ← lift (Std.Array.empty U8).to_slice
+          let (rho, t6) ← AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling aspis_coreDigest32Inst t5 i2 s3
+          let g1 ← B.powers 29#usize gamma
+          let r1 ← B.claim aspis_coreDigest32Inst sem v.y1 v.inactive g1 kappa
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 =>
+              ok
+                (core.result.Result.Ok
+                    { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                      alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                      semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state },
+                  g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1PublicPreparation.verifier.Prepared
+                    (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+              ok (r2, g1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR1PublicPreparation.verifier.Prepared
+                (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+          ok (r1, g)
+    else do
+      let (r, t4) ← B.sampling.queries aspis_coreDigest32Inst t3 30#u8 v.final_message
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i1 ← 30#u8 + 1#u8
+          let s1 ← lift (Std.Array.empty U8).to_slice
+          let (rho, t5) ← AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling aspis_coreDigest32Inst t4 i1 s1
+          let g1 ← B.powers 29#usize gamma
+          let r1 ← B.claim aspis_coreDigest32Inst sem v.y1 v.inactive g1 kappa
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 =>
+              ok
+                (core.result.Result.Ok
+                    { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                      alpha := Array.make 2#usize [alpha0, AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO] ⋯,
+                      rho := rho, queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1,
+                      state := t5.state },
+                  g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1PublicPreparation.verifier.Prepared
+                    (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+              ok (r2, g1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR1PublicPreparation.verifier.Prepared
+                (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+          ok (r1, g)

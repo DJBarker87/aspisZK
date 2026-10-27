@@ -1,0 +1,7 @@
+# Full typed queries equation
+
+XRy_L021 exits 0. XRy_Queries.queries is exactly the XRs_STAGE3 typed equation, over arbitrary digest dictionary D, transcript t, row and payload. No success or digest-totality hypothesis. It preserves every eager digest bind/failure continuation in the emitted schedule, maps the query-error constructors, retains all 22 embeddings and trace.value continuations, and transports the full Result and transcript state. XRy_QueryTransport.raw (L013) walks the common eager schedule one bind at a time; XRy_Remainder.canonical (L018) symbolically proves modular idempotence used by XRy_QueryEmbedding.embed (L020). XRy_QueryLaws.decode (L010) consumes the checked whole driver. All new top theorems print standard axioms only.
+
+L009 was a launcher dependency-preflight rejection (FileNotFoundError: XRy_QueryLaws), not a Lean invocation or infrastructure repair. It was caused by scheduling an import before its first successful build. The dependency passed L010 before L011 launched. No bypass, timeout, kill, resource rerun or cap change. Failed Lean modules are excluded. Actual Lean count through L021:20, Kani0.
+
+A2 remains OPEN: powersPublic/cached-claim, scratch/error stages and whole narrowed prepare remain. A3 not yet attempted in the requested order. Headline premise delta remains T0/P0/G0/C0; no frozen D188 attribution or deployed non-vacuity claimed. No shipped source changed.

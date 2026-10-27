@@ -1,0 +1,68 @@
+XRy_generated/XRy_QueryEmbedding.lean:32:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  z % 2147483647#u32
+in the target expression
+  ok
+      { c0 := XRn_Join_FieldExternal.oldQ { c0 := { a := z, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } },
+        c1 := XRn_Join_FieldExternal.oldQ { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } } } =
+    do
+    let x ← ok z
+    let x ← x % 2147483647#u32
+    ok
+        (AspisS1M31Embedding.Total.toPrep
+          { c0 := { c0 := { a := x, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } },
+            c1 := { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } } })
+
+x : U32
+hz✝ : 0#u32 % 2147483647#u32 = ok 0#u32
+z : UScalar UScalarTy.U32
+hx : x % 2147483647#u32 = ok z
+hp : ↑z < 2147483647
+hz : z % 2147483647#u32 = ok z
+⊢ ok
+      { c0 := XRn_Join_FieldExternal.oldQ { c0 := { a := z, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } },
+        c1 := XRn_Join_FieldExternal.oldQ { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } } } =
+    do
+    let x ← ok z
+    let x ← x % 2147483647#u32
+    ok
+        (AspisS1M31Embedding.Total.toPrep
+          { c0 := { c0 := { a := x, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } },
+            c1 := { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } } })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+'XRy_QueryEmbedding.embed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+def AspisS1M31Embedding.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31 : AspisS1M31Embedding.aspis_core.field.M31 →
+  Result AspisS1M31Embedding.aspis_core.field.wide_exact.WideExact :=
+fun value => do
+  let q ← AspisS1M31Embedding.aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField.from_m31 value
+  AspisS1M31Embedding.aspis_core.field.wide_exact.WideExact.from_qm31 q
+def AspisS1M31Embedding.aspis_core.field.wide_exact.WideExact.from_qm31 : AspisS1M31Embedding.aspis_core.field.QM31 →
+  Result AspisS1M31Embedding.aspis_core.field.wide_exact.WideExact :=
+fun value => do
+  let q ← AspisS1M31Embedding.aspis_core.field.wide_exact.canonical_qm31 value
+  ok { c0 := q, c1 := AspisS1M31Embedding.aspis_core.field.QM31.ZERO }
+def AspisS1M31Embedding.aspis_core.field.wide_exact.canonical_qm31 : AspisS1M31Embedding.aspis_core.field.QM31 →
+  Result AspisS1M31Embedding.aspis_core.field.QM31 :=
+fun value => do
+  let m ←
+    AspisS1M31Embedding.aspis_core.field.wide_exact.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call ()
+        value.c0.a
+  let m1 ←
+    AspisS1M31Embedding.aspis_core.field.wide_exact.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call ()
+        value.c0.b
+  let m2 ←
+    AspisS1M31Embedding.aspis_core.field.wide_exact.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call ()
+        value.c1.a
+  let m3 ←
+    AspisS1M31Embedding.aspis_core.field.wide_exact.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call ()
+        value.c1.b
+  ok { c0 := { a := m, b := m1 }, c1 := { a := m2, b := m3 } }
