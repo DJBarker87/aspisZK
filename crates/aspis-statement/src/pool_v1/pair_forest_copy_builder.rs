@@ -254,8 +254,8 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
         pair_occupied: pair.pair_leaf.second_occupied.0,
         pair_second: raw(&pair.pair_leaf.second_commitment),
         pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
-        recipient_owner: rec.map(|r| raw(&r.owner_key)).unwrap_or(ZERO8),
-        recipient_salt: rec.map(|r| raw(&r.salt)).unwrap_or(ZERO8),
+        recipient_owner: match rec { Some(r) => raw(&r.owner_key), None => ZERO8 },
+        recipient_salt: match rec { Some(r) => raw(&r.salt), None => ZERO8 },
         change_owner: raw(&chg.owner_key),
         change_salt: raw(&chg.salt),
     };
@@ -263,8 +263,24 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
         transfer: rec.is_some(),
         asset: asset.0,
         next_pair_index: snapshot.next_pair_index,
-        frontier: core::array::from_fn(|l| raw(&snapshot.frontier[l])),
-        empty: core::array::from_fn(|l| raw(&empty[l])),
+        frontier: {
+            let mut frontier = [[0u32; 8]; 20];
+            let mut l = 0;
+            while l < 20 {
+                frontier[l] = raw(&snapshot.frontier[l]);
+                l += 1;
+            }
+            frontier
+        },
+        empty: {
+            let mut roots = [[0u32; 8]; 20];
+            let mut l = 0;
+            while l < 20 {
+                roots[l] = raw(&empty[l]);
+                l += 1;
+            }
+            roots
+        },
     };
     (w, p)
 }
