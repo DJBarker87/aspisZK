@@ -37,10 +37,17 @@ for t in [0,2]:
 end AspisR1.{ns}
 end
 '''
- files[R/'lean'/(ns+'.lean')]=s
+ files[P/'JGr_PARTS'/(ns+'.lean.txt')]=s
 for f,s in files.items():
  if '--check' in sys.argv:
   retained=f if f.exists() else P/'JGr_UNCHECKED'/(f.name+'.txt')
   assert retained.read_text()==s,retained
  else:f.write_text(s)
 print('two batch0 count modules; eighteen individually named steps each; no full recurrence reduction')
+
+parts=[(P/'JGr_PARTS'/f'JGr_Count{t}.lean.txt').read_text() for t in [0,2]]
+imports=list(dict.fromkeys(line for text in parts for line in text.splitlines() if line.startswith('import ')))
+text='\n'.join(imports)+'\n'+''.join('\n'.join(line for line in text.splitlines() if not line.startswith('import '))+'\n' for text in parts)
+f=R/'lean/JGr_Counts.lean'
+if '--check' in sys.argv:assert f.read_text()==text,f
+else:f.write_text(text)
