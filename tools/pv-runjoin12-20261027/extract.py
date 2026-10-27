@@ -11,7 +11,7 @@ a=json.loads(r.stdout.strip().splitlines()[-1])
 if not a['allowed']:
  (E/(name+'-refusal.json')).write_text(json.dumps(a,indent=2)+'\n');print(a);sys.exit(78)
 subprocess.run(['scp','-q',f'{host}:{H}/evidence/{name}-reservation.json',str(E)],check=True)
-charon='/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon'
+charon='/home/dombarker/project-offloads/s5-charon-selfid-repair-v1/charon-target/release/charon'
 aeneas='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/rng-extractor/candidate-007/main.exe'
 llbc=H+'/evidence/PV_RunJoin_Records.llbc'
 if phase=='charon':

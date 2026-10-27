@@ -373,3 +373,7 @@ mod glue_tree;
 
 #[path = "glue_append.rs"]
 mod glue_append;
+
+// RunJoin12: fixture-shaped unstubbed shipped/reference association.
+#[path = "pv_runjoin12.rs"]
+mod pv_runjoin12;
