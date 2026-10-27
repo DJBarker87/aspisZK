@@ -1,0 +1,76 @@
+FJj_TensorCellValue.lean:45:2: error: unsolved goals
+case refine_2
+self : FIo_Native.weights.Weights
+k d n j : Usize
+row : Std.Array (Std.Array NQ 4#usize) 5#usize
+digit : Std.Array NQ 4#usize
+hr : self.factors.index_usize k = ok row
+hd : row.index_usize d = ok digit
+iter cursor : Rev
+input out : Slice NQ
+hc : FJf_QMArray.canon digit
+hs : FJj_QMSlice.canon input
+hn : next iter = ok (some j, cursor)
+run : FIo_Native.weights.Weights.tensor_loop0_loop0.body self k n d iter input = ok (cont (cursor, out))
+x q0 q1 q2 q3 p0 p1 p2 p3 : NQ
+s0 s1 s2 : Slice NQ
+hx : input.index_usize j = ok x
+hq0 : digit.index_usize 0#usize = ok q0
+hp0 : FIo_Native.aspis_core.field.QM31.mul x q0 = ok p0
+hs0 : input.update (FJj_TensorCell.index j n 0#usize) p0 = ok s0
+hq1 : digit.index_usize 1#usize = ok q1
+hp1 : FIo_Native.aspis_core.field.QM31.mul x q1 = ok p1
+hs1 : s0.update (FJj_TensorCell.index j n 1#usize) p1 = ok s1
+hq2 : digit.index_usize 2#usize = ok q2
+hp2 : FIo_Native.aspis_core.field.QM31.mul x q2 = ok p2
+hs2 : s1.update (FJj_TensorCell.index j n 2#usize) p2 = ok s2
+hq3 : digit.index_usize 3#usize = ok q3
+hp3 : FIo_Native.aspis_core.field.QM31.mul x q3 = ok p3
+hs3 : s2.update (FJj_TensorCell.index j n 3#usize) p3 = ok out
+cx : FIo_QMValues.Canon x
+cq0 : FIo_QMValues.Canon q0
+cq1 : FIo_QMValues.Canon q1
+cq2 : FIo_QMValues.Canon q2
+cq3 : FIo_QMValues.Canon q3
+v0 :
+  FIo_QMValues.Canon p0 ∧
+    AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm p0) =
+      AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm x) *
+        AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm q0)
+v1 :
+  FIo_QMValues.Canon p1 ∧
+    AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm p1) =
+      AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm x) *
+        AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm q1)
+v2 :
+  FIo_QMValues.Canon p2 ∧
+    AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm p2) =
+      AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm x) *
+        AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm q2)
+v3 :
+  FIo_QMValues.Canon p3 ∧
+    AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm p3) =
+      AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm x) *
+        AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm q3)
+c0 : FJj_QMSlice.canon s0
+c1 : FJj_QMSlice.canon s1
+c2 : FJj_QMSlice.canon s2
+c3 : FJj_QMSlice.canon out
+t : ℕ
+⊢ (if ↑(FJj_TensorCell.index j n 3#usize) = t then FJj_QMSlice.value input ↑j * FJf_QMArray.value digit ↑3#usize
+    else
+      if ↑(FJj_TensorCell.index j n 2#usize) = t then FJj_QMSlice.value input ↑j * FJf_QMArray.value digit ↑2#usize
+      else
+        if ↑(FJj_TensorCell.index j n 1#usize) = t then FJj_QMSlice.value input ↑j * FJf_QMArray.value digit ↑1#usize
+        else
+          if ↑(FJj_TensorCell.index j n 0#usize) = t then FJj_QMSlice.value input ↑j * FJf_QMArray.value digit ↑0#usize
+          else FJj_QMSlice.value input t) =
+    if ↑(FJj_TensorCell.index j n 3#usize) = t then FJj_QMSlice.value input ↑j * FJf_QMArray.value digit 3
+    else
+      if ↑(FJj_TensorCell.index j n 2#usize) = t then FJj_QMSlice.value input ↑j * FJf_QMArray.value digit 2
+      else
+        if ↑(FJj_TensorCell.index j n 1#usize) = t then FJj_QMSlice.value input ↑j * FJf_QMArray.value digit 1
+        else
+          if ↑(FJj_TensorCell.index j n 0#usize) = t then FJj_QMSlice.value input ↑j * FJf_QMArray.value digit 0
+          else FJj_QMSlice.value input t
+'AspisR1.FJj_TensorCellValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

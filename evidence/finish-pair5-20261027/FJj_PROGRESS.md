@@ -56,3 +56,10 @@ PointAdvance036 / PointSecond038 check the actual second constructor row and
 its canonicality; SuccessorFactors042 carries them through later circle writes.
 All accepted axioms standard. Failed candidates retained in per-attempt snapshots.
 Native arithmetic guards, frozen source, top/game/failure event remain unchanged.
+
+Part2 stage3 in progress: SuccessorDigit045 transports each actual native row1
+digit read to the literal successor factors and proves its canonicality.
+QMSlice044 / QMSliceUpdate046 check canonicality, value and length across native
+slice reads/writes. TensorCell048 exposes the actual four products and writes;
+TensorCellValue050 composes their arithmetic into the exact four-lane update.
+These are local cells, not the complete tensor loop or part2 meaning.
