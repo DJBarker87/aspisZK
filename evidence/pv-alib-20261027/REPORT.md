@@ -83,16 +83,52 @@ or a deployed endpoint instance: the bounded P6 gate's scope remains explicit,
 and whole native composition/replay remains separate. No SHA-NI semantics
 claim is made, and V232 is untouched.
 
-## V265 ongoing source attempt
+## V265 source callback and structural gate
 
-V265 / op259 remains OPEN. A closure-free safe reference was written and
-freshly extracted; its initial arithmetic graph still has two standard-library
-external leaves, so it is not yet a closing theorem. The graph including the
-shipped unwrap_or_else closure fails pinned extraction; the monomorphic
-Drop-desugared alternative fails on a missing function and is retained.
-`native-circle-02` passes 8,708 exact original/reference comparisons (8,582
-accepted-map results; 126 fallbacks, both rows). Further extraction and Lean
-source work continue. No chained-field-arithmetic Kani gate was attempted.
+Before: `ProverRwFull.ExternalFuns.op259`; the prepared selector lacked the
+native/reference source gate. After: **OPEN -> CLOSED-ON-CANDIDATE**, at the
+selected source/library-law boundary. Closing theorems:
+`PV_AL_CircleNative.source_reference` and
+`PV_AL_CircleSelected.{native_source,consumed}`. They cover every block and both
+rows with complete Result behavior. Both carrier roundtrips and both row
+images are proved. No totality, field equality, source-equivalence or
+conclusion-shaped hypothesis is assumed.
+
+Ruling (k)'s structural route is used. The owned safe reference preserves every
+frozen arithmetic call and its order, singularity priority, both map errors,
+fallback constants and row selection. Explicit matches replace ok_or/? and
+unwrap_or_else outside shipped crates. `STRUCTURAL-CIRCLE-GATE.json` checks the
+complete pinned native control bodies and identical fallback parameters.
+`PV_AL_CircleControl.native_owned` proves the generic control transport with
+failure/divergence intact; the native map/fallback/wrapper equations specialize
+it to the same extracted arithmetic. The relative sampler source path in the
+extraction metadata is resolved against its proof crate, not the SSH login
+folder; `circle-native-input-pins.json` checks every relevant source file
+against this worktree.
+
+The unchanged pinned tools extract the reference with no external-function
+holes or opaque arithmetic leaves. Three positive shift-count literal ABI
+mismatches were normalized to the current scalar API; the generic U64 shift
+identities are proved in `PV_AL_ShiftLiterals`. Exact edits are recorded in
+`primitive-shift-normalization.json` and reproduced by `promote.py --check`.
+The extractor and release Rust are unchanged. Source, structural-link and
+selected-law checks print only standard axioms (52756/52758/52759/52760/
+52763/52764/52767).
+
+`native-circle-owned-03` passes 8,712 wrapper comparisons (8,582 accepted;
+130 rejected/fallback), direct map comparisons, directed ±i singular cases,
+and both row fallbacks. Earlier reference tests and failed closure/core/Drop
+extractions are retained separately. `CIRCLE-FIDELITY-SCAN.json` records all
+three live Array.update results and quotient reuse. The fresh Lean emission
+(52765) and native Rust agree on zero and FF digit fixtures, including
+`[255,2048,7168,14336]`, where quotient writes change the output. The legacy
+mut-iterator low_base_p_digits body is absent from this op259 graph. No
+chained-field-arithmetic Kani was attempted.
+
+This is a structural source/library result plus fresh extraction and native
+checks, not an unbounded whole-machine proof or a deployed endpoint instance.
+The final owner dependency replay and whole native composition remain separate.
+V184 work continues within the remaining budget.
 
 No endpoint premise or T field changed. No `crates/` or `programs/` file changed,
 so no ELF rebuild is claimed; the three release pins remain inherited, not
