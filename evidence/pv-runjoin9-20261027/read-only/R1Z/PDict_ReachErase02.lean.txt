@@ -1,0 +1,123 @@
+import R1Z.PDict_ReachErase01
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_ReachErase
+open Aeneas Aeneas.Std ProverRwFull
+variable [ExternalTypes]
+
+/-- Full symbolic source-function equality for `block_buffer.Eager.Insts.Block_bufferSealedSealed`. -/
+theorem erase_32 (ops other : ExternalFuns) :
+    @block_buffer.Eager.Insts.Block_bufferSealedSealed _ (replace ops other) = @block_buffer.Eager.Insts.Block_bufferSealedSealed _ ops := by
+  delta block_buffer.Eager.Insts.Block_bufferSealedSealed
+  all_goals rfl
+#print axioms erase_32
+
+/-- Full symbolic source-function equality for `block_buffer.Eager.Insts.Block_bufferBufferKind`. -/
+theorem erase_33 (ops other : ExternalFuns) :
+    @block_buffer.Eager.Insts.Block_bufferBufferKind _ (replace ops other) = @block_buffer.Eager.Insts.Block_bufferBufferKind _ ops := by
+  delta block_buffer.Eager.Insts.Block_bufferBufferKind
+  try simp only [erase_32]
+  all_goals rfl
+#print axioms erase_33
+
+/-- Full symbolic source-function equality for `sha2.core_api.Sha256VarCore.Insts.Crypto_commonBlockSizeUserUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80`. -/
+theorem erase_34 (ops other : ExternalFuns) :
+    @sha2.core_api.Sha256VarCore.Insts.Crypto_commonBlockSizeUserUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80 _ (replace ops other) = @sha2.core_api.Sha256VarCore.Insts.Crypto_commonBlockSizeUserUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80 _ ops := by
+  delta sha2.core_api.Sha256VarCore.Insts.Crypto_commonBlockSizeUserUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80
+  try simp only [erase_20, erase_25, erase_30]
+  all_goals rfl
+#print axioms erase_34
+
+/-- Full symbolic source-function equality for `sha2.core_api.Sha256VarCore.Insts.DigestCore_apiBufferKindUserEagerUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80`. -/
+theorem erase_35 (ops other : ExternalFuns) :
+    @sha2.core_api.Sha256VarCore.Insts.DigestCore_apiBufferKindUserEagerUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80 _ (replace ops other) = @sha2.core_api.Sha256VarCore.Insts.DigestCore_apiBufferKindUserEagerUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80 _ ops := by
+  delta sha2.core_api.Sha256VarCore.Insts.DigestCore_apiBufferKindUserEagerUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80
+  all_goals rfl
+#print axioms erase_35
+
+/-- Full symbolic source-function equality for `sha2.core_api.Sha256VarCore.Insts.DigestCore_apiUpdateCoreUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80`. -/
+theorem erase_36 (ops other : ExternalFuns) :
+    @sha2.core_api.Sha256VarCore.Insts.DigestCore_apiUpdateCoreUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80 _ (replace ops other) = @sha2.core_api.Sha256VarCore.Insts.DigestCore_apiUpdateCoreUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80 _ ops := by
+  delta sha2.core_api.Sha256VarCore.Insts.DigestCore_apiUpdateCoreUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80
+  all_goals rfl
+#print axioms erase_36
+
+/-- Full symbolic source-function equality for `typenum.Equal.Insts.TypenumMarker_traitsOrd`. -/
+theorem erase_37 (ops other : ExternalFuns) :
+    @typenum.Equal.Insts.TypenumMarker_traitsOrd _ (replace ops other) = @typenum.Equal.Insts.TypenumMarker_traitsOrd _ ops := by
+  delta typenum.Equal.Insts.TypenumMarker_traitsOrd
+  all_goals rfl
+#print axioms erase_37
+
+/-- Full symbolic source-function equality for `typenum.Greater.Insts.TypenumMarker_traitsOrd`. -/
+theorem erase_38 (ops other : ExternalFuns) :
+    @typenum.Greater.Insts.TypenumMarker_traitsOrd _ (replace ops other) = @typenum.Greater.Insts.TypenumMarker_traitsOrd _ ops := by
+  delta typenum.Greater.Insts.TypenumMarker_traitsOrd
+  all_goals rfl
+#print axioms erase_38
+
+/-- Full symbolic source-function equality for `typenum.private.IsLessPrivateABLessB1.Blanket`. -/
+theorem erase_39 (ops other : ExternalFuns) :
+    @typenum.private.IsLessPrivateABLessB1.Blanket _ (replace ops other) = @typenum.private.IsLessPrivateABLessB1.Blanket _ ops := by
+  delta typenum.private.IsLessPrivateABLessB1.Blanket
+  try simp only [erase_24]
+  all_goals rfl
+#print axioms erase_39
+
+/-- Full symbolic source-function equality for `typenum.type_operators.IsLess.Blanket`. -/
+theorem erase_40 (ops other : ExternalFuns) :
+    @typenum.type_operators.IsLess.Blanket _ (replace ops other) = @typenum.type_operators.IsLess.Blanket _ ops := by
+  delta typenum.type_operators.IsLess.Blanket
+  all_goals rfl
+#print axioms erase_40
+
+/-- Full symbolic source-function equality for `typenum.uint.UIntUlB0.Insts.TypenumPrivatePrivateCmpUIntUrB0SoFarClause3_Output`. -/
+theorem erase_41 (ops other : ExternalFuns) :
+    @typenum.uint.UIntUlB0.Insts.TypenumPrivatePrivateCmpUIntUrB0SoFarClause3_Output _ (replace ops other) = @typenum.uint.UIntUlB0.Insts.TypenumPrivatePrivateCmpUIntUrB0SoFarClause3_Output _ ops := by
+  delta typenum.uint.UIntUlB0.Insts.TypenumPrivatePrivateCmpUIntUrB0SoFarClause3_Output
+  all_goals rfl
+#print axioms erase_41
+
+/-- Full symbolic source-function equality for `typenum.uint.UIntUlB0.Insts.TypenumType_operatorsCmpUIntUrB0Clause2_Output`. -/
+theorem erase_42 (ops other : ExternalFuns) :
+    @typenum.uint.UIntUlB0.Insts.TypenumType_operatorsCmpUIntUrB0Clause2_Output _ (replace ops other) = @typenum.uint.UIntUlB0.Insts.TypenumType_operatorsCmpUIntUrB0Clause2_Output _ ops := by
+  delta typenum.uint.UIntUlB0.Insts.TypenumType_operatorsCmpUIntUrB0Clause2_Output
+  all_goals rfl
+#print axioms erase_42
+
+/-- Full symbolic source-function equality for `typenum.uint.UIntUlB1.Insts.TypenumPrivatePrivateCmpUIntUrB0SoFarClause3_Output`. -/
+theorem erase_43 (ops other : ExternalFuns) :
+    @typenum.uint.UIntUlB1.Insts.TypenumPrivatePrivateCmpUIntUrB0SoFarClause3_Output _ (replace ops other) = @typenum.uint.UIntUlB1.Insts.TypenumPrivatePrivateCmpUIntUrB0SoFarClause3_Output _ ops := by
+  delta typenum.uint.UIntUlB1.Insts.TypenumPrivatePrivateCmpUIntUrB0SoFarClause3_Output
+  all_goals rfl
+#print axioms erase_43
+
+/-- Full symbolic source-function equality for `typenum.uint.UTerm.Insts.TypenumPrivatePrivateCmpUIntSoFarLess`. -/
+theorem erase_44 (ops other : ExternalFuns) :
+    @typenum.uint.UTerm.Insts.TypenumPrivatePrivateCmpUIntSoFarLess _ (replace ops other) = @typenum.uint.UTerm.Insts.TypenumPrivatePrivateCmpUIntSoFarLess _ ops := by
+  delta typenum.uint.UTerm.Insts.TypenumPrivatePrivateCmpUIntSoFarLess
+  all_goals rfl
+#print axioms erase_44
+
+/-- Full symbolic source-function equality for `sha2.core_api.Sha256VarCore.Insts.DigestCore_apiVariableOutputCoreUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80UIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80EagerUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80B1`. -/
+theorem erase_45 (ops other : ExternalFuns) :
+    @sha2.core_api.Sha256VarCore.Insts.DigestCore_apiVariableOutputCoreUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80UIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80EagerUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80B1 _ (replace ops other) = @sha2.core_api.Sha256VarCore.Insts.DigestCore_apiVariableOutputCoreUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80UIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80EagerUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80B1 _ ops := by
+  delta sha2.core_api.Sha256VarCore.Insts.DigestCore_apiVariableOutputCoreUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80UIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80EagerUIntUIntUIntUIntUIntUIntUIntUTermB1B0B0B0B0B0B0GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplEvenU8GenericArrayImplOddU8ArrayU80B1
+  all_goals rfl
+#print axioms erase_45
+
+/-- Full symbolic source-function equality for `typenum.private.IsLessOrEqualPrivateABEqualB1.Blanket`. -/
+theorem erase_46 (ops other : ExternalFuns) :
+    @typenum.private.IsLessOrEqualPrivateABEqualB1.Blanket _ (replace ops other) = @typenum.private.IsLessOrEqualPrivateABEqualB1.Blanket _ ops := by
+  delta typenum.private.IsLessOrEqualPrivateABEqualB1.Blanket
+  try simp only [erase_24]
+  all_goals rfl
+#print axioms erase_46
+
+/-- Full symbolic source-function equality for `typenum.type_operators.IsLessOrEqual.Blanket`. -/
+theorem erase_47 (ops other : ExternalFuns) :
+    @typenum.type_operators.IsLessOrEqual.Blanket _ (replace ops other) = @typenum.type_operators.IsLessOrEqual.Blanket _ ops := by
+  delta typenum.type_operators.IsLessOrEqual.Blanket
+  all_goals rfl
+#print axioms erase_47
+end R1Z.PDict_ReachErase
