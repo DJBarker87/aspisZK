@@ -9,6 +9,7 @@ theorem sub_zero (x : U32) : U32.wrapping_sub x 0#u32 = x := by
   apply UScalar.eq_of_val_eq
   rw [U32.wrapping_sub_val_eq]
   simp only [show (0#u32).val=0 from rfl,Nat.sub_zero,Nat.add_mod_right]
+  rw [UScalar.size]
   exact Nat.mod_eq_of_lt x.hBounds
 
 theorem subtract_shape (x : U32) : aspis_core.field.ct.subtract_p x =
@@ -27,7 +28,8 @@ theorem subtract_bound (x : U32) (hx : x.val < 4294967294) :
   by_cases h : x ≥ aspis_core.field.P
   · rw [if_pos h]
     change (U32.wrapping_sub x 2147483647#u32).val < 2147483647
-    rw [U32.wrapping_sub_val_eq]
+    rw [U32.wrapping_sub_val_eq,UScalar.size]
+    simp only [UScalarTy.numBits,show (2147483647#u32).val = 2147483647 from rfl]
     change (x.val + 4294967296 - 2147483647) % 4294967296 < 2147483647
     change 2147483647 ≤ x.val at h
     omega
@@ -38,7 +40,7 @@ theorem add (a b : U32) (ha : Canon a) (hb : Canon b) :
     Canon (aspis_core.field.ct.add a b) := by
   unfold aspis_core.field.ct.add
   apply subtract_bound
-  rw [U32.wrapping_add_val_eq]
+  rw [core.num.U32.wrapping_add_val_eq,UScalar.size]
   change (a.val + b.val) % 4294967296 < 4294967294
   change a.val < 2147483647 at ha
   change b.val < 2147483647 at hb
@@ -48,7 +50,7 @@ theorem sub (a b : U32) (ha : Canon a) (hb : Canon b) :
     Canon (aspis_core.field.ct.sub a b) := by
   unfold aspis_core.field.ct.sub
   apply subtract_bound
-  rw [U32.wrapping_sub_val_eq,U32.wrapping_add_val_eq]
+  rw [core.num.U32.wrapping_sub_val_eq,core.num.U32.wrapping_add_val_eq,UScalar.size]
   change ((a.val + 2147483647) % 4294967296 + 4294967296 - b.val) % 4294967296 < 4294967294
   change a.val < 2147483647 at ha
   change b.val < 2147483647 at hb
