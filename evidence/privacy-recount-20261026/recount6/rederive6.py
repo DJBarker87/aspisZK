@@ -20,9 +20,9 @@ def module(k,m):
   s=read(k,path)
   if s is not None:resolved[k,m]=(s,path);return s,path
  resolved[k,m]=(None,paths[0]);return None,paths[0]
-rows=json.loads((B/'recount5/rows5.json').read_text());by={r['id']:r for r in rows};audit={x['id']:x for x in json.loads((P/'definition-audit 6.json').read_text())}
+rows=json.loads((B/'recount5/rows5.json').read_text());by={r['id']:r for r in rows};audit={x['id']:x for x in json.loads((P/'definition-audit6.json').read_text())}
 for r in rows:
- a=audit[r['id']];r['recount5_bucket']=r['dependency_bucket'];r['recount6_status']=r['recount5_status'];r['recount6_class']=r['recount5_class'];r['definition_witnesses6']=a['sources'];r['recount6_evidence']=['definition-audit 6.json#'+r['id']]
+ a=audit[r['id']];r['recount5_bucket']=r['dependency_bucket'];r['recount6_status']=r['recount5_status'];r['recount6_class']=r['recount5_class'];r['definition_witnesses6']=a['sources'];r['recount6_evidence']=['definition-audit6.json#'+r['id']]
  r['recount6_basis']='Pinned definitions, guards and prior supporting objects re-read. '+r['recount5_basis']
  r['definition_changed6']=a['changed_from5']
  if a['changed_from5']:
@@ -55,7 +55,7 @@ new={
 verdicts=[]
 for id,(m,th,route,why) in new.items():
  s,path=module('rw',m);assert s and re.search(r'theorem\s+'+th+r'\b',s),(id,path)
- update(id,'CONFIRMED CLOSED-ON-CANDIDATE. '+why,status='CLOSED-ON-CANDIDATE',theorem=m+'.'+th,route=route,ev=['rw:'+path,'closure-audit 6.json#'+id])
+ update(id,'CONFIRMED CLOSED-ON-CANDIDATE. '+why,status='CLOSED-ON-CANDIDATE',theorem=m+'.'+th,route=route,ev=['rw:'+path,'closure-audit6.json#'+id])
  verdicts.append(dict(id=id,verdict='CONFIRM',theorem=m+'.'+th,path=path,statement_module_sha256=hashlib.sha256(s.encode()).hexdigest(),hypotheses_and_nonvacuity=why,native_evidence_class=route,deployed_premises_removed=0))
 # D285 has a seventh newly available row; independently inspect its adapter and gate.
 s,path=module('rw','R1Z.PV_CBL_CallbackPublication');assert s and 'theorem op26_source' in s
@@ -141,12 +141,12 @@ for id in [37698,37699,37600,37604,38597,38598]:
  assert v['exit']==0 and not bad,(id,bad)
  receipt_audit.append(dict(id=id,path=path,receipt=v,standard_axioms=True,audit_queries=len(axioms),scope='cached focused signature replay; paired audit 37698' if id==37600 else 'focused audit/replay; not full release'))
 (P/'reused-receipts6.json').write_text(json.dumps(receipt_audit,indent=2)+'\n')
-(P/'closure-audit 6.json').write_text(json.dumps(verdicts,indent=2)+'\n')
-(P/'import-closures6.json').write_text(json.dumps(closures,indent=2)+'\n');(P/'evidence-audit 6.json').write_text(json.dumps(ev_audit,indent=2)+'\n')
+(P/'closure-audit6.json').write_text(json.dumps(verdicts,indent=2)+'\n')
+(P/'import-closures6.json').write_text(json.dumps(closures,indent=2)+'\n');(P/'evidence-audit6.json').write_text(json.dumps(ev_audit,indent=2)+'\n')
 (P/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');(P/'rows6.json').write_text(json.dumps(rows,indent=2)+'\n')
 t=dict(rows=len(rows),classes=dict(collections.Counter(r['recount6_class'] for r in rows)),statuses=dict(collections.Counter(r['recount6_status'] for r in rows)),open_dependencies=dict(collections.Counter(r['dependency_bucket'] for r in rows if r['recount6_status']=='OPEN')),closure_routes=dict(collections.Counter(r.get('closure_route') for r in rows if r['recount6_status']=='CLOSED-ON-CANDIDATE')),all_row_imports=dict(collections.Counter(r['in_headline_closure6'] for r in rows)),candidate_closure_imports=dict(collections.Counter(r['in_headline_closure6'] for r in rows if r['recount6_status']=='CLOSED-ON-CANDIDATE')),premises_removed_added_weakened=[0,0,0])
 (P/'totals6.json').write_text(json.dumps(t,indent=2)+'\n')
-lines=['# Recount 6 2026-10-27 (B)','','Every row re-derived at pins.json by METHOD6; historical fields and exact scopes preserved. Target not yet established. Import membership is not discharge. Full sources/statements are content-addressed in manifest.json; native-link class and nonvacuity for the six requested closures are in closure-audit 6.json.','','| Row / class5 →6 / name | Status5 →6 | OPEN bucket | in headline closure? | Derivation, residual and evidence |','|---|---|---|---|---|']
+lines=['# Recount 6 2026-10-27 (B)','','Every row re-derived at pins.json by METHOD6; historical fields and exact scopes preserved. Target not yet established. Import membership is not discharge. Full sources/statements are content-addressed in manifest.json; native-link class and nonvacuity for the six requested closures are in closure-audit6.json.','','| Row / class5 →6 / name | Status5 →6 | OPEN bucket | in headline closure? | Derivation, residual and evidence |','|---|---|---|---|---|']
 for r in rows:
  detail=r['recount6_basis']+' Residual: '+r.get('definition','deployment evidence')+' / '+r['name']+'. Full witnesses: recount6/rows6.json#'+r['id']
  lines.append('|'+r['id']+' / '+r['recount5_class']+' → '+r['recount6_class']+' / '+r['name'].replace('|','\\|')+'|'+r['recount5_status']+' → '+r['recount6_status']+'|'+(r['dependency_bucket'] or '—')+'|'+r['in_headline_closure6']+'|'+detail.replace('|','\\|').replace('\n',' ')+'|')

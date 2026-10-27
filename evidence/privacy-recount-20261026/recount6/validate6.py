@@ -34,6 +34,10 @@ assert sum(l.startswith('|V') for l in (B/'ROWS6.md').read_text().splitlines())=
 packet=Path('design/PV-OWNER-PACKET-20261027.md').read_text()
 assert packet.count('**owner-APPROVED**')==2
 for s in ['constant-time private-input','N7','SHA-NI','DOITM','Client scope','caller-supplied']:assert s in packet
+# Validate authored Markdown links; copied source snapshots remain byte-exact.
+for f,body in [(Path('design/PRIVACY-LEDGER-20261026.md'),ledger[len(base):].decode()),(P/'REPORT6.md',(P/'REPORT6.md').read_text()),(Path('design/PV-OWNER-PACKET-20261027.md'),packet)]:
+ for target in re.findall(r'\]\(([^)]+)\)',body):
+  if not target.startswith(('http:', 'https:')):assert (f.parent/target.split('#')[0]).exists(),(str(f),target)
 pins=load(P/'pins.json');assert pins['revisions']['rw'].startswith('03905a5259')
 assert subprocess.check_output(['git','branch','--show-current'],text=True).strip()=='codex/pv-recount6-20261027'
 assert Path.cwd()==Path('/Users/dominic/ZK/.worktrees/pv-recount6')

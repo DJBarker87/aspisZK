@@ -1,12 +1,12 @@
 # Recount 6 report
 **Target not yet established.** All 407 rows are re-derived by the
-[recount5 method](../evidence/privacy-recount-20261026/recount5/METHOD5.md)
-at [immutable pins](../evidence/privacy-recount-20261026/recount6/pins.json).
+[recount5 method](../recount5/METHOD5.md)
+at [immutable pins](../recount6/pins.json).
 The prover candidate is exactly **03905a5259**. Running runjoin, reach, batch2
 and batch3 heads are snapshots, explicitly recorded as still running; no later
 uncommitted or moving-head result is inferred. Historical ledger/recounts1–5
-and the owner-decisions section are preserved. [ROWS6](../evidence/privacy-recount-20261026/ROWS6.md)
-retains the same columns; [rows6.json](../evidence/privacy-recount-20261026/recount6/rows6.json)
+and the owner-decisions section are preserved. [ROWS6](../ROWS6.md)
+retains the same columns; [rows6.json](../recount6/rows6.json)
 retains historical fields, exact quantifiers, guards, residuals, exclusive buckets,
 definition hashes, supporting witnesses and actual consumer import paths.
 Source/statement/evidence audit only. Endpoint premises removed/added/weakened:
@@ -28,7 +28,7 @@ Seven status changes: the six requested candidate closures and the additional
 D285 V178/op26 bounded-P6 closure are independently confirmed. No prior callback
 closure is withdrawn by the D188 audit. The six full closing statements, their
 carrier/size hypotheses and non-vacuity are read through their source cones,
-not inferred from theorem names. [closure audit](../evidence/privacy-recount-20261026/recount6/closure-audit 6.json)
+not inferred from theorem names. [closure audit](../recount6/closure-audit6.json)
 records the reasons; the full closing sources are content-addressed by manifest.json.
 
 | Row | Closing law and native evidence boundary | Verdict |
@@ -50,7 +50,7 @@ as the earlier seven library laws, not a new deployed source theorem.
 The required receipts37698/37699/37600/37604 and38597/38598 are read and parsed,
 all exit 0, swap 0, standard axiom subsets. Full commands, source revisions,
 dependency fingerprints, timings, RSS and axiom lines remain in
-[reused receipts](../evidence/privacy-recount-20261026/recount6/reused-receipts6.json).
+[reused receipts](../recount6/reused-receipts6.json).
 37600 is a signature replay paired with37698, not159 additional axiom queries.
 165 source-cone occurrences match their final audit freezes; all seven closing
 project cones resolve. Candidate Rust hashes match the circle structural gate and
@@ -134,7 +134,7 @@ remain. V404/V405 remain invocation/minimality/effect obligations; dictionary
 congruence is weaker. Installed op84 forwards its callback Result, correcting
 the earlier generic-interface catching concern.
 
-[Corrections D285–D320](../evidence/privacy-recount-20261026/recount6/CORRECTIONS6.md)
+[Corrections D285–D320](../recount6/CORRECTIONS6.md)
 preserve failed approaches, original snapshot qualifications and every entry’s
 disposition. Material updates are the extra op26 closure; the late original-carrier
 bridges qualifying D298; D188’s body/fixture scopes; repaired op253 boundary
@@ -142,7 +142,7 @@ with universal equality still open; and D320’s universal target. D318’s a 10
 summary for its three closures is confirmed. Nonconforming dudect detection was
 diagnosed as a harness preparation artifact, not a shipped leak or final pass.
 
-The [owner packet](PV-OWNER-PACKET-20261027.md) marks client toolchain and
+The [owner packet](../../../design/PV-OWNER-PACKET-20261027.md) marks client toolchain and
 D188 narrowing **owner-APPROVED** under D301/second amendment. Open: release
 features and constant-time private-input decoding; N7 key custody; SHA-NI
 trust/refinement versus soft backend; DOITM implementation; client scope as
