@@ -1,0 +1,53 @@
+{
+  "kind": "STRUCTURAL argument under ruling (k); not a machine proof",
+  "row": "V230",
+  "op": 134,
+  "source_revision": "2c6de9318eb8e126f07105626affaa7430b2d20f",
+  "files": {
+    "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs": "61bcd59a22c9c02fe3f9ba69cda43bfa8fe02ea14f15da9b761e976fe48798bf",
+    "crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs": "3dfe485fc2e9a643a15e0bc7ef0d9fed20b1fa43984bb1d0997d38a380a90ab6",
+    "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "660f00d91fb08e809b8f00a7e3917d546cf2097e6ea4b59b951e0dc8cc03e7af",
+    "crates/aspis-prover/src/host_forest.rs": "30726aa267d50856e9c3cd71bfb57ec1b2e4f85719e3baa04fa061d5e6a00942"
+  },
+  "reviewed_control_tokens_sha256": "bc07e93fe8761227cc5989243ad1e72c6ce0f5933d6c73f136778bc254e5b4fe",
+  "original_links": 127,
+  "forest_links": 136,
+  "legacy_endpoint_max": [
+    2,
+    2
+  ],
+  "forest_endpoint_max": [
+    2,
+    2
+  ],
+  "table_matches_emission": true,
+  "all_error_paths": "Shape counts and helper Options succeed; both endpoint passes succeed on the frozen no-input constructors; producer before consumer rejection order retained",
+  "deliberate_differences": [
+    {
+      "change": "schedule replaced by frozen MASK_LINKS",
+      "check": "all 136 ordered endpoint pairs equal the pinned constructor trace"
+    },
+    {
+      "change": "sort_unstable and dedup omitted; marks interleaved with validation",
+      "check": "same endpoints; no error is reachable; OR commutes, associates and is idempotent",
+      "lean": [
+        "PV_B3_Close134.or_idempotent",
+        "PV_B3_Close134.or_commutative",
+        "PV_B3_Close134.or_associative",
+        "PV_B3_MaskDictionary134.copy_reference"
+      ]
+    },
+    {
+      "change": "u8 increment split into Option bump",
+      "check": "0/1 increment; >=2 rejects before increment",
+      "lean": [
+        "PV_B3_MaskSparseStep.step",
+        "PV_B3_MaskRowExpected.op134_value"
+      ]
+    }
+  ],
+  "native_link_evidence_class": "structural source argument + extraction; native sample is finite validation",
+  "native_validation": "mask-fidelity-comparison.json (same-input, no input arguments, original/copy/emission 64 masks)",
+  "universal_native_machine_equality_claimed": false,
+  "XR_imports": false
+}
