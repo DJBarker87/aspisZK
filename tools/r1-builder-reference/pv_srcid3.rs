@@ -331,3 +331,50 @@ fn pv_srcid5_withdrawal_public() {
     assert_eq!(p.frontier, q.frontier);
     assert_eq!(p.empty, q.empty);
 }
+
+// Resume 6: exhaustive recipient-variant x selected-input-bit partition.
+// Each proof compares every record field from both actual dynamic mappers.
+// No root, hash or other callee is stubbed and no output equality is assumed.
+fn pv_srcid6_mapper(transfer: bool, selected_second: bool) {
+    let (input, out, recipient, change, snapshot, asset) = arbitrary_inputs();
+    kani::assume(recipient.is_some() == transfer);
+    kani::assume(input.pair.selected_second == selected_second);
+    let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let (v, q) = super::records_reference(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    assert_eq!(w.input_value, v.input_value);
+    assert_eq!(w.output_value, v.output_value);
+    assert_eq!(w.change_value, v.change_value);
+    assert_eq!(w.sk, v.sk);
+    assert_eq!(w.salt, v.salt);
+    assert_eq!(w.bits, v.bits);
+    assert_eq!(w.sibs, v.sibs);
+    assert_eq!(w.pair_first, v.pair_first);
+    assert_eq!(w.pair_occupied, v.pair_occupied);
+    assert_eq!(w.pair_second, v.pair_second);
+    assert_eq!(w.pair_inverse, v.pair_inverse);
+    assert_eq!(w.recipient_owner, v.recipient_owner);
+    assert_eq!(w.recipient_salt, v.recipient_salt);
+    assert_eq!(w.change_owner, v.change_owner);
+    assert_eq!(w.change_salt, v.change_salt);
+    assert_eq!(p.transfer, q.transfer);
+    assert_eq!(p.asset, q.asset);
+    assert_eq!(p.next_pair_index, q.next_pair_index);
+    assert_eq!(p.frontier, q.frontier);
+    assert_eq!(p.empty, q.empty);
+}
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid6_transfer_first() { pv_srcid6_mapper(true, false); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid6_transfer_second() { pv_srcid6_mapper(true, true); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid6_withdrawal_first() { pv_srcid6_mapper(false, false); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid6_withdrawal_second() { pv_srcid6_mapper(false, true); }
