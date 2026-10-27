@@ -28,3 +28,12 @@ covers widths16, rate8 and groups4, including loop exit; unwinding checks remain
 enabled. Default safety/overflow/undefined-call checks remain enabled. Covers
 are included to prevent silent vacuity. No succeeded Kani check is a Lean axiom;
 a named P6 bridge requires exact checked context plus the Lean reference proof.
+
+The split bounded context computes rows(input) with the exact four source
+coefficient rows and assumes each row limb <7P. FJe_RawReference.row_bounds,
+checked013, derives ALL those bounds from arbitrary canonical input limbs.
+Thus this is a redundant solver constraint,not an input-domain restriction or
+an admitted source-output equation. FJe_RawReference.value and output_bound
+check the owned raw formula's field value and <56P reduction range. The pure
+unchanged dependency PoseidonExternalPackedAlgebra was missing and compiled012
+on the coherent SInt2 selection;no old native packed-proof chain was imported.

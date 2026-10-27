@@ -4,20 +4,70 @@
 mod FJe_reference {
     use super::*;
 
-    fn local_raw(input: [QM31; 4]) -> [u64;4] {
-        let x = input.map(extension_limbs);
-        let t: [[u64; 4]; 4] = core::array::from_fn(|r| core::array::from_fn(|l| {
-            let [a,b,c,d] = [x[0][l],x[1][l],x[2][l],x[3][l]].map(u64::from);
-            match r { 0 => 2*a+3*b+c+d, 1 => a+2*b+3*c+d,
-                2 => a+b+2*c+3*d, _ => 3*a+b+c+2*d }
-        }));
-        let b = 7*u64::from(P);
-        [
-            t[0][0]+5*b-t[1][1]+2*t[2][2]-t[2][3]-t[3][2]-2*t[3][3],
-            t[0][1]+t[1][0]+t[2][2]+2*t[2][3]+2*t[3][2]+b-t[3][3],
-            t[0][2]+2*b-t[1][3]+t[2][0]-t[3][1],
-            t[0][3]+t[1][2]+t[2][1]+t[3][0],
-        ]
+    fn rows(input: [QM31;4]) -> [[u64;4];4] {
+        let input = input.map(extension_limbs);
+        let local: [[u64; 4]; 4] = core::array::from_fn(|output| {
+            core::array::from_fn(|limb| {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                match output {
+                    0 => 2 * a + 3 * b + c + d,
+                    1 => a + 2 * b + 3 * c + d,
+                    2 => a + b + 2 * c + 3 * d,
+                    3 => 3 * a + b + c + 2 * d,
+                    _ => unreachable!(),
+                }
+            })
+        });
+        local
+    }
+    fn local_raw(input: [QM31; 4]) -> [u64; 4] {
+        let input = input.map(extension_limbs);
+        let local: [[u64; 4]; 4] = core::array::from_fn(|output| {
+            core::array::from_fn(|limb| {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                match output {
+                    0 => 2 * a + 3 * b + c + d,
+                    1 => a + 2 * b + 3 * c + d,
+                    2 => a + b + 2 * c + 3 * d,
+                    3 => 3 * a + b + c + 2 * d,
+                    _ => unreachable!(),
+                }
+            })
+        });
+        let mut all_local_limbs_bounded = true;
+        let mut output = 0usize;
+        while output < 4 {
+            let mut limb = 0usize;
+            while limb < 4 {
+                all_local_limbs_bounded &= local[output][limb] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+                limb += 1;
+            }
+            output += 1;
+        }
+        debug_assert!(all_local_limbs_bounded);
+    
+        let bound = EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+        let packed = [
+            local[0][0] + 5 * bound - local[1][1] + 2 * local[2][2]
+                - local[2][3]
+                - local[3][2]
+                - 2 * local[3][3],
+            local[0][1] + local[1][0] + local[2][2] + 2 * local[2][3] + 2 * local[3][2] + bound
+                - local[3][3],
+            local[0][2] + 2 * bound - local[1][3] + local[2][0] - local[3][1],
+            local[0][3] + local[1][2] + local[2][1] + local[3][0],
+        ];
+        debug_assert!(packed[0] < 8 * bound);
+        debug_assert!(packed[1] < 8 * bound);
+        debug_assert!(packed[2] < 4 * bound);
+        debug_assert!(packed[3] < 4 * bound);
+        packed
     }
 
     fn local(input: [QM31;4]) -> QM31 { extension_from_raw_limbs(local_raw(input)) }
@@ -65,6 +115,51 @@ mod FJe_reference {
     fn assert_packed(a:[QM31;4],b:[QM31;4]) {
         for j in 0..4 { assert_q(a[j],b[j]); }
     }
+    fn assume_rows(input:[QM31;4]) {
+        let t=rows(input);
+        for r in 0..4 { for l in 0..4 { kani::assume(t[r][l] < 7*u64::from(P)); } }
+    }
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn local_raw_all_bounded() {
+        let input: [QM31;4]=core::array::from_fn(|_| any_q());
+        assume_rows(input);
+        kani::cover!(true, "complete raw domain inhabited");
+        let a=external_local_packed_raw(input); let b=local_raw(input);
+        for j in 0..4 { assert_eq!(a[j],b[j]); }
+    }
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn external_bounded() {
+        let s=any_state();
+        for g in 0..4 { assume_rows([s[4*g],s[4*g+1],s[4*g+2],s[4*g+3]]); }
+        kani::cover!(true, "complete external domain inhabited");
+        assert_packed(external_linear_packed(s),external(s));
+    }
+
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn local_raw_output2_bounded() {
+        let input: [QM31;4] = core::array::from_fn(|_| any_q());
+        let t = rows(input);
+        for r in 0..4 { for l in 0..4 { kani::assume(t[r][l] < 7*u64::from(P)); } }
+        kani::cover!(true, "derived raw2 bounds inhabited");
+        let a = external_local_packed_raw(input); let b = local_raw(input);
+        assert_eq!(a[2],b[2]);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn local_raw_output1_bounded() {
+        let input: [QM31;4] = core::array::from_fn(|_| any_q());
+        // Redundant on canonical input: FJe_RawReference.row_bounds.
+        let t = rows(input);
+        for r in 0..4 { for l in 0..4 { kani::assume(t[r][l] < 7*u64::from(P)); } }
+        kani::cover!(true, "derived row bounds inhabited");
+        let a = external_local_packed_raw(input); let b = local_raw(input);
+        assert_eq!(a[1],b[1]);
+    }
+
     #[kani::proof]
     #[kani::unwind(6)]
     fn local_raw_output0() {
