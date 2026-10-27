@@ -1,0 +1,37 @@
+XRq_generated/XRq_GammaAssociation.lean:36:1: error: 'change' tactic failed, pattern
+  (have __do_jp := fun digits2 => XRn_Join_Release.sampler.decode8 digits2;
+    if wrapped = true then do
+      let __x ← XRn_Join_Release.sampler.add_small_base_p digits1 1#u32
+      match __x with
+        | (fst, digits3) => do
+          let digits2 ← ok digits3
+          __do_jp digits2
+    else do
+      let digits2 ← ok digits1
+      __do_jp digits2) =
+    do
+    let digits2 ←
+      if wrapped = true then do
+          let (_, digits3) ← AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits1 1#u32
+          ok digits3
+        else ok digits1
+    mapR AspisR1ClaimPreparedBridge.gammaToPublic (AspisR1GammaCaller.DigitsModel.candidateGammaHelpers.decode digits2)
+is not definitionally equal to target
+  (let (wrapped, digits1) := (wrapped, digits1)
+    do
+    let digits2 ←
+      if wrapped = true then do
+          let (_, digits3) ← XRn_Join_Release.sampler.add_small_base_p digits1 1#u32
+          ok digits3
+        else ok digits1
+    XRn_Join_Release.sampler.decode8 digits2) =
+    mapR AspisR1ClaimPreparedBridge.gammaToPublic
+      (let (wrapped, digits1) := (wrapped, digits1)
+      do
+      let digits2 ←
+        if wrapped = true then do
+            let (_, digits3) ← AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits1 1#u32
+            ok digits3
+          else ok digits1
+      AspisR1GammaCaller.DigitsModel.candidateGammaHelpers.decode digits2)
+'XRq_GammaAssociation.gamma' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

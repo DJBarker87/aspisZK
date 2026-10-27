@@ -1,0 +1,64 @@
+XRq_generated/XRq_OrdinaryScalar.lean:36:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  XRq_SamplerInterface.ordinary AspisR1Post25Sampler.sampler.low_base_p_digits ?block
+in the target expression
+  mapR (fun p => (p.1, ct p.2))
+      (let (block, after) := (block, after)
+      do
+      let out ← XRq_SamplerInterface.ordinary AspisR1Post25Sampler.sampler.low_base_p_digits block
+      let i ← lift (UScalar.cast UScalarTy.Usize row)
+      XRn_Join_Release.trace.value 4#u16 i out
+      ok (out, after)) =
+    let (block, self1) := (block, ct after)
+    do
+    let out ← XRo_Join_Installed.actual.sampling.ordinary block
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    AspisR1PublicPreparation.trace.value 4#u16 i out
+    ok (out, self1)
+
+H : Type
+D : C.D H
+t : C.T H
+row : U8
+payload : Slice U8
+block : Std.Array U8 32#usize
+after : XRn_Join_Release.transcript.Transcript H
+⊢ mapR (fun p => (p.1, ct p.2))
+      (let (block, after) := (block, after)
+      do
+      let out ← XRq_SamplerInterface.ordinary AspisR1Post25Sampler.sampler.low_base_p_digits block
+      let i ← lift (UScalar.cast UScalarTy.Usize row)
+      XRn_Join_Release.trace.value 4#u16 i out
+      ok (out, after)) =
+    let (block, self1) := (block, ct after)
+    do
+    let out ← XRo_Join_Installed.actual.sampling.ordinary block
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    AspisR1PublicPreparation.trace.value 4#u16 i out
+    ok (out, self1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+XRq_generated/XRq_OrdinaryScalar.lean:30:31: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵R̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵]̵[̲m̲a̲p̲R̲_̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRq_generated/XRq_OrdinaryScalar.lean:35:41: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵]̵[̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRq_OrdinaryScalar.raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRq_OrdinaryScalar.ordinary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

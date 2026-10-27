@@ -1,0 +1,20 @@
+@[irreducible] def BitVec.toLEBytes : {w : ℕ} → BitVec w → List Byte :=
+fun {w} b => BitVec.toLEBytes._unary ⟨w, b⟩
+XRq_generated/XRq_ByteInspect.lean:3:7: error(lean.unknownIdentifier): Unknown constant `BitVec.toNat_extractLsb`
+XRq_generated/XRq_ByteInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `BitVec.toNat_extractLsb'`
+def AspisR1WideToBytesIndexedCandidate.limbBytes : Aeneas.Std.U32 → List Aeneas.Std.U8 :=
+fun w => [w.bv.toLEBytes[0]#uscalar, w.bv.toLEBytes[1]#uscalar, w.bv.toLEBytes[2]#uscalar, w.bv.toLEBytes[3]#uscalar]
+def AspisR1WideToBytesIndexedCandidate.expectedList : AspisR1WideToBytesIndexedCandidate.field.wide_exact.WideExact →
+  List Aeneas.Std.U8 :=
+fun x =>
+  AspisR1WideToBytesIndexedCandidate.limbBytes x.c0.c0.a ++ AspisR1WideToBytesIndexedCandidate.limbBytes x.c0.c0.b ++
+              AspisR1WideToBytesIndexedCandidate.limbBytes x.c0.c1.a ++
+            AspisR1WideToBytesIndexedCandidate.limbBytes x.c0.c1.b ++
+          AspisR1WideToBytesIndexedCandidate.limbBytes x.c1.c0.a ++
+        AspisR1WideToBytesIndexedCandidate.limbBytes x.c1.c0.b ++
+      AspisR1WideToBytesIndexedCandidate.limbBytes x.c1.c1.a ++
+    AspisR1WideToBytesIndexedCandidate.limbBytes x.c1.c1.b
+def XRn_Join_wordBytes : Aeneas.Std.U32 → List Aeneas.Std.U8 :=
+fun x => List.map (fun i => Aeneas.Std.UScalar.ofNat (↑x / 256 ^ i % 256) ⋯) (List.range 4)
+XRq_generated/XRq_ByteInspect.lean:8:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1.ExtractedQM31SamplerIndexedOutputSuccessV5.ordinary_sample_success`
+XRq_generated/XRq_ByteInspect.lean:9:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1.ExtractedQM31SamplerIndexedOutputSuccessV5.decode8_success`
