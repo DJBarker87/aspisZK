@@ -1,0 +1,140 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "RUSTFLAGS=--cfg kani",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "resumed_checks::carry_scalar",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "357291b1999bb754f9bd044c3fdb25b367db0f12",
+  "source_identity": "post-run read-only input snapshot; mutable proof inputs need retained per-run snapshots, not attribution to current files. Shipped snapshot is verified against base 09df2340e24cdcc86fe4ef272eed9994562fcda9; see source-identity.json (782 matching tracked files)",
+  "exit": "0",
+  "wall": "0:01.17",
+  "peak_rss_kib": "166828",
+  "swap": "0",
+  "print_axioms": "N/A native P6 gate",
+  "attempt_charged": true,
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "inputs": {
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source/crates/aspis-core/src/field/wide_exact.rs": {
+      "sha256": "f059fac85a369a226db0d9b37ba82e83cc50faf4aee7c69328c874e751d4b6a3",
+      "size": 22282
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/lib.rs": {
+      "sha256": "27fab4430ce18e936a29af7ca5e479e62fbf98627580b2aeb68c75906fdb1e49",
+      "size": 9991
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/reference_split.rs": {
+      "sha256": "84a4e69a50659699c9b9f80f16da9d48eb37eebe09298984e52aa9463c35015b",
+      "size": 3501
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml": {
+      "sha256": "0f024ff18a543551f99dd248c97d84d6d21190043a09966fa1f06ca3bd309249",
+      "size": 408
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.lock": {
+      "sha256": "19f21ab722023e5a9c081ac071127ef2f341f71daaa6a692b84e2732621cc0d3",
+      "size": 632
+    }
+  },
+  "dependency_fingerprint": "005f7d1db7ed3a00f77e9bfb9b3b28a97a05563d0607c9f5aa3e5d5e7006f86c",
+  "admissions": {
+    "admission-barrier.json": {
+      "schema": "ProverRwNativeEntropy-reservation-v1",
+      "utc": "2026-10-27T01:30:28.647585+00:00",
+      "requested_bytes": 0,
+      "safe_limit_bytes": 59055800320,
+      "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+      "print_axioms": "N/A: read-only resource gate",
+      "allowed": true,
+      "bounded_reserved_bytes": 43352326144,
+      "projected_reserved_bytes": 43352326144,
+      "own_cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-ra7b035d2387d4410bd44ea5bf16b7036.scope",
+      "own_limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "command": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-resume6-carry-001/time.log",
+        "timeout",
+        "180",
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+        "RUSTFLAGS=--cfg kani",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+        "--lib",
+        "--exact",
+        "--harness",
+        "resumed_checks::carry_scalar",
+        "--solver",
+        "kissat",
+        "--no-assertion-reach-checks",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ]
+    },
+    "admission-before.json": {
+      "schema": "ProverRwNativeEntropy-reservation-v1",
+      "utc": "2026-10-27T01:30:28.218486+00:00",
+      "requested_bytes": 8589934592,
+      "safe_limit_bytes": 59055800320,
+      "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+      "print_axioms": "N/A: read-only resource gate",
+      "allowed": true,
+      "bounded_reserved_bytes": 34762391552,
+      "projected_reserved_bytes": 43352326144
+    }
+  },
+  "harness": "resumed_checks::carry_scalar",
+  "expected_phase": "Optimized compilation then named scalar compositional sampler stage; no stubs, bound65. CPU affinity0-3 per sibling KANI-CONFIG mitigation."
+}

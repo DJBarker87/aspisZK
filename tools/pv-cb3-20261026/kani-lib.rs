@@ -227,3 +227,19 @@ mod resumed_checks {
         assert_eq!(a.c1().c1.a.0,b.c1().c1.a.0);assert_eq!(a.c1().c1.b.0,b.c1().c1.b.0);
     }
 }
+
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod resume6_pole {
+    use aspis_core::field::{QM31,CM31,M31};
+    fn q(w:[u32;4])->QM31 {QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn canonical1024() {
+        let mut values=[[[QM31::ZERO;2];2];1024];
+        for row in 0..1024 { for side in 0..2 { for slot in 0..2 {values[row][side][slot]=q(kani::any());}}}
+        let masks:[u16;64]=kani::any();let chi=q(kani::any());
+        let n:usize=kani::any();kani::assume(n<=1024);
+        assert_eq!(super::ct_pole::all_slots_clear(&values[..n],&masks,chi),
+          super::reference::all_slots_clear(&values[..n],&masks,chi));
+    }
+}
