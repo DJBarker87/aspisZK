@@ -1,0 +1,58 @@
+{
+  "target": [
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-join-20261026/pole-target",
+    "RUSTUP_TOOLCHAIN=nightly-2026-06-01",
+    "RUSTFLAGS=--cfg kani --cfg pv_join_extract",
+    "/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--rustc-arg=--cfg=kani",
+    "--rustc-arg=--cfg=pv_join_extract",
+    "--sysroot",
+    "default",
+    "--start-from",
+    "pv_join_direct5::evaluate",
+    "--include",
+    "pv_join_direct5::*",
+    "--include",
+    "aspis_core::field::*",
+    "--opaque",
+    "aspis_core::*::*::*::call_once",
+    "--opaque",
+    "aspis_core::*::*::*::*::call_once",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-pv-join-20261026/direct5.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-join-20261026/direct5/Cargo.toml",
+    "--release",
+    "--offline",
+    "--lib",
+    "--jobs",
+    "4"
+  ],
+  "kind": "charon",
+  "source_revision": "8eba145a7169b1e8390d9db82c9151cd07860cb9",
+  "caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "expected_time": "focused source extraction or harness listing",
+  "optimized_profile": "dev opt-level=3, release opt-level=3",
+  "print_axioms": "N/A; Lean closure separately audited",
+  "exit": 0,
+  "wall_seconds": 1.4176902081817389,
+  "peak_rss_kib": [
+    "150280"
+  ],
+  "swaps": [
+    "0"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "codex/pv-cb-20261026": {
+    "revision": "aadb0e1407c957cb9bd4c95575949711ee8dd09e",
+    "hits": [
+      {
+        "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_Op259Exact.lean",
+        "text": "import R1Z.PV_CB_Op259Funs\nimport R1Z.PV_CB_Op259Carriers\n/-! PREPARED only: fresh extraction and focused type-check are pending. -/\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_CB_Op259Exact\nopen Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op259Transport\nvariable [ExternalTypes]\n\n@[reducible] def selected (ops : ExternalFuns) : ExternalFuns :=\n  {ops with op259 := fun block row => do\n    let point \u2190 PV_CB_ShippedOp259.circle_sample block (encodeRow row)\n    ok (decodePoint point)}\n\ntheorem op259_source (ops : ExternalFuns) (block : Array U8 32#usize)\n    (row : aspis_core.r0_transcript.CircleRow) :\n    (selected ops).op259 block row = (do\n      let point \u2190 PV_CB_ShippedOp259.aspis_r1_cost_probe.sampler.circle_sample\n        block (encodeRow row)\n      ok (decodePoint point)) := rfl\n\n#print axioms op259_source\nend R1Z.PV_CB_Op259Exact\n"
+      }
+    ]
+  },
+  "codex/pv-cb3-20261026": {
+    "revision": "80ef4e8e3daa17e1966559bd69fb946eb5eeaf07",
+    "hits": []
+  }
+}
