@@ -11979,3 +11979,22 @@ completion, never extend. Launched pv-dudect-run2 (same branch) with that order 
 preregistered plan V374-PLAN-v2. Four live slots: batch1b, runjoin17, batch2, dudect-run2 (two held:
 disk 25 GiB, and batch 3 waits for batch 2's timing pre-check). Rows removed outright: 0. Privacy target
 not yet established.
+
+## D294 (Stream B) 2026-10-27 14:40 UTC: second V374 window aborted on an unreadable sensor; build host CPU at its thermal ceiling under load; monitor amended; one pre-approved window
+
+pv-dudect-run2 (`codex/pv-dudect-20261027`, b3598471ee; evidence only). The corrected order worked:
+marker created 14:30:17.508 UTC (fixed expiry 14:55:17.508), host drained 14:31:47.538, admission
+granted, both binary hashes matched; then the harness's fail-closed thermal monitor aborted on
+`[Errno 61] No data available` from thermal_zone6/temp (iwlwifi); marker removed 14:31:47.697
+(verified absent; Stream A held about 90 s and told). 12 experiments, 0 samples, no verdict. Lead check
+of the host sensors: thermal_zone5 x86_pkg_temp = 100 °C and TCPU 100.05 °C under the current load
+(acpitz zone1 101 °C): the build-host CPU runs at its thermal ceiling and is very likely throttling;
+timing samples taken right after a drain would be biased until it cools (the paired, alternating
+design of the op223 gate largely cancels this; dudect would not). Noted for the owner as a host-health
+fact. PLAN AMENDMENT v2.1 (monitoring only; classes, counts, kernels, thresholds unchanged): read only
+x86_pkg_temp and coretemp; exclude unreadable zones; after the drain wait until the package is below
+80 °C (≤ 5 min) before sampling; abort an experiment above 95 °C; record temperature and frequency per
+experiment; dry-test 60 s outside any window. Stream A pre-approved ONE window (until = start + 1500 s;
+no further window within 30 minutes of it). Launched pv-dudect-run3 with drain ≤ 5 min, cool-down ≤ 5 min,
+then the 15-minute plan; an abort ends the job without a retry. Four live slots: batch1b, runjoin17,
+batch2, dudect-run3. Rows removed outright: 0. Privacy target not yet established.
