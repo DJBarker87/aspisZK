@@ -1,0 +1,55 @@
+--- a/crates/aspis-r1-cost-probe/src/sampler.rs
++++ b/crates/aspis-r1-cost-probe/src/sampler.rs
+@@ -232,3 +232,5 @@
+ #[cfg(kani)]
+ #[path = "LPa_sampler.rs"]
+ mod LPa_sampler;
++
++#[cfg(kani)] mod LPp_capture { include!("LPp_capture.rs"); }
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPp_capture.rs
+@@ -0,0 +1,44 @@
++// Native closure control only: translated children are arbitrary typed outcomes.
++use super::*;
++use aspis_core::circle::CirclePointError;
++static mut LPp_RESULT: Option<Result<SecureCirclePoint, CirclePointError>> = None;
++static mut LPp_FALLBACK: Option<SecureCirclePoint> = None;
++static mut LPp_EXPECTED: usize = 0;
++static mut LPp_CALLS: usize = 0;
++fn q() -> QM31 {
++    let v: [u32; 4] = kani::any();
++    QM31 { c0: CM31::new(M31(v[0]), M31(v[1])), c1: CM31::new(M31(v[2]), M31(v[3])) }
++}
++fn point() -> SecureCirclePoint { SecureCirclePoint { x: q(), y: q() } }
++fn LPp_sample(_: &[u8;32]) -> QM31 { QM31::ZERO }
++fn LPp_mapper(_: QM31) -> Result<SecureCirclePoint, CirclePointError> {
++    unsafe { LPp_RESULT.unwrap() }
++}
++fn LPp_fallback(sample: usize) -> SecureCirclePoint {
++    unsafe {
++        assert_eq!(sample, LPp_EXPECTED);
++        LPp_CALLS += 1;
++        LPp_FALLBACK.unwrap()
++    }
++}
++#[kani::proof]
++#[kani::stub(super::qm31_sample, LPp_sample)]
++#[kani::stub(aspis_core::circle::secure_ood_circle_point_from_parameter, LPp_mapper)]
++#[kani::stub(aspis_core::transcript::circle_fallback_point, LPp_fallback)]
++fn LPp_row_capture() {
++    let second: bool = kani::any();
++    let row = if second { CircleRow::Second } else { CircleRow::First };
++    let success: bool = kani::any();
++    let singular: bool = kani::any();
++    let p = point(); let fallback = point();
++    let r = if success { Ok(p) } else if singular { Err(CirclePointError::SingularParameter) }
++        else { Err(CirclePointError::ParameterInCm31Subfield) };
++    unsafe { LPp_RESULT = Some(r); LPp_FALLBACK = Some(fallback);
++        LPp_EXPECTED = usize::from(second); LPp_CALLS = 0; }
++    let out = super::circle_sample(&[0;32], row);
++    assert_eq!(out, if success { p } else { fallback });
++    unsafe { assert_eq!(LPp_CALLS, usize::from(!success)); }
++    kani::cover!(success && second);
++    kani::cover!(!success && singular && !second);
++    kani::cover!(!success && !singular && second);
++}
