@@ -63,4 +63,30 @@ theorem fixture_consumers {F : Subfield K} (B : PackBasis F) :
   ⟨PV_RunJoin_HonestConsumer26.at_honest_input B _ transfer rfl,
    PV_RunJoin_HonestConsumer26.at_honest_input B _ withdrawal rfl⟩
 #print axioms fixture_consumers
+/-- Native chosen-public association for the original returned transfer. -/
+theorem transfer_public : (statement transfer).1 =
+    R1J.SpendWitnessMap.mapPub (PV_RunJoin_FixtureRecords.fixturePublic false) := by
+  change source_honest.public transfer = _
+  rw [public_eq transfer]
+  change R1J.SpendWitnessMap.mapPub (PV_Src_Public.canonicalPublic
+    (PV_Src_NativeInput.publicInput PV_RunJoin_AdmittedCarrier23.transfer)) = _
+  rw [PV_RunJoin_AdmittedCarrier23.transfer_public, PV_RunJoin_CanonicalPublic21.transfer]
+#print axioms transfer_public
+
+/-- Native chosen-public association for the original returned withdrawal. -/
+theorem withdrawal_public : (statement withdrawal).1 =
+    R1J.SpendWitnessMap.mapPub (PV_RunJoin_FixtureRecords.fixturePublic true) := by
+  change source_honest.public withdrawal = _
+  rw [public_eq withdrawal]
+  change R1J.SpendWitnessMap.mapPub (PV_Src_Public.canonicalPublic
+    (PV_Src_NativeInput.publicInput PV_RunJoin_AdmittedCarrier23.withdrawal)) = _
+  rw [PV_RunJoin_AdmittedCarrier23.withdrawal_public, PV_RunJoin_CanonicalPublic21.withdrawal]
+#print axioms withdrawal_public
+
+/-- Discharges both named V047 Association fields on these native publics.
+This is not an assertion that arbitrary public fibres or runtime worlds exist. -/
+theorem association : PV_RunJoin_CanonicalFixtures.Association
+    (statement transfer) (statement withdrawal) := ⟨transfer_public,withdrawal_public⟩
+#print axioms association
+
 end R1Z.PV_RunJoin_HonestFixtures26
