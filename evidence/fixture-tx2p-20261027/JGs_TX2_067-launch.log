@@ -1,0 +1,53 @@
+{"attempt": "JGs_TX2_067", "exit_status": 1, "wall_seconds": 4.40361318201758, "peak_rss_kib": "5945756", "swaps": "0", "print_axioms": ["'AspisR1.JGs_Inactive.coefficients' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGs_InactiveCoefficients.lean:79:2: error: Tactic `apply` failed: could not unify the conclusion of `JGo_TX2_LoopChain.source
+  (fun t => FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f t.1 t.2) coefficientStates 64 cs64`
+  loop (fun t => FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f t.1 t.2) (coefficientStates 0) =
+    ok cs64
+with the goal
+  loop
+      (fun x =>
+        match x with
+        | (iter1, coefficients1) =>
+          FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f iter1 coefficients1)
+      ({ start := 0#usize, «end» := 64#usize },
+        Array.repeat 12#usize FIo_Native.aspis_core.field.wide_exact.WideExact
+...
+: Tactic `apply` failed: could not unify the conclusion of `JGo_TX2_LoopChain.source
+  (fun t => FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f t.1 t.2) coefficientStates 64 cs64`
+  loop (fun t => FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f t.1 t.2) (coefficientStates 0) =
+    ok cs64
+with the goal
+  loop
+      (fun x =>
+        match x with
+        | (iter1, coefficients1) =>
+          FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f iter1 coefficients1)
+      ({ start := 0#usize, «end» := 64#usize },
+        Array.repeat 12#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok cs64
+
+Note: The full type of `JGo_TX2_LoopChain.source
+  (fun t => FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f t.1 t.2) coefficientStates 64
+  cs64` is
+  (∀ i < 64,
+      FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f (coefficientStates i).1
+          (coefficientStates i).2 =
+        ok (cont (coefficientStates (i + 1)))) →
+    FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f (coefficientStates 64).1
+          (coefficientStates 64).2 =
+        ok (done cs64) →
+      loop (fun t => FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f t.1 t.2)
+          (coefficientStates 0) =
+        ok cs64
+
+⊢ loop
+      (fun x =>
+        match x with
+        | (iter1, coefficients1) =>
+          FIo_Native.weights.s2_grouped_inactive_pair_loop0.body JGq_PairShape.f iter1 coefficients1)
+      ({ start := 0#usize, «end» := 64#usize },
+        Array.repeat 12#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok cs64
+'AspisR1.JGs_Inactive.coefficients' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf780b9225d0b422a9a45aa06a8e39b3c.scope; invocation ID: c62fd46c1c224f85a22531afaea1f662
