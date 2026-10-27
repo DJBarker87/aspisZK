@@ -1,0 +1,20 @@
+--- evidence/replay-tops3-20261027/RPv_FIr_FinishComparison.lean
++++ evidence/replay-deployed2-20261027/RPx_FIr_FinishComparison.lean
+@@ -41,7 +41,7 @@
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+     (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
+     (obs : Option (verifier.Phase → Result Unit)) (out : r1_semantic.Verified H)
+-    (hfinish : FinishModel.finish R B D pub pre before challenges obs = ok (.Ok out)) :
++    (hfinish : FinishModel.finish R B D pub pre before challenges (RPz7_PhaseIso.observerToFirst obs) = ok (.Ok out)) :
+     ∃ running afterRounds terminal mask16 mask10 claim0 claim27 mask
+         etaTerminal masked extra28,
+       RoundModel.rounds R D pre before = ok (.Ok (running, out.alpha, afterRounds)) ∧
+@@ -58,7 +58,7 @@
+   obtain ⟨running, afterRounds, record25, record26, z0, after25, z1, after26,
+       hrounds, hchallenges, hstate, htranscript, hclaims, hrecord25, hextra,
+       hcircle25, hrecord26, hbeforeZ1, hcircle26, hz⟩ :=
+-    S1SemanticFinishBounds.finish_success R B D pub pre before challenges obs out hfinish
++    S1SemanticFinishBounds.finish_success R B D pub pre before challenges (RPz7_PhaseIso.observerToFirst obs) out hfinish
+   have h := hfinish
+   unfold FinishModel.finish at h
+   rw [hrounds] at h
