@@ -4234,6 +4234,106 @@
       "timeout": null,
       "sampled_cgroup_observation": null,
       "receipt": "evidence/pv-cb-20261026/kani-resume5-pole1024-900-q01/collected-receipt.json"
+    },
+    {
+      "name": "kani-resume5-pole1024-900-q02",
+      "charged": false,
+      "target": null,
+      "exit": null,
+      "wall": null,
+      "gnu_time_peak_rss_kib": null,
+      "gnu_time_swap": null,
+      "source_revision": "e317106810880296ac78a86b1ab6705ba1a596e1",
+      "print_axioms": "N/A native gate or extraction; Lean audits have separate numbered receipts",
+      "limits": null,
+      "harness": null,
+      "unwind": null,
+      "timeout": null,
+      "sampled_cgroup_observation": null,
+      "receipt": "evidence/pv-cb-20261026/kani-resume5-pole1024-900-q02/collected-receipt.json"
+    },
+    {
+      "name": "kani-resume5-pole1024-900-q03",
+      "charged": true,
+      "target": [
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "timeout",
+        "900",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb-20261026/source-kani-target",
+        "RUSTFLAGS=--cfg kani",
+        "/home/dombarker/.cargo/bin/cargo",
+        "kani",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-cb-20261026/step-proof/Cargo.toml",
+        "--lib",
+        "--harness",
+        "checks::pole1024_reference",
+        "--solver",
+        "kissat",
+        "--output-format",
+        "terse",
+        "-j",
+        "4"
+      ],
+      "exit": "124",
+      "wall": "15:00.00",
+      "gnu_time_peak_rss_kib": "15480",
+      "gnu_time_swap": "0",
+      "source_revision": "e317106810880296ac78a86b1ab6705ba1a596e1",
+      "print_axioms": "N/A Kani; separate Lean source/axioms receipts",
+      "limits": {
+        "MemoryHigh": "6G",
+        "MemoryMax": "8G",
+        "MemorySwapMax": 0,
+        "TasksMax": 64
+      },
+      "harness": "pole1024_reference",
+      "unwind": 1026,
+      "timeout": 900,
+      "sampled_cgroup_observation": {
+        "unit": "run-rdb9d8d02c6d44ea6bbca767eba734cb9.scope",
+        "scope_exists": true,
+        "during_run": true,
+        "processes": [
+          {
+            "pid": 4145072,
+            "command": "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-cb-20261026/kani-resume5-pole1024-900-q03/time.log taskset --cpu-list 0-3 timeout 900 env PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb-20261026/source-kani-target RUSTFLAGS=--cfg kani /home/dombarker/.cargo/bin/cargo kani --manifest-path /home/dombarker/project-offloads/codex-pv-cb-20261026/step-proof/Cargo.toml --lib --harness checks::pole1024_reference --solver kissat --output-format terse -j 4 "
+          },
+          {
+            "pid": 4145075,
+            "command": "timeout 900 env PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb-20261026/source-kani-target RUSTFLAGS=--cfg kani /home/dombarker/.cargo/bin/cargo kani --manifest-path /home/dombarker/project-offloads/codex-pv-cb-20261026/step-proof/Cargo.toml --lib --harness checks::pole1024_reference --solver kissat --output-format terse -j 4 "
+          },
+          {
+            "pid": 4145085,
+            "command": "/home/dombarker/.cargo/bin/cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-pv-cb-20261026/step-proof/Cargo.toml --lib --harness checks::pole1024_reference --solver kissat --output-format terse -j 4 "
+          },
+          {
+            "pid": 4145124,
+            "command": "cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-pv-cb-20261026/step-proof/Cargo.toml --lib --harness checks::pole1024_reference --solver kissat --output-format terse -j 4 "
+          },
+          {
+            "pid": 4145334,
+            "command": "cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 1026 --external-sat-solver kissat --slice-formula /home/dombarker/project-offloads/codex-pv-cb-20261026/source-kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_cb_mask_steps-d23250d1ffef1039__RNvNtCs5pQaoLNQBkM_16pv_cb_mask_steps6checks18pole1024_reference.out --verbosity 9 --json-ui "
+          }
+        ],
+        "metrics": {
+          "memory.current": "6410088448",
+          "memory.peak": "6410088448",
+          "memory.swap.current": "0",
+          "memory.swap.peak": "0",
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+        },
+        "scope_absent_or_empty": false
+      },
+      "receipt": "evidence/pv-cb-20261026/kani-resume5-pole1024-900-q03/collected-receipt.json"
     }
   ]
 }

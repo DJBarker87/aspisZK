@@ -21,7 +21,7 @@ for run in t.get('kani_runs',[]):
  log=(p.parent/'output.log').read_text();code=int(r['exit'])
  verdict='timeout; no verdict' if code==124 else 'VERIFIED' if code==0 and 'VERIFICATION:- SUCCESSFUL' in log and 'successfully verified harnesses' in log else 'inspect failure; no row credit'
  rows.append((h,str(bound),str(r.get('timeout_seconds',run.get('timeout_seconds',900))),r['wall'],verdict))
-s='# Resume5 native gates (live)\n\n'
+s=('# Resume5 native gates (final)' if t['kani_charged']==12 and all(x.get('state')=='complete' for x in t.get('kani_runs',[])) else '# Resume5 native gates (live)')+'\n\n'
 s+='|harness|unwind|timeout s|wall|verdict|\n|---|---:|---:|---|---|\n'
 for row in rows:s+='|'+'|'.join(row)+'|\n'
 s+='\nA timeout is neither a proof nor a counterexample. Each named directory retains target argv, source/input hashes, caps, exit, GNU time metrics and separate sampled cgroup observations when available. Timeout GNU RSS is wrapper rusage, not an invented final aggregate peak. Source/Lean axioms receipts are separate.\n'

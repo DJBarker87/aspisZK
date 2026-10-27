@@ -8,7 +8,7 @@ assert t['lean_charged']==100 and t['kani_charged']==12
 assert all(x['state']=='complete' for x in t['kani_runs'])
 files=set();units=[]
 for run in t['kani_runs']:
- p=ev/run['name'];c=json.loads((p/'cleanup.json').read_text());assert c['scope_absent_or_empty'];units.append(c['unit'])
+ p=ev/run['name'];c=json.loads((p/'cleanup.json').read_text());assert c.get('scope_absent_or_empty') or (c.get('scope_exists_after') is False and not c.get('processes_after'));units.append(c['unit'])
  s=p/'cgroup-sample.json'
  if s.exists():
   r=json.loads(s.read_text())

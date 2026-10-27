@@ -12,7 +12,7 @@ u=m[1];c=Path('/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.s
 r={'unit':u,'scope_exists':c.exists(),'during_run':MODE=='sample'}
 r['processes']=[]
 if c.exists():
- r['metrics']={x:(c/x).read_text().strip() for x in ['memory.current','memory.peak','memory.swap.current','memory.swap.peak','memory.high','memory.max','memory.swap.max','pids.max'] if (c/x).exists()}
+ r['metrics']={x:(c/x).read_text().strip() for x in ['memory.current','memory.peak','memory.swap.current','memory.swap.peak','memory.high','memory.max','memory.swap.max','pids.max','memory.events'] if (c/x).exists()}
  for pid in (c/'cgroup.procs').read_text().split():
   try:r['processes'].append({'pid':int(pid),'command':(Path('/proc')/pid/'cmdline').read_bytes().replace(b'\\0',b' ').decode(errors='replace')})
   except FileNotFoundError:pass

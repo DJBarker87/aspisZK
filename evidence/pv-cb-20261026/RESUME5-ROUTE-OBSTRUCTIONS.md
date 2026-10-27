@@ -43,3 +43,8 @@ consumer source files are byte-identical to revision237e13556180d2ce0320a2760f89
 Rows23/73; endpoint premise removals0. New helper conditions are local theorem
 hypotheses, not new endpoint premises. Fallback native op117/circle/pole gates
 continue under the authorized12-run budget; the live tally is authoritative.
+
+
+Final native status:100 Lean attempts and12 Kani runs are exhausted. All12
+native gates exit124 at their recorded180/900s limits. No source-row theorem
+or endpoint premise was discharged. See final live status/receipts table.
