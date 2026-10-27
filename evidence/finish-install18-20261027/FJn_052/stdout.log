@@ -1,0 +1,57 @@
+FJn_TerminalModel.lean:51:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIr_NativeValue.decode out
+in the target expression
+  embed (decode out) = model p claims point zc lambda chi theta mu
+
+p : SemPub
+claims : Std.Array field.QM31 84#usize
+point zc : Std.Array field.QM31 10#usize
+lambda chi theta mu out : field.QM31
+c1 : Std.Array field.QM31 16#usize
+mask : Std.Array field.QM31 10#usize
+g : field.QM31
+hc : canonical claims
+hp : canonical point
+hz : canonical zc
+hlambda : Canon lambda
+hchi : Canon chi
+htheta : Canon theta
+hmu : Canon mu
+bounds : FJa_PublicBounds.Bounds p
+run : FIr_TerminalTrace.parts p claims point lambda chi theta zc mu = ok (core.result.Result.Ok (out, c1, mask, g))
+comp h active : field.QM31
+called :
+  FIr_TerminalTrace.composition p claims point lambda chi theta =
+    ok (core.result.Result.Ok (comp, c1, mask, g, h, active))
+hh : FIr_NativeValue.Canon h
+finish :
+  FIr_NativeValue.Canon comp →
+    FIr_NativeValue.Canon active →
+      FIr_NativeValue.Canon out ∧
+        FIr_NativeValue.decode out =
+          FIr_TerminalValue.formula
+            (R0P.SemSource.eqValue (fun j => FIr_NativeArray.value zc ↑j) fun j => FIr_NativeArray.value point ↑j)
+            (FIr_NativeValue.decode comp) (FIr_NativeValue.decode mu) (FIr_NativeValue.decode h)
+            (FIr_NativeValue.decode active)
+cm :
+  Canon comp ∧
+    Canon active ∧
+      embed (decode comp) =
+        ∑ i,
+          embed (decode theta) ^ ↑i *
+            R0P.SemSource.laneAt (FJn_CompositionModel.pub p) (embed (decode lambda)) (embed (decode chi))
+              ConcretePackBasis.basis (FJn_CompositionModel.openings claims) (embed (FIv_NativeArray.value claims 26))
+              (FJn_CompositionModel.selector point) i
+av : Canon active ∧ decode active = R0P.SemSource.activeAt (decoded point)
+hs : decode h = FIv_NativeArray.value claims 26
+result :
+  FIr_NativeValue.Canon out ∧
+    FIr_NativeValue.decode out =
+      FIr_TerminalValue.formula
+        (R0P.SemSource.eqValue (fun j => FIr_NativeArray.value zc ↑j) fun j => FIr_NativeArray.value point ↑j)
+        (FIr_NativeValue.decode comp) (FIr_NativeValue.decode mu) (FIr_NativeValue.decode h)
+        (FIr_NativeValue.decode active)
+ps : (fun j => FIv_NativeArray.value point ↑j) = decoded point
+zs : (fun j => FIv_NativeArray.value zc ↑j) = decoded zc
+⊢ embed (decode out) = model p claims point zc lambda chi theta mu
+'AspisR1.FJn_TerminalModel.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

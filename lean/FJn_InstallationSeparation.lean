@@ -19,6 +19,7 @@ theorem not_uniform {C : Type} (err : C) (c : Configuration FIo_Install.W C)
     (challenges : AspisR1PublicPreparation.r1_wire.Challenges) :
     ∃ chosen : Configuration FIo_Install.W C,
       (FIp_Install.configuration err chosen r).boundaries.terminal≠FIq_Terminal.terminal := by
+  classical
   let z:=AspisR1PublicPreparation.aspis_core.field.QM31.ZERO
   let o:=AspisR1PublicPreparation.aspis_core.field.QM31.ONE
   by_cases hz : FIq_Terminal.terminal pub claims alpha challenges=ok (.Ok z)
