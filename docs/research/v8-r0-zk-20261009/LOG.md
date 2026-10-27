@@ -11182,3 +11182,19 @@ Lean, no Kani): apply the patch, extract the applied host function with the unch
 op223_source and the bridge that discharges V164's P_source_p6, run gates (a)-(c), write the timing plan.
 Six slots: runjoin12, optb, inv, srcid9, cblib2, op223. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D258 (Stream B) 2026-10-27 08:05 UTC: inversion round 1 merged (V380 open, no leak found); inv2 launched
+
+pv-inv (`codex/pv-inv-20261027`, research-based; 100/100 Lean = 79 successful, 10 Kani = 9 passed / 1 CLI
+rejection; final three audits standard axioms over 145 declarations, peak 4.12 GB, swap 0; no
+crates/programs change; no forbidden tokens) merged into research (4bdd2679c8); worktree reused, branch
+deleted. Inventory of every inversion site reachable from the deployed caller with operand provenance
+(evidence/pv-inv-20261027/INVENTORY.md). Proved locally: guarded packed operands, extracted QM31/CM31
+norm nonzero conditions, interpolation denominators, registry-slot uniqueness, interleaved packing. No
+checked witness-dependent zero (no leak found). V380-inversion OPEN: the native registry enumeration,
+tuple-bank reads, tags and active masks are not yet bound to the model, and containment of the zero
+events in the headline's existing bad-event union is not yet instantiated. Launched pv-inv2 (new branch
+`codex/pv-inv2-20261027` from research in the same worktree; IDs 43600-43899, 100 Lean / 6 Kani for
+control only): the native bindings, then containment against a named term of the existing bound, or a
+checked counterexample for the owner. Six slots: runjoin12, optb, srcid9, cblib2, op223, inv2. Rows
+removed outright: 0. Privacy target not yet established.
