@@ -8,16 +8,16 @@
 +#[cfg(kani)] mod LPe_replay;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/LPe_replay.rs
-@@ -0,0 +1,117 @@
+@@ -0,0 +1,121 @@
 +use aspis_core::field::{WideExact as E,QM31 as K,M31,CM31};
 +use crate::{fast_pairing,weights::{field,powers}};
 +use alloc::vec::Vec;
 +use aspis_core::{Digest32,circle::SecureCirclePoint};
 +use crate::{verifier::{self,Prepared,Accumulator},transport::Variant};
 +const P:u32=0x7fff_ffff;
-+fn any_k()->K {let x:[u32;4]=kani::any();K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
-+fn limbs(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
-+fn any_e()->E {let x:[u32;8]=kani::any();for v in x{kani::assume(v<P);}E::from_limbs(x).unwrap()}
++pub(crate) fn any_k()->K {let x:[u32;4]=kani::any();K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++pub(crate) fn limbs(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++pub(crate) fn any_e()->E {let x:[u32;8]=kani::any();for v in x{kani::assume(v<P);}E::from_limbs(x).unwrap()}
 +fn partial(x:u64)->u64{(x&(P as u64)).wrapping_add(x>>31)}
 +pub(crate) fn raw(x:[u32;4],y:[u32;4])->[u64;4]{
 + let [a,b,c,d]=x.map(u64::from);let [e,f,g,h]=y.map(u64::from);
@@ -100,7 +100,7 @@
 + let mut weights=Vec::with_capacity(64);for _ in 0..64{weights.push(any_k());}
 + let a=Accumulator{weights,rhs:any_e(),power:any_k(),next:kani::any()};(p,a)
 +}
-+#[derive(Clone,Copy)] struct Ordered<'a>{count:&'a core::cell::Cell<usize>,proof:&'a[u8],public:&'a[u8],answers:[[u8;32];3]}
++#[derive(Clone,Copy)] pub(crate) struct Ordered<'a>{pub(crate) count:&'a core::cell::Cell<usize>,pub(crate) proof:&'a[u8],pub(crate) public:&'a[u8],pub(crate) answers:[[u8;32];3]}
 +impl Digest32 for Ordered<'_>{fn digest(&self,parts:&[&[u8]])->[u8;32]{let i=self.count.get();assert!(i<3);match i{0=>{assert_eq!(parts.len(),1);assert_eq!(parts[0],self.proof);},1=>{assert_eq!(parts.len(),1);assert_eq!(parts[0],self.public);},2=>{assert_eq!(parts.len(),2);assert_eq!(parts[0],b"UNPROVED:R1:checkpoint");assert_eq!(parts[1].len(),1736);},_=>unreachable!()};self.count.set(i+1);self.answers[i]}}
 +fn checkpoint_stage(stage:usize){let(p,a)=full_input();let proof:[u8;3]=kani::any();let public:[u8;5]=kani::any();let answers:[[u8;32];3]=kani::any();let count=core::cell::Cell::new(0);let out=verifier::checkpoint(&p,&a,&proof,&public,Ordered{count:&count,proof:&proof,public:&public,answers});assert_eq!(count.get(),3);assert_eq!(out.len(),1768);
 + let j:usize=kani::any();match stage{
@@ -126,3 +126,23 @@
 +#[kani::proof] #[kani::unwind(70)] fn LPe_cp_return(){checkpoint_stage(8)}
 +// Split timed-out replay_bytes: three small writers; separate six-wide/field.
 +#[kani::proof] #[kani::unwind(34)] fn LPe_replay_small_bytes(){LPe_scalar_bytes();LPe_wide_bytes();LPe_scalar_frame();}
++// Coordinate split of the inherited powers_three timeout; arbitrary full E.
++#[kani::proof] #[kani::unwind(10)] fn LPe_powers_three_limb0(){let x=any_e();let actual=powers::<3>(x);let p1=E::ONE.mul(x);let p2=p1.mul(x);assert_eq!(actual[2].to_limbs()[0],p2.to_limbs()[0]);kani::cover!(x.to_limbs()[7]!=0);}
++// Header/source-cut candidate is kept separate from full native composition.
++#[kani::proof] #[kani::unwind(18)] fn LPe_header_cut(){let next:usize=kani::any();let mut out=Vec::with_capacity(1768);out.extend_from_slice(b"R1P2CKP2");out.extend_from_slice(&[Variant::S2.tag(),next as u8,1,0,0,0,0,0]);let j:usize=kani::any();kani::assume(j<16);let expected=if j<8{b"R1P2CKP2"[j]}else{[Variant::S2.tag(),next as u8,1,0,0,0,0,0][j-8]};assert_eq!(out.len(),16);assert_eq!(out[j],expected);kani::cover!(next>255);}
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -122,6 +122,13 @@
+         }
+         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+     }
++    #[cfg(kani)] mod LPe_canonical {
++      use super::*;
++      fn q()->Q {let x:[u32;4]=kani::any();for a in x{kani::assume(a<P);}Q(x)}
++      #[kani::proof] #[kani::unwind(6)] fn LPe_raw(){let a=q();let b=q();assert_eq!(a.raw(b),crate::LPe_replay::raw(a.limbs(),b.limbs()));kani::cover!(a.0[3]!=0 && b.0[3]!=0);}
++      #[kani::proof] #[kani::unwind(6)] fn LPe_push(){let a=q();let b=q();let sums:[u64;4]=kani::any();let mut d=Dot{sums};d.push(a,b);let raw=crate::LPe_replay::raw(a.limbs(),b.limbs());for j in 0..4{assert_eq!(d.sums[j],sums[j].wrapping_add((raw[j]&u64::from(P)).wrapping_add(raw[j]>>31)));}kani::cover!(sums[0]==u64::MAX);}
++      #[kani::proof] #[kani::unwind(6)] fn LPe_finish(){let sums:[u64;4]=kani::any();let d=Dot{sums};let actual=d.finish().limbs();let expected=sums.map(crate::LPe_replay::reduce);for j in 0..4{assert_eq!(actual[j],expected[j]);}kani::cover!(sums[3]==u64::MAX);}
++    }
+ }
+ 
+ 

@@ -1,0 +1,48 @@
+{"attempt": "LPe_K009", "exit_status": 1, "wall_seconds": 92.04759692895459, "peak_rss_kib": "662548", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+cost-probe/src/LPe_replay.rs:115:39
+    |
+115 | #[kani::proof] #[kani::unwind(70)] fn LPe_cp_return(){checkpoint_stage(8)}
+    |                                       ^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpe_cp_return`
+
+warning: function `LPe_replay_small_bytes` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/LPe_replay.rs:117:39
+    |
+117 | #[kani::proof] #[kani::unwind(34)] fn LPe_replay_small_bytes(){LPe_scalar_bytes();LPe_wide_bytes();LPe_scalar_frame();}
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpe_replay_small_bytes`
+
+warning: function `LPe_powers_three_limb0` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/LPe_replay.rs:119:39
+    |
+119 | ...i::unwind(10)] fn LPe_powers_three_limb0(){let x=any_e();let actual=powers::<3>(x);let p1=E::ONE.mul(x);let p2=p1.mul(x);assert_...
+    |                      ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpe_powers_three_limb0`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.91s
+Checking harness LPe_replay::LPe_powers_three_limb0...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - LPe_replay::LPe_powers_three_limb0
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rb3e796c682da439f955945b6b67fb9f8.scope; invocation ID: 83e5a7a1744046b0940a7c2eee902e19
