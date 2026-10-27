@@ -19,3 +19,13 @@ irreducible, so definitional comparison did not identify it with the explicit
 cohort constant, and one proof hit the default recursion limit. L004 splits out
 scalar namespace equalities with explicit constant rewrites. No recursion or
 heartbeat option is raised. All error-recovery sorryAx prints are excluded.
+
+Kani wrapper LPq_kani.py derives from LPm_run.py with own workspace/prefix,
+unchanged graph validation and byte-identical shared launcher. First G001
+metadata succeeded, then our wrapper used the old LPm_src lock pathname and
+stopped before any Kani launch. Corrected it to LPq_src and resumed from the
+existing G001 receipt, revalidating its complete frozen graph before K001.
+No failed prover rerun or validation weakening. Transport now retries read-only
+and prelaunch 255, never reissues a submitted scope. The metadata JSON parser
+retains LPm's diagnostic-prefix handling. K001 has identical frozen lock hashes
+before/after, offline optimized execution and the required exact capped scope.

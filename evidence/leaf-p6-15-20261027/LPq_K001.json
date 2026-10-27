@@ -1,0 +1,60 @@
+{
+  "sources": [
+    "LPq_src/Cargo.lock",
+    "LPq_src/crates/aspis-r1-cost-probe/src/LPq_verifier.rs",
+    "LPq_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "LPq_src/crates/aspis-r1-cost-probe/src/LPi_contracts.rs",
+    "LPq_src/crates/aspis-r1-cost-probe/src/LPm_verifier.rs",
+    "LPq_src/crates/aspis-r1-cost-probe/src/LPi_verifier.rs",
+    "LPq_src/crates/aspis-r1-cost-probe/src/fast_pairing/canonical/LPm_pairing.rs",
+    "LPq_src/crates/aspis-core/src/field.rs",
+    "LPq_src/crates/aspis-core/src/field/wide_exact.rs",
+    "LPq_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+    "LPq_src/crates/aspis-r1-cost-probe/src/verifier.rs"
+  ],
+  "source_revision": "a271d66945f92f0b34f78aceceb9b36702150a9b",
+  "source_tree_dirty": true,
+  "env": {
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-leaf-p6-15-20261027/LPq_tmp",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "LPq_K001",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-15-20261027/LPq_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-15-20261027/LPq_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::LPq_verifier::weighted_operands",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation, then named solver stage weighted_operands",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "LPq_K001-graph-check.json"
+  },
+  "reservation_retries": 0
+}
