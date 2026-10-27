@@ -68,7 +68,7 @@ pub fn join_bytes_reference(base: &[u8], path: &[u8]) -> Vec<u8> {
 pub fn path_owned_reference(p: std::path::PathBuf) -> std::path::PathBuf { p }
 
 pub fn array_qm31_reference(v: &[aspis_core::field::QM31]) -> Option<[aspis_core::field::QM31;1024]> {
-    array_reference(v,aspis_core::field::QM31::ZERO)
+    array_reference(v,aspis_core::field::QM31 {c0:aspis_core::field::CM31 {a:aspis_core::field::M31(0),b:aspis_core::field::M31(0)},c1:aspis_core::field::CM31 {a:aspis_core::field::M31(0),b:aspis_core::field::M31(0)}})
 }
 pub fn split_owned_reference(data: &[u8], size: usize) -> (Vec<Vec<u8>>,Vec<u8>) {
     let count=data.len()/size;
@@ -81,4 +81,14 @@ pub fn split_owned_reference(data: &[u8], size: usize) -> (Vec<Vec<u8>>,Vec<u8>)
     let mut tail=Vec::new();let mut k=count*size;
     while k<data.len() {tail.push(data[k]);k+=1;}
     (blocks,tail)
+}
+// Complete Result reference on the concrete Vec<QM31> instantiation.
+// A shared input is sufficient for the pure source-value law; the error value
+// is an owned copy with identical elements, and every output variant is kept.
+pub fn array_full_reference(v: &Vec<aspis_core::field::QM31>) -> Result<[aspis_core::field::QM31;1024],Vec<aspis_core::field::QM31>> {
+    match array_qm31_reference(v) { Some(a)=>Ok(a),None=>Err(v.clone()) }
+}
+// Owned input preserves the complete error branch without a cloning callback.
+pub fn array_result_reference(v: Vec<aspis_core::field::QM31>) -> Result<[aspis_core::field::QM31;1024],Vec<aspis_core::field::QM31>> {
+    match array_qm31_reference(&v) {Some(a)=>Ok(a),None=>Err(v)}
 }

@@ -436,6 +436,9 @@ mod pv_cblib_library_checks {
         while i<1024 {out[i]=v[i];i+=1;}
         Some(out)
     }
+    fn array_full_reference(v: Vec<QM31>) -> Result<[QM31;1024],Vec<QM31>> {
+        match array_reference(&v) {Some(a)=>Ok(a),None=>Err(v)}
+    }
     fn arbitrary_q() -> QM31 {
         QM31 {c0:aspis_core::field::CM31 {a:M31(kani::any()),b:M31(kani::any())},
               c1:aspis_core::field::CM31 {a:M31(kani::any()),b:M31(kani::any())}}
@@ -449,22 +452,23 @@ mod pv_cblib_library_checks {
             let mut input=[QM31::ZERO;1024];
             for j in 0..1024 {input[j]=arbitrary_q();}
             let v=Vec::from(input);
-            let reference=array_reference(&v);
+            let reference=array_full_reference(v.clone());
             let native:Result<[QM31;1024],Vec<QM31>>=v.try_into();
             match (native,reference) {
-                (Ok(a),Some(b)) => assert_eq!(a.get(i),b.get(i)),
+                (Ok(a),Ok(b)) => assert_eq!(a.get(i),b.get(i)),
                 _ => unreachable!(),
             }
         } else {
             let n:usize=kani::any();kani::assume(n<=2);
             let values=[arbitrary_q(),arbitrary_q()];let mut v=Vec::new();
             for j in 0..n {v.push(values[j]);}
-            let reference=array_reference(&v);
+            let reference=array_full_reference(v.clone());
             let native:Result<[QM31;1024],Vec<QM31>>=v.try_into();
             match (native,reference) {
-                (Err(a),None) => {
+                (Err(a),Err(b)) => {
                     assert_eq!(a.len(),n);
-                    assert_eq!(a.get(i),if i<n {Some(&values[i])}else{None});
+                    assert_eq!(a.len(),b.len());
+                    assert_eq!(a.get(i),b.get(i));
                 },
                 _ => unreachable!(),
             }

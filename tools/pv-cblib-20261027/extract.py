@@ -5,6 +5,8 @@ root=Path(__file__).resolve().parents[2];stage=sys.argv[1]; variant=sys.argv[2] 
 assert stage in ('charon','aeneas')
 base='/home/dombarker/project-offloads/codex-pv-cblib-20261027';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy';pinned='/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools'
 entries={
+'op36-owned-opt':('pv_cblib_source::array_result_reference','pv_cblib_source::array_reference+pv_cblib_source::array_qm31_reference+pv_cblib_source::array_result_reference','PV_CBL_Op36OwnedReference'),
+'op36-full-opt':('pv_cblib_source::array_full_reference','pv_cblib_source::array_reference+pv_cblib_source::array_qm31_reference+pv_cblib_source::array_full_reference+aspis_core::field::QM31::ZERO+aspis_core::field::{impl core::clone::Clone for aspis_core::field::QM31}::clone+aspis_core::field::{impl core::clone::Clone for aspis_core::field::CM31}::clone+aspis_core::field::{impl core::clone::Clone for aspis_core::field::M31}::clone','PV_CBL_Op36FullReference'),
 'op215-mono':('pv_cblib_source::sha_finalize_into','digest::core_api::wrapper::{impl digest::FixedOutput for _}::finalize_into+digest::core_api::wrapper::CoreWrapper','PV_CBL_Op215Mono'),
 'op209-ref-opt':('pv_cblib_source::split_owned_reference','pv_cblib_source::split_owned_reference','PV_CBL_Op209Reference'),
 'op36-qm31-opt':('pv_cblib_source::array_qm31_reference','pv_cblib_source::array_reference+pv_cblib_source::array_qm31_reference','PV_CBL_Op36QM31Reference'),

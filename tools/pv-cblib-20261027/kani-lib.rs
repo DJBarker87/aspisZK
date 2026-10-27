@@ -77,11 +77,12 @@ mod path_checks {
     #[kani::proof]
     #[kani::unwind(10)]
     fn path_join() {
-        let b=bytes();let q=bytes();
-        let p=std::path::PathBuf::from(std::ffi::OsString::from_vec(b.clone()));
-        let qpath=std::path::PathBuf::from(std::ffi::OsString::from_vec(q.clone()));
+        let p=std::path::PathBuf::from(std::ffi::OsString::from_vec(bytes()));
+        let qpath=std::path::PathBuf::from(std::ffi::OsString::from_vec(bytes()));
         let native=p.join(&qpath);
-        let reference=join_bytes_reference(&b,&q);
-        assert_eq!(native.as_os_str().as_bytes(),reference.as_slice());
+        let reference=join_bytes_reference(p.as_os_str().as_bytes(),qpath.as_os_str().as_bytes());
+        let i:usize=kani::any();
+        assert_eq!(native.as_os_str().as_bytes().len(),reference.len());
+        assert_eq!(native.as_os_str().as_bytes().get(i).copied(),reference.get(i).copied());
     }
 }

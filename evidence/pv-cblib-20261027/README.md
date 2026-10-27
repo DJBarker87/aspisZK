@@ -119,3 +119,7 @@ V232/op208 remains OPEN: exact source body, carrier, full Result and selection
 shape are compiled through39648, but compress256 is still an explicit missing
 source binding (OP208-FRONTIER.md). No opaque compression parameter is counted
 as row discharge.
+
+## Prepared array/split stage
+
+ArrayKernel/Image/Guard/Step/Unfold/Total/Prefix/Copied/Ext/ReferenceTotal and SplitBounds/Arithmetic/Model/Recompose were prepared after commit 6911addb1d. At this checkpoint they are **drafts, not accepted Lean proofs**; the first queue is awaiting host reservation (39656–39658 refused, zero charge). Op215 mono extraction and op36 borrowed full-Result extraction are rejected, with exact diagnostics in their native run directories. Neither is a new row law. See ARRAY-FRONTIER.md. Current accepted bundle remains four source callbacks.
