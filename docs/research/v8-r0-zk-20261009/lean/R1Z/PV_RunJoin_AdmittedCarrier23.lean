@@ -25,6 +25,17 @@ theorem withdrawal_return : @run E R withdrawal = ok (.Ok withdrawal.compiled) :
   PV_RunJoin_NativeReturn20.withdrawal_call withdrawal rfl rfl rfl rfl rfl
 #print axioms withdrawal_return
 
+theorem transfer_checked : PV_Src_RecordReference.Checked transfer :=
+  ⟨PV_RunJoin_FixtureAdmission.transfer_values,PV_RunJoin_FixtureAdmission.first,
+    PV_RunJoin_FixtureAdmission.second,PV_RunJoin_FixtureAdmission.membership,
+    PV_RunJoin_FixtureAdmission.superRoot⟩
+#print axioms transfer_checked
+
+theorem transfer_frontier (l : Fin 20) :
+    R0Z.WriterRefine.Canon8 transfer.snapshot.frontier.val[l.val]! :=
+  PV_RunJoin_FixtureCorrespondence20.frontier_canon l
+#print axioms transfer_frontier
+
 theorem model_injective : Function.Injective
     (BuilderSpendRelation.modelWitness (K := R1J.SpendWitnessMap.F)) := by
   intro a b h

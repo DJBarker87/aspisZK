@@ -19,6 +19,15 @@ theorem admitted : PV_RunJoin_UniversalBuild22.Admission (K := K) counterexample
     PV_RunJoin_AdmittedCarrier23.transfer_admitted
 #print axioms admitted
 
+theorem checked : PV_Src_RecordReference.Checked counterexample :=
+  PV_RunJoin_AdmittedCarrier23.transfer_checked
+#print axioms checked
+
+theorem frontier (l : Fin 20) :
+    R0Z.WriterRefine.Canon8 counterexample.snapshot.frontier.val[l.val]! :=
+  PV_RunJoin_AdmittedCarrier23.transfer_frontier l
+#print axioms frontier
+
 /-- The compiler still succeeds with the original output. This distinguishes
 success of the call from equality to an arbitrary cached payload. -/
 theorem actual_return : @run E R counterexample =
@@ -40,6 +49,15 @@ theorem universal_return_false :
   intro all
   exact not_cached_return (all counterexample admitted)
 #print axioms universal_return_false
+
+theorem universal_guarded_return_false :
+    ¬ (∀ i : Input, PV_RunJoin_UniversalBuild22.Admission (K := K) i →
+      PV_Src_RecordReference.Checked i →
+      (∀ l : Fin 20, R0Z.WriterRefine.Canon8 i.snapshot.frontier.val[l.val]!) →
+      @run E R i = ok (.Ok i.compiled)) := by
+  intro all
+  exact not_cached_return (all counterexample admitted checked frontier)
+#print axioms universal_guarded_return_false
 
 /-- The failure persists when admission is built into the carrier. -/
 theorem admitted_carrier_return_false :
