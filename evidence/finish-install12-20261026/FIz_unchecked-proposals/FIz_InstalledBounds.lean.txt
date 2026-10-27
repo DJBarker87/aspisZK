@@ -1,0 +1,19 @@
+import FIq_Carriers
+import FIy_PartialRoot
+set_option autoImplicit false
+namespace AspisR1.FIz_InstalledBounds
+open Aeneas Aeneas.Std
+/-- Carrier transport preserves the public scalar words literally. This does
+not assert their field bounds; those must come from the installed parser. -/
+theorem transfer_asset (p : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1) :
+    (FIq_Carriers.toTransfer p).asset_id=p.asset_id := rfl
+
+theorem withdrawal_amount (p : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1WithdrawalPublicV1) :
+    (FIq_Carriers.toWithdrawal p).amount=p.amount := rfl
+
+theorem snapshot_frontier (p : AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) :
+    (FIq_Carriers.toSnapshot p).frontier=p.frontier := rfl
+#print axioms transfer_asset
+#print axioms withdrawal_amount
+#print axioms snapshot_frontier
+end AspisR1.FIz_InstalledBounds

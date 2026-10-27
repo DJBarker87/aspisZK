@@ -1,0 +1,20 @@
+import FIz_ContributionAppend
+import FIy_ValueFamilyList
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FIz_ValuePacking
+open FIv_NativeValue (K)
+open FIw_PublicModel (Public Openings Selectors)
+theorem value (p : Public) (o : Openings) (s : Selectors) (group : Nat) :
+    FIx_SelectedMeaning.contribution (FIy_ValuePacked.rangeModel o s) 49 group+
+      FIx_SelectedMeaning.contribution (FIy_ValuePacked.conservation o s) 82 group=
+    FIz_ContributionList.fromList (R0P.valueFamily.residuals (FIw_PublicModel.ofPublic p)
+      (FIw_PublicModel.openings o) (FIw_PublicModel.selector s)) 49 group := by
+  rw [FIz_ContributionList.value,FIz_ContributionList.value]
+  have h := FIz_ContributionAppend.value (List.ofFn (FIy_ValuePacked.rangeModel o s))
+    (List.ofFn (FIy_ValuePacked.conservation o s)) 49 group
+  rw [FIy_ValueFamilyList.value p o s] at h
+  exact h.symm
+#print axioms value
+end AspisR1.FIz_ValuePacking
+end
