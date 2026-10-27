@@ -1,0 +1,60 @@
+"""Optimized finite source/copy gate; restore the scratch test byte-for-byte."""
+from pathlib import Path
+import subprocess,hashlib,json,sys,time
+H=Path('/home/dombarker/project-offloads/codex-pv-batch2-20261027');S=H/'candidate/src';D=H/'batch2c-rowcheck';D.mkdir(exist_ok=False)
+p=S/'crates/aspis-r1-cost-probe/src/host_weights.rs';original=p.read_bytes()
+test=r'''
+#[cfg(test)]
+mod pv_b2_resume_checks {
+ extern crate std;
+ use super::*;
+ use aspis_core::field::{CM31,M31,P};
+ #[test]
+ fn frozen_row_and_boundaries() {
+  for v in [Variant::S1,Variant::S2,Variant::D] {
+   for j in 0..1024 { assert_eq!(host_row(v,j),v.row(j),"row {:?} {}",v,j); }
+  }
+  for v in [Variant::S1,Variant::S2] {
+   for j in [1024usize,65535,usize::MAX] { assert_eq!(host_row(v,j),v.row(j)); }
+  }
+  for j in [1024usize,usize::MAX] {
+   assert!(std::panic::catch_unwind(||host_row(Variant::D,j)).is_err());
+   assert!(std::panic::catch_unwind(||Variant::D.row(j)).is_err());
+  }
+ }
+ #[test]
+ fn copies_finite_outputs() {
+  let raw=K{c0:CM31{a:M31(u32::MAX),b:M31(P)},c1:CM31{a:M31(P+1),b:M31(P-1)}};
+  let z=[SecureCirclePoint{x:K::ONE,y:K::ZERO};2];
+  for alpha in [[K::ZERO;10],[K::ONE;10],[raw;10]] {
+   for variant in [Variant::S1,Variant::S2,Variant::D] {
+    let a=Weights::new(variant,&alpha,&z).unwrap();
+    let b=crate::weights::Weights::new(variant,&alpha,&z).unwrap();
+    assert_eq!(a.factors,b.factors);assert_eq!(a.points,b.points);assert_eq!(a.extra,b.extra);
+    for kind in 0..7 { for j in 0..1024 { assert_eq!(a.raw(kind,j),b.raw(kind,j),"raw {:?} {} {}",variant,kind,j); } }
+    let kappa=E::from_limbs([2,3,4,5,6,7,8,9]).unwrap();
+    let mut out=[E::ONE;1024];a.materialize(kappa,&mut out).unwrap();
+    let expected=b.materialize(kappa).unwrap();assert_eq!(out.as_slice(),expected.as_slice());
+   }
+  }
+  for variant in [Variant::S1,Variant::S2,Variant::D] {
+   let a=Weights{variant,factors:[[[K::ONE;4];5];5],points:[[K::ONE;10];3],extra:[K::ONE;2]};
+   let b=crate::weights::Weights{variant,factors:a.factors,points:a.points,extra:a.extra};
+   let mut out=[E::ZERO;1024];a.materialize(E::ONE,&mut out).unwrap();
+   assert_eq!(out.as_slice(),b.materialize(E::ONE).unwrap().as_slice());
+   let selected=core::array::from_fn::<_,6,_>(|i|out[[0,1,13,56,317,1023][i]].to_limbs());
+   std::println!("PV_B2_NATIVE_ONES_{:?}={:?}",variant,selected);
+  }
+ }
+}
+'''
+(D/'scratch-tests.rs.txt').write_text(test)
+cmd=['cargo','test','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--features','optimized-terminal,r1p-check,ct-host-prover','--lib','--','pv_b2_resume_checks','--test-threads=1','--nocapture']
+(D/'command.json').write_text(json.dumps(dict(command=cmd,source_revision=(H/'candidate/source-revision.txt').read_text().strip(),source_sha256=hashlib.sha256(original).hexdigest(),expected_time='optimized Rust test compilation followed by finite row/copy comparison; no elimination'),indent=2)+'\n')
+try:
+ p.write_bytes(original+test.encode())
+ r=subprocess.run(cmd,cwd=S)
+finally:
+ p.write_bytes(original)
+ (D/'restored.json').write_text(json.dumps(dict(restored=p.read_bytes()==original,sha256=hashlib.sha256(p.read_bytes()).hexdigest()),indent=2)+'\n')
+raise SystemExit(r.returncode)
