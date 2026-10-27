@@ -11948,3 +11948,19 @@ weights and the sampler are compiled into the default release ELF, nothing in pl
 indicative timing pre-check that stops the batch above +3%, extraction, source laws, copy-equals-original
 proofs, the fixture gate. Five live slots: batch1b, runjoin17, dict2, dudect-run, batch2. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D292 (Stream B) 2026-10-27 14:30 UTC: off-path dictionary integrated into the prover candidate (cfg(kani)-only; ELF pins match)
+
+pv-dict2 (`codex/pv-dict2-20261027` from 73070ddd51; 60/60 Lean, no Kani). Merge of
+codex/cx-prover-dict-20261026 (420fbea022): one historical launcher conflict resolved to the candidate's
+bytes; no Lean or crates conflict. Ruling (l): production bytes unchanged; every shipped-file addition is
+inside 15 `#[cfg(kani)]` modules across crates/aspis-prover/src/state_only_hiding.rs,
+crates/aspis-r1-cost-probe/src/prover.rs and r1_wire.rs (+483 lines). All three ELF pins rebuilt and
+matching. 55 re-checks passed, including all five direct consumers of the PDict_ entries; focused audit
+4,530 reports, standard axioms only. Classification: 179/262 selected fields (117 new selector
+equations, 62 inherited bodies), sufficient bound 175 selected / 80 open of 255: these are dictionary
+INSTALLATIONS, not deployed source laws (recount 3's rule). Incomplete: the dictionary's own full
+closure audit (36 targets, including ArrayReference244 and its File/OS-world dependencies) and two
+PublicPreparation source-cohort discrepancies. The lead merged the branch into the prover candidate and
+removed its worktree. The candidate now contains every Stream B sibling except the live code-changing
+branches (records, batch 1, batch 2). Rows removed outright: 0. Privacy target not yet established.
