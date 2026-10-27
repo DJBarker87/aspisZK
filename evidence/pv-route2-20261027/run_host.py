@@ -4,7 +4,8 @@ D=Path('/home/dombarker/project-offloads/codex-pv-route2-20261027'); G=Path('/ho
 REV=(D/'revision').read_text().strip()
 def run(name,cmd,cwd=None):
  O=D/name;O.mkdir();(O/'target.json').write_text(json.dumps(dict(target=cmd,cwd=str(cwd),revision=REV,preflight=True,print_axioms='N/A extraction'),indent=2));a=subprocess.run(['python3',str(G/'reservation.py'),str(O/'admission-before.json')],stdout=open(O/'reservation.log','w'),stderr=subprocess.STDOUT)
- if a.returncode:return a.returncode
+ if a.returncode:
+  (O/'refusal.json').write_text(json.dumps(dict(exit=a.returncode,scope_started=False,revision=REV,charged_lean_attempts=0,wait_seconds_required=180),indent=2));raise SystemExit(a.returncode)
  start=time.monotonic();r=subprocess.run(['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(G/'barrier.py'),str(O/'admission-barrier.json'),'/usr/bin/time','-v','-o',str(O/'time.log'),*cmd],cwd=cwd,stdout=open(O/'output.log','w'),stderr=subprocess.STDOUT)
  (O/'receipt.json').write_text(json.dumps(dict(exit=r.returncode,wall_seconds=time.monotonic()-start,revision=REV,print_axioms='N/A extraction',time_log=(O/'time.log').read_text() if (O/'time.log').exists() else None),indent=2)); print(name,r.returncode,flush=True);return r.returncode
 roots={79:'eval_message',223:'compress_tagged_tuple',230:'state_only_copy_helper_sum',249:'gamma_sample',250:'ordinary_sample',254:'powers',258:'all_slots_clear'}

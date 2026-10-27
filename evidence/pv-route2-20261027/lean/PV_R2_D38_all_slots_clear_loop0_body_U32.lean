@@ -31,7 +31,7 @@ def all_slots_clear_loop0.body
     let i2 ← Array.index_usize masks i1
     let i3 ← lift (row &&& 15#usize)
     let shift ← lift (UScalar.cast .U32 i3)
-  let i4 ← lift (Std.U16.wrapping_shl 1#u16 shift)
+    let i4 ← lift (Std.U16.wrapping_shl 1#u16 shift)
     let i5 ← lift (i2 &&& i4)
     let clear1 ←
       all_slots_clear_loop0_loop0 values chi clear row (i5 != 0#u16) 0#usize

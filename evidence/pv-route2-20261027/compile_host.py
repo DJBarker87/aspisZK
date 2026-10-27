@@ -1,10 +1,11 @@
 from pathlib import Path
-import subprocess,hashlib,json,time,sys,re
+import subprocess,hashlib,json,time,sys,re,os
 D=Path('/home/dombarker/project-offloads/codex-pv-route2-20261027');J=Path('/home/dombarker/project-offloads/aspis-joint-20261019');T=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence');L='/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh'
-rows=json.loads((D/'split.json').read_text());nextid=int(sys.argv[1]);budget=int(sys.argv[2]);done=json.loads((D/'TALLY.json').read_text())['receipts'] if (D/'TALLY.json').exists() else []
+rows=json.loads((D/os.environ.get('ROWS_FILE','split.json')).read_text());nextid=int(sys.argv[1]);budget=int(sys.argv[2]);done=json.loads((D/'TALLY.json').read_text())['receipts'] if (D/'TALLY.json').exists() else []
 for row in rows[int(sys.argv[3]) if len(sys.argv)>3 else 0:]:
  if len(done)>=budget:break
- module=row['module'];src=D/'lean'/(module+'.lean');dst=J/'sources'/(module+'.lean');assert not dst.exists(),str(dst);dst.write_bytes(src.read_bytes())
+ module=row['module'];src=D/Path(row['file']).parent.name/(module+'.lean');dst=J/'sources'/(module+'.lean');assert not dst.exists() or dst.read_bytes()==src.read_bytes(),str(dst)
+ if not dst.exists():dst.write_bytes(src.read_bytes())
  deps={}
  for imp in re.findall(r'^import (\S+)',src.read_text(),re.M):
   search=[str(J/'objects')]+json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text())['LEAN_PATH'].split(':')
@@ -20,6 +21,9 @@ for row in rows[int(sys.argv[3]) if len(sys.argv)>3 else 0:]:
  status=re.findall(r'^exit=(\d+)',txt,re.M);status=int(status[-1]) if status else r.returncode
  receipt=dict(**submission,launcher_exit=r.returncode,exit=status,wall_seconds=wall,print_axioms=re.findall(r"^.*(?:depends on axioms|does not depend on any axioms).*$",txt,re.M),time_log=tm.read_text() if tm.exists() else None)
  (O/'receipt.json').write_text(json.dumps(receipt,indent=2));print(a,module,status,flush=True)
- if not out.exists(): print('launch refusal: review before next scope',flush=True);break
+ if not out.exists():
+  (D/'NEXT-ID.json').write_text(json.dumps(dict(next_unused_id=nextid,refused_id=a,charged_lean_attempts=0),indent=2));print('launch refusal: wait 180 seconds, use next ID',flush=True);break
  done.append(receipt);(D/'TALLY.json').write_text(json.dumps(dict(lean_attempts=len(done),budget=60,next_unused_id=nextid,kani=0,receipts=done),indent=2))
- if status:print(txt[-3500:],flush=True);break
+ if status:
+  print(txt[-3500:],flush=True)
+  if os.environ.get('CONTINUE_FAILURE')!='1':break
