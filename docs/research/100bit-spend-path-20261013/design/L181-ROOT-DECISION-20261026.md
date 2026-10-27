@@ -77,3 +77,13 @@ ARV_Poison.no_admission), so it is not the right image. The adversary a stays
 arbitrary; constants and failure event unchanged. ARX_ (account-rejoin9)
 proves the law equivalence on admitted worlds and the root; adoption still
 awaits the owner.
+
+## Status 2026-10-27: ARX_Root.deployed is proved
+
+account-rejoin9 (ARX_, merged 680b10c65d) proved the proposed root with the
+admitted runtime, standard axioms, exact margin unchanged, and unconditional
+conservativity on the old pure-choice class at the admitted runtime. The
+complete before/after declarations are in
+evidence/account-rejoin9-20261026/ARX_ROOT_COMPARISON.md. recount11 is
+producing the mechanical ledger for both roots and the draft contract
+amendment. Decision requested: adopt ARX_Root.deployed as the headline root.
