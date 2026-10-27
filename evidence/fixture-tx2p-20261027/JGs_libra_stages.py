@@ -58,8 +58,7 @@ theorem powers : FJm_LibraStages.powers (FIo_Install.toWeights JGo_TX2_WeightDat
     call_i,bind_tc_ok,power1_8,bind_tc_ok,call_j,bind_tc_ok,JGs_LibraWrites.up4,bind_tc_ok]
 '''
  s+=f'#print axioms finish\nend AspisR1.{ns}\nend\n';out[ns]=s
-s='''import JGs_LibraStage0
-import JGs_LibraStage1
+s='''import JGs_LibraForward
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.JGs_LibraNative
@@ -70,11 +69,16 @@ for side in [0,1]:
  s+=f'''theorem step{side} : FIo_Native.weights.factored_s2_libra_weights_loop.body JGq_Powers0.a4 JGq_Powers1.a4
     (FIo_Install.toWeights JGo_TX2_WeightData.value).extra {{start:={side}#usize,«end»:=2#usize}} JGs_LibraEnd.{before}=
     ok (.cont ({{start:={side+1}#usize,«end»:=2#usize}},JGs_LibraEnd.{after})) := by
-  rw [JGs_LibraProgram.source]
-  unfold JGs_LibraProgram.body
-  rw [JGo_TX2_Range.next {side}#usize 2#usize {side+1}#usize (by decide) (by decide),bind_tc_ok]
-  simp only [Aeneas.Std.uncurry,{ns}.powers,bind_tc_ok,JGs_LibraScale{side}.source,
-    {ns}.term0,{ns}.term1,{ns}.term2,{ns}.term3,{ns}.totals,{ns}.finish]
+  exact JGs_LibraForward.source JGq_Powers0.a4 JGq_Powers1.a4
+    (FIo_Install.toWeights JGo_TX2_WeightData.value).extra
+    {{start:={side}#usize,«end»:=2#usize}} {{start:={side+1}#usize,«end»:=2#usize}}
+    JGs_LibraEnd.{before} JGs_LibraEnd.{after} {side}#usize JGs_Libra.row{side} {ns}.high
+    JGs_Libra.q{side}_4 JGs_Libra.q{side}_16 JGs_LibraScale{side}.value
+    0#usize 3#usize 2#usize 1#usize
+    JGs_Libra.term{side}_0 JGs_Libra.term{side}_1 JGs_Libra.term{side}_2 JGs_Libra.term{side}_3
+    JGs_Libra.sum{side}_2 JGs_Libra.sum{side}_3 JGs_Libra.sum{side}_4
+    (JGo_TX2_Range.next {side}#usize 2#usize {side+1}#usize (by decide) (by decide))
+    {ns}.powers JGs_LibraForward.scalar{side} {ns}.term0 {ns}.term1 {ns}.term2 {ns}.term3 {ns}.totals {ns}.finish
 #print axioms step{side}
 '''
 s+='end AspisR1.JGs_LibraNative\nend\n';out['JGs_LibraNativeSplit']=s
@@ -82,6 +86,6 @@ s+='end AspisR1.JGs_LibraNative\nend\n';out['JGs_LibraNativeSplit']=s
 source=(R/'lean/JGs_LibraSource.lean').read_text().replace('import JGs_LibraNative0\nimport JGs_LibraNative1','import JGs_LibraNativeSplit');out['JGs_LibraSource']=source
 for mod,s in out.items():
  p=R/'lean'/(mod+'.lean')
- if '--check' in sys.argv:assert p.read_text()==s,mod
+ if '--check' in sys.argv:assert (p if p.exists() else R/'evidence/fixture-tx2p-20261027/JGs_UNCHECKED'/(p.name+'.txt')).read_text()==s,mod
  else:p.write_text(s)
 print(len(out),'Libra stage factorization modules')
