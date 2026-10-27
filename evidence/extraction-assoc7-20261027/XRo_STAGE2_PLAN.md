@@ -17,7 +17,7 @@ The actual adopted B is exactly:
 AspisR1ClaimPreparedBridge.concreteBoundaries
  (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries
   (AspisR1CurrentCaller.OriginalSerializerInstallation.withOriginalSerializer
-   AspisR1CurrentCaller.InstalledPreparation.closedSampling)
+   AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling)
   AspisS1M31Embedding.Total.embed).
 
 Its powers field is powersPublic, its cached claim field is claimPublic.

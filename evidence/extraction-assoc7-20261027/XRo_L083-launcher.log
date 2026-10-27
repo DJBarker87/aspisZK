@@ -1,0 +1,46 @@
+{"attempt": "XRo_L083", "exit_status": 0, "wall_seconds": 1.428646296961233, "peak_rss_kib": "2662968", "swaps": "0", "print_axioms": ["'XRo_Join_PreparedBoundaries.legacy_claim_unused' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'XRo_Join_PreparedBoundaries.legacy_claim_unused' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1PublicPreparation.PreparedScratchModel.prepare : AspisR1PublicPreparation.PreparedScratchModel.Boundaries →
+  {H : Type} →
+    AspisR1PublicPreparation.aspis_core.Digest32 H →
+      AspisR1PublicPreparation.r1_semantic.Verified H →
+        AspisR1PublicPreparation.verifier.View →
+          H →
+            Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize →
+              Result
+                (core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+                  Std.Array AspisR1PublicPreparation.aspis
+...
+nal_message
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i1 ← 30#u8 + 1#u8
+          let s1 ← lift (Std.Array.empty U8).to_slice
+          let (rho, t5) ← AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling aspis_coreDigest32Inst t4 i1 s1
+          let g1 ← B.powers 29#usize gamma
+          let r1 ← B.claim aspis_coreDigest32Inst sem v.y1 v.inactive g1 kappa
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 =>
+              ok
+                (core.result.Result.Ok
+                    { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                      alpha := Array.make 2#usize [alpha0, AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO] ⋯,
+                      rho := rho, queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1,
+                      state := t5.state },
+                  g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1PublicPreparation.verifier.Prepared
+                    (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+              ok (r2, g1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR1PublicPreparation.verifier.Prepared
+                (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+          ok (r1, g)
+
+Running as unit: run-rdfda7e6647d4480596d5deae76f872a0.scope; invocation ID: 5e0af625f5324fdf89b40c60aeb8152b
