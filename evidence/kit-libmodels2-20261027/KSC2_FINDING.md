@@ -47,7 +47,10 @@ or `FnMut F (B×T) B` has no output for updated T, and the implementation drops
 the continuation returned by P7 next. The kernel probes use the corresponding
 value-only callback erasure; native callbacks exercise the missing write-back.
 These are not assertions that a mutating Rust closure has a faithful translation
-into that deficient interface. A restriction to read-only items would require
+into that deficient interface. A faithful unrestricted replacement needs an
+explicit mutable-item ABI/channel (or re-extracted library body with that ABI);
+it cannot be installed as a magic implementation of the current deficient type.
+A restriction to read-only items would require
 a separately stated reached-callback theorem, not a silent model repair.
 No particular counterexample is claimed reachable in deployed Aspis.
 
@@ -175,7 +178,7 @@ Actual adopted reached-path frequency/order is still unestablished: the table's
 static prioritization must not be promoted into a trace/reachability theorem.
 
 The final focused co-import/41-root axiom audit and terminal receipt validation
-are the last verification stage. No full frozen manifest replay is applicable
+passed. No full frozen manifest replay is applicable
 to this new, non-adopted audit; no unchanged release regression was run.
 
 ## Per-model table
@@ -276,3 +279,55 @@ Rows are ordered by inherited exact kernel-consumer count, then static raw-emiss
 | `XRo_Join_QmSampler.O.divPass` (XRo_Join_QmSampler.lean:22) | 0/0 | **UNDETERMINED** | Semantics: No independent Rust std/core item to specify. Source definition inspected at evidence/extraction-assoc7-20261027/XRo_Join_QmSampler.lean:22. Classification inherited from a lexical fallback, not a validated std mapping. Alias of a project sampler arithmetic body/loop in the kit or a cohort, not a std external. Requires raw-emitted same-body association with the exact aliased owner; prior kit-relative equalities give no blanket emission credit. Native: N/A: no Rust std counterpart. |
 | `XRo_Join_Nonvacuity.failingDigest` (XRo_Join_Nonvacuity.lean:8) | 0/0 | **UNDETERMINED** | Semantics: No independent Rust std/core item to specify. Source definition inspected at evidence/extraction-assoc7-20261027/XRo_Join_Nonvacuity.lean:8. Classification inherited from a lexical fallback, not a validated std mapping. Deliberately failing digest test dictionary, not production Rust std. Rejection/non-vacuity diagnostics cannot certify a deployed library operation. Native: N/A: no Rust std counterpart. |
 | `XRn_Join_Bytes.validChunk` (XRn_Join_FunsExternal.lean:417) | 0/0 | **UNDETERMINED** | Semantics: No independent Rust std/core item to specify. Source definition inspected at evidence/extraction-assoc6-20261027/XRn_Join_FunsExternal.lean:417. Classification inherited from a lexical fallback, not a validated std mapping. Project byte/canonicality helper XRn_Join_Bytes.validChunk composing word decoding and field bounds. It is not a std item; must be checked against the exact project body and length/canonicality conditions. Native: N/A: no Rust std counterpart. |
+
+
+## Final verification and stage commits
+
+Used **25/80 Lean attempts, 4/10 Rust runs, 0 Kani**. Lean8 accepted /17 rejected;
+Rust3 accepted /1 rejected. All41 explicit new top theorems are printed in the
+final audit and use only subsets of `[propext, Classical.choice, Quot.sound]`,
+or none. `KSC2_VERIFICATION.json` reports zero errors; every current Lean module
+matches an exit0 source hash, all native/Lean receipt source snapshots match,
+and all17 frozen manifest hashes independently match the pinned git revision.
+The complete `KSC2_attempts.jsonl` preserves every individual command, revision,
+source/dependency/Aeneas pins, status, wall time, RSS, swaps, caps and axiom lines.
+
+Final target: `KSC2_FinalAudit.lean`, **KSC2_L025**, exit0; command
+`lake env lean -j1 -M7000 -DElab.async=false -R KSC2_generated -o
+KSC2_objects/KSC2_FinalAudit.olean KSC2_generated/KSC2_FinalAudit.lean`.
+Source revision **568bf50454d94ba955e1c88581d614f10b2324fb**, exact source SHA256
+`d0297a3446f25d23d6289a582e83f757e73f1b3538594fff27da80e475d170bb`;
+wall **2.1801384080317803s**, peak RSS **2626184KiB**,
+swaps **0**. All41 complete axiom lines are retained in its receipt/stdout.
+Lean compiler-summed wall **67.0036125901388s**,
+maximum attempt RSS **2653724KiB**.
+Rust summed wall **8.14936346997274s**,
+maximum RSS **155660KiB**. Total swaps0.
+
+Every host invocation used its own scope with MemoryHigh6G / MemoryMax8G /
+MemorySwapMax0 / TasksMax64, one scope at a time. Admission required exit0 AND
+`allowed:true`; every recorded reservation admitted. No refusal, quiet-window
+wait, transport retry, timeout, memory kill, cap increase or unchanged failed
+compile rerun occurred. No shared launcher or monitoring infrastructure changed;
+this job invoked private copies of the existing S2W runners and the existing
+S2H admission barrier. L001 discovered absent P7 constants; L004 omitted FnOnce
+parent fields; L006–L017 are retained rejected fold proof/transport elaborations,
+replaced by explicit body-case transport and the passing L018 result; L020–L022
+are rejected proposal proofs (syntax, then an explicit slice-capacity side
+condition), fixed in L023. Failed/sorryAx diagnostics are excluded from all
+accepted evidence and from every current source.
+
+`KSC2_terminal_state.json` records zero changed pins across248 selected objects,
+eight retained private Lean objects, an existing persistent cache, no Cargo
+target directories and no live job process. The native test binary is identified
+by SHA256/size only, not committed. No wallet/key action, other worktree edit,
+merge, push or artifact rebuild occurred. Only this evidence directory changed.
+
+Stage commits before this terminal-evidence commit:
+
+- `7f2f3194d1` Record second-half library model audit scope
+- `196b75ed73` Check pinned library wrappers and iterator counterexamples
+- `568bf50454` Record library model verdicts and borrow restoration defects
+
+The terminal commit adds receipts/verification only; it changes no theorem,
+model verdict, premise or frozen implementation.
