@@ -4,7 +4,7 @@ The actual top remains `AspisR1.Rc10_Top.deployed`. Its complete BEFORE and AFTE
 
 Local BEFORE: `JGc_TX2_Partial.on_saved`, fully retained in JGf_BEFORE_PARTIAL.lean.txt, exports the actual retained saved-checkpoint reader conditional on explicit Realizes mathematical SHA256, inherited checked query/flush calls, twelve native folded leaves and an inhabited folded model-tree root. Native hash/syscall correspondence is not silently supplied.
 
-Local planned AFTER: `JGf_TX2_Partial.on_saved` preserves that entire conjunct with the SAME saved/proof/public/prepared/query inputs and SAME Realizes premise. It adds the tree0 literal input/sibling model and its retained-checkpoint root as another inhabited conjunct. It is a stronger local fixed-input helper statement, not a weakening of the deployed theorem or an accepted-wrapper result. Delivery credit depends on its numbered passing receipt; the source is a draft until then.
+Local checked AFTER (086): `JGf_TX2_Partial.on_saved` preserves that entire conjunct with the SAME saved/proof/public/prepared/query inputs and SAME Realizes premise. It adds the tree0 literal input/sibling model and its retained-checkpoint root as another inhabited conjunct. It is a stronger local fixed-input helper statement, not a weakening of the deployed theorem or an accepted-wrapper result. The exact-current-hash passing receipt is JGf_TX2_086/receipt.json.
 
 Separately, Keys.source returns the actual installed packed-key call; Sort.source derives a real sorted return and exact prefix/suffix; Count0/Count2.source compute installed counts on literal real index frontiers. The actual loop-to-frontier equality, native tree0/1 leaf addresses, sibling-slot reads and owned-verifier control join remain explicit OPEN obligations.
 
