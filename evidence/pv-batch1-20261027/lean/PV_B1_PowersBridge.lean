@@ -28,7 +28,7 @@ theorem finite {N : Usize} (x : W) (fuel : Nat) (out : Array W N) (p : W) (i : U
   | zero =>
     have hi : ¬ i<N := by change ¬i.val<N.val; omega
     simp only [PV_B1_PowersControl.finite,PV_B1_PowersOriginalFinite.finite,
-      dispatch,PV_B1_PowersOriginalControl.dispatch,hi,if_false,finish,bind_tc_ok]
+      dispatch,PV_B1_PowersOriginalControl.dispatch,hi,if_false,finish,bind_tc_ok] <;> rfl
   | succ fuel ih =>
     have hi : i<N := by change i.val<N.val; omega
     have hs := step i hi
@@ -45,7 +45,7 @@ theorem finite {N : Usize} (x : W) (fuel : Nat) (out : Array W N) (p : W) (i : U
       · have hz : fuel=0 := by rw [last] at hn; omega
         subst fuel
         simp only [last,lt_self_iff_false,if_false,if_true,
-          PV_B1_PowersControl.finite,dispatch,finish,bind_tc_ok]
+          PV_B1_PowersControl.finite,dispatch,finish,bind_tc_ok] <;> rfl
       · have hlt : Usize.wrapping_add i 1#usize < N := by
           change (Usize.wrapping_add i 1#usize).val<N.val
           have neq : (Usize.wrapping_add i 1#usize).val ≠ N.val := by
@@ -53,8 +53,8 @@ theorem finite {N : Usize} (x : W) (fuel : Nat) (out : Array W N) (p : W) (i : U
           omega
         simp only [last,hlt,if_true,if_false]
         cases hm : aspis_core.field.wide_exact.WideExact.mul p x with
-        | fail e => simp only [hm,bind_tc_fail,finish]
-        | div => simp only [hm,bind_tc_div,finish]
+        | fail e => simp only [hm,bind_tc_fail,finish] <;> rfl
+        | div => simp only [hm,bind_tc_div,finish] <;> rfl
         | ok next =>
           simp only [hm,bind_tc_ok]
           exact ih (back p) next (Usize.wrapping_add i 1#usize) hn

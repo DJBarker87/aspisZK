@@ -1,0 +1,141 @@
+{"attempt": 53633, "module": "PV_B1_PowersBridge", "exit": 1, "wall_seconds": 1.4829815599950962, "peak_rss_kib": "2625708", "swap": "0", "charged": true}
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PowersBridge.lean:28:9: error: unsolved goals
+case zero
+N : Usize
+x : W
+out : Std.Array W N
+p : W
+i : Usize
+bound : ↑i + 0 = ↑N
+hi : ¬i < N
+⊢ ok out =
+    let (out, pending) := (out, none)
+    match pending with
+    | none => ok out
+    | some returned => ok returned
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PowersBridge.lean:45:6: error: unsolved goals
+case pos
+N : Usize
+x : W
+out : Std.Array W N
+p : W
+i : Usize
+hi : i < N
+hs : ↑(i.wrapping_add 1#usize) = ↑i + 1
+old : W
+back : W → Std.Array W N
+hr : out.index_mut_usize i = ok (old, back)
+last : i.wrapping_add 1#usize = N
+ih :
+  ∀ (out : Std.Array W N) (p : W) (i : Usize),
+    ↑i + 0 = ↑N → PV_B1_PowersControl.finite x 0 out p i = finish (PV_B1_PowersOriginalFinite.finite x 0 out p i)
+bound : ↑i + (0 + 1) = ↑N
+hn : ↑(i.wrapping_add 1#usize) + 0 = ↑N
+⊢ (let (_, back) := (old, back)
+    ok (back p)) =
+    do
+    let (out, pending) ←
+      let (_, back) := (old, back)
+        ok (back p, some (back p))
+    match pending with
+      | none => ok out
+      | some returned => ok returned
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PowersBridge.lean:56:17: error: unsolved goals
+case neg.fail
+N : Usize
+x : W
+fuel : ℕ
+ih :
+  ∀ (out : Std.Array W N) (p : W) (i : Usize),
+    ↑i + fuel = ↑N →
+      PV_B1_PowersControl.finite x fuel out p i = finish (PV_B1_PowersOriginalFinite.finite x fuel out p i)
+out : Std.Array W N
+p : W
+i : Usize
+bound : ↑i + (fuel + 1) = ↑N
+hi : i < N
+hs : ↑(i.wrapping_add 1#usize) = ↑i + 1
+hn : ↑(i.wrapping_add 1#usize) + fuel = ↑N
+old : W
+back : W → Std.Array W N
+hr : out.index_mut_usize i = ok (old, back)
+last : ¬i.wrapping_add 1#usize = N
+hlt : i.wrapping_add 1#usize < N
+e : Error
+hm : aspis_core.field.wide_exact.WideExact.mul p x = fail e
+⊢ (let (_, back) := (old, back)
+    fail e) =
+    do
+    let (out, pending) ←
+      let (_, back) := (old, back)
+        fail e
+    match pending with
+      | none => ok out
+      | some returned => ok returned
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PowersBridge.lean:57:14: error: unsolved goals
+case neg.div
+N : Usize
+x : W
+fuel : ℕ
+ih :
+  ∀ (out : Std.Array W N) (p : W) (i : Usize),
+    ↑i + fuel = ↑N →
+      PV_B1_PowersControl.finite x fuel out p i = finish (PV_B1_PowersOriginalFinite.finite x fuel out p i)
+out : Std.Array W N
+p : W
+i : Usize
+bound : ↑i + (fuel + 1) = ↑N
+hi : i < N
+hs : ↑(i.wrapping_add 1#usize) = ↑i + 1
+hn : ↑(i.wrapping_add 1#usize) + fuel = ↑N
+old : W
+back : W → Std.Array W N
+hr : out.index_mut_usize i = ok (old, back)
+last : ¬i.wrapping_add 1#usize = N
+hlt : i.wrapping_add 1#usize < N
+hm : aspis_core.field.wide_exact.WideExact.mul p x = div
+⊢ (let (_, back) := (old, back)
+    div) =
+    do
+    let (out, pending) ←
+      let (_, back) := (old, back)
+        div
+    match pending with
+      | none => ok out
+      | some returned => ok returned
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PowersBridge.lean:39:27: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵bind_tc_fail, ̲finish]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PowersBridge.lean:40:24: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵bind_tc_div, ̲finish]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PowersBridge.lean:43:17: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PowersBridge.lean:48:53: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵a̵s̵t̵,̵l̵t̵_̵s̵e̵l̵f̵_̵i̵f̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵B̵1̵_̵P̵o̵w̵e̵r̵s̵C̵o̵n̵t̵r̵o̵l̵.̵f̵i̵n̵i̵t̵e̵,̵d̵i̵s̵p̵a̵t̵c̵h̵,̵f̵i̵n̵i̵s̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲l̲a̲s̲t̲,̲ ̲l̲t̲_̲s̲e̲l̲f̲_̲i̲f̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲P̲V̲_̲B̲1̲_̲P̲o̲w̲e̲r̲s̲C̲o̲n̲t̲r̲o̲l̲.̲f̲i̲n̲i̲t̲e̲,̲ ̲d̲i̲s̲p̲a̲t̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲f̲i̲n̲i̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B1_PowersBridge.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B1_PowersBridge.finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B1_PowersBridge.op254_copy_equal_original' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+

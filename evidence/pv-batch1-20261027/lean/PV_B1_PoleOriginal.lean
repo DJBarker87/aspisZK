@@ -1,0 +1,99 @@
+-- Flat original-verdict control representation from the predecessor P6 reference.
+-- This is not labeled as fresh extraction of the unsupported iterator source.
+import PV_B1_258_Types
+open Aeneas Aeneas.Std Result ControlFlow Error
+namespace PV_B1_PoleOriginal
+abbrev aspis_core.field.M31 := PV_B1_258.aspis_core.field.M31
+abbrev aspis_core.field.CM31 := PV_B1_258.aspis_core.field.CM31
+abbrev aspis_core.field.QM31 := PV_B1_258.aspis_core.field.QM31
+/-- [pv_cb3_kani::reference::equal]:
+    Source: 'reference.rs', lines 3:0-5:1
+    Visibility: public -/
+def reference.equal
+  (a : aspis_core.field.QM31) (b : aspis_core.field.QM31) : Result Bool := do
+  let i := a.c0.a
+  let i1 := b.c0.a
+  if i = i1
+  then
+    let i2 := a.c0.b
+    let i3 := b.c0.b
+    if i2 = i3
+    then
+      let i4 := a.c1.a
+      let i5 := b.c1.a
+      if i4 = i5
+      then let i6 := a.c1.b
+           let i7 := b.c1.b
+           ok (i6 = i7)
+      else ok false
+    else ok false
+  else ok false
+
+/-- [pv_cb3_kani::reference::all_slots_clear]: loop body 0:
+    Source: 'reference.rs', lines 8:4-15:5
+    Visibility: public -/
+@[rust_loop_body]
+def reference.all_slots_clear_loop.body
+  (values : Slice (Array (Array aspis_core.field.QM31 2#usize) 2#usize))
+  (masks : Array Std.U16 64#usize) (chi : aspis_core.field.QM31) (clear : Bool)
+  (row : Std.Usize) :
+  Result (ControlFlow (Bool × Std.Usize) Bool)
+  := do
+  let i := Slice.len values
+  if row < i
+  then
+    let i1 ← lift (Std.Usize.wrapping_shr row 4#u32)
+    let i2 ← Array.index_usize masks i1
+    let i3 ← lift (row &&& 15#usize)
+    let i4 ← lift (Std.U16.wrapping_shl 1#u16 (UScalar.cast .U32 i3))
+    let i5 ← lift (i2 &&& i4)
+    let a ← Slice.index_usize values row
+    let a1 ← Array.index_usize a 0#usize
+    let q ← Array.index_usize a1 0#usize
+    let b ← reference.equal chi q
+    let a2 ← Array.index_usize a 0#usize
+    let q1 ← Array.index_usize a2 1#usize
+    let b1 ← reference.equal chi q1
+    let a3 ← Array.index_usize a 1#usize
+    let q2 ← Array.index_usize a3 0#usize
+    let b2 ← reference.equal chi q2
+    let a4 ← Array.index_usize a 1#usize
+    let q3 ← Array.index_usize a4 1#usize
+    let b3 ← reference.equal chi q3
+    let row1 ← lift (Std.Usize.wrapping_add row 1#usize)
+    ok (cont ((((clear && (¬ ((i5 != 0#u16) && b))) && (¬ ((i5 != 0#u16) &&
+      b1))) && (¬ ((i5 != 0#u16) && b2))) && (¬ ((i5 != 0#u16) && b3)),
+      row1))
+  else ok (done clear)
+
+/-- [pv_cb3_kani::reference::all_slots_clear]: loop 0:
+    Source: 'reference.rs', lines 8:4-15:5
+    Visibility: public -/
+@[rust_loop]
+def reference.all_slots_clear_loop
+  (values : Slice (Array (Array aspis_core.field.QM31 2#usize) 2#usize))
+  (masks : Array Std.U16 64#usize) (chi : aspis_core.field.QM31) (clear : Bool)
+  (row : Std.Usize) :
+  Result Bool
+  := do
+  loop
+    (fun (clear1, row1) => reference.all_slots_clear_loop.body values masks chi
+      clear1 row1)
+    (clear, row)
+
+/-- [pv_cb3_kani::reference::all_slots_clear]:
+    Source: 'reference.rs', lines 6:0-17:1
+    Visibility: public -/
+@[reducible]
+def reference.all_slots_clear
+  (values : Slice (Array (Array aspis_core.field.QM31 2#usize) 2#usize))
+  (masks : Array Std.U16 64#usize) (chi : aspis_core.field.QM31) :
+  Result Bool
+  := do
+  reference.all_slots_clear_loop values masks chi true 0#usize
+
+#print axioms reference.equal
+#print axioms reference.all_slots_clear_loop.body
+#print axioms reference.all_slots_clear_loop
+#print axioms reference.all_slots_clear
+end PV_B1_PoleOriginal
