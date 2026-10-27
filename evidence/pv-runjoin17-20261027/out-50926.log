@@ -1,0 +1,116 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_NullifierSource17.lean:21:21: error: Tactic `rfl` failed: The left-hand side
+  do
+    let __x ←
+      (BuiltinFnMut (aspis_core.field.M31 × Std.Array aspis_core.field.M31 16#usize)
+              (Std.Array aspis_core.field.M31 8#usize)).call_mut
+          (fun p => spend.nullifier_reference.hash_owned p.1 p.2)
+          (spend.DOMAIN_NULLIFIER, BuilderNullifierReference.preimage k s)
+    ok __x.1
+is not definitionally equal to the right-hand side
+  do
+    let xs ← lift (BuilderNullifierReference.preimage k s).to_slice
+    poseidon2.hash_fields spend.DOMAIN_NULLIFIER xs
+
+k s : Std.Array U32 8#usize
+⊢ (do
+      let __x ←
+        (BuiltinFnMut (aspis_core.field.M31 × Std.Array aspis_core.field.M31 16#usize)
+                (Std.Array aspis_core.field.M31 8#usize)).call_mut
+            (fun p => spend.nullifier_reference.hash_owned p.1 p.2)
+            (spend.DOMAIN_NULLIFIER, BuilderNullifierReference.preimage k s)
+      ok __x.1) =
+    do
+    let xs ← lift (BuilderNullifierReference.preimage k s).to_slice
+    poseidon2.hash_fields spend.DOMAIN_NULLIFIER xs
+'R1Z.PV_RunJoin_NullifierSource17.pipeline' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_NullifierSource17.lean:32:21: error: Tactic `rfl` failed: The left-hand side
+  have state := Array.repeat 16#usize aspis_core.field.M31.ZERO;
+  do
+  let state1 ← state.update poseidon2.RATE 1095958530#u32
+  have i : Usize := input.len
+  let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+  let i2 ← lift (poseidon2.RATE.wrapping_add 1#usize)
+  let __x ← state1.index_mut_usize i2
+  match __x with
+    | (fst, index_mut_back) => do
+      let b ← core.slice.Slice.is_empty input
+      if b = true then
+          have state2 := index_mut_back i1;
+          do
+          let __x ←
+            poseidon2.permute_optimized_with_trace_threaded
+                (poseidon2.hash_fields_with_trace.closure.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple
+                  poseidon2.hash_fields.closure.Insts.CoreOpsFunctionFnMutPairUsizePoseidon2RoundTransitionTuple)
+                state2 ()
+          match __x with
+            | (state3, snd) =>
+              core.array.from_fn 8#usize
+                (poseidon2.hash_fields_with_trace.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                  poseidon2.hash_fields.closure.Insts.CoreOpsFunctionFnMutPairUsizePoseidon2RoundTransitionTuple)
+                state3
+        else do
+          let c ← core.slice.Slice.chunks input poseidon2.RATE
+          let iter ←
+            core.iter.traits.iterator.Iterator.enumerate.trait_default
+                (core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice aspis_core.field.M31) c
+          have a : Std.Array aspis_core.field.M31 16#usize := index_mut_back i1
+          let state2 ←
+            poseidon2.hash_fields_with_trace_loop0
+                poseidon2.hash_fields.closure.Insts.CoreOpsFunctionFnMutPairUsizePoseidon2RoundTransitionTuple iter () a
+          core.array.from_fn 8#usize
+              (poseidon2.hash_fields_with_trace.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                poseidon2.hash_fields.closure.Insts.CoreOpsFunctionFnMutPairUsizePoseidon2RoundTransitionTuple)
+              state2
+is not definitionally equal to the right-hand side
+  do
+    let state ← poseidon2.hash_fields_with_trace_loop0 callback PV_RunJoin_NullifierLoop17.iter0 () initial
+    core.array.from_fn 8#usize
+        (poseidon2.hash_fields_with_trace.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31 callback) state
+
+⊢ (have state := Array.repeat 16#usize aspis_core.field.M31.ZERO;
+    do
+    let state1 ← state.update poseidon2.RATE 1095958530#u32
+    have i : Usize := input.len
+    let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+    let i2 ← lift (poseidon2.RATE.wrapping_add 1#usize)
+    let __x ← state1.index_mut_usize i2
+    match __x with
+      | (fst, index_mut_back) => do
+        let b ← core.slice.Slice.is_empty input
+        if b = true then
+            have state2 := index_mut_back i1;
+            do
+            let __x ←
+              poseidon2.permute_optimized_with_trace_threaded
+                  (poseidon2.hash_fields_with_trace.closure.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple
+                    poseidon2.hash_fields.closure.Insts.CoreOpsFunctionFnMutPairUsizePoseidon2RoundTransitionTuple)
+                  state2 ()
+            match __x with
+              | (state3, snd) =>
+                core.array.from_fn 8#usize
+                  (poseidon2.hash_fields_with_trace.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                    poseidon2.hash_fields.closure.Insts.CoreOpsFunctionFnMutPairUsizePoseidon2RoundTransitionTuple)
+                  state3
+          else do
+            let c ← core.slice.Slice.chunks input poseidon2.RATE
+            let iter ←
+              core.iter.traits.iterator.Iterator.enumerate.trait_default
+                  (core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice aspis_core.field.M31) c
+            have a : Std.Array aspis_core.field.M31 16#usize := index_mut_back i1
+            let state2 ←
+              poseidon2.hash_fields_with_trace_loop0
+                  poseidon2.hash_fields.closure.Insts.CoreOpsFunctionFnMutPairUsizePoseidon2RoundTransitionTuple iter ()
+                  a
+            core.array.from_fn 8#usize
+                (poseidon2.hash_fields_with_trace.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                  poseidon2.hash_fields.closure.Insts.CoreOpsFunctionFnMutPairUsizePoseidon2RoundTransitionTuple)
+                state2) =
+    do
+    let state ← poseidon2.hash_fields_with_trace_loop0 callback PV_RunJoin_NullifierLoop17.iter0 () initial
+    core.array.from_fn 8#usize
+        (poseidon2.hash_fields_with_trace.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31 callback) state
+'R1Z.PV_RunJoin_NullifierSource17.hash_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NullifierSource17.digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NullifierSource17.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NullifierSource17.transfer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NullifierSource17.withdrawal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

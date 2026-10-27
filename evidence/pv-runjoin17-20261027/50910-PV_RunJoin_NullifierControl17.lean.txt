@@ -1,0 +1,31 @@
+import R1Z.PV_RunJoin_NullifierData17
+import R1Z.PV_RunJoin_FixtureArguments
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_NullifierControl17
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort PV_RunJoin_NullifierData17
+abbrev callback := poseidon2.hash_fields.closure.Insts.CoreOpsFunctionFnMutPairUsizePoseidon2RoundTransitionTuple
+abbrev key := PV_RunJoin_FixtureArguments.witness.pair.nullifier_key
+abbrev salt := PV_RunJoin_FixtureArguments.witness.pair.salt
+def initial : PV_Src_PortSboxStep.State := Array.make 16#usize
+  [0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+def keyIter : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) :=
+  ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,0#usize⟩,0#usize⟩
+def saltIter : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) :=
+  ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,0#usize⟩,0#usize⟩
+theorem absorb_key : poseidon2.hash_fields_with_trace_loop0_loop0 keyIter initial = ok s4_0 := by
+  simp only [poseidon2.hash_fields_with_trace_loop0_loop0,
+    core.iter.adapters.enumerate.IteratorEnumerate.next,
+    core.iter.traits.iterator.IteratorSliceIter,
+    core.slice.iter.IteratorSliceIter.next, keyIter, saltIter]
+  with_unfolding_all rfl
+#print axioms absorb_key
+
+theorem absorb_salt : poseidon2.hash_fields_with_trace_loop0_loop0 saltIter s4_23 = ok s5_0 := by
+  simp only [poseidon2.hash_fields_with_trace_loop0_loop0,
+    core.iter.adapters.enumerate.IteratorEnumerate.next,
+    core.iter.traits.iterator.IteratorSliceIter,
+    core.slice.iter.IteratorSliceIter.next, keyIter, saltIter]
+  with_unfolding_all rfl
+#print axioms absorb_salt
+end R1Z.PV_RunJoin_NullifierControl17

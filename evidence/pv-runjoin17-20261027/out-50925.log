@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_NullifierSource17.lean:21:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let __x ←
+      (BuiltinFnMut (aspis_core.field.M31 × Std.Array aspis_core.field.M31 16#usize)
+              (Std.Array aspis_core.field.M31 8#usize)).call_mut
+          (fun p => spend.nullifier_reference.hash_owned p.1 p.2)
+          (spend.DOMAIN_NULLIFIER, BuilderNullifierReference.preimage k s)
+    ok __x.1
+is not definitionally equal to the right-hand side
+  do
+    let xs ← lift (BuilderNullifierReference.preimage k s).to_slice
+    poseidon2.hash_fields spend.DOMAIN_NULLIFIER xs
+
+k s : Std.Array U32 8#usize
+⊢ (do
+      let __x ←
+        (BuiltinFnMut (aspis_core.field.M31 × Std.Array aspis_core.field.M31 16#usize)
+                (Std.Array aspis_core.field.M31 8#usize)).call_mut
+            (fun p => spend.nullifier_reference.hash_owned p.1 p.2)
+            (spend.DOMAIN_NULLIFIER, BuilderNullifierReference.preimage k s)
+      ok __x.1) =
+    do
+    let xs ← lift (BuilderNullifierReference.preimage k s).to_slice
+    poseidon2.hash_fields spend.DOMAIN_NULLIFIER xs
+'R1Z.PV_RunJoin_NullifierSource17.pipeline' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_NullifierSource17.lean:29:6: error(lean.unknownIdentifier): Unknown identifier `core.array.from_fn`
+'R1Z.PV_RunJoin_NullifierSource17.hash_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_NullifierSource17.lean:35:17: error(lean.unknownIdentifier): Unknown identifier `core.array.from_fn`
+'R1Z.PV_RunJoin_NullifierSource17.digest' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_NullifierSource17.lean:45:2: error: 'change' tactic failed, pattern
+  poseidon2.hash_fields 1095958530#u32 input = ?m.11
+is not definitionally equal to target
+  (do
+      let xs ← lift (BuilderNullifierReference.preimage key salt).to_slice
+      poseidon2.hash_fields spend.DOMAIN_NULLIFIER xs) =
+    ok PV_RunJoin_RecordedTransfer.publicRecord.nullifier
+'R1Z.PV_RunJoin_NullifierSource17.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NullifierSource17.transfer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NullifierSource17.withdrawal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

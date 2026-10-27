@@ -1,0 +1,9 @@
+# Production nullifier fixture specialization checked
+
+`R1Z.PV_RunJoin_NullifierSource17.transfer` and `.withdrawal` prove the actual ported `format.pool_v1_nullifier` with `PV_Src_ExternalReference.dictionary` returns the recorded native nullifier on the exact fixture key/salt. Both fixtures use the same key/salt; no compiler success or installed selected input is inferred.
+
+Composition: checked constant callback → symbolic source permutation → existing single-round model certificates for cells4/5 → canonical word injectivity → named eight-word absorption equations and checked iterator increments → actual two-chunk hash loop → initialization/digest forwarding. No whole permutation recurrence is kernel evaluated. The terminal comparison is against the retained native fixture result, nullifier [8526811,109678668,1639079956,402852,1893371776,347120802,331397657,1970188241]; both absorptions change the state. Per-function restoration inspection is in FIDELITY.md. Native probe evidence is reused, not rerun.
+
+Accepted targets: 50901 constant bridge; 50902 native state data; 50903 permutation instances; 50918 absorption/iterator equations; 50924 outer loop; 50933 production wrapper and both fixtures. Every printed axiom set is exactly {propext,Classical.choice,Quot.sound}. All receipts include source revision, wall, peak RSS and swap0. Failures retained; no failed source rerun unchanged. 50915 was a vanished-other-cgroup admission refusal (zero Lean charge), followed by more than180s before50916.
+
+Supports V152–V154 compile_call; removes the fixture production-nullifier sub-obligation only, not a whole ledger row or endpoint premise. Constructed P={source public binding,trace} before/after; deployed P OPEN; counts2/8/6 unchanged; endpoint removed/added/weakened0/0/0. T unchanged. No shipped code modified.
