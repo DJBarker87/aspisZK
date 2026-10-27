@@ -1,6 +1,6 @@
 import R0P.Occupancy
 import ValueFamilyFieldTransport
-import SpendDataMap
+import DigestFamilyFieldTransport
 set_option autoImplicit false
 namespace AspisR1.FJk_OccupancyMap
 variable {K L : Type} [Field K] [Field L]

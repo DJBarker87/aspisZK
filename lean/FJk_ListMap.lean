@@ -6,7 +6,7 @@ variable {K L : Type} [NonAssocSemiring K] [NonAssocSemiring L]
 theorem getD (g : K →+* L) (xs : List K) (i : Nat) :
     g (xs.getD i 0)=(xs.map g).getD i 0 := by
   induction xs generalizing i with
-  | nil => simp only [List.getD_nil,map_zero]
+  | nil => simp only [List.map_nil,List.getD_nil,map_zero]
   | cons x xs ih =>
     cases i with
     | zero => rfl
