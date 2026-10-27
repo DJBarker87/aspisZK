@@ -1,0 +1,372 @@
+{
+  "branch": "codex/pv-batch2-20261027",
+  "base": "73070ddd512bc4e79edfc0db714fb64dc74e87b8",
+  "applied_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
+  "stop": "transfer indicative median +4.1491556% exceeds +3%; no extractor or Lean launch",
+  "elf_gate": true,
+  "timing": [
+    {
+      "fixture": "transfer",
+      "seconds": {
+        "baseline": [
+          13.861992638,
+          15.277775741,
+          16.185164935,
+          15.582113507,
+          16.433339917
+        ],
+        "candidate": [
+          14.245554579,
+          14.946171965,
+          18.071950805,
+          18.011438199,
+          16.228639645
+        ]
+      },
+      "medians": {
+        "baseline": 15.582113507,
+        "candidate": 16.228639645
+      },
+      "ratio": 1.041491556181359,
+      "within_three_percent": false
+    },
+    {
+      "fixture": "withdrawal",
+      "seconds": {
+        "baseline": [
+          14.21131397,
+          15.032520432,
+          17.687727444,
+          16.190779525,
+          16.161496564
+        ],
+        "candidate": [
+          14.245844638,
+          15.357552602,
+          16.602763134,
+          18.190192381,
+          15.769175877
+        ]
+      },
+      "medians": {
+        "baseline": 16.161496564,
+        "candidate": 15.769175877
+      },
+      "ratio": 0.975724977854223,
+      "within_three_percent": true
+    }
+  ],
+  "function_cost": {
+    "scope": "Finite native inclusive microbenchmark on one fixed input; allocation included for original new and both materialize owners; not a source proof, worst-case bound, or attribution of whole-prover regression",
+    "rows": [
+      {
+        "name": "249_original",
+        "iterations": 100000,
+        "wall_seconds": 0.005631844,
+        "microseconds_per_call": 0.05631844
+      },
+      {
+        "name": "249_copy",
+        "iterations": 100000,
+        "wall_seconds": 0.006394508,
+        "microseconds_per_call": 0.06394508
+      },
+      {
+        "name": "250_original",
+        "iterations": 100000,
+        "wall_seconds": 0.003016388,
+        "microseconds_per_call": 0.03016388
+      },
+      {
+        "name": "250_copy",
+        "iterations": 100000,
+        "wall_seconds": 0.005023771,
+        "microseconds_per_call": 0.05023771
+      },
+      {
+        "name": "252_original",
+        "iterations": 10000,
+        "wall_seconds": 0.014463693,
+        "microseconds_per_call": 1.4463693
+      },
+      {
+        "name": "252_copy",
+        "iterations": 10000,
+        "wall_seconds": 0.015398245,
+        "microseconds_per_call": 1.5398245
+      },
+      {
+        "name": "253_original",
+        "iterations": 100000,
+        "wall_seconds": 0.007202839,
+        "microseconds_per_call": 0.07202839
+      },
+      {
+        "name": "253_copy",
+        "iterations": 100000,
+        "wall_seconds": 0.007091988,
+        "microseconds_per_call": 0.07091987999999999
+      },
+      {
+        "name": "251_original",
+        "iterations": 100,
+        "wall_seconds": 0.058453853,
+        "microseconds_per_call": 584.53853
+      },
+      {
+        "name": "251_copy_with_allocation",
+        "iterations": 100,
+        "wall_seconds": 0.05809617,
+        "microseconds_per_call": 580.9617000000001
+      }
+    ],
+    "probe_sha256": "cfda8f02f37ee9a34575f8e6489f4ee503471e337c2fe76340d920fc5671faba"
+  },
+  "receipts": [
+    {
+      "path": "candidate/build-baseline-001/receipt/receipt.json",
+      "command": [
+        "cargo",
+        "build",
+        "--release",
+        "--offline",
+        "--locked",
+        "-j",
+        "4",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--example",
+        "prover_rw_gate",
+        "--features",
+        "optimized-terminal,r1p-check,ct-host-prover"
+      ],
+      "source_revision": "73070ddd512bc4e79edfc0db714fb64dc74e87b8",
+      "exit_status": 0,
+      "wall_seconds": 38.824,
+      "peak_rss_kib": 569536,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 873742336,
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "candidate/build-candidate-003/receipt/receipt.json",
+      "command": [
+        "cargo",
+        "build",
+        "--release",
+        "--offline",
+        "--locked",
+        "-j",
+        "4",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--example",
+        "prover_rw_gate",
+        "--features",
+        "optimized-terminal,r1p-check,ct-host-prover"
+      ],
+      "source_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
+      "exit_status": 0,
+      "wall_seconds": 4.411,
+      "peak_rss_kib": 327896,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 311377920,
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "candidate/build-default-001/receipt/receipt.json",
+      "command": [
+        "timeout",
+        "600",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/build-default-001/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "source_revision": "5b92d4aa18",
+      "exit_status": 0,
+      "wall_seconds": 37.285,
+      "peak_rss_kib": 685408,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 1197428736,
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "candidate/build-devnet-001/receipt/receipt.json",
+      "command": [
+        "timeout",
+        "600",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/build-devnet-001/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "source_revision": "5b92d4aa18",
+      "exit_status": 0,
+      "wall_seconds": 37.613,
+      "peak_rss_kib": 686164,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 1202151424,
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "candidate/build-function-cost-002/receipt/receipt.json",
+      "command": [
+        "python3",
+        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/build-function-cost.py"
+      ],
+      "source_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
+      "exit_status": 0,
+      "wall_seconds": 31.741,
+      "peak_rss_kib": 569616,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 906768384,
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "candidate/build-pool-001/receipt/receipt.json",
+      "command": [
+        "timeout",
+        "600",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src/programs/aspis-pool/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/build-pool-001/artifacts",
+        "--features",
+        "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "source_revision": "5b92d4aa18",
+      "exit_status": 0,
+      "wall_seconds": 43.973,
+      "peak_rss_kib": 676836,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 1075781632,
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "candidate/function-cost-run-001/receipt/receipt.json",
+      "command": [
+        "/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/pv-batch2-function-cost"
+      ],
+      "source_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
+      "exit_status": 0,
+      "wall_seconds": 0.183,
+      "peak_rss_kib": 1760,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 16203776,
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "candidate/timing-precheck-scope-001/receipt/receipt.json",
+      "command": [
+        "python3",
+        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/precheck.py"
+      ],
+      "source_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
+      "exit_status": 3,
+      "wall_seconds": 318.784,
+      "peak_rss_kib": 675672,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 724373504,
+      "print_axioms": "N/A: no Lean compilation"
+    }
+  ],
+  "lean_attempts": 0,
+  "lean_budget": 100,
+  "kani_attempts": 0,
+  "kani_budget": 0,
+  "used_envj_ids": [],
+  "per_op": [
+    {
+      "op": 249,
+      "row": "V256",
+      "name": "gamma_sample",
+      "source_law": "NOT ATTEMPTED: timing stop",
+      "copy_equality": "NOT ATTEMPTED: timing stop",
+      "bridge": "OPEN; original row unchanged"
+    },
+    {
+      "op": 250,
+      "row": "V257",
+      "name": "ordinary_sample",
+      "source_law": "NOT ATTEMPTED: timing stop",
+      "copy_equality": "NOT ATTEMPTED: timing stop",
+      "bridge": "OPEN; original row unchanged"
+    },
+    {
+      "op": 251,
+      "row": "V258",
+      "name": "Weights.materialize",
+      "source_law": "NOT ATTEMPTED: timing stop",
+      "copy_equality": "NOT ATTEMPTED: timing stop",
+      "bridge": "OPEN; original row unchanged"
+    },
+    {
+      "op": 252,
+      "row": "V259",
+      "name": "Weights.new",
+      "source_law": "NOT ATTEMPTED: timing stop",
+      "copy_equality": "NOT ATTEMPTED: timing stop",
+      "bridge": "OPEN; original row unchanged"
+    },
+    {
+      "op": 253,
+      "row": "V260",
+      "name": "Weights.raw",
+      "source_law": "NOT ATTEMPTED: timing stop",
+      "copy_equality": "NOT ATTEMPTED: timing stop",
+      "bridge": "OPEN; original row unchanged"
+    }
+  ],
+  "fixture_byte_gate": "NOT RUN: stopped before proof stage; successful proof generation and verification do not establish byte equality",
+  "formal_audit": "NOT RUN; no new Lean theorem; #print axioms N/A",
+  "premises": {
+    "removed": [],
+    "retained": [
+      "V256",
+      "V257",
+      "V258",
+      "V259",
+      "V260",
+      "all existing endpoint and deployment hypotheses"
+    ],
+    "added_to_endpoint": [],
+    "changed_endpoint": [],
+    "transferred_to_T": [],
+    "trust_fields": [
+      "entropy_law",
+      "entropy_kernel",
+      "observation"
+    ]
+  },
+  "candidate_obligations": "Each redirected copy needs complete Result, arbitrary-input observable/error equivalence, source/row bridge and native effect/side-channel binding; none discharged",
+  "target": "not yet established",
+  "next_deliverable": "Lead review of the timing stop and per-function costs; a revised authorized candidate must pass all three ELF pins and the same pre-check before extraction/proofs resume",
+  "keys": "retained securely; no transactions or cleanup",
+  "cache": "Pre-existing host compilation caches reused; no private target directory, Lean objects, or local target directory created"
+}
