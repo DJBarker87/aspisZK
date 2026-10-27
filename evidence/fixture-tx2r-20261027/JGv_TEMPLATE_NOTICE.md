@@ -1,0 +1,1 @@
+JGv_TX2_NNN.json files are launcher input templates inherited from Rc8. Historical output fields in a template are not results of this job. Only NNN/receipt.json plus stdout/time/source snapshots establish a compiled result.001 has no compiler receipt and is recorded separately as a charged pre-Lean rejection.

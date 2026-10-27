@@ -20,4 +20,6 @@ for p in sorted(P.glob('JGv_TX2_[0-9][0-9][0-9]/receipt.json')):
 (P/'JGv_ATTEMPTS.jsonl').write_text(''.join(json.dumps(d,sort_keys=True)+'\n' for d in rows))
 (P/'JGv_VALIDATION.json').write_text(json.dumps(valid,indent=2)+'\n')
 summary=dict(processes=len(rows),passed=sum(d['exit_status']==0 for d in rows),rejected=sum(d['exit_status']!=0 for d in rows),kani=0,total_wall=sum(d['wall_seconds'] for d in rows),maximum_rss_kib=max(int(d['peak_rss_kib']) for d in rows),swaps=sum(int(d['swaps']) for d in rows),checked_current_sources=len(valid))
+if (P/'JGv_TX2_100/receipt.json').exists():
+ summary.update(charged_requests=100,prelean_rejections=1,budget_exhausted=True,lean_limit=100,kani_limit=10,final_attempt='JGv_TX2_100',final_target='JGv_DotSum.lean',target_established=False,accepted2=False,top_premises_removed=0)
 (P/'JGv_SUMMARY.json').write_text(json.dumps(summary,indent=2)+'\n');print(summary)
