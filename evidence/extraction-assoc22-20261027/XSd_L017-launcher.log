@@ -1,0 +1,95 @@
+{"attempt": "XSd_L017", "exit_status": 1, "wall_seconds": 1.14665256801527, "peak_rss_kib": "2648376", "swaps": "0", "print_axioms": ["'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx, Quot.sound]", "'XSd_DotSequence.four' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+XSd_generated/XSd_DotSequence.lean:25:68: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (ys, _) ←
+      let (mapped, closureNext) := (y, f)
+        do
+        let (mappedRest, closureFinal) ← core.array.mapListFnMut (BuiltinFnMut T U) xs closureNext
+        ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+    ok ↑ys
+is not definitionally equal to the right-hand side
+  do
+    let __do_lift ←
+      do
+        let (ys, _) ← ok v✝
+        ok ↑ys
+    pure (y :: __do_lift)
+
+case cons.ok.ok
+T U : Type
+f : T → Result U
+x : T
+xs : List T
+ih :
+  (do
+      let (ys, _) ← core.array.mapListFnMut (BuiltinFnMut T U) xs f
+      ok ↑ys) =
+    List.mapM f xs
+call :
+  (BuiltinFnMut T U).call_mut f x
+...
+st, closureFinal) ← core.array.mapListFnMut (BuiltinFnMut T U) xs closureNext
+          ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+      ok ↑ys) =
+    do
+    let __do_lift ←
+      do
+        let (ys, _) ← fail e✝
+        ok ↑ys
+    pure (y :: __do_lift)
+XSd_generated/XSd_DotSequence.lean:25:68: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (ys, _) ←
+      let (mapped, closureNext) := (y, f)
+        do
+        let (mappedRest, closureFinal) ← core.array.mapListFnMut (BuiltinFnMut T U) xs closureNext
+        ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+    ok ↑ys
+is not definitionally equal to the right-hand side
+  do
+    let __do_lift ←
+      do
+        let (ys, _) ← div
+        ok ↑ys
+    pure (y :: __do_lift)
+
+case cons.ok.div
+T U : Type
+f : T → Result U
+x : T
+xs : List T
+ih :
+  (do
+      let (ys, _) ← core.array.mapListFnMut (BuiltinFnMut T U) xs f
+      ok ↑ys) =
+    List.mapM f xs
+call :
+  (BuiltinFnMut T U).call_mut f x = do
+    let y ← f x
+    ok (y, f)
+y : U
+h : f x = ok y
+⊢ (do
+      let (ys, _) ←
+        let (mapped, closureNext) := (y, f)
+          do
+          let (mappedRest, closureFinal) ← core.array.mapListFnMut (BuiltinFnMut T U) xs closureNext
+          ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+      ok ↑ys) =
+    do
+    let __do_lift ←
+      do
+        let (ys, _) ← div
+        ok ↑ys
+    pure (y :: __do_lift)
+XSd_generated/XSd_DotSequence.lean:15:27: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx, Quot.sound]
+'XSd_DotSequence.four' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r071c901cac2d417d802d7c6bda82cfae.scope; invocation ID: c38b3c018f23419bb6545cbffabf5d70

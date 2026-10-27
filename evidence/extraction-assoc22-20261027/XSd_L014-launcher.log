@@ -1,0 +1,71 @@
+{"attempt": "XSd_L014", "exit_status": 1, "wall_seconds": 1.3009801580337808, "peak_rss_kib": "2652912", "swaps": "0", "print_axioms": ["'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx, Quot.sound]", "'XSd_DotSequence.four' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+Error: index out of bounds
+backtrace:
+/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared.so(+0x9332f35) [0x70d92f932f35]
+/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared.so(+0x932a657) [0x70d92f92a657]
+/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared.so(lean_array_get_panic+0x6e) [0x70d92f92aaae]
+/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared.so(Array.get!InternalBorrowed [boxed]+0x3e) [0x70d929914f4e]
+/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared.so(+0x931715d) [0x70d92f91715d]
+/home/dombarker/.elan/toolchains/leanp
+...
+                  | div => div }
+              xs closureNext
+        ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+    ok ↑ys
+is not definitionally equal to the right-hand side
+  div
+
+case cons.ok.div
+T U : Type
+f : T → Result U
+x : T
+xs : List T
+y : U
+h : f x = ok y
+ht : core.array.mapListFnMut (BuiltinFnMut T U) xs f = div
+ih :
+  (do
+      let (ys, _) ← div
+      ok ↑ys) =
+    List.mapM f xs
+⊢ (do
+      let (ys, _) ←
+        let (mapped, closureNext) := (y, f)
+          do
+          let (mappedRest, closureFinal) ←
+            core.array.mapListFnMut
+                { FnOnceInst := BuiltinFnOnce T U,
+                  call_mut := fun f x =>
+                    match f x with
+                    | ok y => ok (y, f)
+                    | fail e => fail e
+                    | div => div }
+                xs closureNext
+          ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+      ok ↑ys) =
+    div
+XSd_generated/XSd_DotSequence.lean:24:55: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XSd_generated/XSd_DotSequence.lean:25:26: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵t̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XSd_generated/XSd_DotSequence.lean:26:23: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵t̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx, Quot.sound]
+'XSd_DotSequence.four' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7c10dedfb0a64039b83572a1f05abbc5.scope; invocation ID: 9409cf8c32d04b7e911e411973f0a373

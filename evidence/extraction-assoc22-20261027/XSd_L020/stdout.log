@@ -1,0 +1,88 @@
+XSd_generated/XSd_DotReduce.lean:23:3: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i8 ← ok (UScalar.wrapping_sub (AspisR1.FIo_ReduceBounds.fold (AspisR1.FIo_ReduceBounds.fold x)) 2147483647#u64)
+    ok (UScalar.cast UScalarTy.U32 i8)
+is not definitionally equal to the right-hand side
+  if
+      U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+          ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32) ≥
+        2147483647#u64 then
+    ok
+      (UScalar.cast UScalarTy.U32
+        ((U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+              ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)).wrapping_sub
+          2147483647#u64))
+  else
+    ok
+      (UScalar.cast UScalarTy.U32
+        (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+          ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+
+case isTrue
+x : U64
+mask : core.convert.num.FromU64U32.from 2147483647#u32 = 2147483647#u64
+h : AspisR1.FIo_ReduceBounds.fold (AspisR1.FIo_ReduceBounds.fold x) ≥ 2147483647#u64
+⊢ (do
+      let i8 ←
+        ok (UScalar.wrapping_sub (AspisR1.FIo_ReduceBounds.fold (AspisR1.FIo_ReduceBounds.fold x)) 2147483647#u64)
+      ok (UScalar.cast UScalarTy.U32 i8)) =
+    if
+        U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+            ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32) ≥
+          2147483647#u64 then
+      ok
+        (UScalar.cast UScalarTy.U32
+          ((U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+                ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)).wrapping_sub
+            2147483647#u64))
+    else
+      ok
+        (UScalar.cast UScalarTy.U32
+          (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+            ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+XSd_generated/XSd_DotReduce.lean:24:3: error: Tactic `rfl` failed: The left-hand side
+  ok (UScalar.cast UScalarTy.U32 (AspisR1.FIo_ReduceBounds.fold (AspisR1.FIo_ReduceBounds.fold x)))
+is not definitionally equal to the right-hand side
+  if
+      U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+          ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32) ≥
+        2147483647#u64 then
+    ok
+      (UScalar.cast UScalarTy.U32
+        ((U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+              ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)).wrapping_sub
+          2147483647#u64))
+  else
+    ok
+      (UScalar.cast UScalarTy.U32
+        (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+          ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+
+case isFalse
+x : U64
+mask : core.convert.num.FromU64U32.from 2147483647#u32 = 2147483647#u64
+h✝ : ¬AspisR1.FIo_ReduceBounds.fold (AspisR1.FIo_ReduceBounds.fold x) ≥ 2147483647#u64
+⊢ ok (UScalar.cast UScalarTy.U32 (AspisR1.FIo_ReduceBounds.fold (AspisR1.FIo_ReduceBounds.fold x))) =
+    if
+        U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+            ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32) ≥
+          2147483647#u64 then
+      ok
+        (UScalar.cast UScalarTy.U32
+          ((U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+                ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)).wrapping_sub
+            2147483647#u64))
+    else
+      ok
+        (UScalar.cast UScalarTy.U32
+          (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+            ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+XSd_generated/XSd_DotReduce.lean:17:23: warning: This simp argument is unused:
+  AspisR1.FIo_ReduceFacts.shr31
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵A̵s̵p̵i̵s̵R̵1̵.̵F̵I̵o̵_̵R̵e̵d̵u̵c̵e̵F̵a̵c̵t̵s̵.̵s̵h̵r̵3̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSd_DotReduce.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XSd_DotReduce.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

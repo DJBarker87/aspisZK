@@ -1,0 +1,52 @@
+{"attempt": "XSd_L016", "exit_status": 1, "wall_seconds": 1.1508647309965454, "peak_rss_kib": "2648848", "swaps": "0", "print_axioms": ["'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx]", "'XSd_DotSequence.four' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+XSd_generated/XSd_DotSequence.lean:15:2: error: 'change' tactic failed, pattern
+  (do
+      let __x ←
+        do
+          let y ← f x
+          ok (y, f)
+      match __x with
+        | (y, next) => do
+          let __x ← core.array.mapListFnMut (BuiltinFnMut T U) xs next
+          match __x with
+            | (rest, last) => ok (y :: ↑rest)) =
+    ?m.48
+is not definitionally equal to target
+  (do
+      let (ys, _) ←
+        do
+          let (mapped, closureNext) ← (BuiltinFnMut T U).call_mut f x
+          let (mappedRest, closureFinal) ← core.array.mapListFnMut (BuiltinFnMut T U) xs closureNext
+          ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+      ok ↑ys) =
+    do
+    let __do_lift
+...
+XSd_generated/XSd_DotSequence.lean:15:2: error: 'change' tactic failed, pattern
+  (do
+      let __x ←
+        do
+          let y ← f x
+          ok (y, f)
+      match __x with
+        | (y, next) => do
+          let __x ← core.array.mapListFnMut (BuiltinFnMut T U) xs next
+          match __x with
+            | (rest, last) => ok (y :: ↑rest)) =
+    ?m.48
+is not definitionally equal to target
+  (do
+      let (ys, _) ←
+        do
+          let (mapped, closureNext) ← (BuiltinFnMut T U).call_mut f x
+          let (mappedRest, closureFinal) ← core.array.mapListFnMut (BuiltinFnMut T U) xs closureNext
+          ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+      ok ↑ys) =
+    do
+    let __do_lift ← f x
+    let __do_lift_1 ← List.mapM f xs
+    pure (__do_lift :: __do_lift_1)
+'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx]
+'XSd_DotSequence.four' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r38c6b1cfd62444a3ade269f4d196736a.scope; invocation ID: 746c915d92ac4d88b08db4b7e1bfde78
