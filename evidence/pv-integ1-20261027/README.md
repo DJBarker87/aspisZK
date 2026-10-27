@@ -65,7 +65,12 @@ records were compared. Runtime measurements are evidence metadata, not quiet-win
 compile. This includes the canonical P6 source and ten imported files newly
 present at their canonical paths. Objects are inspected read-only. No shared
 env-J source is installed or overwritten. Assigned IDs 53900–54199, budget
-30 Lean attempts, zero Kani. Focused target re-checks pending.
+30 Lean attempts, zero Kani. Focused target re-checks pending. Attempt 53900 exited 1 at a missing
+`PV_Op223_P6Bridge.olean` in the private same-prefix object directory, before
+elaboration. `object-overlay.json` records the replacement environment:
+read-only links to the retained, audited op223 objects, excluding both output
+targets. No old object or shared source is overwritten. IDs 53901 and 53902
+were refused before execution and are uncharged; cooldowns use fresh IDs.
 
 Changed/new imported files (listed before compiling):
 
