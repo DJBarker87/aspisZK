@@ -1,11 +1,32 @@
-{
-  "prepared": {
-    "source": "XRn_Join_Funs.lean",
-    "source_body_sha256": "d771be2a235f58e3b4e2f948514fd284ef16d2ba8ff5046b5116ab43d2f6dbaa",
-    "substitutions": [
-      "declaration name plus explicit low parameter",
-      "transcript.Transcript.scalar \u2192 XRz_HybridSampler.scalar low"
-    ],
-    "bytes": 4910
+[
+  {
+    "file": "XRz_HybridPrepared.lean",
+    "original": "verifier.Prepared.new",
+    "only_expected_substitutions": true,
+    "original_sha256": "6cff01adec5987c6c1b4543aa37b0346092c3a69ec7283ee7c1bc5ecbfc646bb",
+    "new_body_sha256": "29ad21aa27bc4c5822de9995d9e5398db6f7a8ac8c19604105ed64cf780dc0e3",
+    "substitutions": {
+      "transcript.Transcript.scalar": "XRz_HybridSampler.scalar low"
+    }
+  },
+  {
+    "file": "XRz_HybridPrepare.lean",
+    "original": "verifier.candidate.prepare",
+    "only_expected_substitutions": true,
+    "original_sha256": "4da864b0d46bf6dd13aba10ef68f660a457581a270fc954406496f6f5594710b",
+    "new_body_sha256": "271a19c5c6266ef08336ade017325b97ff0c87770d2d90ebb9ff00c91a7a3a9d",
+    "substitutions": {
+      "verifier.Prepared.new": "XRz_HybridPrepared.prepared low"
+    }
+  },
+  {
+    "file": "XRz_HybridTx1.lean",
+    "original": "verifier.candidate.tx1",
+    "only_expected_substitutions": true,
+    "original_sha256": "71aebaa0de273a9cde69a5e4e6f687d33d55f812542be49498ade544e8764a30",
+    "new_body_sha256": "213d6acdca3fb999d8cfa72737a73e196764625d1c935b2bc87eeb8483e19738",
+    "substitutions": {
+      "verifier.candidate.prepare": "XRz_HybridPrepare.prepare low"
+    }
   }
-}
+]

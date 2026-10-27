@@ -1,0 +1,17 @@
+import XRz_FinishCarrier
+import XRx_ValueNonvacuity
+open Aeneas Aeneas.Std Result XRn_Join_Release
+set_option autoImplicit false
+namespace XRz_RecordNonvacuity
+/-- Finish materialization has a genuine all-row input domain. -/
+theorem source (a b c d : U64) (terms : Usize) (q : aspis_core.field.QM31) :
+ ∃ out : Slice aspis_core.field.QM31,
+ verifier.BatchedWeights.finish
+  (⟨⟨[Array.make 4#usize [a,b,c,d]],by scalar_tac⟩,terms⟩ : verifier.BatchedWeights)
+  (⟨[q],by scalar_tac⟩ : Slice aspis_core.field.QM31)=ok out ∧ out.length=1 := by
+ obtain ⟨out,run,len,_⟩ := XRz_FinishMaterialize.source
+  (⟨⟨[Array.make 4#usize [a,b,c,d]],by scalar_tac⟩,terms⟩ : verifier.BatchedWeights)
+  (⟨[q],by scalar_tac⟩ : Slice aspis_core.field.QM31) (by change 1≤1; omega)
+ exact ⟨out,run,len⟩
+#print axioms source
+end XRz_RecordNonvacuity
