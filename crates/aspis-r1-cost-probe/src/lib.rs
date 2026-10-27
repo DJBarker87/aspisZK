@@ -61,3 +61,6 @@ pub mod host_work;
 
 #[cfg(all(feature = "prover", feature = "r1p-check"))]
 mod prover_shared;
+
+#[cfg(feature = "prover")]
+pub mod host_forest;
