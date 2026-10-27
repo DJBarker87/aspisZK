@@ -1,0 +1,221 @@
+structure AspisR1.S2Trust.S2TrustedSdkBorrow {W F : Type} (L : AspisR1.S2Trust.Library W F) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          ∀ (a b : ℕ),
+            L.accountData w a = (s.accounts a).1 ∧
+              L.accountLamports w a = (s.accounts a).2 ∧
+                ((s.accounts a).1 = (s.accounts b).1 → L.accountData w a = L.accountData w b) ∧
+                  (s.ownerLive a = Bool.true → L.accountData w a ≠ L.accountLamports w a)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.cell_payload : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s → AspisR1.S2Trust.Valid s → ∀ (c : ℕ), L.cellPayload w c = s.payload c
+  AspisR1.S2Trust.S2TrustedSdkBorrow.cell_counter : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          ∀ (c : ℕ), L.cellCounter w c = s.counter c ∧ ∀ (t : ℕ), L.liveGuard w t = AspisR1.S2Trust.lookup s t
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_ok : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+            0 ≤ s.counter (s.accounts a).1 →
+              s.counter (s.accounts a).1 < AspisR1.S2Trust.maxCounter →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o)
+                  (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.shared,
+                    AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_err : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+            s.counter (s.accounts a).1 < 0 ∨ s.counter (s.accounts a).1 = AspisR1.S2Trust.maxCounter →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o) (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_ok : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+            s.counter (s.accounts a).1 = 0 →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive,
+                  AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_err : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+            s.counter (s.accounts a).1 ≠ 0 →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o) (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_deref : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.shared →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_deref : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.exclusive →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                  (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)) ∧
+                ∀ (i : ℕ) (v : UInt8),
+                  i < (s.payload g.cell).descriptor.length →
+                    AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.write t i v)
+                      (AspisR1.S2Trust.writeAt s g i v, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.guard_move : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.move t o) →
+            AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.move t o)
+              (AspisR1.S2Trust.relocate s t o, AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.shared →
+              0 < s.counter g.cell →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                  (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.exclusive →
+              s.counter g.cell = -1 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                  (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.error_move_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Matches L w AspisR1.S2Trust.Op.errorMoveDrop (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.borrow_frame : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s op → AspisR1.S2Trust.Matches L w op (AspisR1.S2Trust.run s op)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.guard_liveness : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            L.liveGuard w t = Option.some g ∧
+              L.allocated w g.cell = Bool.true ∧ (L.cellPayload w g.cell).descriptor = g.descriptor
+constructor:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.mk {W F : Type} {L : AspisR1.S2Trust.Library W F}
+    (account_data_cell :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            ∀ (a b : ℕ),
+              L.accountData w a = (s.accounts a).1 ∧
+                L.accountLamports w a = (s.accounts a).2 ∧
+                  ((s.accounts a).1 = (s.accounts b).1 → L.accountData w a = L.accountData w b) ∧
+                    (s.ownerLive a = Bool.true → L.accountData w a ≠ L.accountLamports w a))
+    (cell_payload :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s → AspisR1.S2Trust.Valid s → ∀ (c : ℕ), L.cellPayload w c = s.payload c)
+    (cell_counter :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            ∀ (c : ℕ), L.cellCounter w c = s.counter c ∧ ∀ (t : ℕ), L.liveGuard w t = AspisR1.S2Trust.lookup s t)
+    (shared_ok :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+              0 ≤ s.counter (s.accounts a).1 →
+                s.counter (s.accounts a).1 < AspisR1.S2Trust.maxCounter →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o)
+                    (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.shared,
+                      AspisR1.S2Trust.Reply.guard t))
+    (shared_err :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+              s.counter (s.accounts a).1 < 0 ∨ s.counter (s.accounts a).1 = AspisR1.S2Trust.maxCounter →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o) (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (exclusive_ok :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+              s.counter (s.accounts a).1 = 0 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                  (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive,
+                    AspisR1.S2Trust.Reply.guard t))
+    (exclusive_err :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+              s.counter (s.accounts a).1 ≠ 0 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                  (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (shared_deref :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.shared →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                  (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)))
+    (exclusive_deref :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.exclusive →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                    (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)) ∧
+                  ∀ (i : ℕ) (v : UInt8),
+                    i < (s.payload g.cell).descriptor.length →
+                      AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.write t i v)
+                        (AspisR1.S2Trust.writeAt s g i v, AspisR1.S2Trust.Reply.unit))
+    (guard_move :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.move t o) →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.move t o)
+                (AspisR1.S2Trust.relocate s t o, AspisR1.S2Trust.Reply.guard t))
+    (shared_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.shared →
+                0 < s.counter g.cell →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (exclusive_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.exclusive →
+                s.counter g.cell = -1 →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (error_move_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Matches L w AspisR1.S2Trust.Op.errorMoveDrop (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (borrow_frame :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s op → AspisR1.S2Trust.Matches L w op (AspisR1.S2Trust.run s op))
+    (guard_liveness :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              L.liveGuard w t = Option.some g ∧
+                L.allocated w g.cell = Bool.true ∧ (L.cellPayload w g.cell).descriptor = g.descriptor) :
+    AspisR1.S2Trust.S2TrustedSdkBorrow L

@@ -1,0 +1,35 @@
+F3J_NativeInput.lean:39:16: error: Tactic `assumption` failed
+
+CoreError : Type
+adapter : AdapterRw.Ops
+ops : Ops
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops CoreError
+B : FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+accounts1 accounts2 : S2W_ExtractionBoundary.Accounts
+saved : alloc.vec.Vec U8
+f : S2W_NativeConsolidation.FirstCut
+s : S2W_NativeConsolidation.SecondCut
+cuts :
+  S2W_NativeConsolidation.SourceCuts
+    (ClaimsUnrolledSdk.sdkOps adapter (Tx1Q_SameCut.dictionary ops reserved query geo) B std) accounts1 accounts2 saved
+    f s
+selected :
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+      f.statement =
+    ok f.semantic
+run :
+  Tx1Q_Execution.Run (Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo
+    (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std) ()
+    (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved
+header : OraclePortHeader.accepts (bytesOf ↑f.proof) = true
+w : CanonicalCutEnrichedTranscript.Words
+i : F3_Model.Input
+pre : r1_wire.Prefix
+encoded : alloc.vec.Vec U8
+row : ℕ
+⊢ semanticRows 27 0 (slice { wire := i.stored, semantic := List.map (fun s => bytesOf ↑s) ↑pre.records }.wire 48 6983) =
+    some { wire := i.stored, semantic := List.map (fun s => bytesOf ↑s) ↑pre.records }.semantic
+F3J_NativeInput.lean:58:14: error(lean.unknownIdentifier): Unknown constant `from_cut`

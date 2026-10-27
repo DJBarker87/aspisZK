@@ -1,0 +1,297 @@
+AspisR1.F3J_NativeConstruction.native {CoreError : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.ClaimsUnrolledSdk.sdkOps adapter (AspisR1.Uni_Install.current ops reserved query geo) B std) native1
+      native2 hashv)
+  (id : AspisR1.S2W_ExtractionBoundary.Program) (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+  (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (accepted1 : native1 id accounts1 data1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved))
+  (accepted2 : native2 id accounts2 data2 slot = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+  (w : AspisR1.CanonicalCutEnrichedTranscript.Words) :
+  ∃ f s log,
+    AspisR1.S2W_NativeConsolidation.SourceCuts
+        (AspisR1.ClaimsUnrolledSdk.sdkOps adapter (AspisR1.Uni_Install.current ops reserved query geo) B std) accounts1
+        accounts2 saved f s ∧
+      AspisR1.RawJ_RecordCuts.Recorded f s saved log ∧
+        AspisR1.S2W_Trace.run
+              (AspisR1.ClaimsUnrolledSdk.sdkOps adapter (AspisR1.Uni_Install.current ops reserved query geo) B std)
+              (AspisR1.S2W_Observation.two
+                (AspisR1.ClaimsUnrolledSdk.sdkOps adapter (AspisR1.Uni_Install.current ops reserved query geo) B std) id
+                accounts1 data1 accounts2 data2 slot)
+              [] =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved, log) ∧
+          ∃ i pre encoded,
+            i.physical.bytes = AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub ∧
+              i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof ∧
+                AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+                      (AspisR1CurrentCaller.FirstComposition.toRetainedPublic
+                        (AspisS6CurrentVerifierCarrier.toPublic f.semantic)) =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok encoded) ∧
+                  i.semantic.value.pubBytes = AspisR1.MultiproofConeCanonical.bytesOf ↑encoded ∧
+                    i.semantic.value.tag = 2 ∧
+                      (∃ decoded, AspisR1.SemanticPublicWire.parsePublic i.semantic.value.pubBytes = some decoded) ∧
+                        AspisR1.OraclePortCompactDraft.semanticRows 27 0
+                              (AspisR1.OraclePortCompactDraft.slice i.stored 48 6983) =
+                            some (List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s) ↑pre.records) ∧
+                          (∀ row < 33, AspisR1.LiteralTranscript.valid row (i.proof row)) ∧
+                            (∃ (bound :
+                                ∀ (row : ℕ),
+                                  List.length
+                                      (AspisR1.OraclePortCompactDraft.rowBytes
+                                        { wire := i.stored,
+                                          semantic :=
+                                            List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s)
+                                              ↑pre.records }
+                                        row) ≤
+                                    AspisR1.SelectedTranscriptParams.D),
+                                ∀ (row : ℕ),
+                                  AspisR1.LiteralTranscript.erase (i.proof row) =
+                                    if row = 0 then
+                                      AspisR1.TranscriptView.Message.initial
+                                        (AspisV8R19.SqueezeOracleBridge.decodeState pre.c1_root)
+                                    else
+                                      AspisR1.TranscriptView.Message.payload
+                                        ⟨AspisR1.OraclePortCompactDraft.rowBytes
+                                            { wire := i.stored,
+                                              semantic :=
+                                                List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s)
+                                                  ↑pre.records }
+                                            row,
+                                          ⋯⟩) ∧
+                              AspisV8R19.SourceDuplexStep.bytes
+                                  (AspisV8R19.SqueezeOracleBridge.decodeState pre.c1_root) =
+                                AspisR1.OraclePortCompactDraft.slice i.stored 16 32
+AspisR1.F3J_NativePrefix27.native {CoreError : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.ClaimsUnrolledSdk.sdkOps adapter (AspisR1.Uni_Install.current ops reserved query geo) B std) native1
+      native2 hashv)
+  (id : AspisR1.S2W_ExtractionBoundary.Program) (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+  (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (accepted1 : native1 id accounts1 data1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved))
+  (accepted2 : native2 id accounts2 data2 slot = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+  (w : AspisR1.CanonicalCutEnrichedTranscript.Words) :
+  ∃ f s log,
+    AspisR1.S2W_NativeConsolidation.SourceCuts
+        (AspisR1.ClaimsUnrolledSdk.sdkOps adapter (AspisR1.Uni_Install.current ops reserved query geo) B std) accounts1
+        accounts2 saved f s ∧
+      AspisR1.RawJ_RecordCuts.Recorded f s saved log ∧
+        AspisR1.S2W_Trace.run
+              (AspisR1.ClaimsUnrolledSdk.sdkOps adapter (AspisR1.Uni_Install.current ops reserved query geo) B std)
+              (AspisR1.S2W_Observation.two
+                (AspisR1.ClaimsUnrolledSdk.sdkOps adapter (AspisR1.Uni_Install.current ops reserved query geo) B std) id
+                accounts1 data1 accounts2 data2 slot)
+              [] =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved, log) ∧
+          ∃ i pre t0 t25 t26 t27 r25 r26 z0 z1 start cs init,
+            i.physical.bytes = AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub ∧
+              i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof ∧
+                i.semantic.value.pubBytes = AspisR1.MultiproofConeCanonical.bytesOf ↑init.encoded ∧
+                  i.semantic.value.tag = 2 ∧
+                    AspisR1PublicPreparation.SourceFull25.Trace
+                        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                          (AspisR1.Tx1Q_SameCut.callerDigest adapter (AspisR1.Op5T_Concrete.current ops) reserved query
+                            geo B std))
+                        pre t0 t25 cs ∧
+                      List.map (fun c => ↑c.row) cs = List.range 25 ∧
+                        (∀ row < 33, AspisR1.LiteralTranscript.valid row (i.proof row)) ∧
+                          pre.validated_record 25#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok r25) ∧
+                            AspisR1PublicPreparation.FinishModel.circle_validated
+                                  (AspisR1PublicPreparation.S1SemanticRootCopy.install
+                                    (AspisR1.ClaimsUnrolledFinish.install std B))
+                                  (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                    (AspisR1.Tx1Q_SameCut.callerDigest adapter (AspisR1.Op5T_Concrete.current ops)
+                                      reserved query geo B std))
+                                  t25 r25 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z0, t26) ∧
+                              pre.validated_record 26#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok r26) ∧
+                                AspisR1PublicPreparation.FinishModel.circle_validated
+                                      (AspisR1PublicPreparation.S1SemanticRootCopy.install
+                                        (AspisR1.ClaimsUnrolledFinish.install std B))
+                                      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                        (AspisR1.Tx1Q_SameCut.callerDigest adapter (AspisR1.Op5T_Concrete.current ops)
+                                          reserved query geo B std))
+                                      t26 r26 =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z1, t27) ∧
+                                  AspisR1PublicPreparation.transcript.Transcript.new
+                                        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                          (AspisR1.Tx1Q_SameCut.callerDigest adapter (AspisR1.Op5T_Concrete.current ops)
+                                            reserved query geo B std))
+                                        () t27.state AspisR1PublicPreparation.transport.Variant.S2 =
+                                      Aeneas.Std.Result.ok start ∧
+                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.F3J_SamplerRun.program i.proof 0 27
+                                              (FS.emptyPrefix i.semantic.value))).1 =
+                                        AspisR1PublicPreparation.SourceGlobalOracleInitial.initPair init ::
+                                            AspisR1PublicPreparation.SourceDigestLog.sourceLog cs ++
+                                          (AspisR1PublicPreparation.PreparedHashCode.observe
+                                              (AspisR1PublicPreparation.PreparedHashCode.run
+                                                  (AspisR1PublicPreparation.S1SemanticCode.circleValidated
+                                                    (AspisR1PublicPreparation.S1SemanticRootCopy.install
+                                                      (AspisR1.ClaimsUnrolledFinish.install std B))
+                                                    (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                                      (AspisR1.Tx1Q_SameCut.callerDigest adapter
+                                                        (AspisR1.Op5T_Concrete.current ops) reserved query geo B std))
+                                                    t25 r25)).1 ++
+                                            (AspisR1PublicPreparation.PreparedHashCode.observe
+                                                (AspisR1PublicPreparation.PreparedHashCode.run
+                                                    (AspisR1PublicPreparation.S1SemanticCode.circleValidated
+                                                      (AspisR1PublicPreparation.S1SemanticRootCopy.install
+                                                        (AspisR1.ClaimsUnrolledFinish.install std B))
+                                                      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                                        (AspisR1.Tx1Q_SameCut.callerDigest adapter
+                                                          (AspisR1.Op5T_Concrete.current ops) reserved query geo B std))
+                                                      t26 r26)).1 ++
+                                              AspisR1PublicPreparation.PreparedHashCode.observe
+                                                (AspisR1PublicPreparation.PreparedHashCode.run
+                                                    (AspisR1PublicPreparation.PreparedHashEffects.new
+                                                      AspisR1PublicPreparation.PreparedHashCode.effects
+                                                      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                                        (AspisR1.Tx1Q_SameCut.callerDigest adapter
+                                                          (AspisR1.Op5T_Concrete.current ops) reserved query geo B std))
+                                                      () t27.state AspisR1PublicPreparation.transport.Variant.S2)).1)) ∧
+                                      AspisR1.UnifiedSampler.stateOf AspisR1.SelectedTranscriptParams.params
+                                          (AspisR1.LiteralTranscript.erasePrefix
+                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                (AspisR1.F3J_SamplerRun.program i.proof 0 27
+                                                  (FS.emptyPrefix i.semantic.value))).2) =
+                                        AspisV8R19.SqueezeOracleBridge.decodeState start.state
+AspisR1.F3J_PhysicalQuery.ordered {Hash : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 Hash)
+  (before absorbed : AspisR1PublicPreparation.transcript.Transcript Hash) (payload : Aeneas.Std.Slice Aeneas.Std.U8)
+  (success :
+    AspisR1PublicPreparation.transcript.Transcript.absorb D before 31#u8 payload = Aeneas.Std.Result.ok absorbed)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (backend : AspisR1PublicPreparation.Tx1DigestLog.ByteOracleBackend D H) (calls : List AspisR1.F3J_QueryPairs.Call)
+  (pairs : AspisR1.F3J_QueryPairs.Pairs D absorbed.hash 8 absorbed.state calls) (fits : (↑payload).length < 4294967296)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (root : AspisV8R19.SourceDuplexStep.State)
+  (w : AspisR1.CanonicalCutEnrichedTranscript.Words)
+  (bound :
+    ∀ (row : ℕ), List.length (AspisR1.OraclePortCompactDraft.rowBytes p row) ≤ AspisR1.SelectedTranscriptParams.D)
+  (frame :
+    AspisR1.OraclePortCompactDraft.rowBytes p 31 =
+      AspisR1.OraclePortCompactDraft.framed (AspisR1.MultiproofConeCanonical.bytesOf ↑payload))
+  (P : AspisR1.LiteralTranscript.Prefix)
+  (state :
+    AspisR1.UnifiedSampler.stateOf AspisR1.SelectedTranscriptParams.params (AspisR1.LiteralTranscript.erasePrefix P) =
+      AspisV8R19.SqueezeOracleBridge.decodeState before.state) :
+  (AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.LiteralByteSampler.samp 31 P (AspisR1.F3J_InputRows.proof p root w bound 31)).toProgram).1 =
+    (AspisV8R19.SqueezeOracleBridge.flatten
+          (AspisR1PublicPreparation.CallerStep.openingAbsorbParts before.state 191#u8
+            (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 payload.len) payload),
+        AspisV8R19.SqueezeOracleBridge.decodeState absorbed.state) ::
+      AspisR1.F3J_QueryPairs.observed calls
+AspisR1.F3J_CheckpointSource.stage {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (reserved : Bool)
+  (wp : AspisR1.CheckpointBytes5Writer.Prepared) (wa : AspisR1.CheckpointBytes5Writer.Accumulator)
+  (proof publicBytes : Aeneas.Std.Slice Aeneas.Std.U8) (stored : AspisV8R19.DuplexFrames.Bytes)
+  (physical : AspisR1.F3_Model.PhysicalPublic) (parsed : AspisR1.OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+  (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs) (v : AspisR1.LiteralOpeningView.View)
+  (input : AspisR1.OraclePortStoredDecisionDraftC4.input parsed q tr = some i)
+  (query : AspisR1.OraclePortSelectedDraft.queries tr = some q)
+  (caller : AspisR1.CheckpointBytes5Join.S2S10CallerBinding D hash H proof publicBytes stored physical.bytes)
+  (provenance :
+    AspisR1.CheckpointBytes5Join.S1S7S8StateProvenance wp wa
+      (AspisR1.OraclePortCheckpointResumeC5.prepared (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+        (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+      (AspisR1.OraclePortCheckpointStateC3.write
+          (AspisR1.OraclePortCheckpointResumeC5.model i.data (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).accumulator)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (after : AspisR1.CheckpointBytes5Effect.Log)
+  (success :
+    AspisR1.CheckpointBytes5Effect.run D hash (AspisR1.CheckpointBytes5Join.stage reserved wp wa proof publicBytes) [] =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a), after)) :
+  (AspisR1.CheckpointBytes5Inputs.observe after, some (AspisR1.CheckpointBytes5Join.resumedSource i.data p a)) =
+    AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.checkpoint physical stored parsed q tr i v)
+'AspisR1.F3J_BlockCalls.from_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_BlockCalls.consistent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_BlockCode.sample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_BlockCodeValue.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_BlockSampler.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_CheckpointSource.stage' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_CircleCode.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_CircleCode.second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_CircleJoin.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_CircleJoin.second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_CirclePair.sampler' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_First25.sampler' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_First27.sampler' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_InitialLog.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_InitialValue.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_InputRows.erased' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_InputRows.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_LengthFrame.cast_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.F3J_LengthFrame.framed' depends on axioms: [propext, Quot.sound]
+'AspisR1.F3J_NativeConstruction.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_NativeInput.from_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_NativePrefix.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_NativePrefix27.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_Nonvacuity.backend' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_Nonvacuity.sample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_Nonvacuity.issued' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_OpeningCode.block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_OpeningFacts.from_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_OpeningFacts.consistent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_OpeningFrame.absorb' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_OpeningJoin.block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_OpeningPayloads.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_OpeningSampler.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_PhysicalQuery.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_PositiveTrace.exact_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_PrefixWitness.pack' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_PrefixWitness.through' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_PrefixWitness.carried_statement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_PreparedInput.from_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_PreparedInput27.from_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_Public.from_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_QueryAbsorber.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_QueryJoin.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_QueryLog.chain' depends on axioms: [propext, Quot.sound]
+'AspisR1.F3J_QueryLog.length' depends on axioms: [propext, Quot.sound]
+'AspisR1.F3J_QueryLog.sampler' depends on axioms: [propext, Quot.sound]
+'AspisR1.F3J_QueryNonvacuity.pairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_QueryNonvacuity.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_QueryPairs.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_QueryRow.log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_QueryRow.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_QuerySelection.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_QuerySource.first_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_RecordPayload.row_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_ReseedSampler.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_ReseedSource.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_ReseedSource.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_RowBindings.empty' depends on axioms: [propext, Quot.sound]
+'AspisR1.F3J_RowBindings.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_RowBindings.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_RowBindings.bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_RunState.of_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SamplerCompose.logs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SamplerCompose.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SamplerRun.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SamplerRun.split' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SamplerStep.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SamplerStructure.statement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SamplerStructure.pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_ScalarCode.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_ScalarCode.rho' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SemanticLog.consistent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SemanticLog.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SemanticPrefix.positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SemanticValue.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SourceBlock.sample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_SourceBlockValue.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_ValidatedLog.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]

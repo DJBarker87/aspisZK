@@ -1,0 +1,19 @@
+AspisR1.SAG_UnrestrictedScale.wide_mul_m31_success : ∀ (x z : AspisR1CurrentWide.Proof.E)
+  (s : AspisR1CurrentWide.field.M31),
+  AspisR1CurrentWide.field.wide_exact.WideExact.mul_m31 x s = Aeneas.Std.Result.ok z →
+    AspisR1CurrentWide.Proof.CanonicalWide z ∧
+      AspisR1CurrentWide.Proof.decodeWide z =
+        AspisR1CurrentWide.Proof.decodeWide x * AspisR1.SAG_UnrestrictedScale.wideScalarEmbedding s
+AspisR1.SAG_StageScale.value : ∀ (claim rhs : AspisR1Stage2.Stage2Finish.E) (scalar : AspisR1Stage2.Stage2Finish.M),
+  AspisR1.SAG_StageScale.mulM claim scalar = Aeneas.Std.Result.ok rhs →
+    AspisR1.CheckpointBytes5Output.ofE rhs =
+      AspisR1.CheckpointBytes5Output.ofE claim * AspisR1.SAG_UnrestrictedScale.wideScalarEmbedding scalar
+@AspisR1.SAG_StageScale.quarter : ∀ {W : Type} (seed : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (m : AspisR1Stage2.Stage2Finish.M) (claim rhs : AspisR1Stage2.Stage2Finish.E),
+  (AspisR1.SAG_StageScale.install seed).quarter = Aeneas.Std.Result.ok m →
+    (AspisR1.SAG_StageScale.install seed).mulM claim m = Aeneas.Std.Result.ok rhs →
+      AspisR1.CheckpointBytes5Output.ofE rhs = AspisR1.RoundPairing.quarter * AspisR1.CheckpointBytes5Output.ofE claim
+AspisR1.SAG_QuarterLift.value : ∀ (q : AspisR1.SAG_QuarterLift.Base),
+  4 * q = 1 →
+    (Algebra.algebraMap AspisR1.SAG_QuarterLift.Base AspisR1.SAG_QuarterLift.Model) q = AspisR1.RoundPairing.quarter
+AspisR1.SAG_QuarterBase.four_times : 4 * 536870912 = 1

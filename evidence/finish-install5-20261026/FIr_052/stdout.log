@@ -1,0 +1,82 @@
+FIr_EqualityLoop.lean:49:44: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+left right : Std.Array NQ 10#usize
+hl : ∀ x ∈ ↑left, Canon x
+hr : ∀ x ∈ ↑right, Canon x
+out : NQ
+n : ℕ
+ih :
+  ∀ (index : Usize) (product : NQ),
+    ↑index + n = 10 →
+      Canon product →
+        loop left right product index = ok out → Canon out ∧ decode out = decode product * tail left right (↑index) n
+index : Usize
+product : NQ
+bound : ↑index + (n + 1) = 10
+hp : Canon product
+run✝⁴ :
+  (do
+      let q ← left.index_usize index
+      let q1 ← right.index_usize index
+      let q2 ←
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value.closure.Insts.CoreOpsFunctionFnPairQM31QM31QM31.call
+            () (q, q1)
+      let product1 ← FIq_Native.field.QM31.mul product q2
+      let index1 ← index + 1#usize
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value_loop left right product1 index1) =
+    ok out
+more : index < left.to_slice.len
+a : FIq_Native.field.QM31
+ha : left.index_usize index = ok a
+run✝³ :
+  (do
+      let q1 ← right.index_usize index
+      let q2 ←
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value.closure.Insts.CoreOpsFunctionFnPairQM31QM31QM31.call
+            () (a, q1)
+      let product1 ← FIq_Native.field.QM31.mul product q2
+      let index1 ← index + 1#usize
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value_loop left right product1 index1) =
+    ok out
+b : FIq_Native.field.QM31
+hb : right.index_usize index = ok b
+run✝² :
+  (do
+      let q2 ←
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value.closure.Insts.CoreOpsFunctionFnPairQM31QM31QM31.call
+            () (a, b)
+      let product1 ← FIq_Native.field.QM31.mul product q2
+      let index1 ← index + 1#usize
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value_loop left right product1 index1) =
+    ok out
+cell : FIq_Native.field.QM31
+hcell :
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value.closure.Insts.CoreOpsFunctionFnPairQM31QM31QM31.call
+      () (a, b) =
+    ok cell
+run✝¹ :
+  (do
+      let product1 ← FIq_Native.field.QM31.mul product cell
+      let index1 ← index + 1#usize
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value_loop left right product1 index1) =
+    ok out
+next : FIq_Native.field.QM31
+hn : FIq_Native.field.QM31.mul product cell = ok next
+run✝ :
+  (do
+      let index1 ← index + 1#usize
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value_loop left right next index1) =
+    ok out
+index1 : UScalar UScalarTy.Usize
+hi : index + 1#usize = ok index1
+run : FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value_loop left right next index1 = ok out
+va : Canon a
+vb : Canon b
+vc : Canon cell ∧ decode cell = decode a * decode b + (1 - decode a) * (1 - decode b)
+vn : Canon next ∧ decode next = decode product * decode cell
+⊢ ↑index1 = ↑index + 1
+'AspisR1.FIr_EqualityLoop.exact_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

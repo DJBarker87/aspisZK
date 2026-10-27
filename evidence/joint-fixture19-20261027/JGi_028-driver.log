@@ -1,0 +1,62 @@
+{"attempt": "JGi19_028", "exit_status": 1, "wall_seconds": 2.9899609640124254, "peak_rss_kib": "5898036", "swaps": "0", "print_axioms": ["'AspisR1.JGi_ClaimBody.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGi_ClaimBody.done' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+JGi_ClaimBody.lean:28:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.prepared_claim_dot ops D sem y1 g iter.start
+in the target expression
+  (let (o, iter1) := (some iter.start, iter')
+    match o with
+    | none => do
+      let we ← verifier.prepared_claim_sum k parts
+      ok (done (core.result.Result.Ok we))
+    | some point => do
+      let r ← verifier.prepared_claim_dot ops D sem y1 g point
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i ← point + 1#usize
+          let a ← parts.update i val
+          ok (cont (iter1, a))
+        | core
+...
+esult.Ok out)
+canonical : Canonical out
+i : UScalar UScalarTy.Usize
+add : iter.start + 1#usize = ok i
+hadd : ↑i = ↑iter.start + ↑1#usize
+parts' : Std.Array E 7#usize
+write : parts.update i out = ok parts'
+hparts : CanonicalArray parts'
+⊢ (let (o, iter1) := (some iter.start, iter')
+    match o with
+    | none => do
+      let we ← verifier.prepared_claim_sum k parts
+      ok (done (core.result.Result.Ok we))
+    | some point => do
+      let r ← verifier.prepared_claim_dot ops D sem y1 g point
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i ← point + 1#usize
+          let a ← parts.update i val
+          ok (cont (iter1, a))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r1)) =
+    ok (cont (iter', parts'))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (7 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGi_ClaimBody.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClaimBody.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8e99330dd36b49edbc270b74981f8cbd.scope; invocation ID: 4d5fa6706b5846afa2c729ced869f91a
+

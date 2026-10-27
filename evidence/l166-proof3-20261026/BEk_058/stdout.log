@@ -1,0 +1,11 @@
+def AspisR1.SdkC_Source.readLog : AspisR1.SdkC_Source.Log →
+  List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) :=
+fun log =>
+  List.filterMap
+    (fun q =>
+      match q.returned with
+      | Aeneas.Std.Result.ok digest =>
+        Option.some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+      | x => Option.none)
+    log
+'AspisR1.SdkC_Source.readLog' depends on axioms: [propext, Classical.choice, Quot.sound]

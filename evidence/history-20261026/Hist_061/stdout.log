@@ -1,0 +1,35 @@
+Hist_CommittedPayload.lean:26:49: error: Function expected at
+  source
+but this term has type
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops program e.first data = ok (core.result.Result.Ok saved)
+
+Note: Expected a function because this term is being applied to the argument
+  (nativeBytes saved)
+Hist_CommittedPayload.lean:21:89: error: unsolved goals
+A : Type
+ops : AdapterRw.Ops
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+extraction : S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e : Entry
+program : S2W_ExtractionBoundary.Program
+data : Slice U8
+state final : A
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+accepted : first native1 copy allocator e program data state = ok (core.result.Result.Ok (saved, post, final))
+savedSize : (↑saved).length = 1768
+native : native1 program e.first data = ok (core.result.Result.Ok saved)
+written : post = writeBracket e.heap 2 0 0 (S2W_CommittedCheckpoint.source (nativeBytes saved))
+source : AdapterRw.r1_pool_adapter.owned.stage1_owned ops program e.first data = ok (core.result.Result.Ok saved)
+size : (e.heap.payload (e.heap.accounts 2).1).descriptor.length = 1768
+⊢ payloadBytes encode
+      ((writeBracket e.heap 2 0 0 (S2W_CommittedCheckpoint.source (nativeBytes saved))).payload (e.heap.accounts 2).1)
+      1768 =
+    bytesOf ↑saved
+'AspisR1.Hist_CommittedPayload.copied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Hist_CommittedPayload.committed_version' does not depend on any axioms

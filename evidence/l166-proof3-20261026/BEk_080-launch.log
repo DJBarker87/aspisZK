@@ -1,0 +1,31 @@
+{"attempt": "BEk_080", "exit_status": 0, "wall_seconds": 3.3246248890063725, "peak_rss_kib": "5210244", "swaps": "0", "print_axioms": ["'AspisR1.BEj_ErasedBoundaryGap.retained' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEj_ErasedBoundaryGap.retained : ∀ {S : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (input : AspisR1.BEj_ReifiedBatch.Input) (slot : Fin 2) (state : S) (before : AspisR1.SdkC_Source.Log)
+  (extra : AspisR1.SdkC_Source.Query) (Facts : Prop),
+  Facts →
+    Facts ∧
+      ∃ other,
+        other.1 = (AspisR1.BEf_Carrier.run call (AspisR1.BEj_ReifiedBatch.sourceCode hashv input slot) state before).1 ∧
+          other.2.1 =
+              (AspisR1.BEf_Carrier.run call (AspisR1.BEj_ReifiedBatch.sourceCode hashv input slot) state before).2.1 ∧
+   
+...
+theorem AspisR1.BEj_ErasedBoundaryGap.retained : ∀ {S : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (input : AspisR1.BEj_ReifiedBatch.Input) (slot : Fin 2) (state : S) (before : AspisR1.SdkC_Source.Log)
+  (extra : AspisR1.SdkC_Source.Query) (Facts : Prop),
+  Facts →
+    Facts ∧
+      ∃ other,
+        other.1 = (AspisR1.BEf_Carrier.run call (AspisR1.BEj_ReifiedBatch.sourceCode hashv input slot) state before).1 ∧
+          other.2.1 =
+              (AspisR1.BEf_Carrier.run call (AspisR1.BEj_ReifiedBatch.sourceCode hashv input slot) state before).2.1 ∧
+            ¬AspisR1.BEh_Scope.Law other
+                (AspisR1.BEf_Carrier.run call (AspisR1.BEj_ReifiedBatch.sourceCode hashv input slot) state before) :=
+⋯
+'AspisR1.BEj_ErasedBoundaryGap.retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r589040d8ac364800b9788009c6b6fa3f.scope; invocation ID: 06294e31b91e420b86eb96bb7e0ac4f2

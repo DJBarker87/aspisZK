@@ -1,0 +1,31 @@
+FJi_WidePack.lean:15:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  { re := ?a, im := ?b } * { re := ?c, im := 0 }
+in the target expression
+  {
+      re :=
+        { re := { re := (fun j => a j * s) 0, im := (fun j => a j * s) 1 },
+          im := { re := (fun j => a j * s) 2, im := (fun j => a j * s) 3 } },
+      im :=
+        { re := { re := (fun j => a j * s) 4, im := (fun j => a j * s) 5 },
+          im := { re := (fun j => a j * s) 6, im := (fun j => a j * s) 7 } } } =
+    { re := { re := { re := a 0, im := a 1 }, im := { re := a 2, im := a 3 } },
+        im := { re := { re := a 4, im := a 5 }, im := { re := a 6, im := a 7 } } } *
+      { re := { re := { re := s, im := 0 }, im := { re := 0, im := 0 } },
+        im := { re := { re := 0, im := 0 }, im := { re := 0, im := 0 } } }
+
+a : Fin 8 → F
+s : F
+⊢ {
+      re :=
+        { re := { re := (fun j => a j * s) 0, im := (fun j => a j * s) 1 },
+          im := { re := (fun j => a j * s) 2, im := (fun j => a j * s) 3 } },
+      im :=
+        { re := { re := (fun j => a j * s) 4, im := (fun j => a j * s) 5 },
+          im := { re := (fun j => a j * s) 6, im := (fun j => a j * s) 7 } } } =
+    { re := { re := { re := a 0, im := a 1 }, im := { re := a 2, im := a 3 } },
+        im := { re := { re := a 4, im := a 5 }, im := { re := a 6, im := a 7 } } } *
+      { re := { re := { re := s, im := 0 }, im := { re := 0, im := 0 } },
+        im := { re := { re := 0, im := 0 }, im := { re := 0, im := 0 } } }
+'AspisR1.FJi_WidePack.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJi_WidePack.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJi_WidePack.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

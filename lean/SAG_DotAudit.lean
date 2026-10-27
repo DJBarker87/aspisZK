@@ -1,0 +1,11 @@
+import AspisR1FinishDotReturnedFieldProductV1
+import SAF_Deployed
+set_option pp.deepTerms true
+set_option pp.fullNames true
+#print AspisR1FinishDotReturnedFieldProductV1.productSum
+#print AspisR1FinishDotReturnedFieldProductV1.decodeDelta_sum
+#print AspisR1FinishDotReturnedDeltaDecodeV1.successful_finish_decodes_accumulated_residues
+#print AspisR1FinishDotReturnedProductWords.successful_current_finish_query_product_words
+#print AspisR1CurrentWide.Proof.decodeFinish
+#print AspisR1CurrentWide.Proof.finishField
+#print AspisR1FinishDotReturnedFieldProductV1.finishQMDecoded

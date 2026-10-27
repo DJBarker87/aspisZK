@@ -1,0 +1,72 @@
+Tx2N_DecodeHeader.lean:15:25: warning: `List.extract_eq_drop_take` has been deprecated: Use `List.extract_eq_take_drop` instead
+
+Note: The updated constant has a different type:
+  ∀ {α : Type u} {l : List α} {start stop : ℕ}, l.extract start stop = List.take (stop - start) (List.drop start l)
+instead of
+  ∀ {α : Type u_1} {l : List α} {start stop : ℕ}, l.extract start stop = List.take (stop - start) (List.drop start l)
+Tx2N_DecodeHeader.lean:30:94: error: unsolved goals
+case this
+reserved : Bool
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+ck proof pub : Slice U8
+hash : Hash
+p : verifier.Prepared
+a : verifier.Accumulator
+next : a.next = 10#usize
+success :
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D ck proof pub transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+magic reservedBytes : Slice U8
+nextByte : U8
+iterator rest : core.slice.iter.Iter U8
+length : (↑ck).length = 1768
+magicRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := 8#usize } = ok magic
+magicEq : ↑magic = [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+tagRead : ck.index_usize 8#usize = ok 2#u8
+nextRead : ck.index_usize 9#usize = ok nextByte
+versionRead : ck.index_usize 10#usize = ok 1#u8
+reservedRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok reservedBytes
+iterRead : core.slice.Slice.iter reservedBytes = ok iterator
+scan : CheckpointBytes4Ops.headerAny iterator = ok (false, rest)
+⊢ ?m.147
+
+reserved : Bool
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+ck proof pub : Slice U8
+hash : Hash
+p : verifier.Prepared
+a : verifier.Accumulator
+next : a.next = 10#usize
+success :
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D ck proof pub transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+magic reservedBytes : Slice U8
+nextByte : U8
+iterator rest : core.slice.iter.Iter U8
+length : (↑ck).length = 1768
+magicRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := 8#usize } = ok magic
+magicEq : ↑magic = [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+tagRead : ck.index_usize 8#usize = ok 2#u8
+nextRead : ck.index_usize 9#usize = ok nextByte
+versionRead : ck.index_usize 10#usize = ok 1#u8
+reservedRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok reservedBytes
+iterRead : core.slice.Slice.iter reservedBytes = ok iterator
+scan : CheckpointBytes4Ops.headerAny iterator = ok (false, rest)
+this : ?m.147
+⊢ slice (bytesOf ↑ck) 0 16 = OraclePortPhysicalFrameDraft.magic ++ [2, 10, 1, 0, 0, 0, 0, 0]
+Tx2N_DecodeHeader.lean:33:13: error: unexpected token ':='; expected ':'
+Tx2N_DecodeHeader.lean:67:16: error: unexpected token ','; expected ':'
+'AspisR1.Tx2N_DecodeHeader.range_to' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Tx2N_DecodeHeader.byte' depends on axioms: [propext]
+'AspisR1.Tx2N_DecodeHeader.cast_value' depends on axioms: [propext, Quot.sound]
+'AspisR1.Tx2N_DecodeHeader.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

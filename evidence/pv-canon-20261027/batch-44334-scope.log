@@ -1,0 +1,54 @@
+44334 R1Z/PV_Canon_RoundCounter exit=0
+44335 R1Z/PV_Canon_Rounds exit=1
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Rounds.lean:21:9: error: unsolved goals
+case zero
+base : ExternalTypes
+ops : ExternalFuns
+H F : Type
+digest : aspis_core.digest.Digest32 H
+oracleInst : host_sumcheck.Oracle F
+oracle : F
+this✝ : ExternalTypes := PV_Join_PublicCaller.native base
+this : ExternalFuns := PV_Join_PublicCaller.selected base ops
+s : host_wire.SemanticTranscript H
+output : alloc.vec.Vec U8
+point : Std.Array aspis_core.field.QM31 10#usize
+running : aspis_core.field.QM31
+hn : ↑10#usize + 0 = 10
+⊢ (do
+      let r ← oracleInst.evaluate oracle point
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+          if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal, s, output)
+            else ok (core.result.Result.Ok (point, running), s, output)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+                residual
+          ok (r1, s, output)) =
+    do
+    let r ← oracleInst.evaluate oracle point
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+        if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal, s, output)
+          else ok (core.result.Result.Ok (point, running), s, output)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+              residual
+        ok (r1, s, output)
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Rounds.lean:8:9: error: (kernel) excessive memory consumption detected
+'R1Z.PV_Canon.rounds_checked' depends on axioms: [propext, Classical.choice, Quot.sound, rounds_checked]
+
+44336 R1Z/PV_Canon_Prover SKIP failed/missing predecessor
+44337 R1Z/PV_Canon_LegacyMask exit=0
+44338 R1Z/PV_Canon_PreparedComponent exit=0
+44339 R1Z/PV_Canon_PreparedMul exit=0
+44340 R1Z/PV_Canon_D234Boundary exit=0
+Running as unit: run-rd36d1c6e965d4901a9cdf1124a71abba.scope; invocation ID: 64e99be9ebd648a4a2d65f5183899d24

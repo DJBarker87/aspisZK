@@ -1,0 +1,46 @@
+{"attempt": "JFn_086", "exit_status": 1, "wall_seconds": 2.2313979959581047, "peak_rss_kib": "5286380", "swaps": "0", "print_axioms": ["'AspisR1.JFn_Accumulate.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFn_Accumulate.lean:36:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    (JFn_ArrayBuilder.ops seed).op15 11#u16 JFo_Prepared.accumulator.next rhs
+    ok
+        ({ weights := JFo_Prepared.accumulator.weights, rhs := rhs, power := power,
+            next := JFo_Prepared.accumulator.next.wrapping_add 1#usize },
+          { raw := (Port3_RowsInstall.fromBW rows).raw,
+            terms := (Port3_RowsInstall.fromBW rows).terms.wrapping_add 1#usize })
+is not definitionally equal to the right-hand side
+  ok
+    ({ weights := JFo_Prepared.accumulator.weights, rhs := rhs, power := power, next := 11#usize },
+      { raw := (Port3_RowsInstall.fromBW rows).raw,
+        terms := (Port3_RowsInst
+...
+ { start := 0#usize, «end» := 64#usize } JFo_Prepared.accumulator.weights JFo_Prepared.accumulator.power
+      JFo_Prepared.accumulator.next JFo_Pending.value 64#usize basis =
+    ok (Port3_RowsInstall.fromBW rows)
+left✝ : S7Kani3CallerTrace.PushTrace JFn_PendingHistory.old rows sumOut
+progress : S7JoinRowsTrace.Progress 0 64 rows
+product : SAQ_WideABI.E
+hproduct : SAQ_MixedSource.mulE value JFo_Prepared.accumulator.power = ok product
+cproduct : Port4C_QueryArithmetic.CanonE product
+rhs : SAQ_WideABI.E
+hrhs : SAQ_Arithmetic.add JFo_Prepared.accumulator.rhs product = ok rhs
+crhs : Port4C_QueryArithmetic.CanonE rhs
+power : SAQ_WideABI.K
+hpower : SAQ_Arithmetic.mulK JFo_Prepared.accumulator.power JFo_Prepared.value.rho = ok power
+cpower : Port3_FlushInstall.Canonical power
+hp : (JFn_ArrayBuilder.ops seed).op3 value JFo_Prepared.accumulator.power = ok product
+hr : (JFn_ArrayBuilder.ops seed).op2 JFo_Prepared.accumulator.rhs product = ok rhs
+hq : (JFn_ArrayBuilder.ops seed).op9 JFo_Prepared.accumulator.power JFo_Prepared.value.rho = ok power
+⊢ (do
+      (JFn_ArrayBuilder.ops seed).op15 11#u16 JFo_Prepared.accumulator.next rhs
+      ok
+          ({ weights := JFo_Prepared.accumulator.weights, rhs := rhs, power := power,
+              next := JFo_Prepared.accumulator.next.wrapping_add 1#usize },
+            { raw := (Port3_RowsInstall.fromBW rows).raw,
+              terms := (Port3_RowsInstall.fromBW rows).terms.wrapping_add 1#usize })) =
+    ok
+      ({ weights := JFo_Prepared.accumulator.weights, rhs := rhs, power := power, next := 11#usize },
+        { raw := (Port3_RowsInstall.fromBW rows).raw,
+          terms := (Port3_RowsInstall.fromBW rows).terms.wrapping_add 1#usize })
+'AspisR1.JFn_Accumulate.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r18c6baf784a745b69371f900a78e0dbd.scope; invocation ID: 9c438d74e36148c788f14ed2eec80373

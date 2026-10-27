@@ -1,0 +1,83 @@
+PSem_RowStep.lean:39:58: error: Application type mismatch: The argument
+  call
+has type
+  (do
+      let cf ←
+        match
+            match headerEnd with
+            | some x => core.result.Result.Ok x
+            | none => core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (_, size) := val
+          do
+          let i ← dst + 5#usize
+          let (s, index_mut_back) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+                { start := dst, «end» := i }
+          let i1 ← src + 5#usize
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := src, «end» := i1 }
+          let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+          let b ← compact.compact_row row
+          if b = true then do
+              let i2 ← size / 2#usize
+              let i3 ← i1 + i2
+              let s3 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                    { start := i1, «end» := i3 }
+              let i4 ← i + size
+              let (s4, index_mut_back1) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+                    { start := i, «end» := i4 }
+              let (r1, s5) ← nativeValues.expandValues s3 s4
+              let cf1 ←
+                match r1 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let src1 ← i1 + i2
+                  ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame compact.CodecError) residual
+                  ok (ControlFlow.done (r2, index_mut_back1 s5))
+            else do
+              let i2 ← i + size
+              let (s3, index_mut_back1) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+                    { start := i, «end» := i2 }
+              let i3 ← i1 + size
+              let s4 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                    { start := i1, «end» := i3 }
+              let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+              ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (ControlFlow.done (r1, out))) =
+    ok (ControlFlow.cont (nextIter, updated, nextSrc, nextDst))
+but is expected to have type
+  (do
+      let (a, b) ← ?m.166
+      ?m.167 a b) =
+    ok ?m.168
+in the application
+  pair_success ?m.166 ?m.167 ?m.168 call
+PSem_RowStep.lean:36:32: warning: This simp argument is unused:
+  shape
+
+Hint: Omit it from the simp argument list.
+  simp only [advance, ̲bind_tc_ok,s̵h̵a̵p̵e̵,̵ ̲core.option.Option.ok_or,
+      core.result.Result.Insts.CoreOpsTry.branch] at call
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.PSem_RowStep.0.AspisR1.PSem_RowStep.copied' depends on axioms: [propext, Quot.sound]
+'AspisR1.PSem_RowStep.row_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

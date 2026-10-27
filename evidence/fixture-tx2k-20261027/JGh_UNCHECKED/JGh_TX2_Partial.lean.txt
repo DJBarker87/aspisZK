@@ -1,0 +1,44 @@
+import JGh_TX2_NativeRoots
+import JGh_TX2_FrontierStream
+import JFn_Resume
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGh_TX2_Partial
+open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+
+theorem roots :
+    OracleDecisionMultiTree.root JFp_SHADigest.digest
+      (OracleDecisionMultiBuild.build JGf_TX2_M0Roots.indices JGh_TX2_LeafBinding.actualInput0
+        JGh_TX2_SiblingBinding0.native 18 0)=JGf_TX2_M0Root.retainedRoot ∧
+    OracleDecisionMultiTree.root JFp_SHADigest.digest
+      (OracleDecisionMultiBuild.build JGh_TX2_M1Roots.indices JGh_TX2_LeafBinding.actualInput1
+        JGh_TX2_SiblingBinding1.native 18 0)=JGh_TX2_M1Root.retainedRoot :=
+  ⟨JGh_TX2_NativeRoots.source0,JGh_TX2_NativeRoots.source1⟩
+#print axioms roots
+
+theorem on_saved (saved : alloc.vec.Vec U8) (same : saved.val=JFx_NativeBytes.checkpoint.val)
+    {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (realizes : JFn_HashBoundary.Realizes JFp_SHADigest.digest) :
+    Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary JFp_SHADigest.digest D)
+      (⟨saved.val,saved.property⟩ : Slice U8) JFx_NativeBytes.proof JFx_NativeBytes.publicInput .S2 hash=
+        ok (.Ok (JFo_Prepared.value,JFo_Prepared.accumulator)) ∧
+    (OracleDecisionMultiTree.root JFp_SHADigest.digest
+      (OracleDecisionMultiBuild.build JGf_TX2_M0Roots.indices JGh_TX2_LeafBinding.actualInput0
+        JGh_TX2_SiblingBinding0.native 18 0)=JGf_TX2_M0Root.retainedRoot ∧
+    OracleDecisionMultiTree.root JFp_SHADigest.digest
+      (OracleDecisionMultiBuild.build JGh_TX2_M1Roots.indices JGh_TX2_LeafBinding.actualInput1
+        JGh_TX2_SiblingBinding1.native 18 0)=JGh_TX2_M1Root.retainedRoot) ∧
+    MultiproofConeCountLevels.sourceCount 18 JGf_TX2_Count0.indices00=
+      (OraclePortSelectedDraft.orderedFrontier JGf_TX2_M0Roots.indices).length ∧
+    MultiproofConeCountLevels.sourceCount 18 JGf_TX2_Count2.indices00=
+      (OraclePortSelectedDraft.orderedFrontier JGc_TX2_M2Roots.indices).length ∧
+    Port4B_Install.leaves.op3 JFx_NativeBytes.proof 3#usize=ok JGh_TX2_NodeViews.nodes0 ∧
+    Port4B_Install.leaves.op3 JFx_NativeBytes.proof 4#usize=ok JGh_TX2_NodeViews.nodes1 ∧
+    Port4B_Install.leaves.op3 JFx_NativeBytes.proof 5#usize=ok JGh_TX2_NodeViews.nodes2 :=
+  ⟨JFn_Resume.on_saved saved same JFp_SHADigest.digest D hash realizes,roots,
+    JGh_TX2_Frontiers.count0,JGh_TX2_Frontiers.count2,
+    JGh_TX2_NodeViews.source0,JGh_TX2_NodeViews.source1,JGh_TX2_NodeViews.source2⟩
+#print axioms on_saved
+end AspisR1.JGh_TX2_Partial
+end

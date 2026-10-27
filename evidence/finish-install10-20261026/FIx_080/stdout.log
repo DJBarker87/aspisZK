@@ -1,0 +1,57 @@
+FIx_ReconstructFold.lean:24:29: error: unsolved goals
+case append_singleton
+out : NQ
+c : Capture
+xs : List NQ
+x : NQ
+ih :
+  ∀ (bound : xs.length ≤ Usize.max) (acc : NQ),
+    (∀ x ∈ xs, Canon x) →
+      Canon acc →
+        fold { slice := slice xs bound, i := 0 } acc c = ok out → Canon out ∧ decode out = model xs (decode acc)
+bound : (xs ++ [x]).length ≤ Usize.max
+acc : NQ
+hc : ∀ x_1 ∈ xs ++ [x], Canon x_1
+ha : Canon acc
+success :
+  (do
+      let (next, c') ← FIx_ReconstructStep.callback.call_mut c (acc, x)
+      fold { slice := slice xs ⋯, i := 0 } next c') =
+    ok out
+next : FIq_Native.field.QM31
+hx : Canon x
+hnext : FIx_ReconstructStep.callback.call_mut c (acc, x) = ok (next, c)
+tail :
+  (let (next, c') := (next, c)
+    fold { slice := slice xs ⋯, i := 0 } next c') =
+    ok out
+v : Canon next ∧ decode next = decode acc + decode acc + decode x ∧ c = c
+rest : Canon out ∧ decode out = model xs (decode next)
+⊢ List.foldl (fun a b => a + a + b) (decode acc + decode acc + decode x) (List.map decode xs.reverse) =
+    List.foldl (fun a b => a + a + b) (decode acc) (List.map decode (x :: xs.reverse))
+FIx_ReconstructFold.lean:35:64: warning: This simp argument is unused:
+  List.map_append
+
+Hint: Omit it from the simp argument list.
+  simp only [model, ̲List.reverse_append, ̲List.reverse_singleton, ̲List.map_a̵p̵p̵e̵n̵d̵,̵L̵i̵st̵.̵m̵a̵p̵_̵s̵ingleton,
+        List.singleton_append, ̲List.foldl_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIx_ReconstructFold.lean:35:80: warning: This simp argument is unused:
+  List.map_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [model, ̲List.reverse_append, ̲List.reverse_singleton, ̲List.map_append,L̵i̵s̵t̵.̵m̵a̵p̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵,̵
+        List.singleton_append, ̲List.foldl_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIx_ReconstructFold.lean:36:28: warning: This simp argument is unused:
+  List.foldl_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵o̵d̵e̵l̵,̵L̵i̵s̵t̵.̵r̵e̵v̵e̵r̵s̵e̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵r̵e̵v̵e̵r̵s̵e̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵]̵[̲m̲o̲d̲e̲l̲,̲ ̲L̲i̲s̲t̲.̲r̲e̲v̲e̲r̲s̲e̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲r̲e̲v̲e̲r̲s̲e̲_̲s̲i̲n̲g̲l̲e̲t̲o̲n̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲s̲i̲n̲g̲l̲e̲t̲o̲n̲,̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIx_ReconstructFold.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,110 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3SourceCounts.lean:61:4: error: Tactic `rfl` failed: The left-hand side
+  source (blockHash answers) domain (L + 1) 0 state
+is not definitionally equal to the right-hand side
+  Option.map (valuesList (L + 1)) (counted accepted 0 (L + 1) 0 ws)
+
+case zero
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+blocks : ℕ
+answers : Fin blocks → OracleAnswer
+domain : Slice U8
+capacity : blocks < 2 ^ 64
+L : ℕ
+state : State
+before : valid blocks state
+cache : cacheValid answers state
+fits : position state + 0 ≤ blocks * 8
+ws : Fin 0 → CommitReadsR1.Word
+budget : 0 + 16 * L ≤ 0
+agrees : ∀ (i : Fin 0), (wordsE blocks) answers ⟨position state + ↑i, ⋯⟩ = ws i
+⊢ source (blockHash answers) domain (L + 1) 0 state = Option.map (valuesList (L + 1)) (counted accepted 0 (L + 1) 0 ws)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3SourceCounts.lean:64:14: error: Tactic `rfl` failed: The left-hand side
+  source (blockHash answers) domain (L + 1) 0 state
+is not definitionally equal to the right-hand side
+  Option.map (valuesList (L + 1)) (counted accepted (n + 1) (L + 1) 0 ws)
+
+case succ.zero
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+blocks : ℕ
+answers : Fin blocks → OracleAnswer
+domain : Slice U8
+capacity : blocks < 2 ^ 64
+n : ℕ
+ih :
+  ∀ (L r : ℕ) (state : State),
+    valid blocks state →
+      cacheValid answers state →
+        ∀ (fits : position state + n ≤ blocks * 8),
+          r + 16 * L ≤ n →
+            ∀ (ws : Fin n → CommitReadsR1.Word),
+              (∀ (i : Fin n), (wordsE blocks) answers ⟨position state + ↑i, ⋯⟩ = ws i) →
+                source (blockHash answers) domain (L + 1) r state =
+                  Option.map (valuesList (L + 1)) (counted accepted n (L + 1) r ws)
+L : ℕ
+state : State
+before : valid blocks state
+cache : cacheValid answers state
+fits : position state + (n + 1) ≤ blocks * 8
+ws : Fin (n + 1) → CommitReadsR1.Word
+budget : 0 + 16 * L ≤ n + 1
+agrees : ∀ (i : Fin (n + 1)), (wordsE blocks) answers ⟨position state + ↑i, ⋯⟩ = ws i
+⊢ source (blockHash answers) domain (L + 1) 0 state =
+    Option.map (valuesList (L + 1)) (counted accepted (n + 1) (L + 1) 0 ws)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3SourceCounts.lean:90:41: error: Tactic `rfl` failed: The left-hand side
+  Option.map (fun x => (fieldValue (word &&& 2147483647#u32), 17 - (r + 1)) :: x)
+    (source (blockHash answers) domain 0 16 after)
+is not definitionally equal to the right-hand side
+  Option.map (fun x => (fieldValue (word &&& 2147483647#u32), 17 - (r + 1)) :: x) (some [])
+
+case pos.zero
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+blocks : ℕ
+answers : Fin blocks → OracleAnswer
+domain : Slice U8
+capacity : blocks < 2 ^ 64
+n : ℕ
+ih :
+  ∀ (L r : ℕ) (state : State),
+    valid blocks state →
+      cacheValid answers state →
+        ∀ (fits : position state + n ≤ blocks * 8),
+          r + 16 * L ≤ n →
+            ∀ (ws : Fin n → CommitReadsR1.Word),
+              (∀ (i : Fin n), (wordsE blocks) answers ⟨position state + ↑i, ⋯⟩ = ws i) →
+                source (blockHash answers) domain (L + 1) r state =
+                  Option.map (valuesList (L + 1)) (counted accepted n (L + 1) r ws)
+state : State
+before : valid blocks state
+cache : cacheValid answers state
+fits : position state + (n + 1) ≤ blocks * 8
+ws : Fin (n + 1) → CommitReadsR1.Word
+r : ℕ
+word : U32
+after : prover_commit_reference.State
+hn : prover_commit_reference.next (blockHash answers) domain state = ok (word, after)
+progress : valid blocks after ∧ position after = position state + 1
+nextcache : cacheValid answers after
+bound : position state < blocks * 8
+wordeq : wordFin word = (wordsE blocks) answers ⟨position state, bound⟩
+head :
+  accepted (ws 0) =
+    if word &&& 2147483647#u32 < aspis_core.field.P then some (fieldValue (word &&& 2147483647#u32)) else none
+fit : position after + n ≤ blocks * 8
+yes : word &&& 2147483647#u32 < aspis_core.field.P
+budget : r + 1 + 16 * 0 ≤ n + 1
+agrees : ∀ (i : Fin (n + 1)), (wordsE blocks) answers ⟨position state + ↑i, ⋯⟩ = ws i
+tail : ∀ (i : Fin n), (wordsE blocks) answers ⟨position after + ↑i, ⋯⟩ = ws i.succ
+⊢ Option.map (fun x => (fieldValue (word &&& 2147483647#u32), 17 - (r + 1)) :: x)
+      (source (blockHash answers) domain 0 16 after) =
+    Option.map (fun x => (fieldValue (word &&& 2147483647#u32), 17 - (r + 1)) :: x) (some [])
+'R1Z.PV_L2_F3SourceCounts.counted_no_values' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_L2_F3SourceCounts.counted_list_step' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_L2_F3SourceCounts.source_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh

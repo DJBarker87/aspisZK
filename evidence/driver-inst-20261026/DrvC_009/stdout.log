@@ -1,0 +1,23 @@
+'AspisR1.DrvC_Implementation.physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvC_Implementation.finish_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvC_Implementation.resume_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.DrvC_Implementation.implementation : {F C : Type} → Configuration F C → VTop_OracleCode.Implementation :=
+fun {F C} c {A} call =>
+  match A, call with
+  | .(core.result.Result Unit VTop_Stages.verifier.Error), VTop_Trace.Call.op5 D proof p root which hash =>
+    SdkC_Oracle.program
+      (SdkC_BatchSource.mapCode Op5T_Install.stageError
+        (SdkC_BatchSource.code (VTop_Checkpoint.digest D) hash proof p.queries p.roots root which))
+  |
+  .(core.result.Result VTop_Stages.verifier.Prepared VTop_Stages.verifier.Error ×
+        Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize),
+    VTop_Trace.Call.op7 D pub proof hash obs scratch =>
+    match obs with
+    | none => SdkC_Oracle.program (prepare c D pub proof hash scratch)
+    | some observer => Program.done ((DrvC_Dictionary.ops c).op7 D pub proof hash (some observer) scratch)
+  | .(alloc.vec.Vec U8), VTop_Trace.Call.op8 aspis_coredigestDigest32Inst p a proof pub a4 =>
+    SdkC_Oracle.program (GExp_FirstCode.writerCode (unPrepared p) (unAccumulator a) proof pub)
+  | .(core.result.Result (VTop_Stages.verifier.Prepared × VTop_Stages.verifier.Accumulator) VTop_Stages.verifier.Error),
+    VTop_Trace.Call.op18 aspis_coredigestDigest32Inst ck proof pub v a4 =>
+    SdkC_Oracle.program (GExp_RetainedReader.code c.reserved ck proof pub v)
+  | x, op => Program.done (VTop_Trace.invoke (DrvC_Dictionary.ops c) op)

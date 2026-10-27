@@ -1,0 +1,93 @@
+FJh_InternalConstantCalls.lean:21:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ok (FJh_InternalConstants.value ⟨_a, he⟩, ()) = ok (FJh_InternalConstants.value ⟨2 * ↑i, ⋯⟩, ())
+Error: Application type mismatch: The argument
+  he
+has type
+  ↑e < 14
+but is expected to have type
+  _a < 14
+in the application
+  ⟨_a, he⟩
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+i : Fin 7
+offset e o : Usize
+rs : index i - 2#usize = ok offset
+rm : 2#usize * offset = ok e
+ve : ↑e = 2 * ↑i
+ra : e + 1#usize = ok o
+vo : ↑o = 2 * ↑i + 1
+he : ↑e < 14
+read : poseidon2.INTERNAL.index_usize e = ok (FJh_InternalConstants.value ⟨↑e, he⟩)
+⊢ ok (FJh_InternalConstants.value ⟨↑e, he⟩, ()) = ok (FJh_InternalConstants.value ⟨2 * ↑i, ⋯⟩, ())
+FJh_InternalConstantCalls.lean:17:13: warning: This simp argument is unused:
+  even
+
+Hint: Omit it from the simp argument list.
+  simp only [e̵v̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵state_only_poseidon.interpolated_internal_pair.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31,
+      state_only_poseidon.interpolated_internal_pair.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut,
+      rs, ̲rm, ̲read, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJh_InternalConstantCalls.lean:18:4: warning: This simp argument is unused:
+  state_only_poseidon.interpolated_internal_pair.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+
+Hint: Omit it from the simp argument list.
+  simp only [even,
+      s̵t̵a̵t̵e̵_̵o̵n̵l̵y̵_̵p̵o̵s̵e̵i̵d̵o̵n̵.̵i̵n̵t̵e̵r̵p̵o̵l̵a̵t̵e̵d̵_̵i̵n̵t̵e̵r̵n̵a̵l̵_̵p̵a̵i̵r̵.̵c̵l̵o̵s̵u̵r̵e̵_̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵M̵u̵t̵T̵u̵p̵l̵e̵U̵s̵i̵z̵e̵M̵3̵1̵,̵state_only_poseidon.interpolated_internal_pair.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut,
+      r̵s̵,̵r̵m̵,̵r̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵r̲s̲,̲ ̲r̲m̲,̲ ̲r̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJh_InternalConstantCalls.lean:32:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ok (FJh_InternalConstants.value ⟨_a, ho⟩, ()) = ok (FJh_InternalConstants.value ⟨2 * ↑i + 1, ⋯⟩, ())
+Error: Application type mismatch: The argument
+  ho
+has type
+  ↑o < 14
+but is expected to have type
+  _a < 14
+in the application
+  ⟨_a, ho⟩
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+i : Fin 7
+offset e o : Usize
+rs : index i - 2#usize = ok offset
+rm : 2#usize * offset = ok e
+ve : ↑e = 2 * ↑i
+ra : e + 1#usize = ok o
+vo : ↑o = 2 * ↑i + 1
+ho : ↑o < 14
+read : poseidon2.INTERNAL.index_usize o = ok (FJh_InternalConstants.value ⟨↑o, ho⟩)
+⊢ ok (FJh_InternalConstants.value ⟨↑o, ho⟩, ()) = ok (FJh_InternalConstants.value ⟨2 * ↑i + 1, ⋯⟩, ())
+FJh_InternalConstantCalls.lean:28:13: warning: This simp argument is unused:
+  odd
+
+Hint: Omit it from the simp argument list.
+  simp only [o̵d̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵state_only_poseidon.interpolated_internal_pair.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31,
+      state_only_poseidon.interpolated_internal_pair.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut,
+      rs, ̲rm, ̲ra, ̲read, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJh_InternalConstantCalls.lean:29:4: warning: This simp argument is unused:
+  state_only_poseidon.interpolated_internal_pair.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+
+Hint: Omit it from the simp argument list.
+  simp only [odd,
+      s̵t̵a̵t̵e̵_̵o̵n̵l̵y̵_̵p̵o̵s̵e̵i̵d̵o̵n̵.̵i̵n̵t̵e̵r̵p̵o̵l̵a̵t̵e̵d̵_̵i̵n̵t̵e̵r̵n̵a̵l̵_̵p̵a̵i̵r̵.̵c̵l̵o̵s̵u̵r̵e̵_̵2̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵M̵u̵t̵T̵u̵p̵l̵e̵U̵s̵i̵z̵e̵M̵3̵1̵,̵state_only_poseidon.interpolated_internal_pair.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut,
+      r̵s̵,̵r̵m̵,̵r̵a̵,̵r̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵r̲s̲,̲ ̲r̲m̲,̲ ̲r̲a̲,̲ ̲r̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJh_InternalConstantCalls.even_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJh_InternalConstantCalls.odd_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJh_InternalConstantCalls.cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJh_InternalConstantCalls.even_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJh_InternalConstantCalls.odd_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

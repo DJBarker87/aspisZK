@@ -1,0 +1,104 @@
+GExq_OuterRecord.lean:44:16: error: Tactic `rfl` failed: The left-hand side
+  do
+    let pair ←
+      do
+        let a ← fail e
+        CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+            (record (fun {A} => impl) (k a) (before ++ project op a))
+    ok pair.1
+is not definitionally equal to the right-hand side
+  S2W_Trace.erase sdk (S2W_Trace.Code.call op k)
+
+case call.fail
+A : Type
+sdk : AdapterRw.Ops
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+impl : {B : Type} → S2W_Trace.Call B → Oracle B
+law :
+  ∀ {B : Type} (call : S2W_Trace.Call B),
+    GExq_ChildCode.Admissible hashv call →
+      CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (impl call) = S2W_Trace.invoke sdk call
+B✝ : Type
+op : S2W_Trace.Call B✝
+k : B✝ → S2W_Trace.Code A
+ih :
+  ∀ (a : B✝),
+    Good hashv (k a) →
+      ∀ (before : List Event),
+        (do
+            let pair ←
+              CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (record (fun {A} => impl) (k a) before)
+            ok pair.1) =
+          S2W_Trace.erase sdk (k a)
+good : Good hashv (S2W_Trace.Code.call op k)
+before : List Event
+e : Error
+⊢ (do
+      let pair ←
+        do
+          let a ← fail e
+          CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+              (record (fun {A} => impl) (k a) (before ++ project op a))
+      ok pair.1) =
+    S2W_Trace.erase sdk (S2W_Trace.Code.call op k)
+GExq_OuterRecord.lean:45:13: error: Tactic `rfl` failed: The left-hand side
+  do
+    let pair ←
+      do
+        let a ← div
+        CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+            (record (fun {A} => impl) (k a) (before ++ project op a))
+    ok pair.1
+is not definitionally equal to the right-hand side
+  S2W_Trace.erase sdk (S2W_Trace.Code.call op k)
+
+case call.div
+A : Type
+sdk : AdapterRw.Ops
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+impl : {B : Type} → S2W_Trace.Call B → Oracle B
+law :
+  ∀ {B : Type} (call : S2W_Trace.Call B),
+    GExq_ChildCode.Admissible hashv call →
+      CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (impl call) = S2W_Trace.invoke sdk call
+B✝ : Type
+op : S2W_Trace.Call B✝
+k : B✝ → S2W_Trace.Code A
+ih :
+  ∀ (a : B✝),
+    Good hashv (k a) →
+      ∀ (before : List Event),
+        (do
+            let pair ←
+              CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (record (fun {A} => impl) (k a) before)
+            ok pair.1) =
+          S2W_Trace.erase sdk (k a)
+good : Good hashv (S2W_Trace.Code.call op k)
+before : List Event
+⊢ (do
+      let pair ←
+        do
+          let a ← div
+          CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+              (record (fun {A} => impl) (k a) (before ++ project op a))
+      ok pair.1) =
+    S2W_Trace.erase sdk (S2W_Trace.Code.call op k)
+GExq_OuterRecord.lean:46:14: error: Type mismatch
+  ih a (good.right a) (before ++ project op a)
+has type
+  (do
+      let pair ←
+        CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+            (record (fun {A} => impl) (k a) (before ++ project op a))
+      ok pair.1) =
+    S2W_Trace.erase sdk (k a)
+but is expected to have type
+  (do
+      let pair ←
+        do
+          let a ← ok a
+          CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+              (record (fun {A} => impl) (k a) (before ++ project op a))
+      ok pair.1) =
+    S2W_Trace.erase sdk (S2W_Trace.Code.call op k)
+'AspisR1.GExq_OuterRecord.erase_record' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

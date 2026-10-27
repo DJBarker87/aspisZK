@@ -1,0 +1,126 @@
+{
+  "schema": "SCE sequential capped scope v1",
+  "groups": [
+    {
+      "name": "SCE_BATCH1",
+      "admission": "SCE_BATCH1-reservation-retry2.json",
+      "actual_attempts": [
+        "SCE_072",
+        "SCE_073",
+        "SCE_022",
+        "SCE_023"
+      ],
+      "planned_attempts": [
+        "SCE_072",
+        "SCE_073",
+        "SCE_022",
+        "SCE_023",
+        "SCE_024",
+        "SCE_025",
+        "SCE_026",
+        "SCE_027",
+        "SCE_028",
+        "SCE_029",
+        "SCE_031",
+        "SCE_032",
+        "SCE_033",
+        "SCE_034",
+        "SCE_035",
+        "SCE_036"
+      ],
+      "command": "cd /home/dombarker/project-offloads/codex-cx-sound-int2-20261025 && python3 JFz_reservation.py SCE_BATCH1-reservation-retry2.json && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 -c 'import subprocess\nfor n in [\"SCE_072\",\"SCE_073\",\"SCE_022\",\"SCE_023\",\"SCE_024\",\"SCE_025\",\"SCE_026\",\"SCE_027\",\"SCE_028\",\"SCE_029\",\"SCE_031\",\"SCE_032\",\"SCE_033\",\"SCE_034\",\"SCE_035\",\"SCE_036\"]:\n subprocess.run(['\\''python3'\\'','\\''S2W_lean_host.py'\\'',n+'\\''.json'\\''],check=True)\n'",
+      "reference_receipt": "SCE_072/receipt.json",
+      "note": "One admitted 8 GiB scope, one module per unchanged launcher invocation, sequential, stopped on first failure. Cgroup peak is cumulative across this group; /usr/bin/time RSS is per invocation."
+    },
+    {
+      "name": "SCE_BATCH3",
+      "admission": "SCE_BATCH3-reservation-retry1.json",
+      "actual_attempts": [
+        "SCE_024",
+        "SCE_025"
+      ],
+      "reference_receipt": "SCE_024/receipt.json",
+      "note": "One admitted scope; sequential one-module existing-launcher invocations; stopped on first failure"
+    },
+    {
+      "name": "SCE_BATCH4",
+      "admission": "SCE_BATCH4-reservation.json",
+      "actual_attempts": [
+        "SCE_075",
+        "SCE_026",
+        "SCE_027",
+        "SCE_028"
+      ],
+      "reference_receipt": "SCE_075/receipt.json",
+      "note": "One admitted scope; sequential one-module existing-launcher invocations; stopped on first failure"
+    },
+    {
+      "name": "SCE_BATCH5",
+      "admission": "SCE_BATCH5-reservation.json",
+      "actual_attempts": [
+        "SCE_077",
+        "SCE_029"
+      ],
+      "reference_receipt": "SCE_077/receipt.json",
+      "note": "One admitted scope; sequential one-module existing-launcher invocations; stopped on first failure"
+    },
+    {
+      "name": "SCE_BATCH6",
+      "admission": "SCE_BATCH6-reservation-retry3.json",
+      "actual_attempts": [
+        "SCE_031",
+        "SCE_032",
+        "SCE_033",
+        "SCE_034",
+        "SCE_035",
+        "SCE_036",
+        "SCE_037",
+        "SCE_038",
+        "SCE_039",
+        "SCE_040",
+        "SCE_041",
+        "SCE_042",
+        "SCE_043",
+        "SCE_046",
+        "SCE_047",
+        "SCE_048",
+        "SCE_050",
+        "SCE_054",
+        "SCE_063",
+        "SCE_064",
+        "SCE_065",
+        "SCE_066",
+        "SCE_067",
+        "SCE_068",
+        "SCE_069",
+        "SCE_076",
+        "SCE_078",
+        "SCE_079",
+        "SCE_080",
+        "SCE_081",
+        "SCE_082",
+        "SCE_083",
+        "SCE_084",
+        "SCE_085",
+        "SCE_086",
+        "SCE_087",
+        "SCE_088",
+        "SCE_089",
+        "SCE_090",
+        "SCE_091",
+        "SCE_092",
+        "SCE_093",
+        "SCE_094",
+        "SCE_095",
+        "SCE_096",
+        "SCE_097",
+        "SCE_098",
+        "SCE_099",
+        "SCE_100",
+        "SCE_101"
+      ],
+      "reference_receipt": "SCE_078/receipt.json",
+      "note": "One interactive admitted scope; all modules sequential through unchanged launcher; no parallel child builds"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+F3U_PairInputs.lean:29:20: error: Application type mismatch: The argument
+  first
+has type
+  (eval H
+        (GExp_Experiment.first (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+          hashv (currentDigest c)
+          { semantic := AspisS6CurrentVerifierCarrier.toPublic semantic, pub := pub, proof := proof,
+            split := 10#usize })).2 =
+    ok (core.result.Result.Ok saved)
+but is expected to have type
+  ok (core.result.Result.Ok saved) = ok (core.result.Result.Ok saved)
+in the application
+  And.intro first
+F3U_PairInputs.lean:36:32: error: Type mismatch
+  second
+has type
+  (eval H
+        (GExp_Experiment.second (stage c) c.reserved hashv (digest c)
+          { pub := pub, proof := proof, checkpoint := saved.deref })).2 =
+    ok (core.result.Result.Ok PUnit.unit)
+but is expected to have type
+  ok (core.result.Result.Ok PUnit.unit) = ok (core.result.Result.Ok ())
+F3U_PairInputs.lean:36:13: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1.F3U_PairInputs.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

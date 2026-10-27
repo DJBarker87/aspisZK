@@ -1,0 +1,43 @@
+JGg_ScalarForward.lean:16:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if nonzero = true then B.gamma block else B.ordinary block
+in the target expression
+  (let (block, self1) := (block, after)
+    do
+    let out ← if nonzero = true then B.gamma block else B.ordinary block
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    trace.value 4#u16 i out
+    ok (out, self1)) =
+    ok (out, after)
+
+Hash : Type
+B : PreparedModel.Boundaries
+D : aspis_core.Digest32 Hash
+before after : transcript.Transcript Hash
+row : U8
+payload : Slice U8
+block : Std.Array U8 32#usize
+out : aspis_core.field.WideExact
+nonzero : Bool
+call : transcript.Transcript.block D before row payload = ok (block, after)
+sample : (if nonzero = true then B.gamma block else B.ordinary block) = ok out
+⊢ (let (block, self1) := (block, after)
+    do
+    let out ← if nonzero = true then B.gamma block else B.ordinary block
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    trace.value 4#u16 i out
+    ok (out, self1)) =
+    ok (out, after)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGg_ScalarForward.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGg_ScalarForward.gamma' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGg_ScalarForward.ordinary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

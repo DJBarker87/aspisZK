@@ -1,0 +1,41 @@
+{"attempt": "BEn_089", "exit_status": 0, "wall_seconds": 2.347908852971159, "peak_rss_kib": "5553644", "swaps": "0", "print_axioms": ["'AspisR1.ARX_AdmittedRuntime.permitted_iff' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.ARX_AdmittedRuntime.permitted_iff : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (a : AspisR1.SCE_Exper
+...
+Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (a : AspisR1.SCE_Experiment.Adversary A),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.ARX_AdmittedRuntime.permitted L copy allocator c err r native1 native2 hashv a
+          (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+              AspisR1.CPH_Program.verifier a)) ↔
+        Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a H) :=
+fun {W A C Tx} L copy allocator c err r native1 native2 hashv a extraction H =>
+  {
+    mp := fun a_1 =>
+      let ⟨K, h✝⟩ := a_1
+      let ⟨left✝, same⟩ := h✝
+      let ⟨n⟩ := left✝
+      AspisR1.ARU_PartialFactory.original L copy allocator c err r native1 native2 hashv extraction a K H n
+        (AspisR1.ARX_TraceSupport.consistent
+          (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+            AspisR1.CPH_Program.verifier a)
+          K H (congrArg Prod.fst same)),
+    mpr := fun n => Exists.intro H ⟨n, rfl⟩ }
+'AspisR1.ARX_AdmittedRuntime.permitted_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r63259395459746688bdccfa82d16ca0e.scope; invocation ID: f95ae1208a6e435892b6d4869a665b2f

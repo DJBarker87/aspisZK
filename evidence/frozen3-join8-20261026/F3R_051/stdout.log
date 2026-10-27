@@ -1,0 +1,86 @@
+F3R_VerifyLog.lean:46:11: error: invalid 'by' tactic, expected type has not been provided
+F3R_VerifyLog.lean:48:11: error: invalid 'by' tactic, expected type has not been provided
+F3R_VerifyLog.lean:60:2: error: unsolved goals
+case refine_2
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 Unit
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+sem : r1_semantic.Verified Unit
+success :
+  erase (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none) =
+    ok (core.result.Result.Ok sem)
+pre : r1_wire.Prefix
+t0 t15 : r1_wire.SemanticTranscript Unit
+challenges : r1_wire.Challenges
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+initialized : erase (S1SemanticCode.publicTranscript D pub () pre.c1_root) = ok (core.result.Result.Ok t0)
+begin : erase (S1SemanticCode.begin D pre t0) = ok (core.result.Result.Ok challenges, t15)
+finish : erase (S1SemanticCode.finish R B D pub pre t15 challenges none) = ok (core.result.Result.Ok sem)
+logs :
+  observe (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes () none)).1 =
+    observe (run (S1SemanticCode.publicTranscript D pub () pre.c1_root)).1 ++
+      (observe (run (S1SemanticCode.begin D pre t0)).1 ++
+        observe (run (S1SemanticCode.finish R B D pub pre t15 challenges none)).1)
+running : aspis_core.field.QM31
+alpha : Std.Array aspis_core.field.QM31 10#usize
+t25 : r1_wire.SemanticTranscript Unit
+r25 : r1_wire.ValidatedRecord
+z0 : aspis_core.circle.SecureCirclePoint
+t26 : r1_wire.SemanticTranscript Unit
+r26 : r1_wire.ValidatedRecord
+z1 : aspis_core.circle.SecureCirclePoint
+t27 : r1_wire.SemanticTranscript Unit
+rounds : erase (S1SemanticCode.rounds R D pre t15) = ok (core.result.Result.Ok (running, alpha, t25))
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : erase (S1SemanticCode.circleValidated B D t25 r25) = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : erase (S1SemanticCode.circleValidated B D t26 r26) = ok (core.result.Result.Ok z1, t27)
+transcript : sem.transcript = t27
+finishLog :
+  observe (run (S1SemanticCode.finish R B D pub pre t15 challenges none)).1 =
+    observe (run (S1SemanticCode.rounds R D pre t15)).1 ++
+      (observe (run (S1SemanticCode.circleValidated B D t25 r25)).1 ++
+        observe (run (S1SemanticCode.circleValidated B D t26 r26)).1)
+rawBegin : r1_wire.begin D pre t0 = ok (core.result.Result.Ok challenges, t15)
+rawRounds : RoundModel.rounds R D pre t15 = ok (core.result.Result.Ok (running, alpha, t25))
+qs0✝ : List aspis_core.field.QM31
+run0 : BeginCalls.SemanticRun D pre BeginCalls.rows t0 t15 qs0✝
+values0 : qs0✝ = BeginCalls.challengeList challenges
+qs1✝ : List aspis_core.field.QM31
+run1 : BeginCalls.SemanticRun D pre PSem_RoundCalls.rows t15 t25 qs1✝
+values1 : qs1✝ = ↑alpha
+cs0 : List (SourceFull25.Call D pre)
+trace0 : SourceFull25.Trace D pre t0 t15 cs0
+rows0 : List.map SourceFull25.Call.row cs0 = BeginCalls.rows
+qs0 : List.map SourceFull25.Call.q cs0 = qs0✝
+cs1 : List (SourceFull25.Call D pre)
+trace1 : SourceFull25.Trace D pre t15 t25 cs1
+rows1 : List.map SourceFull25.Call.row cs1 = PSem_RoundCalls.rows
+qs1 : List.map SourceFull25.Call.q cs1 = qs1✝
+order0 : List.map (fun c => ↑c.row) cs0 = List.range 15
+order1 : List.map (fun c => ↑c.row) cs1 = List.map (fun j => 15 + j) (List.range 10)
+initHash : t0.hash = ()
+rawPublic : r1_semantic.public_transcript D pub () pre.c1_root = ok (core.result.Result.Ok t0)
+init : PublicInitCall D pub pre.c1_root t0
+initLog : observe (run (S1SemanticCode.publicTranscript D pub () pre.c1_root)).1 = [initPair init]
+⊢ initPair init ::
+      ([] ++
+        (List.flatMap callLog cs0 ++
+          (List.flatMap callLog cs1 ++
+            (observe (run (S1SemanticCode.circleValidated B D t25 r25)).1 ++
+              observe (run (S1SemanticCode.circleValidated B D t26 r26)).1)))) =
+    initPair init ::
+      (List.flatMap callLog cs0 ++
+        (List.flatMap callLog cs1 ++
+          (observe (run (S1SemanticCode.circleValidated B D t25 r25)).1 ++
+            observe (run (S1SemanticCode.circleValidated B D t26 r26)).1)))
+F3R_VerifyLog.lean:62:45: warning: This simp argument is unused:
+  List.singleton_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵o̵u̵r̵c̵e̵L̵o̵g̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵c̵o̵n̵s̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲s̲o̲u̲r̲c̲e̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲c̲o̲n̲s̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3R_VerifyLog.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

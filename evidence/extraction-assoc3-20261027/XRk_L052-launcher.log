@@ -1,0 +1,46 @@
+{"attempt": "XRk_L052", "exit_status": 1, "wall_seconds": 2.567853910033591, "peak_rss_kib": "2638136", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Array.index_mut_usize.{u} : {α : Type u} →
+  {n : Usize} → Std.Array α n → Usize → Result (α × (α → Std.Array α n)) :=
+fun {α} {n} v i => do
+  let x ← v.index_usize i
+  Result.ok (x, v.set i)
+XRk_generated/XRk_PowersProbe.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Array.setAtNat`
+List.take_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} : List.take i (l.set j a) = (List.take i l).set j a
+List.take_set_of_le.{u_1} {α : Type u_1} {a : α} {i j : ℕ} {l : List α} (h : j ≤ i) :
+  List.take j (l.set i a) = List.take j l
+List.take_succ.{u_1} {α : Type u_1} {l : List α} {i : ℕ} : List.take (i + 1) l = List.take i l ++ l[i]?.toList
+List.take_concat_get.{u_1} {α :
+...
+ray.index_mut_usize.{u} : {α : Type u} →
+  {n : Usize} → Std.Array α n → Usize → Result (α × (α → Std.Array α n)) :=
+fun {α} {n} v i => do
+  let x ← v.index_usize i
+  Result.ok (x, v.set i)
+XRk_generated/XRk_PowersProbe.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Array.setAtNat`
+List.take_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} : List.take i (l.set j a) = (List.take i l).set j a
+List.take_set_of_le.{u_1} {α : Type u_1} {a : α} {i j : ℕ} {l : List α} (h : j ≤ i) :
+  List.take j (l.set i a) = List.take j l
+List.take_succ.{u_1} {α : Type u_1} {l : List α} {i : ℕ} : List.take (i + 1) l = List.take i l ++ l[i]?.toList
+List.take_concat_get.{u_1} {α : Type u_1} {l : List α} {i : ℕ} (h : i < l.length) :
+  (List.take i l).concat l[i] = List.take (i + 1) l
+Aeneas.Std.UScalar.add_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x + ↑y ≤ UScalar.max ty) :
+  x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+XRk_generated/XRk_PowersProbe.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.add_eq`
+XRk_generated/XRk_PowersProbe.lean:11:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_add`
+XRk_generated/XRk_PowersProbe.lean:12:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.add_val`
+def XRk_Release.weights.powers_loop : {N : Usize} →
+  aspis_core.field.wide_exact.WideExact →
+    Std.Array aspis_core.field.wide_exact.WideExact N →
+      aspis_core.field.wide_exact.WideExact →
+        Usize →
+          Result
+            (Std.Array aspis_core.field.wide_exact.WideExact N ×
+              Option (Std.Array aspis_core.field.wide_exact.WideExact N)) :=
+fun {N} x out p i =>
+  loop
+    (fun x_1 =>
+      match x_1 with
+      | (out1, p1, i1) => XRk_Release.weights.powers_loop.body x out1 p1 i1)
+    (out, p, i)
+
+Running as unit: run-r1226e5ad6f1647e783372b08db9f1d01.scope; invocation ID: a5edf922f4fe4cd2b26439cb2a0026b4

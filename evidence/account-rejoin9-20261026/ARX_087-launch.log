@@ -1,0 +1,31 @@
+{"attempt": "ARX_087", "exit_status": 0, "wall_seconds": 2.3161583959590644, "peak_rss_kib": "5341884", "swaps": "0", "print_axioms": ["'AspisR1.CPR_DataPersistence.visible_projection' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.CPR_DataPersistence.visible_projection : ∀ (image : AspisR1.CPR_Persistence.Image),
+  AspisR1.CPR_DataPersistence.visible (AspisR1.CPR_DataPersistence.project image) =
+    Option.map (fun a => AspisR1.MultiproofConeCanonical.bytesOf ↑a.cell.data) (AspisR1.CPR_Persistence.visible image)
+'AspisR1.CPR_DataPersistence.visible_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.CPR_DataPersistence.TwoTransactionLaw : {Tx Key : Type} →
+  (Tx → Tx → Prop) →
+    (Tx → Key → Prop) →
+      (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+        (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+          (Tx → Bool) → (Tx → Key → Option AspisV8R19.DuplexFrames.Byt
+...
+AspisR1.CPR_DataPersistence.visible_projection : ∀ (image : AspisR1.CPR_Persistence.Image),
+  AspisR1.CPR_DataPersistence.visible (AspisR1.CPR_DataPersistence.project image) =
+    Option.map (fun a => AspisR1.MultiproofConeCanonical.bytesOf ↑a.cell.data) (AspisR1.CPR_Persistence.visible image)
+'AspisR1.CPR_DataPersistence.visible_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.CPR_DataPersistence.TwoTransactionLaw : {Tx Key : Type} →
+  (Tx → Tx → Prop) →
+    (Tx → Key → Prop) →
+      (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+        (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+          (Tx → Bool) → (Tx → Key → Option AspisV8R19.DuplexFrames.Bytes) → Prop :=
+fun {Tx Key} next ordinary before tentative success loaded =>
+  ∀ (t u : Tx),
+    next t u →
+      ∀ (key : Key),
+        ordinary t key →
+          loaded u key =
+            AspisR1.CPR_DataPersistence.visible (if success t = Bool.true then tentative t key else before t key)
+
+Running as unit: run-re8df3bf15b8248c28204f4e45e553c78.scope; invocation ID: bf06787fa53948af84ef34bfecea5258

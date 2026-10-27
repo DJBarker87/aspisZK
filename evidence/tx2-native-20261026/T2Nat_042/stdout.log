@@ -1,0 +1,84 @@
+T2Nat_AfterQueries.lean:59:86: error: unsolved goals
+case Ok
+ops : ResumeOps
+bytes : Slice U8
+v : transport.Variant
+i4 : U8
+end1 : Usize
+state a3 a4 : Std.Array U8 32#usize
+val val1 val2 val3 : T2Nat_ReaderSuffix.E
+val4 : T2Nat_ReaderSuffix.K
+queries : Std.Array U32 22#usize
+r : verifier.Reader
+hx : ops.validate queries = ok (core.result.Result.Ok PUnit.unit)
+⊢ (do
+      let cf5 ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok PUnit.unit)
+      match cf5 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let r36 ← ops.readSemanticAlpha bytes r.at
+          let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r36
+          match cf6 with
+            | core.ops.control_flow.ControlFlow.Continue val5 =>
+              T2Nat_ReaderSuffix.normalized ops bytes v i4 end1 state a3 a4 val val1 val2 val3 val4 queries val5.1
+                { bytes := r.bytes, «at» := val5.2 }
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    do
+    let value ← ops.readSemanticAlpha bytes r.at
+    match value with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok val5 =>
+        T2Nat_ReaderSuffix.normalized ops bytes v i4 end1 state a3 a4 val val1 val2 val3 val4 queries val5.1
+          { bytes := r.bytes, «at» := val5.2 }
+
+case Err
+ops : ResumeOps
+bytes : Slice U8
+v : transport.Variant
+i4 : U8
+end1 : Usize
+state a3 a4 : Std.Array U8 32#usize
+val val1 val2 val3 : T2Nat_ReaderSuffix.E
+val4 : T2Nat_ReaderSuffix.K
+queries : Std.Array U32 22#usize
+r : verifier.Reader
+a✝ : verifier.Error
+hx : ops.validate queries = ok (core.result.Result.Err a✝)
+⊢ (do
+      let cf5 ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝)
+      match cf5 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let r36 ← ops.readSemanticAlpha bytes r.at
+          let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r36
+          match cf6 with
+            | core.ops.control_flow.ControlFlow.Continue val5 =>
+              let (semantic_alpha, at1) := val5
+              T2Nat_ReaderSuffix.normalized ops bytes v i4 end1 state a3 a4 val val1 val2 val3 val4 queries
+                semantic_alpha { bytes := r.bytes, «at» := at1 }
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    match core.result.Result.Err a✝ with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok a => do
+      let value ← ops.readSemanticAlpha bytes r.at
+      match value with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a =>
+          T2Nat_ReaderSuffix.normalized ops bytes v i4 end1 state a3 a4 val val1 val2 val3 val4 queries a.1
+            { bytes := r.bytes, «at» := a.2 }
+T2Nat_AfterQueries.lean:66:18: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵Aeneas.Std.uncurry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.T2Nat_AfterQueries.normalize' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

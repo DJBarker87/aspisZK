@@ -1,0 +1,215 @@
+Op5C_RejectedMarks.lean:37:2: error: unsolved goals
+case left
+ops : VTop_Stages.Ops
+Hash : Type
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+hash : Hash
+semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split expected : Usize
+obs : Option (VTop_Stages.verifier.Phase → Result Unit)
+read : ops.op16 = ok expected
+wrong : split ≠ expected
+⊢ (if (split != expected) = true then ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+    else do
+      let r ← ops.op3 proof
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let r1 ← ops.op4 proof
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              ops.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+              let we ← ops.op1
+              let (r2, g1) ← ops.op7 D semantic proof hash obs (Array.repeat 29#usize we)
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let r3 ← ops.op12 AspisR1Stage2.transport.Variant.S2
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                      ops.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare
+                      let i1 ← ops.op15
+                      let i2 ← ops.op14
+                      let s ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                            { start := i1, «end» := i2 }
+                      let r4 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+                      let folded_root ← ops.unwrap32 r4
+                      let r5 ← ops.op5 D proof val folded_root 0#usize hash
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue a => do
+                          ops.op13 obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize)
+                          let r6 ← ops.op11 val.queries 0#usize split
+                          let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                          match cf5 with
+                            | core.ops.control_flow.ControlFlow.Continue val2 => do
+                              let r7 ← ops.op10 val1.weights.deref
+                              let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                              match cf6 with
+                                | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                  let r8 ← ops.op6 proof val val1 g1 obs val2 val3 split
+                                  let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r8
+                                  match cf7 with
+                                    | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                      let (a, pending) := val4
+                                      do
+                                      let (s2, deref_mut_back) ← lift a.weights.deref_mut
+                                      let s3 ← ops.op9 pending s2
+                                      let bytes ←
+                                        ops.op8 D val
+                                            { weights := deref_mut_back s3, rhs := a.rhs, power := a.power,
+                                              next := a.next }
+                                            proof pub hash
+                                      ops.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite
+                                      ok (core.result.Result.Ok bytes)
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8) (core.convert.FromSame VTop_Stages.verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8) (core.convert.FromSame VTop_Stages.verifier.Error) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame VTop_Stages.verifier.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame VTop_Stages.verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame VTop_Stages.verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame VTop_Stages.verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame VTop_Stages.verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame VTop_Stages.verifier.Error) residual) =
+    ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+Op5C_RejectedMarks.lean:40:2: error: unsolved goals
+case right.left
+ops : VTop_Stages.Ops
+Hash : Type
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+hash : Hash
+semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split expected : Usize
+obs : Option (VTop_Stages.verifier.Phase → Result Unit)
+read : ops.op16 = ok expected
+wrong : split ≠ expected
+⊢ VTop_Trace.run ops
+      (if (split != expected) = true then
+        pure (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+      else
+        VTop_Trace.Code.call (VTop_Trace.Call.op3 proof) fun r =>
+          VTop_Trace.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch r)) fun cf =>
+            match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              VTop_Trace.Code.call (VTop_Trace.Call.op4 proof) fun r1 =>
+                VTop_Trace.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch r1)) fun cf1 =>
+                  match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a =>
+                    VTop_Trace.Code.call (VTop_Trace.Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                      fun __r =>
+                      VTop_Trace.Code.call VTop_Trace.Call.op1 fun we =>
+                        VTop_Trace.Code.call (VTop_Trace.Call.op7 D semantic proof hash obs (Array.repeat 29#usize we))
+                          fun __x =>
+                          VTop_Trace.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)) fun cf2 =>
+                            match cf2 with
+                            | core.ops.control_flow.ControlFlow.Continue val =>
+                              VTop_Trace.Code.call (VTop_Trace.Call.op12 AspisR1Stage2.transport.Variant.S2) fun r3 =>
+                                VTop_Trace.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch r3)) fun cf3 =>
+                                  match cf3 with
+                                  | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                    VTop_Trace.Code.call
+                                      (VTop_Trace.Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare)
+                                      fun __r =>
+                                      VTop_Trace.Code.call VTop_Trace.Call.op15 fun i1 =>
+                                        VTop_Trace.Code.call VTop_Trace.Call.op14 fun i2 =>
+                                          VTop_Trace.bind
+                                            (liftM
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                { start := i1, «end» := i2 }))
+                                            fun s =>
+                                            VTop_Trace.bind
+                                              (liftM
+                                                (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8
+                                                  s))
+                                              fun r4 =>
+                                              VTop_Trace.Code.call (VTop_Trace.Call.unwrap32 r4) fun folded_root =>
+                                                VTop_Trace.Code.call
+                                                  (VTop_Trace.Call.op5 D proof val folded_root 0#usize hash) fun r5 =>
+                                                  VTop_Trace.bind
+                                                    (liftM (core.result.Result.Insts.CoreOpsTry.branch r5)) fun cf4 =>
+                                                    match cf4 with
+                                                    | core.ops.control_flow.ControlFlow.Continue a =>
+                                                      VTop_Trace.Code.call
+                                                        (VTop_Trace.Call.op13 obs
+                                                          (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize))
+                                                        fun __r =>
+                                                        VTop_Trace.Code.call
+                                                          (VTop_Trace.Call.op11 val.queries 0#usize split) fun r6 =>
+                                                          VTop_Trace.bind
+                                                            (liftM (core.result.Result.Insts.CoreOpsTry.branch r6))
+                                                            fun cf5 =>
+                                                            match cf5 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val2 => ⋯
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              liftM
+                                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (alloc.vec.Vec U8)
+                                                                  (core.convert.FromSame VTop_Stages.verifier.Error)
+                                                                  residual)
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      liftM
+                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (alloc.vec.Vec U8)
+                                                          (core.convert.FromSame VTop_Stages.verifier.Error) residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8) (core.convert.FromSame VTop_Stages.verifier.Error) residual)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (alloc.vec.Vec U8) (core.convert.FromSame VTop_Stages.verifier.Error) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame VTop_Stages.verifier.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                  (core.convert.FromSame VTop_Stages.verifier.Error) residual))
+      ([] ++ [VTop_Trace.Event.returned VTop_Trace.Call.op16 expected]) =
+    ok
+      (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse,
+        [VTop_Trace.Event.returned VTop_Trace.Call.op16 expected])
+Op5C_RejectedMarks.lean:38:6: warning: This simp argument is unused:
+  if_pos wrong
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Stages.verifier.candidate.tx1, read, bind_tc_ok,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵i̵f̵_̵p̵o̵s̵ ̵w̵r̵o̵n̵g̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op5C_RejectedMarks.lean:42:35: warning: This simp argument is unused:
+  if_pos wrong
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Flow.tx1, VTop_Flow.traceEffects, Bind.bind,
+  ̵  ̵ ̵ ̵ ̵ ̵VTop_Trace.bind,
+  ̲  ̲ ̲ ̲VTop_Trace.perform, VTop_Trace.run, VTop_Trace.invoke,
+  ̵  ̵ ̵ ̵ ̵ ̵read, VTop_Trace.thenResult,̵ ̵i̵f̵_̵p̵o̵s̵ ̵w̵r̵o̵n̵g̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Op5C_RejectedMarks.source_wrong_split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Op5C_RejectedMarks.first_marks_force_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Op5C_RejectedMarks.no_global_first_mark_association' depends on axioms: [propext, Classical.choice, Quot.sound]

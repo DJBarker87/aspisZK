@@ -1,0 +1,38 @@
+{"attempt": "BEk_018", "exit_status": 1, "wall_seconds": 2.2880929239909165, "peak_rss_kib": "5363132", "swaps": "0", "print_axioms": ["'AspisR1.BEk_Returning.agrees' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+BEk_Returning.lean:15:23: error(lean.unknownIdentifier): Unknown identifier `flatten`
+BEk_Returning.lean:15:41: error(lean.unknownIdentifier): Unknown identifier `decodeState`
+BEk_Returning.lean:17:18: error: unsolved goals
+A : Type
+hashv : Parts → Result Digest
+H : Bytes → State
+code : Code A
+value : A
+returning : SdkC_BatchPair.Returning hashv H code value
+q : Query
+member : q ∈ (run hashv code []).2
+digest : Digest
+returned : q.returned = ok digest
+bad : ¬AspisV8R19.SqueezeOracleBridge.decodeState digest = H (AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+⊢ some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest) =
+    some (sorry, sorry)
+'
+...
+BEk_Returning.lean:15:23: error(lean.unknownIdentifier): Unknown identifier `flatten`
+BEk_Returning.lean:15:41: error(lean.unknownIdentifier): Unknown identifier `decodeState`
+BEk_Returning.lean:17:18: error: unsolved goals
+A : Type
+hashv : Parts → Result Digest
+H : Bytes → State
+code : Code A
+value : A
+returning : SdkC_BatchPair.Returning hashv H code value
+q : Query
+member : q ∈ (run hashv code []).2
+digest : Digest
+returned : q.returned = ok digest
+bad : ¬AspisV8R19.SqueezeOracleBridge.decodeState digest = H (AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+⊢ some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest) =
+    some (sorry, sorry)
+'AspisR1.BEk_Returning.agrees' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r452f0cffa80b4ecda376153ff46f9538.scope; invocation ID: 233934e9649946f984cd592202daa698

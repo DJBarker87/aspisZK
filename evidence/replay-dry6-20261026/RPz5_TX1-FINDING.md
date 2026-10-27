@@ -1,0 +1,21 @@
+# Cached Tx1 producer-cohort incompatibility
+
+RPz5_041, `ExtractedTx1Model`, fails on the exact smaller producer pair reconstructed from historical receipts. Its source is the e5c186ba3 Tx1 extraction model (`541de441…`), and its cached object is `944b0437…`. Missing exports begin at line9 `aspis_core.r0.Error` and line11 `verifier.Phase`, then `verifier.Accumulator`, `verifier.Accumulator.new.closure` and `verifier.tx1.closure`. Complete errors, diagnostic axioms and the section6 receipt are in RPz5_TX1-FINDING.json and RPz5_041/. No diagnostic sorryAx is accepted.
+
+The original selected-import-pins.json records TWO PublicPreparation pairs: repaired Prepared union Types1087d26b… / Funsbcd26e08… and the original Tx1 prefix union Typese1d3e2db… / Funs06348080…. Its Tx1 object944b0437… comes from that latter prefix root. The later sound-int2 namespace selects the smaller pair while reusing that Tx1 object. Together with the unchanged Tx1 source failing fresh against the smaller pair, this exposes a real cached source-cohort incoherence. The first incompatible pair is `ExtractedTx1Model` / smaller `AspisR1PublicPreparation.Types`. It is not a mathematical counterexample or a shipped SDK defect.
+
+The three original RPz4 failures were all resolved on the smaller historical producer; the stage2 result remains valid in that scope. It did not prove the whole cached closure coherent. Its statement that a mixed PublicPreparation pair had not then been demonstrated is superseded by this downstream finding.
+
+There is an existing e5c186ba3 producer union in `lean/bridge-tx1-e5c186ba3-20261016/`. Its union-pins.json identifies the exact raw extraction source and records that all original Prepared carrier declarations are retained, with five exact Tx1 carriers appended. common-funs-audit.json and prepared-binding-pins.json preserve the Prepared function/model body provenance; tx1-binding-pins.json binds the unchanged Tx1 model. This supplies a provenance-backed candidate for a single producer cohort. It is selected for testing, not inferred from a passing alternate. No consumer body is edited or weakened.
+
+The original56 attempts, source plan/state and smaller-cohort outputs/view remain pinned and unchanged. The larger producer uses separate RPz5_union_sources/objects/overlay. All dependent objects are invalidated and freshly rebuilt. If this source cohort fails, retain the finding and stop that chain; do not replace a consumer with a passing model.
+
+No top premise removed; ledger T0/P0/G0/C0. No joint non-vacuity or fresh top reachability claim.
+
+## Larger-cohort probe: irreconcilable Phase owner
+
+RPz5_057/058 compile the retained larger producer; RPz5_059/060 compile PreparedModel and Tx1Model; RPz5_063 compiles OpeningQueriesModel. But RPz5_074 fails at S1SemanticPhaseV1 line7: **`AspisR1PublicPreparation.verifier.Phase` has already been declared**. That source unconditionally abbreviates `Phase := AspisR1PublicPreparation.FirstCaller.Phase`, explicitly to supply the nominal phase absent from its selected legacy cache. The larger producer declares the same fully qualified name as an inductive.
+
+Both consumers share PublicPreparation.Funs transitively; exact source paths from Rc10 and the shared parent are recorded in RPz5_TX1-FINDING.json. Thus one producer withholding Phase makes Tx1 ill-typed, and exporting Phase makes the alias a duplicate. No producer-source selection alone reconciles these unchanged consumer sources. The cached top is not a coherent source closure on either retained producer cohort. This is the first incompatible consumer pair: **ExtractedTx1Model / S1SemanticPhaseV1**, with the producer name `AspisR1PublicPreparation.verifier.Phase` as the conflicting owner. Fresh compiler errors establish source incoherence, not a false mathematical security theorem.
+
+The larger probe is stopped and remains a diagnostic, with every output and receipt retained. Resume the exact smaller cache-pinned producer and its already passing three vertices; the Tx1 chain stays failed at RPz5_041. No succeeded smaller context is rerun, and no failed input is retried unchanged. Continue only independent eligible source vertices within the remaining budget. L187/L188 stay open; no fresh top formatter reachability result or joint non-vacuity follows.

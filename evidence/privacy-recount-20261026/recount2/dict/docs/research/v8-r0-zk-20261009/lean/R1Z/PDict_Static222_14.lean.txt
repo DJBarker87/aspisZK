@@ -1,0 +1,148 @@
+import R1Z.PDict_Static222_13
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_Static222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap
+universe u
+/-- Extensional transport of symbolic fixed points; no fixed-point evaluation. -/
+theorem fixed_equal {α : Type u} [Lean.Order.CCPO α]
+    {f g : α → α} (hf : Lean.Order.monotone f) (hg : Lean.Order.monotone g)
+    (h : f = g) : Lean.Order.fix f hf = Lean.Order.fix g hg := by
+  cases h
+  rfl
+#print axioms fixed_equal
+
+/-- Carrier transport candidate for `host_sumcheck.merge_evaluations_loop.body`. -/
+theorem erase_224 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.merge_evaluations_loop.body (types base F) (selected base F ops) = @host_sumcheck.merge_evaluations_loop.body base ops := by
+  delta host_sumcheck.merge_evaluations_loop.body
+  all_goals rfl
+#print axioms erase_224
+
+/-- Carrier transport candidate for `host_sumcheck.merge_evaluations_loop`. -/
+theorem erase_225 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.merge_evaluations_loop (types base F) (selected base F ops) = @host_sumcheck.merge_evaluations_loop base ops := by
+  delta host_sumcheck.merge_evaluations_loop
+  try simp only [erase_224 base F ops]
+  all_goals rfl
+#print axioms erase_225
+
+/-- Carrier transport candidate for `host_sumcheck.merge_evaluations`. -/
+theorem erase_226 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.merge_evaluations (types base F) (selected base F ops) = @host_sumcheck.merge_evaluations base ops := by
+  delta host_sumcheck.merge_evaluations
+  try simp only [erase_225 base F ops]
+  all_goals rfl
+#print axioms erase_226
+
+/-- Carrier transport candidate for `host_sumcheck.evaluate_assignment_loop.body`. -/
+theorem erase_227 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.evaluate_assignment_loop.body (types base F) (selected base F ops) = @host_sumcheck.evaluate_assignment_loop.body base ops := by
+  delta host_sumcheck.evaluate_assignment_loop.body
+  all_goals rfl
+#print axioms erase_227
+
+/-- Carrier transport candidate for `host_sumcheck.evaluate_assignment_loop`. -/
+theorem erase_228 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.evaluate_assignment_loop (types base F) (selected base F ops) = @host_sumcheck.evaluate_assignment_loop base ops := by
+  delta host_sumcheck.evaluate_assignment_loop
+  try simp only [erase_227 base F ops]
+  all_goals rfl
+#print axioms erase_228
+
+/-- Carrier transport candidate for `host_sumcheck.evaluate_assignment`. -/
+theorem erase_229 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.evaluate_assignment (types base F) (selected base F ops) = @host_sumcheck.evaluate_assignment base ops := by
+  delta host_sumcheck.evaluate_assignment
+  try simp only [erase_228 base F ops]
+  all_goals rfl
+#print axioms erase_229
+
+/-- Carrier transport candidate for `host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error.call`. -/
+theorem erase_230 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error.call (types base F) (selected base F ops) = @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error.call base ops := by
+  delta host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error.call
+  try simp only [erase_229 base F ops]
+  all_goals rfl
+#print axioms erase_230
+
+/-- Carrier transport candidate for `host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultQM31Error.call_mut`. -/
+theorem erase_231 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultQM31Error.call_mut (types base F) (selected base F ops) = @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultQM31Error.call_mut base ops := by
+  delta host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultQM31Error.call_mut
+  try simp only [erase_230 base F ops]
+  all_goals rfl
+#print axioms erase_231
+
+/-- Carrier transport candidate for `host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeResultQM31Error.call_once`. -/
+theorem erase_232 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeResultQM31Error.call_once (types base F) (selected base F ops) = @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeResultQM31Error.call_once base ops := by
+  delta host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeResultQM31Error.call_once
+  try simp only [erase_231 base F ops]
+  all_goals rfl
+#print axioms erase_232
+
+/-- Carrier transport candidate for `host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeResultQM31Error`. -/
+theorem erase_233 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeResultQM31Error (types base F) (selected base F ops) = @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeResultQM31Error base ops := by
+  delta host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeResultQM31Error
+  try simp only [erase_232 base F ops]
+  all_goals rfl
+#print axioms erase_233
+
+/-- Carrier transport candidate for `host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultQM31Error`. -/
+theorem erase_234 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultQM31Error (types base F) (selected base F ops) = @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultQM31Error base ops := by
+  delta host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultQM31Error
+  try simp only [erase_231 base F ops, erase_233 base F ops]
+  all_goals rfl
+#print axioms erase_234
+
+/-- Carrier transport candidate for `host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error`. -/
+theorem erase_235 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error (types base F) (selected base F ops) = @host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error base ops := by
+  delta host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error
+  try simp only [erase_234 base F ops, erase_230 base F ops]
+  all_goals rfl
+#print axioms erase_235
+
+/-- Carrier transport candidate for `host_sumcheck.prove_sumcheck_round`. -/
+theorem erase_236 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.prove_sumcheck_round (types base F) (selected base F ops) = @host_sumcheck.prove_sumcheck_round base ops := by
+  delta host_sumcheck.prove_sumcheck_round
+  try simp only [erase_60 base F ops, erase_210 base F ops, erase_223 base F ops, erase_226 base F ops, erase_235 base F ops, erase_202 base F ops, erase_203 base F ops]
+  all_goals rfl
+#print axioms erase_236
+
+/-- Carrier transport candidate for `host_sumcheck.prove_sumcheck_rounds`. -/
+theorem erase_237 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.prove_sumcheck_rounds (types base F) (selected base F ops) = @host_sumcheck.prove_sumcheck_rounds base ops := by
+  have hmutual :
+      @host_sumcheck.prove_sumcheck_rounds.mutual (types base F) (selected base F ops) =
+      @host_sumcheck.prove_sumcheck_rounds.mutual base ops := by
+    funext H Field digest oracle state
+    delta host_sumcheck.prove_sumcheck_rounds.mutual
+    apply fixed_equal
+    all_goals funext recur transcript output point running round
+    all_goals try simp only [erase_60 base F ops, erase_236 base F ops]
+    all_goals rfl
+  delta host_sumcheck.prove_sumcheck_rounds
+  rw [hmutual]
+#print axioms erase_237
+
+/-- Carrier transport candidate for `host_sumcheck.prove_sumcheck`. -/
+theorem erase_238 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_sumcheck.prove_sumcheck (types base F) (selected base F ops) = @host_sumcheck.prove_sumcheck base ops := by
+  delta host_sumcheck.prove_sumcheck
+  try simp only [erase_237 base F ops]
+  all_goals rfl
+#print axioms erase_238
+
+/-- Carrier transport candidate for `host_wire.SemanticTranscript.challenge_reference_circle_point`. -/
+theorem erase_239 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_wire.SemanticTranscript.challenge_reference_circle_point (types base F) (selected base F ops) = @host_wire.SemanticTranscript.challenge_reference_circle_point base ops := by
+  delta host_wire.SemanticTranscript.challenge_reference_circle_point
+  try simp only [erase_201 base F ops]
+  all_goals rfl
+#print axioms erase_239
+end R1Z.PDict_Static222

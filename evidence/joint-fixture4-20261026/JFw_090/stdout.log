@@ -1,0 +1,36 @@
+JFw_Selection.lean:13:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑16#usize ≤ ↑7031#usize ∧ ↑7031#usize ≤ JFx_NativeBytes.proof.length then ?m.46 else ?m.47
+in the target expression
+  (if
+        { start := 16#usize, «end» := 7031#usize }.start ≤ { start := 16#usize, «end» := 7031#usize }.end ∧
+          ↑{ start := 16#usize, «end» := 7031#usize }.end ≤ JFx_NativeBytes.proof.length then
+      ok
+        ⟨List.slice ↑{ start := 16#usize, «end» := 7031#usize }.start ↑{ start := 16#usize, «end» := 7031#usize }.end
+            ↑JFx_NativeBytes.proof,
+          ⋯⟩
+    else fail Error.panic) =
+    ok JFw_RealExpansion.stored
+
+length : JFx_NativeBytes.proof.length = 57607
+fits : ↑16#usize ≤ ↑7031#usize ∧ ↑7031#usize ≤ JFx_NativeBytes.proof.length
+⊢ (if
+        { start := 16#usize, «end» := 7031#usize }.start ≤ { start := 16#usize, «end» := 7031#usize }.end ∧
+          ↑{ start := 16#usize, «end» := 7031#usize }.end ≤ JFx_NativeBytes.proof.length then
+      ok
+        ⟨List.slice ↑{ start := 16#usize, «end» := 7031#usize }.start ↑{ start := 16#usize, «end» := 7031#usize }.end
+            ↑JFx_NativeBytes.proof,
+          ⋯⟩
+    else fail Error.panic) =
+    ok JFw_RealExpansion.stored
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JFw_Selection.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

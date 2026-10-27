@@ -1,0 +1,28 @@
+AspisR1.RPx_PreAccept.complete : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (i : AspisR1.F3_Model.Input),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D i) =
+    have tr := (AspisR1.LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33;
+    have terminal :=
+      AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.OracleDecisionFeasibilityCore.onBytes (AspisR1.F3_Model.decision i.physical i.stored) tr (i.proof 33));
+    ((List.map
+            (fun j =>
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  ((AspisR1.LiteralByteProtocol.protocol D).chain H i.semantic.value i.proof j).toProgram).1)
+            (List.range 33)).flatten ++
+        terminal.1,
+      terminal.2)
+'AspisR1.RPx_PreAccept.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.RPx_PreAccept.guard_reject : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (physical : AspisR1.F3_Model.PhysicalPublic) (stored : AspisV8R19.DuplexFrames.Bytes)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (m : AspisR1.RawCutTranscriptRun.ErasedMessage),
+  ¬AspisR1.OraclePortAdmission.Guard tr →
+    AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.decision physical stored tr m) = ([], false)
+'AspisR1.RPx_PreAccept.guard_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.RPx_PreAccept.parse_reject : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (physical : AspisR1.F3_Model.PhysicalPublic) (stored : AspisV8R19.DuplexFrames.Bytes)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (m : AspisR1.RawCutTranscriptRun.ErasedMessage),
+  AspisR1.OraclePortAdmission.Guard tr →
+    AspisR1.OraclePortStoredParserC4.parseReached stored tr = none →
+      AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.decision physical stored tr m) = ([], false)
+'AspisR1.RPx_PreAccept.parse_reject' depends on axioms: [propext, Classical.choice, Quot.sound]

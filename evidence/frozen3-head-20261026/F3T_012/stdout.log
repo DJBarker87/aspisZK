@@ -1,0 +1,141 @@
+F3T_Decision.lean:19:2: error: unsolved goals
+case h_1
+H : Bytes → State
+physical : F3_Model.PhysicalPublic
+stored : Bytes
+p : Parsed
+q : Fin 22 → Fin 262144
+tr : RawCutTranscriptRun.ErasedPrefix
+x✝¹ : Option RecordedBinaryExperimentBin.SourceInputs
+x✝ : Option LiteralOpeningView.View
+i✝ : RecordedBinaryExperimentBin.SourceInputs
+v✝ : LiteralOpeningView.View
+heq✝¹ : OraclePortStoredDecisionDraftC4.input p q tr = some i✝
+heq✝ : LiteralOpeningView.read (typedRows p q tr) = some v✝
+⊢ (eval H (OraclePortFrozen2.stage2 p q tr i✝ (OraclePortFrozen2.completeState i✝ q))).2 =
+    (eval H
+        (match OraclePortStoredDecisionDraftC4.input p q tr, LiteralOpeningView.read (typedRows p q tr) with
+        | some i, some v =>
+          AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.checkpoint stored p q tr i v) fun resumed =>
+            match resumed with
+            | none => Program.done false
+            | some a => OraclePortFrozen2.stage2 p q tr i a
+        | x, x_1 => Program.done false)).2
+F3T_Decision.lean:20:4: error: Tactic `rfl` failed: The left-hand side
+  (eval H (Program.done false)).2
+is not definitionally equal to the right-hand side
+  (eval H
+      (match OraclePortStoredDecisionDraftC4.input p q tr, LiteralOpeningView.read (typedRows p q tr) with
+      | some i, some v =>
+        AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.checkpoint stored p q tr i v) fun resumed =>
+          match resumed with
+          | none => Program.done false
+          | some a => OraclePortFrozen2.stage2 p q tr i a
+      | x, x_1 => Program.done false)).2
+
+case h_2
+H : Bytes → State
+physical : F3_Model.PhysicalPublic
+stored : Bytes
+p : Parsed
+q : Fin 22 → Fin 262144
+tr : RawCutTranscriptRun.ErasedPrefix
+x✝² : Option RecordedBinaryExperimentBin.SourceInputs
+x✝¹ : Option LiteralOpeningView.View
+x✝ :
+  ∀ (i : RecordedBinaryExperimentBin.SourceInputs) (v : LiteralOpeningView.View),
+    OraclePortStoredDecisionDraftC4.input p q tr = some i → LiteralOpeningView.read (typedRows p q tr) = some v → False
+⊢ (eval H (Program.done false)).2 =
+    (eval H
+        (match OraclePortStoredDecisionDraftC4.input p q tr, LiteralOpeningView.read (typedRows p q tr) with
+        | some i, some v =>
+          AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.checkpoint stored p q tr i v) fun resumed =>
+            match resumed with
+            | none => Program.done false
+            | some a => OraclePortFrozen2.stage2 p q tr i a
+        | x, x_1 => Program.done false)).2
+F3T_Decision.lean:19:51: warning: This simp argument is unused:
+  OraclePortFrozen2.checkpoint_value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵F̵3̵_̵M̵o̵d̵e̵l̵.̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵_̵v̵a̵l̵u̵e̵,̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵F̵r̵o̵z̵e̵n̵2̵.̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵_̵v̵a̵l̵u̵e̵]̵[̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲F̲3̲_̲M̲o̲d̲e̲l̲.̲c̲h̲e̲c̲k̲p̲o̲i̲n̲t̲_̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3T_Decision.lean:32:8: error: Type mismatch
+  after_value H physical stored ?m.120 ?m.121 tr
+has type
+  (eval H (F3_Model.afterBatch0 physical stored ?m.120 ?m.121 tr)).2 =
+    (eval H (OraclePortFrozen2.afterBatch0 stored ?m.120 ?m.121 tr)).2
+but is expected to have type
+  (eval H (F3_Model.afterBatch0 physical stored p✝ q✝ tr)).2 =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0) fun ok =>
+            if ok = true then OraclePortFrozen2.afterBatch0 stored p q tr else Program.done false
+        | x, x_1 => Program.done false)).2
+F3T_Decision.lean:33:8: error: Tactic `rfl` failed: The left-hand side
+  (eval H (Program.done false)).2
+is not definitionally equal to the right-hand side
+  (eval H
+      (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+      | some p, some q =>
+        AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0) fun ok =>
+          if ok = true then OraclePortFrozen2.afterBatch0 stored p q tr else Program.done false
+      | x, x_1 => Program.done false)).2
+
+case h_1.isFalse
+H : Bytes → State
+physical : F3_Model.PhysicalPublic
+stored : Bytes
+tr : RawCutTranscriptRun.ErasedPrefix
+m : RawCutTranscriptRun.ErasedMessage
+h✝¹ : OraclePortAdmission.Guard tr
+x✝¹ : Option Parsed
+x✝ : Option (Fin 22 → Fin 262144)
+p✝ : Parsed
+q✝ : Fin 22 → Fin 262144
+heq✝¹ : OraclePortStoredParserC4.parseReached stored tr = some p✝
+heq✝ : queries tr = some q✝
+h✝ : ¬(eval H (OraclePortFrozen2.batch p✝ q✝ OraclePortFrozen2.batch0)).2 = true
+⊢ (eval H (Program.done false)).2 =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0) fun ok =>
+            if ok = true then OraclePortFrozen2.afterBatch0 stored p q tr else Program.done false
+        | x, x_1 => Program.done false)).2
+F3T_Decision.lean:34:6: error: Tactic `rfl` failed: The left-hand side
+  (eval H (Program.done false)).2
+is not definitionally equal to the right-hand side
+  (eval H
+      (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+      | some p, some q =>
+        AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0) fun ok =>
+          if ok = true then OraclePortFrozen2.afterBatch0 stored p q tr else Program.done false
+      | x, x_1 => Program.done false)).2
+
+case h_2
+H : Bytes → State
+physical : F3_Model.PhysicalPublic
+stored : Bytes
+tr : RawCutTranscriptRun.ErasedPrefix
+m : RawCutTranscriptRun.ErasedMessage
+h✝ : OraclePortAdmission.Guard tr
+x✝² : Option Parsed
+x✝¹ : Option (Fin 22 → Fin 262144)
+x✝ :
+  ∀ (p : Parsed) (q : Fin 22 → Fin 262144),
+    OraclePortStoredParserC4.parseReached stored tr = some p → queries tr = some q → False
+⊢ (eval H (Program.done false)).2 =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0) fun ok =>
+            if ok = true then OraclePortFrozen2.afterBatch0 stored p q tr else Program.done false
+        | x, x_1 => Program.done false)).2
+F3T_Decision.lean:48:45: error(lean.unknownIdentifier): Unknown identifier `OraclePortBatchDraft.slotPrograms`
+'AspisR1.F3T_Decision.after_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3T_Decision.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3T_Decision.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3T_Decision.accepted_details' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

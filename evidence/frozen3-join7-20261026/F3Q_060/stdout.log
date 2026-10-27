@@ -1,0 +1,259 @@
+F3Q_BatchCodeLog.lean:30:47: error: unsolved goals
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (parts : Slice (Slice U8)), D.digest hash parts = ok (MultiproofConePhysicalTransport.rawOracle H parts)
+proof : Slice U8
+p : verifier.Prepared
+folded : Std.Array U8 32#usize
+batch : Usize
+idx1 idx2 idx3 : Indices
+val1 val2 val3 : Values
+c0 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree Port4B_Install.leaves D proof p.queries (Port3_BatchStage.root0 p)
+      batch 0#usize (Array.repeat 16#usize 0#u32) (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash =
+    ok (core.result.Result.Ok (), idx1, val1)
+c1 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree Port4B_Install.leaves D proof p.queries (Port3_BatchStage.root1 p)
+      batch 1#usize idx1 val1 hash =
+    ok (core.result.Result.Ok (), idx2, val2)
+c2 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree Port4B_Install.leaves D proof p.queries folded batch 2#usize idx2
+      val2 hash =
+    ok (core.result.Result.Ok (), idx3, val3)
+h0 : p.roots.index_usize 0#usize = ok (Port3_BatchStage.root0 p)
+h1 : p.roots.index_usize 1#usize = ok (Port3_BatchStage.root1 p)
+v0 :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+            (Array.repeat 16#usize 0#u32) (Array.repeat 16#usize (Array.repeat 32#usize 0#u8))))).2 =
+    ok (core.result.Result.Ok (), idx1, val1)
+v1 :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof p.queries (Port3_BatchStage.root1 p) batch 1#usize
+            idx1 val1))).2 =
+    ok (core.result.Result.Ok (), idx2, val2)
+v2 :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof p.queries folded batch 2#usize idx2 val2))).2 =
+    ok (core.result.Result.Ok (), idx3, val3)
+⊢ (eval H
+        (SdkC_Oracle.program
+          (Code.step
+            (match [Port3_BatchStage.root0 p, Port3_BatchStage.root1 p, folded][↑0#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x)
+            fun root0 =>
+            Code.step
+              (match [Port3_BatchStage.root0 p, Port3_BatchStage.root1 p, folded][↑1#usize]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x)
+              fun root1 =>
+              Code.step
+                (match [Port3_BatchStage.root0 p, Port3_BatchStage.root1 p, folded][↑2#usize]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x)
+                fun root2 =>
+                CheckpointBytes5Effect.bind
+                  (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof p.queries root0 batch 0#usize
+                    (Array.repeat 16#usize 0#u32) (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)))
+                  fun __x =>
+                  Code.step
+                    (match __x.1 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                    fun cf =>
+                    match cf with
+                    | core.ops.control_flow.ControlFlow.Continue a =>
+                      CheckpointBytes5Effect.bind
+                        (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof p.queries root1 batch 1#usize __x.2.1
+                          __x.2.2)
+                        fun __x =>
+                        Code.step
+                          (match __x.1 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                          fun cf1 =>
+                          match cf1 with
+                          | core.ops.control_flow.ControlFlow.Continue a =>
+                            CheckpointBytes5Effect.bind
+                              (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof p.queries root2 batch 2#usize
+                                __x.2.1 __x.2.2)
+                              fun __x =>
+                              Code.step
+                                (match __x.1 with
+                                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                | core.result.Result.Err e =>
+                                  ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                                fun cf2 =>
+                                match cf2 with
+                                | core.ops.control_flow.ControlFlow.Continue a => Code.done (core.result.Result.Ok ())
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  Code.step
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame verifier.Error) residual)
+                                    Code.done
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            Code.step
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual)
+                              Code.done
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      Code.step
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual)
+                        Code.done))).1 =
+    (eval H
+          (SdkC_Oracle.program
+            (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof p.queries (Port3_BatchStage.root0 p) batch
+              0#usize (Array.repeat 16#usize 0#u32) (Array.repeat 16#usize (Array.repeat 32#usize 0#u8))))).1 ++
+      ((eval H
+            (SdkC_Oracle.program
+              (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof p.queries (Port3_BatchStage.root1 p) batch
+                1#usize idx1 val1))).1 ++
+        (eval H
+            (SdkC_Oracle.program
+              (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof p.queries folded batch 2#usize idx2 val2))).1)
+F3Q_BatchCodeLog.lean:40:66: warning: This simp argument is unused:
+  List.getElem?_cons_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [Array.index_usize, ̲Array.getElem?_Usize_eq, ̲Array.make, ̲List.getElem?_cons_z̵e̵r̵o̵,̵L̵i̵st̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵ucc,
+      Bind.bind, ̲CheckpointBytes5Effect.bind, ̲CheckpointBytes5Effect.liftResult, ̲SdkC_Oracle.program]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:40:90: warning: This simp argument is unused:
+  List.getElem?_cons_succ
+
+Hint: Omit it from the simp argument list.
+  simp only [Array.index_usize, ̲Array.getElem?_Usize_eq, ̲Array.make, ̲List.getElem?_cons_zero,L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵
+      Bind.bind, ̲CheckpointBytes5Effect.bind, ̲CheckpointBytes5Effect.liftResult, ̲SdkC_Oracle.program]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:41:76: warning: This simp argument is unused:
+  SdkC_Oracle.program
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵A̵r̵r̵a̵y̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵U̵s̵i̵z̵e̵_̵e̵q̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵]̵[̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲U̲s̲i̲z̲e̲_̲e̲q̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:42:13: warning: This simp argument is unused:
+  F3Q_CodeEval.bind_eval
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵v̵0̵,̵v̵1̵,̵v̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲v̲0̲,̲ ̲v̲1̲,̲ ̲v̲2̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:42:36: warning: This simp argument is unused:
+  v0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵v̵0̵,̵v̵1̵,̵v̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲v̲1̲,̲ ̲v̲2̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:42:39: warning: This simp argument is unused:
+  v1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵v̵0̵,̵v̵1̵,̵v̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲v̲0̲,̲ ̲v̲2̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:42:42: warning: This simp argument is unused:
+  v2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵v̵0̵,̵v̵1̵,̵v̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲v̲0̲,̲ ̲v̲1̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:43:47: warning: This simp argument is unused:
+  Bind.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵v̵0̵,̵v̵1̵,̵v̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲v̲0̲,̲ ̲v̲1̲,̲ ̲v̲2̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:43:57: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵v̵0̵,̵v̵1̵,̵v̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲v̲0̲,̲ ̲v̲1̲,̲ ̲v̲2̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲e̲v̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:44:4: warning: This simp argument is unused:
+  CheckpointBytes5Effect.liftResult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵v̵0̵,̵v̵1̵,̵v̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲v̲0̲,̲ ̲v̲1̲,̲ ̲v̲2̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:44:48: warning: This simp argument is unused:
+  SdkC_Oracle.program
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵v̵0̵,̵v̵1̵,̵v̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲v̲0̲,̲ ̲v̲1̲,̲ ̲v̲2̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲e̲v̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:44:68: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵v̵0̵,̵v̵1̵,̵v̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲v̲0̲,̲ ̲v̲1̲,̲ ̲v̲2̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_BatchCodeLog.lean:44:73: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵v̵0̵,̵v̵1̵,̵v̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲v̲0̲,̲ ̲v̲1̲,̲ ̲v̲2̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3Q_BatchCodeLog.compose' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

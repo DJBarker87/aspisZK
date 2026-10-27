@@ -1,0 +1,8 @@
+AspisR1.TxS_Prepared.fields : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (size : (↑a.weights).length = 64) (qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144)
+  (canonical : AspisR1.CheckpointBytesBlocks.CanonicalFields (AspisR1.Port3_DecodeCoherence.inventory p a size qb)),
+  have pm := AspisR1.CheckpointBytesBlocks.prepared (AspisR1.Port3_DecodeCoherence.inventory p a size qb) canonical;
+  pm.rho = AspisR1.CheckpointBytes5Output.ofK p.rho ∧
+    pm.queries = AspisR1.CheckpointBytes5Output.queries p ∧
+      ∀ (j : Fin 2), pm.alpha j = AspisR1.CheckpointBytes5Output.ofE (↑p.alpha)[↑j]
+'AspisR1.TxS_Prepared.fields' depends on axioms: [propext, Classical.choice, Quot.sound]

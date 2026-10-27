@@ -1,0 +1,21 @@
+import Lean
+open Lean Elab Command
+run_cmd do
+  let (data, _) ← liftIO <| readModuleData "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects/S2OwnedStage1ReachabilityV1.olean"
+  logInfo m!"RPZ4_HEADER {(Json.mkObj [("module", toJson "S2OwnedStage1ReachabilityV1"), ("imports", toJson (data.imports.map (·.module.toString)))]).compress}"
+run_cmd do
+  let (data, _) ← liftIO <| readModuleData "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects/S2SdkSourceIteratorV1.olean"
+  logInfo m!"RPZ4_HEADER {(Json.mkObj [("module", toJson "S2SdkSourceIteratorV1"), ("imports", toJson (data.imports.map (·.module.toString)))]).compress}"
+run_cmd do
+  let (data, _) ← liftIO <| readModuleData "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects/S2StdAnySourceTotalV1.olean"
+  logInfo m!"RPZ4_HEADER {(Json.mkObj [("module", toJson "S2StdAnySourceTotalV1"), ("imports", toJson (data.imports.map (·.module.toString)))]).compress}"
+run_cmd do
+  let (data, _) ← liftIO <| readModuleData "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects/S2SdkProofGateTotalV1.olean"
+  logInfo m!"RPZ4_HEADER {(Json.mkObj [("module", toJson "S2SdkProofGateTotalV1"), ("imports", toJson (data.imports.map (·.module.toString)))]).compress}"
+run_cmd do
+  let (data, _) ← liftIO <| readModuleData "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects/S2SdkProofPrefixParentV1.olean"
+  logInfo m!"RPZ4_HEADER {(Json.mkObj [("module", toJson "S2SdkProofPrefixParentV1"), ("imports", toJson (data.imports.map (·.module.toString)))]).compress}"
+run_cmd do
+  let (data, _) ← liftIO <| readModuleData "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects/S2FrameOperationsTotalV1.olean"
+  logInfo m!"RPZ4_HEADER {(Json.mkObj [("module", toJson "S2FrameOperationsTotalV1"), ("imports", toJson (data.imports.map (·.module.toString)))]).compress}"
+run_cmd logInfo "RPZ4_HEADERS_COMPLETE"

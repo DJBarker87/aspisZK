@@ -1,0 +1,8 @@
+# Stage boundaries and budget
+
+1. Call-closed extraction: bounded Charon experiments, preflight inventory of each translated body's calls, one Aeneas invocation on the final accepted LLBC only; stop extraction immediately if Aeneas fails. Commit raw errors, pins, receipts and finding.
+2. Association: only after complete Types/Funs are emitted, compile XRf_Association against actual release carriers. Preserve inherited obligation order, beginning PreparedScratchProjection then powers, geometry, Dot and candidate.tx1. Unproved items are named propositions without proofs or top imports. Do not fabricate emitted types or recycle seven byte-model facts as release associations. If emission fails, document this stage as blocked and commit exact obligations instead.
+3. P6: ten new bounded per-stage Kani targets for expand_values/check_values. Each uses pinned public release functions directly, with no stubs or function contracts. These checks do not imply whole-leaf closure, an arbitrary-length induction, source-to-ELF association or top premise removal. Commit independently of extraction outcome.
+4. Handoff: actual unchanged top before/after, ledger-method delta, non-vacuity distinction, validation/resource summary, remaining items and sizes. No push.
+
+The current branch is codex/cx-extraction-repro6-20261027 (the supplied checkout, rather than the stale 20261026 suffix in the prompt). All four extraction invocations and all ten Kani runs are reserved for useful distinct targets. Lean budget is at most 100; unavailable concrete definitions are a blocker, not grounds to spend attempts re-proving predecessor facts.

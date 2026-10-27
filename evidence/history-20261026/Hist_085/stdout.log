@@ -1,0 +1,99 @@
+'AspisR1.Hist_AcceptedStrong.accepted_pair_claims_tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Hist_AcceptedStrong.accepted_pair_claims_tx1 : ∀ {W A E M Cv CoreError : Type} {N : ℕ}
+  (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : Ops) (reserved : Bool) (queryOps : Port3_NativeQueryBody.Ops)
+                (geoOps : Port3_NativeGeometryBody.Ops CoreError) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+                (claimsStd : ClaimsUnrolledFinish.StdCalls),
+                WAdm_Domain.SessionAPrepare (Tx1Q_Execution.actual ops reserved queryOps geoOps B claimsStd) →
+                  Port5Q1_QueryPorts.SessionAPrimitives queryOps →
+                    ∀ (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                      (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                      S2W_DigestExtraction.AeneasExtraction
+                          (sdkOps adapterOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd) native1
+                          native2 hashv →
+                        ∀ (sha256 H : Bytes → State),
+                          S2W_ExtractionBoundary.P1 sha256 H →
+                            S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                              ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                                (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                                (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                                first native1 copy allocator e1 program data1 state1 =
+                                    ok (core.result.Result.Ok (saved, post1, final1)) →
+                                  second native2 allocator e2 program data2 slot state2 =
+                                      ok (core.result.Result.Ok (post2, final2)) →
+                                    ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32)
+                                      (port :
+                                        ChildConeJoin E
+                                          (sdkOps adapterOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                                            claimsStd)),
+                                      FirstMarks port →
+                                        SecondMarks port →
+                                          ∃ f s validated outer pre middle fs ss,
+                                            SourceCuts
+                                                (sdkOps adapterOps
+                                                  (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                                                e1.first (e2.second secondSizes) saved f s ∧
+                                              AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                                                    f.statement =
+                                                  ok f.semantic ∧
+                                                ⋯ :=
+fun {W A E M Cv CoreError} {N} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops reserved
+    queryOps geoOps B claimsStd prepareOwner primitiveOwner native1 native2 hashv extraction sha256 H p1 syscall program
+    data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length port firstMarks
+    secondMarks =>
+  let ⟨f, h✝⟩ :=
+    Hist_SdkStrong.accepted_pair_claims L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps
+      (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd native1 native2 hashv extraction sha256 H p1
+      syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length
+      port firstMarks secondMarks
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨validated, h✝²⟩ := h✝¹
+  let ⟨outer, h✝³⟩ := h✝²
+  let ⟨pre, h✝⁴⟩ := h✝³
+  let ⟨middle, h✝⁵⟩ := h✝⁴
+  let ⟨fs, h✝⁶⟩ := h✝⁵
+  let ⟨ss, h✝⁷⟩ := h✝⁶
+  let ⟨cuts, right✝⟩ := h✝⁷
+  let ⟨getter, right✝¹⟩ := right✝
+  let ⟨validation, right✝²⟩ := right✝¹
+  let ⟨encoder, right✝³⟩ := right✝²
+  let ⟨execution, right✝⁴⟩ := right✝³
+  let ⟨expanded, right✝⁵⟩ := right✝⁴
+  let ⟨owned, right✝⁶⟩ := right✝⁵
+  let ⟨layout, right✝⁷⟩ := right✝⁶
+  let ⟨unchanged, right✝⁸⟩ := right✝⁷
+  let ⟨before1, right✝⁹⟩ := right✝⁸
+  let ⟨before2, right✝¹⁰⟩ := right✝⁹
+  let ⟨claims, caller⟩ := right✝¹⁰
+  have header :=
+    Op3I_Cuts.same_cut_header adapterOps (Op4P_Install.install (Tx1Q_Execution.base ops reserved queryOps geoOps)) B
+      claimsStd e1.first (e2.second secondSizes) saved f s cuts;
+  have scan :=
+    Op4P_Cuts.same_cut_scan adapterOps (Tx1Q_Execution.base ops reserved queryOps geoOps) B claimsStd e1.first
+      (e2.second secondSizes) saved f s cuts;
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro validated
+        (Exists.intro outer
+          (Exists.intro pre
+            (Exists.intro middle
+              (Exists.intro fs
+                (Exists.intro ss
+                  ⟨cuts,
+                    ⟨getter,
+                      ⟨validation,
+                        ⟨encoder,
+                          ⟨execution,
+                            ⟨header,
+                              ⟨scan,
+                                ⟨WAdm_NativeEndpoint.reached adapterOps ops reserved queryOps geoOps B claimsStd e1
+                                    (e2.second secondSizes) saved f s cuts prepareOwner primitiveOwner,
+                                  ⟨expanded,
+                                    ⟨owned,
+                                      ⟨layout, ⟨unchanged, ⟨before1, ⟨before2, ⟨claims, caller⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))))))

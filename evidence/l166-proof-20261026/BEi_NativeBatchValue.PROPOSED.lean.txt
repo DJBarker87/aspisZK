@@ -1,0 +1,32 @@
+import BEi_NativeBatchCut
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.BEi_NativeBatchValue
+open Aeneas Aeneas.Std Result SdkC_Source BEi_NativeBatchCut
+
+/-- Reified effects erase to the existing extracted native batch parent.
+This checks the concrete source endpoint, but says nothing about a separately
+observed physical log. Native geometry is not inferred from this equality. -/
+theorem emitted (hashv : Parts → Result Digest) (input : Input) (slot : Fin 2) (before : Log) :
+    (SdkC_Source.run hashv (nativeCode hashv input slot) before).1 =
+      Port3_NativeBatchBody.verifier.candidate.batch_merkle
+        (Port9OR_BatchStep.ops Port4B_Install.leaves) (SdkC_Source.dictionary hashv)
+        input.proof input.prepared input.folded (ordinal slot) () := by
+  exact (SdkC_Source.erasure hashv _ before).trans
+    (Port9OR_Batch.source Port4B_Install.leaves (SdkC_Source.dictionary hashv)
+      (SdkC_Source.dictionary hashv) () input.proof input.prepared input.folded (ordinal slot))
+
+/-- Same Result at the adopted source-installed body, on all outcomes. -/
+theorem installed (hashv : Parts → Result Digest) (input : Input) (slot : Fin 2) (before : Log) :
+    (SdkC_Source.run hashv (nativeCode hashv input slot) before).1 =
+      Op5T_Install.body Port4B_Install.leaves (SdkC_Source.dictionary hashv)
+        input.proof input.prepared.queries input.prepared.roots input.folded (ordinal slot) () := by
+  rw [programs]
+  exact (SdkC_Source.erasure hashv _ before).trans
+    (SdkC_BatchSource.erasure (SdkC_Source.dictionary hashv) (SdkC_Source.dictionary hashv) ()
+      input.proof input.prepared.queries input.prepared.roots input.folded (ordinal slot))
+
+#print axioms emitted
+#print axioms installed
+end AspisR1.BEi_NativeBatchValue
+end

@@ -1,0 +1,51 @@
+F3T_AcceptedFacts.lean:33:54: error: Type mismatch
+  checks
+[Error pretty printing: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.(invalid MessageData.lazy, missing context)]
+F3T_AcceptedFacts.lean:41:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  F3_Model.decision (eval H CP).2.physical (eval H CP).2.stored
+in the target expression
+  (eval H (OraclePortExperiment.original D d RP)).2.2 = true
+
+D : LiteralByteProtocol.Decoder
+P : Prover
+Q : ℕ
+hq : ∀ (H : Bytes → State), (eval H P).1.length ≤ Q
+H : Bytes → State
+hc : ¬RecordedBinaryExperimentBin.binaryCollision (Q + 1161) (eval H (projected D (canon P)))
+ha : (eval H (projected D (canon P))).2.2 = true
+CP : Prover := canon P
+d : OraclePortExperiment.Decision := F3_Model.decision (eval H CP).2.physical (eval H CP).2.stored
+RP : RawCutProverCompiler.Prover := F3T_Projection.project CP
+same : eval H (projected D CP) = eval H (OraclePortExperiment.recorded D d RP)
+firstAccepted : (eval H (original D CP)).2.2 = true
+checks :
+  LiteralAcceptanceTerminal.Checks (F3T_Admission.output D (canon P) H).semantic.value
+    (F3T_Admission.rows D (canon P) H)
+checksRaw :
+  LiteralAcceptanceTerminal.Checks (eval H (projected D CP)).2.1.1
+    ((LiteralByteProtocol.protocol D).transcript H (eval H (projected D CP)).2.1.1 (eval H (projected D CP)).2.1.2
+        33).rounds
+checksF :
+  LiteralAcceptanceTerminal.Checks (eval H (OraclePortExperiment.recorded D d RP)).2.1.1
+    ((LiteralByteProtocol.protocol D).transcript H (eval H (OraclePortExperiment.recorded D d RP)).2.1.1
+        (eval H (OraclePortExperiment.recorded D d RP)).2.1.2 33).rounds
+fixed :
+  RawCutTranscriptRun.proof
+      (RawCutWordsFromRunExecutableBin.wordsFromRun
+        (eval H
+          (RawCutProverCompiler.experiment
+            (OracleDecisionFeasibilityCompiler.compiled D d (BinCompiledRunWordStability.wordsFromRun D) RP)
+            (OracleDecisionFeasibilityCore.verifier D d))))
+      (eval H
+              (RawCutProverCompiler.experiment
+                (OracleDecisionFeasibilityCompiler.compiled D d (BinCompiledRunWordStability.wordsFromRun D) RP)
+                (OracleDecisionFeasibilityCore.verifier D d))).2.1.2 =
+    (eval H
+            (RawCutProverCompiler.experiment
+              (OracleDecisionFeasibilityCompiler.compiled D d (BinCompiledRunWordStability.wordsFromRun D) RP)
+              (OracleDecisionFeasibilityCore.verifier D d))).2.1.2
+firstRaw : (eval H (OraclePortExperiment.original D d RP)).2.2 = true
+⊢ (eval H (OraclePortExperiment.original D d RP)).2.1.1.tag = 2
+'AspisR1.F3T_AcceptedFacts.accepted_facts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

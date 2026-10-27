@@ -1,0 +1,107 @@
+'AspisR1.NFrm_TrustScope.reserve_frame_not_from_slots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFrm_TrustScope.box_contents_not_from_slots' depends on axioms: [propext, Quot.sound]
+'AspisR1.NFrm_TrustScope.copy_allocator_nonvacuity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFrm_TrustScope.no_uniform_reduction' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_TrustedStd.TrustedStd {F : Type}
+  (copy : S2Trust.Heap F → ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome F) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice : ∀ (s : S2Trust.Heap F) (dst : ℕ) (src : S2Trust.Payload),
+      copy s dst src = S2W_TrustedStd.specification s dst src
+constructor:
+  AspisR1.S2W_TrustedStd.TrustedStd.mk {F : Type}
+    {copy : S2Trust.Heap F → ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome F}
+    (slice_copy_from_slice :
+      ∀ (s : S2Trust.Heap F) (dst : ℕ) (src : S2Trust.Payload),
+        copy s dst src = S2W_TrustedStd.specification s dst src) :
+    S2W_TrustedStd.TrustedStd copy
+structure AspisR1.S2W_D189Wrappers.Allocator (A : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1.S2W_D189Wrappers.Allocator.allocate : A → ℕ → Result A
+  AspisR1.S2W_D189Wrappers.Allocator.cleanup : A → Result A
+constructor:
+  AspisR1.S2W_D189Wrappers.Allocator.mk {A : Type} (allocate : A → ℕ → Result A) (cleanup : A → Result A) :
+    S2W_D189Wrappers.Allocator A
+structure AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission {W : Type}
+  (L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)) (e : S2W_D189Entry.Entry) (w : W) (n : ℕ) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.entry : AdapterRw.RuntimeEntrypointAdmission e.heap
+      (fun a => List.map S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles a).1).owned.key) n
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.related : L.related w e.heap
+constructor:
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.mk {W : Type}
+    {L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)} {e : S2W_D189Entry.Entry} {w : W} {n : ℕ}
+    (entry :
+      AdapterRw.RuntimeEntrypointAdmission e.heap
+        (fun a => List.map S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles a).1).owned.key) n)
+    (related : L.related w e.heap) : S2W_D189Consolidation.RuntimeEntrypointAdmission L e w n
+structure AspisR1.AdapterRw.RuntimeEntrypointAdmission {F : Type} (s : S2Trust.Heap F) (keys : ℕ → List UInt8)
+  (accountCount : ℕ) : Prop
+number of parameters: 4
+fields:
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.valid : S2Trust.Valid s
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.freshGuards : s.guards = []
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.noExternalBorrows : ∀ (c : ℕ), s.external c = 0
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.liveAccount : ∀ a < accountCount, s.ownerLive a = true
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.counterZero : ∀ a < accountCount, s.counter (s.accounts a).1 = 0
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.sharedCellsOnlyEqualKeys : ∀ (a b : ℕ),
+      a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.duplicateKeysShareCell : ∀ (a b : ℕ),
+      a < accountCount → b < accountCount → keys a = keys b → (s.accounts a).1 = (s.accounts b).1
+constructor:
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.mk {F : Type} {s : S2Trust.Heap F} {keys : ℕ → List UInt8}
+    {accountCount : ℕ} (valid : S2Trust.Valid s) (freshGuards : s.guards = [])
+    (noExternalBorrows : ∀ (c : ℕ), s.external c = 0) (liveAccount : ∀ a < accountCount, s.ownerLive a = true)
+    (counterZero : ∀ a < accountCount, s.counter (s.accounts a).1 = 0)
+    (sharedCellsOnlyEqualKeys :
+      ∀ (a b : ℕ), a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b)
+    (duplicateKeysShareCell :
+      ∀ (a b : ℕ), a < accountCount → b < accountCount → keys a = keys b → (s.accounts a).1 = (s.accounts b).1) :
+    AdapterRw.RuntimeEntrypointAdmission s keys accountCount
+structure AspisR1.S2W_ExtractionBoundary.RuntimeSyscall (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
+  (sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue : S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk {hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest}
+    {sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (returningValue : S2Z.Oracle.RuntimeSyscall hashv sha256) : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+structure AspisR1.Port1_Library.TrustedStd (ops : VTop_Stages.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port1_Library.TrustedStd.option_ok_or : ∀ {T E : Type} (x : Option T) (e : E),
+      ops.op0 x e = Port1_LibrarySource.okOr x e
+  AspisR1.Port1_Library.TrustedStd.result_unwrap32 : ∀
+      (x : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError),
+      ops.unwrap32 x = Port1_LibrarySource.unwrap32 x
+constructor:
+  AspisR1.Port1_Library.TrustedStd.mk {ops : VTop_Stages.Ops}
+    (option_ok_or : ∀ {T E : Type} (x : Option T) (e : E), ops.op0 x e = Port1_LibrarySource.okOr x e)
+    (result_unwrap32 :
+      ∀ (x : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError),
+        ops.unwrap32 x = Port1_LibrarySource.unwrap32 x) :
+    Port1_Library.TrustedStd ops
+structure AspisR1.ClaimsUnrolledFinish.StdCalls : Type 1
+number of parameters: 0
+fields:
+  AspisR1.ClaimsUnrolledFinish.StdCalls.reserve : {T : Type} →
+      Type →
+        alloc.vec.Vec T →
+          Usize →
+            Result
+              (core.result.Result Unit AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError × alloc.vec.Vec T)
+  AspisR1.ClaimsUnrolledFinish.StdCalls.intoBox : {T : Type} → Type → alloc.vec.Vec T → Result (Slice T)
+constructor:
+  AspisR1.ClaimsUnrolledFinish.StdCalls.mk
+    (reserve :
+      {T : Type} →
+        Type →
+          alloc.vec.Vec T →
+            Usize →
+              Result
+                (core.result.Result Unit AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError ×
+                  alloc.vec.Vec T))
+    (intoBox : {T : Type} → Type → alloc.vec.Vec T → Result (Slice T)) : ClaimsUnrolledFinish.StdCalls

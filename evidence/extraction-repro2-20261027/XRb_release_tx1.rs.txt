@@ -1,0 +1,22 @@
+pub fn tx1<H: Digest32>(public: Public<'_>, public_bytes: &[u8], proof: &[u8], k: usize, hash: H, obs: Observer) -> Result<Vec<u8>, Error> {
+    if k != SPLIT {
+        return Err(Error::Parse);
+    }
+    parse_shape(proof)?;
+    canonical_scan(proof)?;
+    mark(obs, Phase::Parsed);
+    let mut g = [E::ZERO; 29];
+    let p = prepare(public, proof, hash, obs, &mut g)?;
+    let a = Accumulator::new(Variant::S2)?;
+    mark(obs, Phase::Prepare);
+    let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
+    batch_merkle(proof, &p, &folded_root, 0, hash)?;
+    mark(obs, Phase::Merkle(0));
+    let geometry = QueryGeometry::for_range(&p.queries, 0, k)?;
+    let pending = BatchedWeights::new(&a.weights)?;
+    let (mut a, pending) = query_loop(proof, &p, a, &g, obs, &geometry, pending, k)?;
+    pending.finish(&mut a.weights);
+    let bytes = checkpoint(&p, &a, proof, public_bytes, hash);
+    mark(obs, Phase::CheckpointWrite);
+    Ok(bytes)
+}

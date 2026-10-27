@@ -1,0 +1,24 @@
+WAdm_Append.lean:34:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+WAdm_Append.lean:43:6: error: Tactic `rfl` failed: The left-hand side
+  CheckpointBytesBlocks.rawK (↑p.z)[0].x ++ CheckpointBytesBlocks.rawK (↑p.z)[0].y ++
+    (CheckpointBytesBlocks.rawK (↑p.z)[1].x ++ CheckpointBytesBlocks.rawK (↑p.z)[1].y)
+is not definitionally equal to the right-hand side
+  CheckpointBytesBlocks.rawK (↑p.z)[0].x ++
+    (CheckpointBytesBlocks.rawK (↑p.z)[0].y ++
+      (CheckpointBytesBlocks.rawK (↑p.z)[1].x ++ CheckpointBytesBlocks.rawK (↑p.z)[1].y))
+
+p : Prepared
+a : Accumulator
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+⊢ CheckpointBytesBlocks.rawK (↑p.z)[0].x ++ CheckpointBytesBlocks.rawK (↑p.z)[0].y ++
+      (CheckpointBytesBlocks.rawK (↑p.z)[1].x ++ CheckpointBytesBlocks.rawK (↑p.z)[1].y) =
+    CheckpointBytesBlocks.rawK (↑p.z)[0].x ++
+      (CheckpointBytesBlocks.rawK (↑p.z)[0].y ++
+        (CheckpointBytesBlocks.rawK (↑p.z)[1].x ++ CheckpointBytesBlocks.rawK (↑p.z)[1].y))
+'AspisR1.WAdm_Append.roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_Append.alpha' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_Append.scalars' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_Append.coordinates' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

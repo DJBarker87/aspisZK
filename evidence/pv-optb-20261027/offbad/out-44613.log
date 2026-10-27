@@ -1,0 +1,56 @@
+def R1Z.PV_OptB_Charged.union : {K CommitHandle Aux : Type} →
+  [inst : Field K] →
+    [Fintype K] →
+      [DecidableEq K] →
+        [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+          {F : Subfield K} →
+            (h : HonestProver K) →
+              (Challenges K → Prop) →
+                (Challenges K → h.Instance → Prop) →
+                  (W : R1Wire K CommitHandle Aux) →
+                    (Pr : R1ProverP K CommitHandle Aux F W) →
+                      RomModel W →
+                        (N : ℕ) →
+                          0 < N →
+                            PackBasis F →
+                              (Statement K CommitHandle → Challenges K → Aux) →
+                                Statement K CommitHandle →
+                                  {Adv World Coins : Type} →
+                                    (ab : AbortBridge K CommitHandle Aux Batched.R1Bat Adv) →
+                                      Adv → Coordinates h W Pr N ab World Coins → h.Instance → World → Coins → Prop :=
+fun {K CommitHandle Aux} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] {F} h P V W Pr
+    R N hN B outputs x {Adv World Coins} ab adv c w os coins =>
+  poleBad P h V ab adv x w (c.retry w os coins) ∨
+    QueryScanRealLazyBound.lazyBad W Pr R N hN h B outputs x w (c.lazy w os coins) ∨
+      FinalR1PBin.exhQ W Pr R N hN h B outputs x w (c.lazy w os coins) ∨
+        QueryScanRealFreshMass.realFresh W Pr N h B outputs x w (c.real w os coins) ∨
+          (∃ i, QueryScanRealLazyBound.realBad W Pr N h B outputs x w i (c.real w os coins)) ∨
+            ProverCommitSeedEvent19.seedGuess (c.queries w os coins) (c.seed os coins) ∨
+              ∃ j, ProverCommitFuelJoin22.failure j (c.fuel os coins)
+@[reducible] def R1Z.PV_OptB_Charged.HeadlineIndependent : {K CommitHandle Aux : Type} →
+  [inst : Field K] →
+    [Fintype K] →
+      [DecidableEq K] →
+        [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+          {F : Subfield K} →
+            (h : HonestProver K) →
+              (Challenges K → Prop) →
+                (Challenges K → h.Instance → Prop) →
+                  (W : R1Wire K CommitHandle Aux) →
+                    (Pr : R1ProverP K CommitHandle Aux F W) →
+                      RomModel W →
+                        (N : ℕ) →
+                          0 < N →
+                            PackBasis F →
+                              (Statement K CommitHandle → Challenges K → Aux) →
+                                Statement K CommitHandle →
+                                  {Adv World Coins : Type} →
+                                    (ab : AbortBridge K CommitHandle Aux Batched.R1Bat Adv) →
+                                      Adv →
+                                        Coordinates h W Pr N ab World Coins →
+                                          {Event : Type} → (h.Instance → World → Coins → Option Event) → Prop :=
+fun {K CommitHandle Aux} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] {F} h P V W Pr
+    R N hN B outputs x {Adv World Coins} ab adv c {Event} signal =>
+  PV_OptB_Factorization.IndependentOffBad h.public signal (union h P V W Pr R N hN B outputs x ab adv c)
+'R1Z.PV_OptB_Charged.union' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0

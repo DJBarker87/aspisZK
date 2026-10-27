@@ -1,0 +1,5 @@
+# Same-run ten-state transport
+
+F3N_SameRunTen.accepted invokes RawJ_RecordCuts.native once, uses SdkD_PairBatches.first_run on THOSE cuts, and constructs F3N_SourceInput.Facts on THAT run.p. It retains the exact original recorded log and accepted outer run. It derives, via AuS1_OnRun.same_pair and existing Tx1Q_Endpoint.on_run, the existing Cons_Ten.Outcome on THAT run, conditional on retained checkpoint/proof history. No separate accepting model or ten-state equality is assumed. F3N_TenInput.same_input instantiates that existing result on exact discovered SourceInputs.
+
+The collision alternative is preserved, together with actual writer success,64 flushed weights and source next10; query/geometry/domain/mul/one/inverse owner laws remain the existing explicit leaves of Cons_Ten. This is transport of the inherited result, not a new unconditional native-source join. Source/semantic scalar and circle bindings from stage1 remain open. No security, runtime or artifact claim. All these modules pass focused compilation and standard-axiom audits. No package replay or shipped changes.

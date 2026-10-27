@@ -1,0 +1,43 @@
+JFw_TX2_Raw00.lean:77:2: error: Tactic `rfl` failed: The left-hand side
+  ok (core.result.Result.Ok (), { c0 := after.c0, c1 := after.c1, count := before.count.wrapping_add 1#usize })
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok (), after)
+
+full : ¬before.count ≥ FIo_Native.fast_pairing.MAX_TERMS
+checked :
+  FIo_Native.fast_pairing.checked_q JFr_TX2_Tails10.value0_0 =
+    ok (core.result.Result.Ok (pack 364683348#u32 1044188774#u32 1153273456#u32 638008223#u32))
+hw :
+  FIo_Native.fast_pairing.canonical.Q.from_wide JFw_TX2_P28.value =
+    ok
+      (Array.make 2#usize
+        [pack 2136659036#u32 1454808535#u32 901973532#u32 323718155#u32,
+          pack 447208057#u32 1244418415#u32 2052833682#u32 2086368445#u32]
+        ⋯)
+r0 :
+  (Array.make 2#usize
+          [pack 2136659036#u32 1454808535#u32 901973532#u32 323718155#u32,
+            pack 447208057#u32 1244418415#u32 2052833682#u32 2086368445#u32]
+          ⋯).index_usize
+      0#usize =
+    ok (pack 2136659036#u32 1454808535#u32 901973532#u32 323718155#u32)
+r1 :
+  (Array.make 2#usize
+          [pack 2136659036#u32 1454808535#u32 901973532#u32 323718155#u32,
+            pack 447208057#u32 1244418415#u32 2052833682#u32 2086368445#u32]
+          ⋯).index_usize
+      1#usize =
+    ok (pack 447208057#u32 1244418415#u32 2052833682#u32 2086368445#u32)
+d0 :
+  before.c0.push (pack 2136659036#u32 1454808535#u32 901973532#u32 323718155#u32)
+      (pack 364683348#u32 1044188774#u32 1153273456#u32 638008223#u32) =
+    ok after.c0
+d1 :
+  before.c1.push (pack 447208057#u32 1244418415#u32 2052833682#u32 2086368445#u32)
+      (pack 364683348#u32 1044188774#u32 1153273456#u32 638008223#u32) =
+    ok after.c1
+⊢ ok (core.result.Result.Ok (), { c0 := after.c0, c1 := after.c1, count := before.count.wrapping_add 1#usize }) =
+    ok (core.result.Result.Ok (), after)
+'AspisR1.JFw_TX2_Raw00.pair0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFw_TX2_Raw00.pair1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFw_TX2_Raw00.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

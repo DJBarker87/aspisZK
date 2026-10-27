@@ -1,0 +1,58 @@
+{
+  "attempt": "PoolN_KANI036",
+  "kind": "kani",
+  "source_revision": "527685c75bf795db43910770c71b78d66dd0fe0c",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolN_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolN_kani_target",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,no-entrypoint",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "PoolN_stack_no_inner_invocation",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolN_processor_harness.rs",
+    "PoolN_forest_harness.rs",
+    "PoolN_misc_harness.rs",
+    "PoolN_source-pins.json",
+    "PoolN_processor_prefixes.rs",
+    "PoolN_pair_forest_prefixes.rs",
+    "PoolN_prefix-manifest.json",
+    "PoolN_fixture.rs",
+    "PoolN_processor_splits.rs",
+    "PoolN_pair_forest_splits.rs",
+    "PoolN_cpi_harness.rs",
+    "PoolN_stack_harness.rs",
+    "PoolN_stack-pin.json",
+    "PoolN_dispatch_harness.rs",
+    "PoolN_dispatch-pin.json",
+    "PoolN_final_splits.rs",
+    "PoolN_input-pins.json"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual copied stack predicate, name-only production-body adaptation. After KANI035 timeout, isolate assertion instrumentation: no Debug formatting and explicit unwind2 for a loop-free predicate. No source/cap/timeout relaxation."
+  },
+  "expected_time": "Optimized proof generation for loop-free scalar guard; standard assertion rather than Debug assertion formatting; no SDK account/CPI/arithmetic."
+}

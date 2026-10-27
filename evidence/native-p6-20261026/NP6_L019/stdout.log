@@ -1,0 +1,53 @@
+NP6_ScalarResult.lean:26:16: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Canonical threshold (input i))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NP6_ScalarResult.lean:38:14: error: unsolved goals
+n limbs threshold : ℕ
+input : Fin n → Fin limbs → ℕ
+bad : Fin n
+facts : Characterizes true threshold input (Outcome.bad bad)
+invalid : ¬Canonical threshold (input bad)
+⊢ sorry () = none
+NP6_ScalarResult.lean:40:26: error: unsolved goals
+n limbs threshold : ℕ
+input : Fin n → Fin limbs → ℕ
+bad : Fin n
+facts : Characterizes true threshold input (Outcome.bad bad)
+invalid : ¬Canonical threshold (input bad)
+before : Fin n
+earlier : ↑before < ↑bad
+⊢ sorry () = some (input before)
+NP6_ScalarResult.lean:41:22: error: unsolved goals
+case true.returned
+n limbs threshold : ℕ
+input values : Fin n → Fin limbs → ℕ
+facts : Characterizes true threshold input (Outcome.returned values)
+i : Fin n
+good : Canonical threshold (input i)
+same : values i = input i
+⊢ sorry () = some (input i)
+NP6_ScalarResult.lean:38:23: warning: This simp argument is unused:
+  invalid
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵i̵n̵v̵a̵l̵i̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NP6_ScalarResult.lean:40:35: warning: This simp argument is unused:
+  facts.2 before earlier
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵f̵a̵c̵t̵s̵.̵2̵ ̵b̵e̵f̵o̵r̵e̵ ̵e̵a̵r̵l̵i̵e̵r̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NP6_ScalarResult.lean:47:12: warning: This simp argument is unused:
+  good
+
+Hint: Omit it from the simp argument list.
+  simp [g̵o̵o̵d̵,̵same]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NP6_ScalarResult.lean:51:8: warning: declaration uses `sorry`
+'AspisR1.NP6_ScalarResult.to_option_spec' depends on axioms: [sorryAx]
+'AspisR1.NP6_ScalarResult.unique' depends on axioms: [sorryAx, Quot.sound]

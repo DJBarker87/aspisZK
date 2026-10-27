@@ -1,0 +1,29 @@
+AspisR1.TxS_Carriers.source_of_read : ∀ (rs : AspisR1.LiteralAcceptanceTerminal.TranscriptRounds)
+  (i : AspisR1.R1FinalSoundness.SourceInputs),
+  AspisR1.LiteralMatchingData.read rs = Option.some i.data →
+    AspisR1.TxS_Carriers.source (AspisR1.TxS_Carriers.eraseInput i) rs = i
+'AspisR1.TxS_Carriers.source_of_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.TxS_Carriers.Metadata : Type
+number of parameters: 0
+fields:
+  AspisR1.TxS_Carriers.Metadata.decoded : R0P.Public AspisR1.SemanticPublicWire.M31
+  AspisR1.TxS_Carriers.Metadata.m31 : AspisR1.LiteralTranscript.Message
+  AspisR1.TxS_Carriers.Metadata.queryBytes : List ℕ
+  AspisR1.TxS_Carriers.Metadata.state31 : AspisV8R19.SourceDuplexStep.State
+  AspisR1.TxS_Carriers.Metadata.m32 : AspisR1.LiteralTranscript.Message
+  AspisR1.TxS_Carriers.Metadata.rho : AspisR1.LiteralTranscript.E
+  AspisR1.TxS_Carriers.Metadata.state32 : AspisV8R19.SourceDuplexStep.State
+constructor:
+  AspisR1.TxS_Carriers.Metadata.mk (decoded : R0P.Public AspisR1.SemanticPublicWire.M31)
+    (m31 : AspisR1.LiteralTranscript.Message) (queryBytes : List ℕ) (state31 : AspisV8R19.SourceDuplexStep.State)
+    (m32 : AspisR1.LiteralTranscript.Message) (rho : AspisR1.LiteralTranscript.E)
+    (state32 : AspisV8R19.SourceDuplexStep.State) : AspisR1.TxS_Carriers.Metadata
+def AspisR1.TxS_Carriers.source : AspisR1.TxS_Carriers.Metadata →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds → AspisR1.R1FinalSoundness.SourceInputs :=
+fun m rs =>
+  { decoded := m.decoded, data := AspisR1.TxS_Carriers.data rs, m31 := m.m31, queryBytes := m.queryBytes,
+    state31 := m.state31, m32 := m.m32, rho := m.rho, state32 := m.state32 }
+def AspisR1.TxS_Carriers.eraseInput : AspisR1.R1FinalSoundness.SourceInputs → AspisR1.TxS_Carriers.Metadata :=
+fun i =>
+  { decoded := i.decoded, m31 := i.m31, queryBytes := i.queryBytes, state31 := i.state31, m32 := i.m32, rho := i.rho,
+    state32 := i.state32 }

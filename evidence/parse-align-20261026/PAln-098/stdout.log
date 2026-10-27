@@ -1,0 +1,50 @@
+PAln_JoinedFacts.lean:62:40: error: unexpected token 'theorem'; expected ':=', 'where' or '|'
+PAln_JoinedFacts.lean:72:4: error: type expected, got
+  (Facts ops reserved query geo B std D hash pub publicBytes proof split saved
+  run : ∃ expanded y1 view sem retained rs pre t0 t25 cs,
+  AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded = ok (core.result.Result.Ok pre) ∧
+    semanticRows 27 0 (slice (bytesOf ↑proof) 48 6983) = some (List.map (fun s => bytesOf ↑s) ↑pre.records) ∧
+      AspisR1PublicPreparation.r1_semantic.public_transcript (retainedDigest D) (FirstComposition.toRetainedPublic pub)
+            hash pre.c1_root =
+          ok (core.result.Result.Ok t0) ∧
+        ↑pre.c1_root = storedRoot proof ∧
+          sourceView proof expanded y1 = ok (core.result.Result.Ok view) ∧
+            view.semantic = expanded ∧
+              bytesOf ↑view.y1 = expand 29 (slice (bytesOf ↑proof) 7031 464) ∧
+                bytesOf ↑(retainedView view).round0 = slice (bytesOf ↑proof) 7527 224 ∧
+                  bytesOf ↑(retainedView view).round1 = slice (bytesOf ↑proof) 7783 224 ∧
+                    bytesOf ↑(retainedView view).final_message = slice (bytesOf ↑proof) 8007 2048 ∧
+                      (∀ (root : Std.Array U8 32#usize) (bytes1 bytes2 : alloc.vec.Vec U8),
+                          core.option.Option.unwrap (retainedView view).folded_root = ok root →
+                            alloc.vec.Vec.extend_from_slice core.clone.CloneU8
+                                  (alloc.vec.Vec.with_capacity U8 256#usize) root.to_slice =
+                                ok bytes1 →
+                              alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 (retainedView view).round1 =
+                                  ok bytes2 →
+                                bytesOf ↑bytes2 = slice (bytesOf ↑proof) 7751 256) ∧
+                        PAln_OpeningStages.Double
+                            (AspisR1ClaimPreparedBridge.concreteBoundaries
+                              (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries
+                                (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed))
+                            (retainedDigest D) (retainedSem sem) (retainedView view) hash retained rs ∧
+                          currentPrepared retained = run.p ∧
+                            AspisR1ClaimPreparedBridge.mapArray currentE rs = run.scratch ∧
+                              AspisR1PublicPreparation.SourceFull25.Trace (retainedDigest D) pre t0 t25 cs ∧
+                                List.map (fun c => ↑c.row) cs = List.range 25 ∧
+                                  List.map (fun c => bytesOf ↑c.record.framed) cs =
+                                      List.take 25 (List.map (fun s => bytesOf ↑s) ↑pre.records) ∧
+                                    ∃ record25 record26 z0 t26 z1 t27,
+                                      pre.validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+                                        AspisR1PublicPreparation.FinishModel.circle_validated
+                                              (AspisR1PublicPreparation.S1SemanticRootCopy.install
+                                                (ClaimsUnrolledFinish.install std B))
+                                              (retainedDigest D) t25 record25 =
+                                            ok (core.result.Result.Ok z0, t26) ∧
+                                          pre.validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+                                            AspisR1PublicPreparation.FinishModel.circle_validated
+                                                  (AspisR1PublicPreparation.S1SemanticRootCopy.install
+                                                    (ClaimsUnrolledFinish.install std B))
+                                                  (retainedDigest D) t26 record26 =
+                                                ok (core.result.Result.Ok z1, t27) ∧
+                                              (retainedSem sem).transcript = t27)
+PAln_JoinedFacts.lean:75:14: error(lean.unknownIdentifier): Unknown constant `on_run`

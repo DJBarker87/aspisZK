@@ -1,0 +1,85 @@
+import GSScalarRootEnvelopeM10
+import GSBinaryModPowerFieldWorkM10
+import RawExtractorCostLedger
+
+/-! Actual scalar traces become bounded field work. The binaryRec power
+counter and recursive Raw divider receive their actual operands. A separate
+generous tariff pays normalization/trim/control work omitted by the older
+remainder-only GCD counter. The bound is uniform in field-element values. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSScalarTraceFieldWorkM10
+open CompPoly Polynomial GSScalarOperandEnvelopeM10 GSScalarCallScheduleM10
+open RawExtractorCostLedger
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [Fintype K]
+
+def normalization (D : Nat) : Nat := 100*(2*(D+1)+1)^2
+
+def callWork (D : Nat) : Call K → Nat
+  | .gcd a b => gcdCharge (a.val,b.val)+normalization D
+  | .division a b => CompPolyFactorRawDivisionBridge.actualDivisionCharge a b+normalization D
+  | .power a m e => (GSBinaryModPowerFieldWorkM10.eval a m e).2+(e+1)*normalization D
+
+def callBudget (D q : Nat) : Nat :=
+  (gcdBudget (D+1)+normalization D)+
+  (divisionBudget (D+1)+normalization D)+
+  (q*GSBinaryModPowerFieldWorkM10.stepBudget D+(q+1)*normalization D)
+
+theorem degree_of_size (p : CPolynomial K) (D : Nat) (h : p.val.size ≤ D+1) :
+    p.toPoly.natDegree ≤ D := by
+  rw [← CPolynomial.natDegree_toPoly]
+  cases hs : p.val.size <;> simp only [CPolynomial.natDegree, hs] <;> omega
+
+theorem call_work (c : Call K) (D q : Nat) (h : Bounded D q c) :
+    callWork D c ≤ callBudget D q := by
+  cases c with
+  | gcd a b =>
+    have hh := ActualCompPolyGCDTotalRemainderCost.public_gcd_remainder_cost_uniform
+      a.val b.val (D+1) h.1 h.2
+    change _+normalization D ≤ _
+    change gcdCharge (a.val,b.val) ≤ gcdBudget (D+1) at hh
+    unfold callBudget
+    omega
+  | division a b =>
+    have hm := GSBinaryModPowerFieldWorkM10.monic_raw b h.2.2
+    have ha := CPolynomial.Raw.Trim.trim_eq_of_isCanonical a.property
+    have hh := ActualLongDivisionTotalCostV1.public_division_total_cost
+      a.val b.val ha hm.1 hm.2.1 hm.2.2
+    have hs : a.val.size+4 ≤ (D+1)+4 := Nat.add_le_add_right h.1 4
+    have hcap := hh.trans (Nat.mul_le_mul h.1
+      (Nat.mul_le_mul (Nat.mul_le_mul_left 100 hs) hs))
+    change CompPolyFactorRawDivisionBridge.actualDivisionCharge a b ≤ divisionBudget (D+1) at hcap
+    change _+normalization D ≤ _
+    unfold callBudget
+    omega
+  | power a m e =>
+    have hh := GSBinaryModPowerFieldWorkM10.work a m e D
+      (degree_of_size a D h.1) h.2.2.2 (degree_of_size m D h.2.1)
+    have hp := Nat.mul_le_mul_right (GSBinaryModPowerFieldWorkM10.stepBudget D) h.2.2.1
+    have hn := Nat.mul_le_mul_right (normalization D) (Nat.add_le_add_right h.2.2.1 1)
+    change _+_ ≤ _
+    unfold callBudget
+    omega
+
+def traceWork (D : Nat) (cs : List (Call K)) : Nat := (cs.map (callWork D)).sum
+
+theorem trace_work (cs : List (Call K)) (D q count : Nat)
+    (hl : cs.length ≤ count) (hs : ∀ c ∈ cs, Bounded D q c) :
+    traceWork D cs ≤ count*callBudget D q :=
+  sum_charge_le cs (callWork D) count (callBudget D q) hl (fun c hc => call_work c D q (hs c hc))
+
+theorem general_work (p : CPolynomial K) (q t D : Nat)
+    (H : Nat → Fin t → K × K) (hd : p.toPoly.natDegree ≤ D) (hD : 1 ≤ D) :
+    traceWork D (GSScalarSequentialScheduleM10.general p q t H).2 ≤
+      (2+fuelBudget t (D+1))*callBudget D q := by
+  apply trace_work
+  · apply GSScalarSequentialScheduleM10.general_length
+    simpa only [CPolynomial.natDegree_toPoly] using hd
+  · exact GSScalarRootEnvelopeM10.general_bounded p q t D H hd hD
+
+#print axioms degree_of_size
+#print axioms call_work
+#print axioms trace_work
+#print axioms general_work
+end AspisR1.GSScalarTraceFieldWorkM10
+end

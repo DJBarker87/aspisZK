@@ -1,0 +1,35 @@
+AspisR1.Rc5_Nonvacuity.Facts : (AspisR1.OraclePortStoredExperimentC4.Input →
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Slice Aeneas.Std.U8 → AspisV8R19.DuplexFrames.Bytes → Prop
+def AspisR1.Rc5_Nonvacuity.Facts : (AspisR1.OraclePortStoredExperimentC4.Input →
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Slice Aeneas.Std.U8 → AspisV8R19.DuplexFrames.Bytes → Prop :=
+fun driver H pub proof pub2 proof2 checkpoint written =>
+  AspisR1.S2W_AuthenticatedInputs.P2Prime H proof pub proof2 pub2 →
+    ∃ i,
+      i.statement.pubBytes = AspisR1.MultiproofConeCanonical.bytesOf ↑pub ∧
+        i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑proof ∧
+          i.statement.tag = 2 ∧
+            List.length i.statement.pubBytes = 1880 ∧
+              (AspisV8R19.MemoizedProgramLaw.eval H (driver i)).2 = Bool.true ∧
+                ¬∀ (j : AspisR1.OraclePortStoredExperimentC4.Input),
+                    (AspisV8R19.MemoizedProgramLaw.eval H (driver j)).2 = Bool.false
+'AspisR1.Rc5_Nonvacuity.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SAQ_Decoder.install : AspisR1.SAQ_Query.Ops → AspisR1.SAQ_Query.Ops
+def AspisR1.SAQ_Decoder.install : AspisR1.SAQ_Query.Ops → AspisR1.SAQ_Query.Ops :=
+fun ops =>
+  have __src := AspisR1.SAQ_LineQuery.install ops;
+  { op0 := @AspisR1.Port3_NativeQueryBody.Ops.op0 __src, op1 := __src.op1, op2 := __src.op2, op3 := __src.op3,
+    op4 := __src.op4, op5 := __src.op5, op6 := __src.op6, op7 := __src.op7, op8 := __src.op8, op9 := __src.op9,
+    op10 := __src.op10, op11 := __src.op11, op12 := __src.op12, op13 := __src.op13, op14 := __src.op14,
+    op15 := __src.op15, op16 := __src.op16, op17 := __src.op17, op18 := __src.op18, op19 := __src.op19,
+    op20 := __src.op20, op21 := AspisR1.SAQ_Decoder.read, widePartialEq := __src.widePartialEq }
+'AspisR1.SAQ_Decoder.install' depends on axioms: [propext, Classical.choice, Quot.sound]

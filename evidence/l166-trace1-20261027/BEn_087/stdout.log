@@ -1,0 +1,1997 @@
+theorem AspisR1.ARU_PartialAccepted.accepted : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a H),
+      AspisR1.SCE_Experiment.accepted
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                  AspisR1.CPH_Program.verifier a)).2 =
+          Bool.true ∧
+        AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+              AspisR1.CPH_Program.verifier a) =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.SCE_Experiment.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+              AspisR1.CPH_Program.verifier a) :=
+fun {W A C Tx} L copy allocator c err r native1 native2 hashv extraction a H n =>
+  let cfg := AspisR1.FIp_Install.configuration err c r;
+  have source := AspisR1.ARU_SourceResults.accepted L copy allocator c err r native1 native2 hashv extraction a H n;
+  have firstPartial :=
+    Eq.trans
+      (congrArg Prod.snd
+        (AspisR1.ART_WrapperExact.execution hashv H
+          (AspisR1.ARS_NativeAccount.firstSyntax (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+            AspisR1.CPH_Program.verifier (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+          n.firstAgrees))
+      source.left;
+  have secondPartial :=
+    Eq.trans
+      (congrArg Prod.snd
+        (AspisR1.ART_WrapperExact.execution hashv H
+          (AspisR1.ARS_NativeAccount.secondSyntax (AspisR1.FIp_Install.configuration err c r) hashv allocator
+            AspisR1.CPH_Program.verifier
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved n.entry.post1
+                  n.entry.final1)).2)
+          n.secondAgrees))
+      source.right;
+  have yes :=
+    id
+      (of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (congrArg (fun x => x (fun a fst a_1 => Bool.true) fun x x_1 => Bool.false)
+                (congr
+                  (congrArg (fun x => AspisR1.SCE_Experiment.accepted.match_1 (fun x x_1 => Bool) x.2.2.1)
+                    (Eq.trans
+                      (AspisV8R19.OracleProgramOps.eval_bind a.first
+                        (fun i =>
+                          AspisV8R19.OracleProgramOps.bind
+                            (AspisR1.ART_PartialAccount.wrapper hashv
+                              (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                AspisR1.CPH_Program.verifier i))
+                            fun reply =>
+                            match reply with
+                            | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                              AspisV8R19.OracleProgramOps.bind (a.second i saved post final) fun j =>
+                                AspisV8R19.OracleProgramOps.bind
+                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                      AspisR1.CPH_Program.verifier j))
+                                  fun out => AspisV8R19.MemoizedProgramLaw.Program.done (i, reply, Option.some (j, out))
+                            | x => AspisV8R19.MemoizedProgramLaw.Program.done (i, reply, Option.none))
+                        H)
+                      (congr
+                        (congrArg Prod.mk
+                          (congrArg (HAppend.hAppend (AspisV8R19.MemoizedProgramLaw.eval H a.first).1)
+                            (congrArg Prod.fst
+                              (Eq.trans
+                                (AspisV8R19.OracleProgramOps.eval_bind
+                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                    (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                      AspisR1.CPH_Program.verifier (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))
+                                  (fun reply =>
+                                    match reply with
+                                    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                      AspisV8R19.OracleProgramOps.bind
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)
+                                        fun j =>
+                                        AspisV8R19.OracleProgramOps.bind
+                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                            (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                              AspisR1.CPH_Program.verifier j))
+                                          fun out =>
+                                          AspisV8R19.MemoizedProgramLaw.Program.done
+                                            ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply,
+                                              Option.some (j, out))
+                                    | x =>
+                                      AspisV8R19.MemoizedProgramLaw.Program.done
+                                        ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply, Option.none))
+                                  H)
+                                (congr
+                                  (congrArg Prod.mk
+                                    (congrArg
+                                      (HAppend.hAppend
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.ART_PartialAccount.wrapper hashv
+                                              (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                                AspisR1.CPH_Program.verifier
+                                                (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).1)
+                                      (congrArg Prod.fst
+                                        (Eq.trans
+                                          (Eq.trans
+                                            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                              (Eq.trans
+                                                (congrArg
+                                                  (fun x =>
+                                                    match x with
+                                                    |
+                                                    Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                                      AspisV8R19.OracleProgramOps.bind
+                                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved
+                                                          post final)
+                                                        fun j =>
+                                                        AspisV8R19.OracleProgramOps.bind
+                                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                                            (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                              AspisR1.CPH_Program.verifier j))
+                                                          fun out =>
+                                                          AspisV8R19.MemoizedProgramLaw.Program.done
+                                                            ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                    (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv
+                                                                      copy allocator AspisR1.CPH_Program.verifier
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                          a.first).2))).2,
+                                                              Option.some (j, out))
+                                                    | x =>
+                                                      AspisV8R19.MemoizedProgramLaw.Program.done
+                                                        ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy
+                                                                  allocator AspisR1.CPH_Program.verifier
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                          Option.none))
+                                                  firstPartial)
+                                                (congrArg
+                                                  (AspisV8R19.OracleProgramOps.bind
+                                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                      n.entry.saved n.entry.post1 n.entry.final1))
+                                                  (funext fun j =>
+                                                    congrArg
+                                                      (AspisV8R19.OracleProgramOps.bind
+                                                        (AspisR1.ART_PartialAccount.wrapper hashv
+                                                          (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                            AspisR1.CPH_Program.verifier j)))
+                                                      (funext fun out =>
+                                                        congrArg AspisV8R19.MemoizedProgramLaw.Program.done
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrFun' (congrArg Prod.mk firstPartial)
+                                                              (Option.some (j, out)))))))))
+                                            (AspisV8R19.OracleProgramOps.eval_bind
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                                n.entry.post1 n.entry.final1)
+                                              (fun j =>
+                                                AspisV8R19.OracleProgramOps.bind
+                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                      AspisR1.CPH_Program.verifier j))
+                                                  fun out =>
+                                                  AspisV8R19.MemoizedProgramLaw.Program.done
+                                                    ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.result.Result.Ok
+                                                          (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                      Option.some (j, out)))
+                                              H))
+                                          (congr
+                                            (congrArg Prod.mk
+                                              (congrArg
+                                                (HAppend.hAppend
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                        n.entry.saved n.entry.post1 n.entry.final1)).1)
+                                                (congrArg Prod.fst
+                                                  (Eq.trans
+                                                    (AspisV8R19.OracleProgramOps.eval_bind
+                                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                                        (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                          AspisR1.CPH_Program.verifier
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                      (fun out =>
+                                                        AspisV8R19.MemoizedProgramLaw.Program.done
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                            Option.some
+                                                              ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                                out)))
+                                                      H)
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg
+                                                          (HAppend.hAppend
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                  (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                    allocator AspisR1.CPH_Program.verifier
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2))).1)
+                                                          (congrArg Prod.fst
+                                                            (congrArg (Prod.mk [])
+                                                              (congrArg
+                                                                (Prod.mk
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.result.Result.Ok
+                                                                        (n.entry.saved, n.entry.post1,
+                                                                          n.entry.final1))))
+                                                                  (congrArg Option.some
+                                                                    (congrArg
+                                                                      (Prod.mk
+                                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                            (a.second
+                                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                                  a.first).2
+                                                                              n.entry.saved n.entry.post1
+                                                                              n.entry.final1)).2)
+                                                                      secondPartial))))))))
+                                                      (congrArg Prod.snd
+                                                        (congrArg (Prod.mk [])
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                              (congrArg Option.some
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2)
+                                                                  secondPartial)))))))))))
+                                            (congrArg Prod.snd
+                                              (Eq.trans
+                                                (AspisV8R19.OracleProgramOps.eval_bind
+                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                      AspisR1.CPH_Program.verifier
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                            n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                  (fun out =>
+                                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                        Option.some
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                            out)))
+                                                  H)
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg
+                                                      (HAppend.hAppend
+                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (AspisR1.ART_PartialAccount.wrapper hashv
+                                                              (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                allocator AspisR1.CPH_Program.verifier
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1
+                                                                      n.entry.final1)).2))).1)
+                                                      (congrArg Prod.fst
+                                                        (congrArg (Prod.mk [])
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                              (congrArg Option.some
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2)
+                                                                  secondPartial))))))))
+                                                  (congrArg Prod.snd
+                                                    (congrArg (Prod.mk [])
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                          (congrArg Option.some
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                              secondPartial))))))))))))))
+                                  (congrArg Prod.snd
+                                    (Eq.trans
+                                      (Eq.trans
+                                        (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                          (Eq.trans
+                                            (congrArg
+                                              (fun x =>
+                                                match x with
+                                                |
+                                                Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                                  AspisV8R19.OracleProgramOps.bind
+                                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved
+                                                      post final)
+                                                    fun j =>
+                                                    AspisV8R19.OracleProgramOps.bind
+                                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                                        (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                          AspisR1.CPH_Program.verifier j))
+                                                      fun out =>
+                                                      AspisV8R19.MemoizedProgramLaw.Program.done
+                                                        ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy
+                                                                  allocator AspisR1.CPH_Program.verifier
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                          Option.some (j, out))
+                                                | x =>
+                                                  AspisV8R19.MemoizedProgramLaw.Program.done
+                                                    ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                                            (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy
+                                                              allocator AspisR1.CPH_Program.verifier
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                      Option.none))
+                                              firstPartial)
+                                            (congrArg
+                                              (AspisV8R19.OracleProgramOps.bind
+                                                (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                                  n.entry.post1 n.entry.final1))
+                                              (funext fun j =>
+                                                congrArg
+                                                  (AspisV8R19.OracleProgramOps.bind
+                                                    (AspisR1.ART_PartialAccount.wrapper hashv
+                                                      (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                        AspisR1.CPH_Program.verifier j)))
+                                                  (funext fun out =>
+                                                    congrArg AspisV8R19.MemoizedProgramLaw.Program.done
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrFun' (congrArg Prod.mk firstPartial)
+                                                          (Option.some (j, out)))))))))
+                                        (AspisV8R19.OracleProgramOps.eval_bind
+                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                            n.entry.post1 n.entry.final1)
+                                          (fun j =>
+                                            AspisV8R19.OracleProgramOps.bind
+                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                  AspisR1.CPH_Program.verifier j))
+                                              fun out =>
+                                              AspisV8R19.MemoizedProgramLaw.Program.done
+                                                ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                  Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.result.Result.Ok
+                                                      (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                  Option.some (j, out)))
+                                          H))
+                                      (congr
+                                        (congrArg Prod.mk
+                                          (congrArg
+                                            (HAppend.hAppend
+                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                    n.entry.saved n.entry.post1 n.entry.final1)).1)
+                                            (congrArg Prod.fst
+                                              (Eq.trans
+                                                (AspisV8R19.OracleProgramOps.eval_bind
+                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                      AspisR1.CPH_Program.verifier
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                            n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                  (fun out =>
+                                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                        Option.some
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                            out)))
+                                                  H)
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg
+                                                      (HAppend.hAppend
+                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (AspisR1.ART_PartialAccount.wrapper hashv
+                                                              (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                allocator AspisR1.CPH_Program.verifier
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1
+                                                                      n.entry.final1)).2))).1)
+                                                      (congrArg Prod.fst
+                                                        (congrArg (Prod.mk [])
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                              (congrArg Option.some
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2)
+                                                                  secondPartial))))))))
+                                                  (congrArg Prod.snd
+                                                    (congrArg (Prod.mk [])
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                          (congrArg Option.some
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                              secondPartial)))))))))))
+                                        (congrArg Prod.snd
+                                          (Eq.trans
+                                            (AspisV8R19.OracleProgramOps.eval_bind
+                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                  AspisR1.CPH_Program.verifier
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                        n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                              (fun out =>
+                                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                    Aeneas.Std.Result.ok
+                                                      (Aeneas.Std.core.result.Result.Ok
+                                                        (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                    Option.some
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                              n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                        out)))
+                                              H)
+                                            (congr
+                                              (congrArg Prod.mk
+                                                (congrArg
+                                                  (HAppend.hAppend
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                        (AspisR1.ART_PartialAccount.wrapper hashv
+                                                          (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                            AspisR1.CPH_Program.verifier
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2))).1)
+                                                  (congrArg Prod.fst
+                                                    (congrArg (Prod.mk [])
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                          (congrArg Option.some
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                              secondPartial))))))))
+                                              (congrArg Prod.snd
+                                                (congrArg (Prod.mk [])
+                                                  (congrArg (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                    (congrArg
+                                                      (Prod.mk
+                                                        (Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                      (congrArg Option.some
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                          secondPartial)))))))))))))))))
+                        (congrArg Prod.snd
+                          (Eq.trans
+                            (AspisV8R19.OracleProgramOps.eval_bind
+                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                  AspisR1.CPH_Program.verifier (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))
+                              (fun reply =>
+                                match reply with
+                                | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                  AspisV8R19.OracleProgramOps.bind
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)
+                                    fun j =>
+                                    AspisV8R19.OracleProgramOps.bind
+                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                        (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                          AspisR1.CPH_Program.verifier j))
+                                      fun out =>
+                                      AspisV8R19.MemoizedProgramLaw.Program.done
+                                        ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply, Option.some (j, out))
+                                | x =>
+                                  AspisV8R19.MemoizedProgramLaw.Program.done
+                                    ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply, Option.none))
+                              H)
+                            (congr
+                              (congrArg Prod.mk
+                                (congrArg
+                                  (HAppend.hAppend
+                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.ART_PartialAccount.wrapper hashv
+                                          (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                            AspisR1.CPH_Program.verifier
+                                            (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).1)
+                                  (congrArg Prod.fst
+                                    (Eq.trans
+                                      (Eq.trans
+                                        (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                          (Eq.trans
+                                            (congrArg
+                                              (fun x =>
+                                                match x with
+                                                |
+                                                Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                                  AspisV8R19.OracleProgramOps.bind
+                                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved
+                                                      post final)
+                                                    fun j =>
+                                                    AspisV8R19.OracleProgramOps.bind
+                                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                                        (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                          AspisR1.CPH_Program.verifier j))
+                                                      fun out =>
+                                                      AspisV8R19.MemoizedProgramLaw.Program.done
+                                                        ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy
+                                                                  allocator AspisR1.CPH_Program.verifier
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                          Option.some (j, out))
+                                                | x =>
+                                                  AspisV8R19.MemoizedProgramLaw.Program.done
+                                                    ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                                            (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy
+                                                              allocator AspisR1.CPH_Program.verifier
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                      Option.none))
+                                              firstPartial)
+                                            (congrArg
+                                              (AspisV8R19.OracleProgramOps.bind
+                                                (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                                  n.entry.post1 n.entry.final1))
+                                              (funext fun j =>
+                                                congrArg
+                                                  (AspisV8R19.OracleProgramOps.bind
+                                                    (AspisR1.ART_PartialAccount.wrapper hashv
+                                                      (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                        AspisR1.CPH_Program.verifier j)))
+                                                  (funext fun out =>
+                                                    congrArg AspisV8R19.MemoizedProgramLaw.Program.done
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrFun' (congrArg Prod.mk firstPartial)
+                                                          (Option.some (j, out)))))))))
+                                        (AspisV8R19.OracleProgramOps.eval_bind
+                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                            n.entry.post1 n.entry.final1)
+                                          (fun j =>
+                                            AspisV8R19.OracleProgramOps.bind
+                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                  AspisR1.CPH_Program.verifier j))
+                                              fun out =>
+                                              AspisV8R19.MemoizedProgramLaw.Program.done
+                                                ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                  Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.result.Result.Ok
+                                                      (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                  Option.some (j, out)))
+                                          H))
+                                      (congr
+                                        (congrArg Prod.mk
+                                          (congrArg
+                                            (HAppend.hAppend
+                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                    n.entry.saved n.entry.post1 n.entry.final1)).1)
+                                            (congrArg Prod.fst
+                                              (Eq.trans
+                                                (AspisV8R19.OracleProgramOps.eval_bind
+                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                      AspisR1.CPH_Program.verifier
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                            n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                  (fun out =>
+                                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                        Option.some
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                            out)))
+                                                  H)
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg
+                                                      (HAppend.hAppend
+                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (AspisR1.ART_PartialAccount.wrapper hashv
+                                                              (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                allocator AspisR1.CPH_Program.verifier
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1
+                                                                      n.entry.final1)).2))).1)
+                                                      (congrArg Prod.fst
+                                                        (congrArg (Prod.mk [])
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                              (congrArg Option.some
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2)
+                                                                  secondPartial))))))))
+                                                  (congrArg Prod.snd
+                                                    (congrArg (Prod.mk [])
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                          (congrArg Option.some
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                              secondPartial)))))))))))
+                                        (congrArg Prod.snd
+                                          (Eq.trans
+                                            (AspisV8R19.OracleProgramOps.eval_bind
+                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                  AspisR1.CPH_Program.verifier
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                        n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                              (fun out =>
+                                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                    Aeneas.Std.Result.ok
+                                                      (Aeneas.Std.core.result.Result.Ok
+                                                        (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                    Option.some
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                              n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                        out)))
+                                              H)
+                                            (congr
+                                              (congrArg Prod.mk
+                                                (congrArg
+                                                  (HAppend.hAppend
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                        (AspisR1.ART_PartialAccount.wrapper hashv
+                                                          (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                            AspisR1.CPH_Program.verifier
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2))).1)
+                                                  (congrArg Prod.fst
+                                                    (congrArg (Prod.mk [])
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                          (congrArg Option.some
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                              secondPartial))))))))
+                                              (congrArg Prod.snd
+                                                (congrArg (Prod.mk [])
+                                                  (congrArg (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                    (congrArg
+                                                      (Prod.mk
+                                                        (Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                      (congrArg Option.some
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                          secondPartial))))))))))))))
+                              (congrArg Prod.snd
+                                (Eq.trans
+                                  (Eq.trans
+                                    (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                      (Eq.trans
+                                        (congrArg
+                                          (fun x =>
+                                            match x with
+                                            |
+                                            Aeneas.Std.Result.ok
+                                                (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                              AspisV8R19.OracleProgramOps.bind
+                                                (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post
+                                                  final)
+                                                fun j =>
+                                                AspisV8R19.OracleProgramOps.bind
+                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                      AspisR1.CPH_Program.verifier j))
+                                                  fun out =>
+                                                  AspisV8R19.MemoizedProgramLaw.Program.done
+                                                    ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                                            (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy
+                                                              allocator AspisR1.CPH_Program.verifier
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                      Option.some (j, out))
+                                            | x =>
+                                              AspisV8R19.MemoizedProgramLaw.Program.done
+                                                ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                                        (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                                          AspisR1.CPH_Program.verifier
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                  Option.none))
+                                          firstPartial)
+                                        (congrArg
+                                          (AspisV8R19.OracleProgramOps.bind
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                              n.entry.post1 n.entry.final1))
+                                          (funext fun j =>
+                                            congrArg
+                                              (AspisV8R19.OracleProgramOps.bind
+                                                (AspisR1.ART_PartialAccount.wrapper hashv
+                                                  (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                    AspisR1.CPH_Program.verifier j)))
+                                              (funext fun out =>
+                                                congrArg AspisV8R19.MemoizedProgramLaw.Program.done
+                                                  (congrArg (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                    (congrFun' (congrArg Prod.mk firstPartial)
+                                                      (Option.some (j, out)))))))))
+                                    (AspisV8R19.OracleProgramOps.eval_bind
+                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                        n.entry.post1 n.entry.final1)
+                                      (fun j =>
+                                        AspisV8R19.OracleProgramOps.bind
+                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                            (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                              AspisR1.CPH_Program.verifier j))
+                                          fun out =>
+                                          AspisV8R19.MemoizedProgramLaw.Program.done
+                                            ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                              Aeneas.Std.Result.ok
+                                                (Aeneas.Std.core.result.Result.Ok
+                                                  (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                              Option.some (j, out)))
+                                      H))
+                                  (congr
+                                    (congrArg Prod.mk
+                                      (congrArg
+                                        (HAppend.hAppend
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                                n.entry.post1 n.entry.final1)).1)
+                                        (congrArg Prod.fst
+                                          (Eq.trans
+                                            (AspisV8R19.OracleProgramOps.eval_bind
+                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                  AspisR1.CPH_Program.verifier
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                        n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                              (fun out =>
+                                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                    Aeneas.Std.Result.ok
+                                                      (Aeneas.Std.core.result.Result.Ok
+                                                        (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                    Option.some
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                              n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                        out)))
+                                              H)
+                                            (congr
+                                              (congrArg Prod.mk
+                                                (congrArg
+                                                  (HAppend.hAppend
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                        (AspisR1.ART_PartialAccount.wrapper hashv
+                                                          (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                            AspisR1.CPH_Program.verifier
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2))).1)
+                                                  (congrArg Prod.fst
+                                                    (congrArg (Prod.mk [])
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                          (congrArg Option.some
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                              secondPartial))))))))
+                                              (congrArg Prod.snd
+                                                (congrArg (Prod.mk [])
+                                                  (congrArg (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                    (congrArg
+                                                      (Prod.mk
+                                                        (Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                      (congrArg Option.some
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                          secondPartial)))))))))))
+                                    (congrArg Prod.snd
+                                      (Eq.trans
+                                        (AspisV8R19.OracleProgramOps.eval_bind
+                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                            (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                              AspisR1.CPH_Program.verifier
+                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                    n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                          (fun out =>
+                                            AspisV8R19.MemoizedProgramLaw.Program.done
+                                              ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                Aeneas.Std.Result.ok
+                                                  (Aeneas.Std.core.result.Result.Ok
+                                                    (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                Option.some
+                                                  ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                          n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                    out)))
+                                          H)
+                                        (congr
+                                          (congrArg Prod.mk
+                                            (congrArg
+                                              (HAppend.hAppend
+                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                    (AspisR1.ART_PartialAccount.wrapper hashv
+                                                      (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                        AspisR1.CPH_Program.verifier
+                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                              n.entry.saved n.entry.post1 n.entry.final1)).2))).1)
+                                              (congrArg Prod.fst
+                                                (congrArg (Prod.mk [])
+                                                  (congrArg (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                    (congrArg
+                                                      (Prod.mk
+                                                        (Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                      (congrArg Option.some
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                          secondPartial))))))))
+                                          (congrArg Prod.snd
+                                            (congrArg (Prod.mk [])
+                                              (congrArg (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                (congrArg
+                                                  (Prod.mk
+                                                    (Aeneas.Std.Result.ok
+                                                      (Aeneas.Std.core.result.Result.Ok
+                                                        (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                  (congrArg Option.some
+                                                    (congrArg
+                                                      (Prod.mk
+                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                              n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                      secondPartial))))))))))))))))))
+                  (congrArg Prod.snd
+                    (congrArg Prod.snd
+                      (congrArg Prod.snd
+                        (Eq.trans
+                          (AspisV8R19.OracleProgramOps.eval_bind a.first
+                            (fun i =>
+                              AspisV8R19.OracleProgramOps.bind
+                                (AspisR1.ART_PartialAccount.wrapper hashv
+                                  (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                    AspisR1.CPH_Program.verifier i))
+                                fun reply =>
+                                match reply with
+                                | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                  AspisV8R19.OracleProgramOps.bind (a.second i saved post final) fun j =>
+                                    AspisV8R19.OracleProgramOps.bind
+                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                        (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                          AspisR1.CPH_Program.verifier j))
+                                      fun out =>
+                                      AspisV8R19.MemoizedProgramLaw.Program.done (i, reply, Option.some (j, out))
+                                | x => AspisV8R19.MemoizedProgramLaw.Program.done (i, reply, Option.none))
+                            H)
+                          (congr
+                            (congrArg Prod.mk
+                              (congrArg (HAppend.hAppend (AspisV8R19.MemoizedProgramLaw.eval H a.first).1)
+                                (congrArg Prod.fst
+                                  (Eq.trans
+                                    (AspisV8R19.OracleProgramOps.eval_bind
+                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                        (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                          AspisR1.CPH_Program.verifier
+                                          (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))
+                                      (fun reply =>
+                                        match reply with
+                                        |
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                          AspisV8R19.OracleProgramOps.bind
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)
+                                            fun j =>
+                                            AspisV8R19.OracleProgramOps.bind
+                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                  AspisR1.CPH_Program.verifier j))
+                                              fun out =>
+                                              AspisV8R19.MemoizedProgramLaw.Program.done
+                                                ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply,
+                                                  Option.some (j, out))
+                                        | x =>
+                                          AspisV8R19.MemoizedProgramLaw.Program.done
+                                            ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply, Option.none))
+                                      H)
+                                    (congr
+                                      (congrArg Prod.mk
+                                        (congrArg
+                                          (HAppend.hAppend
+                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                (AspisR1.ART_PartialAccount.wrapper hashv
+                                                  (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                                    AspisR1.CPH_Program.verifier
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).1)
+                                          (congrArg Prod.fst
+                                            (Eq.trans
+                                              (Eq.trans
+                                                (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                                  (Eq.trans
+                                                    (congrArg
+                                                      (fun x =>
+                                                        match x with
+                                                        |
+                                                        Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                                          AspisV8R19.OracleProgramOps.bind
+                                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                              saved post final)
+                                                            fun j =>
+                                                            AspisV8R19.OracleProgramOps.bind
+                                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                  allocator AspisR1.CPH_Program.verifier j))
+                                                              fun out =>
+                                                              AspisV8R19.MemoizedProgramLaw.Program.done
+                                                                ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                        (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv
+                                                                          copy allocator AspisR1.CPH_Program.verifier
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2))).2,
+                                                                  Option.some (j, out))
+                                                        | x =>
+                                                          AspisV8R19.MemoizedProgramLaw.Program.done
+                                                            ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                    (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv
+                                                                      copy allocator AspisR1.CPH_Program.verifier
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                          a.first).2))).2,
+                                                              Option.none))
+                                                      firstPartial)
+                                                    (congrArg
+                                                      (AspisV8R19.OracleProgramOps.bind
+                                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                          n.entry.saved n.entry.post1 n.entry.final1))
+                                                      (funext fun j =>
+                                                        congrArg
+                                                          (AspisV8R19.OracleProgramOps.bind
+                                                            (AspisR1.ART_PartialAccount.wrapper hashv
+                                                              (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                allocator AspisR1.CPH_Program.verifier j)))
+                                                          (funext fun out =>
+                                                            congrArg AspisV8R19.MemoizedProgramLaw.Program.done
+                                                              (congrArg
+                                                                (Prod.mk
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                                (congrFun' (congrArg Prod.mk firstPartial)
+                                                                  (Option.some (j, out)))))))))
+                                                (AspisV8R19.OracleProgramOps.eval_bind
+                                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                    n.entry.saved n.entry.post1 n.entry.final1)
+                                                  (fun j =>
+                                                    AspisV8R19.OracleProgramOps.bind
+                                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                                        (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                          AspisR1.CPH_Program.verifier j))
+                                                      fun out =>
+                                                      AspisV8R19.MemoizedProgramLaw.Program.done
+                                                        ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                          Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.result.Result.Ok
+                                                              (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                          Option.some (j, out)))
+                                                  H))
+                                              (congr
+                                                (congrArg Prod.mk
+                                                  (congrArg
+                                                    (HAppend.hAppend
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                            n.entry.saved n.entry.post1 n.entry.final1)).1)
+                                                    (congrArg Prod.fst
+                                                      (Eq.trans
+                                                        (AspisV8R19.OracleProgramOps.eval_bind
+                                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                                            (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                              AspisR1.CPH_Program.verifier
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                  (a.second
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                    n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                          (fun out =>
+                                                            AspisV8R19.MemoizedProgramLaw.Program.done
+                                                              ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                                Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                                Option.some
+                                                                  ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2,
+                                                                    out)))
+                                                          H)
+                                                        (congr
+                                                          (congrArg Prod.mk
+                                                            (congrArg
+                                                              (HAppend.hAppend
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                      (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                        allocator AspisR1.CPH_Program.verifier
+                                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                            (a.second
+                                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                                  a.first).2
+                                                                              n.entry.saved n.entry.post1
+                                                                              n.entry.final1)).2))).1)
+                                                              (congrArg Prod.fst
+                                                                (congrArg (Prod.mk [])
+                                                                  (congrArg
+                                                                    (Prod.mk
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                                    (congrArg
+                                                                      (Prod.mk
+                                                                        (Aeneas.Std.Result.ok
+                                                                          (Aeneas.Std.core.result.Result.Ok
+                                                                            (n.entry.saved, n.entry.post1,
+                                                                              n.entry.final1))))
+                                                                      (congrArg Option.some
+                                                                        (congrArg
+                                                                          (Prod.mk
+                                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                                (a.second
+                                                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                                      a.first).2
+                                                                                  n.entry.saved n.entry.post1
+                                                                                  n.entry.final1)).2)
+                                                                          secondPartial))))))))
+                                                          (congrArg Prod.snd
+                                                            (congrArg (Prod.mk [])
+                                                              (congrArg
+                                                                (Prod.mk
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.result.Result.Ok
+                                                                        (n.entry.saved, n.entry.post1,
+                                                                          n.entry.final1))))
+                                                                  (congrArg Option.some
+                                                                    (congrArg
+                                                                      (Prod.mk
+                                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                            (a.second
+                                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                                  a.first).2
+                                                                              n.entry.saved n.entry.post1
+                                                                              n.entry.final1)).2)
+                                                                      secondPartial)))))))))))
+                                                (congrArg Prod.snd
+                                                  (Eq.trans
+                                                    (AspisV8R19.OracleProgramOps.eval_bind
+                                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                                        (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                          AspisR1.CPH_Program.verifier
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                      (fun out =>
+                                                        AspisV8R19.MemoizedProgramLaw.Program.done
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                            Option.some
+                                                              ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                                out)))
+                                                      H)
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg
+                                                          (HAppend.hAppend
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                  (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                    allocator AspisR1.CPH_Program.verifier
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2))).1)
+                                                          (congrArg Prod.fst
+                                                            (congrArg (Prod.mk [])
+                                                              (congrArg
+                                                                (Prod.mk
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.result.Result.Ok
+                                                                        (n.entry.saved, n.entry.post1,
+                                                                          n.entry.final1))))
+                                                                  (congrArg Option.some
+                                                                    (congrArg
+                                                                      (Prod.mk
+                                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                            (a.second
+                                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                                  a.first).2
+                                                                              n.entry.saved n.entry.post1
+                                                                              n.entry.final1)).2)
+                                                                      secondPartial))))))))
+                                                      (congrArg Prod.snd
+                                                        (congrArg (Prod.mk [])
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                              (congrArg Option.some
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2)
+                                                                  secondPartial))))))))))))))
+                                      (congrArg Prod.snd
+                                        (Eq.trans
+                                          (Eq.trans
+                                            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                              (Eq.trans
+                                                (congrArg
+                                                  (fun x =>
+                                                    match x with
+                                                    |
+                                                    Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                                      AspisV8R19.OracleProgramOps.bind
+                                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved
+                                                          post final)
+                                                        fun j =>
+                                                        AspisV8R19.OracleProgramOps.bind
+                                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                                            (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                              AspisR1.CPH_Program.verifier j))
+                                                          fun out =>
+                                                          AspisV8R19.MemoizedProgramLaw.Program.done
+                                                            ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                    (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv
+                                                                      copy allocator AspisR1.CPH_Program.verifier
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                          a.first).2))).2,
+                                                              Option.some (j, out))
+                                                    | x =>
+                                                      AspisV8R19.MemoizedProgramLaw.Program.done
+                                                        ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy
+                                                                  allocator AspisR1.CPH_Program.verifier
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                          Option.none))
+                                                  firstPartial)
+                                                (congrArg
+                                                  (AspisV8R19.OracleProgramOps.bind
+                                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                      n.entry.saved n.entry.post1 n.entry.final1))
+                                                  (funext fun j =>
+                                                    congrArg
+                                                      (AspisV8R19.OracleProgramOps.bind
+                                                        (AspisR1.ART_PartialAccount.wrapper hashv
+                                                          (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                            AspisR1.CPH_Program.verifier j)))
+                                                      (funext fun out =>
+                                                        congrArg AspisV8R19.MemoizedProgramLaw.Program.done
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrFun' (congrArg Prod.mk firstPartial)
+                                                              (Option.some (j, out)))))))))
+                                            (AspisV8R19.OracleProgramOps.eval_bind
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                                n.entry.post1 n.entry.final1)
+                                              (fun j =>
+                                                AspisV8R19.OracleProgramOps.bind
+                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                      AspisR1.CPH_Program.verifier j))
+                                                  fun out =>
+                                                  AspisV8R19.MemoizedProgramLaw.Program.done
+                                                    ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.result.Result.Ok
+                                                          (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                      Option.some (j, out)))
+                                              H))
+                                          (congr
+                                            (congrArg Prod.mk
+                                              (congrArg
+                                                (HAppend.hAppend
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                        n.entry.saved n.entry.post1 n.entry.final1)).1)
+                                                (congrArg Prod.fst
+                                                  (Eq.trans
+                                                    (AspisV8R19.OracleProgramOps.eval_bind
+                                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                                        (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                          AspisR1.CPH_Program.verifier
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                      (fun out =>
+                                                        AspisV8R19.MemoizedProgramLaw.Program.done
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                            Option.some
+                                                              ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                                out)))
+                                                      H)
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg
+                                                          (HAppend.hAppend
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                  (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                    allocator AspisR1.CPH_Program.verifier
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2))).1)
+                                                          (congrArg Prod.fst
+                                                            (congrArg (Prod.mk [])
+                                                              (congrArg
+                                                                (Prod.mk
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.result.Result.Ok
+                                                                        (n.entry.saved, n.entry.post1,
+                                                                          n.entry.final1))))
+                                                                  (congrArg Option.some
+                                                                    (congrArg
+                                                                      (Prod.mk
+                                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                            (a.second
+                                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                                  a.first).2
+                                                                              n.entry.saved n.entry.post1
+                                                                              n.entry.final1)).2)
+                                                                      secondPartial))))))))
+                                                      (congrArg Prod.snd
+                                                        (congrArg (Prod.mk [])
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                              (congrArg Option.some
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2)
+                                                                  secondPartial)))))))))))
+                                            (congrArg Prod.snd
+                                              (Eq.trans
+                                                (AspisV8R19.OracleProgramOps.eval_bind
+                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                      AspisR1.CPH_Program.verifier
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                            n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                  (fun out =>
+                                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                        Option.some
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                            out)))
+                                                  H)
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg
+                                                      (HAppend.hAppend
+                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (AspisR1.ART_PartialAccount.wrapper hashv
+                                                              (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                allocator AspisR1.CPH_Program.verifier
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1
+                                                                      n.entry.final1)).2))).1)
+                                                      (congrArg Prod.fst
+                                                        (congrArg (Prod.mk [])
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                              (congrArg Option.some
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2)
+                                                                  secondPartial))))))))
+                                                  (congrArg Prod.snd
+                                                    (congrArg (Prod.mk [])
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                          (congrArg Option.some
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                              secondPartial)))))))))))))))))
+                            (congrArg Prod.snd
+                              (Eq.trans
+                                (AspisV8R19.OracleProgramOps.eval_bind
+                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                    (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                      AspisR1.CPH_Program.verifier (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))
+                                  (fun reply =>
+                                    match reply with
+                                    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                      AspisV8R19.OracleProgramOps.bind
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)
+                                        fun j =>
+                                        AspisV8R19.OracleProgramOps.bind
+                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                            (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                              AspisR1.CPH_Program.verifier j))
+                                          fun out =>
+                                          AspisV8R19.MemoizedProgramLaw.Program.done
+                                            ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply,
+                                              Option.some (j, out))
+                                    | x =>
+                                      AspisV8R19.MemoizedProgramLaw.Program.done
+                                        ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply, Option.none))
+                                  H)
+                                (congr
+                                  (congrArg Prod.mk
+                                    (congrArg
+                                      (HAppend.hAppend
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.ART_PartialAccount.wrapper hashv
+                                              (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy allocator
+                                                AspisR1.CPH_Program.verifier
+                                                (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).1)
+                                      (congrArg Prod.fst
+                                        (Eq.trans
+                                          (Eq.trans
+                                            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                              (Eq.trans
+                                                (congrArg
+                                                  (fun x =>
+                                                    match x with
+                                                    |
+                                                    Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                                      AspisV8R19.OracleProgramOps.bind
+                                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved
+                                                          post final)
+                                                        fun j =>
+                                                        AspisV8R19.OracleProgramOps.bind
+                                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                                            (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                              AspisR1.CPH_Program.verifier j))
+                                                          fun out =>
+                                                          AspisV8R19.MemoizedProgramLaw.Program.done
+                                                            ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                    (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv
+                                                                      copy allocator AspisR1.CPH_Program.verifier
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                          a.first).2))).2,
+                                                              Option.some (j, out))
+                                                    | x =>
+                                                      AspisV8R19.MemoizedProgramLaw.Program.done
+                                                        ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy
+                                                                  allocator AspisR1.CPH_Program.verifier
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                          Option.none))
+                                                  firstPartial)
+                                                (congrArg
+                                                  (AspisV8R19.OracleProgramOps.bind
+                                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                      n.entry.saved n.entry.post1 n.entry.final1))
+                                                  (funext fun j =>
+                                                    congrArg
+                                                      (AspisV8R19.OracleProgramOps.bind
+                                                        (AspisR1.ART_PartialAccount.wrapper hashv
+                                                          (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                            AspisR1.CPH_Program.verifier j)))
+                                                      (funext fun out =>
+                                                        congrArg AspisV8R19.MemoizedProgramLaw.Program.done
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrFun' (congrArg Prod.mk firstPartial)
+                                                              (Option.some (j, out)))))))))
+                                            (AspisV8R19.OracleProgramOps.eval_bind
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                                n.entry.post1 n.entry.final1)
+                                              (fun j =>
+                                                AspisV8R19.OracleProgramOps.bind
+                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                      AspisR1.CPH_Program.verifier j))
+                                                  fun out =>
+                                                  AspisV8R19.MemoizedProgramLaw.Program.done
+                                                    ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.result.Result.Ok
+                                                          (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                      Option.some (j, out)))
+                                              H))
+                                          (congr
+                                            (congrArg Prod.mk
+                                              (congrArg
+                                                (HAppend.hAppend
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                        n.entry.saved n.entry.post1 n.entry.final1)).1)
+                                                (congrArg Prod.fst
+                                                  (Eq.trans
+                                                    (AspisV8R19.OracleProgramOps.eval_bind
+                                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                                        (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                          AspisR1.CPH_Program.verifier
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                      (fun out =>
+                                                        AspisV8R19.MemoizedProgramLaw.Program.done
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                            Option.some
+                                                              ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                                out)))
+                                                      H)
+                                                    (congr
+                                                      (congrArg Prod.mk
+                                                        (congrArg
+                                                          (HAppend.hAppend
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                  (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                    allocator AspisR1.CPH_Program.verifier
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2))).1)
+                                                          (congrArg Prod.fst
+                                                            (congrArg (Prod.mk [])
+                                                              (congrArg
+                                                                (Prod.mk
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.result.Result.Ok
+                                                                        (n.entry.saved, n.entry.post1,
+                                                                          n.entry.final1))))
+                                                                  (congrArg Option.some
+                                                                    (congrArg
+                                                                      (Prod.mk
+                                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                            (a.second
+                                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                                  a.first).2
+                                                                              n.entry.saved n.entry.post1
+                                                                              n.entry.final1)).2)
+                                                                      secondPartial))))))))
+                                                      (congrArg Prod.snd
+                                                        (congrArg (Prod.mk [])
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                              (congrArg Option.some
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2)
+                                                                  secondPartial)))))))))))
+                                            (congrArg Prod.snd
+                                              (Eq.trans
+                                                (AspisV8R19.OracleProgramOps.eval_bind
+                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                      AspisR1.CPH_Program.verifier
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                            n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                  (fun out =>
+                                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                        Option.some
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                            out)))
+                                                  H)
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg
+                                                      (HAppend.hAppend
+                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (AspisR1.ART_PartialAccount.wrapper hashv
+                                                              (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                allocator AspisR1.CPH_Program.verifier
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1
+                                                                      n.entry.final1)).2))).1)
+                                                      (congrArg Prod.fst
+                                                        (congrArg (Prod.mk [])
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                              (congrArg Option.some
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2)
+                                                                  secondPartial))))))))
+                                                  (congrArg Prod.snd
+                                                    (congrArg (Prod.mk [])
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                          (congrArg Option.some
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                              secondPartial))))))))))))))
+                                  (congrArg Prod.snd
+                                    (Eq.trans
+                                      (Eq.trans
+                                        (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                          (Eq.trans
+                                            (congrArg
+                                              (fun x =>
+                                                match x with
+                                                |
+                                                Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                                  AspisV8R19.OracleProgramOps.bind
+                                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved
+                                                      post final)
+                                                    fun j =>
+                                                    AspisV8R19.OracleProgramOps.bind
+                                                      (AspisR1.ART_PartialAccount.wrapper hashv
+                                                        (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                          AspisR1.CPH_Program.verifier j))
+                                                      fun out =>
+                                                      AspisV8R19.MemoizedProgramLaw.Program.done
+                                                        ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                                (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy
+                                                                  allocator AspisR1.CPH_Program.verifier
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                          Option.some (j, out))
+                                                | x =>
+                                                  AspisV8R19.MemoizedProgramLaw.Program.done
+                                                    ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (AspisR1.ART_PartialAccount.wrapper hashv
+                                                            (AspisR1.ARS_NativeAccount.firstSyntax cfg hashv copy
+                                                              allocator AspisR1.CPH_Program.verifier
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H a.first).2))).2,
+                                                      Option.none))
+                                              firstPartial)
+                                            (congrArg
+                                              (AspisV8R19.OracleProgramOps.bind
+                                                (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                                  n.entry.post1 n.entry.final1))
+                                              (funext fun j =>
+                                                congrArg
+                                                  (AspisV8R19.OracleProgramOps.bind
+                                                    (AspisR1.ART_PartialAccount.wrapper hashv
+                                                      (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                        AspisR1.CPH_Program.verifier j)))
+                                                  (funext fun out =>
+                                                    congrArg AspisV8R19.MemoizedProgramLaw.Program.done
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrFun' (congrArg Prod.mk firstPartial)
+                                                          (Option.some (j, out)))))))))
+                                        (AspisV8R19.OracleProgramOps.eval_bind
+                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 n.entry.saved
+                                            n.entry.post1 n.entry.final1)
+                                          (fun j =>
+                                            AspisV8R19.OracleProgramOps.bind
+                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                  AspisR1.CPH_Program.verifier j))
+                                              fun out =>
+                                              AspisV8R19.MemoizedProgramLaw.Program.done
+                                                ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                  Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.result.Result.Ok
+                                                      (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                  Option.some (j, out)))
+                                          H))
+                                      (congr
+                                        (congrArg Prod.mk
+                                          (congrArg
+                                            (HAppend.hAppend
+                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                    n.entry.saved n.entry.post1 n.entry.final1)).1)
+                                            (congrArg Prod.fst
+                                              (Eq.trans
+                                                (AspisV8R19.OracleProgramOps.eval_bind
+                                                  (AspisR1.ART_PartialAccount.wrapper hashv
+                                                    (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                      AspisR1.CPH_Program.verifier
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                            n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                                  (fun out =>
+                                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                        Option.some
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                            out)))
+                                                  H)
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg
+                                                      (HAppend.hAppend
+                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (AspisR1.ART_PartialAccount.wrapper hashv
+                                                              (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv
+                                                                allocator AspisR1.CPH_Program.verifier
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1
+                                                                      n.entry.final1)).2))).1)
+                                                      (congrArg Prod.fst
+                                                        (congrArg (Prod.mk [])
+                                                          (congrArg
+                                                            (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.result.Result.Ok
+                                                                    (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                              (congrArg Option.some
+                                                                (congrArg
+                                                                  (Prod.mk
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                        (a.second
+                                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                              a.first).2
+                                                                          n.entry.saved n.entry.post1
+                                                                          n.entry.final1)).2)
+                                                                  secondPartial))))))))
+                                                  (congrArg Prod.snd
+                                                    (congrArg (Prod.mk [])
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                          (congrArg Option.some
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                              secondPartial)))))))))))
+                                        (congrArg Prod.snd
+                                          (Eq.trans
+                                            (AspisV8R19.OracleProgramOps.eval_bind
+                                              (AspisR1.ART_PartialAccount.wrapper hashv
+                                                (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                  AspisR1.CPH_Program.verifier
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                        n.entry.saved n.entry.post1 n.entry.final1)).2))
+                                              (fun out =>
+                                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                    Aeneas.Std.Result.ok
+                                                      (Aeneas.Std.core.result.Result.Ok
+                                                        (n.entry.saved, n.entry.post1, n.entry.final1)),
+                                                    Option.some
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                              n.entry.saved n.entry.post1 n.entry.final1)).2,
+                                                        out)))
+                                              H)
+                                            (congr
+                                              (congrArg Prod.mk
+                                                (congrArg
+                                                  (HAppend.hAppend
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                        (AspisR1.ART_PartialAccount.wrapper hashv
+                                                          (AspisR1.ARS_NativeAccount.secondSyntax cfg hashv allocator
+                                                            AspisR1.CPH_Program.verifier
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2))).1)
+                                                  (congrArg Prod.fst
+                                                    (congrArg (Prod.mk [])
+                                                      (congrArg
+                                                        (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                          (congrArg Option.some
+                                                            (congrArg
+                                                              (Prod.mk
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                              secondPartial))))))))
+                                              (congrArg Prod.snd
+                                                (congrArg (Prod.mk [])
+                                                  (congrArg (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                                                    (congrArg
+                                                      (Prod.mk
+                                                        (Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok
+                                                            (n.entry.saved, n.entry.post1, n.entry.final1))))
+                                                      (congrArg Option.some
+                                                        (congrArg
+                                                          (Prod.mk
+                                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                  n.entry.saved n.entry.post1 n.entry.final1)).2)
+                                                          secondPartial)))))))))))))))))))))))
+            Bool.true)
+          (eq_self Bool.true)));
+  ⟨yes, AspisR1.ART_AccountAccepted.exact cfg hashv copy allocator AspisR1.CPH_Program.verifier a H yes⟩
+'AspisR1.ARU_PartialAccepted.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,37 @@
+{"attempt": "SCK_008", "exit_status": 0, "wall_seconds": 2.1736929870094173, "peak_rss_kib": "5365740", "swaps": "0", "print_axioms": ["'AspisR1.SCE_Experiment.submission_eval' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCE_Experiment.first_projection' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCE_Experiment.runtime_eval' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.SCE_Experiment.submission_eval {A : Type} (a : AspisR1.SCE_Experiment.Adversary A)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) :
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a) =
+    ((AspisV8R19.MemoizedProgramLaw.eval H a.first).1,
+      AspisR1.SCE_Experiment.submitted (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+'AspisR1.SCE_Experiment.submission_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCE_Experiment.first_projection {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR
+...
+sR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) :
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).2.1 =
+    (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+'AspisR1.SCE_Experiment.first_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCE_Experiment.runtime_eval {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) :
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) =
+    have v := AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a);
+    (v.1,
+      some
+        (v.1, AspisR1.F3T_Canon.canonInput (AspisR1.F3T_ByteCarrier.input c (AspisR1.SCE_Experiment.submitted v.2.1)),
+          AspisR1.SCE_Experiment.accepted v.2))
+'AspisR1.SCE_Experiment.runtime_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r060ddc8304694ef999bec51f7609ff49.scope; invocation ID: cd98b38da3574f3e901dce869bac09ab

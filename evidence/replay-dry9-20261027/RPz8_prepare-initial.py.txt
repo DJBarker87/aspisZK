@@ -1,0 +1,29 @@
+from pathlib import Path
+import json,re,hashlib
+R=Path.cwd();E=R/'evidence/replay-dry9-20261027';E.mkdir(exist_ok=True);O=R/'evidence/replay-dry8-20261026'
+p=json.loads((O/'RPz7_plan.json').read_text());f=json.loads((O/'RPz7_frontier.json').read_text());remaining=set(f['remaining_original_modules'])
+rename={p['mapping'][m]:'RPz8_'+m.replace('.','_') for m in remaining};rows=[]
+for r in p['rows']:
+ if r['original'] not in remaining:continue
+ src=R/r['source'];t=src.read_text();imports=[rename.get(n,n) for n in r['imports']]
+ for a,b in zip(r['imports'],imports):
+  if a!=b:t=re.sub(r'(?m)^(import\s+)'+re.escape(a)+r'\s*$',lambda z:z[1]+b,t)
+ m=rename[r['module']];dst=E/(m+'.lean');dst.write_text(t)
+ rows.append(dict(original=r['original'],module=m,source=str(dst.relative_to(R)),imports=imports,inherited_source=r['source'],inherited_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),sha256=hashlib.sha256(dst.read_bytes()).hexdigest()))
+plan=dict(rows=rows,order=[m for m in p['order'] if m in remaining],baseline_green=4964-359,mapping={r['original']:r['module'] for r in rows},inherited='evidence/replay-dry8-20261026/RPz7_plan.json',budget=1500,kani_budget=0)
+(E/'RPz8_plan.json').write_text(json.dumps(plan,indent=2)+'\n')
+t=(O/'RPz7_attempt.py').read_text().replace('RPz7','RPz8')
+t=t.replace("B+'/RPz8_overlay:'+B+'/RPz4_trusted'", "B+'/RPz8_overlay:'+B+'/RPz7_overlay:'+B+'/RPz4_trusted'")
+t=t.replace("larger e5c producer, unchanged valid fresh predecessors and RPz8 replacement sources","RPz7 coherent cohort; RPz8 import-only continuation; historical e5c producer; D188 provenance open")
+(E/'RPz8_attempt.py').write_text(t)
+(E/'RPz8_STAGE0.md').write_text('''# Replay continuation inputs
+
+Source revision: '''+__import__('subprocess').check_output(['git','rev-parse','HEAD'],text=True).strip()+'''. Actual checkout branch is codex/cx-replay-dry9-20261027 (the task text names a 20261026 suffix); existing branch retained.
+
+359 unbuilt vertices are copied into RPz8-prefixed modules. Changes are import substitutions among these vertices only. All 4605 green contexts and RPz7 Phase transport are reused read-only in exact pinned order: toolchain, RPz8_overlay, RPz7_overlay, RPz4_trusted, RPz_trusted. No replacement source is selected for a failed vertex. Existing S2W launchers are unchanged; the predecessor serial receipt dispatcher is copied with prefix and search-path updates only. One admitted 6G/8G/Swap0/Tasks64 scope at a time, -M7000. 1500 compile attempts maximum, zero Kani. No shipped source change or ELF rebuild trigger.
+
+Historical cached Rc10 kernel statement remains unavailable because codex-cx-import-union-20261022/objects/AspisR1CircleSampleWrapper/Funs.olean is missing. This stopped inspection is not retried and no package is rebuilt for it. Fresh complete statement capture and the resulting comparison limitation will be recorded.
+
+Premises removed/added/changed 0/0/0; ledger delta T0/P0/G0/C0. Source statement unchanged; fresh kernel check pending. No fresh joint deployment non-vacuity witness; prior conditional witnesses retain their scope. D188 full producer provenance remains open. Target not yet established.
+''')
+print('prepared',len(rows),'sources')

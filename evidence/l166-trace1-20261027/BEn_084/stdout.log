@@ -1,0 +1,52 @@
+theorem AspisR1.SdkC_BatchPair.same_pair : ∀ {F : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std)
+      native1 native2 hashv →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+            (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+            (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+            AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std)
+                accounts1 accounts2 saved f s →
+              ∃ p0 root0 p2 root2,
+                AspisR1.SdkC_BatchPair.Returning hashv H (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0)
+                    (Aeneas.Std.core.result.Result.Ok ()) ∧
+                  AspisR1.SdkC_BatchPair.Returning hashv H (AspisR1.SdkC_BatchSource.stageCode hashv s.proof p2 root2)
+                    (Aeneas.Std.core.result.Result.Ok ()) :=
+fun {F} adapter ops stage finish B std native1 native2 hashv extraction sha256 H p1 syscall accounts1 accounts2 saved f
+    s cuts =>
+  let ⟨p0, h✝⟩ := AspisR1.Op5T_SamePair.batches adapter ops stage finish B std accounts1 accounts2 saved f s cuts
+  let ⟨root0, h✝¹⟩ := h✝
+  let ⟨p2, h✝²⟩ := h✝¹
+  let ⟨root2, h✝³⟩ := h✝²
+  let ⟨batch0, batch2⟩ := h✝³
+  have binding :=
+    AspisR1.S2W_DigestExtraction.native_binding (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std)
+      native1 native2 hashv extraction;
+  Exists.intro p0
+    (Exists.intro root0
+      (Exists.intro p2
+        (Exists.intro root2
+          ⟨AspisR1.SdkC_BatchPair.returning hashv sha256 H p1 syscall
+              (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0) (Aeneas.Std.core.result.Result.Ok ())
+              (Eq.trans
+                (AspisR1.SdkC_BatchSource.current_source hashv
+                  (AspisS6CurrentFirstInstallation.toDigest
+                    (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                      (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std)))
+                  (binding ()) f.proof p0 root0 [])
+                batch0),
+            AspisR1.SdkC_BatchPair.returning hashv sha256 H p1 syscall
+              (AspisR1.SdkC_BatchSource.stageCode hashv s.proof p2 root2) (Aeneas.Std.core.result.Result.Ok ())
+              (Eq.trans
+                (AspisR1.SdkC_BatchSource.stage_source hashv
+                  (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                    (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std))
+                  (binding ()) s.proof p2 root2 [])
+                batch2)⟩)))
+'AspisR1.SdkC_BatchPair.same_pair' depends on axioms: [propext, Classical.choice, Quot.sound]

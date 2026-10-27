@@ -1,0 +1,59 @@
+FJq_MaskedLiteral.lean:34:28: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun l => embed (decode (FJq_MainCells.cell extra l))
+in the target expression
+  (R0P.Mask.terminalZ (R0P.Mask.maskClaimsR0 ConcretePackBasis.basis)
+      (SpendDataMap.mapPublic (⇑ExactBaseProjection.embed) literalPub) (embed (decode c.lambda)) (embed (decode c.chi))
+      (embed (decode c.theta)) (embed (decode c.mu)) (embed (decode c.eta))
+      (fun i => embed (FJn_MainPoint.point c.zc i)) ConcretePackBasis.basis (fun j l => data.Y ⟨↑j, ⋯⟩ l)
+      (fun l => embed (decode (FJq_MainCells.cell extra l))) fun i => embed (FJn_MainPoint.point alpha i)) =
+    R0P.Mask.terminalZ (R0P.Mask.maskClaimsR0 ConcretePackBasis.basis)
+      (SpendDataMap.mapPublic (⇑ExactBaseProjection.embed) literalPub) ((List.map Prod.snd v.semantic).getD 0 0)
+      ((List.map Prod.snd v.semantic).getD 1 0) ((List.map Prod.snd v.semantic).getD 2 0)
+      ((List.map Prod.snd v.semantic).getD 13 0) ((List.map Prod.snd v.semantic).getD 14 0)
+      (R0P.SemSource.preZc fun j => (List.map Prod.snd v.semantic).getD (↑j) 0) ConcretePackBasis.basis
+      (fun j l => data.Y ⟨↑j, ⋯⟩ l) (data.Y 3) fun j => (List.map Prod.snd v.semantic).getD (15 + ↑j) 0
+
+pub : FIq_Carriers.Public
+claims : FJn_MaskC1Gather.Claims
+alpha : Std.Array MQ 10#usize
+extra : Std.Array MQ 29#usize
+c : r1_wire.Challenges
+literalPub : R0P.Public SemanticPublicWire.M31
+v : LiteralOpeningView.View
+data : MatchingSupport.Data AspisWideTower.WideExact
+publicSame :
+  SpendDataMap.mapPublic (⇑embed) (FIw_PublicModel.ofPublic (FJa_PublicCopy.native pub)) =
+    SpendDataMap.mapPublic (⇑ExactBaseProjection.embed) literalPub
+claimsSame : (fun j l => embed (FJn_MainClaims.claims claims j l)) = fun j l => data.Y ⟨↑j, ⋯⟩ l
+extraSame : (fun l => embed (decode (FJq_MainCells.cell extra l))) = data.Y 3
+challengesSame : List.map Prod.snd v.semantic = FJq_ChallengeSlots.values c alpha
+lam : FJq_LiteralOperands.challenge v 0 = embed (decode c.lambda)
+chi : FJq_LiteralOperands.challenge v 1 = embed (decode c.chi)
+theta : FJq_LiteralOperands.challenge v 2 = embed (decode c.theta)
+mu : FJq_LiteralOperands.challenge v 13 = embed (decode c.mu)
+eta : FJq_LiteralOperands.challenge v 14 = embed (decode c.eta)
+zc : (R0P.SemSource.preZc fun j => FJq_LiteralOperands.challenge v ↑j) = fun i => embed (FJn_MainPoint.point c.zc i)
+point : (fun i => FJq_LiteralOperands.challenge v (15 + ↑i)) = fun i => embed (FJn_MainPoint.point alpha i)
+⊢ (R0P.Mask.terminalZ (R0P.Mask.maskClaimsR0 ConcretePackBasis.basis)
+      (SpendDataMap.mapPublic (⇑ExactBaseProjection.embed) literalPub) (embed (decode c.lambda)) (embed (decode c.chi))
+      (embed (decode c.theta)) (embed (decode c.mu)) (embed (decode c.eta))
+      (fun i => embed (FJn_MainPoint.point c.zc i)) ConcretePackBasis.basis (fun j l => data.Y ⟨↑j, ⋯⟩ l)
+      (fun l => embed (decode (FJq_MainCells.cell extra l))) fun i => embed (FJn_MainPoint.point alpha i)) =
+    R0P.Mask.terminalZ (R0P.Mask.maskClaimsR0 ConcretePackBasis.basis)
+      (SpendDataMap.mapPublic (⇑ExactBaseProjection.embed) literalPub) ((List.map Prod.snd v.semantic).getD 0 0)
+      ((List.map Prod.snd v.semantic).getD 1 0) ((List.map Prod.snd v.semantic).getD 2 0)
+      ((List.map Prod.snd v.semantic).getD 13 0) ((List.map Prod.snd v.semantic).getD 14 0)
+      (R0P.SemSource.preZc fun j => (List.map Prod.snd v.semantic).getD (↑j) 0) ConcretePackBasis.basis
+      (fun j l => data.Y ⟨↑j, ⋯⟩ l) (data.Y 3) fun j => (List.map Prod.snd v.semantic).getD (15 + ↑j) 0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJq_MaskedLiteral.transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

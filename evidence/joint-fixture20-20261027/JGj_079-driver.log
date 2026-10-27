@@ -1,0 +1,73 @@
+{"attempt": "JGj20_079", "exit_status": 1, "wall_seconds": 1.890065518033225, "peak_rss_kib": "3851284", "swaps": "0", "print_axioms": ["'AspisR1.JGj_InternalLaneLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGj_InternalLaneLoop.lean:12:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Type ?u.7) 1
+numerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is
+  Type ?u.7
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+JGj_InternalLaneLoop.lean:12:13: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+JGj_InternalLaneLoop.lean:21:26: error: Function expected at
+  ih iter1 s1 ?m.139 ?m.140 ?m.141
+but this term has type
+  ∃ out, state_only_poseidon.internal_linear_lazy_loop1 iter1 s
+...
+Loop.lean:21:26: error: Function expected at
+  ih iter1 s1 ?m.139 ?m.140 ?m.141
+but this term has type
+  ∃ out, state_only_poseidon.internal_linear_lazy_loop1 iter1 s1 full = ok out ∧ canonical out
+
+Note: Expected a function because this term is being applied to the argument
+  cs
+JGj_InternalLaneLoop.lean:21:42: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 17
+  c ≥ 0
+  b ≥ 1
+  b - c ≤ 0
+  a ≥ 0
+  0 ≤ a + b ≤ 16
+where
+ a := ↑n
+ b := ↑↑iter1.start
+ c := ↑Usize.max
+ d := ↑↑iter1.end
+JGj_InternalLaneLoop.lean:21:61: error: Type mismatch
+  he
+has type
+  ↑iter.end ≤ 16
+but is expected to have type
+  ↑iter1.start + n = ↑iter.end
+JGj_InternalLaneLoop.lean:21:79: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iter1.end
+in the target expression
+  canonical s1
+
+full : Raw
+hl : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+hf : Bound full (62 * P)
+n : ℕ
+ih :
+  ∀ (iter : Range) (s : State),
+    ↑iter.end ≤ 16 →
+      ↑iter.start + n = ↑iter.end →
+        canonical s → ∃ out, state_only_poseidon.internal_linear_lazy_loop1 iter s full = ok out ∧ canonical out
+iter : Range
+s : State
+he : ↑iter.end ≤ 16
+hn : ↑iter.start + (n + 1) = ↑iter.end
+hs : canonical s
+iter1 : OccupancyRangeTraversal.Range
+rn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+vs : ↑iter1.start = ↑iter.start + 1
+ve : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+s1 : State
+rs : JGj_InternalLaneStep.step s full iter.start = ok s1
+cs : canonical s1
+⊢ canonical s1
+JGj_InternalLaneLoop.lean:21:11: error: Tactic `rcases` failed: `x✝ : ?m.143` is not an inductive datatype
+'AspisR1.JGj_InternalLaneLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r00748024430d40adae46ee50336d6aaa.scope; invocation ID: ebe8423abc0f4681b4c79e8b5921b6d8
+

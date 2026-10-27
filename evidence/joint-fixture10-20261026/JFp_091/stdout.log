@@ -1,0 +1,53 @@
+JFp_InitialValue.lean:18:39: error: Application type mismatch: The argument
+  JFr_Data00.running
+has type
+  JFr_WordArithmetic.Q
+but is expected to have type
+  MainQM
+in the application
+  List.cons JFr_Data00.running
+JFp_InitialValue.lean:40:37: error: Type mismatch
+  ok JFr_Data00.running
+has type
+  Result JFr_WordArithmetic.Q
+but is expected to have type
+  Result MainQM
+JFp_InitialValue.lean:47:81: error: Application type mismatch: The argument
+  limbs
+has type
+  QM31Limbs
+but is expected to have type
+  DecodeQM
+in the application
+  JFr_DecodeCell.source record out call ⟨0, ?m.117⟩ cell limbs
+JFp_InitialValue.lean:48:69: error: Type mismatch
+  JFr_Data00.running
+has type
+  JFr_WordArithmetic.Q
+but is expected to have type
+  MainQM
+JFp_InitialValue.lean:58:2: error: Tactic `rfl` failed: The left-hand side
+  true
+is not definitionally equal to the right-hand side
+  Function.const Lean.Name () `JFp_InitialValue.40.4.40.58.4.58._sorry._@.JFp_InitialValue.715389041._hygCtx._hyg.100
+
+expanded : Slice U8
+pre : r1_wire.Prefix
+expand :
+  compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues JFw_RealExpansion.stored
+      JFw_RealExpansion.initial =
+    ok (core.result.Result.Ok (), expanded)
+parse : PrefixAdapter.parseAccepted expanded = ok (core.result.Result.Ok pre)
+records : ↑pre.records = JFw_Records.frames
+read : pre.validated_record 14#u8 = ok (core.result.Result.Ok { row := 14#u8, framed := JFw_NativeRow14.record })
+out : Std.Array MainQM 1#usize
+old : pre.validated_record 14#u8 = ok (core.result.Result.Ok record)
+call : decodeMain 1#usize record 0#usize = ok (core.result.Result.Ok out)
+one : (↑out)[↑⟨0, ⋯⟩] = decoderQMToMain sorry
+cellSame : sorry
+arraySame : out = values
+⊢ sorry
+'AspisR1.JFp_InitialValue.encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFp_InitialValue.parser' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFp_InitialValue.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFp_InitialValue.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

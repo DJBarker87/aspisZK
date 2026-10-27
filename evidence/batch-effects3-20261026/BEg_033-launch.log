@@ -1,0 +1,35 @@
+{"attempt": "BEg_033", "exit_status": 0, "wall_seconds": 1.9194466740009375, "peak_rss_kib": "4403188", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_LeafCut.iteration' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_LeafCut.iteration : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)) →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑proof).length = 57607 →
+        ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+            ∀ (q : Fin 22 → Fin 262144) (batch selected : ℕ) (kind lo n slot pos
+...
+          AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind view) =
+                                  AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected ∧
+                                AspisR1.CheckpointBytes5Effect.run D hash (AspisR1.Port4B_LeafCode.code kind view)
+                                      before =
+                                    Aeneas.Std.Result.ok
+                                      (AspisV8R19.SqueezeOracleBridge.encodeState
+                                          (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)),
+                                        before ++
+                                          [(AspisR1.Port4B_LeafCode.input kind view,
+                                              AspisV8R19.SqueezeOracleBridge.encodeState
+                                                (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)))]) ∧
+                                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                      (AspisR1.Port3_BatchStd.install (AspisR1.Port4B_LeafInstall.install base)) D proof
+                                      root kind hash lo n slot keys s.idx s.val s.n pos =
+                                    do
+                                    let out ←
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.MultiproofConeP6Batch.referenceLeaf parsed q (↑kind) selected s)).2
+                                    Aeneas.Std.Result.ok
+                                        (AspisR1.Port4B_LeafStep.project s (pos.wrapping_add 1#usize) out)
+'AspisR1.Port4B_LeafCut.iteration' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc0f7a55812e04ec0a9047965d60239b3.scope; invocation ID: 0b15d58056f740c1a0b5bf9da2ed8e35

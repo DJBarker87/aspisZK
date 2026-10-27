@@ -1,0 +1,14 @@
+JFv_PrefixCall.lean:15:69: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+total : JFv_TranscriptTotal.Total D
+pre : r1_wire.Prefix
+t : r1_wire.SemanticTranscript H
+row : U8
+same : row = t.next_row
+bound : ↑row < 25
+frame : Slice U8
+read : pre.record row = ok (core.result.Result.Ok frame)
+vr : r1_wire.ValidatedRecord := { row := row, framed := frame }
+⊢ ok (core.result.Result.Ok { row := row, framed := frame }) = ok (core.result.Result.Ok vr)
+'AspisR1.JFv_PrefixCall.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

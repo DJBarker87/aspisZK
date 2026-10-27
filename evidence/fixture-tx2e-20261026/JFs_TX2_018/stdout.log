@@ -1,0 +1,50 @@
+structure Aeneas.Std.core.iter.adapters.step_by.StepBy.{u} (I : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.adapters.step_by.StepBy.iter : I
+  Aeneas.Std.core.iter.adapters.step_by.StepBy.step_by : Aeneas.Std.Usize
+constructor:
+  Aeneas.Std.core.iter.adapters.step_by.StepBy.mk.{u} {I : Type u} (iter : I) (step_by : Aeneas.Std.Usize) :
+    Aeneas.Std.core.iter.adapters.step_by.StepBy I
+def Aeneas.Std.core.iter.adapters.step_by.IteratorStepBy.next : {I Item : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator I Item →
+    Aeneas.Std.core.iter.adapters.step_by.StepBy I →
+      Aeneas.Std.Result (Option Item × Aeneas.Std.core.iter.adapters.step_by.StepBy I) :=
+fun {I Item} IteratorInst self => do
+  let __x ← IteratorInst.next self.iter
+  match __x with
+    | (opt, iter) =>
+      match opt with
+      | none => Aeneas.Std.Result.ok (none, { iter := iter, step_by := self.step_by })
+      | some item => do
+        let iter ← Aeneas.Std.core.iter.adapters.step_by.skipN IteratorInst iter (↑self.step_by - 1)
+        Aeneas.Std.Result.ok (some item, { iter := iter, step_by := self.step_by })
+def Aeneas.Std.core.iter.traits.iterator.Iterator.step_by.trait_default : {Self Item : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator Self Item →
+    Self → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.core.iter.adapters.step_by.StepBy Self) :=
+fun {Self Item} _IteratorInst self step_by => Aeneas.Std.core.iter.traits.iterator.Iterator.step_by.default self step_by
+theorem Aeneas.Std.loop.spec_decr_nat.{u, v} : ∀ {α : Type u} {β : Type v} (measure : α → ℕ) (inv : α → Prop)
+  (post : β → Prop) (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        Aeneas.Std.WP.spec (body x) fun r =>
+          match r with
+          | Aeneas.Std.ControlFlow.done y => post y
+          | Aeneas.Std.ControlFlow.cont x' => inv x' ∧ measure x' < measure x) →
+    inv x → Aeneas.Std.WP.spec (Aeneas.Std.loop body x) post :=
+fun {α} {β} measure inv post body x hBody hInv =>
+  have this := Aeneas.Std.loop.spec measure inv post body x hBody hInv;
+  this
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) → α → Aeneas.Std.Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | Aeneas.Std.Result.ok r =>
+        match r with
+        | Aeneas.Std.ControlFlow.cont x => f x
+        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+    ⋯

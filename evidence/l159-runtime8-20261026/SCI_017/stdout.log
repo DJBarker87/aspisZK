@@ -1,0 +1,339 @@
+'AspisR1.SCI_FinalAudit.real_byte_fixture' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_SameWorld.assoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_SameWorld.arbitrary_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_SameWorld.game_does_not_select_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.recorder_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.final_audit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.selected_audit_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.prior_event' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.different_audits' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.nonempty' depends on axioms: [propext, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.child_none' depends on axioms: [propext, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.empty_pred' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.address_pred' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.reordered_event' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.deleting_uncached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.deleting_uncached_charged' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.SCI_Recovery.ObserverBoundary.not_zero_query_conclusion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.SCI_Recovery.ObserverBoundary.extract_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Recovery.ObserverBoundary.failure_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Recovery.ObserverBoundary.unrestricted_runtime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Recovery.ObserverBoundary.not_all_runtime_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.SCI_Recovery.account_of_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Recovery.model_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Recovery.account_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Recovery.account_extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCG_Nonvacuity.joint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Rc7_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Rc7_Top.deployed : ∀ {W A F CoreError Tx : Type} (L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)),
+  S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+          ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record)),
+      S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : S2W_D189Wrappers.Allocator A) (e1 e2 : S2W_D189Entry.Entry) (w1 w2 : W),
+          S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : DrvC_Installation.Configuration F CoreError) (indexError : CoreError)
+                (reservation : NP6_StdModel.Reservation) (native1 : S2W_ExtractionBoundary.First)
+                (native2 : S2W_ExtractionBoundary.Second) (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (DrvC_Installation.sdk (Rc5_Install.configuration indexError c reservation)) native1 native2 hashv →
+                  ∀ (sha256 H : Bytes → State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : alloc.vec.Vec U8)
+                          (post1 post2 : S2Trust.Heap (ℕ → S2W_D189Entry.Record)),
+                          S2W_D189Wrappers.first native1 copy allocator e1 CPH_Program.verifier data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            S2W_D189Wrappers.second native2 allocator e2 CPH_Program.verifier data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Std.Array U8 32#usize) (length : U32) (prior : Program Bytes State Unit)
+                                (words : CanonicalCutEnrichedTranscript.Words) (p : CPG_Projection.Observations Tx A)
+                                (t u : Tx) (actions : List (CPP_BankState.Action A)),
+                                CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator
+                                    CPH_Program.verifier →
+                                  CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+                                      (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p)
+                                      (CPG_Projection.tentative p) (CPG_Projection.success p)
+                                      (CPG_Projection.loaded p) →
+                                    ∀ (D : LiteralByteProtocol.Decoder) (P : F3T_ByteCarrier.ByteProver) (Q0 Q1 : ℕ),
+                                      (∀ (H : Bytes → State), (eval H P).1.length ≤ Q0 + Q1) →
+                                        ∀ (runtime : F3T_Runtime.Runtime),
+                                          FGl_PreparedAt.Owners (Rc5_Install.configuration indexError c reservation)
+                                              (Rc2_Install.configuration (Rc5_Install.seed indexError c)
+                                                  reservation).boundaries →
+                                            F3T_Runtime.StoredCarrierBinding
+                                                (Rc5_Install.configuration indexError c reservation) D
+                                                (F3T_Installed.source
+                                                  (Rc5_Install.configuration indexError c reservation) hashv)
+                                                P runtime →
+                                              have select := fun x =>
+                                                P2P_NativeSelection.pair
+                                                  (DrvC_Installation.sdk
+                                                    (Rc5_Install.configuration indexError c reservation))
+                                                  CPH_Program.verifier e1 e2 data2 slot;
+                                              MultiproofConeP6Frozen2Stage.P6Boundary (P6C_Extension.dictionary hashv H)
+                                                  () H Op5T_P6.parent Op5T_P6.parent Op5T_P6.parent
+                                                  MultiproofConeP6Batch.referenceLeaf ∧
+                                                DrvC_Implementation.driver
+                                                      (Rc5_Install.configuration indexError c reservation) =
+                                                    DrvC_SourceEntry.source
+                                                      (Rc5_Install.configuration indexError c reservation) hashv ∧
+                                                  DrvC_Installation.sdk
+                                                        (Rc5_Install.configuration indexError c reservation) =
+                                                      SdkD_PairBatches.dictionary
+                                                        (Rc5_Install.configuration indexError c reservation).adapter
+                                                        (Rc5_Install.configuration indexError c reservation).currentBase
+                                                        (Rc5_Install.configuration indexError c reservation).stageBase
+                                                        (Rc5_Install.configuration indexError c reservation).finish
+                                                        (Rc5_Install.configuration indexError c reservation).reserved
+                                                        (Rc5_Install.configuration indexError c reservation).query
+                                                        (Rc5_Install.configuration indexError c reservation).geometry
+                                                        (Rc5_Install.configuration indexError c reservation).boundaries
+                                                        (Rc5_Install.configuration indexError c reservation).std ∧
+                                                    P2P_Result.Outcome L e1 e2 w1 w2
+                                                        (Rc5_Install.configuration indexError c reservation).adapter
+                                                        (Rc5_Install.configuration indexError c reservation).currentBase
+                                                        (Rc5_Install.configuration indexError c reservation).reserved
+                                                        (Rc5_Install.configuration indexError c reservation).query
+                                                        (Rc5_Install.configuration indexError c reservation).geometry
+                                                        (Rc5_Install.configuration indexError c reservation).stageBase
+                                                        (Rc5_Install.configuration indexError c reservation).finish
+                                                        c.boundaries reservation CPH_Program.verifier data1 data2 slot
+                                                        saved post1 post2 H
+                                                        (DrvC_Implementation.driver
+                                                          (Rc5_Install.configuration indexError c reservation))
+                                                        prior (p.physicalEvents t) hashv
+                                                        (BinRawByteCollisionTargets.event
+                                                          SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                          (eval H
+                                                            (Hiq_RecordedJoint.program
+                                                              (F3X_Account.program
+                                                                (Rc5_Install.configuration indexError c reservation)
+                                                                hashv P)
+                                                              F3X_Projection.project select))) ∧
+                                                      (F3X_ModelClaims.Claims
+                                                            (Rc5_Install.configuration indexError c reservation) D P
+                                                            (Q0 + Q1) ∧
+                                                          F3Y_SourceClaims.Claims
+                                                              (Rc5_Install.configuration indexError c reservation) D
+                                                              hashv P (Q0 + Q1) select ∧
+                                                            F3Y_AccountMass.Claims
+                                                                (Rc5_Install.configuration indexError c reservation)
+                                                                hashv P (Q0 + Q1) select ∧
+                                                              F3T_RuntimeBound.failureModel runtime ≤
+                                                                  F3T_Numeric.total (Q0 + Q1) ∧
+                                                                (Q0 + Q1 ≤ F3U_RangeEdges.maxQueries →
+                                                                    F3T_RuntimeBound.failureModel runtime ≤
+                                                                      (↑Q0 + ↑Q1 + 1) * (1 / 2 ^ 100)) ∧
+                                                                  (Q0 + Q1 = 0 →
+                                                                    F3U_Numeric.margin ≤
+                                                                        1 / 2 ^ 100 -
+                                                                          F3T_RuntimeBound.failureModel runtime ∧
+                                                                      F3T_RuntimeBound.failureModel runtime <
+                                                                        1 / 2 ^ 100)) ∧
+                                                        (native1 CPH_Program.verifier e1.first data1 =
+                                                              ok (core.result.Result.Ok saved) ∧
+                                                            (↑saved).length = 1768 ∧
+                                                              S2W_EntryWriteHistory.payloadBytes
+                                                                    S2W_ReturnedCheckpoint.encode
+                                                                    (post1.payload (e1.heap.accounts 2).1) 1768 =
+                                                                  MultiproofConeCanonical.bytesOf ↑saved ∧
+                                                                post1.ambient = e1.heap.ambient ∧
+                                                                  post1.accounts = e1.heap.accounts ∧
+                                                                    post1.counter = e1.heap.counter ∧
+                                                                      ∀ (cell : ℕ),
+                                                                        cell ≠ (e1.heap.accounts 2).1 →
+                                                                          post1.payload cell = e1.heap.payload cell) ∧
+                                                          Rc2_Events.Facts
+                                                              (Rc5_Install.configuration indexError c reservation) hashv
+                                                              native1 native2 copy allocator CPH_Program.verifier H
+                                                              saved ∧
+                                                            CPH_Protection.Facts p t saved CPH_Program.verifier ∧
+                                                              CPH_Trace.Facts p t u saved native1 native2 copy allocator
+                                                                  CPH_Program.verifier ∧
+                                                                CPH_Recorder.Facts
+                                                                  (Rc5_Install.configuration indexError c reservation)
+                                                                  hashv native1 native2 copy allocator
+                                                                  CPH_Program.verifier H p t u saved :=
+fun {W A F CoreError Tx} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation native1
+    native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2
+    accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D P Q0 Q1 queries runtime
+    finishOwners binding =>
+  id
+    (let select := fun x =>
+      P2P_NativeSelection.pair (DrvC_Installation.sdk (Rc5_Install.configuration indexError c reservation))
+        CPH_Program.verifier e1 e2 data2 slot;
+    have prepare := F3Y_InstalledLaws.prepare indexError c reservation;
+    have ports := F3Y_InstalledLaws.primitives indexError c reservation;
+    have canonical := F3Y_InstalledLaws.canonical indexError c reservation;
+    have domain := F3Y_InstalledLaws.domain indexError c reservation;
+    have multiply := F3Y_InstalledLaws.multiply indexError c reservation;
+    have one := F3Y_InstalledLaws.one indexError c reservation;
+    have inverse := F3Y_InstalledLaws.inverse indexError c reservation;
+    have security :=
+      FGl_Bound.bound (Rc2_Install.configuration (Rc5_Install.seed indexError c) reservation) hashv D words P (Q0 + Q1)
+        queries runtime select prepare ports canonical domain multiply one inverse finishOwners binding;
+    have sourceCost :=
+      FGl_Cost.source_cost (Rc2_Install.configuration (Rc5_Install.seed indexError c) reservation) hashv D words P
+        (Q0 + Q1) queries select prepare ports canonical domain multiply one inverse finishOwners;
+    have accountMass :=
+      F3Y_AccountMass.claims (Rc2_Install.configuration (Rc5_Install.seed indexError c) reservation) hashv D words P
+        (Q0 + Q1) queries select;
+    ⟨P6C_Extension.boundary hashv sha256 H p1 syscall,
+      ⟨DrvC_SourceEntry.same_program (Rc3_Install.select (Rc5_Install.seed indexError c) reservation) hashv,
+        ⟨DrvC_Installation.aus1_dictionary (Rc5_Install.configuration indexError c reservation),
+          ⟨have original :=
+              Rc7_Native.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation
+                native1 native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved
+                post1 post2 accepted1 accepted2 root length prior words p t u actions game RuntimePersistence;
+            have strengthened :=
+              P2P_R6Result.strengthen L e1 e2 w1 w2 (Rc5_Install.configuration indexError c reservation).adapter
+                (Rc5_Install.configuration indexError c reservation).currentBase
+                (Rc5_Install.configuration indexError c reservation).reserved
+                (Rc5_Install.configuration indexError c reservation).query
+                (Rc5_Install.configuration indexError c reservation).geometry
+                (Rc5_Install.configuration indexError c reservation).stageBase
+                (Rc5_Install.configuration indexError c reservation).finish c.boundaries reservation
+                CPH_Program.verifier data1 data2 slot saved post1 post2 H
+                (DrvC_Implementation.driver (Rc5_Install.configuration indexError c reservation)) prior
+                (p.physicalEvents t) hashv native1 native2 extraction sha256 p1 syscall original;
+            P2P_Release.remove L e1 e2 w1 w2 (Rc5_Install.configuration indexError c reservation).adapter
+              (Rc5_Install.configuration indexError c reservation).currentBase
+              (Rc5_Install.configuration indexError c reservation).reserved
+              (Rc5_Install.configuration indexError c reservation).query
+              (Rc5_Install.configuration indexError c reservation).geometry
+              (Rc5_Install.configuration indexError c reservation).stageBase
+              (Rc5_Install.configuration indexError c reservation).finish c.boundaries reservation CPH_Program.verifier
+              data1 data2 slot saved post1 post2 H
+              (DrvC_Implementation.driver (Rc5_Install.configuration indexError c reservation)) prior
+              (p.physicalEvents t) hashv
+              (F3X_Account.program (Rc5_Install.configuration indexError c reservation) hashv P) F3X_Projection.project
+              (Q0 + Q1)
+              (F3Y_AccountMass.budget (Rc2_Install.configuration (Rc5_Install.seed indexError c) reservation) hashv D
+                words P (Q0 + Q1) queries)
+              strengthened,
+            ⟨⟨F3X_ModelClaims.claims (Rc5_Install.configuration indexError c reservation) D P (Q0 + Q1) queries,
+                ⟨sourceCost,
+                  ⟨accountMass,
+                    ⟨security,
+                      ⟨fun range =>
+                        Eq.mp
+                          (congrArg (LE.le (F3T_RuntimeBound.failureModel runtime))
+                            (congrFun' (congrArg HMul.hMul (congrFun' (congrArg HAdd.hAdd (Nat.cast_add Q0 Q1)) 1))
+                              (1 / 2 ^ 100)))
+                          (LE.le.trans security (F3U_Range.per_attempt (Q0 + Q1) range)),
+                        fun zero =>
+                        F3U_Numeric.runtime_margin (F3T_RuntimeBound.failureModel runtime)
+                          (Eq.mp
+                            (congrArg (fun _a => F3T_RuntimeBound.failureModel runtime ≤ F3T_Numeric.total _a) zero)
+                            security)⟩⟩⟩⟩⟩,
+              ⟨PoolT_Write.accepted_verifier_writes_copy
+                  (DrvC_Installation.sdk (Rc5_Install.configuration indexError c reservation)) native1 native2 hashv
+                  extraction copy std allocator e1 CPH_Program.verifier data1 state1 final1 saved post1 accepted1,
+                ⟨Rc2_Events.derive (Rc5_Install.configuration indexError c reservation) hashv native1 native2 extraction
+                    copy allocator CPH_Program.verifier sha256 H p1 syscall saved,
+                  ⟨CPH_Protection.derive p t u e1 e2 saved actions (Rc5_Install.configuration indexError c reservation)
+                      (Rc5_Install.key indexError c reservation) native1 native2 hashv extraction copy std allocator
+                      CPH_Program.verifier game data1 state1 final1 post1 accepted1,
+                    ⟨CPH_Trace.derive game,
+                      CPH_Recorder.physical p t u e1 e2 saved actions
+                        (Rc5_Install.configuration indexError c reservation) native1 native2 hashv extraction copy
+                        allocator CPH_Program.verifier game sha256 H p1 syscall⟩⟩⟩⟩⟩⟩⟩⟩⟩)
+theorem AspisR1.SCI_SameWorld.assoc : ∀ {A F C : Type} (c : DrvC_Installation.Configuration F C) (err : C)
+  (reservation : NP6_StdModel.Reservation) (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (copy :
+    S2Trust.Heap (ℕ → S2W_D189Entry.Record) → ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record))
+  (allocator : S2W_D189Wrappers.Allocator A) (id : S2W_ExtractionBoundary.Program) (a : SCE_Experiment.Adversary A)
+  (H : Bytes → State),
+  have r := Rc5_Install.configuration err c reservation;
+  SCE_Experiment.accepted (eval H (SCE_Experiment.account r hashv copy allocator id a)).2 = true →
+    ∃ saved post final f s,
+      S2W_NativeConsolidation.SourceCuts (SCH_IdealSdk.dictionary r hashv H) (eval H a.first).2.entry.first
+          ((eval H (a.second (eval H a.first).2 saved post final)).2.entry.second S2W_D189Wrappers.secondSizes) saved f
+          s ∧
+        Port1_Driver.decodeSemantic (DrvC_Installation.sdk r) f.pub = ok (some f.semantic) ∧
+          (eval H (SCE_Experiment.submission a)).2 =
+              { publicBytes := MultiproofConeCanonical.bytesOf ↑f.pub,
+                stored := MultiproofConeCanonical.bytesOf ↑f.proof } ∧
+            MultiproofConeCanonical.bytesOf ↑s.checkpoint =
+              MultiproofConeCanonical.bytesOf
+                ↑((eval H (a.second (eval H a.first).2 saved post final)).2.entry.buffers
+                    ((eval H (a.second (eval H a.first).2 saved post final)).2.entry.handles 6).1) :=
+fun {A F C} c err reservation hashv copy allocator id a H =>
+  _root_.id fun success =>
+    let ⟨saved, h✝⟩ := SCH_AccountDecoded.accepted c err reservation hashv copy allocator id a H success
+    let ⟨post, h✝¹⟩ := h✝
+    let ⟨final, h✝²⟩ := h✝¹
+    let ⟨f, h✝³⟩ := h✝²
+    let ⟨s, h✝⁴⟩ := h✝³
+    let ⟨cuts, right✝⟩ := h✝⁴
+    let ⟨decoded, submitted⟩ := right✝
+    Exists.intro saved
+      (Exists.intro post
+        (Exists.intro final
+          (Exists.intro f
+            (Exists.intro s
+              ⟨cuts,
+                ⟨decoded,
+                  ⟨submitted,
+                    SCE_SecondCutBytes.checkpoint (eval H (a.second (eval H a.first).2 saved post final)).2.entry
+                      (SCH_IdealSdk.dictionary (Rc5_Install.configuration err c reservation) hashv H)
+                      (eval H a.first).2.entry.first saved f s cuts⟩⟩⟩))))
+theorem AspisR1.SCI_Recovery.account_agreement : ∀ {A F C : Type} (c : DrvC_Installation.Configuration F C)
+  (D : LiteralByteProtocol.Decoder) (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (copy :
+    S2Trust.Heap (ℕ → S2W_D189Entry.Record) → ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record))
+  (allocator : S2W_D189Wrappers.Allocator A) (id : S2W_ExtractionBoundary.Program) (a : SCE_Experiment.Adversary A)
+  (H : Bytes → State) (run : F3T_Experiment.RunView),
+  (eval H (SCE_Experiment.runtime c hashv copy allocator id a)).2 = some run →
+    run.2.2 = true →
+      (eval H
+                (F3T_Experiment.original D
+                  (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a))))).2.2 =
+          true →
+        run.1 =
+            (eval H
+                (F3T_Experiment.original D
+                  (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a))))).1 →
+          OraclePortRefineJoin.RecoveredInputAgreement (F3T_Experiment.view run)
+            (eval H
+              (F3T_Charged.projected D (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a))))) :=
+fun {A F C} c D hashv copy allocator id a H run observed success modelSuccess ordered =>
+  have same :=
+    Prod.ext ordered
+      (Prod.ext
+        (Eq.mpr
+          (_root_.id
+            (congrArg
+              (fun _a =>
+                _a =
+                  (eval H
+                        (F3T_Experiment.original D
+                          (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a))))).2.1)
+              (SCE_Projection.input_projection c hashv copy allocator id a H run observed)))
+          (Eq.mpr
+            (_root_.id
+              (congrArg
+                (fun _a => (eval H (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a)))).2 = _a.2.1)
+                (F3T_Experiment.original_eval D (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a)))
+                  H)))
+            (Eq.refl (eval H (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a)))).2)))
+        (Eq.trans success (Eq.symm modelSuccess)));
+  Eq.mpr
+    (_root_.id
+      (congrArg
+        (fun _a =>
+          OraclePortRefineJoin.RecoveredInputAgreement (F3T_Experiment.view _a)
+            (eval H (F3T_Charged.projected D (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a))))))
+        same))
+    (SCI_Recovery.model_agreement D (F3T_ByteCarrier.lift c (SCE_Experiment.submission a)) H modelSuccess)

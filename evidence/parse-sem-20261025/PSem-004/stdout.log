@@ -1,0 +1,76 @@
+def AspisR1.RowShape_InstalledSlots.verifierOps : AspisR1CurrentCaller.Ops →
+  AspisR1PublicPreparation.FinishModel.Boundaries → AspisR1.ClaimsUnrolledFinish.StdCalls → AspisR1CurrentCaller.Ops :=
+fun ops B std =>
+  AspisR1CurrentCaller.BorrowedClaimPrepared.NativeBuffers.install (AspisS1ValuesOwnedInstallation.withValues ops)
+    AspisS1ValuesOwnedInstallation.nativeValues AspisS1ExtractedRoundChildren.children
+    (AspisR1.ClaimsUnrolledFinish.install std B)
+def AspisR1CurrentCaller.BorrowedClaimPrepared.NativeBuffers.install : AspisR1CurrentCaller.Ops →
+  AspisS1NativeCompact.Ops →
+    AspisR1PublicPreparation.RoundModel.Boundaries →
+      AspisR1PublicPreparation.FinishModel.Boundaries → AspisR1CurrentCaller.Ops :=
+fun ops native R B =>
+  AspisR1CurrentCaller.BorrowedClaimPrepared.closedInstall
+    (AspisR1CurrentCaller.S1SemanticInstallation.install
+      { op0 := ops.op0, op1 := @AspisR1CurrentCaller.Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4,
+        op5 := ops.op5, op6 := @AspisR1CurrentCaller.Ops.op6 ops, op7 := ops.op7,
+        op8 := @AspisR1CurrentCaller.Ops.op8 ops, op9 := @AspisR1CurrentCaller.Ops.op9 ops,
+        op10 := AspisS1NativeCompact.compact.expand_semantic native, op11 := ops.op11, op12 := ops.op12,
+        op13 := ops.op13, op14 := ops.op14, op15 := ops.op15, op16 := @AspisR1CurrentCaller.Ops.op16 ops,
+        op17 := ops.op17, op18 := ops.op18, op19 := ops.op19, op20 := ops.op20, op21 := ops.op21 }
+      R B)
+PSem_SourceAudit.lean:7:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentCaller.InstalledPreparation.closedInstall`
+def AspisR1.ClaimsUnrolledSdk.sdkOps : AdapterRw.Ops →
+  AspisR1CurrentCaller.Ops →
+    AspisR1PublicPreparation.FinishModel.Boundaries → AspisR1.ClaimsUnrolledFinish.StdCalls → AdapterRw.Ops :=
+fun adapterOps ops B claimsStd =>
+  AspisS6CurrentFirstInstallation.install adapterOps
+    (AspisR1CurrentCaller.BorrowedClaimPrepared.NativeBuffers.install (AspisS1ValuesOwnedInstallation.withValues ops)
+      AspisS1ValuesOwnedInstallation.nativeValues AspisS1ExtractedRoundChildren.children
+      (AspisR1.ClaimsUnrolledFinish.install claimsStd B))
+def AspisR1CurrentCaller.S1SemanticInstallation.verify : AspisR1PublicPreparation.RoundModel.Boundaries →
+  AspisR1PublicPreparation.FinishModel.Boundaries →
+    {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            H →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result (AspisR1CurrentCaller.r1_semantic.Verified H)
+                  AspisR1CurrentCaller.r1_wire.Error) :=
+fun R B {H} D pub bytes hash => do
+  let result ←
+    AspisR1PublicPreparation.VerifyPrefix.verify
+        (fun {H} =>
+          AspisR1PublicPreparation.FinishModel.finish R (AspisR1PublicPreparation.S1SemanticRootCopy.install B))
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+        (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) bytes hash none
+  Aeneas.Std.Result.ok
+      (match result with
+      | Aeneas.Std.core.result.Result.Ok sem =>
+        Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)
+      | Aeneas.Std.core.result.Result.Err error =>
+        Aeneas.Std.core.result.Result.Err (AspisR1CurrentCaller.S1SemanticCarrier.currentWireError error))
+def AspisR1PublicPreparation.PrefixAdapter.parseAccepted : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result AspisR1PublicPreparation.r1_wire.Prefix AspisR1PublicPreparation.r1_wire.Error) :=
+fun bytes => do
+  let result ← AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes
+  match result with
+    | Aeneas.Std.core.result.Result.Ok pre =>
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (AspisR1PublicPreparation.PrefixAdapter.fromOld pre))
+    | Aeneas.Std.core.result.Result.Err error =>
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err (AspisR1PublicPreparation.PrefixAdapter.errorFromOld error))
+PSem_SourceAudit.lean:11:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1PublicPreparation.PrefixAdapter.parse_typedFull`
+def AspisR1.Tx1Q_Execution.actual : {CoreError : Type} →
+  AspisR1CurrentCaller.Ops →
+    Bool →
+      AspisR1.Port3_NativeQueryBody.Ops →
+        AspisR1.Port3_NativeGeometryBody.Ops CoreError →
+          AspisR1PublicPreparation.FinishModel.Boundaries →
+            AspisR1.ClaimsUnrolledFinish.StdCalls → AspisR1CurrentCaller.Ops :=
+fun {CoreError} ops reserved query geo B std =>
+  AspisR1.RowShape_InstalledSlots.verifierOps
+    (AspisR1.Op3I_Install.install (AspisR1.Op4P_Install.install (AspisR1.Tx1Q_Execution.base ops reserved query geo))) B
+    std
+PSem_SourceAudit.lean:13:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PublicPreparation.OriginalSerializerInstallation.ExactSerializedRankTrace`

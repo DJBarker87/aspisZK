@@ -1,0 +1,185 @@
+FIr_PhysicalInitial.lean:13:29: error(lean.unknownIdentifier): Unknown identifier `Bytes`
+
+Note: It is not possible to treat `Bytes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+FIr_PhysicalInitial.lean:15:17: error(lean.unknownIdentifier): Unknown identifier `Bytes`
+
+Note: It is not possible to treat `Bytes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+FIr_PhysicalInitial.lean:58:63: error: don't know how to synthesize placeholder for argument `rows`
+context:
+CoreError H : Type
+ops : Ops
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops CoreError
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+D : aspis_core.digest.Digest32 H
+hash : H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+publicBytes proof : Slice U8
+split : Usize
+saved : alloc.vec.Vec U8
+run :
+  Tx1Q_Execution.Run (Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo D hash pub publicBytes
+    proof split saved
+p : Parsed
+q : Fin 22 → Fin 262144
+tr : ErasedPrefix
+parsed : OraclePortStoredParserC4.parseReached (bytesOf ↑proof) tr = some p
+view : LiteralOpeningView.View
+claim : LiteralSemanticPrefix.E
+polys : Fin 10 → Polynomial LiteralSemanticPrefix.E
+opening : LiteralOpeningView.read (typedRows p q tr) = some view
+claimRead : claimOf (SelectedSemanticPrefixFacts.lift view.semantic) = some claim
+polyRead : semPolysZ (SelectedSemanticPrefixFacts.lift view.semantic) = some polys
+stored initialBytes expanded y1 : Slice U8
+sourceView : verifier.View
+sem : r1_semantic.Verified H
+readStored :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 16#usize, «end» := 7031#usize } =
+    ok stored
+expand :
+  AspisS1NativeCompact.compact.expand_semantic nativeValues stored initialBytes =
+    ok (core.result.Result.Ok (), expanded)
+wide : InstalledPreparation.sourceView proof expanded y1 = ok (core.result.Result.Ok sourceView)
+same : sourceView.semantic = expanded
+verify :
+  S1SemanticInstallation.verify AspisS1ExtractedRoundChildren.children (ClaimsUnrolledFinish.install std B) D pub
+      expanded hash =
+    ok (core.result.Result.Ok sem)
+prepare :
+  originalNew (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed D sem sourceView hash
+      (Array.repeat 29#usize run.zero) =
+    ok (core.result.Result.Ok run.p, run.scratch)
+pre : AspisR1PublicPreparation.r1_wire.Prefix
+before after : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+running : AspisR1PublicPreparation.aspis_core.field.QM31
+record : AspisR1PublicPreparation.r1_wire.ValidatedRecord
+decoded : Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 1#usize
+initial : AspisR1PublicPreparation.aspis_core.field.QM31
+entries : List (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.RoundEvidence (retainedDigest D) pre)
+values : SemanticPrefixCodec.Full
+sourceParsed : AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded = ok (core.result.Result.Ok pre)
+rounds :
+  AspisR1PublicPreparation.RoundModel.rounds AspisS1ExtractedRoundChildren.children (retainedDigest D) pre before =
+    ok (core.result.Result.Ok (running, (retainedSem sem).alpha, after))
+read : pre.validated_record 14#u8 = ok (core.result.Result.Ok record)
+decode : AspisS1ExtractedRoundChildren.decodeMain 1#usize record 0#usize = ok (core.result.Result.Ok decoded)
+index : decoded.index_usize 0#usize = ok initial
+annotated :
+  AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.AnnotatedRun (retainedDigest D) pre
+    AspisR1PublicPreparation.SemanticRoundsCheckedTrace.schedule
+    (initial, Array.repeat 10#usize AspisR1PublicPreparation.aspis_core.field.QM31.ZERO, before)
+    (running, (retainedSem sem).alpha, after) entries
+alpha :
+  List.map AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.RoundEvidence.q entries = ↑(retainedSem sem).alpha
+full : SemanticPrefixCodec.encodeFull values = AspisR1PublicPreparation.PrefixAdapter.completedRecords pre
+claimEq :
+  (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact)
+      (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.DecodeMain initial) =
+    SemanticPayloadView.claimAt14 values
+polyEq :
+  ∀ entry ∈ entries,
+    Polynomial.map (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact)
+        (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.polynomialOf entry.coefficients) =
+      SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values ⟨↑entry.round % 10, ⋯⟩)
+chain :
+  AspisR1PublicPreparation.RawGenericPolynomialSumcheckChain.Chain
+    (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.DecodeMain initial)
+    (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.DecodeMain running)
+    (List.map (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.pairOf (retainedDigest D) pre) entries)
+sourceRows : semanticRows 27 0 (slice (bytesOf ↑proof) 48 6983) = some (List.map (fun s => bytesOf ↑s) ↑pre.records)
+physical : ↑stored = List.take 7015 (List.drop 16 ↑proof)
+wire : bytesOf (List.drop 32 ↑stored) = slice (bytesOf ↑proof) 48 6983
+⊢ List sorry
+FIr_PhysicalInitial.lean:45:47: error: unsolved goals
+CoreError H : Type
+ops : Ops
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops CoreError
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+D : aspis_core.digest.Digest32 H
+hash : H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+publicBytes proof : Slice U8
+split : Usize
+saved : alloc.vec.Vec U8
+run :
+  Tx1Q_Execution.Run (Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo D hash pub publicBytes
+    proof split saved
+p : Parsed
+q : Fin 22 → Fin 262144
+tr : ErasedPrefix
+parsed : OraclePortStoredParserC4.parseReached (bytesOf ↑proof) tr = some p
+view : LiteralOpeningView.View
+claim : LiteralSemanticPrefix.E
+polys : Fin 10 → Polynomial LiteralSemanticPrefix.E
+opening : LiteralOpeningView.read (typedRows p q tr) = some view
+claimRead : claimOf (SelectedSemanticPrefixFacts.lift view.semantic) = some claim
+polyRead : semPolysZ (SelectedSemanticPrefixFacts.lift view.semantic) = some polys
+stored initialBytes expanded y1 : Slice U8
+sourceView : verifier.View
+sem : r1_semantic.Verified H
+readStored :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 16#usize, «end» := 7031#usize } =
+    ok stored
+expand :
+  AspisS1NativeCompact.compact.expand_semantic nativeValues stored initialBytes =
+    ok (core.result.Result.Ok (), expanded)
+wide : InstalledPreparation.sourceView proof expanded y1 = ok (core.result.Result.Ok sourceView)
+same : sourceView.semantic = expanded
+verify :
+  S1SemanticInstallation.verify AspisS1ExtractedRoundChildren.children (ClaimsUnrolledFinish.install std B) D pub
+      expanded hash =
+    ok (core.result.Result.Ok sem)
+prepare :
+  originalNew (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed D sem sourceView hash
+      (Array.repeat 29#usize run.zero) =
+    ok (core.result.Result.Ok run.p, run.scratch)
+pre : AspisR1PublicPreparation.r1_wire.Prefix
+before after : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+running : AspisR1PublicPreparation.aspis_core.field.QM31
+record : AspisR1PublicPreparation.r1_wire.ValidatedRecord
+decoded : Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 1#usize
+initial : AspisR1PublicPreparation.aspis_core.field.QM31
+entries : List (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.RoundEvidence (retainedDigest D) pre)
+values : SemanticPrefixCodec.Full
+sourceParsed : AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded = ok (core.result.Result.Ok pre)
+rounds :
+  AspisR1PublicPreparation.RoundModel.rounds AspisS1ExtractedRoundChildren.children (retainedDigest D) pre before =
+    ok (core.result.Result.Ok (running, (retainedSem sem).alpha, after))
+read : pre.validated_record 14#u8 = ok (core.result.Result.Ok record)
+decode : AspisS1ExtractedRoundChildren.decodeMain 1#usize record 0#usize = ok (core.result.Result.Ok decoded)
+index : decoded.index_usize 0#usize = ok initial
+annotated :
+  AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.AnnotatedRun (retainedDigest D) pre
+    AspisR1PublicPreparation.SemanticRoundsCheckedTrace.schedule
+    (initial, Array.repeat 10#usize AspisR1PublicPreparation.aspis_core.field.QM31.ZERO, before)
+    (running, (retainedSem sem).alpha, after) entries
+alpha :
+  List.map AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.RoundEvidence.q entries = ↑(retainedSem sem).alpha
+full : SemanticPrefixCodec.encodeFull values = AspisR1PublicPreparation.PrefixAdapter.completedRecords pre
+claimEq :
+  (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact)
+      (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.DecodeMain initial) =
+    SemanticPayloadView.claimAt14 values
+polyEq :
+  ∀ entry ∈ entries,
+    Polynomial.map (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact)
+        (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.polynomialOf entry.coefficients) =
+      SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values ⟨↑entry.round % 10, ⋯⟩)
+chain :
+  AspisR1PublicPreparation.RawGenericPolynomialSumcheckChain.Chain
+    (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.DecodeMain initial)
+    (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.DecodeMain running)
+    (List.map (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.pairOf (retainedDigest D) pre) entries)
+sourceRows : semanticRows 27 0 (slice (bytesOf ↑proof) 48 6983) = some (List.map (fun s => bytesOf ↑s) ↑pre.records)
+physical : ↑stored = List.take 7015 (List.drop 16 ↑proof)
+wire : bytesOf (List.drop 32 ↑stored) = slice (bytesOf ↑proof) 48 6983
+⊢ Polynomial.eval 0 (polys 0) + Polynomial.eval 1 (polys 0) = claim
+'AspisR1.FIr_PhysicalInitial.parsed_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIr_PhysicalInitial.on_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

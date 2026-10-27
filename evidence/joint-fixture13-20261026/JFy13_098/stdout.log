@@ -1,0 +1,72 @@
+JFy_CompositionTail.lean:77:110: error: unsolved goals
+selected : Std.Array field.QM31 84#usize
+a b c : Std.Array field.QM31 16#usize
+m : Std.Array field.QM31 10#usize
+s : pool_v1.pair_forest_copy_terminal.Selectors
+ps : state_only_poseidon.StateOnlyPoseidonSelectors
+leading full internal : field.QM31
+path : Std.Array field.QM31 24#usize
+hpos :
+  state_only_poseidon.evaluate_state_only_poseidon_oracle_projected { z := a, succ_z := b, xor12_z := c } ps =
+    JFy_PoseidonPrefix.tail { z := a, succ_z := b, xor12_z := c } ps leading full internal
+hsem :
+  semantic_packed JFu_PublicSemantic.value { z := a, succ_z := b, xor12_z := c } s =
+    JFy_SemanticPrefix.tail JFu_PublicSemantic.value { z := a, succ_z := b, xor12_z := c } s path
+⊢ (do
+      let poseidon ← JFy_PoseidonPrefix.tail { z := a, succ_z := b, xor12_z := c } ps leading full internal
+      let semantic ← JFy_SemanticPrefix.tail JFu_PublicSemantic.value { z := a, succ_z := b, xor12_z := c } s path
+      let i ← SELECTED_H1_COLUMN
+      let h1_z ← selected_claim selected 0#usize i
+      let pvpfcvv ← copy_variant JFu_PublicSemantic.value.variant
+      let copy ←
+        pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z s JFu_TerminalPrefix.challenges.lambda
+            JFu_TerminalPrefix.challenges.chi JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index pvpfcvv
+      let prepared_theta ← field.PreparedQm31Multiplier.new JFu_TerminalPrefix.challenges.theta
+      let ii ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+      let iter ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31 24#usize) ii
+      let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+      let ii1 ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+      let iter1 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+            (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31 4#usize) ii1
+      let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+      let i1 ← SELECTED_G_COLUMN
+      let q ← selected_claim selected 0#usize i1
+      ok (core.result.Result.Ok (composition1, a, m, q, h1_z, copy.active))) =
+    do
+    let poseidon ← JFy_PoseidonPrefix.tail { z := a, succ_z := b, xor12_z := c } ps leading full internal
+    let semantic ←
+      JFy_SemanticPrefix.tail
+          { variant := JFu_PublicSemantic.value.variant, pool := JFu_PublicSemantic.value.pool,
+            deployment_domain := JFu_PublicSemantic.value.deployment_domain, anchor := JFu_PublicSemantic.value.anchor,
+            nullifier := JFu_PublicSemantic.value.nullifier, asset_id := JFu_PublicSemantic.value.asset_id,
+            recipient := JFu_PublicSemantic.value.recipient, change := JFu_PublicSemantic.value.change,
+            withdrawal_amount := none, transition := JFu_PublicSemantic.value.transition }
+          { z := a, succ_z := b, xor12_z := c } s path
+    let i ← SELECTED_H1_COLUMN
+    let h1_z ← selected_claim selected 0#usize i
+    let pvpfcvv ← copy_variant JFu_PublicSemantic.value.variant
+    let copy ←
+      pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1_z s JFu_TerminalPrefix.challenges.lambda
+          JFu_TerminalPrefix.challenges.chi JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index pvpfcvv
+    let prepared_theta ← field.PreparedQm31Multiplier.new JFu_TerminalPrefix.challenges.theta
+    let ii ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+    let iter ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31 24#usize) ii
+    let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+    let ii1 ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+    let iter1 ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31 4#usize) ii1
+    let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+    let i1 ← SELECTED_G_COLUMN
+    let q ← selected_claim selected 0#usize i1
+    ok (core.result.Result.Ok (composition1, a, m, q, h1_z, copy.active))
+'AspisR1.JFy_CompositionTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

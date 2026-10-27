@@ -1,0 +1,49 @@
+{"attempt": "JGg18_041", "exit_status": 1, "wall_seconds": 3.1050838599912822, "peak_rss_kib": "5857076", "swaps": "0", "print_axioms": ["'AspisR1.JGg_QueryDecode.pair_let' does not depend on any axioms", "'AspisR1.JGg_QueryDecode.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGg_QueryDecode.pair_let' does not depend on any axioms
+JGg_QueryDecode.lean:62:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.250 = ?m.250 then ?m.252 else ?m.253
+in the target expression
+  (if True then do
+      let r ← AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish s3
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let a3 ← advances.index_usize 2#usize
+          ok (core.result.Result.Ok (val, a3))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidua
+...
+ts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val => do
+                          let a8 ← advances.index_usize 7#usize
+                          ok (core.result.Result.Ok (val, a8))
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (Std.Array U32 22#usize × Std.Array U8 32#usize)
+                            (core.convert.FromSame AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError)
+                            residual) =
+    ok (core.result.Result.Ok (s3.accepted, encodeState JGg_Opening31.next2))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGg_QueryDecode.lean:37:68: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish, ̲count,
+        AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_COUNT,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGg_QueryDecode.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb08b5ff1eccf44d789994c5bd7b4a8e7.scope; invocation ID: 3278e950fc974ffb9acd3e16bddd8195
+

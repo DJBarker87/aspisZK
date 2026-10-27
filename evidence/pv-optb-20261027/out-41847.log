@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_OptB_SourceSecondFailure.lean:21:64: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+S : Type
+entropy : Entropy S
+pub : Pub
+compiled : Compiled
+hash : Hash
+store afterStore : Store
+state next final : S
+secret : Secret
+e : verifier.Error
+first : entropy.call_mut state 0#usize = ok (core.result.Result.Ok secret, next)
+body :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret store =
+    ok (core.result.Result.Err verifier.Error.Rejected, afterStore)
+second : entropy.call_mut next 1#usize = ok (core.result.Result.Err e, final)
+⊢ Usize.wrapping_add 0#usize 1#usize = 1#usize
+'R1Z.PV_OptB_SourceSecondFailure.second_callback_error' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

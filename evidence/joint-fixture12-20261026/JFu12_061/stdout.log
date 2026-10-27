@@ -1,0 +1,20 @@
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => Result.fail Error.panic
+        | some n => Result.ok (some range', { start := n, «end» := range.end })
+    else Result.ok (none, range)
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : core.iter.range.Step (UScalar UScalarTy.Usize) :=
+core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize
+def FIq_Native.pool_v1.pair_forest_semantic_terminal.empty_root : Usize →
+  Result (Std.Array FIq_Native.field.M31 8#usize) :=
+fun level => do
+  let a ← FIq_Native.pool_v1.pair_forest_semantic_terminal.constants.POOL_V1_PAIR_EMPTY_ROOTS_V1.index_usize level
+  FIq_Native.core.array.Array.map (BuiltinFnMut U32 FIq_Native.field.M31) a FIq_Native.field.M31_constructor
+@[irreducible] def FIq_Native.pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY : Result U64 :=
+1#u64 <<< FIq_Native.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH

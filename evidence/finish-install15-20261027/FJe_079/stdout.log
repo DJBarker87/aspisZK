@@ -1,0 +1,106 @@
+FJe_Sum3ChannelStep.lean:34:12: error: Type mismatch
+  fun next => FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0 z.2 a next i r c
+has type
+  Std.Array (Std.Array U64 3#usize) 3#usize → Result (Std.Array (Std.Array U64 3#usize) 3#usize)
+but is expected to have type
+  Result (Std.Array (Std.Array U64 3#usize) 3#usize)
+FJe_Sum3ChannelStep.lean:32:21: error: Application type mismatch: The argument
+  s
+has type
+  Sums
+but is expected to have type
+  Unit
+in the application
+  ok s
+FJe_Sum3ChannelStep.lean:33:21: error: Type mismatch
+  step a s i r c ch
+has type
+  (Sums → Result Sums) → Result Sums
+but is expected to have type
+  Result Unit
+FJe_Sum3ChannelStep.lean:46:12: error: Type mismatch
+  fun next =>
+    AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0 z.2 (left a) next i r c
+has type
+  Std.Array (Std.Array U64 3#usize) 3#usize → Result (Std.Array (Std.Array U64 3#usize) 3#usize)
+but is expected to have type
+  Result (Std.Array (Std.Array U64 3#usize) 3#usize)
+FJe_Sum3ChannelStep.lean:44:21: error: Application type mismatch: The argument
+  s
+has type
+  Sums
+but is expected to have type
+  Unit
+in the application
+  ok s
+FJe_Sum3ChannelStep.lean:45:21: error: Type mismatch
+  step a s i r c ch
+has type
+  (Sums → Result Sums) → Result Sums
+but is expected to have type
+  Result Unit
+FJe_Sum3ChannelStep.lean:48:48: error: Ambiguous term
+  bind_map
+Possible interpretations:
+  FIv_NativeArithmetic.bind_map : ∀ (f : ?m.38 → ?m.39) (m : Result ?m.38) (k : ?m.39 → Result ?m.40),
+    (do
+        let x ← FIv_Map.map f m
+        k x) =
+      do
+      let x ← m
+      k (f x)
+  
+  LawfulMonad.bind_map : ∀ (f : ?m.38 (?m.41 → ?m.42)) (x : ?m.38 ?m.41),
+    (do
+        let x_1 ← f
+        x_1 <$> x) =
+      f <*> x
+FJe_Sum3ChannelStep.lean:46:138: error: unsolved goals
+iter : Range
+a : Left
+s : Sums
+i : Usize
+r : Components
+c : Usize
+⊢ (do
+      let __x ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match __x.1 with
+        | none => ok s
+        | some channel => do
+          let pqm ← FIv_Map.map prepared (Array.index_usize a i)
+          let a_1 ← pqm.components.index_usize c
+          let m ← a_1.index_usize channel
+          let i_1 ← lift (UScalar.cast UScalarTy.U64 m)
+          let a1 ← Array.index_usize r c
+          let m1 ← a1.index_usize channel
+          let i1 ← lift (UScalar.cast UScalarTy.U64 m1)
+          let i2 ← i_1 * i1
+          let a2 ← Array.index_usize s c
+          let i3 ← a2.index_usize channel
+          let i4 ← i3 + i2
+          let __x_1 ← Array.index_mut_usize s c
+          let a4 ← __x_1.1.update channel i4
+          AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0 __x.2
+              (FJb_ArrayTransport.array prepared a) (__x_1.2 a4) i r c) =
+    do
+    let z ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match z.1 with
+      | none => ok sorry
+      | some ch => sorry
+    sorry
+FJe_Sum3ChannelStep.lean:48:13: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [s̵t̵e̵p̵,̵left, ̲FJb_ArrayTransport.index, ̲bind_map, ̲prepared]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJe_Sum3ChannelStep.lean:48:57: warning: This simp argument is unused:
+  prepared
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵l̵e̵f̵t̵,̵F̵J̵b̵_̵A̵r̵r̵a̵y̵T̵r̵a̵n̵s̵p̵o̵r̵t̵.̵i̵n̵d̵e̵x̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵p̵r̵e̵p̵a̵r̵e̵d̵]̵[̲s̲t̲e̲p̲,̲ ̲l̲e̲f̲t̲,̲ ̲F̲J̲b̲_̲A̲r̲r̲a̲y̲T̲r̲a̲n̲s̲p̲o̲r̲t̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJe_Sum3ChannelStep.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3ChannelStep.old' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,26 @@
+import R1Z.PV_L2_F6Checker
+set_option autoImplicit false
+namespace R1Z.PV_L2_F6CheckerFailure
+open Aeneas Aeneas.Std Result R1CertCheck R1Z.PV_L2_Record
+
+/-- A source half-check failure retains its entire prefix and never appends
+the not-reached lift/QPrime/BCond events. No successful-certificate premise. -/
+theorem half_failure (pb : Pub) (c : Cert) (error : Aeneas.Std.Error)
+    (failure : half_ok (alloc.vec.Vec.deref pb.a9) (alloc.vec.Vec.deref c.hinv) = .fail error) :
+    PV_L2_F6Checker.recorded pb c =
+      ⟨.fail error,(PV_L2_F6Half.recorded
+        (alloc.vec.Vec.deref pb.a9) (alloc.vec.Vec.deref c.hinv)).events⟩ := by
+  simp only [PV_L2_F6Checker.recorded,PV_L2_RecordCompact.bind,
+    PV_L2_F6Half.erases,failure,bind_tc_fail]
+
+theorem half_divergence (pb : Pub) (c : Cert)
+    (failure : half_ok (alloc.vec.Vec.deref pb.a9) (alloc.vec.Vec.deref c.hinv) = .div) :
+    PV_L2_F6Checker.recorded pb c =
+      ⟨.div,(PV_L2_F6Half.recorded
+        (alloc.vec.Vec.deref pb.a9) (alloc.vec.Vec.deref c.hinv)).events⟩ := by
+  simp only [PV_L2_F6Checker.recorded,PV_L2_RecordCompact.bind,
+    PV_L2_F6Half.erases,failure,bind_tc_div]
+
+#print axioms half_failure
+#print axioms half_divergence
+end R1Z.PV_L2_F6CheckerFailure

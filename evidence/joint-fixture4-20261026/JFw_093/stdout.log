@@ -1,0 +1,29 @@
+JFw_TypedPrefix.lean:12:36: error(lean.unknownIdentifier): Unknown identifier `AspisR1PublicPreparation.PrefixAdapter.completedRecords`
+JFw_TypedPrefix.lean:13:44: error(lean.unknownIdentifier): Unknown identifier `AspisR1PublicPreparation.PrefixAdapter.completedRecords`
+JFw_TypedPrefix.lean:14:38: error(lean.unknownIdentifier): Unknown identifier `AspisR1PublicPreparation.PrefixAdapter.completedRecords`
+JFw_TypedPrefix.lean:17:43: error(lean.unknownIdentifier): Unknown identifier `AspisR1PublicPreparation.PrefixAdapter.parse_typedFull`
+JFw_TypedPrefix.lean:18:22: error(lean.unknownIdentifier): Unknown identifier `values`
+JFw_TypedPrefix.lean:18:42: error(lean.unknownIdentifier): Unknown identifier `decode`
+JFw_TypedPrefix.lean:18:49: error(lean.unknownIdentifier): Unknown identifier `encode`
+JFw_TypedPrefix.lean:18:56: error(lean.unknownIdentifier): Unknown identifier `entries`
+JFw_TypedPrefix.lean:15:53: error: unsolved goals
+case cons
+expanded : Slice U8
+pre : AspisR1PublicPreparation.r1_wire.Prefix
+expand :
+  compact.expand_semantic nativeValues JFw_RealExpansion.stored JFw_RealExpansion.initial =
+    ok (core.result.Result.Ok (), expanded)
+parse : AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded = ok (core.result.Result.Ok pre)
+right✝ :
+  OraclePortCompactDraft.semanticRows 27 0 (OraclePortCompactDraft.slice JFz_RowGeometry.wire 48 6983) =
+    some (List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records)
+head✝ : SemanticPrefixCodec.Bytes
+tail✝ : List SemanticPrefixCodec.Bytes
+⊢ ∃ expanded pre values,
+    compact.expand_semantic nativeValues JFw_RealExpansion.stored JFw_RealExpansion.initial =
+        ok (core.result.Result.Ok (), expanded) ∧
+      AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded = ok (core.result.Result.Ok pre) ∧
+        SemanticPrefixCodec.decodeFull (head✝ :: tail✝) = some values ∧
+          SemanticPrefixCodec.encodeFull values = head✝ :: tail✝ ∧
+            SemanticPrefixCodec.decodeFrom 0 (head✝ :: tail✝) = some (SemanticPrefixCodec.entriesOf values)
+'AspisR1.JFw_TypedPrefix.inhabited' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

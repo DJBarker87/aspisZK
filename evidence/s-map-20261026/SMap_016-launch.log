@@ -1,0 +1,36 @@
+{"attempt": "SMap_016", "exit_status": 0, "wall_seconds": 3.05214717698982, "peak_rss_kib": "4390904", "swaps": "0", "print_axioms": ["'AspisR1.SAF_AcceptedValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.SAF_AcceptedValue.value : ∀ {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a saved : AspisR1Stage2.verifier.Accumulator)
+  (dot : AspisR1Stage2.Stage2Finish.E),
+  p.variant = AspisR1Stage2.transport.Variant.S2 →
+    ops.dot v.final_message a.weights.deref = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok dot) →
+      ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+        (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs),
+        AspisR1.OraclePortStoredDecisionDraftC4.input parsed q tr = some i →
+          Asp
+...
+ saved =
+                            (AspisR1.OraclePortCheckpointStateC3.write
+                                (AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                  (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).accumulator →
+                          AspisR1.CheckpointBytes5Output.accumulator a =
+                              AspisR1.OraclePortCheckpointStateC3.advance
+                                (AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                  (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                                12 (AspisR1.CheckpointBytes5Output.accumulator saved) →
+                            AspisR1.Port4D_FinishInstall.finish ops v p a none =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+                              decide
+                                    (AspisR1.Port3_NativeFinishBody.verifier.finish_relation
+                                        (AspisR1.Port4D_Round.native ops) v p a none =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+                                  AspisR1.OraclePortFrozen2.finish parsed q tr i
+                                    (AspisR1.CheckpointBytes5Output.accumulator a) ∧
+                                decide
+                                    (AspisR1.Port4D_FinishInstall.finish ops v p a none =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+                                  AspisR1.D0TypedChecks.verify
+                                    (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i
+'AspisR1.SAF_AcceptedValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0fdb8915060f4e009220b833cb5e1064.scope; invocation ID: ab957dd98e304aeba5a3dad0053dde66

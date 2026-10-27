@@ -1,0 +1,43 @@
+{"attempt": "BEn_079", "exit_status": 0, "wall_seconds": 2.483839104010258, "peak_rss_kib": "5553904", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_BatchSource.erasure' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.SdkC_BatchSource.erasure : ∀ {Hash : Type} (D E : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (roots : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 2#usize)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (which : Aeneas.Std.Usize),
+  AspisR1.CheckpointBytes5Effect.erase E hash (AspisR1.SdkC_BatchSource.code D hash proof queries roots folded which) =
+    AspisR1.Op5T_Install.body AspisR1.Port4B_Install.leaves E proof queries roots folded which hash :=
+fun {Hash} D E hash proof queries roots folded which =>
+  Eq.mpr
+    (id
+      (congrFun'
+    
+...
+  (AspisR1.SdkC_BatchSource.code._proof_7 folded root0 root1))
+                  which)
+            (congr (congrArg Bind.bind (AspisR1.CheckpointBytes5Effect.erase_lift E hash (roots.index_usize 0#usize)))
+              (funext fun a =>
+                Eq.trans
+                  (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                    (AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 1#usize)) fun root1 =>
+                    AspisR1.Port9OR_Batch.values AspisR1.Port4B_Install.leaves D hash proof queries
+                      (Aeneas.Std.Array.make 3#usize [a, root1, folded]
+                        (AspisR1.SdkC_BatchSource.code._proof_7 folded a root1))
+                      which)
+                  (congr
+                    (congrArg Bind.bind (AspisR1.CheckpointBytes5Effect.erase_lift E hash (roots.index_usize 1#usize)))
+                    (funext fun a_1 =>
+                      AspisR1.Port9OR_Batch.values_source AspisR1.Port4B_Install.leaves D E hash proof queries
+                        (Aeneas.Std.Array.make 3#usize [a, a_1, folded]
+                          (AspisR1.SdkC_BatchSource.code._proof_7 folded a a_1))
+                        which))))))
+        (AspisR1.Op5T_Install.body AspisR1.Port4B_Install.leaves E proof queries roots folded which hash)))
+    (Eq.refl do
+      let a ← roots.index_usize 0#usize
+      let a_1 ← roots.index_usize 1#usize
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values
+          (AspisR1.Port9OR_BatchStep.ops AspisR1.Port4B_Install.leaves) E proof queries
+          (Aeneas.Std.Array.make 3#usize [a, a_1, folded] (AspisR1.SdkC_BatchSource.code._proof_7 folded a a_1)) which
+          hash)
+'AspisR1.SdkC_BatchSource.erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rfc884ae9ac8840f4bf252f8a659f77d8.scope; invocation ID: 4283e5bbef33426e8af7cd1618119bb2
+

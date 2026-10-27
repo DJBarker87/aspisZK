@@ -1,0 +1,200 @@
+44248 R1Z/PV_Canon_UpdateRead exit=0
+44249 R1Z/PV_Canon_CurrentSemantic exit=0
+44250 R1Z/PV_Canon_Prefix exit=0
+44251 R1Z/PV_Canon_CheckedRound exit=0
+44252 R1Z/PV_Canon_BindCongr exit=0
+44253 R1Z/PV_Canon_Round exit=1
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Round.lean:52:16: error: unsolved goals
+case Continue.isFalse.Continue.Err
+base : ExternalTypes
+ops : ExternalFuns
+H F : Type
+digest : aspis_core.digest.Digest32 H
+oracleInst : host_sumcheck.Oracle F
+s : host_wire.SemanticTranscript H
+output : alloc.vec.Vec U8
+point : Std.Array aspis_core.field.QM31 10#usize
+running : aspis_core.field.QM31
+round : Usize
+oracle : F
+hr : ↑round < 10
+this✝ : ExternalTypes := PV_Join_PublicCaller.native base
+this : ExternalFuns := PV_Join_PublicCaller.selected base ops
+remaining : Usize
+zero : aspis_core.field.QM31
+assignments tag count : Usize
+evaluations : alloc.vec.Vec (core.result.Result aspis_core.field.QM31 r1_wire.Error)
+merged : core.result.Result (Std.Array aspis_core.field.QM31 28#usize) r1_wire.Error
+values coefficients : Std.Array aspis_core.field.QM31 28#usize
+hp : host_sumcheck.interpolate values = ok coefficients
+hc : Coeffs coefficients
+boundary : aspis_core.field.QM31
+mismatch : Bool
+h✝ : ¬mismatch = true
+encoded : alloc.vec.Vec U8
+tagCast : UScalar UScalarTy.U8
+tagAdd : U8
+record : core.result.Result (alloc.vec.Vec U8) r1_wire.Error
+framed : alloc.vec.Vec U8
+tagCast2 : UScalar UScalarTy.U8
+tagAdd2 : U8
+after : host_wire.SemanticTranscript H
+e : r1_wire.Error
+hs : host_wire.SemanticTranscript.semantic digest s tagAdd2 framed.deref = ok (core.result.Result.Err e, after)
+⊢ (let (r2, transcript1) := (core.result.Result.Err e, after)
+    do
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val2 => do
+        let point1 ← point.update round val2
+        let output1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output framed.deref
+        let q1 ← point1.index_usize round
+        let running1 ← aspis_core.state_only_sumcheck.evaluate_state_only_polynomial coefficients q1
+        ok (core.result.Result.Ok (point1, running1), transcript1, output1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r3 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+              residual
+        ok (r3, transcript1, output)) =
+    let (r2, transcript1) := (core.result.Result.Err e, after)
+    do
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val2 => do
+        let point1 ← point.update round val2
+        let output1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output framed.deref
+        let q1 ← point1.index_usize round
+        let running1 ← checked_eval coefficients q1
+        ok (core.result.Result.Ok (point1, running1), transcript1, output1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r3 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+              residual
+        ok (r3, transcript1, output)
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Round.lean:57:10: error: Tactic `apply` failed: could not unify the conclusion of `@bind_congr_all`
+  ?r >>= ?f = ?r >>= ?g
+with the goal
+  (match updated with
+    | core.ops.control_flow.ControlFlow.Continue val2 => do
+      let point1 ← point.update round val2
+      let output1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output framed.deref
+      let q1 ← point1.index_usize round
+      let running1 ← aspis_core.state_only_sumcheck.evaluate_state_only_polynomial coefficients q1
+      ok (core.result.Result.Ok (point1, running1), after, output1)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r3 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+            residual
+      ok (r3, after, output)) =
+    match updated with
+    | core.ops.control_flow.ControlFlow.Continue val2 => do
+      let point1 ← point.update round val2
+      let output1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output framed.deref
+      let q1 ← point1.index_usize round
+      let running1 ← checked_eval coefficients q1
+      ok (core.result.Result.Ok (point1, running1), after, output1)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r3 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+            residual
+      ok (r3, after, output)
+
+Note: The full type of `@bind_congr_all` is
+  ∀ {α β : Type} (r : Result α) (f g : α → Result β), (∀ (x : α), f x = g x) → r >>= f = r >>= g
+
+case Continue.isFalse.Continue.Ok
+base : ExternalTypes
+ops : ExternalFuns
+H F : Type
+digest : aspis_core.digest.Digest32 H
+oracleInst : host_sumcheck.Oracle F
+s : host_wire.SemanticTranscript H
+output : alloc.vec.Vec U8
+point : Std.Array aspis_core.field.QM31 10#usize
+running : aspis_core.field.QM31
+round : Usize
+oracle : F
+hr : ↑round < 10
+this✝ : ExternalTypes := PV_Join_PublicCaller.native base
+this : ExternalFuns := PV_Join_PublicCaller.selected base ops
+remaining : Usize
+zero : aspis_core.field.QM31
+assignments tag count : Usize
+evaluations : alloc.vec.Vec (core.result.Result aspis_core.field.QM31 r1_wire.Error)
+merged : core.result.Result (Std.Array aspis_core.field.QM31 28#usize) r1_wire.Error
+values coefficients : Std.Array aspis_core.field.QM31 28#usize
+hp : host_sumcheck.interpolate values = ok coefficients
+hc : Coeffs coefficients
+boundary : aspis_core.field.QM31
+mismatch : Bool
+h✝ : ¬mismatch = true
+encoded : alloc.vec.Vec U8
+tagCast : UScalar UScalarTy.U8
+tagAdd : U8
+record : core.result.Result (alloc.vec.Vec U8) r1_wire.Error
+framed : alloc.vec.Vec U8
+tagCast2 : UScalar UScalarTy.U8
+tagAdd2 : U8
+after : host_wire.SemanticTranscript H
+sampled : aspis_core.field.QM31
+hs : host_wire.SemanticTranscript.semantic digest s tagAdd2 framed.deref = ok (core.result.Result.Ok sampled, after)
+updated :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) aspis_core.field.QM31
+hu :
+  (match core.result.Result.Ok sampled with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok updated
+⊢ (match updated with
+    | core.ops.control_flow.ControlFlow.Continue val2 => do
+      let point1 ← point.update round val2
+      let output1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output framed.deref
+      let q1 ← point1.index_usize round
+      let running1 ← aspis_core.state_only_sumcheck.evaluate_state_only_polynomial coefficients q1
+      ok (core.result.Result.Ok (point1, running1), after, output1)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r3 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+            residual
+      ok (r3, after, output)) =
+    match updated with
+    | core.ops.control_flow.ControlFlow.Continue val2 => do
+      let point1 ← point.update round val2
+      let output1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output framed.deref
+      let q1 ← point1.index_usize round
+      let running1 ← checked_eval coefficients q1
+      ok (core.result.Result.Ok (point1, running1), after, output1)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r3 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+            residual
+      ok (r3, after, output)
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Round.lean:53:64: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Round.lean:55:64: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Canon.round_checked' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6c6e1ec2b3e44baab431fdff89853086.scope; invocation ID: 0ddd49b0caec4e1fa6f650a364a2b3af

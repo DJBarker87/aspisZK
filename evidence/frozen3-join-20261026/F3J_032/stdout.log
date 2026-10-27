@@ -1,0 +1,86 @@
+F3J_SemanticPrefix.lean:54:32: error: Application type mismatch: The argument
+  result.right
+has type
+  UnifiedSampler.stateOf SelectedTranscriptParams.params
+      (LiteralTranscript.erasePrefix
+        (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) (row + 1) cs.length next)).2) =
+    decodeState after.state
+but is expected to have type
+  UnifiedSampler.stateOf SelectedTranscriptParams.params
+      (LiteralTranscript.erasePrefix
+        (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) row (c :: cs).length P)).2) =
+    decodeState after.state
+in the application
+  ⟨?m.303, result.right⟩
+F3J_SemanticPrefix.lean:54:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) (row + 1) cs.length next)).1
+in the target expression
+  (have first :=
+        (callLog c, TranscriptView.Value.ordinary (SourceLiteralTraceLift.sourceChallenge c),
+          decodeState c.after.state);
+      have second := eval H (F3J_SamplerRun.program pf (row + 1) cs.length (Prefix.ext P (pf row) first.2));
+      (first.1 ++ second.1, second.2)).1 =
+    sourceLog (c :: cs)
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+before after✝ : r1_wire.SemanticTranscript Hash
+cs✝ : List (SourceFull25.Call D pre)
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+records : p.semantic = List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+after : r1_wire.SemanticTranscript Hash
+cs : List (SourceFull25.Call D pre)
+c : SourceFull25.Call D pre
+tail : SourceFull25.Trace D pre c.after after cs
+ih :
+  ∀ (row : ℕ) (P : LiteralTranscript.Prefix),
+    row ≠ 0 →
+      row + cs.length ≤ 25 →
+        ↑c.after.next_row = row →
+          UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) =
+              decodeState c.after.state →
+            (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) row cs.length P)).1 = sourceLog cs ∧
+              UnifiedSampler.stateOf SelectedTranscriptParams.params
+                  (LiteralTranscript.erasePrefix
+                    (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) row cs.length P)).2) =
+                decodeState after.state
+row : ℕ
+P : LiteralTranscript.Prefix
+positive : row ≠ 0
+count : row + (c :: cs).length ≤ 25
+number : ↑c.before.next_row = row
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState c.before.state
+rowC : ↑c.row = row
+nextC : ↑c.after.next_row = row + 1
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p root w bound
+erased : LiteralTranscript.erase (pf row) = TranscriptView.Message.payload ⟨rowBytes p row, ⋯⟩
+bytesEq : rowBytes p row = rawBytes c.record.framed
+step :
+  eval H (LiteralByteSampler.samp row P (pf row)).toProgram =
+    (callLog c, TranscriptView.Value.ordinary (SourceLiteralTraceLift.sourceChallenge c), decodeState c.after.state)
+next : Prefix LiteralTranscript.Public LiteralTranscript.Message LiteralTranscript.Challenge :=
+  Prefix.ext P (pf row)
+    (TranscriptView.Value.ordinary (SourceLiteralTraceLift.sourceChallenge c), decodeState c.after.state)
+nextState :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix next) =
+    decodeState c.after.state
+result :
+  (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) (row + 1) cs.length next)).1 = sourceLog cs ∧
+    UnifiedSampler.stateOf SelectedTranscriptParams.params
+        (LiteralTranscript.erasePrefix
+          (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) (row + 1) cs.length next)).2) =
+      decodeState after.state
+⊢ (have first :=
+        (callLog c, TranscriptView.Value.ordinary (SourceLiteralTraceLift.sourceChallenge c),
+          decodeState c.after.state);
+      have second := eval H (F3J_SamplerRun.program pf (row + 1) cs.length (Prefix.ext P (pf row) first.2));
+      (first.1 ++ second.1, second.2)).1 =
+    sourceLog (c :: cs)
+'AspisR1.F3J_SemanticPrefix.positive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

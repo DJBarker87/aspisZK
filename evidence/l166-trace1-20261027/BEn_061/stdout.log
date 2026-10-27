@@ -1,0 +1,28 @@
+theorem AspisR1.BEl_CodeCongr.bind_tail : ∀ {S A B : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (code : AspisR1.SdkC_Source.Code A) (left right : A → AspisR1.SdkC_Source.Code B),
+  (∀ (a : A), AspisR1.BEl_CodeCongr.Equivalent call (left a) (right a)) →
+    AspisR1.BEl_CodeCongr.Equivalent call (code >>= left) (code >>= right) :=
+fun {S A B} call code left right same state before =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => _a = AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call (code >>= right) state before))
+        (AspisR1.BEl_CodeCongr.bind_run call code left state before)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            AspisR1.BEl_CodeCongr.resumeRun call left
+                (AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call code state before)) =
+              _a)
+          (AspisR1.BEl_CodeCongr.bind_run call code right state before)))
+      (let ⟨result, snd✝⟩ := AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call code state before)
+      let ⟨state, history⟩ := snd✝
+      Option.casesOn (motive := fun t =>
+        result = t →
+          AspisR1.BEl_CodeCongr.resumeRun call left (result, state, history) =
+            AspisR1.BEl_CodeCongr.resumeRun call right (result, state, history))
+        result (fun h => Eq.symm h ▸ Eq.refl (AspisR1.BEl_CodeCongr.resumeRun call left (Option.none, state, history)))
+        (fun a h => Eq.symm h ▸ same a state history) (Eq.refl result)))
+'AspisR1.BEl_CodeCongr.bind_tail' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,59 @@
+PAln_DataRead.lean:29:65: error: unsolved goals
+p : Parsed
+q : Fin 22 → Fin 262144
+tr : ErasedPrefix
+aligned : Aligned p tr
+rows : semanticRows 27 0 (slice p.wire 48 6983) = some p.semantic
+length : List.length p.wire = 57607
+scan : OraclePortCompactDraft.scan p.wire
+typed : ∃ decoded, SemanticPrefixCodec.decodeFrom 0 (List.take 25 p.semantic) = some decoded
+ordinary : ∀ i < 31, ∃ value, LiteralChallengeRead.ordinaryAt (typedRows p q tr) i = some value
+rs : LiteralAcceptanceTerminal.TranscriptRounds := typedRows p q tr
+semantic : List (R0P.Mask.SemMsgZ LiteralSemanticPrefix.E × LiteralSemanticPrefix.E)
+semanticRead : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (typedRows p q tr)) = some semantic
+wordReads :
+  LiteralTranscript.c1At (typedRows p q tr) = some (words p q).c1 ∧
+    LiteralTranscript.c2At (typedRows p q tr) = some (words p q).c2 ∧
+      LiteralTranscript.vAt (typedRows p q tr) = some (words p q).final
+z0 : LiteralChallengeRead.E
+read25 : LiteralChallengeRead.ordinaryAt (typedRows p q tr) 25 = some z0
+z1 : LiteralChallengeRead.E
+read26 : LiteralChallengeRead.ordinaryAt (typedRows p q tr) 26 = some z1
+gamma : LiteralChallengeRead.E
+read27 : LiteralChallengeRead.ordinaryAt (typedRows p q tr) 27 = some gamma
+kappa : LiteralChallengeRead.E
+read28 : LiteralChallengeRead.ordinaryAt (typedRows p q tr) 28 = some kappa
+alpha0 : LiteralChallengeRead.E
+read29 : LiteralChallengeRead.ordinaryAt (typedRows p q tr) 29 = some alpha0
+alpha1 : LiteralChallengeRead.E
+read30 : LiteralChallengeRead.ordinaryAt (typedRows p q tr) 30 = some alpha1
+len : (List.take 25 rs).length = 25
+⊢ ∃ common,
+    (match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (typedRows p q tr)) with
+      | none => none
+      | some semantic =>
+        some
+          { c1 := (words p q).c1, c2 := (words p q).c2,
+            word :=
+              LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK (words p q).c1 (words p q).c2,
+            semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+            circlePoints := fun i =>
+              if i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+              else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+            functionals :=
+              SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                if i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+            baseFunctional :=
+              SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                if i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }) =
+      some common
+PAln_DataRead.lean:30:64: warning: This simp argument is unused:
+  semanticRead
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵t̵e̵r̵a̵l̵O̵p̵e̵n̵i̵n̵g̵V̵i̵e̵w̵.̵r̵e̵a̵d̵,̵l̵e̵n̵,̵w̵o̵r̵d̵R̵e̵a̵d̵s̵.̵1̵,̵w̵o̵r̵d̵R̵e̵a̵d̵s̵.̵2̵.̵1̵,̵s̵e̵m̵a̵n̵t̵i̵c̵R̵e̵a̵d̵,̵r̵e̵a̵d̵2̵5̵,̵r̵e̵a̵d̵2̵6̵,̵r̵s̵]̵[̲L̲i̲t̲e̲r̲a̲l̲O̲p̲e̲n̲i̲n̲g̲V̲i̲e̲w̲.̲r̲e̲a̲d̲,̲ ̲l̲e̲n̲,̲ ̲w̲o̲r̲d̲R̲e̲a̲d̲s̲.̲1̲,̲ ̲w̲o̲r̲d̲R̲e̲a̲d̲s̲.̲2̲.̲1̲,̲ ̲r̲e̲a̲d̲2̲5̲,̲ ̲r̲e̲a̲d̲2̲6̲,̲ ̲r̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PAln_DataRead.exists_read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

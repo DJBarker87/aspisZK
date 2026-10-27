@@ -1,0 +1,53 @@
+{"attempt": "JFm_071", "exit_status": 1, "wall_seconds": 1.8508421310107224, "peak_rss_kib": "4290880", "swaps": "0", "print_axioms": ["'AspisR1.JFm_BlockSplit.append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFm_BlockSplit.lean:12:4: error: Tactic `rfl` failed: The left-hand side
+  JFw_Blocks.blocks (0 + m) ([] ++ b)
+is not definitionally equal to the right-hand side
+  JFw_Blocks.blocks 0 [] ++ JFw_Blocks.blocks m b
+
+case zero
+m : ℕ
+b : List U8
+length : [].length = 16 * 0
+⊢ JFw_Blocks.blocks (0 + m) ([] ++ b) = JFw_Blocks.blocks 0 [] ++ JFw_Blocks.blocks m b
+JFm_BlockSplit.lean:18:27: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.drop ?m.134 ?m.135).length
+in the target expression
+  List.drop 16 a ++ List.drop (16 - a.length) b = List.drop 16 a ++ b
+
+m : ℕ
+b : List U8
+n : ℕ
+ih :
+  ∀ (a : List U8),
+    a.length = 16 * n → JFw_Blocks.blocks (n + m) (a ++ b) = JF
+...
+JFm_BlockSplit.lean:12:4: error: Tactic `rfl` failed: The left-hand side
+  JFw_Blocks.blocks (0 + m) ([] ++ b)
+is not definitionally equal to the right-hand side
+  JFw_Blocks.blocks 0 [] ++ JFw_Blocks.blocks m b
+
+case zero
+m : ℕ
+b : List U8
+length : [].length = 16 * 0
+⊢ JFw_Blocks.blocks (0 + m) ([] ++ b) = JFw_Blocks.blocks 0 [] ++ JFw_Blocks.blocks m b
+JFm_BlockSplit.lean:18:27: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.drop ?m.134 ?m.135).length
+in the target expression
+  List.drop 16 a ++ List.drop (16 - a.length) b = List.drop 16 a ++ b
+
+m : ℕ
+b : List U8
+n : ℕ
+ih :
+  ∀ (a : List U8),
+    a.length = 16 * n → JFw_Blocks.blocks (n + m) (a ++ b) = JFw_Blocks.blocks n a ++ JFw_Blocks.blocks m b
+a : List U8
+length : a.length = 16 * (n + 1)
+enough : 16 ≤ a.length
+taken : (List.take 16 a).length = 16
+restLength : (List.drop 16 a).length = 16 * n
+⊢ List.drop 16 a ++ List.drop (16 - a.length) b = List.drop 16 a ++ b
+'AspisR1.JFm_BlockSplit.append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra9d5e450cd7446f89a283d46bbb3b697.scope; invocation ID: 46a14a28758e4f139b9f7d19c7d1178e

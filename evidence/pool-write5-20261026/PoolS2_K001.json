@@ -1,0 +1,41 @@
+{
+  "attempt": "PoolS2_K001",
+  "kind": "kani",
+  "source_revision": "4b324656b7f978072e8c4fbed2966f2a37986e5c",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_planner/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolS2_bump",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolS2_planner/Cargo.toml",
+    "PoolS2_planner/PoolS2_lib.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Original unrestricted planner; one output property, checkpoint bump, first and repeat cases together. All lane bytes and master fields arbitrary."
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check"
+}

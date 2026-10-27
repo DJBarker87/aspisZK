@@ -1,0 +1,36 @@
+CPH_Protection.lean:41:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  entry p t
+in the target expression
+  AdapterRw.r1_pool_adapter.owned.stage1_owned (DrvC_Installation.sdk c) id
+      (load (cached (p.bank t)).cells (layout (cached (p.bank t)) (p.layout t))).first data1 =
+    ok (core.result.Result.Ok saved)
+
+Tx A F C : Type
+p : Observations Tx A
+t u : Tx
+e1 e2 : Entry
+saved : alloc.vec.Vec U8
+actions : List (Action A)
+c : DrvC_Installation.Configuration F C
+keyLaw : (DrvC_Installation.sdk c).op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+extraction : S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk c) n1 n2 hashv
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+game : CPH_Game.DeployedPairExecution p t u e1 e2 saved actions n1 n2 copy allocator id
+data1 : Slice U8
+state1 final1 : A
+post1 : Heap (ℕ → Record)
+accepted1 : first n1 copy allocator e1 id data1 state1 = ok (core.result.Result.Ok (saved, post1, final1))
+native : n1 id e1.first data1 = ok (core.result.Result.Ok saved)
+source :
+  AdapterRw.r1_pool_adapter.owned.stage1_owned (DrvC_Installation.sdk c) id e1.first data1 =
+    ok (core.result.Result.Ok saved)
+⊢ AdapterRw.r1_pool_adapter.owned.stage1_owned (DrvC_Installation.sdk c) id
+      (load (cached (p.bank t)).cells (layout (cached (p.bank t)) (p.layout t))).first data1 =
+    ok (core.result.Result.Ok saved)
+'AspisR1.CPH_Protection.derive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

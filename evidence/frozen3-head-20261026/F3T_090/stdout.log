@@ -1,0 +1,23 @@
+F3T_SourceCost.lean:25:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  view (eval ?H (recorded ?D (build ?D) ?P))
+in the target expression
+  (eval H (recorded D (build D) (F3T_Canon.canon (lift c P)))).2.2 = true
+
+F C : Type
+c : DrvC_Installation.Configuration F C
+D : LiteralByteProtocol.Decoder
+P : ByteProver
+Q : ℕ
+queries : ∀ (H : Bytes → State), (eval H P).1.length ≤ Q
+hashv : SdkC_Source.Parts → Aeneas.Std.Result SdkC_Source.Digest
+raw : AcceptedVerifierJoin c D (F3T_Installed.source c hashv)
+H : Bytes → State
+accepted : (eval H (recorded D (build D) (F3T_Canon.canon (lift c P)))).2.2 = true
+joined :
+  eval H (annotatedWith D (F3T_Installed.source c hashv) (F3T_Canon.canon (lift c P))) =
+    eval H (recorded D (build D) (F3T_Canon.canon (lift c P)))
+⊢ (mean fun coins =>
+      ↑(ActualCostedExtractorM10.extractor.eval (view (eval H (recorded D (build D) (F3T_Canon.canon (lift c P)))))
+              coins).2.total) ≤
+    ↑(CostedAllocationLedgerM10.params (Q + 1161)).attemptBudget
+'AspisR1.F3T_SourceCost.accepted_attempt_cost' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

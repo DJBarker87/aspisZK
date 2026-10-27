@@ -1,0 +1,40 @@
+{"attempt": "RPz8_553", "exit_status": 0, "wall_seconds": 2.657002964988351, "peak_rss_kib": "5570996", "swaps": "0", "print_axioms": ["'AspisR1.ARS_Coverage.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+structure AspisR1.ARS_Coverage.SupportedEntry {W A C Tx : Type} (L : Library W (ℕ → Record))
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (c : DrvC_Installation.Configuration FIo_Install.W C) (err : C) (r : NP6_StdModel.Reservation)
+  (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (a : Adversary A) (H : Bytes → State) : Type
+number of parameters: 15
+fields:
+  AspisR1.ARS_Coverage.SupportedEntry.saved : alloc.vec.Vec U8
+  AspisR1.ARS_Coverage.SupportedEntry.post1 : Heap (ℕ → Record)
+  AspisR1.ARS_Coverage.SupportedEntry.post2 : Heap (ℕ →
+...
+cator A}
+    {c : DrvC_Installation.Configuration FIo_Install.W C} {err : C} {r : NP6_StdModel.Reservation}
+    {native1 : S2W_ExtractionBoundary.First} {native2 : S2W_ExtractionBoundary.Second}
+    {hashv : SdkC_Source.Parts → Result SdkC_Source.Digest} {a : Adversary A} {H : Bytes → State}
+    (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)) (final1 final2 : A) (w1 w2 : W)
+    (admission1 : RuntimeEntrypointAdmission L (eval H a.first).2.entry w1 3)
+    (admission2 : RuntimeEntrypointAdmission L (eval H (a.second (eval H a.first).2 saved post1 final1)).2.entry w2 7)
+    (accepted1 :
+      first native1 copy allocator (eval H a.first).2.entry CPH_Program.verifier (eval H a.first).2.data
+          (eval H a.first).2.state =
+        ok (core.result.Result.Ok (saved, post1, final1)))
+    (accepted2 :
+      let j := (eval H (a.second (eval H a.first).2 saved post1 final1)).2;
+      second native2 allocator j.entry CPH_Program.verifier j.data j.slot j.state =
+        ok (core.result.Result.Ok (post2, final2)))
+    (p : CPG_Projection.Observations Tx A) (t u : Tx) (actions : List (CPP_BankState.Action A))
+    (game :
+      CPH_Game.DeployedPairExecution p t u (eval H a.first).2.entry
+        (eval H (a.second (eval H a.first).2 saved post1 final1)).2.entry saved actions native1 native2 copy allocator
+        CPH_Program.verifier)
+    (RuntimePersistence :
+      CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+        (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p) (CPG_Projection.tentative p)
+        (CPG_Projection.success p) (CPG_Projection.loaded p)) :
+    SupportedEntry L copy allocator c err r native1 native2 hashv a H
+'AspisR1.ARS_Coverage.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r166517df5f124f0390233776234ffdeb.scope; invocation ID: 37747278b2ac4d56b2da9fa85e8e50b8

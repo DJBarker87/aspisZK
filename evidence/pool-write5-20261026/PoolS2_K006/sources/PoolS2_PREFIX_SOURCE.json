@@ -1,0 +1,6 @@
+{
+  "path": "programs/aspis-pool/src/processor.rs",
+  "sha256": "a95ccc46e3083b539115fade0f88f1509635a2dbcff5b5b7d78bc42108ba2b83",
+  "exact_unique_body": "pub(crate) fn require_unique_accounts(accounts: &[AccountInfo<'_>]) -> ProgramResult {\n    for left in 0..accounts.len() {\n        for right in left + 1..accounts.len() {\n            if accounts[left].key == accounts[right].key {\n                return Err(ProgramError::InvalidArgument);\n            }\n        }\n    }\n    Ok(())\n}\n",
+  "scope": "Exact original native AccountInfo key-uniqueness guard vs P6 byte-key projection on exactly12 actual accounts. One-byte arbitrary payload is ignored by both guards, no data borrows occur; not a whole caller proof or arbitrary runtime heap theorem."
+}

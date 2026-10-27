@@ -1,0 +1,45 @@
+JFr_TX2_Windows.lean:9:3: error: unexpected token 'prefix'; expected identifier
+JFr_TX2_Windows.lean:12:45: error: Application type mismatch: The argument
+  h
+has type
+  (↑(JFo_Opening.value i)).length ≤ Usize.max
+but is expected to have type
+  608 ≤ Usize.max
+in the application
+  le_trans (List.length_take_le 608 ↑(JFo_Opening.value i)) h
+JFr_TX2_Windows.lean:14:31: error: unexpected token 'prefix'; expected ')', '_', '↑', '↥', '⇑', identifier or term
+JFr_TX2_Windows.lean:14:37: error: unexpected identifier; expected ':'
+JFr_TX2_Windows.lean:15:19: error: unexpected token ','; expected ':'
+JFr_TX2_Windows.lean:18:49: error: unexpected token 'prefix'; expected ')', '_', '↑', '↥', '⇑', identifier or term
+JFr_TX2_Windows.lean:18:55: error: unexpected identifier; expected ':'
+JFr_TX2_Windows.lean:23:2: error: 'change' tactic failed, pattern
+  List.take count (List.drop start (List.take 608 ↑(JFo_Opening.value i))) = ?m.46
+is not definitionally equal to target
+  List.take count (List.drop start ↑(array i)) =
+    List.take count (List.drop (10055 + ↑i * 832 + start) ↑JFx_NativeBytes.proof)
+JFr_TX2_Windows.lean:37:51: error: unexpected token 'prefix'; expected ')', '↑', '↥', '⇑' or term
+JFr_TX2_Windows.lean:37:50: error: (↥) must have a function type, not
+  Slice U8
+JFr_TX2_Windows.lean:35:83: error: unsolved goals
+case range
+i : Fin 22
+⊢ core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (JFo_Opening.value i)
+      { «end» := 608#usize } =
+    ok sorry
+
+i : Fin 22
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (JFo_Opening.value i)
+      { «end» := 608#usize } =
+    ok sorry
+⊢ (do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (JFo_Opening.value i)
+            { «end» := 608#usize }
+      let r ← core.array.TryFromSharedArraySlice.try_from 608#usize s
+      core.result.Result.unwrap core.fmt.DebugTryFromSliceError r) =
+    ok (array i)
+JFr_TX2_Windows.lean:37:57: error: unexpected identifier; expected ':'
+JFr_TX2_Windows.lean:46:14: error(lean.unknownIdentifier): Unknown constant `length`
+'AspisR1.JFr_TX2_Windows.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFr_TX2_Windows.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

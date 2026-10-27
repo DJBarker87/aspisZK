@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ExternalWritePrefix.lean:37:19: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 0
+  f ≥ 0
+  e ≥ 0
+  1 ≤ d ≤ 4
+  c ≥ 0
+  -3 ≤ c - 4*d ≤ -1
+  c - 4*d - e ≤ -5
+  c - 4*d - f ≤ -5
+  c - 4*d - i ≤ -5
+where
+ c := ↑j
+ d := ↑↑(g.wrapping_add 1#usize)
+ e := ↑↑1#usize
+ f := ↑↑2#usize
+ i := ↑↑3#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ExternalWritePrefix.lean:20:2: error: unsolved goals
+case neg.isFalse.isFalse.isFalse
+a b : State
+g : Usize
+hg : ↑g < 4
+m : Std.Array U32 4#usize
+h : ∀ j < 4 * ↑g, (↑a)[j]! = (↑b)[j]!
+j : ℕ
+hj : j < 4 * (↑g + 1)
+hn : ↑(g.wrapping_add 1#usize) = ↑g + 1
+prior : ¬j < 4 * ↑g
+h✝² : ¬j = 4 * ↑g + ↑3#usize
+h✝¹ : ¬j = 4 * ↑g + ↑2#usize
+h✝ : ¬j = 4 * ↑g + ↑1#usize
+⊢ (↑m)[0]! = if j = 4 * ↑g then (↑m)[0]! else (↑b)[j]!
+'R1Z.PV_Src_ExternalWritePrefix.extend' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

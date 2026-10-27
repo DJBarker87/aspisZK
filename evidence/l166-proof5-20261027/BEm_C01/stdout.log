@@ -1,0 +1,36 @@
+   Compiling bem-batch-observation v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEm_rust)
+warning: unused import: `alloc::vec::Vec`
+  --> src/BEm_frozen.rs:86:5
+   |
+86 | use alloc::vec::Vec;
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: type `BEm_extract::Attempt` is more private than the item `BEm_extract::extracted_shipped`
+ --> src/BEm_extract.rs:5:1
+  |
+5 | pub(crate) fn extracted_shipped<H:Digest32>(proof:&[u8],queries:[u32;22],roots:[[u8;32];3],ordinal:usize,backend:H,log:&RefCell<Vec<Attempt>>)->Result<(),Error> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `BEm_extract::extracted_shipped` is reachable at visibility `pub(crate)`
+  |
+note: but type `BEm_extract::Attempt` is only usable at visibility `pub(self)`
+ --> src/BEm_owned.rs:7:1
+  |
+7 | struct Attempt {
+  | ^^^^^^^^^^^^^^
+  = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `BEm_extract::Attempt` is more private than the item `BEm_extract::extracted_reference`
+ --> src/BEm_extract.rs:8:1
+  |
+8 | pub(crate) fn extracted_reference<H:Digest32>(proof:&[u8],queries:[u32;22],roots:[[u8;32];3],ordinal:usize,backend:H,log:&RefCell<Vec<Attempt>>)->Result<(),Error> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `BEm_extract::extracted_reference` is reachable at visibility `pub(crate)`
+  |
+note: but type `BEm_extract::Attempt` is only usable at visibility `pub(self)`
+ --> src/BEm_owned.rs:7:1
+  |
+7 | struct Attempt {
+  | ^^^^^^^^^^^^^^
+
+warning: `bem-batch-observation` (lib) generated 3 warnings (run `cargo fix --lib -p bem-batch-observation` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 0.23s

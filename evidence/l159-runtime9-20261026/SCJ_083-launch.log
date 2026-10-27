@@ -1,0 +1,39 @@
+{"attempt": "SCJ_083", "exit_status": 0, "wall_seconds": 2.3605072930222377, "peak_rss_kib": "5495224", "swaps": "0", "print_axioms": ["'AspisR1.Rc5_DictionaryNonvacuity.contracts' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2Trust.Library' does not depend on any axioms"]}
+@AspisR1.Rc5_DictionaryNonvacuity.contracts : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (AspisR1.Rc5_Install.configuration err c r).query ∧
+    AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives (AspisR1.Rc5_Install.configuration err c r).geometry ∧
+      AspisR1.Port5Q1_Domain.SessionADomain (AspisR1.Rc5_Install.configuration err c r).geometry
+theorem AspisR1.Rc5_DictionaryNonvacuity.contracts : ∀ {F C : Type} (err : C)
+  (c : AspisR1.DrvC_Installation.Configuration F C) (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (AspisR1.R
+...
+contracts : ∀ {F C : Type} (err : C)
+  (c : AspisR1.DrvC_Installation.Configuration F C) (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (AspisR1.Rc5_Install.configuration err c r).query ∧
+    AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives (AspisR1.Rc5_Install.configuration err c r).geometry ∧
+      AspisR1.Port5Q1_Domain.SessionADomain (AspisR1.Rc5_Install.configuration err c r).geometry :=
+fun {F C} err c r =>
+  ⟨AspisR1.SAQ_Decoder.primitives c.query,
+    ⟨AspisR1.SAQ_Constructor.canonical err c.geometry, AspisR1.SAQ_Constructor.domain err c.geometry⟩⟩
+'AspisR1.Rc5_DictionaryNonvacuity.contracts' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.S2Trust.Library : Type → Type → Type
+structure AspisR1.S2Trust.Library (W F : Type) : Type
+number of parameters: 2
+fields:
+  AspisR1.S2Trust.Library.related : W → AspisR1.S2Trust.Heap F → Prop
+  AspisR1.S2Trust.Library.accountData : W → ℕ → ℕ
+  AspisR1.S2Trust.Library.accountLamports : W → ℕ → ℕ
+  AspisR1.S2Trust.Library.cellPayload : W → ℕ → AspisR1.S2Trust.Payload
+  AspisR1.S2Trust.Library.cellCounter : W → ℕ → ℤ
+  AspisR1.S2Trust.Library.liveGuard : W → ℕ → Option AspisR1.S2Trust.Guard
+  AspisR1.S2Trust.Library.allocated : W → ℕ → Bool
+  AspisR1.S2Trust.Library.run : W → AspisR1.S2Trust.Op → W × AspisR1.S2Trust.Reply
+constructor:
+  AspisR1.S2Trust.Library.mk {W F : Type} (related : W → AspisR1.S2Trust.Heap F → Prop)
+    (accountData accountLamports : W → ℕ → ℕ) (cellPayload : W → ℕ → AspisR1.S2Trust.Payload) (cellCounter : W → ℕ → ℤ)
+    (liveGuard : W → ℕ → Option AspisR1.S2Trust.Guard) (allocated : W → ℕ → Bool)
+    (run : W → AspisR1.S2Trust.Op → W × AspisR1.S2Trust.Reply) : AspisR1.S2Trust.Library W F
+'AspisR1.S2Trust.Library' does not depend on any axioms
+
+Running as unit: run-r38fe2add42de463a81d4da0a3a5973d0.scope; invocation ID: 240b69bbc32840179e3f9b0c4ecac414

@@ -1,0 +1,19 @@
+import JGl_RetainedTerminal
+import JGd_MaskedGate
+set_option autoImplicit false
+namespace AspisR1.JGl_GuardReduction
+open Aeneas Aeneas.Std Result
+/-- The SAME actual retained public terminal exists canonically. Its original
+masked acceptance guard is equivalent to the exact still-unproved numeric
+identification; the guard itself is not asserted inhabited here. -/
+theorem source {H : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+    (B : AspisR1PublicPreparation.FinishModel.Boundaries) (hash : H) :
+    ∃ terminal, FIq_Terminal.terminal JFs_PublicSerialization.value JFu_ClaimsData.claims
+      JFm_PartialAlpha.a10 JFm_Begin.challenges=ok (.Ok terminal) ∧
+      FIp_SemanticValues.Canon terminal ∧
+      (JGb_MaskedArithmetic.run terminal JGd_NumericData.mask=ok JGd_NumericData.running ↔
+        terminal=JGd_NumericData.neededTerminal) := by
+  obtain ⟨terminal,run,canon⟩ := JGl_RetainedTerminal.source D B hash
+  exact ⟨terminal,run,canon,JGd_TerminalCriterion.source terminal canon⟩
+#print axioms source
+end AspisR1.JGl_GuardReduction

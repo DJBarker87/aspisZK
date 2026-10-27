@@ -1,0 +1,47 @@
+F3U_RehashInit.lean:13:80: error: unsolved goals
+Hash : Type
+H : Bytes → State
+D : aspis_core.Digest32 Hash
+hash : Hash
+pub : Slice U8
+root : Std.Array U8 32#usize
+x✝¹ : core.result.Result U32 core.num.error.TryFromIntError
+x✝ : core.result.Result U32 r1_wire.Error
+x : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) U32
+⊢ (PreparedHashCode.bind (Code.done x) fun value =>
+      F3U_Rehash.code H
+        (match value with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest D hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_wire.SemanticTranscript Hash) (core.convert.FromSame r1_wire.Error) residual))) =
+    PreparedHashCode.bind (Code.done x) fun cf =>
+      match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let s ← liftM (lift (Array.make 1#usize [0#u8] S1SemanticCode.newTranscript._proof_4).to_slice)
+        let a ← liftM (lift (core.num.U32.to_le_bytes val))
+        let s1 ← liftM (lift a.to_slice)
+        let s2 ← liftM (lift root.to_slice)
+        let s3 ← liftM (lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+        let a1 ← effects.digest (F3U_Rehash.dictionary H D) hash s3
+        pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        liftM
+          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (r1_wire.SemanticTranscript Hash) (core.convert.FromSame r1_wire.Error) residual)
+F3U_RehashInit.lean:14:82: warning: This simp argument is unused:
+  F3U_RehashBind.digest
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵1̵S̵e̵m̵a̵n̵t̵i̵c̵C̵o̵d̵e̵.̵n̵e̵w̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵,̵F̵3̵U̵_̵R̵e̵h̵a̵s̵h̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵F̵3̵U̵_̵R̵e̵h̵a̵s̵h̵B̵i̵n̵d̵.̵l̵i̵f̵t̵,̵F̵3̵U̵_̵R̵e̵h̵a̵s̵h̵B̵i̵n̵d̵.̵d̵i̵g̵e̵s̵t̵]̵[̲S̲1̲S̲e̲m̲a̲n̲t̲i̲c̲C̲o̲d̲e̲.̲n̲e̲w̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲,̲ ̲F̲3̲U̲_̲R̲e̲h̲a̲s̲h̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲F̲3̲U̲_̲R̲e̲h̲a̲s̲h̲B̲i̲n̲d̲.̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3U_RehashInit.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

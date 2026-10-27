@@ -1,0 +1,22 @@
+PAln_Row30Source.lean:17:45: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+before out : alloc.vec.Vec U8
+payload copy : Slice U8
+cloned : Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) payload = ok copy
+same : payload = copy
+cloned' : Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) payload = ok payload
+h✝ : before.length + payload.length ≤ Usize.max
+call :
+  (match h' : Slice.clone core.clone.CloneU8.clone payload with
+    | ok s' => ok ⟨↑before ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok out
+s : Slice U8
+⊢ (↑before ++ ↑s).length ≤ Usize.max
+'AspisR1.PAln_Row30Source.extend' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PAln_Row30Source.bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

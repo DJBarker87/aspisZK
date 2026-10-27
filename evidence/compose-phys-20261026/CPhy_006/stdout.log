@@ -1,0 +1,25 @@
+CPhy_Ranges.lean:13:20: error: No goals to be solved
+CPhy_Ranges.lean:38:6: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_ofNat`
+CPhy_Ranges.lean:37:4: error: Type mismatch: After simplification, term
+  read
+ has type
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := Port4B_SlotInstall.offset (3 * batch + kind) ⋯,
+        «end» := Port4B_SlotInstall.offset (3 * batch + kind + 1) ⋯ } =
+    ok (sub proof (Port4B_SlotInstall.offset (3 * batch + kind) ⋯) (Port4B_SlotInstall.offset (3 * batch + kind + 1) ⋯))
+but is expected to have type
+  (if small : ↑(3 * batch + kind)#usize < 6 then
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+        { start := Port4B_SlotInstall.offset ↑(3 * batch + kind)#usize ⋯,
+          «end» := Port4B_SlotInstall.offset (↑(3 * batch + kind)#usize + 1) ⋯ }
+    else fail Error.arrayOutOfBounds) =
+    ok (sub proof (Port4B_SlotInstall.offset (3 * batch + kind) ⋯) (Port4B_SlotInstall.offset (3 * batch + kind + 1) ⋯))
+CPhy_Ranges.lean:45:4: error: Type mismatch: After simplification, term
+  (physical proof0 length0 0 k (of_decide_eq_true (id (Eq.refl true))) hk).left
+ has type
+  S2Y_OwnedChildren.PhysicalRange proof0 (node proof0 (3 * 0 + k)) (3 * 0 + k)
+but is expected to have type
+  S2Y_OwnedChildren.PhysicalRange proof0 (node (if True then proof0 else proof1) (3 * 0 + k)) (3 * 0 + k)
+'AspisR1.CPhy_Ranges.physical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Ranges.multiproof' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Ranges.scan' depends on axioms: [propext, Classical.choice, Quot.sound]

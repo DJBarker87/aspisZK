@@ -1,0 +1,53 @@
+FJn_GatherCell.lean:30:31: error: Application type mismatch: The argument
+  c
+has type
+  Claims
+but is expected to have type
+  Std.Array FIv_NativeArithmetic.NQ ?m.164
+in the application
+  FIv_NativeArray.slot c
+FJn_GatherCell.lean:17:42: error: unsolved goals
+c : Claims
+i : Usize
+ri : UScalar UScalarTy.Usize
+hr : i / 28#usize = ok ri
+ci : UScalar UScalarTy.Usize
+hc : i % 28#usize = ok ci
+row : Std.Array field.QM31 29#usize
+rr : Array.index_usize c ri = ok row
+q : field.QM31
+rq : row.index_usize ci = ok q
+run✝³ :
+  (do
+      let i_1 ← i / 28#usize
+      let i1 ← i % 28#usize
+      let a ← Array.index_usize c i_1
+      let q ← a.index_usize i1
+      ok (q, c)) =
+    ok (q, c)
+run✝² :
+  (do
+      let i1 ← i % 28#usize
+      let a ← Array.index_usize c ri
+      let q ← a.index_usize i1
+      ok (q, c)) =
+    ok (q, c)
+run✝¹ :
+  (do
+      let a ← Array.index_usize c ri
+      let q ← a.index_usize ci
+      ok (q, c)) =
+    ok (q, c)
+run✝ :
+  (do
+      let q ← row.index_usize ci
+      ok (q, c)) =
+    ok (q, c)
+run : ok (q, c) = ok (q, c)
+rv : ↑ri = ↑i / 28
+cv : ↑ci = ↑i % 28
+⊢ decode q =
+    match (↑c)[↑ri]? with
+    | none => 0
+    | some row => FIv_NativeArray.value row (↑i % 28)
+'AspisR1.FJn_GatherCell.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

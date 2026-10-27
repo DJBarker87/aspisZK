@@ -1,0 +1,14 @@
+from pathlib import Path
+import json,collections
+E=Path(__file__).resolve().parent;a=json.loads((E/'RPz2_axiom-audit.json').read_text());ds=a['declarations'];std={'propext','Classical.choice','Quot.sound'};bad=[d for d in ds if set(d['axioms'])-std];names=collections.defaultdict(list)
+for d in ds:names[d['name']].append({'module':d['module'],'axioms':d['axioms']})
+raw=[];parser=[]
+for f in sorted(E.glob('RPz2_*/receipt.json')):
+ r=json.loads(f.read_text())
+ if not r['module'].startswith('RPz2_Audit'):continue
+ lines=[l for l in (f.parent/'stdout.log').read_text().splitlines() if 'depends on axioms:' in l or 'does not depend on any axioms' in l];raw.extend({'attempt':r['attempt'],'line':l} for l in lines)
+ missing=list((collections.Counter(lines)-collections.Counter(r['print_axioms'])).elements());extra=list((collections.Counter(r['print_axioms'])-collections.Counter(lines)).elements())
+ if missing or extra:parser.append({'attempt':r['attempt'],'raw_results':len(lines),'receipt_parsed_results':len(r['print_axioms']),'raw_lines_not_preserved_exactly':missing,'receipt_truncated_lines':extra,'qualification':'Existing runner regex mishandles apostrophes inside Lean names; raw stdout and structured collectAxioms records retained. Runner and receipts not edited.'})
+queries=collections.Counter((d['module'],d['name']) for d in ds);out={'declaration_query_records':len(ds),'distinct_global_names':len(names),'repeated_global_names':{n:v for n,v in names.items() if len(v)>1},'extra_queries_by_global_name':len(ds)-len(names),'repeated_owner_name_pairs':[{'module':m,'name':n,'queries':v} for (m,n),v in queries.items() if v>1],'ownership_qualification':'Disjoint selected module groups, not globally unique declaration names. Repeated names have differing reported module owners/import contexts; identical proof-term identity across contexts is not certified.','raw_print_axioms_count':len(raw),'raw_print_axioms':raw,'receipt_parser_discrepancies':parser,'nonstandard_query_count':len(bad),'nonstandard_modules':dict(collections.Counter(d['module'] for d in bad)),'nonstandard_axioms':sorted({x for d in bad for x in d['axioms'] if x not in std}),'nonstandard_queries':bad,'standard_only_modules':len(a['modules'])-len({d['module'] for d in bad}),'top_reachability':'UNKNOWN: Rc7_Top.deployed did not compile fresh. Imported or locally reached formatter axioms are not evidence of top reachability.','top_FunsExternal_to_Rust_mapping':'UNKNOWN; not verified empty.'};(E/'RPz2_audit-findings.json').write_text(json.dumps(out,indent=2)+'\n');print({k:out[k] for k in ['declaration_query_records','distinct_global_names','extra_queries_by_global_name','raw_print_axioms_count','nonstandard_query_count','nonstandard_modules','standard_only_modules']})
+p=E/'RPz2_print-mismatch.log'
+if p.exists():p.unlink()

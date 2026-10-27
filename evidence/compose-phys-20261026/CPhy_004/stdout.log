@@ -1,0 +1,51 @@
+CPhy_Header.lean:28:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  wire[16 + ↑j]?
+in the target expression
+  (fun j => wire[16 + ↑j]?.getD 0, fun j => wire[48 + ↑j]?.getD 0).1 j = (hp, hu).1 j
+
+case fst
+wire : Bytes
+hp hu : State
+length : 80 ≤ List.length wire
+proof : slice wire 16 32 = bytes hp
+pub : slice wire 48 32 = bytes hu
+j : Fin 32
+hb : ↑j < 32
+cell : wire[16 + ↑j]? = some (hp ⟨↑j, ⋯⟩)
+⊢ (fun j => wire[16 + ↑j]?.getD 0, fun j => wire[48 + ↑j]?.getD 0).1 j = (hp, hu).1 j
+CPhy_Header.lean:32:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  wire[48 + ↑j]?
+in the target expression
+  (fun j => wire[16 + ↑j]?.getD 0, fun j => wire[48 + ↑j]?.getD 0).2 j = (hp, hu).2 j
+
+case snd
+wire : Bytes
+hp hu : State
+length : 80 ≤ List.length wire
+proof : slice wire 16 32 = bytes hp
+pub : slice wire 48 32 = bytes hu
+j : Fin 32
+hb : ↑j < 32
+cell : wire[48 + ↑j]? = some (hu ⟨↑j, ⋯⟩)
+⊢ (fun j => wire[16 + ↑j]?.getD 0, fun j => wire[48 + ↑j]?.getD 0).2 j = (hp, hu).2 j
+CPhy_Header.lean:26:40: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [slice, ̲List.getElem?_take,h̵b̵,̵ ̲ite_true, ̲List.getElem?_drop,
+  ̵  ̵ ̵ ̵ ̵ ̵bytes, ̲List.getElem?_ofFn,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲hb, ̲↓reduceDIte] at cell
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CPhy_Header.lean:30:40: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [slice, ̲List.getElem?_take,h̵b̵,̵ ̲ite_true, ̲List.getElem?_drop,
+  ̵  ̵ ̵ ̵ ̵ ̵bytes, ̲List.getElem?_ofFn,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲hb, ̲↓reduceDIte] at cell
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CPhy_Header.decode_fields' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CPhy_Header.writer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Header.reader' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,72 @@
+def AspisR1.F3Y_FinishLeaves.Holds : {W : Type} →
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps W) →
+    (v : AspisR1Stage2.verifier.View) →
+      (p : AspisR1Stage2.verifier.Prepared) →
+        (a : AspisR1Stage2.verifier.Accumulator) →
+          AspisR1.F3S_FinishWitness.Primitives finish v p a →
+            (Fin 22 → Fin 262144) →
+              AspisR1.OraclePortCompactDraft.Parsed →
+                AspisR1.RawCutTranscriptRun.ErasedPrefix → AspisR1.RecordedBinaryExperimentBin.SourceInputs → Prop :=
+fun {W} finish v p a x q parsed tr input =>
+  AspisR1.F3Y_FinishLeaves.PairingRemaining finish v p input.data ∧
+    (∀ (j : Fin 22), AspisR1.MatchingSupport.match0 input.data (q j)) ∧
+      AspisR1.R3SemanticRemainingJoins.EquationEndpoint input.decoded
+          (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) input.data ∧
+        AspisR1.CheckpointBytes5Output.ofE x.dot =
+            ∑ l,
+              input.data.f l *
+                AspisR1.LiteralOpeningView.eK ((AspisR1.CheckpointBytes5Output.accumulator a).weights l) ∧
+          ∀ y ∈ [x.r0.lhs, x.r0.rhs, x.r1.lhs, x.r1.rhs, x.pair, x.r1.value, x.dot, a.rhs],
+            AspisR1.CheckpointBytes4ReaderFields.sourceE (AspisR1.CheckpointBytes5Output.ofE y) = y
+structure AspisR1.F3Y_FinishLeaves.PairingRemaining {W : Type} (finish : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E) : Prop
+number of parameters: 5
+fields:
+  AspisR1.F3Y_FinishLeaves.PairingRemaining.round0 : AspisR1.Port4D_Pairing.RoundLaws
+      (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE v.round0 data.p0
+  AspisR1.F3Y_FinishLeaves.PairingRemaining.round1 : AspisR1.Port4D_Pairing.RoundLaws
+      (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE v.round1 data.p1
+  AspisR1.F3Y_FinishLeaves.PairingRemaining.pair : ∀ (weights : W)
+      (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+      finish.newWeights p.variant p.semantic_alpha p.z =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+        Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+              p.alpha { «end» := 2#usize } =
+            Aeneas.Std.Result.ok alphas →
+          finish.pair weights alphas v.final_message p.kappa =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+            AspisR1.CheckpointBytes5Output.ofE value =
+              AspisR1.RoundPairing.dot data.f
+                (AspisR1.RoundPairing.dualFold data.alpha1
+                  (AspisR1.RoundPairing.dualFold data.alpha0
+                    (AspisR1.FunctionalWeights.weights data.F data.F0 data.kappa)))
+constructor:
+  AspisR1.F3Y_FinishLeaves.PairingRemaining.mk {W : Type} {finish : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {v : AspisR1Stage2.verifier.View} {p : AspisR1Stage2.verifier.Prepared}
+    {data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E}
+    (round0 :
+      AspisR1.Port4D_Pairing.RoundLaws (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE
+        v.round0 data.p0)
+    (round1 :
+      AspisR1.Port4D_Pairing.RoundLaws (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE
+        v.round1 data.p1)
+    (pair :
+      ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+        finish.newWeights p.variant p.semantic_alpha p.z =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            finish.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+              AspisR1.CheckpointBytes5Output.ofE value =
+                AspisR1.RoundPairing.dot data.f
+                  (AspisR1.RoundPairing.dualFold data.alpha1
+                    (AspisR1.RoundPairing.dualFold data.alpha0
+                      (AspisR1.FunctionalWeights.weights data.F data.F0 data.kappa)))) :
+    AspisR1.F3Y_FinishLeaves.PairingRemaining finish v p data

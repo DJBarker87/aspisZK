@@ -1,0 +1,34 @@
+RawJ_DigestRead.lean:14:2: error: 'change' tactic failed, pattern
+  D.digest hash parts = ok out
+is not definitionally equal to target
+  erase (effects.digest D hash parts) = ok out
+RawJ_DigestRead.lean:28:7: error(lean.unknownIdentifier): Unknown identifier `bytesOf`
+RawJ_DigestRead.lean:29:29: error(lean.unknownIdentifier): Unknown identifier `bytesOf`
+RawJ_DigestRead.lean:29:75: error(lean.unknownIdentifier): Unknown identifier `bytesOf`
+RawJ_DigestRead.lean:30:36: error: unsolved goals
+pub : Slice U8
+len : U32
+root : Std.Array U8 32#usize
+⊢ List.map decodeByte
+      (↑AspisR1PublicPreparation.r1_wire.DOMAIN ++ ([0#u8] ++ (↑(core.num.U32.to_le_bytes len) ++ (↑pub ++ ↑root)))) =
+    sorry ++ ([decodeByte 0#u8] ++ (sorry ++ (sorry ++ List.map decodeByte ↑root)))
+RawJ_DigestRead.lean:32:38: warning: This simp argument is unused:
+  List.map_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [initParts, ̲flatten, ̲Array.to_slice, ̲Array.make, ̲List.flatMap_cons, ̲List.flatMap_nil,
+        MultiproofConeCanonical.bytesOf, ̲List.map_c̵o̵ns̵,̵L̵is̵t̵.̵m̵a̵p̵_̵n̵i̵l, ̲List.append_nil,
+        MultiproofConePhysicalTransport.digest_bytes, ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+RawJ_DigestRead.lean:32:52: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [initParts, ̲flatten, ̲Array.to_slice, ̲Array.make, ̲List.flatMap_cons, ̲List.flatMap_nil,
+        MultiproofConeCanonical.bytesOf, ̲List.map_cons, ̲List.m̵ap_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵pp̵end_nil,
+        MultiproofConePhysicalTransport.digest_bytes, ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.RawJ_DigestRead.digest' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RawJ_DigestRead.target' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

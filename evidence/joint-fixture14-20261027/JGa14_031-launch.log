@@ -1,0 +1,57 @@
+{"attempt": "JGa14_031", "exit_status": 1, "wall_seconds": 2.4757672110572457, "peak_rss_kib": "5490376", "swaps": "0", "print_axioms": ["'AspisR1.JGa_PublicDigestSuffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGa_PublicDigestSuffix.lean:20:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pool_v1.pair_forest_semantic_terminal.bounded_append_carry 13#u64
+in the target expression
+  (do
+      let i6 ← 53#usize * 16#usize
+      let i7 ← i6 + 11#usize
+      let q3 ← s.row i7
+      let digests6 ←
+        pool_v1.pair_forest_semantic_terminal.add_digest_binding d q3 o.z 0#usize
+            p.transition.candidate_afterstate.next_root false
+      let carry ← pool_v1.pair_forest_semantic_terminal.bounded_append_carry p.transition.live_snapshot.next_pair_index
+      if carry < 20#usize then do
+          let i8 ← 33#usize + carry
+          let i9 ← i8 * 16#usize
+          let i10
+...
+seidonOpenings
+s : pool_v1.pair_forest_copy_terminal.Selectors
+d : Std.Array field.QM31 8#usize
+hz : canonical o.z
+hd : canonical d
+hh : canonical s.high
+hl : canonical s.low
+hn : ∀ x ∈ ↑p.transition.candidate_afterstate.next_root, ↑x < JFy_PublicCanonical.P
+hf : ∀ row ∈ ↑p.transition.candidate_afterstate.next_frontier, ∀ x ∈ ↑row, ↑x < JFy_PublicCanonical.P
+⊢ (do
+      let i6 ← 53#usize * 16#usize
+      let i7 ← i6 + 11#usize
+      let q3 ← s.row i7
+      let digests6 ←
+        pool_v1.pair_forest_semantic_terminal.add_digest_binding d q3 o.z 0#usize
+            p.transition.candidate_afterstate.next_root false
+      let carry ← pool_v1.pair_forest_semantic_terminal.bounded_append_carry p.transition.live_snapshot.next_pair_index
+      if carry < 20#usize then do
+          let i8 ← 33#usize + carry
+          let i9 ← i8 * 16#usize
+          let i10 ← i9 + 11#usize
+          let q4 ← s.row i10
+          let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+          pool_v1.pair_forest_semantic_terminal.add_digest_binding digests6 q4 o.z 0#usize a false
+        else ok digests6) ⦃
+    out => canonical out ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGa_PublicDigestSuffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re6db88b0f5a94246b4803e305b6eed45.scope; invocation ID: 4f8dd28eb67d449eaee629a9d4611726

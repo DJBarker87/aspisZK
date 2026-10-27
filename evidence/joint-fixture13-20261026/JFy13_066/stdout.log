@@ -1,0 +1,77 @@
+JFy_ScalarSuffix.lean:20:35: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+o : state_only_poseidon.StateOnlyPoseidonOpenings
+s : pool_v1.pair_forest_copy_terminal.Selectors
+packed : Std.Array field.QM31 24#usize
+hz : canonical o.z
+hh : canonical s.high
+hl : canonical s.low
+hp : canonical packed
+hab : ↑p.asset_id < JFy_PublicCanonical.P
+haw : ↑(p.withdrawal_amount.getD 0#u32) < JFy_PublicCanonical.P
+q : field.QM31
+_✝¹⁸ : [> let q ← o.z.index_usize 1#usize <]
+q_post : FIv_NativeValue.Canon q
+q1 : field.QM31
+_✝¹⁷ : [> let q1 ← pool_v1.pair_forest_semantic_terminal.lift_m31 p.asset_id <]
+q1_post : FIv_NativeValue.Canon q1
+asset_difference : field.QM31
+_✝¹⁶ : [> let asset_difference ← q.sub q1 <]
+asset_difference_post : FIv_NativeValue.Canon asset_difference
+i : Usize
+_✝¹⁵ : [> let i ← 2#usize * 16#usize <]
+i_post : ↑i = 2 * 16
+i1 : Usize
+_✝¹⁴ : [> let i1 ← i + 12#usize <]
+i1_post : ↑i1 = ↑i + 12
+q2 : field.QM31
+_✝¹³ : [> let q2 ← s.row i1 <]
+q2_post : FIv_NativeValue.Canon q2
+input_asset : field.QM31
+_✝¹² : [> let input_asset ← q2.mul asset_difference <]
+input_asset_post : FIv_NativeValue.Canon input_asset
+i2 : Usize
+_✝¹¹ : [> let i2 ← 31#usize * 16#usize <]
+i2_post : ↑i2 = 31 * 16
+i3 : Usize
+_✝¹⁰ : [> let i3 ← i2 + 12#usize <]
+i3_post : ↑i3 = ↑i2 + 12
+q3 : field.QM31
+_✝⁹ : [> let q3 ← s.row i3 <]
+q3_post : FIv_NativeValue.Canon q3
+output_scalar : field.QM31
+_✝⁸ : [> let output_scalar ← q3.mul asset_difference <]
+output_scalar_post : FIv_NativeValue.Canon output_scalar
+i4 : Usize
+_✝⁷ : [> let i4 ← 28#usize * 16#usize <]
+i4_post : ↑i4 = 28 * 16
+i5 : Usize
+_✝⁶ : [> let i5 ← i4 + 12#usize <]
+i5_post : ↑i5 = ↑i4 + 12
+q4 : field.QM31
+_✝⁵ : [> let q4 ← s.row i5 <]
+q4_post : FIv_NativeValue.Canon q4
+private_transfer_term : field.QM31
+_✝⁴ : [> let private_transfer_term ← q4.mul asset_difference <]
+private_transfer_term_post : FIv_NativeValue.Canon private_transfer_term
+withdrawal_amount_value : U32
+_✝³ : [> let withdrawal_amount_value ← lift (core.option.Option.unwrap_or p.withdrawal_amount 0#u32) <]
+withdrawal_amount_value_post : withdrawal_amount_value = core.option.Option.unwrap_or p.withdrawal_amount 0#u32
+i6 : Usize
+_✝² : [> let i6 ← 16#usize * 63#usize <]
+i6_post : ↑i6 = 16 * 63
+i7 : Usize
+_✝¹ : [> let i7 ← i6 + 2#usize <]
+i7_post : ↑i7 = ↑i6 + 2
+q5 : field.QM31
+_✝ : [> let q5 ← s.row i7 <]
+q5_post : FIv_NativeValue.Canon q5
+q6 : field.QM31
+_ : [> let q6 ← o.z.index_usize 10#usize <]
+q6_post : FIv_NativeValue.Canon q6
+⊢ ↑withdrawal_amount_value < 2147483647
+'AspisR1.JFy_ScalarSuffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

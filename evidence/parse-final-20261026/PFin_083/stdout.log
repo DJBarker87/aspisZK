@@ -1,0 +1,64 @@
+PFin_RunLevelBound.lean:19:8: error: Tactic `apply` failed: could not unify the conclusion of `ask ?m.89 ?m.90 ?m.91`
+  Bounded (Program.ask ?m.89 ?m.90)
+with the goal
+  Bounded
+    (have both := decide (paired i j✝);
+    if both = true then
+      have right := ((j✝, snd✝) :: tail✝).head!.2;
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children value right)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 ((j✝, snd✝) :: tail✝)) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else
+      match SemanticRecordCodec.decodeState (List.take 32 nodes) with
+      | none => Program.done none
+      | some sibling =>
+        have pair :=
+          if i % 2 = 0 then OracleDecisionMultiTree.children value sibling
+          else OracleDecisionMultiTree.children sibling value;
+        Program.ask (BinMerkle32Path.nodeInput pair) fun d =>
+          AspisV8R19.OracleProgramOps.bind (runLevel fuel ((j✝, snd✝) :: tail✝) (List.drop 32 nodes)) fun out =>
+            Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out))
+
+Note: The full type of `ask ?m.89 ?m.90 ?m.91` is
+  (∀ (answer : State), Bounded (?m.90 answer)) → Bounded (Program.ask ?m.89 ?m.90)
+
+case h_1
+fuel : ℕ
+ih : ∀ (live : Live) (nodes : Bytes), Bounded (runLevel fuel live nodes)
+nodes : Bytes
+i : ℕ
+value : State
+rest✝ : List (ℕ × State)
+j✝ : ℕ
+snd✝ : State
+tail✝ : List (ℕ × State)
+⊢ Bounded
+    (have both := decide (paired i j✝);
+    if both = true then
+      have right := ((j✝, snd✝) :: tail✝).head!.2;
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children value right)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 ((j✝, snd✝) :: tail✝)) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else
+      match SemanticRecordCodec.decodeState (List.take 32 nodes) with
+      | none => Program.done none
+      | some sibling =>
+        have pair :=
+          if i % 2 = 0 then OracleDecisionMultiTree.children value sibling
+          else OracleDecisionMultiTree.children sibling value;
+        Program.ask (BinMerkle32Path.nodeInput pair) fun d =>
+          AspisV8R19.OracleProgramOps.bind (runLevel fuel ((j✝, snd✝) :: tail✝) (List.drop 32 nodes)) fun out =>
+            Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out))
+PFin_RunLevelBound.lean:19:23: error: unsolved goals
+fuel : ℕ
+ih : ∀ (live : Live) (nodes : Bytes), Bounded (runLevel fuel live nodes)
+nodes : Bytes
+i : ℕ
+value : State
+rest✝ : List (ℕ × State)
+j✝ : ℕ
+snd✝ : State
+tail✝ : List (ℕ × State)
+⊢ BinMerkle32Path.Children
+'AspisR1.PFin_RunLevelBound.level' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PFin_RunLevelBound.levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

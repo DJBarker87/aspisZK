@@ -1,0 +1,37 @@
+{
+  "attempt": "Op4P_kani007",
+  "kind": "kani",
+  "source_revision": "beeeb53ccff959f9b41cdb9d44f6cf0961908619",
+  "sources": [
+    "kit/Cargo.toml",
+    "kit/src/lib.rs",
+    "kit/src/Op4P_reference.rs",
+    "kit/src/Op4P_shipped.rs",
+    "kit/src/Op4P_harness.rs"
+  ],
+  "timeout": 240,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-op4-p6-20261025/kit/Cargo.toml",
+    "-j",
+    "4",
+    "--harness",
+    "Op4P_opening_address",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OPT_LEVEL": "3",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-op4-p6-20261025/target"
+  },
+  "deps_fingerprint": {
+    "scope": "Verbatim current scan opening loop body with actual field decoders; owned recursive opening scan"
+  },
+  "expected_time": "Source slice identity: pointer and length instead of huge dynamic byte mux; replaces timed-out kani005"
+}

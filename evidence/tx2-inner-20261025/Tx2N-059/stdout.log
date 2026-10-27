@@ -1,0 +1,356 @@
+Tx2N_Accepted.lean:79:5: warning: Variable name `s2` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:80:5: warning: Variable name `ha0` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:81:5: warning: Variable name `ha1` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:82:5: warning: Variable name `hw` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:83:5: warning: Variable name `has` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:85:5: warning: Variable name `hp` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:86:5: warning: Variable name `hd` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:89:5: warning: Variable name `hi` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:89:71: warning: Variable name `hq` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:90:5: warning: Variable name `read` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:91:5: warning: Variable name `decoded` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:92:5: warning: Variable name `pairing_S3_S5_S9` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:94:5: warning: Variable name `matches_S4_S7` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:95:5: warning: Variable name `semantic_S3_S9` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:97:5: warning: Variable name `dot_S5` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:99:5: warning: Variable name `canonical_S3_S4_S5_S9` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:101:5: warning: Variable name `saved_ten` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:104:5: warning: Variable name `twelve` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.Tx2N_Accepted.accepted_pair_reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Tx2N_Accepted.accepted_pair_reader : ∀ {W A E M Cv F CoreError : Type} {N : ℕ}
+  (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : Ops) (stageBase : VTop_Stages.Ops)
+                (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool)
+                (query : Port3_NativeQueryBody.Ops) (geo : Port3_NativeGeometryBody.Ops CoreError)
+                (B : AspisR1PublicPreparation.FinishModel.Boundaries) (claimsStd : ClaimsUnrolledFinish.StdCalls)
+                (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (sdkOps
+                      (Tx2I_Install.install adapterOps (Tx2N_Execution.control stageBase reserved query geo) finishOps)
+                      (Op3I_Install.install ops) B claimsStd)
+                    native1 native2 hashv →
+                  ∀ (sha256 H : Bytes → State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                          first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32)
+                                (port :
+                                  ChildConeJoin E
+                                    (sdkOps
+                                      (Tx2I_Install.install adapterOps
+                                        (Tx2N_Execution.control stageBase reserved query geo) finishOps)
+                                      (Op3I_Install.install ops) B claimsStd)),
+                                FirstMarks port →
+                                  SecondMarks port →
+                                    ∃ f s outer pre middle fs ss,
+                                      SourceCuts
+                                          (sdkOps
+                                            (Tx2I_Install.install adapterOps
+                                              (Tx2N_Execution.control stageBase reserved query geo) finishOps)
+                                            (Op3I_Install.install ops) B claimsStd)
+                                          e1.first (e2.second secondSizes) saved f s ∧
+                                        (Tx2I_Install.shape s.proof =
+                                              ok (core.result.Result.Ok AspisR1Stage2.transport.Variant.S2) ∧
+                                            ⋯) ∧
+                                          ⋯ ∧ ⋯ :=
+fun {W A E M Cv F CoreError} {N} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops stageBase
+    finishOps reserved query geo B claimsStd native1 native2 hashv extraction sha256 H p1 syscall program data1 data2
+    slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length port firstMarks secondMarks =>
+  let ⟨f, h✝⟩ :=
+    Tx2I_Accepted.accepted_pair_claims_tx2 L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops
+      (Tx2N_Execution.control stageBase reserved query geo) finishOps B claimsStd native1 native2 hashv extraction
+      sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p
+      root length port firstMarks secondMarks
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨outer, h✝²⟩ := h✝¹
+  let ⟨pre, h✝³⟩ := h✝²
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, h✝⁶⟩ := h✝⁵
+  let ⟨cuts, right✝⟩ := h✝⁶
+  let ⟨tx2, right✝¹⟩ := right✝
+  let ⟨first, right✝²⟩ := right✝¹
+  let ⟨expanded, right✝³⟩ := right✝²
+  let ⟨owned, right✝⁴⟩ := right✝³
+  let ⟨layout, right✝⁵⟩ := right✝⁴
+  let ⟨unchanged, right✝⁶⟩ := right✝⁵
+  let ⟨before1, right✝⁷⟩ := right✝⁶
+  let ⟨before2, right✝⁸⟩ := right✝⁷
+  let ⟨claims, caller⟩ := right✝⁸
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨tx2,
+                    ⟨first,
+                      ⟨expanded,
+                        ⟨owned,
+                          ⟨layout,
+                            ⟨unchanged,
+                              ⟨before1,
+                                ⟨before2,
+                                  ⟨claims, fun decode nodes y1 writer reader runtime p2prime entry multiproof scan =>
+                                    let ⟨parsed, h✝⁷⟩ :=
+                                      caller decode nodes y1 writer reader runtime p2prime entry multiproof scan
+                                    let ⟨facts, sites⟩ := h✝⁷
+                                    let ⟨version, h✝⁸⟩ :=
+                                      RowOrder_History.on_d189_cuts copy std allocator e1 e2
+                                        (sdkOps
+                                          (Tx2I_Install.install adapterOps
+                                            (Tx2N_Execution.control stageBase reserved query geo) finishOps)
+                                          (Op3I_Install.install ops) B claimsStd)
+                                        native1 native2 hashv extraction program data1 state1 final1 saved post1
+                                        accepted1 f s cuts decode H writer reader runtime p2prime
+                                    let ⟨key, right✝⁹⟩ := h✝⁸
+                                    let ⟨ledger, right✝¹⁰⟩ := right✝⁹
+                                    let ⟨events, right✝¹¹⟩ := right✝¹⁰
+                                    let ⟨checkpoint, right✝¹²⟩ := right✝¹¹
+                                    let ⟨proof, right✝¹³⟩ := right✝¹²
+                                    let ⟨pub, size⟩ := right✝¹³
+                                    let ⟨variant, h✝⁹⟩ :=
+                                      Tx2I_Cuts.authenticated_reached
+                                        (Tx2I_Install.stage (Tx2N_Execution.control stageBase reserved query geo)
+                                          finishOps)
+                                        (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                          (sdkOps
+                                            (Tx2I_Install.install adapterOps
+                                              (Tx2N_Execution.control stageBase reserved query geo) finishOps)
+                                            (Op3I_Install.install ops) B claimsStd))
+                                        () s.pub s.proof s.checkpoint none cuts.second
+                                    let ⟨shape, common⟩ := h✝⁹
+                                    have commonRun := common;
+                                    let ⟨rp, h✝¹⁰⟩ :=
+                                      Tx2N_Execution.common (Tx2I_Install.stage stageBase finishOps) reserved query geo
+                                        (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                          (sdkOps
+                                            (Tx2I_Install.install adapterOps
+                                              (Tx2N_Execution.control stageBase reserved query geo) finishOps)
+                                            (Op3I_Install.install ops) B claimsStd))
+                                        () s.pub s.proof s.checkpoint commonRun
+                                    let ⟨ra, h✝¹¹⟩ := h✝¹⁰
+                                    let ⟨g, h✝¹²⟩ := h✝¹¹
+                                    ⋯⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩))))))
+Tx2N_Accepted.lean:288:13: warning: Variable name `queryLeaves` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:289:13: warning: Variable name `geoLeaves` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:290:13: warning: Variable name `domain` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:291:13: warning: Variable name `multiply` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:292:13: warning: Variable name `one` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Tx2N_Accepted.lean:293:13: warning: Variable name `inverse` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.Tx2N_Accepted.accepted_pair_inner' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Tx2N_Accepted.accepted_pair_inner : ∀ {W A E M Cv F CoreError : Type} {N : ℕ}
+  (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : Ops) (stageBase : VTop_Stages.Ops)
+                (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool)
+                (query : Port3_NativeQueryBody.Ops) (geo : Port3_NativeGeometryBody.Ops CoreError)
+                (B : AspisR1PublicPreparation.FinishModel.Boundaries) (claimsStd : ClaimsUnrolledFinish.StdCalls)
+                (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (sdkOps
+                      (Tx2I_Install.install adapterOps (Tx2N_Execution.control stageBase reserved query geo) finishOps)
+                      (Op3I_Install.install ops) B claimsStd)
+                    native1 native2 hashv →
+                  ∀ (sha256 H : Bytes → State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                          first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32)
+                                (port :
+                                  ChildConeJoin E
+                                    (sdkOps
+                                      (Tx2I_Install.install adapterOps
+                                        (Tx2N_Execution.control stageBase reserved query geo) finishOps)
+                                      (Op3I_Install.install ops) B claimsStd)),
+                                FirstMarks port →
+                                  SecondMarks port →
+                                    ∃ f s outer pre middle fs ss,
+                                      SourceCuts
+                                          (sdkOps
+                                            (Tx2I_Install.install adapterOps
+                                              (Tx2N_Execution.control stageBase reserved query geo) finishOps)
+                                            (Op3I_Install.install ops) B claimsStd)
+                                          e1.first (e2.second secondSizes) saved f s ∧
+                                        ((RowShape_InstalledSlots.verifierOps (Op3I_Install.install ops) B
+                                                    claimsStd).op3
+                                                f.proof =
+                                              ok (core.result.Result.Ok transport.Variant.S2) ∧
+                                            ⋯) ∧
+                                          ⋯ ∧ ⋯ :=
+fun {W A E M Cv F CoreError} {N} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops stageBase
+    finishOps reserved query geo B claimsStd native1 native2 hashv extraction sha256 H p1 syscall program data1 data2
+    slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length port firstMarks secondMarks =>
+  let ⟨f, h✝⟩ :=
+    accepted_pair_reader L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops stageBase finishOps
+      reserved query geo B claimsStd native1 native2 hashv extraction sha256 H p1 syscall program data1 data2 slot
+      state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length port firstMarks secondMarks
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨outer, h✝²⟩ := h✝¹
+  let ⟨pre, h✝³⟩ := h✝²
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, h✝⁶⟩ := h✝⁵
+  let ⟨cuts, right✝⟩ := h✝⁶
+  let ⟨tx2, right✝¹⟩ := right✝
+  let ⟨first, right✝²⟩ := right✝¹
+  let ⟨expanded, right✝³⟩ := right✝²
+  let ⟨owned, right✝⁴⟩ := right✝³
+  let ⟨layout, right✝⁵⟩ := right✝⁴
+  let ⟨unchanged, right✝⁶⟩ := right✝⁵
+  let ⟨before1, right✝⁷⟩ := right✝⁶
+  let ⟨before2, right✝⁸⟩ := right✝⁷
+  let ⟨claims, caller⟩ := right✝⁸
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨first,
+                    ⟨expanded,
+                      ⟨owned,
+                        ⟨layout,
+                          ⟨unchanged,
+                            ⟨before1,
+                              ⟨before2,
+                                ⟨claims, fun decode nodes y1 writer reader runtime p2prime entry multiproof scan =>
+                                  let ⟨parsed, h✝⁷⟩ :=
+                                    caller decode nodes y1 writer reader runtime p2prime entry multiproof scan
+                                  let ⟨facts, right✝⁹⟩ := h✝⁷
+                                  let ⟨sites, right✝¹⁰⟩ := right✝⁹
+                                  let ⟨checkpoint, right✝¹¹⟩ := right✝¹⁰
+                                  let ⟨rp, h✝⁸⟩ := right✝¹¹
+                                  let ⟨ra, h✝⁹⟩ := h✝⁸
+                                  let ⟨hr, right✝¹²⟩ := h✝⁹
+                                  let ⟨hnext, decoded⟩ := right✝¹²
+                                  Exists.intro parsed
+                                    ⟨facts,
+                                      ⟨sites,
+                                        ⟨checkpoint,
+                                          Exists.intro rp (Exists.intro ra ⟨hr, ⟨hnext, ⋯⟩⟩)⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩))))))

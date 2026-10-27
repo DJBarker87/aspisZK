@@ -1,0 +1,77 @@
+WAdm_WeightsHelpers.lean:40:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (fun state =>
+      match state with
+      | (iter, v) => WAdm_weights_loop.body iter v)
+    (⟨x :: xs, property⟩, out)
+in the target expression
+  (match
+      match (⟨x :: xs, property⟩, out) with
+      | (iter1, out1) => WAdm_weights_loop.body iter1 out1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, out1) => WAdm_weights_loop.body iter1 out1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok after
+
+case cons.refine_1
+x : K
+xs : List K
+ih :
+  ∀ (property : xs.length ≤ Usize.max) (out : alloc.vec.Vec U8),
+    (↑out).length + 16 * xs.length ≤ Usize.max →
+      ∃ after,
+        WAdm_weights_loop ⟨xs, property⟩ out = ok after ∧ ↑after = ↑out ++ List.flatMap CheckpointP6EncodeK.bytes xs
+property : (x :: xs).length ≤ Usize.max
+out : alloc.vec.Vec U8
+bound : (↑out).length + 16 * (x :: xs).length ≤ Usize.max
+first : (↑out).length + 16 ≤ Usize.max
+mid : alloc.vec.Vec U8
+call : WAdm_putK out x = ok mid
+midval : ↑mid = ↑out ++ CheckpointP6EncodeK.bytes x
+restProperty : xs.length ≤ Usize.max
+restBound : (↑mid).length + 16 * xs.length ≤ Usize.max
+after : alloc.vec.Vec U8
+tail : WAdm_weights_loop ⟨xs, restProperty⟩ mid = ok after
+afterval : ↑after = ↑mid ++ List.flatMap CheckpointP6EncodeK.bytes xs
+step : WAdm_weights_loop.body ⟨x :: xs, property⟩ out = ok (cont (⟨xs, restProperty⟩, mid))
+stepPair :
+  (fun state =>
+        match state with
+        | (iter, v) => WAdm_weights_loop.body iter v)
+      (⟨x :: xs, property⟩, out) =
+    ok (cont (⟨xs, restProperty⟩, mid))
+⊢ (match
+      match (⟨x :: xs, property⟩, out) with
+      | (iter1, out1) => WAdm_weights_loop.body iter1 out1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, out1) => WAdm_weights_loop.body iter1 out1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok after
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ⟨x :: xs, property⟩
+  has type
+    { l // l.length ≤ Usize.max }
+  but is expected to have type
+    alloc.vec.into_iter.IntoIter aspis_core.field.QM31
+  in the application
+    Prod.mk ⟨x :: xs, property⟩
+'AspisR1.WAdm_WeightsHelpers.loop_list' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.WAdm_WeightsHelpers.weights' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

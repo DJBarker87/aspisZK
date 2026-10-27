@@ -1,0 +1,175 @@
+structure AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.basis : AspisR1.Port4C_BasisOuter.SessionABasis ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.arithmetic : AspisR1.Port4C_QueryArithmetic.SessionABackends ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.m31 : AspisR1.Port5Q1_NodeModel.SessionAM31 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.decoder : AspisR1.Port5Q1_OpeningValues.SessionAS3 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.line : ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+      (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+      (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ops.op16 alpha values inverse = Aeneas.Std.Result.ok value →
+        AspisR1.CheckpointBytes5Output.ofE value =
+          AspisR1.FoldRuntimeAlgebra.lineWithInverses (AspisR1.CheckpointBytes5Output.ofE alpha)
+            ((Algebra.algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 2)))
+            ((Algebra.algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 3)))
+            ((Algebra.algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 4)))
+            (AspisR1.Port5Q1_OpeningValues.values values)
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.line_canonical : ∀
+      (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+      (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+      (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ops.op16 alpha values inverse = Aeneas.Std.Result.ok value → AspisR1.Port4C_QueryArithmetic.CanonE value
+constructor:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (basis : AspisR1.Port4C_BasisOuter.SessionABasis ops)
+    (arithmetic : AspisR1.Port4C_QueryArithmetic.SessionABackends ops) (m31 : AspisR1.Port5Q1_NodeModel.SessionAM31 ops)
+    (decoder : AspisR1.Port5Q1_OpeningValues.SessionAS3 ops)
+    (line :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok value →
+          AspisR1.CheckpointBytes5Output.ofE value =
+            AspisR1.FoldRuntimeAlgebra.lineWithInverses (AspisR1.CheckpointBytes5Output.ofE alpha)
+              ((Algebra.algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 2)))
+              ((Algebra.algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 3)))
+              ((Algebra.algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 4)))
+              (AspisR1.Port5Q1_OpeningValues.values values))
+    (line_canonical :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok value → AspisR1.Port4C_QueryArithmetic.CanonE value) :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrimitives ops
+structure AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives {CoreError : Type}
+  (ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.point : ∀
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+      ops.op15 f = Aeneas.Std.Result.ok p →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical p.x ∧ AspisR1.Port5Q1_GeometryCanonical.Canonical p.y
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.line : ∀
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op14 f = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.multiply : ∀ (x y : Aeneas.Std.U32)
+      (z : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+          ops.op9 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.double : ∀ (x : Aeneas.Std.U32)
+      (y : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        ops.op10 x = Aeneas.Std.Result.ok y → AspisR1.Port5Q1_GeometryCanonical.Canonical y
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.one : ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op7 = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.subtract : ∀ (x y : Aeneas.Std.U32)
+      (z : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+          ops.op8 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z
+constructor:
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.mk {CoreError : Type}
+    {ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError}
+    (point :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+        (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+        ops.op15 f = Aeneas.Std.Result.ok p →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical p.x ∧ AspisR1.Port5Q1_GeometryCanonical.Canonical p.y)
+    (line :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op14 f = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x)
+    (multiply :
+      ∀ (x y : Aeneas.Std.U32) (z : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+            ops.op9 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z)
+    (double :
+      ∀ (x : Aeneas.Std.U32) (y : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          ops.op10 x = Aeneas.Std.Result.ok y → AspisR1.Port5Q1_GeometryCanonical.Canonical y)
+    (one :
+      ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op7 = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x)
+    (subtract :
+      ∀ (x y : Aeneas.Std.U32) (z : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+            ops.op8 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z) :
+    AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives ops
+structure AspisR1.Port5Q1_Domain.SessionADomain {CoreError : Type}
+  (ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port5Q1_Domain.SessionADomain.fibre : ∀ (u : Aeneas.Std.Usize)
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex),
+      ops.op12 u = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f) → f = u ∧ ↑f < 262144
+  AspisR1.Port5Q1_Domain.SessionADomain.point : ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+      ops.op15 f = Aeneas.Std.Result.ok p →
+        AspisR1.S7JoinBasisMachine.decode p.x =
+            AspisCircleGroupOrder.X (AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f)) ∧
+          AspisR1.S7JoinBasisMachine.decode p.y =
+            (↑(AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f))).2
+  AspisR1.Port5Q1_Domain.SessionADomain.line : ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op14 f = Aeneas.Std.Result.ok x →
+        AspisR1.S7JoinBasisMachine.decode x = AspisR1.FoldStoredGeometry.sourceX18 (AspisR1.Port5Q1_Domain.index ↑f)
+  AspisR1.Port5Q1_Domain.SessionADomain.multiply : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op9 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y
+  AspisR1.Port5Q1_Domain.SessionADomain.double : ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+      ops.op10 x = Aeneas.Std.Result.ok y →
+        AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x
+  AspisR1.Port5Q1_Domain.SessionADomain.one : ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op7 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1
+  AspisR1.Port5Q1_Domain.SessionADomain.subtract : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op8 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y
+constructor:
+  AspisR1.Port5Q1_Domain.SessionADomain.mk {CoreError : Type} {ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError}
+    (fibre :
+      ∀ (u : Aeneas.Std.Usize) (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex),
+        ops.op12 u = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f) → f = u ∧ ↑f < 262144)
+    (point :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+        (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+        ops.op15 f = Aeneas.Std.Result.ok p →
+          AspisR1.S7JoinBasisMachine.decode p.x =
+              AspisCircleGroupOrder.X (AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f)) ∧
+            AspisR1.S7JoinBasisMachine.decode p.y =
+              (↑(AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f))).2)
+    (line :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op14 f = Aeneas.Std.Result.ok x →
+          AspisR1.S7JoinBasisMachine.decode x = AspisR1.FoldStoredGeometry.sourceX18 (AspisR1.Port5Q1_Domain.index ↑f))
+    (multiply :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op9 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y)
+    (double :
+      ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+        ops.op10 x = Aeneas.Std.Result.ok y →
+          AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x)
+    (one :
+      ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op7 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1)
+    (subtract :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op8 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y) :
+    AspisR1.Port5Q1_Domain.SessionADomain ops

@@ -1,0 +1,18 @@
+R1Z.ProverRw21ModelInstance
+  (protocol :
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result R1Z.ProverRw21ProtocolOutput.Transcript ProverRwFull.verifier.Error)) :
+  Aeneas.Std.Result R1Z.ProverRw19AuditValue.Status
+def R1Z.ProverRw21ModelInstance : Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result R1Z.ProverRw21ProtocolOutput.Transcript ProverRwFull.verifier.Error) →
+  Aeneas.Std.Result R1Z.ProverRw19AuditValue.Status :=
+fun protocol =>
+  R1Z.ProverRw19PreparedAssembly.output do
+    let status ← protocol
+    match status with
+      | Aeneas.Std.core.result.Result.Err error => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)
+      | Aeneas.Std.core.result.Result.Ok transcript =>
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (R1Z.ProverRw21ProtocolOutput.prepared transcript))
+'R1Z.ProverRw21ModelInstance' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

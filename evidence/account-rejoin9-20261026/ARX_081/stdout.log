@@ -1,0 +1,11 @@
+@AspisR1.JFv_SemanticCall.success : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H),
+  AspisR1.JFv_TranscriptTotal.Total D →
+    ∀ (t : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+      (vr : AspisR1PublicPreparation.r1_wire.ValidatedRecord),
+      vr.row = t.next_row →
+        ↑vr.row < 25 →
+          ∃ q after,
+            AspisR1PublicPreparation.r1_wire.SemanticTranscript.semantic_validated D t vr =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok q, after) ∧
+              ↑after.next_row = ↑vr.row + 1 ∧ AspisR1.JFv_RoundArithmetic.Canonical q
+'AspisR1.JFv_SemanticCall.success' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,47 @@
+structure Aeneas.Std.core.slice.iter.Iter (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.Iter.slice : Slice T
+  Aeneas.Std.core.slice.iter.Iter.i : ℕ
+constructor:
+  Aeneas.Std.core.slice.iter.Iter.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.Iter T
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.IterMut T
+structure Aeneas.Std.core.iter.adapters.rev.Rev.{u} (T : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.adapters.rev.Rev.iter : T
+constructor:
+  Aeneas.Std.core.iter.adapters.rev.Rev.mk.{u} {T : Type u} (iter : T) : core.iter.adapters.rev.Rev T
+structure Aeneas.Std.core.ops.range.RangeInclusive.{u} (Idx : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.ops.range.RangeInclusive.start : Idx
+  Aeneas.Std.core.ops.range.RangeInclusive.end : Idx
+  Aeneas.Std.core.ops.range.RangeInclusive.exhausted : Bool
+constructor:
+  Aeneas.Std.core.ops.range.RangeInclusive.mk.{u} {Idx : Type u} (start «end» : Idx) (exhausted : Bool) :
+    core.ops.range.RangeInclusive Idx
+structure Aeneas.Std.core.iter.range.Step (Self : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.range.Step.cloneInst : core.clone.Clone Self
+  Aeneas.Std.core.iter.range.Step.partialOrdInst : core.cmp.PartialOrd Self Self
+  Aeneas.Std.core.iter.range.Step.steps_between : Self → Self → Result (Usize × Option Usize)
+  Aeneas.Std.core.iter.range.Step.forward_checked : Self → Usize → Result (Option Self)
+  Aeneas.Std.core.iter.range.Step.backward_checked : Self → Usize → Result (Option Self)
+constructor:
+  Aeneas.Std.core.iter.range.Step.mk {Self : Type} (cloneInst : core.clone.Clone Self)
+    (partialOrdInst : core.cmp.PartialOrd Self Self) (steps_between : Self → Self → Result (Usize × Option Usize))
+    (forward_checked backward_checked : Self → Usize → Result (Option Self)) : core.iter.range.Step Self
+FIq_StdAudit.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.iter.traits.iterator.Iterator.fold.trait_default`
+Aeneas.Std.core.ops.range.RangeInclusive.Insts.CoreIterTraitsIteratorIterator.next {A : Type}
+  (StepInst : core.iter.range.Step A) (self : core.ops.range.RangeInclusive A) :
+  Result (Option A × core.ops.range.RangeInclusive A)
+FIq_StdAudit.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.slice.iter.IterMut.to_slice`

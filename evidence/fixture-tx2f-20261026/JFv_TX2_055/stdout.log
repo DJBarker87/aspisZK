@@ -1,0 +1,45 @@
+JFv_TX2_GatherActive.lean:27:6: error: Tactic `assumption` failed
+
+case isTrue
+C : Type
+err : C
+seed : Ops C
+it : core.slice.iter.Iter U32
+zs flat : alloc.vec.Vec U32
+slice : it.slice = JFv_TX2_GatherShape.selected
+active : it.i < 12
+hzs : ↑zs = JFv_TX2_GatherShape.zs it.i
+hflat : ↑flat = JFv_TX2_GatherShape.flat it.i
+i : Fin 12 := ⟨it.i, active⟩
+length : (↑it.slice).length = 12
+read : (↑it.slice)[it.i] = JFv_TX2_Rows.query i
+h✝ : it.i < ↑it.slice.len
+⊢ ok (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }) =
+    ok (some (JFv_TX2_Rows.query i), { slice := it.slice, i := it.i + 1 })
+JFv_TX2_GatherActive.lean:29:39: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.81
+of sort `Type (?u.81 + 1)` in the application
+  @PrincipalSeg it.i
+JFv_TX2_GatherActive.lean:29:45: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+JFv_TX2_GatherActive.lean:37:4: error: Type mismatch: After simplification, term
+  node
+ has type
+  @Eq (Result U32)
+    (do
+      let s ← AspisR1Qm31ArithmeticProbe.field.M31.mul (JFv_TX2_Rows.value i).lineX (JFv_TX2_Rows.value i).lineX
+      let d ← s.double
+      d.sub 1#u32)
+    (ok (JFv_TX2_Rows.value i).lineZ)
+but is expected to have type
+  @Eq (Result Port4C_GeometryGather.M)
+    (do
+      let square ← (JFv_TX2_GeometryOps.install err seed).op9 (JFv_TX2_Rows.value i).lineX (JFv_TX2_Rows.value i).lineX
+      let doubled ← (JFv_TX2_GeometryOps.install err seed).op10 square
+      let one ← (JFv_TX2_GeometryOps.install err seed).op7
+      (JFv_TX2_GeometryOps.install err seed).op8 doubled one)
+    (ok (JFv_TX2_Rows.value i).lineZ)
+'AspisR1.JFv_TX2_GatherActive.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,38 @@
+{"attempt": "JFw_TX2_042", "exit_status": 1, "wall_seconds": 2.2997628769953735, "peak_rss_kib": "5512924", "swaps": "0", "print_axioms": ["'AspisR1.JFw_TX2_FoldPush.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFw_TX2_FoldPush.lean:16:2: error: 'change' tactic failed, pattern
+  loopCall { start := 1#usize, «end» := 4#usize } { sums := pack (plus a r0) b c d } (pack r0 r1 r2 r3) = ?m.34
+is not definitionally equal to target
+  (match
+      match ({ start := 0#usize, «end» := 4#usize }, { sums := pack a b c d }) with
+      | (iter1, self1) => FIo_Native.fast_pairing.canonical.Dot.push_loop.body (pack r0 r1 r2 r3) iter1 self1 with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, self1) => FIo_Native.fast_pairing.canonical.Dot.push_loop.body (pack r0 r1 r2 r3) iter1 self1)
+          x
+      | ControlFlow.done 
+...
+JFw_TX2_FoldPush.lean:16:2: error: 'change' tactic failed, pattern
+  loopCall { start := 1#usize, «end» := 4#usize } { sums := pack (plus a r0) b c d } (pack r0 r1 r2 r3) = ?m.34
+is not definitionally equal to target
+  (match
+      match ({ start := 0#usize, «end» := 4#usize }, { sums := pack a b c d }) with
+      | (iter1, self1) => FIo_Native.fast_pairing.canonical.Dot.push_loop.body (pack r0 r1 r2 r3) iter1 self1 with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, self1) => FIo_Native.fast_pairing.canonical.Dot.push_loop.body (pack r0 r1 r2 r3) iter1 self1)
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok { sums := pack (plus a r0) (plus b r1) (plus c r2) (plus d r3) }
+'AspisR1.JFw_TX2_FoldPush.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9f9e424de34b4a69b32e718e9fc8864c.scope; invocation ID: 5e733496b16b446ebef1859e0e5c0639

@@ -1,0 +1,49 @@
+{"attempt": "Rc7_041", "exit_status": 0, "wall_seconds": 3.070305979985278, "peak_rss_kib": "5419116", "swaps": "0", "print_axioms": []}
+def AspisR1.CPR_DataPersistence.TwoTransactionLaw : {Tx Key : Type} →
+  (Tx → Tx → Prop) →
+    (Tx → Key → Prop) →
+      (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+        (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+          (Tx → Bool) → (Tx → Key → Option AspisV8R19.DuplexFrames.Bytes) → Prop :=
+fun {Tx Key} next ordinary before tentative success loaded =>
+  ∀ (t u : Tx),
+    next t u →
+      ∀ (key : Key),
+        ordinary t key →
+          loaded u key =
+            AspisR1.CPR_DataPersistence.visible (if success t = Bool.true then tentative t key else before t key)
+structure AspisR1.CPR_DataPersistence.Image : Type
+number of parameters: 0
+fields:
+  AspisR1.CPR_DataPersistenc
+...
+def AspisR1.CPR_DataPersistence.TwoTransactionLaw : {Tx Key : Type} →
+  (Tx → Tx → Prop) →
+    (Tx → Key → Prop) →
+      (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+        (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+          (Tx → Bool) → (Tx → Key → Option AspisV8R19.DuplexFrames.Bytes) → Prop :=
+fun {Tx Key} next ordinary before tentative success loaded =>
+  ∀ (t u : Tx),
+    next t u →
+      ∀ (key : Key),
+        ordinary t key →
+          loaded u key =
+            AspisR1.CPR_DataPersistence.visible (if success t = Bool.true then tentative t key else before t key)
+structure AspisR1.CPR_DataPersistence.Image : Type
+number of parameters: 0
+fields:
+  AspisR1.CPR_DataPersistence.Image.data : AspisV8R19.DuplexFrames.Bytes
+  AspisR1.CPR_DataPersistence.Image.lamports : ℕ
+constructor:
+  AspisR1.CPR_DataPersistence.Image.mk (data : AspisV8R19.DuplexFrames.Bytes) (lamports : ℕ) :
+    AspisR1.CPR_DataPersistence.Image
+def AspisR1.CPR_DataPersistence.visible : AspisR1.CPR_DataPersistence.Image → Option AspisV8R19.DuplexFrames.Bytes :=
+fun image => if image.lamports = 0 then Option.none else Option.some image.data
+def AspisR1.CPG_Projection.ordinary : {Tx A : Type} →
+  AspisR1.CPG_Projection.Observations Tx A → AspisR1.S2W_ExtractionBoundary.Program → Tx → ℕ → Prop :=
+fun {Tx A} p system t key =>
+  ((AspisR1.CPG_Projection.entry p t).records key).owned.is_signer = Bool.false ∧
+    ((AspisR1.CPG_Projection.entry p t).records key).owned.owner ≠ system
+
+Running as unit: run-rd7b98df0e5bb4d1b9e7b4e9fc5e8c2a4.scope; invocation ID: ccce1b7eb63b4f2ca977d3f9f5e3b491

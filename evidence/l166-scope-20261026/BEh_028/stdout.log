@@ -1,0 +1,24 @@
+AspisR1.BEg_Nonvacuity.success : ∀ (parts : AspisR1.SdkC_Source.Parts) (digest : AspisR1.SdkC_Source.Digest) (n : ℕ)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.BEf_Carrier.run (AspisR1.BEf_Count.call fun x => Aeneas.Std.Result.ok digest)
+      (AspisR1.BEg_Terminal.terminal (AspisR1.BEg_Nonvacuity.accepted parts)) n before =
+    (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()), n + 1,
+      before ++ [{ parts := parts, returned := Aeneas.Std.Result.ok digest }])
+'AspisR1.BEg_Nonvacuity.success' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.BEg_Nonvacuity.rejection : ∀ (parts : AspisR1.SdkC_Source.Parts) (digest : AspisR1.SdkC_Source.Digest) (n : ℕ)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.BEf_Carrier.run (AspisR1.BEf_Count.call fun x => Aeneas.Std.Result.ok digest)
+        (AspisR1.BEg_Nonvacuity.rejected parts) n before =
+      (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err ()), n + 1,
+        before ++ [{ parts := parts, returned := Aeneas.Std.Result.ok digest }]) ∧
+    AspisR1.BEf_Carrier.run (AspisR1.BEf_Count.call fun x => Aeneas.Std.Result.ok digest)
+        (AspisR1.BEg_Terminal.terminal (AspisR1.BEg_Nonvacuity.rejected parts)) n before =
+      (Aeneas.Std.Result.fail Aeneas.Std.Error.panic, n + 1,
+        before ++ [{ parts := parts, returned := Aeneas.Std.Result.ok digest }])
+'AspisR1.BEg_Nonvacuity.rejection' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.BEg_Nonvacuity.failed_read : ∀ (parts : AspisR1.SdkC_Source.Parts) (n : ℕ) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.BEf_Carrier.run (AspisR1.BEf_Count.call fun x => Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+      (AspisR1.BEg_Terminal.terminal (AspisR1.BEg_Nonvacuity.accepted parts)) n before =
+    (Aeneas.Std.Result.fail Aeneas.Std.Error.panic, n + 1,
+      before ++ [{ parts := parts, returned := Aeneas.Std.Result.fail Aeneas.Std.Error.panic }])
+'AspisR1.BEg_Nonvacuity.failed_read' depends on axioms: [propext, Classical.choice, Quot.sound]

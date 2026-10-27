@@ -1,0 +1,22 @@
+Hist_DistinctInner.lean:48:14: error: Tactic `subst` failed: did not find equation for eliminating 'j'
+
+case neg
+N : Usize
+base : AdapterRw.Ops
+accounts : Std.Array Account N
+index previous : Usize
+bound : index < N
+ordered : ↑previous ≤ ↑index
+p : Usize
+inv : ↑p ≤ ↑index ∧ ∀ (j : Fin ↑N), ↑previous ≤ ↑j → ↑j < ↑p → keyAt accounts j ≠ keyAt accounts ⟨↑index, ⋯⟩
+running : p < index
+h✝ : ¬(↑accounts)[↑p].key = (↑accounts)[↑index].key
+next : ↑(p.wrapping_add 1#usize) = ↑p + 1
+j : Fin ↑N
+start : ↑previous ≤ ↑j
+lt : ↑j < ↑(p.wrapping_add 1#usize)
+old : ¬↑j < ↑p
+same : ↑j = ↑p
+eq : j = ⟨↑p, ⋯⟩
+⊢ keyAt accounts j ≠ keyAt accounts ⟨↑index, ⋯⟩
+'AspisR1.Hist_DistinctInner.inner_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

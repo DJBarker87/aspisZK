@@ -1,0 +1,93 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullSource.lean:37:68: error: unsolved goals
+case case3
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+L✝ r✝ : ℕ
+state✝ : State
+answer✝ : Result (U32 × prover_commit_reference.State) := prover_commit_reference.next hash domain state✝
+word✝ : U32
+after✝ : prover_commit_reference.State
+x✝ : answer✝ = ok (word✝, after✝)
+rest✝ : Option (List (↥sourceBase × ℕ)) × List Read := produce hash domain L✝ 16 after✝
+h✝ : ↑word✝ &&& 2147483647 < ↑aspis_core.field.P
+ih1✝ : (produce hash domain L✝ 16 after✝).1 = PV_L2_F3SourceCounts.source hash domain L✝ 16 after✝
+⊢ Option.map (fun x => (fieldValue (word✝ &&& 2147483647#u32), 16 - r✝) :: x) rest✝.1 =
+    match prover_commit_reference.next hash domain state✝ with
+    | ok (word, after) =>
+      if ↑word &&& 2147483647 < ↑aspis_core.field.P then
+        Option.map (fun x => (fieldValue (word &&& 2147483647#u32), 16 - r✝) :: x)
+          (PV_L2_F3SourceCounts.source hash domain L✝ 16 after)
+      else PV_L2_F3SourceCounts.source hash domain (L✝ + 1) r✝ after
+    | x => none
+
+case case4
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+L✝ r✝ : ℕ
+state✝ : State
+answer✝ : Result (U32 × prover_commit_reference.State) := prover_commit_reference.next hash domain state✝
+word✝ : U32
+after✝ : prover_commit_reference.State
+x✝ : answer✝ = ok (word✝, after✝)
+rest✝ : Option (List (↥sourceBase × ℕ)) × List Read := produce hash domain (L✝ + 1) r✝ after✝
+h✝ : ↑aspis_core.field.P ≤ ↑word✝ &&& 2147483647
+ih1✝ : (produce hash domain (L✝ + 1) r✝ after✝).1 = PV_L2_F3SourceCounts.source hash domain (L✝ + 1) r✝ after✝
+⊢ rest✝.1 =
+    match prover_commit_reference.next hash domain state✝ with
+    | ok (word, after) =>
+      if ↑word &&& 2147483647 < ↑aspis_core.field.P then
+        Option.map (fun x => (fieldValue (word &&& 2147483647#u32), 16 - r✝) :: x)
+          (PV_L2_F3SourceCounts.source hash domain L✝ 16 after)
+      else PV_L2_F3SourceCounts.source hash domain (L✝ + 1) r✝ after
+    | x => none
+
+case case5
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+L✝ r✝ : ℕ
+state✝ : State
+answer✝ : Result (U32 × prover_commit_reference.State) := prover_commit_reference.next hash domain state✝
+x✝ : ∀ (word : U32) (after : prover_commit_reference.State), ¬answer✝ = ok (word, after)
+⊢ none =
+    match prover_commit_reference.next hash domain state✝ with
+    | ok (word, after) =>
+      if ↑word &&& 2147483647 < ↑aspis_core.field.P then
+        Option.map (fun x => (fieldValue (word &&& 2147483647#u32), 16 - r✝) :: x)
+          (PV_L2_F3SourceCounts.source hash domain L✝ 16 after)
+      else PV_L2_F3SourceCounts.source hash domain (L✝ + 1) r✝ after
+    | x => none
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullSource.lean:39:14: warning: This simp argument is unused:
+  produce
+
+Hint: Omit it from the simp argument list.
+  simp_all [p̵r̵o̵d̵u̵c̵e̵,̵PV_L2_F3SourceCounts.source]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullSource.lean:67:31: error: Invalid projection: Type of
+  bv
+is not known; cannot resolve projection `1`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullSource.lean:67:43: error: Invalid projection: Type of
+  bv
+is not known; cannot resolve projection `2`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullSource.lean:70:5: error(lean.unknownIdentifier): Unknown identifier `pair`
+
+Note: It is not possible to treat `pair` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullSource.lean:71:9: error(lean.unknownIdentifier): Unknown identifier `pair`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullSource.lean:78:5: error(lean.unknownIdentifier): Unknown identifier `pair`
+
+Note: It is not possible to treat `pair` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+'R1Z.PV_L2_F3FullSource.erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3FullSource.arrays_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3FullSource.pair_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3FullSource.observed_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

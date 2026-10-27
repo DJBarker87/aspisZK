@@ -1,0 +1,101 @@
+theorem AspisR1.JGg_PreparationOpening.source : ∀ {Hash : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash) (hash : Hash),
+  have D0 :=
+    AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+      (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D);
+  ∃ gamma kappa alpha0 alpha1 rho q powers,
+    AspisR1PublicPreparation.PreparedModel.scalar
+          AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries.sampling D0
+          { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening27.before, hash := hash } 27#u8
+          AspisR1.JGg_Opening27.payload true =
+        Aeneas.Std.Result.ok
+          (gamma, { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening27.next0, hash := hash }) ∧
+      AspisR1PublicPreparation.PreparedModel.scalar
+            AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries.sampling D0
+            { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening28.before, hash := hash } 28#u8
+            AspisR1.JGg_Opening28.payload false =
+          Aeneas.Std.Result.ok
+            (kappa, { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening28.next0, hash := hash }) ∧
+        AspisR1PublicPreparation.PreparedModel.scalar
+              AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries.sampling D0
+              { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening29.before, hash := hash } 29#u8
+              AspisR1.JGg_Opening29.payload false =
+            Aeneas.Std.Result.ok
+              (alpha0,
+                { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening29.next0, hash := hash }) ∧
+          AspisR1PublicPreparation.PreparedModel.scalar
+                AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries.sampling D0
+                { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening30.before, hash := hash } 30#u8
+                AspisR1.JGg_Opening30.payload false =
+              Aeneas.Std.Result.ok
+                (alpha1,
+                  { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening30.next0, hash := hash }) ∧
+            AspisR1PublicPreparation.PreparedModel.scalar_k
+                  AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries.sampling D0
+                  { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening32.before, hash := hash }
+                  32#u8 AspisR1.JGg_Opening32.payload =
+                Aeneas.Std.Result.ok
+                  (rho,
+                    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening32.next0, hash := hash }) ∧
+              AspisR1PublicPreparation.QueriesModel.queries AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashQueries
+                    D0
+                    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening31.before, hash := hash }
+                    31#u8 AspisR1.JGg_Opening31.payload =
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Ok q,
+                      { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening31.next2,
+                        hash := hash }) ∧
+                AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE gamma) ∧
+                  AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE kappa) ∧
+                    AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE alpha0) ∧
+                      AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE alpha1) ∧
+                        AspisR1ClaimPreparedBridge.powersPublic 29#usize gamma = Aeneas.Std.Result.ok powers :=
+fun {Hash} D hash =>
+  id
+    (let ⟨gamma, h✝⟩ := AspisR1.JGg_Scalars.source D hash
+    let ⟨kappa, h✝¹⟩ := h✝
+    let ⟨alpha0, h✝²⟩ := h✝¹
+    let ⟨alpha1, h✝³⟩ := h✝²
+    let ⟨rho, h✝⁴⟩ := h✝³
+    let ⟨gc, right✝⟩ := h✝⁴
+    let ⟨kc, right✝¹⟩ := right✝
+    let ⟨a0c, right✝²⟩ := right✝¹
+    let ⟨a1c, rc⟩ := right✝²
+    let ⟨q, qc⟩ := AspisR1.JGg_QueryCalls.source D hash
+    have gcanon :=
+      AspisR1.JGg_ScalarCanon.gamma
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+          (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D))
+        { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening27.before, hash := hash }
+        { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening27.next0, hash := hash } 27#u8
+        AspisR1.JGg_Opening27.payload gamma gc;
+    have kcanon :=
+      AspisR1.JGg_ScalarCanon.ordinary
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+          (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D))
+        { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening28.before, hash := hash }
+        { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening28.next0, hash := hash } 28#u8
+        AspisR1.JGg_Opening28.payload kappa kc;
+    have a0canon :=
+      AspisR1.JGg_ScalarCanon.ordinary
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+          (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D))
+        { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening29.before, hash := hash }
+        { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening29.next0, hash := hash } 29#u8
+        AspisR1.JGg_Opening29.payload alpha0 a0c;
+    have a1canon :=
+      AspisR1.JGg_ScalarCanon.ordinary
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+          (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D))
+        { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening30.before, hash := hash }
+        { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening30.next0, hash := hash } 30#u8
+        AspisR1.JGg_Opening30.payload alpha1 a1c;
+    let ⟨powers, powersCall⟩ := AspisR1.JGg_Powers.source 29#usize gamma gcanon
+    Exists.intro gamma
+      (Exists.intro kappa
+        (Exists.intro alpha0
+          (Exists.intro alpha1
+            (Exists.intro rho
+              (Exists.intro q
+                (Exists.intro powers
+                  ⟨gc, ⟨kc, ⟨a0c, ⟨a1c, ⟨rc, ⟨qc, ⟨gcanon, ⟨kcanon, ⟨a0canon, ⟨a1canon, powersCall⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))))))

@@ -1,0 +1,50 @@
+FJh_InternalConstantIndices.lean:13:4: error: Tactic `apply` failed: could not unify the conclusion of `@UScalar.sub_spec`
+  ?x - ?y ⦃ z => ↑z = ↑?x - ↑?y ∧ ↑?y ≤ ↑?x ⦄
+with the goal
+  index i - 2#usize ⦃ x => ↑x = ↑(index i) - 2 ⦄
+
+Note: The full type of `@UScalar.sub_spec` is
+  ∀ {ty : UScalarTy} {x y : UScalar ty}, ↑y ≤ ↑x → x - y ⦃ z => ↑z = ↑x - ↑y ∧ ↑y ≤ ↑x ⦄
+
+i : Fin 7
+hv : ↑(index i) = ↑i + 2
+hmax : 4294967295 ≤ Usize.max
+⊢ index i - 2#usize ⦃ x => ↑x = ↑(index i) - 2 ⦄
+FJh_InternalConstantIndices.lean:19:4: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+FJh_InternalConstantIndices.lean:9:64: error: unsolved goals
+case this
+i : Fin 7
+hv : ↑(index i) = ↑i + 2
+hmax : 4294967295 ≤ Usize.max
+ss : index i - 2#usize ⦃ x => ↑x = ↑(index i) - 2 ⦄
+offset : UScalar UScalarTy.Usize
+rs : index i - 2#usize = ok offset
+vs : ↑offset = ↑(index i) - 2
+vo : ↑offset = ↑i
+ms : 2#usize * offset ⦃ x => ↑x = 2 * ↑offset ⦄
+even : UScalar UScalarTy.Usize
+rm : 2#usize * offset = ok even
+vm : ↑even = 2 * ↑offset
+⊢ ?m.266
+
+i : Fin 7
+hv : ↑(index i) = ↑i + 2
+hmax : 4294967295 ≤ Usize.max
+ss : index i - 2#usize ⦃ x => ↑x = ↑(index i) - 2 ⦄
+offset : UScalar UScalarTy.Usize
+rs : index i - 2#usize = ok offset
+vs : ↑offset = ↑(index i) - 2
+vo : ↑offset = ↑i
+ms : 2#usize * offset ⦃ x => ↑x = 2 * ↑offset ⦄
+even : UScalar UScalarTy.Usize
+rm : 2#usize * offset = ok even
+vm : ↑even = 2 * ↑offset
+this : ?m.266
+⊢ ∃ offset even odd,
+    index i - 2#usize = ok offset ∧
+      2#usize * offset = ok even ∧ ↑even = 2 * ↑i ∧ even + 1#usize = ok odd ∧ ↑odd = 2 * ↑i + 1
+FJh_InternalConstantIndices.lean:21:7: error: unexpected token 'as'; expected command
+'AspisR1.FJh_InternalConstantIndices.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,13 @@
+import FIq_TypedData
+#check Polynomial.eval_map
+#check Polynomial.eval₂_at_apply
+#check Polynomial.eval₂_at
+#check Polynomial.eval₂_hom
+#check Polynomial.hom_eval₂
+#check Polynomial.eval₂_eq_eval_map
+#check Polynomial.eval₂_comp
+#check Polynomial.aeval_algebraMap_apply
+#check Polynomial.eval₂_at_apply
+#check Polynomial.map_eval
+#check Polynomial.eval₂_hom_apply
+#check Polynomial.eval_map_apply

@@ -1,0 +1,51 @@
+Hist_WholeEncoderTrace.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (core.result.Result.Ok saved, log).2
+in the target expression
+  readerPublics log = [encoded.to_slice]
+
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts1 accounts2 : Slice AdapterRw.Cuts.Account
+data1 data2 : Slice U8
+slot : core.result.Result U64 AdapterRw.Cuts.PE
+saved : alloc.vec.Vec U8
+accepted1 : AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts1 data1 = ok (core.result.Result.Ok saved)
+accepted2 :
+  AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts2 data2 slot = ok (core.result.Result.Ok ())
+validated : AdapterRw.r1_pool_adapter.ValidatedAsqa
+encoded : Std.Array U8 1880#usize
+validation :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts2 data2 slot = ok (core.result.Result.Ok validated)
+encoder : ops.op22 validated.statement = ok (core.result.Result.Ok encoded)
+log : Log
+execution :
+  run ops (S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] =
+    ok (core.result.Result.Ok saved, log)
+l1 : Log
+h1 :
+  run ops (S2W_Outer.stage1_owned ops S2W_Outer.traceEffects program accounts1 data1) [] =
+    ok (core.result.Result.Ok saved, l1)
+l2 : Log
+h2 :
+  run ops (S2W_Outer.stage2_owned ops S2W_Outer.traceEffects program accounts2 data2 slot) [] =
+    ok (core.result.Result.Ok (), l2)
+shifted :
+  run ops (S2W_Outer.stage2_owned ops S2W_Outer.traceEffects program accounts2 data2 slot) l1 =
+    ok (core.result.Result.Ok (), l1 ++ l2)
+whole :
+  run ops (S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] =
+    ok (core.result.Result.Ok saved, l1 ++ l2)
+same : (core.result.Result.Ok saved, log).2 = (core.result.Result.Ok saved, l1 ++ l2).2
+⊢ readerPublics log = [encoded.to_slice]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1880 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.Hist_WholeEncoderTrace.second_public' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

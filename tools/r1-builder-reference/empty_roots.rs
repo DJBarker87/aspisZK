@@ -192,3 +192,49 @@ fn empty_root_call_trace() {
     assert_eq!(unsafe { CALLS },21);
     for l in 0..21 { for i in 0..8 { assert_eq!(actual[l][i].0,ROOTS[l][i]); } }
 }
+
+// Accessor for the new unstubbed full-mapper certificate; cfg(kani) module only.
+pub(super) fn pv_srcid3_frozen_roots() -> [Digest; 21] { ROOTS.map(|r| r.map(M31)) }
+
+// Isolated pure-callee obligation after the full mapper timed out. This runs
+// the actual helper end to end; unlike empty_root_call_trace it has no stubs.
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid3_empty_roots_full() {
+    let actual = pair_empty_roots();
+    for level in 0..21 {
+        for lane in 0..8 {
+            assert_eq!(actual[level][lane].0, ROOTS[level][lane]);
+        }
+    }
+}
+
+// Allocation 7 isolates the previously timed-out full-helper comparison by
+// asserted output region. Both harnesses execute the actual 21-call helper;
+// CBMC slicing can discard outputs outside the named region. No callee stub.
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid7_helper_prefix11() {
+    let actual = pair_empty_roots();
+    for level in 0..11 {
+        for lane in 0..8 { assert_eq!(actual[level][lane].0, ROOTS[level][lane]); }
+    }
+}
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid7_helper_suffix10() {
+    let actual = pair_empty_roots();
+    for level in 11..21 {
+        for lane in 0..8 { assert_eq!(actual[level][lane].0, ROOTS[level][lane]); }
+    }
+}
+
+// Allocation 8 splits the timed-out prefix11 assertion to its initial cell.
+// The complete source helper still executes, with no stubbed callees.
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid8_helper_prefix01() {
+    let actual = pair_empty_roots();
+    for lane in 0..8 { assert_eq!(actual[0][lane].0, ROOTS[0][lane]); }
+}

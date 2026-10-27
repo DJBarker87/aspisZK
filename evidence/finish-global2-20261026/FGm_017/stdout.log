@@ -1,0 +1,93 @@
+FGm_PairSumStep.lean:38:65: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Type ?u.50) 7
+numerals are polymorphic in Lean, but the numeral `7` cannot be used in a context where the expected type is
+  Type ?u.50
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+FGm_PairSumStep.lean:38:68: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+FGm_PairSumStep.lean:55:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide next)
+in the target expression
+  decode (iter', next).2 = prefixSum parts k ↑(iter', next).1.start
+
+case some.refine_2
+parts k : Std.Array NE 7#usize
+hp : FIo_ArrayCanon.Holds parts
+hk : FIo_ArrayCanon.Holds k
+iter : FIo_RangeNext.Range
+sum : NE
+hend : (iter, sum).1.end = 7#usize
+hbound : ↑(iter, sum).1.start ≤ 7
+hcanon : FIo_WideValues.Canon (iter, sum).2
+hvalue : decode (iter, sum).2 = prefixSum parts k ↑(iter, sum).1.start
+iter' : core.ops.range.Range (UScalar UScalarTy.Usize)
+i : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, sum).1 = ok (some i, iter')
+p : FIo_Native.aspis_core.field.wide_exact.WideExact
+hpRead : parts.index_usize i = ok p
+kv : FIo_Native.aspis_core.field.wide_exact.WideExact
+hkRead : k.index_usize i = ok kv
+product : FIo_Native.aspis_core.field.wide_exact.WideExact
+hproduct : kv.mul p = ok product
+next : FIo_Native.aspis_core.field.wide_exact.WideExact
+hnext : FIo_Native.aspis_core.field.wide_exact.WideExact.add sum product = ok next
+run✝⁴ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, sum).1
+      match o with
+        | none => ok (done (iter, sum).2)
+        | some kind => do
+          let we ← parts.index_usize kind
+          FIo_Native.trace.value 8#u16 kind we
+          let we1 ← k.index_usize kind
+          let we2 ← we1.mul we
+          let sum1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (iter, sum).2 we2
+          ok (cont (iter1, sum1))) =
+    ok (cont (iter', next))
+run✝³ :
+  (let (o, iter1) := (some i, iter')
+    match o with
+    | none => ok (done (iter, sum).2)
+    | some kind => do
+      let we ← parts.index_usize kind
+      FIo_Native.trace.value 8#u16 kind we
+      let we1 ← k.index_usize kind
+      let we2 ← we1.mul we
+      let sum1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (iter, sum).2 we2
+      ok (cont (iter1, sum1))) =
+    ok (cont (iter', next))
+run✝² :
+  (do
+      let we1 ← k.index_usize i
+      let we2 ← we1.mul p
+      let sum1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add sum we2
+      ok (cont (iter', sum1))) =
+    ok (cont (iter', next))
+run✝¹ :
+  (do
+      let we2 ← kv.mul p
+      let sum1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add sum we2
+      ok (cont (iter', sum1))) =
+    ok (cont (iter', next))
+run✝ :
+  (do
+      let sum1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add sum product
+      ok (cont (iter', sum1))) =
+    ok (cont (iter', next))
+run : ok (cont (iter', next)) = ok (cont (iter', next))
+cp : FIo_WideValues.Canon p
+ck : FIo_WideValues.Canon kv
+prod :
+  FIo_WideValues.Canon product ∧
+    AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide product) =
+      AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide kv) *
+        AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide p)
+sumLaw :
+  FIo_WideValues.Canon next ∧
+    AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide next) =
+      AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide sum) +
+        AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide product)
+progress : i = iter.start ∧ iter'.end = iter.end ∧ ↑iter'.start = ↑iter.start + 1 ∧ ↑iter.start < ↑iter.end
+⊢ decode (iter', next).2 = prefixSum parts k ↑(iter', next).1.start
+'AspisR1.FGm_PairSumStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

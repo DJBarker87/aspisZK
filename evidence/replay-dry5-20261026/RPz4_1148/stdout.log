@@ -1,0 +1,201 @@
+'AspisR1.S2W_LeadInterface.proof_suffix_bytes' depends on axioms: [propext]
+'AspisR1.S2W_LeadInterface.checkpoint_oracle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_LeadInterface.checkpoint_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_LeadInterface.compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_LeadInterface.multiproof_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_LeadInterface.y1_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.returned_raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.native_success_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.before_to_after' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.masked_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_WrapperLaws.copy_projection' depends on axioms: [propext]
+'AspisR1.S2W_WrapperLaws.lift_projection' depends on axioms: [Quot.sound]
+'AspisR1.S2W_WrapperLaws.native_snapshot_protocol' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_WrapperLaws.write_bracket' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_WrapperLaws.checkpoint_write' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_WrapperLaws.trusted_write_protocol' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_EntryWriteHistory.written_bytes' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_EntryWriteHistory.entry_write_history' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_ChildJoins.internal_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_Observation.accepted_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_Observation.accepted_segments' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.S2W_EntryWriteHistory.entry_write_history : ∀ {W F : Type} (L : AspisR1.S2Trust.Library W F),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀ (encode : UInt8 → AspisV8R19.DuplexFrames.Byte) (savedState entryState : AspisR1.S2Trust.Heap F) (w : W)
+      (writer reader writeToken writeOwner readToken readOwner : ℕ) (src : AspisR1.S2Trust.Payload),
+      savedState.guards = [] →
+        savedState.counter (savedState.accounts writer).1 = 0 →
+          (savedState.payload (savedState.accounts writer).1).descriptor.length = 1768 →
+            ∀ (keys : ℕ → List UInt8) (n : ℕ),
+              AspisR1.AdapterRw.RuntimeEntrypointAdmission entryState keys n →
+                reader < n →
+                  L.related w entryState →
+                    ∀
+                      (version :
+                        AspisR1.S2X.CheckpointVersionBinding
+                          (AspisR1.S2W_EntryWriteHistory.payloadBytes encode
+                            ((AspisR1.S2W_WrapperLaws.writeBracket savedState writer writeToken writeOwner src).payload
+                              (savedState.accounts writer).1)
+                            1768)
+                          (AspisR1.S2W_EntryWriteHistory.payloadBytes encode
+                            (entryState.payload (entryState.accounts reader).1) 1768)),
+                      AspisR1.S2W_EntryWriteHistory.payloadBytes encode
+                            (entryState.payload (entryState.accounts reader).1) 1768 =
+                          AspisR1.S2W_EntryWriteHistory.payloadBytes encode src 1768 ∧
+                        List.length (AspisR1.S2W_EntryWriteHistory.payloadBytes encode src 1768) = 1768 ∧
+                          ∃ acquired read done,
+                            L.run w (AspisR1.S2Trust.Op.shared reader readToken readOwner) =
+                                (acquired, AspisR1.S2Trust.Reply.guard readToken) ∧
+                              L.run acquired (AspisR1.S2Trust.Op.deref readToken) =
+                                  (read,
+                                    AspisR1.S2Trust.Reply.payload (entryState.payload (entryState.accounts reader).1)) ∧
+                                L.run read (AspisR1.S2Trust.Op.drop readToken) = (done, AspisR1.S2Trust.Reply.unit) ∧
+                                  L.related done entryState :=
+fun {W F} L trust encode savedState entryState w writer reader writeToken writeOwner readToken readOwner src empty zero
+    length keys n entry within related version =>
+  ⟨Eq.trans
+      (AspisR1.S2X.checkpoint_persistence
+        (AspisR1.S2W_EntryWriteHistory.payloadBytes encode
+          ((AspisR1.S2W_WrapperLaws.writeBracket savedState writer writeToken writeOwner src).payload
+            (savedState.accounts writer).1)
+          1768)
+        (AspisR1.S2W_EntryWriteHistory.payloadBytes encode (entryState.payload (entryState.accounts reader).1) 1768)
+        version)
+      (AspisR1.S2W_EntryWriteHistory.written_bytes encode savedState writer writeToken writeOwner src empty zero
+        length),
+    ⟨List.length_ofFn,
+      AspisR1.S2W_WrapperLaws.native_snapshot_protocol L trust w entryState keys n reader readToken readOwner entry
+        within related⟩⟩
+theorem AspisR1.S2W_WrapperLaws.native_snapshot_protocol : ∀ {W F : Type} (L : AspisR1.S2Trust.Library W F),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (keys : ℕ → List UInt8) (n a t o : ℕ),
+      AspisR1.AdapterRw.RuntimeEntrypointAdmission s keys n →
+        a < n →
+          L.related w s →
+            ∃ acquired read done,
+              L.run w (AspisR1.S2Trust.Op.shared a t o) = (acquired, AspisR1.S2Trust.Reply.guard t) ∧
+                L.run acquired (AspisR1.S2Trust.Op.deref t) =
+                    (read, AspisR1.S2Trust.Reply.payload (s.payload (s.accounts a).1)) ∧
+                  L.run read (AspisR1.S2Trust.Op.drop t) = (done, AspisR1.S2Trust.Reply.unit) ∧ L.related done s :=
+fun {W F} L trust w s keys n a t o runtime within related =>
+  let ⟨acquired, h✝⟩ := AspisR1.AdapterRw.Snapshots.native_entry_shared L trust w s keys n a t o runtime within related
+  let ⟨first, related1⟩ := h✝
+  let ⟨read, h✝¹⟩ :=
+    AspisR1.AdapterRw.Snapshots.native_entry_read L trust acquired s keys n a t o runtime within related1
+  let ⟨second, related2⟩ := h✝¹
+  let ⟨done, h✝²⟩ := AspisR1.AdapterRw.Snapshots.native_entry_drop L trust read s keys n a t o runtime within related2
+  let ⟨third, related3⟩ := h✝²
+  Exists.intro acquired (Exists.intro read (Exists.intro done ⟨first, ⟨second, ⟨third, related3⟩⟩⟩))
+theorem AspisR1.S2W_WrapperLaws.trusted_write_protocol : ∀ {F : Type}
+  (copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F),
+  AspisR1.S2W_TrustedStd.TrustedStd copy →
+    ∀ (s : AspisR1.S2Trust.Heap F) (a t o : ℕ) (src : AspisR1.S2Trust.Payload),
+      s.guards = [] →
+        s.counter (s.accounts a).1 = 0 →
+          (s.payload (s.accounts a).1).descriptor.length = src.descriptor.length →
+            ∃ written,
+              copy (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive) (s.accounts a).1
+                    src =
+                  AspisR1.S2W_TrustedStd.Outcome.returned written ∧
+                AspisR1.S2Trust.release written (AspisR1.S2W_WrapperLaws.exclusiveGuard s a t o) =
+                  AspisR1.S2W_TrustedStd.copyHeap s (s.accounts a).1 src :=
+fun {F} copy std s a t o src empty zero lengths =>
+  Exists.intro
+    (AspisR1.S2W_TrustedStd.copyHeap (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive)
+      (s.accounts a).1 src)
+    ⟨AspisR1.S2W_TrustedStd.accepted_copy copy std
+        (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive) (s.accounts a).1 src lengths,
+      AspisR1.S2W_WrapperLaws.write_bracket s a t o src empty zero⟩
+structure AspisR1.S2W_LeadInterface.S2CallerFacts {Observer Hash : Type} (c : AspisR1.S2W_LeadInterface.Inputs Observer)
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored pub savedBytes : AspisV8R19.DuplexFrames.Bytes) (parsed : AspisR1.OraclePortCompactDraft.Parsed) : Prop
+number of parameters: 10
+fields:
+  AspisR1.S2W_LeadInterface.S2CallerFacts.proofBytes : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s → AspisR1.MultiproofConeCanonical.bytesOf ↑(c.proof s) = stored
+  AspisR1.S2W_LeadInterface.S2CallerFacts.publicBytes : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s → AspisR1.MultiproofConeCanonical.bytesOf ↑(c.publicInput s) = pub
+  AspisR1.S2W_LeadInterface.S2CallerFacts.proofSuffix : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s →
+        s = AspisR1.S2LeadInterface.Site.tx1 ∨ s = AspisR1.S2LeadInterface.Site.tx2 →
+          c.proofAccount s = List.take 688 (c.proofAccount s) ++ stored
+  AspisR1.S2W_LeadInterface.S2CallerFacts.proofLength : List.length stored = 57607
+  AspisR1.S2W_LeadInterface.S2CallerFacts.checkpointBytes : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s →
+        s = AspisR1.S2LeadInterface.Site.save ∨
+            s = AspisR1.S2LeadInterface.Site.tx2 ∨ s = AspisR1.S2LeadInterface.Site.resume →
+          AspisR1.MultiproofConeCanonical.bytesOf ↑(c.checkpoint s) = savedBytes
+  AspisR1.S2W_LeadInterface.S2CallerFacts.checkpointLength : List.length savedBytes = 1768
+  AspisR1.S2W_LeadInterface.S2CallerFacts.nodeViews : ∀ (b k : ℕ),
+      b < 2 →
+        k < 3 →
+          AspisR1.MultiproofConeCanonical.bytesOf ↑(c.nodes b k) =
+            AspisR1.OraclePortCompactDraft.slice parsed.wire (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+              (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))
+  AspisR1.S2W_LeadInterface.S2CallerFacts.y1Input : c.reached AspisR1.S2LeadInterface.Site.tx1 →
+      c.y1 = AspisR1.S8JoinFrozenScan.segment (c.proof AspisR1.S2LeadInterface.Site.tx1) 7031 464
+  AspisR1.S2W_LeadInterface.S2CallerFacts.observerNone : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s → c.observer s = none
+  AspisR1.S2W_LeadInterface.S2CallerFacts.reachedPrefix : ∀ (s t : AspisR1.S2LeadInterface.Site),
+      s.rank < t.rank → c.reached t → c.reached s
+  AspisR1.S2W_LeadInterface.S2CallerFacts.callOrder : ∀ (s t : AspisR1.S2LeadInterface.Site),
+      s.rank < t.rank → c.reached s → c.reached t → c.clock s < c.clock t
+  AspisR1.S2W_LeadInterface.S2CallerFacts.accountFrame : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s → ∀ (a : ℕ), AspisR1.S2W_LeadInterface.dataWrite s a = false → c.after s a = c.before s a
+  AspisR1.S2W_LeadInterface.S2CallerFacts.writtenMetadata : c.reached AspisR1.S2LeadInterface.Site.tx1 →
+      (let __src := c.after AspisR1.S2LeadInterface.Site.tx1 2;
+        { key := __src.key, owner := __src.owner, lamports := __src.lamports,
+          data := (c.before AspisR1.S2LeadInterface.Site.tx1 2).data, signer := __src.signer,
+          writable := __src.writable, executable := __src.executable, rentEpoch := __src.rentEpoch }) =
+        c.before AspisR1.S2LeadInterface.Site.tx1 2
+  AspisR1.S2W_LeadInterface.S2CallerFacts.oracle : AspisR1.CheckpointBytes5Inputs.Oracle D hash H
+constructor:
+  AspisR1.S2W_LeadInterface.S2CallerFacts.mk {Observer Hash : Type} {c : AspisR1.S2W_LeadInterface.Inputs Observer}
+    {D : AspisR1Stage2.aspis_core.digest.Digest32 Hash} {hash : Hash}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {stored pub savedBytes : AspisV8R19.DuplexFrames.Bytes} {parsed : AspisR1.OraclePortCompactDraft.Parsed}
+    (proofBytes :
+      ∀ (s : AspisR1.S2LeadInterface.Site), c.reached s → AspisR1.MultiproofConeCanonical.bytesOf ↑(c.proof s) = stored)
+    (publicBytes :
+      ∀ (s : AspisR1.S2LeadInterface.Site),
+        c.reached s → AspisR1.MultiproofConeCanonical.bytesOf ↑(c.publicInput s) = pub)
+    (proofSuffix :
+      ∀ (s : AspisR1.S2LeadInterface.Site),
+        c.reached s →
+          s = AspisR1.S2LeadInterface.Site.tx1 ∨ s = AspisR1.S2LeadInterface.Site.tx2 →
+            c.proofAccount s = List.take 688 (c.proofAccount s) ++ stored)
+    (proofLength : List.length stored = 57607)
+    (checkpointBytes :
+      ∀ (s : AspisR1.S2LeadInterface.Site),
+        c.reached s →
+          s = AspisR1.S2LeadInterface.Site.save ∨
+              s = AspisR1.S2LeadInterface.Site.tx2 ∨ s = AspisR1.S2LeadInterface.Site.resume →
+            AspisR1.MultiproofConeCanonical.bytesOf ↑(c.checkpoint s) = savedBytes)
+    (checkpointLength : List.length savedBytes = 1768)
+    (nodeViews :
+      ∀ (b k : ℕ),
+        b < 2 →
+          k < 3 →
+            AspisR1.MultiproofConeCanonical.bytesOf ↑(c.nodes b k) =
+              AspisR1.OraclePortCompactDraft.slice parsed.wire (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+                (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k)))
+    (y1Input :
+      c.reached AspisR1.S2LeadInterface.Site.tx1 →
+        c.y1 = AspisR1.S8JoinFrozenScan.segment (c.proof AspisR1.S2LeadInterface.Site.tx1) 7031 464)
+    (observerNone : ∀ (s : AspisR1.S2LeadInterface.Site), c.reached s → c.observer s = none)
+    (reachedPrefix : ∀ (s t : AspisR1.S2LeadInterface.Site), s.rank < t.rank → c.reached t → c.reached s)
+    (callOrder :
+      ∀ (s t : AspisR1.S2LeadInterface.Site), s.rank < t.rank → c.reached s → c.reached t → c.clock s < c.clock t)
+    (accountFrame :
+      ∀ (s : AspisR1.S2LeadInterface.Site),
+        c.reached s → ∀ (a : ℕ), AspisR1.S2W_LeadInterface.dataWrite s a = false → c.after s a = c.before s a)
+    (writtenMetadata :
+      c.reached AspisR1.S2LeadInterface.Site.tx1 →
+        (let __src := c.after AspisR1.S2LeadInterface.Site.tx1 2;
+          { key := __src.key, owner := __src.owner, lamports := __src.lamports,
+            data := (c.before AspisR1.S2LeadInterface.Site.tx1 2).data, signer := __src.signer,
+            writable := __src.writable, executable := __src.executable, rentEpoch := __src.rentEpoch }) =
+          c.before AspisR1.S2LeadInterface.Site.tx1 2)
+    (oracle : AspisR1.CheckpointBytes5Inputs.Oracle D hash H) :
+    AspisR1.S2W_LeadInterface.S2CallerFacts c D hash H stored pub savedBytes parsed

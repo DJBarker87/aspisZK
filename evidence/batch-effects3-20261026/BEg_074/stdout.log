@@ -1,0 +1,84 @@
+@AspisR1.SdkC_Authentication.ideal_value : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash parts =
+        Aeneas.Std.Result.ok
+          (AspisV8R19.SqueezeOracleBridge.encodeState (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))) →
+    ∀ (code : AspisR1.SdkC_Source.Code A),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).2 =
+        AspisR1.CheckpointBytes5Effect.erase D hash code
+'AspisR1.SdkC_Authentication.ideal_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Authentication.stage_acceptance : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : VTop_Stages.aspis_core.digest.Digest32 Unit),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), D.digest () parts = hashv parts) →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+            (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+            AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves D proof p root 1#usize () =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+              AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves (AspisR1.SdkC_Authentication.idealStage H)
+                  proof p root 1#usize () =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.SdkC_Authentication.stage_acceptance' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Authentication.stage_paths : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : VTop_Stages.aspis_core.digest.Digest32 Unit),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), D.digest () parts = hashv parts) →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+            (↑proof).length = 57607 →
+              ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+                parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                  ∀ (p : VTop_Stages.verifier.Prepared) (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+                    (q : Fin 22 → Fin 262144),
+                    AspisR1.Port4B_KeyInstall.queries p.queries = q →
+                      ∀ (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8),
+                        (∀ (b k : ℕ),
+                            b < 2 →
+                              k < 3 →
+                                AspisR1.MultiproofConeCanonical.bytesOf ↑(nodes b k) =
+                                  AspisR1.OraclePortCompactDraft.slice parsed.wire
+                                    (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+                                    (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))) →
+                          AspisR1.Port3_BatchStage.root0 p =
+                              AspisV8R19.SqueezeOracleBridge.encodeState
+                                (AspisR1.OraclePortBatchDraft.committedRoot parsed 0) →
+                            AspisR1.Port3_BatchStage.root1 p =
+                                AspisV8R19.SqueezeOracleBridge.encodeState
+                                  (AspisR1.OraclePortBatchDraft.committedRoot parsed 1) →
+                              folded =
+                                  AspisV8R19.SqueezeOracleBridge.encodeState
+                                    (AspisR1.OraclePortBatchDraft.committedRoot parsed 2) →
+                                AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves D proof p folded 1#usize
+                                      () =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+                                  ∀ kind < 3,
+                                    ∀ pos ∈ AspisR1.OraclePortSelectedDraft.batchPositions 1,
+                                      ∃ path,
+                                        AspisR1.BinMerkle32Path.foldPath H path
+                                              (H (AspisR1.OraclePortSelectedDraft.leaf parsed kind pos)) =
+                                            AspisR1.OraclePortBatchDraft.committedRoot parsed kind ∧
+                                          ∀
+                                            a ∈
+                                              AspisR1.BinMerkle32Leaf.fullTrace H path
+                                                (AspisR1.OraclePortSelectedDraft.leaf parsed kind pos),
+                                            FS2.Duplex.Read
+                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch
+                                                    AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                                    AspisR1.MultiproofConeP6Batch.referenceLeaf parsed q nodes 1
+                                                    AspisR1.Port4B_BatchJoin.initial)).1
+                                              a
+'AspisR1.SdkC_Authentication.stage_paths' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.SdkC_Authentication.idealStage : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  VTop_Stages.aspis_core.digest.Digest32 Unit :=
+fun H =>
+  { coremarkerCopyInst := { cloneInst := { clone := fun q => Aeneas.Std.Result.ok q } },
+    digest := fun x parts =>
+      Aeneas.Std.Result.ok
+        (AspisV8R19.SqueezeOracleBridge.encodeState (H (AspisV8R19.SqueezeOracleBridge.flatten parts))) }

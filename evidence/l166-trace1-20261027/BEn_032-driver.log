@@ -1,0 +1,44 @@
+{"attempt": "BEn_032", "exit_status": 0, "wall_seconds": 2.8990076649934053, "peak_rss_kib": "5557976", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_BatchLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port9OR_BatchLoop.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D E : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize),
+  ↑n < 256 →
+    ∀ (fuel : ℕ) (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values)
+      (d pos : Aeneas.Std.Usize),
+      ↑n - ↑pos + 1 ≤ fuel →
+        AspisR1.CheckpointBytes5Effect.erase E hash
+            (AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel idx val d pos) =
+          As
+...
+ntrolFlow.cont x =>
+                          Aeneas.Std.loop
+                            (fun x =>
+                              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys x.1 x.2.1
+                                x.2.2.1 x.2.2.2)
+                            x
+                        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+                      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+                  (fun ran =>
+                    Eq.refl do
+                      let a ← Aeneas.Std.Result.div
+                      AspisR1.CheckpointBytes5Effect.erase E hash
+                          (match a with
+                          | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                          | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                            AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx
+                              nextVal nextD nextPos))
+                  (Eq.symm h)
+                  (Eq.refl
+                    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                      (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos)))
+              (Eq.refl
+                (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                  (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos))))))
+    fuel idx val d pos bound
+'AspisR1.Port9OR_BatchLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r5d281861c68c4f5e89eda77e8ac3e890.scope; invocation ID: 1840ef42203049aab8407b69ec53e406
+

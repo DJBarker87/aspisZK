@@ -1,0 +1,43 @@
+JFw_NativeRow00.lean:19:4: error: Tactic `rfl` failed: The left-hand side
+  UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [0#u8, 0#u8, 0#u8, 0#u8] ⋯))
+is not definitionally equal to the right-hand side
+  0#usize
+
+case header
+⊢ UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [0#u8, 0#u8, 0#u8, 0#u8] ⋯)) = 0#usize
+JFw_NativeRow00.lean:20:12: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 14
+where
+ e := ↑↑0#u8
+JFw_NativeRow00.lean:28:45: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  bytesOf ↑(window ?off ?n)
+in the target expression
+  bytesOf [0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ++ bytesOf ↑payload =
+    bytesOf [0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ++ slice JFz_RowGeometry.wire (48 + 5) 0
+
+head : List.take 5 (slice JFz_RowGeometry.wire 48 6983) = bytesOf [0#u8, 0#u8, 0#u8, 0#u8, 0#u8]
+⊢ bytesOf [0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ++ bytesOf ↑payload =
+    bytesOf [0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ++ slice JFz_RowGeometry.wire (48 + 5) 0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+JFw_NativeRow00.lean:25:51: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [PSem_Rows.expandedRow, ̲JFz_Row00.shape,P̵r̵o̵d̵.̵s̵n̵d̵,̵ ̲if_neg (by decide : ¬ ̵14 ≤ 0), ̲head]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFw_NativeRow00.payload_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFw_NativeRow00.source_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFw_NativeRow00.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFw_NativeRow00.bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

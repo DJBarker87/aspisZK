@@ -1,0 +1,39 @@
+@AspisR1.RowFinish_Control.RoundValues : {W : Type} →
+  AspisR1Stage2.Stage2Finish.FinishOps W →
+    Aeneas.Std.Slice Aeneas.Std.U8 → AspisR1Stage2.Stage2Finish.E → AspisR1Stage2.Stage2Finish.E → Type
+structure AspisR1.RowFinish_Control.RoundValues {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (alpha claim : AspisR1Stage2.Stage2Finish.E) : Type
+number of parameters: 5
+fields:
+  AspisR1.RowFinish_Control.RoundValues.c0 : AspisR1Stage2.Stage2Finish.E
+  AspisR1.RowFinish_Control.RoundValues.c4 : AspisR1Stage2.Stage2Finish.E
+  AspisR1.RowFinish_Control.RoundValues.lhs : AspisR1Stage2.Stage2Finish.E
+  AspisR1.RowFinish_Control.RoundValues.quarter : AspisR1Stage2.Stage2Finish.M
+  AspisR1.RowFinish_Control.RoundValues.rhs : AspisR1Stage2.Stage2Finish.E
+  AspisR1.RowFinish_Control.RoundValues.value : AspisR1Stage2.Stage2Finish.E
+  AspisR1.RowFinish_Control.RoundValues.field0 : ops.field bytes 0#usize = Aeneas.Std.Result.ok self.c0
+  AspisR1.RowFinish_Control.RoundValues.field4 : ops.field bytes 4#usize = Aeneas.Std.Result.ok self.c4
+  AspisR1.RowFinish_Control.RoundValues.add : ops.add self.c0 self.c4 = Aeneas.Std.Result.ok self.lhs
+  AspisR1.RowFinish_Control.RoundValues.quarter_run : ops.quarter = Aeneas.Std.Result.ok self.quarter
+  AspisR1.RowFinish_Control.RoundValues.multiply : ops.mulM claim self.quarter = Aeneas.Std.Result.ok self.rhs
+  AspisR1.RowFinish_Control.RoundValues.evaluate : ops.polynomial bytes alpha = Aeneas.Std.Result.ok self.value
+constructor:
+  AspisR1.RowFinish_Control.RoundValues.mk {W : Type} {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {bytes : Aeneas.Std.Slice Aeneas.Std.U8} {alpha claim : AspisR1Stage2.Stage2Finish.E}
+    (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E) (quarter : AspisR1Stage2.Stage2Finish.M)
+    (rhs value : AspisR1Stage2.Stage2Finish.E) (field0 : ops.field bytes 0#usize = Aeneas.Std.Result.ok c0)
+    (field4 : ops.field bytes 4#usize = Aeneas.Std.Result.ok c4) (add : ops.add c0 c4 = Aeneas.Std.Result.ok lhs)
+    (quarter_run : ops.quarter = Aeneas.Std.Result.ok quarter)
+    (multiply : ops.mulM claim quarter = Aeneas.Std.Result.ok rhs)
+    (evaluate : ops.polynomial bytes alpha = Aeneas.Std.Result.ok value) :
+    AspisR1.RowFinish_Control.RoundValues ops bytes alpha claim
+'AspisR1.RowFinish_Control.RoundValues' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.TxS_Carriers.toTyped : AspisR1.TxS_Carriers.Prefix → AspisR1.RawCutTranscriptRun.ErasedPrefix
+def AspisR1.TxS_Carriers.toTyped : AspisR1.TxS_Carriers.Prefix → AspisR1.RawCutTranscriptRun.ErasedPrefix :=
+fun p =>
+  if h : 75 + List.length p.publicBytes ≤ AspisR1.SelectedTranscriptParams.L then
+    { statement := { pubBytes := p.publicBytes, initFits := h, tag := p.tag }, rounds := p.rounds }
+  else
+    { statement := { pubBytes := [], initFits := AspisR1.TxS_Carriers.toTyped._proof_1, tag := p.tag },
+      rounds := p.rounds }
+'AspisR1.TxS_Carriers.toTyped' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,67 @@
+{"attempt": "JFv_TX2_019", "exit_status": 1, "wall_seconds": 2.446336526016239, "peak_rss_kib": "5015064", "swaps": "0", "print_axioms": ["'AspisR1.JFv_TX2_Terminal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_TX2_Terminal.lean:32:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.215 then ?m.219 else ?m.220
+in the target expression
+  (if h : it.i < ↑it.slice.len then
+      have x := it.slice[it.i];
+      have it := { slice := it.slice, i := it.i + 1 };
+      ok (some x, it)
+    else ok (none, it)) =
+    ok (none, it)
+
+C : Type
+err : C
+seed : Ops C
+start : Usize
+it : core.slice.iter.Iter U32
+zs flat : alloc.vec.Vec U32
+ending : it.i = (↑it.slice).length
+count : (↑zs).length ≤ 22
+size : (↑flat).length = 5 * (↑zs).length
+positive : 0 < (↑zs).length
+nonzero : ∀ x ∈ ↑flat, S7JoinBasisMachine.decode x ≠ 0
+ops : Ops C := JFv_TX2_GeometryOps.install err seed
+resized
+...
+sisMachine.decode (Port4C_BatchInverse.cell (↑inverse) j) =
+      (S7JoinBasisMachine.decode (Port4C_BatchInverse.cell (↑flat) j))⁻¹
+groups : alloc.vec.Vec Port4C_CollectLoop.Group
+collect :
+  Port4C_CollectLoop.collect (Port4C_GeometryInverse.install (SAQ_Constructor.install err seed)) inverse zs.len =
+    ok groups
+contents : ↑groups = List.map (Port4C_CollectLoop.record inverse) (List.range ↑zs.len)
+glen : (↑groups).length = ↑zs.len
+out : verifier.QueryGeometry := { start := start, inverses := groups, line_z := zs }
+⊢ (if h : it.i < ↑it.slice.len then
+      have x := it.slice[it.i];
+      have it := { slice := it.slice, i := it.i + 1 };
+      ok (some x, it)
+    else ok (none, it)) =
+    ok (none, it)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Slice U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑a
+JFv_TX2_Terminal.lean:32:29: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬it.i
+JFv_TX2_Terminal.lean:32:35: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+JFv_TX2_Terminal.lean:49:16: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+'AspisR1.JFv_TX2_Terminal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r18f4f8b3418f4f33813418e468afeb6f.scope; invocation ID: bfc76fd84e2a4008884ccd522e2c4bd4

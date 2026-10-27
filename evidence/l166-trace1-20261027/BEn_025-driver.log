@@ -1,0 +1,43 @@
+{"attempt": "BEn_025", "exit_status": 0, "wall_seconds": 2.91261931596091, "peak_rss_kib": "5552388", "swaps": "0", "print_axioms": ["'AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]"]}
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+          Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 3#usize →
+            Aeneas.Std.Usize →
+              H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) :=
+fun ops {H} aspis_coredigestDigest32Inst proof queries roots batch hash =>
+  have idx := Aeneas.Std.Array.repeat 16#usize 0#u32;
+  have a := Aeneas.Std.Array.repeat 32#usize 0#u8;
+  have val := Aeneas.Std.Array.repeat 16
+...
+ | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+      let (r1, idx2, val2) ←
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree ops aspis_coredigestDigest32Inst proof queries root1
+            batch 1#usize idx1 val1 hash
+      let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+          let (r2, _, _) ←
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree ops aspis_coredigestDigest32Inst proof queries
+                root2 batch 2#usize idx2 val2 hash
+          let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf2 with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+        (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+'AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+Running as unit: run-r0ed15c3629ac4553907f359aecbdb636.scope; invocation ID: 8c6add6c6d8d4accafda94b10cfce91b
+

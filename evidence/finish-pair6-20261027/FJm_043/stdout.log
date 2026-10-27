@@ -1,0 +1,116 @@
+FJm_LibraPairTrace.lean:72:49: error: Tactic `assumption` failed
+
+cut0 : FIo_Native.Allocation
+self : FIo_Native.weights.Weights
+alpha : Slice NE
+f : Slice U8
+kappa out : NE
+folds : alpha.len = 2#usize
+guard : FIo_Native.weights.shared_two_point_guard self 2#usize = ok true
+cut1 : Result Usize
+cut2 : Usize
+cut3 : FIo_Native.weights.Weights.pair_loop0 { start := 0#usize, «end» := 2#usize } 1024#usize = ok cut2
+cut4 : ¬(f.len.bv.udiv 32#usize.bv#uscalar != cut2) = true
+cut5 : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+cut6 : FIo_Native.aspis_core.field.wide_exact.WideExact
+cut7 : alpha.index_usize 0#usize = ok cut6
+cut8 : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+cut9 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+cut10 : FIo_Native.weights.powers 4#usize cut6 = ok cut9
+cut11 : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+cut12 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+cut13 :
+  (do
+      let we1 ← alpha.index_usize 1#usize
+      FIo_Native.weights.powers 4#usize we1) =
+    ok cut12
+cut14 : Result (core.result.Result (alloc.vec.Vec FIo_Native.aspis_core.field.QM31) FIo_Native.aspis_core.r0.Error)
+initialScratch : alloc.vec.Vec FIo_Native.aspis_core.field.QM31
+cut16 :
+  FIo_Native.aspis_core.r0.heap.filled FIo_Native.aspis_core.field.QM31.Insts.CoreMarkerCopy
+      (f.len.bv.udiv 32#usize.bv#uscalar) FIo_Native.aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok initialScratch)
+cut17 :
+  Result
+    (core.result.Result Unit FIo_Native.verifier.Error ×
+      alloc.vec.Vec FIo_Native.aspis_core.field.QM31 ×
+        Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+regularOut :
+  core.result.Result Unit FIo_Native.verifier.Error ×
+    alloc.vec.Vec FIo_Native.aspis_core.field.QM31 × Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+hregular :
+  FIo_Native.weights.process_regular_kinds self true alpha f 2#usize (f.len.bv.udiv 32#usize.bv#uscalar) cut9 cut12
+      initialScratch (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok regularOut
+cut20 :
+  Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit)
+cut21 : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit
+cut22 : Unit
+hcontinued :
+  core.result.Result.Insts.CoreOpsTry.branch regularOut.1 = ok (core.ops.control_flow.ControlFlow.Continue cut22)
+cut24 : Result (FIo_Native.weights.Weights × Std.Array FIo_Native.aspis_core.field.QM31 16#usize)
+cut25 : FIo_Native.weights.Weights × Std.Array FIo_Native.aspis_core.field.QM31 16#usize
+cut26 :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO) =
+    ok cut25
+cut27 :
+  Result
+    (core.result.Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize) FIo_Native.verifier.Error)
+cut28 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+cut29 : FIo_Native.weights.shared_partials f cut25.2 = ok (core.result.Result.Ok cut28)
+cut30 :
+  Result
+    (core.result.Result Unit FIo_Native.verifier.Error ×
+      Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+cut31 :
+  core.result.Result Unit FIo_Native.verifier.Error × Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+cut32 : FIo_Native.weights.shared_high cut28 cut25.1 cut9 cut12 regularOut.2.2 = ok cut31
+cut33 :
+  Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit)
+cut34 : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible FIo_Native.verifier.Error) Unit
+cut35 : Unit
+cut36 : core.result.Result.Insts.CoreOpsTry.branch cut31.1 = ok (core.ops.control_flow.ControlFlow.Continue cut35)
+cut37 : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize)
+cut38 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 16#usize
+cut39 :
+  FIo_Native.weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } cut9 cut12
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok cut38
+cut40 : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+cut41 : FIo_Native.aspis_core.field.wide_exact.WideExact
+cut42 : FIo_Native.weights.grouped_inactive_pair cut25.1 f cut38 = ok cut41
+cut43 : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+cut44 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+cut45 : cut31.2.update 0#usize cut41 = ok cut44
+cut46 : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+cut47 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+cut48 :
+  (if decide (cut25.1.variant.read_discriminant = FIo_Native.transport.Variant.S2.read_discriminant) = true then
+      FIo_Native.weights.factored_s2_libra_weights cut9 cut12 cut25.1.extra
+    else FIo_Native.weights.twofold_libra_weights cut38 cut25.1.extra) =
+    ok cut47
+cut49 : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+cut50 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+cut51 : FIo_Native.weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f cut44 cut47 = ok cut50
+cut52 : Result (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize)
+cut53 : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+cut54 : FIo_Native.weights.powers 7#usize kappa = ok cut53
+cut55 : Result FIo_Native.aspis_core.field.wide_exact.WideExact
+a1 : NE
+h1 : alpha.index_usize 1#usize = ok a1
+hp1 : FIo_Native.weights.powers 4#usize a1 = ok cut12
+cut56 :
+  FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } cut50 cut53
+      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+run : ok (core.result.Result.Ok out) = ok (core.result.Result.Ok out)
+st : regularOut.1 = core.result.Result.Ok ()
+regEq : regularOut = (core.result.Result.Ok (), regularOut.2.1, regularOut.2.2)
+regular :
+  FIo_Native.weights.process_regular_kinds self true alpha f 2#usize (f.len.bv.udiv 32#usize.bv#uscalar) cut9 cut12
+      initialScratch (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok (), regularOut.2.1, regularOut.2.2)
+⊢ FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq cut25.1.variant FIo_Native.transport.Variant.S2 =
+    ok ?m.299233
+'AspisR1.FJm_LibraPairTrace.reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

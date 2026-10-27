@@ -1,0 +1,92 @@
+FJg_HighCell.lean:45:54: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decodeQM (FIo_FieldBridge.qm c)
+in the target expression
+  FJf_EbyKCodec.model dot + FIp_ArrayValue.value p ↑s * FJf_EbyKCodec.scalar c =
+    FJf_EbyKCodec.model dot + FIp_ArrayValue.value p ↑iter.start * { re := FJf_QMArray.value q ↑iter.start, im := 0 }
+
+case some.Ok.unit.refl
+p : Std.Array NE 4#usize
+q : Std.Array NQ 4#usize
+hp : FIo_ArrayCanon.Holds p
+hq : FJf_QMArray.canon q
+iter cursor : FIo_RangeNext.Range
+dot next : FIo_Native.fast_pairing.EbyKDot
+bound : FJf_EbyKCodec.Bound dot
+run✝³ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => do
+          let we ← dot.finish
+          ok (done (core.result.Result.Ok we))
+        | some s => do
+          let we ← p.index_usize s
+          let q ← q.index_usize s
+          let (r, high1) ← dot.push we q
+          match r with
+            | core.result.Result.Ok a => ok (cont (iter1, high1))
+            | core.result.Result.Err a => ok (done (core.result.Result.Err FIo_Native.verifier.Error.Parse))) =
+    ok (cont (cursor, next))
+s : UScalar UScalarTy.Usize
+v : FIo_Native.aspis_core.field.wide_exact.WideExact
+hv : p.index_usize s = ok v
+c : FIo_Native.aspis_core.field.QM31
+hc : q.index_usize s = ok c
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some s, cursor)
+run✝² :
+  (let (o, iter1) := (some s, cursor)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some s => do
+      let we ← p.index_usize s
+      let q ← q.index_usize s
+      let (r, high1) ← dot.push we q
+      match r with
+        | core.result.Result.Ok a => ok (cont (iter1, high1))
+        | core.result.Result.Err a => ok (done (core.result.Result.Err FIo_Native.verifier.Error.Parse))) =
+    ok (cont (cursor, next))
+run✝¹ :
+  (do
+      let q ← q.index_usize s
+      let (r, high1) ← dot.push v q
+      match r with
+        | core.result.Result.Ok a => ok (cont (cursor, high1))
+        | core.result.Result.Err a => ok (done (core.result.Result.Err FIo_Native.verifier.Error.Parse))) =
+    ok (cont (cursor, next))
+run✝ :
+  (do
+      let (r, high1) ← dot.push v c
+      match r with
+        | core.result.Result.Ok a => ok (cont (cursor, high1))
+        | core.result.Result.Err a => ok (done (core.result.Result.Err FIo_Native.verifier.Error.Parse))) =
+    ok (cont (cursor, next))
+hpush : dot.push v c = ok (core.result.Result.Ok PUnit.unit, next)
+run :
+  (let (r, high1) := (core.result.Result.Ok PUnit.unit, next)
+    match r with
+    | core.result.Result.Ok a => ok (cont (cursor, high1))
+    | core.result.Result.Err a => ok (done (core.result.Result.Err FIo_Native.verifier.Error.Parse))) =
+    ok (cont (cursor, next))
+pr : s = iter.start ∧ cursor.end = iter.end ∧ ↑cursor.start = ↑iter.start + 1 ∧ ↑iter.start < ↑iter.end
+cv : FIo_WideValues.Canon v
+cq : FIo_QMValues.Canon c
+push :
+  ↑next.count = ↑dot.count + 1 ∧
+    FJf_EbyKCodec.Bound next ∧
+      FJf_EbyKCodec.model next = FJf_EbyKCodec.model dot + decodeWide (wide v) * FJf_EbyKCodec.scalar c
+⊢ FJf_EbyKCodec.model dot + FIp_ArrayValue.value p ↑s * FJf_EbyKCodec.scalar c =
+    FJf_EbyKCodec.model dot + FIp_ArrayValue.value p ↑iter.start * { re := FJf_QMArray.value q ↑iter.start, im := 0 }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJg_HighCell.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

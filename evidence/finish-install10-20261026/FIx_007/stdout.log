@@ -1,0 +1,69 @@
+FIx_HighSumOuter.lean:20:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c ≤ -1
+where
+ a := ↑i.i
+ b := ↑(↑i.slice).length
+ c := ↑↑(Usize.ofNatCore (↑i.slice).length ⋯)
+FIx_HighSumOuter.lean:18:62: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵.̵n̵e̵x̵t̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲S̲l̲i̲c̲e̲I̲t̲e̲r̲.̲n̲e̲x̲t̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIx_HighSumOuter.lean:40:4: error: No goals to be solved
+FIx_HighSumOuter.lean:32:64: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵.̵n̵e̵x̵t̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲S̲l̲i̲c̲e̲I̲t̲e̲r̲.̲n̲e̲x̲t̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIx_HighSumOuter.lean:67:27: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIx_HighSumInner.loop r s acc
+in the target expression
+  (do
+      let p ← pool_v1.pair_forest_semantic_terminal.sum_high_loop0_loop0 r s acc
+      pool_v1.pair_forest_semantic_terminal.sum_high_loop0 j p.1 p.2) =
+    ok out
+
+case cons.refine_1
+s : Selectors
+hh : ∀ x ∈ ↑s.high, Canon x
+r : Range
+rs : List Range
+ih :
+  ∀ (i : Iter) (acc : NQ),
+    List.drop i.i ↑i.slice = rs →
+      (∀ r ∈ rs, ↑r.start ≤ ↑r.end ∧ ↑r.end ≤ 64) →
+        Canon acc → ∃ out, Outer i s acc = ok out ∧ Canon out ∧ decode out = ranges rs s (decode acc)
+i : Iter
+acc : NQ
+remaining : List.drop i.i ↑i.slice = r :: rs
+bounds : ∀ r_1 ∈ r :: rs, ↑r_1.start ≤ ↑r_1.end ∧ ↑r_1.end ≤ 64
+ha : Canon acc
+j : Iter
+hn : core.slice.iter.IteratorSliceIter.next i = ok (some r, j)
+hr : List.drop j.i ↑j.slice = rs
+hb : ↑r.start ≤ ↑r.end ∧ ↑r.end ≤ 64
+middle : field.QM31
+hm : FIx_HighSumInner.loop r s acc = ok (s, middle)
+hcm : Canon middle
+hvm : decode middle = model s (↑r.end - ↑r.start) (↑r.start) (decode acc)
+out : field.QM31
+ho : Outer j s middle = ok out
+hco : Canon out
+hvo : decode out = ranges rs s (decode middle)
+clone : core.ops.range.Range.Insts.CoreCloneClone.clone core.clone.CloneUsize r = ok r
+⊢ (do
+      let p ← pool_v1.pair_forest_semantic_terminal.sum_high_loop0_loop0 r s acc
+      pool_v1.pair_forest_semantic_terminal.sum_high_loop0 j p.1 p.2) =
+    ok out
+'AspisR1.FIx_HighSumOuter.next_nil' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.FIx_HighSumOuter.next_cons' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.FIx_HighSumOuter.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

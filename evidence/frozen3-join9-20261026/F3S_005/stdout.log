@@ -1,0 +1,48 @@
+F3S_FirstTail.lean:107:14: error: Type mismatch: After simplification, term
+  logs
+ has type
+  original =
+    List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok digest =>
+            some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+          | x => none)
+        (SdkC_Source.run hashv (GExq_BatchSource.current D hash proof p root) []).2 ++
+      (List.filterMap
+          (fun q =>
+            match q.returned with
+            | ok digest =>
+              some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+            | x => none)
+          (SdkC_Source.run hashv
+              (GExp_FirstCode.writerCode p { weights := back flushed, rhs := a.rhs, power := a.power, next := a.next }
+                proof publicBytes)
+              []).2 ++
+        List.filterMap
+          (fun q =>
+            match q.returned with
+            | ok digest =>
+              some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+            | x => none)
+          (SdkC_Source.run hashv (pure (core.result.Result.Ok saved)) []).2)
+but is expected to have type
+  original =
+    List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok digest =>
+            some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+          | x => none)
+        (SdkC_Source.run hashv (GExq_BatchSource.current D hash proof p root) []).2 ++
+      List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok digest =>
+            some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+          | x => none)
+        (SdkC_Source.run hashv
+            (GExp_FirstCode.writerCode p { weights := back flushed, rhs := a.rhs, power := a.power, next := a.next }
+              proof publicBytes)
+            []).2
+'AspisR1.F3S_FirstTail.split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

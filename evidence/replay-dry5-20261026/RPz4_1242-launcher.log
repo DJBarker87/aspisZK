@@ -1,0 +1,42 @@
+{"attempt": "RPz4_1242", "exit_status": 0, "wall_seconds": 2.144149155996274, "peak_rss_kib": "4400780", "swaps": "0", "print_axioms": ["'AspisR1.S2W_D188Consolidation.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_DigestExtraction.digest_eq_hashv' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_DigestExtraction.native_binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_AuthenticatedInputs.authenticated_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_AuthenticatedInputs.authenticated_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_SiteSchedule.located' depends on axioms: [propext]", "'AspisR1.S2W_SiteSchedule.reached' depends on axioms: [propext]", "'AspisR1.S2W_SiteSchedule.ordered' depends on axioms: [propext, Quot.sound]", "'AspisR1.S2W_SiteSchedule.source_schedule' depends on axioms: [propext, Quot.sound]", "'AspisR1.S2W_ChildEventPorts.returning_trace' depends on axioms: [propext]", "'AspisR1.S2W_TwoFieldAudit.full_fields_iff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_TwoFieldAudit.changed_metadata_excludes_facts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.S2W_D188Consolidation.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_DigestExtraction.digest_eq_hashv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_DigestExtraction.native_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_AuthenticatedInputs.authenticated_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_AuthenticatedInputs.authenticated_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SiteSchedule.located' depends on axioms: [propext]
+'AspisR1.S2W_SiteSchedule.reached' depends on axioms: [propext]
+'AspisR1.S2W_SiteSchedule.o
+...
+ :
+      ∀ (result : core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+        (log : List (S2W_SiteSchedule.Event E)),
+        execution = ok (result, log) → log = S2W_SiteSchedule.secondTrace segments) :
+    SecondEntryEventConeJoin ops s execution segments
+structure AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin (proof : Slice U8) : Prop
+number of parameters: 1
+fields:
+  AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin.parsed : ∃ tr p,
+      OraclePortStoredParserC4.parseReached (bytesOf ↑proof) tr = some p
+constructor:
+  AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin.mk {proof : Slice U8}
+    (parsed : ∃ tr p, OraclePortStoredParserC4.parseReached (bytesOf ↑proof) tr = some p) :
+    S2W_ChildJoins.FirstEntryVerifierConeJoin proof
+structure AspisR1.S2W_ChildJoins.MultiproofConeJoin (proof0 proof1 : Slice U8) (nodes : ℕ → ℕ → Slice U8) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch0Ranges : S2Y_OwnedChildren.NodeRanges proof0 nodes 0
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch1Ranges : S2Y_OwnedChildren.NodeRanges proof1 nodes 1
+constructor:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.mk {proof0 proof1 : Slice U8} {nodes : ℕ → ℕ → Slice U8}
+    (batch0Ranges : S2Y_OwnedChildren.NodeRanges proof0 nodes 0)
+    (batch1Ranges : S2Y_OwnedChildren.NodeRanges proof1 nodes 1) : S2W_ChildJoins.MultiproofConeJoin proof0 proof1 nodes
+structure AspisR1.S2W_ChildJoins.S8StageConeJoin (proof y1 : Slice U8) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.scanArgument : S2Y_OwnedChildren.Y1Range proof y1
+constructor:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.mk {proof y1 : Slice U8} (scanArgument : S2Y_OwnedChildren.Y1Range proof y1) :
+    S2W_ChildJoins.S8StageConeJoin proof y1
+
+Running as unit: run-r1d9fbc7ad50d4df3a06f2cd46562866d.scope; invocation ID: b2901cb1c00d49169ddad4e43250bedb

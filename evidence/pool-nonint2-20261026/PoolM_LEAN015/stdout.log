@@ -1,0 +1,144 @@
+PoolM_NativeCancelGuard.lean:17:61: error: unsolved goals
+readLength : Account → Result Usize
+a : Account
+id : Key
+size : Usize
+⊢ (do
+      let b ← core.cmp.PartialEq.ne.default Hist_Authority.keyEq a.owner id
+      if b = true then ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        else
+          if a.executable = true then
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+          else
+            if a.is_signer = true then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+            else
+              if a.is_writable = true then do
+                let i ← readLength a
+                if ↑i = ↑size then ok (core.result.Result.Ok ())
+                  else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+              else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+    do
+    let x ← Hist_Authority.keyEq a.owner id
+    if x = false then ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      else
+        if a.executable = true then
+          ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        else
+          if a.is_signer = true then
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+          else
+            if a.is_writable = true then do
+              let actual ← readLength a
+              if ↑actual = ↑size then ok (core.result.Result.Ok ())
+                else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+            else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+PoolM_NativeCancelGuard.lean:20:4: warning: This simp argument is unused:
+  core.cmp.PartialEq.ne.trait_default
+
+Hint: Omit it from the simp argument list.
+  simp [̵r̵e̵q̵u̵i̵r̵e̵_̵p̵r̵e̵p̵a̵r̵e̵d̵_̵p̵l̵a̵n̵_̵a̵c̵c̵o̵u̵n̵t̵_̵v̵1̵,̵P̵o̵o̵l̵M̵_̵N̵a̵t̵i̵v̵e̵P̵l̵a̵n̵G̵u̵a̵r̵d̵.̵r̵u̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵H̵i̵q̵_̵P̵o̵o̵l̵S̵o̵u̵r̵c̵e̵.̵k̵e̵y̵N̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵t̵r̵a̵i̵t̵_̵d̵e̵f̵a̵u̵l̵t̵,̵[̲r̲e̲q̲u̲i̲r̲e̲_̲p̲r̲e̲p̲a̲r̲e̲d̲_̲p̲l̲a̲n̲_̲a̲c̲c̲o̲u̲n̲t̲_̲v̲1̲,̲ ̲P̲o̲o̲l̲M̲_̲N̲a̲t̲i̲v̲e̲P̲l̲a̲n̲G̲u̲a̲r̲d̲.̲r̲u̲n̲,̲ ̲H̲i̲q̲_̲P̲o̲o̲l̲S̲o̲u̲r̲c̲e̲.̲k̲e̲y̲N̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey,
+      solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolM_NativeCancelGuard.lean:21:4: warning: This simp argument is unused:
+  solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey
+
+Hint: Omit it from the simp argument list.
+  simp [̵r̵e̵q̵u̵i̵r̵e̵_̵p̵r̵e̵p̵a̵r̵e̵d̵_̵p̵l̵a̵n̵_̵a̵c̵c̵o̵u̵n̵t̵_̵v̵1̵,̵P̵o̵o̵l̵M̵_̵N̵a̵t̵i̵v̵e̵P̵l̵a̵n̵G̵u̵a̵r̵d̵.̵r̵u̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵H̵i̵q̵_̵P̵o̵o̵l̵S̵o̵u̵r̵c̵e̵.̵k̵e̵y̵N̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵[̲r̲e̲q̲u̲i̲r̲e̲_̲p̲r̲e̲p̲a̲r̲e̲d̲_̲p̲l̲a̲n̲_̲a̲c̲c̲o̲u̲n̲t̲_̲v̲1̲,̲ ̲P̲o̲o̲l̲M̲_̲N̲a̲t̲i̲v̲e̲P̲l̲a̲n̲G̲u̲a̲r̲d̲.̲r̲u̲n̲,̲ ̲H̲i̲q̲_̲P̲o̲o̲l̲S̲o̲u̲r̲c̲e̲.̲k̲e̲y̲N̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ core.cmp.PartialEq.ne.trait_default,
+      s̵o̵l̵a̵n̵a̵_̵p̵u̵b̵k̵e̵y̵.̵P̵u̵b̵k̵e̵y̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵P̵u̵b̵k̵e̵y̵,̵solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolM_NativeCancelGuard.lean:51:58: error: unsolved goals
+case true.true.false
+readLength : Account → Result Usize
+system id : Key
+payer coreAcc shard : Account
+hasShard : Bool
+hs : payer.is_signer = true
+hw : payer.is_writable = true
+he : payer.executable = false
+⊢ (do
+      let b ← core.cmp.PartialEq.ne.default Hist_Authority.keyEq payer.owner system
+      if b = true then ok (core.result.Result.Err (AdapterRw.solana_program_error.ProgramError.Custom 1095966772#u32))
+        else do
+          let r ← require_prepared_plan_account_v1 readLength coreAcc id 10000#usize
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if hasShard = true then do
+                let r1 ← require_prepared_plan_account_v1 readLength shard id 8504#usize
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame solana_program_error.ProgramError) residual
+              else ok (core.result.Result.Ok ())
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    do
+    let x ← Hist_Authority.keyEq payer.owner system
+    if x = false then ok (core.result.Result.Err (AdapterRw.solana_program_error.ProgramError.Custom 1095966772#u32))
+      else do
+        let result ← require_prepared_plan_account_v1 readLength coreAcc id 10000#usize
+        match result with
+          | core.result.Result.Err e => ok (core.result.Result.Err e)
+          | core.result.Result.Ok a =>
+            if hasShard = true then do
+              let result ← require_prepared_plan_account_v1 readLength shard id 8504#usize
+              match result with
+                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+            else ok (core.result.Result.Ok ())
+PoolM_NativeCancelGuard.lean:55:6: warning: This simp argument is unused:
+  solana_program_error.ProgramError.Insts.CoreConvertFromPoolV1ProgramError
+
+Hint: Omit it from the simp argument list.
+  simp [̵P̵o̵o̵l̵M̵_̵c̵a̵n̵c̵e̵l̵_̵r̵o̵l̵e̵s̵_̵n̵a̵t̵i̵v̵e̵,̵s̵u̵f̵f̵i̵x̵,̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵h̵s̵,̵h̵w̵,̵h̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵s̵o̵l̵a̵n̵a̵_̵p̵r̵o̵g̵r̵a̵m̵_̵e̵r̵r̵o̵r̵.̵P̵r̵o̵g̵r̵a̵m̵E̵r̵r̵o̵r̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵o̵n̵v̵e̵r̵t̵F̵r̵o̵m̵P̵o̵o̵l̵V̵1̵P̵r̵o̵g̵r̵a̵m̵E̵r̵r̵o̵r̵,̵[̲P̲o̲o̲l̲M̲_̲c̲a̲n̲c̲e̲l̲_̲r̲o̲l̲e̲s̲_̲n̲a̲t̲i̲v̲e̲,̲ ̲s̲u̲f̲f̲i̲x̲,̲ ̲t̲h̲e̲n̲R̲e̲s̲u̲l̲t̲,̲ ̲h̲s̲,̲ ̲h̲w̲,̲ ̲h̲e̲,̲
+        solana_program_error.ProgramError.Insts.CoreConvertFromPoolV1ProgramError.from,
+        POOL_V1_PREPARED_SETTLEMENT_CORE_ACCOUNT_BYTES,
+        POOL_V1_PREPARED_SETTLEMENT_ROLLOVER_ACCOUNT_BYTES, H̵i̵q̵_̵P̵o̵o̵l̵S̵o̵u̵r̵c̵e̵.̵k̵e̵y̵N̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵t̵r̵a̵i̵t̵_̵d̵e̵f̵a̵u̵l̵t̵,̵s̵o̵l̵a̵n̵a̵_̵p̵u̵b̵k̵e̵y̵.̵P̵u̵b̵k̵e̵y̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵P̵u̵b̵k̵e̵y̵,̵H̲i̲q̲_̲P̲o̲o̲l̲S̲o̲u̲r̲c̲e̲.̲k̲e̲y̲N̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲t̲r̲a̲i̲t̲_̲d̲e̲f̲a̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲s̲o̲l̲a̲n̲a̲_̲p̲u̲b̲k̲e̲y̲.̲P̲u̲b̲k̲e̲y̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲C̲m̲p̲P̲a̲r̲t̲i̲a̲l̲E̲q̲P̲u̲b̲k̲e̲y̲,̲
+        solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolM_NativeCancelGuard.lean:60:6: warning: This simp argument is unused:
+  core.cmp.PartialEq.ne.trait_default
+
+Hint: Omit it from the simp argument list.
+  simp [PoolM_cancel_roles_native, ̲suffix, ̲thenResult, ̲hs, ̲hw, ̲he,
+        solana_program_error.ProgramError.Insts.CoreConvertFromPoolV1ProgramError,
+        solana_program_error.ProgramError.Insts.CoreConvertFromPoolV1ProgramError.from,
+        POOL_V1_PREPARED_SETTLEMENT_CORE_ACCOUNT_BYTES,
+        POOL_V1_PREPARED_SETTLEMENT_ROLLOVER_ACCOUNT_BYTES,
+  ̵  ̵ ̵ ̵ ̵ ̵Hiq_PoolSource.keyNe,c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵
+        core.cmp.i̲m̲p̲l̲s̲.̲PartialEq.̵n̵e̵.̵t̵r̵S̲h̲ai̵t̵_̵r̲e̲d.̲n̲ef̵a̵u̵l̵t̵, ̲solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey,
+        solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolM_NativeCancelGuard.lean:60:42: warning: This simp argument is unused:
+  solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey
+
+Hint: Omit it from the simp argument list.
+  simp [̵P̵o̵o̵l̵M̵_̵c̵a̵n̵c̵e̵l̵_̵r̵o̵l̵e̵s̵_̵n̵a̵t̵i̵v̵e̵,̵s̵u̵f̵f̵i̵x̵,̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵h̵s̵,̵h̵w̵,̵h̵e̵,̵[̲P̲o̲o̲l̲M̲_̲c̲a̲n̲c̲e̲l̲_̲r̲o̲l̲e̲s̲_̲n̲a̲t̲i̲v̲e̲,̲ ̲s̲u̲f̲f̲i̲x̲,̲ ̲t̲h̲e̲n̲R̲e̲s̲u̲l̲t̲,̲ ̲h̲s̲,̲ ̲h̲w̲,̲ ̲h̲e̲,̲
+        solana_program_error.ProgramError.Insts.CoreConvertFromPoolV1ProgramError,
+        solana_program_error.ProgramError.Insts.CoreConvertFromPoolV1ProgramError.from,
+        POOL_V1_PREPARED_SETTLEMENT_CORE_ACCOUNT_BYTES,
+        POOL_V1_PREPARED_SETTLEMENT_ROLLOVER_ACCOUNT_BYTES, H̵i̵q̵_̵P̵o̵o̵l̵S̵o̵u̵r̵c̵e̵.̵k̵e̵y̵N̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵t̵r̵a̵i̵t̵_̵d̵e̵f̵a̵u̵l̵t̵,̵s̵o̵l̵a̵n̵a̵_̵p̵u̵b̵k̵e̵y̵.̵P̵u̵b̵k̵e̵y̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵P̵u̵b̵k̵e̵y̵,̵H̲i̲q̲_̲P̲o̲o̲l̲S̲o̲u̲r̲c̲e̲.̲k̲e̲y̲N̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲t̲r̲a̲i̲t̲_̲d̲e̲f̲a̲u̲l̲t̲,̲
+        solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PoolM_NativeCancelGuard.prepared_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolM_NativeCancelGuard.native_control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

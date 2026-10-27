@@ -1,0 +1,32 @@
+import FJl_CircleModel
+import FJl_NativeCircle
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJl_MatchingEndpoint
+open Aeneas Aeneas.Std Result AspisR1Stage2
+open AspisWide.InitialEncoder AspisWide.FinalEncoder
+abbrev E := AspisWideTower.WideExact
+/-- Endpoint transport only. The SAME operand identities must be derived in
+the original owner context; this theorem is not installed as a new owner law. -/
+theorem value {C : Type} (err : C) (c : DrvC_Installation.Configuration FIo_Install.W C)
+    (r : NP6_StdModel.Reservation) (proof : Slice U8) (p : verifier.Prepared)
+    (a out : verifier.Accumulator) (g : Array FIp_DotsAdapter.E 29#usize)
+    (geometry : verifier.QueryGeometry) (b bout : verifier.BatchedWeights)
+    (o : Port4C_QueryValues.Observation
+      (Port3_QueryStage.release (Port4C_RowStd.install (Port5Q1_QueryPorts.install
+        (FIp_Install.configuration err c r).query))) proof p a out g none geometry b bout)
+    (data : MatchingSupport.Data E) (i : Fin 262144)
+    (alpha : CheckpointBytes5Output.ofE o.alpha0=data.alpha0)
+    (dots : Port5Q1_OpeningValues.values o.dots=
+      FirstFold.fibre (TwoFoldExtraction.batchedWord data.W data.gamma) i)
+    (ix : algebraMap Port5Q1_QueryPorts.FP E
+      (S7JoinBasisMachine.decode (Port5Q1_GeometryBinding.lane o.inverse 0))=(exactCircleX i)⁻¹)
+    (iy : algebraMap Port5Q1_QueryPorts.FP E
+      (S7JoinBasisMachine.decode (Port5Q1_GeometryBinding.lane o.inverse 1))=(exactCircleY i)⁻¹)
+    (selected : CheckpointBytes5Output.ofE o.selected=data.V i) : MatchingSupport.match0 data i := by
+  have h := FJl_NativeCircle.value err c r proof p a out g geometry b bout o
+  rw [alpha,dots,ix,iy,FoldRuntimeAlgebra.circle_with_inverses_eq,FJl_CircleModel.value] at h
+  exact h.symm.trans selected
+#print axioms value
+end AspisR1.FJl_MatchingEndpoint
+end

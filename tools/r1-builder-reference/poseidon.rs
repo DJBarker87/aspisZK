@@ -207,3 +207,29 @@ fn external_owned_call_trace_and_outputs() {
     }
     assert_eq!(actual, expected);
 }
+
+// Unstubbed full external-layer association for the extracted owned callback.
+#[cfg(kani)]
+#[kani::proof]
+#[kani::unwind(17)]
+fn pv_srcid3_external_owned_unstubbed() {
+    let mut actual = kani::any::<[u32; 16]>().map(M31);
+    let expected = external_owned(actual);
+    external_linear_lazy(&mut actual);
+    assert_eq!(actual, expected);
+}
+
+// Allocation 7: one complete source internal operation, independently checking
+// the canonical-input boundary proved in PV_Src_PortInternalCopy. No stubs.
+#[cfg(kani)]
+#[kani::proof]
+#[kani::unwind(17)]
+fn pv_srcid7_internal_linear_copy() {
+    let raw: [u32; 16] = kani::any();
+    for lane in 0..16 { kani::assume(raw[lane] < aspis_core::field::P); }
+    let mut actual = raw.map(M31);
+    internal_linear_lazy(&mut actual);
+    let shifts = INTERNAL_SHIFTS.map(u32::from);
+    let expected = aspis_r0_poseidon_copy::internal_linear(&raw, &shifts);
+    for lane in 0..16 { assert_eq!(actual[lane].0, expected[lane]); }
+}

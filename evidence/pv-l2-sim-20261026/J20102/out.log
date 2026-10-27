@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F5.lean:79:2: error: Tactic `apply` failed: could not unify the conclusion of `@List.map_congr_left`
+  List.map ?f ?l = List.map ?g ?l
+with the goal
+  (List.map (fun j => (scanned j q, scanHistory AspisR1.QueryScanModelFailure.initial (parsedWords q j)))
+        (List.filter (fun j => decide (j ≤ stop done q)) (List.finRange 8)),
+      finish (scanned (stop done q) q').1) =
+    (List.map (fun j => (scanned j q', scanHistory AspisR1.QueryScanModelFailure.initial (parsedWords q' j)))
+        (List.filter (fun j => decide (j ≤ stop done q)) (List.finRange 8)),
+      finish (scanned (stop done q) q').1)
+
+Note: The full type of `@List.map_congr_left` is
+  ∀ {α : Type ?u.92} {l : List α} {α_1 : Type ?u.91} {f g : α → α_1}, (∀ a ∈ l, f a = g a) → List.map f l = List.map g l
+
+case e_snd.e_snd
+q q' : Fin 8 → OracleAnswer
+he : PrefixAgree q q' (stop done q)
+hs : stop done q = stop done q'
+hp : observed q (stop done q) = observed q' (stop done q)
+hraw : List.take (↑(stop done q) + 1) (List.ofFn q) = List.take (↑(stop done q) + 1) (List.ofFn q')
+hw : ∀ j ≤ stop done q, parsedWords q j = parsedWords q' j
+hscan : ∀ j ≤ stop done q, scanned j q = scanned j q'
+⊢ (List.map (fun j => (scanned j q, scanHistory AspisR1.QueryScanModelFailure.initial (parsedWords q j)))
+        (List.filter (fun j => decide (j ≤ stop done q)) (List.finRange 8)),
+      finish (scanned (stop done q) q').1) =
+    (List.map (fun j => (scanned j q', scanHistory AspisR1.QueryScanModelFailure.initial (parsedWords q' j)))
+        (List.filter (fun j => decide (j ≤ stop done q)) (List.finRange 8)),
+      finish (scanned (stop done q) q').1)
+'R1Z.PV_L2_F5.instrumented_erases' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_L2_F5.history_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

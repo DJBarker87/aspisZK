@@ -1,0 +1,18 @@
+PFin_HashLeavesBound.lean:23:10: error: Type mismatch
+  ih ?m.124
+has type
+  Bounded (hashLeaves p q kind rest ?m.124)
+but is expected to have type
+  Bounded
+    (have i := index q kind pos;
+    if i = j✝ then hashLeaves p q kind rest ((j, value) :: tail)
+    else hashLeaves p q kind rest ((i, digest) :: (j✝, v✝) :: tail✝))
+PFin_HashLeavesBound.lean:24:10: error: Type mismatch
+  done ?m.126
+has type
+  Bounded (Program.done ?m.126)
+but is expected to have type
+  Bounded
+    (have i := index q kind pos;
+    if i = j✝ then Program.done none else hashLeaves p q kind rest ((i, digest) :: (j✝, v✝) :: tail✝))
+'AspisR1.PFin_HashLeavesBound.leaves' depends on axioms: [propext, sorryAx, Quot.sound]

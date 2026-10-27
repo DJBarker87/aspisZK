@@ -1,0 +1,251 @@
+import JGm_TX2_Initial
+import JGm_TX2_Level0_00
+import JGm_TX2_Level0_01
+import JGm_TX2_Level0_02
+import JGm_TX2_Level0_03
+import JGm_TX2_Level0_04
+import JGm_TX2_Level0_05
+import JGm_TX2_Level0_06
+import JGm_TX2_Level0_07
+import JGm_TX2_Level0_08
+import JGm_TX2_Level0_09
+import JGm_TX2_Level0_10
+import JGm_TX2_Level0_11
+import JGm_TX2_Level0_12
+import JGm_TX2_Level0_13
+import JGm_TX2_Level0_14
+import JGm_TX2_Level0_15
+import JGm_TX2_Level0_16
+import JGm_TX2_Level0_17
+import JGm_TX2_Level1_00
+import JGm_TX2_Level1_01
+import JGm_TX2_Level1_02
+import JGm_TX2_Level1_03
+import JGm_TX2_Level1_04
+import JGm_TX2_Level1_05
+import JGm_TX2_Level1_06
+import JGm_TX2_Level1_07
+import JGm_TX2_Level1_08
+import JGm_TX2_Level1_09
+import JGm_TX2_Level1_10
+import JGm_TX2_Level1_11
+import JGm_TX2_Level1_12
+import JGm_TX2_Level1_13
+import JGm_TX2_Level1_14
+import JGm_TX2_Level1_15
+import JGm_TX2_Level1_16
+import JGm_TX2_Level1_17
+import JGm_TX2_Level2_00
+import JGm_TX2_Level2_01
+import JGm_TX2_Level2_02
+import JGm_TX2_Level2_03
+import JGm_TX2_Level2_04
+import JGm_TX2_Level2_05
+import JGm_TX2_Level2_06
+import JGm_TX2_Level2_07
+import JGm_TX2_Level2_08
+import JGm_TX2_Level2_09
+import JGm_TX2_Level2_10
+import JGm_TX2_Level2_11
+import JGm_TX2_Level2_12
+import JGm_TX2_Level2_13
+import JGm_TX2_Level2_14
+import JGm_TX2_Level2_15
+import JGm_TX2_Level2_16
+import JGm_TX2_Level2_17
+import MultiproofConeLevelIteration
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGm_TX2_Levels0
+open Aeneas Aeneas.Std Result MultiproofConeRef
+def s00 (s : reference.Scratch) := s
+def s01 (s : reference.Scratch) := JGm_TX2_Level0_00.output (s00 s)
+def s02 (s : reference.Scratch) := JGm_TX2_Level0_01.output (s01 s)
+def s03 (s : reference.Scratch) := JGm_TX2_Level0_02.output (s02 s)
+def s04 (s : reference.Scratch) := JGm_TX2_Level0_03.output (s03 s)
+def s05 (s : reference.Scratch) := JGm_TX2_Level0_04.output (s04 s)
+def s06 (s : reference.Scratch) := JGm_TX2_Level0_05.output (s05 s)
+def s07 (s : reference.Scratch) := JGm_TX2_Level0_06.output (s06 s)
+def s08 (s : reference.Scratch) := JGm_TX2_Level0_07.output (s07 s)
+def s09 (s : reference.Scratch) := JGm_TX2_Level0_08.output (s08 s)
+def s10 (s : reference.Scratch) := JGm_TX2_Level0_09.output (s09 s)
+def s11 (s : reference.Scratch) := JGm_TX2_Level0_10.output (s10 s)
+def s12 (s : reference.Scratch) := JGm_TX2_Level0_11.output (s11 s)
+def s13 (s : reference.Scratch) := JGm_TX2_Level0_12.output (s12 s)
+def s14 (s : reference.Scratch) := JGm_TX2_Level0_13.output (s13 s)
+def s15 (s : reference.Scratch) := JGm_TX2_Level0_14.output (s14 s)
+def s16 (s : reference.Scratch) := JGm_TX2_Level0_15.output (s15 s)
+def s17 (s : reference.Scratch) := JGm_TX2_Level0_16.output (s16 s)
+def s18 (s : reference.Scratch) := JGm_TX2_Level0_17.output (s17 s)
+theorem source {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (s : reference.Scratch)
+    (view : JGm_TX2_View.View s JGm_TX2_Level0_00.indices00 JGm_TX2_Level0_00.values00 0) :
+    reference.levels (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash s
+      JGm_TX2_Supplied.nodes0 18#u32=ok (.Done (s18 s)) ∧
+    JGm_TX2_View.View (s18 s) JGm_TX2_Level0_17.indicesOut JGm_TX2_Level0_17.valuesOut 5216 := by
+  obtain ⟨r00,v01⟩ := JGm_TX2_Level0_00.source D hash (s00 s) view
+  obtain ⟨r01,v02⟩ := JGm_TX2_Level0_01.source D hash (s01 s) v01
+  obtain ⟨r02,v03⟩ := JGm_TX2_Level0_02.source D hash (s02 s) v02
+  obtain ⟨r03,v04⟩ := JGm_TX2_Level0_03.source D hash (s03 s) v03
+  obtain ⟨r04,v05⟩ := JGm_TX2_Level0_04.source D hash (s04 s) v04
+  obtain ⟨r05,v06⟩ := JGm_TX2_Level0_05.source D hash (s05 s) v05
+  obtain ⟨r06,v07⟩ := JGm_TX2_Level0_06.source D hash (s06 s) v06
+  obtain ⟨r07,v08⟩ := JGm_TX2_Level0_07.source D hash (s07 s) v07
+  obtain ⟨r08,v09⟩ := JGm_TX2_Level0_08.source D hash (s08 s) v08
+  obtain ⟨r09,v10⟩ := JGm_TX2_Level0_09.source D hash (s09 s) v09
+  obtain ⟨r10,v11⟩ := JGm_TX2_Level0_10.source D hash (s10 s) v10
+  obtain ⟨r11,v12⟩ := JGm_TX2_Level0_11.source D hash (s11 s) v11
+  obtain ⟨r12,v13⟩ := JGm_TX2_Level0_12.source D hash (s12 s) v12
+  obtain ⟨r13,v14⟩ := JGm_TX2_Level0_13.source D hash (s13 s) v13
+  obtain ⟨r14,v15⟩ := JGm_TX2_Level0_14.source D hash (s14 s) v14
+  obtain ⟨r15,v16⟩ := JGm_TX2_Level0_15.source D hash (s15 s) v15
+  obtain ⟨r16,v17⟩ := JGm_TX2_Level0_16.source D hash (s16 s) v16
+  obtain ⟨r17,v18⟩ := JGm_TX2_Level0_17.source D hash (s17 s) v17
+  refine ⟨?_,v18⟩
+  rw [MultiproofConeLevelIteration.levels_eq_iteration _ _ _ _ (by decide)]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes0 0#usize 0#usize) 18 (s00 s)=_
+  simp only [MultiproofConeLevelIteration.iterate,r00,r01,r02,r03,r04,r05,r06,r07,r08,r09,r10,r11,r12,r13,r14,r15,r16,r17,bind_tc_ok]
+#print axioms source
+
+theorem on_scratch {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (s : reference.Scratch) :
+    reference.levels (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash
+      (JGk_TX2_Scratch0.s12 s) JGm_TX2_Supplied.nodes0 18#u32=
+        ok (.Done (s18 (JGk_TX2_Scratch0.s12 s))) ∧
+    JGm_TX2_View.View (s18 (JGk_TX2_Scratch0.s12 s)) JGm_TX2_Level0_17.indicesOut JGm_TX2_Level0_17.valuesOut 5216 :=
+  source D hash _ (JGm_TX2_Initial0.source s)
+#print axioms on_scratch
+end AspisR1.JGm_TX2_Levels0
+end
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGm_TX2_Levels1
+open Aeneas Aeneas.Std Result MultiproofConeRef
+def s00 (s : reference.Scratch) := s
+def s01 (s : reference.Scratch) := JGm_TX2_Level1_00.output (s00 s)
+def s02 (s : reference.Scratch) := JGm_TX2_Level1_01.output (s01 s)
+def s03 (s : reference.Scratch) := JGm_TX2_Level1_02.output (s02 s)
+def s04 (s : reference.Scratch) := JGm_TX2_Level1_03.output (s03 s)
+def s05 (s : reference.Scratch) := JGm_TX2_Level1_04.output (s04 s)
+def s06 (s : reference.Scratch) := JGm_TX2_Level1_05.output (s05 s)
+def s07 (s : reference.Scratch) := JGm_TX2_Level1_06.output (s06 s)
+def s08 (s : reference.Scratch) := JGm_TX2_Level1_07.output (s07 s)
+def s09 (s : reference.Scratch) := JGm_TX2_Level1_08.output (s08 s)
+def s10 (s : reference.Scratch) := JGm_TX2_Level1_09.output (s09 s)
+def s11 (s : reference.Scratch) := JGm_TX2_Level1_10.output (s10 s)
+def s12 (s : reference.Scratch) := JGm_TX2_Level1_11.output (s11 s)
+def s13 (s : reference.Scratch) := JGm_TX2_Level1_12.output (s12 s)
+def s14 (s : reference.Scratch) := JGm_TX2_Level1_13.output (s13 s)
+def s15 (s : reference.Scratch) := JGm_TX2_Level1_14.output (s14 s)
+def s16 (s : reference.Scratch) := JGm_TX2_Level1_15.output (s15 s)
+def s17 (s : reference.Scratch) := JGm_TX2_Level1_16.output (s16 s)
+def s18 (s : reference.Scratch) := JGm_TX2_Level1_17.output (s17 s)
+theorem source {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (s : reference.Scratch)
+    (view : JGm_TX2_View.View s JGm_TX2_Level1_00.indices00 JGm_TX2_Level1_00.values00 0) :
+    reference.levels (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash s
+      JGm_TX2_Supplied.nodes1 18#u32=ok (.Done (s18 s)) ∧
+    JGm_TX2_View.View (s18 s) JGm_TX2_Level1_17.indicesOut JGm_TX2_Level1_17.valuesOut 5216 := by
+  obtain ⟨r00,v01⟩ := JGm_TX2_Level1_00.source D hash (s00 s) view
+  obtain ⟨r01,v02⟩ := JGm_TX2_Level1_01.source D hash (s01 s) v01
+  obtain ⟨r02,v03⟩ := JGm_TX2_Level1_02.source D hash (s02 s) v02
+  obtain ⟨r03,v04⟩ := JGm_TX2_Level1_03.source D hash (s03 s) v03
+  obtain ⟨r04,v05⟩ := JGm_TX2_Level1_04.source D hash (s04 s) v04
+  obtain ⟨r05,v06⟩ := JGm_TX2_Level1_05.source D hash (s05 s) v05
+  obtain ⟨r06,v07⟩ := JGm_TX2_Level1_06.source D hash (s06 s) v06
+  obtain ⟨r07,v08⟩ := JGm_TX2_Level1_07.source D hash (s07 s) v07
+  obtain ⟨r08,v09⟩ := JGm_TX2_Level1_08.source D hash (s08 s) v08
+  obtain ⟨r09,v10⟩ := JGm_TX2_Level1_09.source D hash (s09 s) v09
+  obtain ⟨r10,v11⟩ := JGm_TX2_Level1_10.source D hash (s10 s) v10
+  obtain ⟨r11,v12⟩ := JGm_TX2_Level1_11.source D hash (s11 s) v11
+  obtain ⟨r12,v13⟩ := JGm_TX2_Level1_12.source D hash (s12 s) v12
+  obtain ⟨r13,v14⟩ := JGm_TX2_Level1_13.source D hash (s13 s) v13
+  obtain ⟨r14,v15⟩ := JGm_TX2_Level1_14.source D hash (s14 s) v14
+  obtain ⟨r15,v16⟩ := JGm_TX2_Level1_15.source D hash (s15 s) v15
+  obtain ⟨r16,v17⟩ := JGm_TX2_Level1_16.source D hash (s16 s) v16
+  obtain ⟨r17,v18⟩ := JGm_TX2_Level1_17.source D hash (s17 s) v17
+  refine ⟨?_,v18⟩
+  rw [MultiproofConeLevelIteration.levels_eq_iteration _ _ _ _ (by decide)]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 18 (s00 s)=_
+  simp only [MultiproofConeLevelIteration.iterate,r00,r01,r02,r03,r04,r05,r06,r07,r08,r09,r10,r11,r12,r13,r14,r15,r16,r17,bind_tc_ok]
+#print axioms source
+
+theorem on_scratch {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (s : reference.Scratch) :
+    reference.levels (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash
+      (JGk_TX2_Scratch1.s12 s) JGm_TX2_Supplied.nodes1 18#u32=
+        ok (.Done (s18 (JGk_TX2_Scratch1.s12 s))) ∧
+    JGm_TX2_View.View (s18 (JGk_TX2_Scratch1.s12 s)) JGm_TX2_Level1_17.indicesOut JGm_TX2_Level1_17.valuesOut 5216 :=
+  source D hash _ (JGm_TX2_Initial1.source s)
+#print axioms on_scratch
+end AspisR1.JGm_TX2_Levels1
+end
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGm_TX2_Levels2
+open Aeneas Aeneas.Std Result MultiproofConeRef
+def s00 (s : reference.Scratch) := s
+def s01 (s : reference.Scratch) := JGm_TX2_Level2_00.output (s00 s)
+def s02 (s : reference.Scratch) := JGm_TX2_Level2_01.output (s01 s)
+def s03 (s : reference.Scratch) := JGm_TX2_Level2_02.output (s02 s)
+def s04 (s : reference.Scratch) := JGm_TX2_Level2_03.output (s03 s)
+def s05 (s : reference.Scratch) := JGm_TX2_Level2_04.output (s04 s)
+def s06 (s : reference.Scratch) := JGm_TX2_Level2_05.output (s05 s)
+def s07 (s : reference.Scratch) := JGm_TX2_Level2_06.output (s06 s)
+def s08 (s : reference.Scratch) := JGm_TX2_Level2_07.output (s07 s)
+def s09 (s : reference.Scratch) := JGm_TX2_Level2_08.output (s08 s)
+def s10 (s : reference.Scratch) := JGm_TX2_Level2_09.output (s09 s)
+def s11 (s : reference.Scratch) := JGm_TX2_Level2_10.output (s10 s)
+def s12 (s : reference.Scratch) := JGm_TX2_Level2_11.output (s11 s)
+def s13 (s : reference.Scratch) := JGm_TX2_Level2_12.output (s12 s)
+def s14 (s : reference.Scratch) := JGm_TX2_Level2_13.output (s13 s)
+def s15 (s : reference.Scratch) := JGm_TX2_Level2_14.output (s14 s)
+def s16 (s : reference.Scratch) := JGm_TX2_Level2_15.output (s15 s)
+def s17 (s : reference.Scratch) := JGm_TX2_Level2_16.output (s16 s)
+def s18 (s : reference.Scratch) := JGm_TX2_Level2_17.output (s17 s)
+theorem source {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (s : reference.Scratch)
+    (view : JGm_TX2_View.View s JGm_TX2_Level2_00.indices00 JGm_TX2_Level2_00.values00 0) :
+    reference.levels (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash s
+      JGm_TX2_Supplied.nodes2 18#u32=ok (.Done (s18 s)) ∧
+    JGm_TX2_View.View (s18 s) JGm_TX2_Level2_17.indicesOut JGm_TX2_Level2_17.valuesOut 4512 := by
+  obtain ⟨r00,v01⟩ := JGm_TX2_Level2_00.source D hash (s00 s) view
+  obtain ⟨r01,v02⟩ := JGm_TX2_Level2_01.source D hash (s01 s) v01
+  obtain ⟨r02,v03⟩ := JGm_TX2_Level2_02.source D hash (s02 s) v02
+  obtain ⟨r03,v04⟩ := JGm_TX2_Level2_03.source D hash (s03 s) v03
+  obtain ⟨r04,v05⟩ := JGm_TX2_Level2_04.source D hash (s04 s) v04
+  obtain ⟨r05,v06⟩ := JGm_TX2_Level2_05.source D hash (s05 s) v05
+  obtain ⟨r06,v07⟩ := JGm_TX2_Level2_06.source D hash (s06 s) v06
+  obtain ⟨r07,v08⟩ := JGm_TX2_Level2_07.source D hash (s07 s) v07
+  obtain ⟨r08,v09⟩ := JGm_TX2_Level2_08.source D hash (s08 s) v08
+  obtain ⟨r09,v10⟩ := JGm_TX2_Level2_09.source D hash (s09 s) v09
+  obtain ⟨r10,v11⟩ := JGm_TX2_Level2_10.source D hash (s10 s) v10
+  obtain ⟨r11,v12⟩ := JGm_TX2_Level2_11.source D hash (s11 s) v11
+  obtain ⟨r12,v13⟩ := JGm_TX2_Level2_12.source D hash (s12 s) v12
+  obtain ⟨r13,v14⟩ := JGm_TX2_Level2_13.source D hash (s13 s) v13
+  obtain ⟨r14,v15⟩ := JGm_TX2_Level2_14.source D hash (s14 s) v14
+  obtain ⟨r15,v16⟩ := JGm_TX2_Level2_15.source D hash (s15 s) v15
+  obtain ⟨r16,v17⟩ := JGm_TX2_Level2_16.source D hash (s16 s) v16
+  obtain ⟨r17,v18⟩ := JGm_TX2_Level2_17.source D hash (s17 s) v17
+  refine ⟨?_,v18⟩
+  rw [MultiproofConeLevelIteration.levels_eq_iteration _ _ _ _ (by decide)]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes2 0#usize 0#usize) 18 (s00 s)=_
+  simp only [MultiproofConeLevelIteration.iterate,r00,r01,r02,r03,r04,r05,r06,r07,r08,r09,r10,r11,r12,r13,r14,r15,r16,r17,bind_tc_ok]
+#print axioms source
+
+theorem on_scratch {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (s : reference.Scratch) :
+    reference.levels (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash
+      (JGk_TX2_Scratch2.s12 s) JGm_TX2_Supplied.nodes2 18#u32=
+        ok (.Done (s18 (JGk_TX2_Scratch2.s12 s))) ∧
+    JGm_TX2_View.View (s18 (JGk_TX2_Scratch2.s12 s)) JGm_TX2_Level2_17.indicesOut JGm_TX2_Level2_17.valuesOut 4512 :=
+  source D hash _ (JGm_TX2_Initial2.source s)
+#print axioms on_scratch
+end AspisR1.JGm_TX2_Levels2
+end

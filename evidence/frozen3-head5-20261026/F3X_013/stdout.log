@@ -1,0 +1,125 @@
+F3X_AccountReads.lean:26:67: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?«as» ++ ?bs ++ ?cs
+in the target expression
+  FS.firstReads FS.emptyTable
+      ((eval H prior).1 ++
+            ((eval H (F3T_Installed.source c hashv (input c s))).1 ++ (eval H (F3X_Preparation.program c s)).1, s,
+                some e.run.p).1,
+          ((eval H (F3T_Installed.source c hashv (input c s))).1 ++ (eval H (F3X_Preparation.program c s)).1, s,
+              some e.run.p).2).1 =
+    FS.firstReads FS.emptyTable
+      ((eval H prior).1 ++
+        (eval H
+            (F3T_Installed.source (F3V_Install.configuration base) hashv (input (F3V_Install.configuration base) s))).1)
+
+case pos
+F C : Type
+base : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+prior : Program Bytes State Unit
+s : Submission
+H : Bytes → State
+D : LiteralByteProtocol.Decoder
+w : CanonicalCutEnrichedTranscript.Words
+c : Configuration F C := F3V_Install.configuration base
+success : (eval H (F3T_Installed.source c hashv (input c s))).2 = true
+e : F3V_RunEvidence.Evidence (F3V_Install.configuration base) base.boundaries s H
+first :
+  AspisR1CurrentCaller.verifier.candidate.tx1
+      (GExp_FirstCode.installed (GExp_FirstPair.base base.currentBase base.reserved base.query base.geometry)
+        (F3V_Install.configuration base).boundaries base.std)
+      (F3V_RunEvidence.D1 (F3V_Install.configuration base) H) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.pub
+      e.proof 10#usize () none =
+    ok (core.result.Result.Ok e.saved)
+⊢ FS.firstReads FS.emptyTable
+      ((eval H prior).1 ++
+            ((eval H (F3T_Installed.source c hashv (input c s))).1 ++ (eval H (F3X_Preparation.program c s)).1, s,
+                some e.run.p).1,
+          ((eval H (F3T_Installed.source c hashv (input c s))).1 ++ (eval H (F3X_Preparation.program c s)).1, s,
+              some e.run.p).2).1 =
+    FS.firstReads FS.emptyTable
+      ((eval H prior).1 ++
+        (eval H
+            (F3T_Installed.source (F3V_Install.configuration base) hashv (input (F3V_Install.configuration base) s))).1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+F3X_AccountReads.lean:33:2: error: unsolved goals
+case neg
+F C : Type
+base : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+prior : Program Bytes State Unit
+s : Submission
+H : Bytes → State
+D : LiteralByteProtocol.Decoder
+w : CanonicalCutEnrichedTranscript.Words
+c : Configuration F C := F3V_Install.configuration base
+success : ¬(eval H (F3T_Installed.source c hashv (input c s))).2 = true
+rejected : (eval H (F3T_Installed.source c hashv (input c s))).2 = false
+⊢ FS.firstReads FS.emptyTable
+      ((eval H prior).1 ++
+        ((eval H
+              (F3T_Installed.source (F3V_Install.configuration base) hashv
+                (input (F3V_Install.configuration base) s))).1 ++
+          (eval H
+              (if
+                  (eval H
+                        (F3T_Installed.source (F3V_Install.configuration base) hashv
+                          (input (F3V_Install.configuration base) s))).2 =
+                    true then
+                AspisV8R19.OracleProgramOps.bind (F3X_Preparation.program (F3V_Install.configuration base) s) fun p =>
+                  Program.done (s, p)
+              else Program.done (s, none))).1)) =
+    FS.firstReads FS.emptyTable
+      ((eval H prior).1 ++
+        (eval H
+            (F3T_Installed.source (F3V_Install.configuration base) hashv (input (F3V_Install.configuration base) s))).1)
+F3X_AccountReads.lean:34:47: warning: This simp argument is unused:
+  rejected
+
+Hint: Omit it from the simp argument list.
+  simp only [F3X_Account.submitted, ̲eval_bind,r̵e̵j̵e̵c̵t̵e̵d̵,̵ ̲Bool.false_eq_true, ̲ite_false, ̲eval,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3X_AccountReads.lean:34:56: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵X̵_̵A̵c̵c̵o̵u̵n̵t̵.̵s̵u̵b̵m̵i̵t̵t̵e̵d̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵r̵e̵j̵e̵c̵t̵e̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲F̲3̲X̲_̲A̲c̲c̲o̲u̲n̲t̲.̲s̲u̲b̲m̲i̲t̲t̲e̲d̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲r̲e̲j̲e̲c̲t̲e̲d̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3X_AccountReads.lean:34:75: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵X̵_̵A̵c̵c̵o̵u̵n̵t̵.̵s̵u̵b̵m̵i̵t̵t̵e̵d̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵r̵e̵j̵e̵c̵t̵e̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲F̲3̲X̲_̲A̲c̲c̲o̲u̲n̲t̲.̲s̲u̲b̲m̲i̲t̲t̲e̲d̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲r̲e̲j̲e̲c̲t̲e̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲e̲v̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3X_AccountReads.lean:34:85: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [F3X_Account.submitted, ̲eval_bind, ̲rejected, ̲Bool.false_eq_true, ̲ite_false,e̵v̵a̵l̵,̵
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3X_AccountReads.lean:34:90: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵X̵_̵A̵c̵c̵o̵u̵n̵t̵.̵s̵u̵b̵m̵i̵t̵t̵e̵d̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵r̵e̵j̵e̵c̵t̵e̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲F̲3̲X̲_̲A̲c̲c̲o̲u̲n̲t̲.̲s̲u̲b̲m̲i̲t̲t̲e̲d̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲r̲e̲j̲e̲c̲t̲e̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3X_AccountReads.reused' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3X_AccountReads.bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,208 @@
+WAdm_FissionedRoot.lean:29:34: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+f : WAdm_Fields
+weights : alloc.vec.Vec K
+proof pub : Slice U8
+size : (↑weights).length = 64
+hp hu hc : Std.Array U8 32#usize
+hpCall : D.digest hash (singletonParts proof) = ok hp
+huCall : D.digest hash (singletonParts pub) = ok hu
+hcCall : D.digest hash (checksumParts (bodySlice f weights hp hu size)) = ok hc
+out0 : alloc.vec.Vec U8 := alloc.vec.Vec.with_capacity U8 1768#usize
+magic : Std.Array U8 8#usize := Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8] ⋯
+flags : Std.Array U8 8#usize := Array.make 8#usize [2#u8, 10#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯
+n0 : (↑out0).length = 0
+v1 : alloc.vec.Vec U8
+c1 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out0 magic.to_slice = ok v1
+e1 : ↑v1 = ↑out0 ++ ↑magic.to_slice
+n1 : (↑v1).length = 8
+v2 : alloc.vec.Vec U8
+c2 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v1 flags.to_slice = ok v2
+e2 : ↑v2 = ↑v1 ++ ↑flags.to_slice
+⊢ 8 + ↑8#usize = 16
+WAdm_FissionedRoot.lean:34:34: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+f : WAdm_Fields
+weights : alloc.vec.Vec K
+proof pub : Slice U8
+size : (↑weights).length = 64
+hp hu hc : Std.Array U8 32#usize
+hpCall : D.digest hash (singletonParts proof) = ok hp
+huCall : D.digest hash (singletonParts pub) = ok hu
+hcCall : D.digest hash (checksumParts (bodySlice f weights hp hu size)) = ok hc
+out0 : alloc.vec.Vec U8 := alloc.vec.Vec.with_capacity U8 1768#usize
+magic : Std.Array U8 8#usize := Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8] ⋯
+flags : Std.Array U8 8#usize := Array.make 8#usize [2#u8, 10#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯
+n0 : (↑out0).length = 0
+v1 : alloc.vec.Vec U8
+c1 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out0 magic.to_slice = ok v1
+e1 : ↑v1 = ↑out0 ++ ↑magic.to_slice
+n1 : (↑v1).length = 8
+v2 : alloc.vec.Vec U8
+c2 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v1 flags.to_slice = ok v2
+e2 : ↑v2 = ↑v1 ++ ↑flags.to_slice
+n2 : (↑v2).length = 16
+v3 : alloc.vec.Vec U8
+c3 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v2 hp.to_slice = ok v3
+e3 : ↑v3 = ↑v2 ++ ↑hp.to_slice
+⊢ 16 + ↑32#usize = 48
+WAdm_FissionedRoot.lean:39:34: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+f : WAdm_Fields
+weights : alloc.vec.Vec K
+proof pub : Slice U8
+size : (↑weights).length = 64
+hp hu hc : Std.Array U8 32#usize
+hpCall : D.digest hash (singletonParts proof) = ok hp
+huCall : D.digest hash (singletonParts pub) = ok hu
+hcCall : D.digest hash (checksumParts (bodySlice f weights hp hu size)) = ok hc
+out0 : alloc.vec.Vec U8 := alloc.vec.Vec.with_capacity U8 1768#usize
+magic : Std.Array U8 8#usize := Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8] ⋯
+flags : Std.Array U8 8#usize := Array.make 8#usize [2#u8, 10#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯
+n0 : (↑out0).length = 0
+v1 : alloc.vec.Vec U8
+c1 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out0 magic.to_slice = ok v1
+e1 : ↑v1 = ↑out0 ++ ↑magic.to_slice
+n1 : (↑v1).length = 8
+v2 : alloc.vec.Vec U8
+c2 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v1 flags.to_slice = ok v2
+e2 : ↑v2 = ↑v1 ++ ↑flags.to_slice
+n2 : (↑v2).length = 16
+v3 : alloc.vec.Vec U8
+c3 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v2 hp.to_slice = ok v3
+e3 : ↑v3 = ↑v2 ++ ↑hp.to_slice
+n3 : (↑v3).length = 48
+v4 : alloc.vec.Vec U8
+c4 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v3 hu.to_slice = ok v4
+e4 : ↑v4 = ↑v3 ++ ↑hu.to_slice
+⊢ 48 + ↑32#usize = 80
+WAdm_FissionedRoot.lean:44:35: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+f : WAdm_Fields
+weights : alloc.vec.Vec K
+proof pub : Slice U8
+size : (↑weights).length = 64
+hp hu hc : Std.Array U8 32#usize
+hpCall : D.digest hash (singletonParts proof) = ok hp
+huCall : D.digest hash (singletonParts pub) = ok hu
+hcCall : D.digest hash (checksumParts (bodySlice f weights hp hu size)) = ok hc
+out0 : alloc.vec.Vec U8 := alloc.vec.Vec.with_capacity U8 1768#usize
+magic : Std.Array U8 8#usize := Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8] ⋯
+flags : Std.Array U8 8#usize := Array.make 8#usize [2#u8, 10#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯
+n0 : (↑out0).length = 0
+v1 : alloc.vec.Vec U8
+c1 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out0 magic.to_slice = ok v1
+e1 : ↑v1 = ↑out0 ++ ↑magic.to_slice
+n1 : (↑v1).length = 8
+v2 : alloc.vec.Vec U8
+c2 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v1 flags.to_slice = ok v2
+e2 : ↑v2 = ↑v1 ++ ↑flags.to_slice
+n2 : (↑v2).length = 16
+v3 : alloc.vec.Vec U8
+c3 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v2 hp.to_slice = ok v3
+e3 : ↑v3 = ↑v2 ++ ↑hp.to_slice
+n3 : (↑v3).length = 48
+v4 : alloc.vec.Vec U8
+c4 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v3 hu.to_slice = ok v4
+e4 : ↑v4 = ↑v3 ++ ↑hu.to_slice
+n4 : (↑v4).length = 80
+v5 : alloc.vec.Vec U8
+c5 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v4 f.state.to_slice = ok v5
+e5 : ↑v5 = ↑v4 ++ ↑f.state.to_slice
+⊢ 80 + ↑32#usize = 112
+WAdm_FissionedRoot.lean:79:38: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+f : WAdm_Fields
+weights : alloc.vec.Vec K
+proof pub : Slice U8
+size : (↑weights).length = 64
+hp hu hc : Std.Array U8 32#usize
+hpCall : D.digest hash (singletonParts proof) = ok hp
+huCall : D.digest hash (singletonParts pub) = ok hu
+hcCall : D.digest hash (checksumParts (bodySlice f weights hp hu size)) = ok hc
+out0 : alloc.vec.Vec U8 := alloc.vec.Vec.with_capacity U8 1768#usize
+magic : Std.Array U8 8#usize := Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8] ⋯
+flags : Std.Array U8 8#usize := Array.make 8#usize [2#u8, 10#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯
+n0 : (↑out0).length = 0
+v1 : alloc.vec.Vec U8
+c1 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out0 magic.to_slice = ok v1
+e1 : ↑v1 = ↑out0 ++ ↑magic.to_slice
+n1 : (↑v1).length = 8
+v2 : alloc.vec.Vec U8
+c2 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v1 flags.to_slice = ok v2
+e2 : ↑v2 = ↑v1 ++ ↑flags.to_slice
+n2 : (↑v2).length = 16
+v3 : alloc.vec.Vec U8
+c3 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v2 hp.to_slice = ok v3
+e3 : ↑v3 = ↑v2 ++ ↑hp.to_slice
+n3 : (↑v3).length = 48
+v4 : alloc.vec.Vec U8
+c4 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v3 hu.to_slice = ok v4
+e4 : ↑v4 = ↑v3 ++ ↑hu.to_slice
+n4 : (↑v4).length = 80
+v5 : alloc.vec.Vec U8
+c5 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v4 f.state.to_slice = ok v5
+e5 : ↑v5 = ↑v4 ++ ↑f.state.to_slice
+n5 : (↑v5).length = 112
+lr : (List.flatMap (fun x => ↑x) ↑f.roots).length = 32 * (↑f.roots).length
+le : (List.flatMap CheckpointBytesE.rawBytes ↑f.early).length = 32 * (↑f.early).length
+lq : (List.flatMap (fun x => ↑(core.num.U32.to_le_bytes x)) ↑f.queries).length = 4 * (↑f.queries).length
+ls : (List.flatMap CheckpointP6EncodeK.bytes ↑f.semantic).length = 16 * (↑f.semantic).length
+lz : (List.flatMap CheckpointP6EncodeK.bytes ↑f.coordinates).length = 16 * (↑f.coordinates).length
+lt : (List.flatMap CheckpointBytesE.rawBytes ↑f.tail).length = 32 * (↑f.tail).length
+lw : (List.flatMap CheckpointP6EncodeK.bytes ↑weights).length = 16 * (↑weights).length
+v6 : alloc.vec.Vec U8
+c6 : WAdm_roots v5 f.roots = ok v6
+e6 : ↑v6 = ↑v5 ++ List.flatMap (fun x => ↑x) ↑f.roots
+n6 : (↑v6).length = 176
+v7 : alloc.vec.Vec U8
+c7 : WAdm_early v6 f.early = ok v7
+e7 : ↑v7 = ↑v6 ++ List.flatMap CheckpointBytesE.rawBytes ↑f.early
+n7 : (↑v7).length = 304
+v8 : alloc.vec.Vec U8
+c8 : WAdm_putK v7 f.rho = ok v8
+e8 : ↑v8 = ↑v7 ++ CheckpointP6EncodeK.bytes f.rho
+n8 : (↑v8).length = 320
+v9 : alloc.vec.Vec U8
+c9 : WAdm_queries v8 f.queries = ok v9
+e9 : ↑v9 = ↑v8 ++ List.flatMap (fun x => ↑(core.num.U32.to_le_bytes x)) ↑f.queries
+n9 : (↑v9).length = 408
+v10 : alloc.vec.Vec U8
+c10 : WAdm_semantic v9 f.semantic = ok v10
+e10 : ↑v10 = ↑v9 ++ List.flatMap CheckpointP6EncodeK.bytes ↑f.semantic
+n10 : (↑v10).length = 568
+v11 : alloc.vec.Vec U8
+c11 : WAdm_coordinates v10 f.coordinates = ok v11
+e11 : ↑v11 = ↑v10 ++ List.flatMap CheckpointP6EncodeK.bytes ↑f.coordinates
+n11 : (↑v11).length = 632
+v12 : alloc.vec.Vec U8
+c12 : WAdm_tail v11 f.tail = ok v12
+e12 : ↑v12 = ↑v11 ++ List.flatMap CheckpointBytesE.rawBytes ↑f.tail
+n12 : (↑v12).length = 696
+v13 : alloc.vec.Vec U8
+c13 : WAdm_putK v12 f.power = ok v13
+e13 : ↑v13 = ↑v12 ++ CheckpointP6EncodeK.bytes f.power
+n13 : (↑v13).length = 712
+v14 : alloc.vec.Vec U8
+c14 : WAdm_weights v13 weights = ok v14
+e14 : ↑v14 = ↑v13 ++ List.flatMap CheckpointP6EncodeK.bytes ↑weights
+n14 : (↑v14).length = 1736
+bodyVal : ↑v14 = body f weights hp hu
+bodyEq : v14.deref = bodySlice f weights hp hu size
+hcNative : D.digest hash (checksumParts v14.deref) = ok hc
+v15 : alloc.vec.Vec U8
+c15 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v14 hc.to_slice = ok v15
+e15 : ↑v15 = ↑v14 ++ ↑hc.to_slice
+⊢ 1736 + ↑32#usize = 1768
+'AspisR1.WAdm_FissionedRoot.append' depends on axioms: [propext, Quot.sound]
+'AspisR1.WAdm_FissionedRoot.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

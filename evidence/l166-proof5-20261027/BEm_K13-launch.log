@@ -1,0 +1,47 @@
+{"attempt": "BEm_K13", "exit_status": 0, "wall_seconds": 8.139415315003134, "peak_rss_kib": "386800", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling bem-batch-observation v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEm_rust)
+warning: unused import: `alloc::vec::Vec`
+  --> src/BEm_frozen.rs:86:5
+   |
+86 | use alloc::vec::Vec;
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` pr
+...
+ failure: pointer outside object bounds in *x: SUCCESS
+[BEm_reference::prefixed_leaf::{closure#3}.pointer_dereference.6] line 456 dereference failure: invalid integer address in *x: SUCCESS
+[BEm_reference::prefixed_leaf::{closure#3}.pointer_dereference.7] line 456 dereference failure: pointer NULL in *var_5: SUCCESS
+[BEm_reference::prefixed_leaf::{closure#3}.pointer_dereference.8] line 456 dereference failure: pointer invalid in *var_5: SUCCESS
+[BEm_reference::prefixed_leaf::{closure#3}.pointer_dereference.9] line 456 dereference failure: deallocated dynamic object in *var_5: SUCCESS
+[BEm_reference::prefixed_leaf::{closure#3}.pointer_dereference.10] line 456 dereference failure: dead object in *var_5: SUCCESS
+[BEm_reference::prefixed_leaf::{closure#3}.pointer_dereference.11] line 456 dereference failure: pointer outside object bounds in *var_5: SUCCESS
+[BEm_reference::prefixed_leaf::{closure#3}.pointer_dereference.12] line 456 dereference failure: invalid integer address in *var_5: SUCCESS
+
+src/lib.rs function <std::result::Result<[u8; 32], ()> as std::cmp::PartialEq>::eq
+[<std::result::Result<[u8; 32], ()> as std::cmp::PartialEq>::eq.unreachable.1] line 0 unreachable code: SUCCESS
+
+src/lib.rs function alloc::raw_vec::RawVecInner::grow_amortized
+[alloc::raw_vec::RawVecInner::grow_amortized.unreachable.1] line 0 unreachable code: SUCCESS
+
+src/lib.rs function alloc::raw_vec::RawVecInner::try_allocate_in
+[alloc::raw_vec::RawVecInner::try_allocate_in.unreachable.1] line 0 unreachable code: SUCCESS
+
+src/lib.rs function std::alloc::Global::grow_impl
+[std::alloc::Global::grow_impl.unreachable.1] line 0 unreachable code: SUCCESS
+
+** 0 of 1030 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rfd179c1a6f0e42a1849418c1e5885a27.scope; invocation ID: 85fc364edd27403da2c7a299af7e1e08

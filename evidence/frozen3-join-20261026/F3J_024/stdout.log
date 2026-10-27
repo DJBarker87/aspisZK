@@ -1,0 +1,56 @@
+F3J_ValidatedLog.lean:19:2: error: 'change' tactic failed, pattern
+  observe (run (PreparedHashCode.bind (S1SemanticCode.sampleBlock D c.before c.record.row c.record.framed) ?m.77)).1 =
+    ?m.81
+is not definitionally equal to target
+  observe
+      (run do
+          let row ← liftM (ok c.record.row)
+          if row > 24#u8 then pure (core.result.Result.Err r1_wire.Error.InvalidRow, c.before)
+            else do
+              let s ← liftM (ok c.record.framed)
+              let __x ← S1SemanticCode.sampleBlock D c.before row s
+              let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let q ← liftM (sampler.qm31_sample val)
+                  pure (core.result.Result.Ok q, __x.2)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r1 ←
+                    liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
+                  pure (r1, __x.2)).1 =
+    callLog c
+F3J_ValidatedLog.lean:14:25: warning: This simp argument is unused:
+  decide_eq_false_iff_not
+
+Hint: Omit it from the simp argument list.
+  simp only [gt_iff_lt,̵d̵e̵c̵i̵d̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵_̵i̵f̵f̵_̵n̵o̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_ValidatedLog.lean:18:4: warning: This simp argument is unused:
+  guard
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.ValidatedRecord.impl.row, ̲r1_wire.ValidatedRecord.impl.framed,
+      g̵u̵a̵r̵d̵,̵Bool.false_eq_true, ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_ValidatedLog.lean:18:10: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵1̵_̵w̵i̵r̵e̵.̵V̵a̵l̵i̵d̵a̵t̵e̵d̵R̵e̵c̵o̵r̵d̵.̵i̵m̵p̵l̵.̵r̵o̵w̵,̵r̵1̵_̵w̵i̵r̵e̵.̵V̵a̵l̵i̵d̵a̵t̵e̵d̵R̵e̵c̵o̵r̵d̵.̵i̵m̵p̵l̵.̵f̵r̵a̵m̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵g̵u̵a̵r̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲r̲1̲_̲w̲i̲r̲e̲.̲V̲a̲l̲i̲d̲a̲t̲e̲d̲R̲e̲c̲o̲r̲d̲.̲i̲m̲p̲l̲.̲r̲o̲w̲,̲ ̲r̲1̲_̲w̲i̲r̲e̲.̲V̲a̲l̲i̲d̲a̲t̲e̲d̲R̲e̲c̲o̲r̲d̲.̲i̲m̲p̲l̲.̲f̲r̲a̲m̲e̲d̲,̲ ̲g̲u̲a̲r̲d̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_ValidatedLog.lean:18:29: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.ValidatedRecord.impl.row, ̲r1_wire.ValidatedRecord.impl.framed,
+  ̵  ̵ ̵ ̵guard,
+  ̲ ̲ ̲ ̲ ̲Bool.false_eq_true,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3J_ValidatedLog.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

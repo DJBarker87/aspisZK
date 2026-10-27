@@ -1,0 +1,19 @@
+import R1Z.PV_Canon_Carrier
+set_option autoImplicit false
+namespace R1Z.PV_Canon
+open Aeneas Aeneas.Std
+ theorem next_round_val (round : Usize) (hr : round.val < 10) :
+    (Usize.wrapping_add round 1#usize).val = round.val+1 := by
+  rw [Usize.wrapping_add_val_eq]
+  change (round.val+1) % UScalar.size .Usize = round.val+1
+  apply Nat.mod_eq_of_lt
+  have size : 10 < UScalar.size .Usize := by rw [UScalar.size_def]; decide
+  omega
+ theorem next_round_remaining (round : Usize) (n : Nat)
+    (hn : round.val + (n+1) = 10) :
+    (Usize.wrapping_add round 1#usize).val + n = 10 := by
+  rw [next_round_val round (by omega)]
+  omega
+#print axioms next_round_val
+#print axioms next_round_remaining
+end R1Z.PV_Canon

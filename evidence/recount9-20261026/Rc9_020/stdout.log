@@ -1,0 +1,93 @@
+structure AspisR1.SAF_ReducedLaws.Arithmetic {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact) : Prop
+number of parameters: 5
+fields:
+  AspisR1.SAF_ReducedLaws.Arithmetic.round0 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE
+      v.round0 d.p0
+  AspisR1.SAF_ReducedLaws.Arithmetic.round1 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE
+      v.round1 d.p1
+  AspisR1.SAF_ReducedLaws.Arithmetic.pair : ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E)
+      (value : AspisR1Stage2.Stage2Finish.E),
+      ops.newWeights p.variant p.semantic_alpha p.z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+        Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+              p.alpha { «end» := 2#usize } =
+            Aeneas.Std.Result.ok alphas →
+          ops.pair weights alphas v.final_message p.kappa =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+            AspisR1.CheckpointBytes5Output.ofE value =
+              AspisR1.RoundPairing.dot d.f
+                (AspisR1.RoundPairing.dualFold d.alpha1
+                  (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))
+constructor:
+  AspisR1.SAF_ReducedLaws.Arithmetic.mk {W : Type} {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {v : AspisR1Stage2.verifier.View} {p : AspisR1Stage2.verifier.Prepared}
+    {d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact}
+    (round0 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE v.round0 d.p0)
+    (round1 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE v.round1 d.p1)
+    (pair :
+      ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+        ops.newWeights p.variant p.semantic_alpha p.z =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            ops.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+              AspisR1.CheckpointBytes5Output.ofE value =
+                AspisR1.RoundPairing.dot d.f
+                  (AspisR1.RoundPairing.dualFold d.alpha1
+                    (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))) :
+    AspisR1.SAF_ReducedLaws.Arithmetic ops v p d
+structure AspisR1.Port4D_Pairing.RoundLaws {F W : Type} [Field F] (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (decode : AspisR1Stage2.Stage2Finish.E → F) (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (poly : Polynomial F) : Prop
+number of parameters: 7
+fields:
+  AspisR1.Port4D_Pairing.RoundLaws.boundary : ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+      ops.field bytes 0#usize = Aeneas.Std.Result.ok c0 →
+        ops.field bytes 4#usize = Aeneas.Std.Result.ok c4 →
+          ops.add c0 c4 = Aeneas.Std.Result.ok lhs → decode lhs = AspisR1.TwoRoundComparison.boundary poly
+  AspisR1.Port4D_Pairing.RoundLaws.quarter : ∀ (m : AspisR1Stage2.Stage2Finish.M)
+      (claim rhs : AspisR1Stage2.Stage2Finish.E),
+      ops.quarter = Aeneas.Std.Result.ok m →
+        ops.mulM claim m = Aeneas.Std.Result.ok rhs → decode rhs = AspisR1.RoundPairing.quarter * decode claim
+  AspisR1.Port4D_Pairing.RoundLaws.eval : ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+      ops.polynomial bytes alpha = Aeneas.Std.Result.ok value → decode value = Polynomial.eval (decode alpha) poly
+constructor:
+  AspisR1.Port4D_Pairing.RoundLaws.mk {F W : Type} [Field F] {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {decode : AspisR1Stage2.Stage2Finish.E → F} {bytes : Aeneas.Std.Slice Aeneas.Std.U8} {poly : Polynomial F}
+    (boundary :
+      ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+        ops.field bytes 0#usize = Aeneas.Std.Result.ok c0 →
+          ops.field bytes 4#usize = Aeneas.Std.Result.ok c4 →
+            ops.add c0 c4 = Aeneas.Std.Result.ok lhs → decode lhs = AspisR1.TwoRoundComparison.boundary poly)
+    (quarter :
+      ∀ (m : AspisR1Stage2.Stage2Finish.M) (claim rhs : AspisR1Stage2.Stage2Finish.E),
+        ops.quarter = Aeneas.Std.Result.ok m →
+          ops.mulM claim m = Aeneas.Std.Result.ok rhs → decode rhs = AspisR1.RoundPairing.quarter * decode claim)
+    (eval :
+      ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+        ops.polynomial bytes alpha = Aeneas.Std.Result.ok value → decode value = Polynomial.eval (decode alpha) poly) :
+    AspisR1.Port4D_Pairing.RoundLaws ops decode bytes poly
+def AspisR1.R3SemanticRemainingJoins.EquationEndpoint : R0P.Public AspisR1.SemanticPublicWire.M31 →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+    AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E → Prop :=
+fun pub rs data =>
+  ∀ (view : AspisR1.LiteralOpeningView.View) (claim : AspisR1.LiteralAcceptanceTerminal.E)
+    (polynomials : Fin 10 → Polynomial AspisR1.LiteralAcceptanceTerminal.E),
+    AspisR1.LiteralOpeningView.read rs = Option.some view →
+      R0P.Mask.claimOf (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = Option.some claim →
+        R0P.Mask.semPolysZ (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = Option.some polynomials →
+          AspisR1.R3SemanticEquationCore.Equations claim (AspisR1.R3SemanticRemainingJoins.terminal pub view data)
+            (fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) polynomials
+def AspisR1.MatchingSupport.match0 : {E : Type} →
+  [inst : Field E] →
+    [inst_1 : Fintype E] →
+      [inst_2 : DecidableEq E] →
+        [inst_3 : Algebra (ZMod AspisCircleGroupOrder.P) E] → AspisR1.MatchingSupport.Data E → Fin 262144 → Prop :=
+fun {E} [Field E] [Fintype E] [DecidableEq E] [Algebra (ZMod AspisCircleGroupOrder.P) E] d i =>
+  AspisR1.FirstFold.foldWord d.alpha0 (AspisR1.TwoFoldExtraction.batchedWord d.W d.gamma) i = d.V i

@@ -1,0 +1,52 @@
+{"attempt": "JFu_009", "exit_status": 1, "wall_seconds": 9.989897158986423, "peak_rss_kib": "5348488", "swaps": "0", "print_axioms": ["'AspisR1.JFu_DigestDecode.word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JFu_DigestDecode.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFu_DigestDecode.lean:15:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun out => out = some (core.num.U32.from_le_bytes arr)
+  has type
+    Option aspis_core.field.M31 → Prop
+  but is expected to have type
+    Post (Option aspis_core.field.M31)
+  in the application
+    (do
+        let v ← lift (core.num.U32.from_le_bytes arr)
+        if v ≥ asp
+...
+ : [> let i1 ← arr.index_usize 1#usize <]
+i1_post : i1 = (↑arr)[1]
+i2 : U8
+_✝⁴ : [> let i2 ← arr.index_usize 2#usize <]
+i2_post : i2 = (↑arr)[2]
+i3 : U8
+_✝³ : [> let i3 ← arr.index_usize 3#usize <]
+i3_post : i3 = (↑arr)[3]
+o : Option U32
+_✝² : [> let o ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i, i1, i2, i3] ⋯) <]
+o_post : o = some (core.num.U32.from_le_bytes (Array.make 4#usize [i, i1, i2, i3] ⋯))
+r : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝¹ : [> let r ← core.option.Option.ok_or o atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r_post : ∀ (x : U32), r = core.result.Result.Ok x → o = some x
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+cf_post : core.result.Result.Insts.CoreOpsTry.branch r = ok cf
+residual : core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError
+h✝ : cf = core.ops.control_flow.ControlFlow.Break residual
+out : atomic_statement.AtomicStatementError
+_ :
+  [> let out ←
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Std.Array U32 8#usize)
+      (core.convert.FromSame atomic_statement.AtomicStatementError) residual <]
+x✝¹ : atomic_statement.AtomicStatementError
+x✝ : core.result.Result (Std.Array U32 8#usize) atomic_statement.AtomicStatementError
+out_post1 : residual = core.result.Result.Err out
+out_post2 : out = x✝¹
+out_post3 : x✝ = core.result.Result.Err x✝¹
+⊢ ∃ q, x✝ = core.result.Result.Ok q
+'AspisR1.JFu_DigestDecode.word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFu_DigestDecode.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r686681fe5b7a40878a9df5459649d89c.scope; invocation ID: bca2582c6723406e9490afb7971380cf

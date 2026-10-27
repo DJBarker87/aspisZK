@@ -1,0 +1,46 @@
+PAln_SemanticRead.lean:30:10: error: Invalid `←` modifier: `SemanticPrefixCodec.decodeFrom` is a declaration name to be unfolded
+
+Hint: The simplifier cannot "refold" definitions by name. Use `rw` for this instead,
+                      or use the `←` simp modifier with an equational lemma for `SemanticPrefixCodec.decodeFrom`.
+PAln_SemanticRead.lean:29:13: error: unsolved goals
+case cons.some.none
+eK : AspisV8R15.ExactTowerBase.QM31Exact →+* LiteralSemanticPrefix.E
+row✝ : ℕ
+rs : List (LiteralTranscript.Message × LiteralTranscript.Challenge)
+row : ℕ
+m : LiteralTranscript.Message
+c : LiteralTranscript.Challenge
+rest : List (LiteralTranscript.Message × LiteralTranscript.Challenge)
+valid : LiteralTranscript.valid row m
+ordinary : ∃ value, c.1 = Value.ordinary value
+tail : Ready (row + 1) rest
+ih :
+  ∀ (decoded : List SemanticPrefixCodec.Entry),
+    SemanticPrefixCodec.decodeFrom (row + 1) (records rest) = some decoded →
+      ∃ out, LiteralSemanticPrefix.read eK (row + 1) rest = some out
+decoded : List SemanticPrefixCodec.Entry
+value : SemanticPrefixCodec.At row
+first : SemanticPrefixCodec.decodeOne row (record m) = some value
+remainder : SemanticPrefixCodec.decodeFrom (row + 1) (records rest) = none
+success :
+  ((TypedPrefixParser.decode SemanticPrefixCodec.decodeOne (row + 1) (records rest)).bind fun tail =>
+      some (⟨row, value⟩ :: tail)) =
+    some decoded
+⊢ ∃ out, LiteralSemanticPrefix.read eK row ((m, c) :: rest) = some out
+PAln_SemanticRead.lean:29:22: warning: This simp argument is unused:
+  SemanticPrefixCodec.decodeFrom
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵e̵m̵a̵n̵t̵i̵c̵P̵r̵e̵f̵i̵x̵C̵o̵d̵e̵c̵.̵d̵e̵c̵o̵d̵e̵F̵r̵o̵m̵,̵T̵y̵p̵e̵d̵P̵r̵e̵f̵i̵x̵P̵a̵r̵s̵e̵r̵.̵d̵e̵c̵o̵d̵e̵,̵f̵i̵r̵s̵t̵,̵[̲T̲y̲p̲e̲d̲P̲r̲e̲f̲i̲x̲P̲a̲r̲s̲e̲r̲.̲d̲e̲c̲o̲d̲e̲,̲ ̲f̲i̲r̲s̲t̲,̲ ← S̵e̵m̵a̵n̵t̵i̵c̵P̵r̵e̵f̵i̵x̵C̵o̵d̵e̵c̵.̵d̵e̵c̵o̵d̵e̵F̵r̵o̵m̵,̵r̵e̵m̵a̵i̵n̵d̵e̵r̵]̵S̲e̲m̲a̲n̲t̲i̲c̲P̲r̲e̲f̲i̲x̲C̲o̲d̲e̲c̲.̲d̲e̲c̲o̲d̲e̲F̲r̲o̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲e̲m̲a̲i̲n̲d̲e̲r̲]̲ at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PAln_SemanticRead.lean:30:43: warning: This simp argument is unused:
+  remainder
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPrefixCodec.decodeFrom, ̲TypedPrefixParser.decode, ̲first,
+           ̵ ̵← SemanticPrefixCodec.decodeFrom,̵r̵e̵m̵a̵i̵n̵d̵e̵r̵] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PAln_SemanticRead.read_of_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

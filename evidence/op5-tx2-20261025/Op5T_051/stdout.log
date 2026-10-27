@@ -1,0 +1,54 @@
+Op5T_Concrete.lean:25:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let value ←
+      do
+        let root0 ← p.roots.index_usize 0#usize
+        let root1 ← p.roots.index_usize 1#usize
+        Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (Port3_BatchStd.install Port4B_Install.leaves)
+            { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } proof p.queries
+            (Array.make 3#usize [root0, root1, folded] ⋯) batch hash
+    match value with
+      | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+      | core.result.Result.Err e => ok (core.result.Result.Err (Op5T_Install.stageError e))
+is not definitionally equal to the right-hand side
+  do
+    let r ←
+      do
+        let root0 ← p.roots.index_usize 0#usize
+        let root1 ← p.roots.index_usize 1#usize
+        Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (Port3_BatchStd.install Port4B_Install.leaves)
+            (VTop_Checkpoint.digest D) proof p.queries (Array.make 3#usize [root0, root1, folded] ⋯) batch hash
+    match r with
+      | core.result.Result.Ok a => ok (core.result.Result.Ok a)
+      | core.result.Result.Err e => ok (core.result.Result.Err (Port3_CheckpointInstall.error e))
+
+Hash : Type
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+proof : Slice U8
+p : VTop_Stages.verifier.Prepared
+folded : Std.Array U8 32#usize
+batch : Usize
+hash : Hash
+⊢ (do
+      let value ←
+        do
+          let root0 ← p.roots.index_usize 0#usize
+          let root1 ← p.roots.index_usize 1#usize
+          Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (Port3_BatchStd.install Port4B_Install.leaves)
+              { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } proof p.queries
+              (Array.make 3#usize [root0, root1, folded] ⋯) batch hash
+      match value with
+        | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+        | core.result.Result.Err e => ok (core.result.Result.Err (Op5T_Install.stageError e))) =
+    do
+    let r ←
+      do
+        let root0 ← p.roots.index_usize 0#usize
+        let root1 ← p.roots.index_usize 1#usize
+        Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (Port3_BatchStd.install Port4B_Install.leaves)
+            (VTop_Checkpoint.digest D) proof p.queries (Array.make 3#usize [root0, root1, folded] ⋯) batch hash
+    match r with
+      | core.result.Result.Ok a => ok (core.result.Result.Ok a)
+      | core.result.Result.Err e => ok (core.result.Result.Err (Port3_CheckpointInstall.error e))
+'AspisR1.Op5T_Concrete.stage_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Op5T_Concrete.current_source' depends on axioms: [propext, Classical.choice, Quot.sound]

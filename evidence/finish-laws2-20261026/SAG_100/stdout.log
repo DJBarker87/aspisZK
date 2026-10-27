@@ -1,0 +1,41 @@
+def AspisR1.R3SemanticRemainingJoins.EquationEndpoint : R0P.Public AspisR1.SemanticPublicWire.M31 →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+    AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E → Prop :=
+fun pub rs data =>
+  ∀ (view : AspisR1.LiteralOpeningView.View) (claim : AspisR1.LiteralAcceptanceTerminal.E)
+    (polynomials : Fin 10 → Polynomial AspisR1.LiteralAcceptanceTerminal.E),
+    AspisR1.LiteralOpeningView.read rs = Option.some view →
+      R0P.Mask.claimOf (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = Option.some claim →
+        R0P.Mask.semPolysZ (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = Option.some polynomials →
+          AspisR1.R3SemanticEquationCore.Equations claim (AspisR1.R3SemanticRemainingJoins.terminal pub view data)
+            (fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) polynomials
+def AspisR1.R3SemanticEquationCore.Equations : {K : Type} →
+  [inst : CommSemiring K] → K → K → (Fin 10 → K) → (Fin 10 → Polynomial K) → Prop :=
+fun {K} [CommSemiring K] claim terminal alpha polys =>
+  Polynomial.eval 0 (polys 0) + Polynomial.eval 1 (polys 0) = claim ∧
+    (∀ (j : Fin 9),
+        Polynomial.eval 0 (polys j.succ) + Polynomial.eval 1 (polys j.succ) =
+          Polynomial.eval (alpha j.castSucc) (polys j.castSucc)) ∧
+      Polynomial.eval (alpha 9) (polys 9) = terminal
+def AspisR1.MatchingSupport.match0 : {E : Type} →
+  [inst : Field E] →
+    [inst_1 : Fintype E] →
+      [inst_2 : DecidableEq E] →
+        [inst_3 : Algebra (ZMod AspisCircleGroupOrder.P) E] → AspisR1.MatchingSupport.Data E → Fin 262144 → Prop :=
+fun {E} [Field E] [Fintype E] [DecidableEq E] [Algebra (ZMod AspisCircleGroupOrder.P) E] d i =>
+  AspisR1.FirstFold.foldWord d.alpha0 (AspisR1.TwoFoldExtraction.batchedWord d.W d.gamma) i = d.V i
+def AspisR1.D0TypedChecks.verify : AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+  AspisR1.RecordedBinaryExperimentBin.SourceInputs → Bool :=
+fun rs i =>
+  match AspisR1.LiteralMatchingData.read rs with
+  | Option.none => Bool.false
+  | Option.some data =>
+    Decidable.decide
+      (data = i.data ∧
+        AspisR1.LiteralPairingChecks.checks rs ∧
+          AspisR1.R16DecisionQueryModel.verify data i.queryBytes = Bool.true ∧
+            AspisR1.R3SemanticRemainingJoins.EquationEndpoint i.decoded rs data ∧
+              ∀ (q : Fin 22 → Fin 262144),
+                AspisR1.LiteralQueryRead.decode i.queryBytes = Option.some q →
+                  AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK data q
+                    (AspisR1.SelectedChallengeMap.rhoOf i.rho))

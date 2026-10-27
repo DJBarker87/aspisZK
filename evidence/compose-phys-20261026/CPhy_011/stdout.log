@@ -1,0 +1,82 @@
+'AspisR1.CPhy_Audit.dictionary_compatibility' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Audit.physical_fixture' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Accepted.accepted_pair_unified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_HeaderCells.selector' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_HeaderCells.proofHash' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_HeaderCells.publicHash' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Header.decode_fields' depends on axioms: [propext, Quot.sound]
+'AspisR1.CPhy_Header.writer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Header.reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Ranges.physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Ranges.multiproof' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Ranges.scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPhy_Physical.accepted_pair_unified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_Nonvacuity.domain_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SdkD_Nonvacuity.instance_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.CPhy_Header.decode : AspisV8R19.DuplexFrames.Bytes →
+  Option (AspisV8R19.SourceDuplexStep.State × AspisV8R19.SourceDuplexStep.State) :=
+fun wire =>
+  if 80 ≤ List.length wire then some (fun j => wire[16 + ↑j]?.getD 0, fun j => wire[48 + ↑j]?.getD 0) else none
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin (ops : AdapterRw.Ops)
+  (decode : S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (semantic : S2W_AuthenticatedInputs.Public)
+  (pub proof : Slice U8) (split : Usize) : Prop
+number of parameters: 7
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.header : ∀ (checkpoint : alloc.vec.Vec U8),
+      AdapterRw.first_decoded ops semantic pub proof split = ok (core.result.Result.Ok checkpoint) →
+        decode (MultiproofConeCanonical.bytesOf ↑checkpoint) =
+          some (H (MultiproofConeCanonical.bytesOf ↑proof), H (MultiproofConeCanonical.bytesOf ↑pub))
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.size : ∀ (checkpoint : alloc.vec.Vec U8),
+      AdapterRw.first_decoded ops semantic pub proof split = ok (core.result.Result.Ok checkpoint) →
+        (↑checkpoint).length = 1768
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.mk {ops : AdapterRw.Ops}
+    {decode : S2W_AuthenticatedInputs.HeaderDecode}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State} {semantic : S2W_AuthenticatedInputs.Public}
+    {pub proof : Slice U8} {split : Usize}
+    (header :
+      ∀ (checkpoint : alloc.vec.Vec U8),
+        AdapterRw.first_decoded ops semantic pub proof split = ok (core.result.Result.Ok checkpoint) →
+          decode (MultiproofConeCanonical.bytesOf ↑checkpoint) =
+            some (H (MultiproofConeCanonical.bytesOf ↑proof), H (MultiproofConeCanonical.bytesOf ↑pub)))
+    (size :
+      ∀ (checkpoint : alloc.vec.Vec U8),
+        AdapterRw.first_decoded ops semantic pub proof split = ok (core.result.Result.Ok checkpoint) →
+          (↑checkpoint).length = 1768) :
+    S2W_AuthenticatedInputs.CheckpointWriterConeJoin ops decode H semantic pub proof split
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin (ops : AdapterRw.Ops)
+  (decode : S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (pub proof checkpoint : Slice U8) : Prop
+number of parameters: 6
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.checkedHeader : ops.op11
+          (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+        ok (core.result.Result.Ok ()) →
+      decode (MultiproofConeCanonical.bytesOf ↑checkpoint) =
+        some (H (MultiproofConeCanonical.bytesOf ↑proof), H (MultiproofConeCanonical.bytesOf ↑pub))
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.mk {ops : AdapterRw.Ops}
+    {decode : S2W_AuthenticatedInputs.HeaderDecode}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State} {pub proof checkpoint : Slice U8}
+    (checkedHeader :
+      ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+          ok (core.result.Result.Ok ()) →
+        decode (MultiproofConeCanonical.bytesOf ↑checkpoint) =
+          some (H (MultiproofConeCanonical.bytesOf ↑proof), H (MultiproofConeCanonical.bytesOf ↑pub))) :
+    S2W_AuthenticatedInputs.CheckpointReaderConeJoin ops decode H pub proof checkpoint
+def AspisR1.S2Y_OwnedChildren.PhysicalRange : Slice U8 → Slice U8 → ℕ → Prop :=
+fun proof actual slot =>
+  ∃ start finish,
+    ↑start = OraclePortSelectedDraft.slotStart slot ∧
+      ↑finish = ↑start + 32 * OraclePortSelectedDraft.capacity slot ∧
+        ↑finish ≤ (↑proof).length ∧
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := start, «end» := finish } =
+            ok actual
+def AspisR1.S2Y_OwnedChildren.Y1Range : Slice U8 → Slice U8 → Prop :=
+fun proof actual =>
+  7495 ≤ (↑proof).length ∧
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+        { start := 7031#usize, «end» := 7495#usize } =
+      ok actual

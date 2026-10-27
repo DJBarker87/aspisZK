@@ -1,0 +1,65 @@
+{"attempt": "JGa14_048", "exit_status": 1, "wall_seconds": 3.515341539052315, "peak_rss_kib": "5438916", "swaps": "0", "print_axioms": ["'AspisR1.JGa_ValueFinish.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGa_ValueFinish.lean:40:54: error: unsolved goals
+packed : Std.Array field.QM31 24#usize
+o : state_only_poseidon.StateOnlyPoseidonOpenings
+s : pool_v1.pair_forest_copy_terminal.Selectors
+r : Std.Array field.QM31 33#usize
+sel : field.QM31
+hp : canonical packed
+hz : canonical o.z
+hb : canonical o.succ_z
+hh : canonical s.high
+hl : canonical s.low
+hr : canonical r
+hs : Canon sel
+⊢ (do
+      let (iter, into_iter_back) ← MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter r
+      let (im, back) ← add_value_lanes_loop3 iter (fun im => im) sel
+      let packed1 ← add_preweighted packed 49#usize (into_iter_back (back im))
+      let i2 ← 16#usize * VALUE_AUXILIARY_BLOCK
+      let i
+...
+z
+hh : canonical s.high
+hl : canonical s.low
+hr : canonical r
+hs : Canon sel
+⊢ (do
+      let (iter, into_iter_back) ← MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter r
+      let (im, back) ← add_value_lanes_loop3 iter (fun im => im) sel
+      let packed1 ← add_preweighted packed 49#usize (into_iter_back (back im))
+      let i2 ← 16#usize * VALUE_AUXILIARY_BLOCK
+      let i3 ← i2 + 6#usize
+      let conservation_selector ← s.row i3
+      let q15 ← o.z.index_usize 0#usize
+      let q16 ← o.z.index_usize 1#usize
+      let q17 ← q15.sub q16
+      let q18 ← o.z.index_usize 2#usize
+      let q19 ← q17.sub q18
+      let q20 ← conservation_selector.mul q19
+      let q21 ← o.succ_z.index_usize 0#usize
+      let q22 ← o.succ_z.index_usize 1#usize
+      let q23 ← q21.sub q22
+      let q24 ← conservation_selector.mul q23
+      add_preweighted packed1 82#usize (Array.make 2#usize [q20, q24] ⋯)) =
+    do
+    let x ← MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter r
+    let x_1 ← FIy_IteratorTraversal.Loop3 x.1 (fun im => im) sel
+    let packed1 ← add_preweighted packed 49#usize (x.2 (x_1.2 x_1.1))
+    let i2 ← 16#usize * VALUE_AUXILIARY_BLOCK
+    let i3 ← i2 + 6#usize
+    let conservation_selector ← s.row i3
+    let q15 ← o.z.index_usize 0#usize
+    let q16 ← o.z.index_usize 1#usize
+    let q17 ← q15.sub q16
+    let q18 ← o.z.index_usize 2#usize
+    let q19 ← q17.sub q18
+    let q20 ← conservation_selector.mul q19
+    let q21 ← o.succ_z.index_usize 0#usize
+    let q22 ← o.succ_z.index_usize 1#usize
+    let q23 ← q21.sub q22
+    let q24 ← conservation_selector.mul q23
+    add_preweighted packed1 82#usize (Array.make 2#usize [q20, q24] ⋯)
+'AspisR1.JGa_ValueFinish.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3e5fc85510e845ee94246446e4c09cf2.scope; invocation ID: 239758fa506a46c5bd882eab8852c3b0

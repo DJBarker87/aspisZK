@@ -1,0 +1,53 @@
+Host restored; allocation 8, next unused ID 41552
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0610); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortInternalRoundStep.lean:36:2: error: Type mismatch: After simplification, term
+  he
+ has type
+  @Eq (Result (Std.Array aspis_core.field.M31 16#usize × F × U8 × Std.Array aspis_core.field.M31 16#usize))
+    (do
+      let x ← Array.index_usize s 0#usize
+      let x ← aspis_core.field.M31.add x c
+      let x ← poseidon2.pow5 x
+      let x ← Array.update s 0#usize x
+      let out ← poseidon2.internal_linear_lazy x
+      let __x ←
+        callback.call_mut trace
+            { round := round, kind := poseidon2.Poseidon2RoundKind.Internal (UScalar.cast UScalarTy.U8 index),
+              input := input, output := out }
+      poseidon2.permute_optimized_with_trace_loop1 callback after out __x.2 (round.wrapping_add 1#u8) out)
+    do
+    let out ← R0PoseidonCopy.internal_round s c R0PoseidonCopy.INTERNAL_SHIFTS
+    let __x ←
+      callback.call_mut trace
+          { round := round, kind := poseidon2.Poseidon2RoundKind.Internal (UScalar.cast UScalarTy.U8 index),
+            input := input, output := out }
+    poseidon2.permute_optimized_with_trace_loop1 callback after out __x.2 (round.wrapping_add 1#u8) out
+but is expected to have type
+  @Eq (Result (Std.Array aspis_core.field.M31 16#usize × F × U8 × Std.Array aspis_core.field.M31 16#usize))
+    (do
+      let m ← Array.index_usize s 0#usize
+      let m1 ← m.add c
+      let m2 ← poseidon2.pow5 m1
+      let state1 ← Array.update s 0#usize m2
+      let state2 ← poseidon2.internal_linear_lazy state1
+      let __x ←
+        callback.call_mut trace
+            { round := round, kind := poseidon2.Poseidon2RoundKind.Internal (UScalar.cast UScalarTy.U8 index),
+              input := input, output := state2 }
+      poseidon2.permute_optimized_with_trace_loop1 callback after state2 __x.2 (round.wrapping_add 1#u8) state2)
+    do
+    let out ← R0PoseidonCopy.internal_round s c R0PoseidonCopy.INTERNAL_SHIFTS
+    let (_, trace1) ←
+      callback.call_mut trace
+          { round := round, kind := poseidon2.Poseidon2RoundKind.Internal (UScalar.cast UScalarTy.U8 index),
+            input := input, output := out }
+    poseidon2.permute_optimized_with_trace_loop1 callback after out trace1 (round.wrapping_add 1#u8) out
+'R1Z.PV_Src_PortInternalRoundStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.64
+	Maximum resident set size (kbytes): 4132060
+	Swaps: 0
+	Exit status: 1
+

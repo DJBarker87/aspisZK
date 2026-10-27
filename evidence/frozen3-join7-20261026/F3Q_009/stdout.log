@@ -1,0 +1,105 @@
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (if d > 0#usize then do
+        let i4 ← liftResult (lift (d.wrapping_sub 1#usize))
+        let b ← liftResult (Port3_BatchStd.sameIndex idx i4 index)
+        if b = true then do
+            let i5 ← liftResult (lift (d.wrapping_sub 1#usize))
+            let b1 ← liftResult (Port3_BatchStd.sameLeaf val i5 leaf)
+            if b1 = true then pure (cont (idx, val, d, pos))
+              else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else do
+            let idx1 ← liftResult (Array.update idx d index)
+            let val1 ← liftResult (Array.update val d leaf)
+            let d1 ← liftResult (lift (d.wrapping_add 1#usize))
+            pure (cont (idx1, val1, d1, pos))
+      else do
+        let idx1 ← liftResult (Array.update idx d index)
+        let val1 ← liftResult (Array.update val d leaf)
+        let d1 ← liftResult (lift (d.wrapping_add 1#usize))
+        pure (cont (idx1, val1, d1, pos))))
+is not definitionally equal to the right-hand side
+  ([],
+    if d > 0#usize then do
+      let prev ← lift (d.wrapping_sub 1#usize)
+      let same ← Port3_BatchStd.sameIndex idx prev index
+      if same = true then do
+          let prev ← lift (d.wrapping_sub 1#usize)
+          let equal ← Port3_BatchStd.sameLeaf val prev leaf
+          if equal = true then ok (cont (idx, val, d, pos))
+            else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Array.update idx d index
+          let val1 ← Array.update val d leaf
+          let d1 ← lift (d.wrapping_add 1#usize)
+          ok (cont (idx1, val1, d1, pos))
+    else do
+      let idx1 ← Array.update idx d index
+      let val1 ← Array.update val d leaf
+      let d1 ← lift (d.wrapping_add 1#usize)
+      ok (cont (idx1, val1, d1, pos)))
+
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+⊢ eval H
+      (SdkC_Oracle.program
+        (if d > 0#usize then do
+          let i4 ← liftResult (lift (d.wrapping_sub 1#usize))
+          let b ← liftResult (Port3_BatchStd.sameIndex idx i4 index)
+          if b = true then do
+              let i5 ← liftResult (lift (d.wrapping_sub 1#usize))
+              let b1 ← liftResult (Port3_BatchStd.sameLeaf val i5 leaf)
+              if b1 = true then pure (cont (idx, val, d, pos))
+                else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+            else do
+              let idx1 ← liftResult (Array.update idx d index)
+              let val1 ← liftResult (Array.update val d leaf)
+              let d1 ← liftResult (lift (d.wrapping_add 1#usize))
+              pure (cont (idx1, val1, d1, pos))
+        else do
+          let idx1 ← liftResult (Array.update idx d index)
+          let val1 ← liftResult (Array.update val d leaf)
+          let d1 ← liftResult (lift (d.wrapping_add 1#usize))
+          pure (cont (idx1, val1, d1, pos)))) =
+    ([],
+      if d > 0#usize then do
+        let prev ← lift (d.wrapping_sub 1#usize)
+        let same ← Port3_BatchStd.sameIndex idx prev index
+        if same = true then do
+            let prev ← lift (d.wrapping_sub 1#usize)
+            let equal ← Port3_BatchStd.sameLeaf val prev leaf
+            if equal = true then ok (cont (idx, val, d, pos))
+              else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else do
+            let idx1 ← Array.update idx d index
+            let val1 ← Array.update val d leaf
+            let d1 ← lift (d.wrapping_add 1#usize)
+            ok (cont (idx1, val1, d1, pos))
+      else do
+        let idx1 ← Array.update idx d index
+        let val1 ← Array.update val d leaf
+        let d1 ← lift (d.wrapping_add 1#usize)
+        ok (cont (idx1, val1, d1, pos)))
+F3Q_LeafPost.lean:65:13: warning: This simp argument is unused:
+  F3Q_CodeEval.bind_eval
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵o̵r̵t̵9̵O̵R̵_̵B̵a̵t̵c̵h̵S̵t̵e̵p̵.̵o̵p̵s̵,̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵i̵n̵s̵t̵a̵l̵l̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲l̲i̲f̲t̲_̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲P̲o̲r̲t̲9̲O̲R̲_̲B̲a̲t̲c̲h̲S̲t̲e̲p̲.̲o̲p̲s̲,̲ ̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲i̲n̲s̲t̲a̲l̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_LeafPost.lean:65:36: warning: This simp argument is unused:
+  F3Q_CodeEval.lift_bind_eval
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵o̵r̵t̵9̵O̵R̵_̵B̵a̵t̵c̵h̵S̵t̵e̵p̵.̵o̵p̵s̵,̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵i̵n̵s̵t̵a̵l̵l̵]̵[̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲P̲o̲r̲t̲9̲O̲R̲_̲B̲a̲t̲c̲h̲S̲t̲e̲p̲.̲o̲p̲s̲,̲ ̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲i̲n̲s̲t̲a̲l̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3Q_LeafPost.eval_post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

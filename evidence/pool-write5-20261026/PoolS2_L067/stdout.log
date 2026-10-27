@@ -1,0 +1,68 @@
+PoolS2_PolicyExact.lean:8:66: error: unsolved goals
+case pos
+p : Policy
+flags : p.flags &&& 252#8#uscalar = 0#u8
+registry : ¬p.registry_program = Array.repeat 32#usize 0#u8
+binding : ¬p.policy_binding = Array.repeat 32#usize 0#u8
+hi : p.registry_authority = Array.repeat 32#usize 0#u8
+hd : ¬↑p.flags &&& 2 = 0
+⊢ (do
+      let i1 ← lift (252#8#uscalar)
+      let i2 ← lift (p.flags &&& i1)
+      if ↑i2 = 0 then do
+          let i4 ← lift (p.flags &&& 1#u8)
+          let _ ← lift (p.flags &&& 2#u8)
+          if ↑i4 = 0 then
+              ok
+                (core.result.Result.Err AdapterRw.aspis_statement.pool_v1.format.PoolV1FormatError.InvalidAuthorityMode)
+            else ok (core.result.Result.Ok ())
+        else ok (core.result.Result.Err AdapterRw.aspis_statement.pool_v1.format.PoolV1FormatError.UnsupportedFlags)) =
+    ok (core.result.Result.Ok ())
+
+case neg
+p : Policy
+flags : p.flags &&& 252#8#uscalar = 0#u8
+registry : ¬p.registry_program = Array.repeat 32#usize 0#u8
+binding : ¬p.policy_binding = Array.repeat 32#usize 0#u8
+hi : p.registry_authority = Array.repeat 32#usize 0#u8
+hd : ↑p.flags &&& 2 = 0
+⊢ (do
+      let i1 ← lift (252#8#uscalar)
+      let i2 ← lift (p.flags &&& i1)
+      if ↑i2 = 0 then do
+          let i4 ← lift (p.flags &&& 1#u8)
+          let _ ← lift (p.flags &&& 2#u8)
+          if ↑i4 = 0 then
+              ok
+                (core.result.Result.Err AdapterRw.aspis_statement.pool_v1.format.PoolV1FormatError.InvalidAuthorityMode)
+            else ok (core.result.Result.Ok ())
+        else ok (core.result.Result.Err AdapterRw.aspis_statement.pool_v1.format.PoolV1FormatError.UnsupportedFlags)) =
+    ok (core.result.Result.Ok ())
+
+case neg
+p : Policy
+flags : p.flags &&& 252#8#uscalar = 0#u8
+registry : ¬p.registry_program = Array.repeat 32#usize 0#u8
+binding : ¬p.policy_binding = Array.repeat 32#usize 0#u8
+authority : ↑p.flags % 2 = 0
+hi : ¬p.registry_authority = Array.repeat 32#usize 0#u8
+hd : ↑p.flags &&& 2 = 0
+⊢ (do
+      let i1 ← lift (252#8#uscalar)
+      let i2 ← lift (p.flags &&& i1)
+      if ↑i2 = 0 then do
+          let i4 ← lift (p.flags &&& 1#u8)
+          let i6 ← lift (p.flags &&& 2#u8)
+          if ↑i6 = 0 then
+              if i4 = 0#u8 then ok (core.result.Result.Ok ())
+              else
+                ok
+                  (core.result.Result.Err
+                    AdapterRw.aspis_statement.pool_v1.format.PoolV1FormatError.InvalidAuthorityMode)
+            else
+              ok
+                (core.result.Result.Err AdapterRw.aspis_statement.pool_v1.format.PoolV1FormatError.InvalidAuthorityMode)
+        else ok (core.result.Result.Err AdapterRw.aspis_statement.pool_v1.format.PoolV1FormatError.UnsupportedFlags)) =
+    ok (core.result.Result.Ok ())
+'AspisR1.PoolS2_PolicyExact.ready' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_PolicyExact.accepted_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

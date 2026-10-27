@@ -1,0 +1,47 @@
+{"attempt": "SAP_033", "exit_status": 0, "wall_seconds": 2.124530847009737, "peak_rss_kib": "5245096", "swaps": "0", "print_axioms": ["'AspisR1.SAP_Op3.accepted_pair_claims_op3' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.SAP_Op3.accepted_pair_claims_op3' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.SAP_Op3.accepted_pair_claims_op3 : ∀ {W A E M Cv : Type} {N : ℕ} (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : Ops) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+                (claimsStd : ClaimsUnrolledFinish.StdCalls) (native1 : S2W_ExtractionBounda
+...
+                                        projected port outer = S2W_SiteSchedule.timeline pre middle fs ss ∧
+                                                  post2 = e2.heap ∧
+                                                    before e1 e2 Site.tx1 =
+                                                        S2W_D189Interpretation.nativeObserve L encode e1.metadata 3 w1
+                                                          e1.heap.ambient ∧
+                                                      ⋯ :=
+fun {W A E M Cv} {N} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops B claimsStd native1
+    native2 hashv extraction sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2
+    accepted1 accepted2 p root length port firstMarks secondMarks =>
+  let ⟨f, h✝⟩ :=
+    SAP_Claims.accepted_pair_claims L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps
+      (Op3I_Install.install ops) B claimsStd native1 native2 hashv extraction sha256 H p1 syscall program data1 data2
+      slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length port firstMarks secondMarks
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨outer, h✝²⟩ := h✝¹
+  let ⟨pre, h✝³⟩ := h✝²
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, h✝⁶⟩ := h✝⁵
+  let ⟨cuts, right✝⟩ := h✝⁶
+  let ⟨selected, remaining⟩ := right✝
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨selected,
+                    ⟨Op3I_Cuts.same_cut_header adapterOps ops B claimsStd e1.first (e2.second secondSizes) saved f s
+                        cuts,
+                      remaining⟩⟩⟩))))))
+
+Running as unit: run-recd3a89527d245b08b6117da1799a819.scope; invocation ID: c54abcf82ce542dba8604ff266f89c93

@@ -1,0 +1,277 @@
+'AspisR1.FIn_FinalClosure.slots' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FIn_ReducedHeadline.deployed : ∀ {W A CoreError Tx : Type} (L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)),
+  S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+          ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record)),
+      S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : S2W_D189Wrappers.Allocator A) (e1 e2 : S2W_D189Entry.Entry) (w1 w2 : W),
+          S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : DrvC_Installation.Configuration FIn_WeightsInstall.W CoreError) (indexError : CoreError)
+                (reservation : NP6_StdModel.Reservation) (native1 : S2W_ExtractionBoundary.First)
+                (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Aeneas.Std.Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (DrvC_Installation.sdk (FIn_WeightsInstall.configuration indexError c reservation)) native1 native2
+                    hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : S2Trust.Heap (ℕ → S2W_D189Entry.Record)),
+                          S2W_D189Wrappers.first native1 copy allocator e1 CPH_Program.verifier data1 state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            S2W_D189Wrappers.second native2 allocator e2 CPH_Program.verifier data2 slot state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : CanonicalCutEnrichedTranscript.Words) (p : CPG_Projection.Observations Tx A)
+                                (t u : Tx) (actions : List (CPP_BankState.Action A)),
+                                CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator
+                                    CPH_Program.verifier →
+                                  CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+                                      (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p)
+                                      (CPG_Projection.tentative p) (CPG_Projection.success p)
+                                      (CPG_Projection.loaded p) →
+                                    ∀ (D : LiteralByteProtocol.Decoder) (P : F3T_ByteCarrier.ByteProver) (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q0 + Q1) →
+                                        ∀ (runtime : F3T_Runtime.Runtime),
+                                          FIn_GlobalOwners.Owners
+                                              (FIn_WeightsInstall.configuration indexError c reservation)
+                                              (Rc2_Install.configuration
+                                                  (Rc5_Install.seed indexError (FIn_WeightsInstall.select c))
+                                                  reservation).boundaries →
+                                            F3T_Runtime.StoredCarrierBinding
+                                                (FIn_WeightsInstall.configuration indexError c reservation) D
+                                                (F3T_Installed.source
+                                                  (FIn_WeightsInstall.configuration indexError c reservation) hashv)
+                                                P runtime →
+                                              ∀
+                                                (select :
+                                                  F3X_Projection.Output →
+                                                    R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs),
+                                                DrvC_Implementation.driver
+                                                      (FIn_WeightsInstall.configuration indexError c reservation) =
+                                                    DrvC_SourceEntry.source
+                                                      (FIn_WeightsInstall.configuration indexError c reservation)
+                                                      hashv ∧
+                                                  DrvC_Installation.sdk
+                                                        (FIn_WeightsInstall.configuration indexError c reservation) =
+                                                      SdkD_PairBatches.dictionary
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).adapter
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).currentBase
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).stageBase
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).finish
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).reserved
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).query
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).geometry
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).boundaries
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).std ∧
+                                                    Rc5_Result.Outcome L e1 e2 w1 w2
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).adapter
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).currentBase
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).reserved
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).query
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).geometry
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).stageBase
+                                                        (FIn_WeightsInstall.configuration indexError c
+                                                            reservation).finish
+                                                        c.boundaries reservation CPH_Program.verifier data1 data2 slot
+                                                        saved post1 post2 H
+                                                        (DrvC_Implementation.driver
+                                                          (FIn_WeightsInstall.configuration indexError c reservation))
+                                                        prior (p.physicalEvents t) ∧
+                                                      (F3X_ModelClaims.Claims
+                                                            (FIn_WeightsInstall.configuration indexError c reservation)
+                                                            D P (Q0 + Q1) ∧
+                                                          F3Y_SourceClaims.Claims
+                                                              (FIn_WeightsInstall.configuration indexError c
+                                                                reservation)
+                                                              D hashv P (Q0 + Q1) select ∧
+                                                            F3Y_AccountMass.Claims
+                                                                (FIn_WeightsInstall.configuration indexError c
+                                                                  reservation)
+                                                                hashv P (Q0 + Q1) select ∧
+                                                              ⋯) ∧
+                                                        (native1 CPH_Program.verifier e1.first data1 =
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                            (↑saved).length = 1768 ∧ ⋯) ∧
+                                                          Rc2_Events.Facts
+                                                              (FIn_WeightsInstall.configuration indexError c
+                                                                reservation)
+                                                              hashv native1 native2 copy allocator CPH_Program.verifier
+                                                              H saved ∧
+                                                            CPH_Protection.Facts p t saved CPH_Program.verifier ∧ ⋯
+@FIn_ConcreteAccepted.deployed : ∀ {W A CoreError Tx : Type} (L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)),
+  S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+          ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record)),
+      S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : S2W_D189Wrappers.Allocator A) (e1 e2 : S2W_D189Entry.Entry) (w1 w2 : W),
+          S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : DrvC_Installation.Configuration FIn_WeightsInstall.W CoreError) (indexError : CoreError)
+                (reservation : NP6_StdModel.Reservation) (native1 : S2W_ExtractionBoundary.First)
+                (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Aeneas.Std.Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (DrvC_Installation.sdk (FIn_WeightsInstall.configuration indexError c reservation)) native1 native2
+                    hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : S2Trust.Heap (ℕ → S2W_D189Entry.Record)),
+                          S2W_D189Wrappers.first native1 copy allocator e1 CPH_Program.verifier data1 state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            S2W_D189Wrappers.second native2 allocator e2 CPH_Program.verifier data2 slot state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : CanonicalCutEnrichedTranscript.Words) (p : CPG_Projection.Observations Tx A)
+                                (t u : Tx) (actions : List (CPP_BankState.Action A)),
+                                CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator
+                                    CPH_Program.verifier →
+                                  CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+                                      (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p)
+                                      (CPG_Projection.tentative p) (CPG_Projection.success p)
+                                      (CPG_Projection.loaded p) →
+                                    ∀ (D : LiteralByteProtocol.Decoder) (P : F3T_ByteCarrier.ByteProver) (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q0 + Q1) →
+                                        ∀ (runtime : F3T_Runtime.Runtime),
+                                          F3T_CanonicalJoin.AcceptedVerifierJoin
+                                              (FIn_WeightsInstall.configuration indexError c reservation) D
+                                              (F3T_Installed.source
+                                                (FIn_WeightsInstall.configuration indexError c reservation) hashv) →
+                                            F3T_Runtime.StoredCarrierBinding
+                                                (FIn_WeightsInstall.configuration indexError c reservation) D
+                                                (F3T_Installed.source
+                                                  (FIn_WeightsInstall.configuration indexError c reservation) hashv)
+                                                P runtime →
+                                              ∀
+                                                (adversary :
+                                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                                    AspisV8R19.SourceDuplexStep.State
+                                                    (GExq_AccountExperiment.FirstInputs A))
+                                                (chooseSecond :
+                                                  GExq_AccountExperiment.FirstInputs A →
+                                                    Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+                                                      S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+                                                        A →
+                                                          AspisV8R19.MemoizedProgramLaw.Program
+                                                            AspisV8R19.DuplexFrames.Bytes
+                                                            AspisV8R19.SourceDuplexStep.State
+                                                            (GExq_AccountExperiment.SecondInputs A)),
+                                                (∀
+                                                    (H :
+                                                      AspisV8R19.DuplexFrames.Bytes →
+                                                        AspisV8R19.SourceDuplexStep.State),
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H adversary).1.length ≤ Q0) →
+                                                  (∀ (input : GExq_AccountExperiment.FirstInputs A)
+                                                      (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                                                      (post : S2Trust.Heap (ℕ → S2W_D189Entry.Record)) (final : A)
+                                                      (H :
+                                                        AspisV8R19.DuplexFrames.Bytes →
+                                                          AspisV8R19.SourceDuplexStep.State),
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (chooseSecond input saved post final)).1.length ≤
+                                                        Q1) →
+                                                    ∀
+                                                      (project :
+                                                        GExq_AccountExperiment.Outcome A →
+                                                          OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+                                                      (select :
+                                                        GExq_AccountExperiment.Outcome A →
+                                                          R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs),
+                                                      MultiproofConeP6Frozen2Stage.P6Boundary
+                                                          (P6C_Extension.dictionary hashv H) () H Op5T_P6.parent
+                                                          Op5T_P6.parent Op5T_P6.parent
+                                                          MultiproofConeP6Batch.referenceLeaf ∧
+                                                        DrvC_Implementation.driver
+                                                              (FIn_WeightsInstall.configuration indexError c
+                                                                reservation) =
+                                                            DrvC_SourceEntry.source
+                                                              (FIn_WeightsInstall.configuration indexError c
+                                                                reservation)
+                                                              hashv ∧
+                                                          ⋯
+@FIn_Nonvacuity.witness_or_collision : ∀ {F C : Type} (base : DrvC_Installation.Configuration F C) (seed : FinishOps F),
+  base.finish = FIn_Install.finishOps seed →
+    base.stageBase.op22 = Aeneas.Std.Result.ok 7527#usize ∧
+        base.stageBase.op21 = Aeneas.Std.Result.ok 8007#usize ∧ base.stageBase.op20 = Aeneas.Std.Result.ok 10055#usize →
+      ∀ (hashv : SdkC_Source.Parts → Aeneas.Std.Result SdkC_Source.Digest) (s : F3T_ByteCarrier.Submission)
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+        (w : CanonicalCutEnrichedTranscript.Words)
+        (prior :
+          AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit),
+        have c := F3V_Install.configuration base;
+        WAdm_Domain.SessionAPrepare
+            (Tx1Q_Execution.actual (Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry c.boundaries
+              c.std) →
+          ∀ (decoder : LiteralByteProtocol.Decoder),
+            Port5Q1_QueryPorts.SessionAPrimitives c.query →
+              Port5Q1_GeometryCanonical.SessionAPrimitives c.geometry →
+                Port5Q1_Domain.SessionADomain c.geometry →
+                  c.geometry.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+                    c.geometry.op7 = Aeneas.Std.Result.ok 1#u32 →
+                      c.geometry.op11 = Port4C_InverseExecution.inverse_owned →
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                (F3T_Installed.source c hashv (F3T_ByteCarrier.input c s))).2 =
+                            true →
+                          ∃ e i p q data t,
+                            have tr :=
+                              LiteralTranscript.erasePrefix
+                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                    (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2;
+                            i.physical.bytes = MultiproofConeCanonical.bytesOf ↑e.pub ∧
+                              i.stored = MultiproofConeCanonical.bytesOf ↑e.proof ∧
+                                OraclePortStoredParserC4.parseReached i.stored tr = some p ∧
+                                  OraclePortSelectedDraft.queries tr = some q ∧
+                                    OraclePortStoredDecisionDraftC4.input p q tr = some data ∧
+                                      Cons_Native.Calls (Op5T_Concrete.stage (AuS1_Install.base c.stageBase)) c.finish
+                                          c.reserved c.query c.geometry (F3V_RunEvidence.D2 c H) () e.pub e.proof
+                                          e.saved.deref t ∧
+                                        Cons_NativeBuild.Aux c.reserved c.query c.geometry (F3V_RunEvidence.D2 c H) ()
+                                            e.pub e.proof e.saved.deref t ∧
+                                          SAG_NativeFull.Shape
+                                              (Tx2N_Execution.control
+                                                (Tx2I_Install.stage
+                                                  (Op5T_Concrete.stage (AuS1_Install.base c.stageBase)) c.finish)
+                                                c.reserved c.query c.geometry)
+                                              e.proof t ∧
+                                            F3Y_PreparedAt.At c base.boundaries s H e i p q data ∧
+                                              (AuS1_Finish.Collision H
+                                                  (F3V_Checkpoint.trace c base.boundaries s H e prior) p q ∨
+                                                Nonempty
+                                                  (F3S_FinishWitness.Primitives c.finish t.v2 t.p2
+                                                    (have __src := t.returned2;
+                                                    { weights := t.back2 t.flushed2, rhs := __src.rhs,
+                                                      power := __src.power, next := __src.next })))

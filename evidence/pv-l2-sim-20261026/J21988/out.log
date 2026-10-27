@@ -1,0 +1,66 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F5DivPass.lean:16:4: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F5DivPass.lean:17:4: error: Tactic `rfl` failed: The left-hand side
+  fail e✝
+is not definitionally equal to the right-hand side
+  if j > 0#usize then do
+    let after ← step rank remainder j
+    sampler.qm31_div_pass_loop after.1 after.2.1 after.2.2
+  else ok (rank, remainder)
+
+case h_2
+rank : Std.Array U32 8#usize
+remainder : U64
+j : Usize
+x✝ : Result (ControlFlow (Std.Array U32 8#usize × U64 × Usize) (Std.Array U32 8#usize × U64))
+e✝ : Error
+heq✝ :
+  (if j > 0#usize then do
+      let after ← step rank remainder j
+      ok (cont after)
+    else ok (done (rank, remainder))) =
+    fail e✝
+⊢ fail e✝ =
+    if j > 0#usize then do
+      let after ← step rank remainder j
+      sampler.qm31_div_pass_loop after.1 after.2.1 after.2.2
+    else ok (rank, remainder)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F5DivPass.lean:11:90: error: unsolved goals
+case h_3
+rank : Std.Array U32 8#usize
+remainder : U64
+j : Usize
+x✝ : Result (ControlFlow (Std.Array U32 8#usize × U64 × Usize) (Std.Array U32 8#usize × U64))
+heq✝ :
+  (if j > 0#usize then do
+      let after ← step rank remainder j
+      ok (cont after)
+    else ok (done (rank, remainder))) =
+    div
+⊢ div =
+    if j > 0#usize then do
+      let after ← step rank remainder j
+      sampler.qm31_div_pass_loop after.1 after.2.1 after.2.2
+    else ok (rank, remainder)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F5DivPass.lean:13:13: warning: This simp argument is unused:
+  Aeneas.Std.uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_L2_F5DivPass.unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F5DivPass.erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F5DivPass.pass_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

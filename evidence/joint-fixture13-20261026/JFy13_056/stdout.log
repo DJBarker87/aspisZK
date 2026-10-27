@@ -1,0 +1,53 @@
+JFy_PoseidonFullLow.lean:20:75: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31.call_mut s (acc, i)
+in the target expression
+  (do
+      let (acc', f') ← closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31.call_mut s (acc, i)
+      core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+          closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31 xs acc' f') =
+    ok out
+
+case cons
+s : state_only_poseidon.StateOnlyPoseidonSelectors
+hs : canonical s.local
+i : Usize
+xs : List Usize
+ih :
+  ∀ (acc : field.QM31),
+    Canon acc →
+      (∀ i ∈ xs, ↑i < 16) →
+        ∃ out,
+          core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+                closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31 xs acc s =
+              ok out ∧
+            Canon out
+acc : field.QM31
+ha : Canon acc
+hb : ∀ i_1 ∈ i :: xs, ↑i_1 < 16
+next : field.QM31
+hn : closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31.call_mut s (acc, i) = ok (next, s)
+hnc : Canon next
+out : field.QM31
+tail :
+  core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31
+      xs next s =
+    ok out
+hout : Canon out
+⊢ (do
+      let (acc', f') ← closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31.call_mut s (acc, i)
+      core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+          closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31 xs acc' f') =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JFy_PoseidonFullLow.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFy_PoseidonFullLow.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

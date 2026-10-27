@@ -1,0 +1,223 @@
+def AspisR1.SAF_C_SAF_FinishPrepared.Outcome : {W : Type} →
+  AspisR1Stage2.Stage2Finish.FinishOps W →
+    AspisR1Stage2.verifier.View →
+      AspisR1Stage2.verifier.Prepared →
+        AspisR1Stage2.verifier.Accumulator →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+              (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+                AspisV8R19.DuplexFrames.Bytes →
+                  AspisV8R19.DuplexFrames.Bytes →
+                    AspisR1CurrentCaller.verifier.Prepared →
+                      AspisR1.OraclePortCompactDraft.Parsed →
+                        List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) →
+                          List AspisV8R19.DuplexFrames.Bytes →
+                            (Fin 22 → Fin 262144) →
+                              AspisR1.RawCutTranscriptRun.ErasedPrefix →
+                                AspisR1.RecordedBinaryExperimentBin.SourceInputs →
+                                  AspisR1.OraclePortCheckpointResumeC5.Context → Prop :=
+fun {W} finish v p a proof savedVec H stored publicBytes tx1p parsed trace semantic q tr i c =>
+  p.variant = AspisR1Stage2.transport.Variant.S2 ∧
+    ∃ alpha0 alpha1 alphas,
+      p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok alpha0 ∧
+        p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha1 ∧
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas ∧
+            ∃ r0 r1 weights pair dot,
+              finish.newWeights p.variant p.semantic_alpha p.z =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) ∧
+                finish.pair weights alphas v.final_message p.kappa =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pair) ∧
+                  finish.dot v.final_message a.weights.deref =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok dot) ∧
+                    r0.lhs = r0.rhs ∧
+                      r1.lhs = r1.rhs ∧
+                        pair = r1.value ∧
+                          dot = a.rhs ∧
+                            (AspisR1.SAF_ReducedLaws.Arithmetic (AspisR1.Port3_FinishStage.release finish) v p i.data →
+                              (∀ (j : Fin 22), AspisR1.MatchingSupport.match0 i.data (q j)) →
+                                AspisR1.R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                                    (AspisR1.OraclePortStoredDecisionDraftC4.typedRows
+                                      { wire := AspisR1.MultiproofConeCanonical.bytesOf ↑proof, semantic := semantic } q
+                                      tr)
+                                    i.data →
+                                  AspisR1.CheckpointBytes5Output.ofE dot =
+                                      ∑ l,
+                                        i.data.f l *
+                                          AspisR1.LiteralOpeningView.eK
+                                            ((AspisR1.CheckpointBytes5Output.accumulator a).weights l) →
+                                    AspisR1.AuS1_Finish.Collision H trace parsed q ∨
+                                      Decidable.decide
+                                            (AspisR1.Port3_NativeFinishBody.verifier.finish_relation
+                                                (AspisR1.Port4D_Round.native finish) v p a Option.none =
+                                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+                                          AspisR1.OraclePortFrozen2.finish
+                                            { wire := AspisR1.MultiproofConeCanonical.bytesOf ↑proof,
+                                              semantic := semantic }
+                                            q tr i (AspisR1.CheckpointBytes5Output.accumulator a) ∧
+                                        Decidable.decide
+                                              (AspisR1.Port4D_FinishInstall.finish finish v p a Option.none =
+                                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+                                            AspisR1.D0TypedChecks.verify
+                                              (AspisR1.OraclePortStoredDecisionDraftC4.typedRows
+                                                { wire := AspisR1.MultiproofConeCanonical.bytesOf ↑proof,
+                                                  semantic := semantic }
+                                                q tr)
+                                              i ∧
+                                          AspisR1.D0TypedChecks.verify
+                                              (AspisR1.OraclePortStoredDecisionDraftC4.typedRows
+                                                { wire := AspisR1.MultiproofConeCanonical.bytesOf ↑proof,
+                                                  semantic := semantic }
+                                                q tr)
+                                              i =
+                                            Bool.true)
+structure AspisR1.SAF_ReducedLaws.Arithmetic {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact) : Prop
+number of parameters: 5
+fields:
+  AspisR1.SAF_ReducedLaws.Arithmetic.round0 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE
+      v.round0 d.p0
+  AspisR1.SAF_ReducedLaws.Arithmetic.round1 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE
+      v.round1 d.p1
+  AspisR1.SAF_ReducedLaws.Arithmetic.pair : ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E)
+      (value : AspisR1Stage2.Stage2Finish.E),
+      ops.newWeights p.variant p.semantic_alpha p.z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+        Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+              p.alpha { «end» := 2#usize } =
+            Aeneas.Std.Result.ok alphas →
+          ops.pair weights alphas v.final_message p.kappa =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+            AspisR1.CheckpointBytes5Output.ofE value =
+              AspisR1.RoundPairing.dot d.f
+                (AspisR1.RoundPairing.dualFold d.alpha1
+                  (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))
+constructor:
+  AspisR1.SAF_ReducedLaws.Arithmetic.mk {W : Type} {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {v : AspisR1Stage2.verifier.View} {p : AspisR1Stage2.verifier.Prepared}
+    {d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact}
+    (round0 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE v.round0 d.p0)
+    (round1 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE v.round1 d.p1)
+    (pair :
+      ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+        ops.newWeights p.variant p.semantic_alpha p.z =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            ops.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+              AspisR1.CheckpointBytes5Output.ofE value =
+                AspisR1.RoundPairing.dot d.f
+                  (AspisR1.RoundPairing.dualFold d.alpha1
+                    (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))) :
+    AspisR1.SAF_ReducedLaws.Arithmetic ops v p d
+structure AspisR1.Port4D_Pairing.RoundLaws {F W : Type} [Field F] (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (decode : AspisR1Stage2.Stage2Finish.E → F) (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (poly : Polynomial F) : Prop
+number of parameters: 7
+fields:
+  AspisR1.Port4D_Pairing.RoundLaws.boundary : ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+      ops.field bytes 0#usize = Aeneas.Std.Result.ok c0 →
+        ops.field bytes 4#usize = Aeneas.Std.Result.ok c4 →
+          ops.add c0 c4 = Aeneas.Std.Result.ok lhs → decode lhs = AspisR1.TwoRoundComparison.boundary poly
+  AspisR1.Port4D_Pairing.RoundLaws.quarter : ∀ (m : AspisR1Stage2.Stage2Finish.M)
+      (claim rhs : AspisR1Stage2.Stage2Finish.E),
+      ops.quarter = Aeneas.Std.Result.ok m →
+        ops.mulM claim m = Aeneas.Std.Result.ok rhs → decode rhs = AspisR1.RoundPairing.quarter * decode claim
+  AspisR1.Port4D_Pairing.RoundLaws.eval : ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+      ops.polynomial bytes alpha = Aeneas.Std.Result.ok value → decode value = Polynomial.eval (decode alpha) poly
+constructor:
+  AspisR1.Port4D_Pairing.RoundLaws.mk {F W : Type} [Field F] {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {decode : AspisR1Stage2.Stage2Finish.E → F} {bytes : Aeneas.Std.Slice Aeneas.Std.U8} {poly : Polynomial F}
+    (boundary :
+      ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+        ops.field bytes 0#usize = Aeneas.Std.Result.ok c0 →
+          ops.field bytes 4#usize = Aeneas.Std.Result.ok c4 →
+            ops.add c0 c4 = Aeneas.Std.Result.ok lhs → decode lhs = AspisR1.TwoRoundComparison.boundary poly)
+    (quarter :
+      ∀ (m : AspisR1Stage2.Stage2Finish.M) (claim rhs : AspisR1Stage2.Stage2Finish.E),
+        ops.quarter = Aeneas.Std.Result.ok m →
+          ops.mulM claim m = Aeneas.Std.Result.ok rhs → decode rhs = AspisR1.RoundPairing.quarter * decode claim)
+    (eval :
+      ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+        ops.polynomial bytes alpha = Aeneas.Std.Result.ok value → decode value = Polynomial.eval (decode alpha) poly) :
+    AspisR1.Port4D_Pairing.RoundLaws ops decode bytes poly
+@AspisR1.FIn_ViewTransport.calls : ∀ {W C Hash : Type} (base : VTop_Stages.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps W) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+  (geo : AspisR1.Port3_NativeGeometryBody.Ops C) (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) (t : AspisR1.Cons_Native.Witness),
+  AspisR1.Cons_Native.Calls base finish reserved query geo D hash pub proof checkpoint t →
+    ∀ (v : AspisR1Stage2.verifier.View),
+      AspisR1.Port4D_FinishInstall.finish finish v t.p2
+            (have __src := t.returned2;
+            { weights := t.back2 t.flushed2, rhs := __src.rhs, power := __src.power, next := __src.next })
+            Option.none =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+        AspisR1.Cons_Native.Calls base finish reserved query geo D hash pub proof checkpoint
+          { p2 := t.p2, saved2 := t.saved2, g2 := t.g2, geometry2 := t.geometry2, pending2 := t.pending2,
+            returned2 := t.returned2, after2 := t.after2, flushed2 := t.flushed2, back2 := t.back2, v2 := v }
+@AspisR1.FIo_Derived.derive : ∀ {C Hash : Type} (r : AspisR1.NP6_StdModel.Reservation)
+  (seed : AspisR1Stage2.Stage2Finish.FinishOps AspisR1.FIo_Install.W) (base : VTop_Stages.Ops) (reserved : Bool)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops C)
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) (t : AspisR1.Cons_Native.Witness),
+  AspisR1.Cons_Native.Calls base (AspisR1.FIo_Install.finishOps r seed) reserved query geo D hash pub proof checkpoint
+      t →
+    AspisR1.Cons_NativeBuild.Aux reserved query geo D hash pub proof checkpoint t →
+      (↑t.saved2.weights).length = 64 →
+        ∀ (ops : VTop_Stages.Ops),
+          AspisR1.SAG_NativeFull.Shape ops proof t →
+            ops.op22 = Aeneas.Std.Result.ok 7527#usize →
+              ops.op15 = Aeneas.Std.Result.ok 7751#usize →
+                ops.op14 = Aeneas.Std.Result.ok 7783#usize →
+                  ops.op21 = Aeneas.Std.Result.ok 8007#usize →
+                    ops.op20 = Aeneas.Std.Result.ok 10055#usize →
+                      ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+                        (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+                        (data : AspisR1.MatchingSupport.Data AspisWideTower.WideExact),
+                        AspisR1.OraclePortStoredParserC4.parseReached (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)
+                              tr =
+                            Option.some parsed →
+                          AspisR1.LiteralMatchingData.read
+                                (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                              Option.some data →
+                            ∀
+                              (x :
+                                AspisR1.F3S_FinishWitness.Primitives (AspisR1.FIo_Install.finishOps r seed) t.v2 t.p2
+                                  (have __src := t.returned2;
+                                  { weights := t.back2 t.flushed2, rhs := __src.rhs, power := __src.power,
+                                    next := __src.next })),
+                              AspisR1.FIo_Derived.Holds (AspisR1.FIo_Install.finishOps r seed) t.v2 t.p2
+                                (have __src := t.returned2;
+                                { weights := t.back2 t.flushed2, rhs := __src.rhs, power := __src.power,
+                                  next := __src.next })
+                                x parsed q tr data
+def AspisR1.SAG_NativeFull.Shape : VTop_Stages.Ops →
+  Aeneas.Std.Slice Aeneas.Std.U8 → AspisR1.Cons_Native.Witness → Prop :=
+fun ops proof t =>
+  ∃ round0 folded round1 finalStart queryStart,
+    ops.op22 = Aeneas.Std.Result.ok round0 ∧
+      ops.op15 = Aeneas.Std.Result.ok folded ∧
+        ops.op14 = Aeneas.Std.Result.ok round1 ∧
+          ops.op21 = Aeneas.Std.Result.ok finalStart ∧
+            ops.op20 = Aeneas.Std.Result.ok queryStart ∧
+              Aeneas.Std.core.slice.index.Slice.index
+                    (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                    { start := round0, «end» := folded } =
+                  Aeneas.Std.Result.ok t.v2.round0 ∧
+                Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                      { start := round1, «end» := finalStart } =
+                    Aeneas.Std.Result.ok t.v2.round1 ∧
+                  Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                      { start := finalStart, «end» := queryStart } =
+                    Aeneas.Std.Result.ok t.v2.final_message
+'AspisR1.FIn_ViewTransport.calls' depends on axioms: [propext, Classical.choice, Quot.sound]

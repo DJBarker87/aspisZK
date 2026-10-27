@@ -1,0 +1,40 @@
+{"attempt": "JFu_003", "exit_status": 0, "wall_seconds": 2.378416632011067, "peak_rss_kib": "5584824", "swaps": "0", "print_axioms": []}
+"decoder accepts retained public1880"
+def AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1 : Slice U8 →
+  Result
+    (core.result.Result AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+      AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) :=
+fun bytes => do
+  let s ←
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+        { start := AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.HISTORICAL_ANCHOR_OFFSET,
+          «end» := AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.LATE_STATEMENT_OFFSET }
+  let r ← core.array.TryFromSharedArra
+...
+iltinFnOnce AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+        r AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.PaymentConstructor
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val =>
+      ok
+        (core.result.Result.Ok
+          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+            common val))
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+        (core.convert.FromSame
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+        residual
+inductive AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public : Type
+number of parameters: 0
+constructors:
+AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 →
+  AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 →
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public
+AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 →
+  AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 →
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public
+
+Running as unit: run-rd9fc5e1dd7744881a9aacfe442bf3035.scope; invocation ID: c13f94f3dfb2462aa592a8ca38395905

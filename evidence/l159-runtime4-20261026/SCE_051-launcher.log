@@ -1,0 +1,30 @@
+{"schema": "ProverRwNativeEntropy-reservation-v1", "utc": "2026-10-26T12:03:16.668197+00:00", "requested_bytes": 8589934592, "safe_limit_bytes": 59055800320, "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2", "print_axioms": "N/A: read-only resource gate", "allowed": true, "bounded_reserved_bytes": 36909875200, "projected_reserved_bytes": 45499809792}
+Running as unit: run-rab58f0ab43f64b7a96938e941bfff0c8.scope; invocation ID: 51e2198a4e6b4f2ca9c3dd9eca83b6cc
+{"attempt": "SCE_051", "exit_status": 1, "wall_seconds": 2.654548150021583, "peak_rss_kib": "5339700", "swaps": "0", "print_axioms": ["'AspisR1.SCE_ReplayTable.oracle_known_suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.SCE_ReplayTable.cut_append' depends on axioms: [propext]"]}
+SCE_ReplayTable.lean:15:91: error: unsolved goals
+H : Bytes → State
+prior suffix : List (Bytes × State)
+consistent : ∀ q ∈ prior ++ suffix, q.2 = H q.1
+known : ∀ a ∈ List.map Prod.fst suffix, a ∈ List.map Prod.fst prior
+a : Bytes
+before : ∀ q ∈ prior, q.2 = H q.1
+member : a ∈ List.map Prod.fst (prior ++ suffix) ↔ a ∈ List.map Prod.fst prior
+⊢ (if a ∈ List.map Prod.fst prior then some (H a) else none).getD default =
+    (if a ∈ List.map Prod.fst prior then some (H a) else none).getD default
+'AspisR1.SCE_ReplayTable.oracle_known_suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SCE_ReplayTable.cut_append' depends on axioms: [propext]
+
+...
+SCE_ReplayTable.lean:15:91: error: unsolved goals
+H : Bytes → State
+prior suffix : List (Bytes × State)
+consistent : ∀ q ∈ prior ++ suffix, q.2 = H q.1
+known : ∀ a ∈ List.map Prod.fst suffix, a ∈ List.map Prod.fst prior
+a : Bytes
+before : ∀ q ∈ prior, q.2 = H q.1
+member : a ∈ List.map Prod.fst (prior ++ suffix) ↔ a ∈ List.map Prod.fst prior
+⊢ (if a ∈ List.map Prod.fst prior then some (H a) else none).getD default =
+    (if a ∈ List.map Prod.fst prior then some (H a) else none).getD default
+'AspisR1.SCE_ReplayTable.oracle_known_suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SCE_ReplayTable.cut_append' depends on axioms: [propext]
+

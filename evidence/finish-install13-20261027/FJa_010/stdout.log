@@ -1,0 +1,57 @@
+FJa_SplitStep.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJa_ReverseStep.next iter
+in the target expression
+  (do
+      let (o, iter1) ←
+        core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter
+      match o with
+        | none => ok weights
+        | some index => do
+          let parent ← weights.index_usize index
+          let right ← field.PreparedQm31Multiplier.mul p parent
+          let q ← parent.sub right
+          let i ← 2#usize * index
+          let weights1 ← weights.update i q
+          let i1 ← i + 1#usize
+          let a ← weights1.update i1 right
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter1 a p) =
+    ok out
+
+N : Usize
+weights out : Std.Array NQ N
+p : NP
+c : NQ
+iter tail : FJa_ReverseStep.Rev
+index : Usize
+hc : Canon c
+hw : canonical weights
+hp : field.PreparedQm31Multiplier.new c = ok p
+hn : FJa_ReverseStep.next iter = ok (some index, tail)
+run :
+  (do
+      let (o, iter1) ←
+        core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter
+      match o with
+        | none => ok weights
+        | some index => do
+          let parent ← weights.index_usize index
+          let right ← field.PreparedQm31Multiplier.mul p parent
+          let q ← parent.sub right
+          let i ← 2#usize * index
+          let weights1 ← weights.update i q
+          let i1 ← i + 1#usize
+          let a ← weights1.update i1 right
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter1 a p) =
+    ok out
+⊢ ∃ parent right left i i1 middle afterWrite,
+    weights.index_usize index = ok parent ∧
+      field.PreparedQm31Multiplier.mul p parent = ok right ∧
+        field.QM31.sub parent right = ok left ∧
+          2#usize * index = ok i ∧
+            weights.update i left = ok middle ∧
+              i + 1#usize = ok i1 ∧
+                middle.update i1 right = ok afterWrite ∧
+                  canonical afterWrite ∧ decode left + decode right = decode parent ∧ Loop tail afterWrite p = ok out
+'AspisR1.FJa_SplitStep.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

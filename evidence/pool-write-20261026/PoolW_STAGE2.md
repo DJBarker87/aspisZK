@@ -1,0 +1,14 @@
+# PoolW stage 2: native copy/codec gates and symbolic zero exactness
+
+Native source obligations checked (not full AS8C reachability):
+- KANI012 passes the byte-identical F2183-2188 two-copy tail on arbitrary complete384/192 preimages and output images, arbitrary distinct public keys, initial unborrowed real SDK cells. Actual account-data bytes equal the two supplied images afterwards; keys/owners and lamports are unchanged. No stubs. Replaces the local native full-copy-output obligation in this input class, not a full same-execution P1 certificate.
+- KANI014/015/016/017 pass actual ASC8 encoder header/binding/reserved bytes, full encoder→decoder roundtrip, arbitrary accepted192-byte decoder→encoder canonicality, and every selected lane's sequence bytes. All checkpoint fields/bytes are arbitrary, no stubs. Explicit acceptance guards remain and no planner output is supplied as a theorem premise.
+- KANI009 actual zero guard rejects arbitrary193-byte image, preserving funds/data; KANI011 rejects every192-byte image with nonzero first byte, preserving funds/data.
+
+Lean L005/L007/L008 prove complete extracted P6 Boolean-loop exactness for arbitrary bounded slices, zero acceptance iff every byte zero, and rejection from ANY nonzero member. No192-byte normalization. L010 proves same-public-key two-copy output/other-account/full-metadata frame on a functional store. These store laws are a model of copying, not a source/history instance or bundling of lifecycle assumptions. All checked new top theorem audits contain only propext, Classical.choice, Quot.sound. Failed L003/004/006/009 snapshots remain excluded.
+
+Excluded native errors: KANI007/008/013 timed out on held SDK borrow contexts; no error/frame theorem is inferred. KANI018 arbitrary full planner/output check timed out at90s (90.99194363603601s,5429456KiB,swap0). This is not a source counterexample. Replacements must split the planner's guard/chronology/output shape. KANI001 timeout and002-006 compile errors remain excluded. Unchanged timed-out jobs were not rerun. No tool repair or cap increase.
+
+Receipts carry exact target, revision/source hashes, dependency fingerprint, command, exit, wall/RSS/swap and cgroup limits. Native copy:8.255234199983533s,328892KiB,swap0; encoder header:15.950584371981677s,532964KiB,swap0; roundtrip:14.026761442015413s,637472KiB,swap0; canonical decoder:13.337240378954448s,489456KiB,swap0; selected lane:4.860769826977048s,293692KiB,swap0. Formal source-to-release result is NOT claimed.
+
+No deployed premise/ledger row removed, no trust or runtime item added. Full accepted P1 prefix/child/copy composition, native metadata/decoder/PDA/System-CPI callees, ordered earlier errors/effects and same canonical-action association remain open. Source remains frozen; proof crates only, no shipped changes, no ELF rebuild trigger, no key actions. All inherited ELF pins unchanged.

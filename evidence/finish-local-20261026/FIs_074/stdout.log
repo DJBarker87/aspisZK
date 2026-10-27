@@ -1,0 +1,193 @@
+structure AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin (proof : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 1
+fields:
+  AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin.parsed : ∃ tr p,
+      AspisR1.OraclePortStoredParserC4.parseReached (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) tr = Option.some p
+constructor:
+  AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin.mk {proof : Aeneas.Std.Slice Aeneas.Std.U8}
+    (parsed :
+      ∃ tr p,
+        AspisR1.OraclePortStoredParserC4.parseReached (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) tr =
+          Option.some p) :
+    AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin proof
+theorem AspisR1.PFin_Attach.from_cut : ∀ {CoreError : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (stage : VTop_Stages.Ops) {F : Type} (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (f : AspisR1.S2W_NativeConsolidation.FirstCut) (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+  AspisR1.S2W_NativeConsolidation.SourceCuts
+      (AspisR1.SdkD_PairBatches.dictionary adapter ops stage finish reserved query geo B std) accounts1 accounts2 saved
+      f s →
+    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+          f.statement =
+        Aeneas.Std.Result.ok f.semantic →
+      ∀
+        (run :
+          AspisR1.Tx1Q_Execution.Run
+            (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current ops) reserved query geo B std) reserved query
+            geo (AspisR1.SdkD_PairBatches.current adapter ops stage finish reserved query geo B std) ()
+            (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved),
+        AspisR1.OraclePortHeader.accepts (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) = Bool.true →
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+            (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+            (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+            AspisR1.S2W_DigestExtraction.AeneasExtraction
+                (AspisR1.SdkD_PairBatches.dictionary adapter ops stage finish reserved query geo B std) native1 native2
+                hashv →
+              ∀ (sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                    ∀ (w : AspisR1.CanonicalCutEnrichedTranscript.Words),
+                      AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) →
+                        ∃ i p q source,
+                          i.physical.bytes = AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub ∧
+                            i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof ∧
+                              have tr :=
+                                AspisR1.LiteralTranscript.erasePrefix
+                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                      (AspisR1.F3J_SamplerRun.program i.proof 0 33
+                                        (FS.emptyPrefix i.semantic.value))).2;
+                              AspisR1.OraclePortStoredParserC4.parseReached
+                                    (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) tr =
+                                  Option.some p ∧
+                                AspisR1.OraclePortCompactDraft.Aligned p tr ∧
+                                  AspisR1.OraclePortSelectedDraft.queries tr = Option.some q ∧
+                                    AspisR1.OraclePortStoredDecisionDraftC4.input p q tr = Option.some source ∧
+                                      AspisR1.LiteralMatchingData.read
+                                            (AspisR1.OraclePortStoredDecisionDraftC4.typedRows p q tr) =
+                                          Option.some source.data ∧
+                                        AspisR1.LiteralQueryRead.decode source.queryBytes = Option.some q ∧
+                                          AspisR1.Port5Q1_QueryPorts.SessionAPrepare
+                                            (AspisR1.Tx1Q_Carriers.prepared run.p) source.data q
+                                            (AspisR1.SelectedChallengeMap.rhoOf source.rho) :=
+fun {CoreError} adapter ops reserved query geo stage {F} finish B std accounts1 accounts2 saved f s cuts selected run
+    header H native1 native2 hashv extraction sha256 p1 syscall w canonical =>
+  let a :=
+    AspisR1.Tx2I_Install.install adapter
+      (AspisR1.Op5T_Concrete.stage
+        (AspisR1.Tx2N_Execution.control (AspisR1.AuS1_Install.base stage) reserved query geo))
+      finish;
+  have inputCuts :=
+    Eq.mp
+      (congrFun'
+        (congrFun'
+          (congrFun'
+            (congrFun'
+              (congrFun'
+                (congrArg AspisR1.S2W_NativeConsolidation.SourceCuts
+                  (Eq.trans (AspisR1.AuS1_Install.dictionary adapter ops stage finish reserved query geo B std)
+                    (congrFun'
+                      (congrFun'
+                        (congrArg
+                          (AspisR1.ClaimsUnrolledSdk.sdkOps
+                            (AspisR1.Tx2I_Install.install adapter
+                              (AspisR1.Op5T_Concrete.stage
+                                (AspisR1.Tx2N_Execution.control (AspisR1.AuS1_Install.base stage) reserved query geo))
+                              finish))
+                          (AspisR1.Uni_Install.compose_tx1 ops reserved query geo))
+                        B)
+                      std)))
+                accounts1)
+              accounts2)
+            saved)
+          f)
+        s)
+      cuts;
+  have extracted :=
+    Eq.mp
+      (congrFun'
+        (congrFun'
+          (congrFun'
+            (congrArg AspisR1.S2W_DigestExtraction.AeneasExtraction
+              (Eq.trans (AspisR1.AuS1_Install.dictionary adapter ops stage finish reserved query geo B std)
+                (congrFun'
+                  (congrFun'
+                    (congrArg
+                      (AspisR1.ClaimsUnrolledSdk.sdkOps
+                        (AspisR1.Tx2I_Install.install adapter
+                          (AspisR1.Op5T_Concrete.stage
+                            (AspisR1.Tx2N_Execution.control (AspisR1.AuS1_Install.base stage) reserved query geo))
+                          finish))
+                      (AspisR1.Uni_Install.compose_tx1 ops reserved query geo))
+                    B)
+                  std)))
+            native1)
+          native2)
+        hashv)
+      extraction;
+  have backend :=
+    AspisR1.PAln_Oracle.installed_backend a (AspisR1.Op5T_Concrete.current ops) reserved query geo B std native1 native2
+      hashv extracted sha256 H p1 syscall;
+  let r :=
+    AspisR1.PFin_Digest.transport (AspisR1.PFin_Digest.same adapter ops stage finish reserved query geo B std) run;
+  have result :=
+    AspisR1.PFin_Prepared.from_cut a (AspisR1.Op5T_Concrete.current ops) reserved query geo B std accounts1 accounts2
+      saved f s inputCuts selected r header H backend w canonical;
+  id
+    (Eq.mp
+      (congrArg Exists
+        (funext fun i =>
+          congrArg Exists
+            (funext fun p =>
+              congrArg Exists
+                (funext fun q =>
+                  congrArg Exists
+                    (funext fun source =>
+                      congrArg (And (i.physical.bytes = AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub))
+                        (congrArg (And (i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof))
+                          (congrArg
+                            (And
+                              (AspisR1.OraclePortStoredParserC4.parseReached
+                                  (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof)
+                                  (AspisR1.LiteralTranscript.erasePrefix
+                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.F3J_SamplerRun.program i.proof 0 33
+                                          (FS.emptyPrefix i.semantic.value))).2) =
+                                Option.some p))
+                            (congrArg
+                              (And
+                                (AspisR1.OraclePortCompactDraft.Aligned p
+                                  (AspisR1.LiteralTranscript.erasePrefix
+                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.F3J_SamplerRun.program i.proof 0 33
+                                          (FS.emptyPrefix i.semantic.value))).2)))
+                              (congrArg
+                                (And
+                                  (AspisR1.OraclePortSelectedDraft.queries
+                                      (AspisR1.LiteralTranscript.erasePrefix
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.F3J_SamplerRun.program i.proof 0 33
+                                              (FS.emptyPrefix i.semantic.value))).2) =
+                                    Option.some q))
+                                (congrArg
+                                  (And
+                                    (AspisR1.OraclePortStoredDecisionDraftC4.input p q
+                                        (AspisR1.LiteralTranscript.erasePrefix
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.F3J_SamplerRun.program i.proof 0 33
+                                                (FS.emptyPrefix i.semantic.value))).2) =
+                                      Option.some source))
+                                  (congrArg
+                                    (And
+                                      (AspisR1.LiteralMatchingData.read
+                                          (AspisR1.OraclePortStoredDecisionDraftC4.typedRows p q
+                                            (AspisR1.LiteralTranscript.erasePrefix
+                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (AspisR1.F3J_SamplerRun.program i.proof 0 33
+                                                    (FS.emptyPrefix i.semantic.value))).2)) =
+                                        Option.some source.data))
+                                    (congrArg (And (AspisR1.LiteralQueryRead.decode source.queryBytes = Option.some q))
+                                      (congrFun'
+                                        (congrFun'
+                                          (congrFun'
+                                            (congrArg AspisR1.Port5Q1_QueryPorts.SessionAPrepare
+                                              (congrArg AspisR1.Tx1Q_Carriers.prepared
+                                                (AspisR1.PFin_Digest.prepared
+                                                  (AspisR1.PFin_Digest.same adapter ops stage finish reserved query geo
+                                                    B std)
+                                                  run)))
+                                            source.data)
+                                          q)
+                                        (AspisR1.SelectedChallengeMap.rhoOf source.rho))))))))))))))
+      result)

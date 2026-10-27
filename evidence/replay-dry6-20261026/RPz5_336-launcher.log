@@ -1,0 +1,44 @@
+{"attempt": "RPz5_336", "exit_status": 0, "wall_seconds": 2.048207730986178, "peak_rss_kib": "4408928", "swaps": "0", "print_axioms": ["'AspisR1.RowOrder_History.reindex' does not depend on any axioms", "'AspisR1.RowOrder_History.reindex_key' does not depend on any axioms", "'AspisR1.RowOrder_History.reindex_ledger' does not depend on any axioms", "'AspisR1.RowOrder_History.reindex_events' does not depend on any axioms", "'AspisR1.RowOrder_History.on_d189_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.RowOrder_History.reindex' does not depend on any axioms
+'AspisR1.RowOrder_History.reindex_key' does not depend on any axioms
+'AspisR1.RowOrder_History.reindex_ledger' does not depend on any axioms
+'AspisR1.RowOrder_History.reindex_events' does not depend on any axioms
+'AspisR1.RowOrder_History.on_d189_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.RowOrder_History.on_d189_cuts : ∀ {A : Type}
+  (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+  TrustedStd copy →
+    ∀ (allocator : Allocator A) (e1 e2 : Entry) (ops : AdapterRw.Ops) (native1 : S2W_ExtractionBoundary.First)
+      (native2 : S2W_ExtractionBoundary.Second) (hashv : S2Z.Ora
+...
+rg (fun _a => payloadBytes encode (_a.payload (e1.heap.accounts 2).1) 1768 = bytesOf ↑saved) written))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = bytesOf ↑saved)
+            (written_bytes encode e1.heap 2 0 0 (source (nativeBytes saved)) rfl rfl size)))
+        (have savedSize :=
+          Eq.mpr (id (congrFun' (congrArg Eq (List.length_map nativeByte)) 1768)) (writer.size saved cuts.first);
+        Eq.mpr
+          (id
+            (congrArg (fun _a => payloadBytes encode (source (nativeBytes saved)) _a = bytesOf ↑saved)
+              (Eq.symm savedSize)))
+          (Eq.mpr (id (congrArg (fun _a => _a = bytesOf ↑saved) (source_bytes encode (nativeBytes saved))))
+            (Eq.mpr (id (congrArg (fun _a => _a = bytesOf ↑saved) (vector_representation saved)))
+              (Eq.refl (bytesOf ↑saved))))));
+  let version :=
+    reindex (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) (bytesOf ↑saved) (bytesOf ↑s.checkpoint)
+      copied runtime;
+  let ⟨proof, right✝⟩ :=
+    authenticated_inputs ops decode H f.semantic f.pub f.proof s.pub s.proof s.checkpoint f.split saved cuts.first
+      cuts.second writer reader { history := version } p2prime
+  let ⟨pub, right✝¹⟩ := right✝
+  let ⟨checkpoint, length⟩ := right✝¹
+  Exists.intro version
+    ⟨reindex_key (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) (bytesOf ↑saved)
+        (bytesOf ↑s.checkpoint) copied runtime,
+      ⟨reindex_ledger (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) (bytesOf ↑saved)
+          (bytesOf ↑s.checkpoint) copied runtime,
+        ⟨reindex_events (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) (bytesOf ↑saved)
+            (bytesOf ↑s.checkpoint) copied runtime,
+          ⟨checkpoint, ⟨proof, ⟨pub, length⟩⟩⟩⟩⟩⟩
+
+Running as unit: run-rc91bf75f613541e99795f9e436d677ce.scope; invocation ID: 6ff4d94c46ff42e39cf51a6487017b21

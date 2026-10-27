@@ -1,0 +1,214 @@
+JFw_Row.lean:76:12: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input out : Slice U8
+row nextRow tag : U8
+size src dst : Usize
+bound : ↑row < 27
+next : ↑nextRow = ↑row + 1
+shape : r1_wire.row_shape row = ok (some (tag, size))
+sizeBound : ↑size ≤ 3712
+aligned : ↑size % 32 = 0
+inputBound : (↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ≤ input.length
+outBound : ↑dst + 5 + ↑size ≤ out.length
+smallInput : input.length ≤ 20000
+smallOut : out.length ≤ 20000
+i : Usize
+_✝¹⁹ : [> let i ← dst + 5#usize <]
+i_post : ↑i = ↑dst + 5
+x✝² : Slice U8 × (Slice U8 → Slice U8)
+_✝¹⁸ : [> let x✝² ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := dst, «end» := i } out <]
+_✝¹⁷ : ↑x✝².1 = List.slice ↑dst ↑i ↑out
+_✝¹⁶ : x✝².1.length = ↑i - ↑dst
+_✝¹⁵ : ∀ (s2 : Slice U8), x✝².2 s2 = out.setSlice! ↑dst ↑s2
+i1 : Usize
+_✝¹⁴ : [> let i1 ← src + 5#usize <]
+i1_post : ↑i1 = ↑src + 5
+s1 : Slice U8
+_✝¹³ : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := src, «end» := i1 } input <]
+s1_post1 : ↑s1 = List.slice ↑src ↑i1 ↑input
+s1_post2 : s1.length = ↑i1 - ↑src
+s2 : Slice U8
+_✝¹² : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x✝².1 s1 <]
+s2_post : s2 = s1
+h✝¹ : decide (row ≥ 14#u8) = true
+half : Usize
+_✝¹¹ : [> let half ← size / 2#usize <]
+half_post : ↑half = ↑size / 2
+sourceEnd : Usize
+_✝¹⁰ : [> let sourceEnd ← i1 + half <]
+sourceEnd_post : ↑sourceEnd = ↑i1 + ↑half
+payload : Slice U8
+_✝⁹ : [> let payload ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := i1, «end» := sourceEnd } input <]
+payload_post1 : ↑payload = List.slice ↑i1 ↑sourceEnd ↑input
+payload_post2 : payload.length = ↑sourceEnd - ↑i1
+destEnd : Usize
+_✝⁸ : [> let destEnd ← i + size <]
+destEnd_post : ↑destEnd = ↑i + ↑size
+x✝¹ : Slice U8 × (Slice U8 → Slice U8)
+_✝⁷ : [> let x✝¹ ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := i, «end» := destEnd } (x✝².2 s2) <]
+_✝⁶ : ↑x✝¹.1 = List.slice ↑i ↑destEnd ↑(x✝².2 s2)
+_✝⁵ : x✝¹.1.length = ↑destEnd - ↑i
+_✝⁴ : ∀ (s2_1 : Slice U8), x✝¹.2 s2_1 = (x✝².2 s2).setSlice! ↑i ↑s2_1
+x✝ : core.result.Result Unit AspisR1CurrentCaller.compact.CodecError × Slice U8
+_✝³ : [> let x✝ ← expandValues payload x✝¹.1 <]
+_✝² : x✝.1 = core.result.Result.Ok ()
+_✝¹ : x✝.2.length = x✝¹.1.length
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible AspisR1CurrentCaller.compact.CodecError)
+    Unit
+_✝ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch x✝.1 <]
+cf_post : core.result.Result.Insts.CoreOpsTry.branch x✝.1 = ok cf
+a✝ : Unit
+h✝ : cf = core.ops.control_flow.ControlFlow.Continue a✝
+sourceNext : Usize
+_ : [> let sourceNext ← i1 + half <]
+sourceNext_post : ↑sourceNext = ↑i1 + ↑half
+⊢ ∃ updated nextSrc nextDst,
+    cont (iter nextRow, x✝¹.2 x✝.2, sourceNext, destEnd) = cont (iter nextRow, updated, nextSrc, nextDst) ∧
+      updated.length = out.length ∧
+        (↑nextSrc = ↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ∧ ↑nextDst = ↑dst + 5 + ↑size
+JFw_Row.lean:76:12: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input out : Slice U8
+row nextRow tag : U8
+size src dst : Usize
+bound : ↑row < 27
+next : ↑nextRow = ↑row + 1
+shape : r1_wire.row_shape row = ok (some (tag, size))
+sizeBound : ↑size ≤ 3712
+aligned : ↑size % 32 = 0
+inputBound : (↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ≤ input.length
+outBound : ↑dst + 5 + ↑size ≤ out.length
+smallInput : input.length ≤ 20000
+smallOut : out.length ≤ 20000
+i : Usize
+_✝¹⁹ : [> let i ← dst + 5#usize <]
+i_post : ↑i = ↑dst + 5
+x✝⁴ : Slice U8 × (Slice U8 → Slice U8)
+_✝¹⁸ : [> let x✝⁴ ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := dst, «end» := i } out <]
+_✝¹⁷ : ↑x✝⁴.1 = List.slice ↑dst ↑i ↑out
+_✝¹⁶ : x✝⁴.1.length = ↑i - ↑dst
+_✝¹⁵ : ∀ (s2 : Slice U8), x✝⁴.2 s2 = out.setSlice! ↑dst ↑s2
+i1 : Usize
+_✝¹⁴ : [> let i1 ← src + 5#usize <]
+i1_post : ↑i1 = ↑src + 5
+s1 : Slice U8
+_✝¹³ : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := src, «end» := i1 } input <]
+s1_post1 : ↑s1 = List.slice ↑src ↑i1 ↑input
+s1_post2 : s1.length = ↑i1 - ↑src
+s2 : Slice U8
+_✝¹² : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x✝⁴.1 s1 <]
+s2_post : s2 = s1
+h✝¹ : decide (row ≥ 14#u8) = true
+half : Usize
+_✝¹¹ : [> let half ← size / 2#usize <]
+half_post : ↑half = ↑size / 2
+sourceEnd : Usize
+_✝¹⁰ : [> let sourceEnd ← i1 + half <]
+sourceEnd_post : ↑sourceEnd = ↑i1 + ↑half
+payload : Slice U8
+_✝⁹ : [> let payload ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := i1, «end» := sourceEnd } input <]
+payload_post1 : ↑payload = List.slice ↑i1 ↑sourceEnd ↑input
+payload_post2 : payload.length = ↑sourceEnd - ↑i1
+destEnd : Usize
+_✝⁸ : [> let destEnd ← i + size <]
+destEnd_post : ↑destEnd = ↑i + ↑size
+x✝³ : Slice U8 × (Slice U8 → Slice U8)
+_✝⁷ : [> let x✝³ ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := i, «end» := destEnd } (x✝⁴.2 s2) <]
+_✝⁶ : ↑x✝³.1 = List.slice ↑i ↑destEnd ↑(x✝⁴.2 s2)
+_✝⁵ : x✝³.1.length = ↑destEnd - ↑i
+_✝⁴ : ∀ (s2_1 : Slice U8), x✝³.2 s2_1 = (x✝⁴.2 s2).setSlice! ↑i ↑s2_1
+x✝² : core.result.Result Unit AspisR1CurrentCaller.compact.CodecError × Slice U8
+_✝³ : [> let x✝² ← expandValues payload x✝³.1 <]
+_✝² : x✝².1 = core.result.Result.Ok ()
+_✝¹ : x✝².2.length = x✝³.1.length
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible AspisR1CurrentCaller.compact.CodecError)
+    Unit
+_✝ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch x✝².1 <]
+cf_post : core.result.Result.Insts.CoreOpsTry.branch x✝².1 = ok cf
+residual : core.result.Result core.convert.Infallible AspisR1CurrentCaller.compact.CodecError
+h✝ : cf = core.ops.control_flow.ControlFlow.Break residual
+r : compact.CodecError
+_ :
+  [> let r ←
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+      (core.convert.FromSame compact.CodecError) residual <]
+x✝¹ : compact.CodecError
+x✝ : core.result.Result Unit compact.CodecError
+r_post1 : residual = core.result.Result.Err r
+r_post2 : r = x✝¹
+r_post3 : x✝ = core.result.Result.Err x✝¹
+⊢ ∃ updated nextSrc nextDst,
+    done (x✝, x✝³.2 x✝².2) = cont (iter nextRow, updated, nextSrc, nextDst) ∧
+      updated.length = out.length ∧
+        (↑nextSrc = ↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ∧ ↑nextDst = ↑dst + 5 + ↑size
+JFw_Row.lean:76:12: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input out : Slice U8
+row nextRow tag : U8
+size src dst : Usize
+bound : ↑row < 27
+next : ↑nextRow = ↑row + 1
+shape : r1_wire.row_shape row = ok (some (tag, size))
+sizeBound : ↑size ≤ 3712
+aligned : ↑size % 32 = 0
+inputBound : (↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ≤ input.length
+outBound : ↑dst + 5 + ↑size ≤ out.length
+smallInput : input.length ≤ 20000
+smallOut : out.length ≤ 20000
+i : Usize
+_✝¹⁴ : [> let i ← dst + 5#usize <]
+i_post : ↑i = ↑dst + 5
+x✝¹ : Slice U8 × (Slice U8 → Slice U8)
+_✝¹³ : [> let x✝¹ ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := dst, «end» := i } out <]
+_✝¹² : ↑x✝¹.1 = List.slice ↑dst ↑i ↑out
+_✝¹¹ : x✝¹.1.length = ↑i - ↑dst
+_✝¹⁰ : ∀ (s2 : Slice U8), x✝¹.2 s2 = out.setSlice! ↑dst ↑s2
+i1 : Usize
+_✝⁹ : [> let i1 ← src + 5#usize <]
+i1_post : ↑i1 = ↑src + 5
+s1 : Slice U8
+_✝⁸ : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := src, «end» := i1 } input <]
+s1_post1 : ↑s1 = List.slice ↑src ↑i1 ↑input
+s1_post2 : s1.length = ↑i1 - ↑src
+s2 : Slice U8
+_✝⁷ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x✝¹.1 s1 <]
+s2_post : s2 = s1
+h✝ : ¬decide (row ≥ 14#u8) = true
+destEnd : Usize
+_✝⁶ : [> let destEnd ← i + size <]
+destEnd_post : ↑destEnd = ↑i + ↑size
+x✝ : Slice U8 × (Slice U8 → Slice U8)
+_✝⁵ : [> let x✝ ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := i, «end» := destEnd } (x✝¹.2 s2) <]
+_✝⁴ : ↑x✝.1 = List.slice ↑i ↑destEnd ↑(x✝¹.2 s2)
+_✝³ : x✝.1.length = ↑destEnd - ↑i
+_✝² : ∀ (s2_1 : Slice U8), x✝.2 s2_1 = (x✝¹.2 s2).setSlice! ↑i ↑s2_1
+sourceEnd : Usize
+_✝¹ : [> let sourceEnd ← i1 + size <]
+sourceEnd_post : ↑sourceEnd = ↑i1 + ↑size
+payload : Slice U8
+_✝ : [> let payload ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := i1, «end» := sourceEnd } input <]
+payload_post1 : ↑payload = List.slice ↑i1 ↑sourceEnd ↑input
+payload_post2 : payload.length = ↑sourceEnd - ↑i1
+updated : Slice U8
+_ : [> let updated ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x✝.1 payload <]
+updated_post : updated = payload
+⊢ ∃ updated_1 nextSrc nextDst,
+    cont (iter nextRow, x✝.2 updated, sourceEnd, destEnd) = cont (iter nextRow, updated_1, nextSrc, nextDst) ∧
+      updated_1.length = out.length ∧
+        (↑nextSrc = ↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ∧ ↑nextDst = ↑dst + 5 + ↑size
+'AspisR1.JFw_Row.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFw_Row.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

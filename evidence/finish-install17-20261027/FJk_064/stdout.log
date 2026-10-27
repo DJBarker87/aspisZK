@@ -1,0 +1,69 @@
+FJk_CopyPowersValue.lean:16:26: error: Application type mismatch: The argument
+  ↑j
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.39
+of sort `Type (?u.39 + 1)` in the application
+  @PrincipalSeg ↑j
+FJk_CopyPowersValue.lean:16:33: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Sort ?u.40
+FJk_CopyPowersValue.lean:26:22: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+FJk_CopyPowersValue.lean:39:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case succ.run
+lambda : field.QM31
+out : Std.Array field.QM31 16#usize
+last : Usize
+hl : Canon lambda
+prior : Fin 16 → PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+n : ℕ
+ih :
+  ∀ (i : Usize) (power : field.QM31) (a : Std.Array field.QM31 16#usize),
+    ↑i + n = 16 →
+      Canon power →
+        canonical a →
+          decode power = decode lambda ^ (↑i + 1) →
+            pattern_values_literal_loop0 lambda a power i = ok (out, last) →
+              canonical out ∧ last = 16#usize ∧ decoded out = fun j => decode lambda ^ (↑j + 1)
+i : Usize
+power : field.QM31
+a : Std.Array field.QM31 16#usize
+span : ↑i + (n + 1) = 16
+hp : Canon power
+ha : canonical a
+powerValue : decode power = decode lambda ^ (↑i + 1)
+run✝¹ :
+  (do
+      let a ← a.update i power
+      let power1 ← power.mul lambda
+      let limb1 ← i + 1#usize
+      pattern_values_literal_loop0 lambda a power1 limb1) =
+    ok (out, last)
+active : i < 16#usize
+a' : Std.Array field.QM31 16#usize
+ra : a.update i power = ok a'
+run✝ :
+  (do
+      let power1 ← power.mul lambda
+      let limb1 ← i + 1#usize
+      pattern_values_literal_loop0 lambda a' power1 limb1) =
+    ok (out, last)
+power' : field.QM31
+rp : power.mul lambda = ok power'
+run :
+  (do
+      let limb1 ← i + 1#usize
+      pattern_values_literal_loop0 lambda a' power' limb1) =
+    ok (out, last)
+i' : UScalar UScalarTy.Usize
+ri : i + 1#usize = ok i'
+tail : pattern_values_literal_loop0 lambda a' power' i' = ok (out, last)
+hi : ↑i < ↑16#usize
+av : canonical a' ∧ decoded a' = Function.update (decoded a) ⟨↑i, hi⟩ (decode power)
+pv : Canon power' ∧ decode power' = decode power * decode lambda
+inc : ↑i' = ↑i + 1
+⊢ pattern_values_literal_loop0 lambda a' power' i' = ok (out, last)
+FJk_CopyPowersValue.lean:46:4: error: No goals to be solved
+'AspisR1.FJk_CopyPowersValue.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

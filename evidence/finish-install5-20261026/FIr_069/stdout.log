@@ -1,0 +1,27 @@
+FIr_BuilderCanonical.lean:17:11: error: unsolved goals
+T C : Type
+f : core.ops.function.FnMut C Usize T
+Inv : C → Prop
+Good : T → Prop
+step : ∀ (c : C) (i : Usize) (x : T) (c' : C), Inv c → f.call_mut c i = ok (x, c') → Good x ∧ Inv c'
+c : C
+initial : Inv c
+⊢ ∀ (x : T), True
+FIr_BuilderCanonical.lean:17:56: warning: This simp argument is unused:
+  forall_const
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵n̵o̵t̵_̵m̵e̵m̵_̵n̵i̵l̵,̵f̵a̵l̵s̵e̵_̵i̵m̵p̵l̵i̵e̵s̵,̵f̵o̵r̵a̵l̵l̵_̵c̵o̵n̵s̵t̵]̵[̲L̲i̲s̲t̲.̲n̲o̲t̲_̲m̲e̲m̲_̲n̲i̲l̲,̲ ̲f̲a̲l̲s̲e̲_̲i̲m̲p̲l̲i̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIr_BuilderCanonical.lean:40:31: error: Application type mismatch: The argument
+  run
+has type
+  (if h : xs✝.length = ↑n then ok ⟨xs✝, h⟩ else fail Error.panic) = ok out
+but is expected to have type
+  ok ?m.82 = ok ?m.83
+in the application
+  ok.inj run
+FIr_BuilderCanonical.lean:44:2: error: No goals to be solved
+'AspisR1.FIr_BuilderCanonical.loop' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.FIr_BuilderCanonical.fromFn' depends on axioms: [propext, sorryAx]

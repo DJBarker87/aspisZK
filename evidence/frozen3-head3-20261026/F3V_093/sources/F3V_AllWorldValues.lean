@@ -1,0 +1,43 @@
+import F3V_ModelAcceptance
+import F3V_AllWorldRuns
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.F3V_AllWorldValues
+open Aeneas Aeneas.Std Result MultiproofConeCanonical
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw
+open DrvC_Installation F3T_ByteCarrier F3V_RunEvidence
+
+theorem accepted {F C : Type} (base : Configuration F C)
+    (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (s : Submission) (H : Bytes → State)
+    (w : CanonicalCutEnrichedTranscript.Words) (prior : Program Bytes State Unit) :
+    let c := F3V_Install.configuration base
+    ∀ (owner : WAdm_Domain.SessionAPrepare
+      (Tx1Q_Execution.actual (Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry c.boundaries c.std))
+    (decoder : LiteralByteProtocol.Decoder)
+    (ports : Port5Q1_QueryPorts.SessionAPrimitives c.query)
+    (canonical : Port5Q1_GeometryCanonical.SessionAPrimitives c.geometry)
+    (domain : Port5Q1_Domain.SessionADomain c.geometry)
+    (multiply : c.geometry.op9=AspisR1Qm31ArithmeticProbe.field.M31.mul)
+    (one : c.geometry.op7=ok (1#u32)) (inverse : c.geometry.op11=Port4C_InverseExecution.inverse_owned),
+    (eval H (F3T_Installed.source c hashv (input c s))).2=true →
+    ∃ e : Evidence c base.boundaries s H,
+    ∃ (i : F3_Model.Input) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+      (data : RecordedBinaryExperimentBin.SourceInputs) (t : Cons_Native.Witness),
+      let tr := LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2
+      i.physical.bytes=bytesOf e.pub.val ∧ i.stored=bytesOf e.proof.val ∧
+      OraclePortStoredParserC4.parseReached i.stored tr=some p ∧
+      OraclePortSelectedDraft.queries tr=some q ∧ OraclePortStoredDecisionDraftC4.input p q tr=some data ∧
+      Cons_Native.Calls (Op5T_Concrete.stage (AuS1_Install.base c.stageBase)) c.finish c.reserved c.query c.geometry
+        (D2 c H) () e.pub e.proof e.saved.deref t ∧
+      (AuS1_Finish.Collision H (F3V_Checkpoint.trace c base.boundaries s H e prior) p q ∨
+        F3S_AcceptanceValues.Values c.finish t.v2 t.p2 {t.returned2 with weights:=t.back2 t.flushed2}
+          H (F3V_Checkpoint.trace c base.boundaries s H e prior) p q tr data decoder i) := by
+  dsimp only
+  intro owner decoder ports canonical domain multiply one inverse success
+  obtain ⟨e⟩ := F3V_AllWorldRuns.accepted base hashv s H decoder w success
+  exact ⟨e,F3V_ModelAcceptance.values _ base.boundaries s H e prior owner decoder ports canonical domain multiply one inverse⟩
+
+#print axioms accepted
+end AspisR1.F3V_AllWorldValues
+end

@@ -1,0 +1,43 @@
+{
+  "attempt": "CPP_K003",
+  "kind": "kani",
+  "source_revision": "3a1ef68f3c508b463c23bd78a131aa3057b8b4d6",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/CPP_guard/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/CPP_kani_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "CPP_checkpoint_guard_length_error",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "CPP_guard/Cargo.toml",
+    "CPP_guard/CPP_lib.rs",
+    "CPP_guard/CPP_SOURCE_MAP.json",
+    "CPP_guard/Cargo.lock"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Verbatim local verifier helper CPP_checkpoint_guard_length_error; existing resolved proof Cargo.lock checked before and after, offline Kani CLI has no --locked flag. No enclosing wrapper/native/SBF/history claim."
+  },
+  "expected_time": "Optimized compile, then named native CP metadata guard symbolic check; no dense elimination or proof generation."
+}

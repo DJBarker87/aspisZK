@@ -1,0 +1,30 @@
+JFs_TX2_CanonicalReduce.lean:15:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  j ≥ 0
+  i ≥ 0
+  i + j ≥ 2147483652
+  0 ≤ h ≤ 10737418238
+  g ≥ 0
+  f ≥ 0
+  -2147483647 ≤ 2147483648*f - g ≤ 0
+  0 ≤ e ≤ 2147483647
+where
+ e := ↑↑(FIo_ReduceBounds.fold x &&& 2147483647#u64)
+ f := ↑↑(FIo_ReduceBounds.fold x) / 2147483648
+ g := ↑↑(FIo_ReduceBounds.fold x)
+ h := ↑↑((x &&& 2147483647#u64).wrapping_add (x.wrapping_shr 31#u32))
+ i := ↑↑((x &&& 2147483647#u64).wrapping_add (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+ j := ↑↑(U64.wrapping_shr ((x &&& 2147483647#u64).wrapping_add (x.wrapping_shr 31#u32)) 31#u32)
+JFs_TX2_CanonicalReduce.lean:27:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+x : U64
+small : ↑(FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)) ≤ 2147483651
+h : FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x) ≥ 2147483647#u64
+⊢ ↑(UScalar.cast UScalarTy.U32 ((FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)).wrapping_sub 2147483647#u64)) <
+    2147483647
+'AspisR1.JFs_TX2_CanonicalReduce.twice_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_CanonicalReduce.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

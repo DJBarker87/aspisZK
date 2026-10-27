@@ -1,0 +1,54 @@
+FIx_PreweightedModel.lean:26:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (old j + if _a then FIx_PreweightedGroup.increment a start ↑j else 0) =
+      old j + if group ≤ ↑j ∧ ↑j < group + (n + 1) then FIx_PreweightedGroup.increment a start ↑j else 0
+Error: Application type mismatch: The argument
+  instDecidableAnd
+has type
+  Decidable (group + 1 ≤ ↑j ∧ ↑j < group + 1 + n)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite K _a instDecidableAnd
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case neg
+N : Usize
+a : Std.Array NQ N
+start : ℕ
+j : Fin ↑24#usize
+n : ℕ
+ih :
+  ∀ (group : ℕ) (old : Fin ↑24#usize → K),
+    FIx_PreweightedLoop.model a start n group old j =
+      old j + if group ≤ ↑j ∧ ↑j < group + n then FIx_PreweightedGroup.increment a start ↑j else 0
+group : ℕ
+old : Fin ↑24#usize → K
+he : ¬↑j = group
+h : group + 1 ≤ ↑j ∧ ↑j < group + 1 + n ↔ group ≤ ↑j ∧ ↑j < group + (n + 1)
+⊢ (old j + if group + 1 ≤ ↑j ∧ ↑j < group + 1 + n then FIx_PreweightedGroup.increment a start ↑j else 0) =
+    old j + if group ≤ ↑j ∧ ↑j < group + (n + 1) then FIx_PreweightedGroup.increment a start ↑j else 0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (24 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FIx_PreweightedModel.lean:15:41: warning: This simp argument is unused:
+  Nat.add_zero
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵F̵I̵x̵_̵P̵r̵e̵w̵e̵i̵g̵h̵t̵e̵d̵L̵o̵o̵p̵.̵m̵o̵d̵e̵l̵,̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵i̵f̵_̵n̵e̵g̵ ̵(̵s̵h̵o̵w̵ ̵¬̵(̵g̵r̵o̵u̵p̵≤̵j̵.̵v̵a̵l̵ ̵∧̵ ̵j̵.̵v̵a̵l̵<̵g̵r̵o̵u̵p̵)̵ ̵b̵y̵ ̵o̵m̵e̵g̵a̵)̵,̵a̵d̵d̵_̵z̵e̵r̵o̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲F̲I̲x̲_̲P̲r̲e̲w̲e̲i̲g̲h̲t̲e̲d̲L̲o̲o̲p̲.̲m̲o̲d̲e̲l̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲(̲s̲h̲o̲w̲ ̲¬̲(̲g̲r̲o̲u̲p̲ ̲≤̲ ̲j̲.̲v̲a̲l̲ ̲∧̲ ̲j̲.̲v̲a̲l̲ ̲<̲ ̲g̲r̲o̲u̲p̲)̲ ̲b̲y̲ ̲o̲m̲e̲g̲a̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲d̲d̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIx_PreweightedModel.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

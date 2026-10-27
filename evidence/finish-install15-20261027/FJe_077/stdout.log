@@ -1,0 +1,61 @@
+FJe_Sum3ChannelBridge.lean:32:4: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+case succ
+a : Left
+i : Usize
+r : Components
+c : Usize
+n : ℕ
+ih : ∀ (iter : Range) (s : Sums), ↑iter.start + n = ↑iter.end → native iter a s i r c = old iter (left a) s i r c
+iter : Range
+s : Sums
+span : ↑iter.start + (n + 1) = ↑iter.end
+iter1 : OccupancyRangeTraversal.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+sp : ↑iter1.start + n = ↑iter1.end
+rest :
+  ∀ (s : Sums),
+    FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0 iter1 a s i r c =
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0 iter1
+        (FJb_ArrayTransport.array prepared a) s i r c
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok s
+    | some channel => do
+      let pqm ← Array.index_usize a i
+      let a_1 ← pqm.components.index_usize c
+      let m ← a_1.index_usize channel
+      let i_1 ← lift (UScalar.cast UScalarTy.U64 m)
+      let a1 ← Array.index_usize r c
+      let m1 ← a1.index_usize channel
+      let i1 ← lift (UScalar.cast UScalarTy.U64 m1)
+      let i2 ← i_1 * i1
+      let a2 ← Array.index_usize s c
+      let i3 ← a2.index_usize channel
+      let i4 ← i3 + i2
+      let (a3, index_mut_back) ← Array.index_mut_usize s c
+      let a4 ← a3.update channel i4
+      FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0 iter1 a (index_mut_back a4) i r c) =
+    do
+    let x ← Array.index_usize a i
+    let a_1 ← x.components.index_usize c
+    let m ← a_1.index_usize iter.start
+    let i_1 ← lift (UScalar.cast UScalarTy.U64 m)
+    let a1 ← Array.index_usize r c
+    let m1 ← a1.index_usize iter.start
+    let i1 ← lift (UScalar.cast UScalarTy.U64 m1)
+    let i2 ← i_1 * i1
+    let a2 ← Array.index_usize s c
+    let i3 ← a2.index_usize iter.start
+    let i4 ← i3 + i2
+    let __x ← Array.index_mut_usize s c
+    let a4 ← __x.1.update iter.start i4
+    AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0 iter1
+        (FJb_ArrayTransport.array prepared a) (__x.2 a4) i r c
+'AspisR1.FJe_Sum3ChannelBridge.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,38 @@
+{"attempt": "SCJ_023", "exit_status": 0, "wall_seconds": 2.17494167300174, "peak_rss_kib": "5427928", "swaps": "0", "print_axioms": ["'AspisR1.SCE_SecondCutBytes.checkpoint' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_NativeLoaded.ideal_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+theorem AspisR1.SCJ_NativeLoaded.loaded : ∀ {Tx A F C : Type} (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (actions : List (AspisR1.CPP_BankState.Action A)) (c : AspisR1.DrvC_Installation.Configuration F C),
+  @Eq (AdapterRw.solana_pubkey.Pubkey → AdapterRw.solana_pubkey.Pubkey → Aeneas.Std.Result Bool)
+      (@AspisR1.DrvC_Installation.sdk F C c).op36 AspisR1.Hist_Authority.keyEq →
+    ∀ (n1 : AspisR1.S2W_ExtractionBoundary.First) (n2 : AspisR1.S2W_ExtractionBoundary.Second)
+      (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+      AspisR1.S2W_DigestExt
+...
+ s cuts =>
+  @Eq.trans AspisV8R19.DuplexFrames.Bytes
+    (AspisR1.MultiproofConeCanonical.bytesOf
+      (@Subtype.val (List Aeneas.Std.U8)
+        (fun l => @LE.le Nat instLENat (@List.length Aeneas.Std.U8 l) Aeneas.Std.Usize.max) s.checkpoint))
+    (AspisR1.MultiproofConeCanonical.bytesOf
+      (@Subtype.val (List Aeneas.Std.U8)
+        (fun l => @LE.le Nat instLENat (@List.length Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+        (e2.buffers (@Prod.fst Nat Nat (e2.handles (@OfNat.ofNat Nat (nat_lit 6) (instOfNatNat (nat_lit 6))))))))
+    (AspisR1.MultiproofConeCanonical.bytesOf
+      (@Subtype.val (List Aeneas.Std.U8)
+        (fun l => @LE.le Nat instLENat (@List.length Aeneas.Std.U8 l) Aeneas.Std.Usize.max) saved))
+    (AspisR1.SCE_SecondCutBytes.checkpoint e2 ideal e1.first saved f s cuts)
+    (@AspisR1.SCJ_NativeLoaded.loaded Tx A F C p t u e1 e2 saved actions c keyLaw n1 n2 hashv extraction copy std
+      allocator id system notSystem game data1 data2 slot state1 state2 final1 final2 post1 post2 accepted1 accepted2
+      (sorryAx
+        (∀ (tag : Unit),
+          @AspisR1.CPR_DataPersistence.TwoTransactionLaw Tx Nat (@AspisR1.CPG_Projection.adjacent Tx A p)
+            (@AspisR1.CPG_Projection.ordinary Tx A p system) (@AspisR1.CPG_Projection.before Tx A p)
+            (@AspisR1.CPG_Projection.tentative Tx A p) (@AspisR1.CPG_Projection.success Tx A p)
+            (@AspisR1.CPG_Projection.loaded Tx A p))
+        true
+        (@Function.const Unit Lean.Name Unit.unit
+          `SCJ_NativeLoaded.65.54.65.72.54.72._sorry._@.SCJ_NativeLoaded.2643399122._hygCtx._hyg.252)))
+'AspisR1.SCE_SecondCutBytes.checkpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCJ_NativeLoaded.ideal_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0ae5e38136df44cba6a3dd28b15d2280.scope; invocation ID: b0112bd260b54b77a7ee644f2da111d4

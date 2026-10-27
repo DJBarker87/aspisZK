@@ -1,0 +1,34 @@
+F3P_CircleCell.lean:14:35: error: unsolved goals
+row : Fin 2
+frame : Bytes
+values : CircleRecordCodec.Payload row
+h : CircleRecordCodec.decode row frame = some values
+j : Fin (CircleRecordCodec.count row)
+raw : Bytes
+parsed : RecordFrameCodec.parse (CircleRecordCodec.tag row) (CircleRecordCodec.count row * 32) frame = some raw
+read : SelectedFieldSequenceCodec.decodeLow (CircleRecordCodec.count row) raw = some values
+payload : frame = RecordFrameCodec.frame (CircleRecordCodec.tag row) raw
+length : List.length raw = CircleRecordCodec.count row * 32
+⊢ List.drop 4 (PublicInitFrame.lengthBytes (List.length raw) ++ raw) = raw
+F3P_CircleCell.lean:16:62: warning: This simp argument is unused:
+  List.length_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵R̵e̵c̵o̵r̵d̵F̵r̵a̵m̵e̵C̵o̵d̵e̵c̵.̵f̵r̵a̵m̵e̵,̵R̵e̵c̵o̵r̵d̵F̵r̵a̵m̵e̵C̵o̵d̵e̵c̵.̵h̵e̵a̵d̵e̵r̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵a̵n̵g̵e̵]̵[̲R̲e̲c̲o̲r̲d̲F̲r̲a̲m̲e̲C̲o̲d̲e̲c̲.̲f̲r̲a̲m̲e̲,̲ ̲R̲e̲c̲o̲r̲d̲F̲r̲a̲m̲e̲C̲o̲d̲e̲c̲.̲h̲e̲a̲d̲e̲r̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲r̲a̲n̲g̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3P_CircleCell.lean:16:79: warning: This simp argument is unused:
+  List.length_map
+
+Hint: Omit it from the simp argument list.
+  simp only [RecordFrameCodec.frame, ̲RecordFrameCodec.header, ̲List.length_cons, ̲List.length_m̵a̵p̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵range]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3P_CircleCell.lean:16:95: warning: This simp argument is unused:
+  List.length_range
+
+Hint: Omit it from the simp argument list.
+  simp only [̵R̵e̵c̵o̵r̵d̵F̵r̵a̵m̵e̵C̵o̵d̵e̵c̵.̵f̵r̵a̵m̵e̵,̵R̵e̵c̵o̵r̵d̵F̵r̵a̵m̵e̵C̵o̵d̵e̵c̵.̵h̵e̵a̵d̵e̵r̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵a̵n̵g̵e̵]̵[̲R̲e̲c̲o̲r̲d̲F̲r̲a̲m̲e̲C̲o̲d̲e̲c̲.̲f̲r̲a̲m̲e̲,̲ ̲R̲e̲c̲o̲r̲d̲F̲r̲a̲m̲e̲C̲o̲d̲e̲c̲.̲h̲e̲a̲d̲e̲r̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3P_CircleCell.decoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

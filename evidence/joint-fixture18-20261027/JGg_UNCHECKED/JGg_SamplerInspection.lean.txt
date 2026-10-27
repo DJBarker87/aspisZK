@@ -1,0 +1,12 @@
+import S1ClosedPreparationHashCodeV1
+import GammaCandidateTotalityV14
+import JGe_JoinedFixture
+set_option autoImplicit false
+#print AspisR1Post25SamplerPreparedCarrier.ordinary_sample_success_CE_coordinate_bounds
+#print AspisR1Post25Transcript.GammaCandidateSourceModel.candidate_gamma_total
+#print AspisR1PublicPreparation.sampler.qm31_sample
+#print AspisR1PublicPreparation.PreparedFromQmSourceBridge.sourceFromQm
+#print AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries
+#print AspisR1ClaimPreparedBridge.powersPublic
+#print AspisR1ClaimPreparedBridge.claimPublic
+#print AspisR1QueryScanUnrolled.r0_transcript.block_rank_word_from_le_bytes

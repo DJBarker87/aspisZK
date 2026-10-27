@@ -1,0 +1,80 @@
+F3L_OpeningFields.lean:34:2: error: unsolved goals
+case row31
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+v : verifier.View
+p : Parsed
+c : F3K_OpeningCalls.Calls D B embed v p
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+P : LiteralTranscript.Prefix
+length : P.rounds.length = 27
+data : MatchingSupport.Data LiteralTranscript.E
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState c.t0.state
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p root w bound
+Q : LiteralTranscript.Prefix := (eval H (F3J_SamplerRun.program pf 27 6 P)).2
+decoded : R0P.Public SemanticPublicWire.M31
+decodedPublic : SemanticPublicWire.parsePublic P.statement.pubBytes = some decoded
+entries :
+  have pf := F3J_InputRows.proof p root w bound;
+  have Q := (eval H (F3J_SamplerRun.program pf 27 6 P)).2;
+  Q.rounds[31]? =
+      some
+        (pf 31, TranscriptView.Value.queries (Except.ok (List.map (fun x => ↑x) ↑c.queries)), decodeState c.t5.state) ∧
+    Q.rounds[32]? =
+      some
+        (pf 32, TranscriptView.Value.ordinary (LiteralOpeningView.eK (F3L_RhoMeaning.decode c.rho)),
+          decodeState c.t6.state)
+⊢ some
+      (LiteralTranscript.erase (F3J_InputRows.proof p root w bound 31),
+        TranscriptView.Value.queries (Except.ok (List.map (fun x => ↑x) ↑c.queries)), decodeState c.t5.state) =
+    some
+      (LiteralTranscript.erase (pf 31), TranscriptView.Value.queries (Except.ok (List.map (fun x => ↑x) ↑c.queries)),
+        decodeState c.t5.state)
+F3L_OpeningFields.lean:35:2: error: unsolved goals
+case row32
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+v : verifier.View
+p : Parsed
+c : F3K_OpeningCalls.Calls D B embed v p
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+P : LiteralTranscript.Prefix
+length : P.rounds.length = 27
+data : MatchingSupport.Data LiteralTranscript.E
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState c.t0.state
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p root w bound
+Q : LiteralTranscript.Prefix := (eval H (F3J_SamplerRun.program pf 27 6 P)).2
+decoded : R0P.Public SemanticPublicWire.M31
+decodedPublic : SemanticPublicWire.parsePublic P.statement.pubBytes = some decoded
+entries :
+  have pf := F3J_InputRows.proof p root w bound;
+  have Q := (eval H (F3J_SamplerRun.program pf 27 6 P)).2;
+  Q.rounds[31]? =
+      some
+        (pf 31, TranscriptView.Value.queries (Except.ok (List.map (fun x => ↑x) ↑c.queries)), decodeState c.t5.state) ∧
+    Q.rounds[32]? =
+      some
+        (pf 32, TranscriptView.Value.ordinary (LiteralOpeningView.eK (F3L_RhoMeaning.decode c.rho)),
+          decodeState c.t6.state)
+⊢ some
+      (LiteralTranscript.erase (F3J_InputRows.proof p root w bound 32),
+        TranscriptView.Value.ordinary (LiteralOpeningView.eK (F3L_RhoMeaning.decode c.rho)), decodeState c.t6.state) =
+    some
+      (LiteralTranscript.erase (pf 32),
+        TranscriptView.Value.ordinary (LiteralOpeningView.eK (F3L_RhoMeaning.decode c.rho)), decodeState c.t6.state)
+F3L_OpeningFields.lean:12:8: error: (kernel) excessive memory consumption detected
+'AspisR1.F3L_OpeningFields.fields' depends on axioms: [propext, Classical.choice, Quot.sound, fields]

@@ -1,0 +1,53 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling pooll-leaf v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolL_leaf)
+warning: use of deprecated module `solana_program::system_program`: Use `solana_sdk_ids::system_program` instead
+ --> PoolL_lib.rs:1:117
+  |
+1 | use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError,entrypoint::ProgramResult,system_program};
+  |                                                                                                                     ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+error[E0382]: use of moved value: `r`
+   --> PoolL_lib.rs:183:10
+    |
+178 |  let r=plan_fresh_program_pda(&a,&id,&expected,width);
+    |      - move occurs because `r` has type `std::result::Result<FreshPdaPreparationV1, solana_program::program_error::ProgramError>`, which does not implement the `Copy` trait
+...
+181 |  assert_eq!(r.err(),projected.err());
+    |             - ----- `r` moved due to this method call
+    |             |
+    |             help: consider calling `.as_ref()` or `.as_mut()` to borrow the type's contents
+182 |  drop(borrowed);
+183 |  assert!(matches!(r,Err(ProgramError::Custom(0x41532035))));
+    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ value used here after move
+    |
+    = note: this error originates in the macro `matches` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: you can `clone` the value and consume it, but this might not be your desired behavior
+    |
+181 |  assert_eq!(r.clone().err(),projected.err());
+    |              ++++++++
+
+error[E0382]: use of moved value: `r`
+   --> PoolL_lib.rs:202:10
+    |
+197 |  let r=plan_fresh_program_pda(&a,&id,&expected,width);
+    |      - move occurs because `r` has type `std::result::Result<FreshPdaPreparationV1, solana_program::program_error::ProgramError>`, which does not implement the `Copy` trait
+...
+200 |  assert_eq!(r.err(),projected.err());
+    |             - ----- `r` moved due to this method call
+    |             |
+    |             help: consider calling `.as_ref()` or `.as_mut()` to borrow the type's contents
+201 |  drop(borrowed);
+202 |  assert!(matches!(r,Err(ProgramError::Custom(0x41532035))));
+    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ value used here after move
+    |
+    = note: this error originates in the macro `matches` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: you can `clone` the value and consume it, but this might not be your desired behavior
+    |
+200 |  assert_eq!(r.clone().err(),projected.err());
+    |              ++++++++
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `pooll-leaf` (lib) due to 2 previous errors; 1 warning emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.

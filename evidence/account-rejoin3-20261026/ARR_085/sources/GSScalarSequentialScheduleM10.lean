@@ -1,0 +1,154 @@
+import GSScalarCallScheduleM10
+import CompPolyGeneralRootsProgram
+
+/-! The factorizer is called through a sequential fresh-tape interpreter in
+the maintained RR program. This mirror records the actual retry operands at
+that cursor, rather than reusing the heap-node-addressed tape by mistake. -/
+set_option autoImplicit false
+namespace AspisR1.GSScalarSequentialScheduleM10
+open CompPoly GSScalarCallScheduleM10
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open SequentialFreshProgram SequentialProgramInvariants
+open CompPolyFactorOracleProgram CompPolySplitRetries
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K]
+
+def factor (q t : Nat) (H : Nat → Fin t → K × K) :
+    Nat → Nat → Nat → CPolynomial K →
+      (Option (List K) × Nat) × List (Call K)
+  | 0, _, cursor, _ => ((none,cursor), [])
+  | fuel+1, node, cursor, f =>
+    if f.natDegree = 0 then ((some [],cursor), []) else
+    if f.natDegree = 1 then ((some [-f.coeff 0],cursor), []) else
+    let r := GSScalarCallScheduleM10.retry f q t (H cursor)
+    match r.1 with
+    | none => ((none,cursor+1), r.2)
+    | some d =>
+      let l := factor q t H fuel (2*node+1) (cursor+1) d
+      match l.1.1 with
+      | none => ((none,l.1.2), r.2++l.2)
+      | some left =>
+        let right := factor q t H fuel (2*node+2) l.1.2 (f.divByMonic d)
+        ((right.1.1.map (fun rs => left++rs),right.1.2),
+          r.2++l.2++[.division f d]++right.2)
+
+theorem factor_value (q t : Nat) (H : Nat → Fin t → K × K)
+    (fuel node cursor : Nat) (f : CPolynomial K) :
+    (factor q t H fuel node cursor f).1 =
+      (eval H (sequential (factorProgram q t fuel node f) cursor)).2 := by
+  induction fuel generalizing node cursor f with
+  | zero => rfl
+  | succ fuel ih =>
+    simp only [factor, factorProgram]
+    split
+    · rfl
+    · split
+      · rfl
+      · simp only [sequential, eval, GSScalarCallScheduleM10.retry_value]
+        cases hr : CompPolySplitRetries.retry f q t (H cursor) with
+        | none => rfl
+        | some d =>
+          simp only [sequential_bind, eval_bind]
+          try dsimp only
+          rw [← ih]
+          cases hl : (factor q t H fuel (2*node+1) (cursor+1) d).1.1 with
+          | none => rfl
+          | some left =>
+            simp only [sequential_bind, eval_bind]
+            try dsimp only
+            rw [← ih]
+            cases hx : (factor q t H fuel (2*node+2)
+              (factor q t H fuel (2*node+1) (cursor+1) d).1.2 (f.divByMonic d)).1.1 <;> rfl
+
+theorem factor_length (q t : Nat) (H : Nat → Fin t → K × K)
+    (fuel node cursor : Nat) (f : CPolynomial K) :
+    (factor q t H fuel node cursor f).2.length ≤ fuelBudget t fuel := by
+  induction fuel generalizing node cursor f with
+  | zero => exact Nat.le_refl _
+  | succ fuel ih =>
+    have hr := retry_length f q t (H cursor)
+    simp only [factor, fuelBudget]
+    split
+    · simp only [List.length_nil]; omega
+    · split
+      · simp only [List.length_nil]; omega
+      · split
+        · dsimp only; omega
+        · rename_i d hd
+          have hl := ih (2*node+1) (cursor+1) d
+          have hx := ih (2*node+2)
+            (factor q t H fuel (2*node+1) (cursor+1) d).1.2 (f.divByMonic d)
+          split <;> dsimp only <;>
+            simp only [List.length_append, List.length_cons, List.length_nil] <;> omega
+
+/-- Root-factor preparation contributes the actual power and GCD, before
+the recursive factorizer. Both occurrences are charged even on later abort. -/
+def roots (p : CPolynomial K) (q t : Nat) (H : Nat → Fin t → K × K) :
+    (Option (List K) × Nat) × List (Call K) :=
+  let a := CompPolyPolynomialBackendBridge.modPower CPolynomial.X p q
+  let f := CPolynomial.gcdMonic p (a-CPolynomial.X)
+  let r := factor q t H (p.natDegree+1) 0 0 f
+  (r.1, [.power CPolynomial.X p q, .gcd p (a-CPolynomial.X)]++r.2)
+
+theorem roots_value (p : CPolynomial K) (q t : Nat) (H : Nat → Fin t → K × K) :
+    (roots p q t H).1 =
+      (eval H (CompPolySequentialAbortBound.rootsProgram p q t)).2 := by
+  simp only [roots, factor_value, CompPolySequentialAbortBound.rootsProgram,
+    CompPolyCompleteRoots.rootFactor]
+
+theorem roots_length (p : CPolynomial K) (q t : Nat) (H : Nat → Fin t → K × K) :
+    (roots p q t H).2.length ≤ 2+fuelBudget t (p.natDegree+1) := by
+  have h := factor_length q t H (p.natDegree+1) 0 0
+    (CompPolyCompleteRoots.rootFactor p q)
+  simpa only [roots, List.length_append, List.length_cons, List.length_nil,
+    CompPolyCompleteRoots.rootFactor] using Nat.add_le_add_left h 2
+
+def general (p : CPolynomial K) (q t : Nat) (H : Nat → Fin t → K × K) :
+    (Option (List K) × Nat) × List (Call K) :=
+  if p == 0 then ((none,0),[]) else
+  if p.natDegree = 0 then ((some [],0),[]) else
+    roots (CPolynomial.monicNormalize p) q t H
+
+theorem general_value (p : CPolynomial K) (q t : Nat) (H : Nat → Fin t → K × K) :
+    (general p q t H).1 =
+      (eval H (CompPolyGeneralRootsProgram.generalRootsProgram p q t)).2 := by
+  simp only [general, CompPolyGeneralRootsProgram.generalRootsProgram]
+  split
+  · rfl
+  · split
+    · rfl
+    · exact roots_value _ _ _ _
+
+theorem fuelBudget_mono (t n m : Nat) (h : n ≤ m) :
+    fuelBudget t n ≤ fuelBudget t m := by
+  induction h with
+  | refl => exact Nat.le_refl _
+  | @step m h ih =>
+    have hs : fuelBudget t m ≤ fuelBudget t (m+1) := by
+      rw [fuelBudget]
+      omega
+    exact ih.trans hs
+
+theorem general_length [DecidableEq K] [Fintype K]
+    (p : CPolynomial K) (q t ell : Nat) (H : Nat → Fin t → K × K)
+    (hd : p.natDegree ≤ ell) :
+    (general p q t H).2.length ≤ 2+fuelBudget t (ell+1) := by
+  have hn : (CPolynomial.monicNormalize p).natDegree = p.natDegree := by
+    rw [CPolynomial.natDegree_toPoly, CPolynomial.natDegree_toPoly]
+    exact CompPolyGeneralRootsProgram.normalized_natDegree p
+  have h := (roots_length (CPolynomial.monicNormalize p) q t H).trans
+    (Nat.add_le_add_left (fuelBudget_mono t ((CPolynomial.monicNormalize p).natDegree+1) (ell+1) (by omega)) 2)
+  simp only [general]
+  split
+  · simp only [List.length_nil]; omega
+  · split
+    · simp only [List.length_nil]; omega
+    · exact h
+
+#print axioms factor_value
+#print axioms factor_length
+#print axioms roots_value
+#print axioms roots_length
+#print axioms general_value
+#print axioms fuelBudget_mono
+#print axioms general_length
+end AspisR1.GSScalarSequentialScheduleM10

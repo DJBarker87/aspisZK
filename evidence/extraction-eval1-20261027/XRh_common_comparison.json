@@ -1,0 +1,44 @@
+{
+  "functions": {
+    "verifier.candidate.same_batch_index": {
+      "pinned_sha256": "9a1c988f1ea47d4362f577c5bae49afd092a2cec7c57d9de487a85ebd8748a28",
+      "new_sha256": "9a1c988f1ea47d4362f577c5bae49afd092a2cec7c57d9de487a85ebd8748a28",
+      "pinned_bytes": 350,
+      "new_bytes": 350,
+      "text_identical": true,
+      "diff": ""
+    },
+    "verifier.candidate.batch_leaf": {
+      "pinned_sha256": "aff5d628654070ffcf3ec38daae16f8f1af6c8e168bb2c3ebd0a7560bb72a240",
+      "new_sha256": "645f4c8558b76c6a455ca07b23520a70345a9a96baa06277b2dda0a16256d7a7",
+      "pinned_bytes": 2280,
+      "new_bytes": 2282,
+      "text_identical": false,
+      "diff": "--- pinned\n+++ new\n@@ -1,7 +1,7 @@\n /-- [aspis_r1_cost_probe::verifier::candidate::batch_leaf]:\n     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 117:0-132:1 -/\n def verifier.candidate.batch_leaf\n-  {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)\n+  {H : Type _} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)\n   (hash : H) (tree : Std.Usize) (q : Slice Std.U8) :\n   Result (Array Std.U8 32#usize)\n   := do\n"
+    }
+  },
+  "carriers": {
+    "pinned": {
+      "file": "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_pinned_generated_01/XRh_Release/Types.lean",
+      "sha256": "c448f3c7512ab42a04f56221bb2bab7b99cd632624592155b107b9cb5015bfe1",
+      "dictionary": "/-- Trait declaration: [aspis_core::digest::Digest32]\n    Source: 'crates/aspis-core/src/digest.rs', lines 6:0-6:24\n    Name pattern: [aspis_core::digest::Digest32]\n    Visibility: public -/\n@[rust_trait \"aspis_core::digest::Digest32\"\n  (parentClauses := [\"coremarkerCopyInst\"])]\nstructure aspis_core.digest.Digest32 (Self : Type) where\n  coremarkerCopyInst : core.marker.Copy Self\n  digest : Self \u2192 (Slice (Slice Std.U8)) \u2192 Result (Array Std.U8 32#usize)\n"
+    },
+    "new": {
+      "file": "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_shared/XRh_Eval/Types.lean",
+      "sha256": "a58a0148af43b10b2dd255d207cc3d931cad5644287cbc1ebdb4ccdecbad809d",
+      "dictionary": "/-- Trait declaration: [aspis_core::digest::Digest32]\n    Source: 'crates/aspis-core/src/digest.rs', lines 6:0-6:24\n    Name pattern: [aspis_core::digest::Digest32]\n    Visibility: public -/\n@[rust_trait \"aspis_core::digest::Digest32\"\n  (parentClauses := [\"coremarkerCopyInst\"])]\nstructure aspis_core.digest.Digest32 (Self : Type _) where\n  coremarkerCopyInst : core.marker.Copy Self\n  digest : Self \u2192 Slice (Slice Std.U8) \u2192 Result (Array Std.U8 32#usize)\n"
+    }
+  },
+  "libraries": {
+    "pinned": {
+      "file": "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain/aeneas/backends/lean/Aeneas/Std/Primitives.lean",
+      "sha256": "d89be7c23094e0af9c8da1b396d9358ecf882f0029a9505da827a6d607cdbb5c",
+      "result_definition": "inductive Error where\n   | assertionFailure: Error\n   | integerOverflow: Error\n   | divisionByZero: Error\n   | arrayOutOfBounds: Error\n   | maximumSizeExceeded: Error\n   | panic: Error\n   | undef: Error\nderiving Repr, BEq\n\nopen Error\n\ninductive Result (\u03b1 : Type u) where\n  | ok (v: \u03b1): Result \u03b1\n  | fail (e: Error): Result \u03b1\n  | div\nderiving Repr, BEq\n\nopen Result\n\n"
+    },
+    "new": {
+      "file": "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_aeneas/backends/lean/Aeneas/Std/Primitives.lean",
+      "sha256": "ea312dfb113a04126f7d975b934266fc420bd3209a0b14466f6ec76089d93bbb",
+      "result_definition": "inductive Error where\n   | assertionFailure: Error\n   | integerOverflow: Error\n   | divisionByZero: Error\n   | arrayOutOfBounds: Error\n   | maximumSizeExceeded: Error\n   | panic: Error\n   | undef: Error\nderiving Repr, BEq\n\nopen Error\n\ninductive RustEffect.Input : Type where\n| fail : Error \u2192 RustEffect.Input\n\n@[implicit_reducible]\ndef RustEffect.Output (i : RustEffect.Input) : Type :=\n  match i with\n  | .fail _ => PEmpty\n\n@[implicit_reducible]\ndef RustEffect : Effect := {\n  I := RustEffect.Input\n  O := RustEffect.Output\n}\n\n-- We need Result to be irreducible outside this file (to not break metaprograms which normalize\n-- types), but reducible within. The `unseal` command only affects the local scope.\n@[irreducible]\ndef Result (\u03b1 : Type u) : Type u := ITree RustEffect \u03b1\nunseal Result\nattribute [local implicit_reducible] Result\n\ndef Result.ok {\u03b1} (a : \u03b1) : Result \u03b1 := .ret a\n\ndef Result.vis {\u03b1} (eff : RustEffect.Input) (k : RustEffect.Output eff \u2192 Result \u03b1) : Result \u03b1 := ITree.vis eff k\n\n/- `Result.fail` is deliberately kept opaque: we do *not* mark it with `simp`/`grind` so that it\n   never gets unfolded to a `Result.vis`. All the reasoning about `fail` should go through the\n   dedicated lemmas below (`bind_fail`, `spec_fail`, ...). -/\ndef Result.fail {\u03b1} (e : Error) : Result \u03b1 := Result.vis (.fail e) PEmpty.elim\n\ntheorem Result.fail_eq_vis {\u03b1} (e : Error) :\n  (Result.fail e : Result \u03b1) = Result.vis (.fail e) PEmpty.elim := rfl\n\ndef Result.div {\u03b1} : Result \u03b1 := ITree.div\n\n"
+    }
+  }
+}

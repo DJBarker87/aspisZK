@@ -1,0 +1,16 @@
+AspisR1.DrvC_Mutable.deref : ∀ (a : AspisR1.Tx1Q_Carriers.C.A),
+  (AspisR1.Tx1Q_Carriers.accumulator a).weights.deref =
+    AspisR1.Tx1Q_Carriers.slice AspisR1.Tx1Q_Carriers.k a.weights.deref
+'AspisR1.DrvC_Mutable.deref' depends on axioms: [propext]
+AspisR1.DrvC_Mutable.deref_mut_current : ∀ (a : AspisR1.Tx1Q_Carriers.C.A),
+  a.weights.deref_mut = (a.weights.deref, fun s => ⟨↑s, ⋯⟩)
+'AspisR1.DrvC_Mutable.deref_mut_current' depends on axioms: [propext]
+AspisR1.DrvC_Mutable.deref_mut_stage : ∀ (a : AspisR1.Tx1Q_Carriers.S.A),
+  a.weights.deref_mut = (a.weights.deref, fun s => ⟨↑s, ⋯⟩)
+'AspisR1.DrvC_Mutable.deref_mut_stage' depends on axioms: [propext]
+AspisR1.DrvC_Mutable.materialize : ∀ (a : AspisR1.Tx1Q_Carriers.C.A) (s : Aeneas.Std.Slice AspisR1.Tx1Q_Carriers.C.K),
+  (have __src := AspisR1.Tx1Q_Carriers.accumulator a;
+    { weights := ⟨↑(AspisR1.Tx1Q_Carriers.slice AspisR1.Tx1Q_Carriers.k s), ⋯⟩, rhs := __src.rhs, power := __src.power,
+      next := __src.next }) =
+    AspisR1.Tx1Q_Carriers.accumulator { weights := ⟨↑s, ⋯⟩, rhs := a.rhs, power := a.power, next := a.next }
+'AspisR1.DrvC_Mutable.materialize' depends on axioms: [propext]

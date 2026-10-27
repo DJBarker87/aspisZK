@@ -1,0 +1,42 @@
+{
+  "attempt": "PoolS2_K024",
+  "kind": "kani",
+  "source_revision": "bbfde8f8353a09a690d0086a1a2799785c236978",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_snapshot/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_snapshot-target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolS2_checkpoint_signing_seeds",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolS2_snapshot/Cargo.toml",
+    "PoolS2_snapshot/Cargo.lock",
+    "PoolS2_snapshot/PoolS2_lib.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual P1 seed-construction source expressions after strict decode of SAME arbitrary192 image: complete four-seed content bound to original bytes and actual master Pubkey. No PDA hash/System invocation, planned-image provenance or enclosing caller proof."
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check"
+}

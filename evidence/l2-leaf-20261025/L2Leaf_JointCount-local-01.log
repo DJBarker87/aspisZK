@@ -1,0 +1,39 @@
+docs/research/v8-r0-zk-20261009/lean/R1Z/L2Leaf_JointCount.lean:32:6: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : Bool),
+    (if x = true then 1 else 0) + hits (fun s => test (real s)) ss ≤
+      (if test (ideal s) = true then 1 else 0) + hits (fun s => test (ideal s)) ss + (1 + hits bad ss)
+
+case cons.true
+Sample View : Type
+real ideal : Sample → View
+bad : Sample → Bool
+agree : ∀ (s : Sample), bad s = false → real s = ideal s
+test : View → Bool
+s : Sample
+ss : List Sample
+ih : hits (fun s => test (real s)) ss ≤ hits (fun s => test (ideal s)) ss + hits bad ss
+hb : bad s = true
+⊢ (if test (real s) = true then 1 else 0) + hits (fun s => test (real s)) ss ≤
+    (if test (ideal s) = true then 1 else 0) + hits (fun s => test (ideal s)) ss + (1 + hits bad ss)
+'R1Z.L2Leaf_JointCount.count_le_bad' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.L2Leaf_JointCount.joint_trace_count_bound' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.L2Leaf_JointCount.joint_trace_count_exact' depends on axioms: [Quot.sound]
+'R1Z.L2Leaf_JointCount.projection_agreement_not_joint_agreement' does not depend on any axioms
+        0.32 real         0.18 user         0.15 sys
+           642072576  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               44891  page reclaims
+                  69  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   1  voluntary context switches
+                 757  involuntary context switches
+           315970589  instructions retired
+           125714372  cycles elapsed
+            11043512  peak memory footprint

@@ -1,0 +1,93 @@
+FIx_ValueBits1.lean:27:14: error: unsolved goals
+case succ.e_a
+o returned : Openings
+out : Std.Array NQ 33#usize
+ho : canonical o.succ_z
+n : ℕ
+ih :
+  ∀ (index : Usize) (range : Std.Array NQ 33#usize),
+    ↑index + n = 10 →
+      canonical range →
+        loop o range index = ok (returned, out) →
+          returned = o ∧ canonical out ∧ decoded out = FIx_ValueBitModel.model o.succ_z 10 n (↑index) (decoded range)
+index : Usize
+range : Std.Array NQ 33#usize
+span : ↑index + (n + 1) = 10
+hp : canonical range
+success✝⁵ :
+  (do
+      let q ← o.succ_z.index_usize index
+      let q1 ← q.square
+      let q2 ← q1.sub q
+      let i ← 10#usize + index
+      let a ← range.update i q2
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o a index1) =
+    ok (returned, out)
+more : index < 10#usize
+q : field.QM31
+hq : o.succ_z.index_usize index = ok q
+success✝⁴ :
+  (do
+      let q1 ← q.square
+      let q2 ← q1.sub q
+      let i ← 10#usize + index
+      let a ← range.update i q2
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o a index1) =
+    ok (returned, out)
+square : field.QM31
+hsquare : q.square = ok square
+success✝³ :
+  (do
+      let q2 ← square.sub q
+      let i ← 10#usize + index
+      let a ← range.update i q2
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o a index1) =
+    ok (returned, out)
+residual : field.QM31
+hresidual : square.sub q = ok residual
+success✝² :
+  (do
+      let i ← 10#usize + index
+      let a ← range.update i residual
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o a index1) =
+    ok (returned, out)
+slot : UScalar UScalarTy.Usize
+hslot : 10#usize + index = ok slot
+success✝¹ :
+  (do
+      let a ← range.update slot residual
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o a index1) =
+    ok (returned, out)
+updated : Std.Array field.QM31 33#usize
+hupdated : range.update slot residual = ok updated
+success✝ :
+  (do
+      let index1 ← index + 1#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o updated index1) =
+    ok (returned, out)
+next : UScalar UScalarTy.Usize
+hnext : index + 1#usize = ok next
+success : pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o updated next = ok (returned, out)
+hqcan : Canon q
+vsquare : Canon square ∧ decode square = decode q * decode q
+vresidual : Canon residual ∧ decode residual = decode square - decode q
+vi : ↑next = ↑index + 1
+vslot : ↑slot = ↑10#usize + ↑index
+hb : ↑slot < ↑33#usize
+vu : canonical updated ∧ decoded updated = Function.update (decoded range) ⟨↑slot, hb⟩ (decode residual)
+rest : returned = o ∧ canonical out ∧ decoded out = FIx_ValueBitModel.model o.succ_z 10 n (↑next) (decoded updated)
+j : Fin ↑33#usize
+⊢ (if ↑j = ↑10#usize + ↑index then
+      FIv_NativeArray.value o.succ_z ↑index * FIv_NativeArray.value o.succ_z ↑index -
+        FIv_NativeArray.value o.succ_z ↑index
+    else decoded range j) =
+    if ↑j = 10 + ↑index then
+      FIv_NativeArray.value o.succ_z ↑index * FIv_NativeArray.value o.succ_z ↑index -
+        FIv_NativeArray.value o.succ_z ↑index
+    else decoded range j
+'AspisR1.FIx_ValueBits1.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,129 @@
+'AspisR1.GExp_FinalAccepted.accepted_pair_unified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_InstalledPrepare.associated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_PrepareTrace.source_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_GlobalBudget.budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_CollisionBudget.replay_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_ReadPrefix.retained_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_NativeBounds.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_NativeBounds.second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_Nonvacuity.partial_syscall' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_Nonvacuity.first_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.GExp_FinalAccepted.accepted_pair_unified : ∀ {W A M Cv F CoreError : Type} {N : ℕ}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops) (reserved : Bool)
+                (queryOps : AspisR1.Port3_NativeQueryBody.Ops) (geoOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+                (stageBase : VTop_Stages.Ops) (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
+                (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+                (claimsStd : AspisR1.ClaimsUnrolledFinish.StdCalls) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.ClaimsUnrolledSdk.sdkOps
+                      (AspisR1.Tx2I_Install.install adapterOps
+                        (AspisR1.Op5T_Concrete.stage
+                          (AspisR1.Tx2N_Execution.control stageBase reserved queryOps geoOps))
+                        finishOps)
+                      (AspisR1.Uni_Install.current ops reserved queryOps geoOps) B claimsStd)
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+                          (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (p : FS2.Duplex.Params M Cv N) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+                                (length : Aeneas.Std.U32),
+                                have port :=
+                                  AspisR1.SdkD_Child.port adapterOps
+                                    (AspisR1.Uni_Install.current ops reserved queryOps geoOps)
+                                    (AspisR1.Op5T_Concrete.stage
+                                      (AspisR1.Tx2N_Execution.control stageBase reserved queryOps geoOps))
+                                    finishOps B claimsStd;
+                                ∃ f s outer pre middle fs ss,
+                                  AspisR1.S2W_NativeConsolidation.SourceCuts
+                                      (AspisR1.ClaimsUnrolledSdk.sdkOps
+                                        (AspisR1.Tx2I_Install.install adapterOps
+                                          (AspisR1.Op5T_Concrete.stage
+                                            (AspisR1.Tx2N_Execution.control stageBase reserved queryOps geoOps))
+                                          finishOps)
+                                        (AspisR1.Uni_Install.current ops reserved queryOps geoOps) B claimsStd)
+                                      e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s ∧
+                                    (AspisV8R19.MemoizedProgramLaw.eval H ⋯).2 =
+                                        (AspisR1.GExp_FixedPair.firstInput f,
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved),
+                                          some
+                                            (AspisR1.GExp_FixedPair.secondInput s,
+                                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))) ∧
+                                      (∀ (world : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          ⋯ ≤ 22585) ∧
+                                        AspisR1.SdkC_BatchPair.Returning hashv H ⋯
+                                            (Aeneas.Std.core.result.Result.Ok ()) ∧
+                                          ⋯ ∧ ⋯ :=
+⋯
+def AspisR1.GExp_Experiment.program : AspisR1CurrentCaller.Ops →
+  VTop_Stages.Ops →
+    Bool →
+      AspisR1PublicPreparation.FinishModel.Boundaries →
+        AspisR1.ClaimsUnrolledFinish.StdCalls →
+          (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+            AspisR1CurrentCaller.aspis_core.digest.Digest32 Unit →
+              VTop_Stages.aspis_core.digest.Digest32 Unit →
+                AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                    AspisR1.GExp_Experiment.FirstInputs →
+                  (AspisR1.GExp_Experiment.FirstInputs →
+                      Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+                        AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                          AspisV8R19.SourceDuplexStep.State AspisR1.GExp_Experiment.SecondInputs) →
+                    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                      AspisV8R19.SourceDuplexStep.State AspisR1.GExp_Experiment.Outcome :=
+fun current stage reserved B std hashv D1 D2 adversary chooseSecond =>
+  AspisV8R19.OracleProgramOps.bind adversary fun input =>
+    AspisV8R19.OracleProgramOps.bind (AspisR1.GExp_Experiment.first current B std hashv D1 input) fun reply =>
+      match reply with
+      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) =>
+        AspisV8R19.OracleProgramOps.bind (chooseSecond input saved) fun next =>
+          AspisV8R19.OracleProgramOps.bind (AspisR1.GExp_Experiment.second stage reserved hashv D2 next) fun out =>
+            AspisV8R19.MemoizedProgramLaw.Program.done (input, reply, some (next, out))
+      | x => AspisV8R19.MemoizedProgramLaw.Program.done (input, reply, none)
+theorem AspisR1.GExp_CollisionBudget.replay_collision : ∀ (current : AspisR1CurrentCaller.Ops) (stage : VTop_Stages.Ops)
+  (reserved : Bool) (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D1 : AspisR1CurrentCaller.aspis_core.digest.Digest32 Unit) (D2 : VTop_Stages.aspis_core.digest.Digest32 Unit)
+  (adversary :
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      AspisR1.GExp_Experiment.FirstInputs)
+  (chooseSecond :
+    AspisR1.GExp_Experiment.FirstInputs →
+      Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+        AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          AspisR1.GExp_Experiment.SecondInputs)
+  (Q0 Q1 : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H adversary).1.length ≤ Q0) →
+    (∀ (input : AspisR1.GExp_Experiment.FirstInputs) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (chooseSecond input saved)).1.length ≤ Q1) →
+      ∀ (project : AspisR1.GExp_Experiment.Outcome → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)),
+        (AspisV8R19.MemoizedProgramLaw.lazyMean
+            (AspisR1.SdkC_Replay.augmented
+              (AspisR1.GExp_Experiment.program current stage reserved B std hashv D1 D2 adversary chooseSecond) project)
+            FS.emptyTable fun view =>
+            AspisV8R19.CausalFirstHitUnionBound.indicator
+              (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv
+                (Q0 + Q1 + 22585 + 1040) view)) ≤
+          6 * ↑(Q0 + Q1 + 22585 + 1040) ^ 2 / 256 ^ 32 :=
+⋯

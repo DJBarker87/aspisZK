@@ -1,0 +1,39 @@
+F3N_LeafLog.lean:17:107: error: unsolved goals
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+kind : Usize
+opening : Slice U8
+length : (↑opening).length = 832
+digest : SdkC_Source.Digest
+success : (SdkC_Source.run hashv (Port4B_LeafCode.code kind opening) []).1 = ok digest
+source : CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (Port4B_LeafCode.code kind opening) = ok digest
+exactCode :
+  CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (Port4B_LeafCode.code kind opening) =
+      (SdkC_Source.dictionary hashv).digest () (Port4B_LeafCode.input kind opening) ∧
+    CheckpointBytes5Effect.run (SdkC_Source.dictionary hashv) () (Port4B_LeafCode.code kind opening) [] = do
+      let d ← (SdkC_Source.dictionary hashv).digest () (Port4B_LeafCode.input kind opening)
+      ok (d, [] ++ [(Port4B_LeafCode.input kind opening, d)])
+returned : hashv (Port4B_LeafCode.input kind opening) = ok digest
+value : decodeState digest = H (flatten (Port4B_LeafCode.input kind opening))
+after : CheckpointBytes5Effect.Log
+logs :
+  CheckpointBytes5Inputs.observe after =
+    SdkC_Source.readLog (SdkC_Source.run hashv (Port4B_LeafCode.code kind opening) []).2
+ran :
+  (do
+      let d ← ok digest
+      ok (d, [] ++ [(Port4B_LeafCode.input kind opening, d)])) =
+    ok (digest, after)
+same : [(Port4B_LeafCode.input kind opening, digest)] = after
+⊢ [(AspisR1DigestLogCarrier.flatten (Port4B_LeafCode.input kind opening), CheckpointBytesDigest.stateOf digest)] =
+    [(flatten (Port4B_LeafCode.input kind opening), H (flatten (Port4B_LeafCode.input kind opening)))]
+F3N_LeafLog.lean:30:71: warning: This simp argument is unused:
+  value
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes5Inputs.observe, ̲List.map_cons, ̲List.map_nil,̵v̵a̵l̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3N_LeafLog.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

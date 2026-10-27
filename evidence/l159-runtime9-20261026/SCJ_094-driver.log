@@ -1,0 +1,46 @@
+{"attempt": "SCJ_094", "exit_status": 0, "wall_seconds": 2.4029299839749, "peak_rss_kib": "5495288", "swaps": "0", "print_axioms": ["'AspisR1.P6C_Accepted.issued_calls_ok' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.P6C_Accepted.issued_calls_ok : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) {A : Type}
+  (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Log) (value : A),
+  (AspisR1.SdkC_Source.run hashv code before).1 = Aeneas.Std.Result.ok value →
+    (∀ q ∈ before, ∃ digest, q.returned = Aeneas.Std.Result.ok digest) →
+      ∀ q ∈ (AspisR1.SdkC_Source.run hashv code before).2, ∃ digest, q.returned = Aeneas.Std.Result.ok digest
+theorem AspisR1.P6C_Accepted.issued_calls_ok : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) {A : Type}
+  (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Lo
+...
+
+              ∀ q ∈ (AspisR1.SdkC_Source.run hashv (AspisR1.CheckpointBytes5Effect.Code.read parts k) before).2,
+                ∃ digest, q.returned = Aeneas.Std.Result.ok digest)
+            (fun actual =>
+              let ⟨⟩ := Aeneas.Std.Result.ok value
+              Eq.mp
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg Prod.fst
+                      (Eq.trans (AspisR1.SdkC_Source.run.eq_5 hashv before parts k)
+                        (Eq.trans
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | Aeneas.Std.Result.ok digest =>
+                                AspisR1.SdkC_Source.run hashv (k digest)
+                                  (before ++ [{ parts := parts, returned := hashv parts }])
+                              | Aeneas.Std.Result.fail e =>
+                                (Aeneas.Std.Result.fail e, before ++ [{ parts := parts, returned := hashv parts }])
+                              | Aeneas.Std.Result.div =>
+                                (Aeneas.Std.Result.div, before ++ [{ parts := parts, returned := hashv parts }]))
+                            actual)
+                          (congrArg (Prod.mk Aeneas.Std.Result.div)
+                            (congrArg (HAppend.hAppend before)
+                              (congrFun' (congrArg List.cons (congrArg (AspisR1.SdkC_Source.Query.mk parts) actual))
+                                [])))))))
+                  (Aeneas.Std.Result.ok value))
+                accepted)
+            (Eq.symm h) (Eq.refl (hashv parts)))
+        (Eq.refl (hashv parts)))
+    code before accepted initial
+'AspisR1.P6C_Accepted.issued_calls_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0927b9ead8eb4b7d80ada23222109932.scope; invocation ID: 9a6da1d744fc4cfe82f35dce3bcb7178
+

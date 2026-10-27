@@ -1,0 +1,43 @@
+{"attempt": "JFy13_097", "exit_status": 1, "wall_seconds": 2.8289726020302624, "peak_rss_kib": "5935028", "swaps": "0", "print_axioms": ["'AspisR1.JFy_CompositionTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFy_CompositionTail.lean:80:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  semantic_packed JFu_PublicSemantic.value { z := a, succ_z := b, xor12_z := c } s
+in the target expression
+  (do
+      let poseidon ← JFy_PoseidonPrefix.tail { z := a, succ_z := b, xor12_z := c } ps leading full internal
+      let semantic ←
+        semantic_packed
+            { variant := JFu_PublicSemantic.value.variant, pool := JFu_PublicSemantic.value.pool,
+              deployment_domain := JFu_PublicSemantic.value.deployment_domain,
+              anchor := JFu_PublicSemantic.value.anchor, nullifier := JFu_PublicSemantic.value.nullifier,
+              asset_id := JFu_PublicSemantic
+...
+theta ← field.PreparedQm31Multiplier.new JFu_TerminalPrefix.challenges.theta
+    let ii ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter semantic
+    let iter ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 24#usize)
+          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31 24#usize) ii
+    let composition ← composition_parts_loop0 iter prepared_theta copy.residual
+    let ii1 ← FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon
+    let iter1 ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+          (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator field.QM31 4#usize)
+          (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31 4#usize) ii1
+    let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+    let i1 ← SELECTED_G_COLUMN
+    let q ← selected_claim selected 0#usize i1
+    ok (core.result.Result.Ok (composition1, a, m, q, h1_z, copy.active))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JFy_CompositionTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8fed088304224aff91d53031f91c9a17.scope; invocation ID: aba50f3f049d4a1b992e3c5533bc2725

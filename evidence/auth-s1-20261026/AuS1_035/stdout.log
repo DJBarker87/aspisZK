@@ -1,0 +1,9 @@
+AuS1_Frame.lean:21:4: error: 'change' tactic failed, pattern
+  bytesOf ↑state ++ ([0, 190] ++ ([0, 1, 0, 0] ++ (bytesOf ↑payload ++ []))) = ?m.105
+is not definitionally equal to target
+  List.map decodeByte ↑state ++
+      (List.map decodeByte [0#u8, 190#u8] ++
+        (List.map decodeByte ↑(core.num.U32.to_le_bytes 256#u32) ++
+          (List.map decodeByte ↑payload ++ List.map decodeByte []))) =
+    bytes (decodeState state) ++ [0, 190, 0, 1, 0, 0] ++ bytes (decodeState root) ++ bytesOf tail
+'AspisR1.AuS1_Frame.folded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

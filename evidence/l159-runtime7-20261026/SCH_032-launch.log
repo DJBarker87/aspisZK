@@ -1,0 +1,47 @@
+{"attempt": "SCH_032", "exit_status": 0, "wall_seconds": 2.3057265210081823, "peak_rss_kib": "5356024", "swaps": "0", "print_axioms": []}
+def AdapterRw.r1_pool_adapter.owned.validate_asq8 : AdapterRw.Ops →
+  AdapterRw.solana_pubkey.Pubkey →
+    Aeneas.Std.Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.core.result.Result Aeneas.Std.U64 AdapterRw.solana_program_error.ProgramError →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa
+              AdapterRw.solana_program_error.ProgramError) :=
+fun ops verifier_program accounts instruction_data current_slot =>
+  have i := instruction_data.len;
+  do
+  let i1 ← AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES
+  i
+...
+rom_residual Unit
+                  (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+def AdapterRw.r1_pool_adapter.owned.OwnedAccount.data : AdapterRw.Ops →
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result (Aeneas.Std.Slice Aeneas.Std.U8) AdapterRw.solana_program_error.ProgramError) :=
+fun ops self =>
+  match self.bytes with
+  | Aeneas.Std.core.result.Result.Ok bytes =>
+    have s := bytes.deref;
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok s)
+  | Aeneas.Std.core.result.Result.Err error1 => do
+    let pe ← ops.op35 error1
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err pe)
+@[reducible] def AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice : AdapterRw.Ops →
+  (T : Type) →
+    Aeneas.Std.core.slice.index.SliceIndex AdapterRw.core.ops.range.RangeFull (Aeneas.Std.Slice T)
+      (Aeneas.Std.Slice T) :=
+fun ops T =>
+  { sealedInst := AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexPrivate_slice_indexSealed, get := ops.op8,
+    get_mut := ops.op7, get_unchecked := ops.op6, get_unchecked_mut := ops.op5, index := ops.op4, index_mut := ops.op3 }
+@[reducible] def AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption : AdapterRw.Ops →
+  {T : Type} → Aeneas.Std.core.cmp.PartialEq T T → Aeneas.Std.core.cmp.PartialEq (Option T) (Option T) :=
+fun ops {T} cmpPartialEqInst => { eq := ops.op2 cmpPartialEqInst }
+@[irreducible] def AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES : AdapterRw.Ops →
+  Aeneas.Std.Result Aeneas.Std.Usize :=
+fun ops => do
+  let i ← ops.op19
+  let i1 ← 144#usize + i
+  i1 + AdapterRw.aspis_statement.pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_BYTES
+
+Running as unit: run-rf0d36c91b6734f9687f396ecbcf13ae1.scope; invocation ID: 4f50343fa1344b4a88fd83c38830aa24

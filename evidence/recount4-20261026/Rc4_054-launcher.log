@@ -1,0 +1,42 @@
+{"attempt": "Rc4_054", "exit_status": 0, "wall_seconds": 5.168953204993159, "peak_rss_kib": "5353036", "swaps": "0", "print_axioms": []}
+def AspisR1.Rc2_Events.Facts : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) →
+      AspisR1.S2W_ExtractionBoundary.First →
+        AspisR1.S2W_ExtractionBoundary.Second →
+          (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+              ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+            AspisR1.S2W_D189Wrappers.Allocator A →
+              AspisR1.S2W_ExtractionBoundary.Program →
+                (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+                  Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+...
+PP_BankState.Action A)),
+        AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id initial actions Bool.false =
+          (initial, [AspisR1.S2X.AccountEvent.rollback])
+def AspisR1.Rc2_Protection.Facts : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.S2W_ExtractionBoundary.First →
+      AspisR1.S2W_ExtractionBoundary.Second →
+        (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+            ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+          AspisR1.S2W_D189Wrappers.Allocator A → AspisR1.S2W_ExtractionBoundary.Program → Prop :=
+fun {A F C} c n1 n2 copy allocator id =>
+  (AspisR1.DrvC_Installation.sdk c).op36 = AspisR1.Hist_Authority.keyEq →
+    ∀ (before : AspisR1.CPP_BankState.Bank) (actions : List (AspisR1.CPP_BankState.Action A)) (success : Bool),
+      AspisR1.Hist_Store.byteLedger
+            (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.cells =
+          AspisR1.S2X.history (AspisR1.Hist_Store.byteLedger before.cells)
+            (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).2 ∧
+        ∀ (key : ℕ),
+          (before.cells key).owner = id →
+            AspisR1.Hist_Store.Initialized (before.cells key).data →
+              0 < before.lamports key →
+                (∀ event ∈ (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).2,
+                    AspisR1.S2X.Preserves key event) ∧
+                  (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.cells key =
+                      before.cells key ∧
+                    before.lamports key ≤
+                      (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.lamports key
+
+Running as unit: run-rb5ab1a5b84d84df2a01dc6a217ae90fe.scope; invocation ID: 4c93183f0128445790ffa678f5ea5f85

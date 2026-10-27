@@ -1,0 +1,52 @@
+AspisR1.Port4B_Rejection.padding_branch_differs : ∀ (idx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val : AspisR1.Port3_NativeBatchCalls.Values),
+  AspisR1.Port4B_Rejection.emittedPadding idx val ≠ AspisR1.Port4B_Rejection.rustPadding idx val
+'AspisR1.Port4B_Rejection.padding_branch_differs' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Rejection.padding_result_differs : ∀ (idx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val : AspisR1.Port3_NativeBatchCalls.Values),
+  (do
+        let (i, v, p) ← AspisR1.Port4B_Rejection.emittedPadding idx val
+        AspisR1.Port4B_Rejection.emittedReturn i v p) =
+      Aeneas.Std.Result.fail Aeneas.Std.Error.panic ∧
+    (do
+          let (i, v, p) ← AspisR1.Port4B_Rejection.rustPadding idx val
+          AspisR1.Port4B_Rejection.emittedReturn i v p) =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Parse, idx, val) ∧
+      (do
+          let __x ← AspisR1.Port4B_Rejection.emittedPadding idx val
+          match __x with
+            | (i, v, p) => AspisR1.Port4B_Rejection.emittedReturn i v p) ≠
+        do
+        let (i, v, p) ← AspisR1.Port4B_Rejection.rustPadding idx val
+        AspisR1.Port4B_Rejection.emittedReturn i v p
+'AspisR1.Port4B_Rejection.padding_result_differs' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Rejection.successful_return : ∀ (idx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val : AspisR1.Port3_NativeBatchCalls.Values),
+  AspisR1.Port4B_Rejection.emittedReturn idx val (some (Aeneas.Std.core.result.Result.Ok ())) =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx, val)
+'AspisR1.Port4B_Rejection.successful_return' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_Rejection.emittedReturn : AspisR1.Port3_NativeBatchCalls.Indices →
+  AspisR1.Port3_NativeBatchCalls.Values →
+    Option (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error ×
+          AspisR1.Port3_NativeBatchCalls.Indices × AspisR1.Port3_NativeBatchCalls.Values) :=
+fun idx val pending =>
+  match pending with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+  | some r => Aeneas.Std.Result.ok (r, idx, val)
+def AspisR1.Port4B_Rejection.emittedPadding : AspisR1.Port3_NativeBatchCalls.Indices →
+  AspisR1.Port3_NativeBatchCalls.Values →
+    Aeneas.Std.Result
+      (AspisR1.Port3_NativeBatchCalls.Indices ×
+        AspisR1.Port3_NativeBatchCalls.Values ×
+          Option (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)) :=
+fun idx val => Aeneas.Std.Result.ok (idx, val, none)
+def AspisR1.Port4B_Rejection.rustPadding : AspisR1.Port3_NativeBatchCalls.Indices →
+  AspisR1.Port3_NativeBatchCalls.Values →
+    Aeneas.Std.Result
+      (AspisR1.Port3_NativeBatchCalls.Indices ×
+        AspisR1.Port3_NativeBatchCalls.Values ×
+          Option (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)) :=
+fun idx val =>
+  Aeneas.Std.Result.ok (idx, val, some (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Parse))

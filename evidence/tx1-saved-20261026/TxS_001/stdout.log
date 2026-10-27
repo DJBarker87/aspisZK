@@ -1,0 +1,47 @@
+TxS_Writer.lean:16:49: error: Type mismatch: After simplification, term
+  j.isLt
+ has type
+  @LT.lt ℕ instLTNat (↑j) 22
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑j ↑22#usize
+TxS_Writer.lean:29:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CheckpointBytesBlocks.accumulator (Port3_DecodeCoherence.inventory p a size qb) canonical
+in the target expression
+  bytesOf ↑saved.deref =
+    OraclePortCheckpointAbiC5.encode H (bytesOf ↑proof) (bytesOf ↑pub)
+      (CheckpointBytesBlocks.prepared (CheckpointBytesBody.fields (toPrepared p) (toAccumulator a) ⋯ qb) canonical)
+      (CheckpointBytesBlocks.accumulator (CheckpointBytesBody.fields (toPrepared p) (toAccumulator a) ⋯ qb) canonical)
+
+Hash : Type
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+oracle : CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest D) hash H
+p : verifier.Prepared
+a : verifier.Accumulator
+proof pub : Slice U8
+saved : alloc.vec.Vec U8
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CheckpointBytesBlocks.CanonicalFields (Port3_DecodeCoherence.inventory p a size qb)
+next : ↑a.next = 10
+success : Port3_CheckpointInstall.writer D p a proof pub hash = ok saved
+erased :
+  CheckpointBytes5Effect.erase (VTop_Checkpoint.digest D) hash
+      (CheckpointBytes5Writer.writer (toPrepared p) (toAccumulator a) proof pub) =
+    ok saved.deref
+after : CheckpointBytes5Effect.Log
+ran :
+  CheckpointBytes5Effect.run (VTop_Checkpoint.digest D) hash
+      (CheckpointBytes5Writer.writer (toPrepared p) (toAccumulator a) proof pub) [] =
+    ok (saved.deref, after)
+encoding :
+  bytesOf ↑saved.deref =
+    OraclePortCheckpointAbiC5.encode H (bytesOf ↑proof) (bytesOf ↑pub)
+      (CheckpointBytesBlocks.prepared (CheckpointBytesBody.fields (toPrepared p) (toAccumulator a) ⋯ qb) canonical)
+      (CheckpointBytesBlocks.accumulator (CheckpointBytesBody.fields (toPrepared p) (toAccumulator a) ⋯ qb) canonical)
+⊢ saved =
+    Tx2N_Reader.writer H (bytesOf ↑proof) (bytesOf ↑pub)
+      (CheckpointBytesBlocks.prepared (Port3_DecodeCoherence.inventory p a size qb) canonical)
+      (CheckpointBytes5Output.accumulator a)
+'AspisR1.TxS_Writer.saved' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

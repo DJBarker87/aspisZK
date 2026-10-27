@@ -1,0 +1,77 @@
+FJh_Native07Value.lean:27:45: error: unsolved goals
+o : Openings
+s : Selectors
+out : Std.Array NQ 4#usize
+hz : canonical o.z
+ht : canonical o.succ_z
+hx : canonical o.xor12_z
+hs : canonical s.local
+hb : Canon s.block
+run : state_only_poseidon.evaluate_state_only_poseidon_oracle_projected o s = ok out
+l0 f0 i0 : NQ
+leading full : Std.Array NQ 4#usize
+internal : Std.Array NQ 16#usize
+p : Std.Array FJa_PoseidonOrigins.NP 3#usize
+block : FJa_PoseidonOrigins.NP
+rl0 : s.local.index_usize 0#usize = ok l0
+rf0 : FJa_PoseidonOrigins.fullFold s = ok f0
+ri0 : FJa_PoseidonOrigins.internalFold s = ok i0
+rl : state_only_poseidon.leading_pair_packed o = ok leading
+rf : state_only_poseidon.interpolated_full_pair_packed o.z s.local = ok full
+ri : state_only_poseidon.interpolated_internal_pair o.z s.local = ok internal
+rp :
+  FIq_Native.core.array.Array.map (BuiltinFnMut NQ FJa_PoseidonOrigins.NP) (Array.make 3#usize [l0, f0, i0] ⋯)
+      field.PreparedQm31Multiplier.new =
+    ok p
+rb : field.PreparedQm31Multiplier.new s.block = ok block
+ra :
+  array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy
+      state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO (o, internal, block, p, leading, full) =
+    ok out
+vl :
+  canonical leading ∧
+    decoded leading = fun g =>
+      R0P.poseidonPackingFormula iBasis uBasis fun j =>
+        R0P.poseidonLeadingPair (decoded o.z) (decoded o.xor12_z) (FJe_ExternalAdjoint.lane g j)
+vf :
+  canonical full ∧
+    decoded full = fun g =>
+      R0P.poseidonPackingFormula iBasis uBasis fun j =>
+        R0P.poseidonInterpolatedFullPair (decoded o.z) (decoded s.local) (FJe_ExternalAdjoint.lane g j)
+vi : canonical internal ∧ decoded internal = R0P.poseidonInterpolatedInternalPair (decoded o.z) (decoded s.local)
+cl0 : Canon l0
+vf0 :
+  Canon f0 ∧
+    decode f0 = FIv_NativeArray.value s.local 1 + FIv_NativeArray.value s.local 9 + FIv_NativeArray.value s.local 10
+vi0 :
+  Canon i0 ∧ decode i0 = FJa_LocalWeightFold.model s [2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize, 8#usize] 0
+w : Std.Array NQ 3#usize := Array.make 3#usize [l0, f0, i0] ⋯
+cw : canonical w
+va : canonical out ∧ decoded out = FJh_ProjectedCallValue.model o internal s.block leading full w
+low0 : decode l0 = decoded s.local ⟨↑0#usize, ⋯⟩
+low1 : decode f0 = decoded s.local ⟨1, ⋯⟩ + decoded s.local ⟨9, ⋯⟩ + decoded s.local ⟨10, ⋯⟩
+low2 : decode i0 = List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => decoded s.local ⟨↑i + 2, ⋯⟩)
+g : Fin ↑4#usize
+j : Fin 4
+⊢ decode s.block *
+      (decoded s.local 0 *
+            (decoded o.succ_z (FJe_ExternalAdjoint.lane g j) -
+              R0P.poseidonLeadingPair (decoded o.z) (decoded o.xor12_z) (FJe_ExternalAdjoint.lane g j)) +
+          (decoded s.local 1 + decoded s.local 9 + decoded s.local 10) *
+            (decoded o.succ_z (FJe_ExternalAdjoint.lane g j) -
+              R0P.poseidonInterpolatedFullPair (decoded o.z) (decoded s.local) (FJe_ExternalAdjoint.lane g j)) +
+        List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => decoded s.local ⟨↑i + 2, ⋯⟩) *
+          (decoded o.succ_z (FJe_ExternalAdjoint.lane g j) -
+            R0P.poseidonInterpolatedInternalPair (decoded o.z) (decoded s.local) (FJe_ExternalAdjoint.lane g j))) =
+    decode s.block *
+      (decoded s.local 0 *
+            (decoded o.succ_z (FJe_ExternalAdjoint.lane g j) -
+              R0P.poseidonLeadingPair (decoded o.z) (decoded o.xor12_z) (FJe_ExternalAdjoint.lane g j)) +
+          (decoded s.local 1 + decoded s.local 9 + decoded s.local 10) *
+            (decoded o.succ_z (FJe_ExternalAdjoint.lane g j) -
+              R0P.poseidonInterpolatedFullPair (decoded o.z) (decoded s.local) (FJe_ExternalAdjoint.lane g j)) +
+        List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => decoded s.local ⟨↑i + 2, ⋯⟩) *
+          (decoded o.succ_z (FJe_ExternalAdjoint.lane g j) -
+            R0P.poseidonInterpolatedInternalPair (decoded o.z) (decoded s.local) (FJe_ExternalAdjoint.lane g j)))
+'AspisR1.FJh_Native07Value.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

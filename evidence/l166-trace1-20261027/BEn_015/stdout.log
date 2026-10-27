@@ -1,0 +1,31 @@
+theorem AspisR1.S2W_DigestExtraction.digest_eq_hashv : ∀
+  (hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest)
+  (self : AdapterRw.SolanaDigest) (parts : AspisR1.S2W_DigestExtraction.Parts),
+  AspisR1.S2W_DigestExtraction.digest hashv self parts = hashv parts :=
+fun hashv self parts =>
+  id
+    (id
+      (Aeneas.Std.Result.casesOn (motive := fun t =>
+        hashv parts = t →
+          (do
+              let h ← hashv parts
+              Aeneas.Std.Result.ok h) =
+            hashv parts)
+        (hashv parts)
+        (fun v h =>
+          Eq.symm h ▸
+            Eq.refl do
+              let h ← Aeneas.Std.Result.ok v
+              Aeneas.Std.Result.ok h)
+        (fun e h =>
+          Eq.symm h ▸
+            Eq.refl do
+              let h ← Aeneas.Std.Result.fail e
+              Aeneas.Std.Result.ok h)
+        (fun h =>
+          Eq.symm h ▸
+            Eq.refl do
+              let h ← Aeneas.Std.Result.div
+              Aeneas.Std.Result.ok h)
+        (Eq.refl (hashv parts))))
+'AspisR1.S2W_DigestExtraction.digest_eq_hashv' depends on axioms: [propext, Classical.choice, Quot.sound]

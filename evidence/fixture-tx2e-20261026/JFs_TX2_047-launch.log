@@ -1,0 +1,58 @@
+{"attempt": "JFs_TX2_047", "exit_status": 1, "wall_seconds": 2.827306506980676, "peak_rss_kib": "5415616", "swaps": "0", "print_axioms": ["'AspisR1.JFs_TX2_TailCanonical.cm' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFs_TX2_TailCanonical.lean:20:20: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+bytes : Slice U8
+x✝⁷ : Result (Slice U8)
+a✝⁵ : Slice U8
+heq✝⁷ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+      { start := 0#usize, «end» := 4#usize } =
+    ok a✝⁵
+x✝⁶ : Result (core.result.Result (Std.Array U8 4#usize) core.array.TryFromSliceError)
+a✝⁴ : Std.Array U8 4#usize
+heq✝⁶ : core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 a✝⁵ = ok (core.result.Result.Ok a✝⁴)
+x✝⁵ : Result (Option FIp_DotDecode.field.M31)
+a✝³ : Option FIp_DotDecode.field.M31
+heq✝⁵ :
+  (if
+...
+Decode.field.M31)
+a✝³ : Option FIp_DotDecode.field.M31
+heq✝⁵ :
+  (if core.num.U32.from_le_bytes a✝⁴ ≥ 2147483647#u32 then ok none else ok (some (core.num.U32.from_le_bytes a✝⁴))) =
+    ok a✝³
+x✝⁴ : Result (core.ops.control_flow.ControlFlow (Option core.convert.Infallible) FIp_DotDecode.field.M31)
+cf✝¹ : core.ops.control_flow.ControlFlow (Option core.convert.Infallible) FIp_DotDecode.field.M31
+val✝¹ : FIp_DotDecode.field.M31
+heq✝⁴ :
+  FIp_DotDecode.core.option.Option.Insts.CoreOpsTry_traitTry.branch a✝³ =
+    ok (core.ops.control_flow.ControlFlow.Continue val✝¹)
+x✝³ : Result (Slice U8)
+a✝² : Slice U8
+heq✝³ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+      { start := 4#usize, «end» := 8#usize } =
+    ok a✝²
+x✝² : Result (core.result.Result (Std.Array U8 4#usize) core.array.TryFromSliceError)
+a✝¹ : Std.Array U8 4#usize
+heq✝² : core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 a✝² = ok (core.result.Result.Ok a✝¹)
+x✝¹ : Result (Option FIp_DotDecode.field.M31)
+a✝ : Option FIp_DotDecode.field.M31
+heq✝¹ :
+  (if core.num.U32.from_le_bytes a✝¹ ≥ 2147483647#u32 then ok none else ok (some (core.num.U32.from_le_bytes a✝¹))) =
+    ok a✝
+x✝ : Result (core.ops.control_flow.ControlFlow (Option core.convert.Infallible) FIp_DotDecode.field.M31)
+cf✝ : core.ops.control_flow.ControlFlow (Option core.convert.Infallible) FIp_DotDecode.field.M31
+val✝ : FIp_DotDecode.field.M31
+heq✝ :
+  FIp_DotDecode.core.option.Option.Insts.CoreOpsTry_traitTry.branch a✝ =
+    ok (core.ops.control_flow.ControlFlow.Continue val✝)
+run : ok (some { a := val✝¹, b := val✝ }) = ok (some { a := val✝¹, b := val✝ })
+⊢ ↑{ a := val✝¹, b := val✝ }.b < 2147483647
+'AspisR1.JFs_TX2_TailCanonical.cm' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1da26c77c34c4904b165f5d8e0275f1f.scope; invocation ID: 8a3ab52db4f648768e59cca9bd2b7969

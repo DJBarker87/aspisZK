@@ -1,0 +1,60 @@
+{
+  "attempt": "NP6_K022",
+  "kind": "kani",
+  "source_revision": "c55953b81078ece99bb1d655507201f169a80044",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "NP6_claims/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "NP6_errors::NP6_reference_valid_prefix",
+    "--no-assertion-reach-checks",
+    "--solver",
+    "cadical",
+    "--output-format",
+    "regular",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--object-bits",
+    "16",
+    "--unwinding-assertions",
+    "--symex-cache-dereferences"
+  ],
+  "sources": [
+    "NP6_claims/Cargo.toml",
+    "NP6_claims/src/NP6_reference.rs",
+    "NP6_claims/src/NP6_shipped.rs",
+    "NP6_claims/src/NP6_straight.rs",
+    "NP6_claims/src/lib.rs",
+    "NP6_claims/src/NP6_steps.rs",
+    "NP6_claims/src/NP6_wire.rs",
+    "NP6_claims/src/NP6_sampler.rs",
+    "NP6_claims/src/NP6_proofs.rs",
+    "NP6_claims/src/NP6_scalars.rs",
+    "NP6_claims/src/NP6_characterization.rs",
+    "NP6_claims/src/NP6_errors.rs",
+    "NP6_claims/src/NP6_success.rs",
+    "NP6_claims/src/NP6_lengths.rs",
+    "NP6_claims/src/NP6_construction.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/NP6_target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_RELEASE_OPT_LEVEL": "3",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "core_validation": "NP6_core-validation.json",
+    "source_binding": "NP6_binding.json"
+  },
+  "expected_time": "Reference whole-body original-input canonical prefix before returned NonCanonical index",
+  "source_tree_dirty": true
+}

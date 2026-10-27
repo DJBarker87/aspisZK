@@ -1,0 +1,3 @@
+Stage 1: actual terminal callback and selected-array canonicality.
+
+JFy_TerminalCallbackCanonical.source and JFy_SelectedCanonical.source consume the retained real Claims; no success or canonicality premise is added. JFy_BoundedCanonical preserves a per-cell predicate through the installed builder. Attempts 001–003 pass, standard axioms only, swap zero; exact command, hashes, dependency objects, wall and RSS in each receipt. Closure inventory: 4225 objects present. Initial closure SSH command exceeded transport limits; smaller stdin inspection succeeded, no launcher changed. Before/after Rc7 and Rc10 statements unchanged: zero premise-removal credit. Native terminal acceptance remains open.

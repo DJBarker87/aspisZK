@@ -1,0 +1,60 @@
+FIy_IteratorTraversal.lean:85:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  field.QM31.mul rangeSelector residual
+in the target expression
+  (let (o, iter1, next_back) := (some residual, iter1, nextBack)
+    match o with
+    | none => ok (iter1, fun im => back (next_back im none))
+    | some residual => do
+      let residual1 ← field.QM31.mul rangeSelector residual
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop3 iter1 (fun im => back (next_back im (some residual1)))
+          rangeSelector) =
+    ok (finalIter, finalBack)
+
+case succ.refine_1
+rangeSelector : QM
+values : ℕ → QM
+n : ℕ
+ih :
+  ∀ (iter : IterMut) (back : IterMut → IterMut),
+    ↑iter.slice.len = iter.i + n →
+      (∀ (j : ℕ) (hj : j < (↑iter.slice).length),
+          iter.i ≤ j → field.QM31.mul rangeSelector (↑iter.slice)[j] = ok (values j)) →
+        ∃ finalIter finalBack,
+          Loop3 iter back rangeSelector = ok (finalIter, finalBack) ∧
+            finalIter.slice = iter.slice ∧
+              finalIter.i = iter.i + n ∧
+                ∀ (im : core.slice.iter.IterMut field.QM31), finalBack im = back (deferredWrites values iter.i n im)
+iter : IterMut
+back : IterMut → IterMut
+hlen : ↑iter.slice.len = iter.i + (n + 1)
+hproducts :
+  ∀ (j : ℕ) (hj : j < (↑iter.slice).length), iter.i ≤ j → field.QM31.mul rangeSelector (↑iter.slice)[j] = ok (values j)
+hlenVal : (↑iter.slice).length = iter.i + (n + 1)
+hhas : iter.i < (↑iter.slice).length
+residual : QM := iter.slice[iter.i]
+iter1 : IterMut := { slice := iter.slice, i := iter.i + 1 }
+nextBack : IterMut → Option QM → IterMut :=
+  fun it' x =>
+    match x with
+    | none => it'
+    | some x => { slice := it'.slice.setAtNat iter.i x, i := it'.i }
+hnext : core.slice.iter.IteratorIterMut.next iter = ok (some residual, iter1, nextBack)
+hprod : field.QM31.mul rangeSelector residual = ok (values iter.i)
+hlen1 : ↑iter.slice.len = iter1.i + n
+finalIter : core.slice.iter.IterMut field.QM31
+finalBack : core.slice.iter.IterMut field.QM31 → core.slice.iter.IterMut field.QM31
+hrun : Loop3 iter1 (fun im => back (nextBack im (some (values iter.i)))) rangeSelector = ok (finalIter, finalBack)
+hslice : finalIter.slice = iter1.slice
+hindex : finalIter.i = iter1.i + n
+hback :
+  ∀ (im : core.slice.iter.IterMut field.QM31),
+    finalBack im = back (nextBack (deferredWrites values iter1.i n im) (some (values iter.i)))
+⊢ (let (o, iter1, next_back) := (some residual, iter1, nextBack)
+    match o with
+    | none => ok (iter1, fun im => back (next_back im none))
+    | some residual => do
+      let residual1 ← field.QM31.mul rangeSelector residual
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop3 iter1 (fun im => back (next_back im (some residual1)))
+          rangeSelector) =
+    ok (finalIter, finalBack)
+'AspisR1.FIy_IteratorTraversal.products' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

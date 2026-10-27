@@ -1,0 +1,33 @@
+def AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.transition_kind : Aeneas.Std.U8 →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result AspisR1TerminalDecoder.pool_v1.historical_anchor.PoolV1TransitionKind
+      AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) :=
+fun byte => do
+  let i ← 1#u8 + 0#u8
+  let i1 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U8 i)
+  if byte = i1 then
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Ok
+          AspisR1TerminalDecoder.pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer)
+    else do
+      let i2 ← 2#u8 + 0#u8
+      let i3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U8 i2)
+      if byte = i3 then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Ok
+              AspisR1TerminalDecoder.pool_v1.historical_anchor.PoolV1TransitionKind.Withdrawal)
+        else
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err
+              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidTransitionKind)
+'AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.transition_kind' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@[reducible] def AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_4.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1 : Aeneas.Std.core.ops.function.FnOnce
+  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_4
+  AspisR1TerminalDecoder.atomic_statement.AtomicStatementError
+  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1 :=
+{
+  call_once :=
+    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_4.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1.call_once }
+'AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_4.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1' does not depend on any axioms

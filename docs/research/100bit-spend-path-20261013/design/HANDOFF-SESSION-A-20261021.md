@@ -947,3 +947,15 @@ Same accepted public bytes/reuse/checkpoint/frame and S1 preparation/ranges/join
 ### Lead update — 2026-10-25, import preflight and metadata failure retained
 
 Actual366 failed region-array Inhabited elaboration, no header/import/caller closure. Exit1/7.585s/1.309GB sampled aggregate/swap0, one identity mismatch cause unknown/no signals; two whole-consumer calls367/368 remain reserved. Source fixes/public API memory strategy underway, no A source access or merge. Private metadata transferred46pinnedfiles then setup78; parent summaries rejected permissions, underlying error unobserved. Local publisher umask002->0664 counterexample verified, source-only repair/read-only diagnostic preparation underway; no finalKani. Same shared-account bytes/ranges model connection retained with explicit SDK/std/runtime/extraction boundaries; coherent enclosing caller/security joins remain open. Both deployed targets not yet established.
+
+## 2026-10-25 late (lead): owner direction, close one S-obligation completely
+
+The owner wants one complete S-obligation closed end to end, not progress across all ten. S3 is the suggested candidate on your side, while the lead continues S2's source integration (op3 TX1 and TX2 header, op4 scan and TX2 installation are now closed; see the C3-BIN addenda). Please concentrate on closing S3 completely, and record its exact remaining premises in design/PREMISE-LEDGER-20261025.md style. Your prepare/op7 S1 PreparedBinding remains the premise that blocks the most lead rows.
+
+## 2026-10-26 (lead): the literal data read needs SessionAPrepare data identification
+
+The lead's parser gate `LiteralMatchingData.read (typedRows parsed q tr) = some data` now reduces to two things: the source/oracle transcript binding (lead, GExp_) and identifying that literal data with the data value in your SessionAPrepare / S1 PreparedBinding. Please expose, in your prepare/op7 closure, an equation from the returned Prepared's data to the literal matching data of the parsed transcript. That single equation would close a lead gate as soon as GExp_ lands.
+
+## 2026-10-26 (lead): owner authorised the lead to take on session A rows
+
+The owner has authorised lead workers to work on session A-owned premise rows. The lead will NOT edit your worktrees or candidate files. Lead work happens in lead worktrees under lead prefixes, importing your results read-only. Rows the lead is starting now: (1) SessionAPrepare / S1 PreparedBinding on the actual TX1 run (F3L_ already derived the Port5Q1 form on run.p); (2) SessionAPrimitives (line_canonical, query/geometry primitive laws, the mul/one/inverse identities, the domain/geometry owner instances). If you have work in flight on either, please append a note here today, and the lead will import it instead of duplicating it. Also note: the headline model is now frozen3 (owner decision), so finish laws should target F3_Model's finish, which is unchanged from frozen2.

@@ -1,0 +1,226 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Recorded.lean:85:16: error: Tactic `rfl` failed: The left-hand side
+  (have sample := scalar hash domain 16 state;
+    match sample.1 with
+    | fail e => (fail e, sample.2)
+    | div => (div, sample.2)
+    | ok (core.result.Result.Err e, after) => (ok (core.result.Result.Err e, after), sample.2)
+    | ok (core.result.Result.Ok value, after) =>
+      have rest := collect hash domain n after;
+      (do
+        let (values, final) ← rest.1
+        match values with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final),
+        sample.2 ++ rest.2)).1
+is not definitionally equal to the right-hand side
+  do
+    let (sample, after) ← fail e
+    match sample with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+      | core.result.Result.Ok a => do
+        let (tail, final) ← ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n after
+        match tail with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+
+case succ.fail
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (state : State),
+    (collect hash domain n state).1 =
+      ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n state
+state : State
+e : Error
+hn : (scalar hash domain 16 state).1 = fail e
+⊢ (have sample := scalar hash domain 16 state;
+      match sample.1 with
+      | fail e => (fail e, sample.2)
+      | div => (div, sample.2)
+      | ok (core.result.Result.Err e, after) => (ok (core.result.Result.Err e, after), sample.2)
+      | ok (core.result.Result.Ok value, after) =>
+        have rest := collect hash domain n after;
+        (do
+          let (values, final) ← rest.1
+          match values with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+            | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final),
+          sample.2 ++ rest.2)).1 =
+    do
+    let (sample, after) ← fail e
+    match sample with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+      | core.result.Result.Ok a => do
+        let (tail, final) ← ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n after
+        match tail with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Recorded.lean:86:13: error: Tactic `rfl` failed: The left-hand side
+  (have sample := scalar hash domain 16 state;
+    match sample.1 with
+    | fail e => (fail e, sample.2)
+    | div => (div, sample.2)
+    | ok (core.result.Result.Err e, after) => (ok (core.result.Result.Err e, after), sample.2)
+    | ok (core.result.Result.Ok value, after) =>
+      have rest := collect hash domain n after;
+      (do
+        let (values, final) ← rest.1
+        match values with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final),
+        sample.2 ++ rest.2)).1
+is not definitionally equal to the right-hand side
+  do
+    let (sample, after) ← div
+    match sample with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+      | core.result.Result.Ok a => do
+        let (tail, final) ← ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n after
+        match tail with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+
+case succ.div
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (state : State),
+    (collect hash domain n state).1 =
+      ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n state
+state : State
+hn : (scalar hash domain 16 state).1 = div
+⊢ (have sample := scalar hash domain 16 state;
+      match sample.1 with
+      | fail e => (fail e, sample.2)
+      | div => (div, sample.2)
+      | ok (core.result.Result.Err e, after) => (ok (core.result.Result.Err e, after), sample.2)
+      | ok (core.result.Result.Ok value, after) =>
+        have rest := collect hash domain n after;
+        (do
+          let (values, final) ← rest.1
+          match values with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+            | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final),
+          sample.2 ++ rest.2)).1 =
+    do
+    let (sample, after) ← div
+    match sample with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+      | core.result.Result.Ok a => do
+        let (tail, final) ← ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n after
+        match tail with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Recorded.lean:90:17: error: Tactic `rfl` failed: The left-hand side
+  (have sample := scalar hash domain 16 state;
+    match sample.1 with
+    | fail e => (fail e, sample.2)
+    | div => (div, sample.2)
+    | ok (core.result.Result.Err e, after) => (ok (core.result.Result.Err e, after), sample.2)
+    | ok (core.result.Result.Ok value, after) =>
+      have rest := collect hash domain n after;
+      (do
+        let (values, final) ← rest.1
+        match values with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final),
+        sample.2 ++ rest.2)).1
+is not definitionally equal to the right-hand side
+  do
+    let (sample, after) ← ok (core.result.Result.Err e, after)
+    match sample with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+      | core.result.Result.Ok a => do
+        let (tail, final) ← ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n after
+        match tail with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+
+case succ.ok.Err
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (state : State),
+    (collect hash domain n state).1 =
+      ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n state
+state after : State
+e : state_only_hiding.StateOnlyMaskBuildError
+hn : (scalar hash domain 16 state).1 = ok (core.result.Result.Err e, after)
+⊢ (have sample := scalar hash domain 16 state;
+      match sample.1 with
+      | fail e => (fail e, sample.2)
+      | div => (div, sample.2)
+      | ok (core.result.Result.Err e, after) => (ok (core.result.Result.Err e, after), sample.2)
+      | ok (core.result.Result.Ok value, after) =>
+        have rest := collect hash domain n after;
+        (do
+          let (values, final) ← rest.1
+          match values with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+            | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final),
+          sample.2 ++ rest.2)).1 =
+    do
+    let (sample, after) ← ok (core.result.Result.Err e, after)
+    match sample with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+      | core.result.Result.Ok a => do
+        let (tail, final) ← ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n after
+        match tail with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Recorded.lean:93:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (collect hash domain n ?state).1
+in the target expression
+  (match (scalar hash domain 16 state).1 with
+      | fail e => (fail e, (scalar hash domain 16 state).2)
+      | div => (div, (scalar hash domain 16 state).2)
+      | ok (core.result.Result.Err e, after) => (ok (core.result.Result.Err e, after), (scalar hash domain 16 state).2)
+      | ok (core.result.Result.Ok value, after) =>
+        (do
+          let (values, final) ← (collect hash domain n after).1
+          match values with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+            | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final),
+          (scalar hash domain 16 state).2 ++ (collect hash domain n after).2)).1 =
+    do
+    let (tail, final) ← ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n after
+    match tail with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+      | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final)
+
+case succ.ok.Ok
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (state : State),
+    (collect hash domain n state).1 =
+      ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n state
+state after : State
+value : aspis_core.field.M31
+hn : (scalar hash domain 16 state).1 = ok (core.result.Result.Ok value, after)
+⊢ (match (scalar hash domain 16 state).1 with
+      | fail e => (fail e, (scalar hash domain 16 state).2)
+      | div => (div, (scalar hash domain 16 state).2)
+      | ok (core.result.Result.Err e, after) => (ok (core.result.Result.Err e, after), (scalar hash domain 16 state).2)
+      | ok (core.result.Result.Ok value, after) =>
+        (do
+          let (values, final) ← (collect hash domain n after).1
+          match values with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+            | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final),
+          (scalar hash domain 16 state).2 ++ (collect hash domain n after).2)).1 =
+    do
+    let (tail, final) ← ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n after
+    match tail with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+      | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final)
+'R1Z.PV_L2_F3Recorded.scalar_erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Recorded.source_scalar_erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Recorded.collect_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Recorded.qm31_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

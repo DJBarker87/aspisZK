@@ -1,0 +1,39 @@
+{"attempt": "BEk_098", "exit_status": 0, "wall_seconds": 2.53832854796201, "peak_rss_kib": "5541920", "swaps": "0", "print_axioms": ["'AspisR1.BEk_Nonvacuity.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_Nonvacuity.step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Rc10_Nonvacuity.composed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARU_Nonvacuity.conditional' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.BEk_Nonvacuity.rejected : ∀ (parts : AspisR1.SdkC_Source.Parts) (digest : AspisR1.SdkC_Source.Digest) (n : ℕ)
+  (before : AspisR1.SdkC_Source.Log),
+  have code :=
+    AspisR1.CheckpointBytes5Effect.Code.read parts fun x =>
+      AspisR1.CheckpointBytes5Effect.Code.read parts fun x =>
+        AspisR1.CheckpointBytes5Effect.Code.done (Aeneas.Std.core.result.Result.Err ());
+  have log :=
+    before ++ [{ parts := parts, returned := Aeneas.Std.Result.ok digest }] ++
+      [{ parts := parts, returned := Aeneas.Std.Result.ok digest }];
+  AspisR1.BEh_Scope.Law (Aeneas.Std.Result.fail Aeneas.Std.Error.panic, n + 9, log)
+      (AspisR1.BEf_Carrier.run (AspisR1.BEf_Count.call fun x => Aeneas.S
+...
+.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A)
+      (native H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a native),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        AspisR1.ARS_AccountReplay.Consistent
+            (AspisR1.SCE_Experiment.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+              AspisR1.CPH_Program.verifier a)
+            native H →
+          (AspisV8R19.MemoizedProgramLaw.eval native (AspisR1.SCE_Experiment.submission a)).2 =
+              { publicBytes := AspisR1.MultiproofConeCanonical.bytesOf AspisR1.JFx_NativeBytes.publicBytes,
+                stored := AspisR1.MultiproofConeCanonical.bytesOf AspisR1.JFx_NativeBytes.proofBytes } →
+            Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a H) ∧
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2 =
+                  { publicBytes := AspisR1.MultiproofConeCanonical.bytesOf AspisR1.JFx_NativeBytes.publicBytes,
+                    stored := AspisR1.MultiproofConeCanonical.bytesOf AspisR1.JFx_NativeBytes.proofBytes } ∧
+                AspisR1.SCE_Experiment.accepted
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy
+                          allocator AspisR1.CPH_Program.verifier a)).2 =
+                  Bool.true
+'AspisR1.ARU_Nonvacuity.conditional' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r33b9cfb699fb4e72bfdd1f5e7710683e.scope; invocation ID: 4eff0f45c993489796ccfe6464b72181

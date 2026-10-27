@@ -1,0 +1,83 @@
+structure AspisR1.ARQ_WorldSupport.NativeAt {W A C Tx : Type} (L : Library W (ℕ → Record))
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (c : DrvC_Installation.Configuration FIo_Install.W C) (err : C) (r : NP6_StdModel.Reservation)
+  (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (a : Adversary A) (H : Bytes → State) : Type
+number of parameters: 15
+fields:
+  AspisR1.ARQ_WorldSupport.NativeAt.sha256 : Bytes → State
+  AspisR1.ARQ_WorldSupport.NativeAt.p1 : S2W_ExtractionBoundary.P1 self.sha256 H
+  AspisR1.ARQ_WorldSupport.NativeAt.syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv self.sha256
+  AspisR1.ARQ_WorldSupport.NativeAt.saved : alloc.vec.Vec U8
+  AspisR1.ARQ_WorldSupport.NativeAt.post1 : Heap (ℕ → Record)
+  AspisR1.ARQ_WorldSupport.NativeAt.post2 : Heap (ℕ → Record)
+  AspisR1.ARQ_WorldSupport.NativeAt.final1 : A
+  AspisR1.ARQ_WorldSupport.NativeAt.final2 : A
+  AspisR1.ARQ_WorldSupport.NativeAt.w1 : W
+  AspisR1.ARQ_WorldSupport.NativeAt.w2 : W
+  AspisR1.ARQ_WorldSupport.NativeAt.admission1 : RuntimeEntrypointAdmission L (eval H a.first).2.entry self.w1 3
+  AspisR1.ARQ_WorldSupport.NativeAt.admission2 : RuntimeEntrypointAdmission L
+      (eval H (a.second (eval H a.first).2 self.saved self.post1 self.final1)).2.entry self.w2 7
+  AspisR1.ARQ_WorldSupport.NativeAt.accepted1 : first native1 copy allocator (eval H a.first).2.entry
+        CPH_Program.verifier (eval H a.first).2.data (eval H a.first).2.state =
+      ok (core.result.Result.Ok (self.saved, self.post1, self.final1))
+  AspisR1.ARQ_WorldSupport.NativeAt.accepted2 : let j :=
+      (eval H (a.second (eval H a.first).2 self.saved self.post1 self.final1)).2;
+    second native2 allocator j.entry CPH_Program.verifier j.data j.slot j.state =
+      ok (core.result.Result.Ok (self.post2, self.final2))
+  AspisR1.ARQ_WorldSupport.NativeAt.p : CPG_Projection.Observations Tx A
+  AspisR1.ARQ_WorldSupport.NativeAt.t : Tx
+  AspisR1.ARQ_WorldSupport.NativeAt.u : Tx
+  AspisR1.ARQ_WorldSupport.NativeAt.actions : List (CPP_BankState.Action A)
+  AspisR1.ARQ_WorldSupport.NativeAt.game : CPH_Game.DeployedPairExecution self.p self.t self.u (eval H a.first).2.entry
+      (eval H (a.second (eval H a.first).2 self.saved self.post1 self.final1)).2.entry self.saved self.actions native1
+      native2 copy allocator CPH_Program.verifier
+  AspisR1.ARQ_WorldSupport.NativeAt.RuntimePersistence : CPR_DataPersistence.TwoTransactionLaw
+      (CPG_Projection.adjacent self.p) (CPG_Projection.ordinary self.p (Hist_Nonvacuity.key 0#u8))
+      (CPG_Projection.before self.p) (CPG_Projection.tentative self.p) (CPG_Projection.success self.p)
+      (CPG_Projection.loaded self.p)
+constructor:
+  AspisR1.ARQ_WorldSupport.NativeAt.mk {W A C Tx : Type} {L : Library W (ℕ → Record)}
+    {copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)} {allocator : Allocator A}
+    {c : DrvC_Installation.Configuration FIo_Install.W C} {err : C} {r : NP6_StdModel.Reservation}
+    {native1 : S2W_ExtractionBoundary.First} {native2 : S2W_ExtractionBoundary.Second}
+    {hashv : SdkC_Source.Parts → Result SdkC_Source.Digest} {a : Adversary A} {H : Bytes → State}
+    (sha256 : Bytes → State) (p1 : S2W_ExtractionBoundary.P1 sha256 H)
+    (syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256) (saved : alloc.vec.Vec U8)
+    (post1 post2 : Heap (ℕ → Record)) (final1 final2 : A) (w1 w2 : W)
+    (admission1 : RuntimeEntrypointAdmission L (eval H a.first).2.entry w1 3)
+    (admission2 : RuntimeEntrypointAdmission L (eval H (a.second (eval H a.first).2 saved post1 final1)).2.entry w2 7)
+    (accepted1 :
+      first native1 copy allocator (eval H a.first).2.entry CPH_Program.verifier (eval H a.first).2.data
+          (eval H a.first).2.state =
+        ok (core.result.Result.Ok (saved, post1, final1)))
+    (accepted2 :
+      let j := (eval H (a.second (eval H a.first).2 saved post1 final1)).2;
+      second native2 allocator j.entry CPH_Program.verifier j.data j.slot j.state =
+        ok (core.result.Result.Ok (post2, final2)))
+    (p : CPG_Projection.Observations Tx A) (t u : Tx) (actions : List (CPP_BankState.Action A))
+    (game :
+      CPH_Game.DeployedPairExecution p t u (eval H a.first).2.entry
+        (eval H (a.second (eval H a.first).2 saved post1 final1)).2.entry saved actions native1 native2 copy allocator
+        CPH_Program.verifier)
+    (RuntimePersistence :
+      CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+        (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p) (CPG_Projection.tentative p)
+        (CPG_Projection.success p) (CPG_Projection.loaded p)) :
+    NativeAt L copy allocator c err r native1 native2 hashv a H
+def AspisR1.ARQ_WorldSupport.Supported : {W A C : Type} →
+  {Tx : Type} →
+    Library W (ℕ → Record) →
+      (Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) →
+        Allocator A →
+          DrvC_Installation.Configuration FIo_Install.W C →
+            C →
+              NP6_StdModel.Reservation →
+                S2W_ExtractionBoundary.First →
+                  S2W_ExtractionBoundary.Second →
+                    (SdkC_Source.Parts → Result SdkC_Source.Digest) → Adversary A → Prop :=
+fun {W A C Tx} L copy allocator c err r native1 native2 hashv a =>
+  ∀ (H : Bytes → State),
+    accepted (eval H (account (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a)).2 =
+        true →
+      Nonempty (NativeAt L copy allocator c err r native1 native2 hashv a H)

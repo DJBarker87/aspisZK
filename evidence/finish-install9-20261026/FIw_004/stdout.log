@@ -1,0 +1,693 @@
+FIw_CopyMeaning.lean:61:4: error: Type mismatch: After simplification, term
+  Eq.symm h_q8
+ has type
+  ok q8 =
+    match ⟨[q1, q3, q5, q7], ⋯⟩[0#usize]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+but is expected to have type
+  q8 = q1
+FIw_CopyMeaning.lean:64:4: error: Type mismatch: After simplification, term
+  Eq.symm h_q9
+ has type
+  ok q9 =
+    match ⟨[q1, q3, q5, q7], ⋯⟩[1#usize]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+but is expected to have type
+  q9 = q3
+FIw_CopyMeaning.lean:67:4: error: Type mismatch: After simplification, term
+  Eq.symm h_q10
+ has type
+  ok q10 =
+    match ⟨[q1, q3, q5, q7], ⋯⟩[2#usize]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+but is expected to have type
+  q10 = q5
+FIw_CopyMeaning.lean:70:4: error: Type mismatch: After simplification, term
+  Eq.symm h_q11
+ has type
+  ok q11 =
+    match ⟨[q1, q3, q5, q7], ⋯⟩[3#usize]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+but is expected to have type
+  q11 = q7
+FIw_CopyMeaning.lean:104:58: error: Application type mismatch: The argument
+  run
+has type
+  (do
+      let q13 ← q12.mul q3
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q7
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul producer_numerator
+      q22.sub q23) =
+    ok out
+but is expected to have type
+  q22.sub q23 = ok out
+in the application
+  FIv_SubMap.qm q22 q23 out a_q22.left a_q23.left run
+FIw_CopyMeaning.lean:109:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  value row.producer_values 0#usize.bv.toNat
+in the target expression
+  (decode chi - decode q) * (decode chi - decode q2) *
+        (decode helper * ((decode chi - decode q4) * (decode chi - decode q6)) +
+          (decode q16 * (decode chi - decode q6) + decode q18 * (decode chi - decode q4))) -
+      (decode chi - decode q4) * (decode chi - decode q6) *
+        (decode q12 * (decode chi - decode q2) + decode q14 * (decode chi - decode q)) =
+    have p0 := decode chi - value row.producer_values 0;
+    have p1 := decode chi - value row.producer_values 1;
+    have c0 := decode chi - value row.consumer_values 0;
+    have c1 := decode chi - value row.consumer_values 1;
+    p0 * p1 * (decode helper * (c0 * c1) + (value row.consumer_weights 0 * c1 + value row.consumer_weights 1 * c0)) -
+      c0 * c1 * (value row.producer_weights 0 * p1 + value row.producer_weights 1 * p0)
+
+row : Row
+helper chi out : NQ
+hpv : ∀ x ∈ ↑row.producer_values, Canon x
+hcv : ∀ x ∈ ↑row.consumer_values, Canon x
+hpw : ∀ x ∈ ↑row.producer_weights, Canon x
+hcw : ∀ x ∈ ↑row.consumer_weights, Canon x
+hh : Canon helper
+hc : Canon chi
+run✝²⁷ :
+  (do
+      let q ← row.producer_values.index_usize 0#usize
+      let q1 ← field.QM31.sub chi q
+      let q2 ← row.producer_values.index_usize 1#usize
+      let q3 ← field.QM31.sub chi q2
+      let q4 ← row.consumer_values.index_usize 0#usize
+      let q5 ← field.QM31.sub chi q4
+      let q6 ← row.consumer_values.index_usize 1#usize
+      let q7 ← field.QM31.sub chi q6
+      let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q8.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q8
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+q : field.QM31
+h_q : row.producer_values.index_usize 0#usize = ok q
+run✝²⁶ :
+  (do
+      let q1 ← field.QM31.sub chi q
+      let q2 ← row.producer_values.index_usize 1#usize
+      let q3 ← field.QM31.sub chi q2
+      let q4 ← row.consumer_values.index_usize 0#usize
+      let q5 ← field.QM31.sub chi q4
+      let q6 ← row.consumer_values.index_usize 1#usize
+      let q7 ← field.QM31.sub chi q6
+      let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q8.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q8
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+q1 : field.QM31
+h_q1 : field.QM31.sub chi q = ok q1
+run✝²⁵ :
+  (do
+      let q2 ← row.producer_values.index_usize 1#usize
+      let q3 ← field.QM31.sub chi q2
+      let q4 ← row.consumer_values.index_usize 0#usize
+      let q5 ← field.QM31.sub chi q4
+      let q6 ← row.consumer_values.index_usize 1#usize
+      let q7 ← field.QM31.sub chi q6
+      let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q8.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q8
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+q2 : field.QM31
+h_q2 : row.producer_values.index_usize 1#usize = ok q2
+run✝²⁴ :
+  (do
+      let q3 ← field.QM31.sub chi q2
+      let q4 ← row.consumer_values.index_usize 0#usize
+      let q5 ← field.QM31.sub chi q4
+      let q6 ← row.consumer_values.index_usize 1#usize
+      let q7 ← field.QM31.sub chi q6
+      let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q8.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q8
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+q3 : field.QM31
+h_q3 : field.QM31.sub chi q2 = ok q3
+run✝²³ :
+  (do
+      let q4 ← row.consumer_values.index_usize 0#usize
+      let q5 ← field.QM31.sub chi q4
+      let q6 ← row.consumer_values.index_usize 1#usize
+      let q7 ← field.QM31.sub chi q6
+      let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q8.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q8
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+q4 : field.QM31
+h_q4 : row.consumer_values.index_usize 0#usize = ok q4
+run✝²² :
+  (do
+      let q5 ← field.QM31.sub chi q4
+      let q6 ← row.consumer_values.index_usize 1#usize
+      let q7 ← field.QM31.sub chi q6
+      let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q8.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q8
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+q5 : field.QM31
+h_q5 : field.QM31.sub chi q4 = ok q5
+run✝²¹ :
+  (do
+      let q6 ← row.consumer_values.index_usize 1#usize
+      let q7 ← field.QM31.sub chi q6
+      let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q8.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q8
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+q6 : field.QM31
+h_q6 : row.consumer_values.index_usize 1#usize = ok q6
+run✝²⁰ :
+  (do
+      let q7 ← field.QM31.sub chi q6
+      let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q8.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q8
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+q7 : field.QM31
+h_q7 : field.QM31.sub chi q6 = ok q7
+run✝¹⁹ :
+  (do
+      let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q8.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q8
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+pd cd q12 : field.QM31
+h_q12 : row.producer_weights.index_usize 0#usize = ok q12
+q13 q14 : field.QM31
+h_q14 : row.producer_weights.index_usize 1#usize = ok q14
+q15 pn : field.QM31
+h_pn : q13.add q15 = ok pn
+q16 : field.QM31
+h_q16 : row.consumer_weights.index_usize 0#usize = ok q16
+q17 q18 : field.QM31
+h_q18 : row.consumer_weights.index_usize 1#usize = ok q18
+q19 : field.QM31
+run✝¹⁸ :
+  (do
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul pn
+      q22.sub q23) =
+    ok out
+cn : field.QM31
+h_cn : q17.add q19 = ok cn
+run✝¹⁷ :
+  (do
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add cn
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul pn
+      q22.sub q23) =
+    ok out
+q20 : field.QM31
+h_q20 : field.QM31.mul helper cd = ok q20
+run✝¹⁶ :
+  (do
+      let q21 ← q20.add cn
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul pn
+      q22.sub q23) =
+    ok out
+q21 : field.QM31
+h_q21 : q20.add cn = ok q21
+run✝¹⁵ :
+  (do
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul pn
+      q22.sub q23) =
+    ok out
+q22 : field.QM31
+h_q22 : pd.mul q21 = ok q22
+run✝¹⁴ :
+  (do
+      let q23 ← cd.mul pn
+      q22.sub q23) =
+    ok out
+q23 : field.QM31
+h_q23 : cd.mul pn = ok q23
+run✝¹³ : q22.sub q23 = ok out
+h_q8 : (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize = ok q1
+run✝¹² :
+  (do
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q1.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+h_q15 : q14.mul q1 = ok q15
+h_q9 : (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize = ok q3
+h_q13 : q12.mul q3 = ok q13
+run✝¹¹ :
+  (do
+      let producer_denominator ← q1.mul q3
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q3
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+h_pd : q1.mul q3 = ok pd
+run✝¹⁰ :
+  (do
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q3
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+h_q10 : (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize = ok q5
+run✝⁹ :
+  (do
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul pn
+      q22.sub q23) =
+    ok out
+run✝⁸ :
+  (do
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul pn
+      q22.sub q23) =
+    ok out
+h_q19 : q18.mul q5 = ok q19
+run✝⁷ :
+  (do
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q5.mul q11
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q3
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+h_q11 : (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize = ok q7
+h_q17 : q16.mul q7 = ok q17
+h_cd : q5.mul q7 = ok cd
+run✝⁶ :
+  (do
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q7
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul producer_numerator
+      q22.sub q23) =
+    ok out
+run✝⁵ :
+  (do
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q7
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul pn
+      q22.sub q23) =
+    ok out
+run✝⁴ :
+  (do
+      let q17 ← q16.mul q7
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul pn
+      q22.sub q23) =
+    ok out
+run✝³ :
+  (do
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q7
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul producer_numerator
+      q22.sub q23) =
+    ok out
+run✝² :
+  (do
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q7
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul producer_numerator
+      q22.sub q23) =
+    ok out
+run✝¹ :
+  (do
+      let consumer_denominator ← q5.mul q7
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q3
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q7
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) =
+    ok out
+run✝ :
+  (do
+      let q12 ← row.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q3
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q7
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul producer_numerator
+      q22.sub q23) =
+    ok out
+run :
+  (do
+      let q13 ← q12.mul q3
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q7
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul producer_numerator
+      q22.sub q23) =
+    ok out
+c_q : Canon q
+v_q : value row.producer_values 0#usize.bv.toNat = decode q
+c_q2 : Canon q2
+v_q2 : value row.producer_values 1#usize.bv.toNat = decode q2
+c_q4 : Canon q4
+v_q4 : value row.consumer_values 0#usize.bv.toNat = decode q4
+c_q6 : Canon q6
+v_q6 : value row.consumer_values 1#usize.bv.toNat = decode q6
+c_q12 : Canon q12
+v_q12 : value row.producer_weights 0#usize.bv.toNat = decode q12
+c_q14 : Canon q14
+v_q14 : value row.producer_weights 1#usize.bv.toNat = decode q14
+c_q16 : Canon q16
+v_q16 : value row.consumer_weights 0#usize.bv.toNat = decode q16
+c_q18 : Canon q18
+v_q18 : value row.consumer_weights 1#usize.bv.toNat = decode q18
+a_q1 : Canon q1 ∧ decode q1 = decode chi - decode q
+a_q3 : Canon q3 ∧ decode q3 = decode chi - decode q2
+a_q5 : Canon q5 ∧ decode q5 = decode chi - decode q4
+a_q7 : Canon q7 ∧ decode q7 = decode chi - decode q6
+a_pd : Canon pd ∧ decode pd = decode q1 * decode q3
+a_cd : Canon cd ∧ decode cd = decode q5 * decode q7
+a_q13 : Canon q13 ∧ decode q13 = decode q12 * decode q3
+a_q15 : Canon q15 ∧ decode q15 = decode q14 * decode q1
+a_pn : Canon pn ∧ decode pn = decode q13 + decode q15
+a_q17 : Canon q17 ∧ decode q17 = decode q16 * decode q7
+a_q19 : Canon q19 ∧ decode q19 = decode q18 * decode q5
+a_cn : Canon cn ∧ decode cn = decode q17 + decode q19
+a_q20 : Canon q20 ∧ decode q20 = decode helper * decode cd
+a_q21 : Canon q21 ∧ decode q21 = decode q20 + decode cn
+a_q22 : Canon q22 ∧ decode q22 = decode pd * decode q21
+a_q23 : Canon q23 ∧ decode q23 = decode cd * decode pn
+final : Canon out ∧ decode out = decode q22 - decode q23
+⊢ (decode chi - decode q) * (decode chi - decode q2) *
+        (decode helper * ((decode chi - decode q4) * (decode chi - decode q6)) +
+          (decode q16 * (decode chi - decode q6) + decode q18 * (decode chi - decode q4))) -
+      (decode chi - decode q4) * (decode chi - decode q6) *
+        (decode q12 * (decode chi - decode q2) + decode q14 * (decode chi - decode q)) =
+    have p0 := decode chi - value row.producer_values 0;
+    have p1 := decode chi - value row.producer_values 1;
+    have c0 := decode chi - value row.consumer_values 0;
+    have c1 := decode chi - value row.consumer_values 1;
+    p0 * p1 * (decode helper * (c0 * c1) + (value row.consumer_weights 0 * c1 + value row.consumer_weights 1 * c0)) -
+      c0 * c1 * (value row.producer_weights 0 * p1 + value row.producer_weights 1 * p0)
+'AspisR1.FIw_CopyMeaning.value_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

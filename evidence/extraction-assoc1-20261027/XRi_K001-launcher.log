@@ -1,0 +1,51 @@
+{"attempt": "XRi_K001", "exit_status": 0, "wall_seconds": 19.16383328702068, "peak_rss_kib": "749328", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling version_check v0.9.5
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `her
+...
+ckpoint_pair` should have a snake case name
+  --> XRi_harnesses.rs:18:39
+   |
+18 | #[kani::proof] #[kani::unwind(36)] fn XRi_checkpoint_pair(){let xs=[any_k(),any_k()];let prefix:[u8;8]=kani::any();let mut a=prefix....
+   |                                       ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xri_checkpoint_pair`
+
+warning: function `XRi_checkpoint_four` should have a snake case name
+  --> XRi_harnesses.rs:19:39
+   |
+19 | #[kani::proof] #[kani::unwind(36)] fn XRi_checkpoint_four(){let xs=[any_k(),any_k(),any_k(),any_k()];let mut a=Vec::new();let mut b=...
+   |                                       ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xri_checkpoint_four`
+
+warning: function `XRi_checkpoint_e_pair` should have a snake case name
+  --> XRi_harnesses.rs:20:39
+   |
+20 | #[kani::proof] #[kani::unwind(36)] fn XRi_checkpoint_e_pair(){let xs=[any_e(),any_e()];let prefix:[u8;8]=kani::any();let mut a=prefi...
+   |                                       ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xri_checkpoint_e_pair`
+
+warning: function `XRi_checkpoint_zero_weights` should have a snake case name
+  --> XRi_harnesses.rs:21:39
+   |
+21 | ...nwind(70)] fn XRi_checkpoint_zero_weights(){let mut a=vec![];for _ in 0..64 {XRi_shipped_put_k(&mut a,K::ZERO);}let i:usize=kani:...
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xri_checkpoint_zero_weights`
+
+    Finished `dev` profile [optimized] target(s) in 8.90s
+Checking harness XRi_harnesses::XRi_powers29_zero...
+
+VERIFICATION RESULT:
+ ** 0 of 29 failed (2 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 10.014084s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r6acc453047844efc9adba991ab8fb9be.scope; invocation ID: b872fb3881b146629517f32bc78bab47

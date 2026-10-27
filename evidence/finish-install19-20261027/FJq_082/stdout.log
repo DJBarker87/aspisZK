@@ -1,0 +1,71 @@
+FJq_AcceptedExtra.lean:13:41: error: Ambiguous term
+  r1_semantic.Verified
+Possible interpretations:
+  AspisR1CurrentCaller.r1_semantic.Verified H : Type
+  
+  AspisR1PublicPreparation.r1_semantic.Verified H : Type
+FJq_AcceptedExtra.lean:20:70: error: unsolved goals
+std : ClaimsUnrolledFinish.StdCalls
+ops : Ops
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+sem : sorry
+accepted :
+  (AspisS1NativeBufferClaimTrace.semanticBase ops (ClaimsUnrolledFinish.install std B)).op9 D pub bytes hash none =
+    ok (core.result.Result.Ok sorry)
+pre : r1_wire.Prefix
+initial after : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+challenges : r1_wire.Challenges
+parsed : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+publicInit :
+  r1_semantic.public_transcript (retainedDigest D) (FirstComposition.toRetainedPublic pub) hash pre.c1_root =
+    ok (core.result.Result.Ok initial)
+begun : r1_wire.begin (retainedDigest D) pre initial = ok (core.result.Result.Ok challenges, after)
+finished :
+  FinishModel.finish AspisS1ExtractedRoundChildren.children
+      (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B)) (retainedDigest D)
+      (FirstComposition.toRetainedPublic pub) pre after challenges none =
+    ok (core.result.Result.Ok (retainedSem sorry))
+claims : ClaimsUnrolledFinish.reference std pre = ok (core.result.Result.Ok (retainedSem sorry).claims)
+running : AspisR1PublicPreparation.aspis_core.field.QM31
+t25 : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+r25 r26 : r1_wire.ValidatedRecord
+z0 : AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+t26 : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+z1 : AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+t27 : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+rounds :
+  RoundModel.rounds AspisS1ExtractedRoundChildren.children (retainedDigest D) pre after =
+    ok (core.result.Result.Ok (running, (retainedSem sorry).alpha, t25))
+ch : (retainedSem sorry).challenges = challenges
+state : (retainedSem sorry).state_before_z0 = t25.state
+transcript : (retainedSem sorry).transcript = t27
+claimCall :
+  (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B)).claims pre =
+    ok (core.result.Result.Ok (retainedSem sorry).claims)
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+extra :
+  AspisS1ExtractedRoundChildren.children.decode 29#usize r25 87#usize =
+    ok (core.result.Result.Ok (retainedSem sorry).extra)
+rest :
+  FinishModel.circle_validated (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B)) (retainedDigest D) t25
+        r25 =
+      ok (core.result.Result.Ok z0, t26) ∧
+    pre.validated_record 26#u8 = ok (core.result.Result.Ok r26) ∧
+      AspisS1ExtractedRoundChildren.children.decode 29#usize r26 0#usize =
+          ok (core.result.Result.Ok (retainedSem sorry).before_z1) ∧
+        FinishModel.circle_validated (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B))
+              (retainedDigest D) t26 r26 =
+            ok (core.result.Result.Ok z1, t27) ∧
+          (retainedSem sorry).z = Array.make 2#usize [z0, z1] ⋯
+⊢ ∃ pre record,
+    PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre) ∧
+      pre.validated_record 25#u8 = ok (core.result.Result.Ok record) ∧
+        AspisS1ExtractedRoundChildren.decodeMain 29#usize record 87#usize =
+            ok (core.result.Result.Ok (retainedSem sorry).extra) ∧
+          ∀ x ∈ ↑(retainedSem sorry).extra, FIp_SemanticValues.Canon x
+FJq_AcceptedExtra.lean:28:14: error(lean.unknownIdentifier): Unknown constant `value`

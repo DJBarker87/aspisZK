@@ -1,0 +1,46 @@
+'AspisR1.JFo_QueryFixture.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFo_QueryFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JFo_QueryFixture.inhabited : ∀ (seed : Port3_NativeQueryBody.Ops),
+  ∃ g,
+    Tx2N_Powers.powers 29#usize JFo_Prepared.value.gamma = ok g ∧
+      Port3_NativePendingInstall.source true JFo_Prepared.accumulator.weights.deref =
+          ok (core.result.Result.Ok JFo_Pending.value) ∧
+        ∀ (i : Fin 12),
+          ∃ values,
+            ∀ (j : Fin 4),
+              (Port4C_RowStd.install (Port5Q1_QueryPorts.install (SAQ_Decoder.install seed))).op21
+                  (JFo_Opening.value (position i)) (slot j) =
+                ok (values j) :=
+fun seed =>
+  let ⟨g, h✝⟩ := JFo_Powers.source
+  let ⟨run, right✝⟩ := h✝
+  Exists.intro g ⟨run, ⟨JFo_Pending.source, decoded seed⟩⟩
+'AspisR1.JFo_TX2.reader_on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JFo_TX2.reader_on_saved : ∀ (saved : alloc.vec.Vec U8),
+  ↑saved = ↑JFx_NativeBytes.checkpoint →
+    ∀ {H : Type} (D : VTop_Stages.aspis_core.digest.Digest32 H) (hash : H),
+      D.digest hash (Array.make 1#usize [JFx_NativeBytes.proof] ⋯).to_slice = ok JFo_AuthBytes.proofHash →
+        D.digest hash (Array.make 1#usize [JFx_NativeBytes.publicInput] ⋯).to_slice = ok JFo_AuthBytes.publicHash →
+          D.digest hash
+                (Array.make 2#usize
+                    [(Array.make 22#usize
+                          [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8,
+                            104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                          ⋯).to_slice,
+                      JFq_Range.segment 0 1736 ⋯]
+                    ⋯).to_slice =
+              ok JFo_AuthBytes.checksum →
+            Port4A_ReaderInstall.reader true D ⟨↑saved, ⋯⟩ JFx_NativeBytes.proof JFx_NativeBytes.publicInput
+                transport.Variant.S2 hash =
+              ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator)) :=
+fun saved same {H} D hash proofHash publicHash checksumHash =>
+  have bytes := Subtype.ext same;
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          Port4A_ReaderInstall.reader true D _a JFx_NativeBytes.proof JFx_NativeBytes.publicInput transport.Variant.S2
+              hash =
+            ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator)))
+        bytes))
+    (JFo_ResumeNative.source D hash proofHash publicHash checksumHash).right

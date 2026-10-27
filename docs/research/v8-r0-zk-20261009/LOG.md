@@ -9681,3 +9681,1921 @@ infrastructure; on launcher trouble they stop and report). The manager's running
 `cx-port36-transport` was stopped, with a WIP snapshot kept. Proof results the manager merged are kept
 (e.g. the concrete Claims parent and S1 finish connection, and Q1/Q2 port modules). Infrastructure
 changes are left in place but no longer required by worker rules.
+
+## D191 (lead, 2026-10-26): prover candidate status and its ELF divergence
+
+The proof-friendly prover candidate (codex/cx-prover-rw-20261023, UNMERGED) now has query refinement, entropy/retry modelling (exhaustion 2^-4080 per call and 2^-4077 over eight attempts, as CONDITIONAL model results) and 74 of 262 operation-dictionary interpretations. Conjunct 1 of RustProverRefinement remains a premise. A second worker (codex/cx-prover-dict-20261026) covers the off-path entries. The default ELF built from the CANDIDATE branch's source hashes to d7d42f77..., not the release pin f8c0ec72.... Production is unaffected: lowering2 reproduced all three release pins from research. The candidate branched before the adapter/H5 adoptions and edits shared aspis-core files. Before any adoption it must be rebased onto research, and its effect on the verifier ELF measured; any verifier-byte change needs owner approval. Privacy target not yet established.
+
+## D192 (lead, 2026-10-26): host barrier cap correction for the prover candidate
+
+The prover-candidate host barrier (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py) asserted exactly MemoryHigh=5G / MemoryMax=7G. That rejected every launch at the policy caps 6G/8G (run-joint.sh MX=8), which are required for Lean -M7000. Lead edit (one line; backup barrier.py.bak-lead-20261026): the assert accepts exactly the pairs {(5G,7G),(6G,8G)}, with swap 0 and pids 64. Nothing above policy is accepted, and the reservation scanner is unchanged. Separately, workers follow local-lean.txt rule 6: one scope at a time per job, and wait/retry at the aggregate reservation barrier.
+
+## D193 (Stream B, 2026-10-26 09:20): privacy stream opened; six jobs; dict5 reviewed
+
+Numbering note: D193–D248 above were written during the Codex-manager period (2026-10-24/25)
+and Stream A then appended a second D190–D192. Stream B (the privacy lead, a separate Claude
+session) continues from D193 with the suffix "(Stream B)"; the earlier D193–D248 are not superseded.
+
+Owner instruction at session start: Stream B may run up to six Codex jobs (the handoff said three).
+Six 8 GiB scopes plus Stream A's three exceed the 55 GiB host reservation, so Stream B mixes
+host-heavy proof jobs with source-only audits and lets the reservation barrier serialise compiles;
+no cap is raised. Env-J IDs for privacy start at 20000.
+
+Jobs running (outputs `codex-pv-*.out`, prompts `prompt-pv-*.txt`): prover-rw14 (inherited, main
+path of the candidate), pv-dict6 (dictionary branch, see below), pv-ledger (the mechanical privacy
+premise ledger `design/PRIVACY-LEDGER-20261026.md`, same method as the soundness ledger, audit
+only), pv-l2-sim (F3/F5/F6 simulatable-trace proofs per D166 on research's R1Z tree, prefix
+PV_L2_), pv-rebase (candidate merged onto research in its own branch `codex/pv-rebase-20261026`,
+three-ELF identity and the <15 s / +10% timing gates; a verifier-byte difference is a stop and an
+owner escalation), pv-client (proof-account route audit per D162 and integration receipt).
+
+prover-dict5 finished (head 8f80a91331, unmerged, unpushed): 163/262 operations selected, 26/28
+type representations; Formatter erased from the retry execution and the proof-account caller
+(`PDict_FormatterIndependent`, `PDict_ClientFormatterIndependent`); native Debug sink contract
+checked for 17 variants; audit J14440 exit 0, 1.92 s, 4,294,736 KiB RSS, swap 0, 176 standard-axiom
+reports. Open: std.io.error.Error (dynamic trait payload; extraction rejects it), type 27, File
+ownership/world transport, 99 operations. Root conjunct-1 premises removed: 0. Lead review:
+no sorry/admit/axiom tokens; the 483 added lines under crates/ are cfg(kani)-only harness modules
+(verified by inspection of every added module head), so no shipped bytes changed; the candidate's
+default/devnet ELF mismatch (D191) stands and is pv-rebase's job. The worker stopped with 62 Lean
+attempts unused, against the completion rule. pv-dict6 relaunches on the same branch with a
+changed task: prove by reachability over the extracted erased caller which of the 99 operations
+and 2 types the refinement actually requires, then take the reachable error-carrier/IO entries by
+the P6 owned-reference route. Privacy target not yet established.
+
+## D194 (Stream B, 2026-10-26 09:55): three early returns reviewed; launcher range extended; three relaunches
+
+pv-rebase (head 3f9177b647) merged research into the candidate without conflicts and stopped at the
+source-identity condition: four aspis-core files differ (Cargo.toml feature `ct-host-prover`,
+field.rs, field/ct.rs, field/wide_exact.rs). Lead review: every difference is a
+`#[cfg(not(feature = "ct-host-prover"))]` guard or feature-gated addition, and the feature is
+host-only. The adoption condition is ELF byte identity, not source identity, so pv-rebase2 now runs
+the gates in order: three ELFs against the pins with a research control build in the same session,
+fixture bytes, the 1000-pair differential, quiet-host timing (<15 s, <=1.10x research). A byte
+difference stops the gates and isolates the responsible hunk; no repin is proposed by workers.
+
+pv-client (head 149855299b, merged into research d13ac3cb43; docs and an audit tool only):
+the operational R1 runner (`devnet_spend`, planner plan.rs:112) still calls the Generic96 route;
+`RealR1_client::prove_for_proof_accounts` (proof-account route, D162) is unwired; the release ledger
+pins no client. The minimal change needs tools/ and scripts/ only. D162 decision 1 already
+authorises this client change, so pv-client2 wires the runner to the proof-account route, makes the
+96-byte route unreachable with a test, and produces the acceptance receipt against the pinned ELFs
+plus source pins. No crates/ or programs/ change is permitted; one would stop the job.
+
+pv-l2-sim (head 5048eb9408, merged dd6bb7ee09; design note and row report only, all rows open)
+was refused by the shared launcher: `attempt 20100 outside 5000-9999`. Lead fix on the host,
+range only: run-joint.sh line 20 now also accepts `2[0-9][0-9][0-9][0-9]`; backup
+`run-joint.sh.bak-streamB-20261026`; new sha256 9804d43be78c1b83343d5c0545bd2cd4da0bb413a92ad202b5604210b9cbb864;
+probe 20100 passes the range check, 30000 is refused. The launcher's TasksMax=128 is its standing
+setting and is accepted for run-joint.sh compiles (memory caps unchanged). pv-l2-sim2 relaunched
+with its full budget. Six jobs running. Privacy target not yet established; no premise removed.
+
+## D195 (Stream B, 2026-10-26 10:40): privacy premise ledger merged; baseline counts; RunJoin job
+
+Merged `codex/pv-ledger-20261026` (b59fa7293a): `design/PRIVACY-LEDGER-20261026.md` with evidence
+under `evidence/privacy-ledger-20261026/` (mechanical #check/#print captures J20002/20004/20005,
+explicit-binder source block, non-vacuity audit, pins). Audit only; no theorem added; 5 of 15 Lean
+invocations used. This is the baseline against which Stream B progress is measured.
+
+| Scope | T | P | C |
+|---|---:|---:|---:|
+| All syntactic rows (399) | 26 | 369 | 4 |
+| Remaining obligation/trust/vacuity families | 26 | 161 | 4 |
+
+The difference between the two lines is data/guard fields (42), already-proved internal families (87),
+carried honest-domain guards (22) and explicit native-cut overlaps (57), listed separately so they are
+not counted as open gates. Owners: stream B 373, external 26. The `Admitted` namespace in the proof
+is not a Lean admission; its hidden model facts are inventoried. Highest-fan-out blocker: V038, the
+concrete deployed `RunJoin.agreement` (complete view and observer decision equal to the model outside
+the fixed bad event), with its two marginal laws V036/V037 on the same coupling. C rows: V045 the
+deployed `rust` instance is a free parameter with no deployed-prover certificate; V046 adversary
+inhabitance; V047 matching witness/public fibre for arbitrary x; V270 the Formatter axiom route
+(forbidden, unselected). The ledger notes the LOG numbering collision without editing the LOG.
+
+New job pv-runjoin (`codex/pv-runjoin-20261026`, branched from the candidate, prefix PV_RunJoin_,
+IDs 20900-21199): define the deployed FSExperiments instance from the candidate's extracted
+proof-account prover with an explicit entropy world as RealRand, prove non-vacuity for the two release
+fixtures, build the coupling with both marginals, and reduce `agreement` to a named premise structure
+with one field per ledger row. Six jobs running. Privacy target not yet established; rows removed: 0.
+
+## D196 (Stream B, 2026-10-26 11:20): operational client wired to the proof-account route (D162); L3 job
+
+Merged `codex/pv-client-20261026` into research. This implements the owner's D162 decision 1: the
+operational R1 runner (`tools/r1-cost-probe/src/bin/devnet_spend`, planner `plan.rs`, account helper
+`Client64_accounts.rs`, and the `scripts/` retention/inventory/driver helpers) now calls
+`RealR1_client::prove_for_proof_accounts`; publication is bound to the successful retained key; a
+regression test excludes the Generic96 fallback. No file under `crates/` or `programs/` changed
+(`git diff --stat research.. -- crates programs` empty), so the release pins are untouched.
+Validation: 31 Python tests and three optimized Rust tests; transfer and withdrawal proofs produced
+through the wired route are accepted by both pinned verifier ELFs and the pinned Pool in four signed
+LiteSVM cases; duplicate nonces return `Semantic` and leave the durable ledgers unchanged. Integration
+run: exit 0, 195.957 s, 547,352 KiB peak RSS, swap 0 (`evidence/pv-client-20261026/runtime-02-public/
+acceptance.json`); 1,295 source pins and the exact entry/call chain in `client-pins.json`. Process
+deviation recorded by the worker: one barrier retry after 110.6 s instead of 180 s; the retry passed
+admission independently. Reversible by reverting the merge if the owner objects. What this closes:
+the operational routing mismatch found in D194. What it does not: the release ledger still pins no
+client bundle (a soundness-stream file; recommendation to the owner: pin `client-pins.json`), and
+`RustRealRefinement`, E1/E2, RunJoin and L1/L2/L3 stay open. Ledger rows removed: 0 until recount.
+
+New job pv-l3 (`codex/pv-l3-20261026`, branched from the merged candidate, prefix PV_L3_, IDs
+21200-21299): V372 platform pins, V373 disassembly audit of the CT kernels and witness-bearing call
+sites, V374 dudect-style two-class measurement with pre-registered criteria, and the exact statements
+of the V370/V371 trust items for owner acceptance. All labelled measurement, never proof. Six jobs
+running. Privacy target not yet established.
+
+## D197 (Stream B, 2026-10-26 12:30): rebase gates passing; L3 partial audit with two escalations; rw15 and L1 jobs
+
+pv-rebase2 (branch `codex/pv-rebase-20261026`, unmerged candidate + research): all three ELFs built
+from the merged revision 3f9177b647 hash exactly to the release pins (default f8c0ec72…, 1,563,728 B;
+devnet 63ad3e9c…, 1,563,728 B; Pool 121f3e29…, 605,704 B), and a research control build in the same
+session reproduces the same three. Fixed-coin transfer and withdrawal proofs are byte-identical to
+research (proof 57,607 B, public 1,455 B; equal status/callbacks/attempts/audit). Lead ruling: the
+host-only `ct-host-prover` feature guards in aspis-core are admitted for adoption, since verifier bytes
+are unchanged. The D191 ELF divergence came from the missing research adoptions, not the CT kernels.
+Ledger rows V341–V343 now have passing evidence (not yet recounted). The 1000-pair differential and
+the quiet-host timing gate are still running. No binaries committed.
+
+pv-l3 (branch `codex/pv-l3-20261026`, from the merged candidate; report design/PV-L3-20261026.md):
+V372 platform pins recorded (optimized native prover executable, rustc/LLVM/flags, Intel Core Ultra 7
+155H, microcode, kernel). V373 disassembly audit PARTIAL over 52 kernel entries: M31/CM31/QM31/
+WideExact CT leaves compile to CMOV/SETcc/SSE masks with no secret branch or index; two STOPs retained:
+(a) the pole-verdict caller branches on the scan verdict (`je` at 0xa739d) to select ActivePole; this
+is the already-modelled L1 retry boundary (P_R1 rejection), not a new arithmetic leak; (b) the
+inversion-validity branches (`try_inv` on M31/QM31/WideExact) test for zero, so constant time is
+certified only on the nonzero domain. V374 timing: zero samples, the host load was about 20 with
+three other scopes; a guarded collector waits for a quiet host and will commit evidence locally on
+that branch. Read-only MSR snapshot: CPU0 supports DOITM (data-operand-independent timing mode) but it
+is DISABLED (IA32_UARCH_MISC_CTL = 0). All L3 results are measurement/trust, not proof.
+
+**Escalations to the owner (recommendation in each):**
+1. V371 CPU-latency trust item. With DOITM disabled, branchless code alone does not give
+   data-independent latency on this CPU. Recommendation: enable DOITM on the pinned build/prover host
+   (kernel/MSR setting, recorded as a platform pin) before the L3 measurement run, and accept V371
+   only for the DOITM-enabled mode; otherwise V371 stays a substantive trust item.
+2. Inversion zero-boundary. Recommendation: have the L2 job prove that every `try_inv` operand on a
+   witness-bearing path is nonzero except on an already-charged bad event (so the branch is
+   simulatable); if a witness-dependent zero is reachable, that is a protocol-level leak for decision.
+
+prover-rw14 stopped on the same launcher ID quirk as dict6 (barrier refusal then "attempt 14835
+already used"); it had supplied two callbacks (33 remain), 35/100 Lean and 3/15 Kani used.
+Relaunched as pv-rw15 (IDs 21300–21599, remaining budget) on the proof/audit data equality,
+compression correspondence and callbacks. New job pv-l1 (`codex/pv-l1-20261026`, from the merged
+candidate, prefix PV_L1_, IDs 21600–21899): V347–V351 native L1 event producer and joint law, plus
+V366 on the same coupling. Six jobs running. Privacy target not yet established; rows removed: 0.
+
+## D198 (Stream B, 2026-10-26 13:10): L2 stage 2 merged; all F3/F5/F6 rows still open; l2-sim3
+
+Merged `codex/pv-l2-sim-20261026` (9f7205e539; research-based, no crates/programs change, no forbidden
+tokens). pv-l2-sim2 used 100/100 Lean (45 successes, 140 declarations audited standard-only) and
+20/20 Kani (11 pass, 8 timeouts, 1 unwind failure). Proved: actual QueryScan raw history transport to
+lazy and completed tapes (`Headline.real_to_lazy_actual`), fixed-coin absorption to the unchanged
+simE (`Headline.absorption_actual`, `HeadlineF3.absorption_actual`), owned-source entropy/masking
+count absorption (`F3SourceBudget`, `F3Tape.owned_joint_law`), and extracted checker erasures
+(`F6Dot/KDot/Image/Pivot/Product`). The generic local hypotheses (RAddrIn, RCausal, PublicBase,
+BuilderSoundOn, capacity budgets, conditional fibres) were discharged for the actual domains; no new
+endpoint assumption. Every complete F3/F5/F6 row (V352–V365) remains OPEN: the proved pieces are
+model/parser transports and sub-steps, not the whole native-trace law. `F3SeedObstruction.
+lifted_position_changes` (J20118) is a checked counterexample to a proof inference (successful-seed
+permutation does not preserve the first-nonzero position), not a witness attack; the replacement
+construction fixes the raw E1 tape. Rows removed: 0. pv-l2-sim3 continues with a fresh budget on the
+E1/expander record joined to the full L1 attempt record and ROM history, the new inversion
+zero-boundary row V380 from D197, then the F5/F6 rows, reporting CLOSED/REDUCED/OPEN per row.
+
+## D199 (Stream B, 2026-10-26 14:30): host barrier cause; disk-full interruption; runjoin and dict rounds
+
+Host barrier. Stream A reported refusals "projected reservations above 55 GiB" at about 11 GiB actual
+use. Cause (lead, read from run2.sh/run2-par.sh/run-joint.sh on the host): the projection is the live
+sum of memory.max over every populated cgroup scope, and eight Docker container scopes under
+system.slice carry finite caps of about 23 GiB while using about 8 GiB. With two 8 GiB run scopes the
+sum is 40 GiB; a third makes 56 and holds. So the host admits three capped Lean/Rust scopes at a time
+across both streams regardless of job counts. No stale records exist; no launcher logic was changed.
+Owner decision requested (recommendation: shrink the Docker caps to their real profile; alternatives:
+exclude Docker from the projection, or accept the three-scope ceiling). Stream A concurs.
+
+Disk. The Mac root volume filled at 10:51 UTC (23 worktrees, 122 GB under .worktrees); pv-rw15,
+pv-runjoin and pv-l1 died with "No space left on device" and their output files never finalised. The
+lead committed WIP snapshots in the three worktrees and relaunched them with resume preambles
+(rw16, runjoin2, l1b). Merged Stream B worktrees are removed on merge; the remaining 16 non-Stream-B
+worktrees are Stream A's and session A's.
+
+pv-runjoin2 (`codex/pv-runjoin-20261026`, head 55749bbc7f, 50/100 Lean, 0/10 Kani): shared coupling
+from explicit model coordinates; complete-observer agreement characterised; conditional endpoint
+composed; canonical fixture fibres for transfer and withdrawal (V047 discharged for the shipped
+statements, fields `transfer_public_V047`/`withdrawal_public_V047`); finite cap8 entropy replay.
+Checked counterexample: a native probe observed two distinct successful entropy outputs at one public
+nonce, so one pure ExternalFuns dictionary cannot represent both; same obstruction as D190, route
+already chosen in D191–D193. Lead ruling: the RunJoin's RealRand is the explicit (tape, cursor,
+policy, ledger) world; runjoin3 relaunched on that route with the remaining budget. Fields still open:
+`uniform_V037`, `disclosed_V038`, `observerOracle_V038`; V045 instance incomplete.
+
+pv-dict7 (`codex/cx-prover-dict-20261026`, head ea4fd01ba3, 74/74 Lean, 15/15 Kani, audit J20701
+exit 0, 6.73 s, 4,331,620 KiB, swap 0, 486 standard-axiom reports): seven-field independence proved
+through the actual extracted proof-account caller; thirteen pure entries installed; owned-error
+reference extracted with its source observations; sufficient source requirements 172/255 selected,
+83 open (255 is a sufficient overapproximation, not yet the exact invocation set); types 26/28.
+Crate changes unchanged since D193 (cfg(kani) harnesses only). dict8 relaunched on the fallible-store
+transport, full carrier caller lift, and the native error/File-world quotient for types 3 and 27.
+Root conjunct-1 premises removed: 0. Six jobs running. Privacy target not yet established.
+
+## D200 (Stream B, 2026-10-26 15:40): L2 stage 3 merged; L2 paused pending native association; recount job
+
+Merged `codex/pv-l2-sim-20261026` stage 3 (8524c4269d; research-based, no crates/programs change).
+pv-l2-sim3 used 100/100 Lean and 20/20 Kani (121 theorem results, standard axioms; 17 Kani passes):
+full rejected-attempt L1 and ROM prefixes preserved through source attempts; failure-preserving seeded
+source transport; whole extracted checker erasure; and, for the D197 inversion escalation, a PARTIAL
+result: `PV_L2_InversionQ.logup_operand` proves the extracted QM31 inversion takes the nonzero branch
+for every non-pole operand (operand nonzero derived from the model `NoPole` for every active copy row),
+with inversion success a conclusion, not a hypothesis. The whole inversion row stays OPEN: native
+reached-call enumeration, slot correspondence, and the M31/WideExact/circle/interpolation/certificate
+paths still need caller nonzero arguments. No witness-dependent zero was found. Row outcome: 0 CLOSED,
+0 REDUCED, 19 OPEN, after two full L2 rounds.
+
+Lead assessment (owner rule: when the must-prove count stops falling, reconsider rather than add
+workers): the L2 job's own next deliverable is the native E1 seed-event producer and ordered ROM
+association on the headline coupling, which is the same native-refinement work as conjunct 1 /
+V038. L2 rows are therefore downstream of the RunJoin and will not close from more trace-erasure
+helpers. The L2 slot is paused and reallocated to a mechanical RECOUNT and dependency audit of the
+ledger (pv-recount, `codex/pv-recount-20261026`, audit only), which will classify every open row as
+independent, downstream of the native refinement, or downstream of an owner decision, and credit the
+evidence now on research (ELF identities, fixture fibres, client route). Ledger ID note: the L2
+report's "V380 (inversion)" collides with the ledger's existing V380 (TrustedStd
+`btree_entry_or_insert_with`); the recount assigns the inversion row a fresh ID. Six jobs running:
+rw16, dict8, runjoin3, recount, rebase2, l1b. Privacy target not yet established.
+
+## D201 (Stream B, 2026-10-26 16:30): first privacy recount; dependency buckets; source-identification job
+
+Merged `codex/pv-recount-20261026` (322afc54f7; audit only, 0 Lean, 0 Kani): a dated "Recount
+2026-10-26 (B)" section appended to `design/PRIVACY-LEDGER-20261026.md`, per-row audit in
+`evidence/privacy-recount-20261026/ROWS.md`, original rows intact. The inversion obligation from D197
+is recorded as `V380-inversion` (the ledger's V380 already names TrustedStd `btree_entry_or_insert_with`),
+so there are 400 obligations. T/P/C 26/370/4.
+
+| Status | Baseline (normalised) | Recount 1 |
+|---|---:|---:|
+| OPEN | 167 | 138 |
+| REDUCED (to named premise fields) | 145 | 152 |
+| EVIDENCED (gate/measurement passed) | 0 | 10 |
+| CLOSED on research | 87 | 87 |
+| CLOSED on the unmerged candidate | 0 | 13 |
+
+The 29 rows that left OPEN went to REDUCED (7), EVIDENCED (10: the three ELF identities, fixture
+bytes, client route rows V392–V395 and others) and CLOSED-ON-CANDIDATE (13, the candidate's proved
+callbacks/replays, which count only once the candidate is adopted). No endpoint premise changed.
+Dependency audit of the 138 OPEN rows: 79 independent of the native refinement; 51 downstream of the
+native interpretation (cannot close before the extracted deployed caller is interpreted, including all
+inherited L2 whole rows); 8 downstream of named owner decisions (V370 compiler trust, V371 DOITM,
+V373 inversion zero-domain handling, V396 client bundle pin, and related). Most valuable independent
+row per the audit: V164 compression correspondence (already pv-rw16's stage 2). The freed slot goes to
+the independent rows V152–V154 (`BuilderSource.SourceIdentification`: public_eq, build_eq,
+transport_eq), consumed by the headline via `builder_premises`: job pv-srcid (`codex/pv-srcid-20261026`,
+prefix PV_Src_, IDs 22550–22799). Six jobs running: rw16, dict8, runjoin3, srcid, rebase2, l1b.
+Privacy target not yet established.
+
+## D202 (Stream B, 2026-10-26 17:20): L1 paused on the shared native obstruction; independent callback job
+
+pv-l1b (`codex/pv-l1-20261026`, head 6351160ce6, from the merged candidate; 100/100 Lean, 54 passed,
+0/15 Kani; audit J21698 exit 0, 2.28 s, 4,291,916 KiB, swap 0, 121 declarations standard-only):
+ordered source attempt/count correspondence, retry-origin and failure prefixes, conditional joint
+source/raw-input transport, contiguous RNG ordinals, and the exact seventeen-digest eager-query abort
+prefix. Rows V347–V351 and V366: open → open; `PV_L1_Premises` holds one unproved field per row.
+Its next deliverable is "the complete native callback producer for the operational proof-account
+client", i.e. the same native interpretation that L2 (D200) and RunJoin (D199) wait on. Per AGENTS.md
+§7 (investigate a shared obstruction rather than commission more wrappers) the L1 slot is paused;
+the branch is kept as an unmerged sibling of the candidate and its worktree removed for disk.
+
+The three paused/converging tracks (L1, L2, RunJoin) all need the effect-aware interpretation of the
+extracted deployed caller; pv-runjoin3 carries that route (D199 ruling), with pv-rw16 and pv-dict8
+supplying the callbacks and dictionary it consumes. The freed slot goes to the recount's largest
+independent bucket, the ~70 selected-callback rows V169–V267 (`ProverRwFull.ExternalFuns.opN`),
+as pv-cb (`codex/pv-cb-20261026`, from the candidate, prefix PV_CB_, IDs 22800–23099), ascending
+op order, skipping ops a sibling installs first and deferring effectful ops to the RunJoin route.
+Six jobs running: rw16, dict8, runjoin3, srcid, rebase2, cb. Mac disk: 24 GiB free. Privacy target
+not yet established.
+
+## D203 (Stream B, 2026-10-26 18:10): dict8 reviewed; dictionary refocused away from the shared lift
+
+pv-dict8 (`codex/cx-prover-dict-20261026`, head 4cd294bc60; 100/100 Lean, 53 passed, 47 rejected;
+0/15 Kani; audit 433 standard-only reports, 3.98 s, 4,326,772 KiB, swap 0): fallible nonce-store and
+reserve/material state transport proved without the former fallible-run hypothesis; public-carrier
+transport through the semantic and masked proof bodies; V269 reduced; V263 (`WorkExtensional`,
+op257) still an explicit contract; V268/V269/V271 native Error/Formatter/File-world open. Counts
+unchanged: 172 selected / 83 open / 255 sufficient requirements; types 26/28. Root premises removed: 0.
+The stage it spent the budget on, the full store/retry/client lift, is the same shared native
+interpretation obstruction as L1/L2/RunJoin (D199, D200, D202), now owned by pv-runjoin3. dict9 is
+relaunched refocused on what moves counts: types 3 and 27 by the Kani-first quotient route (15 unused
+runs), the open pure entries outside pv-cb's op list, and the V270 Formatter quotient. Six jobs
+running: rw16, dict9, runjoin3, srcid, rebase2, cb. Privacy target not yet established.
+
+## D204 (Stream B, 2026-10-26 19:00): deployed endpoint reduced to an 8-field premise record
+
+pv-runjoin3 (`codex/pv-runjoin-20261026`, head 92a6c256a6, unmerged sibling of the candidate; 50/50
+Lean, 31 passed; 10/10 Kani, 8 passing harnesses; axioms audit standard-only; swaps 0) delivered the
+structure Stream B is measured against: `PV_RunJoin_Endpoint.privacy_headline_from_premises :
+PV_RunJoin_Premises → <the exact conclusion of privacy_headline_deployed at the deployed rust>`, with
+the original conclusion, public-equality guard, bad event, simulator simE and complete observer
+preserved, and axioms exactly propext, Classical.choice, Quot.sound. The deployed instance is the
+shared-world retry interpretation of the selected client retry owner (explicit entropy tape/cursor,
+policy and ledger state), retaining the full native audit; both coupling marginals are proved on one
+coupling, so `uniform_V037` is now a theorem for the interpreted world; the concrete fixture fibres
+need no assumption (2→0). The record `PV_RunJoin_Premises` has 8 fields / 12 conjunct families:
+`source_V045`, `E1_V329` (trust item, stated exactly), `native_fill_V336`, `native_ledger_V337`,
+`byte_blind_V338`, `kernels_V339`, `disclosed_V038`, `observerOracle_V038`. The field count rose
+3→8 because the abstract premise was unfolded into its native obligations; that is exposure, not
+reduction, and whole deployed rows removed is still 0. Lead review pending on the exact statements
+(no forbidden tokens; no crates/programs change). pv-runjoin4 relaunched with a fresh budget to
+discharge the fields in order of least native dependence (kernels, byte-blind, ledger/fill, then
+source/V038 by composing pv-rw16/pv-cb/pv-dict9 results as they land), splitting any remainder into
+finer named fields so the record tracks the ledger. Six jobs running. Privacy target not yet established.
+
+## D205 (Stream B, 2026-10-26 19:20): correction to D204 after reading the endpoint statement
+
+Lead review of `PV_RunJoin_Endpoint.lean` (head 92a6c256a6) corrects D204. The endpoint theorem
+keeps the exact conclusion and standard axioms, but it is still PARAMETRIC: it quantifies over a free
+`runtime : PV_RunJoin_Deployed.Runtime …` and `boundary : PV_RunJoin_Boundary.Data runtime …`, and
+`rust := PV_RunJoin_Deployed.rust runtime`. So D204's sentence "the deployed instance is the
+shared-world retry interpretation of the selected client retry owner" is superseded: the interpretation
+is defined for an abstract runtime record, and the instance for the frozen extracted client has not
+been constructed. V045 (deployed rust instance) therefore remains open, and the `source_V045` field
+is a law relating `boundary.sourceBody` to `runtime.body`, both still parameters. The two V038 fields
+are the agreement split through `complete_view_ext` (view equality ⇒ decision equality), which is
+organisation of the premise, not discharge (AGENTS.md §3). What stands from D204: the coupling and
+both marginals on the abstract world (`uniform_V037` as a theorem), the fixture fibres, the exact
+statement of the eight obligations. Rows removed: 0. pv-runjoin4 was stopped seconds after launch and
+relaunched as pv-runjoin4b with the order corrected: instantiate `runtime`/`boundary` from the frozen
+extracted operational client first (free parameters 2→0, record restated at the concrete instance),
+then discharge fields. This entry is the record of the correction; nothing in the proof tree changed.
+
+## D206 (Stream B, 2026-10-26 20:10): OS entropy failure is outside the model; owner decision requested
+
+pv-runjoin4b (`codex/pv-runjoin-20261026`, head 5090b732a0; 11/100 Lean, 0/15 Kani, stopped early
+against the completion rule; audit 23416 exit 0, 25.16 s, 3.18 GB, swap 0; standard axioms) did not
+construct the concrete instance (parameters 2→2, fields 8→8, rows removed 0) but surfaced a model gap:
+- Proved: the emitted Draw64 owner transports partial-write OS errors and the shared-world client
+  stops before the body; normalised kernels satisfy the conditional E1 law with zero success
+  availability (E1 does not exclude the fault path, by design: D147 states E1 "without assuming
+  availability"); every successful model `firstGood` branch has a nonempty oracle log, preserved by
+  reencoding for complete observers; hence an empty native log disagrees with that model-success log.
+- Measured: the literal selected entropy factory (pinned getrandom/zeroize) returns `Os(EIO)` under a
+  process-only seccomp EIO fault; the EPERM probe did not reproduce because getrandom falls back to
+  /dev/urandom (retained as a setup failure).
+So a real run in which the OS entropy source fails yields a view (empty log, error) that the current
+model never produces, and that world is outside the fixed bad event. This is not a witness-dependent
+leak claim: no outside-bad witness/decoder counterexample is constructed yet, and OS failure is
+expected to be witness-independent (to be proved by runjoin5).
+
+**Escalation 3 to the owner (contract/model, D185 comparison contract).** Two repairs, neither adopted:
+(A) availability-conditioned endpoint: add a named environment assumption `OsAvailable` (getrandom
+does not fail during the proof-account run) as a trust item; the headline statement is otherwise
+unchanged. (B) failure-as-public-input: make the environment failure signal a public input to BOTH
+experiments so the simulator sees the same witness-independent failure; the error bound is unchanged,
+but the model statement changes. Lead recommendation: (B), because it needs no new trust and keeps
+the observer complete (an attacker who can induce EIO sees the failure in both worlds), provided
+runjoin5 proves the failure event witness-independent; (A) otherwise. pv-runjoin5 relaunched with the
+remaining 89 Lean / 15 Kani to state the disagreement exactly, prepare both options as separate stated
+theorems, and continue the concrete instance. Six jobs running. Privacy target not yet established.
+
+## D207 (Stream B, 2026-10-26 20:40): rw16 done, two callback rows supplied; rw17 on compression by split steps
+
+pv-rw16 (`codex/cx-prover-rw-20261023`, head 5d97a425c5; 65/65 Lean, 48 passes, standard axioms;
+12/12 Kani: nine timeouts, three driver/compiler/check failures; focused audit over 1,224 cached
+dependency hashes): callbacks V262/op255 and V255/op247 supplied through the complete caller
+(33 → 31 remain); current complex/quartic arithmetic transports, owned compression structure, symbolic
+pole/polynomial bounds and the indexed ordinary-reference policy proved. V163 (whole proof/audit data
+equality) and V164 (shipped arity-16 compression correspondence) stay OPEN: the Kani harnesses over the
+shipped compression and sampler loops time out. Root premises removed: 0; two ledger callback rows
+move to CLOSED-ON-CANDIDATE at the next recount. pv-rw17 relaunched with a fresh budget and a ruling:
+no unchanged reruns; V164 by the P6 route decomposed per step (owned reference, per-step Kani with a
+proved-sufficient bound, Lean induction over steps, the route that worked for parts 47-48), then V163,
+then callbacks outside pv-cb's list. Six jobs running: rw17, dict9, runjoin5, srcid, rebase2, cb.
+Privacy target not yet established.
+
+## D208 (Stream B, 2026-10-26 16:05): cb done, 30 value interpretations but 0 rows discharged; cb2 converts them to source equations
+
+pv-cb (`codex/pv-cb-20261026`, head c0e2f7af57, branched from the unmerged candidate; 100/100 Lean,
+20/20 Kani: 13 passes, 5 timeouts, 2 unwinding failures; final audit receipt 22900.json exit 0,
+peak RSS 4.3 GiB, standard axioms): 30 callback ops received a checked "selected dictionary equation"
+(PV_CB_* value interpretations), 7 reused sibling installations, 5 ops deferred to the effect-aware
+route (zeroize volatile writes/fences ops 122/123, Instant timing op 232, worker pool op 257), 31 ops
+open; symbolic owned encoder/mask totality and the exponent-table widening proved for op117. No
+shipped crate or program file changed. Lead review: a dictionary equation is organisation, not the
+row's law; rows V169-V267 require the entry to equal the shipped function's source semantics
+(extraction, D188, or the P6 reference), so 73 rows before → 73 after, 0 removed, and the review's
+"native correspondence remains open" notes are irrelevant to pure ops (that composition is V165/V167,
+owned by RunJoin). The branch is a sibling of the candidate and will be merged into
+`codex/cx-prover-rw-20261023` when rw17 releases that worktree (not into research). pv-cb2 relaunched
+in the same worktree (IDs 24000-24299, 100 Lean/20 Kani): stage 1 converts the 30 installed pure ops
+to proved source equations against the extracted definitions, stage 2 the 25 open pure laws, stage 3
+op117 by per-step P6 with Lean induction. Six jobs running: rw17, dict9, runjoin5, srcid, rebase2,
+cb2. Rows removed outright: 0. Privacy target not yet established.
+
+## D209 (Stream B, 2026-10-26 16:40): rebase2 passes ELF, fixture and differential gates; timing blocked on a quiet host; recount 2 launched
+
+pv-rebase2 (`codex/pv-rebase-20261026`, head dacdb225ff = candidate with research merged; Lean 0,
+Kani 0; no binaries committed): all three ELFs rebuilt from the merged candidate hash exactly to the
+release pins, with research rebuilt in the same session as control (default/devnet 1,563,728 B, Pool
+605,704 B); the four shared-core differences (host-only `ct-host-prover` guards) are therefore
+ADMITTED for adoption on the byte-identity ruling (D197). Transfer and withdrawal fixture proofs are
+byte-identical to research (57,607 B each). The existing differential harness passed 1,000/1,000
+pairs (600 proofs, 100 rejected-prefix pairs), after an earlier oversubscribed cohort was invalidated
+and replaced by a capacity-checked one. Quiet-host timing never qualified: ten boundary checks found
+one opening, and another capped job started during the first research sample, which invalidates it
+(raw research calls 38.2/40.1 s under contention, not medians; candidate never timed). The timing gate
+(candidate median < 15 s and <= 1.10 x research, D168/D169) therefore remains OPEN; the prepared
+command is NEXT-TIMING-COMMAND.txt in the branch's evidence dir and needs a continuous quiet window,
+which does not occur while both streams run six capped scopes. Lead action: ask Stream A to agree a
+scheduled quiet window for timing and the pv-l3 collector (owner may rule). The branch stays unmerged
+(candidate adoption rule). No premise removed. Slot refilled with pv-recount2 (`codex/pv-recount2-
+20261026` from research, IDs 24300-24349, 15 Lean/0 Kani): recount of all 400 rows against the
+evidence on research and the unmerged branches, with the ruling that dictionary installs and bounded
+Kani gates are not closures, a new row for the OS-entropy failure (D206), and an explicit check of
+the lead's D196-D208 claims against the evidence. Six jobs running: rw17, dict9, runjoin5, srcid,
+cb2, recount2. Rows removed outright: 0. Privacy target not yet established.
+
+## D210 (Stream B, 2026-10-26 16:55): dict9 three entries (175/255), stopped on a no-stubs question; ruling given, dict10 launched; quiet window agreed
+
+pv-dict9 (`codex/cx-prover-dict-20261026`, head dfd8a438bc; 59/100 Lean, 45 passed; 15/15 Kani: 10
+passed, 4 timeouts, 1 unsupported; audit J23158 standard axioms; no crates/programs change): entries
+78 (fibre point, V200), 231 (trace clone, V248) and 247 (CT trace value, V255) installed in
+`R1Z.PDict_RemainingDictionary231` (172 → 175 of 255 selected; 83 → 80 open; types still 26/28), plus
+`client_independent` (replacing these raw callbacks leaves the proof-account caller unchanged at the
+selected dictionary). It stopped with 41 attempts unused asking whether "no stubs" permits an explicit
+nondeterministic C ABI environment, because Kani rejects actual File::open at the foreign `open64`.
+Lead ruling (D210): no; a C ABI replacement is a stub, and Kani's reach ends at the OS boundary. The
+OS-call outcomes are a world interface for the effect-aware route (D190-D193, PV_RunJoin_World /
+CallerWorld / E1Tape): Kani only for pure projections, the File/OS paths by Lean against extraction
+with outcomes read from the world state, and each OS-outcome law surfaced as a named world field
+(never an axiom) for matching against runjoin5 and E1/E2. Entry 255 (`from_fn`, Aeneas mutable-borrow
+copy rejection in core) goes by the P6 route or a hand-stated monomorphic extraction with its identity
+obligation recorded; no backend patch. pv-dict10 relaunched with 81 Lean / 10 Kani (IDs 24400-24699).
+Host scheduling: Stream A and Stream B agreed a quiet window 16:50-17:20 UTC (marker
+/home/dombarker/project-offloads/QUIET_WINDOW.json; both streams' launchers refuse while it is in
+force; LEAD RULING (e) for Stream B workers) for the prover timing gate (D209); the shared launcher
+run-joint.sh gained the hold check before any attempt ID is consumed (backup
+run-joint.sh.bak-quietwin-20261026). Six jobs running: rw17, dict10, runjoin5, srcid, cb2, recount2.
+Rows removed outright: 0. Privacy target not yet established.
+
+## D211 (Stream B, 2026-10-26 17:00): recount 2 merged: 27 rows to CLOSED-ON-CANDIDATE, four lead corrections; cb3 launched
+
+pv-recount2 (`codex/pv-recount2-20261026`, merged into research; 15/15 Lean statement checks, 0 Kani;
+only design/PRIVACY-LEDGER-20261026.md and evidence/privacy-recount-20261026/ touched): 403 rows
+(26 T / 372 P / 5 C) after adding V400 (OS-entropy failure coverage, D206), V401 (fixture byte
+equality) and V402 (differential corpus). Status totals, recount 1 → recount 2: OPEN 138 → 110,
+REDUCED 152 → 154, EVIDENCED 10 → 12, CLOSED-ON-RESEARCH 87 → 87, CLOSED-ON-CANDIDATE 13 → 40.
+The 27 new candidate closures are complete extracted source equations under D188: 24 PV_CB_Op*Source
+theorems already produced by pv-cb2 (V169, V197-V199, V202-V206, V208-V216, V218, V223, V224, V226,
+V227), dict9's op78/op231 (V200, V248) and rw16's op247/coefficients (V255, V262); native composition
+stays V165-V167. OPEN buckets: independent 79 → 51, downstream of the native interpretation 51 → 50,
+owner decisions 8 → 9 (the OS-failure repair added). Corrections to the lead's LOG, recorded plainly:
+D199 overstated V047's fibre closure; D201's "29" should read 30; D203 does not support reducing the
+whole Formatter row V269; D206's disagreement theorem is conditional (D204 was already corrected by
+D205). The endpoint record (D204/D205) keeps runtime/boundary 2 → 2 and fields 8 → 8: REDUCED, not
+discharged. Endpoint premises removed: 0. The 51 independent OPEN rows are all owned by running jobs
+(callbacks: cb2; V152-V154: srcid; V163/V164: rw17), so the freed slot runs pv-cb3
+(`codex/pv-cb3-20261026` from the candidate, prefix PV_CB3_, IDs 24700-24999, 100 Lean/20 Kani) on
+the stage-2 callback rows from the top down (ops 258, 253-251, 230-205) while cb2 works upward.
+Six jobs running: rw17, dict10, runjoin5, srcid, cb2, cb3. Privacy target not yet established.
+
+## D212 (Stream B, 2026-10-26 17:05): first quiet window broken after one sample; second window requested
+
+The 16:50-17:20 UTC quiet window (D210) opened on time: the marker was written at 16:50:00, the strict
+preflight found the host quiet at 16:50:40, and the timing driver started in one 6G/8G/no-swap/64-task
+scope. The first research sample completed (transfer 48.5 s, withdrawal 46.4 s, 16 workers, load 2.5;
+proof hashes as pinned), but the post-sample preflight found a new capped scope from Stream A's
+`codex-cx-sound-int2-20261025/S2W_run_host.py` (a launcher outside the S2X_/S2H_ reservation scripts
+Stream A had patched), refused with exit 78, and the driver stopped by design (receipt
+candidate/quiet-timing-2/receipt on the host; exit 1, 95 s, peak RSS 0.57 GiB). The marker was removed
+at 16:52:15 so Stream A lost about two minutes. The sample is UNQUALIFIED and no timing number is
+claimed; for context only, D172 measured the CT-kernels-v2 candidate at 13.6/14.0 s medians against
+about 37-39 s before it, and research has not adopted that candidate, so a large candidate/research
+ratio below 1 is expected rather than a regression signal. Stream A has been asked to patch the
+remaining launcher(s) and name a second 30-minute window from 17:40 UTC; the orchestration script will
+be re-pointed at the new epoch with the same early-release rule. Six jobs running: rw17, dict10,
+runjoin5, srcid, cb2, cb3. Privacy target not yet established.
+
+## D213 (Stream B, 2026-10-26 17:10): srcid merged, V152-V154 reduced to five source premise families; srcid2 launched
+
+pv-srcid (`codex/pv-srcid-20261026`, merged into research; 100/100 Lean, 15/15 Kani; final audit 22689
+standard axioms; no crates/programs change): `R1Z.PV_Src_NativeIdentification` proves `public_eq`,
+`build_eq` and `transport_eq` (V152-V154) for successful returns of the extracted forest compiler and
+constructs the original `SourceIdentification` certificate, which the unchanged `BuilderPremises`
+consumer accepts (receipt 22677). The three rows are REDUCED, not closed: five `PV_Src_Premises`
+families remain (compile_call, words, publicCorr, admission, row_call) with their nested obligations
+explicit; both canonical fixture fibres are inhabited through the extracted bank/column stages; full
+native fixture inhabitance, callee association and deployed installation stay open. Kani: 11 of 15
+runs were charged to misnamed harnesses that exited before verification (worker's own report); ruling
+for successors: list harness names before charging, stop the queue on the first configuration
+failure. No endpoint premise removed. pv-srcid2 launched from research (IDs 25000-25299, 100 Lean/15
+Kani) to classify each family as pure-source or native-association and discharge the pure ones for
+both fixtures. Six jobs running: rw17, dict10, runjoin5, srcid2, cb2, cb3. Second quiet window
+17:45-18:15 UTC agreed (Stream A's systemd-run shim covers every bare launch; owner bypass for the
+timing driver). Privacy target not yet established.
+
+## D214 (Stream B, 2026-10-26 17:50): srcid2 stopped on a source-domain fact that is not a row counterexample; ruling, srcid3 launched
+
+pv-srcid2 (`codex/pv-srcid2-20261026`, merged into research; 4/100 Lean, 11 Kani invocations with two
+timeouts and one configuration waste, no completed verification; standard axioms; no crates/programs
+change; one appended cfg(kani) diagnostic harness in tools/r1-builder-reference/records.rs): the five
+`PV_Src_Premises` families stay 5 → 5. publicCorr is REDUCED to the exact seven-field PubCorr of the
+returned record, admission to RspendPlus on the selected record, row_call to the installed-transport
+equality; compile_call and words stay OPEN. The worker stopped on a "checked source counterexample":
+an optimized native diagnostic importing the exact mapper, pair_trace, poseidon2 and spend files with
+no stubs shows CopyRecords::new and banks succeed with merged[10][1010] = 2^30, outside WitnessOk's
+range. Lead ruling (D214): that refutes only the UNCONDITIONAL raw-mapper lemma the worker chose; the
+ledger rows V152-V154 and the words family are statements about the selected inputs of the deployed
+caller, so words is REDUCED to `PV_Src_RecordReference.Checked` on those inputs and the condition is
+to be discharged from the deployed input validation (client route D162 and/or canonical admission),
+not treated as a stop. The counterexample harness is retained as evidence (AGENTS §7). pv-srcid3
+launched from research with the unused 96 + 4 Lean and 12 Kani (IDs 25300-25599): discharge Checked
+for both fixtures and the canonical instance, then words by unstubbed P6 equality, then publicCorr's
+pure sub-obligations and compile_call's pure callees. No endpoint premise removed. Six jobs running:
+rw17, dict10, runjoin5, srcid3, cb2, cb3. Quiet window 2 (17:45-18:15 UTC) in progress. Privacy
+target not yet established.
+
+## D215 (Stream B, 2026-10-26 17:55): runjoin5 done: OS-failure theorem and both repairs stated, endpoint record unchanged; runjoin6 on the residual fields and the concrete instance
+
+pv-runjoin5 (`codex/pv-runjoin-20261026`, head 4148e0e59c, a sibling of the unmerged candidate so it
+stays unmerged into research; 89/89 Lean, final audit exit 0, 33.6 s, peak RSS 2.8 GiB, standard
+axioms; 3/15 Kani: one pass, two unsupported `dlsym`; frozen implementation and original endpoint
+unchanged): `PV_RunJoin_OsFailure` proves that with a successful first account callback, a nonzero
+nonce and a first entropy draw returning Err, execution stops with Entropy independently of the
+witness; absent the parser, seed-guess and fuel events this world lies outside the unchanged `bad`,
+and with an empty decoded error log against a successful model firstGood branch the complete views
+differ (hypotheses explicit; no concrete native outside-bad world constructed). Option A
+(`privacy_headline_from_premises_available`, named OsAvailable: every in-capacity draw succeeds) keeps
+the exact conclusion and all eight premises; option B (both experiments receive the same public
+failure signal) keeps the bound, including under a common finite public-signal distribution, and
+changes the model statement. Both remain unadopted pending the owner (recommendation B, D206).
+Endpoint accounting: native parameters 2 → 2, fields 8 → 8, rows removed 0; the partial source
+constructor has seven data inputs and six residual proof fields. Two procedural violations recorded by
+the worker (an attempt launched after an admission refusal; one evidence transfer without a fresh
+receipt); the final archive transfer was refused by the quiet window and is retained locally.
+pv-runjoin6 relaunched in the same worktree (IDs 25600-25899, 100 Lean, 12 Kani): discharge the pure
+residual fields and name the native ones as world fields aligned with dict10, instantiate the concrete
+Runtime/Boundary for the proof-account caller, then publish the installed inputs/transport interface
+for srcid3 and say which paused L1/L2 rows become dischargeable. Six jobs running: rw17, dict10,
+runjoin6, srcid3, cb2, cb3. Quiet window 2 in progress (driver started 17:45:00 with the host quiet).
+Privacy target not yet established.
+
+## D216 (Stream B, 2026-10-26 18:00): prover timing gate PASSED in quiet window 2; all four candidate equivalence/performance gates now pass
+
+Quiet window 2 (17:45-18:15 UTC, D213) worked: the host was quiet at 17:45:00, the unchanged driver
+ran research first then candidate, five fresh processes per source with coins 100-104 and a strict
+quiet preflight before and after every sample (all twenty quiet), and finished at 17:53:44 (exit 0,
+524 s, peak RSS 0.65 GiB, swaps 0); the marker was released immediately so Stream A lost under nine
+minutes. Medians: transfer research 38.909 s vs candidate 13.742 s (ratio 0.353); withdrawal research
+38.560 s vs candidate 13.499 s (ratio 0.350); both candidate medians under 15 s and under 1.10 x
+research (D168/D169). Research samples spanned 37.76-39.67 s, candidate 13.04-14.18 s. All ten
+public/proof byte pairs identical (proof 57,607 B). Scope: fixture medians on the pinned host only; no
+universal cost or side-channel theorem. Recorded on `codex/pv-rebase-20261026` (commit b7f1f3c470:
+design/PV-REBASE-20261026.md "Timing gate result", gate-status.json `quiet_timing`, evidence
+quiet-timing-3/ and the invalidated window-1 attempt). Candidate adoption gates now: ELF pins PASSED,
+fixture bytes PASSED, 1,000-pair differential PASSED, timing PASSED, client route merged (D196). Still
+required before adoption, and the reason the candidate stays unmerged: conjunct 1 (real-prover
+refinement / V038 RunJoin), E1/E2, the L2 simulatable-trace rows (paused on the same native
+interpretation) and the L3 receipt. Ledger effect at the next recount: the timing rows move to
+EVIDENCED. Six jobs running: rw17, dict10, runjoin6, srcid3, cb2, cb3. Privacy target not yet
+established.
+
+## D217 (Stream B, 2026-10-26 18:20): rw17 done: compression loop equals the owned reference, helper association still open; rw18 launched
+
+pv-rw17 (`codex/cx-prover-rw-20261023`, head c4eb7e74cb; 100/100 Lean, 73 passes; 20/20 Kani, 12
+passes, 8 timeouts; final frozen manifest 212 theorem reports plus the unchanged headline audit,
+standard axioms, 24.1 s, peak RSS 3.2 GiB, no swap; no production-source or pin change): V164 progressed
+to "the composed emitted iterator/arithmetic loop equals the closed owned reference for arbitrary
+slices and arity 16, preserving the full Result, accumulator, final power and bounds", consumed through
+the auxiliary caller into `BodyData.refinement_of_data` with an exact proof-byte/audit split criterion
+(V163). Still open: the association of the emitted combined-transition loop with the ORIGINAL whole
+Rust helper (V164) and the concrete model instance with both data comparisons (V163). Rows removed: 0;
+no endpoint premise weakened. pv-rw18 relaunched in the same worktree (IDs 25900-26199, 100 Lean/20
+Kani): prove the original helper's for-loop context equals the emitted loop by induction over the
+extracted definition (D188), perform the op223 join using pv-cb3's source law (op223/V240 is in cb3's
+list; no duplication), then V163's concrete instance for both fixtures. Six jobs running: rw18, dict10,
+runjoin6, srcid3, cb2, cb3. Privacy target not yet established.
+
+## D218 (Stream B, 2026-10-26 19:15): dict10 done, counts unchanged, OS world fields named; dict11 refocused on the Formatter axiom blocker
+
+pv-dict10 (`codex/cx-prover-dict-20261026`, head af96787aa3; 81/81 Lean, 57 accepted; 10/10 Kani, 5
+passed, 5 timeouts; final audit J24481 standard axioms across 235 reports, 1,304 object hashes
+matched; no shipped-source change, no stubs, no backend patch): ordered tape replay, request matching,
+safe sink observation frames, owned reference loops and safe reference carriers proved; the OS world
+signature now has named contextual law fields open64, read, write, sync and close (their laws unproved,
+for pv-runjoin6 to associate; no axiom, no E1/E2 change). Counts unchanged for the third round: 175 of
+255 entries selected, 80 open, types 26 of 28; root premises removed 0; native obligations V262, V268,
+V269, V271 retained. Per AGENTS §7 the lead stops commissioning dictionary rounds against the same
+native obstruction. pv-dict11 relaunched in the same worktree (IDs 26200-26499, 100 Lean/10 Kani) on
+one target only: the Formatter release blocker (V269/V270, both treated as OPEN since recount 2 found
+D203 unsupported): stage 0 a mechanical #print axioms inventory of every root in the candidate's
+privacy closure naming the non-standard axiom and its importing modules; stage 1 elimination by the
+avoidance route (chunk 26's publish_compact reduction and retry fixed point as symbolic lemmas, rule
+2) or by a proved safe Formatter quotient as type 27; success criterion is mechanical (only propext,
+Classical.choice, Quot.sound on every root). Six jobs running: rw18, dict11, runjoin6, srcid3, cb2,
+cb3. Privacy target not yet established.
+
+## D219 (Stream B, 2026-10-26 19:55): Formatter axiom blocker clear on the candidate (V269/V270 scoped); host disk full, 39 GiB of caches pruned; pv-adopt launched
+
+pv-dict11 (`codex/cx-prover-dict-20261026`, head 615d347232; 23/100 Lean, 6/10 Kani; stopped under
+local-lean rule 5 when the host filesystem hit 100%): stage 0 inventory FORMATTER-CLOSURE.md: the
+forbidden axiom is `Aeneas.Std.core.fmt.Formatter` (declared by the backend module Aeneas.Std.Core.Fmt,
+729 transitive importers); `#print axioms` over 12,920 declarations in 321 selected family modules
+(every PDict_/ProverRw*/PV_CB_/PV_CB3_ declaration reachable from ExternalFuns, the P6 body root, the
+28 type-slot projections and the deployed headline; receipts J26201 51 s / 4.4 GiB, J26203) shows ONLY
+subsets of {propext, Classical.choice, Quot.sound}; no candidate declaration depends on the axiom, so no
+avoidance rewrite is needed (the split avoidance files PDict_FmtPublicationFrame/PDict_FmtRetryComplete
+exist but are not imported). V269/V270: CLOSED-ON-CANDIDATE for the release-blocker statement only
+("every audited candidate declaration ... has axiom closure contained in the three standard axioms");
+native type-27 adequacy is NOT credited and types stay 26/28, entries 175/255. Stage 2 proved complete
+Result equality and per-coordinate correctness for the extracted owned coefficient reference; native
+coefficient-array association open (three timeouts, one solver failure). Audit scope: focused cached
+audit, not the coherent release replay.
+Host: the root volume (1.8 TiB) reached 100% (19 MiB free) about 19:40 UTC and both streams' launches
+failed. Lead action within Stream B's scope only: removed the finished client job's cargo cache (2.1
+GiB), 40 orphaned Kani/CBMC solver temp files in /tmp not open by any process and older than 30 min
+(7.3 GiB), and 65 cargo-tagged charon-target/native-target/harness target caches in the finished
+codex-cx-prover-commit* and codex-cx-adapter-rw workspaces, none open (30 GiB). Receipts, corpora and
+sources untouched; live job directories untouched. With Stream A's own pruning the volume is at 141
+GiB free (92%). Owner decision requested: the ~30 GiB of differential corpora under
+codex-cx-prover-rw-20261023 (smoke/phase/focused paired runs, corpus-1000-002) and the 6.2 GiB
+invalidated corpus under codex-pv-rebase-20261026 are evidence outputs whose receipts are committed;
+recommendation: archive off-host or delete the invalidated corpus and the superseded smoke/phase
+outputs, keep corpus-1000-002.
+Slot: dictionary rounds stop (D218). pv-adopt launched (`codex/pv-adopt-20261026` from the candidate,
+git-only on the Mac, no host use): sibling merge dry-runs and name collisions, research drift under
+crates/ and programs/ since 3f9177b647 (ELF-pin invalidation per path), the privacy import closure map
+naming the sibling modules not yet joined into the headline route, the final replay command plan, and
+the owner escalation table for the nine decision rows. Six jobs running: rw18, adopt, runjoin6, srcid3,
+cb2, cb3. Privacy target not yet established.
+
+## D220 (Stream B, 2026-10-26 20:10): INCIDENT: shared Lean workspace and launcher deleted during the disk prune; six-round results; runjoin7 and join launched before the loss was known
+
+Incident. While both streams pruned the full host volume (D219), Stream A's pattern-based removal of
+workspaces "older than two days" deleted the SHARED env-J Lean infrastructure:
+/home/dombarker/project-offloads/aspis-joint-20261019 (sources and compiled objects for every J
+compile) and /home/dombarker/project-offloads/r1-privacy-build-integration-20261019 (tools/run-joint.sh,
+env/J.json, evidence/sent.txt and every host-side out-/time-/sha- receipt). Neither matched the keep
+patterns. Every Lean launch on the host now fails for both streams. pv-cb2 and pv-srcid3 stopped under
+local-lean rule 5 ("launcher and source tree vanished"; not budget exhaustion); rw18, cb3, join and
+runjoin7 will stop the same way. Receipts copied into the repo evidence directories survive; host
+originals do not. Stream A has been asked to stop deleting, list what was removed, and rebuild the
+launcher and the joint workspace (their infrastructure; sources from git at the pinned revisions, one
+cold R1Z build in a 6G/8G scope, hours). Stream B's prune touched only cargo-tagged caches and solver
+temp files (D219) and none of the shared paths. Volume now 631 GiB free. Owner: this is reportable as
+a process failure; recommendation: shared infrastructure gets a protected path list before any further
+pattern-based cleanup, and the launcher/env files are committed to the repo (tools/) so they are
+reproducible.
+Results before the loss. pv-cb2 (`codex/pv-cb-20261026`, head 641d98b783; 71/100 Lean, 10/20 Kani):
+18 of its 73 callback rows now have complete extracted source equations (PV_CB_Op*Source), up from 0;
+op117 partial; op105 correction and the combined dictionary prepared but uncompiled; 29 Lean/10 Kani
+unspent. pv-srcid3 (`codex/pv-srcid3-20261026`, head 2311884064; 93/100 Lean, 12/12 Kani, 55 accepted
+modules, standard axioms): `Checked` DISCHARGED for both fixture validation carriers and every encoded
+canonical instance (the excluded boundary is exactly outputValue < 2^30); words REDUCED to the
+unstubbed full-mapper equality plus installed input selection; publicCorr DISCHARGED for the frozen
+reference (deployed snapshot/root association remains); compile_call OPEN (ExternalLinear equality
+verified, Records pending); admission and row_call REDUCED to runjoin6's published interfaces.
+Reference premises 5 → 3, accepted by the unchanged consumer; deployed premises 5 → 5; final audit
+preserved as drafts pending the host (branch kept unmerged until it can be audited). pv-runjoin6
+(`codex/pv-runjoin-20261026`, head 87a332c140; 100/100 Lean, audit 25699 standard axioms, 1/12 Kani):
+full source/header projection, common public reservation, selected dictionary equations, both fixture
+source projections and the endpoint's row_call transport equality proved; published
+PV_RunJoin_SourceSelectionContract / SelectedAdmission / NativeSelectedInputs / InstalledTransport for
+srcid3; named world fields for entropy, open/read/write/sync/close, time, workers; endpoint record still
+residuals 6 → 6, runtime/boundary 2 → 2, fields 8 → 8. pv-adopt (`codex/pv-adopt-20261026`, git-only):
+sibling merge dry-runs show zero Lean-path conflicts and zero public-name collisions (one conflict in a
+historical launcher file); research drift under crates/ and programs/ since 3f9177b647: 0 paths, so the
+ELF-pin evidence stands; 990 sibling-family modules are not imported by the headline route (579 live
+only on sibling branches): the proved callback equations do not yet count in the endpoint's closure;
+replay plan reserves env-J 28000-29999. Branch kept (sibling of the candidate), worktree removed.
+Launched before the loss was known: pv-join (`codex/pv-join-20261026` = candidate + pv-cb + pv-cb3 +
+pv-adopt heads, IDs 26500-26799): discharge the caller's callback hypotheses by the proved source
+equations so they enter the headline closure ("callbacks remaining" count). pv-runjoin7 (IDs
+26800-27099) with LEAD RULING D220: after six rounds at 2 → 2 / 8 → 8 the remaining native facts are
+not provable from the extraction; define one minimal `PV_RunJoin_TrustItems` structure (exact
+statements, shipped locations, justification class; duplicates merged, derivable fields proved and
+removed), construct the concrete Runtime/Boundary for the proof-account caller and prove
+`privacy_headline_deployed_candidate (T : PV_RunJoin_TrustItems)` with the exact endpoint conclusion so
+the record reads 2 → 0 and 8 → 0 with T the only premise; missing proofs listed separately as P
+obligations, never folded into T; non-vacuity of T on both fixtures. That T list is the owner escalation
+the target requires. Both will stall until the launcher is restored. Rows removed outright: 0. Privacy
+target not yet established.
+
+## D221 (Stream B) 2026-10-26 21:30 UTC: rw18 exhausted (V164 REDUCED, V163 OPEN), host gate ruling, cb4/srcid4/rw19 launched
+
+pv-rw18 (`codex/cx-prover-rw-20261023`, head d1351e0a27; 100/100 Lean = 80 green/20 failed-replaced,
+20/20 Kani = 16 pass/4 timeouts, no counterexample, no crates/programs change, no forbidden tokens,
+frozen component manifest 71020eda20 exit 0 / 4.83 s / peak RSS 3.52 GB / swap 0, 172 declarations
+standard axioms). V164 REDUCED to two exact hypotheses retained by `R1Z.ProverRw18ContextJoin.callback`:
+`source_law : ops.op223 = extracted` (pv-cb3's V240) and `context_identity : extracted =
+ProverRw18ContextCompression.compress _ (PV_CurrentScaleInstall.selected ops)` for the original whole
+Rust helper (extraction obstructed; pinned Charon executable absent on the host). V163 OPEN:
+`R1Z.ProverRw18ContextDataIff.criterion` is the exact residual iff (proof-byte and audit observations
+equal a model output); no concrete whole-model instance and neither equation yet. Native checks on 816
+cases per fixture are measurements, not whole-proof comparisons. Endpoint premises: none removed. The
+last 29 of its compiles ran on the Mac (`local-cached-J` receipts under `evidence/pv-rw18-20261026/local/`,
+cache /private/tmp/pv-rw-step-native-local-20261026, 1 GB) after the host workspace loss; pv-cb3 also
+compiled locally (time-247xx-local.log). Kani012 scope deviation recorded as a charged diagnostic.
+
+Host state at 21:15 UTC: Stream A's rebuild (EJR_, 567 attempts, 535 validation passes, peak 7.17 GB,
+no swap) has restored `r1-privacy-build-integration-20261019/{tools/run-joint.sh,env/J.json,
+evidence/sent.txt}` and `aspis-joint-20261019/{sources,objects}`; the rebuilt launcher accepts env-J IDs
+5000-39999, refuses 20000-27099 as spent by Stream B (exit 65), reads sent.txt from evidence/, and has
+no quiet-window block (the systemd-run shim covers it). Confirmation of a verification compile has not
+arrived, so LEAD RULING (f) (pv-common.txt): no Stream B host scope until the lead creates
+`pv-host-restored.flag` in the scratchpad; compile-free work meanwhile; no new local Mac compiles (24 GiB
+host, two jobs already compile locally). Two anomalies in the rebuild's own audit concern privacy
+modules and are passed to Stream A: `R1Z/SimCostOuterRetry6` elaborated with `sorryAx` at attempt 30431
+(exit 90: an elaboration error in the rebuilt environment, the research source has no sorry) and
+`R1Z/EventsR1P2` hit "(kernel) excessive memory consumption" at 30485 (the module's `card_NZ` is a theorem,
+not an axiom). Neither module is imported by `PrivacyR1HeadlineDeployedReal` directly; the closure
+check comes with the replay.
+
+Launched under ruling (f): pv-cb4 (resume of pv-cb on `codex/pv-cb-20261026`, IDs 27100-27399, 69 Lean /
+10 Kani: corrected op105, combined 18-row dictionary and projection groups, ops 107/109/118, then the
+remaining upward pure ops; op117 only by split gates), pv-srcid4 (resume of pv-srcid3 on
+`codex/pv-srcid3-20261026`, IDs 27400-27699: pending CanonicalNormalize / CanonicalTransferRecord /
+PackedSelection / FinalAudit, then Checked on every admitted input, full-mapper `words` by unstubbed P6,
+publicCorr and compile_call pure parts), pv-rw19 (candidate worktree, IDs 27700-27999, 100 Lean / 20
+Kani: discharge `source_law` from pv-cb3's op223 law and `context_identity` by the D188 identity or P6,
+then V163's concrete model instance and both equations). Six slots: cb3, join, runjoin7, cb4, srcid4,
+rw19. Next free Stream B range 28000 is the replay reserve (pv-adopt), so new jobs start at 30000 only
+after agreeing with Stream A, whose verification attempts use 30000+. Rows removed outright: 0. Privacy
+target not yet established.
+
+## D222 (Stream B) 2026-10-26 21:45 UTC: runjoin7 exhausted: three-field trust list proposed, conditional headline proved from T plus named P obligations
+
+pv-runjoin7 (`codex/pv-runjoin-20261026`, head 3478e00a58; 100/100 Lean = 91 accepted / 9 elaboration
+failures retained, 11 Kani = 10 value cuts passed, native factory rejected at `dlsym`; headline axioms
+propext/Classical.choice/Quot.sound; no crates/programs change; no forbidden tokens). Result against
+ruling D220: `R1Z.PV_RunJoin_TrustItems d` (PV_RunJoin_TrustItems.lean) has exactly three fields, all
+OS/kernel-contract class: `entropy_law : ProverCommitPublicNonce40.E1 d.law` (64 successful getrandom
+bytes uniform given the complete prior context), `entropy_kernel : ∀ c, d.nativeWeight c =
+PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c` (joint density of the 128 draws, not only
+marginals), `observation : ∀ c, d.nativeObservation c = d.extractedObservation c` (native
+getrandom/file/time/worker outcomes, filesystem state and the complete D159 observer payload equal the
+extracted execution; explicitly NOT an equality with the security experiment). The old eight-leaf
+Identity structure is proved equivalent to one outcome family plus time/workers (TrustOutcomes); the
+separate filesystem and complete-view equalities are derivable by `observation_projection` and were
+deleted from T. Exact statements, carriers, shipped locations (state_only_entropy.rs
+`generate_for_mask_nonce` / getrandom::fill; RealR1_client.rs `prove_for_proof_accounts`) and the
+consequence of each field failing are in `evidence/pv-runjoin6-20261026/trust-items.md`: this is the
+owner escalation the target requires (new trust items), with my recommendation below.
+`PV_RunJoin_TrustEndpoint.privacy_headline_deployed_candidate` has the exact endpoint conclusion (same
+bound: modelError + 16/2^486 + freshBudget + 2·budget(2^64) + 2·charge, ≤ 1/2^109 + 1/2^137 + 1/2^454 +
+… , < 1/2^100) but is proved from T PLUS a `ProofObligations` record P: source_V045, fill (V336),
+ledger (V337), byte_blind (V338), selection/admission/runtime/observer installation, causal frames,
+extracted-trace refinement (F3/F5/F6), release identity. So the record stays runtime/boundary 2 → 2,
+fields 8 → 8, residuals 6 → 6; the worker correctly refused to report 2 → 0. Generic fixture T-models
+exist; deployed-fixture (P ∧ T) non-vacuity is OPEN. Options A (OsAvailable premise) and B (public
+error signal fed to both sides) remain unadopted and absent from the statement.
+Recommendation to the owner: accept the three fields as the candidate privacy trust list (class T, OS
+kernel contract; comparable to the getrandom trust already implicit in E1), reject any further T growth,
+and treat every P obligation as proof work; decide A vs B (I recommend B, D215) before the final replay.
+Relaunched pv-runjoin8 on the same branch (compile-free until the flag; its IDs come from the flag
+file since 27100-27999 are allocated and Stream A keeps 30000+ until the rebuild hands it back; pv-adopt's
+28000-29999 reserve untouched): shrink P, not T: selection/admission/runtime installation from PV_Src_*
+and the published RunJoin interfaces, deployed-fixture non-vacuity with T hypothetical, then
+initial-ledger independence and extracted-trace refinement. Stream A confirms the rebuild still fails on
+missing extracted objects (R1CertBuild) and will revisit SimCostOuterRetry6/EventsR1P2 once the objects
+are coherent; the SimCost module falls to Stream B if its final audit still flags it. Six slots: cb3,
+join, cb4, srcid4, rw19, runjoin8. Rows removed outright: 0. Privacy target not yet established.
+
+## D223 (Stream B) 2026-10-26 21:55 UTC: pv-join exhausted; the "31 callbacks remain" count corrected; join2 launched
+
+pv-join (`codex/pv-join-20261026`, head c9d2b33137; 100/100 Lean = 85 passed / 15 failed-terminated, peak
+RSS 3.64 GB, no swap, no Kani, no crates/programs change, no forbidden tokens; 55 new theorem axiom
+reports all standard; the final audit module exited 1 because it omitted the headline import and its
+corrected draft is uncompiled). Correction accepted by the lead: `ProverRwP6BodyData.refinement_of_data`
+has an `ExternalFuns` value parameter, a reservation equation and the whole proof/audit data equation,
+NOT a 31-element list of callback hypotheses (exact statement in evidence/pv-join-20261026/local/
+26500-out.log). The "35 remain / 31 remain" figures of D187–D208 are the successful-body source-callback
+inventory (success-next/final-state.json minus the P6/P7/P8 installs), and proving an already-selected
+entry equal to a newly supplied source body is source correspondence, not a decrement of that
+inventory. Only op229 overlapped: inventory 31 → 30 through PV_CB_Op229Source.op229_source with caller
+independence proved. The aggregate caller now consumes 26 named source laws; the privacy headline
+imports neither refinement_of_data nor any callback law, so no row receives headline join credit. Two
+dictionary mismatches are real obligations, not naming: op81 (PV_CB_Borrow.selected vs
+ProverRwSuccessBodyInterpretation.selected on the entries actually read) and op229 (PV_CB_Op229Transport
+carrier vs CB3's op20 carrier). Both fixture non-vacuity obligations open. Consequence for the ledger:
+rows V169–V267 "CLOSED-ON-CANDIDATE" in recount 2 remain correct as source equations, but the recount-3
+column "enters headline closure" must be derived from refinement_of_data's data equation, not from the
+inventory count. Launched pv-join2 (same branch; IDs from the flag file, range 35300-35599 planned):
+corrected final audit, the two dictionary bridges and pending 71/100/101/110/51/120 bridges, then prove
+the proof/audit data equation for both fixtures from the installed source laws (the V163 data equality,
+read-only coordination with rw19), and name exactly which of the 30 inventory entries lack a source law.
+Stream A agreed Stream B's env-J range 35000-39999 (runjoin8 35000-35299, join2 35300-35599); host
+scopes still wait for the restoration message. Six slots: cb3, cb4, srcid4, rw19, runjoin8, join2. Rows
+removed outright: 0. Privacy target not yet established.
+
+## D224 (Stream B) 2026-10-26 21:45 UTC: rw19 ended at the gate with its budget unspent; ruling (g); rw20 launched
+
+pv-rw19 (`codex/cx-prover-rw-20261023`, head bf81d1d222) committed nine UNCHECKED Lean drafts (concrete P6
+compression-context identity carried into the caller, successful-audit invariant and full observation
+transport), confirmed that pv-cb3 has no op223_source theorem yet and that the pinned Charon executable
+is absent on the host, then ended with 0/100 Lean and 0/20 Kani because the restoration flag was absent
+(next unused ID 27700). No forbidden tokens; no crates/programs change; nothing checked, so V164 stays
+conditional and V163 open. LEAD RULING (g) (pv-common.txt): waiting at the gate is part of the job: poll
+the flag every 10 minutes for up to 24 polls, keep drafting between polls, and only then report "gated:
+budget unspent". Relaunched as pv-rw20 on the same branch with the same rows, IDs 27700-27999 and the
+rw19 drafts to validate smallest-first when the flag opens. Six slots: cb3, cb4, srcid4, runjoin8,
+join2, rw20. Rows removed outright: 0. Privacy target not yet established.
+
+## D225 (Stream B) 2026-10-26 21:55 UTC: host launcher restored (partial cache); Stream B host scopes resume
+
+Stream A's restoration message: the rebuilt env-J launcher (`r1-privacy-build-integration-20261019/tools/
+run-joint.sh`, committed env/J.json and run2.py, sources/objects under aspis-joint-20261019) passed its
+verification compile R1Z/EJR_Verification at attempt 30799 (exit 0, allowed reservation, axioms propext
+only); handoff evidence/envj-rebuild-20261026/EJR_HANDOFF.md (research 45a8bc3956). Accepted IDs
+5000-39999; 20000-27099 blocked as spent; 28000-29999 Stream B's replay reserve; 30000-34999 Stream A
+(rebuild2 continues at 30800); 35000-39999 Stream B. The recovery is PARTIAL: 1,830 sources byte-matched,
+767/800 compiles passed (765 standard axioms), 1,007 resolved sources not yet attempted, 28 latest
+targets failed, 19 selected source hashes absent from the git object database (329 historical variants);
+known blockers include core.fmt.Formatter from the archived Fmt source at 30628/30791, EventsR1P2.card_NZ
+kernel memory (symbolic subtype cardinality needed before any retry; Stream A), SimCostOuterRetry6 proof
+errors (Stream B takes it at the next free slot), CertOwnFill vs extracted-provider API mismatch, and scan
+modules needing IMPORT_UNION_SCAN_INPUT. Consequence for privacy: any replay or dependency-closure claim
+must state which objects came from this partial rebuild versus the jobs' own surviving caches; the final
+privacy replay (pv-adopt plan, 28000-29999) cannot be coherent until the 1,007 remaining sources are
+rebuilt or shown unneeded by the headline closure. Lead action: wrote pv-host-restored.flag (launcher,
+per-job ranges cb4 27100-27399, srcid4 27400-27699, rw20 27700-27999, runjoin8 35000-35299, join2
+35300-35599, cb3 35600-35899, cache caveat, never retry the two assigned modules). pv-cb3 was launched
+before ruling (f) with 24700-24999, now blocked (exit 65); it will exhaust refusals and be relaunched on
+35600-35899. Rows removed outright: 0. Privacy target not yet established.
+
+## D226 (Stream B) 2026-10-26 22:30 UTC: cb3 exhausted (four candidate source rows), envfix launched for the two rebuilt-env failures
+
+pv-cb3 (`codex/pv-cb3-20261026`, head 54f2ac877f; 100/100 Lean, 20/20 Kani, no crates/programs change, no
+forbidden tokens; 39-module bundle and final audit on the host before the range block: exit 0, 1.08 s,
+peak RSS 2.55 GiB, swap 0, standard axioms). ROW-DISCHARGED(candidate) by the D208/D211 law, composed in
+`PV_CB3_CallbackBundle.opN_source`: op246 (V254, receipt 24763), op229 (V246, 24760; duplicate of pv-cb's
+op229_source, to be deduplicated at recount 3), op225 (V242, 24762), op120 (V219, 24754). Op51 (V195)
+withdrawn and OPEN: the native harness canonicalises through `WideExact::new`, so arbitrary
+extracted-carrier correspondence is unproved; the serialization native gate is recorded as
+constructor-image evidence only. Worker's running count against recount 2: OPEN 110 → 106, independent
+OPEN 51 → 47, CLOSED-ON-CANDIDATE 40 → 44 (subject to the V246 dedupe and to D223: these are source
+equations, not headline-closure entries). Endpoint premises removed: 0. The freed slot went to pv-envfix
+(`codex/pv-envfix-20261026`, research base, IDs 35900-36199, 60 Lean): diagnose SimCostOuterRetry6 (omega
+failures 31:44/46:27, type mismatch 51:12 → sorryAx at 30431) and EventsR1P2 (kernel memory at 30485,
+7.17 GB) as environment-variant versus source faults by hashing each import chain against research HEAD
+and the rebuild's sent list; recompile mismatched dependencies into its own objects; EventsR1P2 only by
+the symbolic subtype-cardinality route, never an unchanged retry (Stream A confirmed both modules are
+Stream B's). cb3's continuation (op51 arbitrary-carrier correspondence, remaining top-down ops) takes the
+next free slot on range 35600-35899. Six slots: cb4, srcid4, runjoin8, join2, rw20, envfix. Rows removed
+outright: 0. Privacy target not yet established.
+
+## D227 (Stream B) 2026-10-26 22:40 UTC: envfix: both rebuilt-env failures were stale source variants; research unchanged; cb5 launched
+
+pv-envfix (`codex/pv-envfix-20261026`, 4/60 Lean, no Kani, evidence + one audit module PV_Env_Axioms,
+merged into research). Diagnosis (evidence/pv-envfix-20261026/AUDIT.md): the rebuild selected STALE
+historical variants of the two target files; every strict R0Z/R1Z dependency in both import chains
+byte-matches research HEAD and has a shared object. The unchanged research sources compile against the
+restored objects into the job's private objects dir: SimCostOuterRetry6 attempt 35901 exit 0 / 1.75 s /
+peak 3.43 GiB / swap 0; EventsR1P2 attempt 35902 exit 0 / 2.13 s / 3.44 GiB / 0; axioms audit of all 19
+theorems standard. So "environment repaired, source unchanged": no research proof change, no sorry, no
+cap change; AGENTS.md resource rule 5 satisfied because the retry was against changed inputs (correct
+source variant), not an unchanged rerun. Downstream modules (EventsR1P3/4, AgreeR1P/2, FinalR1P,
+PrivacyR1P, SimCostPass6Audit) still need replay against the correct objects; neither target is on the
+current headline endpoint's import path. Stream A told: envj-rebuild2's variant selection can prefer a
+historical hash over research HEAD, which bears on the remaining 1,007 entries. Launched pv-cb5
+(continuation of cb3 on `codex/pv-cb3-20261026`, IDs 35600-35899, 100 Lean / 15 Kani: op51's
+arbitrary-carrier correspondence first, op223 early for rw20's source_law, then the remaining top-down
+ops). Six slots: cb4, srcid4, runjoin8, join2, rw20, cb5. Rows removed outright: 0. Privacy target not
+yet established.
+
+## D228 (Stream B) 2026-10-26 23:00 UTC: srcid4 exhausted; full audit blocked by 92 missing objects; srcid5 launched
+
+pv-srcid4 (`codex/pv-srcid3-20261026`, head 34995987c0; 37/37 resumed Lean, 8/8 Kani = 2 metadata passes /
+6 verification timeouts, no counterexample; no crates/programs change; no forbidden tokens; the edited
+tools/r1-builder-reference files are reference/harness code and are checked for cfg(kani)-only status by
+srcid5). Accepted on the host after the gate opened: canonical normalisation, the canonical transfer and
+withdrawal record identities, the generalised PackedSelection; focused audit 153 standard-axiom checks.
+The FULL dependency-closure audit is incomplete: the inventory lists 92 imported objects missing from the
+partial rebuild, so the branch stays unmerged (merge gate = full audit with every object present and
+byte-matched to research HEAD). Families: words, publicCorr, admission, row_call REDUCED (unchanged
+interfaces), compile_call OPEN; PV_Src_Premises deployed 5 → 5, reference 3 (D219). The corrected combined
+bridge is an unaccepted draft. One reservation retry started 28 s early; recorded and guarded. Launched
+pv-srcid5 (same branch, IDs 36200-36499, 100 Lean / 6 Kani): compile the 92 missing research-HEAD objects
+into the job's own objects dir, run the full audit, validate the bridge, then compile_call's pure Records
+callees, publicCorr's deployed association and `words` by the variant-decomposed unstubbed mapper. Six
+slots: cb4, runjoin8, join2, rw20, cb5, srcid5. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D229 (Stream B) 2026-10-26 23:50 UTC: join2 exhausted (bridges checked, inventory 30 → 30), join3 launched; rebuild2 merged with HEAD-match gate
+
+pv-join2 (`codex/pv-join-20261026`, head ce8e0224ab; 100/100 host Lean = 89 passed / 11 failed, peak RSS
+4.46 GB, swap 0, no Kani, no local compiles, no crates/programs change, no forbidden tokens). Checked on
+the restored host: bridges for current ops 71/100/101/110 and CB3 ops 51/120, the op81 dictionary
+compatibility (PV_CB_Borrow.selected vs ProverRwSuccessBodyInterpretation.selected on the entries read),
+the native op20 carrier bridge, the P6-selected ledger `BodySourceLaw`, the successful-audit guard, and the
+headline import chain rebuilt with receipts; the actual transfer/withdrawal fixture source boundaries are
+pinned (ed1c1cef71). Inventory 30 → 30; entries still without a source law: 4, 32-36, 79, 117, 121-123,
+132-134, 222-224, 226-228, 230, 232, 249-253, 257-259. Still OPEN on both fixtures: the proof-byte
+equations, the complete audit/status equations, the whole V163 equality and native non-vacuity. The
+combined final audit did not run (one-attempt miscount); the original headline checked separately.
+Endpoint premises removed: 0. Launched pv-join3 (same branch, IDs 36500-36799, 100 Lean, last 5 reserved
+for the combined audit): baseline audit first, then per fixture the proof-byte and audit/status equations
+from the installed laws with explicit reachability of inventory entries, V163 per fixture, native
+non-vacuity, then source laws for entries both fixtures reach (consuming cb4/cb5 proofs). Also recorded:
+Stream A's envj-rebuild2 is merged (7ccb01e1a6) with a HEAD-match gate (754/774 compiled sources equal
+research HEAD byte-for-byte, 20 have no HEAD file: 17 unmerged PDict_* plus three EJS audit modules, 0
+stale picks); smoke 31075 imports PrivacyR1HeadlineDeployedReal with propext only; CertOwnFill and both
+Formatter consumers pass only under recorded historical profiles. The three shared sources its integrity
+pass found changed were Stream B launcher recompiles of HEAD sources (join2 attempt 35312; srcid5
+36300/36301) and byte-match HEAD. 669 + 501 source entries remain unattempted; no third round unless the
+pv-adopt replay plan names a missing set. Six slots: cb4, runjoin8, rw20, cb5, srcid5, join3. Rows removed
+outright: 0. Privacy target not yet established.
+
+## D230 (Stream B) 2026-10-27 00:05 UTC: join3 exhausted with a green combined audit; join scope narrowed to reachability and source laws; join4 launched
+
+pv-join3 (`codex/pv-join-20261026`, head 1ad24470b8; 100/100 host Lean = 96 passed / 4 failed, IDs
+36500-36599 each used once, no Kani, swap 0, no crates/programs change, no forbidden tokens). Baseline
+audit 36500 failed on a missing object; the recovered audit 36579 passed; the final combined audit 36599
+passed: all 126 PV_Join_* theorems plus the headline, 127 axiom reports standard. Checked: public-caller
+byte/refinement equivalence, explicit fixture-record conversions, selected-fixture ledger source laws, a
+criterion against rw20's independent serialization model. Still OPEN on both fixtures: the independent
+proof-byte equation, the complete model audit/status equation, the whole V163 equality and native
+non-vacuity; execution reachability unknown (no inventory entry yet proved unreachable). Inventory 30 →
+30; endpoint premises removed: 0. Lead decision (AGENTS.md §7, shared obstruction): three join rounds
+stalled on the same missing interface, the concrete protocol-to-model instance, which is rw20's
+deliverable on the candidate branch; join4 (same branch, IDs 36800-37099, 100 Lean / 6 Kani) is narrowed
+to the source side: per-fixture execution reachability of the 30 inventory entries from the extracted
+prover (Lean unreachability theorems, Kani traces as evidence), source laws for reached entries
+(consuming cb4/cb5 proofs, never duplicating), and the fixture proof-byte equations only once rw20
+publishes the model instance. Six slots: cb4, runjoin8, rw20, cb5, srcid5, join4. Rows removed outright:
+0. Privacy target not yet established.
+
+## D231 (Stream B) 2026-10-27 00:20 UTC: srcid5 exhausted (full audit green but merge gate blocked by a stale cached object); launcher outage; srcid6 launched
+
+pv-srcid5 (`codex/pv-srcid3-20261026`, head 92d3db0b2f; 100/100 Lean all succeeded, 6/6 Kani mapper
+harnesses timed out at 180 s, no counterexample; no crates/programs change; Rust changes cfg(kani)-only per
+the worker, gating to be confirmed by srcid6 since several tools/r1-builder-reference files carry no
+in-file cfg). Missing objects 92 → 0; full audit 132 modules, 579/579 standard axiom reports (final run exit
+0, 2.38 s, 4.23 GB RSS, swap 0); combined canonical private-record/admission bridge validated with its
+public-association join. MERGE GATE BLOCKED: the cached object `R1NaturalProjection` differs materially
+from the research source, so the audit ran against a non-HEAD dependency; the branch stays unmerged.
+Families: compile_call OPEN (pure `Records.call` equation owed), words REDUCED (unstubbed full-mapper
+equality + installed checked selection), publicCorr REDUCED (root-helper equation + deployed snapshot
+association), admission REDUCED (SourceSelectionContract/SelectedAdmission joins), row_call REDUCED
+(InstalledTransport.endpoint_row_call). PV_Src_Premises deployed 5 → 5. Launched pv-srcid6 (same branch,
+IDs 37100-37399, 100 Lean / 4 Kani): recompile every stale closure object from HEAD with dependents, full
+audit, MERGE-GATE.md with per-object source-sha = HEAD-sha evidence; then Records.call, root helper,
+variant-split mapper. Launcher outage 00:03-00:05 UTC: Stream A's codex-run.sh vanished from its
+scratchpad (neither stream deleted it); join4's first two launches started no worker; I reconstructed a
+Stream B copy (pv-codex-run.sh / pv-codex-retry.sh in my scratchpad, same codex exec line) and launched
+join4 with it at 00:05; Stream A restored the original byte-equal at 00:05 and will keep the launcher
+scripts in the repo under evidence. join4 is running normally. Six slots: cb4, runjoin8, rw20, cb5,
+join4, srcid6. Rows removed outright: 0. Privacy target not yet established.
+
+## D232 (Stream B) 2026-10-27 00:25 UTC: runjoin8 exhausted: constructed-candidate P shrank by two (initial, causal); deployed P unchanged; runjoin9 launched
+
+pv-runjoin8 (`codex/pv-runjoin-20261026`, head e896c81133; 100/100 Lean = 78 accepted / 22 rejected, 8/8
+Kani = 7 passed / 1 timeout, focused trust audit 1.79 s / 4.42 GB / swap 0, standard axioms; no forbidden
+tokens). crates/ change: `crates/aspis-statement/src/pool_v1/pair_trace.rs` gains a `#[cfg(kani)]` mod
+declaration pointing at the new harness file pair_trace_pv_runjoin8_roots.rs (bounded no-stub root checks
+calling the frozen pool_v1_tree_parent); cfg(kani)-only, so excluded from every release build by
+construction; it lives on a candidate-sibling branch and is covered by the candidate's ELF gate before any
+adoption. Result (evidence/pv-runjoin8-20261026/P-before-after.json): the CONSTRUCTED candidate's P
+record went from {identity, common_public, initial, causal, trace} to {identity, common_public, trace}:
+initial-ledger independence (`ledger (initialState (coordinates.symm (t,rest))) = ledger (… (u,rest))`)
+and causal frames (`frame i` depends only on draws j < i) are PROVED for the constructed candidate. T
+unchanged at three fields. The DEPLOYED instance's P obligations (actual selection/compiler/admission
+installation, runtime/carrier/observer installation, release identity) remain open; record counts
+2 → 2 / 8 → 8 / 6 → 6; P ∧ T non-vacuity OPEN on both fixtures. Installation closure stopped at
+PDict_Static222_13 (missing installation dependency from the dict branch); the compiler public-binding
+obstruction is recorded exactly. Launched pv-runjoin9 (same branch, IDs 37400-37699, 100 Lean / 6 Kani):
+resume the installation closure through the PDict_ objects, discharge identity/common_public for the
+installed proof-account inputs using PV_Src_*/PV_Join_*, construct the fixture Runtime/Boundary for
+deployed non-vacuity, then `trace` via PV_L2_*. Six slots: cb4, rw20, cb5, join4, srcid6, runjoin9. Rows
+removed outright: 0. Privacy target not yet established.
+
+## D233 (Stream B) 2026-10-27 00:30 UTC: rw20 exhausted: V164's context identity discharged, one hypothesis left; V163 model construction still open; rw21 launched
+
+pv-rw20 (`codex/cx-prover-rw-20261023`, head 0242bd9221; 100/100 Lean = 96 passed, Kani 1/20 charged
+then queue stopped on the required first configuration failure, no counterexample; no crates/programs
+change; no forbidden tokens; combined component manifest audit 230 declarations, standard axioms, zero
+swap, cached-component replay not a clean-source rebuild). V164: the concrete P6 context identity
+(`context_identity`) is DISCHARGED in the checked consumer; V164 now rests on the single hypothesis
+`P_source_p6` (the op223 source law `ops.op223 = extracted`), which neither pv-cb4 nor pv-cb5 has yet
+proved. V163: the canonical audit invariant, complete observation transport, mathematical data transport
+and the independent guarded assembly adapter are checked; OPEN are the deployed caller's whole-model
+construction and the proof-byte equations (fixtures and general). Endpoint premises removed: 0. Launched
+pv-rw21 (same branch, IDs 37700-37999, 100 Lean / 10 Kani): consume or prove the op223 law and close V164;
+publish the concrete mathematical model instance early under a stable name for join4 to consume; prove
+the transfer then withdrawal proof-byte equations, then the general criterion; re-freeze the manifest.
+Six slots: cb4, cb5, join4, srcid6, runjoin9, rw21. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D234 (Stream B) 2026-10-27 00:40 UTC: join4 stopped on an op121 disagreement; ruled not a row counterexample (non-canonical M31 input); join5 launched
+
+pv-join4 (`codex/pv-join-20261026`, head 8eba145a71; 5/100 Lean, 6/6 Kani, final audit 36804 GREEN: 127
+PV_Join theorems plus the headline, standard axioms, 1.73 s / 4.34 GB / swap 0; no crates/programs change;
+no forbidden tokens). Findings: per-fixture execution-reached sets unresolved, universally unreachable set
+empty (`PV_Join_PublicFailure4.fail_public` proves only a conditional serialization-panic prefix);
+inventory 30 → 30, entries 4, 32, 122, 123, 232, 257 explicitly deferred to pv-runjoin; both fixture
+equations open; rw20's model instance not yet published. The worker stopped on a checked disagreement:
+for shipped `evaluate_state_only_polynomial` versus its proposed Horner reference, with coefficient 2 =
+[1,0,0,0] and challenge [0, 2147483648, 0, 0], optimized source returns [3,0,0,0] and the reference
+[2147483646,0,0,0]; Kani confirms an unsigned-subtraction overflow at crates/aspis-core/src/field.rs:331
+(`a + P - b`). RETAINED as evidence (AGENTS.md §7). LEAD RULING: not a ROW counterexample. The challenge
+component 2^31 exceeds P = 2^31 - 1 and so violates M31's documented representation invariant
+("canonical representation in [0, P)", field.rs:22); the subtraction underflows only for non-canonical
+b. The row statement (op121 selected entry = its own extracted definition, D208/D211) is untouched, as
+the worker's report itself states. Consequence: the P6 owned reference's domain is the canonical
+representatives, and "every M31 reaching op121 in the deployed caller is canonical" becomes a PROOF
+OBLIGATION discharged from the producers (reduce_u64 < P, constructors, deserialisation checks), never an
+assumption; the direct extraction route is preferred where it succeeds. No shipped-code change. Launched
+pv-join5 (same branch, IDs 38000-38299, 95 Lean / 6 Kani) with this ruling, then reachability, source laws
+for reached entries, and the fixture equations once rw21 publishes ProverRw21ModelInstance. Six slots:
+cb4, cb5, srcid6, runjoin9, rw21, join5. Rows removed outright: 0. Privacy target not yet established.
+
+## D235 (Stream B) 2026-10-27 00:50 UTC: cb4 exhausted: five more candidate source rows (23/73); shared Kani configuration failure; cb6 launched
+
+pv-cb4 (`codex/pv-cb-20261026`, source head 0b0b73a21f, evidence head ff8096896d; 69/69 Lean = 66 passed /
+3 failed with passing corrected replacements; Kani 1 pass then a compiler configuration failure, queue
+stopped, 8 unused; no crates/programs change; no forbidden tokens; final joint audit 27168: 23 source
+laws, 23 joint projections, 18 helpers, standard axioms, exit 0 / 1.72 s / 4.30 GB / swap 0; zero direct
+hash mismatches in the dependency snapshot, cached transitive dependencies reused). ROW-DISCHARGED
+(candidate) 18/73 → 23/73: ops 84 (V203), 105 (V206), 107 (V208), 109 (V210), 118 (V217). op117 PARTIAL,
+op259 obstructed, op223 (V240, the last V164 hypothesis) not yet proved by either callback job. Endpoint
+premises removed: 0. Shared obstruction (AGENTS.md §7): two jobs (cb4, rw20) stopped Kani on the same
+post-rebuild "compiler configuration failure"; cb6 is told to reproduce it on a trivial harness, record
+the exact error/toolchain in KANI-CONFIG.md and fix only its own host-dir configuration, else continue by
+Lean. Launched pv-cb6 (same branch, IDs 38300-38599, 100 Lean / 12 Kani): op223 first under the stable
+name PV_CB_Op223Source.op223_source for rw21, then op117 by split gates, op259, the remaining upward ops;
+P6 references on the canonical domain with the invariant proved at call sites (D234). Six slots: cb5,
+srcid6, runjoin9, rw21, join5, cb6. Rows removed outright: 0. Privacy target not yet established.
+
+## D236 (Stream B) 2026-10-27 01:30 UTC: join5 and cb5 exhausted; op51 discharged; join track paused for recount 3; cb7 launched
+
+pv-join5 (`codex/pv-join-20261026`, head 908f14a854; 95/95 Lean, 6/6 Kani, final audits 38092-38094
+standard axioms, swap 0; no crates/programs change; no forbidden tokens). Proved canonical interpolation
+outputs for the current joined caller with arbitrary raw evaluation values. op121 OPEN: direct extraction
+failed; the canonical-domain owned reference compiles but both Kani equivalence checks timed out (not
+rerun unchanged); the D234 counterexample is preserved. Inventory 30 → 30; per-fixture reached sets still
+unresolved; both proof-byte equations open; rw21's published serializer inspected, its
+deployed-input-to-Transcript association still open. Lead decision (AGENTS.md §7): five join rounds have
+not moved the inventory or reachability; the join slot is paused until rw21 publishes the model instance
+or recount 3 identifies a better independent row. pv-cb5 (`codex/pv-cb3-20261026`, head 29297acd5c;
+100/100 Lean = 71 passed, Kani 2/15 then the shared configuration failure; frozen 39-module manifest,
+final audit exit 0 / 1.55 s / 4.28 GB / swap 0, 78 axiom checks standard; no crates/programs change; no
+forbidden tokens). V195/op51 ROW-DISCHARGED(candidate) for ARBITRARY extracted carriers (complete Result,
+no canonicality or desired-output premise; native harness 170 checks), repairing the cb3 withdrawal.
+op249: staged reference and typed kernel pass, shipped-to-reference correspondence open. op223: direct
+extraction refused by Aeneas (escaping-reference loan validation), so its law goes by the P6 route (cb6).
+cb3-track rows 4 → 5; candidate closures 44 → 45 before the op229 dedupe. Endpoint premises removed: 0.
+Launched pv-recount3 (`codex/pv-recount3-20261027`, research base, IDs 38600-38699, statement checks
+only): recount 3 of the ledger over all sibling branches with a new column "in headline closure?
+(research / candidate / neither)" derived by import-chain inspection, the D223 inventory correction, the
+D234 canonical-domain obligation and per-fixture reachability as new rows, dedupe op229, corrections to
+D209-D235 claims, and the most valuable independent row. Launched pv-cb7 (cb3 branch, IDs 38700-38999,
+100 Lean / 10 Kani): op249 correspondence and law, then the remaining top-down ops; op223 stays with cb6.
+Six slots: srcid6, runjoin9, rw21, cb6, recount3, cb7. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D237 (Stream B) 2026-10-27 01:35 UTC: runjoin9 exhausted: installation closure through the dictionary, constructed-candidate P down to two; runjoin10 launched
+
+pv-runjoin9 (`codex/pv-runjoin-20261026`, head ab9f1bfb8f; 100/100 Lean = 86 accepted / 14 rejected, 6/6
+Kani passed (configuration works in its host dir), three reserved focused audits standard axioms, swap 0;
+no forbidden tokens; the only crates/ change extends the existing cfg(kani) child module
+pair_trace_pv_runjoin8_roots.rs by 24 lines of fixed-cell root checks, excluded from release builds). The
+installation closure now passes through PDict_ReachCaller (dictionary objects pinned and replayed); the
+joined-selector identity (`identity`) and `common_public` are PROVED for the installed caller, so the
+constructed-candidate P record is {source public binding, trace} (from {identity, common_public, trace}).
+The DEPLOYED public binding remains OPEN; T unchanged (three fields); record 2 → 2 / 8 → 8 / 6 → 6; P ∧ T
+non-vacuity OPEN on both fixtures with the exact missing deployment facts recorded (0dbc560f6c); 4 F5 and
+21 multiproof dependency objects are missing from the shared cache. Endpoint premises removed: 0. Launched
+pv-runjoin10 (same branch, IDs 39000-39299, 100 Lean / 6 Kani): actual selected compiler records and the
+deployed public binding from PV_Src_*, concrete runtime/observer per fixture for non-vacuity, the 25
+missing objects and the L2 source closure toward `trace`. Stream B's agreed range 35000-39999 has 700 IDs
+left (39300-39999); a further range will be agreed with Stream A before it runs out. Six slots: srcid6,
+rw21, cb6, recount3, cb7, runjoin10. Rows removed outright: 0. Privacy target not yet established.
+
+## D238 (Stream B) 2026-10-27 01:45 UTC: env-J launcher range extended to 40000-49999 (range-only edit, agreed with Stream A)
+
+Agreed split: 40000-44999 Stream B, 45000-49999 Stream A; 5000-39999 behaviour and the duplicate guard
+unchanged. Edit on the host, backup `tools/run-joint.sh.bak-streamB-20261027` (sha256
+c1fa8fe3cbd248ef01cf2cc7a54496bb16fe7722ad655599e31c7a60a27d6d27), new file sha256
+11cc87d94e7069923fda1948c498a5e6ced8afc36a9a3c225dbdb277eeb27121, `sh -n` clean:
+
+```diff
+--- r1-privacy-build-integration-20261019/tools/run-joint.sh.bak-streamB-20261027
++++ r1-privacy-build-integration-20261019/tools/run-joint.sh
+@@ -21 +21 @@
+-  case "$A" in 5[0-7][0-9][0-9]|[6-9][0-9][0-9][0-9]|1[0-9][0-9][0-9][0-9]|2[0-9][0-9][0-9][0-9]|3[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
++  case "$A" in 5[0-7][0-9][0-9]|[6-9][0-9][0-9][0-9]|1[0-9][0-9][0-9][0-9]|2[0-9][0-9][0-9][0-9]|3[0-9][0-9][0-9][0-9]|4[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
+```
+Stream B's next job ranges: 39300-39599, 39600-39899, then 40000+ in blocks of 300. Privacy target not
+yet established.
+
+## D239 (Stream B) 2026-10-27 01:50 UTC: Recount 3 merged (OPEN 110 → 103, CLOSED-ON-CANDIDATE 40 → 27 after corrections); lead claims corrected; wire job launched
+
+pv-recount3 (`codex/pv-recount3-20261027`, merged a77e372c08; 20/20 statement checks, 19 green, one
+missing-object diagnostic; no proofs, no Kani; worktree and branch removed). Totals recount 2 → 3: rows
+403 → 407 (T/P/C 26/376/5); OPEN 110 → 103; REDUCED 154 → 176; EVIDENCED 12 → 14 (timing D216 EVIDENCED);
+CLOSED-ON-RESEARCH 87 → 87; CLOSED-ON-CANDIDATE 40 → 27. OPEN buckets a/b/c 51/50/9 → 44/51/8. New rows:
+V403 (M31 canonical domain at op121 callers, D234), V404/V405 (transfer/withdrawal per-fixture execution
+reachability). "In headline closure?" for the 27 candidate closures: research 0, candidate 17, neither
+10: import paths are organisation, not deployed discharge. CORRECTIONS ACCEPTED by the lead: (1) 18
+candidate "source closure" labels were installed/selected-reference equations, not complete
+extracted-source theorems, and are REDUCED (reporting correction, no equation disproved); (2) D226 double-
+counted op229 (cb and cb3); (3) D235 mapped five operation numbers to wrong row IDs: the cb4 closures are
+ops 84, 105, 107, 109, 118 and their row IDs are those in ROWS3.md, not the V-numbers I wrote; (4) D219's
+whole-row V269 Formatter closure is unsupported (only the axiom slice is closed; V270's scoped diagnostic
+is the 27th closure); (5) D223's inventory correction is supported. Op51 is recorded OPEN at the recount's
+pinned heads; the later cb5 arbitrary-carrier repair (29297acd5c) is disclosed and will be credited at
+recount 4 after audit. RunJoin stays 2 → 2 / 8 → 8 / 6 → 6: the constructed-candidate reductions
+(initial, causal, identity, common_public) do not reduce deployed P; T remains three proposed fields
+awaiting owner adoption. Next independent target named by the recount: V240/op223 (= V164's
+`P_source_p6`), already assigned to cb6. Launched pv-wire on the pv-join worktree (IDs 39300-39599, 60
+Lean): merge pv-cb and pv-cb3 heads into the join branch (git-only), wire every unconsumed candidate
+closure into the aggregate caller's closure with per-op consumer theorems, write IMPORT-CHAIN.md for
+recount 4, combined audit. Six slots: srcid6, rw21, cb6, cb7, runjoin10, wire. Rows removed outright: 0.
+Privacy target not yet established.
+
+## D240 (Stream B) 2026-10-27 02:05 UTC: wire job done: 26 of 27 candidate closures now consumed by the aggregate caller (organisation, not discharge)
+
+pv-wire (`codex/pv-join-20261026`, head c3b99bc9d9; 60/60 Lean, IDs 39300-39359, final audits standard
+axioms, swap 0; no crates/programs change vs the candidate; no forbidden tokens). pv-cb (ff8096896d) and
+pv-cb3 (29297acd5c) merged into the join branch without conflicts. Import reachability of the 27
+CLOSED-ON-CANDIDATE rows from the candidate consumer closure: 17 consumed / 10 unconsumed → 26 / 1; all 26
+closing source laws plus the arbitrary-carrier op51 law are applied by per-op consumer theorems; V270
+stays unreachable because its scoped Formatter diagnostic has no closing operation theorem.
+evidence/pv-join-20261026/wire/IMPORT-CHAIN.md gives every row's import path for recount 4. This is
+organisation of proved facts into the consumer closure, not premise discharge; the research headline
+imports none of it; no headline credit. Rows removed outright: 0. Privacy target not yet established.
+
+## D241 (Stream B) 2026-10-27 02:40 UTC: srcid6 exhausted; merge gate redefined (project vs external provenance); R1NaturalProjection at HEAD does not compile; cblib launched earlier; srcid7 launched
+
+pv-srcid6 (`codex/pv-srcid3-20261026`, head 6f0741bb10; 100/100 Lean, 4/4 Kani mapper partitions timed
+out, no counterexample; no crates/programs change; no forbidden tokens in branch modules (the two `sorry`
+hits are in copied upstream Aeneas.Std.Slice sources under evidence/, not ours); full audit 147 modules /
+616 standard reports, three final targets exit 0 / ≤2.01 s / ≤4.27 GB / swap 0). Reference Rust gating
+confirmed: parent cfg(kani) declarations, records_reference.rs under cfg(any(kani, aeneas_ref)). The
+obsolete Formatter profile was rejected and quarantined, the repaired HEAD formatter rebuilt with an
+empty axiom set. Families: compile_call: pure Records.call reference equation PROVED for arbitrary inputs,
+deployed dictionary association OPEN; publicCorr REDUCED to the root-helper equation, 21 parent cells and
+the deployed snapshot association (symbolic root recurrence proved); words: full unstubbed mapper
+equality unproved (Kani route exhausted, moves to Lean); admission/row_call REDUCED (unchanged
+interfaces). PV_Src_Premises deployed 5 → 5. MERGE GATE BLOCKED with a provenance inventory of 6,499
+imported objects: 810 accepted source links, 48 PROJECT gaps, 5,641 EXTERNAL gaps. FINDING:
+`R1NaturalProjection.lean` (docs/research/100bit-spend-path-20261013/evidence/lean-natural-projection-
+20261013/remote-evidence/, Stream A's tree, unchanged since a29d480477) does NOT compile at research HEAD
+under the current toolchain (unsolved goals at 28:35 and 58:67; attempts 37102, 37260); the cached object
+came from a historical variant. The worker left a two-line tactic repair UNAPPLIED
+(evidence/pv-srcid3-20261026/PROJECTION-REPAIR.patch); the lead has sent it to Stream A and will not
+touch the file. LEAD RULING: the merge gate distinguishes PROJECT objects (must be compiled from a source
+byte-equal to research HEAD) from EXTERNAL objects (Lean core, Mathlib, Aeneas backend: linked to the
+pinned toolchain/lake-manifest revision, not to repository sources); the 48 project gaps are the real
+blocker, the projection cone is a single named exception until research changes. Launched pv-srcid7
+(same branch, IDs 40000-40299, 100 Lean / 2 Kani): MERGE-GATE v2, the 48 project gaps, words by Lean from
+the variant decomposition, compile_call's deployed association, publicCorr's root helper and cells. Also
+launched at 02:06 UTC (not yet logged): pv-cblib (`codex/pv-cblib-20261027`, candidate sibling, IDs
+39600-39899, 100 Lean / 10 Kani) on the two independent library families nobody held: digest/SHA-2 ops
+205/208/209/212/215/216/217/219 (V231-V238) and std/alloc ops 25/26/28/29/30-36 (V177-V187), against the
+extracted third-party source at the pinned dependency revision, published through PV_CBL_CallbackBundle.
+Housekeeping: the merged pv-l2-sim worktree and branch were removed; pv-l1 and pv-l3 are candidate
+siblings and stay. Six slots: rw21, cb6, cb7, runjoin10, cblib, srcid7. Rows removed outright: 0. Privacy
+target not yet established.
+
+## D242 (Stream B) 2026-10-27 02:45 UTC: runjoin10 exhausted; the shared obstruction named (no concrete selected record of the deployed caller yet); runjoin11 launched on it alone
+
+pv-runjoin10 (`codex/pv-runjoin-20261026`, head 623a1d3be6; 100/100 Lean = 99 accepted / 1 corrected
+rejection, 6/6 Kani passed, root cells 19/21; three focused trust audits standard axioms, swap 0; no
+forbidden tokens; crates/ change = 24 more cfg(kani)-only lines in the existing child module). Proved:
+packed-record public preservation, conditional admission bridges, compiler-payload uniqueness; the 25
+originally missing F5/multiproof objects restored (0 left; 11 further L2 objects missing). Constructed
+P stays {source public binding, trace}; deployed P OPEN; T unchanged; record 2 → 2 / 8 → 8 / 6 → 6; P ∧ T
+non-vacuity OPEN. Endpoint premises removed: 0. Lead assessment (AGENTS.md §7): runjoin8-10, srcid5-6 and
+the join rounds all stop at the same missing interface: nobody has exhibited the ACTUAL selected record
+of the deployed proof-account caller (D162) as a concrete Lean term together with its compiler-return
+equation and public-transition association; everything downstream (deployed public binding, runtime
+installation, non-vacuity, V163's model instance, srcid's admission/row_call) is conditional on it.
+Launched pv-runjoin11 (same branch, IDs 40300-40599, 100 Lean / 4 Kani) with that single deliverable per
+fixture (transfer, then withdrawal), from the pinned fixture bytes and PV_Src_CanonicalTransferRecord; any
+genuine missing fact is to be stated as one exact proposition with its shipped location rather than
+bridged around. Six slots: rw21, cb6, cb7, cblib, srcid7, runjoin11. Rows removed outright: 0. Privacy
+target not yet established.
+
+## D243 (Stream B) 2026-10-27 02:55 UTC: correction to D241: R1NaturalProjection was a wrong-source comparison and a shared-source overwrite by srcid6, now restored
+
+Stream A's resolution: module `R1NaturalProjection` is pinned (lean-semantic-prefix-agreement-20261015/
+import-source-pins.json) to docs/research/100bit-spend-path-20261013/lean/NaturalProjection.lean (sha256
+add9c506d5cb…), which compiles fresh in the current toolchain (rebuild attempt 30200, object 6cf99b13…);
+the file under evidence/lean-natural-projection-20261013/remote-evidence/ (sha 41db583fe503…) is a
+historical artifact, not the source of the current closure. D241's finding "R1NaturalProjection at HEAD
+does not compile" is therefore WITHDRAWN as stated: the remote-evidence copy does not compile, the pinned
+source does; the "stale cached object" flagged by srcid5/6 was the CORRECT object and the comparison
+used the wrong file. Incident: at 02:02 UTC my srcid6 worker copied the remote-evidence variant over
+the shared `aspis-joint-20261019/sources/R1NaturalProjection.lean` (attempts 37102/37260 compiled that
+copy and failed); the shared object was never replaced. Restored at 02:55 UTC by the lead to the add9c5
+content (sha verified; the wrong copy kept under codex-pv-srcid-20261026/ as evidence); Stream A informed;
+no patch applied anywhere. LEAD RULING (h) added to pv-common.txt: resolve module names through the pin
+table; never overwrite a shared source with a different variant; stop and report if the shared source
+differs. pv-srcid7 (launched 02:34 under the superseded D241 wording) will treat the projection cone as an
+exception until it re-reads; its next round closes it with the pinned source. The merge-gate ruling of
+D241 (project vs external provenance) stands. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D244 (Stream B) 2026-10-27 02:50 UTC: rw21 exhausted: model-instance serializer published, V164/V163 unchanged; rw slot given to a third callback family (cbmid)
+
+pv-rw21 (`codex/cx-prover-rw-20261023`, head 237e135561; 100/100 Lean = 60 pass / 40 fail, 10/10 Kani =
+2 pass / 6 timeouts / 1 MIR overflow assertion / 1 configuration rejection, no row counterexample; no
+crates/programs change; no forbidden tokens; three final audits 477 declarations standard axioms,
+cached-component replay). Published `R1Z.ProverRw21ModelInstance`: a checked mathematical transcript
+serializer (installed serializer output for bounded arbitrary slices equals its mathematical byte image;
+finite sequence encoding; bounded endpoint/no-pole transport). V164: {P_source_p6} → {P_source_p6} (the
+op223 complete-Result law is not yet available; cb6 holds it). V163: deployed model construction, both
+fixture byte equations and the general equation OPEN: the serializer still awaits the deployed-input
+protocol construction, i.e. the same shared obstruction named in D242 (the actual selected record of the
+deployed caller), now runjoin11's single deliverable. Endpoint premises removed: 0. Lead decision: no
+rw22 until cb6 publishes op223 or runjoin11 publishes the fixture records (AGENTS.md §7); the slot goes to
+pv-cbmid (`codex/pv-cbmid-20261027`, candidate sibling at 237e135561, IDs 40600-40899, 100 Lean / 10
+Kani) on bucket-a rows no live job holds: V228-V230 (pool_v1 pair-forest hiding ops 132-134), V201 (op79
+encoder eval_message), then V239/V241 if cb7 has not reached them; laws via PV_CBM_CallbackBundle. Six
+slots: cb6, cb7, cblib, srcid7, runjoin11, cbmid. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D245 (Stream B) 2026-10-27 03:00 UTC: runjoin11 stopped at the exact missing source fact: the shipped records leaf has no extraction; runjoin12 launched on it alone
+
+pv-runjoin11 (`codex/pv-runjoin-20261026`, head 458a0c1ff2; 5/100 Lean all accepted, 2/4 Kani passed,
+root cells 21/21; three focused trust audits standard axioms, swap 0; no forbidden tokens; 8 cfg(kani)
+lines added to the existing child module). It pinned the literal transfer/withdrawal public records and
+transitions from the ed1c1cef71 fixture bytes (PV_RunJoin_RecordedTransfer / RecordedWithdrawal) and then
+stopped, as instructed, at ONE exact missing fact (evidence/pv-runjoin11-20261027/stage1-missing-fact.md,
+stage2-missing-fact.md): the shipped records leaf `records` (crates/aspis-statement/src/pool_v1/
+pair_forest_copy_builder.rs:227-270, via CopyRecords::new and pair_forest_trace.rs:275) has NO extraction
+in the Lean closure: BuilderForestAdmissionPort.lean:4362 declares `class Records` as an opaque class
+parameter and :4376 sets the source leaf to `sourceRecords.call`; the owned reference
+PV_Src_RecordDynamic.dictionary is not identified with that leaf, and its complete-Result equation
+(srcid6) does not establish the identification. The missing proposition, on the SAME fixture arguments
+(witness from deterministic_input_witness_v1, recipient digest(300)/digest(400)/600, change
+digest(500)/digest(600)/400, snapshot r0_fixture::prepare(false)): `Records.call R_shipped w 600 (some
+recipient) change snapshot 77 = @PV_Src_RecordDynamic.call E_shipped w 600 (some recipient) change
+snapshot 77`, where R_shipped is the (absent) extraction of the actual Rust function. Downstream and still
+OPEN: `@PV_Src_NativeInput.run E_shipped R_shipped i = .ok (.Ok i.compiled)` and the transition equality at
+the actual selected i; deployed public binding; non-vacuity; constructed P {source public binding, trace}
+unchanged; record 2/8/6; T unchanged. This is the shared obstruction of D242 made exact: a missing
+source-refinement proof, not a cryptographic assumption (AGENTS.md §3). Launched pv-runjoin12 (same
+branch, IDs 40900-41199, 100 Lean / 12 Kani) on that single deliverable: route A direct Charon/Aeneas
+extraction of `records`; route B the P6 link through the existing tools/r1-builder-reference/
+records_reference.rs (Kani shipped = reference, no stubs, bounded; extraction of the reference), recorded
+as a P6 gate; then the identification per fixture, compiler-return and transition equations. Six slots:
+cb6, cb7, cblib, srcid7, cbmid, runjoin12. Rows removed outright: 0. Privacy target not yet established.
+
+## D246 (Stream B) 2026-10-27 03:15 UTC: cb6 exhausted with no new rows; Kani root cause and timeouts; ruling (i); cb8 launched on op223 alone
+
+pv-cb6 (`codex/pv-cb-20261026`, head 148ce95eec; 100/100 Lean = 77 passed / 23 rejected; all 12
+substantive Kani gates timed out at 180 s, no verdict, no counterexample; no crates/programs change; no
+forbidden tokens; joint audit 226 declarations standard axioms, 38404-38406, ≤1.91 s / 4.28 GB / swap 0).
+No row discharged: op223 (V240) OPEN with `CompressCanonical.reference`, its array-domain and tag
+invariants and the compressor caller transport proved but no source association (Aeneas refuses the
+direct extraction; the shipped = reference gates timed out); op117 PARTIAL (split native gates timed
+out); op259/op258 OPEN (circle and pole gates timed out). Kani configuration (KANI-CONFIG.md): the
+post-rebuild failure is rustc codegen `failed to spawn work thread: Os { code: 11, WouldBlock }` inside
+the TasksMax=64 scope (Kani 0.67.0, rustc 1.93.0-nightly 53732d5e0); a dependency-free probe passed;
+mitigation `taskset --cpu-list 0-3` limits compiler fan-out without touching caps. Two scheduling
+deviations recorded (five early gates before the matched reproduction; one Lean/Kani overlap). LEAD
+RULING (i): a 180 s Kani timeout may be retried once at up to 900 s (the launcher's own Lean timeout)
+under the same memory caps and TasksMax with taskset, then split or move to Lean; never a third identical
+run. Launched pv-cb8 (same branch, IDs 41200-41499, 100 Lean / 12 Kani) on op223 alone: 900 s gates,
+then a borrow-free cfg(aeneas_ref) shim as the extraction target if Aeneas still refuses the shipped
+function, publishing `PV_CB_Op223Source.op223_source` under that stable name for rw22; fallback
+op117/op259/op258 under ruling (i). Six slots: cb7, cblib, srcid7, cbmid, runjoin12, cb8. Rows removed
+outright: 0. Privacy target not yet established.
+
+## D247 (Stream B) 2026-10-27 05:00 UTC: srcid7 exhausted: merge gate v2 down to 3 project gaps, projection exception closed; srcid8 launched
+
+pv-srcid7 (`codex/pv-srcid3-20261026`, head e0d5c21c56; 100/100 Lean, 2/2 Kani (internal-linear
+comparison passed 514 checks; full-helper prefix comparison timed out, no equality inferred); no
+crates/programs change; no forbidden tokens in branch modules; full audit 164 modules / 658 unique
+standard-axiom reports). MERGE GATE v2 under D241: project gaps 48 → 3 (879 project objects), external
+objects 5,640 each linked to the env-J toolchain and Aeneas backend @ 220c7ff9 / manifest pins, 0
+manifest gaps; the R1NaturalProjection exception is CLOSED under ruling (h) with the pinned source
+(receipt 30200 matches current HEAD and the current object; nothing changed). Remaining gaps: no
+accepted receipt binds the current object to the expected HEAD source for
+AspisFormal.V6PublishedTheoremInterfaces (904f5e5b…), R0P.LogUpChain (a9b0e52d…), R0P.SemRounds
+(564b9026…). Proved: the complete candidate mapper transcription equality and the canonical
+internal-linear source/copy equality; new RunJoin records pinned. OPEN: deployed mapper identification,
+installed compiler association (both wait on runjoin12's records identification), the 21 Lean
+root-parent cells. PV_Src_Premises deployed 5 → 5. Launched pv-srcid8 (same branch, IDs 41500-41799, 60
+Lean / 2 Kani): the three gaps first (resolve via the pin table, compile from HEAD with dependents,
+full audit, MERGE-GATE "CLEAN" so the lead can merge), then the 21 cells, the deployed identification
+from runjoin12's publication, and the prefix comparison under ruling (i). Six slots: cb7, cblib, cbmid,
+runjoin12, cb8, srcid8. Rows removed outright: 0. Privacy target not yet established.
+
+## D248 (Stream B) 2026-10-27 06:45 UTC: owner adopts all seven Stream B recommendations; actions taken
+
+The owner: "agree with all your recommendations". Recorded in design/PRIVACY-LEDGER-20261026.md "Owner
+decisions 2026-10-27 (B)". (1) T = the three fields of PV_RunJoin_TrustItems adopted as the privacy trust
+list and CAPPED (no new T field; native facts become P). (2) OS-failure repair option B adopted (failure
+signal public to both experiments, bound unchanged), conditional on proving the failure event
+witness-independent, now a P obligation. (3) V371: enable DOITM and accept V371 only in DOITM mode. NOT
+ENABLED: the build host runs Secure Boot, kernel lockdown (integrity) refuses `wrmsr -a 0x1b01 1`
+("Lockdown: wrmsr: raw MSR access is restricted"); ARCH_CAPABILITIES 0xdc9fd6b has the DOITM bit;
+UARCH_MISC_CTL = 0 on all 22 CPUs. Needs a firmware/kernel change the lead cannot make remotely; V371
+stays a substantive trust item meanwhile. (4) Inversion zero-boundary: proof work (try_inv operands
+nonzero on witness-bearing paths outside charged bad events). (5) Docker caps shrunk at runtime with
+`docker update` (reversible; compose files under ~/crypto-tax/infra and ~/maths-revision/services still
+hold the old values and would restore them on recreate): crypto-tax-worker-1 6144 → 2560 MiB (peak 1304),
+latex-server-latex-server-1 4096 → 512 MiB (peak 92), crypto-tax-reports-1 2048 → 512 MiB (peak 218);
+swap limits kept at 2× memory; crypto-tax-db-1 (peak 7784 of 8192), api, hausklar, gateway, link
+unchanged; finite container caps 24,576 → 15,872 MiB, about one more 8 GiB scope under the 55 GiB
+barrier. (6) Client bundle: pin client-pins.json in the release ledger: handed to Stream A, who own that
+file. (7) Archival: deleted, after a sha256 manifest of all 4,060 files (evidence/pv-archive-20261027/
+deleted-files.sha256, manifest sha256 8bb802cd…), the invalidated codex-pv-rebase-20261026/
+corpus-overparallel-v2 (6.2 GiB) and the superseded smoke-baseline/candidate-001 and
+phase-paired-002-baseline/candidate (16.9 GiB) under codex-cx-prover-rw-20261023; corpus-1000-002 and
+focused-paired-001 kept; nothing had them open. Host free 620 → 643 GiB. Worker rule (j) added. New jobs
+queued for the next free slots: option B endpoint (statement + witness-independence of the failure event)
+and the inversion zero-boundary proof. Rows removed outright: 0. Privacy target not yet established.
+
+## D249 (Stream B) 2026-10-27 06:55 UTC: Stream A's contract amendment noted for privacy
+
+Stream A reports an owner-approved amendment to SECURITY-CONTRACT-20261021.md ("Owner-approved
+amendment, 2026-10-27", research 503f682c76): the D188 Aeneas extraction trust item is read at TRACE
+fidelity (the pinned translation preserves the accepted Result and the chronological attempted
+digest-call sequence of the extracted monadic execution, same body/inputs/replies/pins, no new Lean
+axiom). Privacy arguments cite D188 by that name and do not restate it. The soundness trust inventory
+(design/TRUST-INVENTORY-APPENDIX-DRAFT-20261027.md, approved) covers soundness surfaces only; the privacy
+trust surfaces are the separately adopted T (D248: three PV_RunJoin_TrustItems fields) plus V371. Route A
+(translator re-pin) was not approved. Stream A's session moved to a new address; the D248 handoffs (client
+bundle pin, Docker caps) were re-sent there. Privacy target not yet established.
+
+## D250 (Stream B) 2026-10-27 06:50 UTC: Mac disk full; five idle Stream B worktrees removed (branches kept)
+
+Creating the pv-optb/pv-inv worktrees failed with "No space left on device" (Mac data volume 99%, 8.9
+GiB free; each checkout of this repository is about 7.8 GiB). No running worker was affected (no disk
+errors in any of the six worker logs). Freed 42 GiB (now 51 GiB free) by removing the worktrees of five
+IDLE Stream B branches, each checked clean (no tracked changes, no untracked files, no process using
+them): pv-join (c3b99bc9d9), pv-l3 (3d19f820c9), pv-rebase (b7f1f3c470), cx-prover-dict (615d347232),
+cx-prover-rw (the candidate, 237e135561); all five BRANCHES are kept unchanged (none merged into research;
+the candidate stays unmerged until its adoption gates pass), and the finished rw18 local Lean cache under
+/private/tmp. A future job on any of them recreates its worktree. The option-B and inversion jobs (D248)
+create their worktrees when their slots open. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D251 (Stream B) 2026-10-27 07:05 UTC: cb8 exhausted: op223 still open by both routes; diagnosis of the shared obstruction; ruling (k); option-B job launched
+
+pv-cb8 (`codex/pv-cb-20261026`, head 7599dff5b2; 100/100 Lean = 80 passed / 20 rejected; 12/12 Kani all
+timed out, exit 124, no verdict, no counterexample: compress16 canonical/reference at 900 s unwind 18,
+four per-lane compress16 splits and four Horner splits at 180 s, circle_sample_reference and
+pole1024_reference at 900 s; no crates/programs change; no forbidden tokens; final audits 41300-41302
+standard axioms, ≤1.65 s / 4.30 GB / swap 0). Proved: the canonical sixteen-value compressor producer
+invariant, the actual legacy/forest tuple-constructor invariants, the numerical compressor caller
+transport (conditional canonical16). NOT proved: `PV_CB_Op223Source.op223_source`; the transparent
+by-value shim extraction fails with `ProverRwRngExtractor006: fail-closed preflight: escaping reference
+output requires loan validation`. V164 unchanged: {P_source_p6} (with P_proof_bytes and the reservation
+equation from the consumer); rows 23/73; endpoint premises removed 0. LEAD DIAGNOSIS (AGENTS.md §7, the
+third round at the same point): the shipped function (crates/aspis-statement/src/logup.rs,
+`compress_tagged_tuple(tag, values: &[M31], lambda) = lift(tag) + Σ λ^(i+1)·values[i]`) is a tiny pure
+fold. Kani fails because sixteen chained bit-precise QM31 multiplications are SAT-hard (the same cause
+as the op117/op258/op259 timeouts), so no bound or split will finish; the extraction fails on the slice
+iterator's borrowed element (`for value in values`), not on the arithmetic. LEAD RULING (k): no Kani
+shipped = reference gates for chained field arithmetic; such rows go to Lean on an extraction. The two
+real routes for op223 are (i) make the pinned extraction accept slice iteration (the Aeneas backend
+models core.slice.iter; the refusal is the pipeline's own fail-closed preflight) and (ii) under the D187
+prover rewrite route, a prover-local index-loop copy of the function (verifier bytes untouched, since the
+shared aspis-statement function is also used on SBF), which would require re-running the candidate's
+differential, fixture and timing gates. A focused diagnosis job will compare both before any source
+change; (ii) would come to the owner only if it changes verifier bytes, which by construction it does
+not. Launched pv-optb (`codex/pv-optb-20261027`, research base, IDs 41800-42099, 100 Lean / 6 Kani): the
+option-B endpoint statement with its diff against privacy_headline_deployed, the witness-independence
+proof of the OS-failure event (a counterexample stops it and selects option A), and the derivation. Six
+slots: cb7, cblib, cbmid, runjoin12, srcid8, optb. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D252 (Stream B) 2026-10-27 07:25 UTC: cb7 exhausted (rows 5 → 5); extraction-obstruction diagnosis launched
+
+pv-cb7 (`codex/pv-cb3-20261026`, head a436dadfee; 100/100 Lean, 10/10 Kani; final replay 38842 exit 0 /
+2.13 s / 4.29 GB / swap 0, 382 axiom outputs over 372 targets all standard; no crates/programs change; no
+forbidden tokens). No new row: the cb3-track count stays 5. Proved support: the shipped pole-comparator
+correspondence, complete pole-reference Result laws, sampler-reference rank / canonicality / nonzero
+results, typed weight-read index domains; an emitted 18-function tensor closure awaits Lean checking.
+Native callback associations remain open, and its report isolates "source loan obstructions": the same
+extractor refusal as op223 (D251). Since the obstruction is now shared by at least two tracks, the freed
+slot goes to pv-extract (new branch `codex/pv-extract-20261027` from pv-cb @ 7599dff5b2, reusing the idle
+pv-cb worktree to save disk; IDs 42400-42699, 60 Lean, no Kani): inventory every row blocked by
+`ProverRwRngExtractor006`, find the preflight and why it was added, test whether the pinned Charon/Aeneas
+accept the functions on a copy of the pipeline (diagnostic; use for a row only with an argument that the
+preflight's concern does not apply), close op223/V164 if so, otherwise a design comparison of repairing
+the extraction versus prover-local index-loop copies under D187 (verifier path unchanged; candidate gates
+to re-run). Six slots: cblib, cbmid, runjoin12, srcid8, optb, extract. The inversion job (D248) takes the
+next slot in the idle pv-cb3 worktree. Rows removed outright: 0. Privacy target not yet established.
+
+## D253 (Stream B) 2026-10-27 07:30 UTC: cbmid exhausted (0 rows; reference equations only); inversion job launched
+
+pv-cbmid (`codex/pv-cbmid-20261027`, head 8483406290; budget exhausted; three final audits 40743-40745
+standard axioms, ≤1.03 s / 2.65 GB / swap 0; no crates/programs change; no forbidden tokens). No row
+discharged: PV_CBM_CallbackBundle publishes REFERENCE equations for ops 132/133/134 (V228-V230: reference
+selection and inventory cardinality proved), not opN_source laws; the native shipped = reference
+comparisons for 133 and 134 timed out at 180 s and 900 s (launched before ruling (k)); op79 (V201)
+extraction and caller invariants open; ops 222/224 prepared only. Next deliverable named: op132's
+shipped/reference association with inventory uniqueness and completeness, which under ruling (k) goes
+by Lean on an extraction. Launched pv-inv (D248 owner decision: inversion zero-boundary; new branch
+`codex/pv-inv-20261027` from research, reusing the idle pv-cb3 worktree; IDs 42100-42399, 100 Lean / 10
+Kani): inventory every inversion call site reachable from the deployed caller with operand provenance,
+prove witness-bearing operands nonzero outside an already-charged bad event, or stop on a checked
+witness-dependent zero (a protocol leak for the owner). Six slots: cblib, runjoin12, srcid8, optb,
+extract, inv. Rows removed outright: 0. Privacy target not yet established.
+
+## D254 (Stream B) 2026-10-27 07:45 UTC: srcid8 exhausted; merge gate held on three Stream A shared sources; srcid9 launched (Lean only)
+
+pv-srcid8 (`codex/pv-srcid3-20261026`, head 3873ce854e; 60/60 Lean, 2/2 Kani both timed out at 900/180 s,
+no counterexample; no crates/programs change; no forbidden tokens; full audit 207 modules / 727 standard
+reports / swap 0; 46 objects recompiled into its own objects dir). Proved: exact owned external-layer
+Result equality; the source round recurrences instantiated at the frozen 4/14/4 constants. Source parent
+cells 0/21 (the 21 RunJoin mathematical cells are pinned read-only); deployed PV_Src_Premises 5 → 5;
+shipped Records and installed compiler associations still missing (runjoin12). MERGE GATE v2 still
+BLOCKED on 3 project gaps, now characterised exactly: the shared env-J sources for
+AspisFormal.V6PublishedTheoremInterfaces (shared 80610f3a…, HEAD 904f5e5b…; compiled by Stream A attempt
+30037), R0P.LogUpChain (89e6f147… vs a9b0e52d…; 30159) and R0P.SemRounds (84cd1819… vs 564b9026…; 30161)
+differ from research HEAD and from every recent committed version of those paths; research changed the V6
+file in 6c1455a61e. The worker left them untouched (ruling (h)); the lead has asked Stream A which source
+is authoritative. Launched pv-srcid9 (same branch, IDs 42700-42999, 100 Lean, no Kani per ruling (k)):
+the 21 source root-parent cells and the root-helper equation in Lean from the pinned mathematical cells,
+the merge gate once Stream A answers, Records from runjoin12 if published. Six slots: cblib, runjoin12,
+optb, extract, inv, srcid9. Rows removed outright: 0. Privacy target not yet established.
+
+## D255 (Stream B) 2026-10-27 07:55 UTC: the three "project gaps" were a wrong-source comparison again; ruling (h) corrected
+
+Stream A: the shared copies of AspisFormal.V6PublishedTheoremInterfaces (80610f3a…), R0P.LogUpChain
+(89e6f147…) and R0P.SemRounds (84cd1819…) byte-match research HEAD files under the selected soundness
+cohort, docs/research/100bit-spend-path-20261013/lean/bridge-selected-current-20261018/accepted-current/…,
+which is where these module names resolve for the env-J closure (rebuild attempts 30037/30159/30161,
+selected at d6dd1ca963). The lead verified all three sha256 prefixes against those files at HEAD and
+found the resolution in evidence/envj-rebuild-20261026/EJR_final-inventory.json. So D254's "three project
+gaps" were not gaps: srcid8 compared against same-named files at other paths (AspisFormal/AspisFormal/…,
+docs/research/v8-r0-sem-proof-20261008/lean/R0P/…). Cause: lead ruling (h) named the 2026-10-15
+import-source-pins.json as the authority, and that table maps these names to the other files: the
+worker followed the ruling correctly; the ruling was wrong. Correction (h') in pv-common.txt: the
+authority is the rebuild's own resolution record (EJR_final-inventory.json and the rebuild2 record); a
+grep hit or the older table is not a resolution. Second same-pattern error today (D243), so a module name
+is never a file identity in Stream B instructions. Merge gate: with the correct resolution, the three are
+expected CLEAN; srcid9 will rewrite MERGE-GATE.md under (h') and, if every project object then matches,
+the lead merges codex/pv-srcid3-20261026. Stream A asked that the accepted-current objects not be
+recompiled or overwritten; if the privacy closure needs the newer variants (e.g. a declaration added in
+6c1455a61e), that is a separate cohort built privately and named to Stream A. Rows removed outright: 0.
+Privacy target not yet established.
+
+## D256 (Stream B) 2026-10-27 07:55 UTC: cblib exhausted: four library rows by the P6 route; cblib2 launched
+
+pv-cblib (`codex/pv-cblib-20261027`, head c35956a836; 100/100 Lean, 10/10 Kani with three bounded
+passes, no counterexample; final manifest 39731 exit 0 / 1.05 s / 2.62 GB / swap 0, 185 declarations
+standard axioms; no forbidden tokens). crates/ change: one `#[cfg(kani)] mod pv_cblib_library_checks`
+appended to crates/aspis-r1-cost-probe/src/host_commitment.rs (178 lines, harness-only, excluded from
+release builds; candidate-sibling branch). Rows supplied by the P6 route (owned Rust reference extracted
+by Aeneas; shipped = reference by a no-stub Kani check; dictionary entry = extracted reference by rfl in
+PV_CBL_CallbackBundle): V177 op25 PathBuf deref and V180 op29 PathBuf as_ref (both the identity borrow on
+the frozen PathBuf carrier; std/src/path.rs sha256 14fd4134…), V185 op34 Vec::is_empty and V186 op35
+Vec::default (alloc/src/vec/mod.rs sha256 a9cfdfc0…). Lead review: the laws are P6-route closures, not
+extractions of the shipped library functions; recount 4 must class them as such and judge the bounded
+Kani links (loop-free functions, so the bound is not material) and the PathBuf/Path carrier resolution.
+op32 keeps its allocator-effect deferral. Endpoint premises removed: 0. Launched pv-cblib2 (same branch,
+IDs 43000-43299, 100 Lean / 8 Kani for loop-free links only): remaining std/alloc ops 26/28/30/31/33/36,
+then the SHA-2/digest family V231-V238 in Lean on the extraction of the backend the deployed x86_64
+prover actually compiles (no silent substitution of the soft backend). Six slots: runjoin12, optb,
+extract, inv, srcid9, cblib2. Rows removed outright: 0. Privacy target not yet established.
+
+## D257 (Stream B) 2026-10-27 08:00 UTC: extraction obstruction resolved by diagnosis; op223 route (ii) adopted as a D187 candidate change; pv-op223 launched
+
+pv-extract (`codex/pv-extract-20261027`, head 258c685f50; 60/60 Lean = 54 pass / 6 fail, no Kani; final
+42460 exit 0 / 1.77 s / 4.31 GB / swap 0, 47 standard axiom outputs; no crates/programs change; no
+forbidden tokens). Findings (evidence/pv-extract-20261027/INVENTORY.md, ROOT-CAUSE.md): fifteen callback
+ops are refused by the pinned extractor's fail-closed guard (rng-extractor/base/src/Main.ml:745-761,
+which scans all function output types including helpers): 36, 79, 132, 133, 205, 212, 215-217, 219, 222,
+223, 224, 249, 258; op253 has a separate internal shared-loan failure. The guard is not the real
+obstruction: with it removed in a private copy, the pinned Aeneas fails in InterpReduceCollapse.ml:1991
+(shared-borrow abstraction-ID remapping during loop-context matching) and emits no Lean; a fresh Charon
+accepts op223 but Aeneas still emits nothing. Route (i) (repair the extraction) therefore needs an
+Aeneas fix with its own invariant, and the soundness-side translator re-pin was not approved by the owner
+(Stream A, 2026-10-27). Route (ii) works: an index-loop compressor passes the UNCHANGED pinned extractor
+with the guard on (23 functions, 3 constants, zero opaque), and `PV_Ext_ClosedCandidate.candidate_reference`
+proves complete-Result equality to the P6 compressor for arbitrary inputs. LEAD DECISION: adopt route
+(ii) for op223 only, as a candidate change under the owner-approved prover rewrite route D187: the patch
+(evidence/pv-extract-20261027/route-ii-op223.patch, 18 lines) adds a private module in
+crates/aspis-r1-cost-probe behind `prover` and `r1p-check` and redirects the one host call in
+host_semantic::copy_endpoint_values; aspis-core, aspis-statement, programs/ and the shared logup.rs
+function are untouched, so the verifier keeps the original. Adoption still requires: all three ELF pins
+reconfirmed (any difference stops adoption and goes to the owner), byte-identical fixture proofs, ≥1,000
+paired whole-prover differential runs, and the quiet-window timing gate (median < 15 s, ≤ +10%), which
+the lead schedules with Stream A. The other affected ops stay design-only (table in
+design/PV-EXTRACT-20261027.md) until op223 has gone through the whole workflow. Launched pv-op223
+(`codex/pv-op223-20261027` from the extraction branch, reusing the pv-cb worktree; IDs 43300-43599, 100
+Lean, no Kani): apply the patch, extract the applied host function with the unchanged tool, prove
+op223_source and the bridge that discharges V164's P_source_p6, run gates (a)-(c), write the timing plan.
+Six slots: runjoin12, optb, inv, srcid9, cblib2, op223. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D258 (Stream B) 2026-10-27 08:05 UTC: inversion round 1 merged (V380 open, no leak found); inv2 launched
+
+pv-inv (`codex/pv-inv-20261027`, research-based; 100/100 Lean = 79 successful, 10 Kani = 9 passed / 1 CLI
+rejection; final three audits standard axioms over 145 declarations, peak 4.12 GB, swap 0; no
+crates/programs change; no forbidden tokens) merged into research (4bdd2679c8); worktree reused, branch
+deleted. Inventory of every inversion site reachable from the deployed caller with operand provenance
+(evidence/pv-inv-20261027/INVENTORY.md). Proved locally: guarded packed operands, extracted QM31/CM31
+norm nonzero conditions, interpolation denominators, registry-slot uniqueness, interleaved packing. No
+checked witness-dependent zero (no leak found). V380-inversion OPEN: the native registry enumeration,
+tuple-bank reads, tags and active masks are not yet bound to the model, and containment of the zero
+events in the headline's existing bad-event union is not yet instantiated. Launched pv-inv2 (new branch
+`codex/pv-inv2-20261027` from research in the same worktree; IDs 43600-43899, 100 Lean / 6 Kani for
+control only): the native bindings, then containment against a named term of the existing bound, or a
+checked counterexample for the owner. Six slots: runjoin12, optb, srcid9, cblib2, op223, inv2. Rows
+removed outright: 0. Privacy target not yet established.
+
+## D259 (Stream B) 2026-10-27 08:40 UTC: inversion round 2 merged: zero events contained in the existing poleBad; inv3 launched
+
+pv-inv2 (`codex/pv-inv2-20261027`, research-based; 100/100 Lean, 6/6 Kani control checks passed; final
+audits 181 theorems standard axioms, swap 0; no crates/programs change; no forbidden tokens) merged into
+research (5222276e4a). Proved: conditional native tuple/inverse bindings for the inversion descriptor
+banks, registry activity facts, packing safety, and SAME-COIN CONTAINMENT of the inversion zero events in
+the EXISTING HVZK event `poleBad` (R0Z/HvzkS.lean, HvzkV.lean; its mass bound `poleBad_mass_le` already
+feeds the headline), with the retained charge 8 · (4096 / ((2^31 − 1)^4 − 1)): the bound, simE and the
+observer are unchanged. Still OPEN for V380: the installed registry/bank/coupling bindings (partly on
+runjoin12's records), mask blocks 48-63, and the complete observation law of the inversion branches. No
+witness-dependent zero (no protocol leak) found. Launched pv-inv3 (new branch `codex/pv-inv3-20261027`
+from research in the same worktree; IDs 43900-44199, 100 Lean / 6 Kani control only): mask blocks 48-63,
+the bindings that do not need the selected record, the observation law, or a checked counterexample for
+the owner. Six slots: runjoin12, optb, srcid9, cblib2, op223, inv3. Rows removed outright: 0. Privacy
+target not yet established.
+
+## D260 (Stream B) 2026-10-27 08:50 UTC: source-identification branch merged (merge gate CLEAN); publicCorr source half closed; V403 job launched
+
+pv-srcid9 (`codex/pv-srcid3-20261026`, head 2e8351f033; 100/100 Lean = 78 accepted / 22 rejected drafts, no
+Kani; final audits 42802-42804 exit 0 / ≤1.90 s / ≤4.33 GB / swap 0, 807 standard axiom reports; 6,662
+audited object hashes unchanged; no crates/programs change; no forbidden tokens in branch modules).
+Proved: the 21 SOURCE root-parent cells (0 → 21/21) through the frozen permutation, and the actual
+root-helper equation at the explicit dictionary and the named E_shipped adapter: the publicCorr family's
+SOURCE half is closed (source public-root premise removed in the source-identification instance); the
+deployed snapshot / Records association stays REDUCED; compile_call OPEN; words, admission, row_call
+REDUCED; deployed PV_Src_Premises 5 → 5. MERGE GATE v2 CLEAN under ruling (h'): 1,028 project objects
+with zero gaps (the three D254 "gaps" resolve to the accepted-current cohort), 5,640 external objects
+linked to the toolchain/manifest pins; no Stream A source or object changed. The lead merged
+codex/pv-srcid3-20261026 into research (d0fafc7254, no conflicts) and removed its worktree and branch.
+The merged tools/r1-builder-reference/pv_srcid3.rs is a cfg(kani)-reachable reference module in a tools
+crate that no workspace or shipped crate includes. GitHub warned about large files on push (warning
+only; evidence corpora). The source track now waits on runjoin12's R_shipped. Launched pv-canon
+(`codex/pv-canon-20261027`, research base, IDs 44200-44499, 100 Lean / 6 Kani control only) on V403: every
+M31/CM31/QM31 reaching op121 on the deployed path is canonical (producers inventoried and proved, field
+operations preserve canonicality, composed over the extracted caller), and the op121 row obligation on
+the canonical domain stated exactly. Six slots: runjoin12, optb, cblib2, op223, inv3, canon. Rows removed
+outright: 0. Privacy target not yet established.
+
+## D261 (Stream B) 2026-10-27 09:05 UTC: inversion round 3 merged; inversion track paused on its dependencies; recount 4 launched
+
+pv-inv3 (`codex/pv-inv3-20261027`, research-based; 100/100 Lean = 97 pass / 3 corrected failures, 6/6
+control-only Kani; final audits standard axioms, swap 0; no crates/programs change; no forbidden tokens)
+merged into research (a6cd27379d), branch deleted. Proved: the model mask gap for blocks 48-63 closed, the
+full mask table, row-order/dedup transport, conditional same-coupling guard containment and Boolean trace
+laws; retained charge exactly 8 · (4096 / ((2^31 − 1)^4 − 1)) inside the existing poleBad. V380 still OPEN
+on the native dynamic registry/schedule refinement, the selected caller and the complete D159
+observation law; no protocol counterexample. These depend on runjoin12's selected-record identification
+(D245) and on the extraction route for ops 132/133 (D251/D257), so per AGENTS.md §7 the inversion track
+pauses until one of them lands rather than a fourth round against the same dependencies. Launched
+pv-recount4 (`codex/pv-recount4-20261027` from research in the reused pv-cb3 worktree; IDs 44500-44599,
+statement checks only): recount 4 with the D248 owner decisions applied to the T/P/C classes, a P6 versus
+extraction split of candidate closures, the headline-closure column set from the wire IMPORT-CHAIN, a new
+bucket for rows blocked by the shared extraction obstruction, and corrections to D236-D261. Six slots:
+runjoin12, optb, cblib2, op223, canon, recount4. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D262 (Stream B) 2026-10-27 09:10 UTC: option B round 1; the witness-independence condition made precise (off the charged bad events); optb2 launched
+
+pv-optb (`codex/pv-optb-20261027`, head b654d6d8b1; 100/100 Lean = 52 pass / 48 fail, no Kani; three
+reserved audits exit 0, ≤4.97 s, ≤4.27 GB, swap 0, standard axioms; no crates/programs change; no
+forbidden tokens; four memory-killed attempts (41830/41832/41834/41843) on concrete finite-function-space
+cardinality, caps not raised, replaced by an abstract Nat.card proof that checks in 1.98 s / 4.1 GB).
+Stated `privacy_headline_deployed_B`: same simE, observer map and bound; a different theorem with a fixed
+public failure signal (evidence/pv-optb-20261027/STATEMENT-DIFF.md). Proved: the emitted caller stops on
+its first Entropy callback error; extracted retry-control results; independence on named failure
+prefixes; a conditional synchronisation theorem for PV_RunJoin_Deployed.execute; and a family of admitted
+same-public witnesses whose pole sets differ (41850/41851), so for some challenge their NoPole verdicts
+are opposite. Not proved: witness-independence of every reached deployed OS failure. A native
+programmed-oracle probe differing in reached failure used a malformed compilation and a programmable
+oracle, so it is explicitly not an admitted-witness counterexample. LEAD RULING: the job's condition
+`Independent` (equal reached failure observation for ALL admitted same-public pairs at the same world
+and coins) is stronger than the adopted condition and is expected to be false: later OS calls are
+reached only after a Rejected attempt, and rejection depends on the witness through the pole set. The
+headline already charges exactly that dependence (the HVZK chain's real and ideal loops agree off
+`poleBad`, whose mass bound feeds the headline, alongside the fresh-query, seed and fuel events). The
+D215 condition, made precise, is IndependentOffBad: off the union of the headline's existing charged bad
+events, the reached failure observation is a function of public input, OS world and coins. This is not a
+weakening: simE, the observer and the bound are unchanged; witness-dependent retries stay paid for inside
+poleBad (the same pattern as the inversion containment, D259). Option A is selected only by an
+admitted-witness counterexample with the fixed HOST_HASH oracle OUTSIDE every charged event. Launched
+pv-optb2 (same branch, IDs 44600-44899, 100 Lean / 4 Kani control only): state IndependentOffBad naming
+only existing events, prove it for the emitted retry body, derive the B headline, or stop on that
+counterexample. Six slots: runjoin12, cblib2, op223, canon, recount4, optb2. Rows removed outright: 0.
+Privacy target not yet established.
+
+## D263 (Stream B) 2026-10-27 09:20 UTC: cblib2 exhausted (library rows 4 → 5); SHA-2 rows reduced to the dispatcher question; cblib3 launched
+
+pv-cblib2 (`codex/pv-cblib-20261027`, head 7aebfd030c; 100/100 Lean, 8/8 Kani = 6 bounded passes / 2
+timeouts, no counterexample; final audits 43098-43100 exit 0, ≤8.00 s / 2.63 GB / swap 0, manifest of 151
+modules / 506 declarations standard axioms; no forbidden tokens). crates/ change: 71 lines in two further
+top-level `#[cfg(kani)]` modules of crates/aspis-r1-cost-probe/src/host_commitment.rs (verified: the
+file's only additions are three cfg(kani) modules at lines 376-623; excluded from release builds). New
+row by the P6 route: V179 op28 String as_ref Path (`PV_CBL_CallbackBundle.op28_source`; native gate
+covers valid UTF-8 strings of length 2 with arbitrary byte index; recount 4 to judge the bound). SHA-2:
+the extracted SOFT backend's round/schedule helpers, feed-forward addition and whole-block totality are
+proved in Lean (no SHA Kani gate, ruling (k)); the block-value composition and the link to the backend
+the deployed x86 prover actually runs remain open: the pinned sha2 dispatches at runtime to SHA-NI
+instructions (cpufeatures), which are not extractable and could enter only as a trust item, which the
+owner capped (D248). Launched pv-cblib3 (same branch, IDs 41588-41799 = the never-used tail of srcid8's
+range): the remaining std/alloc rows 26/30/31/33/36, the soft block composition and V231-V238 on the soft
+backend, and design/PV-SHA-DISPATCH-20261027.md with measured options (a soft-backend prover build under
+D187 with the projected timing cost; a Lean model of SHA-NI and what it would trust; others) and a
+recommendation, without changing the build. Env-J: Stream B's 40000-44999 is nearly allocated; a further
+range was requested from Stream A. Six slots: runjoin12, op223, canon, recount4, optb2, cblib3. Rows
+removed outright: 0. Privacy target not yet established.
+
+## D264 (Stream B) 2026-10-27 09:20 UTC: env-J launcher range extended to 50000-59999 (range-only edit, agreed with Stream A)
+
+Agreed split: 50000-54999 Stream B, 55000-59999 Stream A; 45000-49999 stays Stream A's; 5000-49999
+behaviour, the 20000-27099 block and the duplicate guard unchanged. Host edit with backup
+`tools/run-joint.sh.bak-streamB-20261027b` (sha256 11cc87d94e7069923fda1948c498a5e6ced8afc36a9a3c225dbdb277eeb27121,
+= the D238 version); new file sha256 7ac8a13e34b33d2cb41b3ef4bf52e97498fe744b48010069950c63d6dd980c66;
+`sh -n` clean:
+
+```diff
+@@ -21 +21 @@
+-  case "$A" in 5[0-7][0-9][0-9]|[6-9][0-9][0-9][0-9]|1[0-9][0-9][0-9][0-9]|2[0-9][0-9][0-9][0-9]|3[0-9][0-9][0-9][0-9]|4[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
++  case "$A" in 5[0-7][0-9][0-9]|[6-9][0-9][0-9][0-9]|1[0-9][0-9][0-9][0-9]|2[0-9][0-9][0-9][0-9]|3[0-9][0-9][0-9][0-9]|4[0-9][0-9][0-9][0-9]|5[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
+```
+Privacy target not yet established.
+
+## D265 (Stream B) 2026-10-27 09:25 UTC: Recount 4 merged (OPEN 103 → 95, CLOSED-ON-CANDIDATE 27 → 35); op134 job launched
+
+pv-recount4 (`codex/pv-recount4-20261027`, merged 4103b624f8; 20/20 statement checks, 16 passed, three
+missing-object failures and one helper namespace error retained; no proofs, no Kani; branch deleted after
+confirming it is in research). All 407 rows re-derived; original rows preserved. Totals recount 3 → 4:
+OPEN 103 → 95; REDUCED 176 → 176; EVIDENCED 14 → 14; CLOSED-ON-RESEARCH 87 → 87; CLOSED-ON-CANDIDATE
+27 → 35. Closure routes of the 35: 27 extracted operation laws, 1 extraction bridge, 6 P6 gates (the
+library rows; bounded links and the Path carrier qualified), 1 axiom diagnostic (V270). Headline
+membership of the candidate closures: research 0, candidate consumer 29, neither 6 (the original 27
+reproduce the wire job's 0/26/1). OPEN buckets a/b/c/d (d = blocked by the shared extraction
+obstruction, new): 23/55/1/16, change −21/+4/−7/+16; the single remaining owner-first blocker is DOITM
+(V371). D248 applied: the three trust fields class T (adopted, capped), option B's condition a P row,
+inversion P. Corrections recorded: the wrong-source withdrawals of D243/D255 preserved; op229
+deduplicated; bounded P6 links and Path carriers qualified; op36 adapter failures distinguished from the
+shipped generic conversion; V164/V240 count as one callback decrement. Next independent rows named: V403
+(canonical domain, pv-canon running), V400 (option-B failure synchronisation, pv-optb2 running), V230/op134
+(source correspondence). Launched pv-op134 (`codex/pv-op134-20261027` from pv-cbmid's branch in the
+reused pv-cb3 worktree; first IDs of Stream B's new range 50000-50299; 100 Lean / 4 Kani control only):
+direct extraction of the shipped function with the unchanged tool and its source law, or, if the tool
+refuses it, the exact refusal, a route (ii) design entry and the complete reference side. Six slots:
+runjoin12, op223, canon, optb2, cblib3, op134. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D266 (Stream B) 2026-10-27 09:55 UTC: option B round 2 merged (IndependentOffBad stated over existing events; native instance open); L3 disassembly audit launched
+
+pv-optb2 (`codex/pv-optb-20261027`, research-based; budget exhausted; three focused audits 44897/44898/44702
+exit 0, ≤4.74 s / 4.27 GB / swap 0, standard axioms; no crates/programs change; no forbidden tokens) merged
+into research (6c88a07f9c); worktree and branch removed. `IndependentOffBad` is stated as ruled in D262:
+∀ w u, pub w = pub u → ∀ os coins, ¬bad w os coins → ¬bad u os coins → signal w os coins = signal u os coins,
+where `bad` is the union of EXISTING charged events only (poleBad, HitEv, CollEv, lazyBad, exhQ, realFresh,
+realBad, seedGuess, fuel failure). Proved: public-decoder equivalence, off-pole retry-index agreement,
+emitted attempt-control lemmas, a conditional deployed synchronisation, complete first-draw failure
+equality, and joint failure transport that preserves the existing charges. OPEN: the concrete native
+instance (reachable-state body/public-verdict synchronisation at the fixed HOST_HASH; association of the
+actual failure metadata with the charged coordinates) and the endogenous privacy_headline_deployed_B;
+the earlier B theorem remains the fixed-signal form. No qualifying native counterexample. These remain
+on the native interpretation (bucket b), so the B track pauses (AGENTS.md §7) until runjoin12 lands.
+Launched pv-l3dis (existing `codex/pv-l3-20261026`, worktree recreated; IDs 50300-50599, 30 Lean, static
+analysis only) on V373, the L3 disassembly audit of the prover as it ships for x86_64 Linux:
+exact build identity, every secret-dependent kernel and call site disassembled from the built binary,
+findings per site (clean / secret-dependent branch / secret-dependent address / variable-latency op /
+relies on V371 because DOITM is off), any secret-dependent branch or address reported as a checked
+finding; never a claim of absence of leakage. Six slots: runjoin12, op223, canon, cblib3, op134, l3dis.
+Rows removed outright: 0. Privacy target not yet established.
+
+## D267 (Stream B) 2026-10-27 10:05 UTC: runjoin12 exhausted; the records leaf blocks only on closures; closure-free rewrite adopted as a D187 candidate change; runjoin13 launched
+
+pv-runjoin12 (`codex/pv-runjoin-20261026`, head dd58cab637; 100/100 Lean = 88 kernel successes / 12
+rejected, 12 verification runs; three reserved audits standard axioms; no new crates/programs change
+beyond the existing cfg(kani) child module; no forbidden tokens). R_shipped NOT established. Route A
+(direct extraction of the shipped `records`, byte-identical to ed1c1cef71, sha256 e1315ebd…) fails in
+Aeneas with "missing FnOnce at core/function.rs:250, FunsAnalysis.ml:134" (receipts pv12-records-charon-18,
+pv12-aeneas-25). Route B (Kani shipped = reference) incomplete: only the external-layer and
+raw-conversion helper gates passed; the mapper equality timed out. Proved: both REFERENCE fixture
+equations, all frozen empty-root parent cells and the table recurrence, the fixture input commitment
+through named permutation cells, the nullifier inverse and frozen root words. Lead reading of the source
+(pair_forest_copy_builder.rs:227-270): `records` is pure field shuffling, two closures
+(`rec.map(|r| …).unwrap_or(ZERO8)` and `core::array::from_fn(|l| …)`) and one call to pair_empty_roots();
+the extraction blocker is the closures, the Kani blocker the Poseidon empty-root computation (already
+proved in Lean cell by cell). LEAD DECISION under D187: rewrite THAT ONE FUNCTION closure-free with
+identical semantics (explicit match and an index loop; no other change). Because pool_v1 is compiled into
+the Pool and Registry programs, gate (a), all three ELF pins rebuilt and confirmed, runs FIRST; any pin
+change stops the work and goes to the owner (the builder is witness-side and is expected to be dropped
+from the programs by the linker, which the gate checks rather than assumes). Gates (b) fixture bytes and
+(c) the 1,000-run differential will run once over this change together with the op223 change (D257),
+followed by the quiet-window timing gate. Launched pv-runjoin13 (same branch, IDs 50600-50899, 100 Lean /
+2 Kani): edit, gate (a), extraction with the unchanged tool, R_shipped, the identification per fixture
+and generally, then compiler-return, transition, deployed public binding and non-vacuity. Six slots:
+op223, canon, cblib3, op134, l3dis, runjoin13. Rows removed outright: 0. Privacy target not yet
+established.
+
+## D268 (Stream B) 2026-10-27 10:10 UTC: L3 disassembly round 1: checked secret-dependent branches classified; shipped binary not yet audited; l3dis2 launched
+
+pv-l3dis (`codex/pv-l3-20261026`, head 5eba6495dd; 0/30 Lean, no Kani; capped release build 67.1 s / 932
+MB / swap 0; no crates/programs change). Built the unmodified r1p_retry_gate EXAMPLE (release,
+features optimized-terminal,ct-host-prover; rustc 1.94.1, LLVM 21.1.8, x86_64 Linux; sha256
+c7f359d4da1c5a759a3ddf4b83c7cccd602b9e0c104e85170a593f82116b516a) and audited the linked disassembly
+(evidence/pv-l3-20261027/DISASSEMBLY-AUDIT.md). CHECKED findings: F1/F2 private-mask rejection branch in
+SeedExpander::m31 (state_only_hiding.rs:424-426: a 31-bit candidate equal to P is rejected); F3 cursor
+addressing that depends on the rejection history (:409-416); F4 witness-dependent pole verdict branch at
+0x9483d; F5 operand-zero branches in M31::inv; F6 a gamma-sampler carry branch on the raw Fiat-Shamir
+answer; F7 seed zero/short-circuit comparisons in `generate` (state_only_entropy.rs:193); DIV in sumcheck
+on public operands; ct_pole::all_slots_clear and logup::compress_tagged_tuple clean in body (V371 for
+ALU/IMUL/SSE timing; DOITM off). LEAD ASSESSMENT: F1-F3 and F7 are rejection-sampler patterns that reveal
+only rejection counts (probability 2^-31 per word, 2^-256 per seed), independent of the accepted mask
+values and of the witness, so they are simulatable in principle: that is exactly ledger row V354 (L2 F3
+SeedExpander) and V352 (generate_for_mask_nonce), which must PROVE it; F4 differs between witnesses only
+on the charged poleBad event; F5 is covered by the inversion containment (D259/D261); F6 depends on public
+data. No new leak is claimed or excluded: audits never prove absence of leakage. V373 stays OPEN because
+the audited binary is a diagnostic example, not the shipped executable, and it lacks the 64-byte
+generate_for_mask_nonce route. Launched pv-l3dis2 (same branch, IDs 50900-51199, 30 Lean): build
+devnet_spend exactly as pinned by client-pins.json (release ledger, owner-approved client bundle) and
+audit every secret-dependent kernel reached from devnet_spend::main, including generate_for_mask_nonce,
+mask application/balancing and the hashing internals on secret data, each finding linked to its L2/L3
+row; new non-rejection findings are reported as such. Six slots: op223, canon, cblib3, op134, runjoin13,
+l3dis2. Rows removed outright: 0. Privacy target not yet established.
+
+## D269 (Stream B) 2026-10-27 10:15 UTC: shipped-binary audit blocked by a missing release pin (native client build recipe and toolchain); l3dis3 launched on the devnet recipe of record
+
+pv-l3dis2 (`codex/pv-l3-20261026`, head 22b24ffe12; no Lean, no Kani, no host scopes; no source change)
+validated all 1,295 pinned client files at 5228877938 and stopped without guessing: client-pins.json (the
+owner-approved client bundle in the release ledger) pins the SOURCE of the devnet_spend route but not the
+native BUILD (no root rust-toolchain, no complete features, flags or command), so no binary can be named
+"the shipped binary". Also: the candidate prover (the one meant to ship after adoption) differs from the
+pinned client source in 26 files and lacks 6, so the client pin must be refreshed at candidate adoption.
+The recipe of record is the devnet R1 run (2026-10-20, evidence/devnet-r1-20261020/README.md:55-63):
+`cargo build --manifest-path tools/r1-cost-probe/Cargo.toml --release --offline --locked -j 4 --features
+r1p-check --bin devnet_spend` with the host's default toolchain. Recommendation sent to Stream A (owner
+of the release ledger): pin the native client build recipe and an exact toolchain (rustc/cargo, target,
+RUSTFLAGS) in the client-bundle subsection, and re-pin the bundle at candidate adoption. Launched pv-l3dis3
+(same branch, IDs 51200-51499, 30 Lean): build devnet_spend with the recipe of record from (A) the pinned
+client source and (B) the candidate source, audit every secret-dependent kernel reached from its entry
+(generate_for_mask_nonce, mask application/balancing, host semantic bodies, hashing on secret data),
+results labelled "devnet R1 recipe, toolchain unpinned", findings linked to their L2/L3 rows, the
+differing files mapped to kernels, and a V374 dudect plan for (B). Six slots: op223, canon, cblib3, op134,
+runjoin13, l3dis3. Rows removed outright: 0. Privacy target not yet established.
+
+## D270 (Stream B) 2026-10-27 10:25 UTC: client build recipe recorded in the release ledger; toolchain pin escalated to the owner with a recommendation
+
+Stream A added "Native client build: recipe of record, toolchain NOT pinned" to the release ledger's
+client-bundle section: the devnet R1 command (release, offline, locked, -j 4, --features r1p-check, --bin
+devnet_spend, RUSTFLAGS `-C link-arg=-Wl,--threads=4` from the receipt wrapper, host default
+~/.cargo/bin/cargo), "the shipped client binary" undefined until an exact toolchain pin is approved, L3
+client-binary results labelled "toolchain unpinned", and the bundle re-pinned at candidate adoption.
+Choosing the toolchain defines a release artifact, so it is an owner decision. Host facts (2026-10-27
+10:20 UTC): the default is the MOVING `stable` channel, currently rustc 1.94.1 (e408947bf 2026-03-25,
+commit e408947bfd200af42db322daf0fadfe7e26d3bd1), LLVM 21.1.8, cargo 1.94.1 (29ea6fb6a 2026-03-24),
+host/target x86_64-unknown-linux-gnu. LEAD RECOMMENDATION to the owner: pin exactly that toolchain
+(rustc/cargo 1.94.1 by version and commit, target x86_64-unknown-linux-gnu, RUSTFLAGS as recorded, no
+target-cpu change) as the client build, because it is the toolchain the candidate's timing, differential
+and L3 evidence were produced with, and pinning anything else would invalidate that evidence; record it
+as a rust-toolchain file for the client build and in the release ledger; the pin is re-confirmed at
+candidate adoption. Privacy target not yet established.
+
+## D271 (Stream B) 2026-10-27 10:30 UTC: V403 round merged (canonical producers proved; caller transport open); cb9 launched on extractable independent callback rows
+
+pv-canon (`codex/pv-canon-20261027`, research-based; 100/100 Lean = 74 passed / 26 rejected, 6/6 Kani =
+5 control/indexing passes / 1 CLI rejection; audits 44497-44499 standard axioms, ≤3.15 s / 4.30 GB / swap
+0; no crates/programs change; no forbidden tokens) merged into research (16191fd042), branch deleted.
+Proved: canonicality of every producer of op121's arguments and `op121_arguments` over the exact
+extracted interpolation/semantic/update/read prefix; `reached_canonical` composes it with the explicit,
+still-open `P_NativePrefixBinding`. The whole recursive caller transport failed kernel checks and is
+archived (not rerun unchanged). V403 OPEN on the recursive call-event/prefix transport and the binding to
+the installed RunJoin caller. op121's remaining source obligation, stated exactly: canonical inputs give a
+successful canonical output with degree-27 polynomial meaning, i.e. complete Result equality with the
+proved Horner reference; op121 is in the extraction-obstruction set, so its source link is a route (ii)
+question. Track paused on the RunJoin binding. Launched pv-cb9 (new branch from codex/pv-cb3-20261026
+in the reused pv-canon worktree; IDs 51500-51799, 100 Lean / 4 Kani control only) on the independent
+open callback rows NOT in the extraction-obstruction inventory: ops 226, 227, 228, 230, 250, 251, 252,
+254, 259, by direct extraction with the unchanged tool, recording any new refusal. Six slots: op223,
+cblib3, op134, runjoin13, l3dis3, cb9. Rows removed outright: 0. Privacy target not yet established.
+
+## D272 (Stream B) 2026-10-27 10:40 UTC: L3 audit of the devnet client binary: two material side-channel findings (N1 non-CT pole comparison, N7 decimal JSON parsing of secrets); release-recipe decisions escalated
+
+pv-l3dis3 (`codex/pv-l3-20261026`, head 63b8e1ff76; no Lean, no Kani; five capped scopes sequential;
+cargo targets deleted; no source change). Artifact A (pinned client source 5228877938, devnet R1 recipe,
+host rustc 1.94.1, toolchain unpinned) built: sha256 dc31d28c3eb9a793f9e2a8c81e69611b42aa8c2cace1393845cd554d090c357b.
+Artifact B (candidate 237e135561) failed before compiling: tools/r1-cost-probe/Cargo.lock is stale against
+the candidate's workspace changes and the recipe uses --locked (the candidate's earlier gates built
+through other manifests). The pinned chain draws real entropy (devnet_spend::main → plan::prove →
+RealR1_client::prove_for_proof_accounts → generate_for_mask_nonce); the deterministic fixture constructor
+is compiled in (the tool enables aspis-prover/insecure-spend-fixture) but is not on the chain. New
+findings in A (evidence/pv-l3-20261027/dual/AUDIT.md), lead classification:
+- N1 MATERIAL. host_semantic.rs:292 `clear &= chi != *value` over every active compressed witness slot:
+  the derived QM31 inequality compiles to limb-by-limb short-circuit branches (0xbd6a0/0xbd6a6/0xbd6ac).
+  chi is public, values are witness-derived; the branch path differs whenever a slot's leading limb
+  equals chi's (≈ 2^-31 per active slot, far above the charged poleBad and the 2^-100 target), and then
+  reveals a witness-derived limb and its slot position to a timing observer. The candidate's
+  constant-time replacement crate::ct_pole::all_slots_clear (audited clean in body in D268, V371 caveat)
+  is compiled ONLY with the non-default feature ct-host-prover, which the recipe of record does not
+  enable; the pinned research source has no CT path at all. So the devnet route as built leaks at L3.
+- N7 MATERIAL. devnet_spend.rs:16 parses the request JSON, including private witness/key fields, as
+  decimal integers via serde_json (de.rs:462-507): first-digit and digit-count branches make each
+  secret byte's timing depend on whether it is < 10, < 100 or ≥ 100 (~1.6 bits/byte to a timing
+  observer). Input decoding was never inside the constant-time kernel discipline.
+- N2-N6: guard branches (zero/sum guards state_only_hiding.rs:259-266, canonical-column guards
+  host_semantic.rs:60-68, private balance equalities prover.rs:139-154, helper-sum short circuits,
+  sumcheck boundary checks host_sumcheck.rs:64,75) whose outcome is constant on valid honest runs; each
+  is a correctness obligation on its L2 row (V354/V357/V360), not a leak if the invariant holds.
+Owner escalation (release recipe; Stream A owns the ledger): the release client build must (i) be the
+candidate with ct-host-prover enabled, (ii) not enable insecure-spend-fixture, (iii) use the pinned
+toolchain (D270), and (iv) decode private inputs in constant time (fixed-width encoding, e.g. hex or raw
+bytes, with a constant-time decoder) instead of decimal JSON numbers: a host-client change under D187
+plus the Python orchestration that writes the request. Launched pv-l3dis4 (same branch, IDs
+51800-52099): minimal offline lockfile repair for the tool (registry versions/checksums must not change),
+build B with the recommended recipe (r1p-check + ct-host-prover), audit B side by side with A (N1 removed
+by the CT path? N7 extent; N2-N6 constancy obligations), and the V374 dudect plan for B. Rows removed
+outright: 0. Privacy target not yet established.
+
+## D273 (Stream B) 2026-10-27 10:45 UTC: cblib3 (library rows 5 → 7; soft SHA block composition proved; SHA-NI escalated) and cb9 (every remaining direct-extraction target refused); route (ii) feasibility job launched
+
+pv-cblib3 (`codex/pv-cblib-20261027`, head 4aaa5ae9a2; 100/100 Lean, 6/6 Kani; audits 41797-41799, 243
+imports / 735 axiom queries standard; crates/ changes only inside existing cfg(kani) modules; no
+forbidden tokens). New rows by the P6 route: V181 op30 String::with_capacity, V182 op31 String::push_str
+(library list 5 → 7; native bounds explicit). Proved: the complete extracted SOFT SHA-256 word-block value
+composition (schedule, 64 rounds, feed-forward), padding-reference totality, retained-buffer/reset shape.
+V231-V238 open; op26/33/36 open; op32 deferred (allocator effect). Dispatcher packet
+(design/PV-SHA-DISPATCH-20261027.md): the measured host selects runtime SHA-NI; 3,149,033 SHA callbacks per
+proof; weighted soft/native ratio 7.91×; forcing the soft backend projects +5.93 s (≈ 19.6-19.9 s per
+proof against historical baselines), which FAILS the 15 s / +10% prover gate; worker recommends keeping
+SHA-NI and proving its refinement, which needs the SHA-NI instruction semantics as a trust item.
+OWNER ESCALATION (lead recommendation below in the owner report). pv-cb9 (`codex/pv-cb9-20261027`, 0/100
+Lean, 0/4 Kani, no theorem added) found every remaining independent direct-extraction target refused by
+the unchanged extractor: escaping-reference and structured-Drop refusals for ops 226, 227, 228, 250, 251;
+escaping reference for op230; a concrete path-module Drop root for op252; nested-loop return / Option
+language item for op254; op259 already proved on pv-cb (SKIP). The shared extraction obstruction (D251,
+D257) therefore blocks about 25 callback rows, most of what remains. Launched pv-route2
+(`codex/pv-route2-20261027` from the extraction branch, reusing the pv-canon worktree; IDs 52100-52399, 60
+Lean): an extractable variant per blocked function as a patch (in-place where the crate or function is
+absent from the programs, else prover-local with the caller chain), each run through the UNCHANGED
+extractor and type-checked, and design/PV-ROUTE2-20261027.md with the total change size, the ELFs each
+change could touch, and at most three gated batches with the rows each unblocks; no patch applied.
+Launched pv-cblib4 (same cblib branch, IDs 52400-52699): soft-backend SHA-2 rows (padding, byte
+compression, digest wrappers) and op26/33/36, no SHA-NI work pending the owner. Six slots: op223, op134,
+runjoin13, l3dis4, route2, cblib4. Rows removed outright: 0. Privacy target not yet established.
+
+## D274 (Stream B) 2026-10-27 10:50 UTC: records closure rewrite passes the ELF gate; next extraction blocker is a borrow; bounded borrow-to-copy authorization; runjoin14 launched
+
+pv-runjoin13 (`codex/pv-runjoin-20261026`, head 9128568ac0; 0/100 Lean, 0/2 Kani: stopped correctly for a
+ruling, not exhausted). Commit 2910da23a3 rewrites the two `Option::map(..).unwrap_or(ZERO8)` closures
+of `records` as `match` and the two `core::array::from_fn` closures as indexed `while` loops over 20
+entries (diff evidence/pv-runjoin13-20261027/shipped-records.diff, +20/−4, nothing else). Gate (a): all
+three ELFs rebuilt from that source MATCH their pins (default f8c0ec72…, devnet 63ad3e9c…, Pool 121f3e29…;
+gate-a.json): the on-chain programs are byte-identical. Extraction then stops at records:230
+(InterpAbs.ml:1955) on `let pair = &input.pair`. The worker proposed the one-line change
+`let pair = input.pair;` and stopped because the prompt authorised only closure replacements. Lead check:
+input.pair has type PoolV1PairInputNoteWitnessV1, which derives Clone, Copy (pair_trace.rs:71), and
+every later use reads fields, so the copy is the same value. LEAD AUTHORIZATION (bounded): inside
+`records` only, semantics-preserving repairs of two kinds: (i) a shared borrow of a Copy value replaced
+by a copy (with matching `&x` arguments), (ii) closure/combinator removal; each recorded with its Copy
+derive location; all three ELFs re-gated once after the last change; any blocker needing another kind of
+change stops that route with the exact blocker reported. The combined gates (b) fixture bytes and (c)
+1,000-run differential follow over op223 + records (GATE-PLAN.md). Launched pv-runjoin14 (same branch,
+IDs 50600-50899 unused so far): the repairs, gate (a), extraction, R_shipped, identification per fixture
+and generally, compiler-return, transition, deployed public binding, non-vacuity. Six slots: op223,
+op134, l3dis4, route2, cblib4, runjoin14. Rows removed outright: 0. Privacy target not yet established.
+
+## D275 (Stream B) 2026-10-27 10:55 UTC: records Copy repair passes the ELF gate; next blocker is a range loop; authorization widened to the enumerated mechanical repairs; runjoin15 launched
+
+pv-runjoin14 (`codex/pv-runjoin-20261026`, head 503344e60f; 0/100 Lean, 0/2 Kani: stopped on a blocker
+outside its authorization, not exhausted). 05cb63a2ea replaces `let pair = &input.pair` with
+`let pair = input.pair` (PoolV1PairInputNoteWitnessV1 derives Copy, pair_trace.rs:71); gate (a) after the
+final change: all three ELF pins MATCH. Extraction clears the borrow and stops at the unsupported
+`ub_checks<bool>` of the inlined range iterator of `for level in 0..24` (core/iter/range.rs:984-986,
+InterpExpressions.ml:1512); the worker proposed an index `while` loop and stopped. Lead decision: one
+blocker per job cycle is waste (AGENTS.md §7), so the authorization (still confined to the function
+`records`) now covers three enumerated mechanical, semantics-preserving repair kinds, as many as
+extraction needs: (i) borrow-to-copy on Copy values, (ii) closure/combinator removal, (iii) `for i in
+a..b` → index `while` loop with identical body, bounds and order; each recorded; the three ELFs re-gated
+once after the last change; a blocker of another kind or in another function stops the route.
+Launched pv-runjoin15 (same branch, IDs 50600-50899 still unused). Six slots: op223, op134, l3dis4,
+route2, cblib4, runjoin15. Rows removed outright: 0. Privacy target not yet established.
+
+## D276 (Stream B) 2026-10-27 11:00 UTC: candidate client audited (N1 removed by the CT path; N7 remains); candidate lacks the proof-account client route; rebase3 launched
+
+pv-l3dis4 (`codex/pv-l3-20261026`, head aafc302223; no Lean/Kani; five capped scopes; no Rust or Lean
+source change). Lockfile repair 1f02f0ecd7: tools/r1-cost-probe/Cargo.lock gains only the
+aspis-r1-cert-build → aspis-r1-cert-check path edge (+3 lines); all 423 registry records, versions and
+checksums identical. Artifact B = candidate + repaired lockfile, built with the RECOMMENDED recipe
+pending owner approval (r1p-check + aspis-r1-cost-probe/ct-host-prover, --locked, host rustc 1.94.1,
+toolchain unpinned): exit 0, 177.5 s, peak 1.98 GB, swap 0, sha256
+898005412d46103cfeffe5740f7892ee01d1e3d73a7293338c62e679445b5e67. A/B comparison: N1 REMOVED in B (the
+reviewed constant-time pole scan; only the final verdict branch remains); N2-N6 remain in both (guard
+outcomes constant on valid honest inputs: proof obligations on the L2 rows); N7 REMAINS in both
+(decimal JSON parsing of private key bytes: about 7 conditional jumps for a zero byte, 10/13/16 for 1/2/3
+digit bytes); no fixture-feature-gated API is linked or reached in B, but local deterministic NOTE
+fixtures of the devnet tool remain reachable. NEW: in B, devnet_spend reaches the 96-byte generate()
+entropy API, not the proof-account route's generate_for_mask_nonce: the candidate predates the
+proof-account client route merged into research (D162 route; client-pins.json), consistent with its 6
+missing and 26 differing pinned files. V373 stays OPEN (transitive classification incomplete). V374 plan
+preregistered (dudect classes, inputs, sample counts, 90-minute kernel windows and a separate four-hour
+attempt window): NOT scheduled until the owner fixes the release recipe and the candidate carries the
+client route. Launched pv-rebase3 (`codex/pv-rebase3-20261027`, candidate sibling in the reused pv-l3
+worktree; IDs 52700-52999): merge research (1,907 commits past the candidate's merge base 970912bfe7)
+under the D209 conflict rules (candidate wins inside prover-rewrite files, research elsewhere,
+undecidable hunks stop), port devnet_spend onto the proof-account route with call-graph evidence, ELF
+pins, the recommended-recipe build and the fixture-byte gate, and the re-validation list of candidate
+proofs touched by the merge. Six slots: op223, op134, route2, cblib4, runjoin15, rebase3. Rows removed
+outright: 0. Privacy target not yet established.

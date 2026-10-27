@@ -1,0 +1,268 @@
+theorem AspisR1.Port9OR_P6Levels.source : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (h : ℕ) (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.MultiproofConeLevelIteration.Domain physical s →
+    AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Levels.levels h s physical) =
+      AspisR1.MultiproofConeLevelIteration.iterate
+        (fun state =>
+          MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state physical 0#usize 0#usize)
+        h s :=
+fun {Hash} D hash h s physical domain =>
+  Nat.recAux (motive := fun h =>
+    ∀ (s : MultiproofConeRef.reference.Scratch),
+      AspisR1.MultiproofConeLevelIteration.Domain physical s →
+        AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Levels.levels h s physical) =
+          AspisR1.MultiproofConeLevelIteration.iterate
+            (fun state =>
+              MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state physical 0#usize
+                0#usize)
+            h s)
+    (fun s domain =>
+      Eq.refl (AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Levels.levels 0 s physical)))
+    (fun h ih s domain =>
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (AspisR1.CheckpointBytes5Effect.erase_bind D hash (AspisR1.Port9OR_P6Levels.level s physical) fun out =>
+                  match out with
+                  | MultiproofConeRef.reference.Level.Stop stopped =>
+                    Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                  | MultiproofConeRef.reference.Level.Done next => AspisR1.Port9OR_P6Levels.levels h next physical)
+                (congrFun' (congrArg Bind.bind (AspisR1.Port9OR_P6Levels.level_source D hash s physical domain))
+                  fun a =>
+                  AspisR1.CheckpointBytes5Effect.erase D hash
+                    (match a with
+                    | MultiproofConeRef.reference.Level.Stop stopped =>
+                      Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                    | MultiproofConeRef.reference.Level.Done next => AspisR1.Port9OR_P6Levels.levels h next physical))))
+            do
+            let out ←
+              MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize 0#usize
+            match out with
+              | MultiproofConeRef.reference.Level.Stop stopped =>
+                Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Stop stopped)
+              | MultiproofConeRef.reference.Level.Done next =>
+                AspisR1.MultiproofConeLevelIteration.iterate
+                  (fun state =>
+                    MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state physical 0#usize
+                      0#usize)
+                  h next))
+        (Aeneas.Std.Result.casesOn (motive := fun t =>
+          MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize 0#usize = t →
+            (do
+                let a ←
+                  MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize
+                      0#usize
+                AspisR1.CheckpointBytes5Effect.erase D hash
+                    (match a with
+                    | MultiproofConeRef.reference.Level.Stop stopped =>
+                      Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                    | MultiproofConeRef.reference.Level.Done next => AspisR1.Port9OR_P6Levels.levels h next physical)) =
+              do
+              let out ←
+                MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize 0#usize
+              match out with
+                | MultiproofConeRef.reference.Level.Stop stopped =>
+                  Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Stop stopped)
+                | MultiproofConeRef.reference.Level.Done next =>
+                  AspisR1.MultiproofConeLevelIteration.iterate
+                    (fun state =>
+                      MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state physical
+                        0#usize 0#usize)
+                    h next)
+          (MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize 0#usize)
+          (fun out h_1 =>
+            Eq.ndrec (motive := fun x =>
+              MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize 0#usize =
+                  x →
+                (do
+                    let a ← x
+                    AspisR1.CheckpointBytes5Effect.erase D hash
+                        (match a with
+                        | MultiproofConeRef.reference.Level.Stop stopped =>
+                          Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                        | MultiproofConeRef.reference.Level.Done next =>
+                          AspisR1.Port9OR_P6Levels.levels h next physical)) =
+                  do
+                  let out ← x
+                  match out with
+                    | MultiproofConeRef.reference.Level.Stop stopped =>
+                      Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Stop stopped)
+                    | MultiproofConeRef.reference.Level.Done next =>
+                      AspisR1.MultiproofConeLevelIteration.iterate
+                        (fun state =>
+                          MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state physical
+                            0#usize 0#usize)
+                        h next)
+              (fun ran =>
+                Eq.mpr
+                  (id
+                    (congr
+                      (congrArg Eq
+                        (Aeneas.Std.bind_tc_ok out fun y =>
+                          AspisR1.CheckpointBytes5Effect.erase D hash
+                            (match y with
+                            | MultiproofConeRef.reference.Level.Stop stopped =>
+                              Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                            | MultiproofConeRef.reference.Level.Done next =>
+                              AspisR1.Port9OR_P6Levels.levels h next physical)))
+                      (Aeneas.Std.bind_tc_ok out fun y =>
+                        match y with
+                        | MultiproofConeRef.reference.Level.Stop stopped =>
+                          Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Stop stopped)
+                        | MultiproofConeRef.reference.Level.Done next =>
+                          AspisR1.MultiproofConeLevelIteration.iterate
+                            (fun state =>
+                              MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state
+                                physical 0#usize 0#usize)
+                            h next)))
+                  (MultiproofConeRef.reference.Level.casesOn (motive := fun t =>
+                    out = t →
+                      AspisR1.CheckpointBytes5Effect.erase D hash
+                          (match out with
+                          | MultiproofConeRef.reference.Level.Stop stopped =>
+                            Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                          | MultiproofConeRef.reference.Level.Done next =>
+                            AspisR1.Port9OR_P6Levels.levels h next physical) =
+                        match out with
+                        | MultiproofConeRef.reference.Level.Stop stopped =>
+                          Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Stop stopped)
+                        | MultiproofConeRef.reference.Level.Done next =>
+                          AspisR1.MultiproofConeLevelIteration.iterate
+                            (fun state =>
+                              MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state
+                                physical 0#usize 0#usize)
+                            h next)
+                    out
+                    (fun stopped h_2 =>
+                      Eq.ndrec (motive := fun out =>
+                        MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize
+                              0#usize =
+                            Aeneas.Std.Result.ok out →
+                          AspisR1.CheckpointBytes5Effect.erase D hash
+                              (match out with
+                              | MultiproofConeRef.reference.Level.Stop stopped =>
+                                Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                              | MultiproofConeRef.reference.Level.Done next =>
+                                AspisR1.Port9OR_P6Levels.levels h next physical) =
+                            match out with
+                            | MultiproofConeRef.reference.Level.Stop stopped =>
+                              Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Stop stopped)
+                            | MultiproofConeRef.reference.Level.Done next =>
+                              AspisR1.MultiproofConeLevelIteration.iterate
+                                (fun state =>
+                                  MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state
+                                    physical 0#usize 0#usize)
+                                h next)
+                        (fun ran =>
+                          Eq.refl
+                            (AspisR1.CheckpointBytes5Effect.erase D hash
+                              (match MultiproofConeRef.reference.Level.Stop stopped with
+                              | MultiproofConeRef.reference.Level.Stop stopped =>
+                                Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                              | MultiproofConeRef.reference.Level.Done next =>
+                                AspisR1.Port9OR_P6Levels.levels h next physical)))
+                        (Eq.symm h_2) ran)
+                    (fun next h_2 =>
+                      Eq.ndrec (motive := fun out =>
+                        MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize
+                              0#usize =
+                            Aeneas.Std.Result.ok out →
+                          AspisR1.CheckpointBytes5Effect.erase D hash
+                              (match out with
+                              | MultiproofConeRef.reference.Level.Stop stopped =>
+                                Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                              | MultiproofConeRef.reference.Level.Done next =>
+                                AspisR1.Port9OR_P6Levels.levels h next physical) =
+                            match out with
+                            | MultiproofConeRef.reference.Level.Stop stopped =>
+                              Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Stop stopped)
+                            | MultiproofConeRef.reference.Level.Done next =>
+                              AspisR1.MultiproofConeLevelIteration.iterate
+                                (fun state =>
+                                  MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state
+                                    physical 0#usize 0#usize)
+                                h next)
+                        (fun ran => ih next (AspisR1.Port9OR_P6Levels.level_preserve D hash s next physical domain ran))
+                        (Eq.symm h_2) ran)
+                    (Eq.refl out)))
+              (Eq.symm h_1)
+              (Eq.refl
+                (MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize
+                  0#usize)))
+          (fun e h_1 =>
+            Eq.ndrec (motive := fun x =>
+              MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize 0#usize =
+                  x →
+                (do
+                    let a ← x
+                    AspisR1.CheckpointBytes5Effect.erase D hash
+                        (match a with
+                        | MultiproofConeRef.reference.Level.Stop stopped =>
+                          Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                        | MultiproofConeRef.reference.Level.Done next =>
+                          AspisR1.Port9OR_P6Levels.levels h next physical)) =
+                  do
+                  let out ← x
+                  match out with
+                    | MultiproofConeRef.reference.Level.Stop stopped =>
+                      Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Stop stopped)
+                    | MultiproofConeRef.reference.Level.Done next =>
+                      AspisR1.MultiproofConeLevelIteration.iterate
+                        (fun state =>
+                          MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state physical
+                            0#usize 0#usize)
+                        h next)
+              (fun ran =>
+                Eq.refl do
+                  let a ← Aeneas.Std.Result.fail e
+                  AspisR1.CheckpointBytes5Effect.erase D hash
+                      (match a with
+                      | MultiproofConeRef.reference.Level.Stop stopped =>
+                        Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                      | MultiproofConeRef.reference.Level.Done next => AspisR1.Port9OR_P6Levels.levels h next physical))
+              (Eq.symm h_1)
+              (Eq.refl
+                (MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize
+                  0#usize)))
+          (fun h_1 =>
+            Eq.ndrec (motive := fun x =>
+              MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize 0#usize =
+                  x →
+                (do
+                    let a ← x
+                    AspisR1.CheckpointBytes5Effect.erase D hash
+                        (match a with
+                        | MultiproofConeRef.reference.Level.Stop stopped =>
+                          Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                        | MultiproofConeRef.reference.Level.Done next =>
+                          AspisR1.Port9OR_P6Levels.levels h next physical)) =
+                  do
+                  let out ← x
+                  match out with
+                    | MultiproofConeRef.reference.Level.Stop stopped =>
+                      Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Stop stopped)
+                    | MultiproofConeRef.reference.Level.Done next =>
+                      AspisR1.MultiproofConeLevelIteration.iterate
+                        (fun state =>
+                          MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state physical
+                            0#usize 0#usize)
+                        h next)
+              (fun ran =>
+                Eq.refl do
+                  let a ← Aeneas.Std.Result.div
+                  AspisR1.CheckpointBytes5Effect.erase D hash
+                      (match a with
+                      | MultiproofConeRef.reference.Level.Stop stopped =>
+                        Pure.pure (MultiproofConeRef.reference.Level.Stop stopped)
+                      | MultiproofConeRef.reference.Level.Done next => AspisR1.Port9OR_P6Levels.levels h next physical))
+              (Eq.symm h_1)
+              (Eq.refl
+                (MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize
+                  0#usize)))
+          (Eq.refl
+            (MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize
+              0#usize))))
+    h s domain
+'AspisR1.Port9OR_P6Levels.source' depends on axioms: [propext, Classical.choice, Quot.sound]

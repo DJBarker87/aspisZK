@@ -1,0 +1,25 @@
+AuS1_Trace.lean:18:106: error: No goals to be solved
+AuS1_Trace.lean:31:31: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [continueRun,h̵,̵ ̲List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Trace.lean:49:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run (AspisR1PublicPreparation.PreparedHashCode.bind ?p ?k)
+in the target expression
+  (run (p >>= k)).1 = (run p).1 ++ (run (k a)).1
+
+case ok
+A B : Type
+p : Code A
+k : A → Code B
+out : B
+a : A
+hp : erase p = ok a
+success : erase (k a) = ok out
+⊢ (run (p >>= k)).1 = (run p).1 ++ (run (k a)).1
+'AspisR1.AuS1_Trace.run_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Trace.observe_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Trace.success_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

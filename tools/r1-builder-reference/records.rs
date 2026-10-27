@@ -373,3 +373,36 @@ mod glue_tree;
 
 #[path = "glue_append.rs"]
 mod glue_append;
+
+// PV_Src audit: the mapper has no value-range precondition. This deliberately
+// checks the over-general WitnessOk postcondition on a concrete boundary value.
+// No stubs: the actual shipped mapper, including pair_empty_roots, executes.
+#[kani::proof]
+#[kani::unwind(25)]
+fn pv_src_words_range_counterexample() {
+    let z = [M31::ZERO; 8];
+    let input = PoolV1PairForestInputNoteWitnessV1 {
+        pair: PoolV1PairInputNoteWitnessV1 {
+            nullifier_key: z, salt: z, value: 0,
+            pair_leaf: PoolV1PairLeafWitnessV1 {
+                first_commitment: z, second_occupied: M31::ZERO,
+                second_commitment: z, second_occupancy_inverse: M31::ZERO,
+            },
+            selected_second: false,
+            membership: PoolV1MembershipWitnessV1 { siblings: [z; 20], index: 0 },
+        },
+        super_root_siblings: [z; 3], super_root_directions: [false; 3],
+    };
+    let change = PoolV1OutputNoteWitnessV1 { owner_key: z, salt: z, value: 0 };
+    let snapshot = PoolV1PairLiveSnapshotV1 {
+        pool: [0; 32], deployment_domain: [0; 32], sequence: 0,
+        next_pair_index: 0, current_root: z, frontier: [z; 20],
+    };
+    let (w, _) = records(&input, 1 << 30, None, &change, &snapshot, M31::ZERO);
+    assert_eq!(w.output_value, 1 << 30);
+    assert!(w.output_value < (1 << 30), "PV_Src words is not an unconditional mapper law");
+}
+
+// Continuation 5: all-field P6 with the actual root helper and no stubs.
+#[path = "pv_srcid3.rs"]
+mod pv_srcid3;

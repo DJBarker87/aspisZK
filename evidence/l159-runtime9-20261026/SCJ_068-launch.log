@@ -1,0 +1,45 @@
+{"attempt": "SCJ_068", "exit_status": 0, "wall_seconds": 2.2063602379639633, "peak_rss_kib": "5494876", "swaps": "0", "print_axioms": ["'AspisR1.FGl_FinishLeaves.PairingRemaining' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.P2P_Origin.Fact' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.FGl_FinishLeaves.PairingRemaining : {W : Type} →
+  AspisR1Stage2.Stage2Finish.FinishOps W →
+    AspisR1Stage2.verifier.View →
+      AspisR1Stage2.verifier.Prepared → AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E → Prop
+structure AspisR1.FGl_FinishLeaves.PairingRemaining {W : Type} (finish : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E) : Prop
+number of parameters: 5
+fields:
+  AspisR1.FGl_FinishLeaves.PairingRemaining.round0 : AspisR1.Port4D_Pairing.RoundLaws
+      (AspisR1.Port3_FinishStage.release finish) AspisR1.Checkpoi
+...
+td.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            finish.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+              AspisR1.CheckpointBytes5Output.ofE value =
+                AspisR1.RoundPairing.dot data.f
+                  (AspisR1.RoundPairing.dualFold data.alpha1
+                    (AspisR1.RoundPairing.dualFold data.alpha0
+                      (AspisR1.FunctionalWeights.weights data.F data.F0 data.kappa)))) :
+    AspisR1.FGl_FinishLeaves.PairingRemaining finish v p data
+'AspisR1.FGl_FinishLeaves.PairingRemaining' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.P2P_Origin.Fact : AdapterRw.Ops →
+  AspisR1.S2W_ExtractionBoundary.Program →
+    AspisR1.S2W_ExtractionBoundary.Accounts →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1.S2W_ExtractionBoundary.Slot → AspisR1.S2W_NativeConsolidation.SecondCut → Prop
+def AspisR1.P2P_Origin.Fact : AdapterRw.Ops →
+  AspisR1.S2W_ExtractionBoundary.Program →
+    AspisR1.S2W_ExtractionBoundary.Accounts →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1.S2W_ExtractionBoundary.Slot → AspisR1.S2W_NativeConsolidation.SecondCut → Prop :=
+fun ops id a2 data2 slot s =>
+  ∃ v,
+    AdapterRw.r1_pool_adapter.owned.validate_asq8 ops id a2 data2 slot =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok v) ∧
+      ops.op22 v.statement = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok s.encoded)
+'AspisR1.P2P_Origin.Fact' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rca84e01369ec4a498fbede05ce5eabd6.scope; invocation ID: 32dbe68a938d4526a15daa6e28e9dc12

@@ -1,0 +1,130 @@
+JFo_DecodedAccumulator.lean:24:64: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JFx_NativeBytes.checkpointBytes.length
+in the target expression
+  664 + 32 ≤ (↑JFx_NativeBytes.checkpoint).length
+
+⊢ 664 + 32 ≤ (↑JFx_NativeBytes.checkpoint).length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    JFx_NativeBytes.checkpoint
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑JFx_NativeBytes.checkpoint
+JFo_DecodedAccumulator.lean:28:64: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JFx_NativeBytes.checkpointBytes.length
+in the target expression
+  696 + 16 ≤ (↑JFx_NativeBytes.checkpoint).length
+
+rhs : FoldedLeafCodec.Wide
+readRhs :
+  FoldedLeafCodec.decodeWide (slice (bytesOf ↑(JFq_Raw.reader 664#usize).bytes) (↑(JFq_Raw.reader 664#usize).at) 32) =
+    some rhs
+rhsEq : sourceE rhs = JFq_Rhs.scalar
+left✝ : ↑(JFq_Raw.reader 696#usize).at = ↑(JFq_Raw.reader 664#usize).at + 32
+right✝ : (JFq_Raw.reader 696#usize).bytes = (JFq_Raw.reader 664#usize).bytes
+⊢ 696 + 16 ≤ (↑JFx_NativeBytes.checkpoint).length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    JFx_NativeBytes.checkpoint
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑JFx_NativeBytes.checkpoint
+JFo_DecodedAccumulator.lean:33:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JFq_WeightReads.tail00.length
+in the target expression
+  ↑712#usize + (↑JFo_Weights.value).length * 16 ≤ (↑JFx_NativeBytes.checkpoint).length
+
+rhs : FoldedLeafCodec.Wide
+readRhs :
+  FoldedLeafCodec.decodeWide (slice (bytesOf ↑(JFq_Raw.reader 664#usize).bytes) (↑(JFq_Raw.reader 664#usize).at) 32) =
+    some rhs
+rhsEq : sourceE rhs = JFq_Rhs.scalar
+left✝¹ : ↑(JFq_Raw.reader 696#usize).at = ↑(JFq_Raw.reader 664#usize).at + 32
+right✝¹ : (JFq_Raw.reader 696#usize).bytes = (JFq_Raw.reader 664#usize).bytes
+power : ExactLeafFieldCodec.QM31Exact
+readPower :
+  ExactLeafFieldCodec.decodeQM31
+      (slice (bytesOf ↑(JFq_Raw.reader 696#usize).bytes) (↑(JFq_Raw.reader 696#usize).at) 16) =
+    some power
+powerEq : sourceK power = JFq_Power.scalar
+left✝ : ↑(JFq_Raw.reader 712#usize).at = ↑(JFq_Raw.reader 696#usize).at + 16
+right✝ : (JFq_Raw.reader 712#usize).bytes = (JFq_Raw.reader 696#usize).bytes
+restored :
+  CheckpointBytes4Ops.readWeights JFx_NativeBytes.checkpoint 712#usize JFo_Weights.value =
+    ok (core.result.Result.Ok (JFo_Weights.value, 1736#usize))
+⊢ ↑712#usize + (↑JFo_Weights.value).length * 16 ≤ (↑JFx_NativeBytes.checkpoint).length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (712 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JFo_DecodedAccumulator.lean:39:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JFq_WeightReads.tail00.length
+in the target expression
+  ∃ weights,
+    decodeKs (↑JFo_Weights.value).length
+          (slice (bytesOf ↑JFx_NativeBytes.checkpoint) 712 ((↑JFo_Weights.value).length * 16)) =
+        some weights ∧
+      ↑JFo_Weights.value = List.map sourceK (List.ofFn weights)
+
+rhs : FoldedLeafCodec.Wide
+readRhs :
+  FoldedLeafCodec.decodeWide (slice (bytesOf ↑(JFq_Raw.reader 664#usize).bytes) (↑(JFq_Raw.reader 664#usize).at) 32) =
+    some rhs
+rhsEq : sourceE rhs = JFq_Rhs.scalar
+left✝¹ : ↑(JFq_Raw.reader 696#usize).at = ↑(JFq_Raw.reader 664#usize).at + 32
+right✝² : (JFq_Raw.reader 696#usize).bytes = (JFq_Raw.reader 664#usize).bytes
+power : ExactLeafFieldCodec.QM31Exact
+readPower :
+  ExactLeafFieldCodec.decodeQM31
+      (slice (bytesOf ↑(JFq_Raw.reader 696#usize).bytes) (↑(JFq_Raw.reader 696#usize).at) 16) =
+    some power
+powerEq : sourceK power = JFq_Power.scalar
+left✝ : ↑(JFq_Raw.reader 712#usize).at = ↑(JFq_Raw.reader 696#usize).at + 16
+right✝¹ : (JFq_Raw.reader 712#usize).bytes = (JFq_Raw.reader 696#usize).bytes
+restored :
+  CheckpointBytes4Ops.readWeights JFx_NativeBytes.checkpoint 712#usize JFo_Weights.value =
+    ok (core.result.Result.Ok (JFo_Weights.value, 1736#usize))
+model : Fin (↑JFo_Weights.value).length → K
+readModel :
+  decodeKs (↑JFo_Weights.value).length
+      (slice (bytesOf ↑JFx_NativeBytes.checkpoint) (↑712#usize) ((↑JFo_Weights.value).length * 16)) =
+    some model
+modelEq : ↑JFo_Weights.value = List.map sourceK (List.ofFn model)
+right✝ : ↑1736#usize = ↑712#usize + (↑JFo_Weights.value).length * 16
+package :
+  ∃ weights,
+    decodeKs (↑JFo_Weights.value).length
+          (slice (bytesOf ↑JFx_NativeBytes.checkpoint) 712 ((↑JFo_Weights.value).length * 16)) =
+        some weights ∧
+      ↑JFo_Weights.value = List.map sourceK (List.ofFn weights)
+⊢ decodeAccumulator (bytesOf ↑JFx_NativeBytes.checkpoint) = some (accumulator value)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    JFo_Weights.value
+  has type
+    alloc.vec.Vec aspis_core.field.QM31
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑JFo_Weights.value
+'AspisR1.JFo_DecodedAccumulator.header' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFo_DecodedAccumulator.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

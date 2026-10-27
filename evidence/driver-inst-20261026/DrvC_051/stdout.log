@@ -1,0 +1,434 @@
+DrvC_FirstTail.lean:21:94: error: unsolved goals
+case Ok.Ok.Ok.Ok
+F C : Type
+c : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+pub proof : Slice U8
+p : Tx1Q_Carriers.C.P
+g : Std.Array Tx1Q_Carriers.C.E 29#usize
+x✝⁴ : Tx1Q_Carriers.C.A
+x✝³ : Slice U8
+x✝² x✝¹ : Std.Array U8 32#usize
+x✝ : Unit
+x : Tx1Q_Carriers.C.G
+⊢ (bindR
+      (SdkC_Oracle.program
+        (DrvC_CallCode.code (DrvC_FirstConstants.configuration c)
+          (VTop_Trace.Call.op10 (accumulator x✝⁴).weights.deref)))
+      fun a =>
+      bindR
+        (Program.done
+          (match a with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))))
+        fun a =>
+        SdkC_Oracle.program
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue val3 => do
+            let r8 ←
+              DrvC_CallCode.code (DrvC_FirstConstants.configuration c)
+                  (VTop_Trace.Call.op6 proof (prepared p) (accumulator x✝⁴) (arr e g) none (geometry x) val3 10#usize)
+            let cf7 ←
+              liftM
+                  (match r8 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+            match cf7 with
+              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                let __x ← liftM (lift val4.1.weights.deref_mut)
+                let s3 ← DrvC_CallCode.code (DrvC_FirstConstants.configuration c) (VTop_Trace.Call.op9 val4.2 __x.1)
+                let bytes ←
+                  DrvC_CallCode.code (DrvC_FirstConstants.configuration c)
+                      (VTop_Trace.Call.op8 (digest (DrvC_FirstConstants.configuration c)) (prepared p)
+                        { weights := __x.2 s3, rhs := val4.1.rhs, power := val4.1.power, next := val4.1.next } proof pub
+                        ())
+                DrvC_CallCode.code (DrvC_FirstConstants.configuration c)
+                    (VTop_Trace.Call.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite)
+                pure (core.result.Result.Ok bytes)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame VTop_Stages.verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame VTop_Stages.verifier.Error) residual))) =
+    bindR (Program.done ((currentInstalled (DrvC_FirstConstants.configuration c)).op18 x✝⁴.weights.deref)) fun a =>
+      bindR
+        (Program.done
+          (match a with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))))
+        fun a =>
+        mapR (DrvC_Dictionary.reply id)
+          (SdkC_Oracle.program
+            (match a with
+            | core.ops.control_flow.ControlFlow.Continue val3 => do
+              let r8 ←
+                liftM ((currentInstalled (DrvC_FirstConstants.configuration c)).op7 proof p x✝⁴ g none x val3 10#usize)
+              let cf7 ←
+                liftM
+                    (match r8 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+              match cf7 with
+                | core.ops.control_flow.ControlFlow.Continue val4 => do
+                  let __x ← liftM (lift val4.1.weights.deref_mut)
+                  let s3 ← liftM ((currentInstalled (DrvC_FirstConstants.configuration c)).op17 val4.2 __x.1)
+                  let bytes ←
+                    GExp_FirstCode.writerCode p
+                        { weights := __x.2 s3, rhs := val4.1.rhs, power := val4.1.power, next := val4.1.next } proof pub
+                  liftM (ok ())
+                  pure (core.result.Result.Ok bytes)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                  (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) residual)))
+
+case Ok.Ok.Ok.Err
+F C : Type
+c : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+pub proof : Slice U8
+p : Tx1Q_Carriers.C.P
+g : Std.Array Tx1Q_Carriers.C.E 29#usize
+x✝⁴ : Tx1Q_Carriers.C.A
+x✝³ : Slice U8
+x✝² x✝¹ : Std.Array U8 32#usize
+x✝ : Unit
+x : AspisR1CurrentCaller.verifier.Error
+⊢ Program.done
+      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+        (core.convert.FromSame VTop_Stages.verifier.Error)
+        (core.result.Result.Err (AspisS6CurrentVerifierCarrier.fromError x))) =
+    mapR (DrvC_Dictionary.reply id)
+      (Program.done
+        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) (core.result.Result.Err x)))
+
+case Ok.Ok.Err
+F C : Type
+c : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+pub proof : Slice U8
+p : Tx1Q_Carriers.C.P
+g : Std.Array Tx1Q_Carriers.C.E 29#usize
+x✝³ : Tx1Q_Carriers.C.A
+x✝² : Slice U8
+x✝¹ x✝ : Std.Array U8 32#usize
+x : AspisR1CurrentCaller.verifier.Error
+⊢ Program.done
+      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+        (core.convert.FromSame VTop_Stages.verifier.Error)
+        (core.result.Result.Err (AspisS6CurrentVerifierCarrier.fromError x))) =
+    mapR (DrvC_Dictionary.reply id)
+      (Program.done
+        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) (core.result.Result.Err x)))
+
+case Ok.Err.Ok.Ok
+F C : Type
+c : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+pub proof : Slice U8
+p : Tx1Q_Carriers.C.P
+g : Std.Array Tx1Q_Carriers.C.E 29#usize
+x✝⁴ : Tx1Q_Carriers.C.A
+x✝³ : Slice U8
+x✝² : Std.Array U8 32#usize
+x✝¹ : core.array.TryFromSliceError
+x✝ : Unit
+x : Tx1Q_Carriers.C.G
+⊢ (bindR
+      (SdkC_Oracle.program
+        (DrvC_CallCode.code (DrvC_FirstConstants.configuration c)
+          (VTop_Trace.Call.op10 (accumulator x✝⁴).weights.deref)))
+      fun a =>
+      bindR
+        (Program.done
+          (match a with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))))
+        fun a =>
+        SdkC_Oracle.program
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue val3 => do
+            let r8 ←
+              DrvC_CallCode.code (DrvC_FirstConstants.configuration c)
+                  (VTop_Trace.Call.op6 proof (prepared p) (accumulator x✝⁴) (arr e g) none (geometry x) val3 10#usize)
+            let cf7 ←
+              liftM
+                  (match r8 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+            match cf7 with
+              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                let __x ← liftM (lift val4.1.weights.deref_mut)
+                let s3 ← DrvC_CallCode.code (DrvC_FirstConstants.configuration c) (VTop_Trace.Call.op9 val4.2 __x.1)
+                let bytes ←
+                  DrvC_CallCode.code (DrvC_FirstConstants.configuration c)
+                      (VTop_Trace.Call.op8 (digest (DrvC_FirstConstants.configuration c)) (prepared p)
+                        { weights := __x.2 s3, rhs := val4.1.rhs, power := val4.1.power, next := val4.1.next } proof pub
+                        ())
+                DrvC_CallCode.code (DrvC_FirstConstants.configuration c)
+                    (VTop_Trace.Call.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite)
+                pure (core.result.Result.Ok bytes)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame VTop_Stages.verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame VTop_Stages.verifier.Error) residual))) =
+    bindR (Program.done ((currentInstalled (DrvC_FirstConstants.configuration c)).op18 x✝⁴.weights.deref)) fun a =>
+      bindR
+        (Program.done
+          (match a with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))))
+        fun a =>
+        mapR (DrvC_Dictionary.reply id)
+          (SdkC_Oracle.program
+            (match a with
+            | core.ops.control_flow.ControlFlow.Continue val3 => do
+              let r8 ←
+                liftM ((currentInstalled (DrvC_FirstConstants.configuration c)).op7 proof p x✝⁴ g none x val3 10#usize)
+              let cf7 ←
+                liftM
+                    (match r8 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+              match cf7 with
+                | core.ops.control_flow.ControlFlow.Continue val4 => do
+                  let __x ← liftM (lift val4.1.weights.deref_mut)
+                  let s3 ← liftM ((currentInstalled (DrvC_FirstConstants.configuration c)).op17 val4.2 __x.1)
+                  let bytes ←
+                    GExp_FirstCode.writerCode p
+                        { weights := __x.2 s3, rhs := val4.1.rhs, power := val4.1.power, next := val4.1.next } proof pub
+                  liftM (ok ())
+                  pure (core.result.Result.Ok bytes)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                  (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) residual)))
+
+case Ok.Err.Ok.Err
+F C : Type
+c : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+pub proof : Slice U8
+p : Tx1Q_Carriers.C.P
+g : Std.Array Tx1Q_Carriers.C.E 29#usize
+x✝⁴ : Tx1Q_Carriers.C.A
+x✝³ : Slice U8
+x✝² : Std.Array U8 32#usize
+x✝¹ : core.array.TryFromSliceError
+x✝ : Unit
+x : AspisR1CurrentCaller.verifier.Error
+⊢ Program.done
+      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+        (core.convert.FromSame VTop_Stages.verifier.Error)
+        (core.result.Result.Err (AspisS6CurrentVerifierCarrier.fromError x))) =
+    mapR (DrvC_Dictionary.reply id)
+      (Program.done
+        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) (core.result.Result.Err x)))
+
+case Ok.Err.Err
+F C : Type
+c : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+pub proof : Slice U8
+p : Tx1Q_Carriers.C.P
+g : Std.Array Tx1Q_Carriers.C.E 29#usize
+x✝³ : Tx1Q_Carriers.C.A
+x✝² : Slice U8
+x✝¹ : Std.Array U8 32#usize
+x✝ : core.array.TryFromSliceError
+x : AspisR1CurrentCaller.verifier.Error
+⊢ Program.done
+      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+        (core.convert.FromSame VTop_Stages.verifier.Error)
+        (core.result.Result.Err (AspisS6CurrentVerifierCarrier.fromError x))) =
+    mapR (DrvC_Dictionary.reply id)
+      (Program.done
+        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) (core.result.Result.Err x)))
+
+case Err
+F C : Type
+c : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+pub proof : Slice U8
+p : Tx1Q_Carriers.C.P
+g : Std.Array Tx1Q_Carriers.C.E 29#usize
+x : AspisR1CurrentCaller.verifier.Error
+⊢ Program.done
+      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+        (core.convert.FromSame VTop_Stages.verifier.Error)
+        (core.result.Result.Err (AspisS6CurrentVerifierCarrier.fromError x))) =
+    mapR (DrvC_Dictionary.reply id)
+      (Program.done
+        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) (core.result.Result.Err x)))
+DrvC_FirstTail.lean:24:31: warning: This simp argument is unused:
+  program_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [DrvC_FirstSyntax.stageTail, ̲DrvC_FirstSyntax.sourceTail, ̲DrvC_Effects.effects,
+      program_bindM, ̲program_lift,p̵r̵o̵g̵r̵a̵ ̲m_̵p̵u̵r̵e̵,̵m̵ap_bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_FirstTail.lean:27:65: warning: This simp argument is unused:
+  program_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵g̵r̵a̵m̵_̵b̵i̵n̵d̵M̵,̵p̵r̵o̵g̵r̵a̵m̵_̵l̵i̵f̵t̵,̵p̵r̵o̵g̵r̵a̵m̵_̵p̵u̵r̵e̵,̵p̵r̵o̵g̵r̵a̵m̵_̵i̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵a̵p̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵m̵a̵p̵_̵p̵u̵r̵e̵,̵b̵i̵n̵d̵R̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵i̵n̵i̵t̵i̵a̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵b̵a̵t̵c̵h̵[̲p̲r̲o̲g̲r̲a̲m̲_̲b̲i̲n̲d̲M̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲l̲i̲f̲t̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲i̲f̲,̲ ̲m̲a̲p̲_̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲m̲a̲p̲_̲p̲u̲r̲e̲,̲ ̲b̲i̲n̲d̲R̲_̲o̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲i̲n̲i̲t̲i̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲b̲a̲t̲c̲h̲ (DrvC_FirstConstants.configuration c) hashv,
+        D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵q̵u̵e̵r̵y̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵g̵e̵o̵m̵e̵t̵r̵y̵_̵c̵a̵l̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵p̵e̵n̵d̵i̵n̵g̵_̵c̵a̵l̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵f̵l̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵m̵a̵r̵k̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵u̵n̵w̵r̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵e̵p̵a̵r̵e̵.̵w̵r̵i̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵.̵r̵e̵p̵l̵y̵,̵A̵s̵p̵i̵s̵R̵1̵C̵u̵r̵r̵e̵n̵t̵C̵a̵l̵l̵e̵r̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲q̲u̲e̲r̲y̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲g̲e̲o̲m̲e̲t̲r̲y̲_̲c̲a̲l̲l̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲p̲e̲n̲d̲i̲n̲g̲_̲c̲a̲l̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲f̲l̲u̲s̲h̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲m̲a̲r̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲f̲o̲l̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲r̲o̲u̲n̲d̲1̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲f̲o̲l̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲o̲u̲n̲d̲1̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲e̲p̲a̲r̲e̲.̲w̲r̲i̲t̲e̲r̲,̲ ̲D̲r̲v̲C̲_̲D̲i̲c̲t̲i̲o̲n̲a̲r̲y̲.̲r̲e̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲C̲u̲r̲r̲e̲n̲t̲C̲a̲l̲l̲e̲r̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲ core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_FirstTail.lean:27:78: warning: This simp argument is unused:
+  program_if
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵g̵r̵a̵m̵_̵b̵i̵n̵d̵M̵,̵p̵r̵o̵g̵r̵a̵m̵_̵l̵i̵f̵t̵,̵p̵r̵o̵g̵r̵a̵m̵_̵p̵u̵r̵e̵,̵p̵r̵o̵g̵r̵a̵m̵_̵i̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵a̵p̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵m̵a̵p̵_̵p̵u̵r̵e̵,̵b̵i̵n̵d̵R̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵i̵n̵i̵t̵i̵a̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵b̵a̵t̵c̵h̵[̲p̲r̲o̲g̲r̲a̲m̲_̲b̲i̲n̲d̲M̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲l̲i̲f̲t̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲p̲u̲r̲e̲,̲ ̲m̲a̲p̲_̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲m̲a̲p̲_̲p̲u̲r̲e̲,̲ ̲b̲i̲n̲d̲R̲_̲o̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲i̲n̲i̲t̲i̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲b̲a̲t̲c̲h̲ (DrvC_FirstConstants.configuration c) hashv,
+        D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵q̵u̵e̵r̵y̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵g̵e̵o̵m̵e̵t̵r̵y̵_̵c̵a̵l̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵p̵e̵n̵d̵i̵n̵g̵_̵c̵a̵l̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵f̵l̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵m̵a̵r̵k̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵u̵n̵w̵r̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵e̵p̵a̵r̵e̵.̵w̵r̵i̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵.̵r̵e̵p̵l̵y̵,̵A̵s̵p̵i̵s̵R̵1̵C̵u̵r̵r̵e̵n̵t̵C̵a̵l̵l̵e̵r̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲q̲u̲e̲r̲y̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲g̲e̲o̲m̲e̲t̲r̲y̲_̲c̲a̲l̲l̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲p̲e̲n̲d̲i̲n̲g̲_̲c̲a̲l̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲f̲l̲u̲s̲h̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲m̲a̲r̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲f̲o̲l̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲r̲o̲u̲n̲d̲1̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲f̲o̲l̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲o̲u̲n̲d̲1̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲e̲p̲a̲r̲e̲.̲w̲r̲i̲t̲e̲r̲,̲ ̲D̲r̲v̲C̲_̲D̲i̲c̲t̲i̲o̲n̲a̲r̲y̲.̲r̲e̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲C̲u̲r̲r̲e̲n̲t̲C̲a̲l̲l̲e̲r̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲ core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_FirstTail.lean:28:26: warning: This simp argument is unused:
+  map_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵g̵r̵a̵m̵_̵b̵i̵n̵d̵M̵,̵p̵r̵o̵g̵r̵a̵m̵_̵l̵i̵f̵t̵,̵p̵r̵o̵g̵r̵a̵m̵_̵p̵u̵r̵e̵,̵p̵r̵o̵g̵r̵a̵m̵_̵i̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵a̵p̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵m̵a̵p̵_̵p̵u̵r̵e̵,̵b̵i̵n̵d̵R̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵i̵n̵i̵t̵i̵a̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵b̵a̵t̵c̵h̵[̲p̲r̲o̲g̲r̲a̲m̲_̲b̲i̲n̲d̲M̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲l̲i̲f̲t̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲p̲u̲r̲e̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲i̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲m̲a̲p̲_̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲,̲ ̲b̲i̲n̲d̲R̲_̲o̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲i̲n̲i̲t̲i̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲b̲a̲t̲c̲h̲ (DrvC_FirstConstants.configuration c) hashv,
+        D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵q̵u̵e̵r̵y̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵g̵e̵o̵m̵e̵t̵r̵y̵_̵c̵a̵l̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵p̵e̵n̵d̵i̵n̵g̵_̵c̵a̵l̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵f̵l̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵m̵a̵r̵k̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵u̵n̵w̵r̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵e̵p̵a̵r̵e̵.̵w̵r̵i̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵.̵r̵e̵p̵l̵y̵,̵A̵s̵p̵i̵s̵R̵1̵C̵u̵r̵r̵e̵n̵t̵C̵a̵l̵l̵e̵r̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲q̲u̲e̲r̲y̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲g̲e̲o̲m̲e̲t̲r̲y̲_̲c̲a̲l̲l̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲p̲e̲n̲d̲i̲n̲g̲_̲c̲a̲l̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲f̲l̲u̲s̲h̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲m̲a̲r̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲f̲o̲l̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲r̲o̲u̲n̲d̲1̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲f̲o̲l̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲o̲u̲n̲d̲1̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲e̲p̲a̲r̲e̲.̲w̲r̲i̲t̲e̲r̲,̲ ̲D̲r̲v̲C̲_̲D̲i̲c̲t̲i̲o̲n̲a̲r̲y̲.̲r̲e̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲C̲u̲r̲r̲e̲n̲t̲C̲a̲l̲l̲e̲r̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲ core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_FirstTail.lean:30:8: warning: This simp argument is unused:
+  DrvC_FirstPrograms.query
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵g̵r̵a̵m̵_̵b̵i̵n̵d̵M̵,̵p̵r̵o̵g̵r̵a̵m̵_̵l̵i̵f̵t̵,̵p̵r̵o̵g̵r̵a̵m̵_̵p̵u̵r̵e̵,̵p̵r̵o̵g̵r̵a̵m̵_̵i̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵a̵p̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵m̵a̵p̵_̵p̵u̵r̵e̵,̵b̵i̵n̵d̵R̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵i̵n̵i̵t̵i̵a̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵b̵a̵t̵c̵h̵[̲p̲r̲o̲g̲r̲a̲m̲_̲b̲i̲n̲d̲M̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲l̲i̲f̲t̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲p̲u̲r̲e̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲i̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲m̲a̲p̲_̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲,̲ ̲m̲a̲p̲_̲p̲u̲r̲e̲,̲ ̲b̲i̲n̲d̲R̲_̲o̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲i̲n̲i̲t̲i̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲b̲a̲t̲c̲h̲ (DrvC_FirstConstants.configuration c) hashv,
+        D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵q̵u̵e̵r̵y̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵g̵e̵o̵m̵e̵t̵r̵y̵_̵c̵a̵l̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵p̵e̵n̵d̵i̵n̵g̵_̵c̵a̵l̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵f̵l̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵m̵a̵r̵k̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵u̵n̵w̵r̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵e̵p̵a̵r̵e̵.̵w̵r̵i̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵.̵r̵e̵p̵l̵y̵,̵A̵s̵p̵i̵s̵R̵1̵C̵u̵r̵r̵e̵n̵t̵C̵a̵l̵l̵e̵r̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲g̲e̲o̲m̲e̲t̲r̲y̲_̲c̲a̲l̲l̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲p̲e̲n̲d̲i̲n̲g̲_̲c̲a̲l̲l̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲f̲l̲u̲s̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲m̲a̲r̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲f̲o̲l̲d̲e̲d̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲r̲o̲u̲n̲d̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲f̲o̲l̲d̲e̲d̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲o̲u̲n̲d̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲e̲p̲a̲r̲e̲.̲w̲r̲i̲t̲e̲r̲,̲ ̲D̲r̲v̲C̲_̲D̲i̲c̲t̲i̲o̲n̲a̲r̲y̲.̲r̲e̲p̲l̲y̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲C̲u̲r̲r̲e̲n̲t̲C̲a̲l̲l̲e̲r̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲
+        core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_FirstTail.lean:31:8: warning: This simp argument is unused:
+  DrvC_FirstPrograms.pending_call
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵g̵r̵a̵m̵_̵b̵i̵n̵d̵M̵,̵p̵r̵o̵g̵r̵a̵m̵_̵l̵i̵f̵t̵,̵p̵r̵o̵g̵r̵a̵m̵_̵p̵u̵r̵e̵,̵p̵r̵o̵g̵r̵a̵m̵_̵i̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵a̵p̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵m̵a̵p̵_̵p̵u̵r̵e̵,̵b̵i̵n̵d̵R̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵i̵n̵i̵t̵i̵a̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵b̵a̵t̵c̵h̵[̲p̲r̲o̲g̲r̲a̲m̲_̲b̲i̲n̲d̲M̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲l̲i̲f̲t̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲p̲u̲r̲e̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲i̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲m̲a̲p̲_̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲,̲ ̲m̲a̲p̲_̲p̲u̲r̲e̲,̲ ̲b̲i̲n̲d̲R̲_̲o̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲i̲n̲i̲t̲i̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲b̲a̲t̲c̲h̲ (DrvC_FirstConstants.configuration c) hashv,
+        D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵q̵u̵e̵r̵y̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵g̵e̵o̵m̵e̵t̵r̵y̵_̵c̵a̵l̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵p̵e̵n̵d̵i̵n̵g̵_̵c̵a̵l̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵f̵l̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵m̵a̵r̵k̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵u̵n̵w̵r̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵e̵p̵a̵r̵e̵.̵w̵r̵i̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵.̵r̵e̵p̵l̵y̵,̵A̵s̵p̵i̵s̵R̵1̵C̵u̵r̵r̵e̵n̵t̵C̵a̵l̵l̵e̵r̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲q̲u̲e̲r̲y̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲g̲e̲o̲m̲e̲t̲r̲y̲_̲c̲a̲l̲l̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲f̲l̲u̲s̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲m̲a̲r̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲f̲o̲l̲d̲e̲d̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲r̲o̲u̲n̲d̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲f̲o̲l̲d̲e̲d̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲o̲u̲n̲d̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲e̲p̲a̲r̲e̲.̲w̲r̲i̲t̲e̲r̲,̲ ̲D̲r̲v̲C̲_̲D̲i̲c̲t̲i̲o̲n̲a̲r̲y̲.̲r̲e̲p̲l̲y̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲C̲u̲r̲r̲e̲n̲t̲C̲a̲l̲l̲e̲r̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲
+        core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_FirstTail.lean:31:40: warning: This simp argument is unused:
+  DrvC_FirstPrograms.flush
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵g̵r̵a̵m̵_̵b̵i̵n̵d̵M̵,̵p̵r̵o̵g̵r̵a̵m̵_̵l̵i̵f̵t̵,̵p̵r̵o̵g̵r̵a̵m̵_̵p̵u̵r̵e̵,̵p̵r̵o̵g̵r̵a̵m̵_̵i̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵a̵p̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵m̵a̵p̵_̵p̵u̵r̵e̵,̵b̵i̵n̵d̵R̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵i̵n̵i̵t̵i̵a̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵b̵a̵t̵c̵h̵[̲p̲r̲o̲g̲r̲a̲m̲_̲b̲i̲n̲d̲M̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲l̲i̲f̲t̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲p̲u̲r̲e̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲i̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲m̲a̲p̲_̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲,̲ ̲m̲a̲p̲_̲p̲u̲r̲e̲,̲ ̲b̲i̲n̲d̲R̲_̲o̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲i̲n̲i̲t̲i̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲b̲a̲t̲c̲h̲ (DrvC_FirstConstants.configuration c) hashv,
+        D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵q̵u̵e̵r̵y̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵g̵e̵o̵m̵e̵t̵r̵y̵_̵c̵a̵l̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵p̵e̵n̵d̵i̵n̵g̵_̵c̵a̵l̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵f̵l̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵m̵a̵r̵k̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵u̵n̵w̵r̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵e̵p̵a̵r̵e̵.̵w̵r̵i̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵.̵r̵e̵p̵l̵y̵,̵A̵s̵p̵i̵s̵R̵1̵C̵u̵r̵r̵e̵n̵t̵C̵a̵l̵l̵e̵r̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲q̲u̲e̲r̲y̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲g̲e̲o̲m̲e̲t̲r̲y̲_̲c̲a̲l̲l̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲p̲e̲n̲d̲i̲n̲g̲_̲c̲a̲l̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲m̲a̲r̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲f̲o̲l̲d̲e̲d̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲r̲o̲u̲n̲d̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲f̲o̲l̲d̲e̲d̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲o̲u̲n̲d̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲e̲p̲a̲r̲e̲.̲w̲r̲i̲t̲e̲r̲,̲ ̲D̲r̲v̲C̲_̲D̲i̲c̲t̲i̲o̲n̲a̲r̲y̲.̲r̲e̲p̲l̲y̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲C̲u̲r̲r̲e̲n̲t̲C̲a̲l̲l̲e̲r̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲
+        core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_FirstTail.lean:33:62: warning: This simp argument is unused:
+  DrvC_FirstPrepare.writer
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵g̵r̵a̵m̵_̵b̵i̵n̵d̵M̵,̵p̵r̵o̵g̵r̵a̵m̵_̵l̵i̵f̵t̵,̵p̵r̵o̵g̵r̵a̵m̵_̵p̵u̵r̵e̵,̵p̵r̵o̵g̵r̵a̵m̵_̵i̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵a̵p̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵m̵a̵p̵_̵p̵u̵r̵e̵,̵b̵i̵n̵d̵R̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵i̵n̵i̵t̵i̵a̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵b̵a̵t̵c̵h̵[̲p̲r̲o̲g̲r̲a̲m̲_̲b̲i̲n̲d̲M̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲l̲i̲f̲t̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲p̲u̲r̲e̲,̲ ̲p̲r̲o̲g̲r̲a̲m̲_̲i̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲m̲a̲p̲_̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲,̲ ̲m̲a̲p̲_̲p̲u̲r̲e̲,̲ ̲b̲i̲n̲d̲R̲_̲o̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲i̲n̲i̲t̲i̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲b̲a̲t̲c̲h̲ (DrvC_FirstConstants.configuration c) hashv,
+        D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵q̵u̵e̵r̵y̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵g̵e̵o̵m̵e̵t̵r̵y̵_̵c̵a̵l̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵p̵e̵n̵d̵i̵n̵g̵_̵c̵a̵l̵l̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵o̵g̵r̵a̵m̵s̵.̵f̵l̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵m̵a̵r̵k̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵L̵i̵b̵r̵a̵r̵y̵.̵u̵n̵w̵r̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵f̵o̵l̵d̵e̵d̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵o̵u̵n̵d̵1̵,̵D̵r̵v̵C̵_̵F̵i̵r̵s̵t̵P̵r̵e̵p̵a̵r̵e̵.̵w̵r̵i̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵D̵r̵v̵C̵_̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵.̵r̵e̵p̵l̵y̵,̵A̵s̵p̵i̵s̵R̵1̵C̵u̵r̵r̵e̵n̵t̵C̵a̵l̵l̵e̵r̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲q̲u̲e̲r̲y̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲g̲e̲o̲m̲e̲t̲r̲y̲_̲c̲a̲l̲l̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲p̲e̲n̲d̲i̲n̲g̲_̲c̲a̲l̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲P̲r̲o̲g̲r̲a̲m̲s̲.̲f̲l̲u̲s̲h̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲m̲a̲r̲k̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲f̲o̲l̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲r̲o̲u̲n̲d̲1̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲L̲i̲b̲r̲a̲r̲y̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲f̲o̲l̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲D̲r̲v̲C̲_̲F̲i̲r̲s̲t̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲o̲u̲n̲d̲1̲,̲ ̲D̲r̲v̲C̲_̲D̲i̲c̲t̲i̲o̲n̲a̲r̲y̲.̲r̲e̲p̲l̲y̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲C̲u̲r̲r̲e̲n̲t̲C̲a̲l̲l̲e̲r̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲
+        core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.DrvC_FirstTail.bindR_ok' does not depend on any axioms
+'AspisR1.DrvC_FirstTail.program' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

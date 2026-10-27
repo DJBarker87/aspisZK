@@ -1,0 +1,44 @@
+'AspisR1.S2W_ChildEventPorts.returning_trace' depends on axioms: [propext]
+'AspisR1.S2W_ChildEventPorts.accepted_native_observed_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin {E : Type} (ops : AdapterRw.Ops) (f : FirstCut)
+  (execution : ChildExecution E (core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE))
+  (segments : S2W_SiteSchedule.FirstSegments E) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin.erasure : forget execution =
+      AdapterRw.first_decoded ops f.semantic f.pub f.proof f.split
+  AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin.sourceMarks : ∀
+      (result : core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE) (log : List (S2W_SiteSchedule.Event E)),
+      execution = ok (result, log) → log = S2W_SiteSchedule.firstTrace segments
+constructor:
+  AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin.mk {E : Type} {ops : AdapterRw.Ops} {f : FirstCut}
+    {execution : ChildExecution E (core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE)}
+    {segments : S2W_SiteSchedule.FirstSegments E}
+    (erasure : forget execution = AdapterRw.first_decoded ops f.semantic f.pub f.proof f.split)
+    (sourceMarks :
+      ∀ (result : core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE) (log : List (S2W_SiteSchedule.Event E)),
+        execution = ok (result, log) → log = S2W_SiteSchedule.firstTrace segments) :
+    FirstEntryEventConeJoin ops f execution segments
+structure AspisR1.S2W_ChildEventPorts.SecondEntryEventConeJoin {E : Type} (ops : AdapterRw.Ops) (s : SecondCut)
+  (execution : ChildExecution E (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error))
+  (segments : S2W_SiteSchedule.SecondSegments E) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_ChildEventPorts.SecondEntryEventConeJoin.erasure : forget execution =
+      ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s.pub s.proof s.checkpoint () none
+  AspisR1.S2W_ChildEventPorts.SecondEntryEventConeJoin.sourceMarks : ∀
+      (result : core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+      (log : List (S2W_SiteSchedule.Event E)),
+      execution = ok (result, log) → log = S2W_SiteSchedule.secondTrace segments
+constructor:
+  AspisR1.S2W_ChildEventPorts.SecondEntryEventConeJoin.mk {E : Type} {ops : AdapterRw.Ops} {s : SecondCut}
+    {execution : ChildExecution E (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)}
+    {segments : S2W_SiteSchedule.SecondSegments E}
+    (erasure :
+      forget execution =
+        ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s.pub s.proof s.checkpoint () none)
+    (sourceMarks :
+      ∀ (result : core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+        (log : List (S2W_SiteSchedule.Event E)),
+        execution = ok (result, log) → log = S2W_SiteSchedule.secondTrace segments) :
+    SecondEntryEventConeJoin ops s execution segments

@@ -1,0 +1,50 @@
+'AspisR1.JGa_Map.loop' depends on axioms: [propext, Quot.sound]
+JGa_Map.lean:32:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (match h : _a with
+      | ok (ys, _last) => ok ⟨ys, ⋯⟩
+      | fail e => fail e
+      | div => div) =
+      ok ⟨ys, size⟩
+Error: Application type mismatch: The argument
+  h
+has type
+  _a = ok (ys, _last)
+but is expected to have type
+  AspisV8R19.TraversalRuntime.mapState f.call_mut (↑a) c = ok (ys, _last)
+in the application
+  core.array.Array.map._proof_1 f a c ys _last h
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+T C A : Type
+N : Usize
+f : core.ops.function.FnMut C A T
+P : T → Prop
+a : Std.Array A N
+c : C
+step : ∀ x ∈ ↑a, ∃ y, f.call_mut c x = ok (y, c) ∧ P y
+ys : List T
+hys : AspisV8R19.TraversalRuntime.mapState f.call_mut (↑a) c = ok (ys, c)
+hlen : ys.length = (↑a).length
+hp : ∀ y ∈ ys, P y
+size : ys.length = ↑N
+⊢ (match h : AspisV8R19.TraversalRuntime.mapState f.call_mut (↑a) c with
+    | ok (ys, _last) => ok ⟨ys, ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok ⟨ys, size⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Std.Array A N
+  but is expected to have type
+    { l // l.length = ↑N }
+  in the application
+    ↑a
+'AspisR1.JGa_Map.source' depends on axioms: [propext, sorryAx, Quot.sound]

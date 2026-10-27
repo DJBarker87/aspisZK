@@ -1,0 +1,7 @@
+import S6N_Installation
+
+/- Exact selected decoder dependency inventory; no new hypotheses. -/
+#print AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_6.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1
+#print axioms AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_6.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1
+#print AspisR1TerminalDecoder.pool_v1.payment_relation.withdrawal_common
+#print axioms AspisR1TerminalDecoder.pool_v1.payment_relation.withdrawal_common

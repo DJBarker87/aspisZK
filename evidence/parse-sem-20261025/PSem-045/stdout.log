@@ -1,0 +1,49 @@
+PSem_Lenses.lean:37:37: error: Application type mismatch: The argument
+  ↑stop
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ↑start ≤ ↑stop ∧ ↑stop
+PSem_Lenses.lean:37:47: error(lean.unknownIdentifier): Unknown identifier `nput.val.length`
+PSem_Lenses.lean:41:6: error: Tactic `assumption` failed
+
+case isTrue
+T : Type
+input window : Slice T
+back : Slice T → Slice T
+start stop : Usize
+replacement : Slice T
+length : (↑replacement).length = ↑stop - ↑start
+h✝ :
+  { start := start, «end» := stop }.start ≤ { start := start, «end» := stop }.end ∧
+    ↑{ start := start, «end» := stop }.end ≤ input.length
+h :
+  ok
+      (⟨List.slice ↑{ start := start, «end» := stop }.start ↑{ start := start, «end» := stop }.end ↑input, ⋯⟩, fun s' =>
+        ⟨(↑input).setSlice! ↑{ start := start, «end» := stop }.start ↑s', ⋯⟩) =
+    ok (window, back)
+⊢ InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+PSem_Lenses.lean:44:64: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 1
+where
+ e := ↑↑start
+ f := ↑↑stop
+PSem_Lenses.lean:46:62: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+  e - g ≥ 1
+where
+ e := ↑↑stop
+ f := ↑↑start
+ g := ↑(↑input).length
+'AspisR1.PSem_Lenses.take_setSlice' depends on axioms: [propext, Quot.sound]
+'AspisR1.PSem_Lenses.range_write' depends on axioms: [propext, Quot.sound]
+'AspisR1.PSem_Lenses.range_prefix' depends on axioms: [propext, sorryAx, Quot.sound]

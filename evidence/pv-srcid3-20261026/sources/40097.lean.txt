@@ -1,0 +1,58 @@
+import R1Z.PV_Src_PortInternalFullBound
+
+/-! The checked U64 suffix sum is the model's ordered field sum. The array
+shape is proved by list extensionality, without enumerating fifteen lanes. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_PortInternalSumField
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.PoseidonRefine
+open PV_Src_PortInternalStep PV_Src_PortInternalTotal
+variable {K : Type} [Field K]
+
+theorem fold_cast (xs : List U32) (acc : K) :
+    (xs.map (liftU (K := K))).foldl (· + ·) acc =
+      acc + (((xs.map (fun x => x.val)).sum : Nat) : K) := by
+  induction xs generalizing acc with
+  | nil => simp only [List.map_nil,List.foldl_nil,List.sum_nil,Nat.cast_zero,add_zero]
+  | cons x xs ih =>
+    simp only [List.map_cons,List.foldl_cons,List.sum_cons,ih,Nat.cast_add,liftU,add_assoc]
+
+theorem cast_sum (xs : List U32) :
+    (PV_Src_PortSumTotal.natSum (xs.map (UScalar.cast .U64)) : K) =
+      (xs.map (liftU (K := K))).foldl (· + ·) 0 := by
+  rw [fold_cast,zero_add]
+  unfold PV_Src_PortSumTotal.natSum
+  congr 1
+  rw [List.map_map]
+  apply congrArg List.sum
+  apply List.map_congr_left
+  intro x _
+  exact c64 x
+
+theorem tail_eq_ofFn (state : State) :
+    (tail state).val = List.ofFn (fun j : Fin 15 => state.val[j.val+1]!) := by
+  apply List.ext_getElem
+  · change (state.val.drop 1).length = _
+    rw [List.length_drop,List.length_ofFn,state.property]
+    rfl
+  · intro j hj hk
+    change (state.val.drop 1)[j] = _
+    rw [List.getElem_drop,List.getElem_ofFn]
+    rw [List.getElem!_eq_getElem (by
+      have := state.property
+      simp only [List.length_ofFn] at hk
+      simp only [UScalar.ofNatCore_val_eq] at this
+      omega)]
+    congr 1
+    omega
+
+theorem part_lift (state : State) (part : U64)
+    (hp : part.val = PV_Src_PortSumTotal.natSum ((tail state).val.map (UScalar.cast .U64))) :
+    (part.val : K) =
+      (List.ofFn (fun j : Fin 15 => liftU (K := K) state.val[j.val+1]!)).foldl (· + ·) 0 := by
+  rw [hp,cast_sum,tail_eq_ofFn,List.map_ofFn]
+
+#print axioms fold_cast
+#print axioms cast_sum
+#print axioms tail_eq_ofFn
+#print axioms part_lift
+end R1Z.PV_Src_PortInternalSumField

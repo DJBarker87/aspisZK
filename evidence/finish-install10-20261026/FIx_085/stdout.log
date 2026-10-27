@@ -1,0 +1,27 @@
+def Aeneas.Std.core.slice.index.Slice.index : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → Slice T → I → Result Output :=
+fun {T I Output} inst slice i => inst.index i slice
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if ↑r.end ≤ s.length then ok ⟨List.slice 0 ↑r.end ↑s, ⋯⟩ else fail Error.panic
+FIx_ReconstructSliceValue.lean:15:44: error: Application type mismatch: The argument
+  success
+has type
+  (if ↑9#usize ≤ view.to_slice.length then ok ⟨List.slice 0 ↑9#usize ↑view.to_slice, ⋯⟩ else fail Error.panic) = ok out
+but is expected to have type
+  ok ?m.37 = ok ?m.38
+in the application
+  ok.inj success
+FIx_ReconstructSliceValue.lean:15:8: error: stuck at solving universe constraint
+  ?u.21 + 1 =?= max 1 ?u.20
+while trying to unify
+  Eq.{max 1 ?u.20} ?m.41 ?m.40 : Prop
+with
+  Eq.{?u.21 + 1} ?m.41 ?m.40 : Prop
+FIx_ReconstructSliceValue.lean:11:28: error: stuck at solving universe constraint
+  ?u.21 + 1 =?= max 1 ?u.20
+while trying to unify
+  Eq.{max 1 ?u.20} ?m.41 ?m.40 : Prop
+with
+  Eq.{?u.21 + 1} ?m.41 ?m.40 : Prop
+'AspisR1.FIx_ReconstructSlice.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

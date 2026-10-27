@@ -1,0 +1,138 @@
+def AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1 : Aeneas.Std.Slice
+    Aeneas.Std.U8 →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result
+      AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) :=
+fun bytes =>
+  have i := bytes.len;
+  do
+  let i1 ← AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+  if (i != i1) = true then
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength)
+    else do
+      let s ←
+        Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8)
+            bytes { «end» := 4#usize }
+      let s1 ←
+        Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC
+            { start := 0#usize, «end» := 4#usize }
+      let b ←
+        Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+            (AspisR1TerminalDecoder.Slice.Insts.CoreCmpPartialEqSlice Aeneas.Std.core.cmp.PartialEqU8) s s1
+      if b = true then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err
+              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongMagic)
+        else do
+          let i2 ← bytes.index_usize 4#usize
+          if
+                (i2 != AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION) =
+                  true then
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err
+                  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongVersion)
+            else do
+              let i3 ← bytes.index_usize 5#usize
+              let r ← AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.transition_kind i3
+              let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+                  let i4 ← bytes.index_usize 6#usize
+                  if (i4 != AspisR1TerminalDecoder.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION) = true then
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err
+                          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongDigestEncoding)
+                    else do
+                      let r1 ← AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1 bytes
+                      let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                      match cf1 with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 =>
+                          match val with
+                          | AspisR1TerminalDecoder.pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer => do
+                            let i5 ← AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET
+                            let s2 ←
+                              Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) bytes
+                                  { start := i5 }
+                            let r2 ←
+                              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_transfer_statement_boxed_v1
+                                  val1 s2
+                            let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                            match cf2 with
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                                let r3 ←
+                                  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+                                      val2
+                                let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+                                match cf3 with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok val2)
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+                                      (Aeneas.Std.core.convert.FromSame
+                                        AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                      residual
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+                                  (Aeneas.Std.core.convert.FromSame
+                                    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                  residual
+                          | AspisR1TerminalDecoder.pool_v1.historical_anchor.PoolV1TransitionKind.Withdrawal => do
+                            let i5 ← AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET
+                            let s2 ←
+                              Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) bytes
+                                  { start := i5 }
+                            let r2 ←
+                              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_withdrawal_statement_boxed_v1
+                                  val1 s2
+                            let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                            match cf2 with
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                                let r3 ←
+                                  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+                                      val2
+                                let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+                                match cf3 with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok val2)
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+                                      (Aeneas.Std.core.convert.FromSame
+                                        AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                      residual
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+                                  (Aeneas.Std.core.convert.FromSame
+                                    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                  residual
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+                            (Aeneas.Std.core.convert.FromSame
+                              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                            residual
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+                    (Aeneas.Std.core.convert.FromSame
+                      AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                    residual
+'AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+def AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_14.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1.call_once : AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_14 →
+  AspisR1TerminalDecoder.atomic_statement.AtomicStatementError →
+    Aeneas.Std.Result AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1 :=
+fun c tupled_args =>
+  Aeneas.Std.Result.ok AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest
+'AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_14.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1.call_once' does not depend on any axioms

@@ -1,0 +1,33 @@
+import JFr_Boundary00
+import JFr_Horner00_0
+import JFr_Horner00_1
+import JFv_RoundArithmetic
+set_option autoImplicit false
+namespace AspisR1.JFr_Round00
+open Aeneas Aeneas.Std Result
+open JFr_Data00 AspisS1ExtractedRoundChildren
+
+def polynomial : Array MainQM 28#usize := ⟨p.val.map genToMain,by simp only [List.length_map,p.property]⟩
+def challenges : Array MainQM 10#usize := ⟨alpha.val.map genToMain,by simp only [List.length_map,alpha.property]⟩
+
+theorem horner : AspisR1SemanticCallExtraction.r1_semantic.semantic_value p alpha 0#usize=ok output := by
+  have joined := JFr_HornerTrace.append JFr_Horner00_0.trace JFr_Horner00_1.trace
+  exact JFr_HornerTrace.source joined (by change ¬0>0; omega)
+
+theorem boundary : generatedMainBoundary polynomial=ok (genToMain running) := by
+  unfold generatedMainBoundary AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_entry
+  have same : mainArrayToGen polynomial=p := rfl
+  rw [same,JFr_Boundary00.source]
+  rfl
+
+theorem value : generatedMainValue polynomial challenges 0#usize=ok (genToMain output) := by
+  unfold generatedMainValue AspisR1SemanticCallExtraction.r1_semantic.semantic_value_entry
+  have same : mainArrayToGen polynomial=p := rfl
+  have alphaSame : mainAlphaArrayToGen challenges=alpha := rfl
+  rw [same,alphaSame,horner]
+  rfl
+
+#print axioms horner
+#print axioms boundary
+#print axioms value
+end AspisR1.JFr_Round00

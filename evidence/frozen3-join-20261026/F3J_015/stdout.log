@@ -1,0 +1,43 @@
+F3J_SourceBlock.lean:29:75: error(lean.unknownIdentifier): Unknown identifier `bne_self`
+F3J_SourceBlock.lean:29:55: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+c : SourceFull25.Call D pre
+below : ↑c.row < 25
+rowEq : c.row = c.before.next_row
+addTag : 160#u8 + c.row = ok c.tag
+addNext : c.before.next_row + 1#u8 = ok c.next
+⊢ (c.before.next_row != c.before.next_row) = false
+F3J_SourceBlock.lean:31:2: error: 'change' tactic failed, pattern
+  observe
+      (run do
+          let absorbed ←
+            effects.digest D c.before.hash (TranscriptStep.absorbParts c.before.state c.tag c.record.framed)
+          let block ← effects.digest D c.before.hash (TranscriptStep.readParts absorbed 1#u8)
+          let state ← effects.digest D c.before.hash (TranscriptStep.readParts absorbed 2#u8)
+          pure
+              (core.result.Result.Ok block,
+                let __src := c.before;
+                { state := state, hash := __src.hash, next_row := c.next })).1 =
+    callLog c
+is not definitionally equal to target
+  observe
+      (run do
+          let s ← liftM (lift c.before.state.to_slice)
+          let i ← liftM (ok c.tag)
+          let s1 ← liftM (lift (Array.make 2#usize [0#u8, i] ⋯).to_slice)
+          let s2 ← liftM (lift (Array.make 3#usize [s, s1, c.record.framed] ⋯).to_slice)
+          let absorbed ← effects.digest D c.before.hash s2
+          let s3 ← liftM (lift absorbed.to_slice)
+          let s4 ← liftM (lift (Array.make 1#usize [1#u8] S1SemanticCode.sampleBlock._proof_10).to_slice)
+          let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+          let block ← effects.digest D c.before.hash s5
+          let s6 ← liftM (lift absorbed.to_slice)
+          let s7 ← liftM (lift (Array.make 1#usize [2#u8] S1SemanticCode.sampleBlock._proof_13).to_slice)
+          let s8 ← liftM (lift (Array.make 2#usize [s6, s7] ⋯).to_slice)
+          let a ← effects.digest D c.before.hash s8
+          let i1 ← liftM (ok c.next)
+          pure (core.result.Result.Ok block, { state := a, hash := c.before.hash, next_row := i1 })).1 =
+    callLog c
+'AspisR1.F3J_SourceBlock.sample' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

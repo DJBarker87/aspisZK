@@ -1,0 +1,29 @@
+# Finish install2 final handoff
+
+Target not yet established. Branch `codex/cx-finish-install2-20261026`; local stage commits only, no push. The concrete successor is `AspisR1.FIo_Accepted.deployed` of Rc7. All assigned finish arithmetic, constructor, polynomial, Pair and dot slots are installed. This is a source/extraction dictionary installation; no new ELF/runtime equivalence or complete release claim follows.
+
+## Exact result and recount
+
+`FIo_final-before.lean.txt` and `FIo_final-after.lean.txt` are the fresh complete kernel statements from099. The change specialises the operational carrier F to FIo_Install.W and substitutes FIo_Install.configuration. All existing operational controls, remaining hypotheses, game, events, numerical conditions and conclusions are preserved under that substitution. No finish-law premise is introduced, packaged away or removed. `FIo_ConcreteDictionary.control_ext` identifies the four retained FinishOps controls: ne, trace, folds and mark; it does not assert arbitrary-seed independence. Failed093's attempted independence is excluded and explicitly corrected.
+
+`FIo_validate.py` recomputes `FIo_recount.json` from Rc7's immutable ledger, retaining every row/owner/class/scope. Raw actual83T+26P+13G→same; combined excluding deployment alias89T+31P+13G→same. Each witness-domain's two quarter rows denote one predicate (checked FIn_QuarterAlias), so corrected distinct actual83T+24P+13G and combined89T+29P+13G are also unchanged. **Delta0T/0P/0C/0G.** No FIn historical removal is credited again. F3Y_Headline and FGl_Headline are unchanged; this delivery removes no headline premise. The assigned ten-row status and exact blockers are in FIo_ROWS.md.
+
+## What is proved
+
+The retained complete Pair body is installed at current source pins (FIo_STAGE2.md/FIo_QualifiedPins.json). Its coordinate conversion, explicit existing reservation and actual successful native result are checked; no stub, failed template or custom axiom is installed. Early fresh owned reference extraction succeeded but whole-helper Kani equivalence did not; it is not the installed justification.
+
+New direct source arithmetic bridges repair the wrapping-versus-checked mismatch under derived canonical bounds. FIo_M31Values, CMValues/CMMulValues, QMValues/QMMulValues and WideValues/WideMulValues prove decoded values and canonicality for actual successful native arithmetic. CanonicalQM proves ALL-INPUT source canonicalization preserves decoded value. MixedValues permits arbitrary raw QM scalar operands. ScaleValues proves canonical scalar-product outputs even without canonical raw inputs. FromLimbs/FromBytes/FieldCanonical derive canonicality from the same checked decoder call.
+
+GroupCoefficients, GroupSubset, GroupContract and GroupCanonical prove canonicality through the COMPLETE shipped grouped helper, using symbolic successful-Result-loop invariants and actual field reads. PowersCanonical covers arbitrary N. FinalClosure composes one actual powers→grouped call and the exact decoded output adapter. These are source-helper results, not the still-open seven-part value/FunctionalWeights/literal-input law L142. FIo_Derived.derive066 preserves FIn's same-witness round/dot interface after complete Pair installation.
+
+Matching and semantic failures are shared slot obstructions: query.op17/op20/widePartialEq and boundaries.mask/add/mul/terminal remain independent operational parameters of the actual top. Checked local arbitrary-output constructions establish this dictionary obstruction; they are not full accepted-run counterexamples. They require source bindings plus the literal-view joins, rather than another wrapper around a finish law.
+
+## Non-vacuity and validation
+
+`FIo_RootNonvacuity.composed`098 specialises Rc7's accepted-input source/runtime fixture theorem to the SAME concrete installation, preserving successful source/runtime results and its positive numerical margin. It retains actual accepted entries, snapshots and owner hypotheses. It is not an unconditional complete deployed fixture satisfying every remaining obligation. `FIo_Nonvacuity.same_result` also exports the SAME actual native Pair output from installed Pair success.
+
+Final statement/axiom inventory099: exit0,5.785013305s,peakRSS5490848KiB,swap0. Final focused composition100: exit0,2.834238054s,peakRSS5464876KiB,swap0,revisionc40bcfb166 plus exact dirty-source hashes. All new top theorems print only subsets of propext/Classical.choice/Quot.sound. Every delivered current FIo source hash has a successful receipt (FIo_validation.json); failed intermediate logs are excluded. Every scope records target, command, source revision/hash, selected dependency fingerprints, status, time, RSS,swap,cgroup and full axioms output. Cached dependency provenance is reused; no package/full frozen replay is claimed.
+
+Budget exhausted:100/100 charged Lean IDs,97 compiler starts plus preflight charges019/020/047. Kani3/40:K001 timeout,K002 scoped source coefficient-update fragment pass,K003 full subset timeout. No unchanged resource-failed retry or cap increase. One scope per job, reservation gate,6G high/8G max/swap0/tasks64,Lean-M7000. No further compiler launch.
+
+No shipped source/cfg(kani), wallet/key, parameter, feature, wire-format or ELF changes. No rebuild trigger. Inherited pins, not freshly reproduced: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No session A worktree or candidate was modified. Next concrete deliverable: full seven-part Pair value law with fast accumulator and constructor-factor semantics, on the same parsed inputs; separately bind matching/semantic operational slots and transport enriched round/dot witnesses into the current owner quantifiers.

@@ -1,0 +1,97 @@
+FIy_FrontierLoopStep.lean:32:14: error: Tactic `rfl` failed: The left-hand side
+  do
+    let block ← 34#usize + lane✝
+    let i_1 ← src.next_pair_index >>> lane✝
+    if i_1 &&& 1#u64 = 0#u64 then do
+        let i2 ← block * 16#usize
+        let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i2
+        let a1 ← pool_v1.pair_forest_semantic_terminal.empty_root lane✝
+        let digests1 ← pool_v1.pair_forest_semantic_terminal.add_digest_binding d q a poseidon2.RATE a1 true
+        pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop i a s digests1 src
+      else do
+        let i2 ← block * 16#usize
+        let i3 ← i2 + 12#usize
+        let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+        let a1 ← src.frontier.index_usize lane✝
+        let digests1 ← pool_v1.pair_forest_semantic_terminal.add_digest_binding d q a 0#usize a1 false
+        pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop i a s digests1 src
+is not definitionally equal to the right-hand side
+  do
+    let x ← 34#usize + lane✝
+    let x_1 ← src.next_pair_index >>> lane✝
+    let next ←
+      if x_1 &&& 1#u64 = 0#u64 then do
+          let i2 ← x * 16#usize
+          let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i2
+          let a1 ← pool_v1.pair_forest_semantic_terminal.empty_root lane✝
+          let digests1 ← pool_v1.pair_forest_semantic_terminal.add_digest_binding d q a poseidon2.RATE a1 true
+          ok digests1
+        else do
+          let i2 ← x * 16#usize
+          let i3 ← i2 + 12#usize
+          let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+          let a1 ← src.frontier.index_usize lane✝
+          let digests1 ← pool_v1.pair_forest_semantic_terminal.add_digest_binding d q a 0#usize a1 false
+          ok digests1
+    pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop i a s next src
+
+case h_2
+r : core.ops.range.Range Usize
+a : Std.Array NQ 16#usize
+s : Selectors
+d : Std.Array NQ 8#usize
+src : Snapshot
+r' : core.ops.range.Range (UScalar UScalarTy.Usize)
+level : UScalar UScalarTy.Usize
+i : core.ops.range.Range (UScalar UScalarTy.Usize)
+o✝ : Option (UScalar UScalarTy.Usize)
+lane✝ : UScalar UScalarTy.Usize
+⊢ (do
+      let block ← 34#usize + lane✝
+      let i_1 ← src.next_pair_index >>> lane✝
+      if i_1 &&& 1#u64 = 0#u64 then do
+          let i2 ← block * 16#usize
+          let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i2
+          let a1 ← pool_v1.pair_forest_semantic_terminal.empty_root lane✝
+          let digests1 ← pool_v1.pair_forest_semantic_terminal.add_digest_binding d q a poseidon2.RATE a1 true
+          pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop i a s digests1 src
+        else do
+          let i2 ← block * 16#usize
+          let i3 ← i2 + 12#usize
+          let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+          let a1 ← src.frontier.index_usize lane✝
+          let digests1 ← pool_v1.pair_forest_semantic_terminal.add_digest_binding d q a 0#usize a1 false
+          pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop i a s digests1 src) =
+    do
+    let x ← 34#usize + lane✝
+    let x_1 ← src.next_pair_index >>> lane✝
+    let next ←
+      if x_1 &&& 1#u64 = 0#u64 then do
+          let i2 ← x * 16#usize
+          let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i2
+          let a1 ← pool_v1.pair_forest_semantic_terminal.empty_root lane✝
+          let digests1 ← pool_v1.pair_forest_semantic_terminal.add_digest_binding d q a poseidon2.RATE a1 true
+          ok digests1
+        else do
+          let i2 ← x * 16#usize
+          let i3 ← i2 + 12#usize
+          let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+          let a1 ← src.frontier.index_usize lane✝
+          let digests1 ← pool_v1.pair_forest_semantic_terminal.add_digest_binding d q a 0#usize a1 false
+          ok digests1
+    pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop i a s next src
+FIy_FrontierLoopStep.lean:31:25: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIy_FrontierLoopStep.lean:31:39: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIy_FrontierLoopStep.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,21 @@
+FJl_SlotLiteral.lean:24:17: error(lean.unknownIdentifier): Unknown identifier `FJi_SlotValue.value`
+FJl_SlotLiteral.lean:23:92: error: unsolved goals
+q : Std.Array U8 608#usize
+g : Std.Array NE 29#usize
+gamma : E
+hg : FIo_ArrayCanon.Holds g
+powers : ∀ (l : Fin 29), FIp_ArrayValue.value g ↑l = gamma ^ ↑l
+c1 : MixedLeafEncoding.C1
+c2 : MixedLeafEncoding.C2
+d1 : MixedLeafDecoder.decodeC1 (List.take 480 (bytesOf ↑q)) = some c1
+d2 : MixedLeafDecoder.decodeC2 (List.take 128 (List.drop 480 (bytesOf ↑q))) = some c2
+s : Fin 4
+slot : Usize
+hs : ↑slot = ↑s
+out : NE
+run : FIp_NativeDots.fast_dots.four_dots_one q g slot = ok out
+⊢ decodeWide (wide out) =
+    ∑ l ∈ Finset.range 26, gamma ^ l * FJl_BaseLiteral.scalar c1 s l +
+      (gamma ^ 28 * LiteralOpeningView.eK (c1 s).2 + gamma ^ 26 * LiteralOpeningView.eK (c2 s 0) +
+        gamma ^ 27 * LiteralOpeningView.eK (c2 s 1))
+'AspisR1.FJl_SlotLiteral.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

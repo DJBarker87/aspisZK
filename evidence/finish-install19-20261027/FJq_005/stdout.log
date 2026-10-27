@@ -1,0 +1,28 @@
+Aeneas.Std.UScalar.add_spec {ty : Aeneas.Std.UScalarTy} {x y : Aeneas.Std.UScalar ty}
+  (hmax : ↑x + ↑y ≤ Aeneas.Std.UScalar.max ty) : Aeneas.Std.WP.spec (x + y) fun z => ↑z = ↑x + ↑y
+def Aeneas.Std.UScalar.add : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun {ty} x y => Aeneas.Std.UScalar.tryMk ty (↑x + ↑y)
+FJq_ArithmeticInspect.lean:4:7: error(lean.unknownIdentifier): Unknown identifier `Aeneas.WP.spec_imp`
+FJq_ArithmeticInspect.lean:5:7: error(lean.unknownIdentifier): Unknown identifier `Aeneas.WP.spec_imp_exists`
+def AspisR1PublicPreparation.FinishModel.closureFn2 : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.FinishModel.Closure2 H →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Result
+          (AspisR1PublicPreparation.aspis_core.field.QM31 × AspisR1PublicPreparation.FinishModel.Closure2 H) :=
+fun {H} aspis_coreDigest32Inst c tupled_args => do
+  let i ← 16#usize + tupled_args
+  let a ← Aeneas.Std.Array.index_usize c 0#usize
+  let q ← a.index_usize i
+  Aeneas.Std.Result.ok (q, c)
+def AspisR1PublicPreparation.FinishModel.closureFn6 : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.FinishModel.Closure1 H →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Result
+          (AspisR1PublicPreparation.aspis_core.field.QM31 × AspisR1PublicPreparation.FinishModel.Closure1 H) :=
+fun {H} aspis_coreDigest32Inst c tupled_args => do
+  let a ← Aeneas.Std.Array.index_usize c 0#usize
+  let q ← a.index_usize tupled_args
+  Aeneas.Std.Result.ok (q, c)

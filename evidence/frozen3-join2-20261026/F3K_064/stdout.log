@@ -1,0 +1,199 @@
+F3K_PreparedInput33.lean:113:77: error: unsolved goals
+CoreError : Type
+adapter : AdapterRw.Ops
+ops : Ops
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops CoreError
+B : FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+accounts1 accounts2 : S2W_ExtractionBoundary.Accounts
+saved : alloc.vec.Vec U8
+f : S2W_NativeConsolidation.FirstCut
+s : S2W_NativeConsolidation.SecondCut
+cuts :
+  S2W_NativeConsolidation.SourceCuts
+    (ClaimsUnrolledSdk.sdkOps adapter (Tx1Q_SameCut.dictionary ops reserved query geo) B std) accounts1 accounts2 saved
+    f s
+selected :
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+      f.statement =
+    ok f.semantic
+run :
+  Tx1Q_Execution.Run (Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo
+    (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std) ()
+    (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved
+header : OraclePortHeader.accepts (bytesOf ↑f.proof) = true
+H : Bytes → State
+backend :
+  Tx1DigestLog.ByteOracleBackend (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) H
+w : CanonicalCutEnrichedTranscript.Words
+expanded y1 : Slice U8
+view : AspisR1CurrentCaller.verifier.View
+sem : AspisR1CurrentCaller.r1_semantic.Verified AdapterRw.SolanaDigest
+retained : AspisR1PublicPreparation.verifier.Prepared
+rs : Std.Array aspis_core.field.WideExact 29#usize
+pre : r1_wire.Prefix
+t0 t25 : AspisR1PublicPreparation.r1_wire.SemanticTranscript AdapterRw.SolanaDigest
+cs : List (SourceFull25.Call (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) pre)
+parsed : PrefixAdapter.parseAccepted expanded = ok (core.result.Result.Ok pre)
+rows : semanticRows 27 0 (slice (bytesOf ↑f.proof) 48 6983) = some (List.map (fun s => bytesOf ↑s) ↑pre.records)
+publicInit :
+  r1_semantic.public_transcript (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std))
+      (FirstComposition.toRetainedPublic (AspisS6CurrentVerifierCarrier.toPublic f.semantic)) () pre.c1_root =
+    ok (core.result.Result.Ok t0)
+rootPhysical : ↑pre.c1_root = PAln_JoinedRun.storedRoot f.proof
+wide : sourceView f.proof expanded y1 = ok (core.result.Result.Ok view)
+same : view.semantic = expanded
+y1Frame : bytesOf ↑view.y1 = expand 29 (slice (bytesOf ↑f.proof) 7031 464)
+round0Frame : bytesOf ↑(retainedView view).round0 = slice (bytesOf ↑f.proof) 7527 224
+round1Frame : bytesOf ↑(retainedView view).round1 = slice (bytesOf ↑f.proof) 7783 224
+finalFrame : bytesOf ↑(retainedView view).final_message = slice (bytesOf ↑f.proof) 8007 2048
+secondFrame :
+  ∀ (root : Std.Array U8 32#usize) (bytes1 bytes2 : alloc.vec.Vec U8),
+    core.option.Option.unwrap (retainedView view).folded_root = ok root →
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 256#usize) root.to_slice =
+          ok bytes1 →
+        alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 (retainedView view).round1 = ok bytes2 →
+          bytesOf ↑bytes2 = slice (bytesOf ↑f.proof) 7751 256
+opening :
+  PAln_OpeningStages.Double
+    (AspisR1ClaimPreparedBridge.concreteBoundaries
+      (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+        AspisS1M31Embedding.Total.embed))
+    (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) (retainedSem sem)
+    (retainedView view) () retained rs
+out : currentPrepared retained = run.p
+scratch : AspisR1ClaimPreparedBridge.mapArray currentE rs = run.scratch
+trace :
+  SourceFull25.Trace (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) pre t0 t25 cs
+order : List.map (fun c => ↑c.row) cs = List.range 25
+frames : List.map (fun c => bytesOf ↑c.record.framed) cs = List.take 25 (List.map (fun s => bytesOf ↑s) ↑pre.records)
+pub : LiteralTranscript.Public
+encoded : alloc.vec.Vec U8
+serialized :
+  pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+      (FirstComposition.toRetainedPublic (AspisS6CurrentVerifierCarrier.toPublic f.semantic)) =
+    ok (core.result.Result.Ok encoded)
+pubEq : pub.pubBytes = bytesOf ↑encoded
+tag : pub.tag = 2
+publicParsed : ∃ decoded, SemanticPublicWire.parsePublic pub.pubBytes = some decoded
+new :
+  r1_wire.SemanticTranscript.new (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) ()
+      encoded.deref pre.c1_root =
+    ok (core.result.Result.Ok t0)
+initHash : t0.hash = ()
+init :
+  PublicInitCall (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std))
+    (FirstComposition.toRetainedPublic (AspisS6CurrentVerifierCarrier.toPublic f.semantic)) pre.c1_root t0
+encoding : init.encoded = encoded
+p : Parsed := { wire := bytesOf ↑f.proof, semantic := List.map (fun s => bytesOf ↑s) ↑pre.records }
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+i : F3_Model.Input := F3J_InputRows.input p (decodeState pre.c1_root) w bound pub (bytesOf ↑f.pub)
+count : cs.length = 25
+pubInit : pub.pubBytes = SourceDigestAddresses.rawBytes init.encoded.deref
+r25 r26 : r1_wire.ValidatedRecord
+z0 : AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+t26 : AspisR1PublicPreparation.r1_wire.SemanticTranscript AdapterRw.SolanaDigest
+z1 : AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+t27 : AspisR1PublicPreparation.r1_wire.SemanticTranscript AdapterRw.SolanaDigest
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+call25 :
+  FinishModel.circle_validated (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B))
+      (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) t25 r25 =
+    ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+call26 :
+  FinishModel.circle_validated (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B))
+      (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) t26 r26 =
+    ok (core.result.Result.Ok z1, t27)
+trEq : (retainedSem sem).transcript = t27
+variant : view.variant = AspisR1CurrentCaller.transport.Variant.S2
+retainedVariant : (retainedView view).variant = AspisR1PublicPreparation.transport.Variant.S2
+c :
+  F3K_OpeningCalls.Calls (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std))
+    closedHashBoundaries.sampling AspisS1M31Embedding.Total.embed (retainedView view) p
+seed :
+  transcript.Transcript.new (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) ()
+      t27.state AspisR1PublicPreparation.transport.Variant.S2 =
+    ok c.t0
+claim : PreparedScratchReachability.Wide
+outputEq :
+  retained =
+    PreparedScratchReachability.output (retainedSem sem) (retainedView view) c.gamma c.kappa
+      (Array.make 2#usize [c.alpha0, c.alpha1] ⋯) c.rho c.queries claim c.t6
+powerEq : closedHashBoundaries.powers 29#usize c.gamma = ok rs
+claimEq :
+  closedHashBoundaries.claim (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std))
+      (retainedSem sem) (retainedView view).y1 (retainedView view).inactive rs c.kappa =
+    ok (core.result.Result.Ok claim)
+start : transcript.Transcript AdapterRw.SolanaDigest := c.t0
+exactPrefix :
+  have pf := F3J_InputRows.proof p (decodeState pre.c1_root) w bound;
+  (eval H (F3J_SamplerRun.program pf 0 27 (FS.emptyPrefix pub))).1 =
+      initPair init :: sourceLog cs ++
+        (observe
+            (PreparedHashCode.run
+                (S1SemanticCode.circleValidated (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B))
+                  (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) t25 r25)).1 ++
+          (observe
+              (PreparedHashCode.run
+                  (S1SemanticCode.circleValidated (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B))
+                    (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) t26 r26)).1 ++
+            observe
+              (PreparedHashCode.run
+                  (PreparedHashEffects.new effects
+                    (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) () t27.state
+                    AspisR1PublicPreparation.transport.Variant.S2)).1)) ∧
+    UnifiedSampler.stateOf SelectedTranscriptParams.params
+        (LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program pf 0 27 (FS.emptyPrefix pub))).2) =
+      decodeState start.state
+P27 : LiteralTranscript.Prefix := (eval H (F3J_SamplerRun.program i.proof 0 27 (FS.emptyPrefix pub))).2
+suffix :
+  have pf := F3J_InputRows.proof p (decodeState pre.c1_root) w bound;
+  (eval H (F3J_SamplerRun.program pf 27 6 P27)).1 = F3K_OpeningCalls.log c ∧
+    UnifiedSampler.stateOf SelectedTranscriptParams.params
+        (LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program pf 27 6 P27)).2) =
+      decodeState c.t6.state
+logs :
+  (eval H (F3J_SamplerRun.program i.proof 0 (27 + 6) (FS.emptyPrefix pub))).1 =
+    (eval H (F3J_SamplerRun.program i.proof 0 27 (FS.emptyPrefix pub))).1 ++
+      (eval H
+          (F3J_SamplerRun.program i.proof (0 + 27) 6
+            (eval H (F3J_SamplerRun.program i.proof 0 27 (FS.emptyPrefix pub))).2)).1
+values :
+  (eval H (F3J_SamplerRun.program i.proof 0 (27 + 6) (FS.emptyPrefix pub))).2 =
+    (eval H
+        (F3J_SamplerRun.program i.proof (0 + 27) 6
+          (eval H (F3J_SamplerRun.program i.proof 0 27 (FS.emptyPrefix pub))).2)).2
+⊢ (initPair init :: sourceLog cs ++
+          (observe
+              (PreparedHashCode.run
+                  (S1SemanticCode.circleValidated (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B))
+                    (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) t25 r25)).1 ++
+            (observe
+                (PreparedHashCode.run
+                    (S1SemanticCode.circleValidated (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B))
+                      (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) t26 r26)).1 ++
+              observe
+                (PreparedHashCode.run
+                    (PreparedHashEffects.new effects
+                      (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) () t27.state
+                      AspisR1PublicPreparation.transport.Variant.S2)).1))).append
+      (F3K_OpeningCalls.log c) =
+    initPair init :: sourceLog cs ++
+      (observe
+          (PreparedHashCode.run
+              (S1SemanticCode.circleValidated (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B))
+                (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) t25 r25)).1 ++
+        (observe
+            (PreparedHashCode.run
+                (S1SemanticCode.circleValidated (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std B))
+                  (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) t26 r26)).1 ++
+          (observe
+              (PreparedHashCode.run
+                  (PreparedHashEffects.new effects
+                    (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) () t27.state
+                    AspisR1PublicPreparation.transport.Variant.S2)).1 ++
+            F3K_OpeningCalls.log c)))
+'AspisR1.F3K_PreparedInput33.from_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

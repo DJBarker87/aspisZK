@@ -1,0 +1,38 @@
+{"attempt": "SCJ_049", "exit_status": 0, "wall_seconds": 2.317637222004123, "peak_rss_kib": "5494120", "swaps": "0", "print_axioms": ["'AspisR1.F3T_AccountCharge.mass' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.GExq_AccountExperiment.program' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.F3T_AccountCharge.mass : {A : Type} →
+  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A →
+    (A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)) →
+      (A → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs) → ℕ → ℚ
+def AspisR1.F3T_AccountCharge.mass : {A : Type} →
+  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A →
+    (A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)) →
+      (A → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs) → ℕ → ℚ :=
+fun {A} source project select Q =>
+  AspisV8R19.
+...
+                         AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+                                      A →
+                                        AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                          AspisV8R19.SourceDuplexStep.State
+                                          (AspisR1.GExq_AccountExperiment.SecondInputs A)) →
+                                AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                  AspisV8R19.SourceDuplexStep.State (AspisR1.GExq_AccountExperiment.Outcome A) :=
+fun {A F C} adapter ops stage finish reserved query geo B std hashv copy allocator id adversary chooseSecond =>
+  AspisV8R19.OracleProgramOps.bind adversary fun input =>
+    AspisV8R19.OracleProgramOps.bind
+      (AspisR1.SdkC_Oracle.program
+        (AspisR1.GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy allocator
+          input.entry id input.data input.state))
+      fun reply =>
+      match reply with
+      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+        AspisV8R19.OracleProgramOps.bind (chooseSecond input saved post final) fun next =>
+          AspisV8R19.OracleProgramOps.bind
+            (AspisR1.SdkC_Oracle.program
+              (AspisR1.GExq_InstalledWrapper.second adapter ops stage finish reserved query geo B std hashv allocator
+                next.entry id next.data next.slot next.state))
+            fun out => AspisV8R19.MemoizedProgramLaw.Program.done (input, reply, Option.some (next, out))
+      | x => AspisV8R19.MemoizedProgramLaw.Program.done (input, reply, Option.none)
+'AspisR1.GExq_AccountExperiment.program' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r939d233d7b134b8b8d76d783ca816597.scope; invocation ID: 9afa3e6ee7d14e58abc220a3006fa3c7

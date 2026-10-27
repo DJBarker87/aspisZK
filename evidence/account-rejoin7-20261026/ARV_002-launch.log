@@ -1,0 +1,62 @@
+{"attempt": "ARV_002", "exit_status": 1, "wall_seconds": 2.693117266986519, "peak_rss_kib": "5537820", "swaps": "0", "print_axioms": ["'AspisR1.ARV_PoisonNative.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ARV_PoisonNative.lean:24:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (e.heap, cleaned).2
+in the target expression
+  ok (core.result.Result.Ok ((ARV_Poison.entry e).heap, cleaned)) =
+    ok (core.result.Result.Ok ((ARV_Poison.entry e).heap, final))
+
+case Ok
+A : Type
+native : S2W_ExtractionBoundary.Second
+allocator : Allocator A
+e : Entry
+id : S2W_ExtractionBoundary.Program
+data : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+state final : A
+post : Heap (ℕ → Record)
+yes :
+  (do
+      let allocated ← reserve allocator (admittedSizes e 7 secondSizes) state
+      let result ← native id (e.second secondSizes) data slot
+      match result with
+        | core.result.
+...
+erve allocator (admittedSizes e 7 secondSizes) state
+      let result ← native id (e.second secondSizes) data slot
+      match result with
+        | core.result.Result.Err error => ok (core.result.Result.Err error)
+        | core.result.Result.Ok PUnit.unit => do
+          let cleaned ← allocator.cleanup allocated
+          ok (core.result.Result.Ok (e.heap, cleaned))) =
+    ok (core.result.Result.Ok (post, final))
+allocated : A
+allocation : reserve allocator (admittedSizes e 7 secondSizes) state = ok allocated
+rest✝ :
+  (do
+      let result ← native id (e.second secondSizes) data slot
+      match result with
+        | core.result.Result.Err error => ok (core.result.Result.Err error)
+        | core.result.Result.Ok PUnit.unit => do
+          let cleaned ← allocator.cleanup allocated
+          ok (core.result.Result.Ok (e.heap, cleaned))) =
+    ok (core.result.Result.Ok (post, final))
+value : Unit
+called : native id (e.second secondSizes) data slot = ok (core.result.Result.Ok value)
+rest :
+  (match core.result.Result.Ok value with
+    | core.result.Result.Err error => ok (core.result.Result.Err error)
+    | core.result.Result.Ok PUnit.unit => do
+      let cleaned ← allocator.cleanup allocated
+      ok (core.result.Result.Ok (e.heap, cleaned))) =
+    ok (core.result.Result.Ok (post, final))
+cleaned : A
+cleanup : allocator.cleanup allocated = ok cleaned
+returned : ok (core.result.Result.Ok (e.heap, cleaned)) = ok (core.result.Result.Ok (post, final))
+equal : (e.heap, cleaned) = (post, final)
+finalEq : (e.heap, cleaned).2 = (post, final).2
+⊢ ok (core.result.Result.Ok ((ARV_Poison.entry e).heap, cleaned)) =
+    ok (core.result.Result.Ok ((ARV_Poison.entry e).heap, final))
+'AspisR1.ARV_PoisonNative.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re234aca79aeb44e9899f70ffbb5e5c7d.scope; invocation ID: f4a29bf4800c4086967e7575258d5707

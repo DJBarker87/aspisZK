@@ -1,0 +1,36 @@
+{"attempt": "JFw_TX2_040", "exit_status": 1, "wall_seconds": 2.3467115000239573, "peak_rss_kib": "5512600", "swaps": "0", "print_axioms": ["'AspisR1.JFw_TX2_FoldPush.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFw_TX2_FoldPush.lean:14:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.fast_pairing.canonical.Dot.push_loop ?iter ?self ?raw1
+in the target expression
+  loopCall { start := 0#usize, «end» := 4#usize } { sums := pack a b c d } (pack r0 r1 r2 r3) =
+    ok { sums := pack (plus a r0) (plus b r1) (plus c r2) (plus d r3) }
+
+a b c d r0 r1 r2 r3 : U64
+⊢ loopCall { start := 0#usize, «end» := 4#usize } { sums := pack a b c d } (pack r0 r1 r2 r3) =
+    ok { sums := pack (plus a r0) (plus b r1) (plus c r2) (plus d r3) }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usua
+...
+JFw_TX2_FoldPush.lean:14:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.fast_pairing.canonical.Dot.push_loop ?iter ?self ?raw1
+in the target expression
+  loopCall { start := 0#usize, «end» := 4#usize } { sums := pack a b c d } (pack r0 r1 r2 r3) =
+    ok { sums := pack (plus a r0) (plus b r1) (plus c r2) (plus d r3) }
+
+a b c d r0 r1 r2 r3 : U64
+⊢ loopCall { start := 0#usize, «end» := 4#usize } { sums := pack a b c d } (pack r0 r1 r2 r3) =
+    ok { sums := pack (plus a r0) (plus b r1) (plus c r2) (plus d r3) }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JFw_TX2_FoldPush.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra5775fa55c924749bf18fbd4e2ecedec.scope; invocation ID: 35a8724dd76d4142b7fd15a727b93952

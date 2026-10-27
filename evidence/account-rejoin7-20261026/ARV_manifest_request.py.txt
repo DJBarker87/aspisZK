@@ -1,0 +1,10 @@
+import pathlib,json,hashlib
+base=pathlib.Path('/home/dombarker/project-offloads/codex-cx-sound-int2-20261025')
+names=['ARV_Adaptive', 'ARV_AdaptiveAccepted', 'ARV_AdaptiveChoice', 'ARV_AdaptiveOriginal', 'ARV_Constant', 'ARV_Counterexample', 'ARV_Filter', 'ARV_FilterCarrier', 'ARV_FilterCharge', 'ARV_FilterCheckpoint', 'ARV_FilterDomination', 'ARV_FilterExact', 'ARV_FilterJoin', 'ARV_FilterMass', 'ARV_FilterNumeric', 'ARV_FilterOriginal', 'ARV_FilterPerCoin', 'ARV_FilterPhysical', 'ARV_FilterPreserves', 'ARV_FilterRange', 'ARV_FilterSupport', 'ARV_FilterTop', 'ARV_FilterWeighted', 'ARV_FinalAudit', 'ARV_FinalStatements', 'ARV_FirstPartial', 'ARV_Freeze', 'ARV_Fresh', 'ARV_LogChange', 'ARV_NativeCostGap', 'ARV_NativePartial', 'ARV_Nonvacuity', 'ARV_ObservedSupport', 'ARV_OneTuple', 'ARV_PaddingChoice', 'ARV_PaddingSupport', 'ARV_PaddingWork', 'ARV_Poison', 'ARV_PoisonNative', 'ARV_Root', 'ARV_Statement_51', 'ARV_Statement_52', 'ARV_Statement_53', 'ARV_Statement_54', 'ARV_Statement_55', 'ARV_Statement_56', 'ARV_Statement_57', 'ARV_Statement_58', 'ARV_Statement_59', 'ARV_Statement_60', 'ARV_Statement_61', 'ARV_Statement_62', 'ARV_Statement_63', 'ARV_Statement_64', 'ARV_Statement_65', 'ARV_Statement_66', 'ARV_Statement_67', 'ARV_Statement_68', 'ARV_Statement_69', 'ARV_Statement_70', 'ARV_Statement_71', 'ARV_Statement_72', 'ARV_Statement_73', 'ARV_Statement_74', 'ARV_Statement_75', 'ARV_Statement_76', 'ARV_Statement_77', 'ARV_Statement_78', 'ARV_Statement_79', 'ARV_Statement_80', 'ARV_Statement_81', 'ARV_Statement_82', 'ARV_Statement_83', 'ARV_Statement_84', 'ARV_Statement_85', 'ARV_Statement_86', 'ARV_Statement_87', 'ARV_Statement_88', 'ARV_Statement_89', 'ARV_Statement_90', 'ARV_Statement_91', 'ARV_Statement_92', 'ARV_Statement_93', 'ARV_Statement_94', 'ARV_Statement_95', 'ARV_Statement_96', 'ARV_Statement_97', 'ARV_Statement_98', 'ARV_UniversalRefutation']
+rows={}
+for name in names:
+ rows[name]={}
+ for suffix in ['.lean','.olean']:
+  f=base/(name+suffix)
+  rows[name][suffix]={'sha256':hashlib.sha256(f.read_bytes()).hexdigest(),'bytes':f.stat().st_size}
+print(json.dumps(rows,indent=2))

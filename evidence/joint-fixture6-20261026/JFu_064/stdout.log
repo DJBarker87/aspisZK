@@ -1,0 +1,430 @@
+JFu_DigestCanonical.lean:17:2: warning: 'all_goals scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+JFu_DigestCanonical.lean:17:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+JFu_DigestCanonical.lean:32:41: error: unexpected identifier; expected ')'
+JFu_DigestCanonical.lean:32:39: error: unsolved goals
+arr : Std.Array U8 32#usize
+out : Std.Array U32 8#usize
+accepted : atomic_statement.decode_digest_canonical arr = ok (core.result.Result.Ok out)
+i : U8
+_✝⁵⁴ : [> let i ← arr.index_usize 0#usize <]
+i_post : i = (↑arr)[0]
+i1 : U8
+_✝⁵³ : [> let i1 ← arr.index_usize 1#usize <]
+i1_post : i1 = (↑arr)[1]
+i2 : U8
+_✝⁵² : [> let i2 ← arr.index_usize 2#usize <]
+i2_post : i2 = (↑arr)[2]
+i3 : U8
+_✝⁵¹ : [> let i3 ← arr.index_usize 3#usize <]
+i3_post : i3 = (↑arr)[3]
+o : Option U32
+_✝⁵⁰ : [> let o ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i, i1, i2, i3] ⋯) <]
+o_post : ∀ (v : U32), o = some v → ↑v < 2147483647
+r : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝⁴⁹ : [> let r ← core.option.Option.ok_or o atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r_post : ∀ (v : U32), r = core.result.Result.Ok v → o = some v
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝⁴⁸ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+cf_post : core.result.Result.Insts.CoreOpsTry.branch r = ok cf
+val : aspis_core.field.M31
+h✝⁷ : cf = core.ops.control_flow.ControlFlow.Continue val
+i4 : U8
+_✝⁴⁷ : [> let i4 ← arr.index_usize 4#usize <]
+i4_post : i4 = (↑arr)[4]
+i5 : U8
+_✝⁴⁶ : [> let i5 ← arr.index_usize 5#usize <]
+i5_post : i5 = (↑arr)[5]
+i6 : U8
+_✝⁴⁵ : [> let i6 ← arr.index_usize 6#usize <]
+i6_post : i6 = (↑arr)[6]
+i7 : U8
+_✝⁴⁴ : [> let i7 ← arr.index_usize 7#usize <]
+i7_post : i7 = (↑arr)[7]
+o1 : Option U32
+_✝⁴³ : [> let o1 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i4, i5, i6, i7] ⋯) <]
+o1_post : ∀ (v : U32), o1 = some v → ↑v < 2147483647
+r1 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝⁴² : [> let r1 ← core.option.Option.ok_or o1 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r1_post : ∀ (v : U32), r1 = core.result.Result.Ok v → o1 = some v
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝⁴¹ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1 <]
+cf1_post : core.result.Result.Insts.CoreOpsTry.branch r1 = ok cf1
+val1 : aspis_core.field.M31
+h✝⁶ : cf1 = core.ops.control_flow.ControlFlow.Continue val1
+i8 : U8
+_✝⁴⁰ : [> let i8 ← arr.index_usize 8#usize <]
+i8_post : i8 = (↑arr)[8]
+i9 : U8
+_✝³⁹ : [> let i9 ← arr.index_usize 9#usize <]
+i9_post : i9 = (↑arr)[9]
+i10 : U8
+_✝³⁸ : [> let i10 ← arr.index_usize 10#usize <]
+i10_post : i10 = (↑arr)[10]
+i11 : U8
+_✝³⁷ : [> let i11 ← arr.index_usize 11#usize <]
+i11_post : i11 = (↑arr)[11]
+o2 : Option U32
+_✝³⁶ : [> let o2 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i8, i9, i10, i11] ⋯) <]
+o2_post : ∀ (v : U32), o2 = some v → ↑v < 2147483647
+r2 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝³⁵ : [> let r2 ← core.option.Option.ok_or o2 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r2_post : ∀ (v : U32), r2 = core.result.Result.Ok v → o2 = some v
+cf2 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝³⁴ : [> let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2 <]
+cf2_post : core.result.Result.Insts.CoreOpsTry.branch r2 = ok cf2
+val2 : aspis_core.field.M31
+h✝⁵ : cf2 = core.ops.control_flow.ControlFlow.Continue val2
+i12 : U8
+_✝³³ : [> let i12 ← arr.index_usize 12#usize <]
+i12_post : i12 = (↑arr)[12]
+i13 : U8
+_✝³² : [> let i13 ← arr.index_usize 13#usize <]
+i13_post : i13 = (↑arr)[13]
+i14 : U8
+_✝³¹ : [> let i14 ← arr.index_usize 14#usize <]
+i14_post : i14 = (↑arr)[14]
+i15 : U8
+_✝³⁰ : [> let i15 ← arr.index_usize 15#usize <]
+i15_post : i15 = (↑arr)[15]
+o3 : Option U32
+_✝²⁹ : [> let o3 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i12, i13, i14, i15] ⋯) <]
+o3_post : ∀ (v : U32), o3 = some v → ↑v < 2147483647
+r3 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝²⁸ : [> let r3 ← core.option.Option.ok_or o3 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r3_post : ∀ (v : U32), r3 = core.result.Result.Ok v → o3 = some v
+cf3 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝²⁷ : [> let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3 <]
+cf3_post : core.result.Result.Insts.CoreOpsTry.branch r3 = ok cf3
+val3 : aspis_core.field.M31
+h✝⁴ : cf3 = core.ops.control_flow.ControlFlow.Continue val3
+i16 : U8
+_✝²⁶ : [> let i16 ← arr.index_usize 16#usize <]
+i16_post : i16 = (↑arr)[16]
+i17 : U8
+_✝²⁵ : [> let i17 ← arr.index_usize 17#usize <]
+i17_post : i17 = (↑arr)[17]
+i18 : U8
+_✝²⁴ : [> let i18 ← arr.index_usize 18#usize <]
+i18_post : i18 = (↑arr)[18]
+i19 : U8
+_✝²³ : [> let i19 ← arr.index_usize 19#usize <]
+i19_post : i19 = (↑arr)[19]
+o4 : Option U32
+_✝²² : [> let o4 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i16, i17, i18, i19] ⋯) <]
+o4_post : ∀ (v : U32), o4 = some v → ↑v < 2147483647
+r4 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝²¹ : [> let r4 ← core.option.Option.ok_or o4 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r4_post : ∀ (v : U32), r4 = core.result.Result.Ok v → o4 = some v
+cf4 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝²⁰ : [> let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4 <]
+cf4_post : core.result.Result.Insts.CoreOpsTry.branch r4 = ok cf4
+val4 : aspis_core.field.M31
+h✝³ : cf4 = core.ops.control_flow.ControlFlow.Continue val4
+i20 : U8
+_✝¹⁹ : [> let i20 ← arr.index_usize 20#usize <]
+i20_post : i20 = (↑arr)[20]
+i21 : U8
+_✝¹⁸ : [> let i21 ← arr.index_usize 21#usize <]
+i21_post : i21 = (↑arr)[21]
+i22 : U8
+_✝¹⁷ : [> let i22 ← arr.index_usize 22#usize <]
+i22_post : i22 = (↑arr)[22]
+i23 : U8
+_✝¹⁶ : [> let i23 ← arr.index_usize 23#usize <]
+i23_post : i23 = (↑arr)[23]
+o5 : Option U32
+_✝¹⁵ : [> let o5 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i20, i21, i22, i23] ⋯) <]
+o5_post : ∀ (v : U32), o5 = some v → ↑v < 2147483647
+r5 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝¹⁴ : [> let r5 ← core.option.Option.ok_or o5 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r5_post : ∀ (v : U32), r5 = core.result.Result.Ok v → o5 = some v
+cf5 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝¹³ : [> let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r5 <]
+cf5_post : core.result.Result.Insts.CoreOpsTry.branch r5 = ok cf5
+val5 : aspis_core.field.M31
+h✝² : cf5 = core.ops.control_flow.ControlFlow.Continue val5
+i24 : U8
+_✝¹² : [> let i24 ← arr.index_usize 24#usize <]
+i24_post : i24 = (↑arr)[24]
+i25 : U8
+_✝¹¹ : [> let i25 ← arr.index_usize 25#usize <]
+i25_post : i25 = (↑arr)[25]
+i26 : U8
+_✝¹⁰ : [> let i26 ← arr.index_usize 26#usize <]
+i26_post : i26 = (↑arr)[26]
+i27 : U8
+_✝⁹ : [> let i27 ← arr.index_usize 27#usize <]
+i27_post : i27 = (↑arr)[27]
+o6 : Option U32
+_✝⁸ : [> let o6 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i24, i25, i26, i27] ⋯) <]
+o6_post : ∀ (v : U32), o6 = some v → ↑v < 2147483647
+r6 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝⁷ : [> let r6 ← core.option.Option.ok_or o6 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r6_post : ∀ (v : U32), r6 = core.result.Result.Ok v → o6 = some v
+cf6 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝⁶ : [> let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6 <]
+cf6_post : core.result.Result.Insts.CoreOpsTry.branch r6 = ok cf6
+val6 : aspis_core.field.M31
+h✝¹ : cf6 = core.ops.control_flow.ControlFlow.Continue val6
+i28 : U8
+_✝⁵ : [> let i28 ← arr.index_usize 28#usize <]
+i28_post : i28 = (↑arr)[28]
+i29 : U8
+_✝⁴ : [> let i29 ← arr.index_usize 29#usize <]
+i29_post : i29 = (↑arr)[29]
+i30 : U8
+_✝³ : [> let i30 ← arr.index_usize 30#usize <]
+i30_post : i30 = (↑arr)[30]
+i31 : U8
+_✝² : [> let i31 ← arr.index_usize 31#usize <]
+i31_post : i31 = (↑arr)[31]
+o7 : Option U32
+_✝¹ : [> let o7 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i28, i29, i30, i31] ⋯) <]
+o7_post : ∀ (v : U32), o7 = some v → ↑v < 2147483647
+r7 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝ : [> let r7 ← core.option.Option.ok_or o7 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r7_post : ∀ (v : U32), r7 = core.result.Result.Ok v → o7 = some v
+cf7 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_ : [> let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7 <]
+cf7_post : core.result.Result.Insts.CoreOpsTry.branch r7 = ok cf7
+val7 : aspis_core.field.M31
+h✝ : cf7 = core.ops.control_flow.ControlFlow.Continue val7
+⊢ r = core.result.Result.Ok val
+JFu_DigestCanonical.lean:27:54: error: unsolved goals
+case refl
+arr : Std.Array U8 32#usize
+out : Std.Array U32 8#usize
+accepted : atomic_statement.decode_digest_canonical arr = ok (core.result.Result.Ok out)
+i : U8
+_✝⁵⁴ : [> let i ← arr.index_usize 0#usize <]
+i_post : i = (↑arr)[0]
+i1 : U8
+_✝⁵³ : [> let i1 ← arr.index_usize 1#usize <]
+i1_post : i1 = (↑arr)[1]
+i2 : U8
+_✝⁵² : [> let i2 ← arr.index_usize 2#usize <]
+i2_post : i2 = (↑arr)[2]
+i3 : U8
+_✝⁵¹ : [> let i3 ← arr.index_usize 3#usize <]
+i3_post : i3 = (↑arr)[3]
+o : Option U32
+_✝⁵⁰ : [> let o ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i, i1, i2, i3] ⋯) <]
+o_post : ∀ (v : U32), o = some v → ↑v < 2147483647
+r : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝⁴⁹ : [> let r ← core.option.Option.ok_or o atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r_post : ∀ (v : U32), r = core.result.Result.Ok v → o = some v
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝⁴⁸ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+cf_post : core.result.Result.Insts.CoreOpsTry.branch r = ok cf
+val : aspis_core.field.M31
+h✝⁷ : cf = core.ops.control_flow.ControlFlow.Continue val
+i4 : U8
+_✝⁴⁷ : [> let i4 ← arr.index_usize 4#usize <]
+i4_post : i4 = (↑arr)[4]
+i5 : U8
+_✝⁴⁶ : [> let i5 ← arr.index_usize 5#usize <]
+i5_post : i5 = (↑arr)[5]
+i6 : U8
+_✝⁴⁵ : [> let i6 ← arr.index_usize 6#usize <]
+i6_post : i6 = (↑arr)[6]
+i7 : U8
+_✝⁴⁴ : [> let i7 ← arr.index_usize 7#usize <]
+i7_post : i7 = (↑arr)[7]
+o1 : Option U32
+_✝⁴³ : [> let o1 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i4, i5, i6, i7] ⋯) <]
+o1_post : ∀ (v : U32), o1 = some v → ↑v < 2147483647
+r1 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝⁴² : [> let r1 ← core.option.Option.ok_or o1 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r1_post : ∀ (v : U32), r1 = core.result.Result.Ok v → o1 = some v
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝⁴¹ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1 <]
+cf1_post : core.result.Result.Insts.CoreOpsTry.branch r1 = ok cf1
+val1 : aspis_core.field.M31
+h✝⁶ : cf1 = core.ops.control_flow.ControlFlow.Continue val1
+i8 : U8
+_✝⁴⁰ : [> let i8 ← arr.index_usize 8#usize <]
+i8_post : i8 = (↑arr)[8]
+i9 : U8
+_✝³⁹ : [> let i9 ← arr.index_usize 9#usize <]
+i9_post : i9 = (↑arr)[9]
+i10 : U8
+_✝³⁸ : [> let i10 ← arr.index_usize 10#usize <]
+i10_post : i10 = (↑arr)[10]
+i11 : U8
+_✝³⁷ : [> let i11 ← arr.index_usize 11#usize <]
+i11_post : i11 = (↑arr)[11]
+o2 : Option U32
+_✝³⁶ : [> let o2 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i8, i9, i10, i11] ⋯) <]
+o2_post : ∀ (v : U32), o2 = some v → ↑v < 2147483647
+r2 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝³⁵ : [> let r2 ← core.option.Option.ok_or o2 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r2_post : ∀ (v : U32), r2 = core.result.Result.Ok v → o2 = some v
+cf2 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝³⁴ : [> let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2 <]
+cf2_post : core.result.Result.Insts.CoreOpsTry.branch r2 = ok cf2
+val2 : aspis_core.field.M31
+h✝⁵ : cf2 = core.ops.control_flow.ControlFlow.Continue val2
+i12 : U8
+_✝³³ : [> let i12 ← arr.index_usize 12#usize <]
+i12_post : i12 = (↑arr)[12]
+i13 : U8
+_✝³² : [> let i13 ← arr.index_usize 13#usize <]
+i13_post : i13 = (↑arr)[13]
+i14 : U8
+_✝³¹ : [> let i14 ← arr.index_usize 14#usize <]
+i14_post : i14 = (↑arr)[14]
+i15 : U8
+_✝³⁰ : [> let i15 ← arr.index_usize 15#usize <]
+i15_post : i15 = (↑arr)[15]
+o3 : Option U32
+_✝²⁹ : [> let o3 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i12, i13, i14, i15] ⋯) <]
+o3_post : ∀ (v : U32), o3 = some v → ↑v < 2147483647
+r3 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝²⁸ : [> let r3 ← core.option.Option.ok_or o3 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r3_post : ∀ (v : U32), r3 = core.result.Result.Ok v → o3 = some v
+cf3 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝²⁷ : [> let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3 <]
+cf3_post : core.result.Result.Insts.CoreOpsTry.branch r3 = ok cf3
+val3 : aspis_core.field.M31
+h✝⁴ : cf3 = core.ops.control_flow.ControlFlow.Continue val3
+i16 : U8
+_✝²⁶ : [> let i16 ← arr.index_usize 16#usize <]
+i16_post : i16 = (↑arr)[16]
+i17 : U8
+_✝²⁵ : [> let i17 ← arr.index_usize 17#usize <]
+i17_post : i17 = (↑arr)[17]
+i18 : U8
+_✝²⁴ : [> let i18 ← arr.index_usize 18#usize <]
+i18_post : i18 = (↑arr)[18]
+i19 : U8
+_✝²³ : [> let i19 ← arr.index_usize 19#usize <]
+i19_post : i19 = (↑arr)[19]
+o4 : Option U32
+_✝²² : [> let o4 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i16, i17, i18, i19] ⋯) <]
+o4_post : ∀ (v : U32), o4 = some v → ↑v < 2147483647
+r4 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝²¹ : [> let r4 ← core.option.Option.ok_or o4 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r4_post : ∀ (v : U32), r4 = core.result.Result.Ok v → o4 = some v
+cf4 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝²⁰ : [> let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4 <]
+cf4_post : core.result.Result.Insts.CoreOpsTry.branch r4 = ok cf4
+val4 : aspis_core.field.M31
+h✝³ : cf4 = core.ops.control_flow.ControlFlow.Continue val4
+i20 : U8
+_✝¹⁹ : [> let i20 ← arr.index_usize 20#usize <]
+i20_post : i20 = (↑arr)[20]
+i21 : U8
+_✝¹⁸ : [> let i21 ← arr.index_usize 21#usize <]
+i21_post : i21 = (↑arr)[21]
+i22 : U8
+_✝¹⁷ : [> let i22 ← arr.index_usize 22#usize <]
+i22_post : i22 = (↑arr)[22]
+i23 : U8
+_✝¹⁶ : [> let i23 ← arr.index_usize 23#usize <]
+i23_post : i23 = (↑arr)[23]
+o5 : Option U32
+_✝¹⁵ : [> let o5 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i20, i21, i22, i23] ⋯) <]
+o5_post : ∀ (v : U32), o5 = some v → ↑v < 2147483647
+r5 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝¹⁴ : [> let r5 ← core.option.Option.ok_or o5 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r5_post : ∀ (v : U32), r5 = core.result.Result.Ok v → o5 = some v
+cf5 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝¹³ : [> let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r5 <]
+cf5_post : core.result.Result.Insts.CoreOpsTry.branch r5 = ok cf5
+val5 : aspis_core.field.M31
+h✝² : cf5 = core.ops.control_flow.ControlFlow.Continue val5
+i24 : U8
+_✝¹² : [> let i24 ← arr.index_usize 24#usize <]
+i24_post : i24 = (↑arr)[24]
+i25 : U8
+_✝¹¹ : [> let i25 ← arr.index_usize 25#usize <]
+i25_post : i25 = (↑arr)[25]
+i26 : U8
+_✝¹⁰ : [> let i26 ← arr.index_usize 26#usize <]
+i26_post : i26 = (↑arr)[26]
+i27 : U8
+_✝⁹ : [> let i27 ← arr.index_usize 27#usize <]
+i27_post : i27 = (↑arr)[27]
+o6 : Option U32
+_✝⁸ : [> let o6 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i24, i25, i26, i27] ⋯) <]
+o6_post : ∀ (v : U32), o6 = some v → ↑v < 2147483647
+r6 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝⁷ : [> let r6 ← core.option.Option.ok_or o6 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r6_post : ∀ (v : U32), r6 = core.result.Result.Ok v → o6 = some v
+cf6 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝⁶ : [> let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6 <]
+cf6_post : core.result.Result.Insts.CoreOpsTry.branch r6 = ok cf6
+val6 : aspis_core.field.M31
+h✝¹ : cf6 = core.ops.control_flow.ControlFlow.Continue val6
+i28 : U8
+_✝⁵ : [> let i28 ← arr.index_usize 28#usize <]
+i28_post : i28 = (↑arr)[28]
+i29 : U8
+_✝⁴ : [> let i29 ← arr.index_usize 29#usize <]
+i29_post : i29 = (↑arr)[29]
+i30 : U8
+_✝³ : [> let i30 ← arr.index_usize 30#usize <]
+i30_post : i30 = (↑arr)[30]
+i31 : U8
+_✝² : [> let i31 ← arr.index_usize 31#usize <]
+i31_post : i31 = (↑arr)[31]
+o7 : Option U32
+_✝¹ : [> let o7 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i28, i29, i30, i31] ⋯) <]
+o7_post : ∀ (v : U32), o7 = some v → ↑v < 2147483647
+r7 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝ : [> let r7 ← core.option.Option.ok_or o7 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r7_post : ∀ (v : U32), r7 = core.result.Result.Ok v → o7 = some v
+cf7 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_ : [> let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7 <]
+cf7_post : core.result.Result.Insts.CoreOpsTry.branch r7 = ok cf7
+val7 : aspis_core.field.M31
+h✝ : cf7 = core.ops.control_flow.ControlFlow.Continue val7
+rv0 : r = core.result.Result.Ok val
+⊢ Canonical (Array.make 8#usize [val, val1, val2, val3, val4, val5, val6, val7] ⋯)
+JFu_DigestCanonical.lean:25:94: error: unsolved goals
+arr : Std.Array U8 32#usize
+out : Std.Array U32 8#usize
+accepted : atomic_statement.decode_digest_canonical arr = ok (core.result.Result.Ok out)
+spec :
+  atomic_statement.decode_digest_canonical arr ⦃ result =>
+    ∀ (q : Std.Array aspis_core.field.M31 8#usize), result = core.result.Result.Ok q → Canonical q ⦄
+⊢ Canonical out
+'AspisR1.JFu_DigestCanonical.word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFu_DigestCanonical.option' depends on axioms: [propext, Quot.sound]
+'AspisR1.JFu_DigestCanonical.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

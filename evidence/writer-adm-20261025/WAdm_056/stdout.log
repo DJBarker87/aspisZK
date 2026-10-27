@@ -1,0 +1,19 @@
+WAdm_VecStd.lean:16:78: error: unsolved goals
+out : alloc.vec.Vec U8
+s : Slice U8
+bound : (↑out).length + (↑s).length ≤ Usize.max
+hc : Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) s = ok s
+⊢ (match h' : Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) s with
+    | ok s' => ok ⟨↑out ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok ⟨↑out ++ ↑s, ⋯⟩
+WAdm_VecStd.lean:19:59: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [alloc.vec.Vec.extend_from_slice, ̲dif_pos bound,̵h̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.WAdm_VecStd.clone' depends on axioms: [propext, Quot.sound]
+'AspisR1.WAdm_VecStd.extend' depends on axioms: [propext, sorryAx, Quot.sound]

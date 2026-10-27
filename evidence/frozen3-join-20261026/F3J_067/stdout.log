@@ -1,0 +1,168 @@
+F3J_ScalarCode.lean:30:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (run do
+      let out ← if nonzero = true then liftM (B.gamma value) else liftM (B.ordinary value)
+      let i ← liftM (lift (UScalar.cast UScalarTy.Usize row))
+      liftM (trace.value 4#u16 i out)
+      pure (out, after)).1
+in the target expression
+  observe (run (PreparedHashEffects.block effects D before row payload)).1 ++
+      observe
+        (run
+            (if nonzero = true then do
+              let out ← liftM (B.gamma value)
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize row))
+              liftM (trace.value 4#u16 i out)
+              pure (out, after)
+            else do
+              let out ← liftM (B.ordinary value)
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize row))
+              liftM (trace.value 4#u16 i out)
+              pure (out, after))).1 =
+    observe (run (PreparedHashEffects.block effects D before row payload)).1
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+before after : transcript.Transcript Hash
+row : U8
+payload : Slice U8
+value : Std.Array U8 32#usize
+nonzero : Bool
+success : transcript.Transcript.block D before row payload = ok (value, after)
+empty :
+  (run do
+        let out ← if nonzero = true then liftM (B.gamma value) else liftM (B.ordinary value)
+        let i ← liftM (lift (UScalar.cast UScalarTy.Usize row))
+        liftM (trace.value 4#u16 i out)
+        pure (out, after)).1 =
+    []
+⊢ observe (run (PreparedHashEffects.block effects D before row payload)).1 ++
+      observe
+        (run
+            (if nonzero = true then do
+              let out ← liftM (B.gamma value)
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize row))
+              liftM (trace.value 4#u16 i out)
+              pure (out, after)
+            else do
+              let out ← liftM (B.ordinary value)
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize row))
+              liftM (trace.value 4#u16 i out)
+              pure (out, after))).1 =
+    observe (run (PreparedHashEffects.block effects D before row payload)).1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+F3J_ScalarCode.lean:53:35: error: Tactic `rfl` failed: The left-hand side
+  (run
+      (Code.step (ok q) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun wide =>
+            Code.step (trace.value 4#u16 i wide) fun __r => Code.done (out, after))).1
+is not definitionally equal to the right-hand side
+  []
+
+case ok.ok
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+before after : transcript.Transcript Hash
+row : U8
+payload : Slice U8
+value : Std.Array U8 32#usize
+success : transcript.Transcript.block D before row payload = ok (value, after)
+q : aspis_core.field.QM31
+h : sampler.qm31_sample value = ok q
+v✝ : aspis_core.field.WideExact
+⊢ (run
+        (Code.step (ok q) fun out =>
+          Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+            Code.step (B.fromQm out) fun wide =>
+              Code.step (trace.value 4#u16 i wide) fun __r => Code.done (out, after))).1 =
+    []
+F3J_ScalarCode.lean:53:35: error: Tactic `rfl` failed: The left-hand side
+  (run
+      (Code.step (ok q) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun wide =>
+            Code.step (trace.value 4#u16 i wide) fun __r => Code.done (out, after))).1
+is not definitionally equal to the right-hand side
+  []
+
+case ok.fail
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+before after : transcript.Transcript Hash
+row : U8
+payload : Slice U8
+value : Std.Array U8 32#usize
+success : transcript.Transcript.block D before row payload = ok (value, after)
+q : aspis_core.field.QM31
+h : sampler.qm31_sample value = ok q
+e✝ : Error
+⊢ (run
+        (Code.step (ok q) fun out =>
+          Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+            Code.step (B.fromQm out) fun wide =>
+              Code.step (trace.value 4#u16 i wide) fun __r => Code.done (out, after))).1 =
+    []
+F3J_ScalarCode.lean:53:35: error: Tactic `rfl` failed: The left-hand side
+  (run
+      (Code.step (ok q) fun out =>
+        Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+          Code.step (B.fromQm out) fun wide =>
+            Code.step (trace.value 4#u16 i wide) fun __r => Code.done (out, after))).1
+is not definitionally equal to the right-hand side
+  []
+
+case ok.div
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+before after : transcript.Transcript Hash
+row : U8
+payload : Slice U8
+value : Std.Array U8 32#usize
+success : transcript.Transcript.block D before row payload = ok (value, after)
+q : aspis_core.field.QM31
+h : sampler.qm31_sample value = ok q
+⊢ (run
+        (Code.step (ok q) fun out =>
+          Code.step (lift (UScalar.cast UScalarTy.Usize row)) fun i =>
+            Code.step (B.fromQm out) fun wide =>
+              Code.step (trace.value 4#u16 i wide) fun __r => Code.done (out, after))).1 =
+    []
+F3J_ScalarCode.lean:55:2: error: Tactic `rfl` failed: The left-hand side
+  observe (run (PreparedHashEffects.block effects D before row payload)).1 ++ observe []
+is not definitionally equal to the right-hand side
+  observe (run (PreparedHashEffects.block effects D before row payload)).1
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+before after : transcript.Transcript Hash
+row : U8
+payload : Slice U8
+value : Std.Array U8 32#usize
+success : transcript.Transcript.block D before row payload = ok (value, after)
+empty :
+  (run do
+        let out ← liftM (sampler.qm31_sample value)
+        let i ← liftM (lift (UScalar.cast UScalarTy.Usize row))
+        let wide ← liftM (B.fromQm out)
+        liftM (trace.value 4#u16 i wide)
+        pure (out, after)).1 =
+    []
+⊢ observe (run (PreparedHashEffects.block effects D before row payload)).1 ++ observe [] =
+    observe (run (PreparedHashEffects.block effects D before row payload)).1
+'AspisR1.F3J_ScalarCode.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3J_ScalarCode.rho' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,223 @@
+F3Q_LeafActive.lean:12:31: error: Ambiguous term
+  aspis_core.digest.Digest32
+Possible interpretations:
+  MultiproofConeRef.aspis_core.digest.Digest32 X : Type
+  
+  AspisR1Stage2.aspis_core.digest.Digest32 X : Type
+F3Q_LeafActive.lean:22:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let key ← liftResult ((Port9OR_BatchStep.ops Port4B_Install.leaves).op9 keys pos)
+    let key_position1 ← liftResult (lift (pos.wrapping_add 1#usize))
+    let i ← liftResult (lift (key.wrapping_shr 8#u32))
+    let index ← liftResult (lift (UScalar.cast UScalarTy.U32 i))
+    let i1 ← liftResult (lift (key &&& 255#u64))
+    let i2 ← liftResult (lift (UScalar.cast UScalarTy.Usize i1))
+    let i3 ← liftResult (lift (lo.wrapping_add i2))
+    let q ← liftResult ((Port9OR_BatchStep.ops Port4B_Install.leaves).op2 proof i3)
+    let leaf ← Port4B_LeafCode.code tree q
+    if d > 0#usize then do
+        let i4 ← liftResult (lift (d.wrapping_sub 1#usize))
+        let b ← liftResult ((Port9OR_BatchStep.ops Port4B_Install.leaves).op8 idx i4 index)
+        if b = true then do
+            let i5 ← liftResult (lift (d.wrapping_sub 1#usize))
+            let b1 ← liftResult ((Port9OR_BatchStep.ops Port4B_Install.leaves).op7 val i5 leaf)
+            if b1 = true then pure (cont (idx, val, d, key_position1))
+              else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else do
+            let idx1 ← liftResult (Array.update idx d index)
+            let val1 ← liftResult (Array.update val d leaf)
+            let d1 ← liftResult (lift (d.wrapping_add 1#usize))
+            pure (cont (idx1, val1, d1, key_position1))
+      else do
+        let idx1 ← liftResult (Array.update idx d index)
+        let val1 ← liftResult (Array.update val d leaf)
+        let d1 ← liftResult (lift (d.wrapping_add 1#usize))
+        pure (cont (idx1, val1, d1, key_position1))
+is not definitionally equal to the right-hand side
+  do
+    let key ← liftResult (keys.index_usize pos)
+    let view ← liftResult (Port4B_Install.leaves.op2 proof (openingIndex lo key))
+    let leaf ← Port4B_LeafCode.code tree view
+    F3Q_LeafPost.code idx val d (decodedIndex key) leaf (pos.wrapping_add 1#usize)
+
+X : Type
+D : sorry
+hash : X
+proof : Slice U8
+root : Digest
+tree lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Indices
+val : Values
+more : pos < n
+⊢ (do
+      let key ← liftResult ((Port9OR_BatchStep.ops Port4B_Install.leaves).op9 keys pos)
+      let key_position1 ← liftResult (lift (pos.wrapping_add 1#usize))
+      let i ← liftResult (lift (key.wrapping_shr 8#u32))
+      let index ← liftResult (lift (UScalar.cast UScalarTy.U32 i))
+      let i1 ← liftResult (lift (key &&& 255#u64))
+      let i2 ← liftResult (lift (UScalar.cast UScalarTy.Usize i1))
+      let i3 ← liftResult (lift (lo.wrapping_add i2))
+      let q ← liftResult ((Port9OR_BatchStep.ops Port4B_Install.leaves).op2 proof i3)
+      let leaf ← Port4B_LeafCode.code tree q
+      if d > 0#usize then do
+          let i4 ← liftResult (lift (d.wrapping_sub 1#usize))
+          let b ← liftResult ((Port9OR_BatchStep.ops Port4B_Install.leaves).op8 idx i4 index)
+          if b = true then do
+              let i5 ← liftResult (lift (d.wrapping_sub 1#usize))
+              let b1 ← liftResult ((Port9OR_BatchStep.ops Port4B_Install.leaves).op7 val i5 leaf)
+              if b1 = true then pure (cont (idx, val, d, key_position1))
+                else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+            else do
+              let idx1 ← liftResult (Array.update idx d index)
+              let val1 ← liftResult (Array.update val d leaf)
+              let d1 ← liftResult (lift (d.wrapping_add 1#usize))
+              pure (cont (idx1, val1, d1, key_position1))
+        else do
+          let idx1 ← liftResult (Array.update idx d index)
+          let val1 ← liftResult (Array.update val d leaf)
+          let d1 ← liftResult (lift (d.wrapping_add 1#usize))
+          pure (cont (idx1, val1, d1, key_position1))) =
+    do
+    let key ← liftResult (keys.index_usize pos)
+    let view ← liftResult (Port4B_Install.leaves.op2 proof (openingIndex lo key))
+    let leaf ← Port4B_LeafCode.code tree view
+    F3Q_LeafPost.code idx val d (decodedIndex key) leaf (pos.wrapping_add 1#usize)
+F3Q_LeafActive.lean:24:34: error: Ambiguous term
+  aspis_core.digest.Digest32
+Possible interpretations:
+  MultiproofConeRef.aspis_core.digest.Digest32 X : Type
+  
+  AspisR1Stage2.aspis_core.digest.Digest32 X : Type
+F3Q_LeafActive.lean:34:107: error: unsolved goals
+X : Type
+D : sorry
+hash : X
+H : Bytes → State
+proof : Slice U8
+root : Digest
+tree lo n slot pos : Usize
+keys : Std.Array U64 16#usize
+s : reference.Scratch
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : Port4B_Install.leaves.op2 proof (openingIndex lo key) = ok view
+size : (↑view).length = 832
+⊢ ((eval H (SdkC_Oracle.program (liftResult (ok key)))).1 ++
+        (match (eval H (SdkC_Oracle.program (liftResult (ok key)))).2 with
+          | ok a =>
+            ((eval H (SdkC_Oracle.program (liftResult (Port4B_Install.leaves.op2 proof (openingIndex lo a))))).1 ++
+                (match
+                    (eval H
+                        (SdkC_Oracle.program (liftResult (Port4B_Install.leaves.op2 proof (openingIndex lo a))))).2 with
+                  | ok a_1 =>
+                    ((eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).1 ++
+                        (match (eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).2 with
+                          | ok a_2 =>
+                            ([], Port4B_LeafStep.post s.idx s.val s.n (decodedIndex a) a_2 (pos.wrapping_add 1#usize))
+                          | fail e => ([], fail e)
+                          | div => ([], div)).1,
+                      (match (eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).2 with
+                        | ok a_2 =>
+                          ([], Port4B_LeafStep.post s.idx s.val s.n (decodedIndex a) a_2 (pos.wrapping_add 1#usize))
+                        | fail e => ([], fail e)
+                        | div => ([], div)).2)
+                  | fail e => ([], fail e)
+                  | div => ([], div)).1,
+              (match
+                  (eval H
+                      (SdkC_Oracle.program (liftResult (Port4B_Install.leaves.op2 proof (openingIndex lo a))))).2 with
+                | ok a_1 =>
+                  ((eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).1 ++
+                      (match (eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).2 with
+                        | ok a_2 =>
+                          ([], Port4B_LeafStep.post s.idx s.val s.n (decodedIndex a) a_2 (pos.wrapping_add 1#usize))
+                        | fail e => ([], fail e)
+                        | div => ([], div)).1,
+                    (match (eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).2 with
+                      | ok a_2 =>
+                        ([], Port4B_LeafStep.post s.idx s.val s.n (decodedIndex a) a_2 (pos.wrapping_add 1#usize))
+                      | fail e => ([], fail e)
+                      | div => ([], div)).2)
+                | fail e => ([], fail e)
+                | div => ([], div)).2)
+          | fail e => ([], fail e)
+          | div => ([], div)).1,
+      (match (eval H (SdkC_Oracle.program (liftResult (ok key)))).2 with
+        | ok a =>
+          ((eval H (SdkC_Oracle.program (liftResult (Port4B_Install.leaves.op2 proof (openingIndex lo a))))).1 ++
+              (match
+                  (eval H
+                      (SdkC_Oracle.program (liftResult (Port4B_Install.leaves.op2 proof (openingIndex lo a))))).2 with
+                | ok a_1 =>
+                  ((eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).1 ++
+                      (match (eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).2 with
+                        | ok a_2 =>
+                          ([], Port4B_LeafStep.post s.idx s.val s.n (decodedIndex a) a_2 (pos.wrapping_add 1#usize))
+                        | fail e => ([], fail e)
+                        | div => ([], div)).1,
+                    (match (eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).2 with
+                      | ok a_2 =>
+                        ([], Port4B_LeafStep.post s.idx s.val s.n (decodedIndex a) a_2 (pos.wrapping_add 1#usize))
+                      | fail e => ([], fail e)
+                      | div => ([], div)).2)
+                | fail e => ([], fail e)
+                | div => ([], div)).1,
+            (match
+                (eval H (SdkC_Oracle.program (liftResult (Port4B_Install.leaves.op2 proof (openingIndex lo a))))).2 with
+              | ok a_1 =>
+                ((eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).1 ++
+                    (match (eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).2 with
+                      | ok a_2 =>
+                        ([], Port4B_LeafStep.post s.idx s.val s.n (decodedIndex a) a_2 (pos.wrapping_add 1#usize))
+                      | fail e => ([], fail e)
+                      | div => ([], div)).1,
+                  (match (eval H (SdkC_Oracle.program (Port4B_LeafCode.code tree a_1))).2 with
+                    | ok a_2 =>
+                      ([], Port4B_LeafStep.post s.idx s.val s.n (decodedIndex a) a_2 (pos.wrapping_add 1#usize))
+                    | fail e => ([], fail e)
+                    | div => ([], div)).2)
+              | fail e => ([], fail e)
+              | div => ([], div)).2)
+        | fail e => ([], fail e)
+        | div => ([], div)).2) =
+    ([(flatten (Port4B_LeafCode.input tree view), H (flatten (Port4B_LeafCode.input tree view)))],
+      Port4B_LeafStep.post s.idx s.val s.n (decodedIndex key)
+        (encodeState (H (flatten (Port4B_LeafCode.input tree view)))) (pos.wrapping_add 1#usize))
+F3Q_LeafActive.lean:36:23: warning: This simp argument is unused:
+  F3Q_CodeEval.lift_bind_eval
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵k̵e̵y̵R̵e̵a̵d̵,̵v̵i̵e̵w̵R̵e̵a̵d̵,̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲k̲e̲y̲R̲e̲a̲d̲,̲ ̲v̲i̲e̲w̲R̲e̲a̲d̲,̲ ̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲
+      F3Q_LeafEval.leaf H tree view s̵i̵z̵e̵,̵F̵3̵Q̵_̵L̵e̵a̵f̵P̵o̵s̵t̵.̵e̵v̵a̵l̵_̵p̵o̵s̵t̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵s̲i̲z̲e̲,̲ ̲F̲3̲Q̲_̲L̲e̲a̲f̲P̲o̲s̲t̲.̲e̲v̲a̲l̲_̲p̲o̲s̲t̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_LeafActive.lean:36:59: warning: This simp argument is unused:
+  viewRead
+
+Hint: Omit it from the simp argument list.
+  simp only [Bind.bind, ̲F3Q_CodeEval.lift_bind_eval, ̲keyRead,v̵i̵e̵w̵R̵e̵a̵d̵,̵ ̲F3Q_CodeEval.bind_eval,
+      F3Q_LeafEval.leaf H tree view size, ̲F3Q_LeafPost.eval_post, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_LeafActive.lean:37:4: warning: This simp argument is unused:
+  F3Q_LeafEval.leaf H tree view size
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵k̵e̵y̵R̵e̵a̵d̵,̵v̵i̵e̵w̵R̵e̵a̵d̵,̵F̵3̵Q̵_̵C̵o̵d̵e̵E̵v̵a̵l̵.̵b̵i̵n̵d̵_̵e̵v̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵F̵3̵Q̵_̵L̵e̵a̵f̵E̵v̵a̵l̵.̵l̵e̵a̵f̵ ̵H̵ ̵t̵r̵e̵e̵ ̵v̵i̵e̵w̵ ̵s̵i̵z̵e̵,̵F̵3̵Q̵_̵L̵e̵a̵f̵P̵o̵s̵t̵.̵e̵v̵a̵l̵_̵p̵o̵s̵t̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲l̲i̲f̲t̲_̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲ ̲k̲e̲y̲R̲e̲a̲d̲,̲ ̲v̲i̲e̲w̲R̲e̲a̲d̲,̲ ̲F̲3̲Q̲_̲C̲o̲d̲e̲E̲v̲a̲l̲.̲b̲i̲n̲d̲_̲e̲v̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲F̲3̲Q̲_̲L̲e̲a̲f̲P̲o̲s̲t̲.̲e̲v̲a̲l̲_̲p̲o̲s̲t̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_LeafActive.lean:37:62: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [Bind.bind, ̲F3Q_CodeEval.lift_bind_eval, ̲keyRead, ̲viewRead, ̲F3Q_CodeEval.bind_eval,
+      F3Q_LeafEval.leaf H tree view size, ̲F3Q_LeafPost.eval_post,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3Q_LeafActive.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3Q_LeafActive.step_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

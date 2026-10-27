@@ -1,0 +1,142 @@
+import R1TraceWitnessExtract
+import SharedFiniteMaterializationM10
+
+/-! Retain every fixed-width hash state between rounds and every path digest
+between nodes. This prevents function-valued states from rebuilding the
+preceding circuit at each coordinate demand. Equality is extensional; no
+concrete permutation, field value or round constant is evaluated. -/
+set_option autoImplicit false
+namespace AspisR1.CachedWitnessHashM10
+open R0P
+variable {K : Type} [Field K]
+
+def cache {n : Nat} (f : Fin n → K) : Fin n → K :=
+  let a := Array.ofFn f
+  fun i => a[i.val]'(by have ha : a.size = n := Array.size_ofFn; omega)
+
+theorem cache_value {n : Nat} (f : Fin n → K) : cache f = f := by
+  funext i
+  simp only [cache,Array.getElem_ofFn]
+
+def full (s constants : Fin 16 → K) : Fin 16 → K := cache (poseidonFullRound s constants)
+def internal (s : Fin 16 → K) (constant : K) : Fin 16 → K := cache (poseidonInternalRound s constant)
+
+def permutation (s : Fin 16 → K) : Fin 16 → K :=
+  let s := cache s
+  let s := cache (poseidonExternalLinear s)
+  let s := (List.ofFn (fun r : Fin 4 => poseidonExternalInitial (K := K) r)).foldl full s
+  let s := (List.ofFn (fun r : Fin 14 => poseidonInternalConstants (K := K) r)).foldl internal s
+  (List.ofFn (fun r : Fin 4 => poseidonExternalFinal (K := K) r)).foldl full s
+
+theorem permutation_value (s : Fin 16 → K) : permutation s = poseidonPermutation s := by
+  have hf : full (K := K) = poseidonFullRound := by
+    funext s c
+    exact cache_value _
+  have hi : internal (K := K) = poseidonInternalRound := by
+    funext s c
+    exact cache_value _
+  simp only [permutation,cache_value,poseidonPermutation,hf,hi]
+
+def node (left right : Digest K) : Digest K :=
+  cache (digestOf (permutation (fun l =>
+    if h : l.val < 8 then left ⟨l.val,h⟩
+    else if l.val = 15 then right 7-(1051521018 : K)
+    else right ⟨l.val-8,by omega⟩)))
+
+theorem node_value (left right : Digest K) : node left right = nodeCompress left right := by
+  simp only [node,cache_value,permutation_value,nodeCompress]
+
+def sponge (s : Fin 16 → K) (chunk : Fin 8 → K) : Fin 16 → K := permutation (absorb s chunk)
+
+def owner (sk : Digest K) : Digest K := cache (digestOf (sponge (spongeInit 0x4153_0001 8) sk))
+def nullifier (sk salt : Digest K) : Digest K :=
+  cache (digestOf (sponge (sponge (spongeInit 0x4153_0002 16) sk) salt))
+def note (pk : Digest K) (value asset : K) (salt : Digest K) : Digest K :=
+  let chunk2 : Fin 8 → K := fun i =>
+    if i.val = 0 then value else if i.val = 1 then asset else salt ⟨i.val-2,by omega⟩
+  let chunk3 : Fin 8 → K := fun i => if h : i.val < 2 then salt ⟨i.val+6,by omega⟩ else 0
+  cache (digestOf (sponge (sponge (sponge (spongeInit 0x4153_0003 18) pk) chunk2) chunk3))
+
+theorem owner_value (sk : Digest K) : owner sk = ownerKey sk := by
+  simp only [owner,sponge,cache_value,permutation_value,ownerKey,spongeStep]
+theorem nullifier_value (sk salt : Digest K) : nullifier sk salt = nullifierHash sk salt := by
+  simp only [nullifier,sponge,cache_value,permutation_value,nullifierHash,spongeStep]
+theorem note_value (pk : Digest K) (value asset : K) (salt : Digest K) :
+    note pk value asset salt = noteCommitment pk value asset salt := by
+  simp only [note,sponge,cache_value,permutation_value,noteCommitment,spongeStep]
+
+def merkle (leaf : Digest K) (path : Fin 24 → Bool × Digest K) : Nat → Digest K
+  | 0 => leaf
+  | n+1 => if h : n < 24 then
+      let prev := merkle leaf path n
+      if (path ⟨n,h⟩).1 then node (path ⟨n,h⟩).2 prev else node prev (path ⟨n,h⟩).2
+    else merkle leaf path n
+
+theorem merkle_value (leaf : Digest K) (path : Fin 24 → Bool × Digest K) (n : Nat) :
+    merkle leaf path n = merkleRootAux leaf path n := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    simp only [merkle,merkleRootAux,merkleStep,ih,node_value]
+
+def append (pub : Public K) (leaf : Digest K) : Nat → Digest K
+  | 0 => leaf
+  | n+1 => if h : n < 20 then
+      let prev := append pub leaf n
+      if digestBitZero pub ⟨n,h⟩ then node prev (AppendNode.frozenEmpty ⟨n,by omega⟩)
+      else node (pub.snapshotFrontier ⟨n,h⟩) prev
+    else append pub leaf n
+
+theorem append_value (pub : Public K) (leaf : Digest K) (n : Nat) :
+    append pub leaf n = AppendPath.pathPrefix pub leaf n := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    simp only [append,AppendPath.pathPrefix,AppendPath.step,ih,node_value]
+    split <;> rfl
+
+/-- Per-round upper constructor schedule. Each external coordinate performs
+five Mat4 demands (eleven additions and four result/capture groups each),
+five column additions and index/capture groups. Full rounds additionally pay
+all twenty scalar demands per coordinate and four pow5/add operations per
+demand. The final terms cover the internal sum list, scalar temporaries and
+all output slots. Input states are borrowed from retained arrays. -/
+def roundCells : Nat :=
+  16*(5*(11+4)+5+8)+16*5*4*4+15+16+16*8+18
+/-- Input, initial linear layer, four full, fourteen internal, four full. -/
+def permutationCells : Nat := 18+(1+4+14+4)*roundCells
+def nodeCells : Nat := permutationCells+10
+def spongeCells : Nat := permutationCells+18
+def ownerCells : Nat := spongeCells+10
+def nullifierCells : Nat := 2*spongeCells+10
+def noteCells : Nat := 3*spongeCells+28
+
+def merkleCells : Nat → Nat
+  | 0 => 0
+  | n+1 => merkleCells n+(if n < 24 then nodeCells else 0)
+
+def appendCells : Nat → Nat
+  | 0 => 0
+  | n+1 => appendCells n+(if n < 20 then nodeCells else 0)
+
+theorem merkle_cells_bound (n : Nat) : merkleCells n ≤ n*nodeCells := by
+  induction n with
+  | zero => exact Nat.le_refl _
+  | succ n ih => simp only [merkleCells]; split <;> nlinarith
+
+theorem append_cells_bound (n : Nat) : appendCells n ≤ n*nodeCells := by
+  induction n with
+  | zero => exact Nat.le_refl _
+  | succ n ih => simp only [appendCells]; split <;> nlinarith
+
+#print axioms cache_value
+#print axioms permutation_value
+#print axioms node_value
+#print axioms owner_value
+#print axioms nullifier_value
+#print axioms note_value
+#print axioms merkle_value
+#print axioms append_value
+#print axioms merkle_cells_bound
+#print axioms append_cells_bound
+end AspisR1.CachedWitnessHashM10

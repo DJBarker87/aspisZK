@@ -1,0 +1,50 @@
+{"attempt": "RPz4_1282", "exit_status": 0, "wall_seconds": 2.002530133991968, "peak_rss_kib": "4403532", "swaps": "0", "print_axioms": ["'AspisR1.S2W_NativeSchedule.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.S2W_NativeSchedule.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.S2W_NativeSchedule.accepted_run : ∀ {E : Type} (ops : AdapterRw.Ops)
+  (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+  (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+  S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    ∀ (program : S2W_ExtractionBoundary.Program) (accounts1 accounts2 : S2W_ExtractionBoundary.Accounts)
+      (data1 data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot) (saved : alloc.vec.Vec U8),
+      native1 program accounts1 data1 = ok (core.result.Result.Ok saved) →
+        native2 program acco
+...
+                     fun answer => ok (answer.1, firstLog ++ answer.2))
+                (List.append_nil firstLog))
+              shifted))));
+  have shape :=
+    Eq.mpr (id (congrArg (fun _a => tags _a = [false, true]) joined))
+      (id
+        (Eq.mpr (id (congrArg (fun _a => _a = [false, true]) List.filterMap_append))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a ++ tags secondLog = [false, true])
+                  (S2W_FirstOccurrence.first_occurrence ops program accounts1 data1 saved firstLog firstRun)))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => [false] ++ _a = [false, true])
+                    (second_occurrence ops program accounts2 data2 slot secondLog secondEmpty)))
+                (Eq.refl ([false] ++ [true])))))));
+  let ⟨pre, h✝³⟩ := expanded_schedule port firstMarks secondMarks outer shape
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, layout⟩ := h✝⁵
+  Exists.intro outer
+    (Exists.intro pre
+      (Exists.intro middle
+        (Exists.intro fs
+          (Exists.intro ss
+            ⟨execution,
+              ⟨execution_flatMap ops (children port)
+                  (S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] outer
+                  (core.result.Result.Ok saved) execution,
+                ⟨shape,
+                  ⟨layout,
+                    ⟨fun a b a_1 a_2 =>
+                      Eq.mpr (id (congrArg (fun _a => S2W_SiteSchedule.Event.site a ∈ _a) layout))
+                        (S2W_SiteSchedule.reached pre middle fs ss a),
+                      ⟨fun a b order a_1 a_2 => S2W_SiteSchedule.ordered pre middle fs ss a b order, fun a =>
+                        Eq.trans layout (S2W_SiteSchedule.located pre middle fs ss a)⟩⟩⟩⟩⟩⟩))))
+
+Running as unit: run-r3e7f60d72357443ca6b4a504e093fae9.scope; invocation ID: 586b02b327574b5db26da879e782413d

@@ -1,0 +1,58 @@
+reservation: populated 24 GiB + 8 GiB; window=0 (London 1818); env=J
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PublicHeader.lean:21:27: error: Tactic `rfl` failed: The left-hand side
+  (publicRecord roots i).variant
+is not definitionally equal to the right-hand side
+  (publicInput i).variant
+
+case transfer
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+roots : BuilderRecordsReference.Roots
+i : Input
+publicInput✝ : BuilderPublicProjection.Transfer
+recipient✝ : payment_relation.PoolV1OutputNoteWitnessV1
+hr : i.request = Request.transfer publicInput✝ recipient✝
+⊢ (publicRecord roots i).variant = (publicInput i).variant
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PublicHeader.lean:21:27: error: Tactic `rfl` failed: The left-hand side
+  (publicRecord roots i).variant
+is not definitionally equal to the right-hand side
+  (publicInput i).variant
+
+case withdrawal
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+roots : BuilderRecordsReference.Roots
+i : Input
+publicInput✝ : BuilderPublicProjection.Withdrawal
+hr : i.request = Request.withdrawal publicInput✝
+⊢ (publicRecord roots i).variant = (publicInput i).variant
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PublicHeader.lean:37:4: error: 'change' tactic failed, pattern
+  ↑i.snapshot.next_pair_index = ↑i.compiled.public_statement.live_snapshot.next_pair_index
+is not definitionally equal to target
+  (publicRecord roots i).nextPairIndex = (publicInput i).nextPairIndex
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PublicHeader.lean:37:4: error: 'change' tactic failed, pattern
+  ↑i.snapshot.next_pair_index = ↑i.compiled.public_statement.live_snapshot.next_pair_index
+is not definitionally equal to target
+  (publicRecord roots i).nextPairIndex = (publicInput i).nextPairIndex
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PublicHeader.lean:46:4: error: 'change' tactic failed, pattern
+  liftU (↑(↑i.snapshot.frontier)[↑l]!)[↑lane]! =
+    ι (liftU (↑(↑i.compiled.public_statement.live_snapshot.frontier)[↑l]!)[↑lane]!)
+is not definitionally equal to target
+  liftU (↑(↑(publicRecord roots i).frontier)[↑l]!)[↑lane]! = (publicInput i).snapshotFrontier l lane
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PublicHeader.lean:46:4: error: 'change' tactic failed, pattern
+  liftU (↑(↑i.snapshot.frontier)[↑l]!)[↑lane]! =
+    ι (liftU (↑(↑i.compiled.public_statement.live_snapshot.frontier)[↑l]!)[↑lane]!)
+is not definitionally equal to target
+  liftU (↑(↑(publicRecord roots i).frontier)[↑l]!)[↑lane]! = (publicInput i).snapshotFrontier l lane
+'R1Z.PV_Src_PublicHeader.variant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PublicHeader.asset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PublicHeader.next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PublicHeader.frontier' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.85
+	Maximum resident set size (kbytes): 4096364
+	Swaps: 0
+	Exit status: 1

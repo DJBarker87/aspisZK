@@ -1,0 +1,73 @@
+theorem AspisR1.SdkC_BatchSource.map_erasure : ∀ {Hash Err : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (map : AspisR1Stage2.verifier.Error → Err)
+  (body : AspisR1.SdkC_Source.Code (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)),
+  AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.SdkC_BatchSource.mapCode map body) =
+    AspisR1.Op5T_Install.mapResult map (AspisR1.CheckpointBytes5Effect.erase D hash body) :=
+fun {Hash Err} D hash map body =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (AspisR1.CheckpointBytes5Effect.erase_bind D hash body fun value =>
+            Pure.pure
+              (match value with
+              | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok x
+              | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.core.result.Result.Err (map e))))
+        (AspisR1.Op5T_Install.mapResult map (AspisR1.CheckpointBytes5Effect.erase D hash body))))
+    (Aeneas.Std.Result.casesOn (motive := fun t =>
+      AspisR1.CheckpointBytes5Effect.erase D hash body = t →
+        (do
+            let a ← AspisR1.CheckpointBytes5Effect.erase D hash body
+            Aeneas.Std.Result.ok
+                (match a with
+                | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok x
+                | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.core.result.Result.Err (map e))) =
+          AspisR1.Op5T_Install.mapResult map (AspisR1.CheckpointBytes5Effect.erase D hash body))
+      (AspisR1.CheckpointBytes5Effect.erase D hash body)
+      (fun value h =>
+        Eq.symm h ▸
+          Aeneas.Std.core.result.Result.casesOn (motive := fun t =>
+            value = t →
+              (do
+                  let a ← Aeneas.Std.Result.ok value
+                  Aeneas.Std.Result.ok
+                      (match a with
+                      | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok x
+                      | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.core.result.Result.Err (map e))) =
+                AspisR1.Op5T_Install.mapResult map (Aeneas.Std.Result.ok value))
+            value
+            (fun a h =>
+              Eq.symm h ▸
+                Eq.refl do
+                  let a ← Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a)
+                  Aeneas.Std.Result.ok
+                      (match a with
+                      | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok x
+                      | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.core.result.Result.Err (map e)))
+            (fun a h =>
+              Eq.symm h ▸
+                Eq.refl do
+                  let a ← Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err a)
+                  Aeneas.Std.Result.ok
+                      (match a with
+                      | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok x
+                      | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.core.result.Result.Err (map e)))
+            (Eq.refl value))
+      (fun e h =>
+        Eq.symm h ▸
+          Eq.refl do
+            let a ← Aeneas.Std.Result.fail e
+            Aeneas.Std.Result.ok
+                (match a with
+                | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok x
+                | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.core.result.Result.Err (map e)))
+      (fun h =>
+        Eq.symm h ▸
+          Eq.refl do
+            let a ← Aeneas.Std.Result.div
+            Aeneas.Std.Result.ok
+                (match a with
+                | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok x
+                | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.core.result.Result.Err (map e)))
+      (Eq.refl (AspisR1.CheckpointBytes5Effect.erase D hash body)))
+'AspisR1.SdkC_BatchSource.map_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]

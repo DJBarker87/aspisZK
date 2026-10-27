@@ -1,0 +1,123 @@
+# L1 deployed-caller trace and coupling, 26 October 2026
+
+Baseline: e9413cdc71b5d750b2d8e197cc58b20f238ee6c0,
+branch codex/pv-l1-20261026. Implementation is frozen. Target not yet established.
+
+## Observable and event alphabet (written before code)
+
+The selected inner entry is RealR1_client.prove_for_proof_accounts, variant S2.
+An execution starts with retained TLS, oracle, durable ledger, policy, provider
+and body state. Its L1 image retains the ordered list of entered attempts,
+callback/entropy statuses, body rejection origin, success or fatal origin,
+reservation create/write/sync outcomes (including partial writes), TLS pushes
+and takes, and every send/write's bytes, length and position. The final result
+includes successful attempt count and published bytes, or the precise fatal
+error. Cap exhaustion is a terminal event, not a ninth entered attempt.
+Duration magnitudes remain L3; checker invocation counts remain L1.
+The outer operational client's filesystem/subprocess/publication effects also
+need native callbacks; the selected inner caller alone is insufficient.
+
+Use SideChannelL1AttemptRecord.Event for per-attempt payloads, with an explicit
+entry marker and terminal result in new PV_L1_ modules. The reference's list of
+Attempt values retains attempt boundaries; flattening counts is insufficient.
+Secret seed bytes are not exported as events. Oracle history and publication
+are separate coordinates in the SAME joint observation, with raw trace inputs
+retained for V366. Initial history is never reset.
+
+## Intended theorem and source boundary
+
+First derive ordered, bounded traces from the ACTUAL
+ProverRwRngCallerReplay.Replay relation. A step at index 8 checks the cap but
+enters no callback; indices below 8 are the entered attempts. Each payload must
+come from a separately identified native callback relation, not be invented
+from the final output. cap8 and ordered_indices provide control/order, not
+body/IO/TLS payloads. universal_cap16 supplies the entropy-owner same-event
+certificate, but its provider/error sorts require native installation.
+
+The intended native theorem equates complete ordered observations of extracted
+execution and the L1 reference. Missing callback facts must be named Prop
+fields in PV_L1_Premises, one field for each targeted ledger row. These remain
+proof obligations, not definitions of native behavior or cryptographic axioms.
+No premise-removal claim follows from packaging them.
+
+For V348/V366, use one sample space and the headline's existing realBad event.
+A relational transition invariant must preserve publication, masks, retry
+origins, oracle history, TLS, ledger and raw inputs together. Prove lockstep
+prefix transport before a TV bound. Equal-circle, QueryScan abort/observer
+prefixes and part47 byte encoding must preserve that SAME invariant. Do not
+replace simE or add separate charges for previously charged events.
+
+## Initial row audit
+
+| Row | Before | Required native evidence |
+|---|---|---|
+| V347 | open | all payload callbacks + ordered replay/native bridge |
+| V348 | open | joint transition invariant with publication and history |
+| V349 | open | equal-circle rejected prefixes on that invariant |
+| V350 | open | QueryScan exhausted and observer/error prefixes |
+| V351 | open | native y1 selector/tape binding plus every_lane bytes |
+| V366 | open | complete raw inputs on the same coupling |
+
+Read D159/D163, historical D190–D194, SIDE-CHANNEL-L1-20261022,
+SideChannelL1AttemptRecord/JointCoupling, ProverRwEntropyIteration,
+ProverRwRngCallerReplay/Events, universal_cap16, research's privacy ledger and
+PV-CLIENT-ROUTE-20261026. D194 explicitly warns that Body is abstract;
+u64 audit and NativeTypes cannot be treated as installed native instances.
+
+## Validation policy
+
+Only new PV_L1_ Lean files; standard axioms, print every theorem's axioms.
+Compile smallest changed module first through the existing env-J launcher,
+IDs 21600–21899, -M7000, 6G/8G/no swap, standing TasksMax128.
+At most one scope. Keep failed receipts; no unchanged failed reruns.
+Budget 100 Lean attempts, 15 Kani runs. No keys, source implementations,
+ELFs, sibling worktrees or soundness-ledger files are changed.
+
+## Checked structural progress (not row discharge)
+
+`PV_L1_Control.extracted_ordered_cap8` retains the source replay's order,
+at most eight entered callbacks and at most nine replay states (the final
+cap check is not an entry). `PV_L1_NativeRetry.extracted_caller` connects the
+actual borrowed query caller's result to the event producer's erasure.
+`PV_L1_OrderedRefinement.ordered_refinement` gives complete reference-record
+equality from LOCAL called/emitted callback facts, including error prefixes.
+The native callbacks themselves remain missing; arbitrary emit functions do
+not constitute the native event producer.
+
+`PV_L1_Lockstep` proves ordered joint transport from a local step invariant.
+`PV_L1_RunJoin.of_local_replays` constructs the existing FuelJoin22.RunJoin
+using its exact original coupling, old event family and seed query list.
+There is no new L1 bad-event allowance. The native initial-relation instance
+for QueryScanRealLazyBound.realBad is still required.
+
+`PV_L1_RawCoupling.public_history_and_raw` retains full raw inputs on those
+same paired executions with List.Forall₂ of an explicit raw-input relation.
+Private raw inputs are not required equal and are not disclosed as a new
+observer. `PV_L1_Premises.local_joint_law` consumes the separate L2 trace
+kernel theorem on this relation. An earlier checked sufficient interface
+required raw equality; it was strengthened in usefulness by replacing that
+unnecessary requirement with the explicit two-run relation. Neither interface
+was installed or represented as discharging V366.
+
+`PV_L1_Query` identifies native query result AND ordered Digest history in one
+pair, retaining abort and observer prefixes. The native caller eagerly reads
+all eight block/advance pairs; do not substitute a lazy first-stop history.
+Its TLS publisher remains an explicit native source leaf.
+
+`PV_L1_EqualCircle` installs the proved source error comparator and establishes
+EqualCirclePoints -> fatal Semantic; ActivePole -> retrying Rejected.
+A coupling that classifies both as retry would not describe this source.
+No witness-dependent retry-law counterexample is claimed by this distinction.
+
+`PV_L1_Part47.complete_image` assembles the owned evaluator's complete 29-lane,
+928-byte image; joint_image retains arbitrary prior history pointwise.
+It does not install the native coefficient selector/tape/eval_message iterator.
+
+The PV_L1_Premises fields v347_native_event_producer,
+v348_joint_mask_count_tls_oracle, v349_equal_circle_integration,
+v350_query_abort_integration, v351_part47_composition and
+v366_joint_raw_input_coupling map one-to-one to V347–V351/V366.
+These are named Prop fields, not definitions or new axioms. They are local
+callback obligations; no native instance has been constructed. Packaging them
+is not premise removal: targeted open rows remain 6 -> 6, closed rows 0 -> 0;
+privacy_headline_deployed retains its original RustRealRefinement premise.

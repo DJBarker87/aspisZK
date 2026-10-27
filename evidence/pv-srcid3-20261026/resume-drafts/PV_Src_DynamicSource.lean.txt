@@ -1,0 +1,28 @@
+import R1Z.PV_Src_CanonicalRoots
+
+/-! Exact pure dictionary equation conditional on the single root-helper
+source equation. This proves neither that equation nor the shipped P6 mapper
+association; both remain named obligations. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_DynamicSource
+open Aeneas Aeneas.Std Result
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
+
+theorem records [ExternalLinear]
+    (roots : pair_trace.pair_empty_roots = ok PV_Src_CanonicalRoots.table)
+    (i : PV_Src_NativeInput.Input) :
+    @PV_Src_NativeInput.newRecords PV_Src_RecordDynamic.dictionary i =
+      ok (PV_Src_RecordReference.returned PV_Src_CanonicalRoots.table i) := by
+  change (do
+    let (w,p) ← PV_Src_RecordDynamic.call i.witness
+      (PV_Src_NativeInput.outputValue i.request) (PV_Src_NativeInput.recipient i.request)
+      i.change i.snapshot (PV_Src_NativeInput.forestPublic i.request).asset
+    ok (pair_forest_copy_builder.CopyRecords.mk w p)) = _
+  unfold PV_Src_RecordDynamic.call
+  rw [roots]
+  change @PV_Src_NativeInput.newRecords
+    (PV_Src_RecordReference.withRoots PV_Src_CanonicalRoots.table) i = _
+  exact PV_Src_RecordReference.newRecords_eq _ i
+
+#print axioms records
+end R1Z.PV_Src_DynamicSource

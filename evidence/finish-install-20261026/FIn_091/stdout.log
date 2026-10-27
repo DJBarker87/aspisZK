@@ -1,0 +1,26 @@
+def AspisR1.F3Y_FinishFields.Holds : AspisR1Stage2.verifier.Prepared →
+  AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E → Prop :=
+fun p data =>
+  AspisR1.CheckpointBytes5Output.ofE p.claim =
+      AspisR1.JointFunctionalBinding.claimedValue data.Y data.c0 data.gamma data.kappa ∧
+    (∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok x → AspisR1.CheckpointBytes5Output.ofE x = data.alpha0) ∧
+      ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok x → AspisR1.CheckpointBytes5Output.ofE x = data.alpha1
+def AspisR1.FIn_Derived.Holds : {W : Type} →
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps W) →
+    (v : AspisR1Stage2.verifier.View) →
+      (p : AspisR1Stage2.verifier.Prepared) →
+        (a : AspisR1Stage2.verifier.Accumulator) →
+          AspisR1.F3S_FinishWitness.Primitives finish v p a →
+            AspisR1.OraclePortCompactDraft.Parsed →
+              (Fin 22 → Fin 262144) →
+                AspisR1.RawCutTranscriptRun.ErasedPrefix →
+                  AspisR1.MatchingSupport.Data AspisWideTower.WideExact → Prop :=
+fun {W} finish v p a x parsed q tr data =>
+  AspisR1.Port4D_Pairing.RoundLaws (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE
+      v.round0 data.p0 ∧
+    AspisR1.Port4D_Pairing.RoundLaws (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE
+        v.round1 data.p1 ∧
+      AspisR1.CheckpointBytes5Output.ofE x.dot =
+        ∑ l, data.f l * AspisR1.LiteralOpeningView.eK ((AspisR1.CheckpointBytes5Output.accumulator a).weights l)

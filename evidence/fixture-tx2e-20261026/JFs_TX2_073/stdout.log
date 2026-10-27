@@ -1,0 +1,34 @@
+def AspisR1QueryGeometryActual.domain.FibreIndex.get : AspisR1QueryGeometryActual.domain.FibreIndex →
+  Aeneas.Std.Result Aeneas.Std.Usize :=
+fun self => Aeneas.Std.Result.ok self
+def AspisR1QueryGeometryActual.fast_domain.table_value : AspisR1QueryGeometryActual.CM31Ops →
+  Aeneas.Std.U32 × Aeneas.Std.U32 → Aeneas.Std.Result AspisR1QueryGeometryActual.field.CM31 :=
+fun ops value =>
+  let (i, i1) := value
+  ops.new i i1
+AspisR1QueryGeometryActual.fast_domain.TABLE_A : Aeneas.Std.Array (Aeneas.Std.U32 × Aeneas.Std.U32) 512#usize
+AspisR1QueryGeometryActual.fast_domain.TABLE_B : Aeneas.Std.Array (Aeneas.Std.U32 × Aeneas.Std.U32) 512#usize
+def AspisR1Qm31ArithmeticProbe.field.CM31.mul : AspisR1Qm31ArithmeticProbe.field.CM31 →
+  AspisR1Qm31ArithmeticProbe.field.CM31 → Aeneas.Std.Result AspisR1Qm31ArithmeticProbe.field.CM31 :=
+fun self rhs => do
+  let m0 ← self.a.mul rhs.a
+  let m1 ← self.b.mul rhs.b
+  have i : AspisR1Qm31ArithmeticProbe.field.M31 := self.a
+  let i1 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i)
+  have i2 : AspisR1Qm31ArithmeticProbe.field.M31 := self.b
+  let i3 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i2)
+  let i4 ← i1 + i3
+  have i5 : AspisR1Qm31ArithmeticProbe.field.M31 := rhs.a
+  let i6 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i5)
+  have i7 : AspisR1Qm31ArithmeticProbe.field.M31 := rhs.b
+  let i8 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i7)
+  let i9 ← i6 + i8
+  let i10 ← i4 * i9
+  let m2 ← AspisR1Qm31ArithmeticProbe.field.M31.reduce_u64 i10
+  let m ← m0.sub m1
+  let m3 ← m2.sub m0
+  let m4 ← m3.sub m1
+  Aeneas.Std.Result.ok { a := m, b := m4 }
+def R17CurrentM31Semantics.operations : R17FibrePointLineNodeActual.M31Ops :=
+{ mul := AspisR1Qm31ArithmeticProbe.field.M31.mul, double := AspisR1Qm31ArithmeticProbe.field.M31.double,
+  sub := AspisR1Qm31ArithmeticProbe.field.M31.sub }

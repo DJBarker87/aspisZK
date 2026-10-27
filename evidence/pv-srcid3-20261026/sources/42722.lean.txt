@@ -1,0 +1,40 @@
+import R1Z.PV_Src_ExternalCopy
+import R1Z.PV_Src_PortThreadedShape
+import R1Z.PV_Src_PortInitialResult
+import R1Z.PV_Src_PortInternalResult
+import R1Z.PV_Src_PortFinalResult
+set_option autoImplicit false
+namespace R1Z.PV_Src_PortThreadedResult
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.PoseidonRefine
+open BuilderForestAdmissionPort PV_Src_PortSboxStep
+variable {K : Type} [Field K] [CharP K 2147483647]
+
+def model (s : Fin 16 → K) : Fin 16 → K :=
+  PV_Src_PortFullMeaning.model
+    (PV_Src_PortEnumerateTrace.pairs poseidon2.EXTERNAL_FINAL.val 0#usize)
+    (PV_Src_PortInternalMeaning.model
+      (PV_Src_PortEnumerateTrace.pairs poseidon2.INTERNAL.val 0#usize)
+      (PV_Src_PortFullMeaning.model
+        (PV_Src_PortEnumerateTrace.pairs poseidon2.EXTERNAL_INITIAL.val 0#usize)
+        (R0P.poseidonExternalLinear s)))
+
+theorem source (s : State) :
+    ∃ out : State × Unit,
+      poseidon2.permute_optimized_with_trace_threaded
+        (sourceExternalLinear := PV_Src_ExternalReference.dictionary) PV_Src_PortNoop.callback s () = ok out ∧
+      Canonical out.1 ∧ liftA (K := K) out.1 = model (liftA s) := by
+  obtain ⟨first,hfirst,hmeaning⟩ := external_lift (K := K) s
+  have hcan : Canonical first := fun j => external_canon s first hfirst j.val j.isLt
+  obtain ⟨a,ha,hca,hma⟩ := PV_Src_PortInitialResult.source (K := K) first s () 0#u8 hcan
+  rcases a with ⟨sa,ta,ra,ia⟩
+  obtain ⟨b,hb,hcb,hmb⟩ := PV_Src_PortInternalResult.source (K := K) sa ia ta ra hca
+  rcases b with ⟨sb,tb,rb,ib⟩
+  obtain ⟨c,hc,hcc,hmc⟩ := PV_Src_PortFinalResult.source (K := K) sb ib tb rb hcb
+  refine ⟨c,?_,hcc,?_⟩
+  · rw [PV_Src_PortThreadedShape.source,PV_Src_PortThreadedShape.run,PV_Src_ExternalCopy.source,hfirst]
+    simp only [bind_tc_ok,ha,hb,hc]
+  · rw [hmc,hmb,hma,show liftA (K := K) first = _ from funext hmeaning]
+    rfl
+
+#print axioms source
+end R1Z.PV_Src_PortThreadedResult

@@ -1,0 +1,34 @@
+JFv_TX2_SumBlocks.lean:17:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  g - h ≥ 1
+  f ≥ 0
+  e ≥ 0
+  e + f ≥ 0
+where
+ e := ↑(JFv_TX2_InnerMeaning.sum i slot j base n)
+ f := ↑(JFv_TX2_InnerMeaning.sum i slot j (base + n) m)
+ g := ↑(JFv_TX2_TermMeaning.product i slot j (base + n + m))
+ h := ↑(JFv_TX2_TermMeaning.product i slot j (base + (n + m)))
+JFv_TX2_SumBlocks.lean:24:14: error: unsolved goals
+case succ
+i : Fin 12
+slot : Fin 4
+j : Fin 8
+n : ℕ
+ih :
+  n ≤ 7 →
+    JFv_TX2_OuterMeaning.sum i slot j n % 2147483647 = JFv_TX2_InnerMeaning.sum i slot j 0 (min (4 * n) 26) % 2147483647
+hn : n + 1 ≤ 7
+small : n < 7
+prior : min (4 * n) 26 = 4 * n
+span : min (4 * (n + 1)) 26 = 4 * n + (min (4 * n + 4) 26 - 4 * n)
+⊢ (JFv_TX2_InnerMeaning.sum i slot j 0 (4 * n) % 2147483647 % 2147483647 +
+        JFv_TX2_InnerMeaning.sum i slot j (4 * n) (min (4 * n + 4) 26 - 4 * n) % 2147483647 % 2147483647) %
+      2147483647 =
+    (JFv_TX2_InnerMeaning.sum i slot j 0 (4 * n) +
+        JFv_TX2_InnerMeaning.sum i slot j (4 * n) (min (4 * n + 4) 26 - 4 * n)) %
+      2147483647
+'AspisR1.JFv_TX2_SumBlocks.append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_SumBlocks.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

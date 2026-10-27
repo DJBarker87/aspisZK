@@ -1,0 +1,44 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0113); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+structure R1Z.PV_Src_NativeIdentification.PV_Src_Premises {K : Type} [Field K] [CharP K 2147483647] [ExternalLinear]
+  [Records] {I : Type} (inputs : I → Input) (transport : Fin 1024 ≃ Fin 1024) : Prop
+number of parameters: 8
+fields:
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.compile_call : ∀ (i : I),
+      run (inputs i) = ok (core.result.Result.Ok (inputs i).compiled)
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.words : ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+      newRecords (inputs i) = ok records → WitnessOk (wordWitness records.w)
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.publicCorr : ∀ (i : I)
+      (records : pair_forest_copy_builder.CopyRecords),
+      newRecords (inputs i) = ok records →
+        PubCorr (wordPublic records.p) (mapPub (PV_Src_Public.canonicalPublic (publicInput (inputs i))))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.admission : ∀ (i : I)
+      (records : pair_forest_copy_builder.CopyRecords),
+      newRecords (inputs i) = ok records →
+        BuilderSpendRelation.RspendPlus (mapPub (PV_Src_Public.canonicalPublic (publicInput (inputs i))))
+          (BuilderCanonical.liftWitness (BuilderRecordCanonical.witness (wordWitness records.w)))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.row_call : ∀ (j : Fin 1024), transport j = PV_Src_Transport.row j
+constructor:
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.mk {K : Type} [Field K] [CharP K 2147483647] [ExternalLinear]
+    [Records] {I : Type} {inputs : I → Input} {transport : Fin 1024 ≃ Fin 1024}
+    (compile_call : ∀ (i : I), run (inputs i) = ok (core.result.Result.Ok (inputs i).compiled))
+    (words :
+      ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+        newRecords (inputs i) = ok records → WitnessOk (wordWitness records.w))
+    (publicCorr :
+      ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+        newRecords (inputs i) = ok records →
+          PubCorr (wordPublic records.p) (mapPub (PV_Src_Public.canonicalPublic (publicInput (inputs i)))))
+    (admission :
+      ∀ (i : I) (records : pair_forest_copy_builder.CopyRecords),
+        newRecords (inputs i) = ok records →
+          BuilderSpendRelation.RspendPlus (mapPub (PV_Src_Public.canonicalPublic (publicInput (inputs i))))
+            (BuilderCanonical.liftWitness (BuilderRecordCanonical.witness (wordWitness records.w))))
+    (row_call : ∀ (j : Fin 1024), transport j = PV_Src_Transport.row j) : PV_Src_Premises inputs transport
+'R1Z.PV_Src_NativeIdentification.prover' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.59
+	Maximum resident set size (kbytes): 4110752
+	Swaps: 0
+	Exit status: 0

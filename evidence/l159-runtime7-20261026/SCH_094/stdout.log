@@ -1,0 +1,111 @@
+structure AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.basis : AspisR1.Port4C_BasisOuter.SessionABasis ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.arithmetic : AspisR1.Port4C_QueryArithmetic.SessionABackends ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.m31 : AspisR1.Port5Q1_NodeModel.SessionAM31 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.decoder : AspisR1.Port5Q1_OpeningValues.SessionAS3 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.line : ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+      (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+      (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ops.op16 alpha values inverse = Aeneas.Std.Result.ok value →
+        AspisR1.CheckpointBytes5Output.ofE value =
+          AspisR1.FoldRuntimeAlgebra.lineWithInverses (AspisR1.CheckpointBytes5Output.ofE alpha)
+            ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 2)))
+            ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 3)))
+            ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 4)))
+            (AspisR1.Port5Q1_OpeningValues.values values)
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.line_canonical : ∀
+      (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+      (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+      (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ops.op16 alpha values inverse = Aeneas.Std.Result.ok value → AspisR1.Port4C_QueryArithmetic.CanonE value
+constructor:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (basis : AspisR1.Port4C_BasisOuter.SessionABasis ops)
+    (arithmetic : AspisR1.Port4C_QueryArithmetic.SessionABackends ops) (m31 : AspisR1.Port5Q1_NodeModel.SessionAM31 ops)
+    (decoder : AspisR1.Port5Q1_OpeningValues.SessionAS3 ops)
+    (line :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok value →
+          AspisR1.CheckpointBytes5Output.ofE value =
+            AspisR1.FoldRuntimeAlgebra.lineWithInverses (AspisR1.CheckpointBytes5Output.ofE alpha)
+              ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 2)))
+              ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 3)))
+              ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 4)))
+              (AspisR1.Port5Q1_OpeningValues.values values))
+    (line_canonical :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok value → AspisR1.Port4C_QueryArithmetic.CanonE value) :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrimitives ops
+structure AspisR1.S2W_TrustedStd.TrustedStd {F : Type}
+  (copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice : ∀ (s : AspisR1.S2Trust.Heap F) (dst : ℕ)
+      (src : AspisR1.S2Trust.Payload), copy s dst src = AspisR1.S2W_TrustedStd.specification s dst src
+constructor:
+  AspisR1.S2W_TrustedStd.TrustedStd.mk {F : Type}
+    {copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F}
+    (slice_copy_from_slice :
+      ∀ (s : AspisR1.S2Trust.Heap F) (dst : ℕ) (src : AspisR1.S2Trust.Payload),
+        copy s dst src = AspisR1.S2W_TrustedStd.specification s dst src) :
+    AspisR1.S2W_TrustedStd.TrustedStd copy
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin (ops : AdapterRw.Ops)
+  (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (semantic : AspisR1.S2W_AuthenticatedInputs.Public) (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (split : Aeneas.Std.Usize) : Prop
+number of parameters: 7
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.header : ∀
+      (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      AdapterRw.first_decoded ops semantic pub proof split =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+        decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+          some (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.size : ∀
+      (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      AdapterRw.first_decoded ops semantic pub proof split =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+        (↑checkpoint).length = 1768
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.mk {ops : AdapterRw.Ops}
+    {decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {semantic : AspisR1.S2W_AuthenticatedInputs.Public} {pub proof : Aeneas.Std.Slice Aeneas.Std.U8}
+    {split : Aeneas.Std.Usize}
+    (header :
+      ∀ (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+        AdapterRw.first_decoded ops semantic pub proof split =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+          decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+            some (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub)))
+    (size :
+      ∀ (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+        AdapterRw.first_decoded ops semantic pub proof split =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+          (↑checkpoint).length = 1768) :
+    AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin ops decode H semantic pub proof split
+structure AspisR1.CPR_DataPersistence.Image : Type
+number of parameters: 0
+fields:
+  AspisR1.CPR_DataPersistence.Image.data : AspisV8R19.DuplexFrames.Bytes
+  AspisR1.CPR_DataPersistence.Image.lamports : ℕ
+constructor:
+  AspisR1.CPR_DataPersistence.Image.mk (data : AspisV8R19.DuplexFrames.Bytes) (lamports : ℕ) :
+    AspisR1.CPR_DataPersistence.Image

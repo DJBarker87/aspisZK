@@ -1,0 +1,236 @@
+SdkC_NativeNode.lean:18:14: error: Tactic `rfl` failed: The left-hand side
+  reify (checked (ok v✝) next)
+is not definitionally equal to the right-hand side
+  CheckpointBytes5Effect.Code.step (ok v✝) fun a => reify (next a)
+
+case ok
+A B : Type
+next : A → Run B
+v✝ : A
+⊢ reify (checked (ok v✝) next) = CheckpointBytes5Effect.Code.step (ok v✝) fun a => reify (next a)
+SdkC_NativeNode.lean:18:14: error: Tactic `rfl` failed: The left-hand side
+  reify (checked (fail e✝) next)
+is not definitionally equal to the right-hand side
+  CheckpointBytes5Effect.Code.step (fail e✝) fun a => reify (next a)
+
+case fail
+A B : Type
+next : A → Run B
+e✝ : Error
+⊢ reify (checked (fail e✝) next) = CheckpointBytes5Effect.Code.step (fail e✝) fun a => reify (next a)
+SdkC_NativeNode.lean:18:14: error: Tactic `rfl` failed: The left-hand side
+  reify (checked div next)
+is not definitionally equal to the right-hand side
+  CheckpointBytes5Effect.Code.step div fun a => reify (next a)
+
+case div
+A B : Type
+next : A → Run B
+⊢ reify (checked div next) = CheckpointBytes5Effect.Code.step div fun a => reify (next a)
+SdkC_NativeNode.lean:29:74: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ←
+      { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest }.digest hash
+          (MultiproofConePhysicalDigest.parts left right)
+    CheckpointBytes5Effect.erase { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } hash
+        ((fun d =>
+            reify
+              ((fun digest =>
+                  Program.done do
+                    let parent ← index / 2#u32
+                    let idx ← s.idx.update w parent
+                    let val ← s.val.update w digest
+                    let nw ← w + 1#usize
+                    ok (reference.Row.Next { idx := idx, val := val, n := s.n, «at» := cursor } ni nw))
+                d))
+          b)
+is not definitionally equal to the right-hand side
+  do
+    let s1 ← lift (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice
+    let s2 ← lift (Array.to_slice left)
+    let s3 ← lift (Array.to_slice right)
+    let s4 ← lift (Array.make 3#usize [s1, s2, s3] ⋯).to_slice
+    let digest ← D.digest hash s4
+    let i ← index / 2#u32
+    let a ← s.idx.update w i
+    let a1 ← s.val.update w digest
+    let i1 ← w + 1#usize
+    ok (reference.Row.Next { idx := a, val := a1, n := s.n, «at» := cursor } ni i1)
+
+case ok
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+left right : Digest
+ni cursor : Usize
+index : U32
+w : Usize
+v✝ : Std.Array U8 32#usize
+⊢ (do
+      let b ←
+        { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest }.digest hash
+            (MultiproofConePhysicalDigest.parts left right)
+      CheckpointBytes5Effect.erase { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } hash
+          ((fun d =>
+              reify
+                ((fun digest =>
+                    Program.done do
+                      let parent ← index / 2#u32
+                      let idx ← s.idx.update w parent
+                      let val ← s.val.update w digest
+                      let nw ← w + 1#usize
+                      ok (reference.Row.Next { idx := idx, val := val, n := s.n, «at» := cursor } ni nw))
+                  d))
+            b)) =
+    do
+    let s1 ← lift (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice
+    let s2 ← lift (Array.to_slice left)
+    let s3 ← lift (Array.to_slice right)
+    let s4 ← lift (Array.make 3#usize [s1, s2, s3] ⋯).to_slice
+    let digest ← D.digest hash s4
+    let i ← index / 2#u32
+    let a ← s.idx.update w i
+    let a1 ← s.val.update w digest
+    let i1 ← w + 1#usize
+    ok (reference.Row.Next { idx := a, val := a1, n := s.n, «at» := cursor } ni i1)
+SdkC_NativeNode.lean:29:74: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ←
+      { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest }.digest hash
+          (MultiproofConePhysicalDigest.parts left right)
+    CheckpointBytes5Effect.erase { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } hash
+        ((fun d =>
+            reify
+              ((fun digest =>
+                  Program.done do
+                    let parent ← index / 2#u32
+                    let idx ← s.idx.update w parent
+                    let val ← s.val.update w digest
+                    let nw ← w + 1#usize
+                    ok (reference.Row.Next { idx := idx, val := val, n := s.n, «at» := cursor } ni nw))
+                d))
+          b)
+is not definitionally equal to the right-hand side
+  do
+    let s1 ← lift (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice
+    let s2 ← lift (Array.to_slice left)
+    let s3 ← lift (Array.to_slice right)
+    let s4 ← lift (Array.make 3#usize [s1, s2, s3] ⋯).to_slice
+    let digest ← D.digest hash s4
+    let i ← index / 2#u32
+    let a ← s.idx.update w i
+    let a1 ← s.val.update w digest
+    let i1 ← w + 1#usize
+    ok (reference.Row.Next { idx := a, val := a1, n := s.n, «at» := cursor } ni i1)
+
+case fail
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+left right : Digest
+ni cursor : Usize
+index : U32
+w : Usize
+e✝ : Error
+⊢ (do
+      let b ←
+        { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest }.digest hash
+            (MultiproofConePhysicalDigest.parts left right)
+      CheckpointBytes5Effect.erase { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } hash
+          ((fun d =>
+              reify
+                ((fun digest =>
+                    Program.done do
+                      let parent ← index / 2#u32
+                      let idx ← s.idx.update w parent
+                      let val ← s.val.update w digest
+                      let nw ← w + 1#usize
+                      ok (reference.Row.Next { idx := idx, val := val, n := s.n, «at» := cursor } ni nw))
+                  d))
+            b)) =
+    do
+    let s1 ← lift (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice
+    let s2 ← lift (Array.to_slice left)
+    let s3 ← lift (Array.to_slice right)
+    let s4 ← lift (Array.make 3#usize [s1, s2, s3] ⋯).to_slice
+    let digest ← D.digest hash s4
+    let i ← index / 2#u32
+    let a ← s.idx.update w i
+    let a1 ← s.val.update w digest
+    let i1 ← w + 1#usize
+    ok (reference.Row.Next { idx := a, val := a1, n := s.n, «at» := cursor } ni i1)
+SdkC_NativeNode.lean:29:74: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ←
+      { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest }.digest hash
+          (MultiproofConePhysicalDigest.parts left right)
+    CheckpointBytes5Effect.erase { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } hash
+        ((fun d =>
+            reify
+              ((fun digest =>
+                  Program.done do
+                    let parent ← index / 2#u32
+                    let idx ← s.idx.update w parent
+                    let val ← s.val.update w digest
+                    let nw ← w + 1#usize
+                    ok (reference.Row.Next { idx := idx, val := val, n := s.n, «at» := cursor } ni nw))
+                d))
+          b)
+is not definitionally equal to the right-hand side
+  do
+    let s1 ← lift (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice
+    let s2 ← lift (Array.to_slice left)
+    let s3 ← lift (Array.to_slice right)
+    let s4 ← lift (Array.make 3#usize [s1, s2, s3] ⋯).to_slice
+    let digest ← D.digest hash s4
+    let i ← index / 2#u32
+    let a ← s.idx.update w i
+    let a1 ← s.val.update w digest
+    let i1 ← w + 1#usize
+    ok (reference.Row.Next { idx := a, val := a1, n := s.n, «at» := cursor } ni i1)
+
+case div
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+left right : Digest
+ni cursor : Usize
+index : U32
+w : Usize
+⊢ (do
+      let b ←
+        { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest }.digest hash
+            (MultiproofConePhysicalDigest.parts left right)
+      CheckpointBytes5Effect.erase { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } hash
+          ((fun d =>
+              reify
+                ((fun digest =>
+                    Program.done do
+                      let parent ← index / 2#u32
+                      let idx ← s.idx.update w parent
+                      let val ← s.val.update w digest
+                      let nw ← w + 1#usize
+                      ok (reference.Row.Next { idx := idx, val := val, n := s.n, «at» := cursor } ni nw))
+                  d))
+            b)) =
+    do
+    let s1 ← lift (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice
+    let s2 ← lift (Array.to_slice left)
+    let s3 ← lift (Array.to_slice right)
+    let s4 ← lift (Array.make 3#usize [s1, s2, s3] ⋯).to_slice
+    let digest ← D.digest hash s4
+    let i ← index / 2#u32
+    let a ← s.idx.update w i
+    let a1 ← s.val.update w digest
+    let i1 ← w + 1#usize
+    ok (reference.Row.Next { idx := a, val := a1, n := s.n, «at» := cursor } ni i1)
+'AspisR1.SdkC_NativeNode.reify_checked' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SdkC_NativeNode.erase_writer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SdkC_NativeNode.erase_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SdkC_NativeNode.erase_conditional' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SdkC_NativeNode.erase_node' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SdkC_NativeNode.source_node' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SdkC_NativeNode.source_leaf' depends on axioms: [propext, Classical.choice, Quot.sound]

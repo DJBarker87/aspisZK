@@ -1,0 +1,52 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0737); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Inv_RawMap.lean:10:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_Inv_RawMap.put_map`:
+  [Zero W]
+  [DecidableEq W]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Zero W] [DecidableEq W] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Inv_RawMap.lean:19:12: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isTrue
+V U W : Type
+inst✝¹ : Zero W
+inst✝ : DecidableEq W
+f : V → U
+s : Slots V W
+e : Entry V W
+h✝ : (s 0).weight = 0
+⊢ some (put (slots f s) 0 { value := f e.value, weight := e.weight }) = Option.map (slots f) (some (put s 0 e))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Inv_RawMap.lean:16:63: error: unsolved goals
+case isFalse.isTrue
+V U W : Type
+inst✝¹ : Zero W
+inst✝ : DecidableEq W
+f : V → U
+s : Slots V W
+e : Entry V W
+h✝¹ : ¬(s 0).weight = 0
+h✝ : (s 1).weight = 0
+⊢ some (put (slots f s) 1 { value := f e.value, weight := e.weight }) = Option.map (slots f) (some (put s 1 e))
+
+case isFalse.isFalse
+V U W : Type
+inst✝¹ : Zero W
+inst✝ : DecidableEq W
+f : V → U
+s : Slots V W
+e : Entry V W
+h✝¹ : ¬(s 0).weight = 0
+h✝ : ¬(s 1).weight = 0
+⊢ none = Option.map (slots f) none
+'R1Z.PV_Inv_RawMap.put_map' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_Inv_RawMap.step_map' depends on axioms: [propext, sorryAx]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.58
+	Maximum resident set size (kbytes): 1440296
+	Swaps: 0
+	Exit status: 1

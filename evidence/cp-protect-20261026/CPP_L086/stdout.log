@@ -1,0 +1,410 @@
+CPP_BankEvents.lean:27:4: error: unsolved goals
+case pos
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+caller : S2W_ExtractionBoundary.Program
+address : ℕ
+value : Cell
+coins : ℕ
+x✝ : Action A
+input✝ : CPP_Invocation.Invocation A
+heq✝ : Action.foreign caller address value coins = Action.invoke input✝
+key : ℕ
+same : key = address
+⊢ MultiproofConeCanonical.bytesOf
+      ↑((CPP_Invocation.native n1 n2 copy allocator id bank.cells (invocation bank input✝)).1 address).data =
+    (match (motive := S2X.AccountEvent → ℕ → AspisV8R19.DuplexFrames.Bytes)
+        (CPP_Invocation.native n1 n2 copy allocator id bank.cells (invocation bank input✝)).2.1 with
+      | S2X.AccountEvent.committedWrite a bytes => fun b =>
+        if b = a then bytes else MultiproofConeCanonical.bytesOf ↑(bank.cells b).data
+      | S2X.AccountEvent.rollback => byteLedger bank.cells)
+      address
+
+case neg
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+caller : S2W_ExtractionBoundary.Program
+address : ℕ
+value : Cell
+coins : ℕ
+x✝ : Action A
+input✝ : CPP_Invocation.Invocation A
+heq✝ : Action.foreign caller address value coins = Action.invoke input✝
+key : ℕ
+same : ¬key = address
+⊢ MultiproofConeCanonical.bytesOf
+      ↑((CPP_Invocation.native n1 n2 copy allocator id bank.cells (invocation bank input✝)).1 key).data =
+    (match (motive := S2X.AccountEvent → ℕ → AspisV8R19.DuplexFrames.Bytes)
+        (CPP_Invocation.native n1 n2 copy allocator id bank.cells (invocation bank input✝)).2.1 with
+      | S2X.AccountEvent.committedWrite a bytes => fun b =>
+        if b = a then bytes else MultiproofConeCanonical.bytesOf ↑(bank.cells b).data
+      | S2X.AccountEvent.rollback => byteLedger bank.cells)
+      key
+CPP_BankEvents.lean:29:6: error: Tactic `rfl` failed: The left-hand side
+  byteLedger
+    (if
+            caller✝ ≠ id ∧
+              (bank.cells key✝).owner = caller✝ ∧ (value✝.owner = caller✝ ∨ Hir_ProvenanceModel.Zero value✝.data) then
+          ({ cells := Hist_Store.put bank.cells key✝ value✝, lamports := S2Trust.put bank.lamports key✝ coins✝ },
+            S2X.AccountEvent.committedWrite key✝ (MultiproofConeCanonical.bytesOf ↑value✝.data))
+        else (bank, S2X.AccountEvent.rollback)).1.cells
+is not definitionally equal to the right-hand side
+  S2X.applyEvent (byteLedger bank.cells)
+    (if
+          caller✝ ≠ id ∧
+            (bank.cells key✝).owner = caller✝ ∧ (value✝.owner = caller✝ ∨ Hir_ProvenanceModel.Zero value✝.data) then
+        ({ cells := Hist_Store.put bank.cells key✝ value✝, lamports := S2Trust.put bank.lamports key✝ coins✝ },
+          S2X.AccountEvent.committedWrite key✝ (MultiproofConeCanonical.bytesOf ↑value✝.data))
+      else (bank, S2X.AccountEvent.rollback)).2
+
+case h_2
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+caller : S2W_ExtractionBoundary.Program
+address : ℕ
+value : Cell
+coins : ℕ
+x✝ : Action A
+caller✝ : S2W_ExtractionBoundary.Program
+key✝ : ℕ
+value✝ : Cell
+coins✝ : ℕ
+heq✝ : Action.foreign caller address value coins = Action.foreign caller✝ key✝ value✝ coins✝
+⊢ byteLedger
+      (if
+              caller✝ ≠ id ∧
+                (bank.cells key✝).owner = caller✝ ∧ (value✝.owner = caller✝ ∨ Hir_ProvenanceModel.Zero value✝.data) then
+            ({ cells := Hist_Store.put bank.cells key✝ value✝, lamports := S2Trust.put bank.lamports key✝ coins✝ },
+              S2X.AccountEvent.committedWrite key✝ (MultiproofConeCanonical.bytesOf ↑value✝.data))
+          else (bank, S2X.AccountEvent.rollback)).1.cells =
+    S2X.applyEvent (byteLedger bank.cells)
+      (if
+            caller✝ ≠ id ∧
+              (bank.cells key✝).owner = caller✝ ∧ (value✝.owner = caller✝ ∨ Hir_ProvenanceModel.Zero value✝.data) then
+          ({ cells := Hist_Store.put bank.cells key✝ value✝, lamports := S2Trust.put bank.lamports key✝ coins✝ },
+            S2X.AccountEvent.committedWrite key✝ (MultiproofConeCanonical.bytesOf ↑value✝.data))
+        else (bank, S2X.AccountEvent.rollback)).2
+CPP_BankEvents.lean:24:39: error: unsolved goals
+case h_3
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+caller : S2W_ExtractionBoundary.Program
+address : ℕ
+value : Cell
+coins : ℕ
+x✝ : Action A
+key✝ amount✝ : ℕ
+heq✝ : Action.foreign caller address value coins = Action.credit key✝ amount✝
+⊢ byteLedger
+      ({ cells := bank.cells, lamports := S2Trust.put bank.lamports key✝ (bank.lamports key✝ + amount✝) },
+            S2X.AccountEvent.rollback).1.cells =
+    S2X.applyEvent (byteLedger bank.cells)
+      ({ cells := bank.cells, lamports := S2Trust.put bank.lamports key✝ (bank.lamports key✝ + amount✝) },
+          S2X.AccountEvent.rollback).2
+
+case h_4
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+caller : S2W_ExtractionBoundary.Program
+address : ℕ
+value : Cell
+coins : ℕ
+x✝ : Action A
+key✝ : ℕ
+heq✝ : Action.foreign caller address value coins = Action.reap key✝
+⊢ byteLedger
+      (if bank.lamports key✝ = 0 then
+            ({ cells := Hist_Store.put bank.cells key✝ absent, lamports := bank.lamports },
+              S2X.AccountEvent.committedWrite key✝ [])
+          else (bank, S2X.AccountEvent.rollback)).1.cells =
+    S2X.applyEvent (byteLedger bank.cells)
+      (if bank.lamports key✝ = 0 then
+          ({ cells := Hist_Store.put bank.cells key✝ absent, lamports := bank.lamports },
+            S2X.AccountEvent.committedWrite key✝ [])
+        else (bank, S2X.AccountEvent.rollback)).2
+
+case h_5
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+caller : S2W_ExtractionBoundary.Program
+address : ℕ
+value : Cell
+coins : ℕ
+x✝ : Action A
+heq✝ : Action.foreign caller address value coins = Action.rollback
+⊢ byteLedger (bank, S2X.AccountEvent.rollback).1.cells =
+    S2X.applyEvent (byteLedger bank.cells) (bank, S2X.AccountEvent.rollback).2
+CPP_BankEvents.lean:33:4: error: unsolved goals
+case pos
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+address : ℕ
+x✝ : Action A
+input✝ : CPP_Invocation.Invocation A
+heq✝ : Action.reap address = Action.invoke input✝
+key : ℕ
+same : key = address
+⊢ List.map AspisV8R19.SqueezeOracleBridge.decodeByte
+      ↑((CPP_Invocation.native n1 n2 copy allocator id bank.cells (invocation bank input✝)).1 address).data =
+    (match (motive := S2X.AccountEvent → ℕ → AspisV8R19.DuplexFrames.Bytes)
+        (CPP_Invocation.native n1 n2 copy allocator id bank.cells (invocation bank input✝)).2.1 with
+      | S2X.AccountEvent.committedWrite a bytes => fun b =>
+        if b = a then bytes else List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑(bank.cells b).data
+      | S2X.AccountEvent.rollback => byteLedger bank.cells)
+      address
+
+case neg
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+address : ℕ
+x✝ : Action A
+input✝ : CPP_Invocation.Invocation A
+heq✝ : Action.reap address = Action.invoke input✝
+key : ℕ
+same : ¬key = address
+⊢ List.map AspisV8R19.SqueezeOracleBridge.decodeByte
+      ↑((CPP_Invocation.native n1 n2 copy allocator id bank.cells (invocation bank input✝)).1 key).data =
+    (match (motive := S2X.AccountEvent → ℕ → AspisV8R19.DuplexFrames.Bytes)
+        (CPP_Invocation.native n1 n2 copy allocator id bank.cells (invocation bank input✝)).2.1 with
+      | S2X.AccountEvent.committedWrite a bytes => fun b =>
+        if b = a then bytes else List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑(bank.cells b).data
+      | S2X.AccountEvent.rollback => byteLedger bank.cells)
+      key
+CPP_BankEvents.lean:35:6: error: Tactic `rfl` failed: The left-hand side
+  byteLedger
+    (if
+            caller✝ ≠ id ∧
+              (bank.cells key✝).owner = caller✝ ∧ (value✝.owner = caller✝ ∨ Hir_ProvenanceModel.Zero value✝.data) then
+          ({ cells := Hist_Store.put bank.cells key✝ value✝, lamports := S2Trust.put bank.lamports key✝ coins✝ },
+            S2X.AccountEvent.committedWrite key✝ (MultiproofConeCanonical.bytesOf ↑value✝.data))
+        else (bank, S2X.AccountEvent.rollback)).1.cells
+is not definitionally equal to the right-hand side
+  S2X.applyEvent (byteLedger bank.cells)
+    (if
+          caller✝ ≠ id ∧
+            (bank.cells key✝).owner = caller✝ ∧ (value✝.owner = caller✝ ∨ Hir_ProvenanceModel.Zero value✝.data) then
+        ({ cells := Hist_Store.put bank.cells key✝ value✝, lamports := S2Trust.put bank.lamports key✝ coins✝ },
+          S2X.AccountEvent.committedWrite key✝ (MultiproofConeCanonical.bytesOf ↑value✝.data))
+      else (bank, S2X.AccountEvent.rollback)).2
+
+case h_2
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+address : ℕ
+x✝ : Action A
+caller✝ : S2W_ExtractionBoundary.Program
+key✝ : ℕ
+value✝ : Cell
+coins✝ : ℕ
+heq✝ : Action.reap address = Action.foreign caller✝ key✝ value✝ coins✝
+⊢ byteLedger
+      (if
+              caller✝ ≠ id ∧
+                (bank.cells key✝).owner = caller✝ ∧ (value✝.owner = caller✝ ∨ Hir_ProvenanceModel.Zero value✝.data) then
+            ({ cells := Hist_Store.put bank.cells key✝ value✝, lamports := S2Trust.put bank.lamports key✝ coins✝ },
+              S2X.AccountEvent.committedWrite key✝ (MultiproofConeCanonical.bytesOf ↑value✝.data))
+          else (bank, S2X.AccountEvent.rollback)).1.cells =
+    S2X.applyEvent (byteLedger bank.cells)
+      (if
+            caller✝ ≠ id ∧
+              (bank.cells key✝).owner = caller✝ ∧ (value✝.owner = caller✝ ∨ Hir_ProvenanceModel.Zero value✝.data) then
+          ({ cells := Hist_Store.put bank.cells key✝ value✝, lamports := S2Trust.put bank.lamports key✝ coins✝ },
+            S2X.AccountEvent.committedWrite key✝ (MultiproofConeCanonical.bytesOf ↑value✝.data))
+        else (bank, S2X.AccountEvent.rollback)).2
+CPP_BankEvents.lean:30:17: error: unsolved goals
+case h_3
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+address : ℕ
+x✝ : Action A
+key✝ amount✝ : ℕ
+heq✝ : Action.reap address = Action.credit key✝ amount✝
+⊢ byteLedger
+      ({ cells := bank.cells, lamports := S2Trust.put bank.lamports key✝ (bank.lamports key✝ + amount✝) },
+            S2X.AccountEvent.rollback).1.cells =
+    S2X.applyEvent (byteLedger bank.cells)
+      ({ cells := bank.cells, lamports := S2Trust.put bank.lamports key✝ (bank.lamports key✝ + amount✝) },
+          S2X.AccountEvent.rollback).2
+
+case h_4
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+address : ℕ
+x✝ : Action A
+key✝ : ℕ
+heq✝ : Action.reap address = Action.reap key✝
+⊢ byteLedger
+      (if bank.lamports key✝ = 0 then
+            ({ cells := Hist_Store.put bank.cells key✝ absent, lamports := bank.lamports },
+              S2X.AccountEvent.committedWrite key✝ [])
+          else (bank, S2X.AccountEvent.rollback)).1.cells =
+    S2X.applyEvent (byteLedger bank.cells)
+      (if bank.lamports key✝ = 0 then
+          ({ cells := Hist_Store.put bank.cells key✝ absent, lamports := bank.lamports },
+            S2X.AccountEvent.committedWrite key✝ [])
+        else (bank, S2X.AccountEvent.rollback)).2
+
+case h_5
+A : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = n1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+bank : Bank
+address : ℕ
+x✝ : Action A
+heq✝ : Action.reap address = Action.rollback
+⊢ byteLedger (bank, S2X.AccountEvent.rollback).1.cells =
+    S2X.applyEvent (byteLedger bank.cells) (bank, S2X.AccountEvent.rollback).2
+CPP_BankEvents.lean:28:57: warning: This simp argument is unused:
+  Hist_Store.put
+
+Hint: Omit it from the simp argument list.
+  simp [̵b̵y̵t̵e̵L̵e̵d̵g̵e̵r̵,̵H̵i̵s̵t̵_̵S̵t̵o̵r̵e̵.̵p̵u̵t̵,̵S̵2̵X̵.̵a̵p̵p̵l̵y̵E̵v̵e̵n̵t̵,̵s̵a̵m̵e̵]̵[̲b̲y̲t̲e̲L̲e̲d̲g̲e̲r̲,̲ ̲S̲2̲X̲.̲a̲p̲p̲l̲y̲E̲v̲e̲n̲t̲,̲ ̲s̲a̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CPP_BankEvents.lean:34:57: warning: This simp argument is unused:
+  Hist_Store.put
+
+Hint: Omit it from the simp argument list.
+  simp [̵b̵y̵t̵e̵L̵e̵d̵g̵e̵r̵,̵H̵i̵s̵t̵_̵S̵t̵o̵r̵e̵.̵p̵u̵t̵,̵S̵2̵X̵.̵a̵p̵p̵l̵y̵E̵v̵e̵n̵t̵,̵s̵a̵m̵e̵,̵a̵b̵s̵e̵n̵t̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵C̵a̵n̵o̵n̵i̵c̵a̵l̵.̵b̵y̵t̵e̵s̵O̵f̵]̵[̲b̲y̲t̲e̲L̲e̲d̲g̲e̲r̲,̲ ̲S̲2̲X̲.̲a̲p̲p̲l̲y̲E̲v̲e̲n̲t̲,̲ ̲s̲a̲m̲e̲,̲ ̲a̲b̲s̲e̲n̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲C̲a̲n̲o̲n̲i̲c̲a̲l̲.̲b̲y̲t̲e̲s̲O̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CPP_BankEvents.lean:34:92: warning: This simp argument is unused:
+  absent
+
+Hint: Omit it from the simp argument list.
+  simp [̵b̵y̵t̵e̵L̵e̵d̵g̵e̵r̵,̵H̵i̵s̵t̵_̵S̵t̵o̵r̵e̵.̵p̵u̵t̵,̵S̵2̵X̵.̵a̵p̵p̵l̵y̵E̵v̵e̵n̵t̵,̵s̵a̵m̵e̵,̵a̵b̵s̵e̵n̵t̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵C̵a̵n̵o̵n̵i̵c̵a̵l̵.̵b̵y̵t̵e̵s̵O̵f̵]̵[̲b̲y̲t̲e̲L̲e̲d̲g̲e̲r̲,̲ ̲H̲i̲s̲t̲_̲S̲t̲o̲r̲e̲.̲p̲u̲t̲,̲ ̲S̲2̲X̲.̲a̲p̲p̲l̲y̲E̲v̲e̲n̲t̲,̲ ̲s̲a̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲C̲a̲n̲o̲n̲i̲c̲a̲l̲.̲b̲y̲t̲e̲s̲O̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CPP_BankEvents.step_effect' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

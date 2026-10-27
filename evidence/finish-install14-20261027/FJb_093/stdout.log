@@ -1,0 +1,85 @@
+FJb_M31LoopStep.lean:45:6: error: Tactic `rfl` failed: The left-hand side
+  let (q1, index_mut_back) := (x1, back)
+  do
+  let q2 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).index_usize i
+  let q3 ← state_only_poseidon.pow5 q2
+  let a_1 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).update i q3
+  state_only_poseidon.full_round_m31_constants_loop iter1 a_1 a
+is not definitionally equal to the right-hand side
+  do
+    let next ←
+      let (x1, back) := (x1, back)
+        do
+        let x2 ← (back { c0 := { a := m, b := x1.c0.b }, c1 := x1.c1 }).index_usize i
+        let r ← state_only_poseidon.pow5 x2
+        (back { c0 := { a := m, b := x1.c0.b }, c1 := x1.c1 }).update i r
+    state_only_poseidon.full_round_m31_constants_loop iter1 next a
+
+case false.some
+iter : Range
+a : Constants
+s : State
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+i : UScalar UScalarTy.Usize
+x : field.QM31
+c : U32
+m : field.M31
+x1 : field.QM31
+back : field.QM31 → Std.Array field.QM31 16#usize
+⊢ (let (q1, index_mut_back) := (x1, back)
+    do
+    let q2 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).index_usize i
+    let q3 ← state_only_poseidon.pow5 q2
+    let a_1 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).update i q3
+    state_only_poseidon.full_round_m31_constants_loop iter1 a_1 a) =
+    do
+    let next ←
+      let (x1, back) := (x1, back)
+        do
+        let x2 ← (back { c0 := { a := m, b := x1.c0.b }, c1 := x1.c1 }).index_usize i
+        let r ← state_only_poseidon.pow5 x2
+        (back { c0 := { a := m, b := x1.c0.b }, c1 := x1.c1 }).update i r
+    state_only_poseidon.full_round_m31_constants_loop iter1 next a
+FJb_M31LoopStep.lean:67:6: error: Tactic `rfl` failed: The left-hand side
+  let (q1, index_mut_back) := (x1, back)
+  do
+  let q2 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).index_usize i
+  let q3 ← state_only_poseidon.pow5 q2
+  let a_1 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).update i q3
+  state_only_poseidon.full_round_m31_constants_packed_loop iter1 a_1 a
+is not definitionally equal to the right-hand side
+  do
+    let next ←
+      let (x1, back) := (x1, back)
+        do
+        let x2 ← (back { c0 := { a := m, b := x1.c0.b }, c1 := x1.c1 }).index_usize i
+        let r ← state_only_poseidon.pow5 x2
+        (back { c0 := { a := m, b := x1.c0.b }, c1 := x1.c1 }).update i r
+    state_only_poseidon.full_round_m31_constants_packed_loop iter1 next a
+
+case true.some
+iter : Range
+a : Constants
+s : State
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+i : UScalar UScalarTy.Usize
+x : field.QM31
+c : U32
+m : field.M31
+x1 : field.QM31
+back : field.QM31 → Std.Array field.QM31 16#usize
+⊢ (let (q1, index_mut_back) := (x1, back)
+    do
+    let q2 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).index_usize i
+    let q3 ← state_only_poseidon.pow5 q2
+    let a_1 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).update i q3
+    state_only_poseidon.full_round_m31_constants_packed_loop iter1 a_1 a) =
+    do
+    let next ←
+      let (x1, back) := (x1, back)
+        do
+        let x2 ← (back { c0 := { a := m, b := x1.c0.b }, c1 := x1.c1 }).index_usize i
+        let r ← state_only_poseidon.pow5 x2
+        (back { c0 := { a := m, b := x1.c0.b }, c1 := x1.c1 }).update i r
+    state_only_poseidon.full_round_m31_constants_packed_loop iter1 next a
+'AspisR1.FJb_M31LoopStep.unfold_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

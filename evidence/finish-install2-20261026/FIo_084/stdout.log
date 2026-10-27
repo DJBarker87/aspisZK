@@ -1,0 +1,22 @@
+FIo_GroupCoefficients.lean:50:69: error: Application type mismatch: The argument
+  step f
+has type
+  ∀ (s : State),
+    FIo_ArrayCanon.Holds s.2 →
+      ∀ (out : ControlFlow State Cs) (run : FIo_Native.weights.s2_grouped_inactive_pair_loop0.body f s.1 s.2 = ok out),
+        match out, run with
+        | done cs, run => FIo_ArrayCanon.Holds cs
+        | cont t, run => FIo_ArrayCanon.Holds t.2 ∧ measure t < measure s
+but is expected to have type
+  ∀ (s : State),
+    FIo_ArrayCanon.Holds s.2 →
+      ∀ (r : ControlFlow State (Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 12#usize)),
+        FIo_Native.weights.s2_grouped_inactive_pair_loop0.body f s.1 s.2 = ok r →
+          match r with
+          | done v => FIo_ArrayCanon.Holds v
+          | cont t => FIo_ArrayCanon.Holds t.2 ∧ measure t < measure s
+in the application
+  FIo_LoopInvariant.preserve (fun s => FIo_Native.weights.s2_grouped_inactive_pair_loop0.body f s.1 s.2)
+    (fun s => FIo_ArrayCanon.Holds s.2) FIo_ArrayCanon.Holds measure (step f)
+'AspisR1.FIo_GroupCoefficients.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIo_GroupCoefficients.canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,63 @@
+{"attempt": "FJo_043", "exit_status": 1, "wall_seconds": 4.473842434003018, "peak_rss_kib": "5502428", "swaps": "0", "print_axioms": ["'AspisR1.FJo_C1SlotDecode.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+FJo_C1SlotDecode.lean:21:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 479
+  0 ≤ e ≤ 3
+  -103 ≤ 120*e - f ≤ 0
+where
+ e := ↑↑s
+ f := ↑↑608#usize
+FJo_C1SlotDecode.lean:15:73: error: unsolved goals
+q : Std.Array U8 608#usize
+g : Std.Array FIo_FieldBridge.NE 29#usize
+s : Fin 4
+slot : Usize
+hs : ↑slot = ↑s
+out : FIo_FieldBridge.NE
+run : FIp_NativeDots.fast_dots.four_dots_one q g slot = ok out
+reads : ∀ n < 26, FJl_InnerReads.Read q slot n
+v0 v1 v2 : FIo_FieldBridge.NQ
+h0 : FJi_TailInputs.read0 q slot = ok v0
+h1 : FJi_TailInputs.read1 q slot = ok v1
+h2 : FJi_TailInputs.read2 q slot = ok v2
+bytes : List AspisV8R19.DuplexFrames.Byte := List
+...
+t : Usize
+hs : ↑slot = ↑s
+out : FIo_FieldBridge.NE
+run : FIp_NativeDots.fast_dots.four_dots_one q g slot = ok out
+reads : ∀ n < 26, FJl_InnerReads.Read q slot n
+v0 v1 v2 : FIo_FieldBridge.NQ
+h0 : FJi_TailInputs.read0 q slot = ok v0
+h1 : FJi_TailInputs.read1 q slot = ok v1
+h2 : FJi_TailInputs.read2 q slot = ok v2
+bytes : List AspisV8R19.DuplexFrames.Byte := List.take 120 (List.drop (120 * ↑s) (List.take 480 (bytesOf ↑q)))
+size : (List.take 104 bytes).length = 4 * 26
+words : Fin 26 → ExactLeafFieldCodec.M31Exact
+hw : FixedWidthDecoder.decode ExactLeafFieldCodec.decodeM31 4 26 (List.take 104 bytes) = some words
+ht :
+  ExactLeafFieldCodec.decodeQM31 (OraclePortCompactDraft.slice (bytesOf ↑q) (120 * ↑s + 104) 16) =
+    some (AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm v0))
+tail : List.drop 104 bytes = OraclePortCompactDraft.slice (bytesOf ↑q) (120 * ↑s + 104) 16
+⊢ ((ExactLeafFieldCodec.decodeQM31
+          (List.drop 104 (List.take 120 (List.drop (120 * ↑s) (List.take 480 (bytesOf ↑q)))))).bind
+      fun tail => some (words, tail)) =
+    some (words, AspisR1CurrentWide.Proof.decodeQM (FIo_FieldBridge.qm v0))
+FJo_C1SlotDecode.lean:34:13: warning: This simp argument is unused:
+  tail
+
+Hint: Omit it from the simp argument list.
+  simp only [t̵a̵i̵l̵,̵ht, ̲Option.bind_eq_bind, ̲Option.bind_some, ̲Option.pure_def]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJo_C1SlotDecode.lean:34:18: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp only [tail,h̵t̵,̵ ̲Option.bind_eq_bind, ̲Option.bind_some, ̲Option.pure_def]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJo_C1SlotDecode.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r95cbacbe218748f0890392e3828fa590.scope; invocation ID: b52b9b52137046d18b041633b37af5b3
+

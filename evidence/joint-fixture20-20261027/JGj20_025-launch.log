@@ -1,0 +1,58 @@
+{"attempt": "JGj20_025", "exit_status": 1, "wall_seconds": 1.8078349819988944, "peak_rss_kib": "3848344", "swaps": "0", "print_axioms": ["'AspisR1.JGj_ExternalTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGj_ExternalTotal.lean:20:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  array_from_fn_copy 4#usize (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU64) FJb_ColumnTable.callback
+    (Array.repeat 4#usize 0#u64) stage
+in the target expression
+  (have a := Array.repeat 4#usize 0#u64;
+    do
+    let sums ←
+      array_from_fn_copy 4#usize (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU64)
+          state_only_poseidon.external_linear_lazy.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayU644 a stage
+    state_only_poseidon.external_linear_lazy_loop1 stage sums 0#usize) =
+    ok out
+
+s : State
+hs : canonical s
+stage : Std.Array field.QM31 16#usize
+rs : 
+...
+rray.Insts.CoreMarkerCopy 4#usize core.marker.CopyU64)
+          state_only_poseidon.external_linear_lazy.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayU644 a stage
+    state_only_poseidon.external_linear_lazy_loop1 stage sums 0#usize) =
+    ok out
+
+s : State
+hs : canonical s
+stage : Std.Array field.QM31 16#usize
+rs : state_only_poseidon.external_linear_lazy_loop0 s 0#usize = ok stage
+cs : canonical stage
+sums : Std.Array (Std.Array U64 4#usize) 4#usize
+rt :
+  array_from_fn_copy 4#usize (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU64) FJb_ColumnTable.callback
+      (Array.repeat 4#usize 0#u64) stage =
+    ok sums
+hb : FJb_TailCell.Bounded sums
+out : Std.Array field.QM31 16#usize
+ro : state_only_poseidon.external_linear_lazy_loop1 stage sums 0#usize = ok out
+co : canonical out
+⊢ (have a := Array.repeat 4#usize 0#u64;
+    do
+    let sums ←
+      array_from_fn_copy 4#usize (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU64)
+          state_only_poseidon.external_linear_lazy.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayU644 a stage
+    state_only_poseidon.external_linear_lazy_loop1 stage sums 0#usize) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGj_ExternalTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ree27b24e47754890a128c96b7a2f9b12.scope; invocation ID: 7c83c18efcba4b3ea24449ae2542854f

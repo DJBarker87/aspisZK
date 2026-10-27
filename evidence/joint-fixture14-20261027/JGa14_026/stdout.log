@@ -1,0 +1,42 @@
+JGa_CopyEndpoint.lean:21:33: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+values weights : Std.Array field.QM31 2#usize
+e : CompiledPoolV1PairForestEndpoint
+tag weight : U32
+patterns : Std.Array field.QM31 14#usize
+s : Selectors
+hv : canonical values
+hw : canonical weights
+hp : canonical patterns
+hh : canonical s.high
+hl : canonical s.low
+hr : ↑e.row < 1024
+hs : ↑e.slot < 2
+hpat : ↑e.pattern < 14
+ht : ↑tag < 2147483647
+rowv : ↑(core.convert.num.FromUsizeU16.from e.row) = ↑e.row
+slotv : ↑(core.convert.num.FromUsizeU8.from e.slot) = ↑e.slot
+patv : ↑(core.convert.num.FromUsizeU8.from e.pattern) = ↑e.pattern
+⊢ (do
+      let i ← lift (core.convert.num.FromUsizeU16.from e.row)
+      let selector ← s.row i
+      let slot ← lift (core.convert.num.FromUsizeU8.from e.slot)
+      let q ← weights.index_usize slot
+      let q1 ← selector.mul_m31 weight
+      let q2 ← q.add q1
+      let weights1 ← weights.update slot q2
+      let q3 ← lift_m31 tag
+      let i1 ← lift (core.convert.num.FromUsizeU8.from e.pattern)
+      let q4 ← patterns.index_usize i1
+      let compressed ← q3.add q4
+      let q5 ← values.index_usize slot
+      let q6 ← selector.mul compressed
+      let q7 ← q5.add q6
+      let values1 ← values.update slot q7
+      ok (values1, weights1)) ⦃
+    out => canonical out.1 ∧ canonical out.2 ⦄
+'AspisR1.JGa_CopyEndpoint.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

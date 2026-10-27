@@ -1,0 +1,149 @@
+AspisR1.OraclePortHeadlineFrozen2PerAttempt.final_soundness : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+      AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust →
+        AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust P runtime →
+          AspisR1.OraclePortHeadlineFrozen2PerAttempt.Claims D P Q runtime
+'AspisR1.OraclePortHeadlineFrozen2PerAttempt.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port1_CanonicalHeadline.final_soundness : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+      AspisR1.Port1_CanonicalJoin.AcceptedRunJoin D rust →
+        AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust (AspisR1.Port1_StoredCarrier.lift P) runtime →
+          AspisR1.OraclePortHeadlineFrozen2.Claims D (AspisR1.Port1_StoredCarrier.lift P) Q runtime
+'AspisR1.Port1_CanonicalHeadline.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port1_CanonicalHeadline.runtime_transport : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver)
+  (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin D rust →
+    AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust (AspisR1.Port1_StoredCarrier.lift P) runtime →
+      AspisR1.OraclePortRuntimeBindingC7.deployedFailure runtime ≤
+        AspisV8R19.MemoizedProgramLaw.lazyMean
+          (AspisR1.OraclePortFrozen2Consumer.projected D (AspisR1.Port1_StoredCarrier.lift P)) FS.emptyTable
+          AspisR1.RawRecordedOracleExtractionMassBin.failureMass
+'AspisR1.Port1_CanonicalHeadline.runtime_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port1_CanonicalJoin.two_pass : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier),
+  AspisR1.Port1_StoredCarrier.Physical rust →
+    AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D rust → AspisR1.Port1_CanonicalJoin.AcceptedRunJoin D rust
+'AspisR1.Port1_CanonicalJoin.two_pass' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.OraclePortFrozen2Join.AcceptedRunJoin (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) : Prop
+number of parameters: 2
+fields:
+  AspisR1.OraclePortFrozen2Join.AcceptedRunJoin.verifier : AspisR1.OraclePortFrozen2Join.AcceptedVerifierJoin rust
+      (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2)
+  AspisR1.OraclePortFrozen2Join.AcceptedRunJoin.annotated : ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+          Bool.true →
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)
+constructor:
+  AspisR1.OraclePortFrozen2Join.AcceptedRunJoin.mk {D : AspisR1.LiteralByteProtocol.Decoder}
+    {rust : AspisR1.OraclePortRuntimeBindingC7.Verifier}
+    (verifier :
+      AspisR1.OraclePortFrozen2Join.AcceptedVerifierJoin rust
+        (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2))
+    (annotated :
+      ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover)
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+            Bool.true →
+          AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+            AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)) :
+    AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust
+def AspisR1.OraclePortFrozen2Join.AcceptedVerifierJoin : AspisR1.OraclePortRuntimeBindingC7.Verifier →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun source model =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+    (i : AspisR1.OraclePortStoredExperimentC4.Input),
+    (AspisV8R19.MemoizedProgramLaw.eval H (source i)).2 = Bool.true →
+      AspisV8R19.MemoizedProgramLaw.eval H (source i) = AspisV8R19.MemoizedProgramLaw.eval H (model i)
+structure AspisR1.Port1_CanonicalJoin.AcceptedRunJoin (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.verifier : AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D rust
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.annotated : ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          AspisR1.Port1_StoredCarrier.Carried (AspisV8R19.MemoizedProgramLaw.eval H P).2) →
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+              Bool.true →
+            AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+              AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)
+constructor:
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.mk {D : AspisR1.LiteralByteProtocol.Decoder}
+    {rust : AspisR1.OraclePortRuntimeBindingC7.Verifier}
+    (verifier : AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D rust)
+    (annotated :
+      ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+        (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            AspisR1.Port1_StoredCarrier.Carried (AspisV8R19.MemoizedProgramLaw.eval H P).2) →
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+                Bool.true →
+              AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)) :
+    AspisR1.Port1_CanonicalJoin.AcceptedRunJoin D rust
+def AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun D rust =>
+  ∀ (s : AspisR1.Port1_StoredCarrier.Submission)
+    (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port1_StoredCarrier.input s))).2 = Bool.true →
+      AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port1_StoredCarrier.input s)) =
+        AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2
+            (AspisR1.Port1_StoredCarrier.input s))
+def AspisR1.Port1_StoredCarrier.Carried : AspisR1.OraclePortStoredExperimentC4.Input → Prop :=
+fun i =>
+  ∃ s,
+    i.statement = (AspisR1.Port1_StoredCarrier.input s).statement ∧
+      i.stored = s.stored ∧
+        ∀ (row : ℕ),
+          AspisR1.LiteralTranscript.erase (i.proof row) =
+            AspisR1.LiteralTranscript.erase ((AspisR1.Port1_StoredCarrier.input s).proof row)
+def AspisR1.Port1_StoredCarrier.Physical : AspisR1.OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun rust =>
+  ∀ (i j : AspisR1.OraclePortStoredExperimentC4.Input),
+    i.statement.pubBytes = j.statement.pubBytes → i.stored = j.stored → rust i = rust j
+def AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier →
+    AspisR1.OraclePortStoredExperimentC4.Prover → AspisR1.OraclePortRuntimeBindingC7.Runtime → Prop :=
+fun D rust P runtime =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+    (run : AspisR1.OraclePortStoredExperimentC4.RunView),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = Option.some run →
+      run.2.2 = Bool.true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust (AspisR1.OraclePortStoredAdmissionC4.canon P))
+def AspisR1.OraclePortHeadlineFrozen2PerAttempt.Claims : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortStoredExperimentC4.Prover → ℕ → AspisR1.OraclePortRuntimeBindingC7.Runtime → Prop :=
+fun D P Q runtime =>
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortHeadlineFrozen2.projected_frozen D P)).2.2 = Bool.true →
+        (AspisV8R19.OracleResampling.mean fun coins =>
+            ↑(AspisR1.ActualCostedExtractorM10.extractor.eval
+                    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortHeadlineFrozen2.projected_frozen D P))
+                    coins).2.total) ≤
+          ↑(AspisR1.CostedAllocationLedgerM10.params (Q + 1161)).attemptBudget) ∧
+    (∀ (run : AspisR1.RawCutProverCompiler.RunView) (coins : AspisR1.RawExtractorCostComposedV2.Coins)
+        (w : AspisR1.SpendRelation.Wspend),
+        (AspisR1.ActualCostedExtractorM10.extractor.eval run coins).1 = Option.some w →
+          AspisR1.LiteralProtocol.relation run.2.1.1 w) ∧
+      1 / 2 ^ 126 + 1 / 2 ^ 454 ≤ 1 / 2 ^ 120 ∧
+        AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤
+            AspisR1.OraclePortHeadlineFrozen2PerAttempt.totalBound Q ∧
+          (Q ≤ AspisR1.OraclePortHeadlineFrozen2PerAttempt.Qmax →
+            AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤ (↑Q + 1) * (1 / 2 ^ 100))

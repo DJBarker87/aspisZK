@@ -1,0 +1,66 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0749); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+s : State
+first : Std.Array U32 16#usize
+hfirst : R0PoseidonCopy.external_linear s = ok first
+hmeaning : ∀ (i : Fin 16), liftU (↑first)[↑i]! = R0P.poseidonExternalLinear (liftA s) i
+hcan : Canonical first
+a : PV_Src_PortTraceRounds.Output Unit
+ha :
+  poseidon2.permute_optimized_with_trace_loop0 PV_Src_PortNoop.callback
+      { iter := { slice := poseidon2.EXTERNAL_INITIAL.to_slice, i := 0 }, count := 0#usize } first () 0#u8 s =
+    ok a
+hca : Canonical a.1
+hma :
+  liftA a.1 =
+    PV_Src_PortFullMeaning.model (PV_Src_PortEnumerateTrace.pairs (↑poseidon2.EXTERNAL_INITIAL) 0#usize) (liftA first)
+b : PV_Src_PortTraceRounds.Output Unit
+hb :
+  poseidon2.permute_optimized_with_trace_loop1 PV_Src_PortNoop.callback
+      { iter := ↑poseidon2.INTERNAL, count := 0#usize } a.1 a.2.1 a.2.2.1 a.2.2.2 =
+    ok b
+hcb : Canonical b.1
+hmb :
+  liftA b.1 =
+    PV_Src_PortInternalMeaning.model (PV_Src_PortEnumerateTrace.pairs (↑poseidon2.INTERNAL) 0#usize) (liftA a.1)
+c : State × Unit
+hc :
+  poseidon2.permute_optimized_with_trace_loop2 PV_Src_PortNoop.callback
+      { iter := { slice := poseidon2.EXTERNAL_FINAL.to_slice, i := 0 }, count := 0#usize } b.1 b.2.1 b.2.2.1 b.2.2.2 =
+    ok c
+hcc : Canonical c.1
+hmc :
+  liftA c.1 =
+    PV_Src_PortFullMeaning.model (PV_Src_PortEnumerateTrace.pairs (↑poseidon2.EXTERNAL_FINAL) 0#usize) (liftA b.1)
+⊢ (let (a, t, r, i) := a
+    do
+    let (b, t1, r1, i1) ←
+      poseidon2.permute_optimized_with_trace_loop1 PV_Src_PortNoop.callback
+          { iter := ↑poseidon2.INTERNAL, count := 0#usize } a t r i
+    poseidon2.permute_optimized_with_trace_loop2 PV_Src_PortNoop.callback
+        { iter := { slice := poseidon2.EXTERNAL_FINAL.to_slice, i := 0 }, count := 0#usize } b t1 r1 i1) =
+    ok c
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortThreadedResult.lean:33:29: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲ha, ̲hb̵,̵h̵c]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortThreadedResult.lean:33:32: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲ha, ̲hb,̵h̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Src_PortThreadedResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.66
+	Maximum resident set size (kbytes): 4145548
+	Swaps: 0
+	Exit status: 1

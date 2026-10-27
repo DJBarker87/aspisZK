@@ -1,0 +1,66 @@
+slot: /tmp/aspis-r0-lean-slot-1.lock
+{"schema": "ProverRwNativeEntropy-reservation-v1", "utc": "2026-10-26T09:09:59.212511+00:00", "requested_bytes": 7516192768, "safe_limit_bytes": 59055800320, "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2", "print_axioms": "N/A: read-only resource gate", "allowed": true, "bounded_reserved_bytes": 26172456960, "projected_reserved_bytes": 33688649728}
+  (tls : R1Z.ProverCommitTrustedStd24.TLSAPI Thread Slot Output) (thread : Thread)
+  (schedule : List (Thread × R1Z.ProverCommitTLS23.Access Slot Output)) : Prop
+number of parameters: 12
+fields:
+  R1Z.ProverCommitTrustedStd24.TrustedStd.btree_empty : map.decode map.empty = ∅
+  R1Z.ProverCommitTrustedStd24.TrustedStd.btree_insert_state : ∀ (s : MapState) (k : Key) (v : Value),
+      map.decode (map.insert s k v).1 = (map.decode s).insert k v
+  R1Z.ProverCommitTrustedStd24.TrustedStd.btree_insert_previous : ∀ (s : MapState) (k : Key) (v : Value),
+      (map.insert s k v).2 = (map.decode s)[k]?
+  R1Z.ProverCommitTrustedStd24.TrustedStd.btree_get : ∀ (s : MapState) (k : Key), map.get s k = (map.decode s)[k]?
+  R1Z.ProverCommitTrustedStd24.TrustedStd.btree_iter_ordered : ∀ (s : MapState), map.entries s = (map.decode s).toList
+  R1Z.ProverCommitTrustedStd24.TrustedStd.btree_entry_or_insert_with : ∀ (s : MapState) (k : Key) (make : Unit → Value),
+      let result := map.entry_or_insert_with s k make;
+      (map.decode result.1, result.2) =
+        match (map.decode s)[k]? with
+        | Option.some v => (map.decode s, v, Bool.false)
+        | Option.none =>
+          let v := make ();
+          ((map.decode s).insert k v, v, Bool.true)
+  R1Z.ProverCommitTrustedStd24.TrustedStd.btree_set_from_iter_ordered : ∀ (input : List ℕ),
+      map.set_from_iter input = R1Z.ProverCommitTrustedStd24.ascendingDistinct input
+  R1Z.ProverCommitTrustedStd24.TrustedStd.btree_len : ∀ (s : MapState), map.len s = (map.decode s).toList.length
+  R1Z.ProverCommitTrustedStd24.TrustedStd.slice_sort_ascending : ∀ (xs : List ℕ),
+      map.slice_sort xs = xs.mergeSort fun x1 x2 => Decidable.decide (x1 ≤ x2)
+  R1Z.ProverCommitTrustedStd24.TrustedStd.vec_dedup_adjacent : ∀ (xs : List ℕ),
+      map.vec_dedup xs = List.destutter (fun x1 x2 => x1 ≠ x2) xs
+  R1Z.ProverCommitTrustedStd24.TrustedStd.tls_live_key : ∀ (t : Thread) (f : R1Z.ProverCommitTLS23.Access Slot Output)
+      (store : Thread → Slot), tls.access t f store = R1Z.ProverCommitTLS23.native t f store
+  R1Z.ProverCommitTrustedStd24.TrustedStd.tls_single_thread : R1Z.ProverCommitTLS23.SingleThreaded thread schedule
+constructor:
+  R1Z.ProverCommitTrustedStd24.TrustedStd.mk {Key Value MapState Thread Slot Output : Type} {cmp : Key → Key → Ordering}
+    [DecidableEq Thread] {map : R1Z.ProverCommitTrustedStd24.MapAPI Key Value MapState cmp}
+    {tls : R1Z.ProverCommitTrustedStd24.TLSAPI Thread Slot Output} {thread : Thread}
+    {schedule : List (Thread × R1Z.ProverCommitTLS23.Access Slot Output)} (btree_empty : map.decode map.empty = ∅)
+    (btree_insert_state :
+      ∀ (s : MapState) (k : Key) (v : Value), map.decode (map.insert s k v).1 = (map.decode s).insert k v)
+    (btree_insert_previous : ∀ (s : MapState) (k : Key) (v : Value), (map.insert s k v).2 = (map.decode s)[k]?)
+    (btree_get : ∀ (s : MapState) (k : Key), map.get s k = (map.decode s)[k]?)
+    (btree_iter_ordered : ∀ (s : MapState), map.entries s = (map.decode s).toList)
+    (btree_entry_or_insert_with :
+      ∀ (s : MapState) (k : Key) (make : Unit → Value),
+        let result := map.entry_or_insert_with s k make;
+        (map.decode result.1, result.2) =
+          match (map.decode s)[k]? with
+          | Option.some v => (map.decode s, v, Bool.false)
+          | Option.none =>
+            let v := make ();
+            ((map.decode s).insert k v, v, Bool.true))
+    (btree_set_from_iter_ordered :
+      ∀ (input : List ℕ), map.set_from_iter input = R1Z.ProverCommitTrustedStd24.ascendingDistinct input)
+    (btree_len : ∀ (s : MapState), map.len s = (map.decode s).toList.length)
+    (slice_sort_ascending : ∀ (xs : List ℕ), map.slice_sort xs = xs.mergeSort fun x1 x2 => Decidable.decide (x1 ≤ x2))
+    (vec_dedup_adjacent : ∀ (xs : List ℕ), map.vec_dedup xs = List.destutter (fun x1 x2 => x1 ≠ x2) xs)
+    (tls_live_key :
+      ∀ (t : Thread) (f : R1Z.ProverCommitTLS23.Access Slot Output) (store : Thread → Slot),
+        tls.access t f store = R1Z.ProverCommitTLS23.native t f store)
+    (tls_single_thread : R1Z.ProverCommitTLS23.SingleThreaded thread schedule) :
+    R1Z.ProverCommitTrustedStd24.TrustedStd map tls thread schedule
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.72
+	Maximum resident set size (kbytes): 4250072
+	Swaps: 0
+	Exit status: 0

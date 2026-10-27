@@ -1,0 +1,30 @@
+theorem AspisR1.Port9OR_P6Levels.eighteen : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.MultiproofConeLevelIteration.Domain physical s →
+    AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Levels.levels 18 s physical) =
+      MultiproofConeRef.reference.levels (AspisR1.Port9OR_P6Node.digest D) hash s physical 18#u32 :=
+fun {Hash} D hash s physical domain =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => _a = MultiproofConeRef.reference.levels (AspisR1.Port9OR_P6Node.digest D) hash s physical 18#u32)
+        (AspisR1.Port9OR_P6Levels.source D hash 18 s physical domain)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            AspisR1.MultiproofConeLevelIteration.iterate
+                (fun state =>
+                  MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state physical 0#usize
+                    0#usize)
+                18 s =
+              _a)
+          (AspisR1.MultiproofConeLevelIteration.levels_eq_iteration (AspisR1.Port9OR_P6Node.digest D) hash physical
+            18#u32 (of_decide_eq_true (id (Eq.refl Bool.true))) s)))
+      (Eq.refl
+        (AspisR1.MultiproofConeLevelIteration.iterate
+          (fun state =>
+            MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash state physical 0#usize
+              0#usize)
+          18 s)))
+'AspisR1.Port9OR_P6Levels.eighteen' depends on axioms: [propext, Classical.choice, Quot.sound]

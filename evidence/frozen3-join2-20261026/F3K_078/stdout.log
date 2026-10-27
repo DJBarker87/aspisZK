@@ -1,0 +1,16 @@
+F3K_SamplerProtocol.lean:20:8: error(lean.unknownIdentifier): Unknown identifier `F3J_SamplerStep.step`
+F3K_SamplerProtocol.lean:42:2: error: Type mismatch: After simplification, term
+  exact_run D H pub pf 0 n
+ has type
+  @Eq (View Bytes State LiteralTranscript.Prefix)
+    (eval H (F3J_SamplerRun.program pf 0 n ((LiteralByteProtocol.protocol D).transcript H pub pf 0)))
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf j).toProgram).1)
+          (List.range n)).flatten,
+      (LiteralByteProtocol.protocol D).transcript H pub pf n)
+but is expected to have type
+  @Eq (View Bytes State LiteralTranscript.Prefix) (eval H (F3J_SamplerRun.program pf 0 n (emptyPrefix pub)))
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf j).toProgram).1)
+          (List.range n)).flatten,
+      (LiteralByteProtocol.protocol D).transcript H pub pf n)
+'AspisR1.F3K_SamplerProtocol.exact_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3K_SamplerProtocol.initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

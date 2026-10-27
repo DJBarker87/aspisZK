@@ -1,0 +1,38 @@
+{"attempt": "BEg_024", "exit_status": 0, "wall_seconds": 1.945810133998748, "peak_rss_kib": "4363400", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_CallerViews.physical_views' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_CallerViews.callerP6' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_CallerViews.source_rows' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.Port4B_CallerViews.physical_views : ∀ {Observer Hash : Type} (c : AspisR1.S2LeadInterface.Inputs Observer)
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored pub saved : AspisV8R19.DuplexFrames.Bytes) (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.S2LeadInterface.S2CallerFacts c D hash H stored pub saved parsed →
+    ∀ (b k : ℕ),
+      b < 2 →
+        k < 3 →
+          AspisR1.MultiproofConeCanonical.bytesOf ↑(c.nodes b k) =
+              AspisR1.OraclePortCompactDraft.slice parsed.wire (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+                (32 * AspisR1
+...
+.S2LeadInterface.S2CallerFacts c D hash H stored pub saved parsed →
+    ∀ (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+      AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.S2LeadInterface.multiproofDigest D) hash H binary
+          occupied sibling leaf →
+        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.S2LeadInterface.multiproofDigest D) hash H binary
+          occupied sibling leaf
+'AspisR1.Port4B_CallerViews.callerP6' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port4B_CallerViews.source_rows : ∀ {Observer Hash : Type} (c : AspisR1.S2LeadInterface.Inputs Observer)
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored pub saved : AspisV8R19.DuplexFrames.Bytes) (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.S2LeadInterface.S2CallerFacts c D hash H stored pub saved parsed →
+    ∀ (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+      AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.S2LeadInterface.multiproofDigest D) hash H binary
+          occupied sibling leaf →
+        ∀ (q : Fin 22 → Fin 262144),
+          ∀ b < 2,
+            ∀ (s : MultiproofConeRef.reference.Scratch),
+              AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q c.nodes b s) =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.MultiproofConeFrozen2Stage.sourceBatch parsed q c.nodes b s)
+'AspisR1.Port4B_CallerViews.source_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb660ffd2fc594b66972ee9bd258df785.scope; invocation ID: bd286e9565734ffb833b576896918202

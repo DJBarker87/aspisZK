@@ -1,0 +1,65 @@
+{"attempt": "JFr_TX2_010", "exit_status": 1, "wall_seconds": 2.6899818659876473, "peak_rss_kib": "5452112", "swaps": "0", "print_axioms": ["'AspisR1.JFr_TX2_ScalarRead.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFr_TX2_ScalarRead.lean:33:4: error: Type mismatch: After simplification, term
+  h
+ has type
+  slot * 120#usize = ok (↑slot * ↑120#usize)#usize
+but is expected to have type
+  slot * 120#usize = ok (120 * ↑slot)#usize
+JFr_TX2_ScalarRead.lean:36:4: error: Type mismatch: After simplification, term
+  h
+ has type
+  term * 4#usize = ok (↑term * ↑4#usize)#usize
+but is expected to have type
+  term * 4#usize = ok (4 * ↑term)#usize
+JFr_TX2_ScalarRead.lean:51:6: error: Type mismatch: After simplification, term
+  window
+ has type
+  List.take 4 (List.drop (120 * ↑slot + 4 * ↑term) ↑q) = ↑a
+but is expected to have type
+  List.take (↑stop - ↑off) (List.drop ↑off ↑q) = ↑a
+JFr_TX2_ScalarRead.lean:26:29: erro
+...
+JFr_TX2_ScalarRead.lean:33:4: error: Type mismatch: After simplification, term
+  h
+ has type
+  slot * 120#usize = ok (↑slot * ↑120#usize)#usize
+but is expected to have type
+  slot * 120#usize = ok (120 * ↑slot)#usize
+JFr_TX2_ScalarRead.lean:36:4: error: Type mismatch: After simplification, term
+  h
+ has type
+  term * 4#usize = ok (↑term * ↑4#usize)#usize
+but is expected to have type
+  term * 4#usize = ok (4 * ↑term)#usize
+JFr_TX2_ScalarRead.lean:51:6: error: Type mismatch: After simplification, term
+  window
+ has type
+  List.take 4 (List.drop (120 * ↑slot + 4 * ↑term) ↑q) = ↑a
+but is expected to have type
+  List.take (↑stop - ↑off) (List.drop ↑off ↑q) = ↑a
+JFr_TX2_ScalarRead.lean:26:29: error: unsolved goals
+q : Std.Array U8 608#usize
+slot term : Usize
+hs : ↑slot < 4
+ht : ↑term < 26
+a : Std.Array U8 4#usize
+v : U32
+window : List.take 4 (List.drop (120 * ↑slot + 4 * ↑term) ↑q) = ↑a
+decode : FIp_DotDecode.field.M31.from_le_bytes a = ok (some v)
+off : Usize := (120 * ↑slot + 4 * ↑term)#usize
+stop : Usize := (120 * ↑slot + 4 * ↑term + 4)#usize
+base : Usize := (120 * ↑slot)#usize
+delta : Usize := (4 * ↑term)#usize
+mul0 : slot * 120#usize = ok base
+mul1 : term * 4#usize = ok delta
+add0 : base + delta = ok off
+add1 : off + 4#usize = ok stop
+range :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+      { start := off, «end» := stop } =
+    ok a.to_slice
+convert : core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 a.to_slice = ok (core.result.Result.Ok a)
+⊢ ofOption (some v) Error.panic = ok v
+'AspisR1.JFr_TX2_ScalarRead.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r19b01601f89f4ef4b717a3d950e052e3.scope; invocation ID: 099f57d266084a429cd24ef205e345f9

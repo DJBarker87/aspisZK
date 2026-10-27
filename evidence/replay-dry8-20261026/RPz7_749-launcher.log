@@ -1,0 +1,40 @@
+{"attempt": "RPz7_749", "exit_status": 0, "wall_seconds": 2.86225959204603, "peak_rss_kib": "5287668", "swaps": "0", "print_axioms": ["'AspisR1.Tx2N_Finish.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.Tx2N_Finish.Outcome : {W Hash : Type} →
+  FinishOps W →
+    Bool →
+      Port3_NativeQueryBody.Ops →
+        VTop_Stages.aspis_core.digest.Digest32 Hash →
+          Hash → Slice U8 → Slice U8 → Slice U8 → alloc.vec.Vec U8 → (Bytes → State) → Bytes → Bytes → Prop :=
+fun {W Hash} finish reserved queryOps D hash pub proof checkpoint savedVec H stored publicBytes =>
+  ∃ p saved g geometry pending returned after flushed back v,
+    Port4A_ReaderInstall.reader reserved D checkpoint proof pub transport.Variant.S2 hash =
+        ok (core.result.Result.Ok (p, saved)) ∧
+      Port3_QueryStage.query (Port4C_RowStd.install (Port5Q1_QueryPorts.install queryOps)) proof p saved g none geometry
+
+...
+ := bytesOf ↑proof, semantic := semantic } q tr i hi hq read decoded
+                                      pairing_S3_S5_S9 matches_S4_S7 semantic_S3_S9 dot_S5 canonical_S3_S4_S5_S9
+                                      saved_ten twelve;
+                                  ⟨values.left,
+                                    ⟨values.right,
+                                      Eq.mpr (id (congrArg (fun _a => _a = true) (Eq.symm values.right)))
+                                        (of_eq_true
+                                          (Eq.trans
+                                            (congrFun'
+                                              (congrArg Eq
+                                                (Eq.trans
+                                                  (Decidable.decide.congr_simp
+                                                    (Port4D_FinishInstall.finish finish v p
+                                                        { weights := back flushed, rhs := returned.rhs,
+                                                          power := returned.power, next := returned.next }
+                                                        none =
+                                                      ok (core.result.Result.Ok ()))
+                                                    True
+                                                    (Eq.trans
+                                                      (congrFun' (congrArg Eq hfinish) (ok (core.result.Result.Ok ())))
+                                                      (eq_self (ok (core.result.Result.Ok ())))))
+                                                  (decide_true instDecidableTrue)))
+                                              true)
+                                            (eq_self true)))⟩⟩⟩⟩⟩⟩⟩))))))))))
+
+Running as unit: run-r9b93a1188d514bd78a73bd230564c41f.scope; invocation ID: 288fceb50d0149b48f777fd5763a86e9

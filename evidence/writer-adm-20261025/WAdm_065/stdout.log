@@ -1,0 +1,33 @@
+WAdm_EmittedScalars.lean:52:4: error: `dsimp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    to_slice_mut_back s1
+  has type
+    Std.Array (UScalar UScalarTy.U8) 16#usize
+  but is expected to have type
+    { l // l.length = ↑16#usize }
+  in the application
+    ↑(to_slice_mut_back s1)
+WAdm_EmittedScalars.lean:43:96: error: unsolved goals
+out : alloc.vec.Vec U8
+x : K
+bound : (↑out).length + 16 ≤ Usize.max
+encoded : Std.Array U8 16#usize
+call : encode_k x = ok encoded
+layout : ↑encoded = CheckpointP6EncodeK.bytes x
+hb : (↑out).length + (↑encoded).length ≤ Usize.max
+eq :
+  WAdm_putK out x = do
+    let encoded ← encode_k x
+    alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out encoded.to_slice
+⊢ ∃ after,
+    (do
+          let encoded ← ok encoded
+          alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out encoded.to_slice) =
+        ok after ∧
+      ↑after = ↑out ++ CheckpointP6EncodeK.bytes x
+'AspisR1.WAdm_EmittedScalars.put_e' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_EmittedScalars.put_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_EmittedScalars.put_k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

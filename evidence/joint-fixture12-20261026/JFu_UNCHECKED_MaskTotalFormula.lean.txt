@@ -1,0 +1,16 @@
+import JFu_MaskGather
+import JFu_MaskBridge
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFu_MaskTotal
+open Aeneas Aeneas.Std Result
+open FIp_SemanticArithmetic JFu_MaskInputs
+
+theorem source : ∃ out,FIp_SemanticArithmetic.mask c1 maskOnly g point=ok out ∧
+    FIp_SemanticValues.Canon out ∧
+    FIp_SemanticValues.decode out=FIp_MaskValue.value c1 maskOnly g point :=
+  JFu_MaskBridge.source c1 maskOnly g point c1_canonical maskOnly_canonical point_canonical g_canonical
+
+#print axioms source
+end AspisR1.JFu_MaskTotal
+end

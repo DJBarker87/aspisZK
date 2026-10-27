@@ -1,0 +1,56 @@
+theorem AspisR1.SdkC_BatchPair.accepted_pair : ∀ {A F : Type}
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2W_TrustedStd.TrustedStd copy →
+    ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (adapter : AdapterRw.Ops)
+      (ops : AspisR1CurrentCaller.Ops) (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+      (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+      (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+      (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+      AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std)
+          native1 native2 hashv →
+        ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+            AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+              ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+                (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                  AspisR1.S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                    ∃ f s,
+                      AspisR1.S2W_NativeConsolidation.SourceCuts
+                          (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std) e1.first
+                          (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s ∧
+                        post2 = e2.heap ∧
+                          ∃ p0 root0 p2 root2,
+                            AspisR1.SdkC_BatchPair.Returning hashv H
+                                (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0)
+                                (Aeneas.Std.core.result.Result.Ok ()) ∧
+                              AspisR1.SdkC_BatchPair.Returning hashv H
+                                (AspisR1.SdkC_BatchSource.stageCode hashv s.proof p2 root2)
+                                (Aeneas.Std.core.result.Result.Ok ()) :=
+fun {A F} copy stdCopy allocator e1 e2 adapter ops stage finish B std native1 native2 hashv extraction sha256 H p1
+    syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 =>
+  let ⟨owned1, right✝⟩ :=
+    AspisR1.S2W_D189Wrappers.first_accepted native1 copy stdCopy allocator e1 program data1 state1 final1 saved post1
+      accepted1
+  let ⟨owned2, unchanged⟩ :=
+    AspisR1.S2W_D189Wrappers.second_accepted native2 allocator e2 program data2 slot state2 final2 post2 accepted2
+  let ⟨f, h✝⟩ :=
+    AspisR1.S2W_NativeConsolidation.cuts_of_acceptance (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std)
+      native1 native2 hashv
+      (AspisR1.S2W_DigestExtraction.sourceBoundary (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std)
+        native1 native2 hashv extraction)
+      program e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) data1 data2 slot saved owned1 owned2
+  let ⟨s, cuts⟩ := h✝
+  Exists.intro f
+    (Exists.intro s
+      ⟨cuts,
+        ⟨unchanged,
+          AspisR1.SdkC_BatchPair.same_pair adapter ops stage finish B std native1 native2 hashv extraction sha256 H p1
+            syscall e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s cuts⟩⟩)
+'AspisR1.SdkC_BatchPair.accepted_pair' depends on axioms: [propext, Classical.choice, Quot.sound]

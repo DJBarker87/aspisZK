@@ -1,0 +1,55 @@
+FJa_ExpansionMass.lean:32:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ Finset.range (2 ^ (↑coordinates).length),
+    FJa_ExpandModel.value (List.map decode ↑coordinates) 1 (FIv_NativeArray.value seed) x
+in the target expression
+  ∑ x ∈ Finset.range (2 ^ (↑coordinates).length),
+      FJa_ExpandModel.value (List.map decode ↑coordinates) (↑1#usize) (FIv_NativeArray.value seed) x =
+    1
+
+N : Usize
+coordinates : Slice NQ
+out : Std.Array NQ N
+hc : ∀ x ∈ ↑coordinates, Canon x
+hsize : ↑N = 2 ^ (↑coordinates).length
+run✝¹ :
+  (have weights := Array.repeat N field.QM31.ZERO;
+    do
+    let a ← weights.update 0#usize field.QM31.ONE
+    let iter ← SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter coordinates
+    pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 iter a 1#usize) =
+    ok out
+seed : Std.Array field.QM31 N
+hs : (Array.repeat N field.QM31.ZERO).update 0#usize field.QM31.ONE = ok seed
+run✝ :
+  (do
+      let iter ← SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter coordinates
+      pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 iter seed 1#usize) =
+    ok out
+iterator : core.slice.iter.Iter field.QM31
+hi : SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter coordinates = ok iterator
+run : pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 { slice := coordinates, i := 0 } seed 1#usize = ok out
+cz : canonical (Array.repeat N field.QM31.ZERO)
+cs : canonical seed
+same : iterator = { slice := coordinates, i := 0 }
+v :
+  FIv_NativeArray.value out =
+    FJa_ExpandModel.value (List.map decode ↑coordinates) (↑1#usize) (FIv_NativeArray.value seed)
+hm :
+  ∑ x ∈ Finset.range (2 ^ (↑coordinates).length),
+      FJa_ExpandModel.value (List.map decode ↑coordinates) 1 (FIv_NativeArray.value seed) x =
+    ∑ i ∈ Finset.range 1, FIv_NativeArray.value seed i
+⊢ ∑ x ∈ Finset.range (2 ^ (↑coordinates).length),
+      FJa_ExpandModel.value (List.map decode ↑coordinates) (↑1#usize) (FIv_NativeArray.value seed) x =
+    1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    coordinates
+  has type
+    Slice NQ
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑coordinates
+'AspisR1.FJa_ExpansionMass.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

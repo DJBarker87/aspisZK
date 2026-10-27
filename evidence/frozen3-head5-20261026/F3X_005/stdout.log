@@ -1,0 +1,103 @@
+F3X_SourcePrefix.lean:12:7: error: unexpected token 'prefix'; expected identifier
+F3X_SourcePrefix.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.filterMap
+    (fun q =>
+      match q.returned with
+      | ok digest =>
+        some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+      | x => none)
+    (SdkC_Source.run (F3U_Oracle.hashv H)
+        (SdkD_PrepareLower.lower
+          (SdkD_PrepareSource.code (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+            (D1 c H) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof () (Array.repeat 29#usize e.run.zero)))
+        []).2
+in the target expression
+  (eval H (F3T_Installed.source c hashv (input c s))).1 =
+    SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (SdkD_PrepareLower.lower
+                (SdkD_PrepareSource.code (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries
+                  c.std (D1 c H) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof ()
+                  (Array.repeat 29#usize e.run.zero)))
+              []).2 ++
+        (SdkC_Source.readLog
+            (SdkC_Source.run (F3U_Oracle.hashv H)
+                (SdkC_BatchSource.currentCode (F3U_Oracle.hashv H) e.proof e.run.p e.run.root) []).2 ++
+          SdkC_Source.readLog
+            (SdkC_Source.run (F3U_Oracle.hashv H)
+                (GExp_FirstCode.writerCode e.run.p
+                  (have __src := e.run.out;
+                  { weights := ⟨↑e.run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power, next := __src.next })
+                  e.proof e.pub)
+                []).2) ++
+      SdkC_Source.readLog
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) e.pub e.proof e.saved.deref) []).2
+
+F C : Type
+c : Configuration F C
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+s : Submission
+H : Bytes → State
+e : Evidence c B s H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+first :
+  AspisR1CurrentCaller.verifier.candidate.tx1
+      (GExp_FirstCode.installed (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std)
+      (D1 c H) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.pub e.proof 10#usize () none =
+    ok (core.result.Result.Ok e.saved)
+whole :
+  (eval H (F3T_Installed.source c hashv (input c s))).1 =
+    SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (SdkD_PrepareLower.lower
+                (SdkD_PrepareSource.code (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries
+                  c.std (D1 c H) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof ()
+                  (Array.repeat 29#usize e.run.zero)))
+              []).2 ++
+        (SdkC_Source.readLog
+            (SdkC_Source.run (F3U_Oracle.hashv H)
+                (SdkC_BatchSource.currentCode (F3U_Oracle.hashv H) e.proof e.run.p e.run.root) []).2 ++
+          SdkC_Source.readLog
+            (SdkC_Source.run (F3U_Oracle.hashv H)
+                (GExp_FirstCode.writerCode e.run.p
+                  (have __src := e.run.out;
+                  { weights := ⟨↑e.run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power, next := __src.next })
+                  e.proof e.pub)
+                []).2) ++
+      SdkC_Source.readLog
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) e.pub e.proof e.saved.deref) []).2
+lowered :
+  List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest =>
+          some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+        | x => none)
+      (SdkC_Source.run (F3U_Oracle.hashv H)
+          (SdkD_PrepareLower.lower
+            (SdkD_PrepareSource.code (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries
+              c.std (D1 c H) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof ()
+              (Array.repeat 29#usize e.run.zero)))
+          []).2 =
+    AuS1_Recovery.log (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries c.std (D1 c H)
+      (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof () (Array.repeat 29#usize e.run.zero)
+⊢ ∃ tail,
+    (eval H (F3T_Installed.source c hashv (input c s))).1 =
+      AuS1_Recovery.log (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries c.std (D1 c H)
+          (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof () (Array.repeat 29#usize e.run.zero) ++
+        tail
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+F3X_SourcePrefix.lean:36:7: error(lean.unknownIdentifier): Unknown constant `axioms`
+F3X_SourcePrefix.lean:36:20: error: unexpected token 'end'; expected ':'

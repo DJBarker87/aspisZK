@@ -1,0 +1,76 @@
+JGj_DotChunkTotal.lean:26:59: error: unsolved goals
+weights : Slice field.QM31
+values : Slice U32
+hw : WCanonical weights
+hv : VCanonical values
+fuel : ℕ
+ih :
+  ∀ (iter : Range) (raw : Raw4) (n : ℕ),
+    ↑iter.end ≤ (↑weights).length →
+      ↑iter.end ≤ (↑values).length →
+        ↑iter.start + fuel = ↑iter.end →
+          n + fuel ≤ 4 →
+            Budget raw n →
+              ∃ out, field.qm31_m31_dot_loop1_loop0 iter weights values raw = ok out ∧ Budget out (n + fuel)
+iter : Range
+raw : Raw4
+n : ℕ
+hwEnd : ↑iter.end ≤ (↑weights).length
+hvEnd : ↑iter.end ≤ (↑values).length
+hspan : ↑iter.start + (fuel + 1) = ↑iter.end
+hcount : n + (fuel + 1) ≤ 4
+hb : Budget raw n
+hwidx : ↑iter.start < (↑weights).length
+hvidx : ↑iter.start < (↑values).length
+q : field.QM31 := (↑weights)[↑iter.start]
+v : U32 := (↑values)[↑iter.start]
+⊢ (match weights[iter.start]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑weights)[↑iter.start]
+JGj_DotChunkTotal.lean:28:58: error: unsolved goals
+weights : Slice field.QM31
+values : Slice U32
+hw : WCanonical weights
+hv : VCanonical values
+fuel : ℕ
+ih :
+  ∀ (iter : Range) (raw : Raw4) (n : ℕ),
+    ↑iter.end ≤ (↑weights).length →
+      ↑iter.end ≤ (↑values).length →
+        ↑iter.start + fuel = ↑iter.end →
+          n + fuel ≤ 4 →
+            Budget raw n →
+              ∃ out, field.qm31_m31_dot_loop1_loop0 iter weights values raw = ok out ∧ Budget out (n + fuel)
+iter : Range
+raw : Raw4
+n : ℕ
+hwEnd : ↑iter.end ≤ (↑weights).length
+hvEnd : ↑iter.end ≤ (↑values).length
+hspan : ↑iter.start + (fuel + 1) = ↑iter.end
+hcount : n + (fuel + 1) ≤ 4
+hb : Budget raw n
+hwidx : ↑iter.start < (↑weights).length
+hvidx : ↑iter.start < (↑values).length
+q : field.QM31 := (↑weights)[↑iter.start]
+v : U32 := (↑values)[↑iter.start]
+rq : weights.index_usize iter.start = ok q
+⊢ (match values[iter.start]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑values)[↑iter.start]
+JGj_DotChunkTotal.lean:27:35: warning: This simp argument is unused:
+  List.getElem?_eq_getElem hwidx
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵h̵w̵i̵d̵x̵,̵q̵]̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGj_DotChunkTotal.lean:29:35: warning: This simp argument is unused:
+  List.getElem?_eq_getElem hvidx
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵h̵v̵i̵d̵x̵,̵v̵]̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGj_DotChunkTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

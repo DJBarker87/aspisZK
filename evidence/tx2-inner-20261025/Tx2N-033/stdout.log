@@ -1,0 +1,287 @@
+Tx2N_DecodeHeader.lean:15:25: warning: `List.extract_eq_drop_take` has been deprecated: Use `List.extract_eq_take_drop` instead
+
+Note: The updated constant has a different type:
+  ∀ {α : Type u} {l : List α} {start stop : ℕ}, l.extract start stop = List.take (stop - start) (List.drop start l)
+instead of
+  ∀ {α : Type u_1} {l : List α} {start stop : ℕ}, l.extract start stop = List.take (stop - start) (List.drop start l)
+Tx2N_DecodeHeader.lean:33:46: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 1769
+where
+ e := ↑↑8#usize
+Tx2N_DecodeHeader.lean:53:38: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 1768
+where
+ e := ↑↑8#usize
+Tx2N_DecodeHeader.lean:54:46: error: Application type mismatch: The argument
+  nextRead
+has type
+  ck.index_usize 9#usize = ok fields.nextByte
+but is expected to have type
+  ck.index_usize 9#usize = ok 10#u8
+in the application
+  byte ck 9#usize 10#u8 ?m.346 nextRead
+Tx2N_DecodeHeader.lean:54:39: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 1768
+where
+ e := ↑↑9#usize
+Tx2N_DecodeHeader.lean:55:40: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 1768
+where
+ e := ↑↑10#usize
+Tx2N_DecodeHeader.lean:58:4: error: Tactic `rfl` failed: The left-hand side
+  (some (↑ck)[8]).toList
+is not definitionally equal to the right-hand side
+  [2#u8]
+
+reserved : Bool
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+ck proof pub : Slice U8
+hash : Hash
+p : verifier.Prepared
+a : verifier.Accumulator
+next : a.next = 10#usize
+success :
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D ck proof pub transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+magic reservedBytes : Slice U8
+iterator rest : core.slice.iter.Iter U8
+length : (↑ck).length = 1768
+magicRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := 8#usize } = ok magic
+magicEq : ↑magic = [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+tagRead : ck.index_usize 8#usize = ok 2#u8
+versionRead : ck.index_usize 10#usize = ok 1#u8
+reservedRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok reservedBytes
+iterRead : core.slice.Slice.iter reservedBytes = ok iterator
+scan : CheckpointBytes4Ops.headerAny { slice := reservedBytes, i := 0 } = ok (false, rest)
+front : ↑magic = List.take ↑8#usize ↑ck
+suffixRun :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok (MultiproofConeSlices.sub ck 11#usize 16#usize)
+suffixEq : reservedBytes = MultiproofConeSlices.sub ck 11#usize 16#usize
+suffix : ↑reservedBytes = List.take 5 (List.drop 11 ↑ck)
+reservedSize : (↑reservedBytes).length = 5
+iter : iterator = { slice := reservedBytes, i := 0 }
+zero : ↑reservedBytes = List.replicate 5 0#u8
+fields : OraclePortCkptAbiSourceFields.Fields (CheckpointBytes4Ops.ops reserved) ck transport.Variant.S2 p a
+nextRead : ck.index_usize 9#usize = ok fields.nextByte
+cast : UScalar.cast UScalarTy.Usize fields.nextByte = a.next
+nextVal : ↑fields.nextByte = 10
+nextEq : fields.nextByte = 10#u8
+t8 : (↑ck)[↑8#usize] = 2#u8
+t9 : (↑ck)[↑9#usize] = 10#u8
+t10 : (↑ck)[↑10#usize] = 1#u8
+⊢ (some (↑ck)[8]).toList = [2#u8]
+Tx2N_DecodeHeader.lean:61:4: error: Tactic `rfl` failed: The left-hand side
+  (some (↑ck)[9]).toList
+is not definitionally equal to the right-hand side
+  [10#u8]
+
+reserved : Bool
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+ck proof pub : Slice U8
+hash : Hash
+p : verifier.Prepared
+a : verifier.Accumulator
+next : a.next = 10#usize
+success :
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D ck proof pub transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+magic reservedBytes : Slice U8
+iterator rest : core.slice.iter.Iter U8
+length : (↑ck).length = 1768
+magicRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := 8#usize } = ok magic
+magicEq : ↑magic = [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+tagRead : ck.index_usize 8#usize = ok 2#u8
+versionRead : ck.index_usize 10#usize = ok 1#u8
+reservedRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok reservedBytes
+iterRead : core.slice.Slice.iter reservedBytes = ok iterator
+scan : CheckpointBytes4Ops.headerAny { slice := reservedBytes, i := 0 } = ok (false, rest)
+front : ↑magic = List.take ↑8#usize ↑ck
+suffixRun :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok (MultiproofConeSlices.sub ck 11#usize 16#usize)
+suffixEq : reservedBytes = MultiproofConeSlices.sub ck 11#usize 16#usize
+suffix : ↑reservedBytes = List.take 5 (List.drop 11 ↑ck)
+reservedSize : (↑reservedBytes).length = 5
+iter : iterator = { slice := reservedBytes, i := 0 }
+zero : ↑reservedBytes = List.replicate 5 0#u8
+fields : OraclePortCkptAbiSourceFields.Fields (CheckpointBytes4Ops.ops reserved) ck transport.Variant.S2 p a
+nextRead : ck.index_usize 9#usize = ok fields.nextByte
+cast : UScalar.cast UScalarTy.Usize fields.nextByte = a.next
+nextVal : ↑fields.nextByte = 10
+nextEq : fields.nextByte = 10#u8
+t8 : (↑ck)[↑8#usize] = 2#u8
+t9 : (↑ck)[↑9#usize] = 10#u8
+t10 : (↑ck)[↑10#usize] = 1#u8
+one8 : List.take 1 (List.drop 8 ↑ck) = [2#u8]
+⊢ (some (↑ck)[9]).toList = [10#u8]
+Tx2N_DecodeHeader.lean:64:4: error: Tactic `rfl` failed: The left-hand side
+  (some (↑ck)[10]).toList
+is not definitionally equal to the right-hand side
+  [1#u8]
+
+reserved : Bool
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+ck proof pub : Slice U8
+hash : Hash
+p : verifier.Prepared
+a : verifier.Accumulator
+next : a.next = 10#usize
+success :
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D ck proof pub transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+magic reservedBytes : Slice U8
+iterator rest : core.slice.iter.Iter U8
+length : (↑ck).length = 1768
+magicRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := 8#usize } = ok magic
+magicEq : ↑magic = [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+tagRead : ck.index_usize 8#usize = ok 2#u8
+versionRead : ck.index_usize 10#usize = ok 1#u8
+reservedRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok reservedBytes
+iterRead : core.slice.Slice.iter reservedBytes = ok iterator
+scan : CheckpointBytes4Ops.headerAny { slice := reservedBytes, i := 0 } = ok (false, rest)
+front : ↑magic = List.take ↑8#usize ↑ck
+suffixRun :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok (MultiproofConeSlices.sub ck 11#usize 16#usize)
+suffixEq : reservedBytes = MultiproofConeSlices.sub ck 11#usize 16#usize
+suffix : ↑reservedBytes = List.take 5 (List.drop 11 ↑ck)
+reservedSize : (↑reservedBytes).length = 5
+iter : iterator = { slice := reservedBytes, i := 0 }
+zero : ↑reservedBytes = List.replicate 5 0#u8
+fields : OraclePortCkptAbiSourceFields.Fields (CheckpointBytes4Ops.ops reserved) ck transport.Variant.S2 p a
+nextRead : ck.index_usize 9#usize = ok fields.nextByte
+cast : UScalar.cast UScalarTy.Usize fields.nextByte = a.next
+nextVal : ↑fields.nextByte = 10
+nextEq : fields.nextByte = 10#u8
+t8 : (↑ck)[↑8#usize] = 2#u8
+t9 : (↑ck)[↑9#usize] = 10#u8
+t10 : (↑ck)[↑10#usize] = 1#u8
+one8 : List.take 1 (List.drop 8 ↑ck) = [2#u8]
+one9 : List.take 1 (List.drop 9 ↑ck) = [10#u8]
+⊢ (some (↑ck)[10]).toList = [1#u8]
+Tx2N_DecodeHeader.lean:68:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.take ↑8#usize ↑ck
+in the target expression
+  List.take 8 ↑ck ++
+      (List.take 1 (List.drop 8 ↑ck) ++
+        (List.take 1 (List.drop (8 + 1) ↑ck) ++
+          (List.take 1 (List.drop (8 + 1 + 1) ↑ck) ++ List.take 5 (List.drop (8 + 1 + 1 + 1) ↑ck)))) =
+    ↑magic ++ [2#u8, 10#u8, 1#u8] ++ List.replicate 5 0#u8
+
+reserved : Bool
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+ck proof pub : Slice U8
+hash : Hash
+p : verifier.Prepared
+a : verifier.Accumulator
+next : a.next = 10#usize
+success :
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D ck proof pub transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+magic reservedBytes : Slice U8
+iterator rest : core.slice.iter.Iter U8
+length : (↑ck).length = 1768
+magicRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := 8#usize } = ok magic
+magicEq : ↑magic = [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+tagRead : ck.index_usize 8#usize = ok 2#u8
+versionRead : ck.index_usize 10#usize = ok 1#u8
+reservedRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok reservedBytes
+iterRead : core.slice.Slice.iter reservedBytes = ok iterator
+scan : CheckpointBytes4Ops.headerAny { slice := reservedBytes, i := 0 } = ok (false, rest)
+front : ↑magic = List.take ↑8#usize ↑ck
+suffixRun :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok (MultiproofConeSlices.sub ck 11#usize 16#usize)
+suffixEq : reservedBytes = MultiproofConeSlices.sub ck 11#usize 16#usize
+suffix : ↑reservedBytes = List.take 5 (List.drop 11 ↑ck)
+reservedSize : (↑reservedBytes).length = 5
+iter : iterator = { slice := reservedBytes, i := 0 }
+zero : ↑reservedBytes = List.replicate 5 0#u8
+fields : OraclePortCkptAbiSourceFields.Fields (CheckpointBytes4Ops.ops reserved) ck transport.Variant.S2 p a
+nextRead : ck.index_usize 9#usize = ok fields.nextByte
+cast : UScalar.cast UScalarTy.Usize fields.nextByte = a.next
+nextVal : ↑fields.nextByte = 10
+nextEq : fields.nextByte = 10#u8
+t8 : (↑ck)[↑8#usize] = 2#u8
+t9 : (↑ck)[↑9#usize] = 10#u8
+t10 : (↑ck)[↑10#usize] = 1#u8
+one8 : List.take 1 (List.drop 8 ↑ck) = [2#u8]
+one9 : List.take 1 (List.drop 9 ↑ck) = [10#u8]
+one10 : List.take 1 (List.drop 10 ↑ck) = [1#u8]
+⊢ List.take 8 ↑ck ++
+      (List.take 1 (List.drop 8 ↑ck) ++
+        (List.take 1 (List.drop (8 + 1) ↑ck) ++
+          (List.take 1 (List.drop (8 + 1 + 1) ↑ck) ++ List.take 5 (List.drop (8 + 1 + 1 + 1) ↑ck)))) =
+    ↑magic ++ [2#u8, 10#u8, 1#u8] ++ List.replicate 5 0#u8
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ck
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑ck
+Tx2N_DecodeHeader.lean:70:2: error: 'change' tactic failed, pattern
+  bytesOf (List.take 16 ↑ck) = ?m.545
+is not definitionally equal to target
+  slice (bytesOf ↑ck) 0 16 = OraclePortPhysicalFrameDraft.magic ++ [2, 10, 1, 0, 0, 0, 0, 0]
+Tx2N_DecodeHeader.lean:57:104: warning: This simp argument is unused:
+  t8
+
+Hint: Omit it from the simp argument list.
+  simp only [List.take_one, ̲List.head?_drop,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲List.getElem?_eq_getElem (show 8 < ck.val.length by omega),̵t̵8̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Tx2N_DecodeHeader.lean:60:104: warning: This simp argument is unused:
+  t9
+
+Hint: Omit it from the simp argument list.
+  simp only [List.take_one, ̲List.head?_drop,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲List.getElem?_eq_getElem (show 9 < ck.val.length by omega),̵t̵9̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Tx2N_DecodeHeader.lean:63:105: warning: This simp argument is unused:
+  t10
+
+Hint: Omit it from the simp argument list.
+  simp only [List.take_one, ̲List.head?_drop,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲List.getElem?_eq_getElem (show 10 < ck.val.length by omega),̵t̵1̵0̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Tx2N_DecodeHeader.range_to' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Tx2N_DecodeHeader.byte' depends on axioms: [propext]
+'AspisR1.Tx2N_DecodeHeader.cast_value' depends on axioms: [propext, Quot.sound]
+'AspisR1.Tx2N_DecodeHeader.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

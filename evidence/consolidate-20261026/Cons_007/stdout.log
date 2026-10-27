@@ -1,0 +1,2104 @@
+structure AspisR1.S2Trust.S2TrustedSdkBorrow {W F : Type} (L : AspisR1.S2Trust.Library W F) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          ∀ (a b : ℕ),
+            L.accountData w a = (s.accounts a).1 ∧
+              L.accountLamports w a = (s.accounts a).2 ∧
+                ((s.accounts a).1 = (s.accounts b).1 → L.accountData w a = L.accountData w b) ∧
+                  (s.ownerLive a = Bool.true → L.accountData w a ≠ L.accountLamports w a)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.cell_payload : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s → AspisR1.S2Trust.Valid s → ∀ (c : ℕ), L.cellPayload w c = s.payload c
+  AspisR1.S2Trust.S2TrustedSdkBorrow.cell_counter : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          ∀ (c : ℕ), L.cellCounter w c = s.counter c ∧ ∀ (t : ℕ), L.liveGuard w t = AspisR1.S2Trust.lookup s t
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_ok : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+            0 ≤ s.counter (s.accounts a).1 →
+              s.counter (s.accounts a).1 < AspisR1.S2Trust.maxCounter →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o)
+                  (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.shared,
+                    AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_err : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+            s.counter (s.accounts a).1 < 0 ∨ s.counter (s.accounts a).1 = AspisR1.S2Trust.maxCounter →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o) (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_ok : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+            s.counter (s.accounts a).1 = 0 →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive,
+                  AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_err : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+            s.counter (s.accounts a).1 ≠ 0 →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o) (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_deref : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.shared →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_deref : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.exclusive →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                  (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)) ∧
+                ∀ (i : ℕ) (v : UInt8),
+                  i < (s.payload g.cell).descriptor.length →
+                    AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.write t i v)
+                      (AspisR1.S2Trust.writeAt s g i v, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.guard_move : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.move t o) →
+            AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.move t o)
+              (AspisR1.S2Trust.relocate s t o, AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.shared →
+              0 < s.counter g.cell →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                  (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.exclusive →
+              s.counter g.cell = -1 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                  (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.error_move_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Matches L w AspisR1.S2Trust.Op.errorMoveDrop (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.borrow_frame : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s op → AspisR1.S2Trust.Matches L w op (AspisR1.S2Trust.run s op)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.guard_liveness : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            L.liveGuard w t = Option.some g ∧
+              L.allocated w g.cell = Bool.true ∧ (L.cellPayload w g.cell).descriptor = g.descriptor
+constructor:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.mk {W F : Type} {L : AspisR1.S2Trust.Library W F}
+    (account_data_cell :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            ∀ (a b : ℕ),
+              L.accountData w a = (s.accounts a).1 ∧
+                L.accountLamports w a = (s.accounts a).2 ∧
+                  ((s.accounts a).1 = (s.accounts b).1 → L.accountData w a = L.accountData w b) ∧
+                    (s.ownerLive a = Bool.true → L.accountData w a ≠ L.accountLamports w a))
+    (cell_payload :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s → AspisR1.S2Trust.Valid s → ∀ (c : ℕ), L.cellPayload w c = s.payload c)
+    (cell_counter :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            ∀ (c : ℕ), L.cellCounter w c = s.counter c ∧ ∀ (t : ℕ), L.liveGuard w t = AspisR1.S2Trust.lookup s t)
+    (shared_ok :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+              0 ≤ s.counter (s.accounts a).1 →
+                s.counter (s.accounts a).1 < AspisR1.S2Trust.maxCounter →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o)
+                    (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.shared,
+                      AspisR1.S2Trust.Reply.guard t))
+    (shared_err :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+              s.counter (s.accounts a).1 < 0 ∨ s.counter (s.accounts a).1 = AspisR1.S2Trust.maxCounter →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o) (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (exclusive_ok :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+              s.counter (s.accounts a).1 = 0 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                  (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive,
+                    AspisR1.S2Trust.Reply.guard t))
+    (exclusive_err :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+              s.counter (s.accounts a).1 ≠ 0 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                  (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (shared_deref :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.shared →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                  (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)))
+    (exclusive_deref :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.exclusive →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                    (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)) ∧
+                  ∀ (i : ℕ) (v : UInt8),
+                    i < (s.payload g.cell).descriptor.length →
+                      AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.write t i v)
+                        (AspisR1.S2Trust.writeAt s g i v, AspisR1.S2Trust.Reply.unit))
+    (guard_move :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.move t o) →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.move t o)
+                (AspisR1.S2Trust.relocate s t o, AspisR1.S2Trust.Reply.guard t))
+    (shared_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.shared →
+                0 < s.counter g.cell →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (exclusive_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.exclusive →
+                s.counter g.cell = -1 →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (error_move_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Matches L w AspisR1.S2Trust.Op.errorMoveDrop (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (borrow_frame :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s op → AspisR1.S2Trust.Matches L w op (AspisR1.S2Trust.run s op))
+    (guard_liveness :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              L.liveGuard w t = Option.some g ∧
+                L.allocated w g.cell = Bool.true ∧ (L.cellPayload w g.cell).descriptor = g.descriptor) :
+    AspisR1.S2Trust.S2TrustedSdkBorrow L
+def AspisR1.S2Trust.Valid : {F : Type} → AspisR1.S2Trust.Heap F → Prop :=
+fun {F} s =>
+  List.Pairwise (fun g h => g.token ≠ h.token ∧ g.owner ≠ h.owner) s.guards ∧
+    (∀ (c : ℕ),
+        AspisR1.S2Trust.minCounter ≤ s.counter c ∧
+          s.counter c ≤ AspisR1.S2Trust.maxCounter ∧
+            s.counter c =
+                s.external c + AspisR1.S2Trust.count s c AspisR1.S2Trust.Kind.shared -
+                  AspisR1.S2Trust.count s c AspisR1.S2Trust.Kind.exclusive ∧
+              (AspisR1.S2Trust.count s c AspisR1.S2Trust.Kind.exclusive > 0 →
+                  s.external c = 0 ∧
+                    AspisR1.S2Trust.count s c AspisR1.S2Trust.Kind.shared = 0 ∧
+                      AspisR1.S2Trust.count s c AspisR1.S2Trust.Kind.exclusive = 1) ∧
+                (s.external c < 0 →
+                  AspisR1.S2Trust.count s c AspisR1.S2Trust.Kind.shared = 0 ∧
+                    AspisR1.S2Trust.count s c AspisR1.S2Trust.Kind.exclusive = 0)) ∧
+      (∀ g ∈ s.guards, s.allocated g.cell = Bool.true ∧ g.descriptor = (s.payload g.cell).descriptor) ∧
+        ∀ (a : ℕ),
+          s.ownerLive a = Bool.true → (s.accounts a).1 ≠ (s.accounts a).2 ∧ s.allocated (s.accounts a).1 = Bool.true
+def AspisR1.S2Trust.Enabled : {F : Type} → AspisR1.S2Trust.Heap F → AspisR1.S2Trust.Op → Prop :=
+fun {F} s x =>
+  match x with
+  | AspisR1.S2Trust.Op.shared a t o => s.ownerLive a = Bool.true ∧ AspisR1.S2Trust.Fresh s t o
+  | AspisR1.S2Trust.Op.exclusive a t o => s.ownerLive a = Bool.true ∧ AspisR1.S2Trust.Fresh s t o
+  | AspisR1.S2Trust.Op.deref t => ∃ g, AspisR1.S2Trust.lookup s t = Option.some g
+  | AspisR1.S2Trust.Op.drop t => ∃ g, AspisR1.S2Trust.lookup s t = Option.some g
+  | AspisR1.S2Trust.Op.write t i value =>
+    ∃ g,
+      AspisR1.S2Trust.lookup s t = Option.some g ∧
+        g.kind = AspisR1.S2Trust.Kind.exclusive ∧ i < (s.payload g.cell).descriptor.length
+  | AspisR1.S2Trust.Op.move t o => (∃ g, AspisR1.S2Trust.lookup s t = Option.some g) ∧ ∀ g ∈ s.guards, g.owner ≠ o
+  | AspisR1.S2Trust.Op.errorMoveDrop => True
+def AspisR1.S2Trust.Matches : {W F : Type} →
+  AspisR1.S2Trust.Library W F → W → AspisR1.S2Trust.Op → AspisR1.S2Trust.Heap F × AspisR1.S2Trust.Reply → Prop :=
+fun {W F} L w op expected => ∃ w', L.run w op = (w', expected.2) ∧ L.related w' expected.1
+structure AspisR1.S2W_TrustedStd.TrustedStd {F : Type}
+  (copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice : ∀ (s : AspisR1.S2Trust.Heap F) (dst : ℕ)
+      (src : AspisR1.S2Trust.Payload), copy s dst src = AspisR1.S2W_TrustedStd.specification s dst src
+constructor:
+  AspisR1.S2W_TrustedStd.TrustedStd.mk {F : Type}
+    {copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F}
+    (slice_copy_from_slice :
+      ∀ (s : AspisR1.S2Trust.Heap F) (dst : ℕ) (src : AspisR1.S2Trust.Payload),
+        copy s dst src = AspisR1.S2W_TrustedStd.specification s dst src) :
+    AspisR1.S2W_TrustedStd.TrustedStd copy
+structure AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission {W : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (e : AspisR1.S2W_D189Entry.Entry) (w : W) (n : ℕ) :
+  Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.entry : AspisR1.AdapterRw.RuntimeEntrypointAdmission e.heap
+      (fun a => List.map AspisR1.S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles a).1).owned.key) n
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.related : L.related w e.heap
+constructor:
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.mk {W : Type}
+    {L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)} {e : AspisR1.S2W_D189Entry.Entry} {w : W} {n : ℕ}
+    (entry :
+      AspisR1.AdapterRw.RuntimeEntrypointAdmission e.heap
+        (fun a => List.map AspisR1.S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles a).1).owned.key) n)
+    (related : L.related w e.heap) : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e w n
+structure AspisR1.AdapterRw.RuntimeEntrypointAdmission {F : Type} (s : AspisR1.S2Trust.Heap F) (keys : ℕ → List UInt8)
+  (accountCount : ℕ) : Prop
+number of parameters: 4
+fields:
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.valid : AspisR1.S2Trust.Valid s
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.freshGuards : s.guards = []
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.noExternalBorrows : ∀ (c : ℕ), s.external c = 0
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.liveAccount : ∀ a < accountCount, s.ownerLive a = Bool.true
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.counterZero : ∀ a < accountCount, s.counter (s.accounts a).1 = 0
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.sharedCellsOnlyEqualKeys : ∀ (a b : ℕ),
+      a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.duplicateKeysShareCell : ∀ (a b : ℕ),
+      a < accountCount → b < accountCount → keys a = keys b → (s.accounts a).1 = (s.accounts b).1
+constructor:
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission.mk {F : Type} {s : AspisR1.S2Trust.Heap F} {keys : ℕ → List UInt8}
+    {accountCount : ℕ} (valid : AspisR1.S2Trust.Valid s) (freshGuards : s.guards = [])
+    (noExternalBorrows : ∀ (c : ℕ), s.external c = 0) (liveAccount : ∀ a < accountCount, s.ownerLive a = Bool.true)
+    (counterZero : ∀ a < accountCount, s.counter (s.accounts a).1 = 0)
+    (sharedCellsOnlyEqualKeys :
+      ∀ (a b : ℕ), a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b)
+    (duplicateKeysShareCell :
+      ∀ (a b : ℕ), a < accountCount → b < accountCount → keys a = keys b → (s.accounts a).1 = (s.accounts b).1) :
+    AspisR1.AdapterRw.RuntimeEntrypointAdmission s keys accountCount
+structure AspisR1.S2W_DigestExtraction.AeneasExtraction (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage2 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+      (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts
+constructor:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.mk {ops : AdapterRw.Ops}
+    {native1 : AspisR1.S2W_ExtractionBoundary.First} {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest}
+    (stage1 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts) :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv
+structure AspisR1.S2W_ExtractionBoundary.P1
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.P1.realization : AspisR1.S2Z.Oracle.P1Realization sha256 H
+constructor:
+  AspisR1.S2W_ExtractionBoundary.P1.mk {sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (realization : AspisR1.S2Z.Oracle.P1Realization sha256 H) : AspisR1.S2W_ExtractionBoundary.P1 sha256 H
+structure AspisR1.S2W_ExtractionBoundary.RuntimeSyscall
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk
+    {hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest}
+    {sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256) :
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+structure AspisR1.S2W_ExpandedChildren.ChildConeJoin (E : Type) (ops : AdapterRw.Ops) : Type 1
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.execute : {A : Type} →
+      AspisR1.S2W_Trace.Call A → Aeneas.Std.Result (A × List (AspisR1.S2W_ExpandedTrace.Event E))
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.erasure : ∀ {A : Type} (call : AspisR1.S2W_Trace.Call A),
+      (AspisR1.S2W_Trace.thenResult (self.execute call) fun answer => Aeneas.Std.Result.ok answer.1) =
+        AspisR1.S2W_Trace.invoke ops call
+constructor:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.mk {E : Type} {ops : AdapterRw.Ops}
+    (execute : {A : Type} → AspisR1.S2W_Trace.Call A → Aeneas.Std.Result (A × List (AspisR1.S2W_ExpandedTrace.Event E)))
+    (erasure :
+      ∀ {A : Type} (call : AspisR1.S2W_Trace.Call A),
+        (AspisR1.S2W_Trace.thenResult (execute call) fun answer => Aeneas.Std.Result.ok answer.1) =
+          AspisR1.S2W_Trace.invoke ops call) :
+    AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops
+structure AspisR1.S2W_TraceSplice.FirstMarks {E : Type} {ops : AdapterRw.Ops}
+  (port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.FirstMarks.source : ∀ (event : AspisR1.S2W_Trace.Event),
+      AspisR1.S2W_OuterOccurrences.mark event = Option.some Bool.false →
+        ∃ fs,
+          List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+            AspisR1.S2W_SiteSchedule.firstTrace fs
+constructor:
+  AspisR1.S2W_TraceSplice.FirstMarks.mk {E : Type} {ops : AdapterRw.Ops}
+    {port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops}
+    (source :
+      ∀ (event : AspisR1.S2W_Trace.Event),
+        AspisR1.S2W_OuterOccurrences.mark event = Option.some Bool.false →
+          ∃ fs,
+            List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+              AspisR1.S2W_SiteSchedule.firstTrace fs) :
+    AspisR1.S2W_TraceSplice.FirstMarks port
+structure AspisR1.S2W_TraceSplice.SecondMarks {E : Type} {ops : AdapterRw.Ops}
+  (port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.SecondMarks.source : ∀ (event : AspisR1.S2W_Trace.Event),
+      AspisR1.S2W_OuterOccurrences.mark event = Option.some Bool.true →
+        ∃ ss,
+          List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+            AspisR1.S2W_SiteSchedule.secondTrace ss
+constructor:
+  AspisR1.S2W_TraceSplice.SecondMarks.mk {E : Type} {ops : AdapterRw.Ops}
+    {port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops}
+    (source :
+      ∀ (event : AspisR1.S2W_Trace.Event),
+        AspisR1.S2W_OuterOccurrences.mark event = Option.some Bool.true →
+          ∃ ss,
+            List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+              AspisR1.S2W_SiteSchedule.secondTrace ss) :
+    AspisR1.S2W_TraceSplice.SecondMarks port
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin (ops : AdapterRw.Ops)
+  (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (semantic : AspisR1.S2W_AuthenticatedInputs.Public) (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (split : Aeneas.Std.Usize) : Prop
+number of parameters: 7
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.header : ∀
+      (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      AdapterRw.first_decoded ops semantic pub proof split =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+        decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+          Option.some
+            (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.size : ∀
+      (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      AdapterRw.first_decoded ops semantic pub proof split =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+        (↑checkpoint).length = 1768
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.mk {ops : AdapterRw.Ops}
+    {decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {semantic : AspisR1.S2W_AuthenticatedInputs.Public} {pub proof : Aeneas.Std.Slice Aeneas.Std.U8}
+    {split : Aeneas.Std.Usize}
+    (header :
+      ∀ (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+        AdapterRw.first_decoded ops semantic pub proof split =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+          decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+            Option.some
+              (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub)))
+    (size :
+      ∀ (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+        AdapterRw.first_decoded ops semantic pub proof split =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+          (↑checkpoint).length = 1768) :
+    AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin ops decode H semantic pub proof split
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin (ops : AdapterRw.Ops)
+  (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 6
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.checkedHeader : ops.op11
+          (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () Option.none =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+      decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+        Option.some
+          (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.mk {ops : AdapterRw.Ops}
+    {decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8}
+    (checkedHeader :
+      ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () Option.none =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+        decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+          Option.some
+            (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))) :
+    AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin ops decode H pub proof checkpoint
+structure AspisR1.S2X.CheckpointVersionBinding (saved loaded : AspisV8R19.DuplexFrames.Bytes) : Type
+number of parameters: 2
+fields:
+  AspisR1.S2X.CheckpointVersionBinding.key : ℕ
+  AspisR1.S2X.CheckpointVersionBinding.ledger : ℕ → AspisV8R19.DuplexFrames.Bytes
+  AspisR1.S2X.CheckpointVersionBinding.events : List AspisR1.S2X.AccountEvent
+  AspisR1.S2X.CheckpointVersionBinding.savedAtCommit : self.ledger self.key = saved
+  AspisR1.S2X.CheckpointVersionBinding.loadedAtEntry : loaded = AspisR1.S2X.history self.ledger self.events self.key
+  AspisR1.S2X.CheckpointVersionBinding.noInterveningWrite : ∀ event ∈ self.events, AspisR1.S2X.Preserves self.key event
+constructor:
+  AspisR1.S2X.CheckpointVersionBinding.mk {saved loaded : AspisV8R19.DuplexFrames.Bytes} (key : ℕ)
+    (ledger : ℕ → AspisV8R19.DuplexFrames.Bytes) (events : List AspisR1.S2X.AccountEvent)
+    (savedAtCommit : ledger key = saved) (loadedAtEntry : loaded = AspisR1.S2X.history ledger events key)
+    (noInterveningWrite : ∀ event ∈ events, AspisR1.S2X.Preserves key event) :
+    AspisR1.S2X.CheckpointVersionBinding saved loaded
+def AspisR1.S2X.Preserves : ℕ → AspisR1.S2X.AccountEvent → Prop :=
+fun account x =>
+  match x with
+  | AspisR1.S2X.AccountEvent.committedWrite a bytes => account ≠ a
+  | AspisR1.S2X.AccountEvent.rollback => True
+structure AspisR1.S2W_AuthenticatedInputs.P2Prime
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof1 pub1 proof2 pub2 : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_AuthenticatedInputs.P2Prime.binding : AspisR1.R9PoolRuntimeBinding.P2Prime H
+      { proof := AspisR1.MultiproofConeCanonical.bytesOf ↑proof1, pub := AspisR1.MultiproofConeCanonical.bytesOf ↑pub1 }
+      { proof := AspisR1.MultiproofConeCanonical.bytesOf ↑proof2, pub := AspisR1.MultiproofConeCanonical.bytesOf ↑pub2 }
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.P2Prime.mk {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {proof1 pub1 proof2 pub2 : Aeneas.Std.Slice Aeneas.Std.U8}
+    (binding :
+      AspisR1.R9PoolRuntimeBinding.P2Prime H
+        { proof := AspisR1.MultiproofConeCanonical.bytesOf ↑proof1,
+          pub := AspisR1.MultiproofConeCanonical.bytesOf ↑pub1 }
+        { proof := AspisR1.MultiproofConeCanonical.bytesOf ↑proof2,
+          pub := AspisR1.MultiproofConeCanonical.bytesOf ↑pub2 }) :
+    AspisR1.S2W_AuthenticatedInputs.P2Prime H proof1 pub1 proof2 pub2
+def AspisR1.R9PoolRuntimeBinding.P2Prime : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  AspisR1.R9PoolRuntimeBinding.Inputs → AspisR1.R9PoolRuntimeBinding.Inputs → Prop :=
+fun hash written current =>
+  AspisR1.R9PoolRuntimeBinding.digestMatches hash written current →
+    current.proof = written.proof ∧ current.pub = written.pub
+def AspisR1.R9PoolRuntimeBinding.digestMatches : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  AspisR1.R9PoolRuntimeBinding.Inputs → AspisR1.R9PoolRuntimeBinding.Inputs → Prop :=
+fun hash written current => hash current.proof = hash written.proof ∧ hash current.pub = hash written.pub
+structure AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin (proof : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 1
+fields:
+  AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin.parsed : ∃ tr p,
+      AspisR1.OraclePortStoredParserC4.parseReached (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) tr = Option.some p
+constructor:
+  AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin.mk {proof : Aeneas.Std.Slice Aeneas.Std.U8}
+    (parsed :
+      ∃ tr p,
+        AspisR1.OraclePortStoredParserC4.parseReached (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) tr =
+          Option.some p) :
+    AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin proof
+structure AspisR1.S2W_ChildJoins.MultiproofConeJoin (proof0 proof1 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch0Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof0 nodes 0
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch1Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof1 nodes 1
+constructor:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.mk {proof0 proof1 : Aeneas.Std.Slice Aeneas.Std.U8}
+    {nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8}
+    (batch0Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof0 nodes 0)
+    (batch1Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof1 nodes 1) :
+    AspisR1.S2W_ChildJoins.MultiproofConeJoin proof0 proof1 nodes
+def AspisR1.S2Y_OwnedChildren.NodeRanges : Aeneas.Std.Slice Aeneas.Std.U8 →
+  (ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8) → ℕ → Prop :=
+fun proof nodes batch => ∀ k < 3, AspisR1.S2Y_OwnedChildren.PhysicalRange proof (nodes batch k) (3 * batch + k)
+def AspisR1.S2Y_OwnedChildren.PhysicalRange : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Slice Aeneas.Std.U8 → ℕ → Prop :=
+fun proof actual slot =>
+  ∃ start finish,
+    ↑start = AspisR1.OraclePortSelectedDraft.slotStart slot ∧
+      ↑finish = ↑start + 32 * AspisR1.OraclePortSelectedDraft.capacity slot ∧
+        ↑finish ≤ (↑proof).length ∧
+          Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+              proof { start := start, «end» := finish } =
+            Aeneas.Std.Result.ok actual
+structure AspisR1.S2W_ChildJoins.S8StageConeJoin (proof y1 : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.scanArgument : AspisR1.S2Y_OwnedChildren.Y1Range proof y1
+constructor:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.mk {proof y1 : Aeneas.Std.Slice Aeneas.Std.U8}
+    (scanArgument : AspisR1.S2Y_OwnedChildren.Y1Range proof y1) : AspisR1.S2W_ChildJoins.S8StageConeJoin proof y1
+def AspisR1.S2Y_OwnedChildren.Y1Range : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Slice Aeneas.Std.U8 → Prop :=
+fun proof actual =>
+  7495 ≤ (↑proof).length ∧
+    Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+        { start := 7031#usize, «end» := 7495#usize } =
+      Aeneas.Std.Result.ok actual
+structure AspisR1.RowFinish_Control.RoundValues {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (alpha claim : AspisR1Stage2.Stage2Finish.E) : Type
+number of parameters: 5
+fields:
+  AspisR1.RowFinish_Control.RoundValues.c0 : AspisR1Stage2.Stage2Finish.E
+  AspisR1.RowFinish_Control.RoundValues.c4 : AspisR1Stage2.Stage2Finish.E
+  AspisR1.RowFinish_Control.RoundValues.lhs : AspisR1Stage2.Stage2Finish.E
+  AspisR1.RowFinish_Control.RoundValues.quarter : AspisR1Stage2.Stage2Finish.M
+  AspisR1.RowFinish_Control.RoundValues.rhs : AspisR1Stage2.Stage2Finish.E
+  AspisR1.RowFinish_Control.RoundValues.value : AspisR1Stage2.Stage2Finish.E
+  AspisR1.RowFinish_Control.RoundValues.field0 : ops.field bytes 0#usize = Aeneas.Std.Result.ok self.c0
+  AspisR1.RowFinish_Control.RoundValues.field4 : ops.field bytes 4#usize = Aeneas.Std.Result.ok self.c4
+  AspisR1.RowFinish_Control.RoundValues.add : ops.add self.c0 self.c4 = Aeneas.Std.Result.ok self.lhs
+  AspisR1.RowFinish_Control.RoundValues.quarter_run : ops.quarter = Aeneas.Std.Result.ok self.quarter
+  AspisR1.RowFinish_Control.RoundValues.multiply : ops.mulM claim self.quarter = Aeneas.Std.Result.ok self.rhs
+  AspisR1.RowFinish_Control.RoundValues.evaluate : ops.polynomial bytes alpha = Aeneas.Std.Result.ok self.value
+constructor:
+  AspisR1.RowFinish_Control.RoundValues.mk {W : Type} {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {bytes : Aeneas.Std.Slice Aeneas.Std.U8} {alpha claim : AspisR1Stage2.Stage2Finish.E}
+    (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E) (quarter : AspisR1Stage2.Stage2Finish.M)
+    (rhs value : AspisR1Stage2.Stage2Finish.E) (field0 : ops.field bytes 0#usize = Aeneas.Std.Result.ok c0)
+    (field4 : ops.field bytes 4#usize = Aeneas.Std.Result.ok c4) (add : ops.add c0 c4 = Aeneas.Std.Result.ok lhs)
+    (quarter_run : ops.quarter = Aeneas.Std.Result.ok quarter)
+    (multiply : ops.mulM claim quarter = Aeneas.Std.Result.ok rhs)
+    (evaluate : ops.polynomial bytes alpha = Aeneas.Std.Result.ok value) :
+    AspisR1.RowFinish_Control.RoundValues ops bytes alpha claim
+structure AspisR1.Port4D_Pairing.PairingLaws {F W : Type} [Field F] [Fintype F] [DecidableEq F]
+  [Algebra (ZMod AspisCircleGroupOrder.P) F] (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (decode : AspisR1Stage2.Stage2Finish.E → F) (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (d : AspisR1.MatchingSupport.Data F) : Prop
+number of parameters: 11
+fields:
+  AspisR1.Port4D_Pairing.PairingLaws.round0 : AspisR1.Port4D_Pairing.RoundLaws ops decode v.round0 d.p0
+  AspisR1.Port4D_Pairing.PairingLaws.round1 : AspisR1.Port4D_Pairing.RoundLaws ops decode v.round1 d.p1
+  AspisR1.Port4D_Pairing.PairingLaws.claim : decode p.claim =
+      AspisR1.JointFunctionalBinding.claimedValue d.Y d.c0 d.gamma d.kappa
+  AspisR1.Port4D_Pairing.PairingLaws.alpha0 : ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok x → decode x = d.alpha0
+  AspisR1.Port4D_Pairing.PairingLaws.alpha1 : ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok x → decode x = d.alpha1
+  AspisR1.Port4D_Pairing.PairingLaws.pair : ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E)
+      (value : AspisR1Stage2.Stage2Finish.E),
+      ops.newWeights p.variant p.semantic_alpha p.z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+        Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+              p.alpha { «end» := 2#usize } =
+            Aeneas.Std.Result.ok alphas →
+          ops.pair weights alphas v.final_message p.kappa =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+            decode value =
+              AspisR1.RoundPairing.dot d.f
+                (AspisR1.RoundPairing.dualFold d.alpha1
+                  (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))
+constructor:
+  AspisR1.Port4D_Pairing.PairingLaws.mk {F W : Type} [Field F] [Fintype F] [DecidableEq F]
+    [Algebra (ZMod AspisCircleGroupOrder.P) F] {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {decode : AspisR1Stage2.Stage2Finish.E → F} {v : AspisR1Stage2.verifier.View} {p : AspisR1Stage2.verifier.Prepared}
+    {d : AspisR1.MatchingSupport.Data F} (round0 : AspisR1.Port4D_Pairing.RoundLaws ops decode v.round0 d.p0)
+    (round1 : AspisR1.Port4D_Pairing.RoundLaws ops decode v.round1 d.p1)
+    (claim : decode p.claim = AspisR1.JointFunctionalBinding.claimedValue d.Y d.c0 d.gamma d.kappa)
+    (alpha0 :
+      ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok x → decode x = d.alpha0)
+    (alpha1 :
+      ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok x → decode x = d.alpha1)
+    (pair :
+      ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+        ops.newWeights p.variant p.semantic_alpha p.z =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            ops.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+              decode value =
+                AspisR1.RoundPairing.dot d.f
+                  (AspisR1.RoundPairing.dualFold d.alpha1
+                    (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))) :
+    AspisR1.Port4D_Pairing.PairingLaws ops decode v p d
+structure AspisR1.Port4D_Pairing.RoundLaws {F W : Type} [Field F] (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (decode : AspisR1Stage2.Stage2Finish.E → F) (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (poly : Polynomial F) : Prop
+number of parameters: 7
+fields:
+  AspisR1.Port4D_Pairing.RoundLaws.boundary : ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+      ops.field bytes 0#usize = Aeneas.Std.Result.ok c0 →
+        ops.field bytes 4#usize = Aeneas.Std.Result.ok c4 →
+          ops.add c0 c4 = Aeneas.Std.Result.ok lhs → decode lhs = AspisR1.TwoRoundComparison.boundary poly
+  AspisR1.Port4D_Pairing.RoundLaws.quarter : ∀ (m : AspisR1Stage2.Stage2Finish.M)
+      (claim rhs : AspisR1Stage2.Stage2Finish.E),
+      ops.quarter = Aeneas.Std.Result.ok m →
+        ops.mulM claim m = Aeneas.Std.Result.ok rhs → decode rhs = AspisR1.RoundPairing.quarter * decode claim
+  AspisR1.Port4D_Pairing.RoundLaws.eval : ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+      ops.polynomial bytes alpha = Aeneas.Std.Result.ok value → decode value = Polynomial.eval (decode alpha) poly
+constructor:
+  AspisR1.Port4D_Pairing.RoundLaws.mk {F W : Type} [Field F] {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {decode : AspisR1Stage2.Stage2Finish.E → F} {bytes : Aeneas.Std.Slice Aeneas.Std.U8} {poly : Polynomial F}
+    (boundary :
+      ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+        ops.field bytes 0#usize = Aeneas.Std.Result.ok c0 →
+          ops.field bytes 4#usize = Aeneas.Std.Result.ok c4 →
+            ops.add c0 c4 = Aeneas.Std.Result.ok lhs → decode lhs = AspisR1.TwoRoundComparison.boundary poly)
+    (quarter :
+      ∀ (m : AspisR1Stage2.Stage2Finish.M) (claim rhs : AspisR1Stage2.Stage2Finish.E),
+        ops.quarter = Aeneas.Std.Result.ok m →
+          ops.mulM claim m = Aeneas.Std.Result.ok rhs → decode rhs = AspisR1.RoundPairing.quarter * decode claim)
+    (eval :
+      ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+        ops.polynomial bytes alpha = Aeneas.Std.Result.ok value → decode value = Polynomial.eval (decode alpha) poly) :
+    AspisR1.Port4D_Pairing.RoundLaws ops decode bytes poly
+def AspisR1.R3SemanticRemainingJoins.EquationEndpoint : R0P.Public AspisR1.SemanticPublicWire.M31 →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+    AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E → Prop :=
+fun pub rs data =>
+  ∀ (view : AspisR1.LiteralOpeningView.View) (claim : AspisR1.LiteralAcceptanceTerminal.E)
+    (polynomials : Fin 10 → Polynomial AspisR1.LiteralAcceptanceTerminal.E),
+    AspisR1.LiteralOpeningView.read rs = Option.some view →
+      R0P.Mask.claimOf (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = Option.some claim →
+        R0P.Mask.semPolysZ (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = Option.some polynomials →
+          AspisR1.R3SemanticEquationCore.Equations claim (AspisR1.R3SemanticRemainingJoins.terminal pub view data)
+            (fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) polynomials
+structure AspisR1.S2Trust.Library (W F : Type) : Type
+number of parameters: 2
+fields:
+  AspisR1.S2Trust.Library.related : W → AspisR1.S2Trust.Heap F → Prop
+  AspisR1.S2Trust.Library.accountData : W → ℕ → ℕ
+  AspisR1.S2Trust.Library.accountLamports : W → ℕ → ℕ
+  AspisR1.S2Trust.Library.cellPayload : W → ℕ → AspisR1.S2Trust.Payload
+  AspisR1.S2Trust.Library.cellCounter : W → ℕ → ℤ
+  AspisR1.S2Trust.Library.liveGuard : W → ℕ → Option AspisR1.S2Trust.Guard
+  AspisR1.S2Trust.Library.allocated : W → ℕ → Bool
+  AspisR1.S2Trust.Library.run : W → AspisR1.S2Trust.Op → W × AspisR1.S2Trust.Reply
+constructor:
+  AspisR1.S2Trust.Library.mk {W F : Type} (related : W → AspisR1.S2Trust.Heap F → Prop)
+    (accountData accountLamports : W → ℕ → ℕ) (cellPayload : W → ℕ → AspisR1.S2Trust.Payload) (cellCounter : W → ℕ → ℤ)
+    (liveGuard : W → ℕ → Option AspisR1.S2Trust.Guard) (allocated : W → ℕ → Bool)
+    (run : W → AspisR1.S2Trust.Op → W × AspisR1.S2Trust.Reply) : AspisR1.S2Trust.Library W F
+structure AspisR1.S2W_D189Wrappers.Allocator (A : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1.S2W_D189Wrappers.Allocator.allocate : A → ℕ → Aeneas.Std.Result A
+  AspisR1.S2W_D189Wrappers.Allocator.cleanup : A → Aeneas.Std.Result A
+constructor:
+  AspisR1.S2W_D189Wrappers.Allocator.mk {A : Type} (allocate : A → ℕ → Aeneas.Std.Result A)
+    (cleanup : A → Aeneas.Std.Result A) : AspisR1.S2W_D189Wrappers.Allocator A
+structure AspisR1PublicPreparation.FinishModel.Boundaries : Type 1
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.FinishModel.Boundaries.fromFn : {T F : Type} →
+      (N : Aeneas.Std.Usize) →
+        Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N)
+  AspisR1PublicPreparation.FinishModel.Boundaries.mask : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31
+        16#usize →
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+        AspisR1PublicPreparation.aspis_core.field.QM31 →
+          Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+            Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.add : AspisR1PublicPreparation.aspis_core.field.QM31 →
+      AspisR1PublicPreparation.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.mul : AspisR1PublicPreparation.aspis_core.field.QM31 →
+      AspisR1PublicPreparation.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.terminal : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize →
+        Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+          AspisR1PublicPreparation.r1_wire.Challenges →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.QM31
+                AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error)
+  AspisR1PublicPreparation.FinishModel.Boundaries.circle : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+      AspisR1PublicPreparation.FinishModel.CircleRow →
+        Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+  AspisR1PublicPreparation.FinishModel.Boundaries.unwrapRoot : Aeneas.Std.core.result.Result
+        (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AspisR1PublicPreparation.FinishModel.Boundaries.claims : AspisR1PublicPreparation.r1_wire.Prefix →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result
+          (Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize)
+          AspisR1PublicPreparation.r1_wire.Error)
+constructor:
+  AspisR1PublicPreparation.FinishModel.Boundaries.mk
+    (fromFn :
+      {T F : Type} →
+        (N : Aeneas.Std.Usize) →
+          Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N))
+    (mask :
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 16#usize →
+        Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+          AspisR1PublicPreparation.aspis_core.field.QM31 →
+            Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+              Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31)
+    (add mul :
+      AspisR1PublicPreparation.aspis_core.field.QM31 →
+        AspisR1PublicPreparation.aspis_core.field.QM31 →
+          Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31)
+    (terminal :
+      AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize →
+          Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+            AspisR1PublicPreparation.r1_wire.Challenges →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.QM31
+                  AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error))
+    (circle :
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        AspisR1PublicPreparation.FinishModel.CircleRow →
+          Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint)
+    (unwrapRoot :
+      Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+        Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (claims :
+      AspisR1PublicPreparation.r1_wire.Prefix →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            (Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize)
+            AspisR1PublicPreparation.r1_wire.Error)) :
+    AspisR1PublicPreparation.FinishModel.Boundaries
+structure AspisR1.ClaimsUnrolledFinish.StdCalls : Type 1
+number of parameters: 0
+fields:
+  AspisR1.ClaimsUnrolledFinish.StdCalls.reserve : {T : Type} →
+      Type →
+        Aeneas.Std.alloc.vec.Vec T →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result Unit AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError ×
+                Aeneas.Std.alloc.vec.Vec T)
+  AspisR1.ClaimsUnrolledFinish.StdCalls.intoBox : {T : Type} →
+      Type → Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Result (Aeneas.Std.Slice T)
+constructor:
+  AspisR1.ClaimsUnrolledFinish.StdCalls.mk
+    (reserve :
+      {T : Type} →
+        Type →
+          Aeneas.Std.alloc.vec.Vec T →
+            Aeneas.Std.Usize →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result Unit AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError ×
+                  Aeneas.Std.alloc.vec.Vec T))
+    (intoBox : {T : Type} → Type → Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Result (Aeneas.Std.Slice T)) :
+    AspisR1.ClaimsUnrolledFinish.StdCalls
+structure AspisR1.OraclePortFrozen2Join.AcceptedRunJoin (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) : Prop
+number of parameters: 2
+fields:
+  AspisR1.OraclePortFrozen2Join.AcceptedRunJoin.verifier : AspisR1.OraclePortFrozen2Join.AcceptedVerifierJoin rust
+      (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2)
+  AspisR1.OraclePortFrozen2Join.AcceptedRunJoin.annotated : ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+          Bool.true →
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)
+constructor:
+  AspisR1.OraclePortFrozen2Join.AcceptedRunJoin.mk {D : AspisR1.LiteralByteProtocol.Decoder}
+    {rust : AspisR1.OraclePortRuntimeBindingC7.Verifier}
+    (verifier :
+      AspisR1.OraclePortFrozen2Join.AcceptedVerifierJoin rust
+        (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2))
+    (annotated :
+      ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover)
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+            Bool.true →
+          AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+            AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)) :
+    AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust
+def AspisR1.OraclePortFrozen2Join.AcceptedVerifierJoin : AspisR1.OraclePortRuntimeBindingC7.Verifier →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun source model =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+    (i : AspisR1.OraclePortStoredExperimentC4.Input),
+    (AspisV8R19.MemoizedProgramLaw.eval H (source i)).2 = Bool.true →
+      AspisV8R19.MemoizedProgramLaw.eval H (source i) = AspisV8R19.MemoizedProgramLaw.eval H (model i)
+structure AspisR1.Port1_CanonicalJoin.AcceptedRunJoin (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.verifier : AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D rust
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.annotated : ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          AspisR1.Port1_StoredCarrier.Carried (AspisV8R19.MemoizedProgramLaw.eval H P).2) →
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+              Bool.true →
+            AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+              AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)
+constructor:
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.mk {D : AspisR1.LiteralByteProtocol.Decoder}
+    {rust : AspisR1.OraclePortRuntimeBindingC7.Verifier}
+    (verifier : AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D rust)
+    (annotated :
+      ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+        (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            AspisR1.Port1_StoredCarrier.Carried (AspisV8R19.MemoizedProgramLaw.eval H P).2) →
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+                Bool.true →
+              AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)) :
+    AspisR1.Port1_CanonicalJoin.AcceptedRunJoin D rust
+def AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun D rust =>
+  ∀ (s : AspisR1.Port1_StoredCarrier.Submission)
+    (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port1_StoredCarrier.input s))).2 = Bool.true →
+      AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port1_StoredCarrier.input s)) =
+        AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2
+            (AspisR1.Port1_StoredCarrier.input s))
+def AspisR1.Port1_StoredCarrier.Carried : AspisR1.OraclePortStoredExperimentC4.Input → Prop :=
+fun i =>
+  ∃ s,
+    i.statement = (AspisR1.Port1_StoredCarrier.input s).statement ∧
+      i.stored = s.stored ∧
+        ∀ (row : ℕ),
+          AspisR1.LiteralTranscript.erase (i.proof row) =
+            AspisR1.LiteralTranscript.erase ((AspisR1.Port1_StoredCarrier.input s).proof row)
+def AspisR1.Port1_StoredCarrier.Physical : AspisR1.OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun rust =>
+  ∀ (i j : AspisR1.OraclePortStoredExperimentC4.Input),
+    i.statement.pubBytes = j.statement.pubBytes → i.stored = j.stored → rust i = rust j
+def AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier →
+    AspisR1.OraclePortStoredExperimentC4.Prover → AspisR1.OraclePortRuntimeBindingC7.Runtime → Prop :=
+fun D rust P runtime =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+    (run : AspisR1.OraclePortStoredExperimentC4.RunView),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = Option.some run →
+      run.2.2 = Bool.true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust (AspisR1.OraclePortStoredAdmissionC4.canon P))
+def AspisR1.OraclePortHeadlineFrozen2PerAttempt.Claims : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortStoredExperimentC4.Prover → ℕ → AspisR1.OraclePortRuntimeBindingC7.Runtime → Prop :=
+fun D P Q runtime =>
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortHeadlineFrozen2.projected_frozen D P)).2.2 = Bool.true →
+        (AspisV8R19.OracleResampling.mean fun coins =>
+            ↑(AspisR1.ActualCostedExtractorM10.extractor.eval
+                    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortHeadlineFrozen2.projected_frozen D P))
+                    coins).2.total) ≤
+          ↑(AspisR1.CostedAllocationLedgerM10.params (Q + 1161)).attemptBudget) ∧
+    (∀ (run : AspisR1.RawCutProverCompiler.RunView) (coins : AspisR1.RawExtractorCostComposedV2.Coins)
+        (w : AspisR1.SpendRelation.Wspend),
+        (AspisR1.ActualCostedExtractorM10.extractor.eval run coins).1 = Option.some w →
+          AspisR1.LiteralProtocol.relation run.2.1.1 w) ∧
+      1 / 2 ^ 126 + 1 / 2 ^ 454 ≤ 1 / 2 ^ 120 ∧
+        AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤
+            AspisR1.OraclePortHeadlineFrozen2PerAttempt.totalBound Q ∧
+          (Q ≤ AspisR1.OraclePortHeadlineFrozen2PerAttempt.Qmax →
+            AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤ (↑Q + 1) * (1 / 2 ^ 100))
+structure FS2.Duplex.Params (M Cv : Type) (L : ℕ) : Type
+number of parameters: 3
+fields:
+  FS2.Duplex.Params.D : ℕ
+  FS2.Duplex.Params.hL : 34 + self.D ≤ L
+  FS2.Duplex.Params.enc : M → AspisV8R19.DuplexFrames.Bytes
+  FS2.Duplex.Params.encLen : ∀ (m : M), List.length (self.enc m) ≤ self.D
+  FS2.Duplex.Params.dec : AspisV8R19.DuplexFrames.Bytes → Option M
+  FS2.Duplex.Params.decEnc : ∀ (m : M), self.dec (self.enc m) = Option.some m
+  FS2.Duplex.Params.lbl : ℕ → AspisV8R19.DuplexFrames.Byte
+  FS2.Duplex.Params.σ : ℕ → AspisV8R19.SourceDuplexStep.State → Cv
+  FS2.Duplex.Params.iv : AspisV8R19.SourceDuplexStep.State
+  FS2.Duplex.Params.rounds : ℕ
+constructor:
+  FS2.Duplex.Params.mk {M Cv : Type} {L : ℕ} (D : ℕ) (hL : 34 + D ≤ L) (enc : M → AspisV8R19.DuplexFrames.Bytes)
+    (encLen : ∀ (m : M), List.length (enc m) ≤ D) (dec : AspisV8R19.DuplexFrames.Bytes → Option M)
+    (decEnc : ∀ (m : M), dec (enc m) = Option.some m) (lbl : ℕ → AspisV8R19.DuplexFrames.Byte)
+    (σ : ℕ → AspisV8R19.SourceDuplexStep.State → Cv) (iv : AspisV8R19.SourceDuplexStep.State) (rounds : ℕ) :
+    FS2.Duplex.Params M Cv L
+structure AdapterRw.Ops : Type 1
+number of parameters: 0
+fields:
+  AdapterRw.Ops.op0 : {T U : Type} →
+      {N : Aeneas.Std.Usize} →
+        Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Array U N → Aeneas.Std.Result Bool
+  AdapterRw.Ops.op1 : {T U : Type} →
+      {N : Aeneas.Std.Usize} →
+        Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Array U N → Aeneas.Std.Result Bool
+  AdapterRw.Ops.op2 : {T : Type} → Aeneas.Std.core.cmp.PartialEq T T → Option T → Option T → Aeneas.Std.Result Bool
+  AdapterRw.Ops.op3 : {T : Type} →
+      AdapterRw.core.ops.range.RangeFull →
+        Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T))
+  AdapterRw.Ops.op4 : {T : Type} →
+      AdapterRw.core.ops.range.RangeFull → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T)
+  AdapterRw.Ops.op5 : {T : Type} →
+      AdapterRw.core.ops.range.RangeFull →
+        Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T))
+  AdapterRw.Ops.op6 : {T : Type} →
+      AdapterRw.core.ops.range.RangeFull →
+        Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T))
+  AdapterRw.Ops.op7 : {T : Type} →
+      AdapterRw.core.ops.range.RangeFull →
+        Aeneas.Std.Slice T →
+          Aeneas.Std.Result (Option (Aeneas.Std.Slice T) × (Option (Aeneas.Std.Slice T) → Aeneas.Std.Slice T))
+  AdapterRw.Ops.op8 : {T : Type} →
+      AdapterRw.core.ops.range.RangeFull → Aeneas.Std.Slice T → Aeneas.Std.Result (Option (Aeneas.Std.Slice T))
+  AdapterRw.Ops.op9 : {T : Type} → Aeneas.Std.Slice T → Aeneas.Std.Result (Option T)
+  AdapterRw.Ops.op10 : {H : Type} →
+      AdapterRw.aspis_core.digest.Digest32 H →
+        AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Usize →
+                H →
+                  Option (AdapterRw.aspis_r1_cost_probe.verifier.Phase → Aeneas.Std.Result Unit) →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                        AdapterRw.aspis_r1_cost_probe.verifier.Error)
+  AdapterRw.Ops.op11 : {H : Type} →
+      AdapterRw.aspis_core.digest.Digest32 H →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              H →
+                Option (AdapterRw.aspis_r1_cost_probe.verifier.Phase → Aeneas.Std.Result Unit) →
+                  Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+  AdapterRw.Ops.op12 : AdapterRw.aspis_r1_cost_probe.transport.Variant → Aeneas.Std.Result Aeneas.Std.Usize
+  AdapterRw.Ops.op13 : Aeneas.Std.Result Aeneas.Std.U8
+  AdapterRw.Ops.op14 : Aeneas.Std.Result Aeneas.Std.U8
+  AdapterRw.Ops.op15 : AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1 →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AdapterRw.aspis_statement.pool_v1.format.PoolV1FormatError)
+  AdapterRw.Ops.op16 : Aeneas.Std.Result Aeneas.Std.U8
+  AdapterRw.Ops.op17 : Aeneas.Std.Array AdapterRw.aspis_core.field.M31 8#usize →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result Aeneas.Std.U8
+          AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+  AdapterRw.Ops.op18 : Aeneas.Std.Result Aeneas.Std.U8
+  AdapterRw.Ops.op19 : Aeneas.Std.Result Aeneas.Std.Usize
+  AdapterRw.Ops.op20 : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalPaymentV1 →
+      Aeneas.Std.Result (Aeneas.Std.Array AdapterRw.aspis_core.field.M31 8#usize)
+  AdapterRw.Ops.op21 : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result Unit
+          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+  AdapterRw.Ops.op22 : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 1880#usize)
+          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+  AdapterRw.Ops.op23 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result
+          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
+          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+  AdapterRw.Ops.op24 : AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 688#usize)
+          AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+  AdapterRw.Ops.op25 : AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1 → Aeneas.Std.Result Bool
+  AdapterRw.Ops.op26 : AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1 → Aeneas.Std.Result Bool
+  AdapterRw.Ops.op27 : AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2 → Aeneas.Std.Result Bool
+  AdapterRw.Ops.op28 : AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2 → Aeneas.Std.Result Bool
+  AdapterRw.Ops.op29 : AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV2 →
+      Aeneas.Std.U64 → Aeneas.Std.Result Bool
+  AdapterRw.Ops.op30 : AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1 →
+      Aeneas.Std.U64 → Aeneas.Std.Result Bool
+  AdapterRw.Ops.op31 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1
+          AdapterRw.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)
+  AdapterRw.Ops.op32 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1
+          AdapterRw.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)
+  AdapterRw.Ops.op33 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2
+          AdapterRw.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)
+  AdapterRw.Ops.op34 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV2
+          AdapterRw.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)
+  AdapterRw.Ops.op35 : AdapterRw.solana_program_error.ProgramError →
+      Aeneas.Std.Result AdapterRw.solana_program_error.ProgramError
+  AdapterRw.Ops.op36 : AdapterRw.solana_pubkey.Pubkey → AdapterRw.solana_pubkey.Pubkey → Aeneas.Std.Result Bool
+  AdapterRw.Ops.op37 : Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Result AdapterRw.solana_pubkey.Pubkey
+  AdapterRw.Ops.op38 : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+      AdapterRw.solana_pubkey.Pubkey →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AdapterRw.solana_pubkey.Pubkey AdapterRw.solana_pubkey.PubkeyError)
+  AdapterRw.Ops.op39 : AdapterRw.solana_pubkey.Pubkey → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AdapterRw.Ops.op40 : AdapterRw.solana_pubkey.Pubkey → Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8)
+  AdapterRw.Ops.op41 : Aeneas.Std.Result AdapterRw.solana_pubkey.Pubkey
+  AdapterRw.Ops.op42 : AdapterRw.SolanaDigest → Aeneas.Std.Result AdapterRw.SolanaDigest
+  AdapterRw.Ops.op43 : AdapterRw.SolanaDigest →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AdapterRw.Ops.op44 : AdapterRw.aspis_r1_cost_probe.verifier.Error →
+      Aeneas.Std.Result AdapterRw.solana_program_error.ProgramError
+  AdapterRw.Ops.op45 : Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AdapterRw.Ops.op46 : Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AdapterRw.Ops.op47 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result
+          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+          AdapterRw.solana_program_error.ProgramError)
+  AdapterRw.Ops.op48 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1
+          AdapterRw.solana_program_error.ProgramError)
+  AdapterRw.Ops.op49 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result
+          AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1
+          AdapterRw.solana_program_error.ProgramError)
+  AdapterRw.Ops.op50 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result
+          AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1
+          AdapterRw.solana_program_error.ProgramError)
+  AdapterRw.Ops.op51 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AdapterRw.r1_pool_adapter.ScannedAsqaProof
+          AdapterRw.solana_program_error.ProgramError)
+  AdapterRw.Ops.op52 : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1 →
+      AdapterRw.r1_pool_adapter.AuthenticatedAsq8Accounts →
+        AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result
+              AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+              AdapterRw.solana_program_error.ProgramError)
+  AdapterRw.Ops.op53 : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+constructor:
+  AdapterRw.Ops.mk
+    (op0 op1 :
+      {T U : Type} →
+        {N : Aeneas.Std.Usize} →
+          Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Array U N → Aeneas.Std.Result Bool)
+    (op2 : {T : Type} → Aeneas.Std.core.cmp.PartialEq T T → Option T → Option T → Aeneas.Std.Result Bool)
+    (op3 :
+      {T : Type} →
+        AdapterRw.core.ops.range.RangeFull →
+          Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T)))
+    (op4 :
+      {T : Type} → AdapterRw.core.ops.range.RangeFull → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T))
+    (op5 :
+      {T : Type} →
+        AdapterRw.core.ops.range.RangeFull →
+          Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T)))
+    (op6 :
+      {T : Type} →
+        AdapterRw.core.ops.range.RangeFull →
+          Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T)))
+    (op7 :
+      {T : Type} →
+        AdapterRw.core.ops.range.RangeFull →
+          Aeneas.Std.Slice T →
+            Aeneas.Std.Result (Option (Aeneas.Std.Slice T) × (Option (Aeneas.Std.Slice T) → Aeneas.Std.Slice T)))
+    (op8 :
+      {T : Type} →
+        AdapterRw.core.ops.range.RangeFull → Aeneas.Std.Slice T → Aeneas.Std.Result (Option (Aeneas.Std.Slice T)))
+    (op9 : {T : Type} → Aeneas.Std.Slice T → Aeneas.Std.Result (Option T))
+    (op10 :
+      {H : Type} →
+        AdapterRw.aspis_core.digest.Digest32 H →
+          AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                Aeneas.Std.Usize →
+                  H →
+                    Option (AdapterRw.aspis_r1_cost_probe.verifier.Phase → Aeneas.Std.Result Unit) →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          AdapterRw.aspis_r1_cost_probe.verifier.Error))
+    (op11 :
+      {H : Type} →
+        AdapterRw.aspis_core.digest.Digest32 H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                H →
+                  Option (AdapterRw.aspis_r1_cost_probe.verifier.Phase → Aeneas.Std.Result Unit) →
+                    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error))
+    (op12 : AdapterRw.aspis_r1_cost_probe.transport.Variant → Aeneas.Std.Result Aeneas.Std.Usize)
+    (op13 op14 : Aeneas.Std.Result Aeneas.Std.U8)
+    (op15 :
+      AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit AdapterRw.aspis_statement.pool_v1.format.PoolV1FormatError))
+    (op16 : Aeneas.Std.Result Aeneas.Std.U8)
+    (op17 :
+      Aeneas.Std.Array AdapterRw.aspis_core.field.M31 8#usize →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Aeneas.Std.U8
+            AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1))
+    (op18 : Aeneas.Std.Result Aeneas.Std.U8) (op19 : Aeneas.Std.Result Aeneas.Std.Usize)
+    (op20 :
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalPaymentV1 →
+        Aeneas.Std.Result (Aeneas.Std.Array AdapterRw.aspis_core.field.M31 8#usize))
+    (op21 :
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit
+            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1))
+    (op22 :
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 1880#usize)
+            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1))
+    (op23 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
+            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1))
+    (op24 :
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 688#usize)
+            AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1))
+    (op25 op26 : AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1 → Aeneas.Std.Result Bool)
+    (op27 op28 : AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2 → Aeneas.Std.Result Bool)
+    (op29 :
+      AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV2 →
+        Aeneas.Std.U64 → Aeneas.Std.Result Bool)
+    (op30 :
+      AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1 →
+        Aeneas.Std.U64 → Aeneas.Std.Result Bool)
+    (op31 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1
+            AdapterRw.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError))
+    (op32 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1
+            AdapterRw.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError))
+    (op33 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2
+            AdapterRw.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError))
+    (op34 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AdapterRw.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV2
+            AdapterRw.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError))
+    (op35 : AdapterRw.solana_program_error.ProgramError → Aeneas.Std.Result AdapterRw.solana_program_error.ProgramError)
+    (op36 : AdapterRw.solana_pubkey.Pubkey → AdapterRw.solana_pubkey.Pubkey → Aeneas.Std.Result Bool)
+    (op37 : Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Result AdapterRw.solana_pubkey.Pubkey)
+    (op38 :
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+        AdapterRw.solana_pubkey.Pubkey →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result AdapterRw.solana_pubkey.Pubkey AdapterRw.solana_pubkey.PubkeyError))
+    (op39 : AdapterRw.solana_pubkey.Pubkey → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (op40 : AdapterRw.solana_pubkey.Pubkey → Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8))
+    (op41 : Aeneas.Std.Result AdapterRw.solana_pubkey.Pubkey)
+    (op42 : AdapterRw.SolanaDigest → Aeneas.Std.Result AdapterRw.SolanaDigest)
+    (op43 :
+      AdapterRw.SolanaDigest →
+        Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (op44 :
+      AdapterRw.aspis_r1_cost_probe.verifier.Error → Aeneas.Std.Result AdapterRw.solana_program_error.ProgramError)
+    (op45 op46 : Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (op47 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+            AdapterRw.solana_program_error.ProgramError))
+    (op48 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1
+            AdapterRw.solana_program_error.ProgramError))
+    (op49 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1
+            AdapterRw.solana_program_error.ProgramError))
+    (op50 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1
+            AdapterRw.solana_program_error.ProgramError))
+    (op51 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AdapterRw.r1_pool_adapter.ScannedAsqaProof
+            AdapterRw.solana_program_error.ProgramError))
+    (op52 :
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1 →
+        AdapterRw.r1_pool_adapter.AuthenticatedAsq8Accounts →
+          AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result
+                AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+                AdapterRw.solana_program_error.ProgramError))
+    (op53 :
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AdapterRw.solana_program_error.ProgramError)) :
+    AdapterRw.Ops
+structure AspisR1CurrentCaller.Ops : Type 1
+number of parameters: 0
+fields:
+  AspisR1CurrentCaller.Ops.op0 : Aeneas.Std.Result AspisR1CurrentCaller.aspis_core.field.QM31
+  AspisR1CurrentCaller.Ops.op1 : {T : Type} →
+      Aeneas.Std.core.marker.Copy T →
+        Aeneas.Std.Usize →
+          T →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec T) AspisR1CurrentCaller.aspis_core.r0.Error)
+  AspisR1CurrentCaller.Ops.op2 : AspisR1CurrentCaller.compact.CodecError →
+      Aeneas.Std.Result AspisR1CurrentCaller.verifier.Error
+  AspisR1CurrentCaller.Ops.op3 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1CurrentCaller.transport.Variant AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op4 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op5 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.View AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op6 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          AspisR1CurrentCaller.verifier.Prepared →
+            Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+              Aeneas.Std.Usize →
+                H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op7 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      AspisR1CurrentCaller.verifier.Prepared →
+        AspisR1CurrentCaller.verifier.Accumulator →
+          Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+            Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+              AspisR1CurrentCaller.verifier.QueryGeometry →
+                AspisR1CurrentCaller.verifier.BatchedWeights →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result
+                        (AspisR1CurrentCaller.verifier.Accumulator × AspisR1CurrentCaller.verifier.BatchedWeights)
+                        AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op8 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.r1_semantic.Verified H →
+          AspisR1CurrentCaller.verifier.View →
+            H →
+              Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Prepared
+                      AspisR1CurrentCaller.verifier.Error ×
+                    Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  AspisR1CurrentCaller.Ops.op9 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            H →
+              Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result (AspisR1CurrentCaller.r1_semantic.Verified H)
+                    AspisR1CurrentCaller.r1_wire.Error)
+  AspisR1CurrentCaller.Ops.op10 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.compact.CodecError × Aeneas.Std.Slice Aeneas.Std.U8)
+  AspisR1CurrentCaller.Ops.op11 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.compact.CodecError × Aeneas.Std.Slice Aeneas.Std.U8)
+  AspisR1CurrentCaller.Ops.op12 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op13 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op14 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op15 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op16 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.verifier.Prepared →
+          AspisR1CurrentCaller.verifier.Accumulator →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Slice Aeneas.Std.U8 → H → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  AspisR1CurrentCaller.Ops.op17 : AspisR1CurrentCaller.verifier.BatchedWeights →
+      Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+        Aeneas.Std.Result (Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31)
+  AspisR1CurrentCaller.Ops.op18 : Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.BatchedWeights AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op19 : Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.QueryGeometry
+              AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op20 : AspisR1CurrentCaller.transport.Variant →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Accumulator AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op21 : Aeneas.Std.Result Aeneas.Std.Usize
+constructor:
+  AspisR1CurrentCaller.Ops.mk (op0 : Aeneas.Std.Result AspisR1CurrentCaller.aspis_core.field.QM31)
+    (op1 :
+      {T : Type} →
+        Aeneas.Std.core.marker.Copy T →
+          Aeneas.Std.Usize →
+            T →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec T) AspisR1CurrentCaller.aspis_core.r0.Error))
+    (op2 : AspisR1CurrentCaller.compact.CodecError → Aeneas.Std.Result AspisR1CurrentCaller.verifier.Error)
+    (op3 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1CurrentCaller.transport.Variant AspisR1CurrentCaller.verifier.Error))
+    (op4 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error))
+    (op5 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.View AspisR1CurrentCaller.verifier.Error))
+    (op6 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            AspisR1CurrentCaller.verifier.Prepared →
+              Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                Aeneas.Std.Usize →
+                  H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error))
+    (op7 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1CurrentCaller.verifier.Prepared →
+          AspisR1CurrentCaller.verifier.Accumulator →
+            Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+              Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+                AspisR1CurrentCaller.verifier.QueryGeometry →
+                  AspisR1CurrentCaller.verifier.BatchedWeights →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result
+                          (AspisR1CurrentCaller.verifier.Accumulator × AspisR1CurrentCaller.verifier.BatchedWeights)
+                          AspisR1CurrentCaller.verifier.Error))
+    (op8 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          AspisR1CurrentCaller.r1_semantic.Verified H →
+            AspisR1CurrentCaller.verifier.View →
+              H →
+                Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Prepared
+                        AspisR1CurrentCaller.verifier.Error ×
+                      Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize))
+    (op9 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              H →
+                Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result (AspisR1CurrentCaller.r1_semantic.Verified H)
+                      AspisR1CurrentCaller.r1_wire.Error))
+    (op10 op11 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.compact.CodecError ×
+              Aeneas.Std.Slice Aeneas.Std.U8))
+    (op12 op13 op14 op15 : Aeneas.Std.Result Aeneas.Std.Usize)
+    (op16 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          AspisR1CurrentCaller.verifier.Prepared →
+            AspisR1CurrentCaller.verifier.Accumulator →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                Aeneas.Std.Slice Aeneas.Std.U8 → H → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8))
+    (op17 :
+      AspisR1CurrentCaller.verifier.BatchedWeights →
+        Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+          Aeneas.Std.Result (Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31))
+    (op18 :
+      Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.BatchedWeights
+            AspisR1CurrentCaller.verifier.Error))
+    (op19 :
+      Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.QueryGeometry
+                AspisR1CurrentCaller.verifier.Error))
+    (op20 :
+      AspisR1CurrentCaller.transport.Variant →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Accumulator AspisR1CurrentCaller.verifier.Error))
+    (op21 : Aeneas.Std.Result Aeneas.Std.Usize) : AspisR1CurrentCaller.Ops
+structure VTop_Stages.Ops : Type 1
+number of parameters: 0
+fields:
+  VTop_Stages.Ops.op0 : {T E : Type} → Option T → E → Aeneas.Std.Result (Aeneas.Std.core.result.Result T E)
+  VTop_Stages.Ops.op1 : Aeneas.Std.Result VTop_Stages.aspis_core.field.wide_exact.WideExact
+  VTop_Stages.Ops.op2 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result (Option VTop_Stages.aspis_core.field.wide_exact.WideExact)
+  VTop_Stages.Ops.op3 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result VTop_Stages.transport.Variant VTop_Stages.verifier.Error)
+  VTop_Stages.Ops.op4 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error)
+  VTop_Stages.Ops.op5 : {H : Type} →
+      VTop_Stages.aspis_core.digest.Digest32 H →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          VTop_Stages.verifier.Prepared →
+            Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+              Aeneas.Std.Usize → H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error)
+  VTop_Stages.Ops.op6 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      VTop_Stages.verifier.Prepared →
+        VTop_Stages.verifier.Accumulator →
+          Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize →
+            Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+              VTop_Stages.verifier.QueryGeometry →
+                VTop_Stages.verifier.BatchedWeights →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result
+                        (VTop_Stages.verifier.Accumulator × VTop_Stages.verifier.BatchedWeights)
+                        VTop_Stages.verifier.Error)
+  VTop_Stages.Ops.op7 : {H : Type} →
+      VTop_Stages.aspis_core.digest.Digest32 H →
+        VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            H →
+              Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+                Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result VTop_Stages.verifier.Prepared VTop_Stages.verifier.Error ×
+                      Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+  VTop_Stages.Ops.op8 : {H : Type} →
+      VTop_Stages.aspis_core.digest.Digest32 H →
+        VTop_Stages.verifier.Prepared →
+          VTop_Stages.verifier.Accumulator →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Slice Aeneas.Std.U8 → H → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  VTop_Stages.Ops.op9 : VTop_Stages.verifier.BatchedWeights →
+      Aeneas.Std.Slice VTop_Stages.aspis_core.field.QM31 →
+        Aeneas.Std.Result (Aeneas.Std.Slice VTop_Stages.aspis_core.field.QM31)
+  VTop_Stages.Ops.op10 : Aeneas.Std.Slice VTop_Stages.aspis_core.field.QM31 →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result VTop_Stages.verifier.BatchedWeights VTop_Stages.verifier.Error)
+  VTop_Stages.Ops.op11 : Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result VTop_Stages.verifier.QueryGeometry VTop_Stages.verifier.Error)
+  VTop_Stages.Ops.op12 : VTop_Stages.transport.Variant →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result VTop_Stages.verifier.Accumulator VTop_Stages.verifier.Error)
+  VTop_Stages.Ops.op13 : Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+      VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit
+  VTop_Stages.Ops.op14 : Aeneas.Std.Result Aeneas.Std.Usize
+  VTop_Stages.Ops.op15 : Aeneas.Std.Result Aeneas.Std.Usize
+  VTop_Stages.Ops.op16 : Aeneas.Std.Result Aeneas.Std.Usize
+  VTop_Stages.Ops.op17 : (N : Aeneas.Std.Usize) →
+      VTop_Stages.aspis_core.field.wide_exact.WideExact →
+        Aeneas.Std.Result (Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact N)
+  VTop_Stages.Ops.op18 : {H : Type} →
+      VTop_Stages.aspis_core.digest.Digest32 H →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              VTop_Stages.transport.Variant →
+                H →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result (VTop_Stages.verifier.Prepared × VTop_Stages.verifier.Accumulator)
+                      VTop_Stages.verifier.Error)
+  VTop_Stages.Ops.op19 : VTop_Stages.verifier.View →
+      VTop_Stages.verifier.Prepared →
+        VTop_Stages.verifier.Accumulator →
+          Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+            Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error)
+  VTop_Stages.Ops.op20 : Aeneas.Std.Result Aeneas.Std.Usize
+  VTop_Stages.Ops.op21 : Aeneas.Std.Result Aeneas.Std.Usize
+  VTop_Stages.Ops.op22 : Aeneas.Std.Result Aeneas.Std.Usize
+  VTop_Stages.Ops.op23 : Aeneas.Std.Result Aeneas.Std.Usize
+  VTop_Stages.Ops.unwrap32 : Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+        Aeneas.Std.core.array.TryFromSliceError →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+constructor:
+  VTop_Stages.Ops.mk (op0 : {T E : Type} → Option T → E → Aeneas.Std.Result (Aeneas.Std.core.result.Result T E))
+    (op1 : Aeneas.Std.Result VTop_Stages.aspis_core.field.wide_exact.WideExact)
+    (op2 :
+      Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (Option VTop_Stages.aspis_core.field.wide_exact.WideExact))
+    (op3 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result VTop_Stages.transport.Variant VTop_Stages.verifier.Error))
+    (op4 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error))
+    (op5 :
+      {H : Type} →
+        VTop_Stages.aspis_core.digest.Digest32 H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            VTop_Stages.verifier.Prepared →
+              Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                Aeneas.Std.Usize →
+                  H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error))
+    (op6 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        VTop_Stages.verifier.Prepared →
+          VTop_Stages.verifier.Accumulator →
+            Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize →
+              Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+                VTop_Stages.verifier.QueryGeometry →
+                  VTop_Stages.verifier.BatchedWeights →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result
+                          (VTop_Stages.verifier.Accumulator × VTop_Stages.verifier.BatchedWeights)
+                          VTop_Stages.verifier.Error))
+    (op7 :
+      {H : Type} →
+        VTop_Stages.aspis_core.digest.Digest32 H →
+          VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              H →
+                Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+                  Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result VTop_Stages.verifier.Prepared VTop_Stages.verifier.Error ×
+                        Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize))
+    (op8 :
+      {H : Type} →
+        VTop_Stages.aspis_core.digest.Digest32 H →
+          VTop_Stages.verifier.Prepared →
+            VTop_Stages.verifier.Accumulator →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                Aeneas.Std.Slice Aeneas.Std.U8 → H → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8))
+    (op9 :
+      VTop_Stages.verifier.BatchedWeights →
+        Aeneas.Std.Slice VTop_Stages.aspis_core.field.QM31 →
+          Aeneas.Std.Result (Aeneas.Std.Slice VTop_Stages.aspis_core.field.QM31))
+    (op10 :
+      Aeneas.Std.Slice VTop_Stages.aspis_core.field.QM31 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result VTop_Stages.verifier.BatchedWeights VTop_Stages.verifier.Error))
+    (op11 :
+      Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result VTop_Stages.verifier.QueryGeometry VTop_Stages.verifier.Error))
+    (op12 :
+      VTop_Stages.transport.Variant →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result VTop_Stages.verifier.Accumulator VTop_Stages.verifier.Error))
+    (op13 :
+      Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+        VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit)
+    (op14 op15 op16 : Aeneas.Std.Result Aeneas.Std.Usize)
+    (op17 :
+      (N : Aeneas.Std.Usize) →
+        VTop_Stages.aspis_core.field.wide_exact.WideExact →
+          Aeneas.Std.Result (Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact N))
+    (op18 :
+      {H : Type} →
+        VTop_Stages.aspis_core.digest.Digest32 H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                VTop_Stages.transport.Variant →
+                  H →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result (VTop_Stages.verifier.Prepared × VTop_Stages.verifier.Accumulator)
+                        VTop_Stages.verifier.Error))
+    (op19 :
+      VTop_Stages.verifier.View →
+        VTop_Stages.verifier.Prepared →
+          VTop_Stages.verifier.Accumulator →
+            Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+              Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error))
+    (op20 op21 op22 op23 : Aeneas.Std.Result Aeneas.Std.Usize)
+    (unwrap32 :
+      Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+        Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) :
+    VTop_Stages.Ops
+structure AspisR1Stage2.Stage2Finish.FinishOps (W : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1Stage2.Stage2Finish.FinishOps.field : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Usize → Aeneas.Std.Result AspisR1Stage2.Stage2Finish.E
+  AspisR1Stage2.Stage2Finish.FinishOps.quarter : Aeneas.Std.Result AspisR1Stage2.Stage2Finish.M
+  AspisR1Stage2.Stage2Finish.FinishOps.add : AspisR1Stage2.Stage2Finish.E →
+      AspisR1Stage2.Stage2Finish.E → Aeneas.Std.Result AspisR1Stage2.Stage2Finish.E
+  AspisR1Stage2.Stage2Finish.FinishOps.mulM : AspisR1Stage2.Stage2Finish.E →
+      AspisR1Stage2.Stage2Finish.M → Aeneas.Std.Result AspisR1Stage2.Stage2Finish.E
+  AspisR1Stage2.Stage2Finish.FinishOps.ne : AspisR1Stage2.Stage2Finish.E →
+      AspisR1Stage2.Stage2Finish.E → Aeneas.Std.Result Bool
+  AspisR1Stage2.Stage2Finish.FinishOps.polynomial : Aeneas.Std.Slice Aeneas.Std.U8 →
+      AspisR1Stage2.Stage2Finish.E → Aeneas.Std.Result AspisR1Stage2.Stage2Finish.E
+  AspisR1Stage2.Stage2Finish.FinishOps.trace : Aeneas.Std.U16 →
+      Aeneas.Std.Usize → AspisR1Stage2.Stage2Finish.E → Aeneas.Std.Result Unit
+  AspisR1Stage2.Stage2Finish.FinishOps.folds : AspisR1Stage2.transport.Variant → Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1Stage2.Stage2Finish.FinishOps.newWeights : AspisR1Stage2.transport.Variant →
+      Aeneas.Std.Array AspisR1Stage2.Stage2Finish.K 10#usize →
+        Aeneas.Std.Array AspisR1Stage2.aspis_core.circle.SecureCirclePoint 2#usize →
+          Aeneas.Std.Result (Aeneas.Std.core.result.Result W AspisR1Stage2.verifier.Error)
+  AspisR1Stage2.Stage2Finish.FinishOps.pair : W →
+      Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          AspisR1Stage2.Stage2Finish.E →
+            Aeneas.Std.Result (Aeneas.Std.core.result.Result AspisR1Stage2.Stage2Finish.E AspisR1Stage2.verifier.Error)
+  AspisR1Stage2.Stage2Finish.FinishOps.mark : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit) →
+      AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit
+  AspisR1Stage2.Stage2Finish.FinishOps.dot : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.K →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result AspisR1Stage2.Stage2Finish.E AspisR1Stage2.verifier.Error)
+constructor:
+  AspisR1Stage2.Stage2Finish.FinishOps.mk {W : Type}
+    (field : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Usize → Aeneas.Std.Result AspisR1Stage2.Stage2Finish.E)
+    (quarter : Aeneas.Std.Result AspisR1Stage2.Stage2Finish.M)
+    (add : AspisR1Stage2.Stage2Finish.E → AspisR1Stage2.Stage2Finish.E → Aeneas.Std.Result AspisR1Stage2.Stage2Finish.E)
+    (mulM :
+      AspisR1Stage2.Stage2Finish.E → AspisR1Stage2.Stage2Finish.M → Aeneas.Std.Result AspisR1Stage2.Stage2Finish.E)
+    (ne : AspisR1Stage2.Stage2Finish.E → AspisR1Stage2.Stage2Finish.E → Aeneas.Std.Result Bool)
+    (polynomial :
+      Aeneas.Std.Slice Aeneas.Std.U8 → AspisR1Stage2.Stage2Finish.E → Aeneas.Std.Result AspisR1Stage2.Stage2Finish.E)
+    (trace : Aeneas.Std.U16 → Aeneas.Std.Usize → AspisR1Stage2.Stage2Finish.E → Aeneas.Std.Result Unit)
+    (folds : AspisR1Stage2.transport.Variant → Aeneas.Std.Result Aeneas.Std.Usize)
+    (newWeights :
+      AspisR1Stage2.transport.Variant →
+        Aeneas.Std.Array AspisR1Stage2.Stage2Finish.K 10#usize →
+          Aeneas.Std.Array AspisR1Stage2.aspis_core.circle.SecureCirclePoint 2#usize →
+            Aeneas.Std.Result (Aeneas.Std.core.result.Result W AspisR1Stage2.verifier.Error))
+    (pair :
+      W →
+        Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            AspisR1Stage2.Stage2Finish.E →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1Stage2.Stage2Finish.E AspisR1Stage2.verifier.Error))
+    (mark :
+      Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit) →
+        AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit)
+    (dot :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.K →
+          Aeneas.Std.Result (Aeneas.Std.core.result.Result AspisR1Stage2.Stage2Finish.E AspisR1Stage2.verifier.Error)) :
+    AspisR1Stage2.Stage2Finish.FinishOps W
+structure AspisR1.S2W_D189Entry.Entry : Type
+number of parameters: 0
+fields:
+  AspisR1.S2W_D189Entry.Entry.handles : ℕ → ℕ × ℕ
+  AspisR1.S2W_D189Entry.Entry.records : ℕ → AspisR1.S2W_D189Entry.Record
+  AspisR1.S2W_D189Entry.Entry.buffers : ℕ → Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1.S2W_D189Entry.Entry.base : ℕ → ℕ
+  AspisR1.S2W_D189Entry.Entry.provenance : ℕ → ℕ
+constructor:
+  AspisR1.S2W_D189Entry.Entry.mk (handles : ℕ → ℕ × ℕ) (records : ℕ → AspisR1.S2W_D189Entry.Record)
+    (buffers : ℕ → Aeneas.Std.Slice Aeneas.Std.U8) (base provenance : ℕ → ℕ) : AspisR1.S2W_D189Entry.Entry
+structure AspisR1.S2W_D189Entry.Record : Type
+number of parameters: 0
+fields:
+  AspisR1.S2W_D189Entry.Record.owned : AspisR1.S2W_D189Entry.Owned
+  AspisR1.S2W_D189Entry.Record.lamports : ℕ
+  AspisR1.S2W_D189Entry.Record.rentEpoch : ℕ
+constructor:
+  AspisR1.S2W_D189Entry.Record.mk (owned : AspisR1.S2W_D189Entry.Owned) (lamports rentEpoch : ℕ) :
+    AspisR1.S2W_D189Entry.Record
+structure AspisR1.S2Trust.Heap (Ambient : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1.S2Trust.Heap.accounts : ℕ → ℕ × ℕ
+  AspisR1.S2Trust.Heap.ownerLive : ℕ → Bool
+  AspisR1.S2Trust.Heap.allocated : ℕ → Bool
+  AspisR1.S2Trust.Heap.payload : ℕ → AspisR1.S2Trust.Payload
+  AspisR1.S2Trust.Heap.counter : ℕ → ℤ
+  AspisR1.S2Trust.Heap.external : ℕ → ℤ
+  AspisR1.S2Trust.Heap.guards : List AspisR1.S2Trust.Guard
+  AspisR1.S2Trust.Heap.ambient : Ambient
+constructor:
+  AspisR1.S2Trust.Heap.mk {Ambient : Type} (accounts : ℕ → ℕ × ℕ) (ownerLive allocated : ℕ → Bool)
+    (payload : ℕ → AspisR1.S2Trust.Payload) (counter external : ℕ → ℤ) (guards : List AspisR1.S2Trust.Guard)
+    (ambient : Ambient) : AspisR1.S2Trust.Heap Ambient
+structure AspisR1.S2Trust.Payload : Type
+number of parameters: 0
+fields:
+  AspisR1.S2Trust.Payload.descriptor : AspisR1.S2Trust.Descriptor
+  AspisR1.S2Trust.Payload.contents : ℕ → UInt8
+constructor:
+  AspisR1.S2Trust.Payload.mk (descriptor : AspisR1.S2Trust.Descriptor) (contents : ℕ → UInt8) : AspisR1.S2Trust.Payload
+structure AspisR1.S2Trust.Descriptor : Type
+number of parameters: 0
+fields:
+  AspisR1.S2Trust.Descriptor.base : ℕ
+  AspisR1.S2Trust.Descriptor.length : ℕ
+  AspisR1.S2Trust.Descriptor.provenance : ℕ
+constructor:
+  AspisR1.S2Trust.Descriptor.mk (base length provenance : ℕ) : AspisR1.S2Trust.Descriptor
+structure AspisR1.S2Trust.Guard : Type
+number of parameters: 0
+fields:
+  AspisR1.S2Trust.Guard.token : ℕ
+  AspisR1.S2Trust.Guard.cell : ℕ
+  AspisR1.S2Trust.Guard.owner : ℕ
+  AspisR1.S2Trust.Guard.kind : AspisR1.S2Trust.Kind
+  AspisR1.S2Trust.Guard.descriptor : AspisR1.S2Trust.Descriptor
+constructor:
+  AspisR1.S2Trust.Guard.mk (token cell owner : ℕ) (kind : AspisR1.S2Trust.Kind)
+    (descriptor : AspisR1.S2Trust.Descriptor) : AspisR1.S2Trust.Guard
+def AspisR1.R3SemanticEquationCore.Equations : {K : Type} →
+  [inst : CommSemiring K] → K → K → (Fin 10 → K) → (Fin 10 → Polynomial K) → Prop :=
+fun {K} [CommSemiring K] claim terminal alpha polys =>
+  Polynomial.eval 0 (polys 0) + Polynomial.eval 1 (polys 0) = claim ∧
+    (∀ (j : Fin 9),
+        Polynomial.eval 0 (polys j.succ) + Polynomial.eval 1 (polys j.succ) =
+          Polynomial.eval (alpha j.castSucc) (polys j.castSucc)) ∧
+      Polynomial.eval (alpha 9) (polys 9) = terminal
+def AspisR1.MatchingSupport.match0 : {E : Type} →
+  [inst : Field E] →
+    [inst_1 : Fintype E] →
+      [inst_2 : DecidableEq E] →
+        [inst_3 : Algebra (ZMod AspisCircleGroupOrder.P) E] → AspisR1.MatchingSupport.Data E → Fin 262144 → Prop :=
+fun {E} [Field E] [Fintype E] [DecidableEq E] [Algebra (ZMod AspisCircleGroupOrder.P) E] d i =>
+  AspisR1.FirstFold.foldWord d.alpha0 (AspisR1.TwoFoldExtraction.batchedWord d.W d.gamma) i = d.V i
+@[reducible] def AspisR1.LiteralByteProtocol.Decoder : Type :=
+AspisR1.LiteralByteProtocol.Address →
+  AspisV8PairedCommitment.Table AspisR1.LiteralByteProtocol.Address AspisR1.LiteralByteProtocol.State →
+    Option
+      (FS2.Sampler AspisR1.LiteralByteProtocol.Address AspisR1.LiteralByteProtocol.State
+        (AspisR1.LiteralTranscript.Prefix × AspisR1.LiteralTranscript.Message × AspisR1.LiteralTranscript.Challenge))
+def AspisR1.S2Z.Oracle.P1Realization : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun sha256 H => ∀ (bytes : AspisV8R19.DuplexFrames.Bytes), sha256 bytes = H bytes
+def AspisR1.S2Z.Oracle.RuntimeSyscall : (AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun hashv sha256 =>
+  ∀ (parts : AspisR1.S2Z.Oracle.Parts) (digest : AspisR1.S2Z.Oracle.Digest),
+    hashv parts = Aeneas.Std.Result.ok digest →
+      AspisV8R19.SqueezeOracleBridge.decodeState digest = sha256 (AspisV8R19.SqueezeOracleBridge.flatten parts)
+structure AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary {X : Type}
+  (D : MultiproofConeRef.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+  (leafSource : AspisR1.MultiproofConeP6Batch.Leaf) : Prop
+number of parameters: 8
+fields:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.oracle : ∀
+      (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.binary_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.occupied_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.sibling_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource
+constructor:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.mk {X : Type} {D : MultiproofConeRef.aspis_core.digest.Digest32 X}
+    {hash : X} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent}
+    {leafSource : AspisR1.MultiproofConeP6Batch.Leaf}
+    (oracle :
+      ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input))
+    (binary_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary)
+    (occupied_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied)
+    (sibling_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling)
+    (leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource) :
+    AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource
+def AspisR1.MultiproofConeP6Callbacks.ParentGate : (AspisR1.MultiproofConePhysicalProgram.Address →
+    AspisR1.MultiproofConePhysicalProgram.Digest) →
+  AspisR1.MultiproofConeP6Callbacks.Parent → Prop :=
+fun H callback =>
+  ∀ (left right : AspisR1.MultiproofConePhysicalProgram.Digest),
+    AspisV8R19.MemoizedProgramLaw.eval H (callback left right) =
+      ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+            H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+        H (AspisR1.MultiproofConePhysicalDigest.parts left right))
+def AspisR1.MultiproofConeP6Batch.LeafGate : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  AspisR1.MultiproofConeP6Batch.Leaf → Prop :=
+fun H source =>
+  ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind pos : ℕ)
+    (s : MultiproofConeRef.reference.Scratch),
+    ↑s.n < 16 →
+      AspisV8R19.MemoizedProgramLaw.eval H (source p q kind pos s) =
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeP6Batch.referenceLeaf p q kind pos s)
+structure AspisR1.Port1_Library.TrustedStd (ops : VTop_Stages.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port1_Library.TrustedStd.option_ok_or : ∀ {T E : Type} (x : Option T) (e : E),
+      ops.op0 x e = AspisR1.Port1_LibrarySource.okOr x e
+  AspisR1.Port1_Library.TrustedStd.result_unwrap32 : ∀
+      (x :
+        Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+          Aeneas.Std.core.array.TryFromSliceError),
+      ops.unwrap32 x = AspisR1.Port1_LibrarySource.unwrap32 x
+constructor:
+  AspisR1.Port1_Library.TrustedStd.mk {ops : VTop_Stages.Ops}
+    (option_ok_or : ∀ {T E : Type} (x : Option T) (e : E), ops.op0 x e = AspisR1.Port1_LibrarySource.okOr x e)
+    (result_unwrap32 :
+      ∀
+        (x :
+          Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+            Aeneas.Std.core.array.TryFromSliceError),
+        ops.unwrap32 x = AspisR1.Port1_LibrarySource.unwrap32 x) :
+    AspisR1.Port1_Library.TrustedStd ops
+def AspisR1.OraclePortHeadlineFrozen2.Claims : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortStoredExperimentC4.Prover → ℕ → AspisR1.OraclePortRuntimeBindingC7.Runtime → Prop :=
+fun D P Q runtime =>
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortHeadlineFrozen2.projected_frozen D P)).2.2 = Bool.true →
+        (AspisV8R19.OracleResampling.mean fun coins =>
+            ↑(AspisR1.ActualCostedExtractorM10.extractor.eval
+                    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortHeadlineFrozen2.projected_frozen D P))
+                    coins).2.total) ≤
+          ↑(AspisR1.CostedAllocationLedgerM10.params (Q + 1161)).attemptBudget) ∧
+    (∀ (run : AspisR1.RawCutProverCompiler.RunView) (coins : AspisR1.RawExtractorCostComposedV2.Coins)
+        (w : AspisR1.SpendRelation.Wspend),
+        (AspisR1.ActualCostedExtractorM10.extractor.eval run coins).1 = Option.some w →
+          AspisR1.LiteralProtocol.relation run.2.1.1 w) ∧
+      1 / 2 ^ 126 + 1 / 2 ^ 454 ≤ 1 / 2 ^ 120 ∧
+        AspisR1.OraclePortHeadlineFrozen2.failureModel runtime ≤ AspisR1.OraclePortHeadlineFrozen2.totalBound Q ∧
+          (32 ≤ Q →
+            Q ≤ AspisR1.OraclePortHeadlineFrozen2.Qmax →
+              AspisR1.OraclePortHeadlineFrozen2.failureModel runtime ≤ (↑Q + 1) * (1 / 2 ^ 100))
+structure AspisR1.R1FinalSoundness.SourceInputs : Type
+number of parameters: 0
+fields:
+  AspisR1.R1FinalSoundness.SourceInputs.decoded : R0P.Public AspisR1.SemanticPublicWire.M31
+  AspisR1.R1FinalSoundness.SourceInputs.data : AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E
+  AspisR1.R1FinalSoundness.SourceInputs.m31 : AspisR1.LiteralTranscript.Message
+  AspisR1.R1FinalSoundness.SourceInputs.queryBytes : List ℕ
+  AspisR1.R1FinalSoundness.SourceInputs.state31 : AspisV8R19.SourceDuplexStep.State
+  AspisR1.R1FinalSoundness.SourceInputs.m32 : AspisR1.LiteralTranscript.Message
+  AspisR1.R1FinalSoundness.SourceInputs.rho : AspisR1.LiteralAcceptanceTerminal.E
+  AspisR1.R1FinalSoundness.SourceInputs.state32 : AspisV8R19.SourceDuplexStep.State
+constructor:
+  AspisR1.R1FinalSoundness.SourceInputs.mk (decoded : R0P.Public AspisR1.SemanticPublicWire.M31)
+    (data : AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E) (m31 : AspisR1.LiteralTranscript.Message)
+    (queryBytes : List ℕ) (state31 : AspisV8R19.SourceDuplexStep.State) (m32 : AspisR1.LiteralTranscript.Message)
+    (rho : AspisR1.LiteralAcceptanceTerminal.E) (state32 : AspisV8R19.SourceDuplexStep.State) :
+    AspisR1.R1FinalSoundness.SourceInputs
+structure AspisR1.MatchingSupport.Data (E : Type) [Field E] [Fintype E] [DecidableEq E]
+  [Algebra (ZMod AspisCircleGroupOrder.P) E] : Type
+number of parameters: 5
+fields:
+  AspisR1.MatchingSupport.Data.W : Fin 29 → AspisR1.MatchingSupport.InitialWord E
+  AspisR1.MatchingSupport.Data.V : AspisR1.MatchingSupport.FinalWord E
+  AspisR1.MatchingSupport.Data.F : Fin 6 → AspisR1.MatchingSupport.Functional E
+  AspisR1.MatchingSupport.Data.F0 : AspisR1.MatchingSupport.Functional E
+  AspisR1.MatchingSupport.Data.Y : Fin 6 → Fin 29 → E
+  AspisR1.MatchingSupport.Data.c0 : E
+  AspisR1.MatchingSupport.Data.gamma : E
+  AspisR1.MatchingSupport.Data.kappa : E
+  AspisR1.MatchingSupport.Data.alpha0 : E
+  AspisR1.MatchingSupport.Data.alpha1 : E
+  AspisR1.MatchingSupport.Data.p0 : Polynomial E
+  AspisR1.MatchingSupport.Data.p1 : Polynomial E
+  AspisR1.MatchingSupport.Data.f : AspisR1.MatchingSupport.SmallMessage E
+constructor:
+  AspisR1.MatchingSupport.Data.mk {E : Type} [Field E] [Fintype E] [DecidableEq E]
+    [Algebra (ZMod AspisCircleGroupOrder.P) E] (W : Fin 29 → AspisR1.MatchingSupport.InitialWord E)
+    (V : AspisR1.MatchingSupport.FinalWord E) (F : Fin 6 → AspisR1.MatchingSupport.Functional E)
+    (F0 : AspisR1.MatchingSupport.Functional E) (Y : Fin 6 → Fin 29 → E) (c0 gamma kappa alpha0 alpha1 : E)
+    (p0 p1 : Polynomial E) (f : AspisR1.MatchingSupport.SmallMessage E) : AspisR1.MatchingSupport.Data E
+@[reducible] def AspisR1.MatchingSupport.Functional : (K : Type) → [Field K] → Type :=
+fun K [Field K] => (Fin 1024 → K) →ₗ[K] K
+structure LinearMap.{u_14, u_15, u_16, u_17} {R : Type u_14} {S : Type u_15} [Semiring R] [Semiring S] (σ : R →+* S)
+  (M : Type u_16) (M₂ : Type u_17) [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module S M₂] :
+  Type (max u_16 u_17)
+number of parameters: 11
+parents:
+  LinearMap.toAddHom : M →ₙ+ M₂
+  LinearMap.toMulActionHom : M →ₑ[⇑σ] M₂
+fields:
+  AddHom.toFun : M → M₂
+  AddHom.map_add' : ∀ (x y : M), self.toFun (x + y) = self.toFun x + self.toFun y
+  MulActionHom.map_smul' : ∀ (m : R) (x : M), self.toFun (m • x) = σ m • self.toFun x
+constructor:
+  LinearMap.mk.{u_14, u_15, u_16, u_17} {R : Type u_14} {S : Type u_15} [Semiring R] [Semiring S] {σ : R →+* S}
+    {M : Type u_16} {M₂ : Type u_17} [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module S M₂]
+    (toAddHom : M →ₙ+ M₂) (map_smul' : ∀ (m : R) (x : M), toAddHom.toFun (m • x) = σ m • toAddHom.toFun x) : M →ₛₗ[σ] M₂
+field notation resolution order:
+  LinearMap, AddHom, MulActionHom
+structure AddHom.{u_10, u_11} (M : Type u_10) (N : Type u_11) [Add M] [Add N] : Type (max u_10 u_11)
+number of parameters: 4
+fields:
+  AddHom.toFun : M → N
+  AddHom.map_add' : ∀ (x y : M), self.toFun (x + y) = self.toFun x + self.toFun y
+constructor:
+  AddHom.mk.{u_10, u_11} {M : Type u_10} {N : Type u_11} [Add M] [Add N] (toFun : M → N)
+    (map_add' : ∀ (x y : M), toFun (x + y) = toFun x + toFun y) : M →ₙ+ N
+structure AspisR1.OraclePortCompactDraft.Parsed : Type
+number of parameters: 0
+fields:
+  AspisR1.OraclePortCompactDraft.Parsed.wire : AspisV8R19.DuplexFrames.Bytes
+  AspisR1.OraclePortCompactDraft.Parsed.semantic : List AspisV8R19.DuplexFrames.Bytes
+constructor:
+  AspisR1.OraclePortCompactDraft.Parsed.mk (wire : AspisV8R19.DuplexFrames.Bytes)
+    (semantic : List AspisV8R19.DuplexFrames.Bytes) : AspisR1.OraclePortCompactDraft.Parsed
+@[reducible] def AspisR1.UnifiedSampler.Prefix : Type → Type → ℕ → Type :=
+fun M Cv L =>
+  FS.Prefix (AspisR1.UnifiedSampler.Public L) (AspisR1.TranscriptView.Message M) (AspisR1.TranscriptView.Challenge Cv)
+structure AspisR1.UnifiedSampler.Public (L : ℕ) : Type
+number of parameters: 1
+fields:
+  AspisR1.UnifiedSampler.Public.pubBytes : AspisV8R19.DuplexFrames.Bytes
+  AspisR1.UnifiedSampler.Public.initFits : 75 + List.length self.pubBytes ≤ L
+  AspisR1.UnifiedSampler.Public.tag : AspisV8R19.DuplexFrames.Byte
+constructor:
+  AspisR1.UnifiedSampler.Public.mk {L : ℕ} (pubBytes : AspisV8R19.DuplexFrames.Bytes)
+    (initFits : 75 + List.length pubBytes ≤ L) (tag : AspisV8R19.DuplexFrames.Byte) : AspisR1.UnifiedSampler.Public L
+structure R0P.Public (K : Type) : Type
+number of parameters: 1
+fields:
+  R0P.Public.variant : R0P.Variant
+  R0P.Public.anchor : R0P.Digest K
+  R0P.Public.nullifier : R0P.Digest K
+  R0P.Public.assetId : K
+  R0P.Public.recipient : Option (R0P.Digest K)
+  R0P.Public.change : R0P.Digest K
+  R0P.Public.withdrawalAmount : Option K
+  R0P.Public.nextPairIndex : ℕ
+  R0P.Public.snapshotFrontier : Fin 20 → R0P.Digest K
+  R0P.Public.nextRoot : R0P.Digest K
+  R0P.Public.nextFrontier : Fin 20 → R0P.Digest K
+constructor:
+  R0P.Public.mk {K : Type} (variant : R0P.Variant) (anchor nullifier : R0P.Digest K) (assetId : K)
+    (recipient : Option (R0P.Digest K)) (change : R0P.Digest K) (withdrawalAmount : Option K) (nextPairIndex : ℕ)
+    (snapshotFrontier : Fin 20 → R0P.Digest K) (nextRoot : R0P.Digest K) (nextFrontier : Fin 20 → R0P.Digest K) :
+    R0P.Public K
+class Field.{u} (K : Type u) : Type u
+number of parameters: 1
+parents:
+  Field.toCommRing : CommRing K
+  Field.toDivisionRing : DivisionRing K
+fields:
+  Add.add : K → K → K
+  AddSemigroup.add_assoc : ∀ (a b c : K), a + b + c = a + (b + c)
+  Zero.zero : K
+  AddZeroClass.zero_add : ∀ (a : K), 0 + a = a
+  AddZeroClass.add_zero : ∀ (a : K), a + 0 = a
+  NSMul.nsmul : ℕ → K → K
+  AddMonoid.nsmul_zero : ∀ (x : K), 0 • x = 0 := by
+    intros; rfl
+  AddMonoid.nsmul_succ : ∀ (n : ℕ) (x : K), (n + 1) • x = n • x + x := by
+    intros; rfl
+  AddCommMagma.add_comm : ∀ (a b : K), a + b = b + a
+  Mul.mul : K → K → K
+  Semigroup.mul_assoc : ∀ (a b c : K), a * b * c = a * (b * c)
+  One.one : K
+  MulOneClass.one_mul : ∀ (a : K), 1 * a = a
+  MulOneClass.mul_one : ∀ (a : K), a * 1 = a
+  NPow.npow : ℕ → K → K :=
+    npowRecAuto
+  Monoid.npow_zero : ∀ (x : K), x ^ 0 = 1 := by
+    intros; rfl
+  Monoid.npow_succ : ∀ (n : ℕ) (x : K), x ^ (n + 1) = x ^ n * x := by
+    intros; rfl
+  MulZeroClass.zero_mul : ∀ (a : K), 0 * a = 0
+  MulZeroClass.mul_zero : ∀ (a : K), a * 0 = 0
+  Distrib.left_distrib : ∀ (a b c : K), a * (b + c) = a * b + a * c
+  Distrib.right_distrib : ∀ (a b c : K), (a + b) * c = a * c + b * c
+  NatCast.natCast : ℕ → K :=
+    Nat.unaryCast
+  AddMonoidWithOne.natCast_zero : ↑0 = 0 := by
+    intros; rfl
+  AddMonoidWithOne.natCast_succ : ∀ (n : ℕ), ↑(n + 1) = ↑n + 1 := by
+    intros; rfl
+  Neg.neg : K → K
+  Sub.sub : K → K → K :=
+    SubNegMonoid.sub'
+  ZSMul.zsmul : ℤ → K → K
+  SubNegMonoid.sub_eq_add_neg : ∀ (a b : K), a - b = a + -b := by
+    intros; rfl
+  SubNegMonoid.zsmul_zero' : ∀ (a : K), 0 • a = 0 := by
+    intros; rfl
+  SubNegMonoid.zsmul_succ' : ∀ (n : ℕ) (a : K), ↑n.succ • a = ↑n • a + a := by
+    intros; rfl
+  SubNegMonoid.zsmul_neg' : ∀ (n : ℕ) (a : K), Int.negSucc n • a = -(↑n.succ • a) := by
+    intros; rfl
+  AddGroup.neg_add_cancel : ∀ (a : K), -a + a = 0
+  IntCast.intCast : ℤ → K :=
+    Int.castDef
+  AddGroupWithOne.intCast_ofNat : ∀ (n : ℕ), IntCast.intCast ↑n = ↑n := by
+    intros; rfl
+  AddGroupWithOne.intCast_negSucc : ∀ (n : ℕ), IntCast.intCast (Int.negSucc n) = -↑(n + 1) := by
+    intros; rfl
+  CommMagma.mul_comm : ∀ (a b : K), a * b = b * a
+  Inv.inv : K → K
+  Div.div : K → K → K :=
+    DivInvMonoid.div'
+  ZPow.zpow : ℤ → K → K :=
+    zpowRec
+  DivInvMonoid.div_eq_mul_inv : ∀ (a b : K), a / b = a * b⁻¹ := by
+    intros; rfl
+  DivInvMonoid.zpow_zero' : ∀ (a : K), a ^ 0 = 1 := by
+    intros; rfl
+  DivInvMonoid.zpow_succ' : ∀ (n : ℕ) (a : K), a ^ ↑n.succ = a ^ ↑n * a := by
+    intros; rfl
+  DivInvMonoid.zpow_neg' : ∀ (n : ℕ) (a : K), a ^ Int.negSucc n = (a ^ ↑n.succ)⁻¹ := by
+    intros; rfl
+  Nontrivial.exists_pair_ne : ∃ x y, x ≠ y
+  NNRatCast.nnratCast : ℚ≥0 → K :=
+    NNRat.castRec
+  RatCast.ratCast : ℚ → K :=
+    Rat.castRec
+  DivisionRing.mul_inv_cancel : ∀ (a : K), a ≠ 0 → a * a⁻¹ = 1
+  DivisionRing.inv_zero : 0⁻¹ = 0
+  DivisionRing.nnratCast_def : ∀ (q : ℚ≥0), ↑q = ↑q.num / ↑q.den := by
+    intros; rfl
+  DivisionRing.nnqsmul : ℚ≥0 → K → K
+  DivisionRing.nnqsmul_def : ∀ (q : ℚ≥0) (a : K), Field.nnqsmul q a = ↑q * a := by
+    intros; rfl
+  DivisionRing.ratCast_def : ∀ (q : ℚ), ↑q = ↑q.num / ↑q.den := by
+    intros; rfl
+  DivisionRing.qsmul : ℚ → K → K
+  DivisionRing.qsmul_def : ∀ (a : ℚ) (x : K), Field.qsmul a x = ↑a * x := by
+    intros; rfl
+constructor:
+  Field.mk.{u} {K : Type u} [toCommRing : CommRing K] [toInv : Inv K] [toDiv : Div K] [toZPow : ZPow K]
+    (div_eq_mul_inv : ∀ (a b : K), a / b = a * b⁻¹ := by intros; rfl)
+    (zpow_zero' : ∀ (a : K), a ^ 0 = 1 := by intros; rfl)
+    (zpow_succ' : ∀ (n : ℕ) (a : K), a ^ ↑n.succ = a ^ ↑n * a := by intros; rfl)
+    (zpow_neg' : ∀ (n : ℕ) (a : K), a ^ Int.negSucc n = (a ^ ↑n.succ)⁻¹ := by intros; rfl) [toNontrivial : Nontrivial K]
+    [toNNRatCast : NNRatCast K] [toRatCast : RatCast K] (mul_inv_cancel : ∀ (a : K), a ≠ 0 → a * a⁻¹ = 1)
+    (inv_zero : 0⁻¹ = 0) (nnratCast_def : ∀ (q : ℚ≥0), ↑q = ↑q.num / ↑q.den := by intros; rfl) (nnqsmul : ℚ≥0 → K → K)
+    (nnqsmul_def : ∀ (q : ℚ≥0) (a : K), nnqsmul q a = ↑q * a := by intros; rfl)
+    (ratCast_def : ∀ (q : ℚ), ↑q = ↑q.num / ↑q.den := by intros; rfl) (qsmul : ℚ → K → K)
+    (qsmul_def : ∀ (a : ℚ) (x : K), qsmul a x = ↑a * x := by intros; rfl) : Field K
+field notation resolution order:
+  Field, CommRing, DivisionRing, Ring, CommMonoid, DivInvMonoid, Nontrivial, NNRatCast, RatCast, Semiring, AddCommGroup, AddGroupWithOne, IntCast, AddGroup, AddCommMonoid, MonoidWithZero, NonUnitalSemiring, NonAssocSemiring, Monoid, NonUnitalNonAssocSemiring, MulZeroOneClass, SemigroupWithZero, AddCommMonoidWithOne, Distrib, CommSemigroup, Inv, Div, ZPow, Semigroup, MulOneClass, NPow, AddMonoidWithOne, MulZeroClass, MulOne, NatCast, SubNegMonoid, AddMonoid, One, Neg, Sub, ZSMul, AddCommSemigroup, AddSemigroup, AddZeroClass, NSMul, AddZero, CommMagma, Mul, Zero, AddCommMagma, Add

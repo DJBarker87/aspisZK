@@ -1,0 +1,43 @@
+{"attempt": "SCJ_069", "exit_status": 0, "wall_seconds": 2.1592563840094954, "peak_rss_kib": "5494552", "swaps": "0", "print_axioms": ["'AspisR1.R3SemanticEquationCore.Equations' depends on axioms: [propext, Quot.sound]", "'AspisR1.P2P_Caller.Outcome' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.R3SemanticEquationCore.Equations : {K : Type} →
+  [inst : CommSemiring K] → K → K → (Fin 10 → K) → (Fin 10 → Polynomial K) → Prop
+def AspisR1.R3SemanticEquationCore.Equations : {K : Type} →
+  [inst : CommSemiring K] → K → K → (Fin 10 → K) → (Fin 10 → Polynomial K) → Prop :=
+fun {K} [CommSemiring K] claim terminal alpha polys =>
+  Polynomial.eval 0 (polys 0) + Polynomial.eval 1 (polys 0) = claim ∧
+    (∀ (j : Fin 9),
+        Polynomial.eval 0 (polys j.succ) + Polynomial.eval 1 (polys j.succ) =
+          Polynomial.eval (alpha j.castSucc) (polys j.castSucc)) ∧
+      Polynomial.eval (alpha 9) (polys 9) = terminal
+'AspisR1.R3SemanticEquationCore.Equations' depends on axioms: [propext, Q
+...
+   (AspisR1.Tx2N_Execution.control (AspisR1.AuS1_Install.base stageBase) reserved queryOps geoOps))
+      finishOps (AspisR1.F3M_CircleSource.install B) claimsStd;
+  have decode := AspisR1.CPhy_Header.decode;
+  have nodes := AspisR1.CPhy_Ranges.nodes f.proof s.proof;
+  have y1 := AspisR1.CPhy_Ranges.y1 f.proof;
+  ∃ parsed,
+    AspisR1.S2W_LeadInterface.S2CallerFacts
+        (AspisR1.S2W_InputSchedule.observation f s saved nodes y1 pre middle fs ss
+          (AspisR1.S2W_D189Consolidation.before e1 e2) (AspisR1.S2W_D189Consolidation.after e1 e2 post1))
+        (AspisR1.S2Z.Oracle.leadDigest
+          (AspisR1.ClaimsUnrolledSdk.sdkOps
+            (AspisR1.Tx2I_Install.install adapterOps
+              (AspisR1.Op5T_Concrete.stage
+                (AspisR1.Tx2N_Execution.control (AspisR1.AuS1_Install.base stageBase) reserved queryOps geoOps))
+              finishOps)
+            (AspisR1.Uni_Install.current ops reserved queryOps geoOps) (AspisR1.F3M_CircleSource.install B) claimsStd))
+        () H (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) (AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub)
+        (AspisR1.MultiproofConeCanonical.bytesOf ↑saved) parsed ∧
+      (∀ (site : AspisR1.S2LeadInterface.Site),
+          (AspisR1.S2W_InputSchedule.observation f s saved nodes y1 pre middle fs ss
+                  (AspisR1.S2W_D189Consolidation.before e1 e2)
+                  (AspisR1.S2W_D189Consolidation.after e1 e2 post1)).reached
+              site ↔
+            AspisR1.S2W_SiteSchedule.Event.site site ∈ AspisR1.S2W_TraceSplice.projected port outer) ∧
+        AspisR1.Rc5_Cont.Outcome adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd prior H f s
+          saved run tx2
+'AspisR1.P2P_Caller.Outcome' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3eee5971c0cc44d9881ea15362d09522.scope; invocation ID: 6846db87318040768ee197016901391c
+

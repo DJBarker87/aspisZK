@@ -1,0 +1,29 @@
+{"attempt": "BEn_083", "exit_status": 0, "wall_seconds": 2.4235311110387556, "peak_rss_kib": "5553340", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_BatchPair.returning' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.SdkC_BatchPair.returning : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (code : AspisR1.SdkC_Source.Code A) (value : A),
+        (AspisR1.SdkC_Source.run hashv code []).1 = Aeneas.Std.Result.ok value →
+          AspisR1.SdkC_BatchPair.Returning hashv H code value :=
+fun {A} hashv sha256 H p1 syscall code value success =>
+  ⟨success,
+    ⟨AspisR1.SdkC_Oracle.accepted_exact hashv sha256 H p1 syscall code value success, fun a d 
+...
+theorem AspisR1.SdkC_BatchPair.returning : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (code : AspisR1.SdkC_Source.Code A) (value : A),
+        (AspisR1.SdkC_Source.run hashv code []).1 = Aeneas.Std.Result.ok value →
+          AspisR1.SdkC_BatchPair.Returning hashv H code value :=
+fun {A} hashv sha256 H p1 syscall code value success =>
+  ⟨success,
+    ⟨AspisR1.SdkC_Oracle.accepted_exact hashv sha256 H p1 syscall code value success, fun a d bad =>
+      AspisR1.SdkC_Source.no_fabricated_reply hashv sha256 H p1 syscall code a d bad⟩⟩
+'AspisR1.SdkC_BatchPair.returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r75b2cf2c25ae474a825fb01c587493a9.scope; invocation ID: 1f9c479ec81646839770b1e994d8929b
+

@@ -1,0 +1,108 @@
+@AspisR1.RPx_FailedQuery.counted : ∀ {A : Type} (parts : AspisR1.SdkC_Source.Parts)
+  (k : AspisR1.SdkC_Source.Digest → AspisR1.CheckpointBytes5Effect.Code A) (error : Aeneas.Std.Error)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  List.length
+        (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+            (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+      1 ∧
+    AspisR1.SdkC_Source.readLog
+          (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+              (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+        [] ∧
+      AspisR1.RPx_AttemptPrefix.addresses
+            (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+                (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+          [AspisV8R19.SqueezeOracleBridge.flatten parts] ∧
+        ∃ rest,
+          List.map Prod.fst
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.SdkC_Oracle.program (AspisR1.CheckpointBytes5Effect.Code.read parts k))).1 =
+            AspisV8R19.SqueezeOracleBridge.flatten parts :: rest
+theorem AspisR1.RPx_FailedQuery.counted : ∀ {A : Type} (parts : AspisR1.SdkC_Source.Parts)
+  (k : AspisR1.SdkC_Source.Digest → AspisR1.CheckpointBytes5Effect.Code A) (error : Aeneas.Std.Error)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  List.length
+        (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+            (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+      1 ∧
+    AspisR1.SdkC_Source.readLog
+          (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+              (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+        [] ∧
+      AspisR1.RPx_AttemptPrefix.addresses
+            (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+                (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+          [AspisV8R19.SqueezeOracleBridge.flatten parts] ∧
+        ∃ rest,
+          List.map Prod.fst
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.SdkC_Oracle.program (AspisR1.CheckpointBytes5Effect.Code.read parts k))).1 =
+            AspisV8R19.SqueezeOracleBridge.flatten parts :: rest :=
+fun {A} parts k error H =>
+  ⟨of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (congrArg List.length
+                (congrArg Prod.snd (AspisR1.SdkC_Source.run.eq_5 (fun x => Aeneas.Std.Result.fail error) [] parts k)))
+              (zero_add 1)))
+          1)
+        (eq_self 1)),
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (congrArg
+                  (List.filterMap fun q =>
+                    match q.returned with
+                    | Aeneas.Std.Result.ok digest =>
+                      Option.some
+                        (AspisV8R19.SqueezeOracleBridge.flatten q.parts,
+                          AspisV8R19.SqueezeOracleBridge.decodeState digest)
+                    | x => Option.none)
+                  (congrArg Prod.snd (AspisR1.SdkC_Source.run.eq_5 (fun x => Aeneas.Std.Result.fail error) [] parts k)))
+                (List.filterMap_cons_none (of_eq_true (eq_self Option.none)))))
+            [])
+          (eq_self [])),
+      ⟨of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg (List.map fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+                  (congrArg Prod.snd
+                    (AspisR1.SdkC_Source.run.eq_5 (fun x => Aeneas.Std.Result.fail error) [] parts k))))
+              [AspisV8R19.SqueezeOracleBridge.flatten parts])
+            (eq_self [AspisV8R19.SqueezeOracleBridge.flatten parts])),
+        Exists.intro
+          (List.map Prod.fst
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.SdkC_Oracle.program
+                  (k
+                    (AspisV8R19.SqueezeOracleBridge.encodeState
+                      (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1)
+          (of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congrArg (List.map Prod.fst)
+                    (congrArg Prod.fst
+                      (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H (AspisV8R19.SqueezeOracleBridge.flatten parts) fun d =>
+                        AspisR1.SdkC_Oracle.program (k (AspisV8R19.SqueezeOracleBridge.encodeState d))))))
+                (AspisV8R19.SqueezeOracleBridge.flatten parts ::
+                  List.map Prod.fst
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.SdkC_Oracle.program
+                          (k
+                            (AspisV8R19.SqueezeOracleBridge.encodeState
+                              (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1))
+              (eq_self
+                (AspisV8R19.SqueezeOracleBridge.flatten parts ::
+                  List.map Prod.fst
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.SdkC_Oracle.program
+                          (k
+                            (AspisV8R19.SqueezeOracleBridge.encodeState
+                              (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1))))⟩⟩⟩
+'AspisR1.RPx_FailedQuery.counted' depends on axioms: [propext, Classical.choice, Quot.sound]

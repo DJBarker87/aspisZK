@@ -1,0 +1,170 @@
+FJm_QMSquare.lean:31:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decodeC (cm lo)
+in the target expression
+  (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm lo, c1 := cm hi })).re =
+    (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).re *
+        (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).re +
+      AspisV8R15.ExactTowerBase.qm31R * (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).im *
+        (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).im
+
+case refl.re
+x : NQ
+hx : FIo_QMValues.Canon x
+a : FIo_Native.aspis_core.field.CM31
+ha : x.c0.square = ok a
+b : FIo_Native.aspis_core.field.CM31
+hb : x.c1.square = ok b
+r : FIo_Native.aspis_core.field.CM31
+hr : FIo_Native.aspis_core.field.mul_by_r b = ok r
+lo : FIo_Native.aspis_core.field.CM31
+hlo : a.add r = ok lo
+ab : FIo_Native.aspis_core.field.CM31
+hab : x.c0.mul x.c1 = ok ab
+hi : FIo_Native.aspis_core.field.CM31
+run✝⁵ :
+  (do
+      let c0_square ← x.c0.square
+      let c1_square ← x.c1.square
+      let c ← FIo_Native.aspis_core.field.mul_by_r c1_square
+      let c1 ← c0_square.add c
+      let c2 ← x.c0.mul x.c1
+      let c3 ← c2.double
+      ok { c0 := c1, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run✝⁴ :
+  (do
+      let c1_square ← x.c1.square
+      let c ← FIo_Native.aspis_core.field.mul_by_r c1_square
+      let c1 ← a.add c
+      let c2 ← x.c0.mul x.c1
+      let c3 ← c2.double
+      ok { c0 := c1, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run✝³ :
+  (do
+      let c ← FIo_Native.aspis_core.field.mul_by_r b
+      let c1 ← a.add c
+      let c2 ← x.c0.mul x.c1
+      let c3 ← c2.double
+      ok { c0 := c1, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run✝² :
+  (do
+      let c1 ← a.add r
+      let c2 ← x.c0.mul x.c1
+      let c3 ← c2.double
+      ok { c0 := c1, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run✝¹ :
+  (do
+      let c2 ← x.c0.mul x.c1
+      let c3 ← c2.double
+      ok { c0 := lo, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run✝ :
+  (do
+      let c3 ← ab.double
+      ok { c0 := lo, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run : ok { c0 := lo, c1 := hi } = ok { c0 := lo, c1 := hi }
+va : FIo_CMValues.Canon a ∧ decodeC (cm a) = decodeC (cm x.c0) * decodeC (cm x.c0)
+vb : FIo_CMValues.Canon b ∧ decodeC (cm b) = decodeC (cm x.c1) * decodeC (cm x.c1)
+vr : FIo_CMValues.Canon r ∧ decodeC (cm r) = AspisV8R15.ExactTowerBase.qm31R * decodeC (cm b)
+vl : FIo_CMValues.Canon lo ∧ decodeC (cm lo) = decodeC (cm a) + decodeC (cm r)
+vab : FIo_CMValues.Canon ab ∧ decodeC (cm ab) = decodeC (cm x.c0) * decodeC (cm x.c1)
+hhi : ab.add ab = ok hi
+vh : FIo_CMValues.Canon hi ∧ decodeC (cm hi) = decodeC (cm ab) + decodeC (cm ab)
+⊢ (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm lo, c1 := cm hi })).re =
+    (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).re *
+        (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).re +
+      AspisV8R15.ExactTowerBase.qm31R * (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).im *
+        (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).im
+FJm_QMSquare.lean:34:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decodeC (cm hi)
+in the target expression
+  (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm lo, c1 := cm hi })).im =
+    (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).re *
+        (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).im +
+      (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).im *
+        (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).re
+
+case refl.im
+x : NQ
+hx : FIo_QMValues.Canon x
+a : FIo_Native.aspis_core.field.CM31
+ha : x.c0.square = ok a
+b : FIo_Native.aspis_core.field.CM31
+hb : x.c1.square = ok b
+r : FIo_Native.aspis_core.field.CM31
+hr : FIo_Native.aspis_core.field.mul_by_r b = ok r
+lo : FIo_Native.aspis_core.field.CM31
+hlo : a.add r = ok lo
+ab : FIo_Native.aspis_core.field.CM31
+hab : x.c0.mul x.c1 = ok ab
+hi : FIo_Native.aspis_core.field.CM31
+run✝⁵ :
+  (do
+      let c0_square ← x.c0.square
+      let c1_square ← x.c1.square
+      let c ← FIo_Native.aspis_core.field.mul_by_r c1_square
+      let c1 ← c0_square.add c
+      let c2 ← x.c0.mul x.c1
+      let c3 ← c2.double
+      ok { c0 := c1, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run✝⁴ :
+  (do
+      let c1_square ← x.c1.square
+      let c ← FIo_Native.aspis_core.field.mul_by_r c1_square
+      let c1 ← a.add c
+      let c2 ← x.c0.mul x.c1
+      let c3 ← c2.double
+      ok { c0 := c1, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run✝³ :
+  (do
+      let c ← FIo_Native.aspis_core.field.mul_by_r b
+      let c1 ← a.add c
+      let c2 ← x.c0.mul x.c1
+      let c3 ← c2.double
+      ok { c0 := c1, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run✝² :
+  (do
+      let c1 ← a.add r
+      let c2 ← x.c0.mul x.c1
+      let c3 ← c2.double
+      ok { c0 := c1, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run✝¹ :
+  (do
+      let c2 ← x.c0.mul x.c1
+      let c3 ← c2.double
+      ok { c0 := lo, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run✝ :
+  (do
+      let c3 ← ab.double
+      ok { c0 := lo, c1 := c3 }) =
+    ok { c0 := lo, c1 := hi }
+run : ok { c0 := lo, c1 := hi } = ok { c0 := lo, c1 := hi }
+va : FIo_CMValues.Canon a ∧ decodeC (cm a) = decodeC (cm x.c0) * decodeC (cm x.c0)
+vb : FIo_CMValues.Canon b ∧ decodeC (cm b) = decodeC (cm x.c1) * decodeC (cm x.c1)
+vr : FIo_CMValues.Canon r ∧ decodeC (cm r) = AspisV8R15.ExactTowerBase.qm31R * decodeC (cm b)
+vl : FIo_CMValues.Canon lo ∧ decodeC (cm lo) = decodeC (cm a) + decodeC (cm r)
+vab : FIo_CMValues.Canon ab ∧ decodeC (cm ab) = decodeC (cm x.c0) * decodeC (cm x.c1)
+hhi : ab.add ab = ok hi
+vh : FIo_CMValues.Canon hi ∧ decodeC (cm hi) = decodeC (cm ab) + decodeC (cm ab)
+⊢ (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm lo, c1 := cm hi })).im =
+    (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).re *
+        (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).im +
+      (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).im *
+        (ExtractedCurrentQM31Exact.decode (toQM { c0 := cm x.c0, c1 := cm x.c1 })).re
+FJm_QMSquare.lean:33:60: warning: This simp argument is unused:
+  zero_add
+
+Hint: Omit it from the simp argument list.
+  simp only [decodeQM, ̲qm, ̲QuadraticAlgebra.im_mul, ̲zero_mul,z̵e̵r̵o̵_̵ ̲add,̵a̵d̵d̵_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJm_QMSquare.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

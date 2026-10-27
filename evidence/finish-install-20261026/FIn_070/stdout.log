@@ -1,0 +1,32 @@
+'AspisR1.FIn_QuarterAlias.field_type' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIn_QuarterAlias.same_predicate' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.Port4D_Pairing.RoundLaws {F W : Type} [Field F] (ops : FinishOps W) (decode : E → F)
+  (bytes : Slice U8) (poly : Polynomial F) : Prop
+number of parameters: 7
+fields:
+  AspisR1.Port4D_Pairing.RoundLaws.boundary : ∀ (c0 c4 lhs : E),
+      ops.field bytes 0#usize = ok c0 →
+        ops.field bytes 4#usize = ok c4 → ops.add c0 c4 = ok lhs → decode lhs = TwoRoundComparison.boundary poly
+  AspisR1.Port4D_Pairing.RoundLaws.quarter : ∀ (m : M) (claim rhs : E),
+      ops.quarter = ok m → ops.mulM claim m = ok rhs → decode rhs = RoundPairing.quarter * decode claim
+  AspisR1.Port4D_Pairing.RoundLaws.eval : ∀ (alpha value : E),
+      ops.polynomial bytes alpha = ok value → decode value = Polynomial.eval (decode alpha) poly
+constructor:
+  AspisR1.Port4D_Pairing.RoundLaws.mk {F W : Type} [Field F] {ops : FinishOps W} {decode : E → F} {bytes : Slice U8}
+    {poly : Polynomial F}
+    (boundary :
+      ∀ (c0 c4 lhs : E),
+        ops.field bytes 0#usize = ok c0 →
+          ops.field bytes 4#usize = ok c4 → ops.add c0 c4 = ok lhs → decode lhs = TwoRoundComparison.boundary poly)
+    (quarter :
+      ∀ (m : M) (claim rhs : E),
+        ops.quarter = ok m → ops.mulM claim m = ok rhs → decode rhs = RoundPairing.quarter * decode claim)
+    (eval :
+      ∀ (alpha value : E), ops.polynomial bytes alpha = ok value → decode value = Polynomial.eval (decode alpha) poly) :
+    Port4D_Pairing.RoundLaws ops decode bytes poly
+@[reducible] def AspisR1.SAG_QuarterFree.QuarterMeaning : {W : Type} → FinishOps W → Prop :=
+fun {W} ops =>
+  ∀ (m : M) (claim rhs : E),
+    ops.quarter = ok m →
+      ops.mulM claim m = ok rhs →
+        CheckpointBytes5Output.ofE rhs = RoundPairing.quarter * CheckpointBytes5Output.ofE claim

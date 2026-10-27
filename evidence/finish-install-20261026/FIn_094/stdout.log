@@ -1,0 +1,21 @@
+def AspisR1.F3T_Runtime.StoredCarrierBinding : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.LiteralByteProtocol.Decoder →
+      AspisR1.F3T_TwoPass.Verifier → AspisR1.F3T_ByteCarrier.ByteProver → AspisR1.F3T_Runtime.Runtime → Prop :=
+fun {F C} c D rust P runtime =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (run : AspisR1.F3T_Experiment.RunView),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = Option.some run →
+      run.2.2 = Bool.true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_TwoPass.annotatedWith D rust (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c P)))
+structure AspisR1.F3_Model.Input : Type
+number of parameters: 0
+fields:
+  AspisR1.F3_Model.Input.semantic : AspisR1.F3_Model.SemanticPublic
+  AspisR1.F3_Model.Input.physical : AspisR1.F3_Model.PhysicalPublic
+  AspisR1.F3_Model.Input.proof : AspisR1.RawCutProverCompiler.Proof
+  AspisR1.F3_Model.Input.stored : AspisV8R19.DuplexFrames.Bytes
+constructor:
+  AspisR1.F3_Model.Input.mk (semantic : AspisR1.F3_Model.SemanticPublic) (physical : AspisR1.F3_Model.PhysicalPublic)
+    (proof : AspisR1.RawCutProverCompiler.Proof) (stored : AspisV8R19.DuplexFrames.Bytes) : AspisR1.F3_Model.Input

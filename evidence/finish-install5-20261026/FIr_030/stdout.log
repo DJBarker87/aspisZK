@@ -1,0 +1,53 @@
+FIr_SourceChain.lean:51:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Polynomial.eval 0 (Polynomial.map (algebraMap K W) (polynomialOf entries[↑j + 1].coefficients))
+in the target expression
+  Polynomial.eval 0 (Polynomial.map (algebraMap K W) (polynomialOf entries[↑j.succ].coefficients)) +
+      Polynomial.eval 1 (Polynomial.map (algebraMap K W) (polynomialOf entries[↑j.succ].coefficients)) =
+    Polynomial.eval ((algebraMap K W) (DecodeMain (↑alpha)[↑j]))
+      (Polynomial.map (algebraMap K W) (polynomialOf entries[↑j.castSucc].coefficients))
+
+H : Type
+D : aspis_core.Digest32 H
+pre : r1_wire.Prefix
+initial final : Outcome H
+entries : List (RoundEvidence D pre)
+run : AnnotatedRun D pre SemanticRoundsCheckedTrace.schedule initial final entries
+values : SemanticPrefixCodec.Full
+full : SemanticPrefixCodec.encodeFull values = PrefixAdapter.completedRecords pre
+alpha : Std.Array aspis_core.field.QM31 10#usize
+same : List.map RoundEvidence.q entries = ↑alpha
+j : Fin 9
+chain : RawGenericPolynomialSumcheckChain.Chain (DecodeMain initial.1) (DecodeMain final.1)
+  (List.map (pairOf D pre) entries) :=
+  annotatedRun_to_chain D pre SemanticRoundsCheckedTrace.schedule initial final entries run
+step :
+  Polynomial.eval 0 (polynomialOf entries[↑j + 1].coefficients) +
+      Polynomial.eval 1 (polynomialOf entries[↑j + 1].coefficients) =
+    Polynomial.eval (DecodeMain entries[↑j].q) (polynomialOf entries[↑j].coefficients)
+mapped :
+  (algebraMap K W) (Polynomial.eval 0 (polynomialOf entries[↑j + 1].coefficients)) +
+      (algebraMap K W) (Polynomial.eval 1 (polynomialOf entries[↑j + 1].coefficients)) =
+    (algebraMap K W) (Polynomial.eval (DecodeMain entries[↑j].q) (polynomialOf entries[↑j].coefficients))
+evalZero :
+  Polynomial.eval 0 (Polynomial.map (algebraMap K W) (polynomialOf entries[↑j + 1].coefficients)) =
+    (algebraMap K W) (Polynomial.eval 0 (polynomialOf entries[↑j + 1].coefficients))
+evalOne :
+  Polynomial.eval 1 (Polynomial.map (algebraMap K W) (polynomialOf entries[↑j + 1].coefficients)) =
+    (algebraMap K W) (Polynomial.eval 1 (polynomialOf entries[↑j + 1].coefficients))
+⊢ Polynomial.eval 0 (Polynomial.map (algebraMap K W) (polynomialOf entries[↑j.succ].coefficients)) +
+      Polynomial.eval 1 (Polynomial.map (algebraMap K W) (polynomialOf entries[↑j.succ].coefficients)) =
+    Polynomial.eval ((algebraMap K W) (DecodeMain (↑alpha)[↑j]))
+      (Polynomial.map (algebraMap K W) (polynomialOf entries[↑j.castSucc].coefficients))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FIr_SourceChain.polynomial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIr_SourceChain.adjacent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

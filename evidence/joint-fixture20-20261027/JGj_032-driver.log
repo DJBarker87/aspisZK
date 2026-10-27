@@ -1,0 +1,76 @@
+{"attempt": "JGj20_032", "exit_status": 1, "wall_seconds": 1.5091747459955513, "peak_rss_kib": "3019892", "swaps": "0", "print_axioms": ["'AspisR1.JGj_LeadingLoopTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGj_LeadingLoopTotal.lean:16:13: error: unsolved goals
+a : State
+ha : canonical a
+iter : Range
+s : State
+he : ↑iter.end ≤ 16
+hn : ↑iter.start + 0 = ↑iter.end
+hs : canonical s
+⊢ (let (o, iter1) := (none, iter)
+    match o with
+    | none => ok s
+    | some lane => do
+      let next ← FJb_LeadingStep.step a s lane
+      state_only_poseidon.leading_pair_packed_loop iter1 a next) =
+    ok s
+JGj_LeadingLoopTotal.lean:21:64: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJb_LeadingStep.step a s iter.start
+in the target expression
+  (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok s
+    | some lane => do
+      let next ← FJb_LeadingStep.ste
+...
+ome lane => do
+      let next ← FJb_LeadingStep.step a s lane
+      state_only_poseidon.leading_pair_packed_loop iter1 a next) =
+    ok out
+
+a : State
+ha : canonical a
+n : ℕ
+ih :
+  ∀ (iter : Range) (s : State),
+    ↑iter.end ≤ 16 →
+      ↑iter.start + n = ↑iter.end →
+        canonical s → ∃ out, state_only_poseidon.leading_pair_packed_loop iter a s = ok out ∧ canonical out
+iter : Range
+s : State
+he : ↑iter.end ≤ 16
+hn : ↑iter.start + (n + 1) = ↑iter.end
+hs : canonical s
+iter1 : OccupancyRangeTraversal.Range
+rn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+vs : ↑iter1.start = ↑iter.start + 1
+ve : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+s1 : State
+rs : FJb_LeadingStep.step a s iter.start = ok s1
+cs : canonical s1
+out : Std.Array field.QM31 16#usize
+ro : state_only_poseidon.leading_pair_packed_loop iter1 a s1 = ok out
+co : canonical out
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok s
+    | some lane => do
+      let next ← FJb_LeadingStep.step a s lane
+      state_only_poseidon.leading_pair_packed_loop iter1 a next) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGj_LeadingLoopTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re6aa9caffe31425ea5380ec685e8011f.scope; invocation ID: e5d9e77b66484df4adc9573114bd4fbc
+

@@ -1,0 +1,25 @@
+-- NARROWER checked batch-source result; full requested extension not established.
+theorem accepted_pair {A F : Type}
+    (copy : Heap (Nat → Record) → Nat → Payload → Outcome (Nat → Record))
+    (stdCopy : TrustedStd copy) (allocator : Allocator A) (e1 e2 : Entry)
+    (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops) (stage : VTop_Stages.Ops)
+    (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+    (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls)
+    (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+    (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+    (extraction : S2W_DigestExtraction.AeneasExtraction
+      (Op5T_SamePair.dictionary adapter ops stage finish B std) native1 native2 hashv)
+    (sha256 H : Bytes → State) (p1 : S2W_ExtractionBoundary.P1 sha256 H)
+    (syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+    (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot)
+    (state1 state2 final1 final2 : A) (saved : alloc.vec.Vec U8) (post1 post2 : Heap (Nat → Record))
+    (accepted1 : first native1 copy allocator e1 program data1 state1 = .ok (.Ok (saved,post1,final1)))
+    (accepted2 : second native2 allocator e2 program data2 slot state2 = .ok (.Ok (post2,final2))) :
+    ∃ f s,
+      SourceCuts (Op5T_SamePair.dictionary adapter ops stage finish B std)
+        e1.first (e2.second secondSizes) saved f s ∧
+      post2 = e2.heap ∧
+      ∃ (p0 : AspisR1CurrentCaller.verifier.Prepared) (root0 : Array U8 32#usize)
+        (p2 : VTop_Stages.verifier.Prepared) (root2 : Array U8 32#usize),
+        Returning hashv H (SdkC_BatchSource.currentCode hashv f.proof p0 root0) (.Ok ()) ∧
+        Returning hashv H (SdkC_BatchSource.stageCode hashv s.proof p2 root2) (.Ok ())

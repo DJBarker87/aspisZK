@@ -1,0 +1,60 @@
+F3R_SemanticChain.lean:42:10: error(lean.unknownIdentifier): Unknown identifier `AuS1_Trace.erase_bind`
+F3R_SemanticChain.lean:49:6: error: Type mismatch
+  congrArg (fun x => callLog c ++ x) next.right
+has type
+  callLog c ++ observe (run (code D pre (List.map (fun c => c.row) cs) c.after)).1 = callLog c ++ sourceLog cs
+but is expected to have type
+  List.flatMap
+        (fun e =>
+          match e with
+          | Event.digest D hash parts (ok out) =>
+            [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+          | Event.digest D hash parts (fail e) => []
+          | Event.digest D hash parts div => [])
+        (run (S1SemanticCode.semanticValidated D c.before c.record)).1 ++
+      (List.flatMap
+          (fun e =>
+            match e with
+            | Event.digest D hash parts (ok out) =>
+              [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+            | Event.digest D hash parts (fail e) => []
+            | Event.digest D hash parts div => [])
+          (run (code D pre (List.map (fun c => c.row) cs) c.after)).1 ++
+        List.flatMap
+          (fun e =>
+            match e with
+            | Event.digest D hash parts (ok out) =>
+              [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+            | Event.digest D hash parts (fail e) => []
+            | Event.digest D hash parts div => [])
+          (run (pure (core.result.Result.Ok (c.q :: List.map (fun c => c.q) cs, after)))).1) =
+    sourceLog (c :: cs)
+F3R_SemanticChain.lean:48:17: warning: This simp argument is unused:
+  F3J_ValidatedLog.semantic c cb
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵J̵_̵V̵a̵l̵i̵d̵a̵t̵e̵d̵L̵o̵g̵.̵s̵e̵m̵a̵n̵t̵i̵c̵ ̵c̵ ̵c̵b̵,̵o̵b̵s̵e̵r̵v̵e̵,̵r̵u̵n̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲r̲u̲n̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3R_SemanticChain.lean:48:56: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [F3J_ValidatedLog.semantic c cb, ̲observe,r̵u̵n̵,̵ ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3R_SemanticChain.lean:48:60: warning: This simp argument is unused:
+  List.flatMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [F3J_ValidatedLog.semantic c c̵b̵,̵o̵b̵s̵e̵r̵v̵e̵,̵r̵u̵n̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵c̲b̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲r̲u̲n̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3R_SemanticChain.lean:48:77: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [F3J_ValidatedLog.semantic c c̵b̵,̵o̵b̵s̵e̵r̵v̵e̵,̵r̵u̵n̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵c̲b̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲r̲u̲n̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3R_SemanticChain.trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

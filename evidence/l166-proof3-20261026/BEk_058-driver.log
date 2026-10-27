@@ -1,0 +1,28 @@
+{"attempt": "BEk_058", "exit_status": 0, "wall_seconds": 1.8553568019997329, "peak_rss_kib": "4383476", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_Source.readLog' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.SdkC_Source.readLog : AspisR1.SdkC_Source.Log →
+  List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) :=
+fun log =>
+  List.filterMap
+    (fun q =>
+      match q.returned with
+      | Aeneas.Std.Result.ok digest =>
+        Option.some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+      | x => Option.none)
+    log
+'AspisR1.SdkC_Source.readLog' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+def AspisR1.SdkC_Source.readLog : AspisR1.SdkC_Source.Log →
+  List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) :=
+fun log =>
+  List.filterMap
+    (fun q =>
+      match q.returned with
+      | Aeneas.Std.Result.ok digest =>
+        Option.some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+      | x => Option.none)
+    log
+'AspisR1.SdkC_Source.readLog' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7cbd464cf1b641bdae1643bc56f2157d.scope; invocation ID: 5216774240844f1aa6e72e46125bf624
+

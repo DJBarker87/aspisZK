@@ -1,0 +1,24 @@
+F3J_SemanticPrefix.lean:53:4: error: 'change' tactic failed, pattern
+  callLog c ++ (eval H (F3J_SamplerRun.program pf (row + 1) cs.length next)).1 = sourceLog (c :: cs) ∧ ?m.295
+is not definitionally equal to target
+  (eval H (LiteralByteSampler.samp row P (F3J_InputRows.proof p root w bound row)).toProgram).1 ++
+        (eval H
+            (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) (row + 1) cs.length
+              (Prefix.ext P (F3J_InputRows.proof p root w bound row)
+                (eval H (LiteralByteSampler.samp row P (F3J_InputRows.proof p root w bound row)).toProgram).2))).1 =
+      sourceLog (c :: cs) ∧
+    UnifiedSampler.stateOf SelectedTranscriptParams.params
+        (LiteralTranscript.erasePrefix
+          (eval H
+              (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) (row + 1) cs.length
+                (Prefix.ext P (F3J_InputRows.proof p root w bound row)
+                  (eval H (LiteralByteSampler.samp row P (F3J_InputRows.proof p root w bound row)).toProgram).2))).2) =
+      decodeState after.state
+F3J_SemanticPrefix.lean:52:65: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_cons, ̲F3J_SamplerRun.program, ̲eval_bind,̵s̵t̵e̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3J_SemanticPrefix.positive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

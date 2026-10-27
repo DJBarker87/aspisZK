@@ -1,0 +1,89 @@
+FIy_OccupancyStep.lean:47:89: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  b ≥ 0
+  b - d ≥ 1
+  3 ≤ a ≤ 10
+  a - b ≤ -1
+  a - d ≤ -1
+where
+ a := ↑↑j
+ b := ↑↑12#usize
+ d := ↑↑⟨↑i1, ⋯⟩
+FIy_OccupancyStep.lean:47:2: error: unsolved goals
+case pos
+lane : Usize
+opened : Std.Array NQ 16#usize
+oneMinus both : NQ
+occupancy out : Std.Array NQ 12#usize
+hl : ↑lane < 8
+ha : canonical opened
+hm : Canon oneMinus
+hb : Canon both
+hc : canonical occupancy
+success✝⁴ :
+  (do
+      let i ← 2#usize + lane
+      let q ← opened.index_usize i
+      let q1 ← field.QM31.mul oneMinus q
+      let q2 ← field.QM31.mul both q1
+      let i1 ← 3#usize + lane
+      occupancy.update i1 q2) =
+    ok out
+i : UScalar UScalarTy.Usize
+hi : 2#usize + lane = ok i
+success✝³ :
+  (do
+      let q ← opened.index_usize i
+      let q1 ← field.QM31.mul oneMinus q
+      let q2 ← field.QM31.mul both q1
+      let i1 ← 3#usize + lane
+      occupancy.update i1 q2) =
+    ok out
+q : NQ
+hq : opened.index_usize i = ok q
+success✝² :
+  (do
+      let q1 ← field.QM31.mul oneMinus q
+      let q2 ← field.QM31.mul both q1
+      let i1 ← 3#usize + lane
+      occupancy.update i1 q2) =
+    ok out
+q1 : field.QM31
+hq1 : field.QM31.mul oneMinus q = ok q1
+success✝¹ :
+  (do
+      let q2 ← field.QM31.mul both q1
+      let i1 ← 3#usize + lane
+      occupancy.update i1 q2) =
+    ok out
+q2 : field.QM31
+hq2 : field.QM31.mul both q1 = ok q2
+success✝ :
+  (do
+      let i1 ← 3#usize + lane
+      occupancy.update i1 q2) =
+    ok out
+i1 : UScalar UScalarTy.Usize
+hi1 : 3#usize + lane = ok i1
+success : occupancy.update i1 q2 = ok out
+c : Canon q
+m1 : Canon q1 ∧ decode q1 = decode oneMinus * decode q
+m2 : Canon q2 ∧ decode q2 = decode both * decode q1
+j : Fin ↑12#usize
+vi : ↑i = 2 + ↑lane
+vi1 : ↑i1 = 3 + ↑lane
+hu : canonical out ∧ decoded out = Function.update (decoded occupancy) ⟨↑i1, ⋯⟩ (decode q2)
+he : ↑j = 3 + ↑lane
+hj : j = ⟨↑i1, ⋯⟩
+⊢ decode both * (decode oneMinus * FIv_NativeArray.value opened (2 + ↑lane)) =
+    if True then decode both * (decode oneMinus * FIv_NativeArray.value opened (2 + ↑lane))
+    else decoded occupancy ⟨3 + ↑lane, ⋯⟩
+FIy_OccupancyStep.lean:49:25: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵o̵d̵e̵l̵,̵v̵i̵1̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵v̵i̵]̵[̲m̲o̲d̲e̲l̲,̲ ̲v̲i̲1̲,̲ ̲v̲i̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIy_OccupancyStep.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

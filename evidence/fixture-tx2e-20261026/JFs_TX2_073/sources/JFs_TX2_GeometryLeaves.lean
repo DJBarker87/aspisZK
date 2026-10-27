@@ -1,0 +1,7 @@
+import JFs_TX2_GeometryInterfaces
+#print AspisR1QueryGeometryActual.domain.FibreIndex.get
+#print AspisR1QueryGeometryActual.fast_domain.table_value
+#check AspisR1QueryGeometryActual.fast_domain.TABLE_A
+#check AspisR1QueryGeometryActual.fast_domain.TABLE_B
+#print AspisR1Qm31ArithmeticProbe.field.CM31.mul
+#print R17CurrentM31Semantics.operations

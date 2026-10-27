@@ -1,0 +1,11 @@
+'AspisR1.JFo_ReaderFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JFo_ReaderFixture.inhabited : ∃ p a,
+  a.next = 10#usize ∧
+    (↑a.weights).length = 64 ∧
+      Port4A_NativeReader.tail (T2Nat_ReaderOps.ops true) JFx_NativeBytes.checkpoint transport.Variant.S2 10#u8
+            1736#usize (JFq_Range.segment 1736 32 ⋯) JFo_AuthBytes.checksum =
+          ok (core.result.Result.Ok (p, a)) ∧
+        OraclePortCheckpointResumeC5.decodeAccumulator (MultiproofConeCanonical.bytesOf ↑JFx_NativeBytes.checkpoint) =
+          some (CheckpointBytes5Output.accumulator a) :=
+Exists.intro JFo_Prepared.value
+  (Exists.intro JFo_Prepared.accumulator ⟨rfl, ⟨JFo_Weights.length, ⟨JFo_Tail.native, JFo_DecodedAccumulator.source⟩⟩⟩)

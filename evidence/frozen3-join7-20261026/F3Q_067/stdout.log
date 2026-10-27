@@ -1,0 +1,106 @@
+F3Q_SourceCurrentBatch.lean:29:83: error: unsolved goals
+case this
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Unit
+source : ∀ (parts : Slice (Slice U8)), D.digest () parts = hashv parts
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+p : AspisR1CurrentCaller.verifier.Prepared
+folded : Std.Array U8 32#usize
+q : Fin 22 → Fin 262144
+queries : Port4B_KeyInstall.queries p.queries = q
+nodes : ℕ → ℕ → Slice U8
+views :
+  ∀ (b k : ℕ),
+    b < 2 →
+      k < 3 →
+        bytesOf ↑(nodes b k) =
+          OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + k))
+            (32 * OraclePortSelectedDraft.capacity (3 * b + k))
+root0 : Port3_BatchStage.root0 (Tx1Q_Carriers.prepared p) = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root1 : Port3_BatchStage.root1 (Tx1Q_Carriers.prepared p) = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+root2 : folded = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+success : Op5T_Install.currentBatch Port4B_Install.leaves D proof p folded 0#usize () = ok (core.result.Result.Ok ())
+real : (SdkC_Source.run hashv (SdkC_BatchSource.currentCode hashv proof p folded) []).1 = ok (core.result.Result.Ok ())
+observed :
+  (SdkC_Source.readLog (SdkC_Source.run hashv (SdkC_BatchSource.currentCode hashv proof p folded) []).2,
+        ok (core.result.Result.Ok ())).1 =
+    (eval H (SdkC_Oracle.program (SdkC_BatchSource.currentCode hashv proof p folded))).1
+native :
+  Op5T_Install.stageBatch Port4B_Install.leaves (SdkC_Authentication.idealStage H) proof
+      (SdkC_FirstAuthentication.staged (Tx1Q_Carriers.prepared p) p) folded 0#usize () =
+    ok (core.result.Result.Ok ())
+log : List (Bytes × State)
+run :
+  eval H
+      (MultiproofConeP6Frozen2Stage.sourceBatch Op5T_P6.parent Op5T_P6.parent MultiproofConeP6Batch.referenceLeaf parsed
+        q nodes (↑0#usize) Port4B_BatchJoin.initial) =
+    (log, true)
+frozen : eval H (OraclePortFrozen2.batch parsed q [(↑0#usize, 0), (↑0#usize, 1), (↑0#usize, 2)]) = (log, true)
+ordered :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_Batch.code Port4B_Install.leaves (VTop_Checkpoint.digest (SdkC_Authentication.idealStage H)) () proof
+            (SdkC_FirstAuthentication.staged (Tx1Q_Carriers.prepared p) p) folded 0#usize))).1 =
+    log
+⊢ ?m.159
+
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Unit
+source : ∀ (parts : Slice (Slice U8)), D.digest () parts = hashv parts
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+p : AspisR1CurrentCaller.verifier.Prepared
+folded : Std.Array U8 32#usize
+q : Fin 22 → Fin 262144
+queries : Port4B_KeyInstall.queries p.queries = q
+nodes : ℕ → ℕ → Slice U8
+views :
+  ∀ (b k : ℕ),
+    b < 2 →
+      k < 3 →
+        bytesOf ↑(nodes b k) =
+          OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + k))
+            (32 * OraclePortSelectedDraft.capacity (3 * b + k))
+root0 : Port3_BatchStage.root0 (Tx1Q_Carriers.prepared p) = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root1 : Port3_BatchStage.root1 (Tx1Q_Carriers.prepared p) = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+root2 : folded = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+success : Op5T_Install.currentBatch Port4B_Install.leaves D proof p folded 0#usize () = ok (core.result.Result.Ok ())
+real : (SdkC_Source.run hashv (SdkC_BatchSource.currentCode hashv proof p folded) []).1 = ok (core.result.Result.Ok ())
+observed :
+  (SdkC_Source.readLog (SdkC_Source.run hashv (SdkC_BatchSource.currentCode hashv proof p folded) []).2,
+        ok (core.result.Result.Ok ())).1 =
+    (eval H (SdkC_Oracle.program (SdkC_BatchSource.currentCode hashv proof p folded))).1
+native :
+  Op5T_Install.stageBatch Port4B_Install.leaves (SdkC_Authentication.idealStage H) proof
+      (SdkC_FirstAuthentication.staged (Tx1Q_Carriers.prepared p) p) folded 0#usize () =
+    ok (core.result.Result.Ok ())
+log : List (Bytes × State)
+run :
+  eval H
+      (MultiproofConeP6Frozen2Stage.sourceBatch Op5T_P6.parent Op5T_P6.parent MultiproofConeP6Batch.referenceLeaf parsed
+        q nodes (↑0#usize) Port4B_BatchJoin.initial) =
+    (log, true)
+frozen : eval H (OraclePortFrozen2.batch parsed q [(↑0#usize, 0), (↑0#usize, 1), (↑0#usize, 2)]) = (log, true)
+ordered :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_Batch.code Port4B_Install.leaves (VTop_Checkpoint.digest (SdkC_Authentication.idealStage H)) () proof
+            (SdkC_FirstAuthentication.staged (Tx1Q_Carriers.prepared p) p) folded 0#usize))).1 =
+    log
+this : ?m.159
+⊢ SdkC_Source.readLog (SdkC_Source.run hashv (SdkC_BatchSource.currentCode hashv proof p folded) []).2 =
+      (eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch0)).1 ∧
+    (eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch0)).2 = true
+F3Q_SourceCurrentBatch.lean:36:13: error: unexpected token ':='; expected identifier or stx
+'AspisR1.F3Q_SourceCurrentBatch.current' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

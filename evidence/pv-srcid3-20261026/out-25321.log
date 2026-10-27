@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionArray.lean:13:17: error: unsolved goals
+case cons
+T : Type
+cmp : core.cmp.PartialEq T T
+hn : ∀ (x : T), cmp.ne x x = ok false
+x : T
+xs : List T
+ih :
+  List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← cmp.ne x y
+          ok (decide ¬b = true))
+      (xs.zip xs) =
+    ok true
+⊢ List.allM
+      (fun x => do
+        let b ← cmp.ne x.1 x.2
+        ok !b)
+      (List.map (fun a => (a, a)) xs) =
+    ok true
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionArray.lean:13:35: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵z̵i̵p̵,̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵h̵n̵,̵i̵h̵]̵[̲L̲i̲s̲t̲.̲z̲i̲p̲,̲ ̲h̲n̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionArray.lean:13:48: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [List.zip, ̲List.allM, ̲hn,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionArray.lean:32:8: warning: This simp argument is unused:
+  core.cmp.PartialEq.ne.trait_default
+
+Hint: Omit it from the simp argument list.
+  simp [core.cmp.PartialEq.ne.t̵r̵a̵i̵t̵_̵default,c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵
+      AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31,
+      AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionArray.lean:33:4: warning: This simp argument is unused:
+  AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵t̵r̵a̵i̵t̵_̵d̵e̵f̵a̵u̵l̵t̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵B̵u̵i̵l̵d̵e̵r̵A̵d̵m̵i̵s̵s̵i̵o̵n̵S̵o̵u̵r̵c̵e̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵M̵3̵1̵,̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲t̲r̲a̲i̲t̲_̲d̲e̲f̲a̲u̲l̲t̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲d̲e̲f̲a̲u̲l̲t̲,̲
+      AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Src_AdmissionArray.list_reflexive' depends on axioms: [sorryAx]
+'R1Z.PV_Src_AdmissionArray.array_ne_self' depends on axioms: [sorryAx]
+'R1Z.PV_Src_AdmissionArray.byte_ne_self' depends on axioms: [propext]
+'R1Z.PV_Src_AdmissionArray.bytes_ne_self' depends on axioms: [propext, sorryAx]
+'R1Z.PV_Src_AdmissionArray.word_ne_self' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_Src_AdmissionArray.digest_ne_self' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,44 @@
+{"attempt": "ARW_023", "exit_status": 0, "wall_seconds": 2.7190583929768763, "peak_rss_kib": "5939956", "swaps": "0", "print_axioms": ["'AspisR1.JFm_ChallengeFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFn_TX2.partial_on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFn_Nonvacuity.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFr_ArithmeticFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFr_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFs_PublicFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFs_ExactSerialization.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFu_Installation.extraction' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFu_Installation.oracle' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFu_AfterstateValidator.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_RuntimeWitness.compatible' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_SampledFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_ClaimsFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_SemanticCall.success' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_SemanticChain.success' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.JFm_ChallengeFixture.inhabited : ∀ {Hash : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (hash : Hash),
+  have D0 :=
+    AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+      (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D);
+  have t0 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFr_SeedBoundary.numeric, hash := hash,
+      next_row := 0#u8 };
+  have t15 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q14Source.ratchet, hash := hash,
+      next_row := 15#u8 };
+  have t25 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState 
+...
+panded y1 =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+            AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ())) pre =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out)
+'AspisR1.JFv_ClaimsFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.JFv_SemanticCall.success : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H),
+  AspisR1.JFv_TranscriptTotal.Total D →
+    ∀ (t : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+      (vr : AspisR1PublicPreparation.r1_wire.ValidatedRecord),
+      vr.row = t.next_row →
+        ↑vr.row < 25 →
+          ∃ q after,
+            AspisR1PublicPreparation.r1_wire.SemanticTranscript.semantic_validated D t vr =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok q, after) ∧
+              ↑after.next_row = ↑vr.row + 1 ∧ AspisR1.JFv_RoundArithmetic.Canonical q
+'AspisR1.JFv_SemanticCall.success' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.JFv_SemanticChain.success : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H),
+  AspisR1.JFv_TranscriptTotal.Total D →
+    ∀ (pre : AspisR1PublicPreparation.r1_wire.Prefix) (rows : List Aeneas.Std.U8) (start : ℕ)
+      (t : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+      ↑t.next_row = start →
+        List.map Aeneas.Std.UScalar.val rows = List.range' start rows.length →
+          start + rows.length ≤ 25 →
+            ∃ after qs,
+              AspisR1PublicPreparation.BeginCalls.SemanticRun D pre rows t after qs ∧
+                ∀ q ∈ qs, AspisR1.JFv_RoundArithmetic.Canonical q
+'AspisR1.JFv_SemanticChain.success' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4ba1fa630a3848a5a692f51867ed2f5d.scope; invocation ID: 3728ee4c0db44ab1b6575fb3d780f540

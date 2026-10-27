@@ -1,0 +1,39 @@
+{"attempt": "ARS_056", "exit_status": 1, "wall_seconds": 2.0826319440384395, "peak_rss_kib": "5263392", "swaps": "0", "print_axioms": ["'AspisR1.ARS_QueryCost.count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARS_QueryCost.law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ARS_QueryCost.lean:30:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H (SdkC_Oracle.program code)).1.length
+in the target expression
+  observe (run hashv code []).1 (readLog (run hashv code []).2) (readLog (run hashv code []).2).length =
+    observe (run hashv code []).1 (readLog (run hashv code []).2) (List.length (run hashv code []).2)
+
+A V : Type
+hashv : Parts → Result Digest
+H : Bytes → State
+code : Code A
+returns : ARR_ReturnCoverage.ReturnsOnly (run hashv code []).2
+agrees : ARS_QueryTransport.Agrees H (run hashv code []).2
+observe : Result A → List (Bytes × State) → ℕ → V
+result : (run hashv code []).1 = (eval H (SdkC_Oracle.program code)).2
+read
+...
+ARS_QueryCost.lean:30:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H (SdkC_Oracle.program code)).1.length
+in the target expression
+  observe (run hashv code []).1 (readLog (run hashv code []).2) (readLog (run hashv code []).2).length =
+    observe (run hashv code []).1 (readLog (run hashv code []).2) (List.length (run hashv code []).2)
+
+A V : Type
+hashv : Parts → Result Digest
+H : Bytes → State
+code : Code A
+returns : ARR_ReturnCoverage.ReturnsOnly (run hashv code []).2
+agrees : ARS_QueryTransport.Agrees H (run hashv code []).2
+observe : Result A → List (Bytes × State) → ℕ → V
+result : (run hashv code []).1 = (eval H (SdkC_Oracle.program code)).2
+reads : readLog (run hashv code []).2 = (eval H (SdkC_Oracle.program code)).1
+right✝ : RPx_AttemptPrefix.addresses (run hashv code []).2 = List.map Prod.fst (eval H (SdkC_Oracle.program code)).1
+⊢ observe (run hashv code []).1 (readLog (run hashv code []).2) (readLog (run hashv code []).2).length =
+    observe (run hashv code []).1 (readLog (run hashv code []).2) (List.length (run hashv code []).2)
+'AspisR1.ARS_QueryCost.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ARS_QueryCost.law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2f96bb720e9c45978fb14bb143d2ace6.scope; invocation ID: b27fad9db8114ede915167822064892e

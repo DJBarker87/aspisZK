@@ -1,0 +1,37 @@
+{"attempt": "SCH_095", "exit_status": 0, "wall_seconds": 3.430753137974534, "peak_rss_kib": "5447796", "swaps": "0", "print_axioms": []}
+structure AspisR1.Port4C_BasisOuter.SessionABasis (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_mul : ops.op7 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_sub : ops.op6 = AspisR1Qm31ArithmeticProbe.field.M31.sub
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_double : ops.op8 = S7Kani3BasisOuter.double
+  AspisR1.Port4C_BasisOuter.SessionABasis.zero : ops.op4 = Aeneas.Std.Result.ok 0#u32
+  AspisR1.Port4C_BasisOuter.SessionABasis.one : ops.op5 = Aeneas.Std.Result.ok 1#u32
+constructor:
+  AspisR1.Port4C_BasisOuter.SessionABasis.mk {ops : AspisR1.Port3_NativeQueryBody.O
+...
+ts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+        decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+          some (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))) :
+    AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin ops decode H pub proof checkpoint
+structure AspisR1.CPG_Projection.Observations (Tx A : Type) : Type
+number of parameters: 2
+fields:
+  AspisR1.CPG_Projection.Observations.bank : Tx → AspisR1.CPP_BankState.Bank
+  AspisR1.CPG_Projection.Observations.layout : Tx → AspisR1.Hist_RuntimeEntry.Layout
+  AspisR1.CPG_Projection.Observations.next : Tx → Tx → Prop
+  AspisR1.CPG_Projection.Observations.intervening : Tx → Tx → List ℕ
+  AspisR1.CPG_Projection.Observations.parentReply : Tx → AspisR1.CPP_Atomic.Reply Unit
+  AspisR1.CPG_Projection.Observations.copied : Tx → Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8
+  AspisR1.CPG_Projection.Observations.actions : Tx → List (AspisR1.CPP_BankState.Action A)
+  AspisR1.CPG_Projection.Observations.parentTentative : Tx → AspisR1.CPP_BankState.Bank
+  AspisR1.CPG_Projection.Observations.physicalEvents : Tx → List AspisR1.S2X.AccountEvent
+constructor:
+  AspisR1.CPG_Projection.Observations.mk {Tx A : Type} (bank : Tx → AspisR1.CPP_BankState.Bank)
+    (layout : Tx → AspisR1.Hist_RuntimeEntry.Layout) (next : Tx → Tx → Prop) (intervening : Tx → Tx → List ℕ)
+    (parentReply : Tx → AspisR1.CPP_Atomic.Reply Unit) (copied : Tx → Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+    (actions : Tx → List (AspisR1.CPP_BankState.Action A)) (parentTentative : Tx → AspisR1.CPP_BankState.Bank)
+    (physicalEvents : Tx → List AspisR1.S2X.AccountEvent) : AspisR1.CPG_Projection.Observations Tx A
+
+Running as unit: run-rb40772ea054b4fe3b90e8a3573c04d27.scope; invocation ID: 917d4beca7344df198d92de76a7e5296

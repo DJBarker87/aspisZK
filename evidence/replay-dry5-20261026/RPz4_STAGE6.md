@@ -1,0 +1,11 @@
+# Stage 6: pinned CompPoly source closure complete
+
+All 87 CompPoly package modules in the selected committed-source closure have successful fresh receipts. This includes the fourteen original missing package names, compiled from exact upstream revision 4165a87dd9a9ede48ee4dc5b4fe825604b8bb932. The package objects are fresh RPz4 outputs; no cached CompPoly object is silently promoted into the trusted toolchain base. Existing source options are byte-preserved and caps remain fixed. The final batched declaration audit is still pending; module compilation alone is not advertised as its axiom audit.
+
+The literal-transcript direct-import replacement and its dependent source chain are passing. Scope, memory, swap and source/dependency pins remain per attempt; no timeout/memory kill/cap increase has occurred. The same package replay continues with retained objects. Source receipts and read-only header/audit queries share the 1500-attempt budget.
+
+Additional qualified S5QRaw source mappings are prepared in RPz4_S5QRaw-resolution.json from the actual selected coherent object headers and unique matching namespace-rebase candidates. Stronger earlier direct source/object pin associations are retained for the two original EbyK mappings. The existing producer source for FinishDotReturnedProductWordsV2 also has an exact object/source hash match. These mappings are prepared inputs for the next graph update; they are not yet claimed as compiled by the current graph. The next update will resume source states rather than repeat any unchanged successful compile. Circle external templates with axioms remain excluded.
+
+RPz4_verify.py prepares final read-only source/receipt/object consistency validation. RPz4_audit-launch.py and the unchanged audit template semantics prepare one final batch pass over selected green contexts. Both invoke the existing unchanged host runner/admission tools; no build-host launcher or monitoring infrastructure is repaired. No new theorem statement, source adoption, security metric, trust item or shipped artifact change occurs.
+
+Top statement text and ledger delta remain unchanged: premises 0 removed/0 added/0 changed; T0/P0/G0/C0. No fresh top proof or joint non-vacuity witness is established. All release pins remain historical and unchanged; the 100-bit target is not established.

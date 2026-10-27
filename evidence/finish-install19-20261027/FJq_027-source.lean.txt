@@ -1,0 +1,34 @@
+import RawBeginAnnotatedFullTrace
+import FJq_ChallengeSlots
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJq_SourceTrace
+open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+open RawActualAnnotatedPolynomialRun
+/-- The actual begin and annotated arithmetic rounds supply ONE full source
+trace and its ordered values. No independent successful transcript is assumed. -/
+theorem value {H : Type} (D : aspis_core.Digest32 H)
+    (bytes : Slice U8) (pre : r1_wire.Prefix)
+    (parsed : PrefixAdapter.parseAccepted bytes=ok (.Ok pre))
+    (t0 t15 : r1_wire.SemanticTranscript H) (c : r1_wire.Challenges)
+    (begin : r1_wire.begin D pre t0=ok (.Ok c,t15))
+    (initial : MainQM) (initialAlpha : Array MainQM 10#usize)
+    (final : Outcome H) (entries : List (RoundEvidence D pre))
+    (rounds : AnnotatedRun D pre SemanticRoundsCheckedTrace.schedule
+      (initial,initialAlpha,t15) final entries)
+    (values : SemanticPrefixCodec.Full)
+    (full : SemanticPrefixCodec.encodeFull values=PrefixAdapter.completedRecords pre)
+    (alpha : Array MainQM 10#usize) (same : entries.map RoundEvidence.q=alpha.val) :
+    ∃ cs : List (SourceFull25.Call D pre),
+      SourceFull25.Trace D pre t0 final.2.2 cs ∧ cs.length=25 ∧
+      cs.map SourceFull25.Call.q=BeginCalls.challengeList c++alpha.val ∧
+      SourceFull25.rawFrames cs=PrefixAdapter.completedRecords pre := by
+  obtain ⟨cs,trace,rows,qs,frames,decode,bounds⟩:=
+    RawBeginAnnotatedFullTrace.begin_annotated_full_trace D bytes pre parsed t0 t15 c begin
+      initial initialAlpha final entries rounds values full
+  have count:=congrArg List.length rows
+  simp only [List.length_map,List.length_range] at count
+  exact ⟨cs,trace,count,by rw [qs,same],frames⟩
+#print axioms value
+end AspisR1.FJq_SourceTrace
+end

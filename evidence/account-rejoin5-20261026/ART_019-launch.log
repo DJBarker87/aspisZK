@@ -1,0 +1,45 @@
+{"attempt": "ART_019", "exit_status": 1, "wall_seconds": 2.42384179495275, "peak_rss_kib": "5371476", "swaps": "0", "print_axioms": ["'AspisR1.ART_Outcome.represented' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.ART_Outcome.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.ART_Outcome.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ART_Outcome.lean:19:12: error: Tactic `rfl` failed: The left-hand side
+  ((eval native a.first).1 ++
+        (ART_PartialProgram.attempted H
+            (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2 ++
+          ((eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).1 ++
+            ART_PartialProgram.attempted H
+              (SdkC_Source.run hashv
+                  (secondSyntax c hashv allocator id
+                    (eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).2)
+                  []).2)),
+      (eval native a.first).2,
+      (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.
+...
+tive a.first).2) []).1, none).2 =
+    (match (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1 with
+      | ok (core.result.Result.Ok (saved, post, final)) =>
+        ((eval native a.first).1 ++
+            (SdkC_Source.readLog
+                (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2 ++
+              ((eval native (a.second (eval native a.first).2 saved post final)).1 ++
+                SdkC_Source.readLog
+                  (SdkC_Source.run hashv
+                      (secondSyntax c hashv allocator id
+                        (eval native (a.second (eval native a.first).2 saved post final)).2)
+                      []).2)),
+          (eval native a.first).2,
+          (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1,
+          some
+            ((eval native (a.second (eval native a.first).2 saved post final)).2,
+              (SdkC_Source.run hashv
+                  (secondSyntax c hashv allocator id
+                    (eval native (a.second (eval native a.first).2 saved post final)).2)
+                  []).1))
+      | x =>
+        ((eval native a.first).1 ++
+            SdkC_Source.readLog
+              (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2,
+          (eval native a.first).2,
+          (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1, none)).2
+'AspisR1.ART_Outcome.represented' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ART_Outcome.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ART_Outcome.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r81a8fd453dae4ea6870d7ca0c56d34f0.scope; invocation ID: 331026177f2a4e4fb3c7ef5a4913c1d1

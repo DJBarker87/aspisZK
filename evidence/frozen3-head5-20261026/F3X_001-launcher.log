@@ -1,0 +1,75 @@
+{"attempt": "F3X_001", "exit_status": 1, "wall_seconds": 6.726050271012355, "peak_rss_kib": "5266200", "swaps": "0", "print_axioms": ["'AspisR1.F3X_Trace.hits_append' depends on axioms: [propext]", "'AspisR1.F3X_Trace.put_cached' depends on axioms: [propext, Quot.sound]", "'AspisR1.F3X_Trace.after_read' depends on axioms: [propext, sorryAx]", "'AspisR1.F3X_Trace.reused' depends on axioms: [propext, sorryAx, Quot.sound]", "'AspisR1.F3X_Trace.erase_reused' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+F3X_Trace.lean:35:78: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.55 = ?m.55
+but is expected to have type
+  True
+in the application
+  Or.inl rfl
+F3X_Trace.lean:40:8: error: Type mismatch: After simplification, term
+  read
+ has type
+  a = b ∨ a ∈ List.map Prod.fst tail
+but is expected to have type
+  a = b
+F3X_Trace.lean:39:4: error: unsolved goals
+case neg
+I A : Type
+inst✝ : DecidableEq I
+H : I → A
+a : I
+tail : List (I × A)
+ih : ∀ (T : Table I A), (∀ q ∈ tail, q.2 = H q.1) → Read tail a → after T tail a = some (H a)
+T : Table I A
+f : A
+rest : ∀ q ∈ tail, q.2 = H q.1
+again : ¬Read tail a
+consistent : ∀ q ∈ (a, f) :: tail, q.2 = H q.1
+read : Read ((a, f) :: tail) a
+value 
+...
+2 = H (a, f).1
+unchanged : ∀ (S : Table I A) (xs : List (I × A)), ¬Read xs a → after S xs a = S a
+⊢ some f = some (H a)
+F3X_Trace.lean:54:30: warning: This simp argument is unused:
+  value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵u̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵v̵a̵l̵u̵e̵]̵[̲p̲u̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3X_Trace.lean:63:74: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.60 = ?m.60
+but is expected to have type
+  True
+in the application
+  Or.inl rfl
+F3X_Trace.lean:78:48: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  hitsBad bad (after emptyTable source) (replay ++ tail)
+in the target expression
+  hitsBad bad emptyTable source ∨
+      hitsBad bad (after emptyTable source) replay ∨ hitsBad bad (after (after emptyTable source) replay) tail ↔
+    hitsBad bad emptyTable (source ++ tail)
+
+I A : Type
+inst✝ : DecidableEq I
+bad : I → Table I A → A → Prop
+H : I → A
+source replay tail : List (I × A)
+sourceConsistent : ∀ q ∈ source, q.2 = H q.1
+replayConsistent : ∀ q ∈ replay, q.2 = H q.1
+included : ∀ (a : I), Read replay a → Read source a
+cached : ∀ q ∈ replay, after emptyTable source q.1 = some q.2
+⊢ hitsBad bad emptyTable source ∨
+      hitsBad bad (after emptyTable source) replay ∨ hitsBad bad (after (after emptyTable source) replay) tail ↔
+    hitsBad bad emptyTable (source ++ tail)
+'AspisR1.F3X_Trace.hits_append' depends on axioms: [propext]
+'AspisR1.F3X_Trace.put_cached' depends on axioms: [propext, Quot.sound]
+'AspisR1.F3X_Trace.after_read' depends on axioms: [propext, sorryAx]
+'AspisR1.F3X_Trace.reused' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.F3X_Trace.erase_reused' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-r0e523ff7f6e549bea8fba5bf3ca244aa.scope; invocation ID: 66ba7920a7484a6aad8afd66fce34a0a

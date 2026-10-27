@@ -1,0 +1,245 @@
+RPx_Schedule.lean:78:15: warning: This simp argument is unused:
+  first
+
+Hint: Omit it from the simp argument list.
+  simp only [f̵i̵r̵s̵t̵,̵Bool.false_eq_true, ̲if_false, ̲eval, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+RPx_Schedule.lean:79:15: warning: This simp argument is unused:
+  first
+
+Hint: Omit it from the simp argument list.
+  simp only [f̵ir̵s̵t̵,̵i̵f_true, ̲after_batch0 H physical stored p q tr i v input opening,
+       ̵ ̵OraclePortFrozen2.finish_value p q tr i input query]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.RPx_Schedule.checkpoint_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RPx_Schedule.after_batch0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RPx_Schedule.decision' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.RPx_Schedule.decision : ∀ (H : Bytes → State) (physical : F3_Model.PhysicalPublic) (stored : Bytes)
+  (p : Parsed) (q : Fin 22 → Fin 262144) (tr : RawCutTranscriptRun.ErasedPrefix) (m : RawCutTranscriptRun.ErasedMessage)
+  (i : SourceInputs) (v : LiteralOpeningView.View),
+  OraclePortAdmission.Guard tr →
+    OraclePortStoredParserC4.parseReached stored tr = some p →
+      queries tr = some q →
+        OraclePortStoredDecisionDraftC4.input p q tr = some i →
+          LiteralOpeningView.read (typedRows p q tr) = some v →
+            eval H (F3_Model.decision physical stored tr m) =
+              have first := eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0);
+              have second := eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1);
+              if first.2 = true then
+                (first.1 ++
+                    (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v) i.data
+                        (SelectedChallengeMap.rhoOf i.rho) q ++
+                      second.1),
+                  second.2 && D0TypedChecks.verify (typedRows p q tr) i)
+              else (first.1, false) :=
+fun H physical stored p q tr m i v guard parsed query input opening =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (eval H)
+              (Eq.trans
+                (ite.congr_simp (OraclePortAdmission.Guard tr) (OraclePortAdmission.Guard tr)
+                  (Eq.refl (OraclePortAdmission.Guard tr))
+                  (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+                  | some p, some q =>
+                    AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0) fun ok =>
+                      if ok = true then F3_Model.afterBatch0 physical stored p q tr else Program.done false
+                  | x, x_1 => Program.done false)
+                  (AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0) fun ok =>
+                    if ok = true then F3_Model.afterBatch0 physical stored p q tr else Program.done false)
+                  (congrArg
+                    (fun x =>
+                      x
+                        (fun p q =>
+                          AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)
+                            fun ok =>
+                            if ok = true then F3_Model.afterBatch0 physical stored p q tr else Program.done false)
+                        fun x x_1 => Program.done false)
+                    (congr (congrArg (F3_Model.decision.match_1 fun x x_1 => Program Bytes State Bool) parsed) query))
+                  (Program.done false) (Program.done false) (Eq.refl (Program.done false)))
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos guard) x_0 x_1 x_2 x_3)
+                  (Classical.propDecidable (OraclePortAdmission.Guard tr)) (Program Bytes State Bool)
+                  (AspisV8R19.OracleProgramOps.bind (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0) fun ok =>
+                    if ok = true then F3_Model.afterBatch0 physical stored p q tr else Program.done false)
+                  (Program.done false))))
+            (eval_bind (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)
+              (fun ok => if ok = true then F3_Model.afterBatch0 physical stored p q tr else Program.done false) H)))
+        (if (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2 = true then
+          ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+              (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v) i.data
+                  (SelectedChallengeMap.rhoOf i.rho) q ++
+                (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1),
+            (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2 &&
+              D0TypedChecks.verify (typedRows p q tr) i)
+        else ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1, false))))
+    (Bool.casesOn (motive := fun t =>
+      (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2 = t →
+        ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+              (eval H
+                  (if (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2 = true then
+                    F3_Model.afterBatch0 physical stored p q tr
+                  else Program.done false)).1,
+            (eval H
+                (if (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2 = true then
+                  F3_Model.afterBatch0 physical stored p q tr
+                else Program.done false)).2) =
+          if (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2 = true then
+            ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+                (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v) i.data
+                    (SelectedChallengeMap.rhoOf i.rho) q ++
+                  (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1),
+              (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2 &&
+                D0TypedChecks.verify (typedRows p q tr) i)
+          else ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1, false))
+      (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2
+      (fun h =>
+        Eq.ndrec (motive := fun x =>
+          (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2 = x →
+            ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+                  (eval H (if x = true then F3_Model.afterBatch0 physical stored p q tr else Program.done false)).1,
+                (eval H (if x = true then F3_Model.afterBatch0 physical stored p q tr else Program.done false)).2) =
+              if x = true then
+                ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+                    (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v) i.data
+                        (SelectedChallengeMap.rhoOf i.rho) q ++
+                      (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1),
+                  (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2 &&
+                    D0TypedChecks.verify (typedRows p q tr) i)
+              else ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1, false))
+          (fun first =>
+            of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (congr
+                      (congrArg Prod.mk
+                        (Eq.trans
+                          (congrArg (HAppend.hAppend (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1)
+                            (congrArg Prod.fst
+                              (Eq.trans
+                                (congrArg (eval H)
+                                  (Eq.trans
+                                    (ite_congr Bool.false_eq_true
+                                      (fun a => Eq.refl (F3_Model.afterBatch0 physical stored p q tr)) fun a =>
+                                      Eq.refl (Program.done false))
+                                    (if_false (F3_Model.afterBatch0 physical stored p q tr) (Program.done false))))
+                                (eval.eq_1 H false))))
+                          (List.append_nil (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1)))
+                      (congrArg Prod.snd
+                        (Eq.trans
+                          (congrArg (eval H)
+                            (Eq.trans
+                              (ite_congr Bool.false_eq_true
+                                (fun a => Eq.refl (F3_Model.afterBatch0 physical stored p q tr)) fun a =>
+                                Eq.refl (Program.done false))
+                              (if_false (F3_Model.afterBatch0 physical stored p q tr) (Program.done false))))
+                          (eval.eq_1 H false)))))
+                  (Eq.trans
+                    (ite_congr Bool.false_eq_true
+                      (fun a =>
+                        Eq.refl
+                          ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+                              (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v)
+                                  i.data (SelectedChallengeMap.rhoOf i.rho) q ++
+                                (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1),
+                            (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2 &&
+                              D0TypedChecks.verify (typedRows p q tr) i))
+                      fun a => Eq.refl ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1, false))
+                    (if_false
+                      ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+                          (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v) i.data
+                              (SelectedChallengeMap.rhoOf i.rho) q ++
+                            (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1),
+                        (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2 &&
+                          D0TypedChecks.verify (typedRows p q tr) i)
+                      ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1, false))))
+                (eq_self ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1, false))))
+          (Eq.symm h) (Eq.refl (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2))
+      (fun h =>
+        Eq.ndrec (motive := fun x =>
+          (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2 = x →
+            ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+                  (eval H (if x = true then F3_Model.afterBatch0 physical stored p q tr else Program.done false)).1,
+                (eval H (if x = true then F3_Model.afterBatch0 physical stored p q tr else Program.done false)).2) =
+              if x = true then
+                ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+                    (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v) i.data
+                        (SelectedChallengeMap.rhoOf i.rho) q ++
+                      (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1),
+                  (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2 &&
+                    D0TypedChecks.verify (typedRows p q tr) i)
+              else ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1, false))
+          (fun first =>
+            of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (congr
+                      (congrArg Prod.mk
+                        (congrArg (HAppend.hAppend (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1)
+                          (congrArg Prod.fst
+                            (Eq.trans
+                              (Eq.trans
+                                (congrArg (eval H)
+                                  (Eq.trans
+                                    (ite_congr (eq_self true)
+                                      (fun a => Eq.refl (F3_Model.afterBatch0 physical stored p q tr)) fun a =>
+                                      Eq.refl (Program.done false))
+                                    (if_true (F3_Model.afterBatch0 physical stored p q tr) (Program.done false))))
+                                (after_batch0 H physical stored p q tr i v input opening))
+                              (congrArg
+                                (Prod.mk
+                                  (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v)
+                                      i.data (SelectedChallengeMap.rhoOf i.rho) q ++
+                                    (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1))
+                                (congrArg (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2.and
+                                  (OraclePortFrozen2.finish_value p q tr i input query)))))))
+                      (congrArg Prod.snd
+                        (Eq.trans
+                          (Eq.trans
+                            (congrArg (eval H)
+                              (Eq.trans
+                                (ite_congr (eq_self true)
+                                  (fun a => Eq.refl (F3_Model.afterBatch0 physical stored p q tr)) fun a =>
+                                  Eq.refl (Program.done false))
+                                (if_true (F3_Model.afterBatch0 physical stored p q tr) (Program.done false))))
+                            (after_batch0 H physical stored p q tr i v input opening))
+                          (congrArg
+                            (Prod.mk
+                              (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v)
+                                  i.data (SelectedChallengeMap.rhoOf i.rho) q ++
+                                (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1))
+                            (congrArg (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2.and
+                              (OraclePortFrozen2.finish_value p q tr i input query)))))))
+                  (Eq.trans
+                    (ite_congr (eq_self true)
+                      (fun a =>
+                        Eq.refl
+                          ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+                              (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v)
+                                  i.data (SelectedChallengeMap.rhoOf i.rho) q ++
+                                (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1),
+                            (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2 &&
+                              D0TypedChecks.verify (typedRows p q tr) i))
+                      fun a => Eq.refl ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1, false))
+                    (if_true
+                      ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+                          (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v) i.data
+                              (SelectedChallengeMap.rhoOf i.rho) q ++
+                            (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1),
+                        (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2 &&
+                          D0TypedChecks.verify (typedRows p q tr) i)
+                      ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1, false))))
+                (eq_self
+                  ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+                      (checkpointReads H stored physical.bytes (OraclePortAcceptedContextC6.context p i v) i.data
+                          (SelectedChallengeMap.rhoOf i.rho) q ++
+                        (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1),
+                    (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).2 &&
+                      D0TypedChecks.verify (typedRows p q tr) i))))
+          (Eq.symm h) (Eq.refl (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2))
+      (Eq.refl (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).2))

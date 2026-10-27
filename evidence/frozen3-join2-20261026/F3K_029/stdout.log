@@ -1,0 +1,58 @@
+F3K_AbsorbCode.lean:22:2: error: Tactic `rfl` failed: The left-hand side
+  run
+    (Code.step (160#u8 + 31#u8) fun i =>
+      Code.step (ok (Array.make 2#usize [0#u8, i] ⋯).to_slice) fun s1 =>
+        Code.step (ok (UScalar.cast UScalarTy.U32 payload.len)) fun i2 =>
+          Code.step (ok (core.num.U32.to_le_bytes i2)) fun a =>
+            Code.step (ok a.to_slice) fun s2 =>
+              Code.step (ok (Array.make 4#usize [before.state.to_slice, s1, s2, payload] ⋯).to_slice) fun s3 =>
+                Code.digest D before.hash s3 fun b => Code.done { state := b, hash := before.hash })
+is not definitionally equal to the right-hand side
+  ([Event.digest D before.hash
+        (Array.make 4#usize
+            [before.state.to_slice, (Array.make 2#usize [0#u8, 191#u8] ⋯).to_slice,
+              (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice, payload]
+            ⋯).to_slice
+        (ok digestState)],
+    ok { state := digestState, hash := before.hash })
+
+case refl
+Hash : Type
+D : aspis_core.Digest32 Hash
+before absorbed : transcript.Transcript Hash
+payload : Slice U8
+success : transcript.Transcript.absorb D before 31#u8 payload = ok absorbed
+digestState : Std.Array U8 32#usize
+absEq : absorbed = { state := digestState, hash := before.hash }
+digest :
+  D.digest before.hash
+      (Array.make 4#usize
+          [before.state.to_slice, (Array.make 2#usize [0#u8, 191#u8] ⋯).to_slice,
+            (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice, payload]
+          ⋯).to_slice =
+    ok digestState
+add : ok 191#u8 = ok 191#u8
+⊢ run
+      (Code.step (160#u8 + 31#u8) fun i =>
+        Code.step (ok (Array.make 2#usize [0#u8, i] ⋯).to_slice) fun s1 =>
+          Code.step (ok (UScalar.cast UScalarTy.U32 payload.len)) fun i2 =>
+            Code.step (ok (core.num.U32.to_le_bytes i2)) fun a =>
+              Code.step (ok a.to_slice) fun s2 =>
+                Code.step (ok (Array.make 4#usize [before.state.to_slice, s1, s2, payload] ⋯).to_slice) fun s3 =>
+                  Code.digest D before.hash s3 fun b => Code.done { state := b, hash := before.hash }) =
+    ([Event.digest D before.hash
+          (Array.make 4#usize
+              [before.state.to_slice, (Array.make 2#usize [0#u8, 191#u8] ⋯).to_slice,
+                (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice, payload]
+              ⋯).to_slice
+          (ok digestState)],
+      ok { state := digestState, hash := before.hash })
+F3K_AbsorbCode.lean:21:59: warning: This simp argument is unused:
+  digest
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedHashEffects.absorb, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲lift,
+      liftM, ̲MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲effects,̵d̵i̵g̵e̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3K_AbsorbCode.run_absorb' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

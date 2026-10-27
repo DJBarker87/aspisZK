@@ -1,0 +1,81 @@
+JFo_Suffix.lean:33:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let value ← CheckpointBytes4Ops.readWeights JFx_NativeBytes.checkpoint (JFq_Raw.reader 712#usize).at initial
+    match value with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok a =>
+        if (a.2 != 1736#usize) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+        else do
+          let cursor ← lift (UScalar.cast UScalarTy.Usize 10#u8)
+          ok
+              (core.result.Result.Ok
+                ({ variant := transport.Variant.S2, roots := Array.make 2#usize [JFq_Root0.value, JFq_Root1.value] ⋯,
+                    gamma := JFq_Gamma.scalar, kappa := JFq_Kappa.scalar,
+                    alpha := Array.make 2#usize [JFq_Alpha0.scalar, JFq_Alpha1.scalar] ⋯, rho := JFq_Rho.scalar,
+                    queries := JFq_Queries.value, semantic_alpha := JFq_Semantic.value,
+                    z :=
+                      Array.make 2#usize
+                        [{ x := JFq_Z0.scalar, y := JFq_Z1.scalar }, { x := JFq_Z2.scalar, y := JFq_Z3.scalar }] ⋯,
+                    claim := JFq_Claim.scalar, state := JFq_State.value },
+                  { weights := a.1, rhs := JFq_Rhs.scalar, power := JFq_Power.scalar, next := cursor }))
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator))
+
+restored :
+  CheckpointBytes4Ops.readWeights JFx_NativeBytes.checkpoint 712#usize initial =
+    ok (core.result.Result.Ok (JFo_Weights.value, 1736#usize))
+step0 :
+  CheckpointBytes3Reader.readK (JFq_Raw.reader 568#usize) =
+    ok (core.result.Result.Ok JFq_Z0.scalar, JFq_Raw.reader 584#usize)
+step1 :
+  CheckpointBytes3Reader.readK (JFq_Raw.reader 584#usize) =
+    ok (core.result.Result.Ok JFq_Z1.scalar, JFq_Raw.reader 600#usize)
+step2 :
+  CheckpointBytes3Reader.readK (JFq_Raw.reader 600#usize) =
+    ok (core.result.Result.Ok JFq_Z2.scalar, JFq_Raw.reader 616#usize)
+step3 :
+  CheckpointBytes3Reader.readK (JFq_Raw.reader 616#usize) =
+    ok (core.result.Result.Ok JFq_Z3.scalar, JFq_Raw.reader 632#usize)
+step4 :
+  CheckpointBytes3Reader.readE (JFq_Raw.reader 632#usize) =
+    ok (core.result.Result.Ok JFq_Claim.scalar, JFq_Raw.reader 664#usize)
+step5 :
+  CheckpointBytes3Reader.readE (JFq_Raw.reader 664#usize) =
+    ok (core.result.Result.Ok JFq_Rhs.scalar, JFq_Raw.reader 696#usize)
+step6 :
+  CheckpointBytes3Reader.readK (JFq_Raw.reader 696#usize) =
+    ok (core.result.Result.Ok JFq_Power.scalar, JFq_Raw.reader 712#usize)
+⊢ (do
+      let value ← CheckpointBytes4Ops.readWeights JFx_NativeBytes.checkpoint (JFq_Raw.reader 712#usize).at initial
+      match value with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a =>
+          if (a.2 != 1736#usize) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+          else do
+            let cursor ← lift (UScalar.cast UScalarTy.Usize 10#u8)
+            ok
+                (core.result.Result.Ok
+                  ({ variant := transport.Variant.S2, roots := Array.make 2#usize [JFq_Root0.value, JFq_Root1.value] ⋯,
+                      gamma := JFq_Gamma.scalar, kappa := JFq_Kappa.scalar,
+                      alpha := Array.make 2#usize [JFq_Alpha0.scalar, JFq_Alpha1.scalar] ⋯, rho := JFq_Rho.scalar,
+                      queries := JFq_Queries.value, semantic_alpha := JFq_Semantic.value,
+                      z :=
+                        Array.make 2#usize
+                          [{ x := JFq_Z0.scalar, y := JFq_Z1.scalar }, { x := JFq_Z2.scalar, y := JFq_Z3.scalar }] ⋯,
+                      claim := JFq_Claim.scalar, state := JFq_State.value },
+                    { weights := a.1, rhs := JFq_Rhs.scalar, power := JFq_Power.scalar, next := cursor }))) =
+    ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator))
+JFo_Suffix.lean:32:34: warning: This simp argument is unused:
+  restored
+
+Hint: Omit it from the simp argument list.
+  simp only [T2Nat_ReaderSuffix.normalized, ̲T2Nat_Try.withRead, ̲T2Nat_Try.withOk,
+      CheckpointBytes4Ops.ops, ̲step0, ̲step1, ̲step2, ̲step3,
+  ̵  ̵ ̵ ̵step4, ̲step5, ̲step6,
+      CheckpointBytes4Ops.finalLen, ̲CheckpointBytes4Ops.zeroK, ̲allocated,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry,̵r̵e̵s̵t̵o̵r̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFo_Suffix.allocated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFo_Suffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

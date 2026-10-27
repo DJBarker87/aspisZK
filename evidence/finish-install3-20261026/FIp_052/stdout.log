@@ -1,0 +1,109 @@
+FIp_PowersStep.lean:28:38: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+N : Usize
+x : NE
+hx : FIo_WideValues.Canon x
+a : Std.Array NE N
+p : NE
+i : Usize
+inv :
+  FIo_PowersCanonical.Inv (a, p, i) ∧
+    ↑i ≤ ↑N ∧
+      decodeWide (wide p) = decodeWide (wide x) ^ ↑i ∧ ∀ j < ↑i, FIp_ArrayValue.value a j = decodeWide (wide x) ^ j
+more : (a, p, i).2.2 < N
+old : FIo_Native.aspis_core.field.wide_exact.WideExact
+back : FIo_Native.aspis_core.field.wide_exact.WideExact → Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact N
+hb : (a, p, i).1.index_mut_usize (a, p, i).2.2 = ok (old, back)
+hc : FIo_ArrayCanon.Holds (back p)
+hi : ↑i < ↑N
+written : ∀ j < ↑i + 1, FIp_ArrayValue.value (back p) j = decodeWide (wide x) ^ j
+h✝ : i.wrapping_add 1#usize = N
+run✝¹ :
+  (if (a, p, i).2.2 < N then do
+      let (_, index_mut_back) ← (a, p, i).1.index_mut_usize (a, p, i).2.2
+      let i1 ← lift ((a, p, i).2.2.wrapping_add 1#usize)
+      if i1 = N then
+          have out1 := index_mut_back (a, p, i).2.1;
+          ok (done out1)
+        else do
+          let p1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul (a, p, i).2.1 x
+          have a : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact N := index_mut_back (a, p, i).2.1
+          ok (cont (a, p1, i1))
+    else ok (done (a, p, i).1)) =
+    ok (done (back p))
+run✝ :
+  (do
+      let (_, index_mut_back) ← (a, p, i).1.index_mut_usize (a, p, i).2.2
+      let i1 ← lift ((a, p, i).2.2.wrapping_add 1#usize)
+      if i1 = N then
+          have out1 := index_mut_back (a, p, i).2.1;
+          ok (done out1)
+        else do
+          let p1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul (a, p, i).2.1 x
+          have a : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact N := index_mut_back (a, p, i).2.1
+          ok (cont (a, p1, i1))) =
+    ok (done (back p))
+run :
+  (let (_, index_mut_back) := (old, back)
+    ok (done (index_mut_back p))) =
+    ok (done (back p))
+⊢ ↑i + 1 = ↑N
+FIp_PowersStep.lean:52:14: error: Application type mismatch: The argument
+  ↑N
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.108
+of sort `Type (?u.108 + 1)` in the application
+  @InitialSeg ↑N
+FIp_PowersStep.lean:52:21: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.107
+FIp_PowersStep.lean:52:32: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+N : Usize
+x : NE
+hx : FIo_WideValues.Canon x
+a : Std.Array NE N
+p : NE
+i : Usize
+inv :
+  FIo_PowersCanonical.Inv (a, p, i) ∧
+    ↑i ≤ ↑N ∧
+      decodeWide (wide p) = decodeWide (wide x) ^ ↑i ∧ ∀ j < ↑i, FIp_ArrayValue.value a j = decodeWide (wide x) ^ j
+h✝ : ¬(a, p, i).2.2 < N
+run✝ :
+  (if (a, p, i).2.2 < N then do
+      let (_, index_mut_back) ← (a, p, i).1.index_mut_usize (a, p, i).2.2
+      let i1 ← lift ((a, p, i).2.2.wrapping_add 1#usize)
+      if i1 = N then
+          have out1 := index_mut_back (a, p, i).2.1;
+          ok (done out1)
+        else do
+          let p1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul (a, p, i).2.1 x
+          have a : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact N := index_mut_back (a, p, i).2.1
+          ok (cont (a, p1, i1))
+    else ok (done (a, p, i).1)) =
+    ok (done a)
+run : ok (done (a, p, i).1) = ok (done a)
+⊢ InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+FIp_PowersStep.lean:54:26: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  f - g ≤ 0
+  e ≥ 0
+  e - f ≥ 0
+  e - g ≥ 1
+where
+ e := ↑↑N
+ f := ↑↑i
+ g := ↑j
+'AspisR1.FIp_PowersStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

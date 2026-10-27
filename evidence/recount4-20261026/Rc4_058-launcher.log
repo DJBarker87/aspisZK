@@ -1,0 +1,39 @@
+{"attempt": "Rc4_058", "exit_status": 0, "wall_seconds": 6.114252925966866, "peak_rss_kib": "5351468", "swaps": "0", "print_axioms": []}
+structure AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary {X : Type}
+  (D : MultiproofConeRef.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+  (leafSource : AspisR1.MultiproofConeP6Batch.Leaf) : Prop
+number of parameters: 8
+fields:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.oracle : ∀
+      (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.binary_parent : AspisR1.MultiproofConeP6Ca
+...
+ConePhysicalTransport.rawOracle H input)
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.binary_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.occupied_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.sibling_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource
+constructor:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.mk {X : Type} {D : MultiproofConeRef.aspis_core.digest.Digest32 X}
+    {hash : X} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent}
+    {leafSource : AspisR1.MultiproofConeP6Batch.Leaf}
+    (oracle :
+      ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input))
+    (binary_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary)
+    (occupied_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied)
+    (sibling_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling)
+    (leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource) :
+    AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource
+
+Running as unit: run-r735fa0b1781e4575bada0f5d13d50b6b.scope; invocation ID: 105741f2a8e641d49b647c580e3fcc1c

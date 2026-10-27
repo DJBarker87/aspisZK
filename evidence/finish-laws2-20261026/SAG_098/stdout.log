@@ -1,0 +1,29 @@
+@AspisR1.SAG_ScaleScope.retained : ∀ {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W),
+  (AspisR1.SAG_StageScale.install ops).field = ops.field ∧
+    (AspisR1.SAG_StageScale.install ops).add = ops.add ∧
+      (AspisR1.SAG_StageScale.install ops).polynomial = ops.polynomial ∧
+        (AspisR1.SAG_StageScale.install ops).newWeights = ops.newWeights ∧
+          (AspisR1.SAG_StageScale.install ops).pair = ops.pair ∧ (AspisR1.SAG_StageScale.install ops).dot = ops.dot
+@AspisR1.SAG_ScaleConfig.installed_eq : ∀ {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W),
+  AspisR1.SAG_StageScale.install ops = ops ↔
+    ops.quarter = Aeneas.Std.Result.ok 536870912#u32 ∧ ops.mulM = AspisR1.SAG_StageScale.mulM
+@AspisR1.SAG_Q_Forget.forget : ∀ {W : Type} (finish : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (savedVec : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored publicBytes : AspisV8R19.DuplexFrames.Bytes) (tx1p : AspisR1CurrentCaller.verifier.Prepared)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed)
+  (trace : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State))
+  (semantic : List AspisV8R19.DuplexFrames.Bytes) (q : Fin 22 → Fin 262144)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs)
+  (c : AspisR1.OraclePortCheckpointResumeC5.Context),
+  AspisR1.SAG_Q_Finish.Outcome finish v p a proof savedVec H stored publicBytes tx1p parsed trace semantic q tr i c →
+    AspisR1.SAG_FinishPrepared.Outcome finish v p a proof savedVec H stored publicBytes tx1p parsed trace semantic q tr
+      i c
+@AspisR1.SAG_Freedom.evaluator_not_forced : ∀ {W : Type} (seed : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (poly : Polynomial AspisR1.SAG_Freedom.Model) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (alpha : AspisR1Stage2.Stage2Finish.E),
+  ¬∀ (a value : AspisR1Stage2.Stage2Finish.E),
+      (AspisR1.Port3_FinishStage.release (AspisR1.SAG_Freedom.wrongEval seed poly)).polynomial bytes a =
+          Aeneas.Std.Result.ok value →
+        AspisR1.CheckpointBytes5Output.ofE value = Polynomial.eval (AspisR1.CheckpointBytes5Output.ofE a) poly

@@ -1,0 +1,79 @@
+AuS1_ClosedRead.lean:28:52: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+input scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+out : verifier.Prepared
+root : Std.Array U8 32#usize
+variant : view.variant = transport.Variant.S2
+folded : view.folded_root = some root
+success :
+  (erase do
+      let __x ←
+        AspisR1PublicPreparation.PreparedSourceEffects.prepare
+            (preparationEffects closedHashBoundaries closedHashQueries) (retainedDigest D) (retainedSem sem)
+            (retainedView view) hash (AspisR1ClaimPreparedBridge.mapArray retainedE input)
+      match __x with
+        | (r, g) =>
+          pure
+            (match r with
+              | core.result.Result.Ok x => core.result.Result.Ok (currentPrepared x)
+              | core.result.Result.Err e => core.result.Result.Err (currentError e),
+              AspisR1ClaimPreparedBridge.mapArray currentE g)) =
+    ok (core.result.Result.Ok out, scratch)
+g : Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize
+prepared : AspisR1PublicPreparation.verifier.Prepared
+hvalue :
+  erase
+      (AspisR1PublicPreparation.PreparedSourceEffects.prepare
+        (preparationEffects closedHashBoundaries closedHashQueries) (retainedDigest D) (retainedSem sem)
+        (retainedView view) hash (AspisR1ClaimPreparedBridge.mapArray retainedE input)) =
+    ok (core.result.Result.Ok prepared, g)
+after :
+  erase
+      (match (core.result.Result.Ok prepared, g) with
+      | (r, g) =>
+        pure
+          (match r with
+            | core.result.Result.Ok x => core.result.Result.Ok (currentPrepared x)
+            | core.result.Result.Err e => core.result.Result.Err (currentError e),
+            AspisR1ClaimPreparedBridge.mapArray currentE g)) =
+    ok (core.result.Result.Ok out, scratch)
+contains :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (match (core.result.Result.Ok prepared, g) with
+              | (r, g) =>
+                pure
+                  (match r with
+                    | core.result.Result.Ok x => core.result.Result.Ok (currentPrepared x)
+                    | core.result.Result.Err e => core.result.Result.Err (currentError e),
+                    AspisR1ClaimPreparedBridge.mapArray currentE g))).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let __x ←
+                AspisR1PublicPreparation.PreparedSourceEffects.prepare
+                    (preparationEffects closedHashBoundaries closedHashQueries) (retainedDigest D) (retainedSem sem)
+                    (retainedView view) hash (AspisR1ClaimPreparedBridge.mapArray retainedE input)
+              match __x with
+                | (r, g) =>
+                  pure
+                    (match r with
+                      | core.result.Result.Ok x => core.result.Result.Ok (currentPrepared x)
+                      | core.result.Result.Err e => core.result.Result.Err (currentError e),
+                      AspisR1ClaimPreparedBridge.mapArray currentE g)).1)
+        frame
+⊢ retainedVariant transport.Variant.S2 = AspisR1PublicPreparation.transport.Variant.S2
+AuS1_ClosedRead.lean:33:7: error(lean.unknownIdentifier): Unknown identifier `mapArray`
+AuS1_ClosedRead.lean:33:56: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.AuS1_ClosedRead.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

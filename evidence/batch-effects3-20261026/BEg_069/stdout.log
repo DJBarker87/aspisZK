@@ -1,0 +1,46 @@
+@AspisR1.SdkC_Source.erasure_to : ∀ {Hash A : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), D.digest hash parts = hashv parts) →
+    ∀ (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Log),
+      (AspisR1.SdkC_Source.run hashv code before).1 = AspisR1.CheckpointBytes5Effect.erase D hash code
+'AspisR1.SdkC_Source.erasure_to' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Source.run_bind : ∀ (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  {A B : Type} (code : AspisR1.SdkC_Source.Code A) (next : A → AspisR1.SdkC_Source.Code B)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run hashv (code >>= next) before =
+    AspisR1.SdkC_Source.resume hashv (AspisR1.SdkC_Source.run hashv code before) next
+'AspisR1.SdkC_Source.run_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Source.read_count : ∀ (log : AspisR1.SdkC_Source.Log),
+  (AspisR1.SdkC_Source.readLog log).length ≤ List.length log
+'AspisR1.SdkC_Source.read_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Source.no_fabricated_reply : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ {A : Type} (code : AspisR1.SdkC_Source.Code A) (a : AspisV8R19.DuplexFrames.Bytes)
+        (d : AspisV8R19.SourceDuplexStep.State),
+        d ≠ H a → (a, d) ∉ AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code []).2
+'AspisR1.SdkC_Source.no_fabricated_reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Source.returning_digest : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (parts : AspisR1.SdkC_Source.Parts)
+  (digest : AspisR1.SdkC_Source.Digest),
+  hashv parts = Aeneas.Std.Result.ok digest →
+    AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_Source.digestCode parts) [] =
+      (Aeneas.Std.Result.ok digest, [{ parts := parts, returned := Aeneas.Std.Result.ok digest }])
+'AspisR1.SdkC_Source.returning_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Source.failed_digest : ∀ (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (parts : AspisR1.SdkC_Source.Parts) (error : Aeneas.Std.Error),
+  hashv parts = Aeneas.Std.Result.fail error →
+    AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_Source.digestCode parts) [] =
+      (Aeneas.Std.Result.fail error, [{ parts := parts, returned := Aeneas.Std.Result.fail error }])
+'AspisR1.SdkC_Source.failed_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.SdkC_Source.resume : {A B : Type} →
+  (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+    Aeneas.Std.Result A × AspisR1.SdkC_Source.Log →
+      (A → AspisR1.SdkC_Source.Code B) → Aeneas.Std.Result B × AspisR1.SdkC_Source.Log :=
+fun {A B} hashv first next =>
+  match first.1 with
+  | Aeneas.Std.Result.ok a => AspisR1.SdkC_Source.run hashv (next a) first.2
+  | Aeneas.Std.Result.fail e => (Aeneas.Std.Result.fail e, first.2)
+  | Aeneas.Std.Result.div => (Aeneas.Std.Result.div, first.2)

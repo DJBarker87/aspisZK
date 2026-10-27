@@ -1,0 +1,637 @@
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], ok (cont (idx, val, d, pos)))
+
+case h_1.isTrue
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝² : d > 0#usize
+x✝¹ : Result Bool
+a✝¹ : Bool
+heq✝¹ : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = ok a✝¹
+h✝¹ : a✝¹ = true
+x✝ : Result Bool
+a✝ : Bool
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf = ok a✝
+h✝ : a✝ = true
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], ok (cont (idx, val, d, pos)))
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle))))
+
+case h_1.isFalse
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝² : d > 0#usize
+x✝¹ : Result Bool
+a✝¹ : Bool
+heq✝¹ : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = ok a✝¹
+h✝¹ : a✝¹ = true
+x✝ : Result Bool
+a✝ : Bool
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf = ok a✝
+h✝ : ¬a✝ = true
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle))))
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], fail a✝)
+
+case h_2
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝¹ : d > 0#usize
+x✝¹ : Result Bool
+a✝¹ : Bool
+heq✝¹ : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = ok a✝¹
+h✝ : a✝¹ = true
+x✝ : Result Bool
+a✝ : Error
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf = fail a✝
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], fail a✝)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], div)
+
+case h_3
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝¹ : d > 0#usize
+x✝¹ : Result Bool
+a✝ : Bool
+heq✝¹ : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = ok a✝
+h✝ : a✝ = true
+x✝ : Result Bool
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf = div
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], div)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], ok (cont (a✝¹, a✝, d.wrapping_add 1#usize, pos)))
+
+case h_1
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝¹ : d > 0#usize
+x✝² : Result Bool
+a✝² : Bool
+heq✝² : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = ok a✝²
+h✝ : ¬a✝² = true
+x✝¹ : Result (Std.Array U32 16#usize)
+a✝¹ : Std.Array U32 16#usize
+heq✝¹ : Array.update idx d index = ok a✝¹
+x✝ : Result (Std.Array (Std.Array U8 32#usize) 16#usize)
+a✝ : Std.Array (Std.Array U8 32#usize) 16#usize
+heq✝ : Array.update val d leaf = ok a✝
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], ok (cont (a✝¹, a✝, d.wrapping_add 1#usize, pos)))
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], fail a✝)
+
+case h_2
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝¹ : d > 0#usize
+x✝² : Result Bool
+a✝² : Bool
+heq✝² : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = ok a✝²
+h✝ : ¬a✝² = true
+x✝¹ : Result (Std.Array U32 16#usize)
+a✝¹ : Std.Array U32 16#usize
+heq✝¹ : Array.update idx d index = ok a✝¹
+x✝ : Result (Std.Array (Std.Array U8 32#usize) 16#usize)
+a✝ : Error
+heq✝ : Array.update val d leaf = fail a✝
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], fail a✝)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], div)
+
+case h_3
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝¹ : d > 0#usize
+x✝² : Result Bool
+a✝¹ : Bool
+heq✝² : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = ok a✝¹
+h✝ : ¬a✝¹ = true
+x✝¹ : Result (Std.Array U32 16#usize)
+a✝ : Std.Array U32 16#usize
+heq✝¹ : Array.update idx d index = ok a✝
+x✝ : Result (Std.Array (Std.Array U8 32#usize) 16#usize)
+heq✝ : Array.update val d leaf = div
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], div)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], fail a✝)
+
+case h_2
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝¹ : d > 0#usize
+x✝¹ : Result Bool
+a✝¹ : Bool
+heq✝¹ : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = ok a✝¹
+h✝ : ¬a✝¹ = true
+x✝ : Result (Std.Array U32 16#usize)
+a✝ : Error
+heq✝ : Array.update idx d index = fail a✝
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], fail a✝)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], div)
+
+case h_3
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝¹ : d > 0#usize
+x✝¹ : Result Bool
+a✝ : Bool
+heq✝¹ : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = ok a✝
+h✝ : ¬a✝ = true
+x✝ : Result (Std.Array U32 16#usize)
+heq✝ : Array.update idx d index = div
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], div)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], fail a✝)
+
+case h_2
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝ : d > 0#usize
+x✝ : Result Bool
+a✝ : Error
+heq✝ : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = fail a✝
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], fail a✝)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+        if b = true then
+          Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+            Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+              if b = true then Code.done (cont (idx, val, d, pos))
+              else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else
+          Code.step (Array.update idx d index) fun b =>
+            Code.step (Array.update val d leaf) fun b_1 =>
+              Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], div)
+
+case h_3
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝ : d > 0#usize
+x✝ : Result Bool
+heq✝ : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index = div
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) index) fun b =>
+          if b = true then
+            Code.step (ok (d.wrapping_sub 1#usize)) fun b =>
+              Code.step (Port3_BatchStd.sameLeaf val b leaf) fun b =>
+                if b = true then Code.done (cont (idx, val, d, pos))
+                else Code.done (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else
+            Code.step (Array.update idx d index) fun b =>
+              Code.step (Array.update val d leaf) fun b_1 =>
+                Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], div)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Array.update idx d index) fun b =>
+        Code.step (Array.update val d leaf) fun b_1 =>
+          Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], ok (cont (a✝¹, a✝, d.wrapping_add 1#usize, pos)))
+
+case h_1
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝ : ¬d > 0#usize
+x✝¹ : Result (Std.Array U32 16#usize)
+a✝¹ : Std.Array U32 16#usize
+heq✝¹ : Array.update idx d index = ok a✝¹
+x✝ : Result (Std.Array (Std.Array U8 32#usize) 16#usize)
+a✝ : Std.Array (Std.Array U8 32#usize) 16#usize
+heq✝ : Array.update val d leaf = ok a✝
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Array.update idx d index) fun b =>
+          Code.step (Array.update val d leaf) fun b_1 =>
+            Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], ok (cont (a✝¹, a✝, d.wrapping_add 1#usize, pos)))
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Array.update idx d index) fun b =>
+        Code.step (Array.update val d leaf) fun b_1 =>
+          Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], fail a✝)
+
+case h_2
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝ : ¬d > 0#usize
+x✝¹ : Result (Std.Array U32 16#usize)
+a✝¹ : Std.Array U32 16#usize
+heq✝¹ : Array.update idx d index = ok a✝¹
+x✝ : Result (Std.Array (Std.Array U8 32#usize) 16#usize)
+a✝ : Error
+heq✝ : Array.update val d leaf = fail a✝
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Array.update idx d index) fun b =>
+          Code.step (Array.update val d leaf) fun b_1 =>
+            Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], fail a✝)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Array.update idx d index) fun b =>
+        Code.step (Array.update val d leaf) fun b_1 =>
+          Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], div)
+
+case h_3
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝ : ¬d > 0#usize
+x✝¹ : Result (Std.Array U32 16#usize)
+a✝ : Std.Array U32 16#usize
+heq✝¹ : Array.update idx d index = ok a✝
+x✝ : Result (Std.Array (Std.Array U8 32#usize) 16#usize)
+heq✝ : Array.update val d leaf = div
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Array.update idx d index) fun b =>
+          Code.step (Array.update val d leaf) fun b_1 =>
+            Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], div)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Array.update idx d index) fun b =>
+        Code.step (Array.update val d leaf) fun b_1 =>
+          Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], fail a✝)
+
+case h_2
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝ : ¬d > 0#usize
+x✝ : Result (Std.Array U32 16#usize)
+a✝ : Error
+heq✝ : Array.update idx d index = fail a✝
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Array.update idx d index) fun b =>
+          Code.step (Array.update val d leaf) fun b_1 =>
+            Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], fail a✝)
+F3Q_LeafPost.lean:71:12: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (SdkC_Oracle.program
+      (Code.step (Array.update idx d index) fun b =>
+        Code.step (Array.update val d leaf) fun b_1 =>
+          Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos))))
+is not definitionally equal to the right-hand side
+  ([], div)
+
+case h_3
+H : Bytes → State
+idx : Indices
+val : Values
+d : Usize
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+h✝ : ¬d > 0#usize
+x✝ : Result (Std.Array U32 16#usize)
+heq✝ : Array.update idx d index = div
+⊢ eval H
+      (SdkC_Oracle.program
+        (Code.step (Array.update idx d index) fun b =>
+          Code.step (Array.update val d leaf) fun b_1 =>
+            Code.step (ok (d.wrapping_add 1#usize)) fun b_2 => Code.done (cont (b, b_1, b_2, pos)))) =
+    ([], div)
+'AspisR1.F3Q_LeafPost.eval_post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

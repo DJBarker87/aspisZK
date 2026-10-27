@@ -1,0 +1,28 @@
+Hir_PartialPrefix.lean:17:25: error: unsolved goals
+hashv : Parts → Result Digest
+A : Type
+H : Bytes → State
+a : A
+⊢ (eval H (Hir_PartialOracle.program hashv (CheckpointBytes5Effect.Code.done a))).1 =
+    (eval H (SdkC_Oracle.program (CheckpointBytes5Effect.Code.done a))).1
+Hir_PartialPrefix.lean:20:27: error: unsolved goals
+hashv : Parts → Result Digest
+A : Type
+H : Bytes → State
+B✝ : Type
+k : B✝ → CheckpointBytes5Effect.Code A
+ih : ∀ (a : B✝), (eval H (Hir_PartialOracle.program hashv (k a))).1 <+: (eval H (SdkC_Oracle.program (k a))).1
+e : Error
+⊢ (eval H (Hir_PartialOracle.program hashv (CheckpointBytes5Effect.Code.step (fail e) k))).1 =
+    (eval H (SdkC_Oracle.program (CheckpointBytes5Effect.Code.step (fail e) k))).1
+Hir_PartialPrefix.lean:21:24: error: unsolved goals
+hashv : Parts → Result Digest
+A : Type
+H : Bytes → State
+B✝ : Type
+k : B✝ → CheckpointBytes5Effect.Code A
+ih : ∀ (a : B✝), (eval H (Hir_PartialOracle.program hashv (k a))).1 <+: (eval H (SdkC_Oracle.program (k a))).1
+⊢ (eval H (Hir_PartialOracle.program hashv (CheckpointBytes5Effect.Code.step div k))).1 =
+    (eval H (SdkC_Oracle.program (CheckpointBytes5Effect.Code.step div k))).1
+'AspisR1.Hir_PartialPrefix.read_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Hir_PartialPrefix.budget' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

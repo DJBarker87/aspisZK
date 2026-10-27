@@ -1,0 +1,10 @@
+      (∃ run : Tx1Q_Execution.Run (Tx1Q_Execution.actual ops reserved queryOps geoOps B claimsStd)
+        reserved queryOps geoOps (Tx1Q_SameCut.callerDigest adapterOps ops reserved queryOps geoOps B claimsStd) ()
+        (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved,
+        reserved = true ∧ f.split = 10#usize ∧ run.out.next.val = 10 ∧ run.flushed.val.length = 64 ∧
+        (∀ x ∈ (Tx1Q_Carriers.slice Tx1Q_Carriers.k run.flushed).val, Port3_FlushInstall.Canonical x) ∧
+        Port3_CheckpointInstall.writer
+          (Tx1Q_Install.digest (Tx1Q_SameCut.callerDigest adapterOps ops reserved queryOps geoOps B claimsStd))
+          (Tx1Q_Carriers.prepared run.p)
+          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩})
+          f.proof f.pub () = ok saved ∧ Tx1Q_Endpoint.WhenBound run) ∧

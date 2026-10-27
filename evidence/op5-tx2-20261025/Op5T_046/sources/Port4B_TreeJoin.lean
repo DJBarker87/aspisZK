@@ -1,0 +1,84 @@
+import Port4B_Bounds
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.Port4B_TreeJoin
+open Aeneas Aeneas.Std Result
+open MultiproofConeRef
+open Port3_NativeBatchCalls (Indices Values)
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.SqueezeOracleBridge
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open MultiproofConeCanonical MultiproofConeSlotState
+
+/-- Remaining LOCAL native builder gate. No batch success, roots, output or
+log equality is included. Its concrete instance is not discharged here. -/
+def PackedKeys (base : Port3_NativeBatchBody.Ops) (queries : Array U32 22#usize)
+    (q : Fin 22 → Fin 262144) (batch kind : Usize) : Prop :=
+  ∀ raw, base.op4 queries (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch) kind=ok raw →
+    raw.val.take (Port4B_TreeCuts.count batch).val=(OraclePortSelectedDraft.batchPositions batch.val).map
+      (MultiproofConeSortOrder.packed q batch.val kind.val)
+
+/-- Accepted native tree transport with complete ordered leaf+verifier reads.
+PackedKeys and exact root/wire provenance are VISIBLE input gates, not a
+whole-tree agreement or independently successful slot hypothesis. -/
+theorem accepted (base : Port3_NativeBatchBody.Ops) {X : Type}
+    (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (H : Bytes → State)
+    (binary occupied sibling : MultiproofConeP6Callbacks.Parent) (leaf : MultiproofConeP6Batch.Leaf)
+    (p6 : MultiproofConeP6Frozen2Stage.P6Boundary (Port4B_VerifyInstall.digest D) hash H binary occupied sibling leaf)
+    (proof : Slice U8) (len : proof.val.length=57607)
+    (parsed : OraclePortCompactDraft.Parsed) (wire : parsed.wire=bytesOf proof.val)
+    (queries : Array U32 22#usize) (q : Fin 22 → Fin 262144) (batch kind : Usize)
+    (hb : batch.val<2) (hk : kind.val<3)
+    (builder : PackedKeys base queries q batch kind)
+    (root : Array U8 32#usize) (rootValue : root=encodeState (OraclePortBatchDraft.committedRoot parsed kind.val))
+    (physical : Slice U8) (view : bytesOf physical.val=OraclePortCompactDraft.slice parsed.wire
+      (OraclePortSelectedDraft.slotStart (3*batch.val+kind.val)) (32*OraclePortSelectedDraft.capacity (3*batch.val+kind.val)))
+    (initial : reference.Scratch) (outIdx : Indices) (outVal : Values)
+    (run : Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install (Port4B_VerifyInstall.install base))
+      D proof queries root batch kind initial.idx initial.val hash=ok (.Ok (),outIdx,outVal)) :
+    ∃ afterLeaf final,
+      eval H (MultiproofConeP6Batch.batch_tree (MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf
+        parsed q batch.val kind.val physical initial)=
+        ((OraclePortFrozenOrder.sortedPositions q batch.val kind.val).map
+          (fun p => (OraclePortSelectedDraft.leaf parsed kind.val p,H (OraclePortSelectedDraft.leaf parsed kind.val p))) ++
+          (eval H (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling)
+            parsed batch.val kind.val physical afterLeaf)).1,(true,final)) ∧
+      final.idx=outIdx ∧ final.val=outVal := by
+  obtain ⟨raw,sorted,built,sortedCall,loopCall⟩ := Port4B_TreeCuts.keys (Port4B_VerifyInstall.install base)
+    D hash proof queries root batch kind initial.idx outIdx initial.val outVal run
+  have bounds := Port4B_Bounds.count batch
+  have small : (Port4B_TreeCuts.count batch).val≤16 := by rw [bounds.1];split <;> decide
+  have positive : 0<(Port4B_TreeCuts.count batch).val := by rw [bounds.1];split <;> decide
+  have packed := builder raw built
+  obtain ⟨length,stream⟩ := Port4B_SortInstall.key_stream (Port4B_VerifyInstall.install base) q batch.val kind.val
+    raw sorted (Port4B_TreeCuts.count batch) small positive packed sortedCall
+  have room : (reset initial).n.val+(OraclePortFrozenOrder.sortedPositions q batch.val kind.val).length≤16 := by
+    change 0+_≤16;omega
+  obtain ⟨afterLeaf,fold,terminal⟩ := Port4B_LeafLoop.accepted (Port4B_VerifyInstall.install base)
+    D hash H p6.oracle proof len parsed wire q batch.val kind (Port4B_TreeCuts.lo batch)
+    (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) root sorted outIdx outVal
+    (OraclePortFrozenOrder.sortedPositions q batch.val kind.val) (reset initial) 0#usize
+    (fun p hp => hp) bounds.2 (by simpa using length) small room stream loopCall
+  have terminalBody := Port4B_TreeCuts.terminal (Port4B_VerifyInstall.install base) D hash proof root kind
+    (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) afterLeaf.n
+    sorted afterLeaf.idx outIdx afterLeaf.val outVal terminal
+  obtain ⟨nodes,final,nodeRead,nodeView,tailValue,indices,values⟩ := Port4B_TailRun.accepted base D hash H
+    binary occupied sibling leaf p6 proof len parsed wire batch.val kind (Port4B_TreeCuts.lo batch)
+    (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) hb hk (Port4B_Bounds.slot batch kind hb hk)
+    root rootValue sorted afterLeaf outIdx outVal terminalBody
+  have sameNodes : nodes=physical := Subtype.ext (MultiproofConeByteEquality.bytes_injective (nodeView.trans view.symm))
+  subst nodes
+  have referenceGate : MultiproofConeP6Batch.LeafGate H MultiproofConeP6Batch.referenceLeaf := by
+    intro p q k j s room;rfl
+  have sourceFold := MultiproofConeP6Batch.leaves_eq H leaf p6.leaf parsed q kind.val
+    (OraclePortFrozenOrder.sortedPositions q batch.val kind.val) (reset initial) room
+  have referenceFold := MultiproofConeP6Batch.leaves_eq H MultiproofConeP6Batch.referenceLeaf referenceGate parsed q kind.val
+    (OraclePortFrozenOrder.sortedPositions q batch.val kind.val) (reset initial) room
+  have observed := sourceFold.trans (referenceFold.symm.trans fold)
+  refine ⟨afterLeaf,final,?_,indices,values⟩
+  simp only [MultiproofConeP6Batch.batch_tree,eval_bind,observed,eval,List.append_nil,tailValue]
+
+#print axioms accepted
+end AspisR1.Port4B_TreeJoin
+end

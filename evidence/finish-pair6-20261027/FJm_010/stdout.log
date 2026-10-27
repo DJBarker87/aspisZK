@@ -1,0 +1,113 @@
+@FJj_LiteralPointTensor.contract : ∀ {K E : Type} [inst : Field K] [inst_1 : Field E]
+  (φ :
+    @RingHom K E
+      (@Semiring.toNonAssocSemiring K
+        (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst))))
+      (@Semiring.toNonAssocSemiring E
+        (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))))
+  (p : Fin (@OfNat.ofNat Nat (nat_lit 10) (instOfNatNat (nat_lit 10))) → K)
+  (f : Fin (@OfNat.ofNat Nat (nat_lit 64) (instOfNatNat (nat_lit 64))) → E) (a0 a1 : E),
+  @Eq E
+    (@HMul.hMul E E E
+      (@instHMul E
+        (@Distrib.toMul E
+          (@instDistribOfSemiring E
+            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))))
+      (@HMul.hMul E E E
+        (@instHMul E
+          (@Distrib.toMul E
+            (@instDistribOfSemiring E
+              (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))))
+        (@FJg_DualTensor.low E inst_1
+          (fun s =>
+            @DFunLike.coe
+              (@RingHom K E
+                (@Semiring.toNonAssocSemiring K
+                  (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst))))
+                (@Semiring.toNonAssocSemiring E
+                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))))
+              K (fun x => E)
+              (@RingHom.instFunLike K E
+                (@Semiring.toNonAssocSemiring K
+                  (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst))))
+                (@Semiring.toNonAssocSemiring E
+                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))))
+              φ
+              (@FJd_PointReference.pointFactors K inst p
+                (@OfNat.ofNat (Fin (@OfNat.ofNat Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))) (nat_lit 0)
+                  ({
+                        len :=
+                          @OfNat.ofNat Nat (nat_lit 4)
+                            (instOfNatNat (nat_lit 4)) }.instOfNatToTypeOrderHomFinHAddNatLenOfNat
+                    (nat_lit 0)))
+                s))
+          a0)
+        (@FJg_DualTensor.low E inst_1
+          (fun s =>
+            @DFunLike.coe
+              (@RingHom K E
+                (@Semiring.toNonAssocSemiring K
+                  (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst))))
+                (@Semiring.toNonAssocSemiring E
+                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))))
+              K (fun x => E)
+              (@RingHom.instFunLike K E
+                (@Semiring.toNonAssocSemiring K
+                  (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst))))
+                (@Semiring.toNonAssocSemiring E
+                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))))
+              φ
+              (@FJd_PointReference.pointFactors K inst p
+                (@OfNat.ofNat (Fin (@OfNat.ofNat Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))) (nat_lit 1)
+                  ({
+                        len :=
+                          @OfNat.ofNat Nat (nat_lit 4)
+                            (instOfNatNat (nat_lit 4)) }.instOfNatToTypeOrderHomFinHAddNatLenOfNat
+                    (nat_lit 1)))
+                s))
+          a1))
+      (∑ i,
+        @HMul.hMul E E E
+          (@instHMul E
+            (@Distrib.toMul E
+              (@instDistribOfSemiring E
+                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))))
+          (f i)
+          (@FJg_TensorProduct.high E inst_1
+            (fun d s =>
+              @DFunLike.coe
+                (@RingHom K E
+                  (@Semiring.toNonAssocSemiring K
+                    (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst))))
+                  (@Semiring.toNonAssocSemiring E
+                    (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))))
+                K (fun x => E)
+                (@RingHom.instFunLike K E
+                  (@Semiring.toNonAssocSemiring K
+                    (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst))))
+                  (@Semiring.toNonAssocSemiring E
+                    (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))))
+                φ (@FJd_PointReference.pointFactors K inst p d s))
+            i)))
+    (@RoundPairing.dot E inst_1 (@OfNat.ofNat Nat (nat_lit 64) (instOfNatNat (nat_lit 64))) f
+      (@RoundPairing.dualFold E inst_1 (@OfNat.ofNat Nat (nat_lit 64) (instOfNatNat (nat_lit 64))) a1
+        (@RoundPairing.dualFold E inst_1 (@OfNat.ofNat Nat (nat_lit 256) (instOfNatNat (nat_lit 256))) a0 fun j =>
+          @DFunLike.coe
+            (@RingHom K E
+              (@Semiring.toNonAssocSemiring K
+                (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst))))
+              (@Semiring.toNonAssocSemiring E
+                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))))
+            K (fun x => E)
+            (@RingHom.instFunLike K E
+              (@Semiring.toNonAssocSemiring K
+                (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst))))
+              (@Semiring.toNonAssocSemiring E
+                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))))
+            φ (@tensorPoint K inst p j))))
+FJm_ContractProbe.lean:21:8: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.FJm_ContractProbe.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

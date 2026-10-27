@@ -1,0 +1,38 @@
+{"attempt": "ARS_064", "exit_status": 1, "wall_seconds": 2.880968816985842, "peak_rss_kib": "5531288", "swaps": "0", "print_axioms": ["'AspisR1.ARS_Coverage.deployed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ARS_Coverage.lean:26:15: error(lean.unknownIdentifier): Unknown identifier `RuntimeEntrypointAdmission`
+
+Note: It is not possible to treat `RuntimeEntrypointAdmission` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+ARS_Coverage.lean:27:15: error(lean.unknownIdentifier): Unknown identifier `RuntimeEntrypointAdmission`
+
+Note: It is not possible to treat `RuntimeEntrypointAdmission` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+ARS_Coverage.lean:76:85: error: unexpected identifier; expected '}'
+ARS_Coverage.lean:76:9: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `And.intro` has 2 
+...
+C Tx : Type} {L : Library W (ℕ → Record)}
+    {copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)} {allocator : Allocator A}
+    {c : DrvC_Installation.Configuration FIo_Install.W C} {err : C} {r : NP6_StdModel.Reservation}
+    {native1 : S2W_ExtractionBoundary.First} {native2 : S2W_ExtractionBoundary.Second}
+    {hashv : SdkC_Source.Parts → Result SdkC_Source.Digest} {a : Adversary A} {H : Bytes → State}
+    (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)) (final1 final2 : A) (w1 w2 : W) (admission1 : sorry)
+    (admission2 : sorry)
+    (accepted1 :
+      first native1 copy allocator (eval H a.first).2.entry CPH_Program.verifier (eval H a.first).2.data
+          (eval H a.first).2.state =
+        ok (core.result.Result.Ok (saved, post1, final1)))
+    (accepted2 :
+      let j := (eval H (a.second (eval H a.first).2 saved post1 final1)).2;
+      second native2 allocator j.entry CPH_Program.verifier j.data j.slot j.state =
+        ok (core.result.Result.Ok (post2, final2)))
+    (p : CPG_Projection.Observations Tx A) (t u : Tx) (actions : List (CPP_BankState.Action A))
+    (game :
+      CPH_Game.DeployedPairExecution p t u (eval H a.first).2.entry
+        (eval H (a.second (eval H a.first).2 saved post1 final1)).2.entry saved actions native1 native2 copy allocator
+        CPH_Program.verifier)
+    (RuntimePersistence :
+      CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+        (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p) (CPG_Projection.tentative p)
+        (CPG_Projection.success p) (CPG_Projection.loaded p)) :
+    SupportedEntry L copy allocator c err r native1 native2 hashv a H
+'AspisR1.ARS_Coverage.deployed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc06dd9b9983f459e9363b2b384b91720.scope; invocation ID: 06bdac85ce5f46f2b9e8f3259fdfed5f

@@ -1,0 +1,44 @@
+AspisR1.Port4B_LeafLoop.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)) →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑proof).length = 57607 →
+        ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+            ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Aeneas.Std.Usize)
+              (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+              (outIdx : AspisR1.Port3_NativeBatchCalls.Indices) (outVal : AspisR1.Port3_NativeBatchCalls.Values)
+              (ps : List ℕ) (s : MultiproofConeRef.reference.Scratch) (pos : Aeneas.Std.Usize),
+              (∀ p ∈ ps, p ∈ AspisR1.OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+                (↑lo = if batch = 0 then 0 else 10) →
+                  ↑pos + ps.length = ↑n →
+                    ↑n ≤ 16 →
+                      ↑s.n + ps.length ≤ 16 →
+                        AspisR1.Port4B_LeafLoop.KeyStream q batch (↑kind) keys pos ps →
+                          AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                                (AspisR1.Port3_BatchStd.install (AspisR1.Port4B_LeafInstall.install base)) D proof root
+                                kind s.idx s.val hash lo n slot keys s.n pos =
+                              Aeneas.Std.Result.ok (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ())) →
+                            ∃ t,
+                              AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.MultiproofConeP6Batch.leaves AspisR1.MultiproofConeP6Batch.referenceLeaf
+                                      parsed q (↑kind) ps s) =
+                                  (List.map
+                                      (fun p =>
+                                        (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p,
+                                          H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+                                      ps,
+                                    Aeneas.Std.Result.ok (some t)) ∧
+                                AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                                    (AspisR1.Port3_BatchStd.install (AspisR1.Port4B_LeafInstall.install base)) D proof
+                                    root kind t.idx t.val hash lo n slot keys t.n n =
+                                  Aeneas.Std.Result.ok (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ()))
+'AspisR1.Port4B_LeafLoop.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_LeafLoop.KeyStream : (Fin 22 → Fin 262144) →
+  ℕ → ℕ → Aeneas.Std.Array Aeneas.Std.U64 16#usize → Aeneas.Std.Usize → List ℕ → Prop :=
+fun q batch kind keys pos ps =>
+  ∀ (cursor : Aeneas.Std.Usize) (j : ℕ) (bound : j < ps.length),
+    ↑cursor = ↑pos + j →
+      keys.index_usize cursor = Aeneas.Std.Result.ok (AspisR1.MultiproofConeSortOrder.packed q batch kind ps[j])

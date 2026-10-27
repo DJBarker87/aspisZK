@@ -1,0 +1,18 @@
+F3P_RecordParsed.lean:13:67: error: unsolved goals
+case hc
+bytes : Slice U8
+value : AspisR1RecordParser.field.wide_exact.WideExact
+success : AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes = ok (some value)
+len : (↑bytes).length = 32
+arr : Std.Array U8 32#usize
+same : arr.to_slice = bytes
+hc : ∀ (i : Fin 8), ↑(ExtractedRecordByteCanonicality.wordLE arr i) < 2147483647
+packed :
+  value =
+    ExtractedRecordLimbCanonicality.packed (ExtractedRecordByteCanonicality.wordLE arr 0)
+      (ExtractedRecordByteCanonicality.wordLE arr 1) (ExtractedRecordByteCanonicality.wordLE arr 2)
+      (ExtractedRecordByteCanonicality.wordLE arr 3) (ExtractedRecordByteCanonicality.wordLE arr 4)
+      (ExtractedRecordByteCanonicality.wordLE arr 5) (ExtractedRecordByteCanonicality.wordLE arr 6)
+      (ExtractedRecordByteCanonicality.wordLE arr 7)
+⊢ ∀ (i : Fin 8), ↑(ExtractedRecordByteCanonicality.wordLE arr i) < 2147483647
+'AspisR1.F3P_RecordParsed.parsed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

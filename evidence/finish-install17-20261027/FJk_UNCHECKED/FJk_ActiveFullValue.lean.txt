@@ -1,0 +1,82 @@
+import FJk_ActiveValue
+import FJk_CopyRawValue
+import FJk_PatternValues
+import JGa_Copy
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJk_ActiveFullValue
+open Aeneas Aeneas.Std Result FIq_Native
+open pool_v1.pair_forest_copy_terminal
+open FIv_NativeValue (K Canon decode)
+open FIw_ArrayValue (canonical)
+/-- Complete original active VALUE,including every literal mask and native low sum. -/
+theorem value (s : Selectors) (out : field.QM31)
+    (hh : canonical s.high) (hl : canonical s.low) (run : Selectors.active s=ok out) :
+    Canon out ∧ decode out=R0P.copyActiveLiteral (FIw_CopyEndpoint.modelSelectors s) := by
+  change Selectors.active_literal_loop s field.QM31.ZERO 0#usize=ok out at run
+  have got := FJk_ActiveValue.loop 64 0#usize s field.QM31.ZERO out rfl hh hl FIv_NativeValue.zero.1 run
+  refine ⟨got.1,?_⟩
+  have shape : FJk_ActiveValue.model s 0 0=
+      R0P.copyActiveLiteral (FIw_CopyEndpoint.modelSelectors s) := by
+    unfold FJk_ActiveValue.model FJk_ActiveValue.indices FJk_ActiveValue.step
+      R0P.copyActiveLiteral FIw_CopyEndpoint.modelSelectors
+    rw [List.drop_zero]
+  exact (got.2.trans (congrArg (FJk_ActiveValue.model s 0) FIv_NativeValue.zero.2)).trans shape
+#print axioms value
+end AspisR1.FJk_ActiveFullValue
+namespace AspisR1.FJk_CompleteCopy
+open Aeneas Aeneas.Std Result FIq_Native
+open pool_v1.pair_forest_copy_terminal
+open FIv_NativeValue (K Canon decode)
+open FIw_ArrayValue (canonical decoded)
+attribute [local irreducible] R0P.copyLinks R0P.copyResidual R0P.copyActiveLiteral
+/-- Complete native13/14 copy evaluator VALUE on the original parsed operands.
+No pattern,link,active output or child-success premise remains. -/
+theorem value (a : Array field.QM31 16#usize) (h : field.QM31) (s : Selectors)
+    (lambda chi : field.QM31) (index : U64) (v : PoolV1PairForestCompiledVariantV1)
+    (copy : PoolV1PairForestCompiledCopyTerminalV1)
+    (ha : canonical a) (hh : Canon h) (hhigh : canonical s.high) (hlow : canonical s.low)
+    (hlambda : Canon lambda) (hchi : Canon chi)
+    (run : evaluate_with_selectors a h s lambda chi index v=ok copy) :
+    Canon copy.residual ∧ Canon copy.active ∧
+      (decode copy.residual,decode copy.active)=
+      R0P.copyEvaluateWithSelectors (decoded a) (decode h) (FIw_CopyEndpoint.modelSelectors s)
+        (decode lambda) (decode chi) index.val (FJk_CopyDescriptor.variant v) := by
+  obtain ⟨patterns,rp,_,ra,ca,cr,cv⟩ := FJk_CopyRawValue.value a h s lambda chi index v copy
+    ha hh hhigh hlow hlambda hchi run
+  have pv := FJk_PatternValues.value a lambda patterns ha hlambda rp
+  have av := FJk_ActiveFullValue.value s copy.active hhigh hlow ra
+  have shape : R0P.copyEvaluateWithSelectors (decoded a) (decode h) (FIw_CopyEndpoint.modelSelectors s)
+      (decode lambda) (decode chi) index.val (FJk_CopyDescriptor.variant v)=
+      (R0P.copyActiveLiteral (FIw_CopyEndpoint.modelSelectors s)*
+        R0P.copyResidual (FJk_CopyFullFold.model s patterns index v) (decode h) (decode chi),
+       R0P.copyActiveLiteral (FIw_CopyEndpoint.modelSelectors s)) := by
+    unfold R0P.copyEvaluateWithSelectors FJk_CopyFullFold.model FJk_CopyFullFold.initial
+    rw [pv.2]
+    rfl
+  refine ⟨cr,ca,?_⟩
+  exact (Prod.ext (cv.trans (congrArg (fun x=>x*R0P.copyResidual
+    (FJk_CopyFullFold.model s patterns index v) (decode h) (decode chi)) av.2)) av.2).trans shape.symm
+#print axioms value
+end AspisR1.FJk_CompleteCopy
+namespace AspisR1.FJk_CompleteCopyNonvacuity
+open Aeneas Aeneas.Std Result FIq_Native
+open pool_v1.pair_forest_copy_terminal
+open FIv_NativeValue (K Canon decode)
+open FIw_ArrayValue (canonical decoded)
+/-- The complete copy VALUE hypotheses hold on actual source success for every
+canonical operand. No independently assumed child output is required. -/
+theorem value (a : Array field.QM31 16#usize) (h : field.QM31) (s : Selectors)
+    (lambda chi : field.QM31) (index : U64) (v : PoolV1PairForestCompiledVariantV1)
+    (ha : canonical a) (hh : Canon h) (hhigh : canonical s.high) (hlow : canonical s.low)
+    (hlambda : Canon lambda) (hchi : Canon chi) :
+    ∃ copy,evaluate_with_selectors a h s lambda chi index v=ok copy ∧
+      (decode copy.residual,decode copy.active)=
+        R0P.copyEvaluateWithSelectors (decoded a) (decode h) (FIw_CopyEndpoint.modelSelectors s)
+          (decode lambda) (decode chi) index.val (FJk_CopyDescriptor.variant v) := by
+  obtain ⟨copy,run,_,_⟩ := JGa_Copy.source a h s lambda chi index v ha hh hhigh hlow hlambda hchi
+  have got := FJk_CompleteCopy.value a h s lambda chi index v copy ha hh hhigh hlow hlambda hchi run
+  exact ⟨copy,run,got.2.2⟩
+#print axioms value
+end AspisR1.FJk_CompleteCopyNonvacuity
+end

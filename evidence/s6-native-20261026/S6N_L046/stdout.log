@@ -1,0 +1,146 @@
+def AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1.call_once : AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure →
+  AspisR1TerminalDecoder.atomic_statement.AtomicStatementError →
+    Aeneas.Std.Result AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 :=
+fun c tupled_args =>
+  Aeneas.Std.Result.ok
+    AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate
+'AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1.call_once' does not depend on any axioms
+def AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 : AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 →
+  Aeneas.Std.Slice Aeneas.Std.U8 →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result Unit
+          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 ×
+        Aeneas.Std.Slice Aeneas.Std.U8) :=
+fun statement output =>
+  have i := output.len;
+  do
+  let i1 ← AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES
+  if (i != i1) = true then
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongLength,
+          output)
+    else do
+      let o ← Aeneas.Std.lift (statement.live_snapshot.next_pair_index.checked_add 1#u64)
+      let b ←
+        Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+            (AspisR1TerminalDecoder.core.option.Option.Insts.CoreCmpPartialEqOption Aeneas.Std.core.cmp.PartialEqU64) o
+            (some statement.candidate_afterstate.next_pair_index)
+      if b = true then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err
+                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch,
+              output)
+        else do
+          let output1 ← Aeneas.Std.core.slice.Slice.fill Aeneas.Std.core.clone.CloneU8 output 0#u8
+          let (s, index_mut_back) ←
+            Aeneas.Std.core.slice.index.Slice.index_mut
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8) output1 { «end» := 8#usize }
+          let s1 ←
+            Aeneas.Std.lift
+                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+          let s2 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s s1
+          have output2 : Aeneas.Std.Slice Aeneas.Std.U8 := index_mut_back s2
+          let output3 ←
+            output2.update 8#usize
+                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION
+          let output4 ←
+            output3.update 9#usize
+                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT
+          let (s3, index_mut_back1) ←
+            Aeneas.Std.core.slice.index.Slice.index_mut
+                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) output4
+                { start := 10#usize, «end» := 12#usize }
+          let i2 ←
+            Aeneas.Std.lift
+                (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U16
+                  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES)
+          let a ← Aeneas.Std.lift (Aeneas.Std.core.num.U16.to_le_bytes i2)
+          let s4 ← Aeneas.Std.lift a.to_slice
+          let s5 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s3 s4
+          have output5 : Aeneas.Std.Slice Aeneas.Std.U8 := index_mut_back1 s5
+          let (s6, index_mut_back2) ←
+            Aeneas.Std.core.slice.index.Slice.index_mut
+                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) output5
+                { start := 12#usize, «end» := 16#usize }
+          let i3 ←
+            Aeneas.Std.lift
+                (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32
+                  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES)
+          let a1 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.to_le_bytes i3)
+          let s7 ← Aeneas.Std.lift a1.to_slice
+          let s8 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s6 s7
+          have output6 : Aeneas.Std.Slice Aeneas.Std.U8 := index_mut_back2 s8
+          let (s9, index_mut_back3) ←
+            Aeneas.Std.core.slice.index.Slice.index_mut
+                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) output6
+                { start := 16#usize, «end» := 20#usize }
+          let i4 ← AspisR1TerminalDecoder.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+          let i5 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 i4)
+          let a2 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.to_le_bytes i5)
+          let s10 ← Aeneas.Std.lift a2.to_slice
+          let s11 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s9 s10
+          have output7 : Aeneas.Std.Slice Aeneas.Std.U8 := index_mut_back3 s11
+          let (s12, index_mut_back4) ←
+            Aeneas.Std.core.slice.index.Slice.index_mut
+                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) output7
+                { start := 20#usize, «end» := 24#usize }
+          let i6 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 i1)
+          let a3 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.to_le_bytes i6)
+          let s13 ← Aeneas.Std.lift a3.to_slice
+          let s14 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s12 s13
+          have output8 : Aeneas.Std.Slice Aeneas.Std.U8 := index_mut_back4 s14
+          let i7 ← 32#usize + AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES
+          let (s15, index_mut_back5) ←
+            Aeneas.Std.core.slice.index.Slice.index_mut
+                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) output8
+                { start := 32#usize, «end» := i7 }
+          let (r, s16) ←
+            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1
+                statement.live_snapshot s15
+          let r1 ←
+            AspisR1TerminalDecoder.core.result.Result.map_err
+                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1
+                r ()
+          let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+              let r2 ←
+                AspisR1TerminalDecoder.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+                    statement.candidate_afterstate
+              let r3 ←
+                AspisR1TerminalDecoder.core.result.Result.map_err
+                    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1
+                    r2 ()
+              let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf1 with
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+                  have output9 := index_mut_back5 s16;
+                  do
+                  let (s17, index_mut_back6) ←
+                    Aeneas.Std.core.slice.index.Slice.index_mut
+                        (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) output9
+                        { start := i7 }
+                  let s18 ← Aeneas.Std.lift val.to_slice
+                  let s19 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s17 s18
+                  have output10 : Aeneas.Std.Slice Aeneas.Std.U8 := index_mut_back6 s19
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), output10)
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (Aeneas.Std.core.convert.FromSame
+                          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1)
+                        residual
+                  have output9 : Aeneas.Std.Slice Aeneas.Std.U8 := index_mut_back5 s16
+                  Aeneas.Std.Result.ok (r4, output9)
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (Aeneas.Std.core.convert.FromSame
+                      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1)
+                    residual
+              have output9 : Aeneas.Std.Slice Aeneas.Std.U8 := index_mut_back5 s16
+              Aeneas.Std.Result.ok (r2, output9)
+'AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

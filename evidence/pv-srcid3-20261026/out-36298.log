@@ -1,0 +1,268 @@
+structure R1Z.BuilderSource.SourceIdentification {K : Type} [Field K] [CharP K 2147483647]
+  (source : R0Z.ZkStatement.HonestProver K) (toInstance : source.Instance → R1Z.BuilderCanonical.Instance) : Prop
+number of parameters: 5
+fields:
+  R1Z.BuilderSource.SourceIdentification.public_eq : ∀ (w : source.Instance),
+      source.public w = R1Z.BuilderSource.prover.public (toInstance w)
+  R1Z.BuilderSource.SourceIdentification.build_eq : ∀ (w : source.Instance),
+      source.build w = R1Z.BuilderSource.prover.build (toInstance w)
+  R1Z.BuilderSource.SourceIdentification.transport_eq : source.transport = R1Z.BuilderSource.π
+constructor:
+  R1Z.BuilderSource.SourceIdentification.mk {K : Type} [Field K] [CharP K 2147483647]
+    {source : R0Z.ZkStatement.HonestProver K} {toInstance : source.Instance → R1Z.BuilderCanonical.Instance}
+    (public_eq : ∀ (w : source.Instance), source.public w = R1Z.BuilderSource.prover.public (toInstance w))
+    (build_eq : ∀ (w : source.Instance), source.build w = R1Z.BuilderSource.prover.build (toInstance w))
+    (transport_eq : source.transport = R1Z.BuilderSource.π) : R1Z.BuilderSource.SourceIdentification source toInstance
+structure R1Z.PV_Src_Identification.PV_Src_Premises {K : Type} [Field K] [CharP K 2147483647] {I : Type}
+  (inputs : I → R1Z.PV_Src_Identification.Input) (transport : Fin 1024 ≃ Fin 1024) : Prop
+number of parameters: 6
+fields:
+  R1Z.PV_Src_Identification.PV_Src_Premises.words : ∀ (i : I),
+      R0Z.WriterRefine.WitnessOk (R1Z.BuilderPrimitiveArguments.wordWitness (inputs i).witnessRecord)
+  R1Z.PV_Src_Identification.PV_Src_Premises.publicCorr : ∀ (i : I),
+      R0Z.WriterRefine.PubCorr (R1Z.BuilderPrimitiveArguments.wordPublic (inputs i).publicRecord)
+        (R1J.SpendWitnessMap.mapPub (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput))
+  R1Z.PV_Src_Identification.PV_Src_Premises.admission : ∀ (i : I),
+      R1Z.BuilderSpendRelation.RspendPlus
+        (R1J.SpendWitnessMap.mapPub (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput))
+        (R1Z.BuilderCanonical.liftWitness
+          (R1Z.BuilderRecordCanonical.witness (R1Z.BuilderPrimitiveArguments.wordWitness (inputs i).witnessRecord)))
+  R1Z.PV_Src_Identification.PV_Src_Premises.row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j
+constructor:
+  R1Z.PV_Src_Identification.PV_Src_Premises.mk {K : Type} [Field K] [CharP K 2147483647] {I : Type}
+    {inputs : I → R1Z.PV_Src_Identification.Input} {transport : Fin 1024 ≃ Fin 1024}
+    (words : ∀ (i : I), R0Z.WriterRefine.WitnessOk (R1Z.BuilderPrimitiveArguments.wordWitness (inputs i).witnessRecord))
+    (publicCorr :
+      ∀ (i : I),
+        R0Z.WriterRefine.PubCorr (R1Z.BuilderPrimitiveArguments.wordPublic (inputs i).publicRecord)
+          (R1J.SpendWitnessMap.mapPub (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput)))
+    (admission :
+      ∀ (i : I),
+        R1Z.BuilderSpendRelation.RspendPlus
+          (R1J.SpendWitnessMap.mapPub (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput))
+          (R1Z.BuilderCanonical.liftWitness
+            (R1Z.BuilderRecordCanonical.witness (R1Z.BuilderPrimitiveArguments.wordWitness (inputs i).witnessRecord))))
+    (row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j) :
+    R1Z.PV_Src_Identification.PV_Src_Premises inputs transport
+structure R1Z.PV_Src_Canonical.Instance {K : Type} [Field K] [CharP K 2147483647] : Type
+number of parameters: 3
+fields:
+  R1Z.PV_Src_Canonical.Instance.canonical : R1Z.BuilderCanonical.Instance
+  R1Z.PV_Src_Canonical.Instance.indexBound : (↑self.canonical).1.nextPairIndex < 2 ^ 64
+  R1Z.PV_Src_Canonical.Instance.pool : R1Z.PV_Src_PublicRecords.Context
+  R1Z.PV_Src_Canonical.Instance.domain : R1Z.PV_Src_PublicRecords.Context
+  R1Z.PV_Src_Canonical.Instance.destination : R1Z.PV_Src_PublicRecords.Context
+constructor:
+  R1Z.PV_Src_Canonical.Instance.mk {K : Type} [Field K] [CharP K 2147483647] (canonical : R1Z.BuilderCanonical.Instance)
+    (indexBound : (↑canonical).1.nextPairIndex < 2 ^ 64) (pool domain destination : R1Z.PV_Src_PublicRecords.Context) :
+    R1Z.PV_Src_Canonical.Instance
+'R1Z.PV_Src_PartsTotal.parts_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Public.run_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Public.output_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Trace.run_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Trace.canonical_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Identification.public_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Identification.build_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Identification.transport_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Identification.identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Canonical.premises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Canonical.identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Canonical.public_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Canonical.build_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Canonical.transport_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Consumer.of_identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Consumer.extracted_stages' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Consumer.existing_consumer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Fixtures.fixture_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Fixtures.fibres' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure R1Z.PV_Src_ForestIdentification.PV_Src_Premises {K : Type} [Field K] [CharP K 2147483647] {I : Type}
+  (inputs : I → R1Z.PV_Src_ForestIdentification.Input) (transport : Fin 1024 ≃ Fin 1024) : Prop
+number of parameters: 6
+fields:
+  R1Z.PV_Src_ForestIdentification.PV_Src_Premises.words : ∀ (i : I),
+      R0Z.WriterRefine.WitnessOk (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness (inputs i).witnessRecord)
+  R1Z.PV_Src_ForestIdentification.PV_Src_Premises.publicCorr : ∀ (i : I),
+      R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic (inputs i).publicRecord)
+        (R1J.SpendWitnessMap.mapPub (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput))
+  R1Z.PV_Src_ForestIdentification.PV_Src_Premises.admission : ∀ (i : I),
+      R1Z.BuilderSpendRelation.RspendPlus
+        (R1J.SpendWitnessMap.mapPub (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput))
+        (R1Z.BuilderCanonical.liftWitness
+          (R1Z.BuilderRecordCanonical.witness
+            (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness (inputs i).witnessRecord)))
+  R1Z.PV_Src_ForestIdentification.PV_Src_Premises.row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j
+constructor:
+  R1Z.PV_Src_ForestIdentification.PV_Src_Premises.mk {K : Type} [Field K] [CharP K 2147483647] {I : Type}
+    {inputs : I → R1Z.PV_Src_ForestIdentification.Input} {transport : Fin 1024 ≃ Fin 1024}
+    (words :
+      ∀ (i : I), R0Z.WriterRefine.WitnessOk (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness (inputs i).witnessRecord))
+    (publicCorr :
+      ∀ (i : I),
+        R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic (inputs i).publicRecord)
+          (R1J.SpendWitnessMap.mapPub (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput)))
+    (admission :
+      ∀ (i : I),
+        R1Z.BuilderSpendRelation.RspendPlus
+          (R1J.SpendWitnessMap.mapPub (R1Z.PV_Src_Public.canonicalPublic (inputs i).publicInput))
+          (R1Z.BuilderCanonical.liftWitness
+            (R1Z.BuilderRecordCanonical.witness
+              (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness (inputs i).witnessRecord))))
+    (row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j) :
+    R1Z.PV_Src_ForestIdentification.PV_Src_Premises inputs transport
+'R1Z.PV_Src_ForestPartsTotal.parts_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_ForestTrace.run_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_ForestIdentification.identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_ForestCanonical.identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_ForestCanonical.public_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_ForestCanonical.build_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_ForestCanonical.transport_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Consumer.forest_stages' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure R0Z.WriterRefine.WitnessOk (W : R0Z.WriterRefine.RustWitness) : Prop
+number of parameters: 1
+fields:
+  R0Z.WriterRefine.WitnessOk.values : ↑W.inputValue < 2 ^ 30 ∧ ↑W.outputValue < 2 ^ 30 ∧ ↑W.changeValue < 2 ^ 30
+  R0Z.WriterRefine.WitnessOk.bits : ∀ l < 24, ↑(↑W.bits)[l]! = 0 ∨ ↑(↑W.bits)[l]! = 1
+  R0Z.WriterRefine.WitnessOk.sibs : ∀ l < 24, R0Z.WriterRefine.Canon8 (↑W.sibs)[l]!
+constructor:
+  R0Z.WriterRefine.WitnessOk.mk {W : R0Z.WriterRefine.RustWitness}
+    (values : ↑W.inputValue < 2 ^ 30 ∧ ↑W.outputValue < 2 ^ 30 ∧ ↑W.changeValue < 2 ^ 30)
+    (bits : ∀ l < 24, ↑(↑W.bits)[l]! = 0 ∨ ↑(↑W.bits)[l]! = 1)
+    (sibs : ∀ l < 24, R0Z.WriterRefine.Canon8 (↑W.sibs)[l]!) : R0Z.WriterRefine.WitnessOk W
+structure R0Z.WriterRefine.PubCorr {K : Type} [Field K] (P : R0Z.WriterRefine.RustPublic) (pub : R0P.Public K) : Prop
+number of parameters: 4
+fields:
+  R0Z.WriterRefine.PubCorr.variant : P.variant = pub.variant
+  R0Z.WriterRefine.PubCorr.asset : R0Z.WriterRefine.liftU P.asset = pub.assetId
+  R0Z.WriterRefine.PubCorr.next : P.nextPairIndex = pub.nextPairIndex
+  R0Z.WriterRefine.PubCorr.frontier : ∀ (l : Fin 20),
+      R0Z.WriterRefine.DigestLift (↑P.frontier)[↑l]! (pub.snapshotFrontier l)
+  R0Z.WriterRefine.PubCorr.empty : ∀ (l : Fin 20),
+      R0Z.WriterRefine.DigestLift (↑P.empty)[↑l]! (R0Z.BuilderModel.emptyRootK l)
+  R0Z.WriterRefine.PubCorr.frontierCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.frontier)[↑l]!
+  R0Z.WriterRefine.PubCorr.emptyCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.empty)[↑l]!
+constructor:
+  R0Z.WriterRefine.PubCorr.mk {K : Type} [Field K] {P : R0Z.WriterRefine.RustPublic} {pub : R0P.Public K}
+    (variant : P.variant = pub.variant) (asset : R0Z.WriterRefine.liftU P.asset = pub.assetId)
+    (next : P.nextPairIndex = pub.nextPairIndex)
+    (frontier : ∀ (l : Fin 20), R0Z.WriterRefine.DigestLift (↑P.frontier)[↑l]! (pub.snapshotFrontier l))
+    (empty : ∀ (l : Fin 20), R0Z.WriterRefine.DigestLift (↑P.empty)[↑l]! (R0Z.BuilderModel.emptyRootK l))
+    (frontierCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.frontier)[↑l]!)
+    (emptyCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.empty)[↑l]!) : R0Z.WriterRefine.PubCorr P pub
+def R1Z.BuilderSpendRelation.RspendPlus : {K : Type} →
+  [Field K] → R0P.Public K → AspisR1.SpendRelation.Witness K → Prop :=
+fun {K} [Field K] pub w =>
+  AspisR1.SpendRelation.Rspend pub w ∧ (pub.variant = R0P.Variant.privateTransfer → pub.change 7 ≠ 0)
+def AspisR1.SpendRelation.Rspend : {K : Type} → [Field K] → R0P.Public K → AspisR1.SpendRelation.Witness K → Prop :=
+fun {K} [Field K] pub w =>
+  AspisR1.PublicOptionShape.canonical pub ∧
+    AspisR1.InputWitnessCore.Relation pub (↑↑w.inputValue) w.sk w.salt w.path w.pair ∧
+      ↑w.inputValue = ↑w.outputValue + ↑w.changeValue ∧
+        pub.change = AspisR1.SpendRelation.changeCommitment pub w ∧
+          AspisR1.SpendRelation.variantOutput pub w ∧ AspisR1.SpendRelation.AppendBinding pub
+class R1Z.BuilderForestAdmissionPort.ExternalLinear : Type
+number of parameters: 0
+fields:
+  R1Z.BuilderForestAdmissionPort.ExternalLinear.call : Aeneas.Std.Array
+        R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize →
+      Aeneas.Std.Result (Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize)
+constructor:
+  R1Z.BuilderForestAdmissionPort.ExternalLinear.mk
+    (call :
+      Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize →
+        Aeneas.Std.Result (Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize)) :
+    R1Z.BuilderForestAdmissionPort.ExternalLinear
+class R1Z.BuilderForestAdmissionPort.Records : Type
+number of parameters: 0
+fields:
+  R1Z.BuilderForestAdmissionPort.Records.call : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestInputNoteWitnessV1 →
+      Aeneas.Std.U32 →
+        Option R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1 →
+          R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1 →
+            R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 →
+              R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 →
+                Aeneas.Std.Result
+                  (R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.RW ×
+                    R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.RP)
+constructor:
+  R1Z.BuilderForestAdmissionPort.Records.mk
+    (call :
+      R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestInputNoteWitnessV1 →
+        Aeneas.Std.U32 →
+          Option R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1 →
+            R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1 →
+              R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 →
+                R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 →
+                  Aeneas.Std.Result
+                    (R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.RW ×
+                      R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.RP)) :
+    R1Z.BuilderForestAdmissionPort.Records
+structure R1Z.PV_Src_NativeIdentification.PV_Src_Premises {K : Type} [Field K] [CharP K 2147483647]
+  [R1Z.BuilderForestAdmissionPort.ExternalLinear] [R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  (inputs : I → R1Z.PV_Src_NativeInput.Input) (transport : Fin 1024 ≃ Fin 1024) : Prop
+number of parameters: 8
+fields:
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.compile_call : ∀ (i : I),
+      R1Z.PV_Src_NativeInput.run (inputs i) =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (inputs i).compiled)
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.words : ∀ (i : I)
+      (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R0Z.WriterRefine.WitnessOk (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w)
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.publicCorr : ∀ (i : I)
+      (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic records.p)
+          (R1J.SpendWitnessMap.mapPub
+            (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.admission : ∀ (i : I)
+      (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R1Z.BuilderSpendRelation.RspendPlus
+          (R1J.SpendWitnessMap.mapPub
+            (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+          (R1Z.BuilderCanonical.liftWitness
+            (R1Z.BuilderRecordCanonical.witness (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w)))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j
+constructor:
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.mk {K : Type} [Field K] [CharP K 2147483647]
+    [R1Z.BuilderForestAdmissionPort.ExternalLinear] [R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+    {inputs : I → R1Z.PV_Src_NativeInput.Input} {transport : Fin 1024 ≃ Fin 1024}
+    (compile_call :
+      ∀ (i : I),
+        R1Z.PV_Src_NativeInput.run (inputs i) =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (inputs i).compiled))
+    (words :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R0Z.WriterRefine.WitnessOk (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w))
+    (publicCorr :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic records.p)
+            (R1J.SpendWitnessMap.mapPub
+              (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i)))))
+    (admission :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R1Z.BuilderSpendRelation.RspendPlus
+            (R1J.SpendWitnessMap.mapPub
+              (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+            (R1Z.BuilderCanonical.liftWitness
+              (R1Z.BuilderRecordCanonical.witness (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w))))
+    (row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j) :
+    R1Z.PV_Src_NativeIdentification.PV_Src_Premises inputs transport
+'R1Z.PV_Src_ForestCompilation.returned_bank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeIdentification.public_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeIdentification.build_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeIdentification.transport_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeIdentification.identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeConsumer.builder_premises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeConsumer.phased_builder_premises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_LowBits.sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeValueBits.helper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeValueReconstruction.reconstruct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeDirections.closure_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeDirections.run_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeDirections.booleans' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

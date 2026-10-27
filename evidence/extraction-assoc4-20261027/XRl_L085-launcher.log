@@ -1,0 +1,76 @@
+{"attempt": "XRl_L085", "exit_status": 1, "wall_seconds": 1.8525375570170581, "peak_rss_kib": "2624904", "swaps": "0", "print_axioms": ["'XRl_Adapter.next_back_cursor' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRl_Adapter.next_back_restoration_cursor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRl_generated/XRl_ReverseCursor.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (v, next, back).2.2
+in the target expression
+  (back updated item).i = s.i
+
+T : Type
+s next : core.slice.iter.IterMut T
+v : Option T
+back : Back T
+run✝ :
+  (do
+      let (v, r) ←
+        core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back
+            { slice := s.slice, i := ↑0#usize }
+      ok
+          (v, { slice := r.slice, i := s.i }, fun updated item =>
+            match item with
+            | none => updated
+            | some x =>
+              if h : (↑updated.slice ++ [x]).length ≤ Usize.max then
+                { slice := ⟨↑u
+...
+
+  (back updated item).i = s.i
+
+T : Type
+s next : core.slice.iter.IterMut T
+v : Option T
+back : Back T
+run✝ :
+  (do
+      let (v, r) ←
+        core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back
+            { slice := s.slice, i := ↑0#usize }
+      ok
+          (v, { slice := r.slice, i := s.i }, fun updated item =>
+            match item with
+            | none => updated
+            | some x =>
+              if h : (↑updated.slice ++ [x]).length ≤ Usize.max then
+                { slice := ⟨↑updated.slice ++ [x], h⟩, i := updated.i }
+              else s)) =
+    ok (v, next, back)
+updated : core.slice.iter.IterMut T
+item : Option T
+same : updated.i = s.i
+value : Option T
+state : core.slice.iter.Iter T
+left✝ :
+  core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back
+      { slice := s.slice, i := ↑0#usize } =
+    ok (value, state)
+run :
+  ok
+      (value, { slice := state.slice, i := s.i }, fun updated item =>
+        match item with
+        | none => updated
+        | some x =>
+          if h : (↑updated.slice ++ [x]).length ≤ Usize.max then { slice := ⟨↑updated.slice ++ [x], h⟩, i := updated.i }
+          else s) =
+    ok (v, next, back)
+backeq :
+  (value, { slice := state.slice, i := s.i }, fun updated item =>
+          match item with
+          | none => updated
+          | some x =>
+            if h : (↑updated.slice ++ [x]).length ≤ Usize.max then
+              { slice := ⟨↑updated.slice ++ [x], h⟩, i := updated.i }
+            else s).2.2 =
+    (v, next, back).2.2
+⊢ (back updated item).i = s.i
+'XRl_Adapter.next_back_cursor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRl_Adapter.next_back_restoration_cursor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7ff14e83ee804dd0855e7f8198f9c020.scope; invocation ID: 899b77de2ca6463c824e75194772d4ca

@@ -1,0 +1,52 @@
+reservation: populated 17 GiB + 8 GiB; window=1 (London 0903); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+R1Z.ProverRw19CanonicalAuditRefinement.refinement [ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (P_source_p6 : ProverRwFull.ExternalFuns.op223 = R1Z.ProverRwP6CompressSource.compress) {S : Type}
+  (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+  (pub : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (v : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (binding digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool)
+  (reservation : store.reserve s digest attempt.mask_nonce = Aeneas.Std.Result.ok (accepted, after))
+  (modelBytes : Aeneas.Std.Result R1Z.ProverRw19AuditData.ByteStatus)
+  (P_proof_bytes :
+    R1Z.PV_RW_DataProduct.observe R1Z.PV_RW_DataProduct.first
+        (R1Z.ProverRwBodyDataCriterion.data
+          (R1Z.ProverRwP6BodyStore.execute (R1Z.PV_RW_CombinedBodyData.closed ops) store pub compiled v hash binding
+            digest attempt s)) =
+      modelBytes) :
+  R1Z.ProverRwP6BodyStore.execute (R1Z.ProverRw18ContextJoin.original ops) store pub compiled v hash binding digest
+      attempt s =
+    R1Z.ProverRwBodyCandidateData.withState after (R1Z.ProverRw19AuditData.attachAudit modelBytes)
+theorem R1Z.ProverRw19CanonicalAuditRefinement.refinement : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns),
+  ProverRwFull.ExternalFuns.op223 = R1Z.ProverRwP6CompressSource.compress →
+    ∀ {S : Type} (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+      (pub : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+      (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+      (v : ProverRwFull.transport.Variant)
+      (hash :
+        Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+      (binding digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+      (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool),
+      store.reserve s digest attempt.mask_nonce = Aeneas.Std.Result.ok (accepted, after) →
+        ∀ (modelBytes : Aeneas.Std.Result R1Z.ProverRw19AuditData.ByteStatus),
+          R1Z.PV_RW_DataProduct.observe R1Z.PV_RW_DataProduct.first
+                (R1Z.ProverRwBodyDataCriterion.data
+                  (R1Z.ProverRwP6BodyStore.execute (R1Z.PV_RW_CombinedBodyData.closed ops) store pub compiled v hash
+                    binding digest attempt s)) =
+              modelBytes →
+            R1Z.ProverRwP6BodyStore.execute (R1Z.ProverRw18ContextJoin.original ops) store pub compiled v hash binding
+                digest attempt s =
+              R1Z.ProverRwBodyCandidateData.withState after (R1Z.ProverRw19AuditData.attachAudit modelBytes) :=
+⋯
+'R1Z.ProverRw19CanonicalAuditRefinement.refinement' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.69
+	Maximum resident set size (kbytes): 4290132
+	Swaps: 0
+	Exit status: 0

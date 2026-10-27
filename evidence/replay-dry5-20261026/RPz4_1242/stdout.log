@@ -1,0 +1,250 @@
+'AspisR1.S2W_D188Consolidation.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_DigestExtraction.digest_eq_hashv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_DigestExtraction.native_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_AuthenticatedInputs.authenticated_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_AuthenticatedInputs.authenticated_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SiteSchedule.located' depends on axioms: [propext]
+'AspisR1.S2W_SiteSchedule.reached' depends on axioms: [propext]
+'AspisR1.S2W_SiteSchedule.ordered' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_SiteSchedule.source_schedule' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_ChildEventPorts.returning_trace' depends on axioms: [propext]
+'AspisR1.S2W_TwoFieldAudit.full_fields_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TwoFieldAudit.changed_metadata_excludes_facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.S2W_D188Consolidation.accepted_run : ∀ {E : Type} (ops : AdapterRw.Ops)
+  (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+  (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+  S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    ∀ (sha256 H : Bytes → State),
+      S2W_ExtractionBoundary.P1 sha256 H →
+        S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (program : S2W_ExtractionBoundary.Program) (accounts1 accounts2 : S2W_ExtractionBoundary.Accounts)
+            (data1 data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot) (saved : alloc.vec.Vec U8),
+            native1 program accounts1 data1 = ok (core.result.Result.Ok saved) →
+              native2 program accounts2 data2 slot = ok (core.result.Result.Ok ()) →
+                ∃ f s firstLog finalLog suffix,
+                  SourceCuts ops accounts1 accounts2 saved f s ∧
+                    S2W_Trace.run ops (S2W_Outer.stage1_owned ops S2W_Outer.traceEffects program accounts1 data1) [] =
+                        ok (core.result.Result.Ok saved, firstLog) ∧
+                      S2W_Trace.run ops (S2W_Outer.stage2_owned ops S2W_Outer.traceEffects program accounts2 data2 slot)
+                            firstLog =
+                          ok (core.result.Result.Ok (), finalLog) ∧
+                        S2W_Trace.run ops (S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] =
+                            ok (core.result.Result.Ok saved, finalLog) ∧
+                          finalLog = firstLog ++ suffix ∧
+                            (∀ event ∈ finalLog, S2W_TraceFacts.ValidEvent ops event) ∧
+                              ∀ (decode : HeaderDecode) (nodes : ℕ → ℕ → Slice U8) (y1 : Slice U8),
+                                CheckpointWriterConeJoin ops decode H f.semantic f.pub f.proof f.split →
+                                  CheckpointReaderConeJoin ops decode H s.pub s.proof s.checkpoint →
+                                    ∀ (a : CheckpointVersionBinding (bytesOf ↑saved) (bytesOf ↑s.checkpoint)),
+                                      P2Prime H f.proof f.pub s.proof s.pub →
+                                        S2W_ChildJoins.FirstEntryVerifierConeJoin f.proof →
+                                          S2W_ChildJoins.MultiproofConeJoin f.proof s.proof nodes →
+                                            S2W_ChildJoins.S8StageConeJoin f.proof y1 →
+                                              ∀
+                                                (firstExecution :
+                                                  ChildExecution E
+                                                    (core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE))
+                                                (secondExecution :
+                                                  ChildExecution E
+                                                    (core.result.Result Unit
+                                                      AdapterRw.aspis_r1_cost_probe.verifier.Error))
+                                                (fs : S2W_SiteSchedule.FirstSegments E)
+                                                (ss : S2W_SiteSchedule.SecondSegments E),
+                                                FirstEntryEventConeJoin ops f firstExecution fs →
+                                                  SecondEntryEventConeJoin ops s secondExecution ss →
+                                                    ∀ (pre middle : List (S2W_SiteSchedule.Event E))
+                                                      (before after :
+                                                        S2LeadInterface.Site → ℕ → S2LeadInterface.Account),
+                                                      ∃ parsed firstEvents secondEvents,
+                                                        firstExecution = ok (core.result.Result.Ok saved, firstEvents) ∧
+                                                          secondExecution =
+                                                              ok (core.result.Result.Ok (), secondEvents) ∧
+                                                            ⋯ ∧ ⋯ :=
+fun {E} ops native1 native2 hashv extraction sha256 H p1 runtime program accounts1 accounts2 data1 data2 slot saved
+    accepted1 accepted2 =>
+  let boundary := S2W_DigestExtraction.sourceBoundary ops native1 native2 hashv extraction;
+  let ⟨f, h✝⟩ :=
+    accepted_native_observed_inputs ops native1 native2 hashv boundary sha256 H p1 runtime program accounts1 accounts2
+      data1 data2 slot saved accepted1 accepted2
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨cuts, project⟩ := h✝¹
+  let ⟨firstLog, h✝²⟩ :=
+    S2W_ExtractionBoundary.accepted_native_observation ops native1 native2 hashv boundary program accounts1 accounts2
+      data1 data2 slot saved accepted1 accepted2
+  let ⟨finalLog, h✝³⟩ := h✝²
+  let ⟨suffix, h✝⁴⟩ := h✝³
+  let ⟨first, right✝⟩ := h✝⁴
+  let ⟨second, right✝¹⟩ := right✝
+  let ⟨both, right✝²⟩ := right✝¹
+  let ⟨extension, valid⟩ := right✝²
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro firstLog
+        (Exists.intro finalLog (Exists.intro suffix ⟨cuts, ⟨first, ⟨second, ⟨both, ⟨extension, ⟨valid, project⟩⟩⟩⟩⟩⟩))))
+structure AspisR1.S2W_DigestExtraction.AeneasExtraction (ops : AdapterRw.Ops) (native1 : S2W_ExtractionBoundary.First)
+  (native2 : S2W_ExtractionBoundary.Second) (hashv : S2W_DigestExtraction.Parts → Result S2W_DigestExtraction.Digest) :
+  Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1 : ∀ (program : S2W_ExtractionBoundary.Program)
+      (accounts : S2W_ExtractionBoundary.Accounts) (data : Slice U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage2 : ∀ (program : S2W_ExtractionBoundary.Program)
+      (accounts : S2W_ExtractionBoundary.Accounts) (data : Slice U8) (slot : S2W_ExtractionBoundary.Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Slice (Slice U8)), ops.op43 self parts = S2W_DigestExtraction.digest hashv self parts
+constructor:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.mk {ops : AdapterRw.Ops} {native1 : S2W_ExtractionBoundary.First}
+    {native2 : S2W_ExtractionBoundary.Second} {hashv : S2W_DigestExtraction.Parts → Result S2W_DigestExtraction.Digest}
+    (stage1 :
+      ∀ (program : S2W_ExtractionBoundary.Program) (accounts : S2W_ExtractionBoundary.Accounts) (data : Slice U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : S2W_ExtractionBoundary.Program) (accounts : S2W_ExtractionBoundary.Accounts) (data : Slice U8)
+        (slot : S2W_ExtractionBoundary.Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Slice (Slice U8)),
+        ops.op43 self parts = S2W_DigestExtraction.digest hashv self parts) :
+    S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv
+structure AspisR1.S2W_ExtractionBoundary.P1 (sha256 H : Bytes → State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.P1.realization : S2Z.Oracle.P1Realization sha256 H
+constructor:
+  AspisR1.S2W_ExtractionBoundary.P1.mk {sha256 H : Bytes → State} (realization : S2Z.Oracle.P1Realization sha256 H) :
+    S2W_ExtractionBoundary.P1 sha256 H
+structure AspisR1.S2W_ExtractionBoundary.RuntimeSyscall (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
+  (sha256 : Bytes → State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue : S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk {hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest}
+    {sha256 : Bytes → State} (returningValue : S2Z.Oracle.RuntimeSyscall hashv sha256) :
+    S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+structure AspisR1.S2W_AuthenticatedInputs.P2Prime (H : Bytes → State) (proof1 pub1 proof2 pub2 : Slice U8) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_AuthenticatedInputs.P2Prime.binding : R9PoolRuntimeBinding.P2Prime H
+      { proof := bytesOf ↑proof1, pub := bytesOf ↑pub1 } { proof := bytesOf ↑proof2, pub := bytesOf ↑pub2 }
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.P2Prime.mk {H : Bytes → State} {proof1 pub1 proof2 pub2 : Slice U8}
+    (binding :
+      R9PoolRuntimeBinding.P2Prime H { proof := bytesOf ↑proof1, pub := bytesOf ↑pub1 }
+        { proof := bytesOf ↑proof2, pub := bytesOf ↑pub2 }) :
+    P2Prime H proof1 pub1 proof2 pub2
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding (saved loaded : Bytes) : Type
+number of parameters: 2
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding.history : S2X.CheckpointVersionBinding saved loaded
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding.mk {saved loaded : Bytes}
+    (history : S2X.CheckpointVersionBinding saved loaded) : CheckpointVersionBinding saved loaded
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin (ops : AdapterRw.Ops) (decode : HeaderDecode)
+  (H : Bytes → State) (semantic : Public) (pub proof : Slice U8) (split : Usize) : Prop
+number of parameters: 7
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.header : ∀ (checkpoint : alloc.vec.Vec U8),
+      AdapterRw.first_decoded ops semantic pub proof split = ok (core.result.Result.Ok checkpoint) →
+        decode (bytesOf ↑checkpoint) = some (H (bytesOf ↑proof), H (bytesOf ↑pub))
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.size : ∀ (checkpoint : alloc.vec.Vec U8),
+      AdapterRw.first_decoded ops semantic pub proof split = ok (core.result.Result.Ok checkpoint) →
+        (↑checkpoint).length = 1768
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.mk {ops : AdapterRw.Ops} {decode : HeaderDecode}
+    {H : Bytes → State} {semantic : Public} {pub proof : Slice U8} {split : Usize}
+    (header :
+      ∀ (checkpoint : alloc.vec.Vec U8),
+        AdapterRw.first_decoded ops semantic pub proof split = ok (core.result.Result.Ok checkpoint) →
+          decode (bytesOf ↑checkpoint) = some (H (bytesOf ↑proof), H (bytesOf ↑pub)))
+    (size :
+      ∀ (checkpoint : alloc.vec.Vec U8),
+        AdapterRw.first_decoded ops semantic pub proof split = ok (core.result.Result.Ok checkpoint) →
+          (↑checkpoint).length = 1768) :
+    CheckpointWriterConeJoin ops decode H semantic pub proof split
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin (ops : AdapterRw.Ops) (decode : HeaderDecode)
+  (H : Bytes → State) (pub proof checkpoint : Slice U8) : Prop
+number of parameters: 6
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.checkedHeader : ops.op11
+          (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+        ok (core.result.Result.Ok ()) →
+      decode (bytesOf ↑checkpoint) = some (H (bytesOf ↑proof), H (bytesOf ↑pub))
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.mk {ops : AdapterRw.Ops} {decode : HeaderDecode}
+    {H : Bytes → State} {pub proof checkpoint : Slice U8}
+    (checkedHeader :
+      ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+          ok (core.result.Result.Ok ()) →
+        decode (bytesOf ↑checkpoint) = some (H (bytesOf ↑proof), H (bytesOf ↑pub))) :
+    CheckpointReaderConeJoin ops decode H pub proof checkpoint
+structure AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin {E : Type} (ops : AdapterRw.Ops) (f : FirstCut)
+  (execution : ChildExecution E (core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE))
+  (segments : S2W_SiteSchedule.FirstSegments E) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin.erasure : forget execution =
+      AdapterRw.first_decoded ops f.semantic f.pub f.proof f.split
+  AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin.sourceMarks : ∀
+      (result : core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE) (log : List (S2W_SiteSchedule.Event E)),
+      execution = ok (result, log) → log = S2W_SiteSchedule.firstTrace segments
+constructor:
+  AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin.mk {E : Type} {ops : AdapterRw.Ops} {f : FirstCut}
+    {execution : ChildExecution E (core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE)}
+    {segments : S2W_SiteSchedule.FirstSegments E}
+    (erasure : forget execution = AdapterRw.first_decoded ops f.semantic f.pub f.proof f.split)
+    (sourceMarks :
+      ∀ (result : core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE) (log : List (S2W_SiteSchedule.Event E)),
+        execution = ok (result, log) → log = S2W_SiteSchedule.firstTrace segments) :
+    FirstEntryEventConeJoin ops f execution segments
+structure AspisR1.S2W_ChildEventPorts.SecondEntryEventConeJoin {E : Type} (ops : AdapterRw.Ops) (s : SecondCut)
+  (execution : ChildExecution E (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error))
+  (segments : S2W_SiteSchedule.SecondSegments E) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_ChildEventPorts.SecondEntryEventConeJoin.erasure : forget execution =
+      ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s.pub s.proof s.checkpoint () none
+  AspisR1.S2W_ChildEventPorts.SecondEntryEventConeJoin.sourceMarks : ∀
+      (result : core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+      (log : List (S2W_SiteSchedule.Event E)),
+      execution = ok (result, log) → log = S2W_SiteSchedule.secondTrace segments
+constructor:
+  AspisR1.S2W_ChildEventPorts.SecondEntryEventConeJoin.mk {E : Type} {ops : AdapterRw.Ops} {s : SecondCut}
+    {execution : ChildExecution E (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)}
+    {segments : S2W_SiteSchedule.SecondSegments E}
+    (erasure :
+      forget execution =
+        ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s.pub s.proof s.checkpoint () none)
+    (sourceMarks :
+      ∀ (result : core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+        (log : List (S2W_SiteSchedule.Event E)),
+        execution = ok (result, log) → log = S2W_SiteSchedule.secondTrace segments) :
+    SecondEntryEventConeJoin ops s execution segments
+structure AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin (proof : Slice U8) : Prop
+number of parameters: 1
+fields:
+  AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin.parsed : ∃ tr p,
+      OraclePortStoredParserC4.parseReached (bytesOf ↑proof) tr = some p
+constructor:
+  AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin.mk {proof : Slice U8}
+    (parsed : ∃ tr p, OraclePortStoredParserC4.parseReached (bytesOf ↑proof) tr = some p) :
+    S2W_ChildJoins.FirstEntryVerifierConeJoin proof
+structure AspisR1.S2W_ChildJoins.MultiproofConeJoin (proof0 proof1 : Slice U8) (nodes : ℕ → ℕ → Slice U8) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch0Ranges : S2Y_OwnedChildren.NodeRanges proof0 nodes 0
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch1Ranges : S2Y_OwnedChildren.NodeRanges proof1 nodes 1
+constructor:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.mk {proof0 proof1 : Slice U8} {nodes : ℕ → ℕ → Slice U8}
+    (batch0Ranges : S2Y_OwnedChildren.NodeRanges proof0 nodes 0)
+    (batch1Ranges : S2Y_OwnedChildren.NodeRanges proof1 nodes 1) : S2W_ChildJoins.MultiproofConeJoin proof0 proof1 nodes
+structure AspisR1.S2W_ChildJoins.S8StageConeJoin (proof y1 : Slice U8) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.scanArgument : S2Y_OwnedChildren.Y1Range proof y1
+constructor:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.mk {proof y1 : Slice U8} (scanArgument : S2Y_OwnedChildren.Y1Range proof y1) :
+    S2W_ChildJoins.S8StageConeJoin proof y1

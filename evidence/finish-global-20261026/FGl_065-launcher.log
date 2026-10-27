@@ -1,0 +1,36 @@
+{"attempt": "FGl_065", "exit_status": 0, "wall_seconds": 2.8679831529734656, "peak_rss_kib": "5407952", "swaps": "0", "print_axioms": []}
+structure AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.basis : AspisR1.Port4C_BasisOuter.SessionABasis ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.arithmetic : AspisR1.Port4C_QueryArithmetic.SessionABackends ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.m31 : AspisR1.Port5Q1_NodeModel.SessionAM31 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.decoder : AspisR1.Port5Q1_OpeningValues.SessionAS3 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.line : ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+      (values : Aeneas.Std.Array
+...
+de_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok value →
+          AspisR1.CheckpointBytes5Output.ofE value =
+            AspisR1.FoldRuntimeAlgebra.lineWithInverses (AspisR1.CheckpointBytes5Output.ofE alpha)
+              ((Algebra.algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 2)))
+              ((Algebra.algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 3)))
+              ((Algebra.algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 4)))
+              (AspisR1.Port5Q1_OpeningValues.values values))
+    (line_canonical :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok value → AspisR1.Port4C_QueryArithmetic.CanonE value) :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrimitives ops
+AspisR1.SAQ_Decoder.primitives : ∀ (ops : AspisR1.SAQ_Query.Ops),
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (AspisR1.SAQ_Decoder.install ops)
+
+Running as unit: run-rc30ff6d016434717819f878ddb36d644.scope; invocation ID: 63c5bf3ea10c459cbce647aad227fc63

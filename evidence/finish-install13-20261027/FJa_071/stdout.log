@@ -1,0 +1,29 @@
+def FIq_Native.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold : {T Acc Fold : Type} →
+  {N : Usize} →
+    core.ops.function.FnMut Fold (Acc × T) Acc → FIq_Native.core.array.iter.IntoIter T N → Acc → Fold → Result Acc :=
+fun {T Acc Fold} {N} fn x x_1 x_2 =>
+  List.brecOn (motive := fun x => Acc → Fold → Result Acc) x
+    (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold._f fn) x_1 x_2
+def FIq_Native.core.ops.range.RangeInclusive.Insts.CoreIterTraitsIteratorIterator.fold : {A Acc F : Type} →
+  core.iter.range.Step A →
+    core.ops.function.FnMut F (Acc × A) Acc → core.ops.range.RangeInclusive A → Acc → F → Result Acc :=
+@rangeFold
+def Aeneas.Std.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter : {T : Type} →
+  {N : Usize} → Std.Array T N → Result (Std.core.array.iter.IntoIter T N) :=
+fun {T} {N} a => Result.ok { data := ↑a, cursor := 0 }
+def FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter : {T : Type} →
+  {N : Usize} → Std.Array T N → Result (FIq_Native.core.array.iter.IntoIter T N) :=
+fun {T} {N} a => Result.ok ↑a
+def FIq_Native.field.qm31_sum_products3_prepared : Std.Array field.PreparedQm31Multiplier 3#usize →
+  Std.Array field.QM31 3#usize → Result field.QM31 :=
+fun left right =>
+  have a := Array.repeat 3#usize 0#u64;
+  have sums := Array.repeat 3#usize a;
+  do
+  let sums1 ← field.qm31_sum_products3_prepared_loop0 { start := 0#usize, «end» := 3#usize } left right sums
+  field.qm31_from_karatsuba_channel_sums sums1
+@[irreducible] def FIq_Native.field.qm31_sum_products3_prepared_loop0 : core.ops.range.Range Usize →
+  Std.Array field.PreparedQm31Multiplier 3#usize →
+    Std.Array field.QM31 3#usize →
+      Std.Array (Std.Array U64 3#usize) 3#usize → Result (Std.Array (Std.Array U64 3#usize) 3#usize) :=
+fun iter left right => field.qm31_sum_products3_prepared_loop0.mutual left right iter

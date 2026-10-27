@@ -1,0 +1,39 @@
+{"attempt": "ARX_073", "exit_status": 0, "wall_seconds": 2.2600213290425017, "peak_rss_kib": "5508676", "swaps": "0", "print_axioms": ["'AspisR1.JFr_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.JFr_TX2_Partial.on_saved : ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  ↑saved = ↑AspisR1.JFx_NativeBytes.checkpoint →
+    ∀ {Hash : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+      AspisR1.JFn_HashBoundary.Realizes H →
+        ∀ (seed : AspisR1.Port3_NativeQueryBody.Ops),
+          AspisR1.Port4A_ReaderInstall.reader Bool.true (AspisR1.JFn_HashBoundary.dictionary H D) ⟨↑saved, ⋯⟩
+                AspisR1.JFx_NativeBytes.proof AspisR1.JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2
+                hash =
+              Aeneas.Std.Result.ok
+                (A
+...
+ AspisR1.JFn_HashBoundary.Realizes H →
+        ∀ (seed : AspisR1.Port3_NativeQueryBody.Ops),
+          AspisR1.Port4A_ReaderInstall.reader Bool.true (AspisR1.JFn_HashBoundary.dictionary H D) ⟨↑saved, ⋯⟩
+                AspisR1.JFx_NativeBytes.proof AspisR1.JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2
+                hash =
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Ok (AspisR1.JFo_Prepared.value, AspisR1.JFo_Prepared.accumulator)) ∧
+            AspisR1.Tx2N_Powers.powers 29#usize AspisR1.JFo_Prepared.value.gamma =
+                Aeneas.Std.Result.ok AspisR1.JFr_TX2_Powers.value ∧
+              AspisR1.Port3_NativePendingInstall.source Bool.true AspisR1.JFo_Prepared.accumulator.weights.deref =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JFo_Pending.value) ∧
+                (∀ (i : Fin 12),
+                    (AspisR1.JFr_TX2_DotsBinding.ops seed).op0 4#usize
+                        (AspisR1.Port3_NativeQueryBody.verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+                          (AspisR1.JFr_TX2_DotsBinding.ops seed))
+                        (AspisR1.JFo_Opening.value (AspisR1.JFn_Values.position i)) =
+                      Aeneas.Std.Result.ok (AspisR1.JFn_Values.value i)) ∧
+                  ∀ (i : Fin 12) (slot : Fin 4) (term : Fin 26),
+                    ∃ scalar,
+                      AspisR1.JFr_TX2_ScalarRead.read (AspisR1.JFr_TX2_Windows.array (AspisR1.JFn_Values.position i))
+                            (↑slot)#usize (↑term)#usize =
+                          Aeneas.Std.Result.ok scalar ∧
+                        ↑scalar < 2147483647
+'AspisR1.JFr_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re70ff4c349ca4da69bd54dd19ac07c14.scope; invocation ID: 90987b438cdf49e8a01b1b378ab2279c

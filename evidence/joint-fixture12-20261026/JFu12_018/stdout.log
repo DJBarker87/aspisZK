@@ -1,0 +1,339 @@
+@[defeq] theorem AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.sampler_qm31_sample_eq_public : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  sampler.qm31_sample block = do
+    let q ← AspisR1PublicPreparation.sampler.qm31_sample block
+    Aeneas.Std.Result.ok (fromPublicQM q) :=
+fun block => rfl
+@[defeq] theorem AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.secure_circle_eq_r72 : ∀
+  (q : AspisR1CircleSampleWrapper.field.QM31),
+  circle.secure_ood_circle_point_from_parameter q = do
+    let r ← AspisR72Sampler.circle.secure_ood_circle_point_from_parameter (toR72QM q)
+    match r with
+      | Aeneas.Std.core.result.Result.Ok p => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (fromR72Point p))
+      | Aeneas.Std.core.result.Result.Err e =>
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (fromR72Error e)) :=
+fun q => rfl
+theorem AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.success_returns_point : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow)
+  (q : AspisR1CircleSampleWrapper.field.QM31) (point : AspisR1CircleSampleWrapper.circle.SecureCirclePoint),
+  sampler.qm31_sample block = Aeneas.Std.Result.ok q →
+    circle.secure_ood_circle_point_from_parameter q = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok point) →
+      AspisR1CircleSampleWrapper.sampler.circle_sample block row = Aeneas.Std.Result.ok point :=
+fun block row q point hsample hcircle =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (Eq.trans
+              (congrFun' (congrArg Bind.bind hsample) fun q => do
+                let r ← circle.secure_ood_circle_point_from_parameter q
+                match r with
+                  | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.Result.ok x
+                  | Aeneas.Std.core.result.Result.Err e =>
+                    AspisR1CircleSampleWrapper.sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once
+                      row e)
+              (Aeneas.Std.bind_tc_ok q fun y => do
+                let r ← circle.secure_ood_circle_point_from_parameter y
+                match r with
+                  | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.Result.ok x
+                  | Aeneas.Std.core.result.Result.Err e =>
+                    AspisR1CircleSampleWrapper.sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once
+                      row e))
+            (Eq.trans
+              (congrFun' (congrArg Bind.bind hcircle) fun r =>
+                match r with
+                | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.Result.ok x
+                | Aeneas.Std.core.result.Result.Err e =>
+                  AspisR1CircleSampleWrapper.sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once
+                    row e)
+              (Aeneas.Std.bind_tc_ok (Aeneas.Std.core.result.Result.Ok point) fun y =>
+                match y with
+                | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.Result.ok x
+                | Aeneas.Std.core.result.Result.Err e =>
+                  AspisR1CircleSampleWrapper.sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once
+                    row e))))
+        (Aeneas.Std.Result.ok point))
+      (eq_self (Aeneas.Std.Result.ok point)))
+def AspisR1CircleSampleWrapper.sampler.circle_sample : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+  AspisR1CircleSampleWrapper.r0_transcript.CircleRow →
+    Aeneas.Std.Result AspisR1CircleSampleWrapper.circle.SecureCirclePoint :=
+fun block row => do
+  let q ← sampler.qm31_sample block
+  let r ← circle.secure_ood_circle_point_from_parameter q
+  core.result.Result.unwrap_or_else
+      AspisR1CircleSampleWrapper.sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint
+      r row
+theorem AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.circle_total_coordinates : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow),
+  ∃ p,
+    AspisR1CircleSampleWrapper.sampler.circle_sample block row = Aeneas.Std.Result.ok p ∧
+      AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.coordinates p =
+        ↑(AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.model block row) :=
+fun block row =>
+  let ⟨q, h✝⟩ := AspisR1CircleSampleWrapper.RawCircleSampleActualPolicyUnconditionalV1.sampler_total_canonical block
+  let ⟨hq, hc⟩ := h✝
+  have hp := AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.parameter_eq block q hq;
+  have hs := AspisV8R19.SamplerClosureCircleSourceExecution.source_execution (toR72QM q) hc;
+  if hi : (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q)).im ≠ 0 then
+    have hm :=
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Ok
+                    (fromR72Point
+                      (AspisV8R19.SamplerClosureCircleSourceExecution.encodePoint
+                        (AspisV8R19.SamplerCirclePolicy.point
+                          (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q)))))))
+            (AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.secure_circle_eq_r72 q)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let r ← _a
+                    match r with
+                      | Aeneas.Std.core.result.Result.Ok p =>
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (fromR72Point p))
+                      | Aeneas.Std.core.result.Result.Err e =>
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (fromR72Error e))) =
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Ok
+                      (fromR72Point
+                        (AspisV8R19.SamplerClosureCircleSourceExecution.encodePoint
+                          (AspisV8R19.SamplerCirclePolicy.point
+                            (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q)))))))
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    AspisR72Sampler.circle.secure_ood_circle_point_from_parameter (toR72QM q) =
+                      Aeneas.Std.Result.ok (AspisV8R19.SamplerClosureCircleSourceExecution.encodeResult _a))
+                  (AspisV8R19.SamplerCirclePolicy.outside_map
+                    (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q)) hi))
+                hs)))
+          (Eq.refl do
+            let r ←
+              Aeneas.Std.Result.ok
+                  (AspisV8R19.SamplerClosureCircleSourceExecution.encodeResult
+                    (Except.ok
+                      (AspisV8R19.SamplerCirclePolicy.point
+                        (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q)))))
+            match r with
+              | Aeneas.Std.core.result.Result.Ok p =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (fromR72Point p))
+              | Aeneas.Std.core.result.Result.Err e =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (fromR72Error e))));
+    Exists.intro
+      (fromR72Point
+        (AspisV8R19.SamplerClosureCircleSourceExecution.encodePoint
+          (AspisV8R19.SamplerCirclePolicy.point (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q)))))
+      ⟨AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.success_returns_point block row q
+          (fromR72Point
+            (AspisV8R19.SamplerClosureCircleSourceExecution.encodePoint
+              (AspisV8R19.SamplerCirclePolicy.point (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q)))))
+          hq hm,
+        Eq.mpr
+          (id
+            (congrArg (fun _a => _a = ↑(AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.model block row))
+              (AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.encoded_coordinates
+                (AspisV8R19.SamplerCirclePolicy.point
+                  (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q))))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  ((Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                        (AspisV8R19.SamplerCirclePolicy.point _a).1,
+                      (Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                        (AspisV8R19.SamplerCirclePolicy.point _a).2) =
+                    ↑(AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.model block row))
+                hp))
+            (have him := hp ▸ hi;
+            AspisR1CircleSampleWrapper.r0_transcript.CircleRow.casesOn (motive := fun t =>
+              row = t →
+                ((Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                      (AspisV8R19.SamplerCirclePolicy.point
+                          (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block))).1,
+                    (Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                      (AspisV8R19.SamplerCirclePolicy.point
+                          (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block))).2) =
+                  ↑(AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.model block row))
+              row
+              (fun h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congrArg
+                        (Eq
+                          ((Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                              (AspisV8R19.SamplerCirclePolicy.point
+                                  (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block))).1,
+                            (Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                              (AspisV8R19.SamplerCirclePolicy.point
+                                  (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block))).2))
+                        (congrArg Subtype.val
+                          ((fun x_0 =>
+                              (fun x_0 =>
+                                  R0P.SemSource.circleSampleParameterWith_accepted x_0
+                                    (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block)) him)
+                                x_0)
+                            R0P.SemSource.circleFallback0)))
+                      (eq_self
+                        ((Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                            (AspisV8R19.SamplerCirclePolicy.point
+                                (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block))).1,
+                          (Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                            (AspisV8R19.SamplerCirclePolicy.point
+                                (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block))).2))))
+              (fun h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congrArg
+                        (Eq
+                          ((Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                              (AspisV8R19.SamplerCirclePolicy.point
+                                  (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block))).1,
+                            (Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                              (AspisV8R19.SamplerCirclePolicy.point
+                                  (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block))).2))
+                        (congrArg Subtype.val
+                          ((fun x_0 =>
+                              (fun x_0 =>
+                                  R0P.SemSource.circleSampleParameterWith_accepted x_0
+                                    (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block)) him)
+                                x_0)
+                            R0P.SemSource.circleFallback1)))
+                      (eq_self
+                        ((Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                            (AspisV8R19.SamplerCirclePolicy.point
+                                (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block))).1,
+                          (Algebra.algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                            (AspisV8R19.SamplerCirclePolicy.point
+                                (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block))).2))))
+              (Eq.refl row)))⟩
+  else
+    have hz := not_ne_iff.mp hi;
+    let ⟨e, he⟩ :=
+      if hd : 1 + AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q) ^ 2 = 0 then
+        Exists.intro AspisV8R19.SamplerCirclePolicy.MapError.singular
+          (AspisV8R19.SamplerCirclePolicy.singular_first
+            (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q)) hd)
+      else
+        Exists.intro AspisV8R19.SamplerCirclePolicy.MapError.subfield
+          (of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (ite_cond_eq_false (Except.error AspisV8R19.SamplerCirclePolicy.MapError.singular)
+                      (if (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q)).im = 0 then
+                        Except.error AspisV8R19.SamplerCirclePolicy.MapError.subfield
+                      else
+                        Except.ok
+                          (AspisV8R19.SamplerCirclePolicy.point
+                            (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q))))
+                      (eq_false hd))
+                    (ite_cond_eq_true (Except.error AspisV8R19.SamplerCirclePolicy.MapError.subfield)
+                      (Except.ok
+                        (AspisV8R19.SamplerCirclePolicy.point
+                          (AspisV8R19.SamplerClosureProductCorrectness.decode (toR72QM q))))
+                      (Eq.trans (congrFun' (congrArg Eq hz) 0) (eq_self 0)))))
+                (Except.error AspisV8R19.SamplerCirclePolicy.MapError.subfield))
+              (eq_self (Except.error AspisV8R19.SamplerCirclePolicy.MapError.subfield))))
+    have hm :=
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err
+                    (fromR72Error (AspisV8R19.SamplerClosureCircleSourceExecution.encodeError e))))
+            (AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.secure_circle_eq_r72 q)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let r ← _a
+                    match r with
+                      | Aeneas.Std.core.result.Result.Ok p =>
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (fromR72Point p))
+                      | Aeneas.Std.core.result.Result.Err e =>
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (fromR72Error e))) =
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err
+                      (fromR72Error (AspisV8R19.SamplerClosureCircleSourceExecution.encodeError e))))
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    AspisR72Sampler.circle.secure_ood_circle_point_from_parameter (toR72QM q) =
+                      Aeneas.Std.Result.ok (AspisV8R19.SamplerClosureCircleSourceExecution.encodeResult _a))
+                  he)
+                hs)))
+          (Eq.refl do
+            let r ← Aeneas.Std.Result.ok (AspisV8R19.SamplerClosureCircleSourceExecution.encodeResult (Except.error e))
+            match r with
+              | Aeneas.Std.core.result.Result.Ok p =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (fromR72Point p))
+              | Aeneas.Std.core.result.Result.Err e =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (fromR72Error e))));
+    have him := hp ▸ hz;
+    AspisR1CircleSampleWrapper.r0_transcript.CircleRow.casesOn (motive := fun t =>
+      row = t →
+        ∃ p,
+          AspisR1CircleSampleWrapper.sampler.circle_sample block row = Aeneas.Std.Result.ok p ∧
+            AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.coordinates p =
+              ↑(AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.model block row))
+      row
+      (fun h =>
+        Eq.symm h ▸
+          Exists.intro
+            (fromFallbackPoint
+              (AspisR1CircleFallback.fromR72Point
+                (AspisV8R19.SamplerClosureCircleSourceExecution.encodePoint
+                  (AspisV8R19.SamplerCirclePolicy.point R0P.SemSource.circleFallbackParameter0))))
+            ⟨AspisR1CircleSampleWrapper.RawCircleSampleActualFallbackResultV4.firstFallbackActual block q
+                (fromR72Error (AspisV8R19.SamplerClosureCircleSourceExecution.encodeError e)) hq hm,
+              id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.coordinates
+                            (fromFallbackPoint
+                              (AspisR1CircleFallback.fromR72Point
+                                (AspisV8R19.SamplerClosureCircleSourceExecution.encodePoint
+                                  (AspisV8R19.SamplerCirclePolicy.point R0P.SemSource.circleFallbackParameter0)))) =
+                          ↑_a)
+                      (R0P.SemSource.circleSampleParameterWith_rejected R0P.SemSource.circleFallback0
+                        (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block)) him)))
+                  AspisR1CircleSampleWrapper.RawCircleSampleActualFallbackCoordinatesV1.firstFallbackCoordinates)⟩)
+      (fun h =>
+        Eq.symm h ▸
+          Exists.intro
+            (fromFallbackPoint
+              (AspisR1CircleFallback.fromR72Point
+                (AspisV8R19.SamplerClosureCircleSourceExecution.encodePoint
+                  (AspisV8R19.SamplerCirclePolicy.point R0P.SemSource.circleFallbackParameter1))))
+            ⟨AspisR1CircleSampleWrapper.RawCircleSampleActualFallbackResultV4.secondFallbackActual block q
+                (fromR72Error (AspisV8R19.SamplerClosureCircleSourceExecution.encodeError e)) hq hm,
+              id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.coordinates
+                            (fromFallbackPoint
+                              (AspisR1CircleFallback.fromR72Point
+                                (AspisV8R19.SamplerClosureCircleSourceExecution.encodePoint
+                                  (AspisV8R19.SamplerCirclePolicy.point R0P.SemSource.circleFallbackParameter1)))) =
+                          ↑_a)
+                      (R0P.SemSource.circleSampleParameterWith_rejected R0P.SemSource.circleFallback1
+                        (R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block)) him)))
+                  AspisR1CircleSampleWrapper.RawCircleSampleActualFallbackCoordinatesV1.secondFallbackCoordinates)⟩)
+      (Eq.refl row)

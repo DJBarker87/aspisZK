@@ -1,0 +1,42 @@
+{"attempt": "ART_081", "exit_status": 0, "wall_seconds": 2.3169659299892373, "peak_rss_kib": "5531836", "swaps": "0", "print_axioms": ["'AspisR1.ARQ_Join.accepted_recovery_or_account_collision' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARQ_Join.accepted_recovery_or_account_collision : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (a : AspisR1.SCE_Experiment.Adversary A) (w1 w2 : W)
+          (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W CoreError) (indexError : CoreError)
+          (reservation : AspisR1.N
+...
+und choiceBound
+            (AspisR1.F3Y_InstalledLaws.prepare indexError (AspisR1.FIp_Install.select reservation c) reservation)
+            (AspisR1.F3Y_InstalledLaws.primitives indexError (AspisR1.FIp_Install.select reservation c) reservation)
+            (AspisR1.F3Y_InstalledLaws.canonical indexError (AspisR1.FIp_Install.select reservation c) reservation)
+            (AspisR1.F3Y_InstalledLaws.domain indexError (AspisR1.FIp_Install.select reservation c) reservation)
+            (AspisR1.F3Y_InstalledLaws.multiply indexError (AspisR1.FIp_Install.select reservation c) reservation)
+            (AspisR1.F3Y_InstalledLaws.one indexError (AspisR1.FIp_Install.select reservation c) reservation)
+            (AspisR1.F3Y_InstalledLaws.inverse indexError (AspisR1.FIp_Install.select reservation c) reservation)
+            finishOwners (AspisR1.ARQ_Installation.dictionary indexError c reservation) H accountAccepted
+            sourceAccepted;
+        Or.casesOn branch
+          (fun h =>
+            let ⟨raw, agreement⟩ := h
+            Or.inl
+              ⟨raw,
+                ⟨AspisR1.ARQ_ModelAccepted.projected D
+                    (AspisR1.F3T_Canon.canon
+                      (AspisR1.F3T_ByteCarrier.lift (AspisR1.FIp_Install.configuration indexError c reservation)
+                        (AspisR1.SCE_Experiment.submission a)))
+                    H
+                    (AspisR1.ARQ_ModelAccepted.original (AspisR1.FIp_Install.configuration indexError c reservation) D
+                      hashv (AspisR1.SCE_Experiment.submission a) H sourceAccepted raw),
+                  agreement⟩⟩)
+          fun collision => Or.inr collision)
+      fun bad => Or.inr bad
+'AspisR1.ARQ_Join.accepted_recovery_or_account_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r020d4de326a947d8ba2dd1bee96222df.scope; invocation ID: f40c9a247c394c5f81bcdd922e9dd581
+

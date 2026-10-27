@@ -1,0 +1,65 @@
+FIo_ReduceBridge.lean:21:52: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+x : U64
+cast_mask : UScalar.cast UScalarTy.U64 2147483647#u32 = 2147483647#u64
+h :
+  UScalar.cast UScalarTy.U32
+      (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+        ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)) ≥
+    2147483647#u32
+⊢ ↑2147483647#u32 ≤ ↑(UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)))
+FIo_ReduceBridge.lean:20:2: error: unsolved goals
+case isTrue
+x : U64
+cast_mask : UScalar.cast UScalarTy.U64 2147483647#u32 = 2147483647#u64
+h :
+  UScalar.cast UScalarTy.U32
+      (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+        ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)) ≥
+    2147483647#u32
+⊢ ok
+      (U32.wrapping_sub
+        (UScalar.cast UScalarTy.U32
+          (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+            ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+        2147483647#u32) =
+    if UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)) ≥ 2147483647#u32 then
+      ok ((UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x))).wrapping_sub 2147483647#u32)
+    else ok (UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)))
+FIo_ReduceBridge.lean:22:4: error: Tactic `rfl` failed: The left-hand side
+  ok
+    (UScalar.cast UScalarTy.U32
+      (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+        ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+is not definitionally equal to the right-hand side
+  if UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)) ≥ 2147483647#u32 then
+    UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)) - 2147483647#u32
+  else ok (UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)))
+
+case isFalse
+x : U64
+cast_mask : UScalar.cast UScalarTy.U64 2147483647#u32 = 2147483647#u64
+h✝ :
+  ¬UScalar.cast UScalarTy.U32
+        (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+          ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)) ≥
+      2147483647#u32
+⊢ ok
+      (UScalar.cast UScalarTy.U32
+        (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+          ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32))) =
+    if UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)) ≥ 2147483647#u32 then
+      UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)) - 2147483647#u32
+    else ok (UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)))
+FIo_ReduceBridge.lean:16:24: warning: This simp argument is unused:
+  FIo_ReduceFacts.shr31
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵F̵I̵o̵_̵R̵e̵d̵u̵c̵e̵F̵a̵c̵t̵s̵.̵s̵h̵r̵3̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIo_ReduceBridge.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,169 @@
+FJr_LibraOne.lean:46:46: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (algebraMap FK FE) (decodeQM (qm q16) * decodeQM (qm q4))
+in the target expression
+  (if j = 1 then
+      FIp_ArrayValue.value weights 1 +
+        FJm_LibraModel.low ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a0)) *
+          (RoundPairing.quarter * decodeWide (wide a1))
+    else
+      if j = 2 then
+        FJm_LibraModel.low ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a0)) *
+            (FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 0 +
+                  FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 1 +
+                FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 2 +
+              FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 3) *
+          (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E) (decodeQM (qm q)) ^ 4
+      else
+        if j = 3 then
+          FJm_LibraModel.low ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a0)) *
+              (FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 0 +
+                FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 1) *
+            (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+              (decodeQM (qm q16) * decodeQM (qm q) ^ 4)
+        else FIp_ArrayValue.value weights j) =
+    if j = 1 then
+      FIp_ArrayValue.value weights 1 +
+        FJm_LibraModel.low ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a0)) *
+          (RoundPairing.quarter * decodeWide (wide a1))
+    else
+      if j = 2 then
+        FJm_LibraModel.low ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a0)) *
+            (FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 0 +
+                  FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 1 +
+                FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 2 +
+              FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 3) *
+          (algebraMap FK FE) (FJf_QMArray.value extra 1) ^ 4
+      else
+        if j = 3 then
+          FJm_LibraModel.low ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a0)) *
+              (FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 0 +
+                FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 1) *
+            (algebraMap FK FE) (FJf_QMArray.value extra 1) ^ 20
+        else FIp_ArrayValue.value weights j
+
+case refine_2
+a0 a1 : NE
+ap0 ap1 : Std.Array NE 4#usize
+extra : Std.Array NQ 2#usize
+ca0 : FIo_WideValues.Canon a0
+ca1 : FIo_WideValues.Canon a1
+hp0 : FIo_Native.weights.powers 4#usize a0 = ok ap0
+hp1 : FIo_Native.weights.powers 4#usize a1 = ok ap1
+ce : ∀ q ∈ ↑extra, FIo_QMValues.Canon q
+iter cursorOut : FIo_RangeNext.Range
+weights out : Std.Array NE 4#usize
+cw : FIo_ArrayCanon.Holds weights
+start : iter.start = 1#usize
+run : FIo_Native.weights.factored_s2_libra_weights_loop.body ap0 ap1 extra iter weights = ok (cont (cursorOut, out))
+side : Usize
+cursor : FIo_RangeNext.Range
+q : NQ
+low first2 first3 all : NE
+i3 : Usize
+q4 q16 : NQ
+sideEq : side = iter.start
+endEq : cursor.end = iter.end
+step : ↑cursor.start = ↑iter.start + 1
+more : ↑iter.start < ↑iter.end
+hq : extra.index_usize 1#usize = ok q
+cl : FIo_WideValues.Canon low
+c2 : FIo_WideValues.Canon first2
+c3 : FIo_WideValues.Canon first3
+call : FIo_WideValues.Canon all
+c4 : FIo_QMValues.Canon q4
+c16 : FIo_QMValues.Canon q16
+idx : ↑i3 = 1
+v4 : decodeQM (qm q4) = decodeQM (qm q) ^ 4
+v16 : decodeQM (qm q16) = decodeQM (qm q) ^ 16
+vl : decodeWide (wide low) = FJm_LibraModel.low ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a0))
+v2 :
+  decodeWide (wide first2) =
+    FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 0 +
+      FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 1
+v3 :
+  decodeWide (wide first3) =
+    FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 0 +
+        FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 1 +
+      FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 2
+va :
+  decodeWide (wide all) =
+    FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 0 +
+          FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 1 +
+        FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 2 +
+      FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 3
+hfinish : FJm_LibraStages.finish 1#usize low i3 first2 first3 all q4 q16 ap1 weights cursor = ok (cont (cursorOut, out))
+sideOne : side = 1#usize
+cp : FIp_PowersState.Post a1 ap1
+fin :
+  cursorOut = cursor ∧
+    FIo_ArrayCanon.Holds out ∧
+      ∀ (j : ℕ),
+        FIp_ArrayValue.value out j =
+          if j = 1 then
+            FIp_ArrayValue.value weights 1 +
+              decodeWide (wide low) * (RoundPairing.quarter * FIp_ArrayValue.value ap1 ↑i3)
+          else
+            if j = 2 then
+              decodeWide (wide low) * decodeWide (wide all) *
+                (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E) (decodeQM (qm q4))
+            else
+              if j = 3 then
+                decodeWide (wide low) * decodeWide (wide first2) *
+                  (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+                    (decodeQM (qm q16) * decodeQM (qm q4))
+              else FIp_ArrayValue.value weights j
+qvalue : FJf_QMArray.value extra 1 = decodeQM (qm q)
+a1value : FIp_ArrayValue.value ap1 ↑i3 = decodeWide (wide a1)
+q20 : (algebraMap FK FE) (decodeQM (qm q16) * decodeQM (qm q4)) = (algebraMap FK FE) (decodeQM (qm q)) ^ 20
+j : ℕ
+⊢ (if j = 1 then
+      FIp_ArrayValue.value weights 1 +
+        FJm_LibraModel.low ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a0)) *
+          (RoundPairing.quarter * decodeWide (wide a1))
+    else
+      if j = 2 then
+        FJm_LibraModel.low ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a0)) *
+            (FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 0 +
+                  FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 1 +
+                FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 2 +
+              FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 3) *
+          (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E) (decodeQM (qm q)) ^ 4
+      else
+        if j = 3 then
+          FJm_LibraModel.low ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a0)) *
+              (FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 0 +
+                FJm_LibraModel.term ((algebraMap FK FE) (decodeQM (qm q))) (decodeWide (wide a1)) 1) *
+            (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+              (decodeQM (qm q16) * decodeQM (qm q) ^ 4)
+        else FIp_ArrayValue.value weights j) =
+    if j = 1 then
+      FIp_ArrayValue.value weights 1 +
+        FJm_LibraModel.low ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a0)) *
+          (RoundPairing.quarter * decodeWide (wide a1))
+    else
+      if j = 2 then
+        FJm_LibraModel.low ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a0)) *
+            (FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 0 +
+                  FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 1 +
+                FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 2 +
+              FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 3) *
+          (algebraMap FK FE) (FJf_QMArray.value extra 1) ^ 4
+      else
+        if j = 3 then
+          FJm_LibraModel.low ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a0)) *
+              (FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 0 +
+                FJm_LibraModel.term ((algebraMap FK FE) (FJf_QMArray.value extra 1)) (decodeWide (wide a1)) 1) *
+            (algebraMap FK FE) (FJf_QMArray.value extra 1) ^ 20
+        else FIp_ArrayValue.value weights j
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJr_LibraOne.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

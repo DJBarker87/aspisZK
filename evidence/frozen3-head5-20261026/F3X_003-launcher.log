@@ -1,0 +1,53 @@
+{"attempt": "F3X_003", "exit_status": 1, "wall_seconds": 5.822683195001446, "peak_rss_kib": "5332820", "swaps": "0", "print_axioms": ["'AspisR1.F3X_Preparation.on_evidence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+F3X_Preparation.lean:45:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port1_Driver.decodeSemantic (sdk c) e.pub
+in the target expression
+  eval H
+      (match some e.pub, some e.proof with
+      | some pub, some proof =>
+        match Port1_Driver.decodeSemantic (sdk c) pub with
+        | ok (some semantic) =>
+          match
+            AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO
+              (Tx1Q_Execution.actual (Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry c.boundaries
+                c.std) with
+          | ok zero =>
+            AspisV8R19.OracleProgramOps.bind (SdkC_Oracle.program (code c semantic proof zero
+...
+b : Port1_Driver.asSlice s.publicBytes = some e.pub
+proof : Port1_Driver.asSlice s.stored = some e.proof
+⊢ eval H
+      (match some e.pub, some e.proof with
+      | some pub, some proof =>
+        match Port1_Driver.decodeSemantic (sdk c) pub with
+        | ok (some semantic) =>
+          match
+            AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO
+              (Tx1Q_Execution.actual (Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry c.boundaries
+                c.std) with
+          | ok zero =>
+            AspisV8R19.OracleProgramOps.bind (SdkC_Oracle.program (code c semantic proof zero)) fun r =>
+              Program.done
+                (match r with
+                | ok (core.result.Result.Ok p, snd) => some p
+                | x => none)
+          | x => Program.done none
+        | x => Program.done none
+      | x, x_1 => Program.done none) =
+    (AuS1_Recovery.log (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries c.std (D1 c H)
+        (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof () (Array.repeat 29#usize e.run.zero),
+      some e.run.p)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3X_Preparation.on_evidence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0e649614494d453b8dac614f0561ea89.scope; invocation ID: 19e7989100894906b8c61a20b9b542a2

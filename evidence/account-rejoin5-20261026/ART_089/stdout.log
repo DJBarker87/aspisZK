@@ -1,0 +1,21 @@
+AspisR1.F3T_Probability.restricted_union_bound : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.F3T_Experiment.Prover) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    (AspisV8R19.MemoizedProgramLaw.lazyMean (AspisR1.F3T_Charged.projected D (AspisR1.F3T_Canon.canon P)) FS.emptyTable
+        fun run => AspisV8R19.CausalFirstHitUnionBound.indicator (AspisR1.F3T_Clean.prefixHit D P run)) ≤
+      ↑(Q + 34) * AspisR1.PerAttemptEnvelope.B
+theorem AspisR1.F3T_Probability.restricted_union_bound : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.F3T_Experiment.Prover) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    (AspisV8R19.MemoizedProgramLaw.lazyMean (AspisR1.F3T_Charged.projected D (AspisR1.F3T_Canon.canon P)) FS.emptyTable
+        fun run => AspisV8R19.CausalFirstHitUnionBound.indicator (AspisR1.F3T_Clean.prefixHit D P run)) ≤
+      ↑(Q + 34) * AspisR1.PerAttemptEnvelope.B :=
+fun D P Q hq =>
+  Eq.mpr
+    (id (congrArg (fun _a => _a ≤ ↑(Q + 34) * AspisR1.PerAttemptEnvelope.B) (AspisR1.F3T_Probability.hit_mass D P)))
+    (AspisR1.RawAdaptiveClassifierStartBound.shared_hit_mass_le_starts AspisR1.RawFullPublicSelection.select
+      AspisR1.LiteralTableWordChoiceBin.choose (AspisR1.F3T_Charged.charged D (AspisR1.F3T_Canon.canon P)) (Q + 34)
+      (AspisR1.F3T_Charged.starts D (AspisR1.F3T_Canon.canon P) Q (AspisR1.F3T_Canon.bound P Q hq)))
+'AspisR1.F3T_Probability.restricted_union_bound' depends on axioms: [propext, Classical.choice, Quot.sound]

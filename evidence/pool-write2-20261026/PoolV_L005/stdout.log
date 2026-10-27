@@ -1,0 +1,68 @@
+PoolV_ChronologyFacts.lean:18:98: error: unsolved goals
+case false.false.false
+new old : Slice U64
+sequence : U64
+hd : ∀ (a b : U64), (a, b) ∈ (↑new).zip ↑old → ↑b ≤ ↑a
+hp : ∀ (a b : U64), (a, b) ∈ (↑new).zip ↑old → ↑a ≤ ↑b
+⊢ (if sequence = core.num.U64.MAX then ok (3#u8, 0#u64) else ok (0#u8, sequence.wrapping_add 1#u64)) =
+    ok (if sequence = core.num.U64.MAX then (3#u8, 0#u64) else (0#u8, sequence.wrapping_add 1#u64))
+
+case false.false.true
+new old : Slice U64
+sequence : U64
+hd : ∀ (a b : U64), (a, b) ∈ (↑new).zip ↑old → ↑b ≤ ↑a
+hp : ∃ a b, (a, b) ∈ (↑new).zip ↑old ∧ ↑b < ↑a
+⊢ (if sequence = core.num.U64.MAX then ok (3#u8, 0#u64) else ok (0#u8, sequence.wrapping_add 1#u64)) =
+    ok (if sequence = core.num.U64.MAX then (3#u8, 0#u64) else (0#u8, sequence.wrapping_add 1#u64))
+
+case false.true.false
+new old : Slice U64
+sequence : U64
+hd : ∃ a b, (a, b) ∈ (↑new).zip ↑old ∧ ↑a < ↑b
+hp : ∀ (a b : U64), (a, b) ∈ (↑new).zip ↑old → ↑a ≤ ↑b
+⊢ (if sequence = core.num.U64.MAX then ok (3#u8, 0#u64) else ok (0#u8, sequence.wrapping_add 1#u64)) =
+    ok (if sequence = core.num.U64.MAX then (3#u8, 0#u64) else (0#u8, sequence.wrapping_add 1#u64))
+
+case false.true.true
+new old : Slice U64
+sequence : U64
+hd : ∃ a b, (a, b) ∈ (↑new).zip ↑old ∧ ↑a < ↑b
+hp : ∃ a b, (a, b) ∈ (↑new).zip ↑old ∧ ↑b < ↑a
+⊢ (if sequence = core.num.U64.MAX then ok (3#u8, 0#u64) else ok (0#u8, sequence.wrapping_add 1#u64)) =
+    ok (if sequence = core.num.U64.MAX then (3#u8, 0#u64) else (0#u8, sequence.wrapping_add 1#u64))
+
+case true.false.false
+new old : Slice U64
+sequence : U64
+hd : ∀ (a b : U64), (a, b) ∈ (↑new).zip ↑old → ↑b ≤ ↑a
+hp : ∀ (a b : U64), (a, b) ∈ (↑new).zip ↑old → ↑a ≤ ↑b
+⊢ (if (((↑new).zip ↑old).any fun x => decide (↑x.1 < ↑x.2)) = true then ok (1#u8, 0#u64)
+    else
+      if (((↑new).zip ↑old).any fun x => decide (↑x.2 < ↑x.1)) = true then
+        if sequence = core.num.U64.MAX then ok (3#u8, 0#u64) else ok (0#u8, sequence.wrapping_add 1#u64)
+      else ok (2#u8, 0#u64)) =
+    ok (if (true && ((↑new).zip ↑old).any fun x => decide (x.1 < x.2)) = true then (1#u8, 0#u64) else (2#u8, 0#u64))
+
+case true.false.true
+new old : Slice U64
+sequence : U64
+hd : ∀ (a b : U64), (a, b) ∈ (↑new).zip ↑old → ↑b ≤ ↑a
+hp : ∃ a b, (a, b) ∈ (↑new).zip ↑old ∧ ↑b < ↑a
+⊢ (if (((↑new).zip ↑old).any fun x => decide (↑x.1 < ↑x.2)) = true then ok (1#u8, 0#u64)
+    else if sequence = core.num.U64.MAX then ok (3#u8, 0#u64) else ok (0#u8, sequence.wrapping_add 1#u64)) =
+    ok
+      (if (true && ((↑new).zip ↑old).any fun x => decide (x.1 < x.2)) = true then (1#u8, 0#u64)
+      else
+        if (true && !((↑new).zip ↑old).any fun x => decide (x.1 > x.2)) = true then (2#u8, 0#u64)
+        else if sequence = core.num.U64.MAX then (3#u8, 0#u64) else (0#u8, sequence.wrapping_add 1#u64))
+PoolV_ChronologyFacts.lean:31:10: warning: Possibly looping simp theorem: `specification.eq_1`
+
+Note: Possibly caused by: `eq_comm` and `Bool.true_eq`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+PoolV_ChronologyFacts.lean:31:4: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR1.PoolV_ChronologyFacts.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolV_ChronologyFacts.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

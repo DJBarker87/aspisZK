@@ -1,0 +1,137 @@
+Op3I_ParseLaws.lean:69:8: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (do
+      let (b1, _) ←
+        let (b, n) := ((↑tail).any fun x => x != 0#u8, n)
+          ok (b, { slice := tail, i := 0 + n })
+      if b1 = true then ok (core.result.Result.Err verifier.Error.Parse)
+        else ok (core.result.Result.Ok transport.Variant.S2)) =
+    ok (core.result.Result.Ok variant)
+of `h`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isFalse.isFalse.isFalse
+proof : Slice U8
+variant : transport.Variant
+hl : ¬(proof.len != 57607#usize) = true
+h✝² :
+  (do
+      let s ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) proof { «end» := 8#usize }
+      let b ←
+        core.cmp.impls.PartialEqShared.ne (Slice.Insts.CoreCmpPartialEqArray Op3I_Std.ops 8#usize core.cmp.PartialEqU8)
+            s compact.MAGIC
+      if b = true then ok (core.result.Result.Err verifier.Error.Parse)
+        else do
+          let i2 ← proof.index_usize 8#usize
+          let i3 ← transport.Variant.S2.tag
+          if (i2 != i3) = true then ok (core.result.Result.Err verifier.Error.Parse)
+            else do
+              let s1 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := 9#usize, «end» := 16#usize }
+              let i4 ← core.slice.Slice.iter s1
+              let (b1, _) ←
+                Op3I_Std.ops.iterAny verifier.candidate.parse_shape.closure.Insts.CoreOpsFunctionFnMutTupleSharedU8Bool
+                    i4 ()
+              if b1 = true then ok (core.result.Result.Err verifier.Error.Parse)
+                else ok (core.result.Result.Ok transport.Variant.S2)) =
+    ok (core.result.Result.Ok variant)
+len : proof.len = 57607#usize
+length : (↑proof).length = 57607
+s : Slice U8
+hs : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) proof { «end» := 8#usize } = ok s
+sv : ↑s = List.take 8 ↑proof
+hm : ¬(!decide (↑s = ↑compact.MAGIC)) = true
+h✝¹ :
+  (do
+      let i2 ← proof.index_usize 8#usize
+      let i3 ← transport.Variant.S2.tag
+      if (i2 != i3) = true then ok (core.result.Result.Err verifier.Error.Parse)
+        else do
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := 9#usize, «end» := 16#usize }
+          let i4 ← core.slice.Slice.iter s1
+          let (b1, _) ←
+            do
+              let (b, n) ←
+                Op3I_Std.anyList verifier.candidate.parse_shape.closure.Insts.CoreOpsFunctionFnMutTupleSharedU8Bool
+                    (List.drop i4.i ↑i4.slice) ()
+              ok (b, { slice := i4.slice, i := i4.i + n })
+          if b1 = true then ok (core.result.Result.Err verifier.Error.Parse)
+            else ok (core.result.Result.Ok transport.Variant.S2)) =
+    ok (core.result.Result.Ok variant)
+magic : ↑s = ↑compact.MAGIC
+tag : U8
+ht : proof.index_usize 8#usize = ok tag
+tagAt : (↑proof)[8]? = some tag
+ht2 : ¬(tag != 2#u8) = true
+h✝ :
+  (do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := 9#usize, «end» := 16#usize }
+      let i4 ← core.slice.Slice.iter s1
+      let (b1, _) ←
+        do
+          let (b, n) ←
+            Op3I_Std.anyList verifier.candidate.parse_shape.closure.Insts.CoreOpsFunctionFnMutTupleSharedU8Bool
+                (List.drop i4.i ↑i4.slice) ()
+          ok (b, { slice := i4.slice, i := i4.i + n })
+      if b1 = true then ok (core.result.Result.Err verifier.Error.Parse)
+        else ok (core.result.Result.Ok transport.Variant.S2)) =
+    ok (core.result.Result.Ok variant)
+tag2 : tag = 2#u8
+tail : Slice U8
+htail :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 9#usize, «end» := 16#usize } =
+    ok tail
+tv : ↑tail = List.take 7 (List.drop 9 ↑proof)
+n : ℕ
+hn : Op3I_Std.anyList nonzero ↑tail () = ok ((↑tail).any fun x => x != 0#u8, n)
+h :
+  (do
+      let (b1, _) ←
+        let (b, n) := ((↑tail).any fun x => x != 0#u8, n)
+          ok (b, { slice := tail, i := 0 + n })
+      if b1 = true then ok (core.result.Result.Err verifier.Error.Parse)
+        else ok (core.result.Result.Ok transport.Variant.S2)) =
+    ok (core.result.Result.Ok variant)
+⊢ variant = transport.Variant.S2 ∧
+    (↑proof).length = 57607 ∧
+      List.take 8 ↑proof = ↑compact.MAGIC ∧
+        (↑proof)[8]? = some 2#u8 ∧ ((List.take 7 (List.drop 9 ↑proof)).any fun x => x != 0#u8) = false
+Op3I_ParseLaws.lean:34:8: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeToUsizeSlice
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.index.Slice.index,
+          c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵core.slice.index.SliceIndexRangeToUsizeSlice.index] at hs
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_ParseLaws.lean:40:50: warning: This simp argument is unused:
+  Slice.Insts.CoreCmpPartialEqArray
+
+Hint: Omit it from the simp argument list.
+  simp only [core.cmp.impls.PartialEqShared.ne, S̵l̵i̵c̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵A̵r̵r̵a̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵Op3I_Std.ops, Op3I_Std.eqList_u8, bind_tc_ok] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_ParseLaws.lean:61:12: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeUsizeSlice
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.index.Slice.index,
+              c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵core.slice.index.SliceIndexRangeUsizeSlice.index] at htail
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_ParseLaws.lean:68:52: warning: This simp argument is unused:
+  Op3I_Std.ops
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵i̵t̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵O̵p̵3̵I̵_̵S̵t̵d̵.̵o̵p̵s̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵h̵n̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲i̲t̲e̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲h̲n̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'Op3I_ParseLaws.bind_success' depends on axioms: [propext]
+'Op3I_ParseLaws.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

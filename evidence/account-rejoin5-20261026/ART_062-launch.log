@@ -1,0 +1,47 @@
+{"attempt": "ART_062", "exit_status": 1, "wall_seconds": 2.4068724150420167, "peak_rss_kib": "5525968", "swaps": "0", "print_axioms": ["'AspisR1.ART_NativeAccepted.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ART_NativeAccepted.lean:30:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  second native2 allocator (eval native (a.second (eval native a.first).2 n.saved n.post1 n.final1)).2.entry
+    CPH_Program.verifier (eval native (a.second (eval native a.first).2 n.saved n.post1 n.final1)).2.data
+    (eval native (a.second (eval native a.first).2 n.saved n.post1 n.final1)).2.slot
+    (eval native (a.second (eval native a.first).2 n.saved n.post1 n.final1)).2.state
+in the target expression
+  SCE_Experiment.accepted
+      (match ok (core.result.Result.Ok (n.saved, n.post1, n.final1)) with
+      | ok (core.result.Result.Ok (saved, post, final)) =>
+        ((eval native a.f
+...
+ Record)
+allocator : Allocator A
+c : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+r : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+    hashv
+a : Adversary A
+native : Bytes → State
+n : ARQ_WorldSupport.NativeAt L copy allocator c err r native1 native2 hashv a native
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv native
+outcome :
+  (eval native
+        (ART_PartialAccount.account (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier
+          a)).2 =
+    ARS_NativeOutcome.wrappers copy allocator CPH_Program.verifier a native1 native2 native
+⊢ SCE_Experiment.accepted
+      (match ok (core.result.Result.Ok (n.saved, n.post1, n.final1)) with
+      | ok (core.result.Result.Ok (saved, post, final)) =>
+        ((eval native a.first).2, ok (core.result.Result.Ok (n.saved, n.post1, n.final1)),
+          some
+            ((eval native (a.second (eval native a.first).2 saved post final)).2,
+              second native2 allocator (eval native (a.second (eval native a.first).2 saved post final)).2.entry
+                CPH_Program.verifier (eval native (a.second (eval native a.first).2 saved post final)).2.data
+                (eval native (a.second (eval native a.first).2 saved post final)).2.slot
+                (eval native (a.second (eval native a.first).2 saved post final)).2.state))
+      | x => ((eval native a.first).2, ok (core.result.Result.Ok (n.saved, n.post1, n.final1)), none)) =
+    true
+'AspisR1.ART_NativeAccepted.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r76bb94481e334e7faeed6ea181b53dc2.scope; invocation ID: bcc322e0e7be4743adf27ad502eca6d8

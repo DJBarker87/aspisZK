@@ -1,0 +1,81 @@
+FJa_ExpandCanonical.lean:22:78: error: unsolved goals
+N : Usize
+out : Std.Array NQ N
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (it : Iter) (weights : Std.Array NQ N) (len : Usize),
+      (∀ x ∈ ↑it.slice, Canon x) →
+        canonical weights →
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 it weights len = ok out →
+            (↑it.slice).length - it.i = m → canonical out
+it : Iter
+weights : Std.Array NQ N
+len : Usize
+hc : ∀ x ∈ ↑it.slice, Canon x
+hw : canonical weights
+run :
+  (do
+      let (o, iter1) ← core.slice.iter.IteratorSliceIter.next it
+      match o with
+        | none => ok weights
+        | some coordinate => do
+          let prepared ← field.PreparedQm31Multiplier.new coordinate
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := len }
+          let weights1 ← pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter2 weights prepared
+          let len1 ← len * 2#usize
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 iter1 weights1 len1) =
+    ok out
+hm : (↑it.slice).length - it.i = n
+more : it.i < (↑it.slice).length
+c : NQ := it.slice[it.i]
+next : Iter := { slice := it.slice, i := it.i + 1 }
+⊢ ok (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }) =
+    ok (some it.slice[it.i], { slice := it.slice, i := it.i + 1 })
+FJa_ExpandCanonical.lean:38:74: error: unsolved goals
+N : Usize
+out : Std.Array NQ N
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (it : Iter) (weights : Std.Array NQ N) (len : Usize),
+      (∀ x ∈ ↑it.slice, Canon x) →
+        canonical weights →
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 it weights len = ok out →
+            (↑it.slice).length - it.i = m → canonical out
+it : Iter
+weights : Std.Array NQ N
+len : Usize
+hc : ∀ x ∈ ↑it.slice, Canon x
+hw : canonical weights
+run :
+  (do
+      let (o, iter1) ← core.slice.iter.IteratorSliceIter.next it
+      match o with
+        | none => ok weights
+        | some coordinate => do
+          let prepared ← field.PreparedQm31Multiplier.new coordinate
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := len }
+          let weights1 ← pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter2 weights prepared
+          let len1 ← len * 2#usize
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 iter1 weights1 len1) =
+    ok out
+hm : (↑it.slice).length - it.i = n
+more : ¬it.i < (↑it.slice).length
+⊢ (if h : False then ok (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }) else ok (none, it)) = ok (none, it)
+FJa_ExpandCanonical.lean:39:94: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.iter.IteratorSliceIter.next, ̲show ¬it.i < it.slice.len from more,̵d̵i̵f̵_̵n̵e̵g̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJa_ExpandCanonical.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

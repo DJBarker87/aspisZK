@@ -1,0 +1,22 @@
+{"attempt": "BEn_078", "exit_status": 0, "wall_seconds": 2.433679736976046, "peak_rss_kib": "5552376", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_Source.installed_digest' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.SdkC_Source.installed_digest : ∀ (ops : AdapterRw.Ops) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    ∀ (self : AdapterRw.SolanaDigest) (parts : AspisR1.SdkC_Source.Parts),
+      (AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_Source.digestCode parts) []).1 = ops.op43 self parts :=
+fun ops native1 native2 hashv extraction self parts =>
+  Eq.trans (AspisR1.SdkC_Source.digest_erasure hashv self parts) (Eq.symm (extraction.digestSource self parts))
+'AspisR1.SdkC_Sou
+...
+theorem AspisR1.SdkC_Source.installed_digest : ∀ (ops : AdapterRw.Ops) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    ∀ (self : AdapterRw.SolanaDigest) (parts : AspisR1.SdkC_Source.Parts),
+      (AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_Source.digestCode parts) []).1 = ops.op43 self parts :=
+fun ops native1 native2 hashv extraction self parts =>
+  Eq.trans (AspisR1.SdkC_Source.digest_erasure hashv self parts) (Eq.symm (extraction.digestSource self parts))
+'AspisR1.SdkC_Source.installed_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-redc11610c75244dfad6e85377a40297f.scope; invocation ID: 55f8115f12db45b8a56ef0508a3ad432

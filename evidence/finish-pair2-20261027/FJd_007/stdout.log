@@ -1,0 +1,19 @@
+FJd_HighReference.lean:16:14: error: unsolved goals
+case snd
+K : Type
+inst✝ : Field K
+x : Fin 4 × Fin 16
+this : ↑x.1 < 4
+⊢ (16 * ↑x.1 + ↑x.2) % 16 = ↑x.2
+FJd_HighReference.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x, ∑ y, ?f (x, y)
+in the target expression
+  ∑ x, ∑ i, f ⟨16 * ↑x + ↑i, ⋯⟩ * common i * high x = ∑ i, f i * (common ⟨↑i % 16, ⋯⟩ * high ⟨↑i / 16, ⋯⟩)
+
+K : Type
+inst✝ : Field K
+f : Fin 64 → K
+common : Fin 16 → K
+high : Fin 4 → K
+⊢ ∑ x, ∑ i, f ⟨16 * ↑x + ↑i, ⋯⟩ * common i * high x = ∑ i, f i * (common ⟨↑i % 16, ⋯⟩ * high ⟨↑i / 16, ⋯⟩)
+'AspisR1.FJd_HighReference.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,38 @@
+{"attempt": "BEk_028", "exit_status": 0, "wall_seconds": 2.623887180001475, "peak_rss_kib": "4379188", "swaps": "0", "print_axioms": ["'AspisR1.S2W_DigestExtraction.AeneasExtraction' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+structure AspisR1.S2W_DigestExtraction.AeneasExtraction (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage2 : ∀ (
+...
+onBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+      (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts
+constructor:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.mk {ops : AdapterRw.Ops}
+    {native1 : AspisR1.S2W_ExtractionBoundary.First} {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest}
+    (stage1 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts) :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv
+'AspisR1.S2W_DigestExtraction.AeneasExtraction' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r109ea35b166f44f5a4d78cc97dd6d915.scope; invocation ID: e7a07a1b8c4a49de8faeda301fcaf8f2
+

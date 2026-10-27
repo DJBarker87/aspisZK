@@ -1,0 +1,29 @@
+import R1Z.PV_Src_CanonicalDecode
+import R1Z.PV_Src_ReferenceTransfer
+
+/-! The original admission interface follows from exact selected record and
+public association with an admitted canonical instance. These are installed
+input joins, not replacements for RspendPlus on arbitrary native payloads. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Src_RecordAdmission
+open R1J.SpendWitnessMap
+variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]
+
+theorem selected (canonical : BuilderCanonical.Instance (K := K))
+    (i : PV_Src_NativeInput.Input)
+    (records : BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords)
+    (privateEq : PV_Src_Forest_PrimitiveArguments.wordWitness records.w =
+      BuilderCanonical.rustWitness canonical.val.2)
+    (publicEq : mapPub (K := K) (PV_Src_Public.canonicalPublic (PV_Src_NativeInput.publicInput i)) =
+      mapPub (K := K) canonical.val.1) :
+    BuilderSpendRelation.RspendPlus
+      (mapPub (K := K) (PV_Src_Public.canonicalPublic (PV_Src_NativeInput.publicInput i)))
+      (BuilderCanonical.liftWitness (BuilderRecordCanonical.witness
+        (PV_Src_Forest_PrimitiveArguments.wordWitness records.w))) := by
+  rw [privateEq,PV_Src_CanonicalDecode.roundtrip,publicEq]
+  exact canonical.property
+
+#print axioms selected
+end R1Z.PV_Src_RecordAdmission

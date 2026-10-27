@@ -1,0 +1,50 @@
+def FIo_Native.aspis_core.field.M31.add : FIo_Native.aspis_core.field.M31 →
+  FIo_Native.aspis_core.field.M31 → Aeneas.Std.Result FIo_Native.aspis_core.field.M31 :=
+fun self rhs => do
+  let s ← Aeneas.Std.lift (Aeneas.Std.U32.wrapping_add self rhs)
+  if s ≥ FIo_Native.aspis_core.field.P then do
+      let s1 ← Aeneas.Std.lift (s.wrapping_sub FIo_Native.aspis_core.field.P)
+      Aeneas.Std.Result.ok s1
+    else Aeneas.Std.Result.ok s
+def AspisR1CurrentWide.field.M31.add : AspisR1CurrentWide.field.M31 →
+  AspisR1CurrentWide.field.M31 → Aeneas.Std.Result AspisR1CurrentWide.field.M31 :=
+fun self rhs => do
+  let s ← self + rhs
+  if s ≥ AspisR1CurrentWide.field.P then do
+      let s1 ← s - AspisR1CurrentWide.field.P
+      Aeneas.Std.Result.ok s1
+    else Aeneas.Std.Result.ok s
+def FIo_Native.aspis_core.field.M31.sub : FIo_Native.aspis_core.field.M31 →
+  FIo_Native.aspis_core.field.M31 → Aeneas.Std.Result FIo_Native.aspis_core.field.M31 :=
+fun self rhs => do
+  let i ← Aeneas.Std.lift (Aeneas.Std.U32.wrapping_add self FIo_Native.aspis_core.field.P)
+  let s ← Aeneas.Std.lift (i.wrapping_sub rhs)
+  if s ≥ FIo_Native.aspis_core.field.P then do
+      let s1 ← Aeneas.Std.lift (s.wrapping_sub FIo_Native.aspis_core.field.P)
+      Aeneas.Std.Result.ok s1
+    else Aeneas.Std.Result.ok s
+def AspisR1CurrentWide.field.M31.sub : AspisR1CurrentWide.field.M31 →
+  AspisR1CurrentWide.field.M31 → Aeneas.Std.Result AspisR1CurrentWide.field.M31 :=
+fun self rhs => do
+  let i ← self + AspisR1CurrentWide.field.P
+  let s ← i - rhs
+  if s ≥ AspisR1CurrentWide.field.P then do
+      let s1 ← s - AspisR1CurrentWide.field.P
+      Aeneas.Std.Result.ok s1
+    else Aeneas.Std.Result.ok s
+def FIo_Native.aspis_core.field.M31.mul : FIo_Native.aspis_core.field.M31 →
+  FIo_Native.aspis_core.field.M31 → Aeneas.Std.Result FIo_Native.aspis_core.field.M31 :=
+fun self rhs => do
+  let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 self)
+  let i1 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 rhs)
+  let i2 ← Aeneas.Std.lift (Aeneas.Std.U64.wrapping_mul i i1)
+  let i3 ← FIo_Native.aspis_core.field.reduce_u64 i2
+  Aeneas.Std.Result.ok i3
+def AspisR1CurrentWide.field.M31.mul : AspisR1CurrentWide.field.M31 →
+  AspisR1CurrentWide.field.M31 → Aeneas.Std.Result AspisR1CurrentWide.field.M31 :=
+fun self rhs => do
+  let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 self)
+  let i1 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 rhs)
+  let i2 ← i * i1
+  let i3 ← AspisR1CurrentWide.field.reduce_u64 i2
+  Aeneas.Std.Result.ok i3

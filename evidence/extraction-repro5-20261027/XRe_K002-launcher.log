@@ -1,0 +1,54 @@
+Running as unit: run-r87e0d5f26cfa4bf8820c5540cb3ca489.scope; invocation ID: 1b8ec6b935be4660989f0924c8ccdecc
+{"attempt": "XRe_K002", "exit_status": 0, "wall_seconds": 13.263436136010569, "peak_rss_kib": "352796", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` an
+...
+check_y1` should have a snake case name
+  --> XRe_harnesses.rs:65:39
+   |
+65 | #[kani::proof] #[kani::unwind(35)] fn XRe_echeck_y1(){echeck_n::<928>(true)}
+   |                                       ^^^^^^^^^^^^^ help: convert the identifier to snake case: `xre_echeck_y1`
+
+warning: function `XRe_echeck_wide` should have a snake case name
+  --> XRe_harnesses.rs:66:39
+   |
+66 | #[kani::proof] #[kani::unwind(35)] fn XRe_echeck_wide(){echeck_n::<224>(false)}
+   |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xre_echeck_wide`
+
+warning: function `XRe_echeck_tail` should have a snake case name
+  --> XRe_harnesses.rs:67:39
+   |
+67 | #[kani::proof] #[kani::unwind(10)] fn XRe_echeck_tail(){echeck_n::<63>(kani::any())}
+   |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xre_echeck_tail`
+
+warning: function `XRe_wide_view` should have a snake case name
+  --> XRe_harnesses.rs:68:39
+   |
+68 | #[kani::proof] #[kani::unwind(35)] fn XRe_wide_view() {
+   |                                       ^^^^^^^^^^^^^ help: convert the identifier to snake case: `xre_wide_view`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.97s
+Checking harness XRe_harnesses::XRe_checkpoint_put...
+
+VERIFICATION RESULT:
+ ** 0 of 617 failed (6 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 10.049161s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

@@ -1,0 +1,42 @@
+{"attempt": "JGm_TX2_097", "exit_status": 1, "wall_seconds": 6.185692732047755, "peak_rss_kib": "6991512", "swaps": "0", "print_axioms": ["'AspisR1.JGm_TX2_Batch.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGm_TX2_Batch.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGm_TX2_Batch.lean:46:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+    (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+    (encodeState JGf_TX2_M0Root.retainedRoot) 1#usize 0#usize s0.idx s0.val hash
+in the target expression
+  (do
+      let (r, idx1, val1) ←
+        Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+            (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+            (encodeState JGf_TX2_M0Root.retainedRoot) 1#usize 0#usize (
+...
+           (encodeState JGc_TX2_M2Root.retainedRoot) 1#usize 2#usize idx2 val2 hash
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame AspisR1Stage2.verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGm_TX2_Batch.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGm_TX2_Batch.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rbb45414c61954a78b31b0affad0acb4c.scope; invocation ID: d8c2ce8f50ff44fcb4e18c577ef75322
+

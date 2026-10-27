@@ -1,0 +1,129 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3SeedPrefix.lean:24:42: error: Invalid simp theorem: Expected a proposition, but found
+  Bytes32 → PV_L2_F3Recorded.Read → PV_L2_F3Recorded.Read
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3SeedPrefix.lean:24:42: error: Ambiguous term
+  read
+Possible interpretations:
+  PV_L2_F3SeedFrames.read : Bytes32 → PV_L2_F3Recorded.Read → PV_L2_F3Recorded.Read
+  
+  MonadReader.read : ?m.125 ?m.124
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3SeedPrefix.lean:24:42: error: Ambiguous term
+  read
+Possible interpretations:
+  PV_L2_F3SeedFrames.read : Bytes32 → PV_L2_F3Recorded.Read → PV_L2_F3Recorded.Read
+  
+  MonadReader.read : ?m.132 ?m.131
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3SeedPrefix.lean:19:105: error: unsolved goals
+case case3
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+n : ℕ
+answers : Fin n → OracleAnswer
+domain : Slice U8
+seed : Bytes32
+L✝ r✝ : ℕ
+state✝ : State
+answer✝ : Result (U32 × prover_commit_reference.State) := prover_commit_reference.next (blockHash answers) domain state✝
+word✝ : U32
+after✝ : prover_commit_reference.State
+rest✝ : Option (List (↥ProverCommitWordCarrier.sourceBase × ℕ)) × List PV_L2_F3Recorded.Read :=
+  PV_L2_F3FullSource.produce (blockHash answers) domain L✝ 16 after✝
+x✝ : prover_commit_reference.next (blockHash answers) domain state✝ = ok (word✝, after✝)
+h✝ : ↑word✝ &&& 2147483647 < ↑aspis_core.field.P
+ih1✝ :
+  PV_L2_F3FullSource.produce (blockHash answers) domain L✝ 16 (reseed seed after✝) =
+    ((PV_L2_F3FullSource.produce (blockHash answers) domain L✝ 16 after✝).1,
+      List.map (PV_L2_F3SeedFrames.read seed) (PV_L2_F3FullSource.produce (blockHash answers) domain L✝ 16 after✝).2)
+⊢ { before := reseed seed state✝, answer := ok (word✝, reseed seed after✝) } =
+    PV_L2_F3SeedFrames.read seed { before := state✝, answer := ok (word✝, after✝) }
+
+case case4
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+n : ℕ
+answers : Fin n → OracleAnswer
+domain : Slice U8
+seed : Bytes32
+L✝ r✝ : ℕ
+state✝ : State
+answer✝ : Result (U32 × prover_commit_reference.State) := prover_commit_reference.next (blockHash answers) domain state✝
+word✝ : U32
+after✝ : prover_commit_reference.State
+rest✝ : Option (List (↥ProverCommitWordCarrier.sourceBase × ℕ)) × List PV_L2_F3Recorded.Read :=
+  PV_L2_F3FullSource.produce (blockHash answers) domain (L✝ + 1) r✝ after✝
+x✝ : prover_commit_reference.next (blockHash answers) domain state✝ = ok (word✝, after✝)
+h✝ : ↑aspis_core.field.P ≤ ↑word✝ &&& 2147483647
+ih1✝ :
+  PV_L2_F3FullSource.produce (blockHash answers) domain (L✝ + 1) r✝ (reseed seed after✝) =
+    ((PV_L2_F3FullSource.produce (blockHash answers) domain (L✝ + 1) r✝ after✝).1,
+      List.map (PV_L2_F3SeedFrames.read seed)
+        (PV_L2_F3FullSource.produce (blockHash answers) domain (L✝ + 1) r✝ after✝).2)
+⊢ (if ↑word✝ &&& 2147483647 < ↑aspis_core.field.P then
+      (Option.map (fun x => (fieldValue (word✝ &&& 2147483647#u32), 16 - r✝) :: x)
+          (PV_L2_F3FullSource.produce (blockHash answers) domain L✝ 16 (reseed seed after✝)).1,
+        { before := reseed seed state✝, answer := ok (word✝, reseed seed after✝) } ::
+          (PV_L2_F3FullSource.produce (blockHash answers) domain L✝ 16 (reseed seed after✝)).2)
+    else
+      ((PV_L2_F3FullSource.produce (blockHash answers) domain (L✝ + 1) r✝ after✝).1,
+        { before := reseed seed state✝, answer := ok (word✝, reseed seed after✝) } ::
+          List.map (PV_L2_F3SeedFrames.read seed)
+            (PV_L2_F3FullSource.produce (blockHash answers) domain (L✝ + 1) r✝ after✝).2)) =
+    ((PV_L2_F3FullSource.produce (blockHash answers) domain (L✝ + 1) r✝ after✝).1,
+      PV_L2_F3SeedFrames.read seed { before := state✝, answer := ok (word✝, after✝) } ::
+        List.map (PV_L2_F3SeedFrames.read seed)
+          (PV_L2_F3FullSource.produce (blockHash answers) domain (L✝ + 1) r✝ after✝).2)
+
+case case5
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+n : ℕ
+answers : Fin n → OracleAnswer
+domain : Slice U8
+seed : Bytes32
+L✝ r✝ : ℕ
+state✝ : State
+answer✝ : Result (U32 × prover_commit_reference.State) := prover_commit_reference.next (blockHash answers) domain state✝
+x✝ :
+  ∀ (word : U32) (after : prover_commit_reference.State),
+    ¬prover_commit_reference.next (blockHash answers) domain state✝ = ok (word, after)
+⊢ (match
+      match prover_commit_reference.next (blockHash answers) domain state✝ with
+      | fail e => fail e
+      | div => div
+      | ok (word, state) => ok (word, reseed seed state) with
+    | ok (word, after) =>
+      if ↑word &&& 2147483647 < ↑aspis_core.field.P then
+        (Option.map (fun x => (fieldValue (word &&& 2147483647#u32), 16 - r✝) :: x)
+            (PV_L2_F3FullSource.produce (blockHash answers) domain L✝ 16 after).1,
+          { before := reseed seed state✝,
+              answer :=
+                match prover_commit_reference.next (blockHash answers) domain state✝ with
+                | fail e => fail e
+                | div => div
+                | ok (word, state) => ok (word, reseed seed state) } ::
+            (PV_L2_F3FullSource.produce (blockHash answers) domain L✝ 16 after).2)
+      else
+        ((PV_L2_F3FullSource.produce (blockHash answers) domain (L✝ + 1) r✝ after).1,
+          { before := reseed seed state✝,
+              answer :=
+                match prover_commit_reference.next (blockHash answers) domain state✝ with
+                | fail e => fail e
+                | div => div
+                | ok (word, state) => ok (word, reseed seed state) } ::
+            (PV_L2_F3FullSource.produce (blockHash answers) domain (L✝ + 1) r✝ after).2)
+    | x =>
+      (none,
+        [{ before := reseed seed state✝,
+            answer :=
+              match prover_commit_reference.next (blockHash answers) domain state✝ with
+              | fail e => fail e
+              | div => div
+              | ok (word, state) => ok (word, reseed seed state) }])) =
+    (none,
+      [PV_L2_F3SeedFrames.read seed
+          { before := state✝, answer := prover_commit_reference.next (blockHash answers) domain state✝ }])
+'R1Z.PV_L2_F3SeedPrefix.transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

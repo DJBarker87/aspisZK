@@ -1,0 +1,10 @@
+@AspisR1.ARV_PoisonNative.accepted : ∀ {A : Type} (native : AspisR1.S2W_ExtractionBoundary.Second)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e : AspisR1.S2W_D189Entry.Entry)
+  (id : AspisR1.S2W_ExtractionBoundary.Program) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state final : A)
+  (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2W_D189Wrappers.second native allocator e id data slot state =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post, final)) →
+    AspisR1.S2W_D189Wrappers.second native allocator (AspisR1.ARV_Poison.entry e) id data slot state =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ((AspisR1.ARV_Poison.entry e).heap, final))
+'AspisR1.ARV_PoisonNative.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]

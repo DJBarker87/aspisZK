@@ -1,0 +1,117 @@
+FJj_SuccessorLoop.lean:24:59: error: Type mismatch: After simplification, term
+  he
+ has type
+  @Eq ℕ (↑e) 0
+but is expected to have type
+  @Eq ℕ ↑e ↑0#usize
+FJj_SuccessorLoop.lean:30:10: error: Failed to rewrite using equation theorems for `FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body`
+FJj_SuccessorLoop.lean:40:13: error: unsolved goals
+case rec
+z out : Std.Array SQ 10#usize
+hz : FJc_WeightArray.canonical z
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (p : Std.Array SQ 10#usize) (carry : SQ) (e : Usize),
+      ↑e ≤ 10 →
+        FJc_WeightArray.canonical p →
+          Canon carry →
+            FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop (cursor e) z p carry = ok out →
+              ↑e = m →
+                FJc_WeightArray.canonical out ∧
+                  decoded out = (FJj_SuccessorModel.eval (decoded z) m (decode carry, decoded p)).2
+p : Std.Array SQ 10#usize
+carry : SQ
+e : Usize
+bound : ↑e ≤ 10
+hp : FJc_WeightArray.canonical p
+hc : Canon carry
+he : ↑e = n
+hn : ¬n = 0
+i : Usize
+hi : ↑i + 1 = ↑e
+hnext : FJa_ReverseStep.next (cursor e) = ok (some i, cursor i)
+hnext' : FJj_SuccessorCell.next (cursor e) = ok (some i, cursor i)
+p1 : Std.Array SQ 10#usize
+c1 : SQ
+hb :
+  FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z (cursor e) p carry =
+    ok (cont (cursor i, p1, c1))
+run :
+  loop (fun x => FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z x.1 x.2.1 x.2.2)
+      (cursor i, p1, c1) =
+    ok out
+cp : FJc_WeightArray.canonical p1
+cc : Canon c1
+step :
+  (decode c1, decoded p1) =
+    FJd_LoopReference.successorStep (decoded z) (decode carry, decoded p) (FJj_SuccessorModel.index ↑i)
+tail : FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop (cursor i) z p1 c1 = ok out
+⊢ ?m.285
+
+case neg.ok
+z out : Std.Array SQ 10#usize
+hz : FJc_WeightArray.canonical z
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (p : Std.Array SQ 10#usize) (carry : SQ) (e : Usize),
+      ↑e ≤ 10 →
+        FJc_WeightArray.canonical p →
+          Canon carry →
+            FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop (cursor e) z p carry = ok out →
+              ↑e = m →
+                FJc_WeightArray.canonical out ∧
+                  decoded out = (FJj_SuccessorModel.eval (decoded z) m (decode carry, decoded p)).2
+p : Std.Array SQ 10#usize
+carry : SQ
+e : Usize
+bound : ↑e ≤ 10
+hp : FJc_WeightArray.canonical p
+hc : Canon carry
+he : ↑e = n
+hn : ¬n = 0
+i : Usize
+hi : ↑i + 1 = ↑e
+hnext : FJa_ReverseStep.next (cursor e) = ok (some i, cursor i)
+hnext' : FJj_SuccessorCell.next (cursor e) = ok (some i, cursor i)
+p1 : Std.Array SQ 10#usize
+c1 : SQ
+hb :
+  FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z (cursor e) p carry =
+    ok (cont (cursor i, p1, c1))
+run :
+  loop (fun x => FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop.body z x.1 x.2.1 x.2.2)
+      (cursor i, p1, c1) =
+    ok out
+cp : FJc_WeightArray.canonical p1
+cc : Canon c1
+step :
+  (decode c1, decoded p1) =
+    FJd_LoopReference.successorStep (decoded z) (decode carry, decoded p) (FJj_SuccessorModel.index ↑i)
+tail : FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop (cursor i) z p1 c1 = ok out
+rec : ?m.285
+⊢ FJc_WeightArray.canonical out ∧ decoded out = (FJj_SuccessorModel.eval (decoded z) n (decode carry, decoded p)).2
+FJj_SuccessorLoop.lean:38:34: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [hb,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJj_SuccessorLoop.lean:39:29: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [hb,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJj_SuccessorLoop.lean:43:22: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [hb,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJj_SuccessorLoop.lean:48:17: error: unexpected token ':='; expected command
+'AspisR1.FJj_SuccessorLoop.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

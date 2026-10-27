@@ -1,0 +1,70 @@
+import R1Z.PV_Src_AdmissionOccupied
+import R1Z.PV_Src_CheckedValidation
+import R1Z.PV_Src_CheckedFixtures
+
+/-! Actual extracted pair validation for the release fixture's symbolic first
+commitment and occupied second commitment. No Poseidon evaluation is needed. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Src_FixturePairValidation
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R1J.SpendWitnessMap
+open AspisBuilderAdmissionSource
+open PV_Src_Fixture_FixtureRecords
+
+theorem sentinel_ne : digest 900 7 ≠ 0 := by
+  change (1020 : ZMod 2147483647) ≠ 0
+  intro h
+  have hv := congrArg (fun x : ZMod 2147483647 => x.val) h
+  change 1020 = 0 at hv
+  omega
+
+theorem sentinel_word_ne : (d32 (digest 900)).val[7]! ≠ 0#u32 := by
+  rw [d32,arr8_get _ 7 (by decide)]
+  intro h
+  have hv := congrArg UScalar.val h
+  rw [w32_val] at hv
+  change 1020 = 0 at hv
+  omega
+
+theorem inverse_product :
+    aspis_core.field.M31.mul ((d32 (digest 900)).val[7]!)
+      (w32 ((digest 900 7)⁻¹)) = ok 1#u32 := by
+  obtain ⟨z,hz,hc,hv⟩ := PV_Src_AdmissionScalar.mul_field
+    ((d32 (digest 900)).val[7]!) (w32 ((digest 900 7)⁻¹))
+  rw [d32,arr8_get _ 7 (by decide),w32_val,w32_val] at hv
+  simp only [ZMod.natCast_zmod_val] at hv
+  change (z.val : F) = digest 900 7 * (digest 900 7)⁻¹ at hv
+  rw [mul_inv_cancel₀ sentinel_ne] at hv
+  have he : z = 1#u32 := by
+    calc z = w32 (liftU (K := F) z) := (BuilderRecordCanonical.word_roundtrip z hc).symm
+         _ = w32 (1 : F) := congrArg w32 hv
+         _ = 1#u32 := rfl
+  exact hz.trans (congrArg Result.ok he)
+
+def sourcePair (withdrawal : Bool) : pool_v1.pair_trace.PoolV1PairInputNoteWitnessV1 :=
+  BuilderAdmissionRecords.sourcePair (PV_Src_NativeDirections.reference
+    (PV_Src_CheckedEncoding.nativeWitness (witness withdrawal) 0x54321#u32))
+
+theorem pair_validate (withdrawal : Bool) :
+    (sourcePair withdrawal).pair_leaf.validate = ok (.Ok ()) := by
+  apply PV_Src_AdmissionOccupied.validates
+  · exact d32_canon _
+  · exact d32_canon _
+  · change (w32 ((digest 900 7)⁻¹)).val < 2147483647
+    rw [w32_val]
+    exact val_lt_p _
+  · exact sentinel_word_ne
+  · exact inverse_product
+
+theorem pair_spendable (withdrawal : Bool) :
+    (sourcePair withdrawal).pair_leaf.require_selected_spendable
+      (sourcePair withdrawal).selected_second = ok (.Ok ()) := by
+  rw [pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.require_selected_spendable,pair_validate]
+  rfl
+
+#print axioms sentinel_ne
+#print axioms sentinel_word_ne
+#print axioms inverse_product
+#print axioms pair_validate
+#print axioms pair_spendable
+end R1Z.PV_Src_FixturePairValidation

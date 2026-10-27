@@ -1,0 +1,92 @@
+FJe_Sum3ComponentBridge.lean:27:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJe_Sum3ChannelBridge.native ?m.132 a s i r iter.start
+in the target expression
+  (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok s
+    | some component => do
+      let sums1 ←
+        FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0 { start := 0#usize, «end» := 3#usize } a s i r
+            component
+      FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0 iter1 a sums1 i r) =
+    do
+    let sums1 ←
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0
+          { start := 0#usize, «end» := 3#usize } (left a) s i r iter.start
+    AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0 iter1 (left a) sums1 i r
+
+case succ
+a : Left
+i : Usize
+r : Components
+n : ℕ
+ih : ∀ (iter : Range) (s : Sums), ↑iter.start + n = ↑iter.end → native iter a s i r = old iter (left a) s i r
+iter : Range
+s : Sums
+span : ↑iter.start + (n + 1) = ↑iter.end
+iter1 : OccupancyRangeTraversal.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+sp : ↑iter1.start + n = ↑iter1.end
+rest :
+  ∀ (s : Sums),
+    FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0 iter1 a s i r =
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0 iter1 (left a) s i r
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok s
+    | some component => do
+      let sums1 ←
+        FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0 { start := 0#usize, «end» := 3#usize } a s i r
+            component
+      FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0 iter1 a sums1 i r) =
+    do
+    let sums1 ←
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0
+          { start := 0#usize, «end» := 3#usize } (left a) s i r iter.start
+    AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0 iter1 (left a) sums1 i r
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FJe_Sum3ComponentBridge.lean:27:62: error: Tactic `rfl` failed: The left-hand side
+  ↑(core.ops.range.Range.start ?m.132) + 3
+is not definitionally equal to the right-hand side
+  ↑(core.ops.range.Range.end ?m.132)
+
+a : Left
+i : Usize
+r : Components
+n : ℕ
+ih : ∀ (iter : Range) (s : Sums), ↑iter.start + n = ↑iter.end → native iter a s i r = old iter (left a) s i r
+iter : Range
+s : Sums
+span : ↑iter.start + (n + 1) = ↑iter.end
+iter1 : OccupancyRangeTraversal.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+sp : ↑iter1.start + n = ↑iter1.end
+rest :
+  ∀ (s : Sums),
+    FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0 iter1 a s i r =
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0 iter1 (left a) s i r
+⊢ ↑(core.ops.range.Range.start ?m.132) + 3 = ↑(core.ops.range.Range.end ?m.132)
+FJe_Sum3ComponentBridge.lean:26:15: warning: This simp argument is unused:
+  FJb_PairProjection.value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵J̵b̵_̵P̵a̵i̵r̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJe_Sum3ComponentBridge.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

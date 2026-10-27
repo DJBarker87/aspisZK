@@ -1,0 +1,70 @@
+WAdm_SourceBody.lean:42:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => _a = [_a[0], _a[1]]
+Error: Application type mismatch: The argument
+  xs.property
+has type
+  (↑xs).length = ↑2#usize
+but is expected to have type
+  _a.length = ↑2#usize
+in the application
+  Eq.trans xs.property
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+A : Type
+xs : Std.Array A 2#usize
+h : (List.ofFn fun j => (↑xs)[↑j]) = ↑xs
+⊢ ↑xs = [(↑xs)[0], (↑xs)[1]]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+WAdm_SourceBody.lean:46:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+WAdm_SourceBody.lean:50:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    List.flatMap (fun q => bytesOf ↑(core.num.U32.to_le_bytes q)) _a =
+      List.flatMap (fun i => OraclePortCompactDraft.le32 ↑i) (List.ofFn fun j => ⟨↑_a[↑j], ⋯⟩)
+Error: Application type mismatch: The argument
+  CheckpointBytesBody.fields._proof_2 p j
+has type
+  ↑j < (↑p.queries).length
+but is expected to have type
+  ↑j < _a.length
+in the application
+  _a[↑j]
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+p : Prepared
+a : Accumulator
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+⊢ List.flatMap (fun q => bytesOf ↑(core.num.U32.to_le_bytes q)) ↑p.queries =
+    List.flatMap (fun i => OraclePortCompactDraft.le32 ↑i) (List.ofFn fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.WAdm_SourceBody.ofFn_array' depends on axioms: [propext, Quot.sound]
+'AspisR1.WAdm_SourceBody.two' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.WAdm_SourceBody.queries' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

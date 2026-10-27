@@ -1,0 +1,85 @@
+Hist_DistinctBody.lean:14:2: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+previous index : Usize
+ordered : previous < index
+⊢ ↑previous + 1 < UScalar.size UScalarTy.Usize
+Hist_DistinctBody.lean:19:96: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑accounts).length
+in the target expression
+  ↑index < accounts.length
+
+N : Usize
+accounts : Std.Array Account N
+index : Usize
+bound : index < N
+⊢ ↑index < accounts.length
+Hist_DistinctBody.lean:28:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable ((↑accounts)[↑previous].key = (↑accounts)[↑index].key)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Hist_DistinctBody.lean:30:27: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+Hist_DistinctBody.lean:39:52: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+Hist_DistinctBody.lean:39:52: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+Hist_DistinctBody.lean:31:62: error: unsolved goals
+case isFalse
+N : Usize
+base : AdapterRw.Ops
+accounts : Std.Array Account N
+index previous : Usize
+bound : index < N
+ordered : previous < index
+before : previous < N
+h✝ : ¬decide ((↑accounts)[↑previous].key = (↑accounts)[↑index].key) = true
+⊢ (do
+      let previous1 ← ok (previous.wrapping_add 1#usize)
+      ok (cont previous1)) =
+    sorry
+Hist_DistinctBody.lean:39:27: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵l̵i̵f̵t̵]̵[̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Hist_DistinctBody.lean:39:39: warning: This simp argument is unused:
+  decide_false
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵l̵i̵f̵t̵]̵[̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Hist_DistinctBody.lean:39:70: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp_all only [decide_true, ̲decide_false, ̲Bool.true_eq_true,i̵f̵_̵t̵r̵u̵e̵,̵ ̲Bool.false_eq_true,
+  ̲ ̲ ̲ ̲ ̲if_false, ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Hist_DistinctBody.lean:39:78: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵l̵i̵f̵t̵]̵[̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Hist_DistinctBody.lean:39:97: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵l̵i̵f̵t̵]̵[̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Hist_DistinctBody.successor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Hist_DistinctBody.array_read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Hist_DistinctBody.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,94 @@
+structure AspisR1.ARS_Coverage.SupportedEntry {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) :
+  Type
+number of parameters: 15
+fields:
+  AspisR1.ARS_Coverage.SupportedEntry.saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8
+  AspisR1.ARS_Coverage.SupportedEntry.post1 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)
+  AspisR1.ARS_Coverage.SupportedEntry.post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)
+  AspisR1.ARS_Coverage.SupportedEntry.final1 : A
+  AspisR1.ARS_Coverage.SupportedEntry.final2 : A
+  AspisR1.ARS_Coverage.SupportedEntry.w1 : W
+  AspisR1.ARS_Coverage.SupportedEntry.w2 : W
+  AspisR1.ARS_Coverage.SupportedEntry.admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.entry self.w1 3
+  AspisR1.ARS_Coverage.SupportedEntry.admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L
+      (AspisV8R19.MemoizedProgramLaw.eval H
+            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 self.saved self.post1 self.final1)).2.entry
+      self.w2 7
+  AspisR1.ARS_Coverage.SupportedEntry.accepted1 : AspisR1.S2W_D189Wrappers.first native1 copy allocator
+        (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.entry AspisR1.CPH_Program.verifier
+        (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.data (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.state =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (self.saved, self.post1, self.final1))
+  AspisR1.ARS_Coverage.SupportedEntry.accepted2 : let j :=
+      (AspisV8R19.MemoizedProgramLaw.eval H
+          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 self.saved self.post1 self.final1)).2;
+    AspisR1.S2W_D189Wrappers.second native2 allocator j.entry AspisR1.CPH_Program.verifier j.data j.slot j.state =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (self.post2, self.final2))
+  AspisR1.ARS_Coverage.SupportedEntry.p : AspisR1.CPG_Projection.Observations Tx A
+  AspisR1.ARS_Coverage.SupportedEntry.t : Tx
+  AspisR1.ARS_Coverage.SupportedEntry.u : Tx
+  AspisR1.ARS_Coverage.SupportedEntry.actions : List (AspisR1.CPP_BankState.Action A)
+  AspisR1.ARS_Coverage.SupportedEntry.game : AspisR1.CPH_Game.DeployedPairExecution self.p self.t self.u
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.entry
+      (AspisV8R19.MemoizedProgramLaw.eval H
+            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 self.saved self.post1 self.final1)).2.entry
+      self.saved self.actions native1 native2 copy allocator AspisR1.CPH_Program.verifier
+  AspisR1.ARS_Coverage.SupportedEntry.RuntimePersistence : AspisR1.CPR_DataPersistence.TwoTransactionLaw
+      (AspisR1.CPG_Projection.adjacent self.p)
+      (AspisR1.CPG_Projection.ordinary self.p (AspisR1.Hist_Nonvacuity.key 0#u8)) (AspisR1.CPG_Projection.before self.p)
+      (AspisR1.CPG_Projection.tentative self.p) (AspisR1.CPG_Projection.success self.p)
+      (AspisR1.CPG_Projection.loaded self.p)
+constructor:
+  AspisR1.ARS_Coverage.SupportedEntry.mk {W A C Tx : Type}
+    {L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)}
+    {copy :
+      AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+        ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)}
+    {allocator : AspisR1.S2W_D189Wrappers.Allocator A}
+    {c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C} {err : C}
+    {r : AspisR1.NP6_StdModel.Reservation} {native1 : AspisR1.S2W_ExtractionBoundary.First}
+    {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest}
+    {a : AspisR1.SCE_Experiment.Adversary A} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+    (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final1 final2 : A) (w1 w2 : W)
+    (admission1 :
+      AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.entry
+        w1 3)
+    (admission2 :
+      AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L
+        (AspisV8R19.MemoizedProgramLaw.eval H
+              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post1 final1)).2.entry
+        w2 7)
+    (accepted1 :
+      AspisR1.S2W_D189Wrappers.first native1 copy allocator (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.entry
+          AspisR1.CPH_Program.verifier (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.data
+          (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.state =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)))
+    (accepted2 :
+      let j :=
+        (AspisV8R19.MemoizedProgramLaw.eval H
+            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post1 final1)).2;
+      AspisR1.S2W_D189Wrappers.second native2 allocator j.entry AspisR1.CPH_Program.verifier j.data j.slot j.state =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)))
+    (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx) (actions : List (AspisR1.CPP_BankState.Action A))
+    (game :
+      AspisR1.CPH_Game.DeployedPairExecution p t u (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.entry
+        (AspisV8R19.MemoizedProgramLaw.eval H
+              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post1 final1)).2.entry
+        saved actions native1 native2 copy allocator AspisR1.CPH_Program.verifier)
+    (RuntimePersistence :
+      AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+        (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8)) (AspisR1.CPG_Projection.before p)
+        (AspisR1.CPG_Projection.tentative p) (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p)) :
+    AspisR1.ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a H
+'AspisR1.ARS_Coverage.SupportedEntry' depends on axioms: [propext, Classical.choice, Quot.sound]

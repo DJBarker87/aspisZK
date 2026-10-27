@@ -1,0 +1,116 @@
+FJl_FixedIndex.lean:16:11: error: unsolved goals
+case succ.none
+B A : Type
+d : List B → Option A
+k n : ℕ
+ih :
+  ∀ (bytes : List B) (xs : Fin n → A),
+    FixedWidthDecoder.decode d k n bytes = some xs →
+      ∀ (j : Fin n), d (List.take k (List.drop (k * ↑j) bytes)) = some (xs j)
+bytes : List B
+xs : Fin (n + 1) → A
+j : Fin (n + 1)
+h0 : d (List.take k bytes) = none
+run :
+  (do
+      let head ← none
+      let tail ← FixedWidthDecoder.decode d k n (List.drop k bytes)
+      pure (Fin.cons head tail)) =
+    some xs
+⊢ d (List.take k (List.drop (k * ↑j) bytes)) = some (xs j)
+FJl_FixedIndex.lean:19:13: error: unsolved goals
+case succ.some.none
+B A : Type
+d : List B → Option A
+k n : ℕ
+ih :
+  ∀ (bytes : List B) (xs : Fin n → A),
+    FixedWidthDecoder.decode d k n bytes = some xs →
+      ∀ (j : Fin n), d (List.take k (List.drop (k * ↑j) bytes)) = some (xs j)
+bytes : List B
+xs : Fin (n + 1) → A
+j : Fin (n + 1)
+x : A
+h0 : d (List.take k bytes) = some x
+ht : FixedWidthDecoder.decode d k n (List.drop k bytes) = none
+run :
+  (do
+      let head ← some x
+      let tail ← none
+      pure (Fin.cons head tail)) =
+    some xs
+⊢ d (List.take k (List.drop (k * ↑j) bytes)) = some (xs j)
+FJl_FixedIndex.lean:22:8: error: Tactic `subst` failed: did not find equation for eliminating 'xs'
+
+case succ.some.some
+B A : Type
+d : List B → Option A
+k n : ℕ
+ih :
+  ∀ (bytes : List B) (xs : Fin n → A),
+    FixedWidthDecoder.decode d k n bytes = some xs →
+      ∀ (j : Fin n), d (List.take k (List.drop (k * ↑j) bytes)) = some (xs j)
+bytes : List B
+xs : Fin (n + 1) → A
+j : Fin (n + 1)
+x : A
+h0 : d (List.take k bytes) = some x
+tail : Fin n → A
+ht : FixedWidthDecoder.decode d k n (List.drop k bytes) = some tail
+run :
+  (do
+      let head ← some x
+      let tail ← some tail
+      some (Fin.cons head tail)) =
+    some xs
+⊢ d (List.take k (List.drop (k * ↑j) bytes)) = some (xs j)
+FJl_FixedIndex.lean:16:28: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵]̵[̲h̲0̲,̲ ̲r̲e̲d̲u̲c̲e̲C̲t̲o̲r̲E̲q̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJl_FixedIndex.lean:16:45: warning: This simp argument is unused:
+  reduceCtorEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵]̵[̲h̲0̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲n̲o̲n̲e̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJl_FixedIndex.lean:19:33: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵t̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵]̵[̲h̲0̲,̲ ̲h̲t̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲n̲o̲n̲e̲,̲ ̲r̲e̲d̲u̲c̲e̲C̲t̲o̲r̲E̲q̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJl_FixedIndex.lean:19:50: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵t̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵]̵[̲h̲0̲,̲ ̲h̲t̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲r̲e̲d̲u̲c̲e̲C̲t̲o̲r̲E̲q̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJl_FixedIndex.lean:19:67: warning: This simp argument is unused:
+  reduceCtorEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵t̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵]̵[̲h̲0̲,̲ ̲h̲t̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲n̲o̲n̲e̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJl_FixedIndex.lean:21:25: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵t̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵p̵u̵r̵e̵_̵d̵e̵f̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲h̲0̲,̲ ̲h̲t̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲p̲u̲r̲e̲_̲d̲e̲f̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲s̲o̲m̲e̲.̲i̲n̲j̲E̲q̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJl_FixedIndex.lean:21:58: warning: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵t̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵p̵u̵r̵e̵_̵d̵e̵f̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲h̲0̲,̲ ̲h̲t̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲p̲u̲r̲e̲_̲d̲e̲f̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJl_FixedIndex.read' depends on axioms: [propext, sorryAx]

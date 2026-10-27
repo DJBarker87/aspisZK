@@ -1,0 +1,76 @@
+import ARR_OracleCoverage
+import GExq_AccountExperiment
+import DrvC_Installation
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ARR_AccountCode
+open Aeneas Aeneas.Std Result S2Trust S2W_D189Entry S2W_D189Wrappers
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw
+open GExq_AccountExperiment
+variable {A F C : Type} (c : DrvC_Installation.Configuration F C)
+    (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+    (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+    (allocator : Allocator A) (id : S2W_ExtractionBoundary.Program)
+
+def first (i : FirstInputs A) :=
+  GExq_InstalledWrapper.first c.adapter c.currentBase c.stageBase c.finish
+    c.reserved c.query c.geometry c.boundaries c.std hashv copy allocator i.entry id i.data i.state
+
+def second (j : SecondInputs A) :=
+  GExq_InstalledWrapper.second c.adapter c.currentBase c.stageBase c.finish
+    c.reserved c.query c.geometry c.boundaries c.std hashv allocator j.entry id j.data j.slot j.state
+
+def ideal (a : Program Bytes State (FirstInputs A))
+    (choose : FirstInputs A → alloc.vec.Vec U8 → Heap (Nat → Record) → A →
+      Program Bytes State (SecondInputs A)) :=
+  GExq_AccountExperiment.program c.adapter c.currentBase c.stageBase c.finish
+    c.reserved c.query c.geometry c.boundaries c.std hashv copy allocator id a choose
+
+/-- Execute the real partial syscall in each literal installed wrapper and
+retain every attempted address. The adversary choices still use H. This is
+source instrumentation, not a source-to-ELF or bank-representation theorem. -/
+def native (a : Program Bytes State (FirstInputs A))
+    (choose : FirstInputs A → alloc.vec.Vec U8 → Heap (Nat → Record) → A →
+      Program Bytes State (SecondInputs A)) (H : Bytes → State) : List Bytes × Outcome A :=
+  let i := eval H a
+  let f := SdkC_Source.run hashv (first c hashv copy allocator id i.2) []
+  match f.1 with
+  | .ok (.Ok (saved,post,final)) =>
+    let j := eval H (choose i.2 saved post final)
+    let s := SdkC_Source.run hashv (second c hashv allocator id j.2) []
+    (i.1.map Prod.fst ++ (RPx_AttemptPrefix.addresses f.2 ++
+      (j.1.map Prod.fst ++ RPx_AttemptPrefix.addresses s.2)),
+      (i.2,f.1,some (j.2,s.1)))
+  | _ => (i.1.map Prod.fst ++ RPx_AttemptPrefix.addresses f.2,(i.2,f.1,none))
+
+/-- Only actual reached wrapper reads are constrained. A failed syscall is
+excluded; pure rejection, early exit and allocator failure are NOT excluded. -/
+structure CoveredAt (a : Program Bytes State (FirstInputs A))
+    (choose : FirstInputs A → alloc.vec.Vec U8 → Heap (Nat → Record) → A →
+      Program Bytes State (SecondInputs A)) (H : Bytes → State) : Prop where
+  first : ARR_OracleCoverage.Covered H hashv (first c hashv copy allocator id (eval H a).2)
+  second : ∀ saved post final,
+    (SdkC_Source.run hashv (first c hashv copy allocator id (eval H a).2) []).1 =
+      .ok (.Ok (saved,post,final)) →
+    ARR_OracleCoverage.Covered H hashv
+      (second c hashv allocator id (eval H (choose (eval H a).2 saved post final)).2)
+
+/-- Exact literal code equality, without any syscall-totality inference. -/
+theorem ideal_def (a : Program Bytes State (FirstInputs A))
+    (choose : FirstInputs A → alloc.vec.Vec U8 → Heap (Nat → Record) → A →
+      Program Bytes State (SecondInputs A)) :
+    ideal c hashv copy allocator id a choose =
+      AspisV8R19.OracleProgramOps.bind a fun i =>
+        AspisV8R19.OracleProgramOps.bind (SdkC_Oracle.program (first c hashv copy allocator id i)) fun r =>
+          match r with
+          | .ok (.Ok (saved,post,final)) =>
+            AspisV8R19.OracleProgramOps.bind (choose i saved post final) fun j =>
+              AspisV8R19.OracleProgramOps.bind (SdkC_Oracle.program (second c hashv allocator id j))
+                fun s => .done (i,r,some (j,s))
+          | _ => .done (i,r,none) := rfl
+
+#print axioms ideal_def
+#print CoveredAt
+end AspisR1.ARR_AccountCode
+end

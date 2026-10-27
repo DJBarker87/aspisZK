@@ -1,0 +1,42 @@
+{"attempt": "FGl_047", "exit_status": 0, "wall_seconds": 3.4914301190292463, "peak_rss_kib": "5401076", "swaps": "0", "print_axioms": []}
+structure AspisR1.F3Y_FinishLeaves.PairingRemaining {W : Type} (finish : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E) : Prop
+number of parameters: 5
+fields:
+  AspisR1.F3Y_FinishLeaves.PairingRemaining.round0 : AspisR1.Port4D_Pairing.RoundLaws
+      (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE v.round0 data.p0
+  AspisR1.F3Y_FinishLeaves.PairingRemaining.round1 : AspisR1.Port4D_Pairing.RoundLaws
+      (AspisR1.Port3_FinishStage.release finish) AspisR1.CheckpointBytes5Output.ofE v.round1 data.p1
+  AspisR1.F3Y_FinishLeav
+...
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            finish.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+              AspisR1.CheckpointBytes5Output.ofE value =
+                AspisR1.RoundPairing.dot data.f
+                  (AspisR1.RoundPairing.dualFold data.alpha1
+                    (AspisR1.RoundPairing.dualFold data.alpha0
+                      (AspisR1.FunctionalWeights.weights data.F data.F0 data.kappa)))) :
+    AspisR1.FGl_FinishLeaves.PairingRemaining finish v p data
+def AspisR1.FGl_FinishLeaves.Holds : {W : Type} →
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps W) →
+    (v : AspisR1Stage2.verifier.View) →
+      (p : AspisR1Stage2.verifier.Prepared) →
+        (a : AspisR1Stage2.verifier.Accumulator) →
+          AspisR1.F3S_FinishWitness.Primitives finish v p a →
+            (Fin 22 → Fin 262144) →
+              AspisR1.OraclePortCompactDraft.Parsed →
+                AspisR1.RawCutTranscriptRun.ErasedPrefix → AspisR1.RecordedBinaryExperimentBin.SourceInputs → Prop :=
+fun {W} finish v p a x q parsed tr input =>
+  AspisR1.FGl_FinishLeaves.PairingRemaining finish v p input.data ∧
+    (∀ (j : Fin 22), AspisR1.MatchingSupport.match0 input.data (q j)) ∧
+      AspisR1.R3SemanticRemainingJoins.EquationEndpoint input.decoded
+          (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) input.data ∧
+        AspisR1.CheckpointBytes5Output.ofE x.dot =
+          ∑ l, input.data.f l * AspisR1.LiteralOpeningView.eK ((AspisR1.CheckpointBytes5Output.accumulator a).weights l)
+
+Running as unit: run-rc7ad6af2a97e411e8b8e2b0d41ad0279.scope; invocation ID: 04b6a01fe54c4a5499f1dbd1482dbd6e

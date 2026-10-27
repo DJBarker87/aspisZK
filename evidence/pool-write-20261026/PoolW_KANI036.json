@@ -1,0 +1,44 @@
+{
+  "attempt": "PoolW_KANI036",
+  "kind": "kani",
+  "source_revision": "383ecab4cf9e34fc23789c0d29765c3c2ae62e0b",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolW_cpi/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_kani_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolW_cpi_create_order",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolW_cpi/Cargo.toml",
+    "PoolW_cpi/PoolW_lib.rs",
+    "PoolW_cpi/PoolW_harness.rs",
+    "PoolW_cpi/error.rs",
+    "PoolW_CPISLICES.json"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Byte-identical actual CPI helper/trait/metadata guard against recording runtime, exact args/signers/infos/order/early errors. Existing runtime trust remains; recording runtime does not certify actual System effects."
+  },
+  "expected_time": "Optimized Kani compile then one bounded exact native/reference guard equivalence and frame check"
+}

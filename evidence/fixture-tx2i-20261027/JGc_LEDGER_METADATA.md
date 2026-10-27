@@ -1,0 +1,3 @@
+# Ledger metadata provenance
+
+The ledger counts/method and exact Rc10 source are inherited unchanged from JFz. The first copied JSON carried the predecessor entry revision and its fresh-audit labels. Those draft labels are corrected: this job entered at8d24f3b9ae, and no inherited audit is labelled fresh for JGc. This correction changes no theorem statement, source hash, counts or historical prover receipt. The first fresh JGc actual-top audit will be the mandatory070 checkpoint; final audit will be recorded separately. Query and hash receipts contain their actual per-attempt revisions and source hashes throughout.

@@ -1,0 +1,39 @@
+{"attempt": "JFv_TX2_053", "exit_status": 1, "wall_seconds": 2.560312277986668, "peak_rss_kib": "5627368", "swaps": "0", "print_axioms": ["'AspisR1.JFv_TX2_GatherShape.lengths' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_TX2_GatherShape.step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_TX2_GatherShape.nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_TX2_GatherShape.query' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFv_TX2_GatherShape.row_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_TX2_GatherShape.lean:40:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => JFv_TX2_Rows.value ⟨_a, ⋯⟩ = JFv_TX2_Rows.value ⟨i, active⟩
+Error: Application type mismatch: The argument
+  row._proof_2 i
+has type
+  i % 12 < 12
+but is expected to have type
+  _a < 12
+in the application
+  ⟨_a, ⋯⟩
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m
+...
+Fv_TX2_GatherShape.lean:40:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => JFv_TX2_Rows.value ⟨_a, ⋯⟩ = JFv_TX2_Rows.value ⟨i, active⟩
+Error: Application type mismatch: The argument
+  row._proof_2 i
+has type
+  i % 12 < 12
+but is expected to have type
+  _a < 12
+in the application
+  ⟨_a, ⋯⟩
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+i : ℕ
+active : i < 12
+⊢ JFv_TX2_Rows.value ⟨i % 12, ⋯⟩ = JFv_TX2_Rows.value ⟨i, active⟩
+'AspisR1.JFv_TX2_GatherShape.lengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_GatherShape.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_GatherShape.nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_GatherShape.query' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_GatherShape.row_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r960ddd82de0e4a49b32d598b81e92d9c.scope; invocation ID: 2ec307d086874a7aade55330e0113260

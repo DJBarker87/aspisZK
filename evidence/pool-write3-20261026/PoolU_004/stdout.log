@@ -1,0 +1,52 @@
+def AspisR1.PoolU_CopyTail.afterPrefix : {M : Type} →
+  AspisR1.PoolW_Store.Key →
+    AspisR1.PoolW_Store.Key →
+      AspisR1.PoolU_Step.Step (AspisR1.PoolW_Store.Store M) AdapterRw.solana_program_error.ProgramError
+          (AspisR1.PoolW_Store.Bytes × AspisR1.PoolW_Store.Bytes) →
+        AspisR1.PoolU_Step.Step (AspisR1.PoolW_Store.Store M) AdapterRw.solana_program_error.ProgramError Unit :=
+fun {M} master checkpoint prelude =>
+  AspisR1.PoolU_Step.bind prelude fun images => AspisR1.PoolU_CopyTail.copies master checkpoint images.1 images.2
+theorem AspisR1.PoolU_CopyTail.accepted : ∀ {M : Type} (master checkpoint : AspisR1.PoolW_Store.Key)
+  (prelude :
+    AspisR1.PoolU_Step.Step (AspisR1.PoolW_Store.Store M) AdapterRw.solana_program_error.ProgramError
+      (AspisR1.PoolW_Store.Bytes × AspisR1.PoolW_Store.Bytes))
+  (before after : AspisR1.PoolW_Store.Store M),
+  checkpoint ≠ master →
+    AspisR1.PoolU_CopyTail.afterPrefix master checkpoint prelude before =
+        (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()), after) →
+      ∃ images postPrefix,
+        prelude before = (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok images), postPrefix) ∧
+          after = AspisR1.PoolW_Store.copyBoth postPrefix master checkpoint images.1 images.2 ∧
+            (after checkpoint).data = images.2 ∧
+              (after master).data = images.1 ∧
+                (∀ (address : AspisR1.PoolW_Store.Key),
+                    address ≠ master → address ≠ checkpoint → after address = postPrefix address) ∧
+                  ∀ (address : AspisR1.PoolW_Store.Key), (after address).metadata = (postPrefix address).metadata :=
+fun {M} master checkpoint prelude before after unique h =>
+  let ⟨images, h✝⟩ :=
+    (AspisR1.PoolU_Step.accepted_bind prelude
+          (fun images => AspisR1.PoolU_CopyTail.copies master checkpoint images.1 images.2) before after ()).mp
+      h
+  let ⟨postPrefix, h✝¹⟩ := h✝
+  let ⟨hp, hc⟩ := h✝¹
+  have storeEq := Eq.symm (Prod.mk.inj hc).right;
+  Exists.intro images
+    (Exists.intro postPrefix
+      ⟨hp,
+        ⟨storeEq,
+          ⟨Eq.mpr (id (congrArg (fun _a => (_a checkpoint).data = images.2) storeEq))
+              (AspisR1.PoolW_Store.checkpoint_copy postPrefix master checkpoint images.1 images.2 unique),
+            ⟨Eq.mpr (id (congrArg (fun _a => (_a master).data = images.1) storeEq))
+                (AspisR1.PoolW_Store.master_copy postPrefix master checkpoint images.1 images.2),
+              ⟨fun address hm hc =>
+                Eq.mpr (id (congrArg (fun _a => _a address = postPrefix address) storeEq))
+                  (AspisR1.PoolW_Store.frame postPrefix master checkpoint address images.1 images.2 hm hc),
+                fun address =>
+                Eq.mpr (id (congrArg (fun _a => (_a address).metadata = (postPrefix address).metadata) storeEq))
+                  (AspisR1.PoolW_Store.all_metadata postPrefix master checkpoint address images.1 images.2)⟩⟩⟩⟩⟩)
+'AspisR1.PoolU_Step.accepted_bind' depends on axioms: [propext, Quot.sound]
+'AspisR1.PoolU_Step.error_prefix' depends on axioms: [propext]
+'AspisR1.PoolU_Step.failure_prefix' depends on axioms: [propext]
+'AspisR1.PoolU_Step.divergence_prefix' depends on axioms: [propext]
+'AspisR1.PoolU_CopyTail.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolU_CopyTail.rejected_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]

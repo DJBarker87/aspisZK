@@ -1,0 +1,46 @@
+F3L_SemanticInventory.lean:28:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    ((F3L_SourcePrepared.numeric _a).semanticAlpha = fun j => F3L_RhoMeaning.decode (↑sem.alpha)[↑j]) ∧
+      ((F3L_SourcePrepared.numeric _a).coordinates = fun j => F3L_RhoMeaning.decode (semanticCoordinate sem j)) ∧
+        (F3L_SourcePrepared.numeric _a).claim =
+          AspisR1CurrentPreparedClaim.Concrete.decode (AspisR1ClaimPreparedBridge.toClaimE s.claimValue)
+Error: Application type mismatch: The argument
+  s
+has type
+  F3K_OpeningSpine.Spine D B embed sem v hash p out scratch
+but is expected to have type
+  F3K_OpeningSpine.Spine D B embed sem v hash p _a scratch
+in the application
+  s.claimValue
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedScratchModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+sem : r1_semantic.Verified Hash
+v : verifier.View
+hash : Hash
+p : OraclePortCompactDraft.Parsed
+out : verifier.Prepared
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+s : F3K_OpeningSpine.Spine D B embed sem v hash p out scratch
+⊢ ((F3L_SourcePrepared.numeric out).semanticAlpha = fun j => F3L_RhoMeaning.decode (↑sem.alpha)[↑j]) ∧
+    ((F3L_SourcePrepared.numeric out).coordinates = fun j => F3L_RhoMeaning.decode (semanticCoordinate sem j)) ∧
+      (F3L_SourcePrepared.numeric out).claim =
+        AspisR1CurrentPreparedClaim.Concrete.decode (AspisR1ClaimPreparedBridge.toClaimE s.claimValue)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3L_SemanticInventory.remaining_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

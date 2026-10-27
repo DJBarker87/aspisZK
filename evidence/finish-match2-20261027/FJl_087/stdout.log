@@ -1,0 +1,40 @@
+FJl_BaseLiteral.lean:27:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    ∑ l ∈ Finset.range n, gamma ^ l * ExactBaseProjection.embed ((c s).1 ⟨l % 26, ⋯⟩) +
+        gamma ^ ↑⟨n, hn29⟩ * ExactBaseProjection.embed ((c s).1 ⟨n, hn⟩) =
+      ∑ x ∈ Finset.range n, gamma ^ x * ExactBaseProjection.embed ((c s).1 ⟨x % 26, ⋯⟩) +
+        gamma ^ n * ExactBaseProjection.embed ((c s).1 ⟨_a, ⋯⟩)
+Error: Application type mismatch: The argument
+  scalar._proof_1 n
+has type
+  n % 26 < 26
+but is expected to have type
+  _a < 26
+in the application
+  ⟨_a, ⋯⟩
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case succ
+q : Std.Array U8 608#usize
+g : Std.Array FIo_FieldBridge.NE 29#usize
+gamma : E
+powers : ∀ (l : Fin 29), FIp_ArrayValue.value g ↑l = gamma ^ ↑l
+c : MixedLeafEncoding.C1
+decoded : MixedLeafDecoder.decodeC1 (List.take 480 (bytesOf ↑q)) = some c
+s : Fin 4
+slot : Usize
+hs : ↑slot = ↑s
+reads : ∀ n < 26, FJl_InnerReads.Read q slot n
+n : ℕ
+ih : n ≤ 26 → FJi_BaseDot.sumTo q g slot n = ∑ l ∈ Finset.range n, gamma ^ l * scalar c s l
+bound : n + 1 ≤ 26
+hn : n < 26
+hn29 : n < 29
+⊢ ∑ l ∈ Finset.range n, gamma ^ l * ExactBaseProjection.embed ((c s).1 ⟨l % 26, ⋯⟩) +
+      gamma ^ ↑⟨n, hn29⟩ * ExactBaseProjection.embed ((c s).1 ⟨n, hn⟩) =
+    ∑ x ∈ Finset.range n, gamma ^ x * ExactBaseProjection.embed ((c s).1 ⟨x % 26, ⋯⟩) +
+      gamma ^ n * ExactBaseProjection.embed ((c s).1 ⟨n % 26, ⋯⟩)
+'AspisR1.FJl_BaseLiteral.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

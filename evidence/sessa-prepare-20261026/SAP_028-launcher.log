@@ -1,0 +1,51 @@
+{"attempt": "SAP_028", "exit_status": 1, "wall_seconds": 2.6184536679647863, "peak_rss_kib": "5228380", "swaps": "0", "print_axioms": ["'AspisR1.SAP_FinishConsumer.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+SAP_FinishConsumer.lean:21:5: warning: Variable name `tx1p` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+SAP_FinishConsumer.lean:68:100: error: unsolved goals
+W : Type
+finish : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+proof : Slice U8
+savedVec : alloc.vec.Vec U8
+H : Bytes → State
+stored publicBytes : Bytes
+tx1p : AspisR1CurrentCaller.verifier.Prepared
+parsed : Parsed
+trace : List (Bytes × State)
+semantic : List Bytes
+q : Fin 22 → Fin 262144
+tr : RawCutTranscriptRun.ErasedPrefix
+i : SourceInputs
+c : Context
+hi : Oracl
+...
+ok (core.result.Result.Ok dot)
+pairing : Port4D_Pairing.PairingLaws (Port3_FinishStage.release finish) CheckpointBytes5Output.ofE v p i.data
+⊢ (∀ (j : Fin 22), MatchingSupport.match0 i.data (q j)) →
+    R3SemanticRemainingJoins.EquationEndpoint i.decoded
+        (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) i.data →
+      CheckpointBytes5Output.ofE dot =
+          ∑ l, i.data.f l * LiteralOpeningView.eK ((CheckpointBytes5Output.accumulator a).weights l) →
+        (∀ x ∈ [r0.lhs, r0.rhs, r1.lhs, r1.rhs, pair, r1.value, dot, a.rhs],
+            CheckpointBytes4ReaderFields.sourceE (CheckpointBytes5Output.ofE x) = x) →
+          savedVec =
+              Tx2N_Reader.writer H stored publicBytes (prepared c i.data (SelectedChallengeMap.rhoOf i.rho) q)
+                (OraclePortCheckpointStateC3.write (model i.data (SelectedChallengeMap.rhoOf i.rho) q)).accumulator →
+            Collision H trace parsed q ∨
+              decide
+                    (Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native finish) v p a none =
+                      ok (core.result.Result.Ok ())) =
+                  OraclePortFrozen2.finish { wire := bytesOf ↑proof, semantic := semantic } q tr i
+                    (CheckpointBytes5Output.accumulator a) ∧
+                decide (Port4D_FinishInstall.finish finish v p a none = ok (core.result.Result.Ok ())) =
+                    D0TypedChecks.verify (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) i ∧
+                  D0TypedChecks.verify (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) i = true
+SAP_FinishConsumer.lean:71:48: error: unexpected token 'matches'; expected command
+'AspisR1.SAP_FinishConsumer.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r644845c2f22a45dca96420e2be0a96be.scope; invocation ID: 413034114256427f8808d2352286e038

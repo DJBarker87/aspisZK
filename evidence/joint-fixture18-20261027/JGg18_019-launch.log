@@ -1,0 +1,68 @@
+{"attempt": "JGg18_019", "exit_status": 1, "wall_seconds": 1.2705108770169318, "peak_rss_kib": "2644200", "swaps": "0", "print_axioms": ["'AspisR1.JGg_QueryTotal.loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGg_QueryTotal.words_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGg_QueryTotal.lean:25:17: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+f : F
+g : ℕ → T
+stable : ∀ (i : Usize), ↑i < ↑N → callback.call_mut f i = ok (g ↑i, f)
+small : ↑N ≤ 8
+fuel : ℕ
+ih : ∀ (i : Usize) (acc : List T), ↑N - ↑i ≤ fuel → ∃ out, arrayFromFnLoop N callback fuel i f acc = ok (out, f)
+i : Usize
+acc : List T
+bound : ↑N - ↑i ≤ fuel + 1
+active : i < N
+hi : ↑i < ↑N
+add : i + 1#usize ⦃ j => ↑j = ↑i + 1 ⦄
+j : UScalar UScalarTy.Usize
+added : i + 1#usize = ok j
+hj : ↑j = ↑i + 1
+out : List T
+tail : arrayFromFnLoop N callback fuel j f (g ↑i :: acc) = ok (out, f)
+⊢ (let (value, f') := (g ↑i, f)
+    arrayFromFnLoop N callback fuel j f' (value :: acc))
+...
+> ok ⟨xs, ⋯⟩
+      | fail e => fail e
+      | div => div) =
+      ok ranks
+is not definitionally equal to target
+  ∃ ranks,
+    (match h :
+        arrayFromFnLoop 8#usize
+          AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+          (↑8#usize + 1) 0#usize block [] with
+      | ok (values, snd) => ok ⟨values, ⋯⟩
+      | fail error => fail error
+      | div => div) =
+      ok ranks
+JGg_QueryTotal.lean:56:19: error: unsolved goals
+case cons
+block : Std.Array U8 32#usize
+callback : core.ops.function.FnMut AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure Usize U32 :=
+  AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+stable :
+  ∀ (i : Usize),
+    ↑i < ↑8#usize →
+      callback.call_mut block i = ok (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block ↑i, block)
+values : List U32
+loop : arrayFromFnLoop 8#usize callback 9 0#usize block [] = ok (values, block)
+ranks : Std.Array U32 8#usize
+rank : AspisR1QueryScanUnrolled.r0_transcript.block_rank block = ok ranks
+x : U32
+xs : List U32
+ih :
+  AspisV8R19.TraversalRuntime.mapState
+      AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32.call_mut xs () =
+    ok (List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord xs, ())
+⊢ (do
+      let __x ← ok (List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord xs, ())
+      ok (AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord x :: __x.1, __x.2)) =
+    ok
+      (AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord x ::
+          List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord xs,
+        ())
+'AspisR1.JGg_QueryTotal.words_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4356eff4666e44c18daad9b8fe852baf.scope; invocation ID: b4e14f3667be447b8014337b0d2af607

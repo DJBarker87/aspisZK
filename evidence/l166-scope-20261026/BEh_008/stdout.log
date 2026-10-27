@@ -1,0 +1,14 @@
+AspisR1.Port4B_Prepared.roots : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am →
+    AspisR1.Port3_BatchStage.root0 p = AspisV8R19.SqueezeOracleBridge.encodeState (pm.roots 0) ∧
+      AspisR1.Port3_BatchStage.root1 p = AspisV8R19.SqueezeOracleBridge.encodeState (pm.roots 1)
+'AspisR1.Port4B_Prepared.roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Prepared.query_value : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am →
+    ∀ (j : Fin 22) (value : Aeneas.Std.U32),
+      p.queries.index_usize (↑j)#usize = Aeneas.Std.Result.ok value → ↑value = ↑(pm.queries j)
+'AspisR1.Port4B_Prepared.query_value' depends on axioms: [propext, Classical.choice, Quot.sound]

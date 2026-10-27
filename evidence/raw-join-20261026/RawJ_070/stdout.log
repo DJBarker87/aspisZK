@@ -1,0 +1,34 @@
+RawJ_RecordPayload.lean:19:12: error: unsolved goals
+case ok.Err
+p : r1_wire.Prefix
+row : U8
+record : r1_wire.ValidatedRecord
+payload : Slice U8
+root : Std.Array U8 32#usize
+read :
+  (do
+      let r ← p.record row
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val { start := 5#usize }
+          ok (core.result.Result.Ok s)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Ok payload)
+bytes : ↑payload = ↑root
+e : r1_wire.Error
+call : p.record row = ok (core.result.Result.Err e)
+valid :
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.ValidatedRecord
+      (core.convert.FromSame r1_wire.Error) (core.result.Result.Err e) =
+    ok (core.result.Result.Ok record)
+⊢ ∃ pre, ↑record.framed = pre ++ ↑root
+RawJ_RecordPayload.lean:25:42: error: Tactic `unfold` failed to unfold `core.slice.index.SliceIndexRangeFromUsizeSlice.index` in
+  (do
+      let s ← (core.slice.index.SliceIndexRangeFromUsizeSlice U8).index { start := 5#usize } frame
+      ok (core.result.Result.Ok s)) =
+    ok (core.result.Result.Ok payload)
+'AspisR1.RawJ_RecordPayload.framed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

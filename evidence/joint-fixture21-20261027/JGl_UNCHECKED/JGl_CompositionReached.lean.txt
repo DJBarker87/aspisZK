@@ -1,0 +1,61 @@
+import JGl_ConcreteOpenings
+import JGl_BoxedNumeric
+import JGl_SopsNumeric
+import JGl_SemanticNumeric
+import FIw_CompositionOrigins
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGl_CompositionReached
+open Aeneas Aeneas.Std Result FIq_Native
+open FIv_NativeValue (Canon)
+open FIw_ArrayValue (canonical decoded)
+open pool_v1.pair_forest_semantic_terminal
+/-- Invert the SAME successful actual composition and its SAME selected
+constructor. No independently successful evaluator/semantic/copy call is assumed. -/
+theorem value (selected : Array field.QM31 84#usize)
+    (c1 : Array field.QM31 16#usize) (mask : Array field.QM31 10#usize)
+    (comp g h active : field.QM31) (hs : canonical selected)
+    (gather : array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy
+      JGl_SelectedCells.builder field.QM31.ZERO JFu_TerminalCallback.claims=ok selected)
+    (run : composition_parts JFu_PublicSemantic.value selected JFu_TerminalPrefix.alpha
+      JFu_TerminalPrefix.challenges.lambda JFu_TerminalPrefix.challenges.chi JFu_TerminalPrefix.challenges.theta=
+        ok (.Ok (comp,c1,mask,g,h,active))) :
+    c1=JGl_NumericData.a ∧
+    ∃ (pos : Array field.QM31 4#usize)
+      (copy : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledCopyTerminalV1),
+      state_only_poseidon.evaluate_state_only_poseidon_oracle_projected JGl_NumericData.openings JGl_NumericData.sops=ok pos ∧
+      canonical pos ∧ decoded pos=FJh_Native07RawValue.model JGl_NumericData.openings JGl_NumericData.sops ∧
+      semantic_packed JFu_PublicSemantic.value JGl_NumericData.openings JGl_NumericData.selectors=ok JGl_NumericData.semantic ∧
+      pool_v1.pair_forest_copy_terminal.evaluate_with_selectors JGl_NumericData.a h JGl_NumericData.selectors
+        JFu_TerminalPrefix.challenges.lambda JFu_TerminalPrefix.challenges.chi
+        JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index .PrivateTransfer=ok copy ∧
+      copy.active=active := by
+  have es := JGl_ConcreteSelected.value selected gather
+  subst selected
+  obtain ⟨a,b,c,s,ps,variant,sem,pos,prepared,middle,copy,it,it1,
+    same,r0,r1,r2,rs,rsp,rpos,rsem,rv,rc,rp,rit,rit1,rm,rf,ra⟩ :=
+    FIw_CompositionOrigins.reached _ _ _ _ _ _ _ _ _ _ _ _ run
+  have ea := JGl_ConcreteOpenings.a a hs r0
+  have eb := JGl_ConcreteOpenings.b b hs r1
+  have ec := JGl_ConcreteOpenings.c c hs r2
+  subst a
+  subst b
+  subst c
+  have es := JGl_BoxedNumeric.value s rs
+  subst s
+  have ep := JGl_SopsNumeric.value ps rsp
+  subst ps
+  have em := JGl_SemanticNumeric.source sem rsem
+  subst sem
+  have vcall : copy_variant JFu_PublicSemantic.value.variant=ok
+      pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.PrivateTransfer := rfl
+  have ev := Result.ok.inj (rv.symm.trans vcall)
+  subst variant
+  have cp : Canon JGl_NumericData.sops.block := JGl_NumericCanonical.block _
+    (by simp [JGl_NumericData.sops,JGl_NumericData.block])
+  have vp := FJh_Native07RawValue.value JGl_NumericData.openings JGl_NumericData.sops pos
+    JGl_NumericCanonical.a JGl_NumericCanonical.b JGl_NumericCanonical.c JGl_NumericCanonical.low cp rpos
+  exact ⟨same,pos,copy,rpos,vp.1,vp.2,rsem,rc,ra⟩
+#print axioms value
+end AspisR1.JGl_CompositionReached
+end

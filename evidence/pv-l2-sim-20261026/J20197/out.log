@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6ProductOuterStep.lean:18:2: error: Ambiguous term
+  pure
+Possible interpretations:
+  PV_L2_Record.pure (flag && result, i1) : Recorded (Bool × Usize)
+  
+  Pure.pure (flag && result, i1) : Recorded (Bool × Usize)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6ProductOuterStep.lean:22:89: error: unsolved goals
+a : Slice U32
+ao : Usize
+b : Slice U32
+bo : Usize
+c : Slice U32
+co nj len : Usize
+flag : Bool
+i : Usize
+⊢ (do
+      let _ ← prod_row_ok a ao b bo c co i nj len
+      let _ ← (operation (Event.add (↑i) 1) (i + 1#usize)).value
+      sorry.value) =
+    do
+    let result ← prod_row_ok a ao b bo c co i nj len
+    let i1 ← i + 1#usize
+    ok (flag && result, i1)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6ProductOuterStep.lean:24:4: warning: This simp argument is unused:
+  operation_bind_value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵c̵o̵r̵d̵e̵d̵,̵s̵t̵e̵p̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵P̵V̵_̵L̵2̵_̵F̵6̵P̵r̵o̵d̵u̵c̵t̵R̵o̵w̵.̵r̵o̵w̵_̵e̵r̵a̵s̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵o̵p̵e̵r̵a̵t̵i̵o̵n̵_̵b̵i̵n̵d̵_̵v̵a̵l̵u̵e̵,̵p̵u̵r̵e̵_̵v̵a̵l̵u̵e̵]̵[̲r̲e̲c̲o̲r̲d̲e̲d̲,̲ ̲s̲t̲e̲p̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲P̲V̲_̲L̲2̲_̲F̲6̲P̲r̲o̲d̲u̲c̲t̲R̲o̲w̲.̲r̲o̲w̲_̲e̲r̲a̲s̲e̲s̲,̲ ̲p̲u̲r̲e̲_̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6ProductOuterStep.lean:24:25: warning: This simp argument is unused:
+  pure_value
+
+Hint: Omit it from the simp argument list.
+  simp only [recorded, ̲step, ̲erase_bind, ̲PV_L2_F6ProductRow.row_erases,
+  ̵  ̵ ̵ ̵operation_bind_value,̵p̵u̵r̵e̵_̵v̵a̵l̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6ProductOuterStep.lean:23:13: warning: declaration uses `sorry`
+'R1Z.PV_L2_F6ProductOuterStep.recorded_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6ProductOuterStep.unroll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6ProductOuterStep.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

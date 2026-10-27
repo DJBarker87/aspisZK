@@ -1,0 +1,66 @@
+{
+  "attempt": "PoolM_KANI015",
+  "kind": "kani",
+  "source_revision": "c06f3974c3998cf9650524a5264a506cba0a209c",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolM_leaf/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolM_kani_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "PoolM_zeroed_192",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolM_leaf/Cargo.toml",
+    "PoolM_leaf/Cargo.lock",
+    "PoolM_leaf/PoolM_lib.rs",
+    "PoolM_owned/PoolM_lib.rs",
+    "PoolM_slice/error.rs",
+    "PoolM_slice/cancel_prepared_settlement_instruction.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Small native leaf PoolM_zeroed_192; exact source snapshot domain. KANI011/012 split KANI010 by removing Vec/iterator construction and enumerating 2/3-key equality partitions. No broad prefix/full CPI builder."
+  },
+  "expected_time": "Optimized compilation then tiny loop-free metadata equivalence SAT; no whole-prefix Kani",
+  "exit_status": 0,
+  "wall_seconds": 2.474713520030491,
+  "peak_rss_kib": "273632",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/PoolM-KANI015.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "191905792",
+  "source_hashes": {
+    "PoolM_leaf/Cargo.toml": "2082d538219b47b13015826fa8609ef85b915b9d526503127f70f010a660fa00",
+    "PoolM_leaf/Cargo.lock": "f8719505e74c90e255049d2bf079125d297f9e47ab148988900482797e60f561",
+    "PoolM_leaf/PoolM_lib.rs": "94b5b7cb927409133e98db47e31d5c50ac1c695521615c2d06dd1cd95f1a68be",
+    "PoolM_owned/PoolM_lib.rs": "fcd3fa6664a71ee91d043e42e0a9eac9ce2ba82279e454dd391e803bb95d0c6a",
+    "PoolM_slice/error.rs": "7a70c51c3a2f8e9ca09370f530704089ce2c85c658c1e6d7131fd984ebd17d2e",
+    "PoolM_slice/cancel_prepared_settlement_instruction.rs": "d1b32adeeec9540b59e01710ee6b3fef1228788529630d6efc03aa9631c09c8b"
+  },
+  "print_axioms": "N/A: kani"
+}

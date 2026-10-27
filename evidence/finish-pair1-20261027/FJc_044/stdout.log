@@ -1,0 +1,33 @@
+FJc_ArrayUpdateValue.lean:17:55: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+where
+ e := ↑↑i
+ f := ↑↑N
+FJc_ArrayUpdateValue.lean:20:4: error: unsolved goals
+case pos
+N : Usize
+a : Std.Array NE N
+i : Usize
+z : NE
+j : ℕ
+x✝¹ : Option NE
+x✝ : NE
+h : a[i]? = some x✝
+run : ok ⟨(↑a).set (↑i) z, ⋯⟩ = ok ⟨(↑a).set (↑i) z, ⋯⟩
+hi : ↑i < (↑a).length
+eq : ↑i = j
+⊢ (match if j < (↑a).length then some z else none with
+    | some x => decodeWide (wide x)
+    | none => 0) =
+    decodeWide (wide z)
+FJc_ArrayUpdateValue.lean:20:20: warning: This simp argument is unused:
+  if_pos hi
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵q̵,̵i̵f̵_̵p̵o̵s̵ ̵h̵i̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲e̲q̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJc_ArrayUpdateValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

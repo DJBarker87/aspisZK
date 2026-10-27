@@ -1,0 +1,35 @@
+import R1Z.PV_Src_PathPacking
+import R1Z.PV_Src_CheckedEncoding
+
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Src_PathIndex
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open PV_Src_CheckedEncoding
+
+def digits (w : W) : List Bool := List.ofFn (fun l : Fin 20 => (w.path ⟨l.val+1,by omega⟩).1)
+
+def index (w : W) : U32 :=
+  UScalar.ofNatCore (PV_Src_PathPacking.pack (digits w)) (by
+    have hb := PV_Src_PathPacking.bound (digits w)
+    have hl : (digits w).length = 20 := by simp [digits]
+    rw [hl] at hb
+    change PV_Src_PathPacking.pack (digits w) < 2^32
+    omega)
+
+theorem value (w : W) : (index w).val = PV_Src_PathPacking.pack (digits w) :=
+  UScalar.ofNatCore_val_eq _
+
+theorem bound (w : W) : (index w).val < 2^20 := by
+  rw [value]
+  simpa only [digits,List.length_ofFn] using PV_Src_PathPacking.bound (digits w)
+
+theorem bit (w : W) (l : Fin 20) :
+    (index w).val / 2^l.val % 2 = ((w.path ⟨l.val+1,by omega⟩).1).toNat := by
+  rw [value,PV_Src_PathPacking.bit _ _ (by simpa only [digits,List.length_ofFn] using l.isLt)]
+  simp only [digits,List.getElem!_eq_getElem?_getD,List.getElem?_ofFn,dif_pos l.isLt]
+
+#print axioms value
+#print axioms bound
+#print axioms bit
+end R1Z.PV_Src_PathIndex

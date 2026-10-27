@@ -1,0 +1,62 @@
+AuS1_Absorb.lean:19:54: error: Type mismatch
+  ok len
+has type
+  Result U32
+but is expected to have type
+  UScalar UScalarTy.U32
+AuS1_Absorb.lean:24:20: error: Invalid argument: Variable `len_eq` is not a proposition or let-declaration
+AuS1_Absorb.lean:25:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let s ← liftM (lift self.state.to_slice)
+    let i ← liftM (ok tag)
+    let s1 ← liftM (lift (Array.make 2#usize [0#u8, i] ⋯).to_slice)
+    let i2 ← liftM (lift (UScalar.cast UScalarTy.U32 payload.len))
+    let a ← liftM (lift (core.num.U32.to_le_bytes i2))
+    let s2 ← liftM (lift a.to_slice)
+    let s3 ← liftM (lift (Array.make 4#usize [s, s1, s2, payload] ⋯).to_slice)
+    let a1 ← effects.digest D self.hash s3
+    pure { state := a1, hash := self.hash }
+is not definitionally equal to the right-hand side
+  do
+    let state ←
+      effects.digest D self.hash
+          (Array.make 4#usize
+              [self.state.to_slice, (Array.make 2#usize [0#u8, tag] ⋯).to_slice,
+                (core.num.U32.to_le_bytes len).to_slice, payload]
+              ⋯).to_slice
+    pure { state := state, hash := self.hash }
+
+H : Type
+D : aspis_core.Digest32 H
+self : transcript.Transcript H
+row tag : U8
+payload : Slice U8
+len : U32
+tag_eq : 160#u8 + row = ok tag
+len_eq : sorry
+⊢ (do
+      let s ← liftM (lift self.state.to_slice)
+      let i ← liftM (ok tag)
+      let s1 ← liftM (lift (Array.make 2#usize [0#u8, i] ⋯).to_slice)
+      let i2 ← liftM (lift (UScalar.cast UScalarTy.U32 payload.len))
+      let a ← liftM (lift (core.num.U32.to_le_bytes i2))
+      let s2 ← liftM (lift a.to_slice)
+      let s3 ← liftM (lift (Array.make 4#usize [s, s1, s2, payload] ⋯).to_slice)
+      let a1 ← effects.digest D self.hash s3
+      pure { state := a1, hash := self.hash }) =
+    do
+    let state ←
+      effects.digest D self.hash
+          (Array.make 4#usize
+              [self.state.to_slice, (Array.make 2#usize [0#u8, tag] ⋯).to_slice,
+                (core.num.U32.to_le_bytes len).to_slice, payload]
+              ⋯).to_slice
+    pure { state := state, hash := self.hash }
+AuS1_Absorb.lean:30:54: error: Type mismatch
+  ok len
+has type
+  Result U32
+but is expected to have type
+  UScalar UScalarTy.U32
+'AspisR1.AuS1_Absorb.code' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Absorb.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

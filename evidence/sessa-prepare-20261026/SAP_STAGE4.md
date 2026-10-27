@@ -1,0 +1,5 @@
+# Resumed same-witness semantic selection
+
+Resume inventory: 34 Lean invocations through SAP_035 (SAP_005 preflight only), zero Kani. SAP_036–045 add ten focused checked modules. All exit 0, standard-only axioms; caps 6G/8G/swap0/tasks64 and Lean -M7000. Source revision and complete per-attempt fields are in receipts. Total 44/100 Lean, 0/20 Kani.
+
+SAP_Scheduled obtains the semantic getter equality from RawJ_RecordCuts on its actual deterministic cuts, then propagates it through SAP_D189, Claims, Op3, Tx2, Success, Batches, Union, SdkUnion, SdkAccepted, CPhy, Physical, FinishEffects and NativePair. SAP_PairSelected.accepted preserves T2R_Pair.accepted's complete outcome and additionally exposes semantic_public f.statement = ok f.semantic for those SAME f,s and run. No independently chosen preparation or new assumption was added. Existing proved modules were imported read-only; SAP sources are namespaced copies to carry this extra conclusion. No additional ledger credit yet: top consumption is pending. SAP_FullSelected remains an uncompiled definition at this stage.

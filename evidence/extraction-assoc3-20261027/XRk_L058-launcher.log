@@ -1,0 +1,65 @@
+{"attempt": "XRk_L058", "exit_status": 1, "wall_seconds": 3.627216698951088, "peak_rss_kib": "2664700", "swaps": "0", "print_axioms": ["'XRk_PowersLoop.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRk_generated/XRk_PowersLoop.lean:61:53: error(lean.invalidField): Invalid field `map`: The environment does not contain `Aeneas.Std.Result.map`, so it is not possible to project the field `map` from an expression
+  t
+of type `Result (List XRk_Wide)`
+XRk_generated/XRk_PowersLoop.lean:61:10: error: Type mismatch: After simplification, term
+  congrArg (fun t => ?m.833) htail
+ has type
+  ?m.834 (XRk_powers x k.succ q) = ?m.834 (ok tail)
+but is expected to have type
+  (do
+      let rest ← XRk_powers x (k + 1) q
+      ok (p :: rest)) =
+    ok (p :: tail)
+XRk_generated/XRk_PowersLoop.lean:62:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑i + 1
+in the target expres
+...
+ck p;
+    ok (cont (out1, q, next))) =
+    ok (cont (back p, q, next))
+ne : ↑next ≠ ↑N
+nb : ↑next ≤ ↑N
+tail : List XRk_Wide
+htail : XRk_powers x (↑N - ↑next) q = ok tail
+hresult : ↑(chosen r) = List.take ↑next ↑(back p) ++ tail
+remaining : ↑N - ↑i = ↑N - ↑next + 1
+positive : 0 < ↑N - ↑next
+k : ℕ
+hk : ↑N - ↑next = k.succ
+⊢ List.take ↑next ↑(back p) ++ tail = List.take ↑i ↑a ++ p :: tail
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    back p
+  has type
+    Std.Array aspis_core.field.wide_exact.WideExact N
+  but is expected to have type
+    { l // l.length = ↑N }
+  in the application
+    ↑(back p)
+XRk_generated/XRk_PowersLoop.lean:39:19: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵ ̵at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRk_generated/XRk_PowersLoop.lean:51:19: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵ ̵at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRk_generated/XRk_PowersLoop.lean:67:17: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵ ̵at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRk_PowersLoop.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb6396cd90dae4c378ad7eab5f4f4e72a.scope; invocation ID: 9fef5934a9c341f1b9ac898a615b09a8

@@ -1,0 +1,134 @@
+theorem AspisR1.Rc7_Top.deployed : ∀ {W A F CoreError Tx : Type} (L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)),
+  S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+          ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record)),
+      S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : S2W_D189Wrappers.Allocator A) (e1 e2 : S2W_D189Entry.Entry) (w1 w2 : W),
+          S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : DrvC_Installation.Configuration F CoreError) (indexError : CoreError)
+                (reservation : NP6_StdModel.Reservation) (native1 : S2W_ExtractionBoundary.First)
+                (native2 : S2W_ExtractionBoundary.Second) (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (DrvC_Installation.sdk (Rc5_Install.configuration indexError c reservation)) native1 native2 hashv →
+                  ∀ (sha256 H : Bytes → State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : alloc.vec.Vec U8)
+                          (post1 post2 : S2Trust.Heap (ℕ → S2W_D189Entry.Record)),
+                          S2W_D189Wrappers.first native1 copy allocator e1 CPH_Program.verifier data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            S2W_D189Wrappers.second native2 allocator e2 CPH_Program.verifier data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Std.Array U8 32#usize) (length : U32) (prior : Program Bytes State Unit)
+                                (words : CanonicalCutEnrichedTranscript.Words) (p : CPG_Projection.Observations Tx A)
+                                (t u : Tx) (actions : List (CPP_BankState.Action A)),
+                                CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator
+                                    CPH_Program.verifier →
+                                  CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+                                      (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p)
+                                      (CPG_Projection.tentative p) (CPG_Projection.success p)
+                                      (CPG_Projection.loaded p) →
+                                    ∀ (D : LiteralByteProtocol.Decoder) (P : F3T_ByteCarrier.ByteProver) (Q0 Q1 : ℕ),
+                                      (∀ (H : Bytes → State), (eval H P).1.length ≤ Q0 + Q1) →
+                                        ∀ (runtime : F3T_Runtime.Runtime),
+                                          FGl_PreparedAt.Owners (Rc5_Install.configuration indexError c reservation)
+                                              (Rc2_Install.configuration (Rc5_Install.seed indexError c)
+                                                  reservation).boundaries →
+                                            F3T_Runtime.StoredCarrierBinding
+                                                (Rc5_Install.configuration indexError c reservation) D
+                                                (F3T_Installed.source
+                                                  (Rc5_Install.configuration indexError c reservation) hashv)
+                                                P runtime →
+                                              have select := fun x =>
+                                                P2P_NativeSelection.pair
+                                                  (DrvC_Installation.sdk
+                                                    (Rc5_Install.configuration indexError c reservation))
+                                                  CPH_Program.verifier e1 e2 data2 slot;
+                                              MultiproofConeP6Frozen2Stage.P6Boundary (P6C_Extension.dictionary hashv H)
+                                                  () H Op5T_P6.parent Op5T_P6.parent Op5T_P6.parent
+                                                  MultiproofConeP6Batch.referenceLeaf ∧
+                                                DrvC_Implementation.driver
+                                                      (Rc5_Install.configuration indexError c reservation) =
+                                                    DrvC_SourceEntry.source
+                                                      (Rc5_Install.configuration indexError c reservation) hashv ∧
+                                                  DrvC_Installation.sdk
+                                                        (Rc5_Install.configuration indexError c reservation) =
+                                                      SdkD_PairBatches.dictionary
+                                                        (Rc5_Install.configuration indexError c reservation).adapter
+                                                        (Rc5_Install.configuration indexError c reservation).currentBase
+                                                        (Rc5_Install.configuration indexError c reservation).stageBase
+                                                        (Rc5_Install.configuration indexError c reservation).finish
+                                                        (Rc5_Install.configuration indexError c reservation).reserved
+                                                        (Rc5_Install.configuration indexError c reservation).query
+                                                        (Rc5_Install.configuration indexError c reservation).geometry
+                                                        (Rc5_Install.configuration indexError c reservation).boundaries
+                                                        (Rc5_Install.configuration indexError c reservation).std ∧
+                                                    P2P_Result.Outcome L e1 e2 w1 w2
+                                                        (Rc5_Install.configuration indexError c reservation).adapter
+                                                        (Rc5_Install.configuration indexError c reservation).currentBase
+                                                        (Rc5_Install.configuration indexError c reservation).reserved
+                                                        (Rc5_Install.configuration indexError c reservation).query
+                                                        (Rc5_Install.configuration indexError c reservation).geometry
+                                                        (Rc5_Install.configuration indexError c reservation).stageBase
+                                                        (Rc5_Install.configuration indexError c reservation).finish
+                                                        c.boundaries reservation CPH_Program.verifier data1 data2 slot
+                                                        saved post1 post2 H
+                                                        (DrvC_Implementation.driver
+                                                          (Rc5_Install.configuration indexError c reservation))
+                                                        prior (p.physicalEvents t) hashv
+                                                        (BinRawByteCollisionTargets.event
+                                                          SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                          (eval H
+                                                            (Hiq_RecordedJoint.program
+                                                              (F3X_Account.program
+                                                                (Rc5_Install.configuration indexError c reservation)
+                                                                hashv P)
+                                                              F3X_Projection.project select))) ∧
+                                                      (F3X_ModelClaims.Claims
+                                                            (Rc5_Install.configuration indexError c reservation) D P
+                                                            (Q0 + Q1) ∧
+                                                          F3Y_SourceClaims.Claims
+                                                              (Rc5_Install.configuration indexError c reservation) D
+                                                              hashv P (Q0 + Q1) select ∧
+                                                            F3Y_AccountMass.Claims
+                                                                (Rc5_Install.configuration indexError c reservation)
+                                                                hashv P (Q0 + Q1) select ∧
+                                                              F3T_RuntimeBound.failureModel runtime ≤
+                                                                  F3T_Numeric.total (Q0 + Q1) ∧
+                                                                (Q0 + Q1 ≤ F3U_RangeEdges.maxQueries →
+                                                                    F3T_RuntimeBound.failureModel runtime ≤
+                                                                      (↑Q0 + ↑Q1 + 1) * (1 / 2 ^ 100)) ∧
+                                                                  (Q0 + Q1 = 0 →
+                                                                    F3U_Numeric.margin ≤
+                                                                        1 / 2 ^ 100 -
+                                                                          F3T_RuntimeBound.failureModel runtime ∧
+                                                                      F3T_RuntimeBound.failureModel runtime <
+                                                                        1 / 2 ^ 100)) ∧
+                                                        (native1 CPH_Program.verifier e1.first data1 =
+                                                              ok (core.result.Result.Ok saved) ∧
+                                                            (↑saved).length = 1768 ∧
+                                                              S2W_EntryWriteHistory.payloadBytes
+                                                                    S2W_ReturnedCheckpoint.encode
+                                                                    (post1.payload (e1.heap.accounts 2).1) 1768 =
+                                                                  MultiproofConeCanonical.bytesOf ↑saved ∧
+                                                                post1.ambient = e1.heap.ambient ∧
+                                                                  post1.accounts = e1.heap.accounts ∧
+                                                                    post1.counter = e1.heap.counter ∧
+                                                                      ∀ (cell : ℕ),
+                                                                        cell ≠ (e1.heap.accounts 2).1 →
+                                                                          post1.payload cell = e1.heap.payload cell) ∧
+                                                          Rc2_Events.Facts
+                                                              (Rc5_Install.configuration indexError c reservation) hashv
+                                                              native1 native2 copy allocator CPH_Program.verifier H
+                                                              saved ∧
+                                                            CPH_Protection.Facts p t saved CPH_Program.verifier ∧
+                                                              CPH_Trace.Facts p t u saved native1 native2 copy allocator
+                                                                  CPH_Program.verifier ∧
+                                                                CPH_Recorder.Facts
+                                                                  (Rc5_Install.configuration indexError c reservation)
+                                                                  hashv native1 native2 copy allocator
+                                                                  CPH_Program.verifier H p t u saved

@@ -1,0 +1,9 @@
+# Complete retained Pair installation
+
+`FIo_Install.finishOps` installs the retained complete native Pair at current implementation pins, using FIn's extracted constructor carrier and coordinate-only transport. `FIo_Install.reached` derives its SAME native successful call from installed Pair success. All success/error branches, allocation, decoding, regular/shared/inactive/Libra branches and final sum remain in `FIo_NativeFuns`. The only external primitive in this retained extraction is concrete Q.raw plus the explicit allocation interface; the installed dictionary fixes reserve to the existing top Reservation and preserves the Vec on either outcome. This is an extraction/source-model installation, not a new SBF/runtime equivalence result.
+
+`FIo_QualifiedPins.json` verifies the four pins against the immutable S9 producer packet: current weights, current fast_pairing, full qualified generated Funs and Types. Missing old backend helpers were replaced with current checked shift primitives and kernel ASCII proofs. Q.raw reuses its retained concrete extracted source. Full Pair #print axioms and the root use only standard axioms.
+
+`FIo_Accepted.deployed` is the actual Rc7 top specialised to this dictionary, retaining every other binder and every existing finish-owner law. Its Pair binder is no longer arbitrary. **Premise-removal delta is zero** at this stage: specialization is not counted as discharge. Round/dot reductions inherited from FIn and their transport by FGl are not claimed here. The next deliverable is the source final-seven-parts formula, then the same literal-input identity needed by L142.
+
+FIo_015 failed on an inappropriate definitional equality between the extracted and recursive polynomial implementations. FIo_016 instead identifies the actual extracted implementation slot directly; the already proved FIn_ExtractInstall.same remains its semantic bridge. No cap increase or resource-failed unchanged retry occurred.

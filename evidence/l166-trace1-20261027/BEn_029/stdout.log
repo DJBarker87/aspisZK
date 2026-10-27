@@ -1,0 +1,602 @@
+theorem AspisR1.Port9OR_BatchTree.source_factor : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (batch tree : Aeneas.Std.Usize) (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values),
+  AspisR1.Port9OR_BatchTree.factored base D hash proof queries root batch tree idx val =
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) D proof queries
+      root batch tree idx val hash :=
+fun base {Hash} D hash proof queries root batch tree idx val =>
+  id
+    (id
+      (if zero : batch = 0#usize then
+        Eq.mpr
+          (id
+            (congr
+              (congrArg Eq
+                (congr
+                  (congrArg Bind.bind
+                    (congrFun'
+                      (congr
+                        (congrArg
+                          ({ op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                op6 :=
+                                  @AspisR1.Port3_NativeBatchBody.Ops.op6 (AspisR1.Port4B_VerifyInstall.install base),
+                                op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex,
+                                op9 := Aeneas.Std.Array.index_usize,
+                                op10 :=
+                                  @AspisR1.Port3_NativeBatchBody.Ops.op10 (AspisR1.Port4B_VerifyInstall.install base),
+                                op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                op12 :=
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.Array.make 6#usize
+                                      [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                      AspisR1.Port3_BatchStd.install._proof_6),
+                                op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }.op4
+                            queries)
+                          (ite_cond_eq_true 0#usize 10#usize
+                            (Eq.trans (congrFun' (congrArg Eq zero) 0#usize) (eq_self 0#usize))))
+                        (congr
+                          (congrArg Aeneas.Std.Usize.wrapping_sub
+                            (ite_cond_eq_true 10#usize 22#usize
+                              (Eq.trans (congrFun' (congrArg Eq zero) 0#usize) (eq_self 0#usize))))
+                          (ite_cond_eq_true 0#usize 10#usize
+                            (Eq.trans (congrFun' (congrArg Eq zero) 0#usize) (eq_self 0#usize)))))
+                      tree))
+                  (funext fun raw =>
+                    congr
+                      (congrArg Bind.bind
+                        (congrArg
+                          ({ op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                op6 :=
+                                  @AspisR1.Port3_NativeBatchBody.Ops.op6 (AspisR1.Port4B_VerifyInstall.install base),
+                                op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex,
+                                op9 := Aeneas.Std.Array.index_usize,
+                                op10 :=
+                                  @AspisR1.Port3_NativeBatchBody.Ops.op10 (AspisR1.Port4B_VerifyInstall.install base),
+                                op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                op12 :=
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.Array.make 6#usize
+                                      [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                      AspisR1.Port3_BatchStd.install._proof_6),
+                                op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }.op5
+                            raw)
+                          (congr
+                            (congrArg Aeneas.Std.Usize.wrapping_sub
+                              (ite_cond_eq_true 10#usize 22#usize
+                                (Eq.trans (congrFun' (congrArg Eq zero) 0#usize) (eq_self 0#usize))))
+                            (ite_cond_eq_true 0#usize 10#usize
+                              (Eq.trans (congrFun' (congrArg Eq zero) 0#usize) (eq_self 0#usize))))))
+                      (funext fun keys =>
+                        congrFun'
+                          (congrArg Bind.bind
+                            (congrFun'
+                              (congrFun'
+                                (congrFun'
+                                  (congr
+                                    (congr
+                                      (congrArg
+                                        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                                          { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                            op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                            op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                            op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                            op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                            op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                            op6 :=
+                                              @AspisR1.Port3_NativeBatchBody.Ops.op6
+                                                (AspisR1.Port4B_VerifyInstall.install base),
+                                            op7 := AspisR1.Port3_BatchStd.sameLeaf,
+                                            op8 := AspisR1.Port3_BatchStd.sameIndex,
+                                            op9 := Aeneas.Std.Array.index_usize,
+                                            op10 :=
+                                              @AspisR1.Port3_NativeBatchBody.Ops.op10
+                                                (AspisR1.Port4B_VerifyInstall.install base),
+                                            op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                            op12 :=
+                                              Aeneas.Std.Result.ok
+                                                (Aeneas.Std.Array.make 6#usize
+                                                  [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                                  AspisR1.Port3_BatchStd.install._proof_6),
+                                            op13 := Aeneas.Std.Result.ok 10#usize,
+                                            unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                                          D proof root tree idx val hash)
+                                        (ite_cond_eq_true 0#usize 10#usize
+                                          (Eq.trans (congrFun' (congrArg Eq zero) 0#usize) (eq_self 0#usize))))
+                                      (congr
+                                        (congrArg Aeneas.Std.Usize.wrapping_sub
+                                          (ite_cond_eq_true 10#usize 22#usize
+                                            (Eq.trans (congrFun' (congrArg Eq zero) 0#usize) (eq_self 0#usize))))
+                                        (ite_cond_eq_true 0#usize 10#usize
+                                          (Eq.trans (congrFun' (congrArg Eq zero) 0#usize) (eq_self 0#usize)))))
+                                    (congrFun'
+                                      (congrArg Aeneas.Std.Usize.wrapping_add
+                                        (congrArg (Aeneas.Std.Usize.wrapping_mul 3#usize) zero))
+                                      tree))
+                                  keys)
+                                0#usize)
+                              0#usize))
+                          (Aeneas.Std.uncurry fun outIdx =>
+                            Aeneas.Std.uncurry fun outVal pending =>
+                              match pending with
+                              | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                              | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal))))))
+              (Eq.trans
+                (congr
+                  (congrArg Bind.bind
+                    (Eq.trans
+                      (ite_cond_eq_true
+                        (do
+                          let i ← (AspisR1.Port9OR_BatchStep.ops base).op13
+                          Aeneas.Std.Result.ok (0#usize, i))
+                        (do
+                          let i ← (AspisR1.Port9OR_BatchStep.ops base).op13
+                          Aeneas.Std.Result.ok (i, 22#usize))
+                        (Eq.trans (congrFun' (congrArg Eq zero) 0#usize) (eq_self 0#usize)))
+                      (Aeneas.Std.bind_tc_ok 10#usize fun y => Aeneas.Std.Result.ok (0#usize, y))))
+                  (congrArg Aeneas.Std.uncurry
+                    (funext fun lo =>
+                      funext fun hi =>
+                        Eq.trans
+                          (congrArg (Bind.bind (Aeneas.Std.Result.ok (Aeneas.Std.Usize.wrapping_sub hi lo)))
+                            (funext fun n =>
+                              Eq.trans
+                                (congr
+                                  (congrArg Bind.bind
+                                    (congrArg Aeneas.Std.Result.ok
+                                      (congrArg (Aeneas.Std.Usize.wrapping_mul 3#usize) zero)))
+                                  (funext fun i =>
+                                    Aeneas.Std.bind_tc_ok (i.wrapping_add tree) fun y => do
+                                      let a ← (AspisR1.Port4B_VerifyInstall.install base).op4 queries lo n tree
+                                      let keys ← (AspisR1.Port4B_VerifyInstall.install base).op5 a n
+                                      let (idx1, val1, pending_return) ←
+                                        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                                            { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                              op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                              op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                              op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                              op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                              op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                              op6 :=
+                                                @AspisR1.Port3_NativeBatchBody.Ops.op6
+                                                  (AspisR1.Port4B_VerifyInstall.install base),
+                                              op7 := AspisR1.Port3_BatchStd.sameLeaf,
+                                              op8 := AspisR1.Port3_BatchStd.sameIndex,
+                                              op9 := Aeneas.Std.Array.index_usize,
+                                              op10 :=
+                                                @AspisR1.Port3_NativeBatchBody.Ops.op10
+                                                  (AspisR1.Port4B_VerifyInstall.install base),
+                                              op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                              op12 :=
+                                                Aeneas.Std.Result.ok
+                                                  (Aeneas.Std.Array.make 6#usize
+                                                    [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                                    AspisR1.Port3_BatchStd.install._proof_6),
+                                              op13 := Aeneas.Std.Result.ok 10#usize,
+                                              unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                                            D proof root tree idx val hash lo n y keys 0#usize 0#usize
+                                      match pending_return with
+                                        | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                                        | Option.some r => Aeneas.Std.Result.ok (r, idx1, val1)))
+                                (Aeneas.Std.bind_tc_ok (Aeneas.Std.Usize.wrapping_mul 3#usize 0#usize) fun y => do
+                                  let a ← (AspisR1.Port4B_VerifyInstall.install base).op4 queries lo n tree
+                                  let keys ← (AspisR1.Port4B_VerifyInstall.install base).op5 a n
+                                  let (idx1, val1, pending_return) ←
+                                    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                                        { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                          op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                          op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                          op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                          op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                          op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                          op6 :=
+                                            @AspisR1.Port3_NativeBatchBody.Ops.op6
+                                              (AspisR1.Port4B_VerifyInstall.install base),
+                                          op7 := AspisR1.Port3_BatchStd.sameLeaf,
+                                          op8 := AspisR1.Port3_BatchStd.sameIndex, op9 := Aeneas.Std.Array.index_usize,
+                                          op10 :=
+                                            @AspisR1.Port3_NativeBatchBody.Ops.op10
+                                              (AspisR1.Port4B_VerifyInstall.install base),
+                                          op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                          op12 :=
+                                            Aeneas.Std.Result.ok
+                                              (Aeneas.Std.Array.make 6#usize
+                                                [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                                AspisR1.Port3_BatchStd.install._proof_6),
+                                          op13 := Aeneas.Std.Result.ok 10#usize,
+                                          unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                                        D proof root tree idx val hash lo n (y.wrapping_add tree) keys 0#usize 0#usize
+                                  match pending_return with
+                                    | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                                    | Option.some r => Aeneas.Std.Result.ok (r, idx1, val1))))
+                          (Aeneas.Std.bind_tc_ok (Aeneas.Std.Usize.wrapping_sub hi lo) fun y => do
+                            let a ← (AspisR1.Port4B_VerifyInstall.install base).op4 queries lo y tree
+                            let keys ← (AspisR1.Port4B_VerifyInstall.install base).op5 a y
+                            let (idx1, val1, pending_return) ←
+                              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                                  { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                    op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                    op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                    op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                    op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                    op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                    op6 :=
+                                      @AspisR1.Port3_NativeBatchBody.Ops.op6
+                                        (AspisR1.Port4B_VerifyInstall.install base),
+                                    op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex,
+                                    op9 := Aeneas.Std.Array.index_usize,
+                                    op10 :=
+                                      @AspisR1.Port3_NativeBatchBody.Ops.op10
+                                        (AspisR1.Port4B_VerifyInstall.install base),
+                                    op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                    op12 :=
+                                      Aeneas.Std.Result.ok
+                                        (Aeneas.Std.Array.make 6#usize
+                                          [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                          AspisR1.Port3_BatchStd.install._proof_6),
+                                    op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                                  D proof root tree idx val hash lo y
+                                  ((Aeneas.Std.Usize.wrapping_mul 3#usize 0#usize).wrapping_add tree) keys 0#usize
+                                  0#usize
+                            match pending_return with
+                              | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                              | Option.some r => Aeneas.Std.Result.ok (r, idx1, val1)))))
+                (Aeneas.Std.bind_tc_ok (0#usize, 10#usize)
+                  (Aeneas.Std.uncurry fun lo hi => do
+                    let a ←
+                      (AspisR1.Port4B_VerifyInstall.install base).op4 queries lo (Aeneas.Std.Usize.wrapping_sub hi lo)
+                          tree
+                    let keys ← (AspisR1.Port4B_VerifyInstall.install base).op5 a (Aeneas.Std.Usize.wrapping_sub hi lo)
+                    let (idx1, val1, pending_return) ←
+                      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                          { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                            op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                            op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                            op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                            op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                            op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                            op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 (AspisR1.Port4B_VerifyInstall.install base),
+                            op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex,
+                            op9 := Aeneas.Std.Array.index_usize,
+                            op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 (AspisR1.Port4B_VerifyInstall.install base),
+                            op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                            op12 :=
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.Array.make 6#usize
+                                  [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                  AspisR1.Port3_BatchStd.install._proof_6),
+                            op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                          D proof root tree idx val hash lo (Aeneas.Std.Usize.wrapping_sub hi lo)
+                          ((Aeneas.Std.Usize.wrapping_mul 3#usize 0#usize).wrapping_add tree) keys 0#usize 0#usize
+                    match pending_return with
+                      | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                      | Option.some r => Aeneas.Std.Result.ok (r, idx1, val1))))))
+          (Eq.refl do
+            let raw ←
+              (AspisR1.Port4B_VerifyInstall.install base).op4 queries 0#usize
+                  (Aeneas.Std.Usize.wrapping_sub 10#usize 0#usize) tree
+            let keys ←
+              (AspisR1.Port4B_VerifyInstall.install base).op5 raw (Aeneas.Std.Usize.wrapping_sub 10#usize 0#usize)
+            let (outIdx, outVal, pending) ←
+              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                  { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                    op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                    op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                    op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                    op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                    op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                    op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 (AspisR1.Port4B_VerifyInstall.install base),
+                    op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex,
+                    op9 := Aeneas.Std.Array.index_usize,
+                    op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 (AspisR1.Port4B_VerifyInstall.install base),
+                    op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                    op12 :=
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.Array.make 6#usize
+                          [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                          AspisR1.Port3_BatchStd.install._proof_6),
+                    op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                  D proof root tree idx val hash 0#usize (Aeneas.Std.Usize.wrapping_sub 10#usize 0#usize)
+                  ((Aeneas.Std.Usize.wrapping_mul 3#usize 0#usize).wrapping_add tree) keys 0#usize 0#usize
+            match pending with
+              | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+              | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal))
+      else
+        Eq.mpr
+          (id
+            (congr
+              (congrArg Eq
+                (congr
+                  (congrArg Bind.bind
+                    (congrFun'
+                      (congr
+                        (congrArg
+                          ({ op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                op6 :=
+                                  @AspisR1.Port3_NativeBatchBody.Ops.op6 (AspisR1.Port4B_VerifyInstall.install base),
+                                op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex,
+                                op9 := Aeneas.Std.Array.index_usize,
+                                op10 :=
+                                  @AspisR1.Port3_NativeBatchBody.Ops.op10 (AspisR1.Port4B_VerifyInstall.install base),
+                                op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                op12 :=
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.Array.make 6#usize
+                                      [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                      AspisR1.Port3_BatchStd.install._proof_6),
+                                op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }.op4
+                            queries)
+                          (ite_cond_eq_false 0#usize 10#usize (eq_false zero)))
+                        (congr
+                          (congrArg Aeneas.Std.Usize.wrapping_sub (ite_cond_eq_false 10#usize 22#usize (eq_false zero)))
+                          (ite_cond_eq_false 0#usize 10#usize (eq_false zero))))
+                      tree))
+                  (funext fun raw =>
+                    congr
+                      (congrArg Bind.bind
+                        (congrArg
+                          ({ op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                op6 :=
+                                  @AspisR1.Port3_NativeBatchBody.Ops.op6 (AspisR1.Port4B_VerifyInstall.install base),
+                                op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex,
+                                op9 := Aeneas.Std.Array.index_usize,
+                                op10 :=
+                                  @AspisR1.Port3_NativeBatchBody.Ops.op10 (AspisR1.Port4B_VerifyInstall.install base),
+                                op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                op12 :=
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.Array.make 6#usize
+                                      [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                      AspisR1.Port3_BatchStd.install._proof_6),
+                                op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }.op5
+                            raw)
+                          (congr
+                            (congrArg Aeneas.Std.Usize.wrapping_sub
+                              (ite_cond_eq_false 10#usize 22#usize (eq_false zero)))
+                            (ite_cond_eq_false 0#usize 10#usize (eq_false zero)))))
+                      (funext fun keys =>
+                        congrFun'
+                          (congrArg Bind.bind
+                            (congrFun'
+                              (congrFun'
+                                (congrFun'
+                                  (congrFun'
+                                    (congr
+                                      (congrArg
+                                        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                                          { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                            op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                            op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                            op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                            op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                            op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                            op6 :=
+                                              @AspisR1.Port3_NativeBatchBody.Ops.op6
+                                                (AspisR1.Port4B_VerifyInstall.install base),
+                                            op7 := AspisR1.Port3_BatchStd.sameLeaf,
+                                            op8 := AspisR1.Port3_BatchStd.sameIndex,
+                                            op9 := Aeneas.Std.Array.index_usize,
+                                            op10 :=
+                                              @AspisR1.Port3_NativeBatchBody.Ops.op10
+                                                (AspisR1.Port4B_VerifyInstall.install base),
+                                            op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                            op12 :=
+                                              Aeneas.Std.Result.ok
+                                                (Aeneas.Std.Array.make 6#usize
+                                                  [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                                  AspisR1.Port3_BatchStd.install._proof_6),
+                                            op13 := Aeneas.Std.Result.ok 10#usize,
+                                            unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                                          D proof root tree idx val hash)
+                                        (ite_cond_eq_false 0#usize 10#usize (eq_false zero)))
+                                      (congr
+                                        (congrArg Aeneas.Std.Usize.wrapping_sub
+                                          (ite_cond_eq_false 10#usize 22#usize (eq_false zero)))
+                                        (ite_cond_eq_false 0#usize 10#usize (eq_false zero))))
+                                    ((Aeneas.Std.Usize.wrapping_mul 3#usize batch).wrapping_add tree))
+                                  keys)
+                                0#usize)
+                              0#usize))
+                          (Aeneas.Std.uncurry fun outIdx =>
+                            Aeneas.Std.uncurry fun outVal pending =>
+                              match pending with
+                              | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                              | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal))))))
+              (Eq.trans
+                (congr
+                  (congrArg Bind.bind
+                    (Eq.trans
+                      (ite_cond_eq_false
+                        (do
+                          let i ← (AspisR1.Port9OR_BatchStep.ops base).op13
+                          Aeneas.Std.Result.ok (0#usize, i))
+                        (do
+                          let i ← (AspisR1.Port9OR_BatchStep.ops base).op13
+                          Aeneas.Std.Result.ok (i, 22#usize))
+                        (eq_false zero))
+                      (Aeneas.Std.bind_tc_ok 10#usize fun y => Aeneas.Std.Result.ok (y, 22#usize))))
+                  (congrArg Aeneas.Std.uncurry
+                    (funext fun lo =>
+                      funext fun hi =>
+                        Eq.trans
+                          (congrArg (Bind.bind (Aeneas.Std.Result.ok (Aeneas.Std.Usize.wrapping_sub hi lo)))
+                            (funext fun n =>
+                              Eq.trans
+                                (congrArg
+                                  (Bind.bind (Aeneas.Std.Result.ok (Aeneas.Std.Usize.wrapping_mul 3#usize batch)))
+                                  (funext fun i =>
+                                    Aeneas.Std.bind_tc_ok (i.wrapping_add tree) fun y => do
+                                      let a ← (AspisR1.Port4B_VerifyInstall.install base).op4 queries lo n tree
+                                      let keys ← (AspisR1.Port4B_VerifyInstall.install base).op5 a n
+                                      let (idx1, val1, pending_return) ←
+                                        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                                            { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                              op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                              op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                              op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                              op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                              op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                              op6 :=
+                                                @AspisR1.Port3_NativeBatchBody.Ops.op6
+                                                  (AspisR1.Port4B_VerifyInstall.install base),
+                                              op7 := AspisR1.Port3_BatchStd.sameLeaf,
+                                              op8 := AspisR1.Port3_BatchStd.sameIndex,
+                                              op9 := Aeneas.Std.Array.index_usize,
+                                              op10 :=
+                                                @AspisR1.Port3_NativeBatchBody.Ops.op10
+                                                  (AspisR1.Port4B_VerifyInstall.install base),
+                                              op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                              op12 :=
+                                                Aeneas.Std.Result.ok
+                                                  (Aeneas.Std.Array.make 6#usize
+                                                    [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                                    AspisR1.Port3_BatchStd.install._proof_6),
+                                              op13 := Aeneas.Std.Result.ok 10#usize,
+                                              unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                                            D proof root tree idx val hash lo n y keys 0#usize 0#usize
+                                      match pending_return with
+                                        | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                                        | Option.some r => Aeneas.Std.Result.ok (r, idx1, val1)))
+                                (Aeneas.Std.bind_tc_ok (Aeneas.Std.Usize.wrapping_mul 3#usize batch) fun y => do
+                                  let a ← (AspisR1.Port4B_VerifyInstall.install base).op4 queries lo n tree
+                                  let keys ← (AspisR1.Port4B_VerifyInstall.install base).op5 a n
+                                  let (idx1, val1, pending_return) ←
+                                    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                                        { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                          op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                          op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                          op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                          op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                          op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                          op6 :=
+                                            @AspisR1.Port3_NativeBatchBody.Ops.op6
+                                              (AspisR1.Port4B_VerifyInstall.install base),
+                                          op7 := AspisR1.Port3_BatchStd.sameLeaf,
+                                          op8 := AspisR1.Port3_BatchStd.sameIndex, op9 := Aeneas.Std.Array.index_usize,
+                                          op10 :=
+                                            @AspisR1.Port3_NativeBatchBody.Ops.op10
+                                              (AspisR1.Port4B_VerifyInstall.install base),
+                                          op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                          op12 :=
+                                            Aeneas.Std.Result.ok
+                                              (Aeneas.Std.Array.make 6#usize
+                                                [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                                AspisR1.Port3_BatchStd.install._proof_6),
+                                          op13 := Aeneas.Std.Result.ok 10#usize,
+                                          unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                                        D proof root tree idx val hash lo n (y.wrapping_add tree) keys 0#usize 0#usize
+                                  match pending_return with
+                                    | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                                    | Option.some r => Aeneas.Std.Result.ok (r, idx1, val1))))
+                          (Aeneas.Std.bind_tc_ok (Aeneas.Std.Usize.wrapping_sub hi lo) fun y => do
+                            let a ← (AspisR1.Port4B_VerifyInstall.install base).op4 queries lo y tree
+                            let keys ← (AspisR1.Port4B_VerifyInstall.install base).op5 a y
+                            let (idx1, val1, pending_return) ←
+                              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                                  { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                                    op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                                    op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                                    op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                                    op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                                    op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                                    op6 :=
+                                      @AspisR1.Port3_NativeBatchBody.Ops.op6
+                                        (AspisR1.Port4B_VerifyInstall.install base),
+                                    op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex,
+                                    op9 := Aeneas.Std.Array.index_usize,
+                                    op10 :=
+                                      @AspisR1.Port3_NativeBatchBody.Ops.op10
+                                        (AspisR1.Port4B_VerifyInstall.install base),
+                                    op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                                    op12 :=
+                                      Aeneas.Std.Result.ok
+                                        (Aeneas.Std.Array.make 6#usize
+                                          [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                          AspisR1.Port3_BatchStd.install._proof_6),
+                                    op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                                  D proof root tree idx val hash lo y
+                                  ((Aeneas.Std.Usize.wrapping_mul 3#usize batch).wrapping_add tree) keys 0#usize 0#usize
+                            match pending_return with
+                              | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                              | Option.some r => Aeneas.Std.Result.ok (r, idx1, val1)))))
+                (Aeneas.Std.bind_tc_ok (10#usize, 22#usize)
+                  (Aeneas.Std.uncurry fun lo hi => do
+                    let a ←
+                      (AspisR1.Port4B_VerifyInstall.install base).op4 queries lo (Aeneas.Std.Usize.wrapping_sub hi lo)
+                          tree
+                    let keys ← (AspisR1.Port4B_VerifyInstall.install base).op5 a (Aeneas.Std.Usize.wrapping_sub hi lo)
+                    let (idx1, val1, pending_return) ←
+                      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                          { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                            op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                            op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                            op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                            op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                            op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                            op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 (AspisR1.Port4B_VerifyInstall.install base),
+                            op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex,
+                            op9 := Aeneas.Std.Array.index_usize,
+                            op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 (AspisR1.Port4B_VerifyInstall.install base),
+                            op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                            op12 :=
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.Array.make 6#usize
+                                  [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                                  AspisR1.Port3_BatchStd.install._proof_6),
+                            op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                          D proof root tree idx val hash lo (Aeneas.Std.Usize.wrapping_sub hi lo)
+                          ((Aeneas.Std.Usize.wrapping_mul 3#usize batch).wrapping_add tree) keys 0#usize 0#usize
+                    match pending_return with
+                      | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                      | Option.some r => Aeneas.Std.Result.ok (r, idx1, val1))))))
+          (Eq.refl do
+            let raw ←
+              (AspisR1.Port4B_VerifyInstall.install base).op4 queries 10#usize
+                  (Aeneas.Std.Usize.wrapping_sub 22#usize 10#usize) tree
+            let keys ←
+              (AspisR1.Port4B_VerifyInstall.install base).op5 raw (Aeneas.Std.Usize.wrapping_sub 22#usize 10#usize)
+            let (outIdx, outVal, pending) ←
+              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                  { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+                    op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr,
+                    op2 := (AspisR1.Port4B_VerifyInstall.install base).op2,
+                    op3 := (AspisR1.Port4B_VerifyInstall.install base).op3,
+                    op4 := (AspisR1.Port4B_VerifyInstall.install base).op4,
+                    op5 := (AspisR1.Port4B_VerifyInstall.install base).op5,
+                    op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 (AspisR1.Port4B_VerifyInstall.install base),
+                    op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex,
+                    op9 := Aeneas.Std.Array.index_usize,
+                    op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 (AspisR1.Port4B_VerifyInstall.install base),
+                    op11 := (AspisR1.Port4B_VerifyInstall.install base).op11,
+                    op12 :=
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.Array.make 6#usize
+                          [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                          AspisR1.Port3_BatchStd.install._proof_6),
+                    op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+                  D proof root tree idx val hash 10#usize (Aeneas.Std.Usize.wrapping_sub 22#usize 10#usize)
+                  ((Aeneas.Std.Usize.wrapping_mul 3#usize batch).wrapping_add tree) keys 0#usize 0#usize
+            match pending with
+              | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+              | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal))))
+'AspisR1.Port9OR_BatchTree.source_factor' depends on axioms: [propext, Classical.choice, Quot.sound]

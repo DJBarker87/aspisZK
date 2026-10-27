@@ -1,0 +1,227 @@
+'AspisR1.JFv_TX2_Geometry.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_Geometry.meaning' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_GeometryReads.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_GeometryFixture.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_GeometryFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_DotsMeaning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_HeadFlat.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_Query0Inverse.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_Query0Formula.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_CanonicalMeaning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_DotFinishMeaning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFv_TX2_EbyKFinishMeaning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Rc10_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.JFv_TX2_Query0Obligation.Goal : {C : Type} → C → Port3_NativeGeometryBody.Ops C → Prop :=
+fun {C} err seed =>
+  FIp_CircleQuery.circle JFq_Alpha0.scalar (JFs_TX2_Dots.value 0) (JFv_TX2_CircleGeometry.inverse err seed 0) =
+    Aeneas.Std.Result.ok JFv_TX2_Query0Obligation.selected
+theorem AspisR1.JFv_TX2_GeometryFixture.on_saved : ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  ↑saved = ↑JFx_NativeBytes.checkpoint →
+    ∀ {Hash : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+      JFn_HashBoundary.Realizes H →
+        ∀ (querySeed : Port3_NativeQueryBody.Ops) {C : Type} (err : C) (geometrySeed : Port3_NativeGeometryBody.Ops C),
+          Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary H D) ⟨↑saved, ⋯⟩ JFx_NativeBytes.proof
+                JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2 hash =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator)) ∧
+            JFs_TX2_Partial.Calls querySeed ∧ JFv_TX2_GeometryFixture.Calls err geometrySeed :=
+fun saved same {Hash} H D hash realizes querySeed {C} err geometrySeed =>
+  ⟨JFn_Resume.on_saved saved same H D hash realizes,
+    ⟨JFs_TX2_Partial.calls querySeed, JFv_TX2_GeometryFixture.calls err geometrySeed⟩⟩
+theorem AspisR1.JFv_TX2_GeometryFixture.inhabited : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (background : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (querySeed : Port3_NativeQueryBody.Ops) {C : Type} (err : C) (geometrySeed : Port3_NativeGeometryBody.Ops C),
+  ∃ H,
+    JFn_HashBoundary.Realizes H ∧
+      Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary H D) JFx_NativeBytes.checkpoint
+            JFx_NativeBytes.proof JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator)) ∧
+        JFs_TX2_Partial.Calls querySeed ∧ JFv_TX2_GeometryFixture.Calls err geometrySeed :=
+fun {Hash} D hash background querySeed {C} err geometrySeed =>
+  let ⟨H, h✝⟩ := JFs_TX2_Partial.inhabited D hash background querySeed
+  let ⟨realizes, right✝⟩ := h✝
+  let ⟨reader, dots⟩ := right✝
+  Exists.intro H ⟨realizes, ⟨reader, ⟨dots, JFv_TX2_GeometryFixture.calls err geometrySeed⟩⟩⟩
+theorem AspisR1.JFv_TX2_DotsMeaning.source : ∀ (i : Fin 12),
+  ∃ head tail out,
+    JFs_TX2_Dots.nativeValue i = Aeneas.Std.Array.make 4#usize [out 0, out 1, out 2, out 3] ⋯ ∧
+      ∀ (slot : Fin 4),
+        JFs_TX2_DotSuffix.tail (JFr_TX2_Windows.array (JFn_Values.position i)) JFr_TX2_FirstLane.native (↑slot)#usize =
+            Aeneas.Std.Result.ok (tail slot) ∧
+          FIo_WideValues.Canon (head slot) ∧
+            FIo_WideValues.Canon (tail slot) ∧
+              FIo_WideValues.Canon (out slot) ∧
+                AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide (out slot)) =
+                    AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide (head slot)) +
+                      AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide (tail slot)) ∧
+                  ∀ (j : Fin 8),
+                    ↑(JFv_TX2_ArrayMeaning.cell (JFv_TX2_FromLimbsMeaning.limbs (head slot)) j) =
+                      JFv_TX2_InnerMeaning.sum i slot j 0 26 % 2147483647 :=
+fun i =>
+  have all := fun slot => JFv_TX2_SlotMeaning.source i slot;
+  (fun head x =>
+      (fun tail x =>
+          (fun out x =>
+              have r0 := (fun slot => (x slot).left) 0;
+              have r1 := (fun slot => (x slot).left) 1;
+              have r2 := (fun slot => (x slot).left) 2;
+              have r3 := (fun slot => (x slot).left) 3;
+              have c0 := Aeneas.Std.UScalar.eq_of_val_eq (Eq.refl ↑(↑0)#usize);
+              have c1 := Aeneas.Std.UScalar.eq_of_val_eq (Eq.refl ↑(↑1)#usize);
+              have c2 := Aeneas.Std.UScalar.eq_of_val_eq (Eq.refl ↑(↑2)#usize);
+              have c3 := Aeneas.Std.UScalar.eq_of_val_eq (Eq.refl ↑(↑3)#usize);
+              have native :=
+                Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        _a =
+                          Aeneas.Std.Result.ok
+                            (Aeneas.Std.Array.make 4#usize [out 0, out 1, out 2, out 3]
+                              (of_eq_true
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Eq
+                                      (congrFun'
+                                        (congrArg HAdd.hAdd
+                                          (congrFun'
+                                            (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                        1))
+                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                        (of_decide_eq_true (id (Eq.refl true))))))
+                                  (eq_self 4)))))
+                      (JFs_TX2_FourHead.source (JFn_Values.position i) JFr_TX2_FirstLane.native)))
+                  (of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans
+                            (congr
+                              (congrArg bind
+                                (Eq.mp
+                                  (congrArg
+                                    (fun _a =>
+                                      FIp_NativeDots.fast_dots.four_dots_one
+                                          (JFr_TX2_Windows.array (JFn_Values.position i)) JFr_TX2_FirstLane.native _a =
+                                        Aeneas.Std.Result.ok (out 0))
+                                    c0)
+                                  r0))
+                              (funext fun a =>
+                                Eq.trans
+                                  (congr
+                                    (congrArg bind
+                                      (Eq.mp
+                                        (congrArg
+                                          (fun _a =>
+                                            FIp_NativeDots.fast_dots.four_dots_one
+                                                (JFr_TX2_Windows.array (JFn_Values.position i)) JFr_TX2_FirstLane.native
+                                                _a =
+                                              Aeneas.Std.Result.ok (out 1))
+                                          c1)
+                                        r1))
+                                    (funext fun b =>
+                                      Eq.trans
+                                        (congr
+                                          (congrArg bind
+                                            (Eq.mp
+                                              (congrArg
+                                                (fun _a =>
+                                                  FIp_NativeDots.fast_dots.four_dots_one
+                                                      (JFr_TX2_Windows.array (JFn_Values.position i))
+                                                      JFr_TX2_FirstLane.native _a =
+                                                    Aeneas.Std.Result.ok (out 2))
+                                                c2)
+                                              r2))
+                                          (funext fun c =>
+                                            Eq.trans
+                                              (congrFun'
+                                                (congrArg bind
+                                                  (Eq.mp
+                                                    (congrArg
+                                                      (fun _a =>
+                                                        FIp_NativeDots.fast_dots.four_dots_one
+                                                            (JFr_TX2_Windows.array (JFn_Values.position i))
+                                                            JFr_TX2_FirstLane.native _a =
+                                                          Aeneas.Std.Result.ok (out 3))
+                                                      c3)
+                                                    r3))
+                                                fun d =>
+                                                Aeneas.Std.Result.ok
+                                                  (Aeneas.Std.Array.make 4#usize [a, b, c, d]
+                                                    (JFs_TX2_FourHead.slots._proof_8 a b c d)))
+                                              (Aeneas.Std.bind_tc_ok (out 3) fun y =>
+                                                Aeneas.Std.Result.ok
+                                                  (Aeneas.Std.Array.make 4#usize [a, b, c, y]
+                                                    (JFs_TX2_FourHead.slots._proof_8 a b c y)))))
+                                        (Aeneas.Std.bind_tc_ok (out 2) fun y =>
+                                          Aeneas.Std.Result.ok
+                                            (Aeneas.Std.Array.make 4#usize [a, b, y, out 3]
+                                              (JFs_TX2_FourHead.slots._proof_8 a b y (out 3))))))
+                                  (Aeneas.Std.bind_tc_ok (out 1) fun y =>
+                                    Aeneas.Std.Result.ok
+                                      (Aeneas.Std.Array.make 4#usize [a, y, out 2, out 3]
+                                        (JFs_TX2_FourHead.slots._proof_8 a y (out 2) (out 3))))))
+                            (Aeneas.Std.bind_tc_ok (out 0) fun y =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.Array.make 4#usize [y, out 1, out 2, out 3]
+                                  (JFs_TX2_FourHead.slots._proof_8 y (out 1) (out 2) (out 3))))))
+                        (Aeneas.Std.Result.ok
+                          (Aeneas.Std.Array.make 4#usize [out 0, out 1, out 2, out 3]
+                            (of_eq_true
+                              (Eq.trans
+                                (congr
+                                  (congrArg Eq
+                                    (congrFun'
+                                      (congrArg HAdd.hAdd
+                                        (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                          1))
+                                      1))
+                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                      (of_decide_eq_true (id (Eq.refl true))))))
+                                (eq_self 4))))))
+                      (eq_self
+                        (Aeneas.Std.Result.ok
+                          (Aeneas.Std.Array.make 4#usize [out 0, out 1, out 2, out 3]
+                            (JFs_TX2_FourHead.slots._proof_8 (out 0) (out 1) (out 2) (out 3)))))));
+              Exists.intro head
+                (Exists.intro tail
+                  (Exists.intro out
+                    ⟨Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm (JFs_TX2_Dots.native i)) native), fun slot =>
+                      ⟨(fun slot => ((fun slot => (x slot).right) slot).left) slot,
+                        ⟨(fun slot => ((fun slot => ((fun slot => (x slot).right) slot).right) slot).left) slot,
+                          ⟨(fun slot =>
+                                ((fun slot => ((fun slot => ((fun slot => (x slot).right) slot).right) slot).right)
+                                    slot).left)
+                              slot,
+                            ⟨(fun slot =>
+                                  ((fun slot =>
+                                        ((fun slot =>
+                                              ((fun slot => ((fun slot => (x slot).right) slot).right) slot).right)
+                                            slot).right)
+                                      slot).left)
+                                slot,
+                              ⟨(fun slot =>
+                                    ((fun slot =>
+                                          ((fun slot =>
+                                                ((fun slot =>
+                                                      ((fun slot => ((fun slot => (x slot).right) slot).right)
+                                                          slot).right)
+                                                    slot).right)
+                                              slot).right)
+                                        slot).left)
+                                  slot,
+                                (fun slot =>
+                                    ((fun slot =>
+                                          ((fun slot =>
+                                                ((fun slot =>
+                                                      ((fun slot => ((fun slot => (x slot).right) slot).right)
+                                                          slot).right)
+                                                    slot).right)
+                                              slot).right)
+                                        slot).right)
+                                  slot⟩⟩⟩⟩⟩⟩)))
+            (fun slot => Classical.choose (x slot)) fun slot => Classical.choose_spec (x slot))
+        (fun slot => Classical.choose (x slot)) fun slot => Classical.choose_spec (x slot))
+    (fun slot => Classical.choose (all slot)) fun slot => Classical.choose_spec (all slot)

@@ -1,0 +1,46 @@
+def Aeneas.Std.core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst r => do
+  let lt ← StepInst.partialOrdInst.lt r.start r.end
+  if lt = true then do
+      let b ← StepInst.backward_checked r.end 1#usize
+      match b with
+        | none => Result.fail Error.panic
+        | some e' => Result.ok (some e', { start := r.start, «end» := e' })
+    else Result.ok (none, r)
+def Aeneas.Std.core.iter.range.UScalarStep : (ty : UScalarTy) →
+  core.clone.Clone (UScalar ty) → core.cmp.PartialOrd (UScalar ty) (UScalar ty) → core.iter.range.Step (UScalar ty) :=
+fun ty cloneInst partialOrdInst =>
+  { cloneInst := cloneInst, partialOrdInst := partialOrdInst,
+    steps_between := core.iter.range.UScalarStep.steps_between,
+    forward_checked := core.iter.range.UScalarStep.forward_checked,
+    backward_checked := core.iter.range.UScalarStep.backward_checked }
+structure Aeneas.Std.core.iter.range.Step (Self : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.range.Step.cloneInst : core.clone.Clone Self
+  Aeneas.Std.core.iter.range.Step.partialOrdInst : core.cmp.PartialOrd Self Self
+  Aeneas.Std.core.iter.range.Step.steps_between : Self → Self → Result (Usize × Option Usize)
+  Aeneas.Std.core.iter.range.Step.forward_checked : Self → Usize → Result (Option Self)
+  Aeneas.Std.core.iter.range.Step.backward_checked : Self → Usize → Result (Option Self)
+constructor:
+  Aeneas.Std.core.iter.range.Step.mk {Self : Type} (cloneInst : core.clone.Clone Self)
+    (partialOrdInst : core.cmp.PartialOrd Self Self) (steps_between : Self → Self → Result (Usize × Option Usize))
+    (forward_checked backward_checked : Self → Usize → Result (Option Self)) : core.iter.range.Step Self
+Aeneas.Std.UScalar.sub_spec {ty : UScalarTy} {x y : UScalar ty} (h : ↑y ≤ ↑x) : x - y ⦃ z => ↑z = ↑x - ↑y ∧ ↑y ≤ ↑x ⦄
+Aeneas.Std.Usize.sub_spec {x y : Usize} (h : ↑y ≤ ↑x) : x - y ⦃ z => ↑z = ↑x - ↑y ∧ ↑y ≤ ↑x ⦄
+FJa_ReverseStep.lean:10:7: error: overloaded, errors 
+  Unknown constant `Array.update_eq`
+  
+  Unknown constant `Aeneas.Std.Array.update_eq`
+structure Aeneas.Std.core.ops.range.Range.{u} (Idx : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.ops.range.Range.start : Idx
+  Aeneas.Std.core.ops.range.Range.end : Idx
+constructor:
+  Aeneas.Std.core.ops.range.Range.mk.{u} {Idx : Type u} (start «end» : Idx) : core.ops.range.Range Idx
+def Aeneas.Std.core.iter.traits.iterator.Iterator.rev.trait_default : {Self Item0 Item1 : Type} →
+  core.iter.traits.iterator.Iterator Self Item0 →
+    core.iter.traits.double_ended.DoubleEndedIterator Self Item1 → Self → Result (core.iter.adapters.rev.Rev Self) :=
+fun {Self Item0 Item1} _IteratorInst _DEInst => core.iter.traits.iterator.Iterator.rev.default

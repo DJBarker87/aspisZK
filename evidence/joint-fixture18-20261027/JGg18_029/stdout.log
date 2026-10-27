@@ -1,0 +1,31 @@
+JGg_QueryScan0.lean:11:106: error: unsolved goals
+sf : Query31ExplicitListLoop.CurrentScan
+pending : Option Bool
+loop : scanListLoop (↑JGg_QueryWords0.value) Query31ConcreteDriverTraceFacts.sourceDefaultState = ok (sf, pending)
+semantic :
+  scan (q22StateOf Query31ConcreteDriverTraceFacts.sourceDefaultState) (List.map (fun x => ↑x) ↑JGg_QueryWords0.value) =
+    (q22StateOf sf, optionStop pending)
+validFinal : validState sf
+numeric :
+  scan (q22StateOf Query31ConcreteDriverTraceFacts.sourceDefaultState) (List.map (fun x => ↑x) ↑JGg_QueryWords0.value) =
+    ({ accepted := [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859], draws := 8 }, false)
+same :
+  (q22StateOf sf, optionStop pending) =
+    ({ accepted := [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859], draws := 8 }, false)
+stateFinal :
+  (q22StateOf sf, optionStop pending).1 =
+    ({ accepted := [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859], draws := 8 }, false).1
+stopped :
+  (q22StateOf sf, optionStop pending).2 =
+    ({ accepted := [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859], draws := 8 }, false).2
+⊢ (let (sf, pending) := (sf, pending)
+    ok (optionStop pending, sf)) =
+    ok (false, sf)
+JGg_QueryScan0.lean:21:85: warning: This simp argument is unused:
+  stopped
+
+Hint: Omit it from the simp argument list.
+  simp only [Query31ModelScanCall.modelScanFn, ̲JGg_QueryWords0.source, ̲bind_tc_ok, ̲loop,̵s̵t̵o̵p̵p̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGg_QueryScan0.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

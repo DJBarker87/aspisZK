@@ -1,0 +1,51 @@
+@R1Z.ProverRwP6BodyData.refinement_of_data : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : @ProverRwFull.ExternalFuns inst) {S : Type}
+  (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+  (pub : @ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public inst)
+  (compiled : @ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 inst)
+  (v : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+      Aeneas.Std.Result
+        (Aeneas.Std.Array Aeneas.Std.U8
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯)))
+  (binding digest :
+    Aeneas.Std.Array Aeneas.Std.U8
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯))
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool),
+  @Eq (Aeneas.Std.Result (Prod Bool S))
+      (@ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore.reserve S store s digest attempt.mask_nonce)
+      (@Aeneas.Std.Result.ok (Prod Bool S) (@Prod.mk Bool S accepted after)) →
+    ∀
+      (model :
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            (Prod (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) ProverRwFull.prover.MaskedFixtureAudit)
+            ProverRwFull.verifier.Error)),
+      @Eq
+          (Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result
+              (Prod (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) ProverRwFull.prover.MaskedFixtureAudit)
+              ProverRwFull.verifier.Error))
+          (@R1Z.ProverRwBodyDataCriterion.data
+            (Aeneas.Std.core.result.Result
+              (Prod (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) ProverRwFull.prover.MaskedFixtureAudit)
+              ProverRwFull.verifier.Error)
+            S (@R1Z.ProverRwP6BodyStore.execute inst ops S store pub compiled v hash binding digest attempt s))
+          model →
+        @Eq
+          (Aeneas.Std.Result
+            (Prod
+              (Aeneas.Std.core.result.Result
+                (Prod (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) ProverRwFull.prover.MaskedFixtureAudit)
+                ProverRwFull.verifier.Error)
+              S))
+          (@R1Z.ProverRwP6BodyStore.execute inst ops S store pub compiled v hash binding digest attempt s)
+          (@R1Z.ProverRwBodyCandidateData.withState
+            (Aeneas.Std.core.result.Result
+              (Prod (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) ProverRwFull.prover.MaskedFixtureAudit)
+              ProverRwFull.verifier.Error)
+            S after model)
+'R1Z.ProverRwP6BodyData.refinement_of_data' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

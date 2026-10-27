@@ -1,0 +1,31 @@
+F3K_SamplerProtocol.lean:23:14: error: unsolved goals
+case succ.e_fst.e_a
+D : LiteralByteProtocol.Decoder
+H : Bytes → State
+pub : LiteralTranscript.Public
+pf : RawCutProverCompiler.Proof
+pr : FS2.Protocol LiteralTranscript.Public LiteralTranscript.Message LiteralTranscript.Challenge
+  LiteralByteProtocol.Witness LiteralByteProtocol.Proof LiteralByteProtocol.Address LiteralByteProtocol.State :=
+  LiteralByteProtocol.protocol D
+n : ℕ
+ih :
+  ∀ (row : ℕ),
+    eval H (F3J_SamplerRun.program pf row n (pr.transcript H pub pf row)) =
+      ((List.map (fun j => (eval H (pr.chain H pub pf (row + j)).toProgram).1) (List.range n)).flatten,
+        pr.transcript H pub pf (row + n))
+row : ℕ
+count : row + 1 + n = row + (n + 1)
+j : ℕ
+hj : j ∈ List.range n
+index : row + 1 + j = row + (j + 1)
+⊢ (eval H (pr.chain H pub pf (row + (j + 1))).toProgram).1 =
+    ((fun j => (eval H (pr.chain H pub pf (row + j)).toProgram).1) ∘ Nat.succ) j
+F3K_SamplerProtocol.lean:30:60: warning: This simp argument is unused:
+  Function.comp_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵t̵e̵n̵_̵c̵o̵n̵s̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵a̵p̵p̵l̵y̵,̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲t̲e̲n̲_̲c̲o̲n̲s̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3K_SamplerProtocol.exact_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3K_SamplerProtocol.initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

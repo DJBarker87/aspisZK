@@ -1,0 +1,49 @@
+FJh_ProjectedCallValue.lean:46:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIv_NativeValue.decode out
+in the target expression
+  Decode out = model o internal theta lead full w ⟨↑g, hg⟩
+
+o : Openings
+internal : State
+theta : QM
+block : NP
+p : Std.Array NP 3#usize
+lead full : Packed
+w : Std.Array QM 3#usize
+g : Usize
+hg : ↑g < 4
+out : QM
+last : Capture
+ct : canonical o.succ_z
+ci : canonical internal
+cb : Canonical theta
+cl : canonical lead
+cf : canonical full
+cw : canonical w
+rp : FIq_Native.core.array.Array.map (BuiltinFnMut QM NP) w field.PreparedQm31Multiplier.new = ok p
+rb : field.PreparedQm31Multiplier.new theta = ok block
+run : call (o, internal, block, p, lead, full) g = ok (out, last)
+start stop : Usize
+ts ins : Slice FIv_NativeArithmetic.NQ
+target ip : FIv_NativeArithmetic.NQ
+rs : 4#usize * g = ok start
+re : start + 4#usize = ok stop
+rts : FJh_ProjectedCall.slice o.succ_z start stop = ok ts
+rt : field.qm31_pack_base4 ts = ok target
+rins : FJh_ProjectedCall.slice internal start stop = ok ins
+ri : field.qm31_pack_base4 ins = ok ip
+ra : FJh_ProjectedAfter.source target ip lead full p block g = ok out
+hlast : last = (o, internal, block, p, lead, full)
+bounds : ↑start = 4 * ↑g ∧ ↑stop = 4 * ↑g + 4 ∧ ↑start ≤ ↑stop ∧ ↑stop ≤ 16
+finish : ↑stop = ↑start + 4
+vt : Canonical target ∧ Decode target = FJh_SlicePackValue.pack o.succ_z ⟨↑g, hg⟩
+vi : Canonical ip ∧ Decode ip = FJh_SlicePackValue.pack internal ⟨↑g, hg⟩
+vo :
+  FIv_NativeValue.Canon out ∧
+    FIv_NativeValue.decode out =
+      FIv_NativeValue.decode theta *
+        (FIv_NativeValue.decode (cell w ⟨0, ⋯⟩) * (FIv_NativeValue.decode target - decoded lead ⟨↑g, hg⟩) +
+            FIv_NativeValue.decode (cell w ⟨1, ⋯⟩) * (FIv_NativeValue.decode target - decoded full ⟨↑g, hg⟩) +
+          FIv_NativeValue.decode (cell w ⟨2, ⋯⟩) * (FIv_NativeValue.decode target - FIv_NativeValue.decode ip))
+⊢ Decode out = model o internal theta lead full w ⟨↑g, hg⟩
+'AspisR1.FJh_ProjectedCallValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

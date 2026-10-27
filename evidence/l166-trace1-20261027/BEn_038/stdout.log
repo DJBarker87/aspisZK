@@ -1,0 +1,236 @@
+theorem AspisR1.Port9OR_P6Verify.source : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (root : AspisR1.CheckpointBytes5Effect.Digest) (s : MultiproofConeRef.reference.Scratch)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Verify.code root s nodes) =
+    MultiproofConeRef.reference.verify_owned (AspisR1.Port9OR_P6Node.digest D) hash root s nodes :=
+fun {Hash} D hash root s nodes =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Verify.code root s nodes) = _a)
+        (Eq.symm (AspisR1.Port9OR_P6Verify.source_factor (AspisR1.Port9OR_P6Node.digest D) hash root s nodes))))
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (AspisR1.CheckpointBytes5Effect.erase_ite D hash (s.n = 0#usize) (Pure.pure (Bool.false, s))
+                    (if s.n > 16#usize then Pure.pure (Bool.false, s)
+                    else do
+                      let valid ←
+                        AspisR1.CheckpointBytes5Effect.liftResult
+                            (MultiproofConeRef.reference.valid_indices s.idx s.n 0#usize)
+                      if valid = Bool.true then do
+                          let rem ← AspisR1.CheckpointBytes5Effect.liftResult (nodes.len % 32#usize)
+                          if (rem != 0#usize) = Bool.true then Pure.pure (Bool.false, s)
+                            else do
+                              let out ←
+                                AspisR1.Port9OR_P6Levels.levels 18
+                                    { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+                              AspisR1.CheckpointBytes5Effect.liftResult (AspisR1.Port9OR_P6Verify.after root nodes out)
+                        else Pure.pure (Bool.false, s)))
+                  (ite_congr (Eq.refl (s.n = 0#usize)) (fun a => Eq.refl (Aeneas.Std.Result.ok (Bool.false, s)))
+                    fun a =>
+                    Eq.trans
+                      (AspisR1.CheckpointBytes5Effect.erase_ite D hash (s.n > 16#usize) (Pure.pure (Bool.false, s)) do
+                        let valid ←
+                          AspisR1.CheckpointBytes5Effect.liftResult
+                              (MultiproofConeRef.reference.valid_indices s.idx s.n 0#usize)
+                        if valid = Bool.true then do
+                            let rem ← AspisR1.CheckpointBytes5Effect.liftResult (nodes.len % 32#usize)
+                            if (rem != 0#usize) = Bool.true then Pure.pure (Bool.false, s)
+                              else do
+                                let out ←
+                                  AspisR1.Port9OR_P6Levels.levels 18
+                                      { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                    (AspisR1.Port9OR_P6Verify.after root nodes out)
+                          else Pure.pure (Bool.false, s))
+                      (ite_congr (Eq.refl (s.n > 16#usize)) (fun a => Eq.refl (Aeneas.Std.Result.ok (Bool.false, s)))
+                        fun a =>
+                        Eq.trans
+                          (AspisR1.CheckpointBytes5Effect.erase_bind D hash
+                            (AspisR1.CheckpointBytes5Effect.liftResult
+                              (MultiproofConeRef.reference.valid_indices s.idx s.n 0#usize))
+                            fun valid =>
+                            if valid = Bool.true then do
+                              let rem ← AspisR1.CheckpointBytes5Effect.liftResult (nodes.len % 32#usize)
+                              if (rem != 0#usize) = Bool.true then Pure.pure (Bool.false, s)
+                                else do
+                                  let out ←
+                                    AspisR1.Port9OR_P6Levels.levels 18
+                                        { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+                                  AspisR1.CheckpointBytes5Effect.liftResult
+                                      (AspisR1.Port9OR_P6Verify.after root nodes out)
+                            else Pure.pure (Bool.false, s))
+                          (congr
+                            (congrArg Bind.bind
+                              (AspisR1.CheckpointBytes5Effect.erase_lift D hash
+                                (MultiproofConeRef.reference.valid_indices s.idx s.n 0#usize)))
+                            (funext fun a =>
+                              Eq.trans
+                                (AspisR1.CheckpointBytes5Effect.erase_ite D hash (a = Bool.true)
+                                  (do
+                                    let rem ← AspisR1.CheckpointBytes5Effect.liftResult (nodes.len % 32#usize)
+                                    if (rem != 0#usize) = Bool.true then Pure.pure (Bool.false, s)
+                                      else do
+                                        let out ←
+                                          AspisR1.Port9OR_P6Levels.levels 18
+                                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+                                        AspisR1.CheckpointBytes5Effect.liftResult
+                                            (AspisR1.Port9OR_P6Verify.after root nodes out))
+                                  (Pure.pure (Bool.false, s)))
+                                (ite_congr (Eq.refl (a = Bool.true))
+                                  (fun a =>
+                                    Eq.trans
+                                      (AspisR1.CheckpointBytes5Effect.erase_bind D hash
+                                        (AspisR1.CheckpointBytes5Effect.liftResult (nodes.len % 32#usize)) fun rem =>
+                                        if (rem != 0#usize) = Bool.true then Pure.pure (Bool.false, s)
+                                        else do
+                                          let out ←
+                                            AspisR1.Port9OR_P6Levels.levels 18
+                                                { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+                                          AspisR1.CheckpointBytes5Effect.liftResult
+                                              (AspisR1.Port9OR_P6Verify.after root nodes out))
+                                      (congr
+                                        (congrArg Bind.bind
+                                          (AspisR1.CheckpointBytes5Effect.erase_lift D hash (nodes.len % 32#usize)))
+                                        (funext fun a =>
+                                          Eq.trans
+                                            (AspisR1.CheckpointBytes5Effect.erase_ite D hash
+                                              ((a != 0#usize) = Bool.true) (Pure.pure (Bool.false, s)) do
+                                              let out ←
+                                                AspisR1.Port9OR_P6Levels.levels 18
+                                                    { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+                                              AspisR1.CheckpointBytes5Effect.liftResult
+                                                  (AspisR1.Port9OR_P6Verify.after root nodes out))
+                                            (ite_congr (Eq.refl ((a != 0#usize) = Bool.true))
+                                              (fun a => Eq.refl (Aeneas.Std.Result.ok (Bool.false, s))) fun a =>
+                                              Eq.trans
+                                                (AspisR1.CheckpointBytes5Effect.erase_bind D hash
+                                                  (AspisR1.Port9OR_P6Levels.levels 18
+                                                    { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes)
+                                                  fun out =>
+                                                  AspisR1.CheckpointBytes5Effect.liftResult
+                                                    (AspisR1.Port9OR_P6Verify.after root nodes out))
+                                                (congrArg
+                                                  (Bind.bind
+                                                    (AspisR1.CheckpointBytes5Effect.erase D hash
+                                                      (AspisR1.Port9OR_P6Levels.levels 18
+                                                        { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize }
+                                                        nodes)))
+                                                  (funext fun a =>
+                                                    AspisR1.CheckpointBytes5Effect.erase_lift D hash
+                                                      (AspisR1.Port9OR_P6Verify.after root nodes a)))))))
+                                  fun a => Eq.refl (Aeneas.Std.Result.ok (Bool.false, s)))))))))
+              (if s.n = 0#usize then Aeneas.Std.Result.ok (Bool.false, s)
+              else
+                if s.n > 16#usize then Aeneas.Std.Result.ok (Bool.false, s)
+                else do
+                  let valid ← MultiproofConeRef.reference.valid_indices s.idx s.n 0#usize
+                  if valid = Bool.true then do
+                      let rem ← nodes.len % 32#usize
+                      if (rem != 0#usize) = Bool.true then Aeneas.Std.Result.ok (Bool.false, s)
+                        else do
+                          let out ←
+                            MultiproofConeRef.reference.levels (AspisR1.Port9OR_P6Node.digest D) hash
+                                { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes 18#u32
+                          AspisR1.Port9OR_P6Verify.after root nodes out
+                    else Aeneas.Std.Result.ok (Bool.false, s))))
+          (Decidable.casesOn (Aeneas.Std.instDecidableEqUScalar_1 Aeneas.Std.UScalarTy.Usize s.n 0#usize)
+            (fun h =>
+              Eq.mpr (id (congr (congrArg Eq (if_neg h)) (if_neg h)))
+                (Decidable.casesOn (16#usize.decLt s.n)
+                  (fun h_1 =>
+                    Eq.mpr (id (congr (congrArg Eq (if_neg h_1)) (if_neg h_1)))
+                      (have domain :=
+                        ⟨id
+                            (have nz := fun eq => h (Aeneas.Std.UScalar.eq_of_val_eq eq);
+                            Decidable.byContradiction fun a => AspisR1.Port9OR_P6Verify.source._proof_1 s nz a),
+                          ⟨id
+                              (id
+                                (fun bounded =>
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.Port9OR_P6Verify.source._proof_2 s bounded a)
+                                h_1),
+                            id (Decidable.byContradiction fun a => AspisR1.Port9OR_P6Verify.source._proof_3 nodes a)⟩⟩;
+                      (Aeneas.Std.bind_eq_iff (MultiproofConeRef.reference.valid_indices s.idx s.n 0#usize)
+                            (fun a =>
+                              if a = Bool.true then do
+                                let a ← nodes.len % 32#usize
+                                if (a != 0#usize) = Bool.true then Aeneas.Std.Result.ok (Bool.false, s)
+                                  else do
+                                    let a ←
+                                      AspisR1.CheckpointBytes5Effect.erase D hash
+                                          (AspisR1.Port9OR_P6Levels.levels 18
+                                            { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes)
+                                    AspisR1.Port9OR_P6Verify.after root nodes a
+                              else Aeneas.Std.Result.ok (Bool.false, s))
+                            fun valid =>
+                            if valid = Bool.true then do
+                              let rem ← nodes.len % 32#usize
+                              if (rem != 0#usize) = Bool.true then Aeneas.Std.Result.ok (Bool.false, s)
+                                else do
+                                  let out ←
+                                    MultiproofConeRef.reference.levels (AspisR1.Port9OR_P6Node.digest D) hash
+                                        { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes 18#u32
+                                  AspisR1.Port9OR_P6Verify.after root nodes out
+                            else Aeneas.Std.Result.ok (Bool.false, s)).mpr
+                        fun valid a =>
+                        Decidable.casesOn (instDecidableEqBool valid Bool.true)
+                          (fun h =>
+                            Eq.mpr (id (congr (congrArg Eq (if_neg h)) (if_neg h)))
+                              (Eq.refl (Aeneas.Std.Result.ok (Bool.false, s))))
+                          fun h =>
+                          Eq.mpr (id (congr (congrArg Eq (if_pos h)) (if_pos h)))
+                            ((Aeneas.Std.bind_eq_iff (nodes.len % 32#usize)
+                                  (fun a =>
+                                    if (a != 0#usize) = Bool.true then Aeneas.Std.Result.ok (Bool.false, s)
+                                    else do
+                                      let a ←
+                                        AspisR1.CheckpointBytes5Effect.erase D hash
+                                            (AspisR1.Port9OR_P6Levels.levels 18
+                                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes)
+                                      AspisR1.Port9OR_P6Verify.after root nodes a)
+                                  fun rem =>
+                                  if (rem != 0#usize) = Bool.true then Aeneas.Std.Result.ok (Bool.false, s)
+                                  else do
+                                    let out ←
+                                      MultiproofConeRef.reference.levels (AspisR1.Port9OR_P6Node.digest D) hash
+                                          { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes 18#u32
+                                    AspisR1.Port9OR_P6Verify.after root nodes out).mpr
+                              fun rem a =>
+                              Decidable.casesOn (instDecidableEqBool (rem != 0#usize) Bool.true)
+                                (fun h =>
+                                  Eq.mpr (id (congr (congrArg Eq (if_neg h)) (if_neg h)))
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            (do
+                                                let a ← _a
+                                                AspisR1.Port9OR_P6Verify.after root nodes a) =
+                                              do
+                                              let a ←
+                                                MultiproofConeRef.reference.levels (AspisR1.Port9OR_P6Node.digest D)
+                                                    hash { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+                                                    18#u32
+                                              AspisR1.Port9OR_P6Verify.after root nodes a)
+                                          (AspisR1.Port9OR_P6Levels.eighteen D hash
+                                            { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes domain)))
+                                      (Eq.refl do
+                                        let a ←
+                                          MultiproofConeRef.reference.levels (AspisR1.Port9OR_P6Node.digest D) hash
+                                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes 18#u32
+                                        AspisR1.Port9OR_P6Verify.after root nodes a)))
+                                fun h =>
+                                Eq.mpr (id (congr (congrArg Eq (if_pos h)) (if_pos h)))
+                                  (Eq.refl (Aeneas.Std.Result.ok (Bool.false, s))))))
+                  fun h =>
+                  Eq.mpr (id (congr (congrArg Eq (if_pos h)) (if_pos h)))
+                    (Eq.refl (Aeneas.Std.Result.ok (Bool.false, s)))))
+            fun h =>
+            Eq.mpr (id (congr (congrArg Eq (if_pos h)) (if_pos h))) (Eq.refl (Aeneas.Std.Result.ok (Bool.false, s)))))))
+'AspisR1.Port9OR_P6Verify.source' depends on axioms: [propext, Classical.choice, Quot.sound]

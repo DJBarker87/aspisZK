@@ -1,0 +1,25 @@
+import JGb_DecodeInjective
+import JGb_Mask
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGb_MaskedValue
+open Aeneas Aeneas.Std Result
+open FIq_Native
+open FIv_NativeValue (Canon decode)
+
+/-- Canonical carrier equality is equivalent to equality in the exact tower.
+This conversion does not assert the protocol's masked-terminal gate. -/
+theorem equality (terminal : field.QM31) (mask : FIp_SemanticArithmetic.MQ)
+    (ht : Canon terminal) (hm : FIp_SemanticValues.Canon mask) :
+    FIq_Carriers.fromQ terminal=mask ↔ decode terminal=FIp_SemanticValues.decode mask := by
+  constructor
+  · intro same
+    rw [← same]
+    rfl
+  · intro same
+    have c : Canon (FIq_Carriers.toQ mask) := hm
+    have eq := JGb_DecodeInjective.source terminal (FIq_Carriers.toQ mask) ht c same
+    exact congrArg FIq_Carriers.fromQ eq
+#print axioms equality
+end AspisR1.JGb_MaskedValue
+end

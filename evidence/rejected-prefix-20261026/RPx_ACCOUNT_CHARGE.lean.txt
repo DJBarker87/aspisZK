@@ -1,0 +1,40 @@
+@AspisR1.RPx_AccountCharge.charged : ∀ {A F C : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops C)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (adversary :
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (AspisR1.GExq_AccountExperiment.FirstInputs A))
+  (chooseSecond :
+    AspisR1.GExq_AccountExperiment.FirstInputs A →
+      Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          A →
+            AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.SecondInputs A))
+  (Q0 Q1 : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H adversary).1.length ≤ Q0) →
+    (∀ (input : AspisR1.GExq_AccountExperiment.FirstInputs A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+        (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final : A)
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (chooseSecond input saved post final)).1.length ≤ Q1) →
+      ∀
+        (project :
+          AspisR1.GExq_AccountExperiment.Outcome A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+        (select :
+          AspisR1.GExq_AccountExperiment.Outcome A →
+            AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs),
+        have account :=
+          AspisR1.GExq_AccountExperiment.program adapter ops stage finish reserved query geo B std hashv copy allocator
+            id adversary chooseSecond;
+        (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            FS.firstReads FS.emptyTable
+                (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Hiq_RecordedJoint.program account project select)).1 ≤
+              Q0 + Q1 + 2965) ∧
+          AspisR1.F3T_AccountCharge.mass account project select (Q0 + Q1) ≤ AspisR1.F3T_Numeric.accountLoss (Q0 + Q1)

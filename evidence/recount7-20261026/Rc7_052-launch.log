@@ -1,0 +1,38 @@
+{"attempt": "Rc7_052", "exit_status": 0, "wall_seconds": 4.792521744035184, "peak_rss_kib": "5380692", "swaps": "0", "print_axioms": []}
+@AspisR1.Rc6_Install.parser_base : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Rc5_Install.configuration err c r =
+    AspisR1.Rc2_Install.configuration
+      (have __src := AspisR1.Rc5_Install.seed err c;
+      { adapter := __src.adapter, currentBase := __src.currentBase, stageBase := __src.stageBase,
+        finish := __src.finish, reserved := __src.reserved, query := __src.query, geometry := __src.geometry,
+        boundaries := AspisR1.F3M_CircleSource.install c.boundaries, std := __src.std })
+      r
+@AspisR1.Rc6_Install.p6_base : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+
+...
+@AspisR1.Rc6_Install.parser_base : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Rc5_Install.configuration err c r =
+    AspisR1.Rc2_Install.configuration
+      (have __src := AspisR1.Rc5_Install.seed err c;
+      { adapter := __src.adapter, currentBase := __src.currentBase, stageBase := __src.stageBase,
+        finish := __src.finish, reserved := __src.reserved, query := __src.query, geometry := __src.geometry,
+        boundaries := AspisR1.F3M_CircleSource.install c.boundaries, std := __src.std })
+      r
+@AspisR1.Rc6_Install.p6_base : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Rc5_Install.configuration err c r = AspisR1.Rc3_Install.configuration (AspisR1.Rc5_Install.seed err c) r
+@AspisR1.Rc6_Install.reconstruct : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  { adapter := (AspisR1.Rc5_Install.configuration err c r).adapter,
+      currentBase := (AspisR1.Rc5_Install.configuration err c r).currentBase,
+      stageBase := (AspisR1.Rc5_Install.configuration err c r).stageBase,
+      finish := (AspisR1.Rc5_Install.configuration err c r).finish,
+      reserved := (AspisR1.Rc5_Install.configuration err c r).reserved,
+      query := (AspisR1.Rc5_Install.configuration err c r).query,
+      geometry := (AspisR1.Rc5_Install.configuration err c r).geometry,
+      boundaries := AspisR1.F3M_CircleSource.install c.boundaries, std := AspisR1.NP6_StdModel.calls r } =
+    AspisR1.Rc5_Install.configuration err c r
+
+Running as unit: run-rd654a160c36848a180670d4e18dc3f9d.scope; invocation ID: dfc9b1986cc2427bb7da55ad30ab3d4b

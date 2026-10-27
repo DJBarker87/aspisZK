@@ -1,0 +1,24 @@
+import R1Z.PV_Src_LowBits
+import R1Z.PV_Src_NativeValueBits
+
+/-! Exact behavior outside the admitted value range too: the actual native
+helper keeps the low30 bits. No source-value precondition is hidden. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_NativeValueAllWords
+open Aeneas Aeneas.Std Result
+open BuilderForestAdmissionPort.pool_v1
+
+theorem reconstruct_mod (value : U32) :
+    ∃ out, pair_trace.value_bits value = ok out ∧
+      (∑ n ∈ Finset.range 30, 2^n * (out.val[n]!).val) = value.val % 2^30 := by
+  obtain ⟨out,ho,hc⟩ := PV_Src_NativeValueBits.cells value
+  refine ⟨out,ho,?_⟩
+  calc
+    _ = ∑ n ∈ Finset.range 30, 2^n * (value.val / 2^n % 2) := by
+      apply Finset.sum_congr rfl
+      intro n hn
+      rw [hc n (Finset.mem_range.mp hn)]
+    _ = value.val % 2^30 := PV_Src_LowBits.sum value.val 30
+
+#print axioms reconstruct_mod
+end R1Z.PV_Src_NativeValueAllWords

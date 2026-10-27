@@ -1,0 +1,21 @@
+FIy_Scaling.lean:41:29: error: don't know how to synthesize placeholder for argument `h`
+context:
+range : Std.Array QM 33#usize
+selector : QM
+hc : canonical range
+hs : Canon selector
+iter : IterMut := ⋯
+v : ℕ → QM
+hv : ∀ (j : ℕ) (hj : j < 33), Canon (v j) ∧ decode (v j) = decode selector * decode (↑iter.slice)[j]
+final : core.slice.iter.IterMut field.QM31
+back : core.slice.iter.IterMut field.QM31 → core.slice.iter.IterMut field.QM31
+hr : Loop3 iter (fun x => x) selector = ok (final, back)
+hsl : final.slice = iter.slice
+hi : final.i = 33
+hback : ∀ (im : core.slice.iter.IterMut field.QM31), back im = deferredWrites v 0 33 im
+out : Std.Array QM 33#usize := ⋯
+outVal : ↑out = List.ofFn fun i => v ↑i
+j : Fin ↑33#usize
+⊢ ↑j < (↑out).length
+'AspisR1.FIy_Scaling.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIy_Scaling.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

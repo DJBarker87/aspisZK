@@ -1,0 +1,46 @@
+{
+  "attempt": "PoolM_KANI020",
+  "kind": "kani",
+  "source_revision": "ab5203a52cdf6c48b522f0eaf90b629b3aebe2c3",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolM_leaf/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolM_kani_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "PoolM_readonly_meta",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolM_leaf/Cargo.toml",
+    "PoolM_leaf/Cargo.lock",
+    "PoolM_leaf/PoolM_lib.rs",
+    "PoolM_owned/PoolM_lib.rs",
+    "PoolM_slice/error.rs",
+    "PoolM_slice/cancel_prepared_settlement_instruction.rs",
+    "PoolM_CPI_META_SLICE.json"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Projected exact selected six-meta construction plus optional CP push; arbitrary live meta index. No full CPI builder, AccountInfo clone/alias coupling or native invoke/frame theorem. Final leaf Kani run; whole Pool dispatch/source-instance frame remains open."
+  },
+  "expected_time": "Optimized cached compilation, then CBMC for the isolated selected six readonly metas plus optional CP push, arbitrary live meta index. No account-info cloning, parser, arithmetic, CPI invoke, or full builder."
+}

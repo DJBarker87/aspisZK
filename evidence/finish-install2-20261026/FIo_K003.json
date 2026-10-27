@@ -1,0 +1,45 @@
+{
+  "attempt": "FIo_K003",
+  "kind": "kani",
+  "source_revision": "1126d6087ec1d0747b97c9754fcbbdf5a9dde4cb",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "FIo_PairKit/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "FIo_proofs::FIo_subset_exact",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "FIo_PairKit/Cargo.toml",
+    "FIo_PairKit/src/FIn_fast_pairing.rs",
+    "FIo_PairKit/src/FIn_trace.rs",
+    "FIo_PairKit/src/FIn_transport.rs",
+    "FIo_PairKit/src/FIn_verifier.rs",
+    "FIo_PairKit/src/FIn_weights.rs",
+    "FIo_PairKit/src/FIo_proofs.rs",
+    "FIo_PairKit/src/FIo_reference.rs",
+    "FIo_PairKit/src/lib.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/FIo_kani_target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_RELEASE_OPT_LEVEL": "3",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "source_binding": "FIn_source-pins.json",
+    "core_snapshot": "unchanged op4-install aspis-core; compare exact field source before adoption"
+  },
+  "expected_time": "Focused extraction isolation: subset; compilation/translation, no arithmetic aggregation"
+}

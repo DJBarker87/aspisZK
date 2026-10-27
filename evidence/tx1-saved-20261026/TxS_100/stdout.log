@@ -1,0 +1,15 @@
+@AspisR1.TxS_Writer.saved : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle (AspisR1.VTop_Checkpoint.digest D) hash H →
+    ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+      (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+      (size : (↑a.weights).length = 64) (qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144)
+      (canonical : AspisR1.CheckpointBytesBlocks.CanonicalFields (AspisR1.Port3_DecodeCoherence.inventory p a size qb)),
+      ↑a.next = 10 →
+        AspisR1.Port3_CheckpointInstall.writer D p a proof pub hash = Aeneas.Std.Result.ok saved →
+          saved =
+            AspisR1.Tx2N_Reader.writer H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)
+              (AspisR1.MultiproofConeCanonical.bytesOf ↑pub)
+              (AspisR1.CheckpointBytesBlocks.prepared (AspisR1.Port3_DecodeCoherence.inventory p a size qb) canonical)
+              (AspisR1.CheckpointBytes5Output.accumulator a)
+'AspisR1.TxS_Writer.saved' depends on axioms: [propext, Classical.choice, Quot.sound]

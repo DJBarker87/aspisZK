@@ -1,0 +1,19 @@
+AspisR1.SCF_Recovery.agreement (left right : AspisR1.RawCutProverCompiler.RunView) (pub : left.2.1.1 = right.2.1.1)
+  (frames :
+    ∀ (row : ℕ),
+      row = 0 ∨ row = 2 ∨ row = 30 →
+        AspisR1.RawCommitmentFrameReplay.frameFromView left row =
+          AspisR1.RawCommitmentFrameReplay.frameFromView right row)
+  (cuts :
+    ∀ (row : ℕ),
+      row = 0 ∨ row = 2 ∨ row = 30 →
+        AspisR1.BinRawByteCutRecovery.cut left.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row) =
+          AspisR1.BinRawByteCutRecovery.cut right.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row)) :
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement left right
+'AspisR1.SCF_Recovery.agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCF_Recovery.extract (left right : AspisR1.RawCutProverCompiler.RunView)
+  (agree : AspisR1.OraclePortRefineJoin.RecoveredInputAgreement left right)
+  (coins : AspisR1.GSConcreteByteDecoderBank.RawCoins) :
+  AspisR1.RawRecordedPublicSpendExtractorBin.extract left coins =
+    AspisR1.RawRecordedPublicSpendExtractorBin.extract right coins
+'AspisR1.SCF_Recovery.extract' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,260 @@
+FIy_OccupancyPrefix.lean:88:2: error: unsolved goals
+case refl.refine_2
+input output : NQ
+opened : Std.Array NQ 16#usize
+occupied oneMinus both : NQ
+a : Std.Array NQ 12#usize
+hi : Canon input
+ho : Canon output
+ha : canonical opened
+success✝¹⁵ :
+  (do
+      let occupied ← opened.index_usize 0#usize
+      let inverse ← opened.index_usize 1#usize
+      let one_minus ← field.QM31.ONE.sub occupied
+      have occupancy : Std.Array field.QM31 12#usize := Array.repeat 12#usize field.QM31.ZERO
+      let both ← field.QM31.add input output
+      let q ← field.QM31.sub occupied field.QM31.ONE
+      let q1 ← field.QM31.mul occupied q
+      let q2 ← both.mul q1
+      let occupancy1 ← occupancy.update 0#usize q2
+      let q3 ← opened.index_usize 9#usize
+      let q4 ← field.QM31.mul q3 inverse
+      let q5 ← q4.sub occupied
+      let q6 ← both.mul q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← one_minus.mul inverse
+      let q8 ← both.mul q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, one_minus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+inverse : NQ
+h_inverse : opened.index_usize 1#usize = ok inverse
+q q1 q2 : field.QM31
+occupancy1 : Std.Array field.QM31 12#usize
+h_occupancy1 : (Array.repeat 12#usize field.QM31.ZERO).update 0#usize q2 = ok occupancy1
+q3 : NQ
+h_q3 : opened.index_usize 9#usize = ok q3
+q4 : field.QM31
+h_q4 : field.QM31.mul q3 inverse = ok q4
+q5 q6 : field.QM31
+occupancy2 : Std.Array field.QM31 12#usize
+h_occupancy2 : occupancy1.update 1#usize q6 = ok occupancy2
+q7 q8 : field.QM31
+h_occ : opened.index_usize 0#usize = ok occupied
+success✝¹⁴ :
+  (do
+      let inverse ← opened.index_usize 1#usize
+      let one_minus ← field.QM31.ONE.sub occupied
+      have occupancy : Std.Array field.QM31 12#usize := Array.repeat 12#usize field.QM31.ZERO
+      let both ← field.QM31.add input output
+      let q ← field.QM31.sub occupied field.QM31.ONE
+      let q1 ← field.QM31.mul occupied q
+      let q2 ← both.mul q1
+      let occupancy1 ← occupancy.update 0#usize q2
+      let q3 ← opened.index_usize 9#usize
+      let q4 ← field.QM31.mul q3 inverse
+      let q5 ← q4.sub occupied
+      let q6 ← both.mul q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← one_minus.mul inverse
+      let q8 ← both.mul q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, one_minus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝¹³ :
+  (do
+      let one_minus ← field.QM31.ONE.sub occupied
+      have occupancy : Std.Array field.QM31 12#usize := Array.repeat 12#usize field.QM31.ZERO
+      let both ← field.QM31.add input output
+      let q ← field.QM31.sub occupied field.QM31.ONE
+      let q1 ← field.QM31.mul occupied q
+      let q2 ← both.mul q1
+      let occupancy1 ← occupancy.update 0#usize q2
+      let q3 ← opened.index_usize 9#usize
+      let q4 ← field.QM31.mul q3 inverse
+      let q5 ← q4.sub occupied
+      let q6 ← both.mul q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← one_minus.mul inverse
+      let q8 ← both.mul q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, one_minus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+h_q : field.QM31.sub occupied field.QM31.ONE = ok q
+h_q1 : field.QM31.mul occupied q = ok q1
+h_q5 : q4.sub occupied = ok q5
+h_q7 : field.QM31.mul oneMinus inverse = ok q7
+h_m : field.QM31.ONE.sub occupied = ok oneMinus
+success✝¹² :
+  (have occupancy := Array.repeat 12#usize field.QM31.ZERO;
+    do
+    let both ← field.QM31.add input output
+    let q ← field.QM31.sub occupied field.QM31.ONE
+    let q1 ← field.QM31.mul occupied q
+    let q2 ← both.mul q1
+    let occupancy1 ← occupancy.update 0#usize q2
+    let q3 ← opened.index_usize 9#usize
+    let q4 ← field.QM31.mul q3 inverse
+    let q5 ← q4.sub occupied
+    let q6 ← both.mul q5
+    let occupancy2 ← occupancy1.update 1#usize q6
+    let q7 ← field.QM31.mul oneMinus inverse
+    let q8 ← both.mul q7
+    let a ← occupancy2.update 2#usize q8
+    ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+h_b : field.QM31.add input output = ok both
+h_q2 : field.QM31.mul both q1 = ok q2
+h_q6 : field.QM31.mul both q5 = ok q6
+h_q8 : field.QM31.mul both q7 = ok q8
+success✝¹¹ :
+  (do
+      let q ← field.QM31.sub occupied field.QM31.ONE
+      let q1 ← field.QM31.mul occupied q
+      let q2 ← field.QM31.mul both q1
+      let occupancy1 ← (Array.repeat 12#usize field.QM31.ZERO).update 0#usize q2
+      let q3 ← opened.index_usize 9#usize
+      let q4 ← field.QM31.mul q3 inverse
+      let q5 ← q4.sub occupied
+      let q6 ← field.QM31.mul both q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← field.QM31.mul oneMinus inverse
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝¹⁰ :
+  (do
+      let q1 ← field.QM31.mul occupied q
+      let q2 ← field.QM31.mul both q1
+      let occupancy1 ← (Array.repeat 12#usize field.QM31.ZERO).update 0#usize q2
+      let q3 ← opened.index_usize 9#usize
+      let q4 ← field.QM31.mul q3 inverse
+      let q5 ← q4.sub occupied
+      let q6 ← field.QM31.mul both q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← field.QM31.mul oneMinus inverse
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝⁹ :
+  (do
+      let q2 ← field.QM31.mul both q1
+      let occupancy1 ← (Array.repeat 12#usize field.QM31.ZERO).update 0#usize q2
+      let q3 ← opened.index_usize 9#usize
+      let q4 ← field.QM31.mul q3 inverse
+      let q5 ← q4.sub occupied
+      let q6 ← field.QM31.mul both q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← field.QM31.mul oneMinus inverse
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝⁸ :
+  (do
+      let occupancy1 ← (Array.repeat 12#usize field.QM31.ZERO).update 0#usize q2
+      let q3 ← opened.index_usize 9#usize
+      let q4 ← field.QM31.mul q3 inverse
+      let q5 ← q4.sub occupied
+      let q6 ← field.QM31.mul both q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← field.QM31.mul oneMinus inverse
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝⁷ :
+  (do
+      let q3 ← opened.index_usize 9#usize
+      let q4 ← field.QM31.mul q3 inverse
+      let q5 ← q4.sub occupied
+      let q6 ← field.QM31.mul both q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← field.QM31.mul oneMinus inverse
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝⁶ :
+  (do
+      let q4 ← field.QM31.mul q3 inverse
+      let q5 ← q4.sub occupied
+      let q6 ← field.QM31.mul both q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← field.QM31.mul oneMinus inverse
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝⁵ :
+  (do
+      let q5 ← q4.sub occupied
+      let q6 ← field.QM31.mul both q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← field.QM31.mul oneMinus inverse
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝⁴ :
+  (do
+      let q6 ← field.QM31.mul both q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← field.QM31.mul oneMinus inverse
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝³ :
+  (do
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← field.QM31.mul oneMinus inverse
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝² :
+  (do
+      let q7 ← field.QM31.mul oneMinus inverse
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝¹ :
+  (do
+      let q8 ← field.QM31.mul both q7
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+success✝ :
+  (do
+      let a ← occupancy2.update 2#usize q8
+      ok (occupied, oneMinus, both, a)) =
+    ok (occupied, oneMinus, both, a)
+h_a1 : occupancy2.update 2#usize q8 = ok a
+success : ok (occupied, oneMinus, both, a) = ok (occupied, oneMinus, both, a)
+cocc : Canon occupied
+cinv : Canon inverse
+cm : Canon oneMinus ∧ decode oneMinus = decode field.QM31.ONE - decode occupied
+cb : Canon both ∧ decode both = decode input + decode output
+cq : Canon q ∧ decode q = decode occupied - decode field.QM31.ONE
+cq1 : Canon q1 ∧ decode q1 = decode occupied * decode q
+cq2 : Canon q2 ∧ decode q2 = decode both * decode q1
+zero : canonical (Array.repeat 12#usize field.QM31.ZERO)
+u1 :
+  canonical occupancy1 ∧
+    decoded occupancy1 = Function.update (decoded (Array.repeat 12#usize field.QM31.ZERO)) ⟨↑0#usize, ⋯⟩ (decode q2)
+cq3 : Canon q3
+cq4 : Canon q4 ∧ decode q4 = decode q3 * decode inverse
+cq5 : Canon q5 ∧ decode q5 = decode q4 - decode occupied
+cq6 : Canon q6 ∧ decode q6 = decode both * decode q5
+u2 : canonical occupancy2 ∧ decoded occupancy2 = Function.update (decoded occupancy1) ⟨↑1#usize, ⋯⟩ (decode q6)
+cq7 : Canon q7 ∧ decode q7 = decode oneMinus * decode inverse
+cq8 : Canon q8 ∧ decode q8 = decode both * decode q7
+u3 : canonical a ∧ decoded a = Function.update (decoded occupancy2) ⟨↑2#usize, ⋯⟩ (decode q8)
+⊢ 1 - FIv_NativeArray.value opened ↑0#usize = 1 - FIv_NativeArray.value opened 0
+FIy_OccupancyPrefix.lean:90:38: error(lean.unknownIdentifier): Unknown identifier `FIx_ArrayMeaning.decoded_repeat`
+'AspisR1.FIy_OccupancyPrefix.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

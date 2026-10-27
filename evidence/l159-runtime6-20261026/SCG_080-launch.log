@@ -1,0 +1,47 @@
+{"attempt": "SCG_080", "exit_status": 0, "wall_seconds": 3.0398612380377017, "peak_rss_kib": "5484936", "swaps": "0", "print_axioms": []}
+theorem AspisR1.PFin_Gates.decoded : ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs),
+  AspisR1.OraclePortStoredDecisionDraftC4.input p q tr = Option.some i →
+    AspisR1.OraclePortSelectedDraft.queries tr = Option.some q →
+      AspisR1.LiteralQueryRead.decode i.queryBytes = Option.some q :=
+fun p q tr i found queries =>
+  have fields := (AspisR1.OraclePortStoredDecisionDraftC4.input_fields p q tr i found).left;
+  Eq.mp
+    (congrArg
+      (fun _a =>
+        (do
+            let __x ← _a
+            match __x with
+              | (fst, c) =>
+                match c
+...
+criptView.Value.queries (Except.ok bs) => AspisR1.LiteralQueryRead.decode bs
+                | x => Option.none) =
+          Option.some q)
+      fields.right.left)
+    queries
+structure AspisR1.Port5Q1_QueryPorts.SessionAPrepare (p : AspisR1Stage2.verifier.Prepared)
+  (data : AspisR1.MatchingSupport.Data AspisR1.Port5Q1_QueryPorts.FE) (q : Fin 22 → Fin 262144)
+  (rho : AspisR1.Port5Q1_QueryPorts.FK) : Prop
+number of parameters: 4
+fields:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.queries : ∀ (i : ℕ) (hi : i < 22),
+      ↑(AspisR1.Port5Q1_GeometryBinding.queryAt p.queries i) = ↑(q ⟨i, hi⟩)
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.rho_eq : AspisR1.CheckpointBytes5Output.ofK p.rho = rho
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.rho_canonical : AspisR1.Port3_FlushInstall.Canonical p.rho
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.alpha1 : ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha → AspisR1.CheckpointBytes5Output.ofE alpha = data.alpha1
+constructor:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.mk {p : AspisR1Stage2.verifier.Prepared}
+    {data : AspisR1.MatchingSupport.Data AspisR1.Port5Q1_QueryPorts.FE} {q : Fin 22 → Fin 262144}
+    {rho : AspisR1.Port5Q1_QueryPorts.FK}
+    (queries : ∀ (i : ℕ) (hi : i < 22), ↑(AspisR1.Port5Q1_GeometryBinding.queryAt p.queries i) = ↑(q ⟨i, hi⟩))
+    (rho_eq : AspisR1.CheckpointBytes5Output.ofK p.rho = rho)
+    (rho_canonical : AspisR1.Port3_FlushInstall.Canonical p.rho)
+    (alpha1 :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha →
+          AspisR1.CheckpointBytes5Output.ofE alpha = data.alpha1) :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrepare p data q rho
+
+Running as unit: run-ra3112af7b9af4e3fa817b668e1e9befd.scope; invocation ID: a0d9ae51c32245daa8fb012a4da42e39

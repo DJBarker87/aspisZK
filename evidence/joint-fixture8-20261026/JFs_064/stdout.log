@@ -1,0 +1,378 @@
+JFs_PublicValidation.lean:47:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 JFs_PublicValue.common.lane_transition
+    (Array.repeat 1520#usize 0#u8).to_slice
+in the target expression
+  (let (pool, deployment, anchor_sequence, anchor, nullifier, _) :=
+      (JFs_PaymentValue.common.pool, JFs_PaymentValue.common.deployment_domain, JFs_PaymentValue.common.anchor_sequence,
+        JFs_PaymentValue.common.anchor_root, JFs_PaymentValue.common.nullifier, JFs_PaymentValue.common.asset_id)
+    do
+    let b3 ← core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 pool JFs_PublicValue.common.master_account
+    if b3 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+      else do
+        let b4 ←
+          core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 deployment
+              JFs_PublicValue.common.lane_transition.live_snapshot.deployment_domain
+        if b4 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+          else
+            if (anchor_sequence != JFs_PublicValue.common.checkpoint_sequence) = true then
+              ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+            else do
+              let b6 ←
+                core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                    JFs_PublicValue.common.historical_global_anchor
+              if b6 = true then
+                  ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                else do
+                  let r2 ← pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 nullifier
+                  let r3 ←
+                    match r2 with
+                      | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                      | core.result.Result.Err e => do
+                        let t ←
+                          validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                              () e
+                        ok (core.result.Result.Err t)
+                  let cf1 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  core.ops.control_flow.ControlFlow.rec
+                      (fun a =>
+                        if (a != JFs_PublicValue.common.output_lane) = true then
+                          ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                        else
+                          let (s, _) :=
+                            ((Array.repeat 1520#usize 0#u8).to_slice, (Array.repeat 1520#usize 0#u8).from_slice)
+                          do
+                          let (r4, _) ←
+                            pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                                JFs_PublicValue.common.lane_transition s
+                          let r5 ←
+                            match r4 with
+                              | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                              | core.result.Result.Err e => do
+                                let t ←
+                                  validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                      () e
+                                ok (core.result.Result.Err t)
+                          let cf2 ←
+                            match r5 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          core.ops.control_flow.ControlFlow.rec (fun a => ok (core.result.Result.Ok ()))
+                              (fun a =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) a)
+                              cf2)
+                      (fun a =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) a)
+                      cf1) =
+    ok (core.result.Result.Ok ())
+
+encoded : Std.Array U8 216#usize
+contents : ↑encoded = ↑JFu_PublicRange.payment
+payment :
+  pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 JFs_PaymentValue.value =
+    ok (core.result.Result.Ok encoded)
+updated : Slice U8
+late :
+  pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 JFs_LateChildren.value
+      (Array.repeat 1520#usize 0#u8).to_slice =
+    ok (core.result.Result.Ok (), updated)
+length : updated.length = 1520
+common : JFs_PublicValue.value.common = ok JFs_PublicValue.common
+publicCall :
+  statement_public_common
+      (PoolV1PairForestTerminalStatementV1.PrivateTransfer JFs_PublicValue.common JFs_PaymentValue.value) =
+    ok
+      (JFs_PaymentValue.common.pool, JFs_PaymentValue.common.deployment_domain, JFs_PaymentValue.common.anchor_sequence,
+        JFs_PaymentValue.common.anchor_root, JFs_PaymentValue.common.nullifier, JFs_PaymentValue.common.asset_id)
+lateCall :
+  pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 JFs_PublicValue.common.lane_transition
+      (Array.repeat 1520#usize 0#u8).to_slice =
+    ok (core.result.Result.Ok (), updated)
+⊢ (let (pool, deployment, anchor_sequence, anchor, nullifier, _) :=
+      (JFs_PaymentValue.common.pool, JFs_PaymentValue.common.deployment_domain, JFs_PaymentValue.common.anchor_sequence,
+        JFs_PaymentValue.common.anchor_root, JFs_PaymentValue.common.nullifier, JFs_PaymentValue.common.asset_id)
+    do
+    let b3 ← core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 pool JFs_PublicValue.common.master_account
+    if b3 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+      else do
+        let b4 ←
+          core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 deployment
+              JFs_PublicValue.common.lane_transition.live_snapshot.deployment_domain
+        if b4 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+          else
+            if (anchor_sequence != JFs_PublicValue.common.checkpoint_sequence) = true then
+              ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+            else do
+              let b6 ←
+                core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                    JFs_PublicValue.common.historical_global_anchor
+              if b6 = true then
+                  ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                else do
+                  let r2 ← pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 nullifier
+                  let r3 ←
+                    match r2 with
+                      | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                      | core.result.Result.Err e => do
+                        let t ←
+                          validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                              () e
+                        ok (core.result.Result.Err t)
+                  let cf1 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  core.ops.control_flow.ControlFlow.rec
+                      (fun a =>
+                        if (a != JFs_PublicValue.common.output_lane) = true then
+                          ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                        else
+                          let (s, _) :=
+                            ((Array.repeat 1520#usize 0#u8).to_slice, (Array.repeat 1520#usize 0#u8).from_slice)
+                          do
+                          let (r4, _) ←
+                            pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                                JFs_PublicValue.common.lane_transition s
+                          let r5 ←
+                            match r4 with
+                              | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                              | core.result.Result.Err e => do
+                                let t ←
+                                  validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                      () e
+                                ok (core.result.Result.Err t)
+                          let cf2 ←
+                            match r5 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          core.ops.control_flow.ControlFlow.rec (fun a => ok (core.result.Result.Ok ()))
+                              (fun a =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) a)
+                              cf2)
+                      (fun a =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) a)
+                      cf1) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+encoded : Std.Array U8 216#usize
+contents : ↑encoded = ↑JFu_PublicRange.payment
+payment :
+  pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 JFs_PaymentValue.value =
+    ok (core.result.Result.Ok encoded)
+updated : Slice U8
+late :
+  pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 JFs_LateChildren.value
+      (Array.repeat 1520#usize 0#u8).to_slice =
+    ok (core.result.Result.Ok (), updated)
+length : updated.length = 1520
+common : JFs_PublicValue.value.common = ok JFs_PublicValue.common
+publicCall :
+  statement_public_common
+      (PoolV1PairForestTerminalStatementV1.PrivateTransfer JFs_PublicValue.common JFs_PaymentValue.value) =
+    ok
+      (JFs_PaymentValue.common.pool, JFs_PaymentValue.common.deployment_domain, JFs_PaymentValue.common.anchor_sequence,
+        JFs_PaymentValue.common.anchor_root, JFs_PaymentValue.common.nullifier, JFs_PaymentValue.common.asset_id)
+lateCall :
+  pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 JFs_PublicValue.common.lane_transition
+      (Array.repeat 1520#usize 0#u8).to_slice =
+    ok (core.result.Result.Ok (), updated)
+⊢ (let (pool, deployment, anchor_sequence, anchor, nullifier, _) :=
+      (JFs_PaymentValue.common.pool, JFs_PaymentValue.common.deployment_domain, JFs_PaymentValue.common.anchor_sequence,
+        JFs_PaymentValue.common.anchor_root, JFs_PaymentValue.common.nullifier, JFs_PaymentValue.common.asset_id)
+    do
+    let b3 ← core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 pool JFs_PublicValue.common.master_account
+    if b3 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+      else do
+        let b4 ←
+          core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 deployment
+              JFs_PublicValue.common.lane_transition.live_snapshot.deployment_domain
+        if b4 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+          else
+            if (anchor_sequence != JFs_PublicValue.common.checkpoint_sequence) = true then
+              ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+            else do
+              let b6 ←
+                core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                    JFs_PublicValue.common.historical_global_anchor
+              if b6 = true then
+                  ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                else do
+                  let r2 ← pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 nullifier
+                  let r3 ←
+                    match r2 with
+                      | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                      | core.result.Result.Err e => do
+                        let t ←
+                          validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                              () e
+                        ok (core.result.Result.Err t)
+                  let cf1 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  core.ops.control_flow.ControlFlow.rec
+                      (fun a =>
+                        if (a != JFs_PublicValue.common.output_lane) = true then
+                          ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                        else
+                          let (s, _) :=
+                            ((Array.repeat 1520#usize 0#u8).to_slice, (Array.repeat 1520#usize 0#u8).from_slice)
+                          do
+                          let (r4, _) ←
+                            pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                                JFs_PublicValue.common.lane_transition s
+                          let r5 ←
+                            match r4 with
+                              | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                              | core.result.Result.Err e => do
+                                let t ←
+                                  validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                      () e
+                                ok (core.result.Result.Err t)
+                          let cf2 ←
+                            match r5 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          core.ops.control_flow.ControlFlow.rec (fun a => ok (core.result.Result.Ok ()))
+                              (fun a =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) a)
+                              cf2)
+                      (fun a =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) a)
+                      cf1) =
+    ok (core.result.Result.Ok ())
+JFs_PublicValidation.lean:37:24: warning: This simp argument is unused:
+  JFs_PublicComparisons.pool
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵p̵o̵o̵l̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵d̵o̵m̵a̵i̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵s̵n̵a̵p̵s̵h̵o̵t̵_̵p̵o̵o̵l̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵a̵n̵c̵h̵o̵r̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵s̵e̵q̵u̵e̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵L̵a̵n̵e̵.̵s̵o̵u̵r̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵l̵a̵n̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲d̲o̲m̲a̲i̲n̲,̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲s̲n̲a̲p̲s̲h̲o̲t̲_̲p̲o̲o̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲a̲n̲c̲h̲o̲r̲,̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲s̲e̲q̲u̲e̲n̲c̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲L̲a̲n̲e̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲l̲a̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PublicValidation.lean:37:51: warning: This simp argument is unused:
+  JFs_PublicComparisons.domain
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵p̵o̵o̵l̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵d̵o̵m̵a̵i̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵s̵n̵a̵p̵s̵h̵o̵t̵_̵p̵o̵o̵l̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵a̵n̵c̵h̵o̵r̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵s̵e̵q̵u̵e̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵L̵a̵n̵e̵.̵s̵o̵u̵r̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵l̵a̵n̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲p̲o̲o̲l̲,̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲s̲n̲a̲p̲s̲h̲o̲t̲_̲p̲o̲o̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲a̲n̲c̲h̲o̲r̲,̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲s̲e̲q̲u̲e̲n̲c̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲L̲a̲n̲e̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲l̲a̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PublicValidation.lean:38:40: warning: This simp argument is unused:
+  JFs_PublicComparisons.anchor
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲JFs_PublicComparisons.pool, ̲JFs_PublicComparisons.domain,
+      JFs_PublicComparisons.snapshot_pool, ̲JFs_PublicComparisons.a̵n̵c̵h̵o̵r̵,̵J̵F̵s_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵s̵equence,
+  ̵  ̵ ̵ ̵Bool.false_eq_true,
+  ̲ ̲ ̲ ̲ ̲↓reduceIte, ̲JFs_PublicLane.source,
+  ̵  ̵ ̵ ̵core.result.Result.map_err,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲JFs_PublicComparisons.lane]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PublicValidation.lean:38:69: warning: This simp argument is unused:
+  JFs_PublicComparisons.sequence
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲JFs_PublicComparisons.pool, ̲JFs_PublicComparisons.domain,
+      JFs_PublicComparisons.snapshot_pool, ̲JFs_PublicComparisons.anchor,J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵s̵e̵q̵u̵e̵n̵c̵e̵,̵
+  ̵  ̵ ̵ ̵Bool.false_eq_true,
+  ̲ ̲ ̲ ̲ ̲↓reduceIte, ̲JFs_PublicLane.source,
+  ̵  ̵ ̵ ̵core.result.Result.map_err,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲JFs_PublicComparisons.lane]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PublicValidation.lean:39:34: warning: This simp argument is unused:
+  JFs_PublicLane.source
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵p̵o̵o̵l̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵d̵o̵m̵a̵i̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵s̵n̵a̵p̵s̵h̵o̵t̵_̵p̵o̵o̵l̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵a̵n̵c̵h̵o̵r̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵s̵e̵q̵u̵e̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵L̵a̵n̵e̵.̵s̵o̵u̵r̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵l̵a̵n̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲p̲o̲o̲l̲,̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲d̲o̲m̲a̲i̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲s̲n̲a̲p̲s̲h̲o̲t̲_̲p̲o̲o̲l̲,̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲a̲n̲c̲h̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲s̲e̲q̲u̲e̲n̲c̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲J̲F̲s̲_̲P̲u̲b̲l̲i̲c̲C̲o̲m̲p̲a̲r̲i̲s̲o̲n̲s̲.̲l̲a̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PublicValidation.lean:40:4: warning: This simp argument is unused:
+  core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲JFs_PublicComparisons.pool, ̲JFs_PublicComparisons.domain,
+      JFs_PublicComparisons.snapshot_pool, ̲JFs_PublicComparisons.anchor,
+  ̲ ̲ ̲ ̲ ̲JFs_PublicComparisons.sequence,
+  ̵  ̵ ̵ ̵Bool.false_eq_true, ̲↓reduceIte, ̲JFs_PublicLane.source,
+      core.result.Result.m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵Insts.CoreOpsTry.branch, ̲JFs_PublicComparisons.lane]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PublicValidation.lean:40:31: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲JFs_PublicComparisons.pool, ̲JFs_PublicComparisons.domain,
+      JFs_PublicComparisons.snapshot_pool, ̲JFs_PublicComparisons.anchor,
+  ̲ ̲ ̲ ̲ ̲JFs_PublicComparisons.sequence,
+  ̵  ̵ ̵ ̵Bool.false_eq_true, ̲↓reduceIte, ̲JFs_PublicLane.source,
+      core.result.Result.map_err,c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵ ̲JFs_PublicComparisons.lane]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PublicValidation.lean:40:74: warning: This simp argument is unused:
+  JFs_PublicComparisons.lane
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲JFs_PublicComparisons.pool, ̲JFs_PublicComparisons.domain,
+      JFs_PublicComparisons.snapshot_pool, ̲JFs_PublicComparisons.anchor,
+  ̲ ̲ ̲ ̲ ̲JFs_PublicComparisons.sequence,
+  ̵  ̵ ̵ ̵Bool.false_eq_true, ̲↓reduceIte, ̲JFs_PublicLane.source,
+      core.result.Result.map_err, ̲core.result.Result.Insts.CoreOpsTry.branch,̵J̵F̵s̵_̵P̵u̵b̵l̵i̵c̵C̵o̵m̵p̵a̵r̵i̵s̵o̵n̵s̵.̵l̵a̵n̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PublicValidation.lean:41:32: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [Array.to_slice_mut,l̵i̵f̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PublicValidation.lean:41:37: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵_̵m̵u̵t̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲_̲m̲u̲t̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFs_PublicValidation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

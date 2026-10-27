@@ -1,0 +1,144 @@
+FJk_CopyWeightSimple.lean:13:2: error: Tactic `rfl` failed: The left-hand side
+  ↑field.M31.ONE
+is not definitionally equal to the right-hand side
+  1
+
+case refl
+l : CompiledPoolV1PairForestLink
+index : U64
+v : PoolV1PairForestCompiledVariantV1
+hk : l.weight_kind = 0#u8
+run :
+  (match 0#u8 with
+    | 0#8#uscalar => ok field.M31.ONE
+    | 1#8#uscalar => do
+      let b ←
+        PoolV1PairForestCompiledVariantV1.Insts.CoreCmpPartialEqPoolV1PairForestCompiledVariantV1.eq v
+            PoolV1PairForestCompiledVariantV1.PrivateTransfer
+      let i ← lift (core.convert.num.FromU32Bool.from b)
+      ok i
+    | 2#8#uscalar => do
+      let b ←
+        PoolV1PairForestCompiledVariantV1.Insts.CoreCmpPartialEqPoolV1PairForestCompiledVariantV1.eq v
+            PoolV1PairForestCompiledVariantV1.Withdrawal
+      let i ← lift (core.convert.num.FromU32Bool.from b)
+      ok i
+    | 3#8#uscalar => do
+      let i ← index >>> l.weight_level
+      let i1 ← lift (i &&& 1#u64)
+      let i2 ← lift (UScalar.cast UScalarTy.U32 i1)
+      let i3 ← 1#u32 - i2
+      ok i3
+    | 4#8#uscalar => do
+      let i ← index >>> l.weight_level
+      let i1 ← lift (i &&& 1#u64)
+      let i2 ← lift (UScalar.cast UScalarTy.U32 i1)
+      ok i2
+    | x => fail Error.panic) =
+    ok field.M31.ONE
+⊢ ↑field.M31.ONE = 1
+FJk_CopyWeightSimple.lean:23:40: error: Tactic `rfl` failed: The left-hand side
+  ↑(core.convert.num.FromU32Bool.from
+      (decide
+        (PoolV1PairForestCompiledVariantV1.Withdrawal.read_discriminant =
+          PoolV1PairForestCompiledVariantV1.PrivateTransfer.read_discriminant)))
+is not definitionally equal to the right-hand side
+  match PoolV1PairForestCompiledVariantV1.Withdrawal, hk, run✝ with
+  | PoolV1PairForestCompiledVariantV1.PrivateTransfer, hk, run => 1
+  | PoolV1PairForestCompiledVariantV1.Withdrawal, hk, run => 0
+
+case Withdrawal.refl
+l : CompiledPoolV1PairForestLink
+index : U64
+hk : l.weight_kind = 1#u8
+run✝ :
+  link_weight l index PoolV1PairForestCompiledVariantV1.Withdrawal =
+    ok
+      (core.convert.num.FromU32Bool.from
+        (decide
+          (PoolV1PairForestCompiledVariantV1.Withdrawal.read_discriminant =
+            PoolV1PairForestCompiledVariantV1.PrivateTransfer.read_discriminant)))
+run :
+  (match 1#u8 with
+    | 0#8#uscalar => ok field.M31.ONE
+    | 1#8#uscalar =>
+      ok
+        (core.convert.num.FromU32Bool.from
+          (decide
+            (PoolV1PairForestCompiledVariantV1.Withdrawal.read_discriminant =
+              PoolV1PairForestCompiledVariantV1.PrivateTransfer.read_discriminant)))
+    | 2#8#uscalar => ok (core.convert.num.FromU32Bool.from (decide True))
+    | 3#8#uscalar => do
+      let i ← index >>> l.weight_level
+      let i3 ← 1#u32 - UScalar.cast UScalarTy.U32 (i &&& 1#u64)
+      ok i3
+    | 4#8#uscalar => do
+      let i ← index >>> l.weight_level
+      ok (UScalar.cast UScalarTy.U32 (i &&& 1#u64))
+    | x => fail Error.panic) =
+    ok
+      (core.convert.num.FromU32Bool.from
+        (decide
+          (PoolV1PairForestCompiledVariantV1.Withdrawal.read_discriminant =
+            PoolV1PairForestCompiledVariantV1.PrivateTransfer.read_discriminant)))
+⊢ ↑(core.convert.num.FromU32Bool.from
+        (decide
+          (PoolV1PairForestCompiledVariantV1.Withdrawal.read_discriminant =
+            PoolV1PairForestCompiledVariantV1.PrivateTransfer.read_discriminant))) =
+    match PoolV1PairForestCompiledVariantV1.Withdrawal, hk, run✝ with
+    | PoolV1PairForestCompiledVariantV1.PrivateTransfer, hk, run => 1
+    | PoolV1PairForestCompiledVariantV1.Withdrawal, hk, run => 0
+FJk_CopyWeightSimple.lean:33:40: error: Tactic `rfl` failed: The left-hand side
+  ↑(core.convert.num.FromU32Bool.from
+      (decide
+        (PoolV1PairForestCompiledVariantV1.PrivateTransfer.read_discriminant =
+          PoolV1PairForestCompiledVariantV1.Withdrawal.read_discriminant)))
+is not definitionally equal to the right-hand side
+  match PoolV1PairForestCompiledVariantV1.PrivateTransfer, hk, run✝ with
+  | PoolV1PairForestCompiledVariantV1.PrivateTransfer, hk, run => 0
+  | PoolV1PairForestCompiledVariantV1.Withdrawal, hk, run => 1
+
+case PrivateTransfer.refl
+l : CompiledPoolV1PairForestLink
+index : U64
+hk : l.weight_kind = 2#u8
+run✝ :
+  link_weight l index PoolV1PairForestCompiledVariantV1.PrivateTransfer =
+    ok
+      (core.convert.num.FromU32Bool.from
+        (decide
+          (PoolV1PairForestCompiledVariantV1.PrivateTransfer.read_discriminant =
+            PoolV1PairForestCompiledVariantV1.Withdrawal.read_discriminant)))
+run :
+  (match 2#u8 with
+    | 0#8#uscalar => ok field.M31.ONE
+    | 1#8#uscalar => ok (core.convert.num.FromU32Bool.from (decide True))
+    | 2#8#uscalar =>
+      ok
+        (core.convert.num.FromU32Bool.from
+          (decide
+            (PoolV1PairForestCompiledVariantV1.PrivateTransfer.read_discriminant =
+              PoolV1PairForestCompiledVariantV1.Withdrawal.read_discriminant)))
+    | 3#8#uscalar => do
+      let i ← index >>> l.weight_level
+      let i3 ← 1#u32 - UScalar.cast UScalarTy.U32 (i &&& 1#u64)
+      ok i3
+    | 4#8#uscalar => do
+      let i ← index >>> l.weight_level
+      ok (UScalar.cast UScalarTy.U32 (i &&& 1#u64))
+    | x => fail Error.panic) =
+    ok
+      (core.convert.num.FromU32Bool.from
+        (decide
+          (PoolV1PairForestCompiledVariantV1.PrivateTransfer.read_discriminant =
+            PoolV1PairForestCompiledVariantV1.Withdrawal.read_discriminant)))
+⊢ ↑(core.convert.num.FromU32Bool.from
+        (decide
+          (PoolV1PairForestCompiledVariantV1.PrivateTransfer.read_discriminant =
+            PoolV1PairForestCompiledVariantV1.Withdrawal.read_discriminant))) =
+    match PoolV1PairForestCompiledVariantV1.PrivateTransfer, hk, run✝ with
+    | PoolV1PairForestCompiledVariantV1.PrivateTransfer, hk, run => 0
+    | PoolV1PairForestCompiledVariantV1.Withdrawal, hk, run => 1
+'AspisR1.FJk_CopyWeightSimple.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJk_CopyWeightSimple.transfer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJk_CopyWeightSimple.withdrawal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

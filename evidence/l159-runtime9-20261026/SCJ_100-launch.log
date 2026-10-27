@@ -1,0 +1,38 @@
+{"attempt": "SCJ_100", "exit_status": 0, "wall_seconds": 2.468216865963768, "peak_rss_kib": "5517644", "swaps": "0", "print_axioms": ["'AspisR1.SCJ_AccountProjection.event_implies' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_AlignedEvent.hits' depends on axioms: [propext, Quot.sound]", "'AspisR1.SCJ_Alignment.sublist' depends on axioms: [propext, Quot.sound]", "'AspisR1.SCJ_BeforeTable.extension' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_Checkpoint.same_saved' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_Checkpoint.entry_saved' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_Composition.account_of_branch' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_Domination.indicator_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_Domination.of_transport' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_Projection.event_implies_aligned' depends on axioms: [propext, Quot.sound]", "'AspisR1.SCJ_Projection.not_all_sublists_aligned' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_FirstHitWitness.witness' depends on axioms: [propext]", "'AspisR1.SCJ_FirstRead.cached_interior' depends on axioms: [propext, Quot.sound]", "'AspisR1.SCJ_NativeLoaded.entry_loaded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_NativeLoaded.ideal_cut' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_Nonvacuity.real_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_OrderObstruction.sublist_not_first_order' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_Projection.event_implies' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_Projection.event_implies_refuted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_Projection.clean_transport_refuted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_TableExtension.known' does not depend on any axioms", "'AspisR1.SCJ_TableExtension.put' does not depend on any axioms", "'AspisR1.SCJ_TableExtension.bad' depends on axioms: [propext, Quot.sound]", "'AspisR1.SCJ_Top.unrestricted_runtime_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Rc8_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Rc8_Nonvacuity.composed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCG_Nonvacuity.joint' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.SCJ_AccountProjection.event_implies' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCJ_AlignedEvent.hits' depends on axioms: [propext, Quot.sound]
+'AspisR1.SCJ_Alignment.sublist' depends on axioms: [propext, Quot.sound]
+'AspisR1.SCJ_BeforeTable.extension' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCJ_Checkpoint.same_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCJ_Checkpoint.entry_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCJ_Composition.account_of_branch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCJ_Domination.indicator_obstruction' depends on ax
+...
+2.2 =
+                      Bool.true ∧
+                    AspisR1.OraclePortRefineJoin.RecoveredInputAgreement (AspisR1.F3T_Experiment.view run)
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.F3T_Charged.projected D
+                          (AspisR1.F3T_Canon.canon
+                            (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a)))))
+inductive AspisR1.SCJ_Alignment.Aligned : {I A : Type} →
+  [DecidableEq I] →
+    ℕ → AspisV8PairedCommitment.Table I A → AspisV8PairedCommitment.Table I A → List (I × A) → List (I × A) → Prop
+number of parameters: 4
+constructors:
+AspisR1.SCJ_Alignment.Aligned.nil : ∀ {I A : Type} [inst : DecidableEq I] {Q : ℕ}
+  (small full : AspisV8PairedCommitment.Table I A), AspisR1.SCJ_Alignment.Aligned Q small full [] []
+AspisR1.SCJ_Alignment.Aligned.keep : ∀ {I A : Type} [inst : DecidableEq I] {Q : ℕ}
+  (small full : AspisV8PairedCommitment.Table I A) (i : I) (answer : A) (left right : List (I × A)),
+  AspisR1.SCJ_TableExtension.Extends small full →
+    (small i = Option.none → full i = Option.none) →
+      (small i = Option.none → AspisR1.AllAddressCollision.Small full Q) →
+        AspisR1.SCJ_Alignment.Aligned Q (AspisV8PairedCommitment.put small i answer)
+            (AspisV8PairedCommitment.put full i answer) left right →
+          AspisR1.SCJ_Alignment.Aligned Q small full ((i, answer) :: left) ((i, answer) :: right)
+AspisR1.SCJ_Alignment.Aligned.drop : ∀ {I A : Type} [inst : DecidableEq I] {Q : ℕ}
+  (small full : AspisV8PairedCommitment.Table I A) (i : I) (answer : A) (left right : List (I × A)),
+  AspisR1.SCJ_Alignment.Aligned Q small (AspisV8PairedCommitment.put full i answer) left right →
+    AspisR1.SCJ_Alignment.Aligned Q small full left ((i, answer) :: right)
+
+Running as unit: run-r2f1e19e340de498bad135b76bc35fe86.scope; invocation ID: 1585c9c6af5f48e4b610cdfcab4fd6c0

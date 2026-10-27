@@ -1,0 +1,52 @@
+def AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_5.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1.call_once : AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_5 →
+  AspisR1TerminalDecoder.atomic_statement.AtomicStatementError →
+    Aeneas.Std.Result AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 :=
+fun c tupled_args =>
+  Aeneas.Std.Result.ok
+    AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate
+'AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_5.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1.call_once' does not depend on any axioms
+def AspisR1TerminalDecoder.pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1 : AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result Unit
+      AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) :=
+fun public1 => do
+  let cpv ← AspisR1TerminalDecoder.pool_v1.payment_relation.withdrawal_common public1
+  let r ← AspisR1TerminalDecoder.pool_v1.payment_relation.validate_common cpv
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+      if public1.amount = 0#u32 then
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount)
+      else do
+        let i ← AspisR1TerminalDecoder.spend.VALUE_LIMIT
+        if public1.amount ≥ i then
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err
+                AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount)
+          else
+            have a := Aeneas.Std.Array.repeat 32#usize 0#u8;
+            do
+            let b ←
+              Aeneas.Std.core.array.equality.PartialEqArray.eq Aeneas.Std.core.cmp.PartialEqU8
+                  public1.destination_token_account a
+            if b = true then
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err
+                    AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidDestination)
+              else do
+                let b1 ← AspisR1TerminalDecoder.pool_v1.payment_relation.digest_is_canonical public1.change_commitment
+                if b1 = true then Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                  else
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.core.result.Result.Err
+                        AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+        (Aeneas.Std.core.convert.FromSame
+          AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError)
+        residual
+'AspisR1TerminalDecoder.pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

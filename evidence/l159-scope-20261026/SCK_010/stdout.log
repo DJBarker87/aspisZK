@@ -1,0 +1,26 @@
+AspisR1.SCH_AccountDecoded.accepted {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C) (err : C)
+  (reservation : AspisR1.NP6_StdModel.Reservation)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) :
+  have r := AspisR1.Rc5_Install.configuration err c reservation;
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    AspisR1.SCE_Experiment.accepted
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account r hashv copy allocator id a)).2 =
+        true →
+      ∃ saved post final f s,
+        AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.SCH_IdealSdk.dictionary r hashv H)
+            (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.entry.first
+            ((AspisV8R19.MemoizedProgramLaw.eval H
+                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)).2.entry.second
+              AspisR1.S2W_D189Wrappers.secondSizes)
+            saved f s ∧
+          AspisR1.Port1_Driver.decodeSemantic (AspisR1.DrvC_Installation.sdk r) f.pub =
+              Aeneas.Std.Result.ok (some f.semantic) ∧
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2 =
+              { publicBytes := AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub,
+                stored := AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof }
+'AspisR1.SCH_AccountDecoded.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]

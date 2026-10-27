@@ -1,0 +1,21 @@
+import FIz_ContributionList
+import FIz_PathFamily
+import FIz_OccupancyFamily
+import FIz_PublicDigest
+import FIz_ScalarList
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FIz_ComponentPacking
+open FIv_NativeValue (K)
+open FIw_PublicModel (Public Openings Selectors)
+theorem path (p : Public) (o : Openings) (s : Selectors) (group : Nat)
+    (hm : (∑ h : Fin 64, FIv_NativeArray.value s.high h.val)=1)
+    (lm : (∑ l : Fin 16, FIv_NativeArray.value s.low l.val)=1) :
+    FIx_SelectedMeaning.contribution (FIx_PathMeaning.coefficients (FIx_PathPacked.selector s)
+      (FIv_NativeArray.value o.z 0) (FIv_NativeArray.value o.z) (FIv_NativeArray.value o.succ_z)) 32 group=
+    FIz_ContributionList.fromList (R0P.pathFamily.residuals (FIw_PublicModel.ofPublic p)
+      (FIw_PublicModel.openings o) (FIw_PublicModel.selector s)) 32 group := by
+  rw [FIz_ContributionList.value,FIz_PathFamily.value p o s hm lm]
+#print axioms path
+end AspisR1.FIz_ComponentPacking
+end

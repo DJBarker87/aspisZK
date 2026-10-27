@@ -1,0 +1,11 @@
+import JGg_FinalAudit
+import S1ClosedPreparationHashCodeV1
+set_option autoImplicit false
+#print AspisR1ClaimPreparedBridge.claimPublic
+#print AspisR1CurrentPreparedClaim.verifier.prepared_claim
+#print AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop
+#print AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot
+#print AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop
+#print AspisR1S5ClaimDotConcreteAdapter.concreteOps
+#print AspisR1CurrentPreparedClaim.ClaimParser.field
+#print AspisR1CurrentPreparedClaim.ClaimParser.c0

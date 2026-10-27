@@ -1,0 +1,64 @@
+FIn_Polynomial.lean:81:62: error: Ambiguous term
+  dite_true
+Possible interpretations:
+  _root_.dite_true : dite True ?m.46 ?m.47 = ?m.46 True.intro
+  
+  Aeneas.dite_true : dite True ?m.46 ?m.47 = ?m.46 True.intro
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+FIn_Polynomial.lean:77:2: error: unsolved goals
+case refine_2
+bytes : Slice U8
+x out : E
+f : Fin 7 → AspisWideTower.WideExact
+encoded : SelectedFieldSequenceCodec.encodeWide f = MultiproofConeCanonical.bytesOf ↑bytes
+run : polynomial bytes x = ok out
+coeff : ℕ → AspisWideTower.WideExact := fun i => if h : i < 7 then f ⟨i, h⟩ else 0
+h :
+  CheckpointBytes5Output.ofE out =
+    List.foldl (fun acc i => acc * CheckpointBytes5Output.ofE x + coeff ↑i) 0
+      [6#usize, 5#usize, 4#usize, 3#usize, 2#usize, 1#usize, 0#usize]
+⊢ (((((((CheckpointBytes5Output.ofE x * if h : 1#usize.bv.toNat < 7 then f ⟨1#usize.bv.toNat, ⋯⟩ else 0) +
+                CheckpointBytes5Output.ofE x ^ 2 * if h : 2#usize.bv.toNat < 7 then f ⟨2#usize.bv.toNat, ⋯⟩ else 0) +
+              CheckpointBytes5Output.ofE x ^ 3 * if h : 3#usize.bv.toNat < 7 then f ⟨3#usize.bv.toNat, ⋯⟩ else 0) +
+            CheckpointBytes5Output.ofE x ^ 4 * if h : 4#usize.bv.toNat < 7 then f ⟨4#usize.bv.toNat, ⋯⟩ else 0) +
+          CheckpointBytes5Output.ofE x ^ 5 * if h : 5#usize.bv.toNat < 7 then f ⟨5#usize.bv.toNat, ⋯⟩ else 0) +
+        CheckpointBytes5Output.ofE x ^ 6 * if h : 6#usize.bv.toNat < 7 then f ⟨6#usize.bv.toNat, ⋯⟩ else 0) +
+      if h : 0#usize.bv.toNat < 7 then f ⟨0#usize.bv.toNat, ⋯⟩ else 0) =
+    CheckpointBytes5Output.ofE x * f (Fin.succ 0) + CheckpointBytes5Output.ofE x ^ 2 * f (Fin.succ 0).succ +
+              CheckpointBytes5Output.ofE x ^ 3 * f (Fin.succ 0).succ.succ +
+            CheckpointBytes5Output.ofE x ^ 4 * f (Fin.succ 0).succ.succ.succ +
+          CheckpointBytes5Output.ofE x ^ 5 * f (Fin.succ 0).succ.succ.succ.succ +
+        CheckpointBytes5Output.ofE x ^ 6 * f (Fin.succ 0).succ.succ.succ.succ.succ +
+      f 0
+FIn_Polynomial.lean:86:57: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  i = 0#usize ∨ i ∈ []
+
+case inr.inr.inr.inr.inr.inr
+bytes : Slice U8
+x out : E
+f : Fin 7 → AspisWideTower.WideExact
+encoded : SelectedFieldSequenceCodec.encodeWide f = MultiproofConeCanonical.bytesOf ↑bytes
+run : polynomial bytes x = ok out
+coeff : ℕ → AspisWideTower.WideExact := fun i => if h : i < 7 then f ⟨i, h⟩ else 0
+i : Usize
+c : E
+hc : FIn_Primitives.field bytes i = ok c
+h✝ : i = 0#usize ∨ i ∈ []
+⊢ ↑i < 7
+FIn_Polynomial.lean:85:31: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_cons,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵] at hi
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIn_Polynomial.mul_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIn_Polynomial.go_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIn_Polynomial.encoded_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIn_Polynomial.zero_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIn_Polynomial.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

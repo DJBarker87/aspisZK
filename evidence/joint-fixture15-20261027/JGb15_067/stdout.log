@@ -1,0 +1,81 @@
+JGb_Sum3Component.lean:27:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JGb_Sum3Channel.loop ?m.136 left sums index right it.start
+in the target expression
+  (do
+      let sums1 ←
+        FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0 { start := 0#usize, «end» := 3#usize } left sums
+            index right it.start
+      FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0 it1 left sums1 index right) =
+    do
+    let sums1 ←
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0
+          { start := 0#usize, «end» := 3#usize } (JGb_ArrayMap.array prepared left) sums index right it.start
+    AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0 it1
+        (JGb_ArrayMap.array prepared left) sums1 index right
+
+case succ
+left : Std.Array NP 3#usize
+index : Usize
+right : Components
+n : ℕ
+ih :
+  ∀ (it : core.ops.range.Range Usize) (sums : Sums),
+    ↑it.start + n = ↑it.end →
+      loop it left sums index right = probe it (JGb_ArrayMap.array prepared left) sums index right
+it : core.ops.range.Range Usize
+sums : Sums
+span : ↑it.start + (n + 1) = ↑it.end
+it1 : ExtractedMaskForwardRange.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize it = ok (some it.start, it1)
+hs : ↑it1.start = ↑it.start + 1
+he : it1.end = it.end
+right✝ : ↑it.start + 1 ≤ Usize.max
+span1 : ↑it1.start + n = ↑it1.end
+recur : ∀ (s : Sums), loop it1 left s index right = probe it1 (JGb_ArrayMap.array prepared left) s index right
+⊢ (do
+      let sums1 ←
+        FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0 { start := 0#usize, «end» := 3#usize } left sums
+            index right it.start
+      FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0 it1 left sums1 index right) =
+    do
+    let sums1 ←
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0
+          { start := 0#usize, «end» := 3#usize } (JGb_ArrayMap.array prepared left) sums index right it.start
+    AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0 it1
+        (JGb_ArrayMap.array prepared left) sums1 index right
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGb_Sum3Component.lean:27:70: error: Tactic `rfl` failed: The left-hand side
+  ↑(core.ops.range.Range.start ?m.136) + 3
+is not definitionally equal to the right-hand side
+  ↑(core.ops.range.Range.end ?m.136)
+
+left : Std.Array NP 3#usize
+index : Usize
+right : Components
+n : ℕ
+ih :
+  ∀ (it : core.ops.range.Range Usize) (sums : Sums),
+    ↑it.start + n = ↑it.end →
+      loop it left sums index right = probe it (JGb_ArrayMap.array prepared left) sums index right
+it : core.ops.range.Range Usize
+sums : Sums
+span : ↑it.start + (n + 1) = ↑it.end
+it1 : ExtractedMaskForwardRange.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize it = ok (some it.start, it1)
+hs : ↑it1.start = ↑it.start + 1
+he : it1.end = it.end
+right✝ : ↑it.start + 1 ≤ Usize.max
+span1 : ↑it1.start + n = ↑it1.end
+recur : ∀ (s : Sums), loop it1 left s index right = probe it1 (JGb_ArrayMap.array prepared left) s index right
+⊢ ↑(core.ops.range.Range.start ?m.136) + 3 = ↑(core.ops.range.Range.end ?m.136)
+'AspisR1.JGb_Sum3Component.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

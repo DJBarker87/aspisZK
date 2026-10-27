@@ -1,0 +1,129 @@
+F3Q_CodeEval.lean:17:63: error: Ambiguous term
+  bind
+Possible interpretations:
+  AspisV8R19.OracleProgramOps.bind : Program ?m.103 ?m.104 ?m.105 →
+    (?m.105 → Program ?m.103 ?m.104 ?m.106) → Program ?m.103 ?m.104 ?m.106
+  
+  CheckpointBytes5Effect.bind : Code ?m.103 → (?m.103 → Code ?m.104) → Code ?m.104
+  
+  Std.bind : Result ?m.103 → (?m.103 → Result ?m.104) → Result ?m.104
+F3Q_CodeEval.lean:29:47: error: Tactic `rfl` failed: The left-hand side
+  have first := eval H (SdkC_Oracle.program c);
+  have second :=
+    eval H
+      (match first.2 with
+      | ok a => SdkC_Oracle.program (k a)
+      | fail e => Program.done (fail e)
+      | div => Program.done div);
+  (first.1 ++ second.1, second.2)
+is not definitionally equal to the right-hand side
+  let first := eval H (SdkC_Oracle.program c);
+  let next :=
+    match first.2 with
+    | ok a => eval H (SdkC_Oracle.program (k a))
+    | fail e => ([], fail e)
+    | div => ([], div);
+  (first.1 ++ next.1, next.2)
+
+case ok
+A B : Type
+H : Bytes → State
+c : Code A
+k : A → Code B
+v✝ : A
+⊢ (have first := eval H (SdkC_Oracle.program c);
+    have second :=
+      eval H
+        (match first.2 with
+        | ok a => SdkC_Oracle.program (k a)
+        | fail e => Program.done (fail e)
+        | div => Program.done div);
+    (first.1 ++ second.1, second.2)) =
+    let first := eval H (SdkC_Oracle.program c);
+    let next :=
+      match first.2 with
+      | ok a => eval H (SdkC_Oracle.program (k a))
+      | fail e => ([], fail e)
+      | div => ([], div);
+    (first.1 ++ next.1, next.2)
+F3Q_CodeEval.lean:29:47: error: Tactic `rfl` failed: The left-hand side
+  have first := eval H (SdkC_Oracle.program c);
+  have second :=
+    eval H
+      (match first.2 with
+      | ok a => SdkC_Oracle.program (k a)
+      | fail e => Program.done (fail e)
+      | div => Program.done div);
+  (first.1 ++ second.1, second.2)
+is not definitionally equal to the right-hand side
+  let first := eval H (SdkC_Oracle.program c);
+  let next :=
+    match first.2 with
+    | ok a => eval H (SdkC_Oracle.program (k a))
+    | fail e => ([], fail e)
+    | div => ([], div);
+  (first.1 ++ next.1, next.2)
+
+case fail
+A B : Type
+H : Bytes → State
+c : Code A
+k : A → Code B
+e✝ : Error
+⊢ (have first := eval H (SdkC_Oracle.program c);
+    have second :=
+      eval H
+        (match first.2 with
+        | ok a => SdkC_Oracle.program (k a)
+        | fail e => Program.done (fail e)
+        | div => Program.done div);
+    (first.1 ++ second.1, second.2)) =
+    let first := eval H (SdkC_Oracle.program c);
+    let next :=
+      match first.2 with
+      | ok a => eval H (SdkC_Oracle.program (k a))
+      | fail e => ([], fail e)
+      | div => ([], div);
+    (first.1 ++ next.1, next.2)
+F3Q_CodeEval.lean:29:47: error: Tactic `rfl` failed: The left-hand side
+  have first := eval H (SdkC_Oracle.program c);
+  have second :=
+    eval H
+      (match first.2 with
+      | ok a => SdkC_Oracle.program (k a)
+      | fail e => Program.done (fail e)
+      | div => Program.done div);
+  (first.1 ++ second.1, second.2)
+is not definitionally equal to the right-hand side
+  let first := eval H (SdkC_Oracle.program c);
+  let next :=
+    match first.2 with
+    | ok a => eval H (SdkC_Oracle.program (k a))
+    | fail e => ([], fail e)
+    | div => ([], div);
+  (first.1 ++ next.1, next.2)
+
+case div
+A B : Type
+H : Bytes → State
+c : Code A
+k : A → Code B
+⊢ (have first := eval H (SdkC_Oracle.program c);
+    have second :=
+      eval H
+        (match first.2 with
+        | ok a => SdkC_Oracle.program (k a)
+        | fail e => Program.done (fail e)
+        | div => Program.done div);
+    (first.1 ++ second.1, second.2)) =
+    let first := eval H (SdkC_Oracle.program c);
+    let next :=
+      match first.2 with
+      | ok a => eval H (SdkC_Oracle.program (k a))
+      | fail e => ([], fail e)
+      | div => ([], div);
+    (first.1 ++ next.1, next.2)
+'AspisR1.F3Q_CodeEval.bind_program' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3Q_CodeEval.bind_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3Q_CodeEval.lift_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3Q_CodeEval.lift_bind_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

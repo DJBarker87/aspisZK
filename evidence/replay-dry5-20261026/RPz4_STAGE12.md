@@ -1,0 +1,9 @@
+# Stage 12: source replay budget frontier
+
+The source scheduler stopped at1472 total Lean attempts, reserving28 for the final disjoint declaration audit. There are2749 selected green module contexts:1378 retained from the predecessor source replay and1371 newly successful source compiles. The source graph contains4798 modules with zero unresolved module names. All23 original name gaps and all three inherited failure vertices have successful selected-input replacements. Complete per-target resources and exact frontier categories are in RPz4_source-frontier.json.
+
+Three selected source vertices remain failed on the shared adopted c16 export incompatibility:640 ExtractedPreparedModel,1105 ExtractedOpeningQueriesModel and1225 S1SemanticPrefixModelV1. Their chains remain stopped; source/model alternatives are not silently substituted. The syntax-only Claims parent Types repair passed1403, followed by its source/row consumers1404-1405. Original1316 remains in the failure record. No source candidate outside the job prefix was edited.
+
+No timeout, memory kill, swap or cap increase occurred. Every proof/query uses one existing admitted capped host scope and Lean-M7000. The complete job namespace view and immutable source/dependency pins are retained. The source stop is a budget reservation, not a claim that every ready module has run. The remaining28 attempts are the final batched axioms pass; source and audit counts will total at most1500.
+
+Rc7_Top is not reached. Its identical source text, zero premise/ledger delta, lack of fresh joint non-vacuity and unestablished source-to-ELF/100-bit result remain explicit. No historical cached-top receipt substitutes for the fresh top. Formatter proof-term reachability from a fresh top therefore remains unknown. The actual source incompatibilities and remaining budget frontier, rather than commit/module counts, govern closure status.

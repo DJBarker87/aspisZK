@@ -1,0 +1,50 @@
+RowShape_SlotObstruction.lean:31:75: error: unsolved goals
+tr : ErasedPrefix
+header : OraclePortHeader.accepts (bytesOf ↑empty) = false
+⊢ (do
+      let p ← none
+      if Aligned p tr then some p else none) =
+    none
+RowShape_SlotObstruction.lean:35:4: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [OraclePortStoredParserC4.parseReached, parse, header, if_true,̵
+  ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+RowShape_SlotObstruction.lean:50:4: error: Tactic `decide` failed for proposition
+  7031 + (0 + 1 + 1 + 1 + 1) ≤ Usize.max
+because its `Decidable` instance
+  (7031 + (0 + 1 + 1 + 1 + 1)).decLe Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (7031 + (0 + 1 + 1 + 1 + 1)).ble Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+RowShape_SlotObstruction.lean:53:22: warning: Possibly looping simp theorem: `badScan.eq_1`
+
+Note: Possibly caused by: `List.reduceReplicate` and `List.cons_append`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+RowShape_SlotObstruction.lean:53:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+RowShape_SlotObstruction.lean:53:22: warning: declaration uses `sorry`
+'AspisR1.RowShape_SlotObstruction.shape_arbitrary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RowShape_SlotObstruction.scan_arbitrary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RowShape_SlotObstruction.frozen_empty' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RowShape_SlotObstruction.shape_success_not_parser' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.RowShape_SlotObstruction.badScan_segment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RowShape_SlotObstruction.badScan_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RowShape_SlotObstruction.scan_success_not_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

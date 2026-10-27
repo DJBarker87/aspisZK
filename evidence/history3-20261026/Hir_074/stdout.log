@@ -1,0 +1,44 @@
+Hir_RuntimeNonvacuity.lean:30:7: error: Ambiguous term
+  put
+Possible interpretations:
+  S2Trust.put initial 0 created : ℕ → Cell
+  
+  Hist_Store.put initial 0 created : Store
+Hir_RuntimeNonvacuity.lean:32:22: error: Ambiguous term
+  run
+Possible interpretations:
+  Hir_Schedule.run : S2W_ExtractionBoundary.First →
+    S2W_ExtractionBoundary.Second →
+      (Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) →
+        Allocator ?m.42 → S2W_ExtractionBoundary.Program → (Bytes → State) → Store → Schedule ?m.42 ?m.43 → Output ?m.43
+  
+  S2Trust.run : Heap ?m.42 → Op → Heap ?m.42 × S2Trust.Reply
+Hir_RuntimeNonvacuity.lean:30:110: error: unsolved goals
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator Unit
+H : Bytes → State
+authorized : key 1#u8 ≠ key 0#u8 ∧ (initial 0).owner = key 1#u8
+⊢ Hir_Schedule.run native1 native2 copy allocator (key 0#u8) H initial
+      (Schedule.ask [] fun x =>
+        Schedule.foreign (key 1#u8) 0 { owner := key 0#u8, data := zeros } fun x => (Schedule.done ()).rollback) =
+    (sorry, [S2X.AccountEvent.committedWrite 0 (MultiproofConeCanonical.bytesOf ↑zeros), S2X.AccountEvent.rollback], ())
+Hir_RuntimeNonvacuity.lean:32:26: warning: This simp argument is unused:
+  Hiq_NativeAction.apply
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵c̵h̵e̵d̵u̵l̵e̵,̵r̵u̵n̵,̵H̵i̵q̵_̵N̵a̵t̵i̵v̵e̵A̵c̵t̵i̵o̵n̵.̵a̵p̵p̵l̵y̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵u̵t̵h̵o̵r̵i̵z̵e̵d̵,̵c̵r̵e̵a̵t̵e̵d̵]̵[̲s̲c̲h̲e̲d̲u̲l̲e̲,̲ ̲r̲u̲n̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲a̲u̲t̲h̲o̲r̲i̲z̲e̲d̲,̲ ̲c̲r̲e̲a̲t̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Hir_RuntimeNonvacuity.lean:32:49: warning: This simp argument is unused:
+  if_pos authorized
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵c̵h̵e̵d̵u̵l̵e̵,̵r̵u̵n̵,̵H̵i̵q̵_̵N̵a̵t̵i̵v̵e̵A̵c̵t̵i̵o̵n̵.̵a̵p̵p̵l̵y̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵u̵t̵h̵o̵r̵i̵z̵e̵d̵,̵c̵r̵e̵a̵t̵e̵d̵]̵[̲s̲c̲h̲e̲d̲u̲l̲e̲,̲ ̲r̲u̲n̲,̲ ̲H̲i̲q̲_̲N̲a̲t̲i̲v̲e̲A̲c̲t̲i̲o̲n̲.̲a̲p̲p̲l̲y̲,̲ ̲c̲r̲e̲a̲t̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Hir_RuntimeNonvacuity.genesis' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hir_RuntimeNonvacuity.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hir_RuntimeNonvacuity.reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Hir_RuntimeNonvacuity.admissibility' depends on axioms: [propext, Classical.choice, Quot.sound]

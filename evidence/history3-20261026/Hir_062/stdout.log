@@ -1,0 +1,68 @@
+Hir_SelectedVersion.lean:32:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+A F C : Type
+c : DrvC_Installation.Configuration F C
+law : (DrvC_Installation.sdk c).op36 = Hist_Authority.keyEq
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction : S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk c) native1 native2 hashv
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+std : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+H : Bytes → State
+initial : Store
+schedule : Schedule A (Call A)
+writer : Hir_WriterSelect.Writer A
+found :
+  let out := Hir_Schedule.run native1 native2 copy allocator id H initial schedule;
+  search native1 copy allocator id (out.2.2.layout.handles 6).1 (out.1 (out.2.2.layout.handles 6).1).data
+      (Hir_ProvenanceModel.calls native1 native2 copy allocator id H initial schedule) =
+    some writer
+f : FirstCut
+s : SecondCut
+cuts :
+  let out := Hir_Schedule.run native1 native2 copy allocator id H initial schedule;
+  SourceCuts (DrvC_Installation.sdk c) (load writer.site.before writer.site.call.layout).first
+    ((load out.1 out.2.2.layout).second secondSizes) writer.saved f s
+out : Output (Call A) := Hir_Schedule.run native1 native2 copy allocator id H initial schedule
+member : writer.site ∈ Hir_ProvenanceModel.calls native1 native2 copy allocator id H initial schedule
+birth :
+  Birth native1 copy allocator id
+    ((Hir_Schedule.run native1 native2 copy allocator id H initial schedule).2.2.layout.handles 6).1
+    ((Hir_Schedule.run native1 native2 copy allocator id H initial schedule).1
+        ((Hir_Schedule.run native1 native2 copy allocator id H initial schedule).2.2.layout.handles 6).1).data
+    writer.site
+accepted1 :
+  first native1 copy allocator (load writer.site.before writer.site.call.layout) id writer.site.call.data
+      writer.site.call.state =
+    ok (core.result.Result.Ok (writer.saved, writer.post, writer.final))
+dataEq :
+  ((Hir_Schedule.run native1 native2 copy allocator id H initial schedule).1
+        ((Hir_Schedule.run native1 native2 copy allocator id H initial schedule).2.2.layout.handles 6).1).data =
+    writer.saved.deref
+x✝ :
+  ∃ saved post final front events,
+    first native1 copy allocator (load writer.site.before writer.site.call.layout) id writer.site.call.data
+          writer.site.call.state =
+        ok (core.result.Result.Ok (saved, post, final)) ∧
+      ((Hir_Schedule.run native1 native2 copy allocator id H initial schedule).1
+              ((Hir_Schedule.run native1 native2 copy allocator id H initial schedule).2.2.layout.handles 6).1).data =
+          saved.deref ∧
+        Trace (DrvC_Installation.sdk c) id
+            (commit writer.site.before
+              ((Hir_Schedule.run native1 native2 copy allocator id H initial schedule).2.2.layout.handles 6).1 saved)
+            events (Hir_Schedule.run native1 native2 copy allocator id H initial schedule).1 ∧
+          (Hir_Schedule.run native1 native2 copy allocator id H initial schedule).2.1 =
+            front ++
+              S2X.AccountEvent.committedWrite
+                  ((Hir_Schedule.run native1 native2 copy allocator id H initial schedule).2.2.layout.handles 6).1
+                  (bytesOf ↑saved) ::
+                events
+⊢ S2X.CheckpointVersionBinding
+    (payloadBytes encode (writer.post.payload ((load writer.site.before writer.site.call.layout).heap.accounts 2).1)
+      1768)
+    (bytesOf ↑s.checkpoint)
+'AspisR1.Hir_SelectedVersion.on_cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

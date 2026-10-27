@@ -1,0 +1,59 @@
+FJe_ThreeColumnStep.lean:61:2: error: Type mismatch: After simplification, term
+  vv
+ has type
+  @Eq K (FIv_NativeValue.decode v)
+    (decoded w ⟨↑0#usize, ⋯⟩ * ↑↑(cell c0 ⟨↑i, hi⟩) + decoded w ⟨↑1#usize, ⋯⟩ * ↑↑(cell c1 ⟨↑i, hi⟩) +
+      decoded w ⟨↑2#usize, ⋯⟩ * ↑↑(cell c2 ⟨↑i, hi⟩))
+but is expected to have type
+  @Eq K (FIv_NativeValue.decode v)
+    (decoded w ⟨0, model._proof_2⟩ * ↑↑(cell c0 ⟨↑i, hi⟩) + decoded w ⟨1, model._proof_3⟩ * ↑↑(cell c1 ⟨↑i, hi⟩) +
+      decoded w ⟨2, model._proof_4⟩ * ↑↑(cell c2 ⟨↑i, hi⟩))
+FJe_ThreeColumnStep.lean:69:20: error: unsolved goals
+w : Weights
+c0 c1 c2 : Constants
+s : State
+i : Usize
+⊢ (if i < poseidon2.POSEIDON2_WIDTH then do
+      let q ← Array.index_usize w 0#usize
+      let q1 ← Array.index_usize w 1#usize
+      let q2 ← Array.index_usize w 2#usize
+      let i3 ← Array.index_usize c0 i
+      let i4 ← Array.index_usize c1 i
+      let i5 ← Array.index_usize c2 i
+      let m ← state_only_poseidon.interpolate_three_constant_limb q.c0.a q1.c0.a q2.c0.a i3 i4 i5
+      let m1 ← state_only_poseidon.interpolate_three_constant_limb q.c0.b q1.c0.b q2.c0.b i3 i4 i5
+      let c ← field.CM31.new m m1
+      let m2 ← state_only_poseidon.interpolate_three_constant_limb q.c1.a q1.c1.a q2.c1.a i3 i4 i5
+      let m3 ← state_only_poseidon.interpolate_three_constant_limb q.c1.b q1.c1.b q2.c1.b i3 i4 i5
+      let c1_1 ← field.CM31.new m2 m3
+      let a ← Array.update s i { c0 := c, c1 := c1_1 }
+      let lane1 ← i + 1#usize
+      state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 a lane1
+    else ok s) =
+    if i < poseidon2.POSEIDON2_WIDTH then do
+      let x ← Array.index_usize w 0#usize
+      let x_1 ← Array.index_usize w 1#usize
+      let x_2 ← Array.index_usize w 2#usize
+      let x_3 ← Array.index_usize c0 i
+      let x_4 ← Array.index_usize c1 i
+      let x_5 ← Array.index_usize c2 i
+      let x_6 ← state_only_poseidon.interpolate_three_constant_limb x.c0.a x_1.c0.a x_2.c0.a x_3 x_4 x_5
+      let x_7 ← state_only_poseidon.interpolate_three_constant_limb x.c0.b x_1.c0.b x_2.c0.b x_3 x_4 x_5
+      let x_8 ← field.CM31.new x_6 x_7
+      let x_9 ← state_only_poseidon.interpolate_three_constant_limb x.c1.a x_1.c1.a x_2.c1.a x_3 x_4 x_5
+      let x ← state_only_poseidon.interpolate_three_constant_limb x.c1.b x_1.c1.b x_2.c1.b x_3 x_4 x_5
+      let x ← field.CM31.new x_9 x
+      let x ← pure { c0 := x_8, c1 := x }
+      let next ← Array.update s i x
+      let i1 ← i + 1#usize
+      state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 next i1
+    else ok s
+FJe_ThreeColumnStep.lean:71:53: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵F̵J̵e̵_̵T̵h̵r̵e̵e̵C̵e̵l̵l̵.̵s̵o̵u̵r̵c̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲t̲e̲p̲,̲ ̲F̲J̲e̲_̲T̲h̲r̲e̲e̲C̲e̲l̲l̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJe_ThreeColumnStep.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeColumnStep.unfold_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

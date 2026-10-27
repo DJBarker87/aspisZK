@@ -1,0 +1,17 @@
+SCH_Oracle.lean:29:12: error: Application type mismatch: The argument
+  result
+has type
+  (run (ideal H) (k (encodeState (H (flatten parts))))
+        (before ++ [{ parts := parts, returned := ok (encodeState (H (flatten parts))) }])).1 =
+    (eval H (SdkC_Oracle.program (k (encodeState (H (flatten parts)))))).2
+but is expected to have type
+  (run (ideal H) (CheckpointBytes5Effect.Code.read parts k) before).1 =
+    (eval H (SdkC_Oracle.program (CheckpointBytes5Effect.Code.read parts k))).2
+in the application
+  And.intro result
+SCH_Oracle.lean:30:4: error: 'change' tactic failed, pattern
+  readLog (run (ideal H) (k ?m.144) (before ++ [?m.146])).2 = ?m.155
+is not definitionally equal to target
+  readLog (run (ideal H) (CheckpointBytes5Effect.Code.read parts k) before).2 =
+    readLog before ++ (eval H (SdkC_Oracle.program (CheckpointBytes5Effect.Code.read parts k))).1
+'AspisR1.SCH_Oracle.evaluation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

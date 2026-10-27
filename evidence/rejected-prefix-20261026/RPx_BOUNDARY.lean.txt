@@ -1,0 +1,113 @@
+def AspisR1.RPx_Transport.Claims : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      AspisR1.F3T_ByteCarrier.ByteProver → ℕ → Prop :=
+fun {F C} c hashv P Q =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (∃ suffix,
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Account.program c hashv P)).1 =
+          (AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3T_Installed.source c hashv
+                    (AspisR1.F3T_ByteCarrier.input c (AspisV8R19.MemoizedProgramLaw.eval H P).2))).1 ++
+            suffix) ∧
+      FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Account.program c hashv P)).1 =
+          FS.firstReads FS.emptyTable
+            ((AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3T_Installed.source c hashv
+                    (AspisR1.F3T_ByteCarrier.input c (AspisV8R19.MemoizedProgramLaw.eval H P).2))).1) ∧
+        ((AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.F3T_Installed.source c hashv
+                      (AspisR1.F3T_ByteCarrier.input c (AspisV8R19.MemoizedProgramLaw.eval H P).2))).1).length ≤
+            Q + 1921 ∧
+          ((AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3T_Installed.source c hashv
+                    (AspisR1.F3T_ByteCarrier.input c (AspisV8R19.MemoizedProgramLaw.eval H P).2))).2 =
+              Bool.false →
+            AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Account.program c hashv P) =
+              ((AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.F3T_Installed.source c hashv
+                        (AspisR1.F3T_ByteCarrier.input c (AspisV8R19.MemoizedProgramLaw.eval H P).2))).1,
+                (AspisV8R19.MemoizedProgramLaw.eval H P).2, Option.none))
+def AspisR1.RPx_NativeTransport.PrefixBound : {T : Type} →
+  AspisR1.CheckpointBytes5Effect.Code T →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → ℕ → Prop :=
+fun {T} code hashv H n =>
+  List.length (AspisR1.SdkC_Source.run hashv code []).2 ≤ n ∧
+    ∃ kept remaining,
+      AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code []).2 = kept ∧
+        List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+          kept ++ remaining
+def AspisR1.F3T_Runtime.StoredCarrierBinding : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.LiteralByteProtocol.Decoder →
+      AspisR1.F3T_TwoPass.Verifier → AspisR1.F3T_ByteCarrier.ByteProver → AspisR1.F3T_Runtime.Runtime → Prop :=
+fun {F C} c D rust P runtime =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (run : AspisR1.F3T_Experiment.RunView),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = Option.some run →
+      run.2.2 = Bool.true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_TwoPass.annotatedWith D rust (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c P)))
+def AspisR1.F3T_Runtime.runtimeMass : AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes
+    AspisV8R19.SourceDuplexStep.State (Option AspisR1.F3T_Experiment.RunView) →
+  ℚ :=
+fun v =>
+  match v.2 with
+  | Option.none => 0
+  | Option.some run => AspisR1.RawRecordedOracleExtractionMassBin.failureMass (AspisR1.F3T_Experiment.view run)
+@AspisR1.RPx_Obstruction.arbitrary : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (rust : AspisR1.F3T_TwoPass.Verifier)
+  (P : AspisR1.F3T_ByteCarrier.ByteProver) (runtime : AspisR1.F3T_Runtime.Runtime),
+  AspisR1.F3T_Runtime.StoredCarrierBinding c D rust P runtime →
+    ∀ (n : ℕ),
+      ∃ extended,
+        AspisR1.F3T_Runtime.StoredCarrierBinding c D rust P extended ∧
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H extended).2 = (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 ∧
+              (AspisV8R19.MemoizedProgramLaw.eval H extended).1.length =
+                  n + (AspisV8R19.MemoizedProgramLaw.eval H runtime).1.length ∧
+                n ≤ FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H extended).1
+@AspisR1.RPx_Obstruction.exceeds : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (rust : AspisR1.F3T_TwoPass.Verifier)
+  (P : AspisR1.F3T_ByteCarrier.ByteProver) (runtime : AspisR1.F3T_Runtime.Runtime),
+  AspisR1.F3T_Runtime.StoredCarrierBinding c D rust P runtime →
+    ∀ (Q : ℕ),
+      ∃ extended,
+        AspisR1.F3T_Runtime.StoredCarrierBinding c D rust P extended ∧
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H extended).2 = (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 ∧
+              Q + 2965 < FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H extended).1
+@AspisR1.RPx_FailedQuery.counted : ∀ {A : Type} (parts : AspisR1.SdkC_Source.Parts)
+  (k : AspisR1.SdkC_Source.Digest → AspisR1.CheckpointBytes5Effect.Code A) (error : Aeneas.Std.Error)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  List.length
+        (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+            (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+      1 ∧
+    AspisR1.SdkC_Source.readLog
+          (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+              (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+        [] ∧
+      AspisR1.RPx_AttemptPrefix.addresses
+            (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+                (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+          [AspisV8R19.SqueezeOracleBridge.flatten parts] ∧
+        ∃ rest,
+          List.map Prod.fst
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.SdkC_Oracle.program (AspisR1.CheckpointBytes5Effect.Code.read parts k))).1 =
+            AspisV8R19.SqueezeOracleBridge.flatten parts :: rest
+AspisR1.RPx_RejectMass.runtime : ∀ (r : AspisR1.F3T_Runtime.Runtime)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (run : AspisR1.F3T_Experiment.RunView),
+      (AspisV8R19.MemoizedProgramLaw.eval H r).2 = Option.some run → run.2.2 = Bool.false) →
+    AspisR1.F3T_Runtime.runtimeMass (AspisV8R19.MemoizedProgramLaw.eval H r) = 0
+AspisR1.F3T_Numeric.margin_exact : 1 / 2 ^ 100 - AspisR1.F3T_Numeric.total 0 =
+  1 / 2 ^ 108 - 6 * (1161 ^ 2 + 2965 ^ 2) / 2 ^ 256 - 1 / 2 ^ 126 - 1 / 2 ^ 454
+'AspisR1.RPx_Obstruction.exceeds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RPx_AccountCharge.charged' depends on axioms: [propext, Classical.choice, Quot.sound]

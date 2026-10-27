@@ -1,0 +1,62 @@
+ARU_SourceAlternative.lean:51:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port1_Driver.decodeSemantic (DrvC_Installation.sdk (Rc5_Install.configuration err (FIp_Install.select r c) r))
+in the target expression
+  Port1_Driver.decodeSemantic (DrvC_Installation.sdk cfg) f.pub = ok (some f.semantic)
+
+W A C Tx : Type
+L : Library W (ℕ → Record)
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+c : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+r : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+    hashv
+a : Adversary A
+H : Bytes → State
+n : ARU_Support.At L copy allocator c err r native1 native2 hashv a H
+std : S2W_TrustedStd.TrustedStd copy
+Q0 Q1 : ℕ
+prefixBound : ∀ (K : Bytes → State), (eval K a.first).1.length ≤ Q0
+choiceBound :
+  ∀ (i : GExq_AccountExperiment.FirstInputs A) (saved : alloc.vec.Vec U8) (post : Heap (ℕ → Record)) (final : A)
+    (K : Bytes → State), (eval K (a.second i saved post final)).1.length ≤ Q1
+cfg : DrvC_Installation.Configuration FIo_Install.W C := FIp_Install.configuration err c r
+f : FirstCut
+s : SecondCut
+cuts :
+  SourceCuts (SCH_IdealSdk.dictionary (FIp_Install.configuration err c r) hashv H) (eval H a.first).2.entry.first
+    ((eval H (a.second (eval H a.first).2 n.entry.saved n.entry.post1 n.entry.final1)).2.entry.second secondSizes)
+    n.entry.saved f s
+decoded :
+  Port1_Driver.decodeSemantic (SCH_IdealSdk.dictionary (FIp_Install.configuration err c r) hashv H) f.pub =
+    ok (some f.semantic)
+origin :
+  P2P_Origin.Fact (SCH_IdealSdk.dictionary (FIp_Install.configuration err c r) hashv H) CPH_Program.verifier
+    ((eval H (a.second (eval H a.first).2 n.entry.saved n.entry.post1 n.entry.final1)).2.entry.second secondSizes)
+    (eval H (a.second (eval H a.first).2 n.entry.saved n.entry.post1 n.entry.final1)).2.data
+    (eval H (a.second (eval H a.first).2 n.entry.saved n.entry.post1 n.entry.final1)).2.slot s
+selector :
+  ARQ_Observer.select (FIp_Install.configuration err c r) CPH_Program.verifier
+      (eval H (account (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a)).2 =
+    Hist_PairExperiment.select { first := f, second := s }
+checkpoint : MultiproofConeCanonical.bytesOf ↑s.checkpoint = MultiproofConeCanonical.bytesOf ↑n.entry.saved
+binding :
+  R9PoolRuntimeBinding.P2Prime H (Hist_PairExperiment.select { first := f, second := s }).1
+    (Hist_PairExperiment.select { first := f, second := s }).2
+matched :
+  R9PoolRuntimeBinding.digestMatches H
+    { proof := MultiproofConeCanonical.bytesOf ↑f.proof, pub := MultiproofConeCanonical.bytesOf ↑f.pub }
+    { proof := MultiproofConeCanonical.bytesOf ↑s.proof, pub := MultiproofConeCanonical.bytesOf ↑s.pub }
+proof :
+  (Hist_PairExperiment.select { first := f, second := s }).2.proof =
+    (Hist_PairExperiment.select { first := f, second := s }).1.proof
+pub :
+  (Hist_PairExperiment.select { first := f, second := s }).2.pub =
+    (Hist_PairExperiment.select { first := f, second := s }).1.pub
+⊢ Port1_Driver.decodeSemantic (DrvC_Installation.sdk cfg) f.pub = ok (some f.semantic)
+'AspisR1.ARU_SourceAlternative.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

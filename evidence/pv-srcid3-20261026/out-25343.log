@@ -1,0 +1,152 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionOccupied.lean:20:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pool_v1.pair_tree_profile.digest_is_canonical first
+in the target expression
+  (do
+      let b ← pool_v1.pair_tree_profile.digest_is_canonical (pair first second inverse).first_commitment
+      if b = true then do
+          let b1 ← pool_v1.pair_tree_profile.digest_is_canonical (pair first second inverse).second_commitment
+          if b1 = true then
+              have i := (pair first second inverse).second_occupied;
+              if i ≥ aspis_core.field.P then
+                ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.NonCanonicalOccupancy)
+              else
+                have i1 := (pair first second inverse).second_occupancy_inverse;
+                if i1 ≥ aspis_core.field.P then
+                  ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.NonCanonicalInverse)
+                else do
+                  let one_minus_occupied ← aspis_core.field.M31.ONE.sub (pair first second inverse).second_occupied
+                  let m ← (pair first second inverse).second_occupied.sub aspis_core.field.M31.ONE
+                  let m1 ← (pair first second inverse).second_occupied.mul m
+                  let b2 ←
+                    core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m1
+                        aspis_core.field.M31.ZERO
+                  if b2 = true then
+                      ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.OccupancyNotBoolean)
+                    else do
+                      let m2 ← (pair first second inverse).second_sentinel
+                      let m3 ← m2.mul (pair first second inverse).second_occupancy_inverse
+                      let b3 ←
+                        core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m3
+                            (pair first second inverse).second_occupied
+                      if b3 = true then
+                          ok
+                            (core.result.Result.Err
+                              pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.SentinelInverseMismatch)
+                        else do
+                          let m4 ← one_minus_occupied.mul (pair first second inverse).second_occupancy_inverse
+                          let b4 ←
+                            core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m4
+                                aspis_core.field.M31.ZERO
+                          if b4 = true then
+                              ok
+                                (core.result.Result.Err
+                                  pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.EmptyInverseNonZero)
+                            else do
+                              let s ← lift (pair first second inverse).second_commitment.to_slice
+                              let i2 ← core.slice.Slice.iter s
+                              let __x ←
+                                core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                                    pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.validate.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                    i2 one_minus_occupied
+                              match __x with
+                                | (b5, snd) =>
+                                  if b5 = true then
+                                    ok
+                                      (core.result.Result.Err
+                                        pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.EmptyCommitmentNonZero)
+                                  else do
+                                    let b6 ←
+                                      aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq
+                                          (pair first second inverse).second_occupied aspis_core.field.M31.ONE
+                                    if b6 = true then do
+                                        let b7 ←
+                                          aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq m2 aspis_core.field.M31.ZERO
+                                        if b7 = true then
+                                            ok
+                                              (core.result.Result.Err
+                                                pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.OccupiedSentinelZero)
+                                          else ok (core.result.Result.Ok ())
+                                      else ok (core.result.Result.Ok ())
+            else ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.NonCanonicalCommitment)
+        else ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.NonCanonicalCommitment)) =
+    ok (core.result.Result.Ok ())
+
+first second : Std.Array U32 8#usize
+inverse : U32
+hf : Canon8 first
+hs : Canon8 second
+hi : ↑inverse < 2147483647
+hne : (↑second)[7]! ≠ 0#u32
+hm : aspis_core.field.M31.mul (↑second)[7]! inverse = ok 1#u32
+⊢ (do
+      let b ← pool_v1.pair_tree_profile.digest_is_canonical (pair first second inverse).first_commitment
+      if b = true then do
+          let b1 ← pool_v1.pair_tree_profile.digest_is_canonical (pair first second inverse).second_commitment
+          if b1 = true then
+              have i := (pair first second inverse).second_occupied;
+              if i ≥ aspis_core.field.P then
+                ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.NonCanonicalOccupancy)
+              else
+                have i1 := (pair first second inverse).second_occupancy_inverse;
+                if i1 ≥ aspis_core.field.P then
+                  ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.NonCanonicalInverse)
+                else do
+                  let one_minus_occupied ← aspis_core.field.M31.ONE.sub (pair first second inverse).second_occupied
+                  let m ← (pair first second inverse).second_occupied.sub aspis_core.field.M31.ONE
+                  let m1 ← (pair first second inverse).second_occupied.mul m
+                  let b2 ←
+                    core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m1
+                        aspis_core.field.M31.ZERO
+                  if b2 = true then
+                      ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.OccupancyNotBoolean)
+                    else do
+                      let m2 ← (pair first second inverse).second_sentinel
+                      let m3 ← m2.mul (pair first second inverse).second_occupancy_inverse
+                      let b3 ←
+                        core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m3
+                            (pair first second inverse).second_occupied
+                      if b3 = true then
+                          ok
+                            (core.result.Result.Err
+                              pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.SentinelInverseMismatch)
+                        else do
+                          let m4 ← one_minus_occupied.mul (pair first second inverse).second_occupancy_inverse
+                          let b4 ←
+                            core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m4
+                                aspis_core.field.M31.ZERO
+                          if b4 = true then
+                              ok
+                                (core.result.Result.Err
+                                  pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.EmptyInverseNonZero)
+                            else do
+                              let s ← lift (pair first second inverse).second_commitment.to_slice
+                              let i2 ← core.slice.Slice.iter s
+                              let __x ←
+                                core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                                    pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.validate.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                    i2 one_minus_occupied
+                              match __x with
+                                | (b5, snd) =>
+                                  if b5 = true then
+                                    ok
+                                      (core.result.Result.Err
+                                        pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.EmptyCommitmentNonZero)
+                                  else do
+                                    let b6 ←
+                                      aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq
+                                          (pair first second inverse).second_occupied aspis_core.field.M31.ONE
+                                    if b6 = true then do
+                                        let b7 ←
+                                          aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq m2 aspis_core.field.M31.ZERO
+                                        if b7 = true then
+                                            ok
+                                              (core.result.Result.Err
+                                                pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.OccupiedSentinelZero)
+                                          else ok (core.result.Result.Ok ())
+                                      else ok (core.result.Result.Ok ())
+            else ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.NonCanonicalCommitment)
+        else ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.NonCanonicalCommitment)) =
+    ok (core.result.Result.Ok ())
+'R1Z.PV_Src_AdmissionOccupied.validates' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

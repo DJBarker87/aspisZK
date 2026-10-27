@@ -1,0 +1,26 @@
+SCC_Physical.lean:27:6: error: Ambiguous term
+  original_eval
+Possible interpretations:
+  F3T_TwoPass.original_eval : ∀ (rust : Verifier) (P : Prover) (H : Bytes → State),
+    eval H (originalWith rust P) =
+      ((eval H P).1 ++ (eval H (rust (eval H P).2)).1, (eval H P).2, (eval H (rust (eval H P).2)).2)
+  
+  F3T_Experiment.original_eval : ∀ (D : LiteralByteProtocol.Decoder) (P : Prover) (H : Bytes → State),
+    eval H (original D P) =
+      ((eval H P).1 ++ (eval H (F3_Model.verifier D (eval H P).2)).1, (eval H P).2,
+        (eval H (F3_Model.verifier D (eval H P).2)).2)
+SCC_Physical.lean:23:78: error: unsolved goals
+rust : Verifier
+P : Prover
+runtime : F3T_Runtime.Runtime
+binding : FirstPassBinding rust P runtime
+H : Bytes → State
+run : RunView
+observed : (eval H runtime).2 = some run
+accepted : run.2.2 = true
+same : run.2.1.stored = (eval H (originalWith rust P)).2.1.stored
+⊢ run.2.1.stored = (eval H P).2.stored
+'AspisR1.SCC_Physical.stored_of_first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SCC_Physical.changed_stored' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCC_Physical.accepted_unassociated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SCC_Physical.preserve_conditions' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,33 @@
+@AspisR1.ARV_FilterRange.bounded : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (words : AspisR1.CanonicalCutEnrichedTranscript.Words),
+          AspisR1.FIp_GlobalOwners.Owners (AspisR1.FIp_Install.configuration err c r)
+              (AspisR1.Rc2_Install.configuration (AspisR1.Rc5_Install.seed err (AspisR1.FIp_Install.select r c))
+                  r).boundaries →
+            ∀ (Q : ℕ),
+              AspisR1.ART_AdversaryWork.Bound (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                  AspisR1.CPH_Program.verifier a Q →
+                (Q ≤ AspisR1.F3U_RangeEdges.maxQueries →
+                    AspisR1.F3T_RuntimeBound.failureModel
+                        (AspisR1.ARV_Filter.runtime L copy allocator c err r native1 native2 hashv a) ≤
+                      (↑Q + 1) * (1 / 2 ^ 100)) ∧
+                  (Q = 0 →
+                    AspisR1.F3U_Numeric.margin ≤
+                        1 / 2 ^ 100 -
+                          AspisR1.F3T_RuntimeBound.failureModel
+                            (AspisR1.ARV_Filter.runtime L copy allocator c err r native1 native2 hashv a) ∧
+                      AspisR1.F3T_RuntimeBound.failureModel
+                          (AspisR1.ARV_Filter.runtime L copy allocator c err r native1 native2 hashv a) <
+                        1 / 2 ^ 100)
+'AspisR1.ARV_FilterRange.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]

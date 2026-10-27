@@ -1,0 +1,51 @@
+[diag] Diagnostics
+  [reduction] unfolded declarations (max: 241, num: 6):
+    [reduction] Add.add ↦ 241
+    [reduction] Nat.rec ↦ 190
+    [reduction] Mul.mul ↦ 148
+    [reduction] HAdd.hAdd ↦ 126
+    [reduction] HMul.hMul ↦ 112
+    [reduction] npowRec ↦ 36
+  [reduction] unfolded reducible declarations (max: 190, num: 3):
+    [reduction] Nat.casesOn ↦ 190
+    [reduction] QuadraticAlgebra.re ↦ 164
+    [reduction] AspisV8R15.ExactTowerBase.M31Exact ↦ 40
+  [def_eq] heuristic for solving `f a =?= f b` (max: 42, num: 2):
+    [def_eq] instHAdd ↦ 42
+    [def_eq] Fin.add ↦ 39
+  use `set_option diagnostics.threshold <num>` to control threshold for reporting counters
+JGd_MaskModel.lean:40:41: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+case refine_3
+c1 : Std.Array MQ 16#usize
+m point : Std.Array MQ 10#usize
+g : MQ
+hc : ∀ (j : Fin 16), ExtractedMaskCallerModel.CanonicalQM (ExtractedMaskCoefficientStep.c1Cell (mapArray c1) j)
+hm : ∀ (j : Fin 10), ExtractedMaskCallerModel.CanonicalQM (ExtractedMaskCoefficientStep.maskCell (mapArray m) j)
+hp :
+  ∀ (i : ℕ) (hi : i < 10),
+    ExtractedMaskCallerModel.CanonicalQM (ExtractedMaskLinearLoop.pointAtNat (mapArray point) i hi)
+hg : Canon g
+out : ExtractedMaskCallerModel.QM
+call :
+  AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value (mapArray c1) (mapArray m) (toProbe g)
+      (mapArray point) =
+    ok out
+hcan : ExtractedMaskCallerModel.CanonicalQM out
+hval :
+  ExtractedMaskCallerModel.decode out =
+    ExtractedMaskHornerPolynomial.coefficientPolynomial
+        (ExtractedMaskHornerCaller.coefficientValue
+          (ExtractedMaskCallerModel.populatedCoefficients (mapArray c1) (mapArray m)))
+        (ExtractedMaskLinearRecurrence.maskLinear 0 (ExtractedMaskLinearsExact.decodedPoint (mapArray point))) +
+      (1 + ExtractedMaskLinearRecurrence.maskLinear 16 (ExtractedMaskLinearsExact.decodedPoint (mapArray point)) ^ 26) *
+        ExtractedMaskCallerModel.decode (toProbe g)
+⊢ ExtractedMaskQM31Exact.decode out =
+    ExtractedMaskHornerPolynomial.coefficientPolynomial
+        (ExtractedMaskHornerCaller.coefficientValue
+          (ExtractedMaskCallerModel.populatedCoefficients (mapArray c1) (mapArray m)))
+        (ExtractedMaskLinearRecurrence.maskLinear 0 (ExtractedMaskLinearsExact.decodedPoint (mapArray point))) +
+      (1 + ExtractedMaskLinearRecurrence.maskLinear 16 (ExtractedMaskLinearsExact.decodedPoint (mapArray point)) ^ 26) *
+        ExtractedMaskQM31Exact.decode (toProbe g)
+'AspisR1.JGd_MaskModel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

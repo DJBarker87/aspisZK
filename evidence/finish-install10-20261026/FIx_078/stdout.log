@@ -1,0 +1,42 @@
+FIx_ReconstructTraversal.lean:31:49: error(lean.unknownIdentifier): Unknown constant `List.dropLast_append_singleton`
+FIx_ReconstructTraversal.lean:32:2: error: Tactic `rfl` failed: The left-hand side
+  let (item, rest) := ((some x).or xs.getLast?, { slice := ⟨(xs ++ [x]).dropLast, ⋯⟩, i := 0 })
+  match item with
+  | none => ok acc
+  | some x => do
+    let (next, f') ←
+      pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut
+          c (acc, x)
+    revFold
+        { iteratorInst := core.iter.traits.iterator.IteratorSliceIter NQ,
+          next_back := core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back }
+        callback rest next f'
+is not definitionally equal to the right-hand side
+  do
+    let (next, c') ←
+      pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut
+          c (acc, x)
+    fold { slice := ⟨xs, ⋯⟩, i := 0 } next c'
+
+xs : List NQ
+x acc : NQ
+c : Capture
+bound : (xs ++ [x]).length ≤ Usize.max
+⊢ (let (item, rest) := ((some x).or xs.getLast?, { slice := ⟨(xs ++ [x]).dropLast, ⋯⟩, i := 0 })
+    match item with
+    | none => ok acc
+    | some x => do
+      let (next, f') ←
+        pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut
+            c (acc, x)
+      revFold
+          { iteratorInst := core.iter.traits.iterator.IteratorSliceIter NQ,
+            next_back := core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back }
+          callback rest next f') =
+    do
+    let (next, c') ←
+      pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut
+          c (acc, x)
+    fold { slice := ⟨xs, ⋯⟩, i := 0 } next c'
+'AspisR1.FIx_ReconstructTraversal.nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIx_ReconstructTraversal.append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

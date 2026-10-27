@@ -1,0 +1,794 @@
+[
+  {
+    "kind": "fun_decls",
+    "id": 0,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "tx1",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 270,
+          "col": 0
+        },
+        "end": {
+          "line": 291,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "source_text": "pub fn tx1<H: Digest32>(public: Public<'_>, public_bytes: &[u8], proof: &[u8], k: usize, hash: H, obs: Observer) -> Result<Vec<u8>, Error> {\n    if k != SPLIT {\n        return Err(Error::Parse);\n    }\n    parse_shape(proof)?;\n    canonical_scan(proof)?;\n    mark(obs, Phase::Parsed);\n    let mut g = [E::ZERO; 29];\n    let p = prepare(public, proof, hash, obs, &mut g)?;\n    let a = Accumulator::new(Variant::S2)?;\n    mark(obs, Phase::Prepare);\n    let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();\n    batch_merkle(proof, &p, &folded_root, 0, hash)?;\n    mark(obs, Phase::Merkle(0));\n    let geometry = QueryGeometry::for_range(&p.queries, 0, k)?;\n    let pending = BatchedWeights::new(&a.weights)?;\n    let (mut a, pending) = query_loop(proof, &p, a, &g, obs, &geometry, pending, k)?;\n    pending.finish(&mut a.weights);\n    let bytes = checkpoint(&p, &a, proof, public_bytes, hash);\n    mark(obs, Phase::CheckpointWrite);\n    Ok(bytes)\n}",
+    "body_kind": "Structured",
+    "signature": {
+      "is_unsafe": false,
+      "abi": "Rust",
+      "is_variadic": false,
+      "inputs": [
+        {
+          "HashConsedValue": [
+            17522,
+            {
+              "Adt": {
+                "id": {
+                  "Adt": 0
+                },
+                "generics": {
+                  "regions": [
+                    {
+                      "Var": {
+                        "Free": 0
+                      }
+                    }
+                  ],
+                  "types": [],
+                  "const_generics": [],
+                  "trait_refs": []
+                }
+              }
+            }
+          ]
+        },
+        {
+          "HashConsedValue": [
+            17523,
+            {
+              "Ref": [
+                {
+                  "Var": {
+                    "Free": 1
+                  }
+                },
+                {
+                  "Deduplicated": 1157
+                },
+                "Shared"
+              ]
+            }
+          ]
+        },
+        {
+          "HashConsedValue": [
+            17524,
+            {
+              "Ref": [
+                {
+                  "Var": {
+                    "Free": 2
+                  }
+                },
+                {
+                  "Deduplicated": 1157
+                },
+                "Shared"
+              ]
+            }
+          ]
+        },
+        {
+          "Deduplicated": 1160
+        },
+        {
+          "Deduplicated": 17367
+        },
+        {
+          "HashConsedValue": [
+            1217,
+            {
+              "Adt": {
+                "id": {
+                  "Adt": 1
+                },
+                "generics": {
+                  "regions": [],
+                  "types": [
+                    {
+                      "HashConsedValue": [
+                        1216,
+                        {
+                          "FnPtr": {
+                            "regions": [],
+                            "skip_binder": {
+                              "is_unsafe": false,
+                              "abi": "Rust",
+                              "is_variadic": false,
+                              "inputs": [
+                                {
+                                  "HashConsedValue": [
+                                    1214,
+                                    {
+                                      "Adt": {
+                                        "id": {
+                                          "Adt": 2
+                                        },
+                                        "generics": {
+                                          "regions": [],
+                                          "types": [],
+                                          "const_generics": [],
+                                          "trait_refs": []
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ],
+                              "output": {
+                                "HashConsedValue": [
+                                  1215,
+                                  {
+                                    "Adt": {
+                                      "id": "Tuple",
+                                      "generics": {
+                                        "regions": [],
+                                        "types": [],
+                                        "const_generics": [],
+                                        "trait_refs": []
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "const_generics": [],
+                  "trait_refs": []
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "output": {
+        "HashConsedValue": [
+          16708,
+          {
+            "Adt": {
+              "id": {
+                "Adt": 3
+              },
+              "generics": {
+                "regions": [],
+                "types": [
+                  {
+                    "HashConsedValue": [
+                      16707,
+                      {
+                        "Adt": {
+                          "id": {
+                            "Adt": 4
+                          },
+                          "generics": {
+                            "regions": [],
+                            "types": [
+                              {
+                                "Deduplicated": 1156
+                              }
+                            ],
+                            "const_generics": [],
+                            "trait_refs": []
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "Deduplicated": 1330
+                  }
+                ],
+                "const_generics": [],
+                "trait_refs": []
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "kind": "fun_decls",
+    "id": 15,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "query_loop",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 239,
+          "col": 0
+        },
+        "end": {
+          "line": 252,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "source_text": "fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: BatchedWeights, end: usize) -> Result<(Accumulator, BatchedWeights), Error> {\n    let mut state = Ok((a, pending));\n    loop {\n        match state {\n            Err(error) => return Err(error),\n            Ok((a, pending)) => {\n                if a.next >= end {\n                    return Ok((a, pending));\n                }\n                state = query_values(proof, p, a, g, obs, geometry, pending);\n            }\n        }\n    }\n}",
+    "body_kind": "Structured",
+    "signature": {
+      "is_unsafe": false,
+      "abi": "Rust",
+      "is_variadic": false,
+      "inputs": [
+        {
+          "Deduplicated": 17374
+        },
+        {
+          "Deduplicated": 17549
+        },
+        {
+          "Deduplicated": 1605
+        },
+        {
+          "HashConsedValue": [
+            17558,
+            {
+              "Ref": [
+                {
+                  "Var": {
+                    "Free": 2
+                  }
+                },
+                {
+                  "Deduplicated": 1537
+                },
+                "Shared"
+              ]
+            }
+          ]
+        },
+        {
+          "Deduplicated": 1217
+        },
+        {
+          "HashConsedValue": [
+            17559,
+            {
+              "Ref": [
+                {
+                  "Var": {
+                    "Free": 3
+                  }
+                },
+                {
+                  "Deduplicated": 1666
+                },
+                "Shared"
+              ]
+            }
+          ]
+        },
+        {
+          "Deduplicated": 1689
+        },
+        {
+          "Deduplicated": 1160
+        }
+      ],
+      "output": {
+        "Deduplicated": 1723
+      }
+    }
+  },
+  {
+    "kind": "fun_decls",
+    "id": 43,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "r1_semantic",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verify_observed",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 43,
+        "beg": {
+          "line": 311,
+          "col": 0
+        },
+        "end": {
+          "line": 318,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "source_text": "pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {\n    let prefix = Prefix::parse(bytes)?;\n    mark(obs, 0);\n    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;\n    let challenges = wire::begin(&prefix, &mut transcript)?;\n    mark(obs, 1);\n    verify_finish(public, prefix, transcript, challenges, obs)\n}",
+    "body_kind": "Opaque",
+    "signature": {
+      "is_unsafe": false,
+      "abi": "Rust",
+      "is_variadic": false,
+      "inputs": [
+        {
+          "Deduplicated": 17522
+        },
+        {
+          "Deduplicated": 17523
+        },
+        {
+          "Deduplicated": 17367
+        },
+        {
+          "Deduplicated": 1217
+        }
+      ],
+      "output": {
+        "Deduplicated": 17533
+      }
+    }
+  },
+  {
+    "kind": "fun_decls",
+    "id": 61,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "QueryGeometry",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 13
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 131,
+          "col": 0
+        },
+        "end": {
+          "line": 131,
+          "col": 76
+        }
+      },
+      "generated_from_span": null
+    },
+    "source_text": "struct QueryGeometry { start:usize, inverses:Vec<[M31;5]>, line_z:Vec<M31> }",
+    "body_kind": "Structured",
+    "signature": {
+      "is_unsafe": true,
+      "abi": "Rust",
+      "is_variadic": false,
+      "inputs": [
+        {
+          "HashConsedValue": [
+            17655,
+            {
+              "Ref": [
+                {
+                  "Var": {
+                    "Free": 0
+                  }
+                },
+                {
+                  "Deduplicated": 1666
+                },
+                "Mut"
+              ]
+            }
+          ]
+        }
+      ],
+      "output": {
+        "Deduplicated": 1215
+      }
+    }
+  },
+  {
+    "kind": "fun_decls",
+    "id": 207,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "Error",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 31
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 20,
+          "col": 0
+        },
+        "end": {
+          "line": 27,
+          "col": 38
+        }
+      },
+      "generated_from_span": null
+    },
+    "source_text": "pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation,\n    /// Host prover only (LOG D38.3): this attempt's challenges fail the public\n    /// P_R1 check. Carries no challenge and no conjunct.\n    #[cfg(feature=\"prover\")] Rejected,\n    /// Host prover only (D38.3): all N = 8 attempts were rejected; nothing is published.\n    #[cfg(feature=\"prover\")] AttemptsExhausted,\n    /// Host prover only: the operating-system entropy source failed.\n    #[cfg(feature=\"prover\")] Entropy }",
+    "body_kind": "Structured",
+    "signature": {
+      "is_unsafe": true,
+      "abi": "Rust",
+      "is_variadic": false,
+      "inputs": [
+        {
+          "HashConsedValue": [
+            17684,
+            {
+              "Ref": [
+                {
+                  "Var": {
+                    "Free": 0
+                  }
+                },
+                {
+                  "Deduplicated": 1330
+                },
+                "Mut"
+              ]
+            }
+          ]
+        }
+      ],
+      "output": {
+        "Deduplicated": 1215
+      }
+    }
+  },
+  {
+    "kind": "fun_decls",
+    "id": 240,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "prepared_claim",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 53,
+          "col": 0
+        },
+        "end": {
+          "line": 68,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "source_text": "fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {\n        let k=powers::<7>(kappa);\n        let mut parts=[E::ZERO;7];parts[0]=inactive;\n        for point in 0..6 {\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        }\n        let mut claim=E::ZERO;\n        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}\n        crate::trace::value(14,7,claim);\n        Ok(claim)\n}",
+    "body_kind": "Opaque",
+    "signature": {
+      "is_unsafe": false,
+      "abi": "Rust",
+      "is_variadic": false,
+      "inputs": [
+        {
+          "Deduplicated": 17618
+        },
+        {
+          "Deduplicated": 17523
+        },
+        {
+          "Deduplicated": 1536
+        },
+        {
+          "Deduplicated": 17558
+        },
+        {
+          "Deduplicated": 1536
+        }
+      ],
+      "output": {
+        "Deduplicated": 7671
+      }
+    }
+  },
+  {
+    "kind": "type_decls",
+    "id": 6,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "Error",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 20,
+          "col": 0
+        },
+        "end": {
+          "line": 27,
+          "col": 38
+        }
+      },
+      "generated_from_span": null
+    },
+    "source_text": "pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation,\n    /// Host prover only (LOG D38.3): this attempt's challenges fail the public\n    /// P_R1 check. Carries no challenge and no conjunct.\n    #[cfg(feature=\"prover\")] Rejected,\n    /// Host prover only (D38.3): all N = 8 attempts were rejected; nothing is published.\n    #[cfg(feature=\"prover\")] AttemptsExhausted,\n    /// Host prover only: the operating-system entropy source failed.\n    #[cfg(feature=\"prover\")] Entropy }",
+    "body_kind": null,
+    "signature": null
+  },
+  {
+    "kind": "type_decls",
+    "id": 11,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "Prepared",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 49,
+          "col": 0
+        },
+        "end": {
+          "line": 52,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "source_text": "pub struct Prepared {\n    pub variant:Variant,pub roots:[[u8;32];2],pub gamma:E,pub kappa:E,pub alpha:[E;2],pub rho:K,\n    pub queries:[u32;22],pub semantic_alpha:[K;10],pub z:[SecureCirclePoint;2],pub claim:E,pub state:[u8;32],\n}",
+    "body_kind": null,
+    "signature": null
+  },
+  {
+    "kind": "type_decls",
+    "id": 15,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "QueryGeometry",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 131,
+          "col": 0
+        },
+        "end": {
+          "line": 131,
+          "col": 76
+        }
+      },
+      "generated_from_span": null
+    },
+    "source_text": "struct QueryGeometry { start:usize, inverses:Vec<[M31;5]>, line_z:Vec<M31> }",
+    "body_kind": null,
+    "signature": null
+  },
+  {
+    "kind": "type_decls",
+    "id": 96,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "fast_pairing",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "EbyKDot",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 96,
+        "beg": {
+          "line": 153,
+          "col": 0
+        },
+        "end": {
+          "line": 157,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "source_text": "pub struct EbyKDot {\n    c0: canonical::Dot,\n    c1: canonical::Dot,\n    count: usize,\n}",
+    "body_kind": null,
+    "signature": null
+  }
+]

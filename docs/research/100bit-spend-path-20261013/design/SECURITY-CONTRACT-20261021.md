@@ -99,3 +99,93 @@ metric are unchanged. See [DV-TWOTX-20261021.md](DV-TWOTX-20261021.md) and
 the receipts under `evidence/dv-twotx-20261021/`. This is a conditional model
 endpoint. The deployed security target is **not yet established**: the new
 frozen-source accepted-run join and runtime/carrier binding remain open.
+
+## Owner-approved amendment, 2026-10-26
+
+The owner approved three changes on 2026-10-26. The target, metric, failure event and numerical constants are UNCHANGED: 100-bit per-attempt soundness without grinding credit; zero-query whole-experiment bound at most 2^-100; repeated attempts stated as (Q+34)·B plus collision terms.
+
+1. **Headline model is frozen3.** The model headline moves from `OraclePortHeadlineFrozen2PerAttempt` over `dV_frozen2` to its frozen3 counterpart, over the complete frozen3 verifier (`F3_Model`). frozen3 keeps frozen2's sampler-first schedule and adds a distinct physical public carrier (the 1880-byte ASF8 statement), used by checkpoint write/resume. Reason: the deployed source hashes the physical public bytes at checkpoint, which frozen2 did not model, so frozen2's exact log join (L157) is false for the deployed code (design/LOG-ALIGNMENT-20261026.md). Evidence: `F3S_Join.accepted_log_eq` and the F3T_ bounds (Q+34 starts, Q+1161 distinct reads, Q+2322 issued calls; exact zero-query margin 2^-108 − 6(1161²+2965²)/2^256 − 2^-126 − 2^-454 > 0). The replacement for L157 is "raw canonical join OR the charged collision event"; the collision branch is charged in the bound.
+
+2. **Game statement for the two-transaction spend.** The experiment is the deployed two-transaction spend executed by the Solana runtime:
+   (a) the TX1 and TX2 entries are consecutive executions on one bank lineage;
+   (b) both name the same physical verifier checkpoint (CP) account, and no other transaction touches that account between them;
+   (c) TX1's final parent status is success;
+   (d) the recorded checkpoint actions are the physical runtime actions of these two transactions.
+   This states the game the contract always intended ("checkpoint save and authenticated resume between batch 0 and batch 1"); it is not an assumption about attacker behaviour. The attacker remains adaptive and chooses both submissions.
+
+3. **New named runtime trust item: RuntimePersistence.** `CPR_DataPersistence.TwoTransactionLaw` (design/RUNTIME-PERSISTENCE-ITEM-20261026.md). For the next transaction that loads an ordinary account (not fee payer, not durable nonce) on the same bank lineage, the loaded data bytes are the previous transaction's final bytes if its final parent status was success, and its starting bytes otherwise. Zero lamports means absent. The item covers data bytes only: no owner, balance, privilege, SDK or verifier claim. It reflects documented Solana transaction-pipeline behaviour and the Agave account loader, and joins the existing runtime trust items (RuntimeEntrypointAdmission, RuntimeSyscall, Allocator).
+
+## Owner-approved amendment, 2026-10-27
+
+The owner approved all three open recommendations on 2026-10-27 ("do your
+recommendations for all open qs"). The target, metric, failure event, work
+metric and numerical constants are UNCHANGED: 100-bit classical per-attempt
+soundness without grinding credit; the zero-query whole-experiment bound at most
+2^-100; repeated attempts stated as (Q+34)·B plus the collision terms; the exact
+zero-query margin 2^-108 − 6(1161²+2965²)/2^256 − 2^-126 − 2^-454 > 0.
+
+1. **Headline statement is `AspisR1.ARX_Root.deployed`.** It replaces
+   `AspisR1.Rc10_Top.deployed` as the adopted top. The only binder changes:
+   the independently supplied ByteProver `P`, `runtime` and
+   `binding : StoredCarrierBinding …` are replaced by an arbitrary account
+   adversary `a : SCE_Experiment.Adversary A`, with `P` the prover induced by
+   `a` (`ARW_Induced.program`) and `runtime` the admitted runtime image
+   `ARX_AdmittedRuntime.runtime`; the query budget bounds `a`'s issued digest
+   queries across both reached phases (`ARW_Induced.issued`, identified with
+   `(eval H P).1.length` by `ARW_Induced.queries`), counting duplicates and
+   rejecting prefixes. The adversary is arbitrary and fully adaptive. The
+   admitted runtime's world range is exactly the executions the approved game
+   admits (each with its own `ARU_Support.At` witness); outside it the security
+   mean is zero-extended with the original oracle weights, never conditioned.
+   All other binders, carriers, the collision event at Q+2965, the bound
+   `F3T_Numeric.total Q`, its range and the conclusion are literal to Rc10.
+   Evidence: `ARX_Root.deployed` (account-rejoin9, 680b10c65d), fresh compile
+   on the coherent cohort with axioms propext/Classical.choice/Quot.sound only
+   (replay-dry9 RPz8_), conservativity on the old pure-choice class
+   (`ARX_Conservativity.conservativity`). Full text:
+   [ARX amendment](../../../../design/SECURITY-CONTRACT-ARX-AMENDMENT-DRAFT-20261027.md),
+   before/after kernel statements in evidence/recount11-20261027/ and
+   evidence/replay-dry9-20261027/. This removes L159/L185 and L181 from the
+   ledger; it does not establish source-to-ELF correspondence, L166, L188 or
+   joint non-vacuity.
+
+2. **D188 is read at trace fidelity.** We trust the pinned Charon/Aeneas
+   translation of each specifically associated shipped Rust body to preserve
+   both the accepted Result and the chronological attempted digest-call
+   sequence of its monadic extracted execution, including duplicates and every
+   issued call before rejection; rejected prefixes must both reject, with
+   differing non-Ok error kinds allowed (the recorded Err(Parse) versus
+   extracted fail-panic discrepancy). The guarantee applies to the SAME body,
+   inputs, digest replies and source/producer pins, not to an arbitrary
+   recorder or caller. `S2W_DigestExtraction.AeneasExtraction.stage1`,
+   `stage2` and `digestSource` keep their existing kernel types; no Lean axiom,
+   compiler equivalence or opaque-body semantics is added. Non-extracted
+   wrappers and unsafe construction still need the P6 route, and L166 must
+   still be PROVED from the extracted trace and joined to its consumer; this
+   wording closes no row by itself.
+
+3. **Trust inventory recorded.** The one-to-one inventory of every trust
+   surface in the adopted closure (44 named fields, definition-level and
+   external surfaces) and the contract paragraphs for S2TrustedSdkBorrow,
+   TrustedStd (slice copy and pure Option/Result), P1, the P6/Kani association,
+   P7 (compiler, platform tools and the release-pinned library base), the
+   standard logical axioms and the historical checkpoint interfaces are adopted
+   as written in the
+   [trust inventory appendix](../../../../design/TRUST-INVENTORY-APPENDIX-DRAFT-20261027.md),
+   with its trace-fidelity D188 column (item 2 above). Retained, not waived:
+   - **W1:** `TrustedStd.slice_copy_from_slice` quantifies all abstract
+     states; each actual use must have justified reference validity.
+   - **F-AXIOM:** 105 nonstandard axioms are imported but unreachable from the
+     adopted top; they are not security premises and remain a finding under the
+     strict import-wide audit.
+   - **D188-P2 caveat:** the selected PublicPreparation / ExtractedTx1Model /
+     S1 semantic-prefix cohort models the retired `verifier.tx1` path at five
+     interfaces (dot_type, prepared_claim, query_geometry, tx1, tx1_finish).
+     The theorems are valid about their model; deployed attribution across the
+     semantic-prefix/preparation/query/finish boundary is QUALIFIED until the
+     association rows close against the frozen release source
+     (design/D188-PROVENANCE-FINDING-20261027.md).
+
+Not approved by this amendment: route A (translator upgrade and D188 re-pin),
+any change to the target, constants or adversary, and any release claim. The
+deployed security target is **not yet established**.

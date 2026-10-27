@@ -1,0 +1,16 @@
+PoolS2_UniqueSuffix.lean:28:13: error(lean.unknownIdentifier): Unknown identifier `decide_and`
+PoolS2_UniqueSuffix.lean:25:69: error: unsolved goals
+keys : Slice Key
+left : ℕ
+unique : Bool
+within : left < (↑keys).length
+⊢ (unique &&
+      decide
+        ((∀ a' ∈ List.drop (left + 1) ↑keys, ↑(↑keys)[left] ≠ ↑a') ∧
+          List.Pairwise (fun a b => ↑a ≠ ↑b) (List.drop (left + 1) ↑keys))) =
+    (unique &&
+      (decide (∀ other ∈ List.drop (left + 1) ↑keys, ↑(↑keys)[left] ≠ ↑other) &&
+        decide (List.Pairwise (fun a b => ↑a ≠ ↑b) (List.drop (left + 1) ↑keys))))
+'AspisR1.PoolS2_UniqueSuffix.row_decide' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_UniqueSuffix.next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_UniqueSuffix.ended' depends on axioms: [propext, Classical.choice, Quot.sound]

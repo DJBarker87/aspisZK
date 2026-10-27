@@ -1,0 +1,67 @@
+FIz_ScalarAssembly.lean:34:2: error: unsolved goals
+case pos
+p : R0P.Public K
+o : R0P.Openings K
+s : R0P.Sel K
+i : ℕ
+ha : (R0P.assetFamily.residuals p o s).length = 2
+ho : (R0P.occupancyFamily.residuals p o s).length = 12
+h12 : i < 12
+h32 : ¬32 ≤ i
+h49 : ¬49 ≤ i
+h84 : ¬84 ≤ i
+h92 : ¬92 ≤ i
+⊢ (R0P.scheduleFamily.residuals p o s)[i]?.getD 0 + (R0P.occupancyFamily.residuals p o s)[i]?.getD 0 =
+    (R0P.scheduleFamily.residuals p o s).getD i 0 + (R0P.occupancyFamily.residuals p o s).getD i 0
+FIz_ScalarAssembly.lean:40:41: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (R0P.occupancyFamily.residuals p o s).length
+in the target expression
+  0 + (R0P.scheduleFamily.residuals p o s).length ≤ i
+
+p : R0P.Public K
+o : R0P.Openings K
+s : R0P.Sel K
+i : ℕ
+ha : (R0P.assetFamily.residuals p o s).length = 2
+ho : (R0P.occupancyFamily.residuals p o s).length = 12
+h12 : ¬i < 12
+⊢ 0 + (R0P.scheduleFamily.residuals p o s).length ≤ i
+FIz_ScalarAssembly.lean:40:52: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?a + 0
+in the target expression
+  0 + part (R0P.pathFamily.residuals p o s) 32 i + part (R0P.valueFamily.residuals p o s) 49 i +
+          part (R0P.digestFamily.residuals p o s) 84 i +
+        part (R0P.assetFamily.residuals p o s) 92 i +
+      part (R0P.occupancyFamily.residuals p o s) 0 i =
+    if i < 32 then (R0P.scheduleFamily.residuals p o s).getD i 0
+    else
+      if i < 49 then (R0P.pathFamily.residuals p o s).getD (i - 32) 0
+      else
+        if i < 84 then (R0P.valueFamily.residuals p o s).getD (i - 49) 0
+        else
+          if i < 92 then (R0P.digestFamily.residuals p o s).getD (i - 84) 0
+          else if i < 94 then (R0P.assetFamily.residuals p o s).getD (i - 92) 0 else 0
+
+case neg
+p : R0P.Public K
+o : R0P.Openings K
+s : R0P.Sel K
+i : ℕ
+ha : (R0P.assetFamily.residuals p o s).length = 2
+ho : (R0P.occupancyFamily.residuals p o s).length = 12
+h12 : ¬i < 12
+⊢ 0 + part (R0P.pathFamily.residuals p o s) 32 i + part (R0P.valueFamily.residuals p o s) 49 i +
+          part (R0P.digestFamily.residuals p o s) 84 i +
+        part (R0P.assetFamily.residuals p o s) 92 i +
+      part (R0P.occupancyFamily.residuals p o s) 0 i =
+    if i < 32 then (R0P.scheduleFamily.residuals p o s).getD i 0
+    else
+      if i < 49 then (R0P.pathFamily.residuals p o s).getD (i - 32) 0
+      else
+        if i < 84 then (R0P.valueFamily.residuals p o s).getD (i - 49) 0
+        else
+          if i < 92 then (R0P.digestFamily.residuals p o s).getD (i - 84) 0
+          else if i < 94 then (R0P.assetFamily.residuals p o s).getD (i - 92) 0 else 0
+'AspisR1.FIz_ScalarAssembly.outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIz_ScalarAssembly.inside' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIz_ScalarAssembly.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

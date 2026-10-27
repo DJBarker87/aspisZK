@@ -1,0 +1,87 @@
+JFw_Chunks.lean:12:17: error: unsolved goals
+case cons
+c : List U8
+cs : List (List U8)
+ih : (∀ c ∈ cs, c.length = 32) → List.toChunksExact 32 ⋯ cs.flatten = (cs, [])
+lengths : ∀ c_1 ∈ c :: cs, c_1.length = 32
+length : c.length = 32
+rest : List.toChunksExact 32 ⋯ cs.flatten = (cs, [])
+enough : ¬(c ++ cs.flatten).length < 32
+⊢ (if h : (c ++ cs.flatten).length < 32 then ([], c ++ cs.flatten)
+    else
+      (List.take 32 c :: (List.toChunksExact 32 ⋯ (List.drop 32 c ++ cs.flatten)).1,
+        (List.toChunksExact 32 ⋯ (List.drop 32 c ++ cs.flatten)).2)) =
+    (c :: cs, [])
+JFw_Chunks.lean:18:15: warning: This simp argument is unused:
+  if_neg enough
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵n̵e̵g̵ ̵e̵n̵o̵u̵g̵h̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵r̵e̵s̵t̵]̵[̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲r̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Chunks.lean:19:65: warning: This simp argument is unused:
+  List.take_length
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg e̵n̵o̵u̵g̵h̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵r̵e̵s̵t̵]̵e̲n̲o̲u̲g̲h̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲r̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Chunks.lean:20:6: warning: This simp argument is unused:
+  List.drop_length
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg e̵n̵o̵u̵g̵h̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵r̵e̵s̵t̵]̵e̲n̲o̲u̲g̲h̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲r̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Chunks.lean:20:23: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg e̵n̵o̵u̵g̵h̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵r̵e̵s̵t̵]̵e̲n̲o̲u̲g̲h̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲r̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Chunks.lean:20:39: warning: This simp argument is unused:
+  rest
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg e̵n̵o̵u̵g̵h̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵r̵e̵s̵t̵]̵e̲n̲o̲u̲g̲h̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Chunks.lean:31:4: error: Ambiguous term
+  dite_true
+Possible interpretations:
+  _root_.dite_true : dite True ?m.44 ?m.45 = ?m.44 True.intro
+  
+  Aeneas.dite_true : dite True ?m.44 ?m.45 = ?m.44 True.intro
+JFw_Chunks.lean:35:4: error: Type mismatch: After simplification, term
+  count
+ has type
+  chunks.length ≤ Usize.max
+but is expected to have type
+  ↑0#usize + (List.toChunksExact ↑32#usize ⋯ ↑payload).1.length ≤ Usize.max
+JFw_Chunks.lean:40:46: error: Application type mismatch: The argument
+  c.property
+has type
+  ↑c ∈ (List.toChunksExact ↑32#usize ⋯ ↑payload).1
+but is expected to have type
+  ↑c ∈ chunks
+in the application
+  valid (↑c) c.property
+'AspisR1.JFw_Chunks.split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFw_Chunks.validator' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

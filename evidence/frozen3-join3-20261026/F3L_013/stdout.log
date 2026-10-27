@@ -1,0 +1,36 @@
+F3L_RhoChallenge.lean:27:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H (LiteralByteSampler.samp (↑32#u8) P (F3J_InputRows.proof p root w bound 32)).toProgram
+in the target expression
+  (eval H (LiteralByteSampler.samp 32 P (F3J_InputRows.proof p root w bound 32)).toProgram).2 =
+    (TranscriptView.Value.ordinary (LiteralOpeningView.eK (F3L_RhoMeaning.decode out)), decodeState after.state)
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+before after : transcript.Transcript Hash
+payload : Slice U8
+out : aspis_core.field.QM31
+success : PreparedModel.scalar_k B D before 32#u8 payload = ok (out, after)
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+frame : rowBytes p 32 = framed (MultiproofConeCanonical.bytesOf ↑payload)
+fits : (↑payload).length < 4294967296
+P : LiteralTranscript.Prefix
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before.state
+block : Std.Array U8 32#usize
+call : transcript.Transcript.block D before 32#u8 payload = ok (block, after)
+sampled : sampler.qm31_sample block = ok out
+c : F3J_OpeningFacts.Calls D before after 32#u8 payload block
+full :
+  eval H (LiteralByteSampler.samp (↑32#u8) P (F3J_InputRows.proof p root w bound 32)).toProgram =
+    (F3J_OpeningFacts.log c,
+      TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ (↑32#u8) (decodeState block)),
+      decodeState after.state)
+⊢ (eval H (LiteralByteSampler.samp 32 P (F3J_InputRows.proof p root w bound 32)).toProgram).2 =
+    (TranscriptView.Value.ordinary (LiteralOpeningView.eK (F3L_RhoMeaning.decode out)), decodeState after.state)
+'AspisR1.F3L_RhoChallenge.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

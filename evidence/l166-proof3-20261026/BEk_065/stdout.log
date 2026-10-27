@@ -1,0 +1,8 @@
+def AspisR1.BEh_Scope.BothSlots : {I S A E F : Type} →
+  (I → Fin 2 → S → Prop) →
+    (I → Fin 2 → S → AspisR1.SdkC_Source.Log → AspisR1.BEh_Scope.Outcome S A E) →
+      (I → Fin 2 → S → AspisR1.SdkC_Source.Log → AspisR1.BEh_Scope.Outcome S A F) → Prop :=
+fun {I S A E F} admitted native source =>
+  ∀ (input : I) (slot : Fin 2) (state : S) (before : AspisR1.SdkC_Source.Log),
+    admitted input slot state → AspisR1.BEh_Scope.Law (native input slot state before) (source input slot state before)
+'AspisR1.BEh_Scope.BothSlots' depends on axioms: [propext, Classical.choice, Quot.sound]

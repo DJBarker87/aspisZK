@@ -1,0 +1,59 @@
+FJb_MatrixModel.lean:22:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.46[?m.47]?
+in the target expression
+  FIv_NativeValue.decode x✝ = if h : n < ↑16#usize then decoded s ⟨n, h⟩ else 0
+
+case h_1
+s : State
+n : ℕ
+x✝¹ : Option FIv_NativeArithmetic.NQ
+x✝ : FIv_NativeArithmetic.NQ
+h : (↑s)[n]? = some x✝
+⊢ FIv_NativeValue.decode x✝ = if h : n < ↑16#usize then decoded s ⟨n, h⟩ else 0
+FJb_MatrixModel.lean:25:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.51[?m.52]?
+in the target expression
+  0 = if h : n < ↑16#usize then decoded s ⟨n, h⟩ else 0
+
+case h_2
+s : State
+n : ℕ
+x✝ : Option FIv_NativeArithmetic.NQ
+h : (↑s)[n]? = none
+⊢ 0 = if h : n < ↑16#usize then decoded s ⟨n, h⟩ else 0
+FJb_MatrixModel.lean:22:37: error: Type mismatch: After simplification, term
+  h
+ has type
+  (↑s)[n]? = some x✝
+but is expected to have type
+  ?m.47 < List.length ?m.46
+FJb_MatrixModel.lean:25:81: error: Application type mismatch: The argument
+  h
+has type
+  (↑s)[n]? = none
+but is expected to have type
+  ¬?m.60 > ?m.59
+in the application
+  Nat.le_of_not_gt h
+FJb_MatrixModel.lean:25:31: error: unsolved goals
+s : State
+n : ℕ
+x✝ : Option FIv_NativeArithmetic.NQ
+h : (↑s)[n]? = none
+⊢ List.length ?m.51 ≤ ?m.59
+FJb_MatrixModel.lean:27:87: error: unsolved goals
+s : State
+g : ℕ
+he : FJb_MatrixBlock.input s g = fun k => sample (decoded s) (4 * g + ↑k)
+j : Fin ↑16#usize
+⊢ (have rows := R0P.poseidonMat4 fun k => sample (decoded s) (4 * g + ↑k);
+    if ↑j = 4 * g + 3 then rows 3
+    else
+      if ↑j = 4 * g + 2 then rows 2
+      else if ↑j = 4 * g + 1 then rows 1 else if ↑j = 4 * g then rows 0 else decoded s j) =
+    have rows := R0P.poseidonMat4 fun k => sample (decoded s) (4 * g + ↑k);
+    if ↑j = 4 * g + 3 then rows 3
+    else
+      if ↑j = 4 * g + 2 then rows 2 else if ↑j = 4 * g + 1 then rows 1 else if ↑j = 4 * g then rows 0 else decoded s j
+'AspisR1.FJb_MatrixModel.at_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJb_MatrixModel.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

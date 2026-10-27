@@ -1,0 +1,1047 @@
+PSem_RowStep.lean:122:6: error: unsolved goals
+case pos.Ok.refine_2
+input out : Slice U8
+iter nextIter : core.ops.range.Range U8
+row tag : U8
+size src dst : Usize
+advance : core.iter.range.IteratorRange.next core.iter.range.StepU8 iter = ok (some row, nextIter)
+shape : r1_wire.row_shape row = ok (some (tag, size))
+hit : core.iter.range.IteratorRange.next core.iter.range.StepU8 iter = ok (some row, nextIter)
+nextEq : (some row, nextIter) = (some row, nextIter)
+hshape : r1_wire.row_shape row = ok (some (tag, size))
+headerEnd : UScalar UScalarTy.Usize
+hheaderEnd : dst + 5#usize = ok headerEnd
+header : Slice U8
+back : Slice U8 → Slice U8
+hheader :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+      { start := dst, «end» := headerEnd } =
+    ok (header, back)
+sourceHeaderEnd : UScalar UScalarTy.Usize
+hsourceHeaderEnd : src + 5#usize = ok sourceHeaderEnd
+sourceHeader : Slice U8
+hsourceHeader :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+      { start := src, «end» := sourceHeaderEnd } =
+    ok sourceHeader
+newHeader : Slice U8
+hnewHeader : core.slice.Slice.copy_from_slice core.marker.CopyU8 header sourceHeader = ok newHeader
+hdest : ↑headerEnd = ↑dst + 5
+hsource : ↑sourceHeaderEnd = ↑src + 5
+copyHeader : newHeader = sourceHeader
+headerRead : ↑sourceHeader = List.take (↑sourceHeaderEnd - ↑src) (List.drop ↑src ↑input)
+headerLength : (↑sourceHeader).length = ↑sourceHeaderEnd - ↑src
+headerSize : (↑newHeader).length = ↑headerEnd - ↑dst
+headerPrefix : List.take ↑headerEnd ↑(back newHeader) = List.take ↑dst ↑out ++ ↑newHeader
+compactCall : compact.compact_row row = ok (decide (14 ≤ ↑row))
+compactRow : 14 ≤ ↑row
+half : UScalar UScalarTy.Usize
+hhalf : size / 2#usize = ok half
+sourceEnd : UScalar UScalarTy.Usize
+hsourceEnd : sourceHeaderEnd + half = ok sourceEnd
+sourcePayload : Slice U8
+hsourcePayload :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+      { start := sourceHeaderEnd, «end» := sourceEnd } =
+    ok sourcePayload
+payloadEnd : UScalar UScalarTy.Usize
+hpayloadEnd : headerEnd + size = ok payloadEnd
+payload : Slice U8
+backPayload : Slice U8 → Slice U8
+hpayload :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back newHeader)
+      { start := headerEnd, «end» := payloadEnd } =
+    ok (payload, backPayload)
+replacement : Slice U8
+unit : Unit
+hexpand : nativeValues.expandValues sourcePayload payload = ok (core.result.Result.Ok unit, replacement)
+sourceNext : UScalar UScalarTy.Usize
+hsourceNext : sourceHeaderEnd + half = ok sourceNext
+left✝ : True
+call✝¹³ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepU8 iter
+      match o with
+        | none =>
+          have i := input.len;
+          if (src != i) = true then
+            ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+          else
+            have i1 := out.len;
+            if (dst != i1) = true then
+              ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+            else ok (ControlFlow.done (core.result.Result.Ok (), out))
+        | some row => do
+          let o1 ← r1_wire.row_shape row
+          let r ← core.option.Option.ok_or o1 AspisR1CurrentCaller.compact.CodecError.Length
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              let (_, size) := val
+              do
+              let i ← dst + 5#usize
+              let (s, index_mut_back) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+                    { start := dst, «end» := i }
+              let i1 ← src + 5#usize
+              let s1 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                    { start := src, «end» := i1 }
+              let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+              have out1 : Slice U8 := index_mut_back s2
+              let b ← compact.compact_row row
+              if b = true then do
+                  let i2 ← size / 2#usize
+                  let i3 ← i1 + i2
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                        { start := i1, «end» := i3 }
+                  let i4 ← i + size
+                  let (s4, index_mut_back1) ←
+                    core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                        { start := i, «end» := i4 }
+                  let (r1, s5) ← nativeValues.expandValues s3 s4
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a =>
+                      have out2 := index_mut_back1 s5;
+                      do
+                      let src1 ← i1 + i2
+                      ok (ControlFlow.cont (iter1, out2, src1, i4))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r2 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame compact.CodecError) residual
+                      have out2 : Slice U8 := index_mut_back1 s5
+                      ok (ControlFlow.done (r2, out2))
+                else do
+                  let i2 ← i + size
+                  let (s3, index_mut_back1) ←
+                    core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                        { start := i, «end» := i2 }
+                  let i3 ← i1 + size
+                  let s4 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                        { start := i1, «end» := i3 }
+                  let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+                  have out2 : Slice U8 := index_mut_back1 s5
+                  ok (ControlFlow.cont (iter1, out2, i3, i2))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r1, out))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝¹² :
+  (match some row with
+    | none =>
+      have i := input.len;
+      if (src != i) = true then
+        ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+      else
+        have i1 := out.len;
+        if (dst != i1) = true then
+          ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+        else ok (ControlFlow.done (core.result.Result.Ok (), out))
+    | some row => do
+      let o1 ← r1_wire.row_shape row
+      let r ← core.option.Option.ok_or o1 AspisR1CurrentCaller.compact.CodecError.Length
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (_, size) := val
+          do
+          let i ← dst + 5#usize
+          let (s, index_mut_back) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+                { start := dst, «end» := i }
+          let i1 ← src + 5#usize
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := src, «end» := i1 }
+          let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+          have out1 : Slice U8 := index_mut_back s2
+          let b ← compact.compact_row row
+          if b = true then do
+              let i2 ← size / 2#usize
+              let i3 ← i1 + i2
+              let s3 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                    { start := i1, «end» := i3 }
+              let i4 ← i + size
+              let (s4, index_mut_back1) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                    { start := i, «end» := i4 }
+              let (r1, s5) ← nativeValues.expandValues s3 s4
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have out2 := index_mut_back1 s5;
+                  do
+                  let src1 ← i1 + i2
+                  ok (ControlFlow.cont (nextIter, out2, src1, i4))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame compact.CodecError) residual
+                  have out2 : Slice U8 := index_mut_back1 s5
+                  ok (ControlFlow.done (r2, out2))
+            else do
+              let i2 ← i + size
+              let (s3, index_mut_back1) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                    { start := i, «end» := i2 }
+              let i3 ← i1 + size
+              let s4 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                    { start := i1, «end» := i3 }
+              let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+              have out2 : Slice U8 := index_mut_back1 s5
+              ok (ControlFlow.cont (nextIter, out2, i3, i2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (ControlFlow.done (r1, out))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝¹¹ :
+  (let (_, size) := (tag, size)
+    do
+    let i ← dst + 5#usize
+    let (s, index_mut_back) ←
+      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out { start := dst, «end» := i }
+    let i1 ← src + 5#usize
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input { start := src, «end» := i1 }
+    let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+    let b ← compact.compact_row row
+    if b = true then do
+        let i2 ← size / 2#usize
+        let i3 ← i1 + i2
+        let s3 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+              { start := i1, «end» := i3 }
+        let i4 ← i + size
+        let (s4, index_mut_back1) ←
+          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+              { start := i, «end» := i4 }
+        let (r1, s5) ← nativeValues.expandValues s3 s4
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let src1 ← i1 + i2
+            ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame compact.CodecError) residual
+            ok (ControlFlow.done (r2, index_mut_back1 s5))
+      else do
+        let i2 ← i + size
+        let (s3, index_mut_back1) ←
+          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+              { start := i, «end» := i2 }
+        let i3 ← i1 + size
+        let s4 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+              { start := i1, «end» := i3 }
+        let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+        ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝¹⁰ :
+  (do
+      let (s, index_mut_back) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+            { start := dst, «end» := headerEnd }
+      let i1 ← src + 5#usize
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input { start := src, «end» := i1 }
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+      let b ← compact.compact_row row
+      if b = true then do
+          let i2 ← size / 2#usize
+          let i3 ← i1 + i2
+          let s3 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := i1, «end» := i3 }
+          let i4 ← headerEnd + size
+          let (s4, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+                { start := headerEnd, «end» := i4 }
+          let (r1, s5) ← nativeValues.expandValues s3 s4
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let src1 ← i1 + i2
+              ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r2, index_mut_back1 s5))
+        else do
+          let i2 ← headerEnd + size
+          let (s3, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+                { start := headerEnd, «end» := i2 }
+          let i3 ← i1 + size
+          let s4 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := i1, «end» := i3 }
+          let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝⁹ :
+  (do
+      let i1 ← src + 5#usize
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input { start := src, «end» := i1 }
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 header s1
+      let b ← compact.compact_row row
+      if b = true then do
+          let i2 ← size / 2#usize
+          let i3 ← i1 + i2
+          let s3 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := i1, «end» := i3 }
+          let i4 ← headerEnd + size
+          let (s4, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i4 }
+          let (r1, s5) ← nativeValues.expandValues s3 s4
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let src1 ← i1 + i2
+              ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r2, index_mut_back1 s5))
+        else do
+          let i2 ← headerEnd + size
+          let (s3, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i2 }
+          let i3 ← i1 + size
+          let s4 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := i1, «end» := i3 }
+          let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝⁸ :
+  (do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+            { start := src, «end» := sourceHeaderEnd }
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 header s1
+      let b ← compact.compact_row row
+      if b = true then do
+          let i2 ← size / 2#usize
+          let i3 ← sourceHeaderEnd + i2
+          let s3 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := sourceHeaderEnd, «end» := i3 }
+          let i4 ← headerEnd + size
+          let (s4, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i4 }
+          let (r1, s5) ← nativeValues.expandValues s3 s4
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let src1 ← sourceHeaderEnd + i2
+              ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r2, index_mut_back1 s5))
+        else do
+          let i2 ← headerEnd + size
+          let (s3, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i2 }
+          let i3 ← sourceHeaderEnd + size
+          let s4 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := sourceHeaderEnd, «end» := i3 }
+          let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝⁷ :
+  (do
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 header sourceHeader
+      let b ← compact.compact_row row
+      if b = true then do
+          let i2 ← size / 2#usize
+          let i3 ← sourceHeaderEnd + i2
+          let s3 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := sourceHeaderEnd, «end» := i3 }
+          let i4 ← headerEnd + size
+          let (s4, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i4 }
+          let (r1, s5) ← nativeValues.expandValues s3 s4
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let src1 ← sourceHeaderEnd + i2
+              ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r2, index_mut_back1 s5))
+        else do
+          let i2 ← headerEnd + size
+          let (s3, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i2 }
+          let i3 ← sourceHeaderEnd + size
+          let s4 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := sourceHeaderEnd, «end» := i3 }
+          let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝⁶ :
+  (do
+      let i2 ← size / 2#usize
+      let i3 ← sourceHeaderEnd + i2
+      let s3 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+            { start := sourceHeaderEnd, «end» := i3 }
+      let i4 ← headerEnd + size
+      let (s4, index_mut_back1) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back newHeader)
+            { start := headerEnd, «end» := i4 }
+      let (r1, s5) ← nativeValues.expandValues s3 s4
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let src1 ← sourceHeaderEnd + i2
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (ControlFlow.done (r2, index_mut_back1 s5))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝⁵ :
+  (do
+      let i3 ← sourceHeaderEnd + half
+      let s3 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+            { start := sourceHeaderEnd, «end» := i3 }
+      let i4 ← headerEnd + size
+      let (s4, index_mut_back1) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back newHeader)
+            { start := headerEnd, «end» := i4 }
+      let (r1, s5) ← nativeValues.expandValues s3 s4
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let src1 ← sourceHeaderEnd + half
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (ControlFlow.done (r2, index_mut_back1 s5))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝⁴ :
+  (do
+      let s3 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+            { start := sourceHeaderEnd, «end» := sourceEnd }
+      let i4 ← headerEnd + size
+      let (s4, index_mut_back1) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back newHeader)
+            { start := headerEnd, «end» := i4 }
+      let (r1, s5) ← nativeValues.expandValues s3 s4
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let src1 ← sourceHeaderEnd + half
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (ControlFlow.done (r2, index_mut_back1 s5))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝³ :
+  (do
+      let i4 ← headerEnd + size
+      let (s4, index_mut_back1) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back newHeader)
+            { start := headerEnd, «end» := i4 }
+      let (r1, s5) ← nativeValues.expandValues sourcePayload s4
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let src1 ← sourceHeaderEnd + half
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (ControlFlow.done (r2, index_mut_back1 s5))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝² :
+  (do
+      let (s4, index_mut_back1) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back newHeader)
+            { start := headerEnd, «end» := payloadEnd }
+      let (r1, s5) ← nativeValues.expandValues sourcePayload s4
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let src1 ← sourceHeaderEnd + half
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, payloadEnd))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (ControlFlow.done (r2, index_mut_back1 s5))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝¹ :
+  (do
+      let (r1, s5) ← nativeValues.expandValues sourcePayload payload
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let src1 ← sourceHeaderEnd + half
+          ok (ControlFlow.cont (nextIter, backPayload s5, src1, payloadEnd))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (ControlFlow.done (r2, backPayload s5))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call✝ :
+  (do
+      let src1 ← sourceHeaderEnd + half
+      ok (ControlFlow.cont (nextIter, backPayload replacement, src1, payloadEnd))) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+call :
+  ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd)) =
+    ok (ControlFlow.cont (nextIter, backPayload replacement, sourceNext, payloadEnd))
+hv : ↑half = ↑size / 2
+hs : ↑sourceEnd = ↑sourceHeaderEnd + ↑half
+hn : ↑sourceNext = ↑sourceHeaderEnd + ↑half
+hd : ↑payloadEnd = ↑headerEnd + ↑size
+bytes : bytesOf ↑replacement = expand (sourcePayload.length / 16) (bytesOf ↑sourcePayload)
+sourceRead : ↑sourcePayload = List.take (↑sourceEnd - ↑sourceHeaderEnd) (List.drop ↑sourceHeaderEnd ↑input)
+sourceLength : (↑sourcePayload).length = ↑sourceEnd - ↑sourceHeaderEnd
+values :
+  replacement.length = payload.length ∧
+    payload.length = 2 * sourcePayload.length ∧
+      sourcePayload.length % 16 = 0 ∧
+        ∀ j < replacement.length,
+          (↑replacement)[j]? = if j % 32 < 16 then (↑sourcePayload)[j / 32 * 16 + j % 32]? else some 0#u8
+payloadLength : (↑payload).length = ↑payloadEnd - ↑headerEnd
+replacementSize : (↑replacement).length = ↑payloadEnd - ↑headerEnd
+payloadPrefix :
+  List.take ↑payloadEnd ↑(backPayload replacement) = List.take ↑headerEnd ↑(back newHeader) ++ ↑replacement
+⊢ bytesOf (List.take ↑dst ↑out ++ ↑newHeader ++ ↑replacement) =
+    bytesOf (List.take ↑dst ↑out) ++ List.take 5 (bytesOf (List.drop ↑src ↑input)) ++
+      if 14 ≤ ↑row then expand (↑size / 32) (bytesOf (List.take (↑size / 2) (List.drop (↑src + 5) ↑input)))
+      else bytesOf (List.take (↑size) (List.drop (↑src + 5) ↑input))
+PSem_RowStep.lean:49:69: error: unsolved goals
+case neg
+input out updated : Slice U8
+iter nextIter : core.ops.range.Range U8
+row tag : U8
+size src dst nextSrc nextDst : Usize
+advance : core.iter.range.IteratorRange.next core.iter.range.StepU8 iter = ok (some row, nextIter)
+shape : r1_wire.row_shape row = ok (some (tag, size))
+call✝⁶ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepU8 iter
+      match o with
+        | none =>
+          have i := input.len;
+          if (src != i) = true then
+            ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+          else
+            have i1 := out.len;
+            if (dst != i1) = true then
+              ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+            else ok (ControlFlow.done (core.result.Result.Ok (), out))
+        | some row => do
+          let o1 ← r1_wire.row_shape row
+          let r ← core.option.Option.ok_or o1 AspisR1CurrentCaller.compact.CodecError.Length
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              let (_, size) := val
+              do
+              let i ← dst + 5#usize
+              let (s, index_mut_back) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+                    { start := dst, «end» := i }
+              let i1 ← src + 5#usize
+              let s1 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                    { start := src, «end» := i1 }
+              let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+              have out1 : Slice U8 := index_mut_back s2
+              let b ← compact.compact_row row
+              if b = true then do
+                  let i2 ← size / 2#usize
+                  let i3 ← i1 + i2
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                        { start := i1, «end» := i3 }
+                  let i4 ← i + size
+                  let (s4, index_mut_back1) ←
+                    core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                        { start := i, «end» := i4 }
+                  let (r1, s5) ← nativeValues.expandValues s3 s4
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a =>
+                      have out2 := index_mut_back1 s5;
+                      do
+                      let src1 ← i1 + i2
+                      ok (ControlFlow.cont (iter1, out2, src1, i4))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r2 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame compact.CodecError) residual
+                      have out2 : Slice U8 := index_mut_back1 s5
+                      ok (ControlFlow.done (r2, out2))
+                else do
+                  let i2 ← i + size
+                  let (s3, index_mut_back1) ←
+                    core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                        { start := i, «end» := i2 }
+                  let i3 ← i1 + size
+                  let s4 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                        { start := i1, «end» := i3 }
+                  let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+                  have out2 : Slice U8 := index_mut_back1 s5
+                  ok (ControlFlow.cont (iter1, out2, i3, i2))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r1, out))) =
+    ok (ControlFlow.cont (nextIter, updated, nextSrc, nextDst))
+hit : core.iter.range.IteratorRange.next core.iter.range.StepU8 iter = ok (some row, nextIter)
+call✝⁵ :
+  (match some row with
+    | none =>
+      have i := input.len;
+      if (src != i) = true then
+        ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+      else
+        have i1 := out.len;
+        if (dst != i1) = true then
+          ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+        else ok (ControlFlow.done (core.result.Result.Ok (), out))
+    | some row => do
+      let o1 ← r1_wire.row_shape row
+      let r ← core.option.Option.ok_or o1 AspisR1CurrentCaller.compact.CodecError.Length
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (_, size) := val
+          do
+          let i ← dst + 5#usize
+          let (s, index_mut_back) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+                { start := dst, «end» := i }
+          let i1 ← src + 5#usize
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := src, «end» := i1 }
+          let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+          have out1 : Slice U8 := index_mut_back s2
+          let b ← compact.compact_row row
+          if b = true then do
+              let i2 ← size / 2#usize
+              let i3 ← i1 + i2
+              let s3 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                    { start := i1, «end» := i3 }
+              let i4 ← i + size
+              let (s4, index_mut_back1) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                    { start := i, «end» := i4 }
+              let (r1, s5) ← nativeValues.expandValues s3 s4
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  have out2 := index_mut_back1 s5;
+                  do
+                  let src1 ← i1 + i2
+                  ok (ControlFlow.cont (nextIter, out2, src1, i4))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame compact.CodecError) residual
+                  have out2 : Slice U8 := index_mut_back1 s5
+                  ok (ControlFlow.done (r2, out2))
+            else do
+              let i2 ← i + size
+              let (s3, index_mut_back1) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                    { start := i, «end» := i2 }
+              let i3 ← i1 + size
+              let s4 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                    { start := i1, «end» := i3 }
+              let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+              have out2 : Slice U8 := index_mut_back1 s5
+              ok (ControlFlow.cont (nextIter, out2, i3, i2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (ControlFlow.done (r1, out))) =
+    ok (ControlFlow.cont (nextIter, updated, nextSrc, nextDst))
+nextEq : (some row, nextIter) = (some row, nextIter)
+hshape : r1_wire.row_shape row = ok (some (tag, size))
+call✝⁴ :
+  (let (_, size) := (tag, size)
+    do
+    let i ← dst + 5#usize
+    let (s, index_mut_back) ←
+      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out { start := dst, «end» := i }
+    let i1 ← src + 5#usize
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input { start := src, «end» := i1 }
+    let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+    let b ← compact.compact_row row
+    if b = true then do
+        let i2 ← size / 2#usize
+        let i3 ← i1 + i2
+        let s3 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+              { start := i1, «end» := i3 }
+        let i4 ← i + size
+        let (s4, index_mut_back1) ←
+          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+              { start := i, «end» := i4 }
+        let (r1, s5) ← nativeValues.expandValues s3 s4
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let src1 ← i1 + i2
+            ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame compact.CodecError) residual
+            ok (ControlFlow.done (r2, index_mut_back1 s5))
+      else do
+        let i2 ← i + size
+        let (s3, index_mut_back1) ←
+          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+              { start := i, «end» := i2 }
+        let i3 ← i1 + size
+        let s4 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+              { start := i1, «end» := i3 }
+        let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+        ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, updated, nextSrc, nextDst))
+headerEnd : UScalar UScalarTy.Usize
+hheaderEnd : dst + 5#usize = ok headerEnd
+call✝³ :
+  (do
+      let (s, index_mut_back) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+            { start := dst, «end» := headerEnd }
+      let i1 ← src + 5#usize
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input { start := src, «end» := i1 }
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+      let b ← compact.compact_row row
+      if b = true then do
+          let i2 ← size / 2#usize
+          let i3 ← i1 + i2
+          let s3 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := i1, «end» := i3 }
+          let i4 ← headerEnd + size
+          let (s4, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+                { start := headerEnd, «end» := i4 }
+          let (r1, s5) ← nativeValues.expandValues s3 s4
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let src1 ← i1 + i2
+              ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r2, index_mut_back1 s5))
+        else do
+          let i2 ← headerEnd + size
+          let (s3, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+                { start := headerEnd, «end» := i2 }
+          let i3 ← i1 + size
+          let s4 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := i1, «end» := i3 }
+          let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, updated, nextSrc, nextDst))
+header : Slice U8
+back : Slice U8 → Slice U8
+hheader :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+      { start := dst, «end» := headerEnd } =
+    ok (header, back)
+call✝² :
+  (do
+      let i1 ← src + 5#usize
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input { start := src, «end» := i1 }
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 header s1
+      let b ← compact.compact_row row
+      if b = true then do
+          let i2 ← size / 2#usize
+          let i3 ← i1 + i2
+          let s3 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := i1, «end» := i3 }
+          let i4 ← headerEnd + size
+          let (s4, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i4 }
+          let (r1, s5) ← nativeValues.expandValues s3 s4
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let src1 ← i1 + i2
+              ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r2, index_mut_back1 s5))
+        else do
+          let i2 ← headerEnd + size
+          let (s3, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i2 }
+          let i3 ← i1 + size
+          let s4 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := i1, «end» := i3 }
+          let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, updated, nextSrc, nextDst))
+sourceHeaderEnd : UScalar UScalarTy.Usize
+hsourceHeaderEnd : src + 5#usize = ok sourceHeaderEnd
+call✝¹ :
+  (do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+            { start := src, «end» := sourceHeaderEnd }
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 header s1
+      let b ← compact.compact_row row
+      if b = true then do
+          let i2 ← size / 2#usize
+          let i3 ← sourceHeaderEnd + i2
+          let s3 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := sourceHeaderEnd, «end» := i3 }
+          let i4 ← headerEnd + size
+          let (s4, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i4 }
+          let (r1, s5) ← nativeValues.expandValues s3 s4
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let src1 ← sourceHeaderEnd + i2
+              ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r2, index_mut_back1 s5))
+        else do
+          let i2 ← headerEnd + size
+          let (s3, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i2 }
+          let i3 ← sourceHeaderEnd + size
+          let s4 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := sourceHeaderEnd, «end» := i3 }
+          let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, updated, nextSrc, nextDst))
+sourceHeader : Slice U8
+hsourceHeader :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+      { start := src, «end» := sourceHeaderEnd } =
+    ok sourceHeader
+call✝ :
+  (do
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 header sourceHeader
+      let b ← compact.compact_row row
+      if b = true then do
+          let i2 ← size / 2#usize
+          let i3 ← sourceHeaderEnd + i2
+          let s3 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := sourceHeaderEnd, «end» := i3 }
+          let i4 ← headerEnd + size
+          let (s4, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i4 }
+          let (r1, s5) ← nativeValues.expandValues s3 s4
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let src1 ← sourceHeaderEnd + i2
+              ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r2, index_mut_back1 s5))
+        else do
+          let i2 ← headerEnd + size
+          let (s3, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back s2)
+                { start := headerEnd, «end» := i2 }
+          let i3 ← sourceHeaderEnd + size
+          let s4 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                { start := sourceHeaderEnd, «end» := i3 }
+          let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, updated, nextSrc, nextDst))
+newHeader : Slice U8
+hnewHeader : core.slice.Slice.copy_from_slice core.marker.CopyU8 header sourceHeader = ok newHeader
+hdest : ↑headerEnd = ↑dst + 5
+hsource : ↑sourceHeaderEnd = ↑src + 5
+copyHeader : newHeader = sourceHeader
+headerRead : ↑sourceHeader = List.take (↑sourceHeaderEnd - ↑src) (List.drop ↑src ↑input)
+headerLength : (↑sourceHeader).length = ↑sourceHeaderEnd - ↑src
+headerSize : (↑newHeader).length = ↑headerEnd - ↑dst
+headerPrefix : List.take ↑headerEnd ↑(back newHeader) = List.take ↑dst ↑out ++ ↑newHeader
+compactCall : compact.compact_row row = ok (decide (14 ≤ ↑row))
+call :
+  (if 14 ≤ ↑row then do
+      let i2 ← size / 2#usize
+      let i3 ← sourceHeaderEnd + i2
+      let s3 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+            { start := sourceHeaderEnd, «end» := i3 }
+      let i4 ← headerEnd + size
+      let (s4, index_mut_back1) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back newHeader)
+            { start := headerEnd, «end» := i4 }
+      let (r1, s5) ← nativeValues.expandValues s3 s4
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let src1 ← sourceHeaderEnd + i2
+          ok (ControlFlow.cont (nextIter, index_mut_back1 s5, src1, i4))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (ControlFlow.done (r2, index_mut_back1 s5))
+    else do
+      let i2 ← headerEnd + size
+      let (s3, index_mut_back1) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (back newHeader)
+            { start := headerEnd, «end» := i2 }
+      let i3 ← sourceHeaderEnd + size
+      let s4 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+            { start := sourceHeaderEnd, «end» := i3 }
+      let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+      ok (ControlFlow.cont (nextIter, index_mut_back1 s5, i3, i2))) =
+    ok (ControlFlow.cont (nextIter, updated, nextSrc, nextDst))
+compactRow : ¬14 ≤ ↑row
+⊢ (↑nextSrc = ↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ∧
+    ↑nextDst = ↑dst + 5 + ↑size ∧
+      ↑nextSrc ≤ (↑input).length ∧
+        bytesOf (List.take ↑nextDst ↑updated) =
+          bytesOf (List.take ↑dst ↑out) ++ List.take 5 (bytesOf (List.drop ↑src ↑input)) ++
+            if 14 ≤ ↑row then expand (↑size / 32) (bytesOf (List.take (↑size / 2) (List.drop (↑src + 5) ↑input)))
+            else bytesOf (List.take (↑size) (List.drop (↑src + 5) ↑input))
+PSem_RowStep.lean:97:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+PSem_RowStep.lean:98:17: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at call
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_RowStep.lean:123:10: error: unexpected identifier; expected command
+'_private.PSem_RowStep.0.AspisR1.PSem_RowStep.window_length' depends on axioms: [propext, Quot.sound]
+'_private.PSem_RowStep.0.AspisR1.PSem_RowStep.copied' depends on axioms: [propext, Quot.sound]
+'AspisR1.PSem_RowStep.row_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

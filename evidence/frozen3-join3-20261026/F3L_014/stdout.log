@@ -1,0 +1,51 @@
+F3L_RhoChallenge.lean:28:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SelectedTranscriptParams.params.σ 32 (decodeState block)
+in the target expression
+  (F3J_OpeningFacts.log c,
+        TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ (↑32#u8) (decodeState block)),
+        decodeState after.state).2 =
+    (TranscriptView.Value.ordinary (LiteralOpeningView.eK (F3L_RhoMeaning.decode out)), decodeState after.state)
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+before after : transcript.Transcript Hash
+payload : Slice U8
+out : aspis_core.field.QM31
+success : PreparedModel.scalar_k B D before 32#u8 payload = ok (out, after)
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+frame : rowBytes p 32 = framed (MultiproofConeCanonical.bytesOf ↑payload)
+fits : (↑payload).length < 4294967296
+P : LiteralTranscript.Prefix
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before.state
+block : Std.Array U8 32#usize
+call : transcript.Transcript.block D before 32#u8 payload = ok (block, after)
+sampled : sampler.qm31_sample block = ok out
+c : F3J_OpeningFacts.Calls D before after 32#u8 payload block
+full :
+  eval H (LiteralByteSampler.samp 32 P (F3J_InputRows.proof p root w bound 32)).toProgram =
+    (F3J_OpeningFacts.log c,
+      TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ (↑32#u8) (decodeState block)),
+      decodeState after.state)
+⊢ (F3J_OpeningFacts.log c,
+        TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ (↑32#u8) (decodeState block)),
+        decodeState after.state).2 =
+    (TranscriptView.Value.ordinary (LiteralOpeningView.eK (F3L_RhoMeaning.decode out)), decodeState after.state)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3L_RhoChallenge.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

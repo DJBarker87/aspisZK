@@ -1,0 +1,79 @@
+'AspisR1.Hist_CausalAuth.on_selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Hist_CausalAuth.on_selected : ∀ {A CoreError : Type}
+  (sourceProgram : Program Bytes State Hist_PairExperiment.Pair) (iv : State) (Q : ℕ),
+  (∀ (H : Bytes → State), firstReads emptyTable (eval H sourceProgram).1 ≤ Q) →
+    ∀ (H : Bytes → State) (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops) (reserved : Bool)
+      (query : Port3_NativeQueryBody.Ops) (geo : Port3_NativeGeometryBody.Ops CoreError)
+      (B : AspisR1PublicPreparation.FinishModel.Boundaries) (stdClaims : ClaimsUnrolledFinish.StdCalls),
+      WAdm_Domain.SessionAPrepare (Tx1Q_Execution.actual ops reserved query geo B stdClaims) →
+        Port5Q1_QueryPorts.SessionAPrimitives query →
+          ∀ (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+            (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+            S2W_DigestExtraction.AeneasExtraction
+                (sdkOps (Hist_Authority.install adapter) (Tx1Q_SameCut.dictionary ops reserved query geo) B stdClaims)
+                native1 native2 hashv →
+              ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+                TrustedStd copy →
+                  ∀ (allocator : Allocator A) (program : S2W_ExtractionBoundary.Program) (initial final : Store)
+                    (layout1 layout2 : Layout) (data1 : Slice U8) (state final1 : A) (saved : alloc.vec.Vec U8)
+                    (post1 : Heap (ℕ → Record)),
+                    first native1 copy allocator (load initial layout1) program data1 state =
+                        ok (core.result.Result.Ok (saved, post1, final1)) →
+                      ∀ (events : List S2X.AccountEvent),
+                        Trace
+                            (sdkOps (Hist_Authority.install adapter) (Tx1Q_SameCut.dictionary ops reserved query geo) B
+                              stdClaims)
+                            program (commit initial (layout1.handles 2).1 saved) events final →
+                          (layout2.handles 6).1 = (layout1.handles 2).1 →
+                            SourceCuts
+                                (sdkOps (Hist_Authority.install adapter)
+                                  (Tx1Q_SameCut.dictionary ops reserved query geo) B stdClaims)
+                                (load initial layout1).first ((load final layout2).second secondSizes) saved
+                                (eval H sourceProgram).2.first (eval H sourceProgram).2.second →
+                              ∀ (decode : HeaderDecode),
+                                CheckpointWriterConeJoin
+                                    (sdkOps (Hist_Authority.install adapter)
+                                      (Tx1Q_SameCut.dictionary ops reserved query geo) B stdClaims)
+                                    decode H (eval H sourceProgram).2.first.semantic (eval H sourceProgram).2.first.pub
+                                    (eval H sourceProgram).2.first.proof (eval H sourceProgram).2.first.split →
+                                  CheckpointReaderConeJoin
+                                      (sdkOps (Hist_Authority.install adapter)
+                                        (Tx1Q_SameCut.dictionary ops reserved query geo) B stdClaims)
+                                      decode H (eval H sourceProgram).2.second.pub (eval H sourceProgram).2.second.proof
+                                      (eval H sourceProgram).2.second.checkpoint →
+                                    BinRawByteCollisionTargets.event iv (Q + 4)
+                                        (eval H (Hist_PairExperiment.charged sourceProgram)) ∨
+                                      ∃ runtime,
+                                        runtime.key = (layout1.handles 2).1 ∧
+                                          runtime.events = events ∧
+                                            bytesOf ↑(eval H sourceProgram).2.second.proof =
+                                                bytesOf ↑(eval H sourceProgram).2.first.proof ∧
+                                              bytesOf ↑(eval H sourceProgram).2.second.pub =
+                                                  bytesOf ↑(eval H sourceProgram).2.first.pub ∧
+                                                bytesOf ↑(eval H sourceProgram).2.second.checkpoint = bytesOf ↑saved ∧
+                                                  List.length (bytesOf ↑saved) = 1768 :=
+fun {A CoreError} sourceProgram iv Q budget H adapter ops reserved query geo B stdClaims owner ports native1 native2
+    hashv extraction copy std allocator program initial final layout1 layout2 data1 state final1 saved post1 accepted1
+    events trace sameKey cuts decode writer reader =>
+  let pair := (eval H sourceProgram).2;
+  have native :=
+    (first_accepted native1 copy std allocator (load initial layout1) program data1 state final1 saved post1
+        accepted1).left;
+  have sourceAccepted := Eq.trans (Eq.symm (extraction.stage1 program (load initial layout1).first data1)) native;
+  let savedHistory :=
+    Hist_CausalSdk.version adapter ops reserved query geo B stdClaims owner ports program initial final layout1 layout2
+      data1 saved sourceAccepted events trace sameKey pair.first pair.second cuts;
+  let runtime :=
+    Hist_CommittedSdk.version adapter ops reserved query geo B stdClaims owner ports native1 native2 hashv extraction
+      copy std allocator program initial final layout1 layout2 data1 state final1 saved post1 accepted1 events trace
+      sameKey pair.first pair.second cuts;
+  Or.casesOn (Hist_PairExperiment.binding_or_collision iv sourceProgram Q budget H) (fun bad => Or.inl bad)
+    fun p2prime =>
+    let ⟨proof, right✝⟩ :=
+      authenticated_inputs
+        (sdkOps (Hist_Authority.install adapter) (Tx1Q_SameCut.dictionary ops reserved query geo) B stdClaims) decode H
+        pair.first.semantic pair.first.pub pair.first.proof pair.second.pub pair.second.proof pair.second.checkpoint
+        pair.first.split saved cuts.first cuts.second writer reader { history := savedHistory } p2prime
+    let ⟨pub, right✝¹⟩ := right✝
+    let ⟨checkpoint, size⟩ := right✝¹
+    Or.inr (Exists.intro runtime ⟨rfl, ⟨rfl, ⟨proof, ⟨pub, ⟨checkpoint, size⟩⟩⟩⟩⟩)

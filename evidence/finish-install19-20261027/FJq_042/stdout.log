@@ -1,0 +1,64 @@
+FJq_DecodeChunk.lean:15:11: error: overloaded, errors 
+  15:17 Unknown identifier `MainQM`
+  
+  Note: It is not possible to treat `MainQM` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+  
+  15:17 Unknown identifier `MainQM`
+  
+  Note: It is not possible to treat `MainQM` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+FJq_DecodeChunk.lean:42:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ExtractedPrefixSemanticLow.lowValue limbs
+in the target expression
+  ExtractedMaskQM31Exact.decode (RawSemanticFieldOwnerAdapter.mainToProbe (decoderQMToMain q)) = (↑x).re
+
+n : Usize
+record : r1_wire.ValidatedRecord
+offset : Usize
+out : sorry
+run : decodeMain n record offset = ok (core.result.Result.Ok sorry)
+j : Fin ↑n
+x : SemanticCoefficientCodec.LowWide
+literal :
+  SemanticCoefficientCodec.decodeLow
+      (List.map ExtractedRecordByteValue.rawByte
+        (List.take 32 (List.drop (32 * (↑offset + ↑j)) (List.drop 5 ↑record.framed)))) =
+    some x
+byteOffset : Usize
+hOffset : lift (offset.checked_mul 32#usize) = ok (some byteOffset)
+hvalues :
+  ∀ (j : Fin ↑n),
+    ∃ q,
+      AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_value (recordToDecoder record) byteOffset
+            (UScalar.ofNatCore ↑j ⋯) offset =
+          ok (core.result.Result.Ok q) ∧
+        (↑sorry)[↑j] = decoderQMToMain q ∧
+          Nonempty
+              (AspisR1DecodeKFullValueTrace.ParserTrace (recordToDecoder record) byteOffset (UScalar.ofNatCore ↑j ⋯)
+                offset q) ∧
+            RawSemanticFieldOwnerAdapter.Canonical (RawSemanticFieldOwnerAdapter.mainToProbe (decoderQMToMain q))
+q : DecodeQM
+call :
+  AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_value (recordToDecoder record) byteOffset
+      (UScalar.ofNatCore ↑j ⋯) offset =
+    ok (core.result.Result.Ok q)
+source : (↑sorry)[↑j] = decoderQMToMain q
+canonical : RawSemanticFieldOwnerAdapter.Canonical (RawSemanticFieldOwnerAdapter.mainToProbe (decoderQMToMain q))
+trace : AspisR1DecodeKFullValueTrace.ParserTrace (recordToDecoder record) byteOffset (UScalar.ofNatCore ↑j ⋯) offset q
+byteValue : ↑byteOffset = ↑offset * 32
+start : ↑trace.payloadStart = 32 * (↑offset + ↑j)
+raw :
+  List.take 32 (List.drop ↑trace.payloadStart ↑trace.payloadData) =
+    List.take 32 (List.drop (32 * (↑offset + ↑j)) (List.drop 5 ↑record.framed))
+strict : ExtractedPrefixStrictPayload.StrictLowChunk (List.take 32 (List.drop ↑trace.payloadStart ↑trace.payloadData))
+limbs : RetainedFieldByteCodec.QM31Limbs
+decoded : some x = some (ExtractedPrefixSemanticLow.lowValue limbs)
+same : q = ActualDecodeKStrictQM31Parser.limbsToActual limbs
+field :
+  ExtractedMaskQM31Exact.decode (RawSemanticFieldOwnerAdapter.mainToProbe (decoderQMToMain q)) =
+    (↑(ExtractedPrefixSemanticLow.lowValue limbs)).re
+encoded :
+  SemanticCoefficientCodec.encodeLow (ExtractedPrefixSemanticLow.lowValue limbs) =
+    List.map ExtractedRecordByteValue.rawByte (List.take 32 (List.drop ↑trace.payloadStart ↑trace.payloadData))
+chosen : x = ExtractedPrefixSemanticLow.lowValue limbs
+⊢ ExtractedMaskQM31Exact.decode (RawSemanticFieldOwnerAdapter.mainToProbe (decoderQMToMain q)) = (↑x).re
+'AspisR1.FJq_DecodeChunk.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,26 @@
+SAQ_Geometry.lean:43:4: error: failed to synthesize
+  Decidable (Port5Q1_GeometryCanonical.Canonical 1#u32)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.SAQ_Geometry.canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SAQ_Geometry.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SAQ_Geometry.one' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1QueryGeometryActual.fast_domain.fibre_point : AspisR1QueryGeometryActual.CM31Ops →
+  AspisR1QueryGeometryActual.domain.FibreIndex →
+    Result (AspisR1QueryGeometryActual.domain.Point AspisR1QueryGeometryActual.field.M31) :=
+fun ops u => do
+  let index ← u.get
+  let i ← lift (index &&& 511#usize)
+  let p ← AspisR1QueryGeometryActual.fast_domain.TABLE_A.index_usize i
+  let left ← AspisR1QueryGeometryActual.fast_domain.table_value ops p
+  let i1 ← index >>> 9#i32
+  let p1 ← AspisR1QueryGeometryActual.fast_domain.TABLE_B.index_usize i1
+  let right ← AspisR1QueryGeometryActual.fast_domain.table_value ops p1
+  let point ← ops.mul left right
+  ok { x := point.a, y := point.b }
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+SAQ_Geometry.lean:58:7: error(lean.unknownIdentifier): Unknown constant `AspisR1QueryGeometryActual.domain.FibreIndex.new`

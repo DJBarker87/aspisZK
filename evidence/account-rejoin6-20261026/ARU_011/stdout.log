@@ -1,0 +1,21 @@
+ARU_Returning.lean:18:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (readLog (run hashv code []).2, ok value).1
+in the target expression
+  (a, d) ∈ readLog (run hashv code []).2
+
+A : Type
+hashv : Parts → Result Digest
+H : Bytes → State
+code : Code A
+value : A
+accepted : (run hashv code []).1 = ok value
+agrees : ARS_QueryTransport.Agrees H (run hashv code []).2
+same : eval H (SdkC_Oracle.program code) = (readLog (run hashv code []).2, ok value)
+a : Bytes
+d : State
+bad : d ≠ H a
+member : (a, d) ∈ readLog (run hashv code []).2
+logs : (eval H (SdkC_Oracle.program code)).1 = (readLog (run hashv code []).2, ok value).1
+⊢ False
+'AspisR1.ARU_Returning.returning' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ARU_Returning.safe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

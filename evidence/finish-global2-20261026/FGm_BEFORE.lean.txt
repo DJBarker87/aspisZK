@@ -1,0 +1,174 @@
+@AspisR1.FIo_Accepted.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk (AspisR1.FIo_Install.configuration indexError c reservation)) native1
+                    native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.F3T_ByteCarrier.ByteProver)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q0 + Q1) →
+                                        ∀ (runtime : AspisR1.F3T_Runtime.Runtime),
+                                          AspisR1.FGl_PreparedAt.Owners
+                                              (AspisR1.FIo_Install.configuration indexError c reservation)
+                                              (AspisR1.Rc2_Install.configuration
+                                                  (AspisR1.Rc5_Install.seed indexError
+                                                    (AspisR1.FIo_Install.select reservation c))
+                                                  reservation).boundaries →
+                                            AspisR1.F3T_Runtime.StoredCarrierBinding
+                                                (AspisR1.FIo_Install.configuration indexError c reservation) D
+                                                (AspisR1.F3T_Installed.source
+                                                  (AspisR1.FIo_Install.configuration indexError c reservation) hashv)
+                                                P runtime →
+                                              have select := fun x =>
+                                                AspisR1.P2P_NativeSelection.pair
+                                                  (AspisR1.DrvC_Installation.sdk
+                                                    (AspisR1.FIo_Install.configuration indexError c reservation))
+                                                  AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                              AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                                  (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                                  AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                                  AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                                AspisR1.DrvC_Implementation.driver
+                                                      (AspisR1.FIo_Install.configuration indexError c reservation) =
+                                                    AspisR1.DrvC_SourceEntry.source
+                                                      (AspisR1.FIo_Install.configuration indexError c reservation)
+                                                      hashv ∧
+                                                  AspisR1.DrvC_Installation.sdk
+                                                        (AspisR1.FIo_Install.configuration indexError c reservation) =
+                                                      AspisR1.SdkD_PairBatches.dictionary
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).adapter
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).currentBase
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).stageBase
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).finish
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).reserved
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).query
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).geometry
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).boundaries
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).std ∧
+                                                    AspisR1.P2P_Result.Outcome L e1 e2 w1 w2
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).adapter
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).currentBase
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).reserved
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).query
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).geometry
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).stageBase
+                                                        (AspisR1.FIo_Install.configuration indexError c
+                                                            reservation).finish
+                                                        c.boundaries reservation AspisR1.CPH_Program.verifier data1
+                                                        data2 slot saved post1 post2 H
+                                                        (AspisR1.DrvC_Implementation.driver
+                                                          (AspisR1.FIo_Install.configuration indexError c reservation))
+                                                        prior (p.physicalEvents t) hashv
+                                                        (AspisR1.BinRawByteCollisionTargets.event
+                                                          AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (AspisR1.Hiq_RecordedJoint.program
+                                                              (AspisR1.F3X_Account.program
+                                                                (AspisR1.FIo_Install.configuration indexError c
+                                                                  reservation)
+                                                                hashv P)
+                                                              AspisR1.F3X_Projection.project select))) ∧
+                                                      (AspisR1.F3X_ModelClaims.Claims
+                                                            (AspisR1.FIo_Install.configuration indexError c reservation)
+                                                            D P (Q0 + Q1) ∧
+                                                          AspisR1.F3Y_SourceClaims.Claims
+                                                              (AspisR1.FIo_Install.configuration indexError c
+                                                                reservation)
+                                                              D hashv P (Q0 + Q1) select ∧
+                                                            AspisR1.F3Y_AccountMass.Claims
+                                                                (AspisR1.FIo_Install.configuration indexError c
+                                                                  reservation)
+                                                                hashv P (Q0 + Q1) select ∧
+                                                              AspisR1.F3T_RuntimeBound.failureModel runtime ≤
+                                                                  AspisR1.F3T_Numeric.total (Q0 + Q1) ∧
+                                                                (Q0 + Q1 ≤ AspisR1.F3U_RangeEdges.maxQueries →
+                                                                    AspisR1.F3T_RuntimeBound.failureModel runtime ≤
+                                                                      (↑Q0 + ↑Q1 + 1) * (1 / 2 ^ 100)) ∧
+                                                                  (Q0 + Q1 = 0 →
+                                                                    AspisR1.F3U_Numeric.margin ≤
+                                                                        1 / 2 ^ 100 -
+                                                                          AspisR1.F3T_RuntimeBound.failureModel
+                                                                            runtime ∧
+                                                                      AspisR1.F3T_RuntimeBound.failureModel runtime <
+                                                                        1 / 2 ^ 100)) ∧
+                                                        (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                            (↑saved).length = 1768 ∧
+                                                              AspisR1.S2W_EntryWriteHistory.payloadBytes
+                                                                    AspisR1.S2W_ReturnedCheckpoint.encode
+                                                                    (post1.payload (e1.heap.accounts 2).1) 1768 =
+                                                                  AspisR1.MultiproofConeCanonical.bytesOf ↑saved ∧
+                                                                post1.ambient = e1.heap.ambient ∧
+                                                                  post1.accounts = e1.heap.accounts ∧
+                                                                    post1.counter = e1.heap.counter ∧
+                                                                      ∀ (cell : ℕ),
+                                                                        cell ≠ (e1.heap.accounts 2).1 →
+                                                                          post1.payload cell = e1.heap.payload cell) ∧
+                                                          AspisR1.Rc2_Events.Facts
+                                                              (AspisR1.FIo_Install.configuration indexError c
+                                                                reservation)
+                                                              hashv native1 native2 copy allocator
+                                                              AspisR1.CPH_Program.verifier H saved ∧
+                                                            AspisR1.CPH_Protection.Facts p t saved
+                                                                AspisR1.CPH_Program.verifier ∧
+                                                              AspisR1.CPH_Trace.Facts p t u saved native1 native2 copy
+                                                                  allocator AspisR1.CPH_Program.verifier ∧
+                                                                AspisR1.CPH_Recorder.Facts
+                                                                  (AspisR1.FIo_Install.configuration indexError c
+                                                                    reservation)
+                                                                  hashv native1 native2 copy allocator
+                                                                  AspisR1.CPH_Program.verifier H p t u saved

@@ -1,0 +1,91 @@
+'AspisR1.JGg_PrepareForward.checked_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGg_PrepareForward.lean:54:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let cf1 ←
+      match core.result.Result.Ok claim with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val1 =>
+        ok
+          (core.result.Result.Ok
+              { variant := transport.Variant.S2, roots := sem.roots, gamma := gamma, kappa := kappa,
+                alpha := Array.make 2#usize [a0, a1] ⋯, rho := rho, queries := queries, semantic_alpha := sem.alpha,
+                z := sem.z, claim := val1, state := t6.state },
+            scratch)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r2 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (core.convert.FromSame verifier.Error) residual
+        ok (r2, scratch)
+is not definitionally equal to the right-hand side
+  ok
+    (core.result.Result.Ok
+        (PreparedScratchReachability.output sem view gamma kappa (Array.make 2#usize [a0, a1] ⋯) rho queries claim t6),
+      scratch)
+
+Hash : Type
+B : PreparedScratchModel.Boundaries
+D : aspis_core.Digest32 Hash
+sem : r1_semantic.Verified Hash
+view : verifier.View
+hash : Hash
+scratch input : Std.Array aspis_core.field.WideExact 29#usize
+variant : view.variant = transport.Variant.S2
+t0 t1 t2 t3 t4 t5 t6 : transcript.Transcript Hash
+inactive root : Std.Array U8 32#usize
+bytes1 bytes2 : alloc.vec.Vec U8
+gamma kappa a0 a1 : aspis_core.field.WideExact
+rho : aspis_core.field.QM31
+queries : Std.Array U32 22#usize
+claim : aspis_core.field.WideExact
+seed : transcript.Transcript.new D hash sem.transcript.state view.variant = ok t0
+gammaCall : PreparedModel.scalar B.sampling D t0 27#u8 view.y1 true = ok (gamma, t1)
+serialize : B.sampling.toBytes view.inactive = ok inactive
+kappaCall : PreparedModel.scalar B.sampling D t1 28#u8 inactive.to_slice false = ok (kappa, t2)
+a0Call : PreparedModel.scalar B.sampling D t2 29#u8 view.round0 false = ok (a0, t3)
+rootCall : core.option.Option.unwrap view.folded_root = ok root
+first :
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 256#usize) root.to_slice =
+    ok bytes1
+second : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 view.round1 = ok bytes2
+a1Call : PreparedModel.scalar B.sampling D t3 30#u8 bytes2.deref false = ok (a1, t4)
+query : B.sampling.queries D t4 31#u8 view.final_message = ok (core.result.Result.Ok queries, t5)
+rhoCall : PreparedModel.scalar_k B.sampling D t5 32#u8 PreparedScratchReachability.emptyPayload = ok (rho, t6)
+powers : B.powers 29#usize gamma = ok scratch
+claimed : B.claim D sem view.y1 view.inactive scratch kappa = ok (core.result.Result.Ok claim)
+folds : transport.Variant.S2.folds = ok 2#usize
+add : 32#usize + 224#usize = ok 256#usize
+addRow : 31#u8 + 1#u8 = ok 32#u8
+⊢ (do
+      let cf1 ←
+        match core.result.Result.Ok claim with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 =>
+          ok
+            (core.result.Result.Ok
+                { variant := transport.Variant.S2, roots := sem.roots, gamma := gamma, kappa := kappa,
+                  alpha := Array.make 2#usize [a0, a1] ⋯, rho := rho, queries := queries, semantic_alpha := sem.alpha,
+                  z := sem.z, claim := val1, state := t6.state },
+              scratch)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, scratch)) =
+    ok
+      (core.result.Result.Ok
+          (PreparedScratchReachability.output sem view gamma kappa (Array.make 2#usize [a0, a1] ⋯) rho queries claim
+            t6),
+        scratch)
+JGg_PrepareForward.lean:38:85: warning: This simp argument is unused:
+  read_discriminant
+
+Hint: Omit it from the simp argument list.
+  simp [̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵f̵o̵l̵d̵s̵,̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵V̵a̵r̵i̵a̵n̵t̵.̵e̵q̵,̵r̵e̵a̵d̵_̵d̵i̵s̵c̵r̵i̵m̵i̵n̵a̵n̵t̵,̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵r̵e̵a̵d̵_̵d̵i̵s̵c̵r̵i̵m̵i̵n̵a̵n̵t̵]̵[̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲f̲o̲l̲d̲s̲,̲ ̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲C̲m̲p̲P̲a̲r̲t̲i̲a̲l̲E̲q̲V̲a̲r̲i̲a̲n̲t̲.̲e̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲r̲e̲a̲d̲_̲d̲i̲s̲c̲r̲i̲m̲i̲n̲a̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGg_PrepareForward.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

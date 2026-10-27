@@ -1,0 +1,50 @@
+FIz_DigestPrefix.lean:23:4: error: Tactic `rfl` failed: The left-hand side
+  R0P.digestAddBinding
+    (R0P.digestAddBinding
+      (R0P.digestAddBinding (fun x => 0) (FIw_PublicModel.selector s ⟨907, ⋯⟩) (fun j => FIv_NativeArray.value o.z ↑j) 0
+        (FIw_PublicModel.digest p.anchor))
+      (FIw_PublicModel.selector s ⟨427, ⋯⟩) (fun j => FIv_NativeArray.value o.z ↑j) 0
+      (FIw_PublicModel.digest p.nullifier))
+    (FIw_PublicModel.selector s ⟨523, ⋯⟩) (fun j => FIv_NativeArray.value o.z ↑j) 0 (FIw_PublicModel.digest p.change)
+is not definitionally equal to the right-hand side
+  List.foldl
+    (fun acc key =>
+      R0P.digestAddBinding acc (FIw_PublicModel.selector s (R0P.digestRow (FIw_PublicModel.ofPublic p) key))
+        (FIw_PublicModel.openings o).z (R0P.digestStart (FIw_PublicModel.ofPublic p) key)
+        (R0P.digestTarget (FIw_PublicModel.ofPublic p) key))
+    (fun x => 0) (keys (FIw_PublicModel.ofPublic p))
+
+case none
+p : Public
+o : Openings
+s : Selectors
+hr : p.recipient = none
+⊢ R0P.digestAddBinding
+      (R0P.digestAddBinding
+        (R0P.digestAddBinding (fun x => 0) (FIw_PublicModel.selector s ⟨907, ⋯⟩) (fun j => FIv_NativeArray.value o.z ↑j)
+          0 (FIw_PublicModel.digest p.anchor))
+        (FIw_PublicModel.selector s ⟨427, ⋯⟩) (fun j => FIv_NativeArray.value o.z ↑j) 0
+        (FIw_PublicModel.digest p.nullifier))
+      (FIw_PublicModel.selector s ⟨523, ⋯⟩) (fun j => FIv_NativeArray.value o.z ↑j) 0
+      (FIw_PublicModel.digest p.change) =
+    List.foldl
+      (fun acc key =>
+        R0P.digestAddBinding acc (FIw_PublicModel.selector s (R0P.digestRow (FIw_PublicModel.ofPublic p) key))
+          (FIw_PublicModel.openings o).z (R0P.digestStart (FIw_PublicModel.ofPublic p) key)
+          (R0P.digestTarget (FIw_PublicModel.ofPublic p) key))
+      (fun x => 0) (keys (FIw_PublicModel.ofPublic p))
+FIz_DigestPrefix.lean:21:15: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵r̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIz_DigestPrefix.lean:25:15: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵r̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIz_DigestPrefix.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

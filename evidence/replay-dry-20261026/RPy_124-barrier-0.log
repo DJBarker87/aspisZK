@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-cx-s2h-20261023/S2H_reservation.py", line 8, in <module>
+    rows.append(dict(scope=str(p),memory_max=int(limit) if limit!='max' else None,processes=[subprocess.run(['ps','-p',pid,'-o','args='],text=True,capture_output=True).stdout.strip() for pid in (p/'cgroup.procs').read_text().split()],memory_high=(p/'memory.high').read_text().strip(),memory_swap_max=(p/'memory.swap.max').read_text().strip(),memory_current=int((p/'memory.current').read_text())))
+                                                                                                                                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1029, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rd654a160c36848a180670d4e18dc3f9d.scope/memory.high'

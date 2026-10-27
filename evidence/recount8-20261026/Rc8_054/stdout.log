@@ -1,0 +1,100 @@
+def AspisR1.FIo_Install.finishOps : AspisR1.NP6_StdModel.Reservation →
+  AspisR1Stage2.Stage2Finish.FinishOps AspisR1.FIo_Install.W →
+    AspisR1Stage2.Stage2Finish.FinishOps AspisR1.FIo_Install.W :=
+fun r seed =>
+  have __src := AspisR1.FIn_WeightsInstall.install seed;
+  { field := __src.field, quarter := __src.quarter, add := __src.add, mulM := __src.mulM, ne := __src.ne,
+    polynomial := __src.polynomial, trace := __src.trace, folds := __src.folds, newWeights := __src.newWeights,
+    pair := AspisR1.FIo_Install.pair r, mark := __src.mark, dot := __src.dot }
+def AspisR1.FIo_Install.select : {C : Type} →
+  AspisR1.NP6_StdModel.Reservation →
+    AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C →
+      AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C :=
+fun {C} r c =>
+  { adapter := c.adapter, currentBase := c.currentBase, stageBase := c.stageBase,
+    finish := AspisR1.FIo_Install.finishOps r c.finish, reserved := c.reserved, query := c.query,
+    geometry := c.geometry, boundaries := c.boundaries, std := c.std }
+def AspisR1.FIo_Install.configuration : {C : Type} →
+  C →
+    AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C →
+      AspisR1.NP6_StdModel.Reservation → AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C :=
+fun {C} err c r => AspisR1.Rc5_Install.configuration err (AspisR1.FIo_Install.select r c) r
+def AspisR1.FIn_WeightsInstall.install : AspisR1Stage2.Stage2Finish.FinishOps AspisR1.FIn_WeightsInstall.W →
+  AspisR1Stage2.Stage2Finish.FinishOps AspisR1.FIn_WeightsInstall.W :=
+fun seed =>
+  have __src := AspisR1.FIn_Install.finishOps seed;
+  { field := __src.field, quarter := __src.quarter, add := __src.add, mulM := __src.mulM, ne := __src.ne,
+    polynomial := __src.polynomial, trace := __src.trace, folds := __src.folds,
+    newWeights := AspisR1.FIn_WeightsInstall.newWeights, pair := __src.pair, mark := __src.mark, dot := __src.dot }
+def AspisR1.FIn_Install.finishOps : {W : Type} →
+  AspisR1Stage2.Stage2Finish.FinishOps W → AspisR1Stage2.Stage2Finish.FinishOps W :=
+fun {W} seed =>
+  have __src := AspisR1.SAG_StageScale.install seed;
+  { field := AspisR1.FIn_Primitives.field, quarter := __src.quarter, add := AspisR1.FIn_Primitives.add,
+    mulM := __src.mulM, ne := __src.ne, polynomial := AspisR1.FIn_ExtractInstall.polynomial, trace := __src.trace,
+    folds := __src.folds, newWeights := __src.newWeights, pair := __src.pair, mark := __src.mark,
+    dot := AspisR1.SAG_DotClosed.source }
+AspisR1.FIo_Install.slots : ∀ (r : AspisR1.NP6_StdModel.Reservation)
+  (seed : AspisR1Stage2.Stage2Finish.FinishOps AspisR1.FIo_Install.W),
+  (AspisR1.FIo_Install.finishOps r seed).pair = AspisR1.FIo_Install.pair r ∧
+    (AspisR1.FIo_Install.finishOps r seed).newWeights = AspisR1.FIn_WeightsInstall.newWeights ∧
+      (AspisR1.FIo_Install.finishOps r seed).field = AspisR1.FIn_Primitives.field ∧
+        (AspisR1.FIo_Install.finishOps r seed).add = AspisR1.FIn_Primitives.add ∧
+          (AspisR1.FIo_Install.finishOps r seed).polynomial = AspisR1.FIn_ExtractInstall.polynomial
+AspisR1.Rc8_Install.arithmetic : ∀ (r : AspisR1.NP6_StdModel.Reservation)
+  (seed : AspisR1Stage2.Stage2Finish.FinishOps AspisR1.FIo_Install.W),
+  AspisR1.FIn_Install.finishOps (AspisR1.FIo_Install.finishOps r seed) = AspisR1.FIo_Install.finishOps r seed
+@AspisR1.Rc8_Install.complete_pair : ∀ {C : Type} (err : C)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (r : AspisR1.NP6_StdModel.Reservation),
+  (AspisR1.FIo_Install.configuration err c r).finish.pair = AspisR1.FIo_Install.pair r
+structure AspisR1.S6N_Installation.Facts (ops : AdapterRw.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.S6N_Installation.Facts.installed : ops.op47 = AspisS6CurrentCodecInstallation.decode
+  AspisR1.S6N_Installation.Facts.complete : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+      ops.op47 bytes = do
+        let reply ← AspisS6CurrentCodecInstallation.rawDecoder bytes
+        match reply with
+          | Aeneas.Std.core.result.Result.Ok value => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value)
+          | Aeneas.Std.core.result.Result.Err a =>
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+  AspisR1.S6N_Installation.Facts.total : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+      ∃ result, ops.op47 bytes = Aeneas.Std.Result.ok result
+  AspisR1.S6N_Installation.Facts.getters : ∀ (statement : AspisR1.S6N_Getters.Statement),
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common statement =
+          Aeneas.Std.Result.ok (AspisR1.S6N_Getters.commonValue statement) ∧
+        AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+            statement =
+          Aeneas.Std.Result.ok (AspisR1.S6N_Getters.publicValue statement)
+constructor:
+  AspisR1.S6N_Installation.Facts.mk {ops : AdapterRw.Ops}
+    (installed : ops.op47 = AspisS6CurrentCodecInstallation.decode)
+    (complete :
+      ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+        ops.op47 bytes = do
+          let reply ← AspisS6CurrentCodecInstallation.rawDecoder bytes
+          match reply with
+            | Aeneas.Std.core.result.Result.Ok value => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value)
+            | Aeneas.Std.core.result.Result.Err a =>
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+    (total : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8), ∃ result, ops.op47 bytes = Aeneas.Std.Result.ok result)
+    (getters :
+      ∀ (statement : AspisR1.S6N_Getters.Statement),
+        AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common statement =
+            Aeneas.Std.Result.ok (AspisR1.S6N_Getters.commonValue statement) ∧
+          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+              statement =
+            Aeneas.Std.Result.ok (AspisR1.S6N_Getters.publicValue statement)) :
+    AspisR1.S6N_Installation.Facts ops
+@AspisR1.S6N_Installation.accepted : ∀ {F E : Type} (c : AspisR1.DrvC_Installation.Configuration F E)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (statement : AspisS6CurrentCodecInstallation.Statement),
+  (AspisR1.DrvC_Installation.sdk c).op47 bytes = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok statement) →
+    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1 bytes =
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Ok
+            (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1 statement)) ∧
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+          statement =
+        Aeneas.Std.Result.ok (AspisR1.S6N_Getters.publicValue statement)

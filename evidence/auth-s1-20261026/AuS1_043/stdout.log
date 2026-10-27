@@ -1,0 +1,67 @@
+AuS1_Vec.lean:10:45: error: Type mismatch
+  ok xs
+has type
+  Result (List U8)
+but is expected to have type
+  Result { l' // l'.length = xs.length }
+AuS1_Vec.lean:12:11: error: Tactic `rfl` failed: The left-hand side
+  true
+is not definitionally equal to the right-hand side
+  Function.const Lean.Name () `AuS1_Vec.10.4.10.50.4.50._sorry._@.AuS1_Vec.2469498376._hygCtx._hyg.12
+
+case nil
+⊢ sorry
+AuS1_Vec.lean:14:26: error: Invalid argument: Variable `ih` is not a proposition or let-declaration
+AuS1_Vec.lean:18:6: error(lean.unknownIdentifier): Unknown identifier `list_clone`
+AuS1_Vec.lean:16:87: error: unsolved goals
+s : Slice U8
+⊢ (do
+      let s' ← List.clone core.clone.CloneU8.clone ↑s
+      ok ⟨↑s', ⋯⟩) =
+    ok s
+AuS1_Vec.lean:26:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (match h' : _a with
+      | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+      | fail e => fail e
+      | div => div) =
+      ok out
+Error: Application type mismatch: The argument
+  h'
+has type
+  _a = ok s'
+but is expected to have type
+  Slice.clone core.clone.CloneU8.clone s = ok s'
+in the application
+  alloc.vec.Vec.extend_from_slice._proof_1 core.clone.CloneU8 v s h✝ s' h'
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case isTrue
+v out : alloc.vec.Vec U8
+s : Slice U8
+h✝ : v.length + s.length ≤ Usize.max
+success :
+  (match h' : Slice.clone core.clone.CloneU8.clone s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok out
+⊢ ↑out = ↑v ++ ↑s
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    v
+  has type
+    alloc.vec.Vec U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑v
+AuS1_Vec.lean:38:14: error(lean.unknownIdentifier): Unknown constant `list_clone`
+'AspisR1.AuS1_Vec.slice_clone' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.AuS1_Vec.extend' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.AuS1_Vec.payload' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

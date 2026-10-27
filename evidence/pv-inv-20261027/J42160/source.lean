@@ -1,0 +1,72 @@
+import R1Z.PV_Inv_IInterpolationFactors
+/-! Derived into private PV_Inv module names for this focused proof; original theorem bodies retained.  Actual zero-array/one-cell initialization and all 27 omitted-point
+factors. The source denominator is proved nonzero, not assumed successful. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Inv_IInterpolationInitial
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitM31Ops48 PV_Inv_IM31Array
+open PV_Inv_IBasisPolynomial PV_Inv_IInterpolationSchedule
+
+def initial : Nat → U32 := Function.update (fun _ => 0#u32) 0 1#u32
+
+theorem initial_canonical (k : Nat) : canonical (initial k) := by
+  by_cases h : k=0
+  · subst k;simp only [initial,Function.update_self];decide
+  · simp only [initial,Function.update_of_ne h];decide
+
+theorem initial_value (k : Nat) : decode (initial k)=if k=0 then 1 else 0 := by
+  have zero : decode (0#u32)=0 := rfl
+  have one : decode (1#u32)=1 := rfl
+  by_cases h : k=0
+  · subst k;simp only [initial,Function.update_self,one,if_true]
+  · simp only [initial,Function.update_of_ne h,zero,if_neg h]
+
+theorem initial_poly : poly initial=1 := by
+  ext k
+  rw [PV_Inv_IBasisPolynomial.poly,PV_Inv_IInterpolationPoly.coeff]
+  by_cases h : k=0
+  · subst k
+    simp [initial_value]
+  · simp [initial_value,h,Polynomial.coeff_one]
+
+theorem initial_source :
+    Aeneas.Std.Array.update (Aeneas.Std.Array.repeat 28#usize field.M31.ZERO) 0#usize field.M31.ONE=
+      ok (array 28#usize initial) := by
+  have hz : Aeneas.Std.Array.repeat 28#usize field.M31.ZERO=array 28#usize (fun _ => 0#u32) := by
+    rw [field.M31.ZERO]
+    apply Subtype.ext
+    simp only [Aeneas.Std.Array.repeat,array,List.ofFn_const]
+  rw [hz,field.M31.ONE,update _ _ 0#usize (by decide)]
+  rfl
+
+def prepare (i : U8) : Result (Aeneas.Std.Array U32 28#usize × U32) := do
+  let basis ← Aeneas.Std.Array.update (Aeneas.Std.Array.repeat 28#usize field.M31.ZERO) 0#usize field.M31.ONE
+  basis_factors basis field.M31.ONE 0#u8 i 0#u8 28#u8
+
+theorem prepare_exact (i : U8) (hi : i.val < 28) :
+    ∃ (ys : Nat → U32) (den : U32), prepare i=ok (array 28#usize ys,den) ∧
+      (∀ k, k < 28 → canonical (ys k)) ∧ canonical den ∧
+      poly ys=polyProd i.val 0 28 ∧ decode den=denProd i.val 0 28 ∧ den≠0#u32 := by
+  obtain ⟨ys,den,hy,hcy,hcd,hpoly,hd⟩ := PV_Inv_IInterpolationFactors.factors_value i hi 28
+    initial (fun k _ => initial_canonical k) 1#u32 (by decide) 0#u8 0#u8 28#u8 rfl
+    (by scalar_tac) (by change 0=degree i.val 0;simp [degree])
+    (by intro k hk hs;rw [initial_value,if_neg (by change 0+1 ≤ k at hs;omega)])
+  have one : decode (1#u32)=1 := rfl
+  have hd' : decode den=denProd i.val 0 28 := by simpa only [one,one_mul,show (0#u8).val=0 from rfl] using hd
+  have hn : den≠0#u32 := by
+    intro he
+    have hz : decode den=0 := by rw [he];rfl
+    exact denominator_nonzero i.val 0 28 hi (by omega) (hd'.symm.trans hz)
+  refine ⟨ys,den,?_,hcy,hcd,?_,hd',hn⟩
+  · unfold prepare
+    rw [initial_source]
+    exact hy
+  · simpa only [initial_poly,one_mul,show (0#u8).val=0 from rfl] using hpoly
+
+#print axioms initial_canonical
+#print axioms initial_value
+#print axioms initial_poly
+#print axioms initial_source
+#print axioms prepare_exact
+end R1Z.PV_Inv_IInterpolationInitial

@@ -1,0 +1,25 @@
+FIw_CopyMeaning.lean:112:58: error: Application type mismatch: The argument
+  run
+has type
+  (do
+      let q13 ← q12.mul q3
+      let q14 ← row.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q1
+      let producer_numerator ← q13.add q15
+      let q16 ← row.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q7
+      let q18 ← row.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q5
+      let consumer_numerator ← q17.add q19
+      let q20 ← field.QM31.mul helper cd
+      let q21 ← q20.add consumer_numerator
+      let q22 ← pd.mul q21
+      let q23 ← cd.mul producer_numerator
+      q22.sub q23) =
+    ok out
+but is expected to have type
+  q22.sub q23 = ok out
+in the application
+  FIv_SubMap.qm q22 q23 out a_q22.left a_q23.left run
+FIw_CopyMeaning.lean:116:2: error: `dsimp` made no progress
+'AspisR1.FIw_CopyMeaning.value_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

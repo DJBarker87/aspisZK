@@ -1,0 +1,62 @@
+PAln_ChallengeRows.lean:40:90: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+pre : r1_wire.Prefix
+cs : List (SourceFull25.Call D pre)
+count : cs.length = 25
+values : Fin 6 → LiteralTranscript.E
+states : Fin 8 → State
+queries : List ℕ
+rho : LiteralTranscript.E
+row : ℕ
+c : SourceFull25.Call D pre
+slot : cs[row]? = some c
+below : row < cs.length
+len : (semantic cs).length = 25
+⊢ (List.map (fun c => (Value.ordinary (SourceLiteralTraceLift.sourceChallenge c), decodeState c.after.state)) cs ++
+            suffix values states queries rho)[row]?.getD
+      (Value.ordinary 0, 0) =
+    (Value.ordinary (SourceLiteralTraceLift.sourceChallenge c), decodeState c.after.state)
+PAln_ChallengeRows.lean:43:19: warning: This simp argument is unused:
+  List.getElem?_append_left (by omega : row < (semantic cs).length)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵t̵R̵o̵w̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵a̵p̵p̵e̵n̵d̵_̵l̵e̵f̵t̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵ ̵:̵ ̵r̵o̵w̵<̵(̵s̵e̵m̵a̵n̵t̵i̵c̵ ̵c̵s̵)̵.̵l̵e̵n̵g̵t̵h̵)̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵e̵m̵a̵n̵t̵i̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵,̵s̵l̵o̵t̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵[̲a̲t̲R̲o̲w̲,̲ ̲s̲e̲m̲a̲n̲t̲i̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲m̲a̲p̲,̲ ̲s̲l̲o̲t̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PAln_ChallengeRows.lean:44:13: warning: This simp argument is unused:
+  List.getElem?_map
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵t̵R̵o̵w̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵a̵p̵p̵e̵n̵d̵_̵l̵e̵f̵t̵[̲a̲t̲R̲o̲w̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲a̲p̲p̲e̲n̲d̲_̲l̲e̲f̲t̲ (by omega : r̵o̵w̵<̵(̵s̵e̵m̵a̵n̵t̵i̵c̵r̲o̲w̲ ̲<̲ ̲(̲s̲e̲m̲a̲n̲t̲i̲c̲ cs).length), s̵e̵m̵a̵n̵t̵i̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵,̵s̵l̵o̵t̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵s̲e̲m̲a̲n̲t̲i̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲l̲o̲t̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PAln_ChallengeRows.lean:44:31: warning: This simp argument is unused:
+  slot
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵t̵R̵o̵w̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵a̵p̵p̵e̵n̵d̵_̵l̵e̵f̵t̵[̲a̲t̲R̲o̲w̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲a̲p̲p̲e̲n̲d̲_̲l̲e̲f̲t̲ (by omega : r̵o̵w̵<̵(̵s̵e̵m̵a̵n̵t̵i̵c̵r̲o̲w̲ ̲<̲ ̲(̲s̲e̲m̲a̲n̲t̲i̲c̲ cs).length), s̵e̵m̵a̵n̵t̵i̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵,̵s̵l̵o̵t̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵s̲e̲m̲a̲n̲t̲i̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲m̲a̲p̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PAln_ChallengeRows.lean:44:36: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵t̵R̵o̵w̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵a̵p̵p̵e̵n̵d̵_̵l̵e̵f̵t̵[̲a̲t̲R̲o̲w̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲a̲p̲p̲e̲n̲d̲_̲l̲e̲f̲t̲ (by omega : r̵o̵w̵<̵(̵s̵e̵m̵a̵n̵t̵i̵c̵r̲o̲w̲ ̲<̲ ̲(̲s̲e̲m̲a̲n̲t̲i̲c̲ cs).length), s̵e̵m̵a̵n̵t̵i̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵,̵s̵l̵o̵t̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵s̲e̲m̲a̲n̲t̲i̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲m̲a̲p̲,̲ ̲s̲l̲o̲t̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PAln_ChallengeRows.lean:44:52: warning: This simp argument is unused:
+  Option.getD_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵t̵R̵o̵w̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵a̵p̵p̵e̵n̵d̵_̵l̵e̵f̵t̵[̲a̲t̲R̲o̲w̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲a̲p̲p̲e̲n̲d̲_̲l̲e̲f̲t̲ (by omega : r̵o̵w̵<̵(̵s̵e̵m̵a̵n̵t̵i̵c̵r̲o̲w̲ ̲<̲ ̲(̲s̲e̲m̲a̲n̲t̲i̲c̲ cs).length), s̵e̵m̵a̵n̵t̵i̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵,̵s̵l̵o̵t̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵s̲e̲m̲a̲n̲t̲i̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲m̲a̲p̲,̲ ̲s̲l̲o̲t̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PAln_ChallengeRows.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PAln_ChallengeRows.source_entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PAln_ChallengeRows.ordinary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

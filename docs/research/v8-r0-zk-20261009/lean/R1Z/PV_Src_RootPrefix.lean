@@ -1,0 +1,39 @@
+import R1Z.PV_Src_RootRecurrence
+
+/-! Root-array hprefix invariant: only an already proved parent step can extend
+it. The parent equality is explicit; it is not an assumed whole loop result. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_RootPrefix
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
+open PV_Src_RootRecurrence
+
+abbrev Prefix (a target : Roots) (n : Nat) := BuilderRecordsArray.Prefix a target n
+
+theorem step [ExternalLinear] (target roots : Roots) (level : Usize)
+    (bound : level.val < 20) (hprefix : Prefix roots target (level.val+1))
+    (parent : format.pool_v1_tree_parent target.val[level.val]! target.val[level.val]! =
+      ok target.val[level.val+1]!) :
+    PV_Src_RootRecurrence.step level roots =
+      ok (roots.set (Usize.wrapping_add level 1#usize) target.val[level.val+1]!) := by
+  rw [PV_Src_RootRecurrence.step,index_ok_gen roots level (by simpa using (by omega : level.val < 21))]
+  simp only [bind_tc_ok]
+  rw [hprefix level.val (by omega) (by simp;omega),parent]
+  simp only [bind_tc_ok]
+  apply BuilderRecordsArray.update_gen
+  rw [BuilderRecordsArray.next_val level (by omega)]
+  simp;omega
+
+theorem extend (target roots : Roots) (level : Usize)
+    (bound : level.val < 20) (hprefix : Prefix roots target (level.val+1)) :
+    Prefix (roots.set (Usize.wrapping_add level 1#usize) target.val[level.val+1]!)
+      target (level.val+2) := by
+  have hn := BuilderRecordsArray.next_val level (by omega)
+  have h := BuilderRecordsArray.prefix_step roots target
+    (Usize.wrapping_add level 1#usize) (by rw [hn];simp;omega)
+    (by simpa [hn] using hprefix)
+  simpa [hn] using h
+
+#print axioms step
+#print axioms extend
+end R1Z.PV_Src_RootPrefix

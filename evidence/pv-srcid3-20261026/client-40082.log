@@ -1,0 +1,69 @@
+Host restoration instructions: HOST RESTORED 2026-10-26 21:50 UTC (Stream B lead). Launcher: /home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh <attempt> <Module> J 7000 8 [deps-fingerprint]; sources /home/dombarker/project-offloads/aspis-joint-20261019/sources, objects .../aspis-joint-20261019/objects; env/J.json and run2.py committed; verification attempt 30799 exit 0. Accepted IDs 5000-39999; 20000-27099 BLOCKED (exit 65); 28000-29999 reserved (do not use); 30000-34999 Stream A.
+Per-job env-J ranges (use ONLY yours, next unused ID, never an old ID):
+cb3: 35600-35899 (your old range 24700-24999 is blocked)
+cb4: 27100-27399
+srcid4: 27400-27699
+rw20: 27700-27999
+runjoin8: 35000-35299
+join2: 35300-35599
+CAVEAT: the rebuilt object cache is PARTIAL (767/800 compiled, 1,007 resolved sources not yet attempted; see evidence/envj-rebuild-20261026/EJR_HANDOFF.md on research). A missing imported .olean in the shared objects is not a stop and not a sorry: first use your own job's surviving host cache (codex-pv-*/lean-objects), else compile the missing dependency module yourself as a charged attempt (smallest first), else record the exact missing object and continue with other work. Never retry EventsR1P2 or SimCostOuterRetry6; they are assigned to a dedicated Stream B job. Quiet windows (ruling (e)) still apply via the systemd-run shim.
+
+UPDATE 2026-10-27 01:45 UTC: accepted IDs now 5000-49999; 40000-44999 Stream B, 45000-49999 Stream A (LOG D238).
+
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0339); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortInternalBody.lean:25:86: error: unsolved goals
+state : State
+⊢ (do
+      let s ←
+        core.array.Array.index
+            (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice aspis_core.field.M31)) state
+            { start := 1#usize }
+      let part_sum ←
+        BuilderForestStd.sumLoop
+            (BuilderForestStdPort.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator
+              (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31)
+              poseidon2.internal_linear_lazy.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31U64)
+            { iter := { slice := s, i := 0 }, f := () } 0#u64
+      let m1 ← Array.index_usize state 0#usize
+      let m2 ←
+        aspis_core.field.M31.reduce_u62
+            ((part_sum.wrapping_add (UScalar.cast UScalarTy.U64 aspis_core.field.P)).wrapping_sub
+              (UScalar.cast UScalarTy.U64 m1))
+      let a ← Array.update state 0#usize m2
+      ok (PV_Src_PortInternalLoop.steps 15 1#usize a (part_sum.wrapping_add (UScalar.cast UScalarTy.U64 m1)))) =
+    do
+    let s ←
+      core.array.Array.index
+          (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice aspis_core.field.M31)) state
+          { start := 1#usize }
+    let part ← PV_Src_PortSumTrace.fold (List.map (UScalar.cast UScalarTy.U64) ↑s) 0#u64
+    let first ← Array.index_usize state 0#usize
+    let reduced ←
+      aspis_core.field.M31.reduce_u62
+          ((part.wrapping_add (UScalar.cast UScalarTy.U64 aspis_core.field.P)).wrapping_sub
+            (UScalar.cast UScalarTy.U64 first))
+    let changed ← Array.update state 0#usize reduced
+    ok (PV_Src_PortInternalLoop.steps 15 1#usize changed (part.wrapping_add (UScalar.cast UScalarTy.U64 first)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortInternalBody.lean:31:13: warning: This simp argument is unused:
+  PV_Src_PortSumTrace.cast_sum
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵S̵r̵c̵_̵P̵o̵r̵t̵S̵u̵m̵T̵r̵a̵c̵e̵.̵c̵a̵s̵t̵_̵s̵u̵m̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵P̵V̵_̵S̵r̵c̵_̵P̵o̵r̵t̵I̵n̵t̵e̵r̵n̵a̵l̵L̵o̵o̵p̵.̵f̵u̵l̵l̵_̵l̵o̵o̵p̵]̵[̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲P̲V̲_̲S̲r̲c̲_̲P̲o̲r̲t̲I̲n̲t̲e̲r̲n̲a̲l̲L̲o̲o̲p̲.̲f̲u̲l̲l̲_̲l̲o̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortInternalBody.lean:31:42: warning: This simp argument is unused:
+  List.drop_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵S̵r̵c̵_̵P̵o̵r̵t̵S̵u̵m̵T̵r̵a̵c̵e̵.̵c̵a̵s̵t̵_̵s̵u̵m̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵P̵V̵_̵S̵r̵c̵_̵P̵o̵r̵t̵I̵n̵t̵e̵r̵n̵a̵l̵L̵o̵o̵p̵.̵f̵u̵l̵l̵_̵l̵o̵o̵p̵]̵[̲P̲V̲_̲S̲r̲c̲_̲P̲o̲r̲t̲S̲u̲m̲T̲r̲a̲c̲e̲.̲c̲a̲s̲t̲_̲s̲u̲m̲,̲ ̲P̲V̲_̲S̲r̲c̲_̲P̲o̲r̲t̲I̲n̲t̲e̲r̲n̲a̲l̲L̲o̲o̲p̲.̲f̲u̲l̲l̲_̲l̲o̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Src_PortInternalBody.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.71
+	Maximum resident set size (kbytes): 4132068
+	Swaps: 0
+	Exit status: 1
+

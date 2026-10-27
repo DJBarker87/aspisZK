@@ -1,0 +1,64 @@
+FJg_ScaleSum.lean:33:42: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+semAlpha : Std.Array K 10#usize
+z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize
+w : FIo_Install.W
+hc : FJc_WeightArray.canonical (FJg_LiteralTensor.source semAlpha)
+hw : FIn_WeightsInstall.newWeights transport.Variant.S2 semAlpha z = ok (core.result.Result.Ok w)
+d : Fin 5
+row : Std.Array (Std.Array NQ 4#usize) 5#usize
+digit : Std.Array NQ 4#usize
+hr : (FIo_Install.toWeights w).factors.index_usize 0#usize = ok row
+hd : row.index_usize (↑d)#usize = ok digit
+a : NE
+p : Std.Array NE 4#usize
+ha : FIo_WideValues.Canon a
+hp : FIo_Native.weights.powers 4#usize a = ok p
+powers : FIp_PowersState.Post a p
+sum : FJg_ScalarCell.sumPrefix p digit 4 = ∑ s, FJg_ScalarCell.term p digit ↑s
+s : Fin 4
+a✝ : s ∈ Finset.univ
+this : ↑d < 5
+⊢ ↑d ≤ UScalar.cMax UScalarTy.Usize
+FJg_ScaleSum.lean:33:59: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+FJg_ScaleSum.lean:24:84: error: unsolved goals
+semAlpha : Std.Array K 10#usize
+z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize
+w : FIo_Install.W
+hc : FJc_WeightArray.canonical (FJg_LiteralTensor.source semAlpha)
+hw : FIn_WeightsInstall.newWeights transport.Variant.S2 semAlpha z = ok (core.result.Result.Ok w)
+d : Fin 5
+row : Std.Array (Std.Array NQ 4#usize) 5#usize
+digit : Std.Array NQ 4#usize
+hr : (FIo_Install.toWeights w).factors.index_usize 0#usize = ok row
+hd : row.index_usize (↑d)#usize = ok digit
+a : NE
+p : Std.Array NE 4#usize
+ha : FIo_WideValues.Canon a
+hp : FIo_Native.weights.powers 4#usize a = ok p
+powers : FIp_PowersState.Post a p
+sum : FJg_ScalarCell.sumPrefix p digit 4 = ∑ s, FJg_ScalarCell.term p digit ↑s
+s : Fin 4
+a✝ : s ∈ Finset.univ
+dv :
+  FJf_QMArray.value digit ↑s =
+    FJf_PointCell.point (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ semAlpha) (↑(↑d)#usize) s
+⊢ decodeWide (wide a) ^ ((4 - ↑s) % 4) *
+      (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+        (FJf_PointCell.point (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ semAlpha) (↑(↑d)#usize) s) =
+    decodeWide (wide a) ^ ((4 - ↑s) % 4) *
+      (algebraMap FJg_LiteralTensor.FK FJg_LiteralTensor.FE)
+        (FJf_PointCell.point (FJg_LiteralTensor.source semAlpha) (↑d) s)
+'AspisR1.FJg_ScaleSum.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

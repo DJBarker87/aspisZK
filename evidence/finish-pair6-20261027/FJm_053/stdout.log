@@ -1,0 +1,53 @@
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+FJm_CMSquare.lean:33:2: error: unsolved goals
+case refl.re
+x : NC
+hx : FIo_CMValues.Canon x
+product : U64
+hchecked : ExtractedMaskCM31Square.squareOperand x.a x.b = ok product
+hoperand : FJm_SquareOperand.operand x.a x.b = product
+numeric : ↑product = (↑x.a + ↑x.b) * (↑x.a + 2147483647 - ↑x.b)
+real : FIo_Native.aspis_core.field.M31
+hr : FIo_Native.aspis_core.field.M31.reduce_u64 product = ok real
+ab : FIo_Native.aspis_core.field.M31
+hab : x.a.mul x.b = ok ab
+imag : FIo_Native.aspis_core.field.M31
+run✝² :
+  (do
+      let real ← FIo_Native.aspis_core.field.M31.reduce_u64 product
+      let ab ← x.a.mul x.b
+      let imag ← ab.double
+      ok { a := real, b := imag }) =
+    ok { a := real, b := imag }
+run✝¹ :
+  (do
+      let ab ← x.a.mul x.b
+      let imag ← ab.double
+      ok { a := real, b := imag }) =
+    ok { a := real, b := imag }
+run✝ :
+  (do
+      let imag ← ab.double
+      ok { a := real, b := imag }) =
+    ok { a := real, b := imag }
+run : ok { a := real, b := imag } = ok { a := real, b := imag }
+vr : decodeM real = (↑↑x.a + ↑↑x.b) * (↑↑x.a - ↑↑x.b)
+cr : ↑real < 2147483647
+vab : ↑ab < 2147483647 ∧ decodeM ab = decodeM x.a * decodeM x.b
+hi : ab.add ab = ok imag
+vi : ↑imag < 2147483647 ∧ decodeM imag = decodeM ab + decodeM ab
+⊢ ↑↑x.a ^ 2 - ↑↑x.b ^ 2 = decodeM x.a ^ 2 - decodeM x.b ^ 2
+FJm_CMSquare.lean:10:8: error: (kernel) excessive memory consumption detected
+FJm_CMSquare.lean:38:59: warning: This simp argument is unused:
+  zero_add
+
+Hint: Omit it from the simp argument list.
+  simp only [decodeC, ̲cm, ̲QuadraticAlgebra.im_mul, ̲zero_mul,z̵e̵r̵o̵_̵ ̲add,̵a̵d̵d̵_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJm_CMSquare.value' depends on axioms: [propext, Classical.choice, Quot.sound, value]

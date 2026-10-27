@@ -1,0 +1,50 @@
+{"attempt": "SCF_017", "exit_status": 1, "wall_seconds": 3.819100632041227, "peak_rss_kib": "5350984", "swaps": "0", "print_axioms": ["'AspisR1.SCF_AccountCuts.delete_choice' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+SCF_AccountCuts.lean:36:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  BinRawByteCutRecovery.cut
+    ((eval H a.first).1 ++ (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1 ++ ?m.128) frame
+in the target expression
+  BinRawByteCutRecovery.cut
+      ((eval H a.first).1 ++ (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1 ++
+          (eval H (a.second (eval H a.first).2 saved post final)).1 ++
+        (eval H (secondCode c hashv allocator id (eval H (a.second (eval H a.first).2 saved post final)).2)).1)
+      frame =
+    BinRawByteCutRecovery.cut
+      ((eval H a.first).1 ++ (eval H (firstCode c hashv copy allocator id (eval
+...
+attern
+  BinRawByteCutRecovery.cut
+    ((eval H a.first).1 ++ (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1 ++ ?m.128) frame
+in the target expression
+  BinRawByteCutRecovery.cut
+      ((eval H a.first).1 ++ (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1 ++
+          (eval H (a.second (eval H a.first).2 saved post final)).1 ++
+        (eval H (secondCode c hashv allocator id (eval H (a.second (eval H a.first).2 saved post final)).2)).1)
+      frame =
+    BinRawByteCutRecovery.cut
+      ((eval H a.first).1 ++ (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1) frame
+
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+a : Adversary A
+H : Bytes → State
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+final : A
+first :
+  (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).2 = ok (core.result.Result.Ok (saved, post, final))
+frame : Bytes
+read : FS2.Duplex.Read ((eval H a.first).1 ++ (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1) frame
+⊢ BinRawByteCutRecovery.cut
+      ((eval H a.first).1 ++ (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1 ++
+          (eval H (a.second (eval H a.first).2 saved post final)).1 ++
+        (eval H (secondCode c hashv allocator id (eval H (a.second (eval H a.first).2 saved post final)).2)).1)
+      frame =
+    BinRawByteCutRecovery.cut
+      ((eval H a.first).1 ++ (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).1) frame
+'AspisR1.SCF_AccountCuts.delete_choice' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r38ea447877894c988454aac364910e9c.scope; invocation ID: de661ef21e754b9bb36cac9717766ba1

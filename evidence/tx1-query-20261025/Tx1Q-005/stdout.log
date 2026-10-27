@@ -1,0 +1,53 @@
+Tx1Q_Cuts.lean:33:49: error: Tactic `assumption` failed
+
+ops : Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+pub proof : Slice U8
+split : Usize
+hash : H
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+saved : alloc.vec.Vec U8
+x✝¹⁰ : Result (core.result.Result verifier.Accumulator verifier.Error)
+a✝¹⁰ : verifier.Accumulator
+heq✝¹⁰ : ops.op20 transport.Variant.S2 = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : compact.OFF_FOLDED_ROOT ops = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : compact.OFF_ROUND1 ops = ok a✝⁸
+x✝⁷ : Result (Slice U8)
+a✝⁷ : Slice U8
+heq✝⁷ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof { start := a✝⁹, «end» := a✝⁸ } =
+    ok a✝⁷
+x✝⁶ : Result (core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError)
+a✝⁶ : Std.Array U8 32#usize
+heq✝⁶ : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result (core.result.Result Unit verifier.Error)
+a✝⁵ : Unit
+heq✝⁵ : ops.op6 D proof p a✝⁶ 0#usize hash = ok (core.result.Result.Ok a✝⁵)
+x✝⁴ : Result (core.result.Result verifier.QueryGeometry verifier.Error)
+a✝⁴ : verifier.QueryGeometry
+heq✝⁴ : ops.op19 p.queries 0#usize split = ok (core.result.Result.Ok a✝⁴)
+x✝³ : Result (core.result.Result verifier.BatchedWeights verifier.Error)
+a✝³ : verifier.BatchedWeights
+heq✝³ : ops.op18 a✝¹⁰.weights.deref = ok (core.result.Result.Ok a✝³)
+x✝² : Result (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+a✝² : verifier.Accumulator × verifier.BatchedWeights
+heq✝² : ops.op7 proof p a✝¹⁰ g none a✝⁴ a✝³ split = ok (core.result.Result.Ok a✝²)
+x✝¹ : Result (Slice aspis_core.field.QM31)
+a✝¹ : Slice aspis_core.field.QM31
+heq✝¹ : ops.op17 a✝².2 ⟨↑a✝².1.weights, ⋯⟩ = ok a✝¹
+x✝ : Result (alloc.vec.Vec U8)
+a✝ : alloc.vec.Vec U8
+heq✝ :
+  ops.op16 D p { weights := (fun s => ⟨↑s, ⋯⟩) a✝¹, rhs := a✝².1.rhs, power := a✝².1.power, next := a✝².1.next } proof
+      pub hash =
+    ok a✝
+success : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok saved)
+⊢ ops.op16 D p { weights := ⟨↑a✝¹, ⋯⟩, rhs := a✝².1.rhs, power := a✝².1.power, next := a✝².1.next } proof pub hash =
+    ok saved
+'AspisR1.Tx1Q_Cuts.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

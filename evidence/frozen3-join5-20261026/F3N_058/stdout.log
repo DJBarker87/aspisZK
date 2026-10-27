@@ -1,0 +1,32 @@
+F3N_CurrentBatchPrograms.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port9OR_Code.program (VTop_Checkpoint.digest D) () ?c
+in the target expression
+  (eval H
+        (SdkC_Oracle.program
+          (SdkC_BatchSource.code (SdkC_Source.dictionary hashv) () proof p.queries p.roots root 0#usize))).1 =
+    (eval H (Port9OR_Installed.batch D () proof (Tx1Q_Carriers.prepared p) root 0#usize)).1
+
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : VTop_Stages.aspis_core.digest.Digest32 Unit
+total : ∀ (parts : Slice (Slice U8)), ∃ digest, D.digest () parts = ok digest
+proof : Slice U8
+p : AspisR1CurrentCaller.verifier.Prepared
+root : Std.Array U8 32#usize
+H : Bytes → State
+⊢ (eval H
+        (SdkC_Oracle.program
+          (SdkC_BatchSource.code (SdkC_Source.dictionary hashv) () proof p.queries p.roots root 0#usize))).1 =
+    (eval H (Port9OR_Installed.batch D () proof (Tx1Q_Carriers.prepared p) root 0#usize)).1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3N_CurrentBatchPrograms.code_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3N_CurrentBatchPrograms.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,44 @@
+{"attempt": "BEn_054", "exit_status": 0, "wall_seconds": 3.033865608042106, "peak_rss_kib": "5556052", "swaps": "0", "print_axioms": ["'AspisR1.BEl_PartialRecorder.correspondence' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEl_PartialRecorder.correspondence : ∀ {S A : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (code : AspisR1.SdkC_Source.Code A) (state : S) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.BEl_PartialRecorder.observation
+      (AspisR1.BEl_PartialRecorder.run call code state (AspisR1.BEl_Recorder.completed before)) =
+    AspisR1.BEf_Carrier.run call code state before :=
+fun {S A} call code state before =>
+  AspisR1.CheckpointBytes5Effect.Code.rec (motive := fun code =>
+    ∀ (state : S) (before : AspisR1.SdkC_Source.Log),
+      AspisR1.BEl_PartialRecorder.observation
+          (AspisR1.BEl_PartialRecorder.run call code state 
+...
+        (congrArg
+                              (fun x =>
+                                match x.1 with
+                                | Aeneas.Std.Result.ok digest =>
+                                  AspisR1.BEf_Carrier.run call (k digest) (call parts state).2
+                                    (before ++ [{ parts := parts, returned := (call parts state).1 }])
+                                | Aeneas.Std.Result.fail e =>
+                                  (Aeneas.Std.Result.fail e, (call parts state).2,
+                                    before ++ [{ parts := parts, returned := (call parts state).1 }])
+                                | Aeneas.Std.Result.div =>
+                                  (Aeneas.Std.Result.div, (call parts state).2,
+                                    before ++ [{ parts := parts, returned := (call parts state).1 }]))
+                              called)
+                            (congrArg (Prod.mk Aeneas.Std.Result.div)
+                              (congr (congrArg Prod.mk (congrArg Prod.snd called))
+                                (congrArg (HAppend.hAppend before)
+                                  (congrFun'
+                                    (congrArg List.cons
+                                      (congrArg (AspisR1.SdkC_Source.Query.mk parts) (congrArg Prod.fst called)))
+                                    [])))))))
+                      (eq_self
+                        (Aeneas.Std.Result.div, next,
+                          before ++ [{ parts := parts, returned := Aeneas.Std.Result.div }]))))
+                (Eq.symm h) called)
+            (Eq.refl answer))
+        (Eq.symm h✝) (Eq.refl (call parts state)))
+    code state before
+'AspisR1.BEl_PartialRecorder.correspondence' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb8cfdb7b78364fc4ac923bcb6ea921eb.scope; invocation ID: 815dd258a60f429c84aafa187680afcc
+

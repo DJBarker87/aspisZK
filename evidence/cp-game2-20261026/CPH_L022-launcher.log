@@ -1,0 +1,42 @@
+{"attempt": "CPH_L022", "exit_status": 0, "wall_seconds": 2.2030829369905405, "peak_rss_kib": "5287700", "swaps": "0", "print_axioms": ["'AspisR1.S2Trust.model_satisfies' depends on axioms: [propext, Quot.sound]"]}
+structure AdapterRw.r1_pool_adapter.owned.OwnedAccount : Type
+number of parameters: 0
+fields:
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.key : AdapterRw.solana_pubkey.Pubkey
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.owner : AdapterRw.solana_pubkey.Pubkey
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.is_signer : Bool
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.is_writable : Bool
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.executable : Bool
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.length : Aeneas.Std.core.result.Result Aeneas.Std.Usize
+      AdapterRw.solana_program_error.ProgramError
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.bytes : Aeneas.Std.core.result.Result
+   
+...
+ount.owner : AdapterRw.solana_pubkey.Pubkey
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.is_signer : Bool
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.is_writable : Bool
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.executable : Bool
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.length : Aeneas.Std.core.result.Result Aeneas.Std.Usize
+      AdapterRw.solana_program_error.ProgramError
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.bytes : Aeneas.Std.core.result.Result
+      (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) AdapterRw.solana_program_error.ProgramError
+constructor:
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.mk (key owner : AdapterRw.solana_pubkey.Pubkey)
+    (is_signer is_writable executable : Bool)
+    (length : Aeneas.Std.core.result.Result Aeneas.Std.Usize AdapterRw.solana_program_error.ProgramError)
+    (bytes :
+      Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+        AdapterRw.solana_program_error.ProgramError) :
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount
+Aeneas.Std.U8.ofNat (x : ℕ) (hInBounds : x ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U8 := by decide) :
+  Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U8
+Aeneas.Std.U8.ofNatCore (x : ℕ) (h : x < 2 ^ Aeneas.Std.UScalarTy.U8.numBits) :
+  Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U8
+def AspisR1.S2Trust.model : (F : Type) → AspisR1.S2Trust.Library (AspisR1.S2Trust.Heap F) F :=
+fun F =>
+  { related := Eq, accountData := fun s a => (s.accounts a).1, accountLamports := fun s a => (s.accounts a).2,
+    cellPayload := AspisR1.S2Trust.Heap.payload, cellCounter := AspisR1.S2Trust.Heap.counter,
+    liveGuard := AspisR1.S2Trust.lookup, allocated := AspisR1.S2Trust.Heap.allocated, run := AspisR1.S2Trust.run }
+'AspisR1.S2Trust.model_satisfies' depends on axioms: [propext, Quot.sound]
+
+Running as unit: CPH-L022.scope; invocation ID: 2dd0876e1fee4de7b5fe28253eeee524

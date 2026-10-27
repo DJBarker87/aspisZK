@@ -1,0 +1,99 @@
+structure AspisR1.R1FinalSoundness.SourceInputs : Type
+number of parameters: 0
+fields:
+  AspisR1.R1FinalSoundness.SourceInputs.decoded : R0P.Public AspisR1.SemanticPublicWire.M31
+  AspisR1.R1FinalSoundness.SourceInputs.data : AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E
+  AspisR1.R1FinalSoundness.SourceInputs.m31 : AspisR1.LiteralTranscript.Message
+  AspisR1.R1FinalSoundness.SourceInputs.queryBytes : List ℕ
+  AspisR1.R1FinalSoundness.SourceInputs.state31 : AspisV8R19.SourceDuplexStep.State
+  AspisR1.R1FinalSoundness.SourceInputs.m32 : AspisR1.LiteralTranscript.Message
+  AspisR1.R1FinalSoundness.SourceInputs.rho : AspisR1.LiteralAcceptanceTerminal.E
+  AspisR1.R1FinalSoundness.SourceInputs.state32 : AspisV8R19.SourceDuplexStep.State
+constructor:
+  AspisR1.R1FinalSoundness.SourceInputs.mk (decoded : R0P.Public AspisR1.SemanticPublicWire.M31)
+    (data : AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E) (m31 : AspisR1.LiteralTranscript.Message)
+    (queryBytes : List ℕ) (state31 : AspisV8R19.SourceDuplexStep.State) (m32 : AspisR1.LiteralTranscript.Message)
+    (rho : AspisR1.LiteralAcceptanceTerminal.E) (state32 : AspisV8R19.SourceDuplexStep.State) :
+    AspisR1.R1FinalSoundness.SourceInputs
+structure AspisR1.Port4D_Pairing.RoundLaws {F W : Type} [Field F] (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (decode : AspisR1Stage2.Stage2Finish.E → F) (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (poly : Polynomial F) : Prop
+number of parameters: 7
+fields:
+  AspisR1.Port4D_Pairing.RoundLaws.boundary : ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+      ops.field bytes 0#usize = Aeneas.Std.Result.ok c0 →
+        ops.field bytes 4#usize = Aeneas.Std.Result.ok c4 →
+          ops.add c0 c4 = Aeneas.Std.Result.ok lhs → decode lhs = AspisR1.TwoRoundComparison.boundary poly
+  AspisR1.Port4D_Pairing.RoundLaws.quarter : ∀ (m : AspisR1Stage2.Stage2Finish.M)
+      (claim rhs : AspisR1Stage2.Stage2Finish.E),
+      ops.quarter = Aeneas.Std.Result.ok m →
+        ops.mulM claim m = Aeneas.Std.Result.ok rhs → decode rhs = AspisR1.RoundPairing.quarter * decode claim
+  AspisR1.Port4D_Pairing.RoundLaws.eval : ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+      ops.polynomial bytes alpha = Aeneas.Std.Result.ok value → decode value = Polynomial.eval (decode alpha) poly
+constructor:
+  AspisR1.Port4D_Pairing.RoundLaws.mk {F W : Type} [Field F] {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {decode : AspisR1Stage2.Stage2Finish.E → F} {bytes : Aeneas.Std.Slice Aeneas.Std.U8} {poly : Polynomial F}
+    (boundary :
+      ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+        ops.field bytes 0#usize = Aeneas.Std.Result.ok c0 →
+          ops.field bytes 4#usize = Aeneas.Std.Result.ok c4 →
+            ops.add c0 c4 = Aeneas.Std.Result.ok lhs → decode lhs = AspisR1.TwoRoundComparison.boundary poly)
+    (quarter :
+      ∀ (m : AspisR1Stage2.Stage2Finish.M) (claim rhs : AspisR1Stage2.Stage2Finish.E),
+        ops.quarter = Aeneas.Std.Result.ok m →
+          ops.mulM claim m = Aeneas.Std.Result.ok rhs → decode rhs = AspisR1.RoundPairing.quarter * decode claim)
+    (eval :
+      ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+        ops.polynomial bytes alpha = Aeneas.Std.Result.ok value → decode value = Polynomial.eval (decode alpha) poly) :
+    AspisR1.Port4D_Pairing.RoundLaws ops decode bytes poly
+structure AspisR1.S2W_TraceSplice.FirstMarks {E : Type} {ops : AdapterRw.Ops}
+  (port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.FirstMarks.source : ∀ (event : AspisR1.S2W_Trace.Event),
+      AspisR1.S2W_OuterOccurrences.mark event = some false →
+        ∃ fs,
+          List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+            AspisR1.S2W_SiteSchedule.firstTrace fs
+constructor:
+  AspisR1.S2W_TraceSplice.FirstMarks.mk {E : Type} {ops : AdapterRw.Ops}
+    {port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops}
+    (source :
+      ∀ (event : AspisR1.S2W_Trace.Event),
+        AspisR1.S2W_OuterOccurrences.mark event = some false →
+          ∃ fs,
+            List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+              AspisR1.S2W_SiteSchedule.firstTrace fs) :
+    AspisR1.S2W_TraceSplice.FirstMarks port
+structure AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary {X : Type}
+  (D : MultiproofConeRef.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+  (leafSource : AspisR1.MultiproofConeP6Batch.Leaf) : Prop
+number of parameters: 8
+fields:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.oracle : ∀
+      (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.binary_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.occupied_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.sibling_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource
+constructor:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.mk {X : Type} {D : MultiproofConeRef.aspis_core.digest.Digest32 X}
+    {hash : X} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent}
+    {leafSource : AspisR1.MultiproofConeP6Batch.Leaf}
+    (oracle :
+      ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input))
+    (binary_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary)
+    (occupied_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied)
+    (sibling_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling)
+    (leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource) :
+    AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource

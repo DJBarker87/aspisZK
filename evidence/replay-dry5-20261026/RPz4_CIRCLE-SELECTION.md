@@ -1,0 +1,11 @@
+# Circle source selection corrected before compilation
+
+The previously recovered wrapper source in the policy publication has hash 976d5361...; it was only an unvalidated co-located snapshot, and it is not the source of the selected coherent object 7abf9741.... No wrapper Funs/Types/FunsExternal from that proposed selection was compiled before this correction. Its snapshots and earlier diagnostic provenance remain as explicitly superseded, out-of-selection inputs.
+
+The committed actual-circle-wrapper-emission publication packet's packet-metadata.json explicitly pairs selected object 7abf9741... with Funs source 5d1b131ed8be869faa5814712dd46e684b205abe512a90c0272c41e957b4eed6. It pins the concrete v3 FunsExternal source 333c9975... (object 5051916f...) and the v3/v4 preflight identifies named Types source 169861d3.... Exact members and source hashes are in RPz4_circle-selection.json, and the original metadata is preserved verbatim in RPz4_circle-emission-metadata.json. These concrete sources are selected instead of either unfilled external template or a passing arbitrary variant. The current coherent path lacks their external/type objects; fresh source replay is required rather than a historical-object success claim.
+
+Fallback Types and FunsExternal are recovered from the separate committed fallback publication. That external adapter is executable Lean code calling the retained R72 mapper through explicit record conversions; it contains no axiom placeholder. The earlier template was inspected only and is never selected or compiled. All recovered source bytes and existing generated options are preserved unchanged.
+
+The source scheduler stops at a completed receipt boundary for this manifest update, with no compiler interruption. No passed source context is invalidated: the superseded wrapper sources had not been compiled. Earlier successful modules retain their exact bytes/dependencies. Newly resolved S5QRaw and product-word inputs also enter the new graph; this continues the same package replay, with no unchanged successful replay.
+
+Top statement text, security premises, trust items, ledger delta and non-vacuity status are unchanged. No source-to-ELF adoption or 100-bit claim follows from source selection or compilation.

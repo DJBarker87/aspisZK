@@ -1,0 +1,58 @@
+FJq_PublicModel.lean:20:48: error: unsolved goals
+case transfer
+common✝ : PublicSourceRaw.Common
+recipient✝ : PublicSourceRaw.Digest
+h : PublicSourceRaw.Canonical (PublicSourceRaw.Public.transfer common✝ recipient✝)
+⊢ { variant := R0P.Variant.privateTransfer,
+      anchor := SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.anchor i) ⋯,
+      nullifier :=
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.nullifier i) ⋯,
+      assetId := ↑↑common✝.assetId,
+      recipient :=
+        some (SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (recipient✝ i) ⋯),
+      change := SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.change i) ⋯,
+      withdrawalAmount := none, nextPairIndex := ↑common✝.nextPairIndex,
+      snapshotFrontier := fun i =>
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i_1 =>
+          PublicSourceRaw.mapField (common✝.snapshotFrontier i i_1) ⋯,
+      nextRoot :=
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.nextRoot i) ⋯,
+      nextFrontier := fun i =>
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i_1 =>
+          PublicSourceRaw.mapField (common✝.nextFrontier i i_1) ⋯ } =
+    { variant := R0P.Variant.privateTransfer, anchor := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.anchor i),
+      nullifier := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.nullifier i), assetId := ↑↑common✝.assetId,
+      recipient := some (SpendDataMap.digest ⇑embed fun i => ↑↑(recipient✝ i)),
+      change := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.change i), withdrawalAmount := none,
+      nextPairIndex := ↑common✝.nextPairIndex,
+      snapshotFrontier := fun i => SpendDataMap.digest ⇑embed fun i_1 => ↑↑(common✝.snapshotFrontier i i_1),
+      nextRoot := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.nextRoot i),
+      nextFrontier := fun i => SpendDataMap.digest ⇑embed fun i_1 => ↑↑(common✝.nextFrontier i i_1) }
+
+case withdrawal
+common✝ : PublicSourceRaw.Common
+amount✝ : PublicSourceRaw.Word
+h : PublicSourceRaw.Canonical (PublicSourceRaw.Public.withdrawal common✝ amount✝)
+⊢ { variant := R0P.Variant.withdrawal,
+      anchor := SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.anchor i) ⋯,
+      nullifier :=
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.nullifier i) ⋯,
+      assetId := ↑↑common✝.assetId, recipient := none,
+      change := SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.change i) ⋯,
+      withdrawalAmount := some ↑↑amount✝, nextPairIndex := ↑common✝.nextPairIndex,
+      snapshotFrontier := fun i =>
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i_1 =>
+          PublicSourceRaw.mapField (common✝.snapshotFrontier i i_1) ⋯,
+      nextRoot :=
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.nextRoot i) ⋯,
+      nextFrontier := fun i =>
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i_1 =>
+          PublicSourceRaw.mapField (common✝.nextFrontier i i_1) ⋯ } =
+    { variant := R0P.Variant.withdrawal, anchor := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.anchor i),
+      nullifier := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.nullifier i), assetId := ↑↑common✝.assetId,
+      recipient := none, change := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.change i),
+      withdrawalAmount := some ↑↑amount✝, nextPairIndex := ↑common✝.nextPairIndex,
+      snapshotFrontier := fun i => SpendDataMap.digest ⇑embed fun i_1 => ↑↑(common✝.snapshotFrontier i i_1),
+      nextRoot := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.nextRoot i),
+      nextFrontier := fun i => SpendDataMap.digest ⇑embed fun i_1 => ↑↑(common✝.nextFrontier i i_1) }
+'AspisR1.FJq_PublicModel.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

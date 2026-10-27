@@ -1,0 +1,7 @@
+theorem AspisR1.SdkC_Source.associated : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) {A : Type}
+  (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Log),
+  (∀ q ∈ before, q.returned = hashv q.parts) →
+    ∀ q ∈ (AspisR1.SdkC_Source.run hashv code before).2, q.returned = hashv q.parts :=
+⋯
+'AspisR1.SdkC_Source.associated' depends on axioms: [propext, Classical.choice, Quot.sound]

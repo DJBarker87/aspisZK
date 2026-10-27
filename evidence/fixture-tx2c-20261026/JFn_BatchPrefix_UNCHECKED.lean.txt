@@ -1,0 +1,23 @@
+import JFn_BatchRoot
+import Op5T_Concrete
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFn_BatchPrefix
+open Aeneas Aeneas.Std Result
+
+/-- The actual installed batch1 parent reads both decoded checkpoint roots
+in order. Merkle children and their oracle queries remain to be proved. -/
+theorem source {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) :
+    Op5T_Install.body Port4B_Install.leaves (VTop_Checkpoint.digest D) JFx_NativeBytes.proof
+      JFo_Prepared.value.queries JFo_Prepared.value.roots JFn_BatchRoot.value 1#usize hash=
+    Port3_NativeBatchBody.verifier.candidate.batch_merkle_values
+      (Port3_BatchStd.install Port4B_Install.leaves) (VTop_Checkpoint.digest D)
+      JFx_NativeBytes.proof JFo_Prepared.value.queries
+      (Array.make 3#usize [JFq_Root0.value,JFq_Root1.value,JFn_BatchRoot.value]) 1#usize hash := by
+  have first : Array.index_usize JFo_Prepared.value.roots 0#usize=ok JFq_Root0.value := rfl
+  have second : Array.index_usize JFo_Prepared.value.roots 1#usize=ok JFq_Root1.value := rfl
+  simp only [Op5T_Install.body,first,second,bind_tc_ok]
+
+#print axioms source
+end AspisR1.JFn_BatchPrefix
+end

@@ -1,0 +1,96 @@
+JFr_TX2_ScalarRead.lean:32:4: error: Tactic `apply` failed: could not unify the conclusion of `Port4A_ReaderInstall.mul_value`
+  ?x * ?y = ok (↑?x * ↑?y)#usize
+with the goal
+  slot * 120#usize = ok base
+
+Note: The full type of `Port4A_ReaderInstall.mul_value` is
+  ∀ (x y : Usize) (h : ↑x * ↑y ≤ 65536), x * y = ok (↑x * ↑y)#usize
+
+q : Std.Array U8 608#usize
+slot term : Usize
+hs : ↑slot < 4
+ht : ↑term < 26
+a : Std.Array U8 4#usize
+v : U32
+window : List.take 4 (List.drop (120 * ↑slot + 4 * ↑term) ↑q) = ↑a
+decode : FIp_DotDecode.field.M31.from_le_bytes a = ok (some v)
+off : Usize := (120 * ↑slot + 4 * ↑term)#usize
+stop : Usize := (120 * ↑slot + 4 * ↑term + 4)#usize
+base : Usize := (120 * ↑slot)#usize
+delta : Usize := (4 * ↑term)#usize
+⊢ slot * 120#usize = ok base
+JFr_TX2_ScalarRead.lean:36:4: error: Tactic `apply` failed: could not unify the conclusion of `Port4A_ReaderInstall.mul_value`
+  ?x * ?y = ok (↑?x * ↑?y)#usize
+with the goal
+  term * 4#usize = ok delta
+
+Note: The full type of `Port4A_ReaderInstall.mul_value` is
+  ∀ (x y : Usize) (h : ↑x * ↑y ≤ 65536), x * y = ok (↑x * ↑y)#usize
+
+q : Std.Array U8 608#usize
+slot term : Usize
+hs : ↑slot < 4
+ht : ↑term < 26
+a : Std.Array U8 4#usize
+v : U32
+window : List.take 4 (List.drop (120 * ↑slot + 4 * ↑term) ↑q) = ↑a
+decode : FIp_DotDecode.field.M31.from_le_bytes a = ok (some v)
+off : Usize := (120 * ↑slot + 4 * ↑term)#usize
+stop : Usize := (120 * ↑slot + 4 * ↑term + 4)#usize
+base : Usize := (120 * ↑slot)#usize
+delta : Usize := (4 * ↑term)#usize
+mul0 : slot * 120#usize = ok base
+⊢ term * 4#usize = ok delta
+JFr_TX2_ScalarRead.lean:53:6: error: Type mismatch: After simplification, term
+  window
+ has type
+  List.take 4 (List.drop (120 * ↑slot + 4 * ↑term) ↑q) = ↑a
+but is expected to have type
+  List.take (↑stop - ↑off) (List.drop ↑off ↑q) = ↑a
+JFr_TX2_ScalarRead.lean:56:54: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  off + 4#usize
+in the target expression
+  (do
+      let i3 ← ok off
+      let i4 ← i3 + 4#usize
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+            { start := off, «end» := i4 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let o ← FIp_DotDecode.field.M31.from_le_bytes a
+      core.option.Option.unwrap o) =
+    ok v
+
+q : Std.Array U8 608#usize
+slot term : Usize
+hs : ↑slot < 4
+ht : ↑term < 26
+a : Std.Array U8 4#usize
+v : U32
+window : List.take 4 (List.drop (120 * ↑slot + 4 * ↑term) ↑q) = ↑a
+decode : FIp_DotDecode.field.M31.from_le_bytes a = ok (some v)
+off : Usize := (120 * ↑slot + 4 * ↑term)#usize
+stop : Usize := (120 * ↑slot + 4 * ↑term + 4)#usize
+base : Usize := (120 * ↑slot)#usize
+delta : Usize := (4 * ↑term)#usize
+mul0 : slot * 120#usize = ok base
+mul1 : term * 4#usize = ok delta
+add0 : base + delta = ok off
+add1 : off + 4#usize = ok stop
+range :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+      { start := off, «end» := stop } =
+    ok a.to_slice
+⊢ (do
+      let i3 ← ok off
+      let i4 ← i3 + 4#usize
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+            { start := off, «end» := i4 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let o ← FIp_DotDecode.field.M31.from_le_bytes a
+      core.option.Option.unwrap o) =
+    ok v
+'AspisR1.JFr_TX2_ScalarRead.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

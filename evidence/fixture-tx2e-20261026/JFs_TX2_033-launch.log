@@ -1,0 +1,61 @@
+{"attempt": "JFs_TX2_033", "exit_status": 1, "wall_seconds": 2.4925581120187417, "peak_rss_kib": "5501412", "swaps": "0", "print_axioms": ["'AspisR1.JFs_TX2_DotSuffix.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFs_TX2_DotSuffix.lean:86:77: error: unsolved goals
+q : Std.Array U8 608#usize
+g : Std.Array FIo_Install.NE 29#usize
+slot : Usize
+⊢ (do
+      let iter ←
+        core.iter.traits.iterator.Iterator.step_by.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+            4#usize
+      let limbs1 ← fast_dots.four_dots_one_loop0 iter q g slot (Array.repeat 8#usize 0#u64)
+      let i ← limbs1.index_usize 0#usize
+      let m ← FIo_Native.aspis_core.field.M31.reduce_u64 i
+      let i1 ← limbs1.index_usize 1#usize
+      let m1 ← FIo_Native.aspis_core.field.M31.reduce_u64 i1
+      let i2 ← limbs1.index_usize 2#usize
+     
+...
+et x_20 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+          { start := x_18, «end» := x_19 }
+    let x_21 ← FIp_DotDecode.field.QM31.from_le_bytes x_20
+    let x_22 ← core.option.Option.unwrap x_21
+    let x_23 ← x_15.push x_16 x_22
+    let tail ←
+      let (r, tail1) := x_23
+        do
+        core.result.Result.unwrap core.fmt.DebugUnit r
+        let i11 ← slot * 32#usize
+        let i12 ← 480#usize + i11
+        let i13 ← 0#usize * 16#usize
+        let offset0 ← i12 + i13
+        let i14 ← 0#usize + 26#usize
+        let we1 ← g.index_usize i14
+        let i15 ← offset0 + 16#usize
+        let s1 ←
+          core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+              { start := offset0, «end» := i15 }
+        let o2 ← FIp_DotDecode.field.QM31.from_le_bytes s1
+        let q2 ← core.option.Option.unwrap o2
+        let (r1, tail2) ← tail1.push we1 q2
+        core.result.Result.unwrap core.fmt.DebugUnit r1
+        let i16 ← 480#usize + i11
+        let i17 ← 1#usize * 16#usize
+        let offset1 ← i16 + i17
+        let i18 ← 1#usize + 26#usize
+        let we2 ← g.index_usize i18
+        let i19 ← offset1 + 16#usize
+        let s2 ←
+          core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+              { start := offset1, «end» := i19 }
+        let o3 ← FIp_DotDecode.field.QM31.from_le_bytes s2
+        let q3 ← core.option.Option.unwrap o3
+        let (r2, tail3) ← tail2.push we2 q3
+        core.result.Result.unwrap core.fmt.DebugUnit r2
+        let value ← tail3.finish
+        ok value
+    x.add tail
+'AspisR1.JFs_TX2_DotSuffix.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r63cab8e691a640b781796c03d684f3fb.scope; invocation ID: 295935f162544b06aa98073ee1193131

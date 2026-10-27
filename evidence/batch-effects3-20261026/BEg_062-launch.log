@@ -1,0 +1,38 @@
+{"attempt": "BEg_062", "exit_status": 0, "wall_seconds": 2.1023584520444274, "peak_rss_kib": "5245172", "swaps": "0", "print_axioms": ["'AspisR1.Op5T_NativeAuth.accepted_batch' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.Op5T_NativeAuth.accepted_batch : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)) →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑proof).length = 57607 →
+        ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+            ∀ (p : VTop_Stages.verifier.Prepared) (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+
+...
+Draft.capacity (3 * b + k))) →
+                        AspisR1.Port3_BatchStage.root0 p =
+                            AspisV8R19.SqueezeOracleBridge.encodeState
+                              (AspisR1.OraclePortBatchDraft.committedRoot parsed 0) →
+                          AspisR1.Port3_BatchStage.root1 p =
+                              AspisV8R19.SqueezeOracleBridge.encodeState
+                                (AspisR1.OraclePortBatchDraft.committedRoot parsed 1) →
+                            folded =
+                                AspisV8R19.SqueezeOracleBridge.encodeState
+                                  (AspisR1.OraclePortBatchDraft.committedRoot parsed 2) →
+                              AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves D proof p folded batch
+                                    hash =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+                                ∃ log,
+                                  AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch AspisR1.Op5T_P6.parent
+                                          AspisR1.Op5T_P6.parent AspisR1.MultiproofConeP6Batch.referenceLeaf parsed q
+                                          nodes (↑batch) AspisR1.Port4B_BatchJoin.initial) =
+                                      (log, true) ∧
+                                    AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.OraclePortFrozen2.batch parsed q
+                                          [(↑batch, 0), (↑batch, 1), (↑batch, 2)]) =
+                                      (log, true)
+'AspisR1.Op5T_NativeAuth.accepted_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r99357ca816cb4231b0b63248505f011d.scope; invocation ID: 684176fb728c43d58084814331d8774e

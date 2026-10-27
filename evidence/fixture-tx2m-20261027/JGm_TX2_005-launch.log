@@ -1,0 +1,67 @@
+{"attempt": "JGm_TX2_005", "exit_status": 1, "wall_seconds": 3.7607967299991287, "peak_rss_kib": "5823168", "swaps": "0", "print_axioms": ["'AspisR1.JGm_TX2_BinarySelect.pair' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGm_TX2_BinarySelect.external' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGm_TX2_BinarySelect.pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGm_TX2_BinarySelect.lean:45:2: error: unsolved goals
+case neg
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+nodes : Slice U8
+i w ni : Usize
+index : U32
+value : Std.Array U8 32#usize
+ri : s.idx.index_usize i = ok index
+rv : s.val.index_usize i = ok value
+inc : i + 1#usize = ok ni
+unpaired : ni < s.n → ∃ other, s.idx.index_usize ni = ok other ∧ other ≠ index ^^^ 1#u32
+more : ¬ni < s.n
+⊢ (do
+      let i5 ← nodes.len - s.at
+      if i5 < 32#usize then ok (reference.Row.Stop s)
+        else do
+          let i6 ← s.at + 32#usize
+          let s1 ←
+            core.sli
+...
+'AspisR1.JGm_TX2_BinarySelect.pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGm_TX2_BinarySelect.lean:45:2: error: unsolved goals
+case neg
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+nodes : Slice U8
+i w ni : Usize
+index : U32
+value : Std.Array U8 32#usize
+ri : s.idx.index_usize i = ok index
+rv : s.val.index_usize i = ok value
+inc : i + 1#usize = ok ni
+unpaired : ni < s.n → ∃ other, s.idx.index_usize ni = ok other ∧ other ≠ index ^^^ 1#u32
+more : ¬ni < s.n
+⊢ (do
+      let i5 ← nodes.len - s.at
+      if i5 < 32#usize then ok (reference.Row.Stop s)
+        else do
+          let i6 ← s.at + 32#usize
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes
+                { start := s.at, «end» := i6 }
+          let sibling ← reference.read32 s1
+          let i7 ← lift (index &&& 1#u32)
+          if i7 = 0#u32 then reference.write_parent D hash s value sibling ni i6 index w
+            else reference.write_parent D hash s sibling value ni i6 index w) =
+    do
+    let remaining ← nodes.len - s.at
+    if remaining < 32#usize then ok (reference.Row.Stop s)
+      else do
+        let cursor ← s.at + 32#usize
+        let view ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes
+              { start := s.at, «end» := cursor }
+        let sibling ← reference.read32 view
+        if index &&& 1#u32 = 0#u32 then reference.write_parent D hash s value sibling ni cursor index w
+          else reference.write_parent D hash s sibling value ni cursor index w
+'AspisR1.JGm_TX2_BinarySelect.external' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r40b4efe778df4300914d4876459f0ccb.scope; invocation ID: bab93e97894e45d9af418812762502ee

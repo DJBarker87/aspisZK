@@ -1,0 +1,94 @@
+FJc_LibraFrame.lean:38:82: error: No goals to be solved
+FJc_LibraFrame.lean:38:36: error: unsolved goals
+f : Slice U8
+libra : Std.Array NE 4#usize
+original : Std.Array NE 7#usize
+iter : FIo_RangeNext.Range
+parts : Std.Array NE 7#usize
+inv : Inv original (iter, parts)
+cursor : core.ops.range.Range (UScalar UScalarTy.Usize)
+i : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, parts).1 = ok (some i, cursor)
+old : FIo_Native.aspis_core.field.wide_exact.WideExact
+hold : (iter, parts).2.index_usize 4#usize = ok old
+fv : FIo_Native.aspis_core.field.wide_exact.WideExact
+hfv : FIo_Native.weights.field f i = ok fv
+lv : FIo_Native.aspis_core.field.wide_exact.WideExact
+hlv : libra.index_usize i = ok lv
+product : FIo_Native.aspis_core.field.wide_exact.WideExact
+hproduct : fv.mul lv = ok product
+next : FIo_Native.aspis_core.field.wide_exact.WideExact
+hnext : old.add product = ok next
+updated : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+hupdated : (iter, parts).2.update 4#usize next = ok updated
+run✝⁶ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, parts).1
+      match o with
+        | none => ok (done (iter, parts).2)
+        | some j => do
+          let we ← (iter, parts).2.index_usize 4#usize
+          let we1 ← FIo_Native.weights.field f j
+          let we2 ← libra.index_usize j
+          let we3 ← we1.mul we2
+          let we4 ← we.add we3
+          let a ← (iter, parts).2.update 4#usize we4
+          ok (cont (iter1, a))) =
+    ok (cont (cursor, updated))
+run✝⁵ :
+  (let (o, iter1) := (some i, cursor)
+    match o with
+    | none => ok (done (iter, parts).2)
+    | some j => do
+      let we ← (iter, parts).2.index_usize 4#usize
+      let we1 ← FIo_Native.weights.field f j
+      let we2 ← libra.index_usize j
+      let we3 ← we1.mul we2
+      let we4 ← we.add we3
+      let a ← (iter, parts).2.update 4#usize we4
+      ok (cont (iter1, a))) =
+    ok (cont (cursor, updated))
+run✝⁴ :
+  (do
+      let we1 ← FIo_Native.weights.field f i
+      let we2 ← libra.index_usize i
+      let we3 ← we1.mul we2
+      let we4 ← old.add we3
+      let a ← (iter, parts).2.update 4#usize we4
+      ok (cont (cursor, a))) =
+    ok (cont (cursor, updated))
+run✝³ :
+  (do
+      let we2 ← libra.index_usize i
+      let we3 ← fv.mul we2
+      let we4 ← old.add we3
+      let a ← (iter, parts).2.update 4#usize we4
+      ok (cont (cursor, a))) =
+    ok (cont (cursor, updated))
+run✝² :
+  (do
+      let we3 ← fv.mul lv
+      let we4 ← old.add we3
+      let a ← (iter, parts).2.update 4#usize we4
+      ok (cont (cursor, a))) =
+    ok (cont (cursor, updated))
+run✝¹ :
+  (do
+      let we4 ← old.add product
+      let a ← (iter, parts).2.update 4#usize we4
+      ok (cont (cursor, a))) =
+    ok (cont (cursor, updated))
+run✝ :
+  (do
+      let a ← (iter, parts).2.update 4#usize next
+      ok (cont (cursor, a))) =
+    ok (cont (cursor, updated))
+run : ok (cont (cursor, updated)) = ok (cont (cursor, updated))
+p : i = iter.start ∧ cursor.end = iter.end ∧ ↑cursor.start = ↑iter.start + 1 ∧ ↑iter.start < ↑iter.end
+j : ℕ
+hj : j ≠ 4
+h4 : ↑4#usize = 4
+⊢ ↑4#usize ≠ j
+'AspisR1.FJc_LibraFrame.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJc_LibraFrame.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJc_LibraFrame.eight_alias' depends on axioms: [propext, Classical.choice, Quot.sound]

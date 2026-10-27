@@ -1,0 +1,538 @@
+@Op4P_Accepted.accepted_pair_claims_op34 : ∀ {W A E M Cv : Type} {N : ℕ}
+  (L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)),
+  S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+          ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record)),
+      S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : S2W_D189Wrappers.Allocator A) (e1 e2 : S2W_D189Entry.Entry) (w1 w2 : W),
+          S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+                (B : AspisR1PublicPreparation.FinishModel.Boundaries) (claimsStd : ClaimsUnrolledFinish.StdCalls)
+                (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (ClaimsUnrolledSdk.sdkOps adapterOps (Op3I_Install.install (Op4P_Install.install ops)) B claimsStd)
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : S2Trust.Heap (ℕ → S2W_D189Entry.Record)),
+                          S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32)
+                                (port :
+                                  S2W_ExpandedChildren.ChildConeJoin E
+                                    (ClaimsUnrolledSdk.sdkOps adapterOps
+                                      (Op3I_Install.install (Op4P_Install.install ops)) B claimsStd)),
+                                S2W_TraceSplice.FirstMarks port →
+                                  S2W_TraceSplice.SecondMarks port →
+                                    ∃ f s outer pre middle fs ss,
+                                      S2W_NativeConsolidation.SourceCuts
+                                          (ClaimsUnrolledSdk.sdkOps adapterOps
+                                            (Op3I_Install.install (Op4P_Install.install ops)) B claimsStd)
+                                          e1.first (e2.second S2W_D189Wrappers.secondSizes) saved f s ∧
+                                        ((RowShape_InstalledSlots.verifierOps
+                                                    (Op3I_Install.install (Op4P_Install.install ops)) B claimsStd).op3
+                                                f.proof =
+                                              ok (core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                            Op3I_Install.sourceBody f.proof =
+                                                ok (core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                              OraclePortHeader.accepts (MultiproofConeCanonical.bytesOf ↑f.proof) =
+                                                  true ∧
+                                                Op3I_Cuts.frozenHeader (MultiproofConeCanonical.bytesOf ↑f.proof) =
+                                                  some AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                          ((RowShape_InstalledSlots.verifierOps
+                                                      (Op3I_Install.install (Op4P_Install.install ops)) B claimsStd).op4
+                                                  f.proof =
+                                                ok (core.result.Result.Ok ()) ∧
+                                              Op4P_Install.sourceBody f.proof = ok (core.result.Result.Ok ()) ∧
+                                                OraclePortCompactDraft.scan
+                                                  (MultiproofConeCanonical.bytesOf ↑f.proof)) ∧
+                                            S2W_ExpandedTrace.runExpanded
+                                                  (ClaimsUnrolledSdk.sdkOps adapterOps
+                                                    (Op3I_Install.install (Op4P_Install.install ops)) B claimsStd)
+                                                  (S2W_ExpandedChildren.children port)
+                                                  (S2W_Observation.two
+                                                    (ClaimsUnrolledSdk.sdkOps adapterOps
+                                                      (Op3I_Install.install (Op4P_Install.install ops)) B claimsStd)
+                                                    program e1.first data1 (e2.second S2W_D189Wrappers.secondSizes)
+                                                    data2 slot)
+                                                  [] =
+                                                ok
+                                                  (core.result.Result.Ok saved,
+                                                    S2W_ExpandedTrace.full (S2W_ExpandedChildren.children port) outer) ∧
+                                              S2W_D189Interpretation.runOwned
+                                                    (ClaimsUnrolledSdk.sdkOps adapterOps
+                                                      (Op3I_Install.install (Op4P_Install.install ops)) B claimsStd)
+                                                    (S2W_Observation.two
+                                                      (ClaimsUnrolledSdk.sdkOps adapterOps
+                                                        (Op3I_Install.install (Op4P_Install.install ops)) B claimsStd)
+                                                      program e1.first data1 (e2.second S2W_D189Wrappers.secondSizes)
+                                                      data2 slot)
+                                                    [] e1.heap =
+                                                  ok (core.result.Result.Ok saved, outer, e1.heap) ∧
+                                                S2W_TraceSplice.projected port outer =
+                                                    S2W_SiteSchedule.timeline pre middle fs ss ∧
+                                                  post2 = e2.heap ∧
+                                                    S2W_D189Consolidation.before e1 e2 S2LeadInterface.Site.tx1 =
+                                                        S2W_D189Interpretation.nativeObserve L
+                                                          S2W_ReturnedCheckpoint.encode e1.metadata 3 w1
+                                                          e1.heap.ambient ∧
+                                                      ⋯
+@Tx2I_Accepted.accepted_pair_claims_tx2 : ∀ {W A E M Cv F : Type} {N : ℕ}
+  (L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)),
+  S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+          ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record)),
+      S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : S2W_D189Wrappers.Allocator A) (e1 e2 : S2W_D189Entry.Entry) (w1 w2 : W),
+          S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops) (stageBase : VTop_Stages.Ops)
+                (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
+                (B : AspisR1PublicPreparation.FinishModel.Boundaries) (claimsStd : ClaimsUnrolledFinish.StdCalls)
+                (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (ClaimsUnrolledSdk.sdkOps (Tx2I_Install.install adapterOps stageBase finishOps)
+                      (Op3I_Install.install ops) B claimsStd)
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : S2Trust.Heap (ℕ → S2W_D189Entry.Record)),
+                          S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32)
+                                (port :
+                                  S2W_ExpandedChildren.ChildConeJoin E
+                                    (ClaimsUnrolledSdk.sdkOps (Tx2I_Install.install adapterOps stageBase finishOps)
+                                      (Op3I_Install.install ops) B claimsStd)),
+                                S2W_TraceSplice.FirstMarks port →
+                                  S2W_TraceSplice.SecondMarks port →
+                                    ∃ f s outer pre middle fs ss,
+                                      S2W_NativeConsolidation.SourceCuts
+                                          (ClaimsUnrolledSdk.sdkOps
+                                            (Tx2I_Install.install adapterOps stageBase finishOps)
+                                            (Op3I_Install.install ops) B claimsStd)
+                                          e1.first (e2.second S2W_D189Wrappers.secondSizes) saved f s ∧
+                                        (Tx2I_Install.shape s.proof =
+                                              ok (core.result.Result.Ok AspisR1Stage2.transport.Variant.S2) ∧
+                                            Op3I_Install.sourceBody s.proof =
+                                                ok (core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                              OraclePortHeader.accepts (MultiproofConeCanonical.bytesOf ↑s.proof) =
+                                                  true ∧
+                                                ∃ p, ⋯) ∧
+                                          ((RowShape_InstalledSlots.verifierOps (Op3I_Install.install ops) B
+                                                      claimsStd).op3
+                                                  f.proof =
+                                                ok (core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                              Op3I_Install.sourceBody f.proof =
+                                                  ok (core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                                OraclePortHeader.accepts (MultiproofConeCanonical.bytesOf ↑f.proof) =
+                                                    true ∧
+                                                  Op3I_Cuts.frozenHeader (MultiproofConeCanonical.bytesOf ↑f.proof) =
+                                                    some AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                            S2W_ExpandedTrace.runExpanded
+                                                  (ClaimsUnrolledSdk.sdkOps
+                                                    (Tx2I_Install.install adapterOps stageBase finishOps)
+                                                    (Op3I_Install.install ops) B claimsStd)
+                                                  (S2W_ExpandedChildren.children port) ⋯ [] =
+                                                ok ⋯ ∧
+                                              ⋯ = ok (core.result.Result.Ok saved, outer, e1.heap) ∧ ⋯ ∧ ⋯
+@Op5T_Final.accepted_pair_claims_op5 : ∀ {W A E M Cv F : Type} {N : ℕ}
+  (L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)),
+  S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+          ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record)),
+      S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : S2W_D189Wrappers.Allocator A) (e1 e2 : S2W_D189Entry.Entry) (w1 w2 : W),
+          S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops) (stageBase : VTop_Stages.Ops)
+                (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
+                (B : AspisR1PublicPreparation.FinishModel.Boundaries) (claimsStd : ClaimsUnrolledFinish.StdCalls)
+                (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (ClaimsUnrolledSdk.sdkOps
+                      (Tx2I_Install.install adapterOps (Op5T_Concrete.stage stageBase) finishOps)
+                      (Op3I_Install.install (Op5T_Concrete.current ops)) B claimsStd)
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : S2Trust.Heap (ℕ → S2W_D189Entry.Record)),
+                          S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32)
+                                (port :
+                                  S2W_ExpandedChildren.ChildConeJoin E
+                                    (ClaimsUnrolledSdk.sdkOps
+                                      (Tx2I_Install.install adapterOps (Op5T_Concrete.stage stageBase) finishOps)
+                                      (Op3I_Install.install (Op5T_Concrete.current ops)) B claimsStd)),
+                                Op5T_Marks.FirstMarks port →
+                                  Op5T_Marks.SecondMarks port →
+                                    ∃ f s outer pre middle fs ss,
+                                      S2W_NativeConsolidation.SourceCuts
+                                          (ClaimsUnrolledSdk.sdkOps
+                                            (Tx2I_Install.install adapterOps (Op5T_Concrete.stage stageBase) finishOps)
+                                            (Op3I_Install.install (Op5T_Concrete.current ops)) B claimsStd)
+                                          e1.first (e2.second S2W_D189Wrappers.secondSizes) saved f s ∧
+                                        (have sdk :=
+                                            Op5T_SamePair.dictionary adapterOps ops stageBase finishOps B claimsStd;
+                                          have D := AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 sdk;
+                                          have currentD := AspisS6CurrentFirstInstallation.toDigest D;
+                                          ∃ p0, ⋯) ∧
+                                          (Tx2I_Install.shape s.proof =
+                                                ok (core.result.Result.Ok AspisR1Stage2.transport.Variant.S2) ∧
+                                              Op3I_Install.sourceBody s.proof =
+                                                  ok (core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                                OraclePortHeader.accepts (MultiproofConeCanonical.bytesOf ↑s.proof) =
+                                                    true ∧
+                                                  ⋯) ∧
+                                            ((RowShape_InstalledSlots.verifierOps
+                                                        (Op3I_Install.install (Op5T_Concrete.current ops)) B
+                                                        claimsStd).op3
+                                                    f.proof =
+                                                  ok (core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                                Op3I_Install.sourceBody f.proof =
+                                                    ok
+                                                      (core.result.Result.Ok
+                                                        AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                                  ⋯) ∧
+                                              ⋯ = ⋯ ∧ ⋯ ∧ ⋯
+@Tx1Q_Accepted.accepted_pair_claims_tx1 : ∀ {W A E M Cv CoreError : Type} {N : ℕ}
+  (L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)),
+  S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+          ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record)),
+      S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : S2W_D189Wrappers.Allocator A) (e1 e2 : S2W_D189Entry.Entry) (w1 w2 : W),
+          S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops) (reserved : Bool)
+                (queryOps : Port3_NativeQueryBody.Ops) (geoOps : Port3_NativeGeometryBody.Ops CoreError)
+                (B : AspisR1PublicPreparation.FinishModel.Boundaries) (claimsStd : ClaimsUnrolledFinish.StdCalls)
+                (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (ClaimsUnrolledSdk.sdkOps adapterOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                      claimsStd)
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : S2Trust.Heap (ℕ → S2W_D189Entry.Record)),
+                          S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32)
+                                (port :
+                                  S2W_ExpandedChildren.ChildConeJoin E
+                                    (ClaimsUnrolledSdk.sdkOps adapterOps
+                                      (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)),
+                                S2W_TraceSplice.FirstMarks port →
+                                  S2W_TraceSplice.SecondMarks port →
+                                    ∃ f s outer pre middle fs ss,
+                                      S2W_NativeConsolidation.SourceCuts
+                                          (ClaimsUnrolledSdk.sdkOps adapterOps
+                                            (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                                          e1.first (e2.second S2W_D189Wrappers.secondSizes) saved f s ∧
+                                        ((RowShape_InstalledSlots.verifierOps
+                                                    (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                                                    claimsStd).op3
+                                                f.proof =
+                                              ok (core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                            Op3I_Install.sourceBody f.proof =
+                                                ok (core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                              OraclePortHeader.accepts (MultiproofConeCanonical.bytesOf ↑f.proof) =
+                                                  true ∧
+                                                Op3I_Cuts.frozenHeader (MultiproofConeCanonical.bytesOf ↑f.proof) =
+                                                  some AspisR1CurrentCaller.transport.Variant.S2) ∧
+                                          ((RowShape_InstalledSlots.verifierOps
+                                                      (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                                                      claimsStd).op4
+                                                  f.proof =
+                                                ok (core.result.Result.Ok ()) ∧
+                                              Op4P_Install.sourceBody f.proof = ok (core.result.Result.Ok ()) ∧
+                                                OraclePortCompactDraft.scan
+                                                  (MultiproofConeCanonical.bytesOf ↑f.proof)) ∧
+                                            (∃ run, ⋯) ∧ ⋯ ∧ ⋯
+@Uni_Accepted.accepted_pair_unified : ∀ {W A E M Cv F CoreError : Type} {N : ℕ}
+  (L : S2Trust.Library W (ℕ → S2W_D189Entry.Record)),
+  S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+          ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record)),
+      S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : S2W_D189Wrappers.Allocator A) (e1 e2 : S2W_D189Entry.Entry) (w1 w2 : W),
+          S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops) (reserved : Bool)
+                (queryOps : Port3_NativeQueryBody.Ops) (geoOps : Port3_NativeGeometryBody.Ops CoreError)
+                (stageBase : VTop_Stages.Ops) (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
+                (B : AspisR1PublicPreparation.FinishModel.Boundaries) (claimsStd : ClaimsUnrolledFinish.StdCalls)
+                (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (ClaimsUnrolledSdk.sdkOps
+                      (Tx2I_Install.install adapterOps (Op5T_Concrete.stage stageBase) finishOps)
+                      (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : S2Trust.Heap (ℕ → S2W_D189Entry.Record)),
+                          S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32)
+                                (port :
+                                  S2W_ExpandedChildren.ChildConeJoin E
+                                    (ClaimsUnrolledSdk.sdkOps
+                                      (Tx2I_Install.install adapterOps (Op5T_Concrete.stage stageBase) finishOps)
+                                      (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)),
+                                Op5T_Marks.FirstMarks port →
+                                  Op5T_Marks.SecondMarks port →
+                                    ∃ f s outer pre middle fs ss,
+                                      S2W_NativeConsolidation.SourceCuts
+                                          (ClaimsUnrolledSdk.sdkOps
+                                            (Tx2I_Install.install adapterOps (Op5T_Concrete.stage stageBase) finishOps)
+                                            (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)
+                                          e1.first (e2.second S2W_D189Wrappers.secondSizes) saved f s ∧
+                                        (⋯ ∧
+                                            Op4P_Install.sourceBody f.proof = ok (core.result.Result.Ok ()) ∧
+                                              OraclePortCompactDraft.scan (MultiproofConeCanonical.bytesOf ↑f.proof)) ∧
+                                          ⋯ ∧ ⋯
+OraclePortHeadlineFrozen2PerAttempt.final_soundness : ∀ (D : LiteralByteProtocol.Decoder)
+  (P : OraclePortStoredExperimentC4.Prover) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (rust : OraclePortRuntimeBindingC7.Verifier) (runtime : OraclePortRuntimeBindingC7.Runtime),
+      OraclePortFrozen2Join.AcceptedRunJoin D rust →
+        OraclePortRuntimeBindingC7.StoredCarrierBinding D rust P runtime →
+          OraclePortHeadlineFrozen2PerAttempt.Claims D P Q runtime
+Uni_CanonicalPerAttempt.final_soundness : ∀ (D : LiteralByteProtocol.Decoder) (P : Port1_StoredCarrier.ByteProver)
+  (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (rust : OraclePortRuntimeBindingC7.Verifier) (runtime : OraclePortRuntimeBindingC7.Runtime),
+      Port1_StoredCarrier.Physical rust →
+        Port1_CanonicalJoin.AcceptedVerifierJoin D rust →
+          OraclePortRuntimeBindingC7.StoredCarrierBinding D rust (Port1_StoredCarrier.lift P) runtime →
+            OraclePortHeadlineFrozen2PerAttempt.Claims D (Port1_StoredCarrier.lift P) Q runtime
+structure AspisR1.S2W_TraceSplice.FirstMarks {E : Type} {ops : AdapterRw.Ops}
+  (port : S2W_ExpandedChildren.ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.FirstMarks.source : ∀ (event : S2W_Trace.Event),
+      S2W_OuterOccurrences.mark event = some false →
+        ∃ fs, List.map S2W_TraceSplice.project (S2W_ExpandedChildren.events port event) = S2W_SiteSchedule.firstTrace fs
+constructor:
+  AspisR1.S2W_TraceSplice.FirstMarks.mk {E : Type} {ops : AdapterRw.Ops}
+    {port : S2W_ExpandedChildren.ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        S2W_OuterOccurrences.mark event = some false →
+          ∃ fs,
+            List.map S2W_TraceSplice.project (S2W_ExpandedChildren.events port event) =
+              S2W_SiteSchedule.firstTrace fs) :
+    S2W_TraceSplice.FirstMarks port
+structure AspisR1.S2W_TraceSplice.SecondMarks {E : Type} {ops : AdapterRw.Ops}
+  (port : S2W_ExpandedChildren.ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.SecondMarks.source : ∀ (event : S2W_Trace.Event),
+      S2W_OuterOccurrences.mark event = some true →
+        ∃ ss,
+          List.map S2W_TraceSplice.project (S2W_ExpandedChildren.events port event) = S2W_SiteSchedule.secondTrace ss
+constructor:
+  AspisR1.S2W_TraceSplice.SecondMarks.mk {E : Type} {ops : AdapterRw.Ops}
+    {port : S2W_ExpandedChildren.ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        S2W_OuterOccurrences.mark event = some true →
+          ∃ ss,
+            List.map S2W_TraceSplice.project (S2W_ExpandedChildren.events port event) =
+              S2W_SiteSchedule.secondTrace ss) :
+    S2W_TraceSplice.SecondMarks port
+structure AspisR1.Op5T_Marks.FirstMarks {E : Type} {ops : AdapterRw.Ops}
+  (port : S2W_ExpandedChildren.ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.Op5T_Marks.FirstMarks.source : ∀ (event : S2W_Trace.Event),
+      S2W_OuterOccurrences.mark event = some false →
+        Op5T_Marks.accepted ops event →
+          ∃ fs,
+            List.map S2W_TraceSplice.project (S2W_ExpandedChildren.events port event) = S2W_SiteSchedule.firstTrace fs
+constructor:
+  AspisR1.Op5T_Marks.FirstMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : S2W_ExpandedChildren.ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        S2W_OuterOccurrences.mark event = some false →
+          Op5T_Marks.accepted ops event →
+            ∃ fs,
+              List.map S2W_TraceSplice.project (S2W_ExpandedChildren.events port event) =
+                S2W_SiteSchedule.firstTrace fs) :
+    Op5T_Marks.FirstMarks port
+structure AspisR1.Op5T_Marks.SecondMarks {E : Type} {ops : AdapterRw.Ops}
+  (port : S2W_ExpandedChildren.ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.Op5T_Marks.SecondMarks.source : ∀ (event : S2W_Trace.Event),
+      S2W_OuterOccurrences.mark event = some true →
+        Op5T_Marks.accepted ops event →
+          ∃ ss,
+            List.map S2W_TraceSplice.project (S2W_ExpandedChildren.events port event) = S2W_SiteSchedule.secondTrace ss
+constructor:
+  AspisR1.Op5T_Marks.SecondMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : S2W_ExpandedChildren.ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        S2W_OuterOccurrences.mark event = some true →
+          Op5T_Marks.accepted ops event →
+            ∃ ss,
+              List.map S2W_TraceSplice.project (S2W_ExpandedChildren.events port event) =
+                S2W_SiteSchedule.secondTrace ss) :
+    Op5T_Marks.SecondMarks port
+def AspisR1.Op5T_Marks.accepted : AdapterRw.Ops → S2W_Trace.Event → Prop :=
+fun ops x =>
+  match x with
+  | S2W_Trace.Event.returned (S2W_Trace.Call.op10 D semantic pub proof split hash obs) a =>
+    ∃ saved, ops.op10 D semantic pub proof split hash obs = ok (core.result.Result.Ok saved)
+  | S2W_Trace.Event.returned (S2W_Trace.Call.op11 D pub proof checkpoint hash obs) a =>
+    ops.op11 D pub proof checkpoint hash obs = ok (core.result.Result.Ok ())
+  | x => False
+def AspisR1.Tx1Q_Endpoint.WhenBound : {CoreError H : Type} →
+  {installed : AspisR1CurrentCaller.Ops} →
+    {reserved : Bool} →
+      {query : Port3_NativeQueryBody.Ops} →
+        {geo : Port3_NativeGeometryBody.Ops CoreError} →
+          {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} →
+            {hash : H} →
+              {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public} →
+                {pub proof : Slice U8} →
+                  {split : Usize} →
+                    {saved : alloc.vec.Vec U8} →
+                      Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved → Prop :=
+fun {CoreError H} {installed} {reserved} {query} {geo} {D} {hash} {semantic} {pub proof} {split} {saved} run =>
+  Port5Q1_QueryPorts.SessionAPrimitives query →
+    ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (tr : RawCutTranscriptRun.ErasedPrefix)
+      (data : MatchingSupport.Data OraclePortCheckpointAbiC5.E) (rho : OraclePortCheckpointAbiC5.K),
+      Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared run.p) data q rho →
+        OraclePortStoredParserC4.parseReached (MultiproofConeCanonical.bytesOf ↑proof) tr = some parsed →
+          LiteralMatchingData.read (OraclePortStoredDecisionDraftC4.typedRows parsed q tr) = some data →
+            ∀ (recovered : ℕ → Option AspisV8R19.DuplexFrames.Bytes),
+              (∀ pos < 22,
+                  recovered (OraclePortSelectedDraft.index q 2 pos) =
+                    some (OraclePortPackedChoiceC4.payload parsed 2 pos)) →
+                Port5Q1_GeometryCanonical.SessionAPrimitives geo →
+                  Port5Q1_Domain.SessionADomain geo →
+                    geo.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+                      geo.op7 = ok 1#u32 →
+                        geo.op11 = Port4C_InverseExecution.inverse_owned →
+                          have state :=
+                            Tx1Q_Carriers.accumulator
+                              (have __src := run.out;
+                              { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                next := __src.next });
+                          CheckpointBytes5Output.accumulator state =
+                              (OraclePortCheckpointStateC3.write
+                                  (OraclePortCheckpointResumeC5.model data rho q)).accumulator ∧
+                            Port3_CheckpointInstall.writer (Tx1Q_Install.digest D) (Tx1Q_Carriers.prepared run.p) state
+                                  proof pub hash =
+                                ok saved ∧
+                              (↑run.flushed).length = 64 ∧ ↑run.out.next = 10
+def AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin : LiteralByteProtocol.Decoder →
+  OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun D rust =>
+  ∀ (s : Port1_StoredCarrier.Submission) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (AspisV8R19.MemoizedProgramLaw.eval H (rust (Port1_StoredCarrier.input s))).2 = true →
+      AspisV8R19.MemoizedProgramLaw.eval H (rust (Port1_StoredCarrier.input s)) =
+        AspisV8R19.MemoizedProgramLaw.eval H
+          (OraclePortStoredExperimentC4.verifier D OraclePortFrozen2.dV_frozen2 (Port1_StoredCarrier.input s))
+structure AspisR1.Port1_CanonicalJoin.AcceptedRunJoin (D : LiteralByteProtocol.Decoder)
+  (rust : OraclePortRuntimeBindingC7.Verifier) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.verifier : Port1_CanonicalJoin.AcceptedVerifierJoin D rust
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.annotated : ∀ (P : OraclePortStoredExperimentC4.Prover),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          Port1_StoredCarrier.Carried (AspisV8R19.MemoizedProgramLaw.eval H P).2) →
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval H (OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 = true →
+            AspisV8R19.MemoizedProgramLaw.eval H (OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+              AspisV8R19.MemoizedProgramLaw.eval H
+                (OraclePortStoredAdmissionC4.annotated D OraclePortFrozen2.dV_frozen2 P)
+constructor:
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.mk {D : LiteralByteProtocol.Decoder}
+    {rust : OraclePortRuntimeBindingC7.Verifier} (verifier : Port1_CanonicalJoin.AcceptedVerifierJoin D rust)
+    (annotated :
+      ∀ (P : OraclePortStoredExperimentC4.Prover),
+        (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            Port1_StoredCarrier.Carried (AspisV8R19.MemoizedProgramLaw.eval H P).2) →
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H (OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 = true →
+              AspisV8R19.MemoizedProgramLaw.eval H (OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (OraclePortStoredAdmissionC4.annotated D OraclePortFrozen2.dV_frozen2 P)) :
+    Port1_CanonicalJoin.AcceptedRunJoin D rust
+def AspisR1.Uni_Install.base : {C : Type} →
+  AspisR1CurrentCaller.Ops →
+    Bool → Port3_NativeQueryBody.Ops → Port3_NativeGeometryBody.Ops C → AspisR1CurrentCaller.Ops :=
+fun {C} ops reserved query geo => Op4P_Install.install (Tx1Q_Execution.base ops reserved query geo)
+def AspisR1.Uni_Install.current : {C : Type} →
+  AspisR1CurrentCaller.Ops →
+    Bool → Port3_NativeQueryBody.Ops → Port3_NativeGeometryBody.Ops C → AspisR1CurrentCaller.Ops :=
+fun {C} ops reserved query geo => Op3I_Install.install (Op5T_Concrete.current (Uni_Install.base ops reserved query geo))
+'AspisR1.Uni_Install.compose_tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_Install.scan_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_Install.prefix_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_Install.overlap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_Cuts.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_Cuts.scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_Accepted.accepted_pair_unified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_SecondMarks.authenticated_order' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_SecondMarks.accepted_source_marks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_SecondMarks.successful_fixture' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_RejectedSecond.shape_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_RejectedSecond.rejected_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_RejectedSecond.second_marks_force_resume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_RejectedSecond.no_global_second_mark_association' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.Uni_CanonicalPerAttempt.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_CanonicalPerAttempt.no_global_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_CanonicalPerAttempt.failure_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_Slots.stage_commutes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_Slots.current_slots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_Slots.stage_slots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Uni_Audit.extraction_satisfiable' depends on axioms: [propext, Classical.choice, Quot.sound]

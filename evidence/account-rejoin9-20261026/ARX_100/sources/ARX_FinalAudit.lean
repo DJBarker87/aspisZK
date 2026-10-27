@@ -1,0 +1,142 @@
+import ARW_FinalAudit
+import ARX_AdmittedRuntime
+import ARX_Audit_ARQ_Domination
+import ARX_Audit_ARQ_Transport
+import ARX_Audit_ARS_Coverage
+import ARX_Audit_ART_AdversaryWork
+import ARX_Audit_ART_FullBudget
+import ARX_Audit_ART_FullCharge
+import ARX_Audit_ART_Runtime
+import ARX_Audit_ART_RuntimeDomination
+import ARX_Audit_ART_WrapperBudget
+import ARX_Audit_ARU_OriginalFactory
+import ARX_Audit_ARU_PartialAccepted
+import ARX_Audit_ARU_PartialFactory
+import ARX_Audit_ARU_Replies
+import ARX_Audit_ARU_Support
+import ARX_Audit_ARV_Constant
+import ARX_Audit_ARV_Poison
+import ARX_Audit_ARW_AdmittedBudget
+import ARX_Audit_ARW_AdmittedQueries
+import ARX_Audit_ARW_AdmittedSupport
+import ARX_Audit_ARW_Carrier
+import ARX_Audit_ARW_Conservativity
+import ARX_Audit_ARW_Induced
+import ARX_Audit_ARW_Nonvacuity
+import ARX_Audit_ARW_Observations
+import ARX_Audit_ARW_OldRoot
+import ARX_Audit_ARW_QueryAgreement
+import ARX_Audit_ARW_Residual
+import ARX_Audit_ARW_RuntimeDomain
+import ARX_Audit_ARW_WrapperNative
+import ARX_Audit_CPH_Game
+import ARX_Audit_CPR_DataPersistence
+import ARX_Audit_F3T_Charged
+import ARX_Audit_F3T_Combined
+import ARX_Audit_F3T_Cost
+import ARX_Audit_F3T_ModelClaims
+import ARX_Audit_F3T_Numeric
+import ARX_Audit_F3T_Probability
+import ARX_Audit_F3U_Numeric
+import ARX_Audit_F3U_Range
+import ARX_Audit_FIp_GlobalOwners
+import ARX_Audit_JFm_ChallengeFixture
+import ARX_Audit_JFn_Nonvacuity
+import ARX_Audit_JFn_TX2
+import ARX_Audit_JFr_ArithmeticFixture
+import ARX_Audit_JFr_TX2_Partial
+import ARX_Audit_JFs_ExactSerialization
+import ARX_Audit_JFs_PublicFixture
+import ARX_Audit_JFu_AfterstateValidator
+import ARX_Audit_JFu_Installation
+import ARX_Audit_JFv_ClaimsFixture
+import ARX_Audit_JFv_RuntimeWitness
+import ARX_Audit_JFv_SampledFixture
+import ARX_Audit_JFv_SemanticCall
+import ARX_Audit_JFv_SemanticChain
+import ARX_Audit_JFw_RealExpansion
+import ARX_Audit_JFw_TypedPrefix
+import ARX_Audit_JFw_Y1
+import ARX_Audit_RPx_ChargeBudget
+import ARX_Audit_RPx_RejectMass
+import ARX_Audit_S2TrustedSdkBorrow
+import ARX_Audit_S2W_DigestExtraction
+import ARX_Audit_SCF_Recovery
+import ARX_Audit_SCG_RawRecovery
+import ARX_Audit_SCI_Recovery
+import ARX_CachedCharge
+import ARX_Cap
+import ARX_CappedSupport
+import ARX_Carrier
+import ARX_Conservativity
+import ARX_Coverage
+import ARX_DefinitionsAudit
+import ARX_Domain
+import ARX_Domination
+import ARX_FixtureAudit
+import ARX_Join
+import ARX_LawConstants
+import ARX_LawEquivalence
+import ARX_LocalCharge
+import ARX_LogAgreement
+import ARX_Mass
+import ARX_Nonvacuity
+import ARX_OldClassPoison
+import ARX_RecoveryBranch
+import ARX_RejectedPrefixes
+import ARX_Residual
+import ARX_RestrictedCharge
+import ARX_Root
+import ARX_RootStatements
+import ARX_SourceAlternative
+import ARX_SubmissionBudget
+import ARX_TraceSupport
+set_option autoImplicit false
+set_option pp.deepTerms true
+set_option pp.fullNames true
+set_option pp.maxSteps 1000000
+set_option format.width 140
+-- Final focused closure audit; not a package replay or release adoption.
+#print axioms AspisR1.ARX_AdmittedRuntime.permitted_iff
+#print axioms AspisR1.ARX_AdmittedRuntime.evaluation
+#print axioms AspisR1.ARX_AdmittedRuntime.on_admitted
+#print axioms AspisR1.ARX_AdmittedRuntime.outside
+#print axioms AspisR1.ARX_AdmittedRuntime.excludes_poison
+#print axioms AspisR1.ARX_CachedCharge.cached_preparation
+#print axioms AspisR1.ARX_Cap.length
+#print axioms AspisR1.ARX_Cap.exact
+#print axioms AspisR1.ARX_CappedSupport.supported
+#print axioms AspisR1.ARX_Carrier.exact
+#print axioms AspisR1.ARX_Conservativity.conservativity
+#print axioms AspisR1.ARX_Coverage.coverage
+#print axioms AspisR1.ARX_Domain.range
+#print axioms AspisR1.ARX_Domination.pointwise
+#print axioms AspisR1.ARX_Join.accepted
+#print axioms AspisR1.ARX_LawConstants.unchanged
+#print axioms AspisR1.ARX_LawEquivalence.observations
+#print axioms AspisR1.ARX_LawEquivalence.work
+#print axioms AspisR1.ARX_LawEquivalence.mean
+#print axioms AspisR1.ARX_LawEquivalence.failure_mean
+#print axioms AspisR1.ARX_LocalCharge.congr_source
+#print axioms AspisR1.ARX_LocalCharge.budget
+#print axioms AspisR1.ARX_LocalCharge.exact
+#print axioms AspisR1.ARX_LocalCharge.binding
+#print axioms AspisR1.ARX_LocalCharge.canonical
+#print axioms AspisR1.ARX_LogAgreement.consistent
+#print axioms AspisR1.ARX_Mass.bounded
+#print axioms AspisR1.ARX_Nonvacuity.conditional
+#print axioms AspisR1.ARX_OldClassPoison.differs
+#print axioms AspisR1.ARX_RecoveryBranch.accepted
+#print axioms AspisR1.ARX_RejectedPrefixes.cost
+#print axioms AspisR1.ARX_RejectedPrefixes.mass
+#print axioms AspisR1.ARX_Residual.numeric
+#print axioms AspisR1.ARX_Residual.margin_exact
+#print axioms AspisR1.ARX_RestrictedCharge.equality
+#print axioms AspisR1.ARX_RestrictedCharge.bounded
+#print axioms AspisR1.ARX_Root.deployed
+#print axioms AspisR1.ARX_SourceAlternative.accepted
+#print axioms AspisR1.ARX_SubmissionBudget.bound
+#print axioms AspisR1.ARX_TraceSupport.consistent
+#check @AspisR1.ARX_Root.deployed
+#check @AspisR1.ARX_Conservativity.conservativity
+#check @AspisR1.ARX_Nonvacuity.conditional

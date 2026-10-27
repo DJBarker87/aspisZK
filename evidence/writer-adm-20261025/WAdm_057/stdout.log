@@ -1,0 +1,106 @@
+WAdm_EmittedScalars.lean:8:12: error: Ambiguous term
+  aspis_core.field.QM31
+Possible interpretations:
+  OraclePortCkptAbi2Extracted.aspis_core.field.QM31 : Type
+  
+  WAdm_Fissioned.aspis_core.field.QM31 : Type
+WAdm_EmittedScalars.lean:9:12: error: Ambiguous term
+  aspis_core.field.wide_exact.WideExact
+Possible interpretations:
+  OraclePortCkptAbi2Extracted.aspis_core.field.wide_exact.WideExact : Type
+  
+  WAdm_Fissioned.aspis_core.field.wide_exact.WideExact : Type
+WAdm_EmittedScalars.lean:12:75: error: Application type mismatch: The argument
+  x
+has type
+  E
+but is expected to have type
+  WAdm_Fissioned.aspis_core.field.wide_exact.WideExact
+in the application
+  aspis_core.field.wide_exact.WideExact.to_le_bytes x
+WAdm_EmittedScalars.lean:27:86: error: Application type mismatch: The argument
+  x
+has type
+  E
+but is expected to have type
+  CheckpointBytesE.RawE
+in the application
+  CheckpointBytesE.rawBytes x
+WAdm_EmittedScalars.lean:28:56: error: Application type mismatch: The argument
+  x
+has type
+  E
+but is expected to have type
+  CheckpointBytesE.RawE
+in the application
+  CheckpointBytesE.rawBytes x
+WAdm_EmittedScalars.lean:31:92: error: Application type mismatch: The argument
+  x
+has type
+  E
+but is expected to have type
+  CheckpointBytesE.RawE
+in the application
+  CheckpointBytesE.rawBytes x
+WAdm_EmittedScalars.lean:30:26: warning: declaration uses `sorry`
+WAdm_EmittedScalars.lean:43:27: error: Application type mismatch: The argument
+  x
+has type
+  K
+but is expected to have type
+  WAdm_Fissioned.aspis_core.field.QM31
+in the application
+  WAdm_putK out x
+WAdm_EmittedScalars.lean:43:91: error: Application type mismatch: The argument
+  x
+has type
+  K
+but is expected to have type
+  OraclePortCkptAbi2Extracted.aspis_core.field.QM31
+in the application
+  CheckpointP6EncodeK.bytes x
+WAdm_EmittedScalars.lean:44:69: error: Application type mismatch: The argument
+  x
+has type
+  K
+but is expected to have type
+  OraclePortCkptAbi2Extracted.aspis_core.field.QM31
+in the application
+  CheckpointP6EncodeK.encode_k_total x
+WAdm_EmittedScalars.lean:46:26: error: Application type mismatch: The argument
+  x
+has type
+  K
+but is expected to have type
+  WAdm_Fissioned.aspis_core.field.QM31
+in the application
+  WAdm_putK out x
+WAdm_EmittedScalars.lean:47:57: error: Application type mismatch: The argument
+  x
+has type
+  K
+but is expected to have type
+  OraclePortCkptAbi2Extracted.aspis_core.field.QM31
+in the application
+  encode_k x
+WAdm_EmittedScalars.lean:43:96: error: unsolved goals
+out : alloc.vec.Vec U8
+x : K
+bound : (↑out).length + 16 ≤ Usize.max
+encoded : Std.Array U8 16#usize
+call : encode_k sorry = ok encoded
+layout : ↑encoded = CheckpointP6EncodeK.bytes sorry
+hb : (↑out).length + (↑encoded).length ≤ Usize.max
+eq :
+  WAdm_putK out sorry = do
+    let encoded ← encode_k sorry
+    alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out encoded.to_slice
+⊢ ∃ after,
+    (do
+          let encoded ← ok encoded
+          alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out encoded.to_slice) =
+        ok after ∧
+      ↑after = ↑out ++ CheckpointP6EncodeK.bytes sorry
+'AspisR1.WAdm_EmittedScalars.put_e' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.WAdm_EmittedScalars.put_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_EmittedScalars.put_k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,30 @@
+{"attempt": "BEk_079", "exit_status": 0, "wall_seconds": 2.058551488968078, "peak_rss_kib": "5271252", "swaps": "0", "print_axioms": ["'AspisR1.BEj_ErasedBoundaryGap.installed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEj_ErasedBoundaryGap.installed : ∀ {S : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (input : AspisR1.BEj_ReifiedBatch.Input) (slot : Fin 2) (state : S) (before : AspisR1.SdkC_Source.Log)
+      (extra : AspisR1.SdkC_Source.Query),
+      ∃ other,
+        other.1 =
+            AspisR1.Op5T_Install.body AspisR1.Port4B_Install.leaves (AspisR1.SdkC_Source.dictionary hashv) input.proof
+              input.prepared.queries input.prepared.roots input
+...
+theorem AspisR1.BEj_ErasedBoundaryGap.installed : ∀ {S : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (input : AspisR1.BEj_ReifiedBatch.Input) (slot : Fin 2) (state : S) (before : AspisR1.SdkC_Source.Log)
+      (extra : AspisR1.SdkC_Source.Query),
+      ∃ other,
+        other.1 =
+            AspisR1.Op5T_Install.body AspisR1.Port4B_Install.leaves (AspisR1.SdkC_Source.dictionary hashv) input.proof
+              input.prepared.queries input.prepared.roots input.folded (AspisR1.BEj_ReifiedBatch.ordinal slot) () ∧
+          other.2.1 =
+              (AspisR1.BEf_Carrier.run call (AspisR1.BEj_ReifiedBatch.sourceCode hashv input slot) state before).2.1 ∧
+            ¬AspisR1.BEh_Scope.Law other
+                (AspisR1.BEf_Carrier.run call (AspisR1.BEj_ReifiedBatch.sourceCode hashv input slot) state before) :=
+⋯
+'AspisR1.BEj_ErasedBoundaryGap.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r401949b196ee466182c1249990475014.scope; invocation ID: 2765cf501d6e40b49869c5eeb8eccccf

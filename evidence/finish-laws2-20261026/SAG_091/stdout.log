@@ -1,0 +1,125 @@
+structure AspisR1.SAG_QuarterFree.Arithmetic {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact) : Prop
+number of parameters: 5
+fields:
+  AspisR1.SAG_QuarterFree.Arithmetic.boundary0 : ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+      ops.field v.round0 0#usize = Aeneas.Std.Result.ok c0 →
+        ops.field v.round0 4#usize = Aeneas.Std.Result.ok c4 →
+          ops.add c0 c4 = Aeneas.Std.Result.ok lhs →
+            AspisR1.CheckpointBytes5Output.ofE lhs = AspisR1.TwoRoundComparison.boundary d.p0
+  AspisR1.SAG_QuarterFree.Arithmetic.eval0 : ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+      ops.polynomial v.round0 alpha = Aeneas.Std.Result.ok value →
+        AspisR1.CheckpointBytes5Output.ofE value = Polynomial.eval (AspisR1.CheckpointBytes5Output.ofE alpha) d.p0
+  AspisR1.SAG_QuarterFree.Arithmetic.boundary1 : ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+      ops.field v.round1 0#usize = Aeneas.Std.Result.ok c0 →
+        ops.field v.round1 4#usize = Aeneas.Std.Result.ok c4 →
+          ops.add c0 c4 = Aeneas.Std.Result.ok lhs →
+            AspisR1.CheckpointBytes5Output.ofE lhs = AspisR1.TwoRoundComparison.boundary d.p1
+  AspisR1.SAG_QuarterFree.Arithmetic.eval1 : ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+      ops.polynomial v.round1 alpha = Aeneas.Std.Result.ok value →
+        AspisR1.CheckpointBytes5Output.ofE value = Polynomial.eval (AspisR1.CheckpointBytes5Output.ofE alpha) d.p1
+  AspisR1.SAG_QuarterFree.Arithmetic.pair : ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E)
+      (value : AspisR1Stage2.Stage2Finish.E),
+      ops.newWeights p.variant p.semantic_alpha p.z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+        Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+              p.alpha { «end» := 2#usize } =
+            Aeneas.Std.Result.ok alphas →
+          ops.pair weights alphas v.final_message p.kappa =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+            AspisR1.CheckpointBytes5Output.ofE value =
+              AspisR1.RoundPairing.dot d.f
+                (AspisR1.RoundPairing.dualFold d.alpha1
+                  (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))
+constructor:
+  AspisR1.SAG_QuarterFree.Arithmetic.mk {W : Type} {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {v : AspisR1Stage2.verifier.View} {p : AspisR1Stage2.verifier.Prepared}
+    {d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact}
+    (boundary0 :
+      ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+        ops.field v.round0 0#usize = Aeneas.Std.Result.ok c0 →
+          ops.field v.round0 4#usize = Aeneas.Std.Result.ok c4 →
+            ops.add c0 c4 = Aeneas.Std.Result.ok lhs →
+              AspisR1.CheckpointBytes5Output.ofE lhs = AspisR1.TwoRoundComparison.boundary d.p0)
+    (eval0 :
+      ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+        ops.polynomial v.round0 alpha = Aeneas.Std.Result.ok value →
+          AspisR1.CheckpointBytes5Output.ofE value = Polynomial.eval (AspisR1.CheckpointBytes5Output.ofE alpha) d.p0)
+    (boundary1 :
+      ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+        ops.field v.round1 0#usize = Aeneas.Std.Result.ok c0 →
+          ops.field v.round1 4#usize = Aeneas.Std.Result.ok c4 →
+            ops.add c0 c4 = Aeneas.Std.Result.ok lhs →
+              AspisR1.CheckpointBytes5Output.ofE lhs = AspisR1.TwoRoundComparison.boundary d.p1)
+    (eval1 :
+      ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+        ops.polynomial v.round1 alpha = Aeneas.Std.Result.ok value →
+          AspisR1.CheckpointBytes5Output.ofE value = Polynomial.eval (AspisR1.CheckpointBytes5Output.ofE alpha) d.p1)
+    (pair :
+      ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+        ops.newWeights p.variant p.semantic_alpha p.z =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            ops.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+              AspisR1.CheckpointBytes5Output.ofE value =
+                AspisR1.RoundPairing.dot d.f
+                  (AspisR1.RoundPairing.dualFold d.alpha1
+                    (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))) :
+    AspisR1.SAG_QuarterFree.Arithmetic ops v p d
+structure AspisR1.SAF_ReducedLaws.Arithmetic {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact) : Prop
+number of parameters: 5
+fields:
+  AspisR1.SAF_ReducedLaws.Arithmetic.round0 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE
+      v.round0 d.p0
+  AspisR1.SAF_ReducedLaws.Arithmetic.round1 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE
+      v.round1 d.p1
+  AspisR1.SAF_ReducedLaws.Arithmetic.pair : ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E)
+      (value : AspisR1Stage2.Stage2Finish.E),
+      ops.newWeights p.variant p.semantic_alpha p.z = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+        Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+              p.alpha { «end» := 2#usize } =
+            Aeneas.Std.Result.ok alphas →
+          ops.pair weights alphas v.final_message p.kappa =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+            AspisR1.CheckpointBytes5Output.ofE value =
+              AspisR1.RoundPairing.dot d.f
+                (AspisR1.RoundPairing.dualFold d.alpha1
+                  (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))
+constructor:
+  AspisR1.SAF_ReducedLaws.Arithmetic.mk {W : Type} {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {v : AspisR1Stage2.verifier.View} {p : AspisR1Stage2.verifier.Prepared}
+    {d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact}
+    (round0 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE v.round0 d.p0)
+    (round1 : AspisR1.Port4D_Pairing.RoundLaws ops AspisR1.CheckpointBytes5Output.ofE v.round1 d.p1)
+    (pair :
+      ∀ (weights : W) (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (value : AspisR1Stage2.Stage2Finish.E),
+        ops.newWeights p.variant p.semantic_alpha p.z =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            ops.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) →
+              AspisR1.CheckpointBytes5Output.ofE value =
+                AspisR1.RoundPairing.dot d.f
+                  (AspisR1.RoundPairing.dualFold d.alpha1
+                    (AspisR1.RoundPairing.dualFold d.alpha0 (AspisR1.FunctionalWeights.weights d.F d.F0 d.kappa)))) :
+    AspisR1.SAF_ReducedLaws.Arithmetic ops v p d
+@AspisR1.SAG_QuarterFree.reconstruct : ∀ {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+  (d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact),
+  AspisR1.SAG_QuarterFree.QuarterMeaning ops →
+    AspisR1.SAG_QuarterFree.Arithmetic ops v p d → AspisR1.SAF_ReducedLaws.Arithmetic ops v p d

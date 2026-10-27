@@ -1,0 +1,2204 @@
+FIw_ScalarSuffix.lean:135:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+pub : Public
+o : Openings
+s : Selectors
+packed out : Std.Array NQ 24#usize
+hz : ∀ x ∈ ↑o.z, Canon x
+hh : ∀ x ∈ ↑s.high, Canon x
+hl : ∀ x ∈ ↑s.low, Canon x
+assetBound : ↑pub.asset_id < FIw_ScalarArithmetic.P
+amountBound : ↑(pub.withdrawal_amount.getD 0#u32) < FIw_ScalarArithmetic.P
+success :
+  (do
+      let q ← o.z.index_usize 1#usize
+      let q1 ← pool_v1.pair_forest_semantic_terminal.lift_m31 pub.asset_id
+      let asset_difference ← q.sub q1
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q : field.QM31
+h_q : o.z.index_usize 1#usize = ok q
+r1 :
+  (do
+      let q1 ← pool_v1.pair_forest_semantic_terminal.lift_m31 pub.asset_id
+      let asset_difference ← q.sub q1
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+diff : field.QM31
+r3 :
+  (do
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i : UScalar UScalarTy.Usize
+h_i : 2#usize * 16#usize = ok i
+r4 :
+  (do
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i1 : UScalar UScalarTy.Usize
+h_i1 : i + 12#usize = ok i1
+r5 :
+  (do
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q2 : field.QM31
+h_q2 : pool_v1.pair_forest_copy_terminal.Selectors.row s i1 = ok q2
+r6 :
+  (do
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+input : field.QM31
+h_input : q2.mul diff = ok input
+r7 :
+  (do
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i2 : UScalar UScalarTy.Usize
+h_i2 : 31#usize * 16#usize = ok i2
+r8 :
+  (do
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i3 : UScalar UScalarTy.Usize
+h_i3 : i2 + 12#usize = ok i3
+r9 :
+  (do
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q3 : field.QM31
+h_q3 : pool_v1.pair_forest_copy_terminal.Selectors.row s i3 = ok q3
+r10 :
+  (do
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+output : field.QM31
+h_output : q3.mul diff = ok output
+r11 :
+  (do
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i4 : UScalar UScalarTy.Usize
+h_i4 : 28#usize * 16#usize = ok i4
+r12 :
+  (do
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i5 : UScalar UScalarTy.Usize
+h_i5 : i4 + 12#usize = ok i5
+r13 :
+  (do
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q4 : field.QM31
+h_q4 : pool_v1.pair_forest_copy_terminal.Selectors.row s i5 = ok q4
+r14 :
+  (do
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+transfer : field.QM31
+h_transfer : q4.mul diff = ok transfer
+r15 :
+  (do
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+amount : U32
+h_amount : lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) = ok amount
+r16 :
+  (do
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i6 : UScalar UScalarTy.Usize
+h_i6 : 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK = ok i6
+r17 :
+  (do
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i7 : UScalar UScalarTy.Usize
+h_i7 : i6 + 2#usize = ok i7
+r18 :
+  (do
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q5 : field.QM31
+h_q5 : pool_v1.pair_forest_copy_terminal.Selectors.row s i7 = ok q5
+r19 :
+  (do
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q6 : field.QM31
+h_q6 : o.z.index_usize 10#usize = ok q6
+r20 :
+  (do
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q8 : field.QM31
+r22 :
+  (do
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+withdrawal : field.QM31
+h_withdrawal : q5.mul q8 = ok withdrawal
+r23 :
+  (have b := core.option.Option.is_some pub.withdrawal_amount;
+    do
+    let scalars ← pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal
+    pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+scalars : Std.Array field.QM31 2#usize
+h_scalars :
+  pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant (core.option.Option.is_some pub.withdrawal_amount)
+      input output transfer withdrawal =
+    ok scalars
+r24 : pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars = ok out
+h_q1 : ok (FIw_ScalarArithmetic.lifted pub.asset_id) = ok (FIw_ScalarArithmetic.lifted pub.asset_id)
+r2 :
+  (do
+      let asset_difference ← q.sub (FIw_ScalarArithmetic.lifted pub.asset_id)
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+h_diff : q.sub (FIw_ScalarArithmetic.lifted pub.asset_id) = ok diff
+amountSame : amount = pub.withdrawal_amount.getD 0#u32
+h_q7 :
+  ok (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) =
+    ok (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+r21 :
+  (do
+      let q8 ← q6.sub (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+h_q8 : q6.sub (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) = ok q8
+qcanon : Canon q
+amountCanon :
+  Canon (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) ∧
+    decode (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) = ↑↑(pub.withdrawal_amount.getD 0#u32)
+assetCanon :
+  Canon (FIw_ScalarArithmetic.lifted pub.asset_id) ∧ decode (FIw_ScalarArithmetic.lifted pub.asset_id) = ↑↑pub.asset_id
+d : Canon diff ∧ decode diff = decode q - decode (FIw_ScalarArithmetic.lifted pub.asset_id)
+rows2 : Canon q2 ∧ decode q2 = value s.high (↑i1 / 16) * value s.low (↑i1 % 16)
+rows3 : Canon q3 ∧ decode q3 = value s.high (↑i3 / 16) * value s.low (↑i3 % 16)
+rows4 : Canon q4 ∧ decode q4 = value s.high (↑i5 / 16) * value s.low (↑i5 % 16)
+rows5 : Canon q5 ∧ decode q5 = value s.high (↑i7 / 16) * value s.low (↑i7 % 16)
+a : Canon input ∧ decode input = decode q2 * decode diff
+b : Canon output ∧ decode output = decode q3 * decode diff
+c : Canon transfer ∧ decode transfer = decode q4 * decode diff
+q6canon : Canon q6
+wd : Canon q8 ∧ decode q8 = decode q6 - decode (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+w : Canon withdrawal ∧ decode withdrawal = decode q5 * decode q8
+sc :
+  (∀ x ∈ ↑scalars, Canon x) ∧
+    List.map decode ↑scalars =
+      FIw_CoefficientMeaning.scalar pub.variant pub.withdrawal_amount.isSome (decode input) (decode output)
+        (decode transfer) (decode withdrawal)
+⊢ ↑i1 = ↑44#usize
+FIw_ScalarSuffix.lean:138:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+pub : Public
+o : Openings
+s : Selectors
+packed out : Std.Array NQ 24#usize
+hz : ∀ x ∈ ↑o.z, Canon x
+hh : ∀ x ∈ ↑s.high, Canon x
+hl : ∀ x ∈ ↑s.low, Canon x
+assetBound : ↑pub.asset_id < FIw_ScalarArithmetic.P
+amountBound : ↑(pub.withdrawal_amount.getD 0#u32) < FIw_ScalarArithmetic.P
+success :
+  (do
+      let q ← o.z.index_usize 1#usize
+      let q1 ← pool_v1.pair_forest_semantic_terminal.lift_m31 pub.asset_id
+      let asset_difference ← q.sub q1
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q : field.QM31
+h_q : o.z.index_usize 1#usize = ok q
+r1 :
+  (do
+      let q1 ← pool_v1.pair_forest_semantic_terminal.lift_m31 pub.asset_id
+      let asset_difference ← q.sub q1
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+diff : field.QM31
+r3 :
+  (do
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i : UScalar UScalarTy.Usize
+h_i : 2#usize * 16#usize = ok i
+r4 :
+  (do
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i1 : UScalar UScalarTy.Usize
+h_i1 : i + 12#usize = ok i1
+r5 :
+  (do
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q2 : field.QM31
+h_q2 : pool_v1.pair_forest_copy_terminal.Selectors.row s i1 = ok q2
+r6 :
+  (do
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+input : field.QM31
+h_input : q2.mul diff = ok input
+r7 :
+  (do
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i2 : UScalar UScalarTy.Usize
+h_i2 : 31#usize * 16#usize = ok i2
+r8 :
+  (do
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i3 : UScalar UScalarTy.Usize
+h_i3 : i2 + 12#usize = ok i3
+r9 :
+  (do
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q3 : field.QM31
+h_q3 : pool_v1.pair_forest_copy_terminal.Selectors.row s i3 = ok q3
+r10 :
+  (do
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+output : field.QM31
+h_output : q3.mul diff = ok output
+r11 :
+  (do
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i4 : UScalar UScalarTy.Usize
+h_i4 : 28#usize * 16#usize = ok i4
+r12 :
+  (do
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i5 : UScalar UScalarTy.Usize
+h_i5 : i4 + 12#usize = ok i5
+r13 :
+  (do
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q4 : field.QM31
+h_q4 : pool_v1.pair_forest_copy_terminal.Selectors.row s i5 = ok q4
+r14 :
+  (do
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+transfer : field.QM31
+h_transfer : q4.mul diff = ok transfer
+r15 :
+  (do
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+amount : U32
+h_amount : lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) = ok amount
+r16 :
+  (do
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i6 : UScalar UScalarTy.Usize
+h_i6 : 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK = ok i6
+r17 :
+  (do
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i7 : UScalar UScalarTy.Usize
+h_i7 : i6 + 2#usize = ok i7
+r18 :
+  (do
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q5 : field.QM31
+h_q5 : pool_v1.pair_forest_copy_terminal.Selectors.row s i7 = ok q5
+r19 :
+  (do
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q6 : field.QM31
+h_q6 : o.z.index_usize 10#usize = ok q6
+r20 :
+  (do
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q8 : field.QM31
+r22 :
+  (do
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+withdrawal : field.QM31
+h_withdrawal : q5.mul q8 = ok withdrawal
+r23 :
+  (have b := core.option.Option.is_some pub.withdrawal_amount;
+    do
+    let scalars ← pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal
+    pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+scalars : Std.Array field.QM31 2#usize
+h_scalars :
+  pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant (core.option.Option.is_some pub.withdrawal_amount)
+      input output transfer withdrawal =
+    ok scalars
+r24 : pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars = ok out
+h_q1 : ok (FIw_ScalarArithmetic.lifted pub.asset_id) = ok (FIw_ScalarArithmetic.lifted pub.asset_id)
+r2 :
+  (do
+      let asset_difference ← q.sub (FIw_ScalarArithmetic.lifted pub.asset_id)
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+h_diff : q.sub (FIw_ScalarArithmetic.lifted pub.asset_id) = ok diff
+amountSame : amount = pub.withdrawal_amount.getD 0#u32
+h_q7 :
+  ok (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) =
+    ok (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+r21 :
+  (do
+      let q8 ← q6.sub (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+h_q8 : q6.sub (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) = ok q8
+qcanon : Canon q
+amountCanon :
+  Canon (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) ∧
+    decode (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) = ↑↑(pub.withdrawal_amount.getD 0#u32)
+assetCanon :
+  Canon (FIw_ScalarArithmetic.lifted pub.asset_id) ∧ decode (FIw_ScalarArithmetic.lifted pub.asset_id) = ↑↑pub.asset_id
+d : Canon diff ∧ decode diff = decode q - decode (FIw_ScalarArithmetic.lifted pub.asset_id)
+rows2 : Canon q2 ∧ decode q2 = value s.high (↑i1 / 16) * value s.low (↑i1 % 16)
+rows3 : Canon q3 ∧ decode q3 = value s.high (↑i3 / 16) * value s.low (↑i3 % 16)
+rows4 : Canon q4 ∧ decode q4 = value s.high (↑i5 / 16) * value s.low (↑i5 % 16)
+rows5 : Canon q5 ∧ decode q5 = value s.high (↑i7 / 16) * value s.low (↑i7 % 16)
+a : Canon input ∧ decode input = decode q2 * decode diff
+b : Canon output ∧ decode output = decode q3 * decode diff
+c : Canon transfer ∧ decode transfer = decode q4 * decode diff
+q6canon : Canon q6
+wd : Canon q8 ∧ decode q8 = decode q6 - decode (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+w : Canon withdrawal ∧ decode withdrawal = decode q5 * decode q8
+sc :
+  (∀ x ∈ ↑scalars, Canon x) ∧
+    List.map decode ↑scalars =
+      FIw_CoefficientMeaning.scalar pub.variant pub.withdrawal_amount.isSome (decode input) (decode output)
+        (decode transfer) (decode withdrawal)
+vi1 : i1 = 44#usize
+⊢ ↑i3 = ↑508#usize
+FIw_ScalarSuffix.lean:141:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+pub : Public
+o : Openings
+s : Selectors
+packed out : Std.Array NQ 24#usize
+hz : ∀ x ∈ ↑o.z, Canon x
+hh : ∀ x ∈ ↑s.high, Canon x
+hl : ∀ x ∈ ↑s.low, Canon x
+assetBound : ↑pub.asset_id < FIw_ScalarArithmetic.P
+amountBound : ↑(pub.withdrawal_amount.getD 0#u32) < FIw_ScalarArithmetic.P
+success :
+  (do
+      let q ← o.z.index_usize 1#usize
+      let q1 ← pool_v1.pair_forest_semantic_terminal.lift_m31 pub.asset_id
+      let asset_difference ← q.sub q1
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q : field.QM31
+h_q : o.z.index_usize 1#usize = ok q
+r1 :
+  (do
+      let q1 ← pool_v1.pair_forest_semantic_terminal.lift_m31 pub.asset_id
+      let asset_difference ← q.sub q1
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+diff : field.QM31
+r3 :
+  (do
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i : UScalar UScalarTy.Usize
+h_i : 2#usize * 16#usize = ok i
+r4 :
+  (do
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i1 : UScalar UScalarTy.Usize
+h_i1 : i + 12#usize = ok i1
+r5 :
+  (do
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q2 : field.QM31
+h_q2 : pool_v1.pair_forest_copy_terminal.Selectors.row s i1 = ok q2
+r6 :
+  (do
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+input : field.QM31
+h_input : q2.mul diff = ok input
+r7 :
+  (do
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i2 : UScalar UScalarTy.Usize
+h_i2 : 31#usize * 16#usize = ok i2
+r8 :
+  (do
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i3 : UScalar UScalarTy.Usize
+h_i3 : i2 + 12#usize = ok i3
+r9 :
+  (do
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q3 : field.QM31
+h_q3 : pool_v1.pair_forest_copy_terminal.Selectors.row s i3 = ok q3
+r10 :
+  (do
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+output : field.QM31
+h_output : q3.mul diff = ok output
+r11 :
+  (do
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i4 : UScalar UScalarTy.Usize
+h_i4 : 28#usize * 16#usize = ok i4
+r12 :
+  (do
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i5 : UScalar UScalarTy.Usize
+h_i5 : i4 + 12#usize = ok i5
+r13 :
+  (do
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q4 : field.QM31
+h_q4 : pool_v1.pair_forest_copy_terminal.Selectors.row s i5 = ok q4
+r14 :
+  (do
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+transfer : field.QM31
+h_transfer : q4.mul diff = ok transfer
+r15 :
+  (do
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+amount : U32
+h_amount : lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) = ok amount
+r16 :
+  (do
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i6 : UScalar UScalarTy.Usize
+h_i6 : 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK = ok i6
+r17 :
+  (do
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i7 : UScalar UScalarTy.Usize
+h_i7 : i6 + 2#usize = ok i7
+r18 :
+  (do
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q5 : field.QM31
+h_q5 : pool_v1.pair_forest_copy_terminal.Selectors.row s i7 = ok q5
+r19 :
+  (do
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q6 : field.QM31
+h_q6 : o.z.index_usize 10#usize = ok q6
+r20 :
+  (do
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q8 : field.QM31
+r22 :
+  (do
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+withdrawal : field.QM31
+h_withdrawal : q5.mul q8 = ok withdrawal
+r23 :
+  (have b := core.option.Option.is_some pub.withdrawal_amount;
+    do
+    let scalars ← pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal
+    pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+scalars : Std.Array field.QM31 2#usize
+h_scalars :
+  pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant (core.option.Option.is_some pub.withdrawal_amount)
+      input output transfer withdrawal =
+    ok scalars
+r24 : pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars = ok out
+h_q1 : ok (FIw_ScalarArithmetic.lifted pub.asset_id) = ok (FIw_ScalarArithmetic.lifted pub.asset_id)
+r2 :
+  (do
+      let asset_difference ← q.sub (FIw_ScalarArithmetic.lifted pub.asset_id)
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+h_diff : q.sub (FIw_ScalarArithmetic.lifted pub.asset_id) = ok diff
+amountSame : amount = pub.withdrawal_amount.getD 0#u32
+h_q7 :
+  ok (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) =
+    ok (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+r21 :
+  (do
+      let q8 ← q6.sub (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+h_q8 : q6.sub (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) = ok q8
+qcanon : Canon q
+amountCanon :
+  Canon (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) ∧
+    decode (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) = ↑↑(pub.withdrawal_amount.getD 0#u32)
+assetCanon :
+  Canon (FIw_ScalarArithmetic.lifted pub.asset_id) ∧ decode (FIw_ScalarArithmetic.lifted pub.asset_id) = ↑↑pub.asset_id
+d : Canon diff ∧ decode diff = decode q - decode (FIw_ScalarArithmetic.lifted pub.asset_id)
+rows2 : Canon q2 ∧ decode q2 = value s.high (↑i1 / 16) * value s.low (↑i1 % 16)
+rows3 : Canon q3 ∧ decode q3 = value s.high (↑i3 / 16) * value s.low (↑i3 % 16)
+rows4 : Canon q4 ∧ decode q4 = value s.high (↑i5 / 16) * value s.low (↑i5 % 16)
+rows5 : Canon q5 ∧ decode q5 = value s.high (↑i7 / 16) * value s.low (↑i7 % 16)
+a : Canon input ∧ decode input = decode q2 * decode diff
+b : Canon output ∧ decode output = decode q3 * decode diff
+c : Canon transfer ∧ decode transfer = decode q4 * decode diff
+q6canon : Canon q6
+wd : Canon q8 ∧ decode q8 = decode q6 - decode (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+w : Canon withdrawal ∧ decode withdrawal = decode q5 * decode q8
+sc :
+  (∀ x ∈ ↑scalars, Canon x) ∧
+    List.map decode ↑scalars =
+      FIw_CoefficientMeaning.scalar pub.variant pub.withdrawal_amount.isSome (decode input) (decode output)
+        (decode transfer) (decode withdrawal)
+vi1 : i1 = 44#usize
+vi3 : i3 = 508#usize
+⊢ ↑i5 = ↑460#usize
+FIw_ScalarSuffix.lean:145:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+pub : Public
+o : Openings
+s : Selectors
+packed out : Std.Array NQ 24#usize
+hz : ∀ x ∈ ↑o.z, Canon x
+hh : ∀ x ∈ ↑s.high, Canon x
+hl : ∀ x ∈ ↑s.low, Canon x
+assetBound : ↑pub.asset_id < FIw_ScalarArithmetic.P
+amountBound : ↑(pub.withdrawal_amount.getD 0#u32) < FIw_ScalarArithmetic.P
+success :
+  (do
+      let q ← o.z.index_usize 1#usize
+      let q1 ← pool_v1.pair_forest_semantic_terminal.lift_m31 pub.asset_id
+      let asset_difference ← q.sub q1
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q : field.QM31
+h_q : o.z.index_usize 1#usize = ok q
+r1 :
+  (do
+      let q1 ← pool_v1.pair_forest_semantic_terminal.lift_m31 pub.asset_id
+      let asset_difference ← q.sub q1
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+diff : field.QM31
+r3 :
+  (do
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i : UScalar UScalarTy.Usize
+h_i : 2#usize * 16#usize = ok i
+r4 :
+  (do
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i1 : UScalar UScalarTy.Usize
+h_i1 : i + 12#usize = ok i1
+r5 :
+  (do
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q2 : field.QM31
+h_q2 : pool_v1.pair_forest_copy_terminal.Selectors.row s i1 = ok q2
+r6 :
+  (do
+      let input_asset ← q2.mul diff
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+input : field.QM31
+h_input : q2.mul diff = ok input
+r7 :
+  (do
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i2 : UScalar UScalarTy.Usize
+h_i2 : 31#usize * 16#usize = ok i2
+r8 :
+  (do
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i3 : UScalar UScalarTy.Usize
+h_i3 : i2 + 12#usize = ok i3
+r9 :
+  (do
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q3 : field.QM31
+h_q3 : pool_v1.pair_forest_copy_terminal.Selectors.row s i3 = ok q3
+r10 :
+  (do
+      let output_scalar ← q3.mul diff
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+output : field.QM31
+h_output : q3.mul diff = ok output
+r11 :
+  (do
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i4 : UScalar UScalarTy.Usize
+h_i4 : 28#usize * 16#usize = ok i4
+r12 :
+  (do
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i5 : UScalar UScalarTy.Usize
+h_i5 : i4 + 12#usize = ok i5
+r13 :
+  (do
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q4 : field.QM31
+h_q4 : pool_v1.pair_forest_copy_terminal.Selectors.row s i5 = ok q4
+r14 :
+  (do
+      let private_transfer_term ← q4.mul diff
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+transfer : field.QM31
+h_transfer : q4.mul diff = ok transfer
+r15 :
+  (do
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+amount : U32
+h_amount : lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) = ok amount
+r16 :
+  (do
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i6 : UScalar UScalarTy.Usize
+h_i6 : 16#usize * 63#usize = ok i6
+r17 :
+  (do
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+i7 : UScalar UScalarTy.Usize
+h_i7 : i6 + 2#usize = ok i7
+r18 :
+  (do
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q5 : field.QM31
+h_q5 : pool_v1.pair_forest_copy_terminal.Selectors.row s i7 = ok q5
+r19 :
+  (do
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q6 : field.QM31
+h_q6 : o.z.index_usize 10#usize = ok q6
+r20 :
+  (do
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 amount
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+q8 : field.QM31
+r22 :
+  (do
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+withdrawal : field.QM31
+h_withdrawal : q5.mul q8 = ok withdrawal
+r23 :
+  (have b := core.option.Option.is_some pub.withdrawal_amount;
+    do
+    let scalars ← pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal
+    pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+scalars : Std.Array field.QM31 2#usize
+h_scalars :
+  pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant (core.option.Option.is_some pub.withdrawal_amount)
+      input output transfer withdrawal =
+    ok scalars
+r24 : pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars = ok out
+h_q1 : ok (FIw_ScalarArithmetic.lifted pub.asset_id) = ok (FIw_ScalarArithmetic.lifted pub.asset_id)
+r2 :
+  (do
+      let asset_difference ← q.sub (FIw_ScalarArithmetic.lifted pub.asset_id)
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i4 ← 28#usize * 16#usize
+      let i5 ← i4 + 12#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← pool_v1.pair_forest_semantic_terminal.lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+            withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+h_diff : q.sub (FIw_ScalarArithmetic.lifted pub.asset_id) = ok diff
+amountSame : amount = pub.withdrawal_amount.getD 0#u32
+h_q7 :
+  ok (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) =
+    ok (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+r21 :
+  (do
+      let q8 ← q6.sub (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ←
+        pool_v1.pair_forest_semantic_terminal.scalar_lanes pub.variant b input output transfer withdrawal_term
+      pool_v1.pair_forest_semantic_terminal.add_preweighted packed 92#usize scalars) =
+    ok out
+h_q8 : q6.sub (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) = ok q8
+qcanon : Canon q
+amountCanon :
+  Canon (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) ∧
+    decode (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32)) = ↑↑(pub.withdrawal_amount.getD 0#u32)
+assetCanon :
+  Canon (FIw_ScalarArithmetic.lifted pub.asset_id) ∧ decode (FIw_ScalarArithmetic.lifted pub.asset_id) = ↑↑pub.asset_id
+d : Canon diff ∧ decode diff = decode q - decode (FIw_ScalarArithmetic.lifted pub.asset_id)
+rows2 : Canon q2 ∧ decode q2 = value s.high (↑i1 / 16) * value s.low (↑i1 % 16)
+rows3 : Canon q3 ∧ decode q3 = value s.high (↑i3 / 16) * value s.low (↑i3 % 16)
+rows4 : Canon q4 ∧ decode q4 = value s.high (↑i5 / 16) * value s.low (↑i5 % 16)
+rows5 : Canon q5 ∧ decode q5 = value s.high (↑i7 / 16) * value s.low (↑i7 % 16)
+a : Canon input ∧ decode input = decode q2 * decode diff
+b : Canon output ∧ decode output = decode q3 * decode diff
+c : Canon transfer ∧ decode transfer = decode q4 * decode diff
+q6canon : Canon q6
+wd : Canon q8 ∧ decode q8 = decode q6 - decode (FIw_ScalarArithmetic.lifted (pub.withdrawal_amount.getD 0#u32))
+w : Canon withdrawal ∧ decode withdrawal = decode q5 * decode q8
+sc :
+  (∀ x ∈ ↑scalars, Canon x) ∧
+    List.map decode ↑scalars =
+      FIw_CoefficientMeaning.scalar pub.variant pub.withdrawal_amount.isSome (decode input) (decode output)
+        (decode transfer) (decode withdrawal)
+vi1 : i1 = 44#usize
+vi3 : i3 = 508#usize
+vi5 : i5 = 460#usize
+⊢ ↑i7 = ↑1010#usize
+'AspisR1.FIw_ScalarSuffix.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIw_ScalarSuffix.value_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

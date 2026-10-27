@@ -1,0 +1,52 @@
+@AspisR1.CPH_Protection.Facts : {Tx A : Type} →
+  AspisR1.CPG_Projection.Observations Tx A →
+    Tx → Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 → AspisR1.S2W_ExtractionBoundary.Program → Prop
+def AspisR1.CPH_Protection.Facts : {Tx A : Type} →
+  AspisR1.CPG_Projection.Observations Tx A →
+    Tx → Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 → AspisR1.S2W_ExtractionBoundary.Program → Prop :=
+fun {Tx A} p t saved id =>
+  have bank :=
+    AspisR1.CPR_SourceBank.afterCopy (AspisR1.CPG_Projection.cached (p.bank t)) ((p.layout t).handles 2).1 saved;
+  have key := ((p.layout t).handles 2).1;
+  (bank.cells key).owner = id ∧
+    AspisR1.Hist_Store.Initialized (bank.cells key).data ∧
+      0 < bank.lamports key ∧
+        (∀ event ∈ p.physicalEvents t, AspisR1.S2X.Preserves key event) ∧
+          (p.parentTentative t).cells key = bank.cells key ∧ bank.lamports key ≤ (p.parentTentative t).lamports key
+'AspisR1.CPH_Protection.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.TxS_Encoding.Facts : {CoreError H : Type} →
+  {installed : AspisR1CurrentCaller.Ops} →
+    {reserved : Bool} →
+      {query : AspisR1.Port3_NativeQueryBody.Ops} →
+        {geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError} →
+          {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} →
+            {hash : H} →
+              {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public} →
+                {pub proof : Aeneas.Std.Slice Aeneas.Std.U8} →
+                  {split : Aeneas.Std.Usize} →
+                    {saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8} →
+                      AspisR1.Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved →
+                        (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop
+def AspisR1.TxS_Encoding.Facts : {CoreError H : Type} →
+  {installed : AspisR1CurrentCaller.Ops} →
+    {reserved : Bool} →
+      {query : AspisR1.Port3_NativeQueryBody.Ops} →
+        {geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError} →
+          {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} →
+            {hash : H} →
+              {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public} →
+                {pub proof : Aeneas.Std.Slice Aeneas.Std.U8} →
+                  {split : Aeneas.Std.Usize} →
+                    {saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8} →
+                      AspisR1.Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved →
+                        (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun {CoreError H} {installed} {reserved} {query} {geo} {D} {hash} {semantic} {pub proof} {split} {saved} run H_1 =>
+  ∃ pm,
+    saved =
+      AspisR1.Tx2N_Reader.writer H_1 (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)
+        (AspisR1.MultiproofConeCanonical.bytesOf ↑pub) pm
+        (AspisR1.CheckpointBytes5Output.accumulator
+          (AspisR1.Tx1Q_Carriers.accumulator
+            (have __src := run.out;
+            { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power, next := __src.next })))
+'AspisR1.TxS_Encoding.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]

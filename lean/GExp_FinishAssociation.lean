@@ -1,0 +1,31 @@
+import GExp_CircleValidatedAssociation
+set_option autoImplicit false
+namespace AspisR1PublicPreparation.S1SemanticCode
+open Aeneas Aeneas.Std Result
+open PreparedHashCode
+open AspisR1.GExp_Association
+attribute [local irreducible] PreparedHashCode.effects sampleBlock semanticValidated begin13 begin9 begin5 begin newTranscript publicTranscript roundStep rounds circleValidated
+
+theorem finish_associated (R : RoundModel.Boundaries) (B : FinishModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
+    (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (prefix1 : r1_wire.Prefix)
+    (transcript : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
+    (obs : Option (verifier.Phase → Result Unit)) (hashv : AspisR1.SdkC_Source.Parts → Result AspisR1.SdkC_Source.Digest)
+    (law : ∀ h parts, D.digest h parts = hashv parts) :
+    AspisR1.SdkD_PrepareLower.Associated hashv (finish R B D pub prefix1 transcript challenges obs) := by
+  unfold finish
+  repeat' first
+    | (solve | apply pure_associated)
+    | (solve | apply lift_associated)
+    | (solve | apply rounds_associated; exact law)
+    | (association_then_for rounds
+       <;> first | (solve | apply rounds_associated; exact law) | intro x)
+    | (solve | apply circleValidated_associated; exact law)
+    | (association_then_for circleValidated
+       <;> first | (solve | apply circleValidated_associated; exact law) | intro x)
+    | (apply lift_bind_associated; intro x)
+    | (association_then
+       <;> first | (solve | apply digest_associated; exact law _ _) | intro x)
+    | split
+
+#print axioms finish_associated
+end AspisR1PublicPreparation.S1SemanticCode

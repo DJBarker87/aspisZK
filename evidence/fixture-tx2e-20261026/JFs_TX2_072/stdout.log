@@ -1,0 +1,40 @@
+R17CurrentDomainCanonical.arithmetic_cm_mul_success_canonical
+R17CurrentDomainCanonical.cm_operations_success_canonical
+R17CurrentDomainCanonical.line_node_success_canonical
+R17CurrentDomainCanonical.sub_success_canonical
+R17CurrentDomainCanonical.fibre_point_success_canonical
+R17CurrentDomainCanonical.CanonicalM
+R17CurrentDomainCanonical.double_success_canonical
+R17CurrentDomainSource.successful_line_node_stored
+R17CurrentDomainCanonical.mul_success_canonical
+R17CurrentDomainCanonical.CanonicalCM
+R17CurrentDomainCanonical.ArithmeticCM
+R17CurrentDomainSource.successful_fibre_point_stored
+def AspisR1QueryGeometryActual.fast_domain.fibre_point : AspisR1QueryGeometryActual.CM31Ops →
+  AspisR1QueryGeometryActual.domain.FibreIndex →
+    Aeneas.Std.Result (AspisR1QueryGeometryActual.domain.Point AspisR1QueryGeometryActual.field.M31) :=
+fun ops u => do
+  let index ← u.get
+  let i ← Aeneas.Std.lift (index &&& 511#usize)
+  let p ← AspisR1QueryGeometryActual.fast_domain.TABLE_A.index_usize i
+  let left ← AspisR1QueryGeometryActual.fast_domain.table_value ops p
+  let i1 ← index >>> 9#i32
+  let p1 ← AspisR1QueryGeometryActual.fast_domain.TABLE_B.index_usize i1
+  let right ← AspisR1QueryGeometryActual.fast_domain.table_value ops p1
+  let point ← ops.mul left right
+  Aeneas.Std.Result.ok { x := point.a, y := point.b }
+def R17FibrePointLineNodeActual.line_node : AspisR1QueryGeometryActual.CM31Ops →
+  R17FibrePointLineNodeActual.M31Ops →
+    AspisR1QueryGeometryActual.domain.FibreIndex → Aeneas.Std.Result AspisR1QueryGeometryActual.field.M31 :=
+fun cmops ops u => do
+  let p ← AspisR1QueryGeometryActual.fast_domain.fibre_point cmops u
+  let square ← ops.mul p.x p.x
+  let m ← ops.double square
+  ops.sub m 1#u32
+def R17CurrentCM31Semantics.operations : AspisR1QueryGeometryActual.CM31Ops :=
+{ new := fun a b => Aeneas.Std.Result.ok { a := a, b := b },
+  mul := fun a b => do
+    let z ←
+      AspisR1Qm31ArithmeticProbe.field.CM31.mul (R17CurrentCM31Semantics.toArithmetic a)
+          (R17CurrentCM31Semantics.toArithmetic b)
+    Aeneas.Std.Result.ok (R17CurrentCM31Semantics.fromArithmetic z) }

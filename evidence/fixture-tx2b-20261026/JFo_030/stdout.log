@@ -1,0 +1,76 @@
+JFo_Resume.lean:34:13: error(lean.unknownIdentifier): Unknown identifier `«_».take`
+JFo_Resume.lean:34:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+JFo_Resume.lean:22:66: error: unsolved goals
+case this
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+proofHash : D.digest hash (Array.make 1#usize [JFx_NativeBytes.proof] ⋯).to_slice = ok JFo_AuthBytes.proofHash
+publicHash : D.digest hash (Array.make 1#usize [JFx_NativeBytes.publicInput] ⋯).to_slice = ok JFo_AuthBytes.publicHash
+checksumHash :
+  D.digest hash
+      (Array.make 2#usize
+          [(Array.make 22#usize
+                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8,
+                  101#u8, 99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                ⋯).to_slice,
+            JFq_Range.segment 0 1736 ⋯]
+          ⋯).to_slice =
+    ok JFo_AuthBytes.checksum
+size : JFx_NativeBytes.checkpoint.len = 1768#usize
+proofRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.checkpoint
+      { start := 16#usize, «end» := 48#usize } =
+    ok (JFq_Range.segment (↑16#usize) (↑48#usize - ↑16#usize) ⋯)
+publicRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.checkpoint
+      { start := 48#usize, «end» := 80#usize } =
+    ok (JFq_Range.segment (↑48#usize) (↑80#usize - ↑48#usize) ⋯)
+neProof : CheckpointBytes4Ops.ne core.cmp.PartialEqU8 (JFq_Range.segment 16 32 ⋯) JFo_AuthBytes.proofHash = ok false
+nePublic : CheckpointBytes4Ops.ne core.cmp.PartialEqU8 (JFq_Range.segment 48 32 ⋯) JFo_AuthBytes.publicHash = ok false
+suffix :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) JFx_NativeBytes.checkpoint
+      { start := 1736#usize } =
+    ok (JFq_Range.segment 1736 32 ⋯)
+⊢ ?m.235
+
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+proofHash : D.digest hash (Array.make 1#usize [JFx_NativeBytes.proof] ⋯).to_slice = ok JFo_AuthBytes.proofHash
+publicHash : D.digest hash (Array.make 1#usize [JFx_NativeBytes.publicInput] ⋯).to_slice = ok JFo_AuthBytes.publicHash
+checksumHash :
+  D.digest hash
+      (Array.make 2#usize
+          [(Array.make 22#usize
+                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8,
+                  101#u8, 99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                ⋯).to_slice,
+            JFq_Range.segment 0 1736 ⋯]
+          ⋯).to_slice =
+    ok JFo_AuthBytes.checksum
+size : JFx_NativeBytes.checkpoint.len = 1768#usize
+proofRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.checkpoint
+      { start := 16#usize, «end» := 48#usize } =
+    ok (JFq_Range.segment (↑16#usize) (↑48#usize - ↑16#usize) ⋯)
+publicRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.checkpoint
+      { start := 48#usize, «end» := 80#usize } =
+    ok (JFq_Range.segment (↑48#usize) (↑80#usize - ↑48#usize) ⋯)
+neProof : CheckpointBytes4Ops.ne core.cmp.PartialEqU8 (JFq_Range.segment 16 32 ⋯) JFo_AuthBytes.proofHash = ok false
+nePublic : CheckpointBytes4Ops.ne core.cmp.PartialEqU8 (JFq_Range.segment 48 32 ⋯) JFo_AuthBytes.publicHash = ok false
+suffix :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) JFx_NativeBytes.checkpoint
+      { start := 1736#usize } =
+    ok (JFq_Range.segment 1736 32 ⋯)
+this : ?m.235
+⊢ T2Nat_ResumePrefix.body (CheckpointBytes4Ops.ops true) D JFx_NativeBytes.checkpoint JFx_NativeBytes.proof
+      JFx_NativeBytes.publicInput transport.Variant.S2 hash
+      (Port4A_NativeReader.tail (CheckpointBytes4Ops.ops true) JFx_NativeBytes.checkpoint transport.Variant.S2) =
+    ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator))
+JFo_Resume.lean:37:13: error: unexpected token ':='; expected ':'
+JFo_Resume.lean:47:76: error: unexpected token ','; expected ':'
+'AspisR1.JFo_Resume.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

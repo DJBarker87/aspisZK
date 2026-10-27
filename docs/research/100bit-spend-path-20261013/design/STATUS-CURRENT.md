@@ -1,3 +1,32 @@
+# Current status: soundness and privacy — 25 October 2026
+
+**Both deployed targets remain NOT ESTABLISHED.** The authoritative premise,
+trust, ownership, candidate-adoption and release-gate inventory is now the
+[release ledger](../../../../design/RELEASE-LEDGER-20261025.md).
+
+The preferred soundness route is the conditional source-event endpoint
+`Port6AUTH_Headline.final_soundness`. Same-execution child/native instances,
+terminal Checks/no-hit, prefix containment, all-outcome source 1161 accounting,
+StoredCarrierBinding and source/artifact joins remain open. The real privacy
+endpoint `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` retains its
+real-prover refinement premise and E1/E2, L1/L2/L3 and selected client obligations.
+Prover rewrite, CT v2 and safe Claims candidates remain unadopted.
+
+Frozen ELF pins remain default `f8c0ec72…`, devnet `63ad3e9c…`, Pool `121f3e29…`.
+S10 completeness, final premise acceptance, coherent frozen-manifest replay and
+headline `#print axioms` audit remain release gates. Historical Formatter helper
+audit exceptions must remain explicitly outside the headline closure. Operational
+DATA setup and focused cached checks do not establish either security target.
+The 100-bit attack-work contract is unchanged; a per-attempt numeric bound does
+not by itself settle repeated-campaign work security.
+
+This ledger update used source/document reads and small Python checks only:
+no Lean, Kani, builds, infrastructure work, candidate adoption or key operations.
+All previous status entries are preserved below as historical evidence, with
+their original source/domain/receipt qualifications.
+
+---
+
 # Current status: 100-bit soundness and privacy (living page)
 
 ## Lead execution update — 2026-10-25, after actual374 and privacy v13

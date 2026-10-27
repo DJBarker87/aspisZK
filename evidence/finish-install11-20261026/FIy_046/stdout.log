@@ -1,0 +1,147 @@
+FIy_DigestLane.lean:53:12: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FIy_DigestLane.lean:55:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FIy_DigestLane.lean:70:12: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+FIy_DigestLane.lean:71:15: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+FIy_DigestLane.lean:76:2: error: unsolved goals
+case pos
+lane start : Usize
+output out : Std.Array NQ 8#usize
+selector : NQ
+opened : Std.Array NQ 16#usize
+expected : Std.Array U32 8#usize
+right : Bool
+hl : ↑lane < 8
+hb : ↑start + 8 ≤ 16
+ho : canonical output
+hs : Canon selector
+ha : canonical opened
+he : ∀ x ∈ ↑expected, ↑x < FIw_ScalarArithmetic.P
+success✝⁵ :
+  (do
+      let target ← expected.index_usize lane
+      let target1 ← FIy_DigestTarget.run lane target right
+      let old ← output.index_usize lane
+      let i ← start + lane
+      let cell ← opened.index_usize i
+      let updated ← FIy_DigestArithmetic.run old selector cell target1
+      output.update lane updated) =
+    ok out
+t : U32
+ht : expected.index_usize lane = ok t
+success✝⁴ :
+  (do
+      let target1 ← FIy_DigestTarget.run lane t right
+      let old ← output.index_usize lane
+      let i ← start + lane
+      let cell ← opened.index_usize i
+      let updated ← FIy_DigestArithmetic.run old selector cell target1
+      output.update lane updated) =
+    ok out
+t1 : U32
+ht1 : FIy_DigestTarget.run lane t right = ok t1
+success✝³ :
+  (do
+      let old ← output.index_usize lane
+      let i ← start + lane
+      let cell ← opened.index_usize i
+      let updated ← FIy_DigestArithmetic.run old selector cell t1
+      output.update lane updated) =
+    ok out
+old : NQ
+hold : output.index_usize lane = ok old
+success✝² :
+  (do
+      let i ← start + lane
+      let cell ← opened.index_usize i
+      let updated ← FIy_DigestArithmetic.run old selector cell t1
+      output.update lane updated) =
+    ok out
+i : UScalar UScalarTy.Usize
+hi : start + lane = ok i
+success✝¹ :
+  (do
+      let cell ← opened.index_usize i
+      let updated ← FIy_DigestArithmetic.run old selector cell t1
+      output.update lane updated) =
+    ok out
+cell : NQ
+hcell : opened.index_usize i = ok cell
+success✝ :
+  (do
+      let updated ← FIy_DigestArithmetic.run old selector cell t1
+      output.update lane updated) =
+    ok out
+updated : NQ
+hupdated : FIy_DigestArithmetic.run old selector cell t1 = ok updated
+success : output.update lane updated = ok out
+tmem : t ∈ ↑expected
+vt : ↑t1 < FIw_ScalarArithmetic.P ∧ ↑t1 = FIy_DigestTarget.value (↑lane) t right
+hcanon : ↑t1 < FIw_ScalarArithmetic.P
+hvalue : ↑t1 = FIy_DigestTarget.value (↑lane) t right
+cold : Canon old
+ccell : Canon cell
+vi : ↑i = ↑start + ↑lane
+vu : Canon updated ∧ decode updated = decode old + decode selector * (decode cell - ↑↑t1)
+up : canonical out ∧ decoded out = Function.update (decoded output) ⟨↑lane, hl⟩ (decode updated)
+targetRead : (↑expected)[↑lane]?.getD 0#u32 = t
+j : Fin ↑8#usize
+hj : ↑j = ↑lane
+eq : j = ⟨↑lane, hl⟩
+⊢ decoded output ⟨↑lane, hl⟩ +
+      decode selector * (FIv_NativeArray.value opened (↑start + ↑lane) - ↑(FIy_DigestTarget.value (↑lane) t right)) =
+    if True then
+      decoded output ⟨↑lane, hl⟩ +
+        decode selector * (FIv_NativeArray.value opened (↑start + ↑lane) - ↑(FIy_DigestTarget.value (↑lane) t right))
+    else decoded output ⟨↑lane, hl⟩
+FIy_DigestLane.lean:78:21: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [model,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIy_DigestLane.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,64 @@
+{"attempt": "JFv_TX2_074", "exit_status": 1, "wall_seconds": 2.928652793983929, "peak_rss_kib": "5513492", "swaps": "0", "print_axioms": ["'AspisR1.JFv_TX2_InnerMeaning.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_TX2_InnerMeaning.lean:63:27: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ok ?x ⦃ ?m.681 ⦄
+in the target expression
+  (let (o, iter1) := (none, next)
+    match o with
+    | none => ok (done s)
+    | some term => do
+      let i_1 ← (↑slot)#usize * 120#usize
+      let i1 ← term * 4#usize
+      let i2 ← i_1 + i1
+      let i3 ← i_1 + i1
+      let i4 ← i3 + 4#usize
+      let s_1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            (JFr_TX2_Windows.array (JFn_Values.position i)) { start := i2, «end» := i4 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s_1
+   
+...
+ft-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨5, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨5, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«5»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨5, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨5, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+JFv_TX2_InnerMeaning.lean:73:24: error: Tactic `rfl` failed: The left-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨6, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨6, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«6»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨6, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨6, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+JFv_TX2_InnerMeaning.lean:73:24: error: Tactic `rfl` failed: The left-hand side
+  ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨7, ⋯⟩))
+is not definitionally equal to the right-hand side
+  sum i slot ((fun i => i) ⟨7, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+
+case refine_2.refine_2.«7»
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+order : ↑iter.start ≤ ↑iter.end
+stop : ↑iter.end ≤ 26
+width : ↑iter.end ≤ ↑iter.start + 4
+⊢ ↑(cell (Array.repeat 8#usize 0#u64) ((fun i => i) ⟨7, ⋯⟩)) =
+    sum i slot ((fun i => i) ⟨7, ⋯⟩) (↑iter.start) (↑iter.start - ↑iter.start)
+'AspisR1.JFv_TX2_InnerMeaning.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7162716c53a641c8829cb40ed79fa33a.scope; invocation ID: 0ac5b785169d4a3882387d48323ac7b3

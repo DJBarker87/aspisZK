@@ -1,0 +1,56 @@
+FJg_GuardEquality.lean:15:2: error: 'change' tactic failed, pattern
+  (do
+      let b ← FIo_Native.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq q q
+      ok (decide ¬b = true)) =
+    ok false
+is not definitionally equal to target
+  FIo_Native.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.ne q q = ok false
+FJg_GuardEquality.lean:28:4: error: Type mismatch
+  ih
+has type
+  List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← FIo_Native.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.ne x y
+          ok (decide ¬b = true))
+      (xs.zip xs) =
+    ok true
+but is expected to have type
+  (do
+      let __do_lift ←
+        do
+          let b ←
+            do
+              let __do_lift ← FIo_Native.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq x x
+              ok !__do_lift
+          ok (decide ¬b = true)
+      if __do_lift = true then
+          List.allM
+            (fun x => do
+              let b ←
+                do
+                  let __do_lift ← FIo_Native.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq x.1 x.2
+                  ok !__do_lift
+              ok (decide ¬b = true))
+            (xs.zip xs)
+        else pure false) =
+    ok true
+FJg_GuardEquality.lean:27:49: warning: This simp argument is unused:
+  not_field
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵z̵i̵p̵_̵c̵o̵n̵s̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵a̵l̵l̵M̵_̵c̵o̵n̵s̵,̵n̵o̵t̵_̵f̵i̵e̵l̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲L̲i̲s̲t̲.̲z̲i̲p̲_̲c̲o̲n̲s̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲a̲l̲l̲M̲_̲c̲o̲n̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJg_GuardEquality.lean:27:59: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵z̵i̵p̵_̵c̵o̵n̵s̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵a̵l̵l̵M̵_̵c̵o̵n̵s̵,̵n̵o̵t̵_̵f̵i̵e̵l̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲L̲i̲s̲t̲.̲z̲i̲p̲_̲c̲o̲n̲s̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲a̲l̲l̲M̲_̲c̲o̲n̲s̲,̲ ̲n̲o̲t̲_̲f̲i̲e̲l̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJg_GuardEquality.field' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJg_GuardEquality.not_field' depends on axioms: [sorryAx]
+'AspisR1.FJg_GuardEquality.list' depends on axioms: [sorryAx]
+'AspisR1.FJg_GuardEquality.array' depends on axioms: [sorryAx]

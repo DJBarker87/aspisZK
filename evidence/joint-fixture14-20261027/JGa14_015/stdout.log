@@ -1,0 +1,60 @@
+JGa_ValueConservation.lean:35:33: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+packed : Std.Array field.QM31 24#usize
+o : state_only_poseidon.StateOnlyPoseidonOpenings
+s : pool_v1.pair_forest_copy_terminal.Selectors
+range : Std.Array field.QM31 33#usize
+hp : canonical packed
+hz : canonical o.z
+hb : canonical o.succ_z
+hh : canonical s.high
+hl : canonical s.low
+hr : canonical range
+packed1 : Std.Array field.QM31 24#usize
+_✝¹² : [> let packed1 ← add_preweighted packed 49#usize range <]
+packed1_post : canonical packed1
+i2 : Usize
+_✝¹¹ : [> let i2 ← 16#usize * 63#usize <]
+i2_post : ↑i2 = 16 * 63
+i3 : Usize
+_✝¹⁰ : [> let i3 ← i2 + 6#usize <]
+i3_post : ↑i3 = ↑i2 + 6
+conservation_selector : field.QM31
+_✝⁹ : [> let conservation_selector ← s.row i3 <]
+conservation_selector_post : FIv_NativeValue.Canon conservation_selector
+q15 : field.QM31
+_✝⁸ : [> let q15 ← o.z.index_usize 0#usize <]
+q15_post : FIv_NativeValue.Canon q15
+q16 : field.QM31
+_✝⁷ : [> let q16 ← o.z.index_usize 1#usize <]
+q16_post : FIv_NativeValue.Canon q16
+q17 : field.QM31
+_✝⁶ : [> let q17 ← q15.sub q16 <]
+q17_post : FIv_NativeValue.Canon q17
+q18 : field.QM31
+_✝⁵ : [> let q18 ← o.z.index_usize 2#usize <]
+q18_post : FIv_NativeValue.Canon q18
+q19 : field.QM31
+_✝⁴ : [> let q19 ← q17.sub q18 <]
+q19_post : FIv_NativeValue.Canon q19
+q20 : field.QM31
+_✝³ : [> let q20 ← conservation_selector.mul q19 <]
+q20_post : FIv_NativeValue.Canon q20
+q21 : field.QM31
+_✝² : [> let q21 ← o.succ_z.index_usize 0#usize <]
+q21_post : FIv_NativeValue.Canon q21
+q22 : field.QM31
+_✝¹ : [> let q22 ← o.succ_z.index_usize 1#usize <]
+q22_post : FIv_NativeValue.Canon q22
+q23 : field.QM31
+_✝ : [> let q23 ← q21.sub q22 <]
+q23_post : FIv_NativeValue.Canon q23
+q24 : field.QM31
+_ : [> let q24 ← conservation_selector.mul q23 <]
+q24_post : FIv_NativeValue.Canon q24
+⊢ canonical (Array.make 2#usize [q20, q24] ⋯)
+'AspisR1.JGa_ValueConservation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

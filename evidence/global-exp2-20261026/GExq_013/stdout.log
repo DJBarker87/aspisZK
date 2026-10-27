@@ -1,0 +1,19 @@
+GExq_FirstErasure.lean:33:78: error: Tactic `rfl` failed: The left-hand side
+  SdkC_BatchSource.code (SdkC_Source.dictionary hashv) () proof p.queries p.roots root 0#usize
+is not definitionally equal to the right-hand side
+  SdkC_BatchSource.code E hash proof p.queries p.roots root 0#usize
+
+Hash : Type
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+law : ∀ (parts : Slice (Slice U8)), D.digest hash parts = hashv parts
+proof : Slice U8
+p : verifier.Prepared
+root : Std.Array U8 32#usize
+E : AspisR1Stage2.aspis_core.digest.Digest32 Hash := { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest }
+⊢ SdkC_BatchSource.code (SdkC_Source.dictionary hashv) () proof p.queries p.roots root 0#usize =
+    SdkC_BatchSource.code E hash proof p.queries p.roots root 0#usize
+'AspisR1.GExq_FirstErasure.prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExq_FirstErasure.batch' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GExq_FirstErasure.writer' depends on axioms: [propext, Classical.choice, Quot.sound]

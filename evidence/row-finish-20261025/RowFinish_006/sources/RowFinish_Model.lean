@@ -1,0 +1,175 @@
+import RowFinish_Control
+import Port4D_ReturnedFinish
+import RowFinish_Finalization
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.RowFinish_Model
+open Aeneas Aeneas.Std Result AspisR1Stage2 AspisR1Stage2.Stage2Finish
+open scoped BigOperators
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft
+open OraclePortStoredDecisionDraftC4 OraclePortCheckpointResumeC5
+open RecordedBinaryExperimentBin (SourceInputs)
+open RowFinish_Control
+attribute [local instance] Classical.propDecidable
+attribute [local irreducible] QueryAccumulator.run QueryAccumulator.run22
+  QueryResidualBridge.values QueryResidualBridge.basis
+  OraclePortCheckpointStateC3.write OraclePortCheckpointStateC3.advance
+variable {W : Type}
+
+/-- Keep propositional reordering independent of the concrete field carrier. -/
+theorem reverse_three {A : Type} (x0 y0 x1 y1 x2 y2 : A) :
+    (x0 = y0 ∧ x1 = y1 ∧ x2 = y2) ↔ (y2 = x2 ∧ x1 = y1 ∧ x0 = y0) := by
+  constructor
+  · rintro ⟨h0,h1,h2⟩
+    exact ⟨h2.symm,h1,h0⟩
+  · rintro ⟨h2,h1,h0⟩
+    exact ⟨h0,h1,h2.symm⟩
+
+#print axioms reverse_three
+
+/-- State identification uses the same saved state and its twelve-step return;
+there is no independently chosen complete accumulator. -/
+theorem returned_state (i : SourceInputs) (q : Fin 22 → Fin 262144)
+    (saved a : verifier.Accumulator)
+    (saved_ten : CheckpointBytes5Output.accumulator saved =
+      (OraclePortCheckpointStateC3.write (OraclePortCheckpointResumeC5.model i.data
+        (SelectedChallengeMap.rhoOf i.rho) q)).accumulator)
+    (twelve : CheckpointBytes5Output.accumulator a =
+      OraclePortCheckpointStateC3.advance (OraclePortCheckpointResumeC5.model i.data
+        (SelectedChallengeMap.rhoOf i.rho) q) 12 (CheckpointBytes5Output.accumulator saved)) :
+    CheckpointBytes5Output.accumulator a = OraclePortFrozen2.completeState i q := by
+  rw [twelve,saved_ten]
+  let model := OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q
+  have eq := (OraclePortCheckpointStateC3.resumed_state model).2
+  have prep : (OraclePortCheckpointStateC3.write model).prepared = model := by
+    unfold OraclePortCheckpointStateC3.write
+    rfl
+  simp only [OraclePortCheckpointStateC3.resume,prep] at eq
+  simpa only [model,OraclePortCheckpointResumeC5.model,OraclePortCheckpointStateC3.fromData,
+    OraclePortFrozen2.completeState] using eq
+
+/-- Whole source acceptance value, including rejection, on the returned
+state. S3/S4/S5/S9 total primitive evaluations and canonicality are explicit
+owner hypotheses. Neither source finish success nor model acceptance is a
+premise. Pure local leaves do not claim a native runtime/ROM instance. -/
+theorem finish_value (ops : FinishOps W) (v : verifier.View) (p : verifier.Prepared)
+    (a saved : verifier.Accumulator) (alpha0 alpha1 : E)
+    (r0 : RoundValues ops v.round0 alpha0 p.claim)
+    (r1 : RoundValues ops v.round1 alpha1 r0.value)
+    (weights : W) (alphas : Slice E) (pair dot : E)
+    (s2 : p.variant = .S2)
+    (ha0 : Array.index_usize p.alpha 0#usize = ok alpha0)
+    (ha1 : Array.index_usize p.alpha 1#usize = ok alpha1)
+    (hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (.Ok weights))
+    (has : core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha { «end» := 2#usize } = ok alphas)
+    (hp : ops.pair weights alphas v.final_message p.kappa = ok (.Ok pair))
+    (hd : ops.dot v.final_message a.weights.deref = ok (.Ok dot))
+    (parsed : Parsed) (q : Fin 22 → Fin 262144)
+    (tr : RawCutTranscriptRun.ErasedPrefix) (i : SourceInputs)
+    (hi : input parsed q tr = some i) (hq : queries tr = some q)
+    (read : LiteralMatchingData.read (typedRows parsed q tr) = some i.data)
+    (decoded : LiteralQueryRead.decode i.queryBytes = some q)
+    (pairing_S3_S5_S9 : Port4D_Pairing.PairingLaws (Port3_FinishStage.release ops)
+      CheckpointBytes5Output.ofE v p i.data)
+    (matches_S4_S7 : ∀ j, MatchingSupport.match0 i.data (q j))
+    (semantic_S3_S9 : R3SemanticRemainingJoins.EquationEndpoint i.decoded
+      (typedRows parsed q tr) i.data)
+    (dot_S5 : CheckpointBytes5Output.ofE dot = ∑ l : Fin 64, i.data.f l *
+      LiteralOpeningView.eK ((CheckpointBytes5Output.accumulator a).weights l))
+    (canonical_S3_S4_S5_S9 : ∀ x ∈ [r0.lhs,r0.rhs,r1.lhs,r1.rhs,pair,r1.value,dot,a.rhs],
+      CheckpointBytes4ReaderFields.sourceE (CheckpointBytes5Output.ofE x) = x)
+    (saved_ten : CheckpointBytes5Output.accumulator saved =
+      (OraclePortCheckpointStateC3.write (OraclePortCheckpointResumeC5.model i.data
+        (SelectedChallengeMap.rhoOf i.rho) q)).accumulator)
+    (twelve : CheckpointBytes5Output.accumulator a =
+      OraclePortCheckpointStateC3.advance (OraclePortCheckpointResumeC5.model i.data
+        (SelectedChallengeMap.rhoOf i.rho) q) 12 (CheckpointBytes5Output.accumulator saved)) :
+    decide (Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native ops) v p a none =
+      ok (.Ok ())) = OraclePortFrozen2.finish parsed q tr i (CheckpointBytes5Output.accumulator a) ∧
+    decide (Port4D_FinishInstall.finish ops v p a none = ok (.Ok ())) =
+      D0TypedChecks.verify (typedRows parsed q tr) i := by
+  let decode := CheckpointBytes5Output.ofE
+  have returned := returned_state i q saved a saved_ten twelve
+  have nextVal : a.next.val = 22 := by
+    have h := congrArg QueryAccumulator.State.next returned
+    simpa only [CheckpointBytes5Output.accumulator,OraclePortFrozen2.completeState,
+      QueryAccumulator.run22_next] using h
+  have next : a.next = 22#usize := UScalar.eq_of_val_eq nextVal
+  have strict (x y : E) (hx : x ∈ [r0.lhs,r0.rhs,r1.lhs,r1.rhs,pair,r1.value,dot,a.rhs])
+      (hy : y ∈ [r0.lhs,r0.rhs,r1.lhs,r1.rhs,pair,r1.value,dot,a.rhs]) :
+      x = y ↔ decode x = decode y := by
+    constructor
+    · exact congrArg decode
+    · intro eq
+      exact (canonical_S3_S4_S5_S9 x hx).symm.trans
+        ((congrArg CheckpointBytes4ReaderFields.sourceE eq).trans (canonical_S3_S4_S5_S9 y hy))
+  have b0 := pairing_S3_S5_S9.round0.boundary r0.c0 r0.c4 r0.lhs r0.field0 r0.field4 r0.add
+  have b1 := pairing_S3_S5_S9.round1.boundary r1.c0 r1.c4 r1.lhs r1.field0 r1.field4 r1.add
+  have quarter0 := pairing_S3_S5_S9.round0.quarter r0.quarter p.claim r0.rhs r0.quarter_run r0.multiply
+  have quarter1 := pairing_S3_S5_S9.round1.quarter r1.quarter r0.value r1.rhs r1.quarter_run r1.multiply
+  have ev0 := pairing_S3_S5_S9.round0.eval alpha0 r0.value r0.evaluate
+  have ev1 := pairing_S3_S5_S9.round1.eval alpha1 r1.value r1.evaluate
+  rw [pairing_S3_S5_S9.alpha0 alpha0 ha0] at ev0
+  rw [pairing_S3_S5_S9.alpha1 alpha1 ha1] at ev1
+  rw [pairing_S3_S5_S9.claim] at quarter0
+  rw [ev0] at quarter1
+  have pairMeaning := pairing_S3_S5_S9.pair weights alphas pair hw has hp
+  have gates : (r0.lhs = r0.rhs ∧ r1.lhs = r1.rhs ∧ pair = r1.value) ↔
+      LiteralPairingChecks.checks (typedRows parsed q tr) := by
+    rw [← LiteralPairingChecks.acceptedPairing_iff_checks _ i.data read]
+    rw [strict r0.lhs r0.rhs (by simp) (by simp),strict r1.lhs r1.rhs (by simp) (by simp),
+      strict pair r1.value (by simp) (by simp)]
+    change (decode r0.lhs = decode r0.rhs ∧ decode r1.lhs = decode r1.rhs ∧
+      decode pair = decode r1.value) ↔ _
+    simp only [decode,b0,b1,quarter0,quarter1,ev1,pairMeaning,MatchingSupport.AcceptedPairing]
+    exact reverse_three _ _ _ _ _ _
+  have dotGate : dot = a.rhs ↔ HchecksAccumulator.ClosedSum LiteralOpeningView.eK i.data q
+      (SelectedChallengeMap.rhoOf i.rho) := by
+    rw [strict dot a.rhs (by simp) (by simp)]
+    change CheckpointBytes5Output.ofE dot = (CheckpointBytes5Output.accumulator a).rhs ↔ _
+    rw [dot_S5,returned]
+    simp only [OraclePortFrozen2.completeState,QueryAccumulator.run22_weights,
+      QueryAccumulator.run22_rhs,HchecksAccumulator.ClosedSum]
+  have normal := parent_value ops v p a alpha0 alpha1 r0 r1 weights alphas pair dot s2 ha0 ha1 hw has hp hd
+  have control : (Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native ops) v p a none =
+      ok (.Ok ())) ↔ ((r0.lhs = r0.rhs ∧ r1.lhs = r1.rhs ∧ pair = r1.value) ∧ dot = a.rhs) := by
+    rw [normal]
+    by_cases e0 : r0.lhs = r0.rhs <;> by_cases e1 : r1.lhs = r1.rhs <;>
+      by_cases ep : pair = r1.value <;> by_cases ed : dot = a.rhs
+    all_goals simp [e0,e1,ep,ed,next]
+  have query := Port4D_FinishFrozen.query_decision i q decoded matches_S4_S7
+  have checks : D0TypedChecks.verify (typedRows parsed q tr) i =
+      decide (LiteralPairingChecks.checks (typedRows parsed q tr) ∧
+        HchecksAccumulator.ClosedSum LiteralOpeningView.eK i.data q (SelectedChallengeMap.rhoOf i.rho)) := by
+    simp only [D0TypedChecks.verify,read]
+    congr 1
+    apply propext
+    constructor
+    · intro h
+      exact ⟨h.2.1,h.2.2.2.2 q decoded⟩
+    · rintro ⟨pairing,closed⟩
+      refine ⟨rfl,pairing,query,semantic_S3_S9,?_⟩
+      intro q' hq'
+      have eq : q' = q := Option.some.inj (hq'.symm.trans decoded)
+      subst q'
+      exact closed
+  have sourceValue : decide (Port3_NativeFinishBody.verifier.finish_relation
+      (Port4D_Round.native ops) v p a none = ok (.Ok ())) =
+      D0TypedChecks.verify (typedRows parsed q tr) i := by
+    rw [checks]
+    exact congrArg decide (propext (control.trans (and_congr gates dotGate)))
+  refine ⟨?_,?_⟩
+  · rw [returned,OraclePortFrozen2.finish_value parsed q tr i hi hq]
+    exact sourceValue
+  · have iff := Port3_QueryInstall.success_iff
+      (Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native ops) v p a none) ()
+    change decide (Port3_QueryInstall.result
+      (Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native ops) v p a none) = ok (.Ok ())) = _
+    exact (congrArg decide (propext iff)).trans sourceValue
+
+#print axioms returned_state
+#print axioms finish_value
+end AspisR1.RowFinish_Model
+end

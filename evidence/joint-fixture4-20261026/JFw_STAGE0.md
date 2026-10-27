@@ -1,0 +1,1 @@
+Target: joint real-byte non-vacuity for Rc6_Top.deployed. Only JFw_ modules and this directory change. Budget 100 Lean / 10 Kani; no package replay. Read root AGENTS security/proof rules, common/local rules, S2 ownership/plan/diagnosis/interface, route-B addendum, owner amendment, JFz and SInt2 handoffs. Native fixture and ELF pins inherited, no shipped source changes.

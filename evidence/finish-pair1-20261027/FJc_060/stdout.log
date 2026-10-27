@@ -1,0 +1,53 @@
+FJc_LowStep.lean:38:13: error: unsolved goals
+case done.some
+ap0 ap1 : Std.Array NE 4#usize
+ha0 : FIo_ArrayCanon.Holds ap0
+ha1 : FIo_ArrayCanon.Holds ap1
+iter : FIo_RangeNext.Range
+low : Std.Array NE 16#usize
+inv :
+  FIo_ArrayCanon.Holds low ∧
+    ↑iter.end = 16 ∧ ↑iter.start ≤ 16 ∧ ∀ j < ↑iter.start, FIp_ArrayValue.value low j = FJc_LowModel.value ap0 ap1 j
+result : Std.Array NE 16#usize
+run✝ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, low).1
+      match o with
+        | none => ok (done (iter, low).2)
+        | some s => do
+          let i ← s % 4#usize
+          let i1 ← FIo_Native.weights.PERM.index_usize i
+          let we ← ap0.index_usize i1
+          let i2 ← s / 4#usize
+          let i3 ← FIo_Native.weights.PERM.index_usize i2
+          let we1 ← ap1.index_usize i3
+          let we2 ← we.mul we1
+          let m ← FIo_Native.weights.QUARTER.mul FIo_Native.weights.QUARTER
+          let we3 ← we2.mul_m31 m
+          let a ← (iter, low).2.update s we3
+          ok (cont (iter1, a))) =
+    ok (done result)
+cursor : core.ops.range.Range (UScalar UScalarTy.Usize)
+i : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, low).1 = ok (some i, cursor)
+run :
+  (match FIo_Native.weights.PERM.index_usize (i.bv.umod 4#usize.bv#uscalar) with
+    | ok v =>
+      (fun i1 => do
+          let we ← ap0.index_usize i1
+          let i2 ← i / 4#usize
+          let i3 ← FIo_Native.weights.PERM.index_usize i2
+          let we1 ← ap1.index_usize i3
+          let we2 ← we.mul we1
+          let m ← FIo_Native.weights.QUARTER.mul FIo_Native.weights.QUARTER
+          let we3 ← we2.mul_m31 m
+          let a ← (iter, low).2.update i we3
+          ok (cont (cursor, a)))
+        v
+    | fail v => fail v
+    | div => div) =
+    ok (done result)
+⊢ match done result, run✝ with
+  | done low_1, run => Post ap0 ap1 low_1
+  | cont t, run => Inv ap0 ap1 t ∧ measure t < measure (iter, low)
+'AspisR1.FJc_LowStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

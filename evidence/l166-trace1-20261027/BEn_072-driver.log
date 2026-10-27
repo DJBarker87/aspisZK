@@ -1,0 +1,44 @@
+{"attempt": "BEn_072", "exit_status": 0, "wall_seconds": 2.609939933056012, "peak_rss_kib": "5559180", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_Source.erasure' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.SdkC_Source.erasure : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) {A : Type}
+  (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Log),
+  (AspisR1.SdkC_Source.run hashv code before).1 =
+    AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_Source.dictionary hashv) () code :=
+fun hashv {A} code before =>
+  AspisR1.CheckpointBytes5Effect.Code.rec (motive := fun code =>
+    ∀ (before : AspisR1.SdkC_Source.Log),
+      (AspisR1.SdkC_Source.run hashv code before).1 =
+        AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_Source.dictionary hashv) () code)
+    (fun a before => Eq.refl (AspisR1.SdkC_Source.run hashv (Aspis
+...
+t =>
+                                  AspisR1.SdkC_Source.run hashv (k digest)
+                                    (before ++ [{ parts := parts, returned := hashv parts }])
+                                | Aeneas.Std.Result.fail e =>
+                                  (Aeneas.Std.Result.fail e, before ++ [{ parts := parts, returned := hashv parts }])
+                                | Aeneas.Std.Result.div =>
+                                  (Aeneas.Std.Result.div, before ++ [{ parts := parts, returned := hashv parts }]))
+                              h)
+                            (congrArg (Prod.mk Aeneas.Std.Result.div)
+                              (congrArg (HAppend.hAppend before)
+                                (congrFun' (congrArg List.cons (congrArg (AspisR1.SdkC_Source.Query.mk parts) h))
+                                  [])))))))
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind h) fun b =>
+                        AspisR1.CheckpointBytes5Effect.erase
+                          { coremarkerCopyInst := { cloneInst := { clone := fun q => Aeneas.Std.Result.ok q } },
+                            digest := fun x parts => hashv parts }
+                          () (k b))
+                      (Aeneas.Std.bind_tc_div fun y =>
+                        AspisR1.CheckpointBytes5Effect.erase
+                          { coremarkerCopyInst := { cloneInst := { clone := fun q => Aeneas.Std.Result.ok q } },
+                            digest := fun x parts => hashv parts }
+                          () (k y))))
+                  (eq_self Aeneas.Std.Result.div)))
+            (Eq.symm h) (Eq.refl (hashv parts)))
+        (Eq.refl (hashv parts)))
+    code before
+'AspisR1.SdkC_Source.erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc6129914ba634b58b09da6e8609ce8ab.scope; invocation ID: a8d76223d7fc427fb16efdd1f923e845
+

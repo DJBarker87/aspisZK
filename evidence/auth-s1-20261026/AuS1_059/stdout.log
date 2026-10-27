@@ -1,0 +1,40 @@
+AuS1_Recovery.lean:32:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  observe (run (SdkD_PrepareSource.code ops B std D pub proof hash input)).1
+in the target expression
+  ∀ a ∈ log ops B std D pub proof hash input, a.2 = H a.1
+
+ops : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+source : ∀ (h : Hash) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+hash : Hash
+input : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+logs :
+  List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest => some (flatten q.parts, decodeState digest)
+        | x => none)
+      (SdkC_Source.run hashv (SdkD_PrepareLower.lower (SdkD_PrepareSource.code ops B std D pub proof hash input))
+          []).2 =
+    observe (run (SdkD_PrepareSource.code ops B std D pub proof hash input)).1
+⊢ ∀ a ∈ log ops B std D pub proof hash input, a.2 = H a.1
+AuS1_Recovery.lean:51:15: error(lean.unknownIdentifier): Unknown identifier `firstReads`
+
+Note: It is not possible to treat `firstReads` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+AuS1_Recovery.lean:52:6: error(lean.unknownIdentifier): Unknown identifier `hitsBad`
+
+Note: It is not possible to treat `hitsBad` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+AuS1_Recovery.lean:49:34: error(lean.unknownIdentifier): Unknown identifier `eval`
+
+Note: It is not possible to treat `eval` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+'AspisR1.AuS1_Recovery.consistent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Recovery.authenticated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

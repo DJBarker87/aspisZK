@@ -1,0 +1,79 @@
+Tx2I_Nonvacuity.lean:58:40: error: Type mismatch
+  Array.repeat 29#usize x
+has type
+  Std.Array E 29#usize
+but is expected to have type
+  Std.Array aspis_core.field.wide_exact.WideExact 2#usize
+Tx2I_Nonvacuity.lean:59:65: error: unsolved goals
+x : E
+p0 : verifier.Prepared
+a0 : verifier.Accumulator
+v : verifier.View
+⊢ ∃ x_1,
+    3#usize * 0#usize = ok x_1 ∧
+      (∃ x, x_1 + 1#usize = ok x) ∧
+        (∃ x, x_1 + 2#usize = ok x) ∧
+          ∃ x_2,
+            core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok x) = ok x_2 ∧
+              ∃ x_3,
+                (match x_2 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let x_4 ← 3#usize * 1#usize
+                      let _ ← x_4 + 1#usize
+                      let _ ← x_4 + 2#usize
+                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok x)
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok ())
+                          match cf2 with
+                            | core.ops.control_flow.ControlFlow.Continue val2 => do
+                              let _ ←
+                                core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize }
+                                    (sorry ()).to_slice
+                              let cf3 ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok x)
+                              match cf3 with
+                                | core.ops.control_flow.ControlFlow.Continue val3 =>
+                                  if val3 = val1 then do
+                                    let cf4 ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok x)
+                                    match cf4 with
+                                      | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                        if val4 = x then ok (core.result.Result.Ok ())
+                                        else ok (core.result.Result.Err verifier.Error.Query)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame verifier.Error) residual
+                                  else ok (core.result.Result.Err verifier.Error.Relation)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual) =
+                    ok x_3 ∧
+                  (match x_3 with
+                    | core.result.Result.Ok a => ok (core.result.Result.Ok a)
+                    | core.result.Result.Err e => ok (core.result.Result.Err (Port3_CheckpointInstall.error e))) =
+                    ok (core.result.Result.Ok ())
+Tx2I_Nonvacuity.lean:64:29: warning: This simp argument is unused:
+  Array.repeat
+
+Hint: Omit it from the simp argument list.
+  simp [Port4D_FinishInstall.finish, ̲Port4D_Round.parent_eq,
+  ̵  ̵ ̵ ̵verifier.finishRelationWithOps,
+  ̲ ̲ ̲ ̲ ̲verifier.finishRelationRoundWithOps,
+  ̵  ̵ ̵ ̵Port3_FinishStage.release, ̲Port3_FinishStage.folds,
+  ̲ ̲ ̲ ̲ ̲Port3_FinishStage.ne,
+  ̵  ̵ ̵ ̵Port3_QueryStage.mark, ̲Port3_QueryInstall.observer,
+  ̲ ̲ ̲ ̲ ̲Port3_QueryInstall.result,
+  ̵  ̵ ̵ ̵leaves, ̲Array.index_usize,̵A̵r̵r̵a̵y̵.̵r̵e̵p̵e̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Tx2I_Nonvacuity.extraction_satisfiable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Tx2I_Nonvacuity.shape_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Tx2I_Nonvacuity.finish_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

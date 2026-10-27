@@ -1,0 +1,40 @@
+{"attempt": "F3T_101", "exit_status": 0, "wall_seconds": 2.584721121005714, "peak_rss_kib": "5313472", "swaps": "0", "print_axioms": ["'AspisR1.F3T_ConditionalClaims.claims' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.F3T_ConditionalClaims.claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.F3T_ConditionalClaims.claims : ∀ {F C : Type} (c : DrvC_Installation.Configuration F C)
+  (D : LiteralByteProtocol.Decoder) (P : ByteProver) (Q : ℕ),
+  (∀ (H : Bytes → State), (eval H P).1.length ≤ Q) →
+    ∀ (hashv : SdkC_Source.Parts → Aeneas.Std.Result SdkC_Source.Digest) (runtime : Runtime),
+      AcceptedVerifierJoin c D (F3T_Installed.source c hashv) →
+        StoredCarrierBinding c D (F3T_Installed.source c hashv) P runtime →
+          (∀ (H : Bytes → State),
+              (eval H (annotatedWith D (F3T_Installed.source c hashv) (F3T_Canon.canon (lift c P)))).2.2 = true →
+ 
+...
+n.Configuration F C)
+  (D : LiteralByteProtocol.Decoder) (P : ByteProver) (Q : ℕ),
+  (∀ (H : Bytes → State), (eval H P).1.length ≤ Q) →
+    ∀ (hashv : SdkC_Source.Parts → Aeneas.Std.Result SdkC_Source.Digest) (runtime : Runtime),
+      AcceptedVerifierJoin c D (F3T_Installed.source c hashv) →
+        StoredCarrierBinding c D (F3T_Installed.source c hashv) P runtime →
+          (∀ (H : Bytes → State),
+              (eval H (annotatedWith D (F3T_Installed.source c hashv) (F3T_Canon.canon (lift c P)))).2.2 = true →
+                (mean fun coins =>
+                    ↑(ActualCostedExtractorM10.extractor.eval
+                            (view
+                              (eval H (annotatedWith D (F3T_Installed.source c hashv) (F3T_Canon.canon (lift c P)))))
+                            coins).2.total) ≤
+                  ↑(CostedAllocationLedgerM10.params (Q + 1161)).attemptBudget) ∧
+            (∀ (run : RawCutProverCompiler.RunView) (coins : Coins) (w : SpendRelation.Wspend),
+                (ActualCostedExtractorM10.extractor.eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
+              1 / 2 ^ 126 + 1 / 2 ^ 454 ≤ 1 / 2 ^ 120 ∧
+                F3T_RuntimeBound.failureModel runtime ≤ StartChargeNumeric.totalBound Q ∧
+                  (Q ≤ OraclePortHeadlineFrozen2.Qmax →
+                    F3T_RuntimeBound.failureModel runtime ≤ (↑Q + 1) * (1 / 2 ^ 100)) :=
+fun {F C} c D P Q queries hashv runtime raw binding =>
+  have bound := (F3T_Conditional.installed c D P Q queries hashv runtime raw binding).right;
+  ⟨F3T_SourceCost.accepted_attempt_cost c D P Q queries hashv raw,
+    ⟨F3T_Cost.returned_relation,
+      ⟨R1FinalSoundnessNumeric.extractor_abort_allowance,
+        ⟨bound, fun range => LE.le.trans bound (StartChargeNumeric.safe_range Q range)⟩⟩⟩⟩
+
+Running as unit: F3T-101.scope; invocation ID: 243012df46af44bc8967a35ebf013d1c

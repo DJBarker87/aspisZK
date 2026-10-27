@@ -1,0 +1,66 @@
+slot: /tmp/aspis-r0-lean-slot-1.lock
+{"schema": "ProverRwNativeEntropy-reservation-v1", "utc": "2026-10-26T09:15:21.128507+00:00", "requested_bytes": 7516192768, "safe_limit_bytes": 59055800320, "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2", "print_axioms": "N/A: read-only resource gate", "allowed": true, "bounded_reserved_bytes": 34762391552, "projected_reserved_bytes": 42278584320}
+                W.qmax)
+            (fun heq => id (R1Z.RomObserverBin.runLog_length (adv.prog W.failView []) (W.look r.1) W.qmax))
+            (Eq.symm h_1)
+            (Eq.refl
+              (R0Z.FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = Bool.false)
+                (R1Z.GamesR1PBin.realOut W Pr h B outputs x w (W.look r.1) r.2))))
+        (fun k h_1 =>
+          Eq.ndrec (motive := fun x_1 =>
+            R0Z.FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = Bool.false)
+                  (R1Z.GamesR1PBin.realOut W Pr h B outputs x w (W.look r.1) r.2) =
+                x_1 →
+              (match x_1 with
+                  | Option.none => R1Z.GamesR1.runLog (adv.prog W.failView []) (W.look r.1) W.qmax
+                  | Option.some k =>
+                    R1Z.GamesR1.runLog
+                      (adv.prog (R1Z.GamesR1PBin.realOut W Pr h B outputs x w (W.look r.1) r.2 k).view
+                        (R1Z.GamesR1PBin.realOut W Pr h B outputs x w (W.look r.1) r.2 k).log)
+                      (W.look r.1) W.qmax).length ≤
+                W.qmax)
+            (fun heq =>
+              id
+                (R1Z.RomObserverBin.runLog_length
+                  (adv.prog (R1Z.GamesR1PBin.realOut W Pr h B outputs x w (W.look r.1) r.2 k).view
+                    (R1Z.GamesR1PBin.realOut W Pr h B outputs x w (W.look r.1) r.2 k).log)
+                  (W.look r.1) W.qmax))
+            (Eq.symm h_1)
+            (Eq.refl
+              (R0Z.FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = Bool.false)
+                (R1Z.GamesR1PBin.realOut W Pr h B outputs x w (W.look r.1) r.2))))
+        (Eq.refl
+          (R0Z.FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = Bool.false)
+            (R1Z.GamesR1PBin.realOut W Pr h B outputs x w (W.look r.1) r.2)))))
+theorem R1Z.ProverCommitReencode16.privacy_transport : ∀ {CommitHandle Aux : Type}
+  (W : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (Pr : R1Z.GamesR1PBin.R1ProverP R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.PrivacyR1AcctBasis.F W) (N : ℕ)
+  (hN : 0 < N) (P : R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Prop)
+  (Vp :
+    (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → h.Instance → Prop)
+  (encoding :
+    R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat →
+      List R1Z.ProverCommitReencode16.Entry → List R1Z.ProverCommitReencode16.Entry)
+  (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle)
+  (sim :
+    R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+      R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+        R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (ε : ℚ),
+  R0Z.HvzkS.ZK_FSS h R1Z.PrivacyR1AcctBasis.basis outputs (R1Z.GamesR1PBin.fsR1P W Pr N hN P Vp) x sim ε →
+    R0Z.HvzkS.ZK_FSS h R1Z.PrivacyR1AcctBasis.basis outputs
+      (R1Z.ProverCommitReencode16.experiment W Pr N hN P Vp encoding) x sim ε :=
+fun {CommitHandle Aux} W Pr N hN P Vp encoding h outputs x sim ε private_model adv w hw =>
+  private_model (R1Z.ProverCommitReencode16.observer encoding adv) w hw
+'R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.71
+	Maximum resident set size (kbytes): 4210520
+	Swaps: 0
+	Exit status: 0

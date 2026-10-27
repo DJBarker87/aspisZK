@@ -1,0 +1,42 @@
+{"schema": "ProverRwNativeEntropy-reservation-v1", "utc": "2026-10-26T12:03:36.963503+00:00", "requested_bytes": 8589934592, "safe_limit_bytes": 59055800320, "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2", "print_axioms": "N/A: read-only resource gate", "allowed": true, "bounded_reserved_bytes": 36909875200, "projected_reserved_bytes": 45499809792}
+Running as unit: run-r8155e3fc891444d395e58c6bd3b05d22.scope; invocation ID: 566909514d29432a891f1f88bf56f2f7
+{"attempt": "SCE_052", "exit_status": 1, "wall_seconds": 3.8270570900058374, "peak_rss_kib": "5337476", "swaps": "0", "print_axioms": ["'AspisR1.SCE_ReplayTable.oracle_known_suffix' depends on axioms: [propext, sorryAx, Quot.sound]", "'AspisR1.SCE_ReplayTable.cut_append' depends on axioms: [propext]"]}
+SCE_ReplayTable.lean:25:2: error: Tactic `rfl` failed: The left-hand side
+  (@ite (Option State) (a ∈ List.map Prod.fst prior)
+        (@List.instDecidableMemOfLawfulBEq Bytes List.instBEq ⋯ a (List.map Prod.fst prior)) (some (H a)) none).getD
+    default
+is not definitionally equal to the right-hand side
+  (@ite (Option State) (a ∈ List.map Prod.fst prior)
+        (@List.instDecidableMemOfLawfulBEq Bytes instBEqOfDecidableEq ⋯ a (List.map Prod.fst prior)) (some (H a))
+        none).getD
+    default
+
+H : Bytes → State
+prior suffix : List (Bytes × State)
+consistent : ∀ q ∈ prior ++ suffix, q.2 = H q.1
+known : ∀ a ∈ List.map Prod.fst suffix, a ∈ List.map Prod.fst prior
+a : Bytes
+before : ∀ q ∈
+...
+SCE_ReplayTable.lean:25:2: error: Tactic `rfl` failed: The left-hand side
+  (@ite (Option State) (a ∈ List.map Prod.fst prior)
+        (@List.instDecidableMemOfLawfulBEq Bytes List.instBEq ⋯ a (List.map Prod.fst prior)) (some (H a)) none).getD
+    default
+is not definitionally equal to the right-hand side
+  (@ite (Option State) (a ∈ List.map Prod.fst prior)
+        (@List.instDecidableMemOfLawfulBEq Bytes instBEqOfDecidableEq ⋯ a (List.map Prod.fst prior)) (some (H a))
+        none).getD
+    default
+
+H : Bytes → State
+prior suffix : List (Bytes × State)
+consistent : ∀ q ∈ prior ++ suffix, q.2 = H q.1
+known : ∀ a ∈ List.map Prod.fst suffix, a ∈ List.map Prod.fst prior
+a : Bytes
+before : ∀ q ∈ prior, q.2 = H q.1
+member : a ∈ List.map Prod.fst (prior ++ suffix) ↔ a ∈ List.map Prod.fst prior
+⊢ (if a ∈ List.map Prod.fst prior then some (H a) else none).getD default =
+    (if a ∈ List.map Prod.fst prior then some (H a) else none).getD default
+'AspisR1.SCE_ReplayTable.oracle_known_suffix' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SCE_ReplayTable.cut_append' depends on axioms: [propext]
+

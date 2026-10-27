@@ -1,0 +1,27 @@
+{"attempt": "BEn_056", "exit_status": 0, "wall_seconds": 2.90333872102201, "peak_rss_kib": "5552292", "swaps": "0", "print_axioms": ["'AspisR1.BEl_Recorder.finish' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEl_Recorder.finish : ∀ (before : AspisR1.BEl_Recorder.History) (parts : AspisR1.SdkC_Source.Parts)
+  (answer : Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.BEl_Recorder.complete before parts answer =
+    List.take (List.length before) (AspisR1.BEl_Recorder.enter before parts) ++
+      [{ parts := parts, returned := Option.some answer }] :=
+fun before parts answer =>
+  of_eq_true
+    (Eq.trans
+      (congrArg (Eq (before ++ [{ parts := parts, returned := Option.some answer }]))
+        (congrFun' (congrArg HAppend.hAppend List.take_left) [{ parts := parts, returned := Option.some answer }]))
+      (eq_self (before ++ [{ parts := parts, returned := Option.some answ
+...
+theorem AspisR1.BEl_Recorder.finish : ∀ (before : AspisR1.BEl_Recorder.History) (parts : AspisR1.SdkC_Source.Parts)
+  (answer : Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.BEl_Recorder.complete before parts answer =
+    List.take (List.length before) (AspisR1.BEl_Recorder.enter before parts) ++
+      [{ parts := parts, returned := Option.some answer }] :=
+fun before parts answer =>
+  of_eq_true
+    (Eq.trans
+      (congrArg (Eq (before ++ [{ parts := parts, returned := Option.some answer }]))
+        (congrFun' (congrArg HAppend.hAppend List.take_left) [{ parts := parts, returned := Option.some answer }]))
+      (eq_self (before ++ [{ parts := parts, returned := Option.some answer }])))
+'AspisR1.BEl_Recorder.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r49a5bff98c92435c9c5c216d04469726.scope; invocation ID: 78cfaadec4574957ab7d70a16ba1c678

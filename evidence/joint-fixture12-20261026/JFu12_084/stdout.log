@@ -1,0 +1,52 @@
+JFu_Transition.lean:25:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if 13#u64 ≥ 1048576#u64 then ?m.21 else ?m.22
+in the target expression
+  (if JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index ≥ 1048576#u64 then
+      ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+    else do
+      let o ← lift (JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index.checked_add 1#u64)
+      let b2 ←
+        core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64) o
+            (some JFu_PublicSemantic.value.transition.candidate_afterstate.next_pair_index)
+      if b2 = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+        else do
+          let carry ← bounded_append_carry JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index
+          validate_transition_loop JFu_PublicSemantic.value { start := 0#usize, «end» := 20#usize } carry) =
+    ok (core.result.Result.Ok ())
+
+⊢ (if JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index ≥ 1048576#u64 then
+      ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+    else do
+      let o ← lift (JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index.checked_add 1#u64)
+      let b2 ←
+        core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64) o
+            (some JFu_PublicSemantic.value.transition.candidate_afterstate.next_pair_index)
+      if b2 = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+        else do
+          let carry ← bounded_append_carry JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index
+          validate_transition_loop JFu_PublicSemantic.value { start := 0#usize, «end» := 20#usize } carry) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1048576 ≤ UScalar.cMax UScalarTy.U64)) true
+  in the application
+    id (Eq.refl true)
+JFu_Transition.lean:24:33: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [pool, ̲domain, ̲sequence, ̲JFu_TransitionArithmetic.capacity, ̲bind_tc_ok,
+      Bool.false_eq_true, ̲ite_false,̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFu_Transition.pool' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFu_Transition.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFu_Transition.sequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFu_Transition.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFu_Transition.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,39 @@
+FIx_PreweightedLoopStep.lean:17:38: error: unsolved goals
+N : Usize
+r : core.ops.range.RangeInclusive Usize
+packed : Std.Array NQ 24#usize
+start : Usize
+values : Std.Array NQ N
+⊢ (do
+      let (o, iter1) ←
+        core.ops.range.RangeInclusive.Insts.CoreIterTraitsIteratorIterator.next core.iter.range.StepUsize r
+      match o with
+        | none => ok packed
+        | some group => do
+          let lanes ←
+            array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy
+                (pool_v1.pair_forest_semantic_terminal.add_preweighted.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+                  N)
+                field.QM31.ZERO (group, start, values)
+          let q ← packed.index_usize group
+          let s ← lift lanes.to_slice
+          let q1 ← field.qm31_pack_base4 s
+          let q2 ← q.add q1
+          let a ← packed.update group q2
+          pool_v1.pair_forest_semantic_terminal.add_preweighted_loop iter1 a start values) =
+    do
+    let (o, r') ← core.ops.range.RangeInclusive.Insts.CoreIterTraitsIteratorIterator.next core.iter.range.StepUsize r
+    match o with
+      | none => ok packed
+      | some group => do
+        let x ←
+          array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy
+              (pool_v1.pair_forest_semantic_terminal.add_preweighted.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 N)
+              field.QM31.ZERO (group, start, values)
+        let x_1 ← packed.index_usize group
+        let x ← lift x.to_slice
+        let x ← field.qm31_pack_base4 x
+        let x ← field.QM31.add x_1 x
+        let next ← packed.update group x
+        pool_v1.pair_forest_semantic_terminal.add_preweighted_loop r' next start values
+'AspisR1.FIx_PreweightedLoopStep.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

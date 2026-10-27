@@ -1,0 +1,25 @@
+LogA_Dependencies.lean:27:2: error: Tactic `rfl` failed: The left-hand side
+  (mapView Addr.toBytes
+        (eval (fun a => H a.toBytes)
+          (LiteralTranscript.samp 0 (emptyPrefix pub) (LiteralTranscript.Message.initial root word)).toProgram)).1.head?
+is not definitionally equal to the right-hand side
+  some (PublicInitFrame.frame pub.pubBytes root, H (PublicInitFrame.frame pub.pubBytes root))
+
+D : LiteralByteProtocol.Decoder
+stored : Bytes
+pub : LiteralTranscript.Public
+pf : RawCutProverCompiler.Proof
+root : State
+word : LiteralTranscript.C1Word
+first : pf 0 = LiteralTranscript.Message.initial root word
+H : Bytes → State
+⊢ (mapView Addr.toBytes
+          (eval (fun a => H a.toBytes)
+            (LiteralTranscript.samp 0 (emptyPrefix pub)
+                (LiteralTranscript.Message.initial root word)).toProgram)).1.head? =
+    some (PublicInitFrame.frame pub.pubBytes root, H (PublicInitFrame.frame pub.pubBytes root))
+'AspisR1.LogA_Dependencies.verifier_initial_head' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LogA_Dependencies.query_states_agree' depends on axioms: [propext, Quot.sound]
+'AspisR1.LogA_Dependencies.plain_inputs' depends on axioms: [propext, Quot.sound]
+'AspisR1.LogA_Dependencies.leaf_first' depends on axioms: [propext, Quot.sound]
+'AspisR1.LogA_Dependencies.checksum_input_agree' depends on axioms: [propext, Classical.choice, Quot.sound]

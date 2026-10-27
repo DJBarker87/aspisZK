@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6ImageStep.lean:47:53: error: unsolved goals
+m : Slice U32
+st j : Usize
+idx : Slice U32
+io : Usize
+c : Slice U32
+co s : Usize
+tgt : Slice U32
+to1 ts : Usize
+flag : Bool
+i : Usize
+⊢ (do
+      let a ← j * st
+      let a ← a + i
+      let a ← m.index_usize a
+      (do
+            let i5 ← PV_L2_F6KDot.kdot m st i idx io c co s
+            let i6 ← operation (Event.add ↑(UScalar.cast UScalarTy.U64 a) ↑i5) (UScalar.cast UScalarTy.U64 a + i5)
+            let v ← operation (Event.rem ↑i6 ↑P) (i6 % P)
+            let i7 ← operation (Event.mul ↑i ↑ts) (i * ts)
+            let i8 ← operation (Event.add ↑to1 ↑i7) (to1 + i7)
+            let i9 ← operation (Event.index 1 ↑i8) (tgt.index_usize i8)
+            let i11 ← operation (Event.add (↑i) 1) (i + 1#usize)
+            operation
+                (Event.guard 4 (↑v) (↑(UScalar.cast UScalarTy.U64 i9)) (decide (v = UScalar.cast UScalarTy.U64 i9)))
+                (ok (flag && decide (v = UScalar.cast UScalarTy.U64 i9), i11))).value) =
+    do
+    let i1 ← j * st
+    let i2 ← i1 + i
+    let i3 ← m.index_usize i2
+    let i5 ← kdot m st i idx io c co s
+    let i6 ← UScalar.cast UScalarTy.U64 i3 + i5
+    let v ← i6 % P
+    let i7 ← i * ts
+    let i8 ← to1 + i7
+    let i9 ← tgt.index_usize i8
+    let i11 ← i + 1#usize
+    ok (flag && decide (v = UScalar.cast UScalarTy.U64 i9), i11)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6ImageStep.lean:48:48: warning: This simp argument is unused:
+  bind_value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵c̵o̵r̵d̵e̵d̵,̵s̵t̵e̵p̵,̵o̵p̵e̵r̵a̵t̵i̵o̵n̵_̵b̵i̵n̵d̵_̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵v̵a̵l̵u̵e̵,̵P̵V̵_̵L̵2̵_̵F̵6̵K̵D̵o̵t̵.̵k̵d̵o̵t̵_̵e̵r̵a̵s̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵o̵p̵e̵r̵a̵t̵i̵o̵n̵_̵v̵a̵l̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲r̲e̲c̲o̲r̲d̲e̲d̲,̲ ̲s̲t̲e̲p̲,̲ ̲o̲p̲e̲r̲a̲t̲i̲o̲n̲_̲b̲i̲n̲d̲_̲v̲a̲l̲u̲e̲,̲ ̲P̲V̲_̲L̲2̲_̲F̲6̲K̲D̲o̲t̲.̲k̲d̲o̲t̲_̲e̲r̲a̲s̲e̲s̲,̲ ̲o̲p̲e̲r̲a̲t̲i̲o̲n̲_̲v̲a̲l̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6ImageStep.lean:48:59: warning: This simp argument is unused:
+  PV_L2_F6KDot.kdot_erases
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵c̵o̵r̵d̵e̵d̵,̵s̵t̵e̵p̵,̵o̵p̵e̵r̵a̵t̵i̵o̵n̵_̵b̵i̵n̵d̵_̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵v̵a̵l̵u̵e̵,̵P̵V̵_̵L̵2̵_̵F̵6̵K̵D̵o̵t̵.̵k̵d̵o̵t̵_̵e̵r̵a̵s̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵o̵p̵e̵r̵a̵t̵i̵o̵n̵_̵v̵a̵l̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲r̲e̲c̲o̲r̲d̲e̲d̲,̲ ̲s̲t̲e̲p̲,̲ ̲o̲p̲e̲r̲a̲t̲i̲o̲n̲_̲b̲i̲n̲d̲_̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲v̲a̲l̲u̲e̲,̲ ̲o̲p̲e̲r̲a̲t̲i̲o̲n̲_̲v̲a̲l̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6ImageStep.lean:49:4: warning: This simp argument is unused:
+  operation_value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵c̵o̵r̵d̵e̵d̵,̵s̵t̵e̵p̵,̵o̵p̵e̵r̵a̵t̵i̵o̵n̵_̵b̵i̵n̵d̵_̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵v̵a̵l̵u̵e̵,̵P̵V̵_̵L̵2̵_̵F̵6̵K̵D̵o̵t̵.̵k̵d̵o̵t̵_̵e̵r̵a̵s̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵o̵p̵e̵r̵a̵t̵i̵o̵n̵_̵v̵a̵l̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲r̲e̲c̲o̲r̲d̲e̲d̲,̲ ̲s̲t̲e̲p̲,̲ ̲o̲p̲e̲r̲a̲t̲i̲o̲n̲_̲b̲i̲n̲d̲_̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲v̲a̲l̲u̲e̲,̲ ̲P̲V̲_̲L̲2̲_̲F̲6̲K̲D̲o̲t̲.̲k̲d̲o̲t̲_̲e̲r̲a̲s̲e̲s̲,̲ ̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_L2_F6ImageStep.recorded_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6ImageStep.unroll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6ImageStep.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

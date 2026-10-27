@@ -1,0 +1,65 @@
+PoolT_CopyShape.lean:28:71: error: Application type mismatch: The argument
+  rest
+has type
+  fail Error.assertionFailure = ok (core.result.Result.Ok (saved, post, final))
+but is expected to have type
+  (do
+      let a ← ?m.194
+      ?m.195 a) =
+    ok ?m.196
+in the application
+  AdapterRw.Cuts.bind_success ?m.194 ?m.195 ?m.196 rest
+PoolT_CopyShape.lean:33:6: error: Dependent elimination failed: Failed to solve equation
+  ok (core.result.Result.Ok (saved, post, final)) =
+    match allocator.cleanup allocated with
+    | ok v =>
+      (fun cleaned => ok (core.result.Result.Ok (value, release written✝ (exclusiveGuard e.heap 2 0 0), cleaned))) v
+    | fail v => fail v
+    | div => div
+PoolT_CopyShape.lean:53:16: error: invalid `▸` notation, expected result type of cast is 
+  True
+however, the equality 
+  lengths
+of type 
+  (e.heap.payload (e.heap.accounts 2).1).descriptor.length = (↑saved).length
+does not contain the expected result type on either the left or the right hand side
+PoolT_CopyShape.lean:49:75: error: unsolved goals
+A : Type
+native : S2W_ExtractionBoundary.First
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e : Entry
+program : S2W_ExtractionBoundary.Program
+data : Slice U8
+state final : A
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+accepted : first native copy allocator e program data state = ok (core.result.Result.Ok (saved, post, final))
+lengths : (e.heap.payload (e.heap.accounts 2).1).descriptor.length = (↑saved).length
+written : post = writeBracket e.heap 2 0 0 (source (nativeBytes saved))
+i : Fin (↑saved).length
+⊢ encode
+      ({ descriptor := (e.heap.payload (e.heap.accounts 2).1).descriptor,
+            contents := fun i =>
+              if i < (e.heap.payload (e.heap.accounts 2).1).descriptor.length then
+                (source (nativeBytes saved)).contents i
+              else (e.heap.payload (e.heap.accounts 2).1).contents i }.contents
+        ↑i) =
+    encode ((source (nativeBytes saved)).contents ↑i)
+PoolT_CopyShape.lean:52:28: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵p̵y̵H̵e̵a̵p̵,̵p̵u̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵c̵o̵p̵i̵e̵d̵,̵p̵a̵y̵l̵o̵a̵d̵B̵y̵t̵e̵s̵]̵[̲c̲o̲p̲y̲H̲e̲a̲p̲,̲ ̲p̲u̲t̲,̲ ̲c̲o̲p̲i̲e̲d̲,̲ ̲p̲a̲y̲l̲o̲a̲d̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolT_CopyShape.lean:52:46: warning: This simp argument is unused:
+  payloadBytes
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵p̵y̵H̵e̵a̵p̵,̵p̵u̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵c̵o̵p̵i̵e̵d̵,̵p̵a̵y̵l̵o̵a̵d̵B̵y̵t̵e̵s̵]̵[̲c̲o̲p̲y̲H̲e̲a̲p̲,̲ ̲p̲u̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲r̲f̲l̲,̲ ̲c̲o̲p̲i̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PoolT_CopyShape.accepted_lengths' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolT_CopyShape.accepted_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

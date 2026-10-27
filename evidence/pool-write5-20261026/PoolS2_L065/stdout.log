@@ -1,0 +1,38 @@
+PoolS2_PolicyFacts.lean:27:38: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+p : Policy
+h✝⁵ : ¬(p.flags &&& ~~~3#u8 != 0#u8) = true
+h✝⁴ : ¬decide (p.registry_program = Array.repeat 32#usize 0#u8) = true
+h✝³ : ¬decide (p.policy_binding = Array.repeat 32#usize 0#u8) = true
+h✝² : (p.flags &&& 2#u8 != 0#u8) = true
+h✝¹ : (p.flags &&& 1#u8 != 0#u8) = true
+h✝ : ¬(true != decide (p.registry_authority = Array.repeat 32#usize 0#u8)) = true
+h : ok (core.result.Result.Ok ()) = ok (core.result.Result.Ok ())
+⊢ p.flags &&& ~~~3#u8 = 0#u8 ∧
+    p.registry_program ≠ Array.repeat 32#usize 0#u8 ∧
+      p.policy_binding ≠ Array.repeat 32#usize 0#u8 ∧
+        ((p.flags &&& 2#u8 != 0#u8) = true → (p.flags &&& 1#u8 != 0#u8) = true) ∧
+          ((p.flags &&& 1#u8 != 0#u8) = true ↔ p.registry_authority = Array.repeat 32#usize 0#u8)
+PoolS2_PolicyFacts.lean:27:38: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+p : Policy
+h✝⁴ : ¬(p.flags &&& ~~~3#u8 != 0#u8) = true
+h✝³ : ¬decide (p.registry_program = Array.repeat 32#usize 0#u8) = true
+h✝² : ¬decide (p.policy_binding = Array.repeat 32#usize 0#u8) = true
+h✝¹ : ¬(p.flags &&& 2#u8 != 0#u8) = true
+h✝ : ¬((p.flags &&& 1#u8 != 0#u8) != decide (p.registry_authority = Array.repeat 32#usize 0#u8)) = true
+h : ok (core.result.Result.Ok ()) = ok (core.result.Result.Ok ())
+⊢ p.flags &&& ~~~3#u8 = 0#u8 ∧
+    p.registry_program ≠ Array.repeat 32#usize 0#u8 ∧
+      p.policy_binding ≠ Array.repeat 32#usize 0#u8 ∧
+        ((p.flags &&& 2#u8 != 0#u8) = true → (p.flags &&& 1#u8 != 0#u8) = true) ∧
+          ((p.flags &&& 1#u8 != 0#u8) = true ↔ p.registry_authority = Array.repeat 32#usize 0#u8)
+'AspisR1.PoolS2_PolicyFacts.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

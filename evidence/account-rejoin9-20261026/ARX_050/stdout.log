@@ -1,0 +1,21 @@
+@AspisR1.ART_AdversaryWork.first : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (Q : ℕ),
+  AspisR1.ART_AdversaryWork.Bound c hashv copy allocator id a Q →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).1.length ≤ Q
+'AspisR1.ART_AdversaryWork.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.ART_AdversaryWork.Bound : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+        AspisR1.S2W_D189Wrappers.Allocator A →
+          AspisR1.S2W_ExtractionBoundary.Program → AspisR1.SCE_Experiment.Adversary A → ℕ → Prop :=
+fun {A F C} c hashv copy allocator id a Q =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    AspisR1.ART_AdversaryWork.work c hashv copy allocator id a H ≤ Q

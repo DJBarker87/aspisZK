@@ -1,0 +1,50 @@
+@AspisR1.SAG_DotFromRead.value : ∀ {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (a : AspisR1Stage2.verifier.Accumulator) (out : AspisR1Stage2.Stage2Finish.E)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact),
+  ops.dot = AspisR1.SAG_DotClosed.source →
+    (↑a.weights).length = 64 →
+      AspisR1.OraclePortCompactDraft.Aligned parsed tr →
+        AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+            Option.some d →
+          AspisR1.MultiproofConeCanonical.bytesOf ↑v.final_message =
+              AspisR1.OraclePortCompactDraft.slice parsed.wire 8007 2048 →
+            ops.dot v.final_message a.weights.deref = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+              AspisR1.CheckpointBytes5Output.ofE out =
+                ∑ l, d.f l * AspisR1.LiteralOpeningView.eK ((AspisR1.CheckpointBytes5Output.accumulator a).weights l)
+@AspisR1.SAG_ShapeDot.value : ∀ {F C Hash : Type} (base : VTop_Stages.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+  (geo : AspisR1.Port3_NativeGeometryBody.Ops C) (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) (t : AspisR1.Cons_Native.Witness),
+  AspisR1.Cons_Native.Calls base finish reserved query geo D hash pub proof checkpoint t →
+    ∀ (shapeOps : VTop_Stages.Ops),
+      AspisR1.SAG_NativeFull.Shape shapeOps proof t →
+        shapeOps.op21 = Aeneas.Std.Result.ok 8007#usize →
+          shapeOps.op20 = Aeneas.Std.Result.ok 10055#usize →
+            finish.dot = AspisR1.SAG_DotClosed.source →
+              (↑(t.back2 t.flushed2)).length = 64 →
+                ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+                  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+                  (data : AspisR1.MatchingSupport.Data AspisWideTower.WideExact),
+                  AspisR1.OraclePortStoredParserC4.parseReached (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) tr =
+                      Option.some parsed →
+                    AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                        Option.some data →
+                      have a :=
+                        have __src := t.returned2;
+                        { weights := t.back2 t.flushed2, rhs := __src.rhs, power := __src.power, next := __src.next };
+                      AspisR1.CheckpointBytes5Output.ofE a.rhs =
+                        ∑ l,
+                          data.f l *
+                            AspisR1.LiteralOpeningView.eK ((AspisR1.CheckpointBytes5Output.accumulator a).weights l)
+def AspisR1.SAG_DotClosed.seed : AspisR1FinishRelationCurrent.FinishOps Unit AspisR1.SAG_DotClosed.PushState :=
+{ eq := fun x x_1 => Aeneas.Std.Result.div, add := fun x x_1 => Aeneas.Std.Result.div,
+  mulM31 := fun x x_1 => Aeneas.Std.Result.div, quarter := Aeneas.Std.Result.div,
+  newWeights := fun x x_1 x_2 => Aeneas.Std.Result.div, pair := fun x x_1 x_2 x_3 => Aeneas.Std.Result.div,
+  field := fun x x_1 => Aeneas.Std.Result.div, newDot := Aeneas.Std.Result.div,
+  pushDot := fun x x_1 x_2 => Aeneas.Std.Result.div, finishDot := fun x => Aeneas.Std.Result.div,
+  polynomial := fun x x_1 => Aeneas.Std.Result.div }
+def AspisR1.SAG_DotClosed.source : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.K →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result AspisR1Stage2.Stage2Finish.E AspisR1Stage2.verifier.Error) :=
+AspisR1.SAG_DotAdapter.sourceDot AspisR1.SAG_DotClosed.seed

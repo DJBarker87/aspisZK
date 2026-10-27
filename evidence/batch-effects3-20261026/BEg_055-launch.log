@@ -1,0 +1,36 @@
+{"attempt": "BEg_055", "exit_status": 0, "wall_seconds": 2.297404180979356, "peak_rss_kib": "4404872", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_VerifyRun.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_VerifyRun.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.Port4B_VerifyInstall.digest D) hash H binary occupied sibling
+      leaf →
+    ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (s : MultiproofConeRef.reference.Scratch)
+      (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+      AspisR1.OraclePortFrozenOrder.wellFormed (List.map Prod.fst (AspisR1.Mu
+...
+AspisR1.Port4B_VerifyRun.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.Port4B_VerifyInstall.digest D) hash H binary occupied sibling
+      leaf →
+    ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (s : MultiproofConeRef.reference.Scratch)
+      (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+      AspisR1.OraclePortFrozenOrder.wellFormed (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)) →
+        (↑nodes).length % 32 = 0 →
+          (↑nodes).length ≤ 5504 →
+            ∀ (outIdx : AspisR1.Port3_NativeBatchCalls.Indices) (outVal : AspisR1.Port3_NativeBatchCalls.Values),
+              (AspisR1.Port4B_VerifyInstall.install base).op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two
+                    root s.idx s.val s.n nodes =
+                  Aeneas.Std.Result.ok (true, outIdx, outVal) →
+                ∃ final,
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.MultiproofConeP6Verify.verifyState
+                            (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) root nodes
+                            { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize })).2 =
+                      (true, final) ∧
+                    final.idx = outIdx ∧ final.val = outVal
+'AspisR1.Port4B_VerifyRun.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r35b2a5127e1c4a38aa3b2d26557dbbcf.scope; invocation ID: 066b6da257ae4b319e37420bbd76a822

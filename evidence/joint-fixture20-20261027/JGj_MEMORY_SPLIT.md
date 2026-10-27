@@ -1,0 +1,1 @@
+Attempt058 failed with kernel excessive memory consumption in zero callback; no cap increase or unchanged rerun. Split into JGj_InternalFullSum and JGj_InternalZeroSum. Replace the modulus rfl reduction with symbolic wide_val and norm_num on its literal modulus. Original source and all diagnostics retained in058.

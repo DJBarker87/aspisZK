@@ -1,0 +1,25 @@
+PoolS2_LaneFacts.lean:16:22: error: unsolved goals
+case neg
+master : Key
+lane : Lane
+rest : List Lane
+ih : ∀ (expected : ℕ), check master expected rest = core.result.Result.Ok () ↔ Valid master expected rest
+expected : ℕ
+hm : lane.master = master
+hi : ↑lane.lane_id = expected
+hb : ↑lane.tree.next_leaf_index ≤ ↑capacity
+⊢ (if ↑capacity < ↑lane.tree.next_leaf_index then
+        core.result.Result.Err
+          AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState
+      else check master (expected + 1) rest) =
+      core.result.Result.Ok () ↔
+    Valid master (expected + 1) rest
+PoolS2_LaneFacts.lean:20:28: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp_all [check, ̲Valid,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PoolS2_LaneFacts.accepted_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_LaneFacts.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]

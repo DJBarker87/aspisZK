@@ -1,0 +1,77 @@
+PFin_RunLevelBound.lean:15:21: error: unsolved goals
+case h_1
+fuel : ℕ
+ih : ∀ (live : Live) (nodes : Bytes), Bounded (runLevel fuel live nodes)
+nodes : Bytes
+i : ℕ
+value : State
+rest✝ : List (ℕ × State)
+j✝ : ℕ
+snd✝ : State
+tail✝ : List (ℕ × State)
+x✝ : Option State
+heq✝ : SemanticRecordCodec.decodeState (List.take 32 nodes) = none
+⊢ Bounded
+    (have both := decide (paired i j✝);
+    if both = true then
+      have right := ((j✝, snd✝) :: tail✝).head!.2;
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children value right)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 ((j✝, snd✝) :: tail✝)) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else Program.done none)
+
+case h_2.isTrue
+fuel : ℕ
+ih : ∀ (live : Live) (nodes : Bytes), Bounded (runLevel fuel live nodes)
+nodes : Bytes
+i : ℕ
+value : State
+rest✝ : List (ℕ × State)
+j✝ : ℕ
+snd✝ : State
+tail✝ : List (ℕ × State)
+x✝ : Option State
+sibling✝ : State
+heq✝ : SemanticRecordCodec.decodeState (List.take 32 nodes) = some sibling✝
+h✝ : i % 2 = 0
+⊢ Bounded
+    (have both := decide (paired i j✝);
+    if both = true then
+      have right := ((j✝, snd✝) :: tail✝).head!.2;
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children value right)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 ((j✝, snd✝) :: tail✝)) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else
+      have pair := OracleDecisionMultiTree.children value sibling✝;
+      Program.ask (BinMerkle32Path.nodeInput pair) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel ((j✝, snd✝) :: tail✝) (List.drop 32 nodes)) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out))
+
+case h_2.isFalse
+fuel : ℕ
+ih : ∀ (live : Live) (nodes : Bytes), Bounded (runLevel fuel live nodes)
+nodes : Bytes
+i : ℕ
+value : State
+rest✝ : List (ℕ × State)
+j✝ : ℕ
+snd✝ : State
+tail✝ : List (ℕ × State)
+x✝ : Option State
+sibling✝ : State
+heq✝ : SemanticRecordCodec.decodeState (List.take 32 nodes) = some sibling✝
+h✝ : ¬i % 2 = 0
+⊢ Bounded
+    (have both := decide (paired i j✝);
+    if both = true then
+      have right := ((j✝, snd✝) :: tail✝).head!.2;
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children value right)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 ((j✝, snd✝) :: tail✝)) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else
+      have pair := OracleDecisionMultiTree.children sibling✝ value;
+      Program.ask (BinMerkle32Path.nodeInput pair) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel ((j✝, snd✝) :: tail✝) (List.drop 32 nodes)) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out))
+'AspisR1.PFin_RunLevelBound.level' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PFin_RunLevelBound.levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

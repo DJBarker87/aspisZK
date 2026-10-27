@@ -1,0 +1,41 @@
+AspisR1.P6C_NativeEffects.values_append : ∀ (left right : AspisR1.SdkC_Source.Log),
+  AspisR1.P6C_NativeEffects.values (left ++ right) =
+    AspisR1.P6C_NativeEffects.values left ++ AspisR1.P6C_NativeEffects.values right
+'AspisR1.P6C_NativeEffects.values_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.P6C_NativeEffects.source : ∀ {Hash A : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), D.digest hash parts = hashv parts) →
+    ∀ (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Log),
+      AspisR1.CheckpointBytes5Effect.run D hash code (AspisR1.P6C_NativeEffects.values before) =
+        AspisR1.P6C_NativeEffects.forget (AspisR1.SdkC_Source.run hashv code before)
+'AspisR1.P6C_NativeEffects.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.P6C_NativeEffects.accepted : ∀ {Hash A : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), D.digest hash parts = hashv parts) →
+    ∀ (code : AspisR1.SdkC_Source.Code A) (value : A),
+      (AspisR1.SdkC_Source.run hashv code []).1 = Aeneas.Std.Result.ok value →
+        AspisR1.CheckpointBytes5Effect.run D hash code [] =
+          Aeneas.Std.Result.ok (value, AspisR1.P6C_NativeEffects.values (AspisR1.SdkC_Source.run hashv code []).2)
+'AspisR1.P6C_NativeEffects.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.P6C_NativeEffects.no_lost_calls : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (code : AspisR1.SdkC_Source.Code A)
+  (value : A),
+  (AspisR1.SdkC_Source.run hashv code []).1 = Aeneas.Std.Result.ok value →
+    List.length (AspisR1.P6C_NativeEffects.values (AspisR1.SdkC_Source.run hashv code []).2) =
+      List.length (AspisR1.SdkC_Source.run hashv code []).2
+'AspisR1.P6C_NativeEffects.no_lost_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.P6C_NativeEffects.values : AspisR1.SdkC_Source.Log → AspisR1.CheckpointBytes5Effect.Log :=
+fun log =>
+  List.filterMap
+    (fun q =>
+      match q.returned with
+      | Aeneas.Std.Result.ok value => some (q.parts, value)
+      | x => none)
+    log
+def AspisR1.P6C_NativeEffects.forget : {A : Type} →
+  Aeneas.Std.Result A × AspisR1.SdkC_Source.Log → Aeneas.Std.Result (A × AspisR1.CheckpointBytes5Effect.Log) :=
+fun {A} answer =>
+  match answer.1 with
+  | Aeneas.Std.Result.ok value => Aeneas.Std.Result.ok (value, AspisR1.P6C_NativeEffects.values answer.2)
+  | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+  | Aeneas.Std.Result.div => Aeneas.Std.Result.div

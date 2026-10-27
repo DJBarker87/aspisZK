@@ -1,0 +1,43 @@
+'AspisR1.JFn_Nonvacuity.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFn_Nonvacuity.line_accumulation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JFn_Nonvacuity.inhabited : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (background : Bytes → State) (seed : Port3_NativeQueryBody.Ops),
+  ∃ H,
+    JFn_HashBoundary.Realizes H ∧
+      Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary H D) JFx_NativeBytes.checkpoint
+            JFx_NativeBytes.proof JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2 hash =
+          ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator)) ∧
+        ∀ (i : Fin 12),
+          (JFn_ArrayBuilder.ops seed).op0 4#usize
+                (Port3_NativeQueryBody.verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+                  (JFn_ArrayBuilder.ops seed))
+                (JFo_Opening.value (JFn_Values.position i)) =
+              ok (JFn_Values.value i) ∧
+            ∀ (inverse : Std.Array U32 5#usize),
+              ∃ out,
+                SAQ_LineQuery.line JFq_Alpha1.scalar (JFn_Values.value i) inverse = ok out ∧
+                  Port4C_QueryArithmetic.CanonE out :=
+fun {Hash} D hash background seed =>
+  Exists.intro (JFn_HashModelNonvacuity.extension background)
+    ⟨JFn_HashModelNonvacuity.realizes background,
+      ⟨JFn_HashModelNonvacuity.reader D hash background, fun i => ⟨JFn_Values.source seed i, JFn_Lines.source i⟩⟩⟩
+theorem AspisR1.JFn_Nonvacuity.line_accumulation : ∀ (seed : Port3_NativeQueryBody.Ops) (i : Fin 12)
+  (inverse : Std.Array U32 5#usize) (node : U32),
+  ∃ value out after flushed,
+    SAQ_LineQuery.line JFq_Alpha1.scalar (JFn_Values.value i) inverse = ok value ∧
+      Port3_NativeQueryBody.verifier.accumulate_batched_with_node (JFn_ArrayBuilder.ops seed) JFo_Prepared.value
+            JFo_Prepared.accumulator node value JFo_Pending.value =
+          ok (out, after) ∧
+        out.next = 11#usize ∧ Port3_FlushInstall.flush after out.weights.deref = ok flushed ∧ (↑flushed).length = 64 :=
+fun seed i inverse node =>
+  let ⟨value, h✝⟩ := JFn_Lines.source i inverse
+  let ⟨line, canonical⟩ := h✝
+  let ⟨out, h✝¹⟩ := JFn_AccumulationFlush.source seed node value canonical
+  let ⟨after, h✝²⟩ := h✝¹
+  let ⟨flushed, h✝³⟩ := h✝²
+  let ⟨run, right✝⟩ := h✝³
+  let ⟨left✝, right✝¹⟩ := right✝
+  let ⟨next, right✝²⟩ := right✝¹
+  let ⟨flush, right✝³⟩ := right✝²
+  let ⟨size, right✝⁴⟩ := right✝³
+  Exists.intro value (Exists.intro out (Exists.intro after (Exists.intro flushed ⟨line, ⟨run, ⟨next, ⟨flush, size⟩⟩⟩⟩)))

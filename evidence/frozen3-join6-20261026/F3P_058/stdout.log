@@ -1,0 +1,15 @@
+F3P_LowCellRead.lean:18:50: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+F3P_LowCellRead.lean:18:57: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.take 16 bytes).length
+in the target expression
+  bytes = List.take 16 bytes ++ List.take (16 - List.length bytes) (List.replicate 16 0)
+
+bytes : Bytes
+a b : SemanticCoefficientCodec.LowWide
+full : SemanticCoefficientCodec.decodeLow bytes = some a
+low : SemanticCoefficientCodec.decodeLow (List.take 16 bytes ++ List.replicate 16 0) = some b
+length : 32 = List.length bytes
+enough : (List.take 16 bytes).length = 16
+⊢ bytes = List.take 16 bytes ++ List.take (16 - List.length bytes) (List.replicate 16 0)
+'AspisR1.F3P_LowCellRead.identify' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

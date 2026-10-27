@@ -1,0 +1,48 @@
+{"attempt": "RPz7_771", "exit_status": 0, "wall_seconds": 2.0531969889998436, "peak_rss_kib": "5271672", "swaps": "0", "print_axioms": ["'AspisR1.WAdm_Carrier.proof_view' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.WAdm_Carrier.public_view' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.WAdm_Carrier.wide' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.WAdm_Carrier.proof_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_Carrier.public_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_Carrier.wide' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.WAdm_Carrier.WideInputs (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) : Prop
+number of parameters: 2
+fields:
+  AspisR1.WAdm_Carrier.WideInputs.gamma : aspis_core.field.wide_exact.WideExact.from_limbs
+        (WAdm_WideIndices.limbs (toE p.gamma)) =
+      ok (some (toE p.gamma))
+  AspisR1.WAdm_Carrier.WideInputs.kappa : aspis_core.field.wide_exact.WideExact.from_limbs
+   
+...
+er.WideInputs (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) : Prop
+number of parameters: 2
+fields:
+  AspisR1.WAdm_Carrier.WideInputs.gamma : aspis_core.field.wide_exact.WideExact.from_limbs
+        (WAdm_WideIndices.limbs (toE p.gamma)) =
+      ok (some (toE p.gamma))
+  AspisR1.WAdm_Carrier.WideInputs.kappa : aspis_core.field.wide_exact.WideExact.from_limbs
+        (WAdm_WideIndices.limbs (toE p.kappa)) =
+      ok (some (toE p.kappa))
+  AspisR1.WAdm_Carrier.WideInputs.alpha : ∀ x ∈ ↑p.alpha,
+      aspis_core.field.wide_exact.WideExact.from_limbs (WAdm_WideIndices.limbs (toE x)) = ok (some (toE x))
+  AspisR1.WAdm_Carrier.WideInputs.claim : aspis_core.field.wide_exact.WideExact.from_limbs
+        (WAdm_WideIndices.limbs (toE p.claim)) =
+      ok (some (toE p.claim))
+  AspisR1.WAdm_Carrier.WideInputs.rhs : aspis_core.field.wide_exact.WideExact.from_limbs
+        (WAdm_WideIndices.limbs (toE a.rhs)) =
+      ok (some (toE a.rhs))
+constructor:
+  AspisR1.WAdm_Carrier.WideInputs.mk {p : AspisR1Stage2.verifier.Prepared} {a : AspisR1Stage2.verifier.Accumulator}
+    (gamma :
+      aspis_core.field.wide_exact.WideExact.from_limbs (WAdm_WideIndices.limbs (toE p.gamma)) = ok (some (toE p.gamma)))
+    (kappa :
+      aspis_core.field.wide_exact.WideExact.from_limbs (WAdm_WideIndices.limbs (toE p.kappa)) = ok (some (toE p.kappa)))
+    (alpha :
+      ∀ x ∈ ↑p.alpha,
+        aspis_core.field.wide_exact.WideExact.from_limbs (WAdm_WideIndices.limbs (toE x)) = ok (some (toE x)))
+    (claim :
+      aspis_core.field.wide_exact.WideExact.from_limbs (WAdm_WideIndices.limbs (toE p.claim)) = ok (some (toE p.claim)))
+    (rhs :
+      aspis_core.field.wide_exact.WideExact.from_limbs (WAdm_WideIndices.limbs (toE a.rhs)) = ok (some (toE a.rhs))) :
+    WideInputs p a
+
+Running as unit: run-r4a1a9767a65845ee85ffc3a418052e1f.scope; invocation ID: f7e9c9d5f7484d68b370335ad745064b

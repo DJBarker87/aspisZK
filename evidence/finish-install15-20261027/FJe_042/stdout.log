@@ -1,0 +1,39 @@
+FJe_PackedRawRow.lean:26:27: error: unsolved goals
+input : Input
+r : Usize
+hr : ↑r < 4
+row : Row
+run : array_from_fn_copy 4#usize core.marker.CopyU64 inner 0#u64 (input, r) = ok row
+selected : ∀ (i : Usize) (hi : ↑i < ↑4#usize), inner.call_mut (input, r) i = ok ((↑row)[↑i], input, r)
+j : Fin 4
+i : Usize := Usize.ofNatCore ↑j ⋯
+⊢ ↑(Usize.ofNatCore ↑j ⋯) = ↑j
+FJe_PackedRawRow.lean:30:24: error: Type mismatch: After simplification, term
+  hi
+ has type
+  @LT.lt ℕ instLTNat (↑i) 4
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑i ↑4#usize
+FJe_PackedRawRow.lean:26:43: warning: This simp argument is unused:
+  UScalar.ofNatCore_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [i,̵U̵S̵c̵a̵l̵a̵r̵.̵o̵f̵N̵a̵t̵C̵o̵r̵e̵_̵v̵a̵l̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJe_PackedRawRow.lean:37:13: warning: This simp argument is unused:
+  outer
+
+Hint: Omit it from the simp argument list.
+  simp only [o̵u̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵state_only_poseidon.external_local_packed_raw.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayU644.call_mut,
+      rr, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJe_PackedRawRow.lean:45:15: error: Tactic `unfold` failed to unfold `state_only_poseidon.external_local_packed_raw.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayU644.call_mut` in
+  state_only_poseidon.external_local_packed_raw.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayU644.call_mut input r =
+    ok (row, input)
+'AspisR1.FJe_PackedRawRow.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawRow.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawRow.callback_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawRow.callback_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

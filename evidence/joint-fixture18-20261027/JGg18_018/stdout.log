@@ -1,0 +1,165 @@
+JGg_QueryTotal.lean:16:23: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+f : F
+g : ℕ → T
+stable : ∀ (i : Usize), ↑i < ↑N → callback.call_mut f i = ok (g ↑i, f)
+small : ↑N ≤ 8
+i : Usize
+acc : List T
+bound : ↑N - ↑i ≤ 0
+stop : ¬i < N
+⊢ (if h : i < N then div else ok (acc.reverse, f)) = ok (acc.reverse, f)
+JGg_QueryTotal.lean:25:17: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+f : F
+g : ℕ → T
+stable : ∀ (i : Usize), ↑i < ↑N → callback.call_mut f i = ok (g ↑i, f)
+small : ↑N ≤ 8
+fuel : ℕ
+ih : ∀ (i : Usize) (acc : List T), ↑N - ↑i ≤ fuel → ∃ out, arrayFromFnLoop N callback fuel i f acc = ok (out, f)
+i : Usize
+acc : List T
+bound : ↑N - ↑i ≤ fuel + 1
+active : i < N
+hi : ↑i < ↑N
+add : i + 1#usize ⦃ j => ↑j = ↑i + 1 ⦄
+j : UScalar UScalarTy.Usize
+added : i + 1#usize = ok j
+hj : ↑j = ↑i + 1
+out : List T
+tail : arrayFromFnLoop N callback fuel j f (g ↑i :: acc) = ok (out, f)
+⊢ (if h : i < N then
+      let (value, f') := (g ↑i, f)
+      arrayFromFnLoop N callback fuel j f' (value :: acc)
+    else ok (acc.reverse, f)) =
+    ok (out, f)
+JGg_QueryTotal.lean:26:25: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+f : F
+g : ℕ → T
+stable : ∀ (i : Usize), ↑i < ↑N → callback.call_mut f i = ok (g ↑i, f)
+small : ↑N ≤ 8
+fuel : ℕ
+ih : ∀ (i : Usize) (acc : List T), ↑N - ↑i ≤ fuel → ∃ out, arrayFromFnLoop N callback fuel i f acc = ok (out, f)
+i : Usize
+acc : List T
+bound : ↑N - ↑i ≤ fuel + 1
+active : ¬i < N
+⊢ (if h : i < N then do
+      let (value, f') ← callback.call_mut f i
+      let i' ← i + 1#usize
+      arrayFromFnLoop N callback fuel i' f' (value :: acc)
+    else ok (acc.reverse, f)) =
+    ok (acc.reverse, f)
+JGg_QueryTotal.lean:16:53: warning: This simp argument is unused:
+  if_neg stop
+
+Hint: Omit it from the simp argument list.
+  simp only [arrayFromFnLoop,̵i̵f̵_̵n̵e̵g̵ ̵s̵t̵o̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGg_QueryTotal.lean:25:47: warning: This simp argument is unused:
+  if_pos active
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵r̵r̵a̵y̵F̵r̵o̵m̵F̵n̵L̵o̵o̵p̵,̵i̵f̵_̵p̵o̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵s̵t̵a̵b̵l̵e̵[̲a̲r̲r̲a̲y̲F̲r̲o̲m̲F̲n̲L̲o̲o̲p̲,̲ ̲s̲t̲a̲b̲l̲e̲ i h̵i̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵d̵d̵e̵d̵,̵t̵a̵i̵l̵]̵h̲i̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲a̲d̲d̲e̲d̲,̲ ̲t̲a̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGg_QueryTotal.lean:25:90: warning: This simp argument is unused:
+  tail
+
+Hint: Omit it from the simp argument list.
+  simp only [arrayFromFnLoop, ̲if_pos active, ̲stable i hi, ̲bind_tc_ok, ̲added,̵t̵a̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGg_QueryTotal.lean:26:55: warning: This simp argument is unused:
+  if_neg active
+
+Hint: Omit it from the simp argument list.
+  simp only [arrayFromFnLoop,̵i̵f̵_̵n̵e̵g̵ ̵a̵c̵t̵i̵v̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGg_QueryTotal.loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGg_QueryTotal.lean:35:4: error: Type mismatch: After simplification, term
+  AspisR1QueryScanUnrolled.r0_transcript.block_rank_callback_call_mut_success block i hi
+ has type
+  AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut block i =
+    ok (AspisR1QueryScanUnrolled.r0_transcript.wordAt✝ block (↑i) hi, block)
+but is expected to have type
+  AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut block i =
+    ok (if hj : ↑i < 8 then AspisR1QueryScanUnrolled.r0_transcript.wordAt✝ block (↑i) hj else 0#u32, block)
+JGg_QueryTotal.lean:42:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  arrayFromFnLoop 8#usize callback 9 0#usize block []
+in the target expression
+  ∃ ranks,
+    (match h :
+        arrayFromFnLoop 8#usize
+          AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+          (↑8#usize + 1) 0#usize block [] with
+      | ok (values, snd) => ok ⟨values, ⋯⟩
+      | fail error => fail error
+      | div => div) =
+      ok ranks
+
+block : Std.Array U8 32#usize
+callback : core.ops.function.FnMut AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure Usize U32 :=
+  AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+stable :
+  ∀ (i : Usize),
+    ↑i < ↑8#usize →
+      callback.call_mut block i = ok (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block ↑i, block)
+values : List U32
+loop : arrayFromFnLoop 8#usize callback 9 0#usize block [] = ok (values, block)
+⊢ ∃ ranks,
+    (match h :
+        arrayFromFnLoop 8#usize
+          AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+          (↑8#usize + 1) 0#usize block [] with
+      | ok (values, snd) => ok ⟨values, ⋯⟩
+      | fail error => fail error
+      | div => div) =
+      ok ranks
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGg_QueryTotal.lean:51:19: error: unsolved goals
+case cons
+block : Std.Array U8 32#usize
+callback : core.ops.function.FnMut AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure Usize U32 :=
+  AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+stable :
+  ∀ (i : Usize),
+    ↑i < ↑8#usize →
+      callback.call_mut block i = ok (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block ↑i, block)
+values : List U32
+loop : arrayFromFnLoop 8#usize callback 9 0#usize block [] = ok (values, block)
+ranks : Std.Array U32 8#usize
+rank : AspisR1QueryScanUnrolled.r0_transcript.block_rank block = ok ranks
+x : U32
+xs : List U32
+ih :
+  AspisV8R19.TraversalRuntime.mapState
+      AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32.call_mut xs () =
+    ok (List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord xs, ())
+⊢ (do
+      let __x ← ok (List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord xs, ())
+      ok (AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord x :: __x.1, __x.2)) =
+    ok
+      (AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord x ::
+          List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord xs,
+        ())
+'AspisR1.JGg_QueryTotal.words_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

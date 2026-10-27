@@ -1,0 +1,10 @@
+@[backward_defeq] theorem AspisR1.JFp_SHA256.loop.eq_1 : ∀ (x : List ℕ) (x_1 : AspisR1.JFp_SHA256.Reg),
+  AspisR1.JFp_SHA256.loop [] x x_1 = x_1 :=
+fun x x_1 => Eq.refl (AspisR1.JFp_SHA256.loop [] x x_1)
+JFp_SHAInspect.lean:3:7: error: (kernel) excessive memory consumption detected
+@[backward_defeq] theorem AspisR1.JFp_SHA256.loop.eq_2 : ∀ (x : List ℕ) (x_1 : AspisR1.JFp_SHA256.Reg) (k : ℕ)
+  (ks : List ℕ),
+  AspisR1.JFp_SHA256.loop (k :: ks) x x_1 =
+    AspisR1.JFp_SHA256.loop ks (AspisR1.JFp_SHA256.advance x) (AspisR1.JFp_SHA256.round x_1 k (x.getD 0 0)) :=
+fun x x_1 k ks => Eq.refl (AspisR1.JFp_SHA256.loop (k :: ks) x x_1)
+'AspisR1.JFp_SHA256.loop.eq_2' does not depend on any axioms

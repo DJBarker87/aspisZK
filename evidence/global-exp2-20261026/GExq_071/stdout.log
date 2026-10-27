@@ -1,0 +1,34 @@
+GExq_PrepareFrame.lean:23:41: error: Application type mismatch: The argument
+  B
+has type
+  AspisR1PublicPreparation.FinishModel.Boundaries
+of sort `Type 1` but is expected to have type
+  AspisR1PublicPreparation.RoundModel.Boundaries
+of sort `Type` in the application
+  GExp_PrepareAssociation.prepare ops B
+GExq_PrepareFrame.lean:21:102: error: unsolved goals
+Hash : Type
+ops : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : aspis_core.digest.Digest32 Hash
+source : ∀ (h : Hash) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+hash : Hash
+p : verifier.Prepared
+input scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+success :
+  verifier.candidate.prepare (RowShape_InstalledSlots.verifierOps ops B std) D pub proof hash none input =
+    ok (core.result.Result.Ok p, scratch)
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑proof
+⊢ ∃ frame,
+    Read
+        (SdkC_Source.readLog
+          (SdkC_Source.run hashv (SdkD_PrepareLower.lower (SdkD_PrepareSource.code ops B std D pub proof hash input))
+              []).2)
+        frame ∧
+      BinRawByteCollisionTargets.pred 3 frame = some (OraclePortBatchDraft.committedRoot parsed 2)
+'AspisR1.GExq_PrepareFrame.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,13 @@
+'AspisR1.Port4C_CollectStd.next_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[irreducible] def Aeneas.Std.alloc.vec.FromIteratorVec.iterToList : {T IntoIter : Type} →
+  core.iter.traits.iterator.Iterator IntoIter T → IntoIter → List T → Result (List T) :=
+fun {T IntoIter} iterInst =>
+  Lean.Order.fix
+    (fun f iter acc => do
+      let __x ← iterInst.next iter
+      match __x with
+        | (opt, iter) =>
+          match opt with
+          | none => ok acc.reverse
+          | some item => f iter (item :: acc))
+    ⋯

@@ -1,0 +1,51 @@
+{"attempt": "ART_092", "exit_status": 0, "wall_seconds": 2.0861675390042365, "peak_rss_kib": "5268472", "swaps": "0", "print_axioms": ["'AspisR1.RPx_FailedQuery.counted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.RPx_FailedQuery.counted : ∀ {A : Type} (parts : AspisR1.SdkC_Source.Parts)
+  (k : AspisR1.SdkC_Source.Digest → AspisR1.CheckpointBytes5Effect.Code A) (error : Aeneas.Std.Error)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  List.length
+        (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+            (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+      1 ∧
+    AspisR1.SdkC_Source.readLog
+          (AspisR1.SdkC_Source.run (fun x => Aeneas.Std.Result.fail error)
+              (AspisR1.CheckpointBytes5Effect.Code.read parts k) []).2 =
+        [] ∧
+      AspisR1.RPx_AttemptPrefix.addresses
+            (AspisR1.SdkC_Source.run
+...
+or) [] parts k))))
+              [AspisV8R19.SqueezeOracleBridge.flatten parts])
+            (eq_self [AspisV8R19.SqueezeOracleBridge.flatten parts])),
+        Exists.intro
+          (List.map Prod.fst
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.SdkC_Oracle.program
+                  (k
+                    (AspisV8R19.SqueezeOracleBridge.encodeState
+                      (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1)
+          (of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congrArg (List.map Prod.fst)
+                    (congrArg Prod.fst
+                      (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H (AspisV8R19.SqueezeOracleBridge.flatten parts) fun d =>
+                        AspisR1.SdkC_Oracle.program (k (AspisV8R19.SqueezeOracleBridge.encodeState d))))))
+                (AspisV8R19.SqueezeOracleBridge.flatten parts ::
+                  List.map Prod.fst
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.SdkC_Oracle.program
+                          (k
+                            (AspisV8R19.SqueezeOracleBridge.encodeState
+                              (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1))
+              (eq_self
+                (AspisV8R19.SqueezeOracleBridge.flatten parts ::
+                  List.map Prod.fst
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.SdkC_Oracle.program
+                          (k
+                            (AspisV8R19.SqueezeOracleBridge.encodeState
+                              (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1))))⟩⟩⟩
+'AspisR1.RPx_FailedQuery.counted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7aca193ff74c43e7a7a6c82cf14e470a.scope; invocation ID: 33c8aabf4f2d42c28efe7d1a0b83339c

@@ -1,0 +1,40 @@
+{"attempt": "FGl_041", "exit_status": 0, "wall_seconds": 4.311963410989847, "peak_rss_kib": "5405528", "swaps": "0", "print_axioms": []}
+def AspisR1.NP6_Constructors.Contents : AspisR1.Tx1Q_Carriers.C.A → AspisR1.Tx1Q_Carriers.C.B → Prop :=
+fun initial state =>
+  ↑(AspisR1.Tx1Q_Carriers.accumulator initial).weights = List.replicate 64 AspisR1.Port2_Initial.zeroK ∧
+    (AspisR1.Tx1Q_Carriers.accumulator initial).rhs = AspisR1.Port2_Initial.zeroE ∧
+      (AspisR1.Tx1Q_Carriers.accumulator initial).power = AspisR1.Port2_Initial.oneK ∧
+        (AspisR1.Tx1Q_Carriers.accumulator initial).next = 0#usize ∧
+          AspisR1.CheckpointBytes5Output.accumulator (AspisR1.Tx1Q_Carriers.accumulator initial) =
+              AspisR1.QueryAccumulator.initial ∧
+            ↑(AspisR1.Tx1Q_Carriers.pending state).raw =
+                List.map
+...
+              ↑out =
+                [AspisR1.ClaimsUnrolledFinish.toMainArray row0, AspisR1.ClaimsUnrolledFinish.toMainArray row1,
+                  AspisR1.ClaimsUnrolledFinish.toMainArray row2]
+def AspisR1.NP6_ParsedClaims.Content : AspisR1.NP6_StdModel.Reservation →
+  Aeneas.Std.Slice Aeneas.Std.U8 →
+    AspisR1.ClaimsUnrolledFinish.MainPrefix → AspisR1.ClaimsUnrolledFinish.MainClaims → Prop :=
+fun reservation bytes pre out =>
+  reservation = Aeneas.Std.core.result.Result.Ok () ∧
+    ∃ vr row0 row1 row2,
+      (AspisR1.ClaimsUnrolledFinish.external (AspisR1.NP6_StdModel.calls reservation)).validated
+            (AspisR1.ClaimsUnrolledFinish.fromMainPrefix pre) 25#u8 =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok vr) ∧
+        (↑vr.framed).length = 3717 ∧
+          (AspisR1.ClaimsUnrolledFinish.external (AspisR1.NP6_StdModel.calls reservation)).decode 29#usize vr 0#usize =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok row0) ∧
+            (AspisR1.ClaimsUnrolledFinish.external (AspisR1.NP6_StdModel.calls reservation)).decode 29#usize vr
+                  29#usize =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok row1) ∧
+              (AspisR1.ClaimsUnrolledFinish.external (AspisR1.NP6_StdModel.calls reservation)).decode 29#usize vr
+                    58#usize =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok row2) ∧
+                ↑out =
+                    [AspisR1.ClaimsUnrolledFinish.toMainArray row0, AspisR1.ClaimsUnrolledFinish.toMainArray row1,
+                      AspisR1.ClaimsUnrolledFinish.toMainArray row2] ∧
+                  AspisR1PublicPreparation.PrefixAdapter.parseAccepted bytes =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre)
+
+Running as unit: run-r3194f5d5fd684a98925eff21525fd7f1.scope; invocation ID: 73b47e77a2954f12ab1927f50404acca

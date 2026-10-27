@@ -1,0 +1,43 @@
+{"attempt": "FGl_031", "exit_status": 0, "wall_seconds": 3.3216423880076036, "peak_rss_kib": "5405944", "swaps": "0", "print_axioms": []}
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin (ops : AdapterRw.Ops)
+  (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (semantic : AspisR1.S2W_AuthenticatedInputs.Public) (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (split : Aeneas.Std.Usize) : Prop
+number of parameters: 7
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.header : ∀
+      (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      AdapterRw.first_decoded ops semantic pub proof split =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+        decode (AspisR1.MultiproofConeCan
+...
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+          (↑checkpoint).length = 1768) :
+    AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin ops decode H semantic pub proof split
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin (ops : AdapterRw.Ops)
+  (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 6
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.checkedHeader : ops.op11
+          (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () Option.none =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+      decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+        Option.some
+          (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.mk {ops : AdapterRw.Ops}
+    {decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8}
+    (checkedHeader :
+      ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () Option.none =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+        decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+          Option.some
+            (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))) :
+    AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin ops decode H pub proof checkpoint
+
+Running as unit: run-r3e41e88764884a2bb1dc1b54b18c151e.scope; invocation ID: de45fb767a6c4208bf9aa19551fd78b5

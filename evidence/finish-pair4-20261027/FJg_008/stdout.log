@@ -1,0 +1,130 @@
+FJg_SharedPoints.lean:35:6: error(lean.unknownIdentifier): Unknown identifier `FJf_ArraySlots.update_slot`
+FJg_SharedPoints.lean:20:52: error: unsolved goals
+case refl
+alpha : Std.Array SQ 10#usize
+s : Slice FIn_WeightsExtract.field.QM31
+hs : lift alpha.to_slice = ok s
+iter : core.iter.adapters.rev.Rev (core.ops.range.Range (UScalar UScalarTy.Usize))
+hi :
+  core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := s.len } =
+    ok iter
+successor : Std.Array FIn_WeightsExtract.field.QM31 10#usize
+hsc :
+  FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop iter alpha alpha
+      FIn_WeightsExtract.field.QM31.ONE =
+    ok successor
+q : FIn_WeightsExtract.field.QM31
+hq : alpha.index_usize 7#usize = ok q
+x : FIn_WeightsExtract.field.QM31
+hx : FIn_WeightsExtract.field.QM31.ONE.sub q = ok x
+p : Std.Array FIn_WeightsExtract.field.QM31 10#usize
+hp : alpha.update 7#usize x = ok p
+q' : FIn_WeightsExtract.field.QM31
+hq' : p.index_usize 6#usize = ok q'
+x' : FIn_WeightsExtract.field.QM31
+hx' : FIn_WeightsExtract.field.QM31.ONE.sub q' = ok x'
+p' : Std.Array FIn_WeightsExtract.field.QM31 10#usize
+hp' : p.update 6#usize x' = ok p'
+run✝⁸ :
+  (do
+      let s ← lift alpha.to_slice
+      have i : Usize := s.len
+      let iter ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := i }
+      let successor ←
+        FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop iter alpha alpha
+            FIn_WeightsExtract.field.QM31.ONE
+      let q ← alpha.index_usize 7#usize
+      let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub q
+      let absorption ← alpha.update 7#usize q1
+      let q2 ← absorption.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← absorption.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, p'] ⋯)
+run✝⁷ :
+  (have i := s.len;
+    do
+    let iter ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := i }
+    let successor ←
+      FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop iter alpha alpha
+          FIn_WeightsExtract.field.QM31.ONE
+    let q ← alpha.index_usize 7#usize
+    let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub q
+    let absorption ← alpha.update 7#usize q1
+    let q2 ← absorption.index_usize 6#usize
+    let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+    let absorption1 ← absorption.update 6#usize q3
+    ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, p'] ⋯)
+run✝⁶ :
+  (do
+      let successor ←
+        FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop iter alpha alpha
+            FIn_WeightsExtract.field.QM31.ONE
+      let q ← alpha.index_usize 7#usize
+      let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub q
+      let absorption ← alpha.update 7#usize q1
+      let q2 ← absorption.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← absorption.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, p'] ⋯)
+run✝⁵ :
+  (do
+      let q ← alpha.index_usize 7#usize
+      let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub q
+      let absorption ← alpha.update 7#usize q1
+      let q2 ← absorption.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← absorption.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, p'] ⋯)
+run✝⁴ :
+  (do
+      let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub q
+      let absorption ← alpha.update 7#usize q1
+      let q2 ← absorption.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← absorption.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, p'] ⋯)
+run✝³ :
+  (do
+      let absorption ← alpha.update 7#usize x
+      let q2 ← absorption.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← absorption.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, p'] ⋯)
+run✝² :
+  (do
+      let q2 ← p.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← p.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, p'] ⋯)
+run✝¹ :
+  (do
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q'
+      let absorption1 ← p.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, p'] ⋯)
+run✝ :
+  (do
+      let absorption1 ← p.update 6#usize x'
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, p'] ⋯)
+run : ok (Array.make 3#usize [alpha, successor, p'] ⋯) = ok (Array.make 3#usize [alpha, successor, p'] ⋯)
+i : ℕ
+h6 : i ≠ 6
+h7 : i ≠ 7
+⊢ (↑p')[i]? = (↑alpha)[i]?
+'AspisR1.FJg_SharedPoints.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

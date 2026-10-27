@@ -1,0 +1,26 @@
+SdkD_WriterCells.lean:40:8: error: Type mismatch: After simplification, term
+  bound
+ has type
+  i < 32
+but is expected to have type
+  ?m.237 < List.length ?m.236
+SdkD_WriterCells.lean:38:32: error: unsolved goals
+p : CheckpointBytes5Writer.Prepared
+a : CheckpointBytes5Writer.Accumulator
+hp hu : Std.Array U8 32#usize
+i : ℕ
+hi : i < List.length (OraclePortCompactDraft.slice (sourceBody p a hp hu) 112 32)
+hj : i < List.length (bytesOf ↑(↑p.roots)[0])
+bound : i < 32
+cell : some (OraclePortCompactDraft.slice (sourceBody p a hp hu) 112 32)[i] = some (decodeByte (↑(↑p.roots)[0])[i])
+left : some (OraclePortCompactDraft.slice (sourceBody p a hp hu) 112 32)[i] = (sourceBody p a hp hu)[112 + i]?
+⊢ Option.map decodeByte (↑(↑p.roots)[0])[i]? = some (decodeByte (↑(↑p.roots)[0])[i])
+SdkD_WriterCells.lean:40:27: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵y̵t̵e̵s̵O̵f̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵[̲b̲y̲t̲e̲s̲O̲f̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲m̲a̲p̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲ (by simpa using b̵o̵u̵n̵d̵)̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵]̵b̲o̲u̲n̲d̲)̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SdkD_WriterCells.selector' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SdkD_WriterCells.root0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

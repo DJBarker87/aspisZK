@@ -1,0 +1,10 @@
+import F3M_PreparedClaim
+import OraclePortAcceptedContextC6
+set_option autoImplicit false
+#print AspisR1.JointFunctionalBinding.claimedValue
+#print AspisR1CurrentPreparedClaim.ClaimParts.kappaPolynomial
+#print AspisR1CurrentPreparedClaim.ClaimParts.kappaTerm
+#print AspisR1CurrentPreparedClaim.Concrete.decode
+#print AspisR1CurrentWide.Proof.decodeWide
+#print AspisR1CurrentWide.Proof.decodeQM
+#print AspisR1CurrentWide.Proof.decodeM31

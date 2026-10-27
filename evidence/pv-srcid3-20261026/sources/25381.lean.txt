@@ -1,0 +1,46 @@
+import R1Z.PV_Src_CanonicalSibling
+
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Src_PathSiblings
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R1J.SpendWitnessMap
+open PV_Src_CheckedEncoding
+
+theorem at_level (w : W) (index : U32)
+    (selected : (w.path 0).2 = if (w.path 0).1 then w.pair.firstCommitment else w.pair.secondCommitment)
+    (n : Nat) (hn : n < 24) :
+    (BuilderRecordsPath.siblings (PV_Src_NativeDirections.reference (nativeWitness w index))).val[n]! =
+      d32 (w.path ⟨n,hn⟩).2 := by
+  rw [BuilderRecordsPath.siblings,BuilderRecordsArray.tabulate_get _ _ _ (by simpa using hn)]
+  by_cases h0 : n = 0
+  · subst n
+    rw [if_pos rfl]
+    change (if (w.path 0).1 then d32 w.pair.firstCommitment else d32 w.pair.secondCommitment) = d32 (w.path 0).2
+    cases hb : (w.path 0).1 <;> simpa only [hb,Bool.false_eq_true,if_false,if_true] using congrArg d32 selected.symm
+  · rw [if_neg h0]
+    by_cases h20 : n ≤ 20
+    · rw [if_pos h20]
+      change (arr20 _).val[n-1]! = _
+      rw [arr20_get _ _ (by omega)]
+      have he : (⟨(n-1)+1,by omega⟩ : Fin 24) = ⟨n,hn⟩ := Fin.ext (by omega)
+      rw [he]
+    · rw [if_neg h20]
+      change (arr3 _).val[n-21]! = _
+      rw [arr3_get _ _ (by omega)]
+      have he : (⟨(n-21)+21,by omega⟩ : Fin 24) = ⟨n,hn⟩ := Fin.ext (by omega)
+      rw [he]
+
+theorem siblings (w : W) (index : U32)
+    (selected : (w.path 0).2 = if (w.path 0).1 then w.pair.firstCommitment else w.pair.secondCommitment) :
+    BuilderRecordsPath.siblings (PV_Src_NativeDirections.reference (nativeWitness w index)) =
+      (BuilderCanonical.rustWitness w).sibs := by
+  apply BuilderRecordCanonical.array_ext
+  intro n hn
+  have hn' : n < 24 := by simpa using hn
+  rw [at_level w index selected n hn']
+  change _ = (arr24 _).val[n]!
+  rw [arr24_get _ n hn']
+
+#print axioms at_level
+#print axioms siblings
+end R1Z.PV_Src_PathSiblings

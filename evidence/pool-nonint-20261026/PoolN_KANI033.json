@@ -1,0 +1,49 @@
+{
+  "attempt": "PoolN_KANI033",
+  "kind": "kani",
+  "source_revision": "c06f3974c3998cf9650524a5264a506cba0a209c",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolN_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolN_kani_target",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,no-entrypoint",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "PoolN_ASPT_prefix_fixedmeta_",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolN_processor_harness.rs",
+    "PoolN_forest_harness.rs",
+    "PoolN_misc_harness.rs",
+    "PoolN_source-pins.json",
+    "PoolN_processor_prefixes.rs",
+    "PoolN_pair_forest_prefixes.rs",
+    "PoolN_prefix-manifest.json",
+    "PoolN_fixture.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Literal source prefix; fixed canonical instruction and well-shaped checkpoint metadata; arbitrary checkpoint bytes and balance. First-byte frame only. Metadata failures are a separate Hiq guard theorem; universal source join remains open."
+  },
+  "expected_time": "Isolated well-shaped metadata ASPT prefix after KANI032 timed out on symbolic metadata; no cap or timeout increase."
+}

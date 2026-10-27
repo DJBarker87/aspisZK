@@ -1,0 +1,46 @@
+{"attempt": "JFo_005", "exit_status": 1, "wall_seconds": 2.4556415370316245, "peak_rss_kib": "5296300", "swaps": "0", "print_axioms": ["'AspisR1.JFo_Suffix.allocated' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFo_Suffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFo_Suffix.lean:33:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let value ← CheckpointBytes4Ops.readWeights JFx_NativeBytes.checkpoint (JFq_Raw.reader 712#usize).at initial
+    match value with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok a =>
+        if (a.2 != 1736#usize) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+        else do
+          let cursor ← lift (UScalar.cast UScalarTy.Usize 10#u8)
+          ok
+              (core.result.Result.Ok
+                ({ variant := transport.Variant.S2, roots := Array.make 2#usize [JFq_Root0.value, JFq_Root1.value] ⋯,
+                    gamma := JFq_Gamma.scalar
+...
+       if (a.2 != 1736#usize) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+          else do
+            let cursor ← lift (UScalar.cast UScalarTy.Usize 10#u8)
+            ok
+                (core.result.Result.Ok
+                  ({ variant := transport.Variant.S2, roots := Array.make 2#usize [JFq_Root0.value, JFq_Root1.value] ⋯,
+                      gamma := JFq_Gamma.scalar, kappa := JFq_Kappa.scalar,
+                      alpha := Array.make 2#usize [JFq_Alpha0.scalar, JFq_Alpha1.scalar] ⋯, rho := JFq_Rho.scalar,
+                      queries := JFq_Queries.value, semantic_alpha := JFq_Semantic.value,
+                      z :=
+                        Array.make 2#usize
+                          [{ x := JFq_Z0.scalar, y := JFq_Z1.scalar }, { x := JFq_Z2.scalar, y := JFq_Z3.scalar }] ⋯,
+                      claim := JFq_Claim.scalar, state := JFq_State.value },
+                    { weights := a.1, rhs := JFq_Rhs.scalar, power := JFq_Power.scalar, next := cursor }))) =
+    ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator))
+JFo_Suffix.lean:32:34: warning: This simp argument is unused:
+  restored
+
+Hint: Omit it from the simp argument list.
+  simp only [T2Nat_ReaderSuffix.normalized, ̲T2Nat_Try.withRead, ̲T2Nat_Try.withOk,
+      CheckpointBytes4Ops.ops, ̲step0, ̲step1, ̲step2, ̲step3,
+  ̵  ̵ ̵ ̵step4, ̲step5, ̲step6,
+      CheckpointBytes4Ops.finalLen, ̲CheckpointBytes4Ops.zeroK, ̲allocated,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry,̵r̵e̵s̵t̵o̵r̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFo_Suffix.allocated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFo_Suffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r401ad207a1e0443c8d007f90d9f67c19.scope; invocation ID: 508e031c31cf460c8e0b5108c35d4334

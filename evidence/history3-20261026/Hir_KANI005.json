@@ -1,0 +1,48 @@
+{
+  "attempt": "Hir_KANI005",
+  "kind": "kani",
+  "source_revision": "d896f77e1ccc72fd5db1aee252cca875b238cb11",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_kani_target",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,no-entrypoint",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "Hir_retained_reader_",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "Hir_pool_harness.rs",
+    "Hir_PoolPins.json",
+    "Hir_src/programs/aspis-pool/src/pair_forest.rs",
+    "Hir_close_harness.rs",
+    "Hir_src/programs/aspis-pool/src/processor.rs",
+    "Hir_encoded_harness.rs",
+    "Hir_read_harness.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual decode_retained_pair_forest_checkpoint_account_v1 wrong-owner and signer rejection gates, all data arbitrary, no stubs. Complete successful PDA authentication/lifecycle still open."
+  },
+  "expected_time": "Two optimized actual retained-reader wrong-owner/signer rejection gates with arbitrary full192-byte data. No PDA/hash branch expected."
+}

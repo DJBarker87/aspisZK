@@ -1,0 +1,38 @@
+import JFo_Prepared
+import JFt_ExactArray
+import AuS1_Install
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFn_BatchRoot
+open Aeneas Aeneas.Std Result
+open MultiproofConeSlices
+
+def view : Slice U8 := sub JFx_NativeBytes.proof 7751#usize 7783#usize
+
+theorem length : view.val.length=32 := by
+  simp only [view,sub,List.slice,List.length_take,List.length_drop,JFx_NativeBytes.proofBytes_length]
+
+def value : Array U8 32#usize := ⟨view.val,length⟩
+
+theorem read : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+    JFx_NativeBytes.proof {start:=7751#usize,«end»:=7783#usize}=ok view :=
+  range_total _ _ _ (by decide) (by rw [JFx_NativeBytes.proofBytes_length];decide)
+
+theorem copy : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 view=ok (.Ok value) :=
+  JFt_ExactArray.cast _ _ _ rfl
+
+/-- The actual folded-root slice, physical std copy and installed unwrap
+are returning calls on the real proof. No batch authentication is asserted. -/
+theorem installed (base : VTop_Stages.Ops) :
+    (do let slice ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                   JFx_NativeBytes.proof {start:=7751#usize,«end»:=7783#usize}
+        let arr ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 slice
+        (AuS1_Install.base base).unwrap32 arr)=ok value := by
+  simp only [read,copy,bind_tc_ok,AuS1_Install.base,Port4B_FoldedCut.unwrap32]
+
+#print axioms length
+#print axioms read
+#print axioms copy
+#print axioms installed
+end AspisR1.JFn_BatchRoot
+end

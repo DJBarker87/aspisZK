@@ -1,0 +1,33 @@
+{"attempt": "FGm_067", "exit_status": 0, "wall_seconds": 2.521942289022263, "peak_rss_kib": "5465768", "swaps": "0", "print_axioms": ["'AspisR1.F3Y_FinishFields.from_fields' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.F3Y_FinishFields.Holds : AspisR1Stage2.verifier.Prepared →
+  AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E → Prop :=
+fun p data =>
+  AspisR1.CheckpointBytes5Output.ofE p.claim =
+      AspisR1.JointFunctionalBinding.claimedValue data.Y data.c0 data.gamma data.kappa ∧
+    (∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok x → AspisR1.CheckpointBytes5Output.ofE x = data.alpha0) ∧
+      ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok x → AspisR1.CheckpointBytes5Output.ofE x = data.alpha1
+AspisR1.F3Y_FinishFields.from_fields :
+...
+def AspisR1.F3Y_FinishFields.Holds : AspisR1Stage2.verifier.Prepared →
+  AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E → Prop :=
+fun p data =>
+  AspisR1.CheckpointBytes5Output.ofE p.claim =
+      AspisR1.JointFunctionalBinding.claimedValue data.Y data.c0 data.gamma data.kappa ∧
+    (∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok x → AspisR1.CheckpointBytes5Output.ofE x = data.alpha0) ∧
+      ∀ (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok x → AspisR1.CheckpointBytes5Output.ofE x = data.alpha1
+AspisR1.F3Y_FinishFields.from_fields : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed) (data : AspisR1.RecordedBinaryExperimentBin.SourceInputs)
+  (view : AspisR1.LiteralOpeningView.View) (q : Fin 22 → Fin 262144)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches p a
+      (AspisR1.OraclePortCheckpointResumeC5.prepared (AspisR1.OraclePortAcceptedContextC6.context parsed data view)
+        data.data (AspisR1.SelectedChallengeMap.rhoOf data.rho) q)
+      am →
+    AspisR1.F3Y_FinishFields.Holds p data.data
+'AspisR1.F3Y_FinishFields.from_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd7f898ff038c4702a123c2db6f56c01f.scope; invocation ID: 8d1e5947780a425aadc8cb7e8b1293d9

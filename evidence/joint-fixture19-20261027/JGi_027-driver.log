@@ -1,0 +1,96 @@
+{"attempt": "JGi19_027", "exit_status": 1, "wall_seconds": 2.807301783002913, "peak_rss_kib": "5897456", "swaps": "0", "print_axioms": ["'AspisR1.JGi_ClaimBody.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGi_ClaimBody.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGi_ClaimBody.lean:8:25: error: overloaded, errors 
+  8:31 Ambiguous term
+    E
+  Possible interpretations:
+    JGi_DotOps.E : Type
+    
+    Concrete.E : Type
+  
+  8:31 Ambiguous term
+    E
+  Possible interpretations:
+    JGi_DotOps.E : Type
+    
+    Concrete.E : Type
+JGi_ClaimBody.lean:8:54: error: overloaded, errors 
+  8:60 Ambiguous term
+    E
+  Possible interpretations:
+    JGi_DotOps.E : Type
+    
+    Concrete.E : Type
+  
+  8:60 Ambiguous term
+    E
+  Possible interpretations:
+    JGi_DotOps.E : Type
+    
+    Concrete.E : Type
+JGi_ClaimBody.lean:8:54: error: overloaded, errors 
+  8:60 Ambiguous term
+    E
+  Possible interpretations:
+    JGi_DotOps.E : Type
+    
+    Concrete.E : Type
+  
+
+...
+s term
+    E
+  Possible interpretations:
+    JGi_DotOps.E : Type
+    
+    Concrete.E : Type
+  
+  32:60 Ambiguous term
+    E
+  Possible interpretations:
+    JGi_DotOps.E : Type
+    
+    Concrete.E : Type
+JGi_ClaimBody.lean:35:112: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+g : sorry
+k : sorry
+parts : sorry
+iter : ClaimScalar.Range
+hend : ↑iter.end = 6
+hi : ↑iter.start = 6
+hk : CanonicalArray sorry
+hp : CanonicalArray sorry
+iter' : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs : iter' = iter
+next :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (none, iter')
+out : aspis_core.field.WideExact
+call : verifier.prepared_claim_sum sorry sorry = ok out
+canonical : Canonical out
+meaning : decode out = partialSum sorry sorry 7
+⊢ (let (o, iter1) := (none, iter')
+    match o with
+    | none => ok (ControlFlow.done (core.result.Result.Ok out))
+    | some point => do
+      let r ← verifier.prepared_claim_dot ops D sem y1 sorry point
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i ← point + 1#usize
+          let a ← sorry.update i val
+          ok (cont (iter1, a))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (ControlFlow.done r1)) =
+    ok (ControlFlow.done (core.result.Result.Ok out))
+'AspisR1.JGi_ClaimBody.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r772b59b337da4f629cae039f1ccf5090.scope; invocation ID: 2d5bd75c930b482b8faf12da4faab827
+

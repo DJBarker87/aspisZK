@@ -1,0 +1,90 @@
+TxS_Encoding.lean:15:25: warning: Variable name `trace` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+TxS_Encoding.lean:15:56: warning: Variable name `parsed` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+TxS_Encoding.lean:56:29: error: Application type mismatch: The argument
+  prepare
+has type
+  RawCutTranscriptRun.ErasedPrefix
+of sort `Type` but is expected to have type
+  Port5Q1_QueryPorts.SessionAPrepare (prepared run.p)
+    (TxS_Carriers.data (typedRows parsed q (TxS_Carriers.toTyped raw))) q rho
+of sort `Prop` in the application
+  ten ports q raw rho prepare
+TxS_Encoding.lean:57:4: error: Type mismatch
+  Or.inl collision
+has type
+  AuS1_Finish.Collision H trace parsed q ∨ ?m.93
+but is expected to have type
+  geo.op7 = ok 1#u32 →
+    geo.op11 = Port4C_InverseExecution.inverse_owned →
+      AuS1_Finish.Collision H trace parsed q ∨
+        saved =
+          Tx2N_Reader.writer H (bytesOf ↑proof) (bytesOf ↑pub) pm
+            (OraclePortCheckpointStateC3.write (OraclePortCheckpointResumeC5.model read rho q)).accumulator
+TxS_Encoding.lean:58:4: error: Tactic `right` failed: target is not an inductive datatype
+
+case inr
+CoreError H✝ : Type
+installed : AspisR1CurrentCaller.Ops
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops CoreError
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H✝
+hash : H✝
+semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+saved : alloc.vec.Vec U8
+run : Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved
+H : Bytes → State
+trace : List (Bytes × State)
+parsed : Parsed
+ten : TxS_RawTen.Outcome run H trace parsed
+pm : OraclePortCheckpointAbiC5.Prepared
+encoded :
+  saved =
+    Tx2N_Reader.writer H (bytesOf ↑proof) (bytesOf ↑pub) pm
+      (CheckpointBytes5Output.accumulator
+        (accumulator
+          (have __src := run.out;
+          { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power, next := __src.next })))
+ports : Port5Q1_QueryPorts.SessionAPrimitives query
+q : Fin 22 → Fin 262144
+raw : TxS_Carriers.Prefix
+rho : OraclePortCheckpointAbiC5.K
+prepare : RawCutTranscriptRun.ErasedPrefix := TxS_Carriers.toTyped raw
+read : MatchingSupport.Data LiteralTranscript.E := TxS_Carriers.data (typedRows parsed q prepare)
+geoLeaves : Port5Q1_QueryPorts.SessionAPrepare (prepared run.p) read q rho
+domain : LiteralMatchingData.read (typedRows parsed q prepare) = some read
+multiply : Port5Q1_GeometryCanonical.SessionAPrimitives geo
+one : Port5Q1_Domain.SessionADomain geo
+inverse : geo.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+checked :
+  CheckpointBytes5Output.accumulator
+        (accumulator
+          (have __src := run.out;
+          { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power, next := __src.next })) =
+      (OraclePortCheckpointStateC3.write
+          (OraclePortCheckpointResumeC5.model (TxS_Carriers.data (typedRows parsed q (TxS_Carriers.toTyped raw))) rho
+            q)).accumulator ∧
+    Port3_CheckpointInstall.writer (Tx1Q_Install.digest D) (prepared run.p)
+          (accumulator
+            (have __src := run.out;
+            { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power, next := __src.next }))
+          proof pub hash =
+        ok saved ∧
+      (↑run.flushed).length = 64 ∧ ↑run.out.next = 10
+⊢ geo.op7 = ok 1#u32 →
+    geo.op11 = Port4C_InverseExecution.inverse_owned →
+      AuS1_Finish.Collision H trace parsed q ∨
+        saved =
+          Tx2N_Reader.writer H (bytesOf ↑proof) (bytesOf ↑pub) pm
+            (OraclePortCheckpointStateC3.write (OraclePortCheckpointResumeC5.model read rho q)).accumulator
+'AspisR1.TxS_Encoding.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

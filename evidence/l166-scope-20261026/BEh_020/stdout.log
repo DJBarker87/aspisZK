@@ -1,0 +1,14 @@
+def AspisR1.RPx_AttemptPrefix.addresses : AspisR1.SdkC_Source.Log → List AspisV8R19.DuplexFrames.Bytes :=
+fun log => List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) log
+@AspisR1.RPx_AttemptPrefix.transport : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (before : AspisR1.SdkC_Source.Log),
+        ∃ kept remaining,
+          AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code before).2 =
+              AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+            List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+              kept ++ remaining
+'AspisR1.RPx_AttemptPrefix.transport' depends on axioms: [propext, Classical.choice, Quot.sound]

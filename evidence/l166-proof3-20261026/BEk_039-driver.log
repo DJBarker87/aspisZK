@@ -1,0 +1,25 @@
+{"attempt": "BEk_039", "exit_status": 0, "wall_seconds": 2.5817842729738913, "peak_rss_kib": "4402752", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_TreeJoin.PackedKeys' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.Port4B_TreeJoin.PackedKeys : AspisR1.Port3_NativeBatchBody.Ops →
+  Aeneas.Std.Array Aeneas.Std.U32 22#usize → (Fin 22 → Fin 262144) → Aeneas.Std.Usize → Aeneas.Std.Usize → Prop :=
+fun base queries q batch kind =>
+  ∀ (raw : Aeneas.Std.Array Aeneas.Std.U64 16#usize),
+    base.op4 queries (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch) kind =
+        Aeneas.Std.Result.ok raw →
+      List.take ↑(AspisR1.Port4B_TreeCuts.count batch) ↑raw =
+        List.map (AspisR1.MultiproofConeSortOrder.packed q ↑batch ↑kind)
+          (AspisR1.OraclePortSelectedDraft.batchPositions ↑batch)
+'AspisR1.Port4B_TreeJoin.PackedKeys' depends on axioms: [propext, Classical.choice, 
+...
+def AspisR1.Port4B_TreeJoin.PackedKeys : AspisR1.Port3_NativeBatchBody.Ops →
+  Aeneas.Std.Array Aeneas.Std.U32 22#usize → (Fin 22 → Fin 262144) → Aeneas.Std.Usize → Aeneas.Std.Usize → Prop :=
+fun base queries q batch kind =>
+  ∀ (raw : Aeneas.Std.Array Aeneas.Std.U64 16#usize),
+    base.op4 queries (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch) kind =
+        Aeneas.Std.Result.ok raw →
+      List.take ↑(AspisR1.Port4B_TreeCuts.count batch) ↑raw =
+        List.map (AspisR1.MultiproofConeSortOrder.packed q ↑batch ↑kind)
+          (AspisR1.OraclePortSelectedDraft.batchPositions ↑batch)
+'AspisR1.Port4B_TreeJoin.PackedKeys' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd7d5644633aa4c6ba5a4147aa81db923.scope; invocation ID: 9c2298d61a7f45d0b071ba788db6084c
+

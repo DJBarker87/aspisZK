@@ -1,0 +1,47 @@
+{"attempt": "JGg18_055", "exit_status": 1, "wall_seconds": 3.147267162974458, "peak_rss_kib": "5862704", "swaps": "0", "print_axioms": ["'AspisR1.JGg_QueryCalls.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGg_QueryCalls.lean:144:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decoder JGg_QueryArrays.b8 JGg_QueryArrays.a8
+in the target expression
+  (match
+      { decode := decoder, embed := AspisS1M31Embedding.Total.embed }.decode
+        ⟨(↑⟨(↑⟨(↑⟨(↑⟨(↑⟨(↑⟨(↑((Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).set 0#usize
+                                                                  (encodeState JGg_Opening31.block0))).set
+                                                            (↑1#usize) (encodeState JGg_Opening31.block1),
+                                                          ⋯⟩).set
+                                                    (↑2#usize) (en
+...
+ng.Total.embed }.embed u19
+              trace.value 5#u16 19#usize we19
+              let u20 ← q.index_usize 20#usize
+              let we20 ← { decode := decoder, embed := AspisS1M31Embedding.Total.embed }.embed u20
+              trace.value 5#u16 20#usize we20
+              let u21 ← q.index_usize 21#usize
+              let we21 ← { decode := decoder, embed := AspisS1M31Embedding.Total.embed }.embed u21
+              trace.value 5#u16 21#usize we21
+              ok
+                  (core.result.Result.Ok q,
+                    { state := state7, hash := { state := encodeState JGg_Opening31.absorbed, hash := hash }.hash })
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Std.Array U32 22#usize) (core.convert.FromSame verifier.Error) residual
+              ok (r2, { state := encodeState JGg_Opening31.absorbed, hash := hash }))
+        v
+    | fail v => fail v
+    | div => div) =
+    ok (core.result.Result.Ok q, { state := encodeState JGg_Opening31.next2, hash := hash })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGg_QueryCalls.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r738c4c2cac0946bfbc2919c52f01ebc4.scope; invocation ID: 678e0d33fc0041da8efee36d69749d83
+

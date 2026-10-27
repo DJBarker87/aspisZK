@@ -1,0 +1,43 @@
+{
+  "attempt": "PoolV_K025",
+  "kind": "kani",
+  "source_revision": "37a2706c740ccb128996ffb4434e65043dce7d9e",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolV_tail/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolV_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolV_native_assembly",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolV_tail/Cargo.toml",
+    "PoolV_tail/PoolV_lib.rs",
+    "PoolV_ref/PoolV_lib.rs",
+    "PoolV_SLICE_SOURCE.json"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Exact native source output assembly and validate_master; original actual full master/checkpoint/plan records"
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check"
+}

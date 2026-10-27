@@ -1,0 +1,47 @@
+{"attempt": "BEn_045", "exit_status": 0, "wall_seconds": 2.5286919589852914, "peak_rss_kib": "5553344", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_P6Node.node_value' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port9OR_P6Node.node_value : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (i w : Aeneas.Std.Usize) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.Port9OR_Code.program D hash (AspisR1.Port9OR_P6Node.node s physical i w))).2 =
+    MultiproofConeRef.reference.binary_step (AspisR1.Port9OR_P6Node.digest (AspisR1.Port9OR_Code.native D H)) hash s
+      physical i w :=
+fun {Hash} D hash s physical i w H =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+      
+...
+theorem AspisR1.Port9OR_P6Node.node_value : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (i w : Aeneas.Std.Usize) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.Port9OR_Code.program D hash (AspisR1.Port9OR_P6Node.node s physical i w))).2 =
+    MultiproofConeRef.reference.binary_step (AspisR1.Port9OR_P6Node.digest (AspisR1.Port9OR_Code.native D H)) hash s
+      physical i w :=
+fun {Hash} D hash s physical i w H =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            MultiproofConeRef.reference.binary_step (AspisR1.Port9OR_P6Node.digest (AspisR1.Port9OR_Code.native D H))
+              hash s physical i w)
+        (AspisR1.Port9OR_Code.value D hash (AspisR1.Port9OR_P6Node.node s physical i w) H)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a =
+              MultiproofConeRef.reference.binary_step (AspisR1.Port9OR_P6Node.digest (AspisR1.Port9OR_Code.native D H))
+                hash s physical i w)
+          (AspisR1.Port9OR_P6Node.node_source (AspisR1.Port9OR_Code.native D H) hash s physical i w)))
+      (Eq.refl
+        (MultiproofConeRef.reference.binary_step (AspisR1.Port9OR_P6Node.digest (AspisR1.Port9OR_Code.native D H)) hash
+          s physical i w)))
+'AspisR1.Port9OR_P6Node.node_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd14274979ec74abc95837b3cec3ef43e.scope; invocation ID: 63d107b2f4d04b24b2fc462394560774
+

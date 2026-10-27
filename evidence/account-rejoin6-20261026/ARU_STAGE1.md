@@ -1,0 +1,5 @@
+# Stage 1: queried wrappers and exact selected cuts
+
+ARU_WrapperAccepted.first/second replace global P1/RuntimeSyscall by ARS_QueryTransport.Agrees on each actual source log. ARU_NativeReplies.accepted specializes these to the FIp installation. ARU_Replies.accepted consumes a bank-supported entry plus those issued agreements, deriving both ideal replies and account acceptance. ARU_Cuts.selected derives ideal source cuts at exactly the saved/post/final tuple in that entry, together with semantic decode. ARU_Checkpoint.selected derives saved checkpoint bytes on those SAME cuts via the approved game and RuntimePersistence. No global H oracle factory is used. ARU_Issued.derive and ARU_EventInclusion.inclusion generalize issued boundary/event consumers.
+
+ARU_001..008 passed, individual receipts include exact target, command, source revision/hash, dependency fingerprint, exit, wall/RSS/swap, cgroup limits and printed standard axioms. ARU_Support.At is explicitly a representation target, not runtime trust or premise discharge. Actual Rc10 root and ledger unchanged, zero removal credit. Source-only change; existing frozen artifacts reused, not rebuilt.

@@ -1,0 +1,144 @@
+JFw_Record.lean:37:54: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ h ≤ 13
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 6
+  e ≥ 0
+  0 ≤ e - f ≤ 3712
+where
+ e := ↑↑total
+ f := ↑↑5#usize
+ g := ↑(↑payload).length
+ h := ↑↑row
+JFw_Record.lean:40:10: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.eq_iff.mpr`
+JFw_Record.lean:41:4: error: No goals to be solved
+JFw_Record.lean:50:2: error: unsolved goals
+case pos
+row tag a b c d : U8
+size : Usize
+frame payload : Slice U8
+shape : r1_wire.row_shape row = ok (some (tag, size))
+small : ↑size ≤ 3712
+length : payload.length = ↑size
+bytes : ↑frame = tag :: a :: b :: c :: d :: ↑payload
+header : UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [a, b, c, d] ⋯)) = size
+fields : 14 ≤ ↑row → r1_wire.validate_record_fields row payload = ok (core.result.Result.Ok ())
+total : UScalar UScalarTy.Usize
+add : 5#usize + size = ok total
+value : ↑total = ↑5#usize + ↑size
+flen : frame.len = total
+r0 : frame.index_usize 0#usize = ok tag
+r1 : frame.index_usize 1#usize = ok a
+r2 : frame.index_usize 2#usize = ok b
+r3 : frame.index_usize 3#usize = ok c
+r4 : frame.index_usize 4#usize = ok d
+readPayload :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) frame { start := 5#usize } =
+    ok payload
+active : 14 ≤ ↑row
+test : row ≥ 14#u8
+⊢ (let (tag, size) := (tag, size)
+    do
+    let i1 ← 5#usize + size
+    if (total != i1) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+      else
+        if (tag != tag) = true then ok (core.result.Result.Err (r1_wire.Error.Tag row))
+        else
+          if (size != size) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+          else ok (core.result.Result.Ok payload)) =
+    ok (core.result.Result.Ok payload)
+JFw_Record.lean:53:2: error: unsolved goals
+case neg
+row tag a b c d : U8
+size : Usize
+frame payload : Slice U8
+shape : r1_wire.row_shape row = ok (some (tag, size))
+small : ↑size ≤ 3712
+length : payload.length = ↑size
+bytes : ↑frame = tag :: a :: b :: c :: d :: ↑payload
+header : UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [a, b, c, d] ⋯)) = size
+fields : 14 ≤ ↑row → r1_wire.validate_record_fields row payload = ok (core.result.Result.Ok ())
+total : UScalar UScalarTy.Usize
+add : 5#usize + size = ok total
+value : ↑total = ↑5#usize + ↑size
+flen : frame.len = total
+r0 : frame.index_usize 0#usize = ok tag
+r1 : frame.index_usize 1#usize = ok a
+r2 : frame.index_usize 2#usize = ok b
+r3 : frame.index_usize 3#usize = ok c
+r4 : frame.index_usize 4#usize = ok d
+readPayload :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) frame { start := 5#usize } =
+    ok payload
+active : ¬14 ≤ ↑row
+test : ¬row ≥ 14#u8
+⊢ (let (tag, size) := (tag, size)
+    do
+    let i1 ← 5#usize + size
+    if (total != i1) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+      else
+        if (tag != tag) = true then ok (core.result.Result.Err (r1_wire.Error.Tag row))
+        else
+          if (size != size) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+          else ok (core.result.Result.Ok payload)) =
+    ok (core.result.Result.Ok payload)
+JFw_Record.lean:47:40: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp (config := { ̲zeta := true ̲}) only [a̵d̵d̵,̵bind_tc_ok, ̲flen, ̲bne_self_eq_false,
+  ̵  ̵ ̵ ̵Bool.false_eq_true,
+  ̲ ̲ ̲ ̲ ̲if_false, ̲r0, ̲r1, ̲r2, ̲r3, ̲r4, ̲lift, ̲header, ̲readPayload]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Record.lean:47:60: warning: This simp argument is unused:
+  bne_self_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵f̵l̵e̵n̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵r̵0̵,̵r̵1̵,̵r̵2̵,̵r̵3̵,̵r̵4̵,̵l̵i̵f̵t̵,̵h̵e̵a̵d̵e̵r̵,̵r̵e̵a̵d̵P̵a̵y̵l̵o̵a̵d̵]̵[̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲f̲l̲e̲n̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲r̲0̲,̲
+  ̲ ̲ ̲ ̲ ̲r̲1̲,̲ ̲r̲2̲,̲ ̲r̲3̲,̲ ̲r̲4̲,̲ ̲l̲i̲f̲t̲,̲ ̲h̲e̲a̲d̲e̲r̲,̲ ̲r̲e̲a̲d̲P̲a̲y̲l̲o̲a̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Record.lean:48:4: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵f̵l̵e̵n̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵r̵0̵,̵r̵1̵,̵r̵2̵,̵r̵3̵,̵r̵4̵,̵l̵i̵f̵t̵,̵h̵e̵a̵d̵e̵r̵,̵r̵e̵a̵d̵P̵a̵y̵l̵o̵a̵d̵]̵[̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲f̲l̲e̲n̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲r̲0̲,̲
+  ̲ ̲ ̲ ̲ ̲r̲1̲,̲ ̲r̲2̲,̲ ̲r̲3̲,̲ ̲r̲4̲,̲ ̲l̲i̲f̲t̲,̲ ̲h̲e̲a̲d̲e̲r̲,̲ ̲r̲e̲a̲d̲P̲a̲y̲l̲o̲a̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Record.lean:48:23: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp (config := { ̲zeta := true ̲}) only [add, ̲bind_tc_ok, ̲flen, ̲bne_self_eq_false,
+      Bool.false_eq_true,i̵f̵_̵f̵a̵l̵s̵e̵,̵ ̲r0, ̲r1, ̲r2, ̲r3, ̲r4, ̲lift, ̲header, ̲readPayload]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Record.lean:51:20: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵e̵s̵t̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵f̵i̵e̵l̵d̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲t̲e̲s̲t̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲f̲i̲e̲l̲d̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Record.lean:52:6: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵t̵e̵s̵t̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵f̵i̵e̵l̵d̵s̵ ̵a̵c̵t̵i̵v̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲t̲e̲s̲t̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲f̲i̲e̲l̲d̲s̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Record.lean:54:20: warning: This simp argument is unused:
+  decide_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵e̵s̵t̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲t̲e̲s̲t̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFw_Record.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFw_Record.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

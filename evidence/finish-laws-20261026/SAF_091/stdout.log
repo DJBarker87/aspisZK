@@ -1,0 +1,81 @@
+@AspisR1.SAF_AcceptedValue.value : ∀ {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a saved : AspisR1Stage2.verifier.Accumulator)
+  (dot : AspisR1Stage2.Stage2Finish.E),
+  p.variant = AspisR1Stage2.transport.Variant.S2 →
+    ops.dot v.final_message a.weights.deref = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok dot) →
+      ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+        (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs),
+        AspisR1.OraclePortStoredDecisionDraftC4.input parsed q tr = Option.some i →
+          AspisR1.OraclePortSelectedDraft.queries tr = Option.some q →
+            AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                Option.some i.data →
+              AspisR1.LiteralQueryRead.decode i.queryBytes = Option.some q →
+                AspisR1.Port4D_Pairing.PairingLaws (AspisR1.Port3_FinishStage.release ops)
+                    AspisR1.CheckpointBytes5Output.ofE v p i.data →
+                  (∀ (j : Fin 22), AspisR1.MatchingSupport.match0 i.data (q j)) →
+                    AspisR1.R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                        (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i.data →
+                      AspisR1.CheckpointBytes5Output.ofE dot =
+                          ∑ l,
+                            i.data.f l *
+                              AspisR1.LiteralOpeningView.eK ((AspisR1.CheckpointBytes5Output.accumulator a).weights l) →
+                        AspisR1.CheckpointBytes5Output.accumulator saved =
+                            (AspisR1.OraclePortCheckpointStateC3.write
+                                (AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                  (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).accumulator →
+                          AspisR1.CheckpointBytes5Output.accumulator a =
+                              AspisR1.OraclePortCheckpointStateC3.advance
+                                (AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                  (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                                12 (AspisR1.CheckpointBytes5Output.accumulator saved) →
+                            AspisR1.Port4D_FinishInstall.finish ops v p a Option.none =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+                              Decidable.decide
+                                    (AspisR1.Port3_NativeFinishBody.verifier.finish_relation
+                                        (AspisR1.Port4D_Round.native ops) v p a Option.none =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+                                  AspisR1.OraclePortFrozen2.finish parsed q tr i
+                                    (AspisR1.CheckpointBytes5Output.accumulator a) ∧
+                                Decidable.decide
+                                    (AspisR1.Port4D_FinishInstall.finish ops v p a Option.none =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+                                  AspisR1.D0TypedChecks.verify
+                                    (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i
+@AspisR1.SAF_C_Cons_FinishProof.strengthen : ∀ {F C Hash : Type} (base : VTop_Stages.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops),
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives query →
+    ∀ (geo : AspisR1.Port3_NativeGeometryBody.Ops C),
+      AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives geo →
+        AspisR1.Port5Q1_Domain.SessionADomain geo →
+          geo.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+            geo.op7 = Aeneas.Std.Result.ok 1#u32 →
+              geo.op11 = AspisR1.Port4C_InverseExecution.inverse_owned →
+                ∀ (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+                  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8)
+                  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+                  (stored publicBytes : AspisV8R19.DuplexFrames.Bytes) (tx1p : AspisR1CurrentCaller.verifier.Prepared)
+                  (parsed : AspisR1.OraclePortCompactDraft.Parsed)
+                  (trace : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State))
+                  (frame : AspisV8R19.DuplexFrames.Bytes),
+                  parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                    AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint =
+                        AspisR1.MultiproofConeCanonical.bytesOf ↑saved →
+                      (↑proof).length = 57607 →
+                        ∀ (t : AspisR1.Cons_Native.Witness),
+                          AspisR1.Cons_Native.Calls base finish reserved query geo D hash pub proof checkpoint t →
+                            AspisR1.Cons_NativeBuild.Aux reserved query geo D hash pub proof checkpoint t →
+                              (∀ (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E)
+                                  (rho : AspisR1.OraclePortCheckpointAbiC5.K) (q : Fin 22 → Fin 262144),
+                                  AspisR1.Port5Q1_QueryPorts.SessionAPrepare (AspisR1.Tx1Q_Carriers.prepared tx1p) data
+                                      q rho →
+                                    AspisR1.AuS1_Finish.Collision H trace parsed q ∨
+                                      ∀ pos < 22,
+                                        AspisR1.OraclePortAllSelectedRecoveryC6.recovered trace frame parsed 2
+                                            (AspisR1.OraclePortSelectedDraft.index q 2 pos) =
+                                          Option.some (AspisR1.OraclePortPackedChoiceC4.payload parsed 2 pos)) →
+                                AspisR1.SAF_C_Cons_Finish.Outcome finish t.v2 t.p2
+                                  (have __src := t.returned2;
+                                  { weights := t.back2 t.flushed2, rhs := __src.rhs, power := __src.power,
+                                    next := __src.next })
+                                  proof saved H stored publicBytes tx1p parsed trace

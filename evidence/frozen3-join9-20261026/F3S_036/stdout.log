@@ -1,0 +1,154 @@
+F3S_FirstTailLogs.lean:33:87: error: unsolved goals
+Hash : Type
+base : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : aspis_core.digest.Digest32 Hash
+publicBytes proof : Slice U8
+k : Usize
+hash : Hash
+p : verifier.Prepared
+scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+a out : verifier.Accumulator
+geo : verifier.QueryGeometry
+pending after : verifier.BatchedWeights
+flushed : Slice aspis_core.field.QM31
+root : Std.Array U8 32#usize
+view : Slice U8
+initial : (GExp_FirstCode.installed base B std).op20 transport.Variant.S2 = ok (core.result.Result.Ok a)
+start : compact.OFF_FOLDED_ROOT (GExp_FirstCode.installed base B std) = ok 7751#usize
+finish : compact.OFF_ROUND1 (GExp_FirstCode.installed base B std) = ok 7783#usize
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok view
+copy : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 view = ok (core.result.Result.Ok root)
+batch :
+  erase (SdkC_Source.dictionary hashv) () (GExq_BatchSource.current D hash proof p root) = ok (core.result.Result.Ok ())
+geometry : (GExp_FirstCode.installed base B std).op19 p.queries 0#usize k = ok (core.result.Result.Ok geo)
+newPending : (GExp_FirstCode.installed base B std).op18 a.weights.deref = ok (core.result.Result.Ok pending)
+query :
+  (GExp_FirstCode.installed base B std).op7 proof p a scratch none geo pending k =
+    ok (core.result.Result.Ok (out, after))
+flush : (GExp_FirstCode.installed base B std).op17 after out.weights.deref = ok flushed
+⊢ SdkC_Source.readLog (SdkC_Source.run hashv (GExq_BatchSource.current D hash proof p root) []).2 ++
+      SdkC_Source.readLog
+        (SdkC_Source.run hashv
+            (CheckpointBytes5Effect.bind
+              (liftResult ((GExp_FirstCode.installed base B std).op17 after ⟨↑out.weights, ⋯⟩)) fun s3 =>
+              CheckpointBytes5Effect.bind
+                (GExp_FirstCode.writerCode p
+                  { weights := ⟨↑s3, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next } proof publicBytes)
+                fun bytes =>
+                CheckpointBytes5Effect.bind (liftResult (ok ())) fun __r => pure (core.result.Result.Ok bytes))
+            []).2 =
+    SdkC_Source.readLog (SdkC_Source.run hashv (GExq_BatchSource.current D hash proof p root) []).2 ++
+      SdkC_Source.readLog
+        (SdkC_Source.run hashv
+            (GExp_FirstCode.writerCode p
+              { weights := ⟨↑flushed, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next } proof publicBytes)
+            []).2
+Hash : Type
+base : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : aspis_core.digest.Digest32 Hash
+publicBytes proof : Slice U8
+k : Usize
+hash : Hash
+p : verifier.Prepared
+scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+a out : verifier.Accumulator
+geo : verifier.QueryGeometry
+pending after : verifier.BatchedWeights
+flushed : Slice aspis_core.field.QM31
+root : Std.Array U8 32#usize
+view : Slice U8
+initial : (GExp_FirstCode.installed base B std).op20 transport.Variant.S2 = ok (core.result.Result.Ok a)
+start : compact.OFF_FOLDED_ROOT (GExp_FirstCode.installed base B std) = ok 7751#usize
+finish : compact.OFF_ROUND1 (GExp_FirstCode.installed base B std) = ok 7783#usize
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok view
+copy : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 view = ok (core.result.Result.Ok root)
+batch :
+  erase (SdkC_Source.dictionary hashv) () (GExq_BatchSource.current D hash proof p root) = ok (core.result.Result.Ok ())
+geometry : (GExp_FirstCode.installed base B std).op19 p.queries 0#usize k = ok (core.result.Result.Ok geo)
+newPending : (GExp_FirstCode.installed base B std).op18 a.weights.deref = ok (core.result.Result.Ok pending)
+query :
+  (GExp_FirstCode.installed base B std).op7 proof p a scratch none geo pending k =
+    ok (core.result.Result.Ok (out, after))
+flush : (GExp_FirstCode.installed base B std).op17 after out.weights.deref = ok flushed
+⊢ SdkC_Source.readLog (SdkC_Source.run hashv (GExq_BatchSource.current D hash proof p root) []).2 ++
+      SdkC_Source.readLog
+        (SdkC_Source.run hashv
+            (CheckpointBytes5Effect.bind
+              (liftResult ((GExp_FirstCode.installed base B std).op17 after ⟨↑out.weights, ⋯⟩)) fun s3 =>
+              CheckpointBytes5Effect.bind
+                (GExp_FirstCode.writerCode p
+                  { weights := ⟨↑s3, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next } proof publicBytes)
+                fun bytes =>
+                CheckpointBytes5Effect.bind (liftResult (ok ())) fun __r => pure (core.result.Result.Ok bytes))
+            []).2 =
+    SdkC_Source.readLog (SdkC_Source.run hashv (GExq_BatchSource.current D hash proof p root) []).2 ++
+      SdkC_Source.readLog
+        (SdkC_Source.run hashv
+            (GExp_FirstCode.writerCode p
+              { weights := ⟨↑flushed, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next } proof publicBytes)
+            []).2
+F3S_FirstTailLogs.lean:37:64: warning: This simp argument is unused:
+  query
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵S̵_̵F̵i̵r̵s̵t̵T̵a̵i̵l̵C̵o̵d̵e̵.̵c̵o̵d̵e̵,̵i̵n̵i̵t̵i̵a̵l̵,̵s̵t̵a̵r̵t̵,̵f̵i̵n̵i̵s̵h̵,̵r̵a̵n̵g̵e̵,̵c̵o̵p̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵F̵3̵S̵_̵F̵o̵r̵w̵a̵r̵d̵.̵l̵i̵f̵t̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵,̵g̵e̵o̵m̵e̵t̵r̵y̵,̵n̵e̵w̵P̵e̵n̵d̵i̵n̵g̵,̵q̵u̵e̵r̵y̵,̵f̵l̵u̵s̵h̵]̵[̲F̲3̲S̲_̲F̲i̲r̲s̲t̲T̲a̲i̲l̲C̲o̲d̲e̲.̲c̲o̲d̲e̲,̲ ̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲s̲t̲a̲r̲t̲,̲ ̲f̲i̲n̲i̲s̲h̲,̲ ̲r̲a̲n̲g̲e̲,̲ ̲c̲o̲p̲y̲,̲ ̲l̲i̲f̲t̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲F̲3̲S̲_̲F̲o̲r̲w̲a̲r̲d̲.̲l̲i̲f̲t̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲g̲e̲o̲m̲e̲t̲r̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲n̲e̲w̲P̲e̲n̲d̲i̲n̲g̲,̲ ̲f̲l̲u̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3S_FirstTailLogs.lean:37:70: warning: This simp argument is unused:
+  flush
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵S̵_̵F̵i̵r̵s̵t̵T̵a̵i̵l̵C̵o̵d̵e̵.̵c̵o̵d̵e̵,̵i̵n̵i̵t̵i̵a̵l̵,̵s̵t̵a̵r̵t̵,̵f̵i̵n̵i̵s̵h̵,̵r̵a̵n̵g̵e̵,̵c̵o̵p̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵F̵3̵S̵_̵F̵o̵r̵w̵a̵r̵d̵.̵l̵i̵f̵t̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵,̵g̵e̵o̵m̵e̵t̵r̵y̵,̵n̵e̵w̵P̵e̵n̵d̵i̵n̵g̵,̵q̵u̵e̵r̵y̵,̵f̵l̵u̵s̵h̵]̵[̲F̲3̲S̲_̲F̲i̲r̲s̲t̲T̲a̲i̲l̲C̲o̲d̲e̲.̲c̲o̲d̲e̲,̲ ̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲s̲t̲a̲r̲t̲,̲ ̲f̲i̲n̲i̲s̲h̲,̲ ̲r̲a̲n̲g̲e̲,̲ ̲c̲o̲p̲y̲,̲ ̲l̲i̲f̲t̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲F̲3̲S̲_̲F̲o̲r̲w̲a̲r̲d̲.̲l̲i̲f̲t̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲g̲e̲o̲m̲e̲t̲r̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲n̲e̲w̲P̲e̲n̲d̲i̲n̲g̲,̲ ̲q̲u̲e̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3S_FirstTailLogs.lean:39:33: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵S̵_̵F̵o̵r̵w̵a̵r̵d̵.̵l̵i̵f̵t̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵q̵u̵e̵r̵y̵,̵f̵l̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵,̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵d̵e̵r̵e̵f̵_̵m̵u̵t̵,̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵d̵e̵r̵e̵f̵]̵[̲F̲3̲S̲_̲F̲o̲r̲w̲a̲r̲d̲.̲l̲i̲f̲t̲_̲o̲k̲,̲ ̲q̲u̲e̲r̲y̲,̲ ̲f̲l̲u̲s̲h̲,̲ ̲l̲i̲f̲t̲,̲ ̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲d̲e̲r̲e̲f̲_̲m̲u̲t̲,̲ ̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲d̲e̲r̲e̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3S_FirstTailLogs.lean:39:82: warning: This simp argument is unused:
+  flush
+
+Hint: Omit it from the simp argument list.
+  simp only [F3S_Forward.lift_ok, ̲core.result.Result.Insts.CoreOpsTry.branch, ̲query,f̵l̵u̵s̵h̵,̵
+  ̵  ̵ ̵ ̵lift,
+  ̲ ̲ ̲ ̲ ̲alloc.vec.Vec.deref_mut, ̲alloc.vec.Vec.deref]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3S_FirstTailLogs.lean:40:33: warning: This simp argument is unused:
+  alloc.vec.Vec.deref
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵S̵_̵F̵o̵r̵w̵a̵r̵d̵.̵l̵i̵f̵t̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵q̵u̵e̵r̵y̵,̵f̵l̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵,̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵d̵e̵r̵e̵f̵_̵m̵u̵t̵,̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵d̵e̵r̵e̵f̵]̵[̲F̲3̲S̲_̲F̲o̲r̲w̲a̲r̲d̲.̲l̲i̲f̲t̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲q̲u̲e̲r̲y̲,̲ ̲f̲l̲u̲s̲h̲,̲ ̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲d̲e̲r̲e̲f̲_̲m̲u̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3S_FirstTailLogs.on_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

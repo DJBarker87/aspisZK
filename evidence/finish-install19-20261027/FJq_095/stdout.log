@@ -1,0 +1,55 @@
+FJq_SamplerErasure.lean:34:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H
+      (F3J_SamplerRun.program f (row + 1) n
+        (FS.Prefix.ext P (f row) (eval H (LiteralByteSampler.samp row P (f row)).toProgram).2))).1
+in the target expression
+  (have first := eval H (LiteralByteSampler.samp row P (f row)).toProgram;
+      have next := eval H (F3J_SamplerRun.program f (row + 1) n (FS.Prefix.ext P (f row) first.2));
+      (first.1 ++ next.1, next.2)).1 =
+    (have first := eval H (LiteralByteSampler.samp row Q (g row)).toProgram;
+      have next := eval H (F3J_SamplerRun.program g (row + 1) n (FS.Prefix.ext Q (g row) first.2));
+      (first.1 ++ next.1, next.2)).1
+
+case succ
+H : Bytes → State
+f g : RawCutProverCompiler.Proof
+n : ℕ
+ih :
+  ∀ (row : ℕ) (P Q : LiteralTranscript.Prefix),
+    LiteralTranscript.erasePrefix P = LiteralTranscript.erasePrefix Q →
+      (∀ k < n, LiteralTranscript.erase (f (row + k)) = LiteralTranscript.erase (g (row + k))) →
+        (eval H (F3J_SamplerRun.program f row n P)).1 = (eval H (F3J_SamplerRun.program g row n Q)).1 ∧
+          LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program f row n P)).2 =
+            LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program g row n Q)).2
+row : ℕ
+P Q : LiteralTranscript.Prefix
+samePrefix : LiteralTranscript.erasePrefix P = LiteralTranscript.erasePrefix Q
+messages : ∀ k < n + 1, LiteralTranscript.erase (f (row + k)) = LiteralTranscript.erase (g (row + k))
+message : LiteralTranscript.erase (f row) = LiteralTranscript.erase (g row)
+step :
+  eval H (LiteralByteSampler.samp row P (f row)).toProgram = eval H (LiteralByteSampler.samp row Q (g row)).toProgram
+next :
+  LiteralTranscript.erasePrefix (FS.Prefix.ext P (f row) (eval H (LiteralByteSampler.samp row P (f row)).toProgram).2) =
+    LiteralTranscript.erasePrefix (FS.Prefix.ext Q (g row) (eval H (LiteralByteSampler.samp row Q (g row)).toProgram).2)
+rest :
+  (eval H
+          (F3J_SamplerRun.program f (row + 1) n
+            (FS.Prefix.ext P (f row) (eval H (LiteralByteSampler.samp row P (f row)).toProgram).2))).1 =
+      (eval H
+          (F3J_SamplerRun.program g (row + 1) n
+            (FS.Prefix.ext Q (g row) (eval H (LiteralByteSampler.samp row Q (g row)).toProgram).2))).1 ∧
+    LiteralTranscript.erasePrefix
+        (eval H
+            (F3J_SamplerRun.program f (row + 1) n
+              (FS.Prefix.ext P (f row) (eval H (LiteralByteSampler.samp row P (f row)).toProgram).2))).2 =
+      LiteralTranscript.erasePrefix
+        (eval H
+            (F3J_SamplerRun.program g (row + 1) n
+              (FS.Prefix.ext Q (g row) (eval H (LiteralByteSampler.samp row Q (g row)).toProgram).2))).2
+⊢ (have first := eval H (LiteralByteSampler.samp row P (f row)).toProgram;
+      have next := eval H (F3J_SamplerRun.program f (row + 1) n (FS.Prefix.ext P (f row) first.2));
+      (first.1 ++ next.1, next.2)).1 =
+    (have first := eval H (LiteralByteSampler.samp row Q (g row)).toProgram;
+      have next := eval H (F3J_SamplerRun.program g (row + 1) n (FS.Prefix.ext Q (g row) first.2));
+      (first.1 ++ next.1, next.2)).1
+'AspisR1.FJq_SamplerErasure.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

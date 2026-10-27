@@ -1,0 +1,69 @@
+RawJ_SecondOuter.lean:9:77: error: Type mismatch
+  h
+has type
+  bounded n (k a)
+but is expected to have type
+  bounded n (monadLift (ok a) >>= k)
+RawJ_SecondOuter.lean:14:78: error: unsolved goals
+case h_1.isFalse.hk
+sdk : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Option (Slice U8)
+x✝¹² : Slice U8
+x✝¹¹ : Bool
+h✝² : ¬x✝¹¹ = true
+x✝¹⁰ : core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError
+cf✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError)
+    AdapterRw.r1_pool_adapter.ValidatedAsqa
+val✝ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+x✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+x✝⁸ : core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError
+cf10✝¹ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) (Slice U8)
+val4✝² : Slice U8
+x✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+x✝⁶ : core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError
+cf10✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) (Slice U8)
+val4✝¹ : Slice U8
+x✝⁵ : Usize
+x✝⁴ : core.result.Result Usize AdapterRw.solana_program_error.ProgramError
+cf11✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) Usize
+val5✝ : Usize
+h✝¹ : ¬(val4✝².len != val5✝) = true
+x✝³ :
+  core.result.Result (Std.Array U8 1880#usize)
+    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+x✝² : core.result.Result (Std.Array U8 1880#usize) AdapterRw.solana_program_error.ProgramError
+cf4✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) (Std.Array U8 1880#usize)
+val4✝ : Std.Array U8 1880#usize
+x✝¹ : Usize
+h✝ : ¬(val4✝.to_slice.len != x✝¹) = true
+x✝ : Slice U8
+x : core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error
+⊢ bounded
+    (903 - cost (Call.op22 val✝.statement) -
+      cost (Call.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 sdk) val4✝.to_slice x✝ val4✝¹ () none))
+    do
+    let r7 ← mapError traceEffects.op44 x
+    let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+    match cf5 with
+      | core.ops.control_flow.ControlFlow.Continue a => traceEffects.op53 val✝.statement
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        liftM
+          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+'AspisR1.RawJ_SecondOuter.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RawJ_SecondOuter.second' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

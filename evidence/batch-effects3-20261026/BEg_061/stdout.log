@@ -1,0 +1,18 @@
+@AspisR1.Op5T_Concrete.stage_source : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : Aeneas.Std.Usize) (hash : Hash),
+  AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves D proof p folded batch hash =
+    AspisR1.Port4B_Install.batch D proof p folded batch hash
+'AspisR1.Op5T_Concrete.stage_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Op5T_Concrete.current_source : ∀ {Hash : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : Aeneas.Std.Usize) (hash : Hash),
+  AspisR1.Op5T_Install.currentBatch AspisR1.Port4B_Install.leaves D proof p folded batch hash =
+    AspisR1.Op5T_Install.mapResult AspisR1.Op5T_Install.currentError
+      (AspisR1.Op5T_Install.body AspisR1.Port4B_Install.leaves
+        { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } proof p.queries p.roots folded batch hash)
+'AspisR1.Op5T_Concrete.current_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Op5T_Concrete.current : AspisR1CurrentCaller.Ops → AspisR1CurrentCaller.Ops :=
+fun base => AspisR1.Op5T_Install.current base AspisR1.Port4B_Install.leaves
+def AspisR1.Op5T_Concrete.stage : VTop_Stages.Ops → VTop_Stages.Ops :=
+fun base => AspisR1.Op5T_Install.stage base AspisR1.Port4B_Install.leaves

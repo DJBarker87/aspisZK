@@ -1,0 +1,5 @@
+'AspisR1.JFu_DigestSlice.digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFu_DigestSlice.success' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Aeneas.Std.core.array.TryFromSharedArraySlice.try_from : {T : Type} →
+  (N : Usize) → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N s => if h : s.len = N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())

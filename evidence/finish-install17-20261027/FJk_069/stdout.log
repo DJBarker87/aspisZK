@@ -1,0 +1,270 @@
+FJk_PatternCellValue.lean:49:66: error: Application type mismatch: The argument
+  run
+has type
+  (do
+      let source ← q.add (FIw_ScalarArithmetic.lifted offset)
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+but is expected to have type
+  before.add product = ok out
+in the application
+  FIv_NativeValue.add before product out hb mv.left run
+FJk_PatternCellValue.lean:54:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJh_Base.cell p.kinds ⟨↑i, hi⟩
+in the target expression
+  decode before + FIv_NativeArray.value powers ↑i * (FIv_NativeArray.value a ↑col + ↑↑offset) =
+    if
+        { kinds := fun i => ↑(FJh_Base.cell p.kinds i), columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.kinds
+            ⟨↑i, hi⟩ =
+          1 then
+      decode before +
+        FIv_NativeArray.value powers ↑⟨↑i, hi⟩ *
+          (FIv_NativeArray.value a
+              ↑({ kinds := fun i => ↑(FJh_Base.cell p.kinds i),
+                      columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                      offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.columns
+                  ⟨↑i, hi⟩) +
+            ↑({ kinds := fun i => ↑(FJh_Base.cell p.kinds i),
+                    columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                    offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.offsets
+                ⟨↑i, hi⟩))
+    else decode before
+
+case isTrue.refl
+a powers : Std.Array field.QM31 16#usize
+p : CompiledPoolV1PairForestPattern
+i : Usize
+before out : field.QM31
+hi : ↑i < 16
+ha : canonical a
+hp : canonical powers
+hb : Canon before
+hg : JGa_PatternBounds.Good p
+run✝⁸ :
+  (do
+      let kind ← p.kinds.index_usize i
+      if kind = 1#u8 then do
+          let column ← p.columns.index_usize i
+          let index ← lift (core.convert.num.FromUsizeU8.from column)
+          let q ← a.index_usize index
+          let offset ← p.offsets.index_usize i
+          let q1 ← lift_m31 offset
+          let source ← q.add q1
+          let q2 ← powers.index_usize i
+          let q3 ← q2.mul source
+          before.add q3
+        else ok before) =
+    ok out
+kind : U8
+rkind : p.kinds.index_usize i = ok kind
+vk : FJh_Base.cell p.kinds ⟨↑i, hi⟩ = kind
+hk : kind = 1#u8
+run✝⁷ :
+  (do
+      let column ← p.columns.index_usize i
+      let index ← lift (core.convert.num.FromUsizeU8.from column)
+      let q ← a.index_usize index
+      let offset ← p.offsets.index_usize i
+      let q1 ← lift_m31 offset
+      let source ← q.add q1
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+col : U8
+rcol : p.columns.index_usize i = ok col
+run✝⁶ :
+  (do
+      let index ← lift (core.convert.num.FromUsizeU8.from col)
+      let q ← a.index_usize index
+      let offset ← p.offsets.index_usize i
+      let q1 ← lift_m31 offset
+      let source ← q.add q1
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+idx : Usize
+ridx : lift (core.convert.num.FromUsizeU8.from col) = ok idx
+run✝⁵ :
+  (do
+      let q ← a.index_usize idx
+      let offset ← p.offsets.index_usize i
+      let q1 ← lift_m31 offset
+      let source ← q.add q1
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+q : field.QM31
+rq : a.index_usize idx = ok q
+run✝⁴ :
+  (do
+      let offset ← p.offsets.index_usize i
+      let q1 ← lift_m31 offset
+      let source ← q.add q1
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+offset : U32
+roff : p.offsets.index_usize i = ok offset
+run✝³ :
+  (do
+      let q1 ← lift_m31 offset
+      let source ← q.add q1
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+source : field.QM31
+run✝² :
+  (do
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+power : field.QM31
+rpower : powers.index_usize i = ok power
+run✝¹ :
+  (do
+      let q3 ← power.mul source
+      before.add q3) =
+    ok out
+product : field.QM31
+rproduct : power.mul source = ok product
+run✝ : before.add product = ok out
+vc : FJh_Base.cell p.columns ⟨↑i, hi⟩ = col
+vo : FJh_Base.cell p.offsets ⟨↑i, hi⟩ = offset
+cb : ↑col < 16
+ob : ↑offset < 2147483647
+ix : ↑idx = ↑col
+run :
+  (do
+      let source ← q.add (FIw_ScalarArithmetic.lifted offset)
+      let q2 ← powers.index_usize i
+      let q3 ← q2.mul source
+      before.add q3) =
+    ok out
+rsource : q.add (FIw_ScalarArithmetic.lifted offset) = ok source
+rlift : ok (FIw_ScalarArithmetic.lifted offset) = ok (FIw_ScalarArithmetic.lifted offset)
+lv : Canon (FIw_ScalarArithmetic.lifted offset) ∧ decode (FIw_ScalarArithmetic.lifted offset) = ↑↑offset
+qv : Canon q
+pw : Canon power
+sv : Canon source ∧ decode source = decode q + decode (FIw_ScalarArithmetic.lifted offset)
+mv : Canon product ∧ decode product = decode power * decode source
+result : Canon out ∧ decode out = decode before + decode product
+⊢ decode before + FIv_NativeArray.value powers ↑i * (FIv_NativeArray.value a ↑col + ↑↑offset) =
+    if
+        { kinds := fun i => ↑(FJh_Base.cell p.kinds i), columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.kinds
+            ⟨↑i, hi⟩ =
+          1 then
+      decode before +
+        FIv_NativeArray.value powers ↑⟨↑i, hi⟩ *
+          (FIv_NativeArray.value a
+              ↑({ kinds := fun i => ↑(FJh_Base.cell p.kinds i),
+                      columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                      offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.columns
+                  ⟨↑i, hi⟩) +
+            ↑({ kinds := fun i => ↑(FJh_Base.cell p.kinds i),
+                    columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                    offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.offsets
+                ⟨↑i, hi⟩))
+    else decode before
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FJk_PatternCellValue.lean:61:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJh_Base.cell p.kinds ⟨↑i, hi⟩
+in the target expression
+  decode before =
+    if
+        { kinds := fun i => ↑(FJh_Base.cell p.kinds i), columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.kinds
+            ⟨↑i, hi⟩ =
+          1 then
+      decode before +
+        FIv_NativeArray.value powers ↑⟨↑i, hi⟩ *
+          (FIv_NativeArray.value a
+              ↑({ kinds := fun i => ↑(FJh_Base.cell p.kinds i),
+                      columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                      offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.columns
+                  ⟨↑i, hi⟩) +
+            ↑({ kinds := fun i => ↑(FJh_Base.cell p.kinds i),
+                    columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                    offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.offsets
+                ⟨↑i, hi⟩))
+    else decode before
+
+case isFalse
+a powers : Std.Array field.QM31 16#usize
+p : CompiledPoolV1PairForestPattern
+i : Usize
+before : field.QM31
+hi : ↑i < 16
+ha : canonical a
+hp : canonical powers
+hb : Canon before
+hg : JGa_PatternBounds.Good p
+kind : U8
+rkind : p.kinds.index_usize i = ok kind
+vk : FJh_Base.cell p.kinds ⟨↑i, hi⟩ = kind
+hk : ¬kind = 1#u8
+run✝ :
+  (do
+      let kind ← p.kinds.index_usize i
+      if kind = 1#u8 then do
+          let column ← p.columns.index_usize i
+          let index ← lift (core.convert.num.FromUsizeU8.from column)
+          let q ← a.index_usize index
+          let offset ← p.offsets.index_usize i
+          let q1 ← lift_m31 offset
+          let source ← q.add q1
+          let q2 ← powers.index_usize i
+          let q3 ← q2.mul source
+          before.add q3
+        else ok before) =
+    ok before
+run : ok before = ok before
+⊢ decode before =
+    if
+        { kinds := fun i => ↑(FJh_Base.cell p.kinds i), columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.kinds
+            ⟨↑i, hi⟩ =
+          1 then
+      decode before +
+        FIv_NativeArray.value powers ↑⟨↑i, hi⟩ *
+          (FIv_NativeArray.value a
+              ↑({ kinds := fun i => ↑(FJh_Base.cell p.kinds i),
+                      columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                      offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.columns
+                  ⟨↑i, hi⟩) +
+            ↑({ kinds := fun i => ↑(FJh_Base.cell p.kinds i),
+                    columns := fun i => ⟨↑(FJh_Base.cell p.columns i) % 16, ⋯⟩,
+                    offsets := fun i => ↑(FJh_Base.cell p.offsets i) }.offsets
+                ⟨↑i, hi⟩))
+    else decode before
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    i
+  has type
+    Fin 16
+  but is expected to have type
+    Fin ↑16#usize
+  in the application
+    FJh_Base.cell p.kinds i
+'AspisR1.FJk_PatternCellValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,11 @@
+import S1SemanticFinishModelV1
+import S1SemanticRootCopyV1
+import S1SemanticInstallationV1
+set_option autoImplicit false
+#print AspisR1PublicPreparation.r1_wire.Prefix
+#print AspisR1PublicPreparation.r1_wire.ValidatedRecord
+#print AspisR1PublicPreparation.r1_wire.Prefix.validated_record
+#print AspisR1PublicPreparation.r1_wire.ValidatedRecord.impl.framed
+#print AspisR1PublicPreparation.r1_wire.ValidatedRecord.impl.row
+#print AspisR1PublicPreparation.FinishModel.payload
+#print AspisR1CurrentCaller.S1SemanticInstallation.verify_roots

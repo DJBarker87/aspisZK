@@ -1,0 +1,21 @@
+{"attempt": "BEn_016", "exit_status": 0, "wall_seconds": 2.81157705798978, "peak_rss_kib": "5552404", "swaps": "0", "print_axioms": ["'AspisR1.S2W_DigestExtraction.native_binding' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.S2W_DigestExtraction.native_binding : ∀ (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    AspisR1.S2Z.Oracle.NativeBinding ops hashv :=
+fun ops native1 native2 hashv extraction self parts =>
+  Eq.trans (extraction.digestSource self parts) (AspisR1.S2W_DigestExtraction.digest_eq_hashv hashv self parts)
+'AspisR1.S2W_DigestExtraction.native_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem AspisR1.S2W_DigestExtraction.native_binding : ∀ (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    AspisR1.S2Z.Oracle.NativeBinding ops hashv :=
+fun ops native1 native2 hashv extraction self parts =>
+  Eq.trans (extraction.digestSource self parts) (AspisR1.S2W_DigestExtraction.digest_eq_hashv hashv self parts)
+'AspisR1.S2W_DigestExtraction.native_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb8275c7c197f45bfb808242deb84aee1.scope; invocation ID: 177de150077847658fa1294c83da8e5f

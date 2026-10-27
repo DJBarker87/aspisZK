@@ -1,0 +1,5 @@
+import ExtractedMaskSemanticBridgeConcrete
+set_option pp.privateNames true
+set_option pp.fullNames true
+#print AspisR1.ExtractedMaskSemanticBridgeConcrete.current_selected_mask_maps_to_maskValue
+#print axioms AspisR1.ExtractedMaskSemanticBridgeConcrete.current_selected_mask_maps_to_maskValue

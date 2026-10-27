@@ -1,0 +1,7 @@
+# Pair value substeps
+
+FGm_PowersValue.value proves successful native powers decode to x^j for every reached array coordinate, arbitrary N, with canonicality. FGm_PairKappa.value proves the actual final seven-part weighted sum equals the source parts weighted by kappa powers. All four final aggregation loops are definitionally the same.
+
+FGm_SubsetValue.value proves successful native mask-selected contraction equals the symbolic sum of actual low-array values selected by the actual mask/read/shift operations. FGm_ContractValue.value composes the twelve actual coefficient products; FGm_GroupValue.value exports the SAME source coefficient loop result and full grouped contraction value. These are native source-helper facts, not the missing FunctionalWeights/literal-input/constructor/component relation. Global L142 remains a premise. No further root-count credit.
+
+All successful theorem receipts print standard axioms. Failed intermediate elaborations are retained and excluded, including 016–019,022–023,026,028,034,037,041. 009 and037 hit Lean heartbeat limits: 009 was replaced by the separately compiled installed-key lemma010 and corrected application011; 037 had an incorrect copied end numeral causing inappropriate sum reduction, replaced by symbolic bounded-range stop lemma038 and corrected invariant039. No caps or Lean heartbeat options were raised; no unchanged retry. Full snapshots/errors/resources are in each attempt directory.

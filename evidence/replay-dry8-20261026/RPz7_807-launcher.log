@@ -1,0 +1,38 @@
+{"attempt": "RPz7_807", "exit_status": 0, "wall_seconds": 2.2880407250486314, "peak_rss_kib": "5275644", "swaps": "0", "print_axioms": ["'AspisR1.T2Nat_ReaderEffects.header' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.T2Nat_ReaderEffects.program' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.T2Nat_ReaderEffects.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.T2Nat_ReaderEffects.on_run' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.T2Nat_ReaderEffects.OnRun : Bool →
+  {H : Type} →
+    VTop_Stages.aspis_core.digest.Digest32 H →
+      H → Slice U8 → Slice U8 → Slice U8 → verifier.Prepared → verifier.Accumulator → Prop :=
+fun reserved {H} D hash bytes proof pub p a =>
+  ∀ (before : Log),
+    ∃ after,
+      run (VTop_Checkpoint.digest D) hash
+            (CheckpointBytes5Resume.program (T2Nat_ReaderOps.ops reserved) bytes proof pub transport.Variant.S2)
+            before =
+          ok (core.result.Result.Ok (p, a), after) ∧
+        run (VTop_Checkpoint.digest D) hash
+            (CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) bytes proof pub transport.Variant.S2)
+            before =
+      
+...
+def AspisR1.T2Nat_ReaderEffects.OnRun : Bool →
+  {H : Type} →
+    VTop_Stages.aspis_core.digest.Digest32 H →
+      H → Slice U8 → Slice U8 → Slice U8 → verifier.Prepared → verifier.Accumulator → Prop :=
+fun reserved {H} D hash bytes proof pub p a =>
+  ∀ (before : Log),
+    ∃ after,
+      run (VTop_Checkpoint.digest D) hash
+            (CheckpointBytes5Resume.program (T2Nat_ReaderOps.ops reserved) bytes proof pub transport.Variant.S2)
+            before =
+          ok (core.result.Result.Ok (p, a), after) ∧
+        run (VTop_Checkpoint.digest D) hash
+            (CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) bytes proof pub transport.Variant.S2)
+            before =
+          ok (core.result.Result.Ok (p, a), after)
+'AspisR1.T2Nat_ReaderEffects.header' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_ReaderEffects.program' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_ReaderEffects.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_ReaderEffects.on_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8bf03f1fe8ec44bf80c5dc27a463642d.scope; invocation ID: 5b9c12e2f923452d9f973426b5cefc8f

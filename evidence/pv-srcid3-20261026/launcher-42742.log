@@ -1,0 +1,19 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0759); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortNodeResult.lean:25:67: error: Tactic `decide` failed for proposition
+  Usize.wrapping_sub 16#usize 1#usize = 15#usize
+because its `Decidable` instance
+  instDecidableEqUScalar_1 UScalarTy.Usize (Usize.wrapping_sub 16#usize 1#usize) 15#usize
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `decEq`, `instDecidableEqBool`, `instDecidableEqNat`, `Bool.decEq`, `Nat.decEq`, `Nat.decLe`, and `instDecidableEqUScalar_1`, reduction got stuck at the `Decidable` instance
+  match h : (↑(Usize.wrapping_sub 16#usize 1#usize)).beq ↑15#usize with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+'R1Z.PV_Src_PortNodeResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.65
+	Maximum resident set size (kbytes): 4143276
+	Swaps: 0
+	Exit status: 1

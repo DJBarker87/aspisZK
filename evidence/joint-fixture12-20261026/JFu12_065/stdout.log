@@ -1,0 +1,81 @@
+JFu_TransitionFirst.lean:14:63: error: Type mismatch: After simplification, term
+  start
+ has type
+  @Eq ℕ (↑r.start) (↑0#usize + 1)
+but is expected to have type
+  @Eq ℕ ↑r.start ↑1#usize
+JFu_TransitionFirst.lean:22:2: error: Tactic `rfl` failed: The left-hand side
+  if 0#usize = 1#usize then
+    if 1#usize < 20#usize then validate_transition_loop JFu_PublicSemantic.value r1 1#usize
+    else do
+      let (iter2, expected) ←
+        if 0#usize < 1#usize then do
+            let expected1 ← empty_root 0#usize
+            ok (r1, expected1)
+          else do
+            let i ← JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index >>> 0#usize
+            let i1 ← lift (i &&& 1#u64)
+            let a ←
+              if i1 = 0#u64 then empty_root 0#usize
+                else JFu_PublicSemantic.value.transition.live_snapshot.frontier.index_usize 0#usize
+            ok (r1, a)
+      let a ← JFu_PublicSemantic.value.transition.candidate_afterstate.next_frontier.index_usize 0#usize
+      let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+      if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+        else validate_transition_loop JFu_PublicSemantic.value iter2 1#usize
+  else do
+    let (iter2, expected) ←
+      if 0#usize < 1#usize then do
+          let expected1 ← empty_root 0#usize
+          ok (r1, expected1)
+        else do
+          let i ← JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index >>> 0#usize
+          let i1 ← lift (i &&& 1#u64)
+          let a ←
+            if i1 = 0#u64 then empty_root 0#usize
+              else JFu_PublicSemantic.value.transition.live_snapshot.frontier.index_usize 0#usize
+          ok (r1, a)
+    let a ← JFu_PublicSemantic.value.transition.candidate_afterstate.next_frontier.index_usize 0#usize
+    let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+    if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+      else validate_transition_loop JFu_PublicSemantic.value iter2 1#usize
+is not definitionally equal to the right-hand side
+  validate_transition_loop JFu_PublicSemantic.value r1 1#usize
+
+⊢ (if 0#usize = 1#usize then
+      if 1#usize < 20#usize then validate_transition_loop JFu_PublicSemantic.value r1 1#usize
+      else do
+        let (iter2, expected) ←
+          if 0#usize < 1#usize then do
+              let expected1 ← empty_root 0#usize
+              ok (r1, expected1)
+            else do
+              let i ← JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index >>> 0#usize
+              let i1 ← lift (i &&& 1#u64)
+              let a ←
+                if i1 = 0#u64 then empty_root 0#usize
+                  else JFu_PublicSemantic.value.transition.live_snapshot.frontier.index_usize 0#usize
+              ok (r1, a)
+        let a ← JFu_PublicSemantic.value.transition.candidate_afterstate.next_frontier.index_usize 0#usize
+        let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+        if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+          else validate_transition_loop JFu_PublicSemantic.value iter2 1#usize
+    else do
+      let (iter2, expected) ←
+        if 0#usize < 1#usize then do
+            let expected1 ← empty_root 0#usize
+            ok (r1, expected1)
+          else do
+            let i ← JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index >>> 0#usize
+            let i1 ← lift (i &&& 1#u64)
+            let a ←
+              if i1 = 0#u64 then empty_root 0#usize
+                else JFu_PublicSemantic.value.transition.live_snapshot.frontier.index_usize 0#usize
+            ok (r1, a)
+      let a ← JFu_PublicSemantic.value.transition.candidate_afterstate.next_frontier.index_usize 0#usize
+      let b ← core.array.equality.PartialEqArray.ne field.M31.Insts.CoreCmpPartialEqM31 a expected
+      if b = true then ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+        else validate_transition_loop JFu_PublicSemantic.value iter2 1#usize) =
+    validate_transition_loop JFu_PublicSemantic.value r1 1#usize
+'AspisR1.JFu_TransitionFirst.next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFu_TransitionFirst.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

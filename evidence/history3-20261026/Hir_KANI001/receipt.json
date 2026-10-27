@@ -1,0 +1,62 @@
+{
+  "attempt": "Hir_KANI001",
+  "kind": "kani",
+  "source_revision": "792ab44a6e65fe005221758774656cd5bfcdf239",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_kani_target",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,no-entrypoint",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "Hir_occupied_guard_rejects",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "Hir_pool_harness.rs",
+    "Hir_PoolPins.json",
+    "Hir_src/programs/aspis-pool/src/pair_forest.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual full source borrowed zero guard. Original source plus appended cfg(kani)-only Hir module in own snapshot. No stubs.192-byte complete Pool checkpoint with nonzero first byte. No writer/lifecycle claim."
+  },
+  "expected_time": "Compilation, then one named bounded guard verification; optimized cargo dev profile opt-level3, four jobs",
+  "exit_status": 0,
+  "wall_seconds": 33.18141814903356,
+  "peak_rss_kib": "712256",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/Hir_KANI001.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1275064320",
+  "source_hashes": {
+    "Hir_pool_harness.rs": "edb6bd386863bfb58135950c42040588334320fc4ade55804d0741a13ba21e53",
+    "Hir_PoolPins.json": "c032af190eddb91855c9f0ba9d64c338bf19500563a497d8ec81cf96a64ad009",
+    "Hir_src/programs/aspis-pool/src/pair_forest.rs": "e72858709e773e11c38bd265161e948e247742701e95da234e7c4bd7bfcad08d"
+  },
+  "print_axioms": "N/A: kani"
+}

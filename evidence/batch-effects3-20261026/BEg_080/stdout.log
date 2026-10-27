@@ -1,0 +1,26 @@
+AspisR1.GExp_BatchBudget.values : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (roots : Aeneas.Std.Array AspisR1.CheckpointBytes5Effect.Digest 3#usize) (which : Aeneas.Std.Usize),
+  AspisR1.GExp_CountLaws.count 11232 (AspisR1.Port9OR_Batch.values base D hash proof queries roots which)
+'AspisR1.GExp_BatchBudget.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.GExp_BatchBudget.source : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (roots : Aeneas.Std.Array AspisR1.CheckpointBytes5Effect.Digest 2#usize)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (which : Aeneas.Std.Usize),
+  AspisR1.GExp_CountLaws.count 11232 (AspisR1.SdkC_BatchSource.code D hash proof queries roots root which)
+'AspisR1.GExp_BatchBudget.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.GExp_BatchBudget.map : ∀ {Err : Type} (f : AspisR1Stage2.verifier.Error → Err)
+  (p : AspisR1.CheckpointBytes5Effect.Code (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)) (n : ℕ),
+  AspisR1.GExp_CountLaws.count n p → AspisR1.GExp_CountLaws.count n (AspisR1.SdkC_BatchSource.mapCode f p)
+'AspisR1.GExp_BatchBudget.map' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.GExp_BatchBudget.current : ∀ (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (root : AspisR1.CheckpointBytes5Effect.Digest),
+  AspisR1.GExp_CountLaws.count 11232 (AspisR1.SdkC_BatchSource.currentCode hashv proof p root)
+'AspisR1.GExp_BatchBudget.current' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.GExp_BatchBudget.stage : ∀ (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+  (root : AspisR1.CheckpointBytes5Effect.Digest),
+  AspisR1.GExp_CountLaws.count 11232 (AspisR1.SdkC_BatchSource.stageCode hashv proof p root)
+'AspisR1.GExp_BatchBudget.stage' depends on axioms: [propext, Classical.choice, Quot.sound]
