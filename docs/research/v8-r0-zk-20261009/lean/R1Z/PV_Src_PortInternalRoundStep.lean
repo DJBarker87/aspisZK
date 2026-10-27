@@ -3,6 +3,7 @@ import R1Z.PV_Src_PortInternalRoundCopy
 /-! Exact source trace-loop step. Callback errors and state changes remain
 in the Result expression; the body alone is replaced by its proved copy. -/
 set_option autoImplicit false
+set_option pp.fullNames true
 namespace R1Z.PV_Src_PortInternalRoundStep
 open Aeneas Aeneas.Std Result
 open BuilderForestStdPort BuilderForestAdmissionPort PV_Src_PortSboxStep
@@ -33,7 +34,8 @@ theorem source {F : Type}
     poseidon2.permute_optimized_with_trace_loop1 callback after out trace1
       (U8.wrapping_add round 1#u8) out)
     (PV_Src_PortInternalRoundCopy.source s c hs hc)
-  simpa only [PV_Src_PortInternalRoundCopy.run,bind_assoc_eq,lift,bind_tc_ok] using he
+  simp only [PV_Src_PortInternalRoundCopy.run,bind_assoc_eq,lift,bind_tc_ok] at he
+  convert he using 1 <;> rfl
 
 #print axioms source
 end R1Z.PV_Src_PortInternalRoundStep
