@@ -19,3 +19,9 @@ Kani harnesses listed before invocation: source_root_04, source_root_05, source_
 ## Stage 1 closure completed
 
 PDict_Static222_13 through PDict_ReachCaller all compiled from pinned read-only git-show source snapshots; no genuine missing PDict theorem was found. SourceConstructor (37450) and SourceBoundary (37451) are accepted dependent bridges. Through this point: 46/100 Lean attempts, all accepted, no swap; full receipt metrics/axiom lines per target retained. This closes missing-object replay, not actual deployment selection/compiler/admission or source-to-model trace. Shared launcher publishing and own retained-object copy behavior is unchanged from the entry runner; every accepted object is copied to the assigned host lean-objects directory.
+
+InstalledTrustLedger 37452 failed (24.16s, 4,501,102,592B, swap 0): local instance at line 59 had a non-inferable explicit baseTypes parameter; subsequent carrier mismatches/timeouts are retained. Replacement changes baseTypes to an instance-implicit section parameter and fixes the dependent call; no heartbeat/cap increase and no theorem premise added. This previously uncompiled draft is promoted to an active source only for the corrected check.
+
+## Installed constructor check
+
+InstalledTrustLedger accepted at 37461 (18.24s, 4,536,266,752B peak RSS, swap 0, standard axioms), after seven rejected draft elaborations (37452, 37453, 37455, 37456, 37457, 37458, 37460) and the successful interface probe 37454. The fixes explicitly select the native dictionary and its LedgerWorld carrier, inline derived input/common macros, and use explicit applications for anonymous class binders. No caps, heartbeats, or assumptions were raised. A temporary quotation-precheck option did not fix the problem and was removed. Rejected recovery sorryAx output was never accepted or retained as a proof object.
