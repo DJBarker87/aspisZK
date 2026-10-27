@@ -21,6 +21,7 @@ theorem mul (a b : C) : ∃ y, aspis_core.field.CM31.mul a b=ok y := by
     (U64.wrapping_add (core.convert.num.FromU64U32.from a.a) (core.convert.num.FromU64U32.from a.b))
     (U64.wrapping_add (core.convert.num.FromU64U32.from b.a) (core.convert.num.FromU64U32.from b.b))
   obtain ⟨m2,h2⟩ := PV_B1_FieldM31Total.reduce64 prod
+  dsimp only [prod] at h2
   obtain ⟨m,hm⟩ := PV_B1_FieldM31Total.sub m0 m1
   obtain ⟨m3,h3⟩ := PV_B1_FieldM31Total.sub m2 m0
   obtain ⟨m4,h4⟩ := PV_B1_FieldM31Total.sub m3 m1
