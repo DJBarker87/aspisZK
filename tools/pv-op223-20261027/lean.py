@@ -1,0 +1,36 @@
+from pathlib import Path
+import hashlib,json,re,shlex,subprocess,sys
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-op223-20261027';D='/home/dombarker/project-offloads/codex-pv-op223-20261027';H='dombarker@100.108.41.90'
+n=int(sys.argv[1]);module=sys.argv[2];assert 43300<=n<=43599
+p=R/'docs/research/v8-r0-zk-20261009/lean'/(module+'.lean');assert p.name.startswith('PV_Op223_')
+tp=E/'TALLY.json';t=json.loads(tp.read_text()) if tp.exists() else dict(lean_charged=0,kani=0,next_env_j_id=43300,attempts=[])
+assert n>=t['next_env_j_id'] and t['lean_charged']<100
+assert n<43597 or 'Audit' in module
+t['next_env_j_id']=n+1;t['attempts'].append(dict(id=n,module=module));tp.write_text(json.dumps(t,indent=2)+'\n')
+imports=re.findall(r'^import (\S+)',p.read_text(),re.M)
+code='''from pathlib import Path
+import json,hashlib
+D=Path(DIR);B=D.parent;e=json.loads((B/'r1-privacy-build-integration-20261019/env/J.json').read_text());e['LEAN_PATH']=str(B/'aspis-joint-20261019/objects')+':'+e['LEAN_PATH'];(D/'env-J.json').write_text(json.dumps(e));r={}
+for m in IMPORTS:
+ for d in [str(D/'lean-objects')]+e['LEAN_PATH'].split(':'):
+  p=Path(d)/(m.replace('.','/')+'.olean')
+  if p.exists():r[m]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest());break
+ else:raise SystemExit('missing object '+m)
+(D/'lean-sources/R1Z').mkdir(parents=True,exist_ok=True);(D/'lean-objects/R1Z').mkdir(parents=True,exist_ok=True)
+print(json.dumps(r,sort_keys=True))
+'''.replace('DIR',repr(D)).replace('IMPORTS',repr(imports))
+r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True)
+if r.returncode:(E/f'{n}-preflight-error.txt').write_text(r.stderr+r.stdout);raise SystemExit(r.stderr+r.stdout)
+deps=json.loads(r.stdout);fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest();meta=dict(attempt=n,module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),deps_fingerprint=fp,dependency_objects=deps)
+(E/f'{n}-submission.json').write_text(json.dumps(meta,indent=2)+'\n');(E/f'{n}-source.lean.txt').write_bytes(p.read_bytes())
+subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+module+'.lean'],check=True)
+cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+module+'.olean',D+'/lean-sources/'+module+'.lean','7000']
+label='lean-'+str(n)
+a=subprocess.run(['ssh',H,shlex.join(['python3',D+'/run_host.py',label,json.dumps(cmd)])],text=True,capture_output=True);(E/f'{n}-launcher.log').write_text(a.stdout+a.stderr);print(a.stdout+a.stderr)
+res=subprocess.run(['ssh',H,'cat '+D+'/'+label+'/receipt/receipt.json'],text=True,capture_output=True)
+if res.returncode:print('UNCHARGED refusal; preserve cooldown');sys.exit(a.returncode or 1)
+rec=json.loads(res.stdout);t=json.loads(tp.read_text());t['lean_charged']+=1;t['attempts'][-1].update(charged=True,exit=rec['exit_status']);tp.write_text(json.dumps(t,indent=2)+'\n')
+for name in ['stdout.log','stderr.log','time.log']:
+ v=subprocess.check_output(['ssh',H,'cat '+D+'/'+label+'/receipt/'+name],text=True);(E/f'{n}-{name}').write_text(v)
+ if name=='stdout.log':meta['axiom_output']=v;print(v)
+meta.update(rec);(E/f'{n}.json').write_text(json.dumps(meta,indent=2)+'\n');sys.exit(rec['exit_status'])

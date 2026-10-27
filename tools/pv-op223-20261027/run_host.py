@@ -1,0 +1,10 @@
+from pathlib import Path
+import json,subprocess,sys,time,hashlib
+D=Path('/home/dombarker/project-offloads/codex-pv-op223-20261027');name=sys.argv[1];cmd=json.loads(sys.argv[2]);O=D/name;O.mkdir()
+G=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy')
+r=subprocess.run(['python3',str(G/'reservation.py'),str(O/'admission-before.json')],stdout=open(O/'reservation.log','w'),stderr=subprocess.STDOUT)
+if r.returncode:sys.exit(r.returncode)
+rev=(D/'source-revision.txt').read_text().strip()
+(O/'target.json').write_text(json.dumps(dict(target=cmd,revision=rev,print_axioms='N/A extraction/native run'),indent=2))
+r=subprocess.run(['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(G/'barrier.py'),str(O/'admission-barrier.json'),'python3',str(D/'capped.py'),str(O/'receipt'),name,'--',*cmd],stdout=open(O/'output.log','w'),stderr=subprocess.STDOUT)
+print(name,r.returncode);sys.exit(r.returncode)
