@@ -10,19 +10,18 @@ head='set_option autoImplicit false\nnoncomputable section\nnamespace AspisR1.JG
 end='end AspisR1.JGc_TX2_M2Roots\nend\n'
 def cert(i):
  h=f'JGc_TX2_M2.Hash{i:03}'
- return f'''def input{i:03} : Bytes := JGc_TX2_HashBytes.bytes {h}.message
-def value{i:03} : State := JFp_SHADigest.output {h}.result
-theorem canonical{i:03} : ∀ n∈{h}.message,n<256 := by
-  simp [{h}.message,{h}.head,{','.join(h+f'.B{k:02}.input' for k in range(tree['hashes'][i]['blocks']-1))},{h}.tail]
-#print axioms canonical{i:03}
-theorem hash{i:03} : JFp_SHADigest.digest input{i:03}=value{i:03} := by
-  unfold input{i:03} JFp_SHADigest.digest
-  rw [JGc_TX2_HashBytes.numeric _ canonical{i:03},{h}.checked]
-#print axioms hash{i:03}
-'''
+ blocks=tree['hashes'][i]['blocks']-1
+ s=f'def input{i:03} : Bytes := JGc_TX2_HashBytes.bytes {h}.message\ndef value{i:03} : State := JFp_SHADigest.output {h}.result\n'
+ for j in range(blocks):
+  s+=f'theorem cast{i:03}_{j} : (JGc_TX2_HashBytes.bytes {h}.B{j:02}.input).map Fin.val={h}.B{j:02}.input := by rfl\n#print axioms cast{i:03}_{j}\n'
+ s+=f'theorem tail{i:03} : (JGc_TX2_HashBytes.bytes {h}.tail).map Fin.val={h}.tail := by rfl\n#print axioms tail{i:03}\n'
+ s+=f'theorem numeric{i:03} : (JGc_TX2_HashBytes.bytes {h}.message).map Fin.val={h}.message := by\n'
+ s+=f'  simp only [{h}.message,{h}.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,'+','.join(f'cast{i:03}_{j}' for j in range(blocks))+f',tail{i:03}]\n#print axioms numeric{i:03}\n'
+ s+=f'theorem hash{i:03} : JFp_SHADigest.digest input{i:03}=value{i:03} := by\n  unfold input{i:03} JFp_SHADigest.digest\n  rw [numeric{i:03},{h}.checked]\n#print axioms hash{i:03}\n'
+ return s
 # All messages >=64 use the symbolic head/tail emitter.
 imports=''.join('import '+owner[i]+'\n' for i in range(0,12,2))
-s=imports+'import JGc_TX2_HashBytes\nimport OracleDecisionMultiBuild\n'+head
+s=imports+'import JGc_TX2_ByteAppend\nimport JGc_TX2_HashBytes\nimport OracleDecisionMultiBuild\n'+head
 for i in range(12):
  s+=cert(i)+f'''def tree{i:03} : Tree := .opened input{i:03}
 theorem root{i:03} : root JFp_SHADigest.digest tree{i:03}=value{i:03} := hash{i:03}
