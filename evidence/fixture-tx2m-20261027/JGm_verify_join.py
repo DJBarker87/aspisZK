@@ -11,6 +11,7 @@ noncomputable section
 namespace AspisR1.{ns}
 open Aeneas Aeneas.Std Result MultiproofConeRef
 open AspisV8R19.SqueezeOracleBridge
+attribute [local irreducible] JFx_NativeBytes.proof JGh_TX2_NodeViews.nodes0 JGh_TX2_NodeViews.nodes1 JGh_TX2_NodeViews.nodes2 JGm_TX2_Supplied.nodes0 JGm_TX2_Supplied.nodes1 JGm_TX2_Supplied.nodes2
 
 def output {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (s : reference.Scratch) : reference.Scratch := Classical.choose (JGm_TX2_Levels{t}.on_scratch D hash s)
 
@@ -33,18 +34,20 @@ theorem source {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Has
     obtain ⟨v,run,hv⟩ := WP.spec_imp_exists (UScalar.rem_spec (x:={c}#usize) (y:=32#usize) (by scalar_tac))
     have same : v=0#usize := UScalar.eq_of_val_eq (by simpa using hv)
     simpa only [same] using run
-  rw [reference.verify_owned]
-  simp only [show (JGk_TX2_Scratch{t}.s12 s).n=12#usize from rfl,
-    show (12#usize=0#usize)=False from propext (by decide),
-    show (12#usize>16#usize)=False from propext (by decide),if_false,if_true,Bool.true_eq,
-    JGm_TX2_Valid{t}.on_scratch,bind_tc_ok,len,modulo,
-    show (0#usize!=0#usize)=false from rfl,Bool.false_eq_true,reset,levels]
+  have valid : reference.valid_indices (JGk_TX2_Scratch{t}.s12 s).idx (JGk_TX2_Scratch{t}.s12 s).n 0#usize=ok true := JGm_TX2_Valid{t}.on_scratch s
+  rw [reference.verify_owned,
+    if_neg (by change ¬12#usize=0#usize;decide),
+    if_neg (by change ¬12#usize>16#usize;decide),valid]
+  simp only [bind_tc_ok,Bool.true_eq,if_true,len,modulo,
+    show (0#usize!=0#usize)=false from rfl,Bool.false_eq_true,if_false]
+  rw [reset,levels]
+  simp only [bind_tc_ok]
   change (do if (output D hash s).n=1#usize then
                let i ← Array.index_usize (output D hash s).idx 0#usize
                if i=0#u32 then
                  let a ← Array.index_usize (output D hash s).val 0#usize
                  let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a (encodeState {pre}_TX2_M{t}Root.retainedRoot)
-                 if b then ok ((output D hash s).«at»=Slice.len JGm_TX2_Supplied.nodes{t},output D hash s)
+                 if b then ok (decide ((output D hash s).«at»={c}#usize),output D hash s)
                  else ok (false,output D hash s)
                else ok (false,output D hash s)
              else ok (false,output D hash s))=_

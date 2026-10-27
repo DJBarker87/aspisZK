@@ -1,0 +1,54 @@
+{"attempt": "JGm_TX2_090", "exit_status": 1, "wall_seconds": 9.014252824010327, "peak_rss_kib": "6993932", "swaps": "0", "print_axioms": ["'AspisR1.JGm_TX2_Verify0.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGm_TX2_Verify1.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGm_TX2_Verify2.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGm_TX2_Verify.lean:38:49: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  reference.valid_indices (JGk_TX2_Scratch0.s12 ?s).idx 12#usize 0#usize
+in the target expression
+  (do
+      let b ← reference.valid_indices (JGk_TX2_Scratch0.s12 s).idx (JGk_TX2_Scratch0.s12 s).n 0#usize
+      if b = true then
+          have i := JGm_TX2_Supplied.nodes0.len;
+          do
+          let i1 ← i % 32#usize
+          if (i1 != 0#usize) = true then ok (false, JGk_TX2_Scratch0.s12 s)
+            else do
+              let l ←
+                reference.levels (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash
+                    { idx := (JGk_TX2_Scratch0.s12 s).id
+...
+}) =
+    JGk_TX2_Scratch2.s12 s
+len : JGm_TX2_Supplied.nodes2.len = 4512#usize
+modulo : 4512#usize % 32#usize = ok 0#usize
+⊢ (do
+      let b ← reference.valid_indices (JGk_TX2_Scratch2.s12 s).idx (JGk_TX2_Scratch2.s12 s).n 0#usize
+      if b = true then
+          have i := JGm_TX2_Supplied.nodes2.len;
+          do
+          let i1 ← i % 32#usize
+          if (i1 != 0#usize) = true then ok (false, JGk_TX2_Scratch2.s12 s)
+            else do
+              let l ←
+                reference.levels (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash
+                    { idx := (JGk_TX2_Scratch2.s12 s).idx, val := (JGk_TX2_Scratch2.s12 s).val,
+                      n := (JGk_TX2_Scratch2.s12 s).n, «at» := 0#usize }
+                    JGm_TX2_Supplied.nodes2 18#u32
+              match l with
+                | reference.Level.Stop out => ok (false, out)
+                | reference.Level.Done out =>
+                  if out.n = 1#usize then do
+                    let i2 ← out.idx.index_usize 0#usize
+                    if i2 = 0#u32 then do
+                        let a ← out.val.index_usize 0#usize
+                        let b1 ←
+                          core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a
+                              (encodeState JGc_TX2_M2Root.retainedRoot)
+                        if b1 = true then
+                            have i3 := JGm_TX2_Supplied.nodes2.len;
+                            ok (decide (out.at = i3), out)
+                          else ok (false, out)
+                      else ok (false, out)
+                  else ok (false, out)
+        else ok (false, JGk_TX2_Scratch2.s12 s)) =
+    ok (true, output D hash s)
+'AspisR1.JGm_TX2_Verify2.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd4fa681b14454736b5bf5618cd9cd00c.scope; invocation ID: bca2467435314ade8ce16c20cbdbcbe4
