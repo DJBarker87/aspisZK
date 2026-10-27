@@ -56,3 +56,18 @@ association. Both L146 rows remain. Scalar mask helper model conversion failed
 at default heartbeat080,then default recursion082/083 despite isolating the
 scalar decode081;this is not an admitted mask value or counterexample. The
 direct Wide bridge is being checked independently,without raising limits.
+
+## Final update after100
+
+Complete actual FIq body/main-carrier value078 and accepted-source canonicality/
+value092 are checked;direct mask090 and full source masking arithmetic094 are
+checked under their explicit operand premises. Both source mask-gather arrays
+are canonical096/097. Local terminal-tail non-vacuity093 is constructive from
+its SAME reached composition. Literal public/Y/challenges/coordinates/mask/extra
+transport and adopted installation remain open. Both L146 rows remain;zero delta.
+
+098 principal value/non-vacuity statements and099 root/remaining-family audits
+PASS.100 combined81-root axioms audit PASS,standard axioms only.100/100 starts,
+63 passes,37 compiler errors;0/20 Kani. All63 current exact source hashes have
+passing receipts and match the retained coherent host cache. Unverified drafts
+are archived as text. No further compile launch;target not yet established.
