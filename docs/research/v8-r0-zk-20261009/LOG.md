@@ -12876,3 +12876,19 @@ P6 or structural native links. Ruling (q) forbids importing or copying XR* modul
 allows citing Stream A's 13 closed direct leaf bridges by their committed sources, after the usual
 statement audit, where native correspondence for those functions is needed. Rows removed outright:
 0. Privacy target not yet established.
+
+## D335 (Stream B) 2026-10-27 23:29 UTC: pv-reach10: 200-module dependency build complete; installed op84 proved not to catch; pv-reach11 launched
+
+pv-reach10 used its 100 attempts (99 accepted, one retained failure; audits pass; 7,450 dependency
+fingerprint checks matched; no swap). The ~200 prerequisites of the installed-op84 lemma compiled in
+seven chunks under D330's dependency-build authorization, and PV_RE_InstalledOp84B9.installed_noCatch
+proves that the installed op84 instance forwards the hash callback's Result without catching (the
+first candidate, 40207, failed and is kept unaccepted). PV_RE_ReserveGuards9.client_to_store carries
+the source reserve guards into the actual durable nonce-store call, removing five source-prefix
+hypotheses and discharging all three reserve guards. Remaining: 152 native-boundary prerequisite
+modules (the public-deployment, external and record association roots), source-derived invocation
+coverage and exclusion for both shapes (support-complement entries op13, op16, op17, op18, op85,
+op124, op238), and conditional native success witnesses. V404/V405 stay OPEN. pv-reach11 (IDs
+40400-40499) builds the 152 modules as a dependency build, reusing the runjoin line's verified
+objects under (h6) first, then the coverage and exclusion certificates. Rows removed outright: 0.
+Privacy target not yet established.
