@@ -20,6 +20,7 @@ for i in range(17):t+=f'def a{i} : Array Q 16#usize := Array.make 16#usize ['+',
 out[mod+'Data']=t+'end AspisR1.JGq_Common\nend\n'
 for i in range(16):
  out[mod+f'Step{i:02}']=f'''import {mod}Data
+import FJf_CommonIndices
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.JGq_Common
@@ -29,8 +30,13 @@ attribute [local irreducible] FIo_Native.weights.Weights.pair_loop1
 theorem step{i} : FIo_Native.weights.Weights.pair_loop1.body w
     {{start:={i}#usize,«end»:=16#usize}} a{i}=
     ok (.cont ({{start:={i+1}#usize,«end»:=16#usize}},a{i+1})) := by
+  have low : ({i}#usize &&& 3#usize)={i%4}#usize :=
+    UScalar.eq_of_val_eq (by rw [FJf_CommonIndices.low];rfl)
+  have high : Usize.wrapping_shr {i}#usize 2#u32={i//4}#usize :=
+    UScalar.eq_of_val_eq (by rw [FJf_CommonIndices.high];rfl)
   unfold FIo_Native.weights.Weights.pair_loop1.body
   rw [JGo_TX2_Range.next {i}#usize 16#usize {i+1}#usize (by decide) (by decide),bind_tc_ok]
+  simp only [Aeneas.Std.uncurry,lift,bind_tc_ok,low,high]
   with_unfolding_all rfl
 #print axioms step{i}
 end AspisR1.JGq_Common

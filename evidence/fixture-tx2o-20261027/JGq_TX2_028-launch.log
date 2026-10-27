@@ -1,0 +1,57 @@
+{"attempt": "JGq_TX2_028", "exit_status": 1, "wall_seconds": 6.019548590993509, "peak_rss_kib": "5417560", "swaps": "0", "print_axioms": ["'AspisR1.JGq_Common.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGq_CommonStep00.lean:13:21: error: Tactic `rfl` failed: The left-hand side
+  let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 16#usize })
+  match o with
+  | none => ok (done (w, a0))
+  | some j => do
+    let i ← lift (j &&& 3#usize)
+    let a ← w.factors.index_usize 0#usize
+    let a1 ← a.index_usize 2#usize
+    let q ← a1.index_usize i
+    let i1 ← lift (Usize.wrapping_shr j 2#u32)
+    let a2 ← a.index_usize 3#usize
+    let q1 ← a2.index_usize i1
+    let q2 ← q.mul q1
+    let a3 ← a0.update j q2
+    ok (cont (iter1, a3))
+is not definitionally equal to the right-hand side
+  ok (cont ({ start := 1#usize, «end» := 16#usize }, a1))
+
+⊢ (let (o, iter1) := (some 0#usize, { start := 1
+...
+JGq_CommonStep00.lean:13:21: error: Tactic `rfl` failed: The left-hand side
+  let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 16#usize })
+  match o with
+  | none => ok (done (w, a0))
+  | some j => do
+    let i ← lift (j &&& 3#usize)
+    let a ← w.factors.index_usize 0#usize
+    let a1 ← a.index_usize 2#usize
+    let q ← a1.index_usize i
+    let i1 ← lift (Usize.wrapping_shr j 2#u32)
+    let a2 ← a.index_usize 3#usize
+    let q1 ← a2.index_usize i1
+    let q2 ← q.mul q1
+    let a3 ← a0.update j q2
+    ok (cont (iter1, a3))
+is not definitionally equal to the right-hand side
+  ok (cont ({ start := 1#usize, «end» := 16#usize }, a1))
+
+⊢ (let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 16#usize })
+    match o with
+    | none => ok (done (w, a0))
+    | some j => do
+      let i ← lift (j &&& 3#usize)
+      let a ← w.factors.index_usize 0#usize
+      let a1 ← a.index_usize 2#usize
+      let q ← a1.index_usize i
+      let i1 ← lift (Usize.wrapping_shr j 2#u32)
+      let a2 ← a.index_usize 3#usize
+      let q1 ← a2.index_usize i1
+      let q2 ← q.mul q1
+      let a3 ← a0.update j q2
+      ok (cont (iter1, a3))) =
+    ok (cont ({ start := 1#usize, «end» := 16#usize }, a1))
+'AspisR1.JGq_Common.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7c1484ecf6204ea5bb513eaf3c67de3b.scope; invocation ID: 831ede36b0ed44909b5e0d334590b321
