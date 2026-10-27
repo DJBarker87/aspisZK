@@ -4,6 +4,7 @@ R=Path(__file__).resolve().parents[2]; E=R/'evidence/pv-canon-20261027'; B='/hom
 m=sys.argv[1]; p=R/'docs/research/v8-r0-zk-20261009/lean'/ (m+'.lean'); assert p.name.startswith('PV_Canon_')
 tp=E/'tally.json'; t=json.loads(tp.read_text()) if tp.exists() else dict(lean=0,kani=0,next_id=44200,attempts=[])
 assert t['lean']<100; n=t['next_id']; assert n<=44499
+assert (n<44497 if t['lean']<97 else n==44497+t['lean']-97)
 t['next_id']+=1; t['attempts'].append(dict(id=n,module=m));tp.write_text(json.dumps(t,indent=2)+'\n')
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 (E/f'{n}-source.lean.txt').write_bytes(p.read_bytes())
@@ -37,6 +38,10 @@ for module in re.findall(r'^import (\S+)',src.read_text(),re.M):
   dep=Path(root)/(module.replace('.','/')+'.olean')
   if dep.is_file(): deps[module]=dict(path=str(dep.resolve()),sha256=hashlib.sha256(dep.read_bytes()).hexdigest());break
 meta['dependencies']=deps
+for previous in (D/'receipts').glob('*/receipt.json'):
+ old=json.loads(previous.read_text())
+ if old.get('source_sha256')==meta['source_sha256'] and old.get('dependencies')==meta.get('dependencies'):
+  raise SystemExit('REFUSED unchanged source and imported objects: '+str(previous))
 start=time.monotonic()
 c=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(G/'barrier.py'),str(O/'barrier.json'),'/usr/bin/time','-v','-o',str(O/'time.log'),'timeout','900','python3',str(B/'aspis-fs-generic-20261006/evidence/run2.py'),str(D/'env.json'),str(D/'objects'),str(D/'sources'),str(obj),str(src),'7000']
 a=subprocess.run(c,stdout=open(O/'out.log','w'),stderr=subprocess.STDOUT)

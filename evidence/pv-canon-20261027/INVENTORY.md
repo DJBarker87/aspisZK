@@ -50,3 +50,37 @@ reservation after copying the new proof source. The scopes themselves were
 always reservation/barrier capped. The runner now records admission before
 any source scp, as local-lean rule 7 requires, and retains each attempted source
 snapshot. No shared source was written during the initial runs either.
+
+## Frozen deployed stack and input checks
+
+At the frozen worktree source: `prover.rs:159` calls
+`host_semantic::build_with_material`; this reaches
+`build_with_helper_mode` and the sole op121-driving
+`host_sumcheck::prove_sumcheck` invocation at host_semantic.rs:151.
+The oracle is exactly the closure at lines 155 onward:
+`point_claims` → `public.terminal_qm31` and selected-mask evaluation →
+`mask.add(eta.mul(terminal)).add(extra(&dc,point[8],point[9]))`.
+The `prover` feature gates host_sumcheck/host_semantic in lib.rs:32–33.
+
+`host_semantic::build_with_helper_mode` explicitly rejects c1 columns of wrong
+length or limbs ≥P, and rejects d/g values that fail a QM31 serialization/parse
+roundtrip. It does not justify a universal invariant on every externally
+supplied h1-padding value by its type alone. For op121 coefficients the
+strong successful-interpolation canonicality theorem avoids assuming an
+oracle-output invariant. The separate stronger claim that *all earlier field
+values* in the prover are canonical would still need the padding/native-input
+producer binding; it is not silently inferred here.
+
+## Checked composition stage
+
+44238–44240: sampler, polynomial, and generic semantic canonicality pass.
+44248–44252: update/read equality, current sampler/semantic instantiation,
+`PV_Canon_Prefix.op121_arguments`, proof-only monitored round definition and
+successful-bind congruence pass. The prefix theorem assumes only the actual
+source return equations and round<10, not a canonicality conclusion, an oracle
+range premise, or an entropy law. Its dictionary is exactly
+`PV_Join_PublicCaller.selected base ops`.
+
+The stronger one-round instrumentation equality is being checked. Initial
+44253 failed on simplifying a let-pair before matching the semantic Result;
+no source/domain statement was weakened to resolve that elaboration issue.

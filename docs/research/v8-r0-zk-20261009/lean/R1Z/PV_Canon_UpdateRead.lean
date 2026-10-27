@@ -10,8 +10,9 @@ open Aeneas Aeneas.Std Result ProverRwFull
   obtain ⟨out,hout,hset⟩ := WP.spec_imp_exists (Array.update_spec xs i q hidx)
   rw [hout] at hu
   cases hu
-  rw [ProverCommitArrayIndex25.array_index_usize_ok out i hi] at hr
+  rw [ProverCommitArrayIndex25.array_index_usize_ok ys i hi] at hr
   rw [hset] at hr
+  change Result.ok ((xs.val.set i.val q)[i.val]'(by simpa only [List.length_set] using hidx)) = .ok z at hr
   simp only [List.getElem_set_self] at hr
   exact (Result.ok.inj hr).symm
  theorem update_read_canonical (xs ys : Array aspis_core.field.QM31 10#usize)

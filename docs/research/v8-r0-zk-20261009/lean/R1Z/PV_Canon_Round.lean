@@ -50,8 +50,10 @@ theorem round_checked (base : ExternalTypes)
         apply bind_congr_success; rintro ⟨sem,after⟩ hs
         cases sem with
         | Err e =>
+          dsimp only
           simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
         | Ok sampled =>
+          dsimp only
           simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
           apply bind_congr_success; intro updated hu
           apply bind_congr_all; intro extended

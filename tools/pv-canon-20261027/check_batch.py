@@ -22,6 +22,11 @@ for item in plan:
    path=Path(root)/(imported.replace('.','/')+'.olean')
    if path.is_file():deps[imported]=dict(path=str(path.resolve()),sha256=hashlib.sha256(path.read_bytes()).hexdigest());break
  meta=dict(target=m,attempt=n,revision=REVISION,source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),dependencies=deps,caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),batch=TAG)
+
+ for previous in (D/'receipts').glob('*/receipt.json'):
+  old=json.loads(previous.read_text())
+  if old.get('source_sha256')==meta['source_sha256'] and old.get('dependencies')==meta.get('dependencies'):
+   raise SystemExit('REFUSED unchanged source and imported objects: '+str(previous))
  started=time.monotonic();cmd=['timeout','900','python3',str(B/'aspis-fs-generic-20261006/evidence/run2.py'),str(D/'env.json'),str(D/'objects'),str(D/'sources'),str(obj),str(src),'7000']
  r=subprocess.run(['/usr/bin/time','-v','-o',str(O/'time.log'),*cmd],stdout=open(O/'out.log','w'),stderr=subprocess.STDOUT)
  meta.update(exit=r.returncode,wall_seconds=time.monotonic()-started,time_log=(O/'time.log').read_text(),axioms=[line for line in (O/'out.log').read_text().splitlines() if 'axioms' in line]);(O/'receipt.json').write_text(json.dumps(meta,indent=2));print(str(n)+' '+m+' exit='+str(r.returncode),flush=True)
