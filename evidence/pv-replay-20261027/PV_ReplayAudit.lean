@@ -7,6 +7,11 @@ import Lean.Elab.Command
 open Lean Elab Command in
 run_cmd do
   let env ← getEnv
+  for i in [:env.header.moduleData.size] do
+    let mod := env.header.moduleNames[i]!
+    let deps := (env.header.moduleData[i]!.imports.toList.map fun imp => imp.module.toString)
+    logInfo m!"PV_REPLAY_IMPORT {mod} : {String.intercalate "," deps}"
+  logInfo m!"PV_REPLAY_IMPORTED_MODULE_COUNT {env.header.modules.size}"
   let names := env.constants.toList.filterMap fun (name, ci) =>
     match ci with
     | .thmInfo _ =>

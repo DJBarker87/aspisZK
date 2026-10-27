@@ -107,7 +107,7 @@ def compile_one(m,n,deps):
  def val(p):
   z=re.search(p,t);return z[1].strip() if z else None
  exit=int(val(r'Exit status:\s*(\d+)'))
- axioms=[' '.join(z.split()) for z in re.findall(r"^('[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms))",out,re.M|re.S)]
+ axioms=[' '.join(z.split()) for z in re.findall(r"^('.*?' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms))",out,re.M|re.S)]
  bad=[z for z in axioms if '[' in z and not set(z.split('[',1)[1].rstrip(']').replace(' ','').split(','))<={'propext','Classical.choice','Quot.sound'}]
  obj=O/(m+'.olean')
  r=dict(attempt=a,module=m,status='compiled' if exit==0 else 'failed',source_sha256=n['source_sha256'],source_revision=plan['revision'],source_repository_path=n['source_path'],deps=deps,deps_fingerprint=fp,source_closure_fingerprint=n['deps_fingerprint'],command=cmd,launcher_sha256=sha(P/'run-private.sh'),env_sha256=sha(P/'env/J.json'),loader_bindings_sha256=loader_digest,exit=exit,validation_exit=90 if bad else exit,outer_exit=outer,wall_seconds=time.monotonic()-start,wall=val(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.+)'),peak_rss_kib=int(val(r'Maximum resident set size \(kbytes\):\s*(\d+)')),swaps=int(val(r'Swaps:\s*(\d+)')),axioms=axioms,axioms_status='printed' if axioms else 'no #print axioms in original source; final closure audit pending',errors=[l for l in out.splitlines() if 'error:' in l],nonstandard_axioms=bad,admission=ad,caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,lean_M=7000),object_sha256=sha(obj) if exit==0 and obj.exists() else None,object_bytes=obj.stat().st_size if exit==0 and obj.exists() else None)
