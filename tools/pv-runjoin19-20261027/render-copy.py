@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 R=Path(__file__).resolve().parents[2];L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'
 s=''.join(f'import R1Z.PV_RunJoin_IndexedRound{r:02}19\n' for r in range(22))+'''import R1Z.PV_Src_PortInitialConstants
 import R1Z.PV_Src_PortInternalConstants
@@ -54,4 +55,6 @@ s+='''theorem source (s : State) (hs : Canonical s) (r : Fin 22) :
   fin_cases r
 '''
 s+=''.join(f'  · exact copy{r:02} s hs\n' for r in range(22))
-s+='#print axioms source\nend R1Z.PV_RunJoin_IndexedCopy19\n';(L/'PV_RunJoin_IndexedCopy19.lean').write_text(s)
+s+='#print axioms source\nend R1Z.PV_RunJoin_IndexedCopy19\n';p=L/'PV_RunJoin_IndexedCopy19.lean'
+if '--check' in sys.argv:assert p.read_text()==s
+else:p.write_text(s)

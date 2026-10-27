@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 R=Path(__file__).resolve().parents[2];L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'
 def cell(b,w):
  if b<4:j=b
@@ -58,5 +59,7 @@ theorem {name}_rows (tail : Nat → State) :
   PV_RunJoin_BankAggregate18.rows _ ({name}_blocks tail)
 #print axioms {name}_rows
 '''
-s+='end R1Z.PV_RunJoin_FixtureBanks19\n';(L/'PV_RunJoin_FixtureBanks19.lean').write_text(s)
+s+='end R1Z.PV_RunJoin_FixtureBanks19\n';p=L/'PV_RunJoin_FixtureBanks19.lean'
+if '--check' in sys.argv:assert p.read_text()==s
+else:p.write_text(s)
 print('114 named block certificates; two 57-block compositions; arbitrary path/aux tail; source identification remains open')

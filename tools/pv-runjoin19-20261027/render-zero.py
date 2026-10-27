@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 R=Path(__file__).resolve().parents[2];L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'
 s='''import R1Z.PV_RunJoin_IndexedPair19
 set_option autoImplicit false
@@ -45,4 +46,6 @@ theorem step{r} : poseidon2.apply_round_by_index s{r+1} {r}#usize = ok (some (),
 '''
 # reuse exactly the preflight-checked pair transport, with its local source names
 base=(L/'PV_RunJoin_ValidatorCell0019.lean').read_text();s+=base[base.index('theorem pair0'):base.rindex('end R1Z.')]
-s+='end R1Z.PV_RunJoin_ValidatorZero19\n';(L/'PV_RunJoin_ValidatorZero19.lean').write_text(s)
+s+='end R1Z.PV_RunJoin_ValidatorZero19\n';p=L/'PV_RunJoin_ValidatorZero19.lean'
+if '--check' in sys.argv:assert p.read_text()==s
+else:p.write_text(s)

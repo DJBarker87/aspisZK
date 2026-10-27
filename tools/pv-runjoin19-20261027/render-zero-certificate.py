@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 R=Path(__file__).resolve().parents[2];L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'
 s='''import R1Z.PV_RunJoin_BankCertificate19
 import R1Z.PV_RunJoin_ValidatorZero19
@@ -31,4 +32,6 @@ def certificate : Certificate := {
   absorbed := fun _ => PV_RunJoin_ValidatorZero19.s0, states := states,
   before := rfl, after := rfl, add := add, pair := pairs }
 end R1Z.PV_RunJoin_BankZero19
-''';(L/'PV_RunJoin_BankZero19.lean').write_text(s)
+''';p=L/'PV_RunJoin_BankZero19.lean'
+if '--check' in sys.argv:assert p.read_text()==s
+else:p.write_text(s)
