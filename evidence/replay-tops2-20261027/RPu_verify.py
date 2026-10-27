@@ -24,6 +24,8 @@ for x in json.loads((R/'evidence/replay-tops1-20261027/RPt_inherited-pins.json')
  if sha(R/x['path'])!=x['sha256']:errors.append({'transitive_inherited_evidence_drift':x['path']})
 for x in json.loads((E/'RPu_job-evidence-pins.json').read_text()):
  if sha(R/x['path'])!=x['sha256']:errors.append({'job_evidence_drift':x['path']})
+for x in json.loads((E/'RPu_extra-resolution-pins.json').read_text()):
+ pins[x['path']]={k:x[k] for k in ['path','sha256','bytes']}
 for x in json.loads((E/'RPu_toolchain-pins.json').read_text()):
  if x['path'] in pins and pins[x['path']]['sha256']!=x['sha256']:errors.append({'toolchain_pin_conflict':x['path']})
  pins[x['path']]={k:x[k] for k in ['path','sha256','bytes']}
