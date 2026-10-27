@@ -65,3 +65,21 @@ scratch. The only guard remains the exact named terminal identification.
 This establishes requested stages1–2. It does not establish enclosing
 candidate.prepare, TX1 acceptance, returned checkpoint equality or a deployed
 accepted-pair fixture. No premise-removal credit is assigned.
+
+## TX1 frontier
+
+095–099 prove the real-byte shape/scan slots in both Tx1Q_Execution.actual
+and WAdm_Execution.actual, and exact complete Result reduction of each entry
+to JGi_TX1Control.afterScan. JGi_TX1Ready.inhabited joins these concrete
+entry identities with the SAME semantic/originalNew fixture. Its only fixture
+guard is JGe_TerminalCondition.Identified; accepted1 is NOT a conclusion.
+JGi_TX1Next.source exposes the next explicit local observations: the ZERO call
+and the complete candidate.prepare return, after which the SAME
+Tx1Reachability.afterPrepare remains. This does not replace candidate.prepare
+with originalNew or assume the desired entry acceptance.
+
+Requested stages3–5 remain unproved: accepted1, equality of its returned CP
+to the SAME1768 retained bytes, and JGi_Fixture.inhabited. accepted2, frozen3
+same-pair, game/runtime/admission/deployed instantiation also remain open.
+No impossibility/vacuity counterexample has been found. Conditional preparation
+non-vacuity is not deployed non-vacuity. Rc7 removal delta stays zero.

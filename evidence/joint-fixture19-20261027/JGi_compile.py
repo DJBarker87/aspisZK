@@ -14,7 +14,7 @@ if not mod.startswith('JGi_'):
  assert subprocess.check_output(['git','show','HEAD:'+str(source_file.relative_to(R))])==source_file.read_bytes()
 a=f'JGi19_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/joint-fixture12-20261026/JFu12_100/receipt.json').read_text())
-cfg.update(attempt=a,sources=[relative_source],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,expected_time='Focused JGg symbolic forward source proof; no hash certificate generation (0 blocks)' )
+cfg.update(attempt=a,sources=[relative_source],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,expected_time='Focused JGi symbolic forward source proof; no hash certificate generation (0 blocks)' )
 cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/JFp_Cache:/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects'
 # Select the existing pinned circle namespace before the retired aggregate cache.
 circle_cache='/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects'
