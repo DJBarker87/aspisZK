@@ -5,6 +5,7 @@ n=int(sys.argv[1]);module=sys.argv[2];assert 54900<=n<=54999 or 53326<=n<=53599
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(module+'.lean');assert p.name.startswith('PV_B2_')
 tp=E/'TALLY.json';t=json.loads(tp.read_text()) if tp.exists() else dict(lean_charged=0,kani=0,next_env_j_id=54900,attempts=[])
 assert n==t['next_env_j_id'] and t['lean_charged']<100
+assert t['lean_charged']<97 or 'Audit' in module
 assert n not in [53597,53598,53599] or 'Audit' in module
 t['next_env_j_id']=53326 if n==54999 else n+1;t['attempts'].append(dict(id=n,module=module));tp.write_text(json.dumps(t,indent=2)+'\n')
 imports=re.findall(r'^import (\S+)',p.read_text(),re.M)
@@ -26,7 +27,7 @@ print(json.dumps(r,sort_keys=True))
 '''.replace('DIR',repr(D)).replace('IMPORTS',repr(imports))
 r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True)
 if r.returncode:(E/f'{n}-preflight-error.txt').write_text(r.stderr+r.stdout);raise SystemExit(r.stderr+r.stdout)
-deps=json.loads(r.stdout);fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest();meta=dict(attempt=n,module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),deps_fingerprint=fp,dependency_objects=deps)
+deps=json.loads(r.stdout);fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest();meta=dict(attempt=n,module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),worktree_source_dirty=bool(subprocess.check_output(['git','status','--porcelain','--',str(p)],text=True).strip()),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),deps_fingerprint=fp,dependency_objects=deps)
 (E/f'{n}-submission.json').write_text(json.dumps(meta,indent=2)+'\n');(E/f'{n}-source.lean.txt').write_bytes(p.read_bytes())
 subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+module+'.lean'],check=True)
 cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+module+'.olean',D+'/lean-sources/'+module+'.lean','7000']
@@ -46,4 +47,4 @@ for name in ['stdout.log','stderr.log','time.log']:
   if rec['exit_status']==0:print('\n'.join(line for line in v.splitlines() if 'axioms' in line))
   else:print(v)
 rec['print_axioms']=[line for line in meta.get('axiom_output','').splitlines() if 'axioms' in line] if rec['exit_status']==0 else 'compile failed; no accepted theorem from this attempt'
-rec['native_wrapper_revision']=rec.pop('source_revision');meta.update(rec);(E/f'{n}.json').write_text(json.dumps(meta,indent=2)+'\n');sys.exit(rec['exit_status'])
+rec['native_wrapper_revision']=rec.pop('source_revision');meta.update(rec);meta['accepted_axioms']=not any(x in meta.get('axiom_output','') for x in ['sorryAx','_native.','axiom ']);(E/f'{n}.json').write_text(json.dumps(meta,indent=2)+'\n');sys.exit(rec['exit_status'] if meta['accepted_axioms'] else 1)
