@@ -30,8 +30,8 @@ noncomputable def selected (base : ExternalTypes)
     (ops : @ExternalFuns (R1Z.PV_CBM_MasksSelection.Types base)) :
     @ExternalFuns (R1Z.PV_CBM_MasksSelection.Types base) :=
   letI : ExternalTypes := R1Z.PV_CBM_MasksSelection.Types base
-  {ops with op134 := translate
-    PV_B3_Forest_134.host_forest.pool_v1_pair_forest_copy_active_row_masks_v1}
+  {ops with op134 := (translate
+    PV_B3_Forest_134.host_forest.pool_v1_pair_forest_copy_active_row_masks_v1)}
 
 theorem dictionary (base : ExternalTypes)
     (ops : @ExternalFuns (R1Z.PV_CBM_MasksSelection.Types base)) :
