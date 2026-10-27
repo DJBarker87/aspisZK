@@ -11416,3 +11416,23 @@ audit every secret-dependent kernel reached from devnet_spend::main, including g
 mask application/balancing and the hashing internals on secret data, each finding linked to its L2/L3
 row; new non-rejection findings are reported as such. Six slots: op223, canon, cblib3, op134, runjoin13,
 l3dis2. Rows removed outright: 0. Privacy target not yet established.
+
+## D269 (Stream B) 2026-10-27 10:15 UTC: shipped-binary audit blocked by a missing release pin (native client build recipe and toolchain); l3dis3 launched on the devnet recipe of record
+
+pv-l3dis2 (`codex/pv-l3-20261026`, head 22b24ffe12; no Lean, no Kani, no host scopes; no source change)
+validated all 1,295 pinned client files at 5228877938 and stopped without guessing: client-pins.json (the
+owner-approved client bundle in the release ledger) pins the SOURCE of the devnet_spend route but not the
+native BUILD (no root rust-toolchain, no complete features, flags or command), so no binary can be named
+"the shipped binary". Also: the candidate prover (the one meant to ship after adoption) differs from the
+pinned client source in 26 files and lacks 6, so the client pin must be refreshed at candidate adoption.
+The recipe of record is the devnet R1 run (2026-10-20, evidence/devnet-r1-20261020/README.md:55-63):
+`cargo build --manifest-path tools/r1-cost-probe/Cargo.toml --release --offline --locked -j 4 --features
+r1p-check --bin devnet_spend` with the host's default toolchain. Recommendation sent to Stream A (owner
+of the release ledger): pin the native client build recipe and an exact toolchain (rustc/cargo, target,
+RUSTFLAGS) in the client-bundle subsection, and re-pin the bundle at candidate adoption. Launched pv-l3dis3
+(same branch, IDs 51200-51499, 30 Lean): build devnet_spend with the recipe of record from (A) the pinned
+client source and (B) the candidate source, audit every secret-dependent kernel reached from its entry
+(generate_for_mask_nonce, mask application/balancing, host semantic bodies, hashing on secret data),
+results labelled "devnet R1 recipe, toolchain unpinned", findings linked to their L2/L3 rows, the
+differing files mapped to kernels, and a V374 dudect plan for (B). Six slots: op223, canon, cblib3, op134,
+runjoin13, l3dis3. Rows removed outright: 0. Privacy target not yet established.
