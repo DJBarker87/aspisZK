@@ -17,7 +17,7 @@ inputs=['evidence/leaf-p6-11-20261027/LPm_HANDOFF.md','evidence/leaf-p6-11-20261
 input_pins={n:dict(bytes=Path(n).stat().st_size,sha256=sha(Path(n).read_bytes())) for n in inputs}
 s=Path('crates/aspis-r1-cost-probe/src/verifier.rs').read_bytes()
 body=s[s.index(b'fn prepared_claim<'):s.index(b'\nimpl Prepared {')]
-report=dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),frozen_revision=frozen,source_tree_dirty=True,files=files,errors=errors,lock_sha256=lock,inputs=input_pins,prepared_claim_body=dict(sha256=sha(body),bytes=len(body),start_line=53,end_line=70),native_scopes_launched=0,lean_attempts_launched=0,validation='static only, no source-to-model or source-to-ELF closure')
+report=dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),frozen_revision=frozen,source_tree_dirty=True,files=files,errors=errors,lock_sha256=lock,inputs=input_pins,prepared_claim_body=dict(sha256=sha(body),bytes=len(body),start_line=53,end_line=70),validation='static only, no source-to-model or source-to-ELF closure')
 (E/'LPq_SOURCE_AUDIT.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(dict(files=len(files),errors=errors,body=report['prepared_claim_body'])))
 assert not errors

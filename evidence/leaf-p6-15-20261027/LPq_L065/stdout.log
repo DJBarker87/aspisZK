@@ -1,0 +1,120 @@
+LPq_generated/LPq_OuterTrace.lean:54:62: error: unsolved goals
+H : Type
+inst : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+g : Std.Array Concrete.E 29#usize
+k parts✝ : Seven
+iter✝ : Range
+out✝ : NE
+hk : LPq_WeightedStep.canonical k
+iter iter' : Range
+parts : Seven
+out : NE
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter')
+sum : LPq_Weighted.run k parts 7 0#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO = ok out
+hp : LPq_WeightedStep.canonical parts
+actual : NE
+en : LPq_Weighted.run k parts 7 0#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO = ok actual
+left✝ : canonE actual
+model : verifier.prepared_claim_sum (arr LPq_Powers.claim k) (arr LPq_Powers.claim parts) = ok (LPq_Powers.claim out)
+same : actual = out
+⊢ (let (o, iter1) := (none, iter')
+    match o with
+    | none => ok (done (core.result.Result.Ok (LPq_Powers.claim out)))
+    | some point => do
+      let r ← verifier.prepared_claim_dot LPm_PointLoop.ops inst sem y1 g point
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i ← point + 1#usize
+          let a ← (arr LPq_Powers.claim parts).update i val
+          ok (cont (iter1, a))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r1)) =
+    ok (done (core.result.Result.Ok (LPq_Powers.claim out)))
+LPq_generated/LPq_OuterTrace.lean:66:82: error: unsolved goals
+H : Type
+inst : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+g : Std.Array Concrete.E 29#usize
+k parts✝ : Seven
+iter✝ : Range
+out✝ : NE
+hk : LPq_WeightedStep.canonical k
+iter iter' : Range
+parts : Seven
+out : NE
+point i : Usize
+value : NE
+xs : List (NE × NQ)
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some point, iter')
+dot : LPm_PointLoop.Trace sem y1 g point { start := 0#usize, «end» := 29#usize } LPm_PublicTwentyNine.zero xs value
+increment : point + 1#usize = ok i
+within : ↑i < 7
+tail : Trace sem y1 g k iter' (Std.Array.set parts i value) out
+ih :
+  LPq_WeightedStep.canonical (Std.Array.set parts i value) →
+    verifier.prepared_claim_loop LPm_PointLoop.ops inst iter' sem y1 g (arr LPq_Powers.claim k)
+        (arr LPq_Powers.claim (Std.Array.set parts i value)) =
+      ok (core.result.Result.Ok (LPq_Powers.claim out))
+hp : LPq_WeightedStep.canonical parts
+model :
+  verifier.prepared_claim_dot LPm_PointLoop.ops inst sem y1 g point =
+    ok (core.result.Result.Ok (LPq_Powers.claim value))
+write :
+  (arr LPq_Powers.claim parts).update i (LPq_Powers.claim value) =
+    ok (arr LPq_Powers.claim (Std.Array.set parts i value))
+hp' : LPq_WeightedStep.canonical (Std.Array.set parts i value)
+⊢ (let (o, iter1) := (some point, iter')
+    match o with
+    | none => do
+      let we ← verifier.prepared_claim_sum (arr LPq_Powers.claim k) (arr LPq_Powers.claim parts)
+      ok (done (core.result.Result.Ok we))
+    | some point => do
+      let r ← verifier.prepared_claim_dot LPm_PointLoop.ops inst sem y1 g point
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i ← point + 1#usize
+          let a ← (arr LPq_Powers.claim parts).update i val
+          ok (cont (iter1, a))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r1)) =
+    ok (cont (iter', arr LPq_Powers.claim (Std.Array.set parts i value)))
+LPq_generated/LPq_OuterTrace.lean:67:67: warning: This simp argument is unused:
+  model
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.prepared_claim_loop.body, ̲next, ̲bind_tc_ok,m̵o̵d̵e̵l̵,̵
+          core.result.Result.Insts.CoreOpsTry.branch, ̲increment, ̲write]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPq_generated/LPq_OuterTrace.lean:68:51: warning: This simp argument is unused:
+  increment
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.prepared_claim_loop.body, ̲next, ̲bind_tc_ok, ̲model,
+          core.result.Result.Insts.CoreOpsTry.branch,i̵n̵c̵r̵e̵m̵e̵n̵t̵,̵ ̲write]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPq_generated/LPq_OuterTrace.lean:68:61: warning: This simp argument is unused:
+  write
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.prepared_claim_loop.body, ̲next, ̲bind_tc_ok, ̲model,
+          core.result.Result.Insts.CoreOpsTry.branch, ̲increment,̵w̵r̵i̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.LPq_OuterTrace.point_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPq_OuterTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
