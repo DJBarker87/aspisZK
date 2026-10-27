@@ -6,8 +6,11 @@ from pathlib import Path
 import os,sys,json,hashlib,re,time
 ORIGINAL_JENV=Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json')
 JENV=H/'env-J-private.json'
+module=sys.argv[1];assert module.startswith('PV_B3_'),module
 shared_env=json.loads(ORIGINAL_JENV.read_text())
 shared_env['LEAN_PATH']='/home/dombarker/project-offloads/aspis-joint-20261019/objects:'+shared_env['LEAN_PATH']
+if module.startswith('PV_B3_MaskRow') or module.startswith('PV_B3_ResumeAudit'):
+ shared_env['LEAN_PATH']=str(H/'reference-objects')+':'+shared_env['LEAN_PATH']
 JENV.write_text(json.dumps(shared_env,indent=2)+'\n')
 DRIVER=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py')
 module=sys.argv[1];assert module.startswith('PV_B3_'),module
@@ -27,7 +30,7 @@ for base,dirs,files in os.walk(root):
  if depth>=5: dirs[:]=[]
  dirs[:]=[d for d in dirs if d not in {'target','sbf-target','charon-target','node_modules','.git','source','sources','.lake'}]
  for name in dirs+files:
-  if re.search(r'(?<![0-9])'+str(a)+r'(?![0-9])',name): collision.append(str(Path(base)/name))
+  if re.search(r'(?<![A-Za-z0-9])'+str(a)+r'(?![A-Za-z0-9])',name): collision.append(str(Path(base)/name))
  for name in files:
   if name=='sent.txt':
    for line in (Path(base)/name).read_text().splitlines():
