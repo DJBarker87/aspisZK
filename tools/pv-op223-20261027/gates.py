@@ -21,8 +21,8 @@ def call(script,args,label):
   return actual
  raise SystemExit(78)
 labels={}
-for mode in ['default','devnet','pool']:
- labels[mode]=call('build.py',['candidate',mode,'{label}'],'build-'+mode)
+for mode in (['devnet','pool'] if '--resume-after-default' in sys.argv else ['default','devnet','pool']):
+ labels[mode]=call('build.py',['candidate',mode,'{label}'],('build-devnet-public-inputs-002' if mode=='devnet' and '--resume-after-default' in sys.argv else 'build-'+mode))
  # Explicit independent stop, even if the underlying producer's exit behavior changes.
  r=json.loads(subprocess.check_output(['ssh',H,'cat '+D+'/'+labels[mode]+'/comparison.json'],text=True));assert r['matches'],r
 for example,label in [('prover_rw_gate','build-fixture'),('prover_rw_differential','build-differential')]:
