@@ -11643,3 +11643,20 @@ IDs 53000-53299, 100 Lean / 6 Kani control only): L2 source-trace simulatability
 simulator's sampler) and of the guard branches N2-N6 (constant on honest valid inputs, or inside a named
 charged event), with the V371 dependence recorded. Six slots: op223, op134, route2, cblib4, runjoin16,
 l2b. Rows removed outright: 0. Privacy target not yet established.
+
+## D279 (Stream B) 2026-10-27 11:35 UTC: op134 reference side complete (shipped link waits on route (ii)); private dry replay of the headline closure launched
+
+pv-op134 (`codex/pv-op134-20261027`, from pv-cbmid's branch; 100/100 Lean = 93 successful / 7 retained
+failures, 0/4 Kani; audits 50297/50299 standard axioms, ≤2.62 s / 2.67 GB / swap 0; no crates/programs
+change; PV_CBM_* files byte-stable). Direct extraction of the shipped op134 refused (the shared
+obstruction); the REFERENCE side is complete: full Result equations, the 3,803-cell inventory's
+uniqueness and completeness, 214 ascending rows with dedup identity, all 1,024 mask bits. A route (ii)
+addendum (evidence/pv-op134-20261027/ROUTE-II.md) is proposed only; V230 stays OPEN pending the route
+(ii) decision that pv-route2 is costing. Launched pv-replay (`codex/pv-replay-20261027`, research base,
+reusing the pv-cb3 worktree): a PRIVATE dry replay (never writing the shared env-J tree, per ruling
+(h'); pv-envfix's private method) of the transitive import closure of R1Z.PrivacyR1HeadlineDeployedReal
+on research, module names resolved through the rebuild record, dependency first, reusing objects whose
+source and fingerprint match, with a final #print axioms audit and the list of headline premises still
+present; receipts numbered in the reserved 28000-29999 range. This is a coherence check now (AGENTS.md
+§7), not the final release replay. Six slots: op223, route2, cblib4, runjoin16, l2b, replay. Rows removed
+outright: 0. Privacy target not yet established.
