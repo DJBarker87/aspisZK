@@ -1,0 +1,15 @@
+import JHf_Carrier2
+set_option autoImplicit false
+namespace AspisR1.JHf_Carrier
+open Aeneas Aeneas.Std Result
+def toPoolV1PairForestTerminalCommonV1 (value : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1) : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 :=
+  {master_account:=value.master_account,checkpoint_account:=value.checkpoint_account,selected_lane_account:=value.selected_lane_account,output_lane:=value.output_lane,checkpoint_sequence:=value.checkpoint_sequence,historical_global_anchor:=value.historical_global_anchor,lane_transition:=toPoolV1PairLatePublicStatementV1 (value.lane_transition)}
+
+def fromPoolV1PairForestTerminalCommonV1 (value : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1) : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 :=
+  {master_account:=value.master_account,checkpoint_account:=value.checkpoint_account,selected_lane_account:=value.selected_lane_account,output_lane:=value.output_lane,checkpoint_sequence:=value.checkpoint_sequence,historical_global_anchor:=value.historical_global_anchor,lane_transition:=fromPoolV1PairLatePublicStatementV1 (value.lane_transition)}
+theorem from_toPoolV1PairForestTerminalCommonV1 (v : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1) :
+    fromPoolV1PairForestTerminalCommonV1 (toPoolV1PairForestTerminalCommonV1 v)=v := by
+  cases v <;> simp only [fromPoolV1PairLiveSnapshotV1,toPoolV1PairLiveSnapshotV1,fromPoolV1PairVerifiedAfterstateV1,toPoolV1PairVerifiedAfterstateV1,fromPoolV1PairLatePublicStatementV1,toPoolV1PairLatePublicStatementV1,fromPoolV1PairForestTerminalCommonV1,toPoolV1PairForestTerminalCommonV1]
+  all_goals rfl
+#print axioms from_toPoolV1PairForestTerminalCommonV1
+end AspisR1.JHf_Carrier

@@ -1,0 +1,79 @@
+{"attempt": "JHf_TX2_040", "exit_status": 1, "wall_seconds": 1.8332580169662833, "peak_rss_kib": "4391080", "swaps": "0", "print_axioms": ["'AspisR1.JHf_KeyEq.lists' depends on axioms: [propext, sorryAx]", "'AspisR1.JHf_KeyEq.key' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHf_KeyEq.lean:12:8: error: unsolved goals
+case nil.nil
+⊢ pure true = ok true
+JHf_KeyEq.lean:23:8: error: Type mismatch
+  ih ys tail
+has type
+  List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← core.cmp.PartialEqU8.ne x y
+          ok !b)
+      (xs.zip ys) =
+    ok (decide (xs = ys))
+but is expected to have type
+  (match !core.cmp.impls.PartialEqU8.ne x x with
+    | true => List.allM (fun x => ok !core.cmp.impls.PartialEqU8.ne x.1 x.2) (xs.zip ys)
+    | false => pure false) =
+    ok (decide (xs = ys))
+JHf_KeyEq.lean:24:6: error: unsolved goals
+case neg
+x : U8
+xs : List U8
+ih :
+  ∀ (ys : List U8),
+    xs.length = ys.length →
+      List.allM
+          (fun
+...
+ment is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵m̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲c̲o̲m̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHf_KeyEq.lists' depends on axioms: [propext, sorryAx]
+JHf_KeyEq.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.allM
+    (fun x =>
+      match x with
+      | (x, y) => do
+        let b ← core.cmp.PartialEqU8.ne x y
+        ok !b)
+    ((↑left).zip ↑right)
+in the target expression
+  List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← core.cmp.PartialEqU8.ne x y
+          ok (decide ¬b = true))
+      ((↑left).zip ↑right) =
+    ok (decide (left = right))
+
+left right : AdapterRw.solana_pubkey.Pubkey
+⊢ List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← core.cmp.PartialEqU8.ne x y
+          ok (decide ¬b = true))
+      ((↑left).zip ↑right) =
+    ok (decide (left = right))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    left
+  has type
+    AdapterRw.solana_pubkey.Pubkey
+  but is expected to have type
+    { l // l.length = ↑32#usize }
+  in the application
+    ↑left
+'AspisR1.JHf_KeyEq.key' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3ddcd4c577f44dac98de3740eb6d6988.scope; invocation ID: ed7f540ef379482b97e0d403f70c0b22

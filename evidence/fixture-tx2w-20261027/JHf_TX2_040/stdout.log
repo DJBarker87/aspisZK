@@ -1,0 +1,166 @@
+JHf_KeyEq.lean:12:8: error: unsolved goals
+case nil.nil
+⊢ pure true = ok true
+JHf_KeyEq.lean:23:8: error: Type mismatch
+  ih ys tail
+has type
+  List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← core.cmp.PartialEqU8.ne x y
+          ok !b)
+      (xs.zip ys) =
+    ok (decide (xs = ys))
+but is expected to have type
+  (match !core.cmp.impls.PartialEqU8.ne x x with
+    | true => List.allM (fun x => ok !core.cmp.impls.PartialEqU8.ne x.1 x.2) (xs.zip ys)
+    | false => pure false) =
+    ok (decide (xs = ys))
+JHf_KeyEq.lean:24:6: error: unsolved goals
+case neg
+x : U8
+xs : List U8
+ih :
+  ∀ (ys : List U8),
+    xs.length = ys.length →
+      List.allM
+          (fun x =>
+            match x with
+            | (x, y) => do
+              let b ← core.cmp.PartialEqU8.ne x y
+              ok !b)
+          (xs.zip ys) =
+        ok (decide (xs = ys))
+y : U8
+ys : List U8
+width : (x :: xs).length = (y :: ys).length
+tail : xs.length = ys.length
+same : ¬x = y
+comp : core.cmp.PartialEqU8.ne x y = ok true
+⊢ pure false = ok false
+JHf_KeyEq.lean:21:19: warning: This simp argument is unused:
+  core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵L̵i̵s̵t̵.̵c̵o̵n̵s̵.̵i̵n̵j̵E̵q̵,̵t̵r̵u̵e̵_̵a̵n̵d̵]̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲d̲e̲f̲a̲u̲l̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲L̲i̲s̲t̲.̲c̲o̲n̲s̲.̲i̲n̲j̲E̲q̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_KeyEq.lean:21:40: warning: This simp argument is unused:
+  core.cmp.PartialEq.ne.default
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵L̵i̵s̵t̵.̵c̵o̵n̵s̵.̵i̵n̵j̵E̵q̵,̵t̵r̵u̵e̵_̵a̵n̵d̵]̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲c̲o̲n̲s̲.̲i̲n̲j̲E̲q̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_KeyEq.lean:22:10: warning: This simp argument is unused:
+  bne_self_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵L̵i̵s̵t̵.̵c̵o̵n̵s̵.̵i̵n̵j̵E̵q̵,̵t̵r̵u̵e̵_̵a̵n̵d̵]̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲d̲e̲f̲a̲u̲l̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲L̲i̲s̲t̲.̲c̲o̲n̲s̲.̲i̲n̲j̲E̲q̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_KeyEq.lean:22:28: warning: This simp argument is unused:
+  Bool.not_false
+
+Hint: Omit it from the simp argument list.
+  simp only [core.cmp.PartialEqU8, ̲core.cmp.PartialEq.ne.default, ̲bind_tc_ok,
+            bne_self_eq_false,B̵o̵o̵l̵.̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵ ̲↓reduceIte, ̲List.cons.injEq, ̲true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_KeyEq.lean:22:43: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [core.cmp.PartialEqU8, ̲core.cmp.PartialEq.ne.default, ̲bind_tc_ok,
+            bne_self_eq_false, ̲Bool.not_false,↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵ ̲List.cons.injEq, ̲true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_KeyEq.lean:25:16: warning: This simp argument is unused:
+  core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵s̵a̵m̵e̵]̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲d̲e̲f̲a̲u̲l̲t̲,̲ ̲s̲a̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_KeyEq.lean:25:37: warning: This simp argument is unused:
+  core.cmp.PartialEq.ne.default
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵s̵a̵m̵e̵]̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲,̲ ̲s̲a̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_KeyEq.lean:26:19: warning: This simp argument is unused:
+  comp
+
+Hint: Omit it from the simp argument list.
+  simp only [c̵o̵m̵p̵,̵bind_tc_ok, ̲Bool.not_true, ̲Bool.false_eq_true, ̲↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_KeyEq.lean:26:35: warning: This simp argument is unused:
+  Bool.not_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵m̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲c̲o̲m̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_KeyEq.lean:26:49: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵m̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲c̲o̲m̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_KeyEq.lean:26:68: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵m̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲c̲o̲m̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHf_KeyEq.lists' depends on axioms: [propext, sorryAx]
+JHf_KeyEq.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.allM
+    (fun x =>
+      match x with
+      | (x, y) => do
+        let b ← core.cmp.PartialEqU8.ne x y
+        ok !b)
+    ((↑left).zip ↑right)
+in the target expression
+  List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← core.cmp.PartialEqU8.ne x y
+          ok (decide ¬b = true))
+      ((↑left).zip ↑right) =
+    ok (decide (left = right))
+
+left right : AdapterRw.solana_pubkey.Pubkey
+⊢ List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← core.cmp.PartialEqU8.ne x y
+          ok (decide ¬b = true))
+      ((↑left).zip ↑right) =
+    ok (decide (left = right))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    left
+  has type
+    AdapterRw.solana_pubkey.Pubkey
+  but is expected to have type
+    { l // l.length = ↑32#usize }
+  in the application
+    ↑left
+'AspisR1.JHf_KeyEq.key' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

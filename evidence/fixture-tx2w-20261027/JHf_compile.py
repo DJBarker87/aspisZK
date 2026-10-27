@@ -12,6 +12,14 @@ def ssh(cmd,**kw):
   print('Transient SSH failure before submission; retry after 60s',flush=True)
   time.sleep(60)
 
+def copy(args):
+ for retry in range(11):
+  result=subprocess.run(['scp','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',*args])
+  if result.returncode!=255 or retry==10:
+   result.check_returncode();return
+  with (P/'JHf_TRANSPORT.jsonl').open('a') as f:
+   f.write(json.dumps(dict(step='scp',args=args,exit=255,retry=retry+1,wait_seconds=60,time=time.time()))+'\n')
+  print('Transient scp failure; retry after60s',flush=True);time.sleep(60)
 n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and (mod.startswith('JHf_'))
 a=f'JHf_TX2_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/recount8-20261026/Rc8_002/receipt.json').read_text())
@@ -51,10 +59,10 @@ for retry in range(11):
  print(sshout.stdout+sshout.stderr);sys.exit(r.returncode or 1)
 src=R/'lean'/(mod+'.lean')
 if not src.exists():src=R/'docs/research/100bit-spend-path-20261013/lean'/(mod+'.lean')
-subprocess.run(['scp','-q',str(src),str(P/(a+'.json')),HOST+':'+B+'/'],check=True)
+copy(['-q',str(src),str(P/(a+'.json')),HOST+':'+B+'/'])
 r=ssh(f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py {a}.json',capture_output=True,text=True)
 (P/(a+'-launch.log')).write_text(r.stdout+r.stderr); print(r.stdout+r.stderr)
-subprocess.run(['scp','-qr',HOST+':'+B+'/'+a,str(P)],check=True)
-subprocess.run(['scp','-q',HOST+':'+B+'/'+a+'-reservation.json',str(P)],check=True)
+copy(['-qr',HOST+':'+B+'/'+a,str(P)])
+copy(['-q',HOST+':'+B+'/'+a+'-reservation.json',str(P)])
 (P/(a+'-retries.json')).write_text(json.dumps(retries,indent=2)+'\n')
 sys.exit(r.returncode)
