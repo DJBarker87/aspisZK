@@ -1,5 +1,7 @@
 # Library callback source campaign
 
+**Final: 100/100 Lean attempts and 10/10 Kani runs exhausted. Four candidate source laws supplied; zero canonical endpoint premises removed. All three reserved audits passed. See [RELEASE.md](RELEASE.md), [OPS.md](OPS.md), [LEAN-RECEIPTS.md](LEAN-RECEIPTS.md), and [KANI-SUMMARY.md](KANI-SUMMARY.md). Target not yet established.**
+
 Branch: codex/pv-cblib-20261027. Initial candidate revision:
 `bd47052f039ae2d96060acb5607fe652ebe193d4` (unmerged prover candidate).
 Target not yet established. Initial rows discharged: 0.
