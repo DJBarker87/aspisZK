@@ -12296,3 +12296,21 @@ counts (376 P / 26 T / 5 C); the current ledger is recount 5 (400 P / 3 T / 4 C,
 resumes with the audit, then the 57 block certificates, then the compiler-return composition.
 Branch pushed (fd42d798ff). The D307 heading time was corrected from 17:58 to 17:47 UTC. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D309 (Stream B) 2026-10-27 18:07 UTC: pv-reach2 result; reachability restated as dictionary congruence; pv-reach3 launched
+
+pv-reach2 used a fresh 100-attempt budget (85 passed, 15 failed; IDs 44200-44299; standard axioms).
+PV_RE_ContinuationRetry.whole_client composes the proof-account client, op233 with every outcome,
+all eight retry positions and op226 with the named attempt continuation, with no added Prop
+hypotheses; PV_RE_ShapeControl.transfer/.withdrawal specialise it; congr_at and at0-at8 give
+continuation locality with every hypothesis instantiated. Whole-run callback membership, exclusions
+and native fixture non-vacuity are not proved, so V404/V405 stay OPEN; branch pushed (aee46ed9c5).
+
+Lead direction: the missing piece was framed as an invocation-trace refinement, which needs an
+instrumented semantics the extraction does not have. Because the extracted run is parametric in its
+callback dictionary, reachability is restated as dictionary congruence: for an explicit entry set S
+per fixture shape, any two dictionaries agreeing on S give the same Result on every admitted input,
+proved suffix by suffix and composed with the existing retry equations; exclusion of an entry outside
+S is the corollary. pv-reach3 must first check the V404/V405 Lean definitions and say whether
+congruence is exactly what they require, weaker, or different, and must not claim the rows in the
+latter cases (IDs 36900-36999). Rows removed outright: 0. Privacy target not yet established.
