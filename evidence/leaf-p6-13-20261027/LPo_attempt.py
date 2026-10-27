@@ -14,7 +14,7 @@ if (E/a/'receipt.json').exists():raise SystemExit('Refuse existing attempt')
 # its terminal receipt. Source writing/read-only work can proceed separately.
 for existing in E.glob('LPo_[LK][0-9][0-9][0-9].json'):
  name=existing.stem
- if name!=a and not (E/name/'receipt.json').exists():
+ if name!=a and not (E/name/'receipt.json').exists() and not (E/(name+'-not-launched.json')).exists():
   raise SystemExit('STOP own attempt still active or needs receipt: '+name)
 remote=ssh("pgrep -af '^(/usr/bin/)?python3 S2W_(run|lean)_host.py LPo_' || true")
 if remote.stdout.strip():raise SystemExit('STOP own host proof active: '+remote.stdout)

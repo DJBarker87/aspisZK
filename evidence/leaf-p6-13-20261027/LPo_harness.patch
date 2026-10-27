@@ -95,3 +95,34 @@
 +    let expected=LPo_raw_inactive(&p[7495..7527]).unwrap();
 +    let v=wide_view(&p,&s,&y).unwrap();assert_eq!(v.inactive,expected);
 +}
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -322,3 +322,5 @@
+ mod LPa_semantic;
+ 
+ #[cfg(kani)] mod LPn_claims { include!("LPn_claims.rs"); }
++
++#[cfg(kani)] mod LPo_semantic { include!("LPo_semantic.rs"); }
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPo_semantic.rs
+@@ -0,0 +1,20 @@
++use super::*;
++#[kani::proof] #[kani::unwind(2)]
++fn LPo_boundary_iteration() {
++    let words:[u32;112]=kani::any();
++    let polynomial:[QM31;28]=unsafe{core::mem::transmute(words)};
++    let i:usize=kani::any();kani::assume(i<28);
++    let aw:[u32;4]=kani::any();
++    let a:QM31=unsafe{core::mem::transmute(aw)};
++    let q=polynomial[i];
++    let qw=[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0];
++    kani::assume(aw[0]<2147483647&&aw[1]<2147483647&&aw[2]<2147483647&&aw[3]<2147483647);
++    kani::assume(qw[0]<2147483647&&qw[1]<2147483647&&qw[2]<2147483647&&qw[3]<2147483647);
++    let mut iterator=polynomial[i..].iter().copied();let n=iterator.len();
++    let c=iterator.next().unwrap();assert_eq!(iterator.len()+1,n);assert_eq!(c,q);
++    let result=a.add(c);let folded=polynomial[i..i+1].iter().copied().fold(a,QM31::add);assert_eq!(folded,result);let out=[result.c0.a.0,result.c0.b.0,result.c1.a.0,result.c1.b.0];
++    let j:usize=kani::any();kani::assume(j<4);
++    let sum=u64::from(aw[j])+u64::from(qw[j]);
++    let expected=if sum>=2147483647{sum-2147483647}else{sum};
++    assert_eq!(u64::from(out[j]),expected);assert!(out[j]<2147483647);
++}

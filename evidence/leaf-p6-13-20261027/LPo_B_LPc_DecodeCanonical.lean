@@ -1,0 +1,19 @@
+import LPo_B_LPa_DecodeLaws
+import LPo_B_LPa_AddInvariant
+open Aeneas Aeneas.Std Result LPl_Kit_Release LPl_Kit_FieldExternal
+set_option autoImplicit false
+namespace LPo.BC.Decode
+/-- Every accepted byte-decoding stage produces canonical limbs. -/
+theorem step_canonical (payload : List U8) (start i : Nat)
+    (good : (LPo.BA.Decode.step payload start i).1 = true) :
+    LPo.BA.Add.Canonical (LPo.BA.Decode.step payload start i).2 := by
+  let w := fun j => LPn_Kit_word ((((payload.drop (start+32*i)).take 16).drop (4*j)).take 4)
+  change ([w 0,w 1,w 2,w 3].all (fun x => x < 2147483647#u32)) = true at good
+  change (w 0).val < 2147483647 ∧ (w 1).val < 2147483647 ∧
+    (w 2).val < 2147483647 ∧ (w 3).val < 2147483647
+  have cap : (2147483647#u32).val = 2147483647 := by
+    norm_num [UScalar.ofNatCore_val_eq]
+  simpa only [List.all_cons, List.all_nil, Bool.and_eq_true, Bool.and_true,
+    decide_eq_true_eq, UScalar.lt_equiv, cap] using good
+#print axioms step_canonical
+end LPo.BC.Decode
