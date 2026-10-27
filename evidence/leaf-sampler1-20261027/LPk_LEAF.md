@@ -53,3 +53,18 @@ K003 first failed on another missing frozen include; K004 on the scratch module
 path. Both are compile failures, not semantic failures. K005 repaired the path.
 The scratch harness is retained as patches only (the earlier direct evidence
 source file is removed); no repository crates/ or programs/ file changed.
+
+## Stage 4 — native from_fn order and shared capture
+K011 passes: eight calls, ascending index order, each call receives the previous
+call's complete quotient capture, each result goes to its index, and the final
+capture is the eighth callback's output. Transitions and all eight state words
+are arbitrary. Pointwise arbitrary-word checks cover the full state carrier.
+K007 was a rejected memcmp unwinding failure; replacing array equality by an
+arbitrary-coordinate check retained the same validation strength without a
+byte-comparison loop. K011 wall 3.486 s, RSS 338776 KiB, swap 0.
+
+Stage 5 fixtures are reused, pinned in LPk_REUSED.json: frozen-native SDX_R003
+and cohort SDX_L032/L033 for zero, P, P+1, and 32 ff. No fresh fixture/release
+replay is claimed. K008/K009 passed quotient-fit and remainder-range checks.
+K010 (uncast widened reconstruction alone) timed out; it is replaced by a
+wrapping-word identity plus a separately proved Lean no-wrap lift, not rerun.
