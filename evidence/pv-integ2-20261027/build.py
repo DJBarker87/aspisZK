@@ -1,7 +1,13 @@
 from pathlib import Path
-import os,subprocess,json,sys,hashlib,time
+import os,subprocess,json,sys,hashlib,time,datetime
 H=Path('/home/dombarker/project-offloads/codex-pv-integ2-20261027')
-who,mode,label=sys.argv[1:]; W=H/who;out=W/label;out.mkdir(exist_ok=False)
+who,mode,label=sys.argv[1:]; W=H/who
+for old in W.glob('*/reservation.json'):
+ r=json.loads(old.read_text())
+ if r.get('admitted') is False:
+  remain=datetime.datetime.fromisoformat(r['timestamp_utc']).timestamp()+180-time.time()
+  if remain>0:print(f'LOCAL COOLDOWN HOLD: {remain:.1f}s');sys.exit(78)
+out=W/label;out.mkdir(exist_ok=False)
 rev=(W/'source-revision.txt').read_text().strip()
 # Reuse the existing receipt runner with this snapshot's source pin.
 runner=W/'capped.py'
