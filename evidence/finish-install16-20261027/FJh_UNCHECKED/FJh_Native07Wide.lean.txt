@@ -1,0 +1,27 @@
+import FJh_Native07Value
+import FJh_WidePack
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJh_Native07Wide
+open Aeneas Aeneas.Std Result FIq_Native
+open FIv_NativeArithmetic (NQ)
+open FIv_NativeValue (Canon decode)
+open FIw_ArrayValue (canonical decoded)
+open FJa_PoseidonOrigins (Openings Selectors)
+/-- Wide packing of exactly the SAME Native07 values. This still leaves the
+shared public/Y/family interpretation and full composition join to be proved. -/
+theorem value (o : Openings) (s : Selectors) (out : Array NQ 4#usize)
+    (hz : canonical o.z) (ht : canonical o.succ_z) (hx : canonical o.xor12_z)
+    (hs : canonical s.local) (hb : Canon s.block)
+    (run : state_only_poseidon.evaluate_state_only_poseidon_oracle_projected o s=ok out) :
+    canonical out ∧ (fun g=>FIz_ConcretePack.embed (decoded out g))=
+      fun g=>R0P.pack4 ConcretePackBasis.basis (fun j=>FIz_ConcretePack.embed
+        (R0P.poseidonScalarResidual (FJh_Native07Value.openings o) (decode s.block) (decoded s.local)
+          (FJe_ExternalAdjoint.lane g j))) := by
+  have v := FJh_Native07Value.value o s out hz ht hx hs hb run
+  refine ⟨v.1,?_⟩
+  funext g
+  exact (congrArg FIz_ConcretePack.embed (congrFun v.2 g)).trans (FJh_WidePack.value _)
+#print axioms value
+end AspisR1.FJh_Native07Wide
+end
