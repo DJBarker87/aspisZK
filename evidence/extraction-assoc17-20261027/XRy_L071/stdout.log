@@ -1,0 +1,23 @@
+XRy_generated/XRy_ArrayRead.lean:16:1: error: Tactic `rfl` failed: The left-hand side
+  ok (↑(arr f a))[↑i]
+is not definitionally equal to the right-hand side
+  ok (f (↑a)[↑i])
+
+A B : Type
+N : Usize
+f : A → B
+a : Std.Array A N
+i : Usize
+hi : ↑i < ↑N
+⊢ ok (↑(arr f a))[↑i] = ok (f (↑a)[↑i])
+XRy_generated/XRy_ArrayRead.lean:22:1: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+i : Usize
+⊢ ↑i < UScalar.cMax UScalarTy.Usize + 1
+'XRy_ArrayRead.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRy_ArrayRead.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRy_ArrayRead.usize' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

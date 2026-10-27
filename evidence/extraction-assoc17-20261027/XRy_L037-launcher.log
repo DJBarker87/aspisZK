@@ -1,0 +1,68 @@
+{"attempt": "XRy_L037", "exit_status": 1, "wall_seconds": 1.7380351640167646, "peak_rss_kib": "4747952", "swaps": "0", "print_axioms": ["'XRy_LoopWide.canonical' does not depend on any axioms", "'XRy_LoopWide.multiply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRy_generated/XRy_LoopWide.lean:21:1: error: 'change' tactic failed, pattern
+  (do
+      let w ←
+        AspisR1CurrentWideMul.field.wide_exact.WideExact.mul (XRy_WideMultiply.toWide a) (XRy_WideMultiply.toWide b)
+      ok (AspisR1LoopPowers.fromOld (AspisR1PowersConcreteMul.fromWide w))) =
+    ?m.44
+is not definitionally equal to target
+  (do
+      let z ←
+        do
+          let z ←
+            AspisR1CurrentWideMul.field.wide_exact.WideExact.mul
+                (AspisR1PowersConcreteMul.toWide (AspisR1LoopPowers.toOld (toLoop a)))
+                (AspisR1PowersConcreteMul.toWide (AspisR1LoopPowers.toOld (toLoop b)))
+          ok (AspisR1PowersConcreteMul.fromWide z)
+      ok (AspisR1Loop
+...
+de a) (XRy_WideMultiply.toWide b)
+      ok (AspisR1LoopPowers.fromOld (AspisR1PowersConcreteMul.fromWide w))) =
+    ?m.44
+is not definitionally equal to target
+  (do
+      let z ←
+        do
+          let z ←
+            AspisR1CurrentWideMul.field.wide_exact.WideExact.mul
+                (AspisR1PowersConcreteMul.toWide (AspisR1LoopPowers.toOld (toLoop a)))
+                (AspisR1PowersConcreteMul.toWide (AspisR1LoopPowers.toOld (toLoop b)))
+          ok (AspisR1PowersConcreteMul.fromWide z)
+      ok (AspisR1LoopPowers.fromOld z)) =
+    ok (toLoop z)
+'XRy_LoopWide.canonical' does not depend on any axioms
+'XRy_LoopWide.multiply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+def Aeneas.Std.Array.set.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Std.Array α n :=
+fun {α} {n} v i x => ⟨(↑v).set (↑i) x, ⋯⟩
+theorem Aeneas.Std.loop.eq_def.{u, v} : ∀ {α : Type u} {β : Type v} (body : α → Result (ControlFlow α β)) (x : α),
+  loop body x =
+    match body x with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x => loop body x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div :=
+fun {α} {β} body x =>
+  id
+    (Eq.trans (congrFun (Lean.Order.fix_eq (loop._proof_1 body)) x)
+      (Eq.refl
+        (match body x with
+        | ok r =>
+          match r with
+          | ControlFlow.cont x =>
+            Lean.Order.fix
+              (fun f x =>
+                match body x with
+                | ok r =>
+                  match r with
+                  | ControlFlow.cont x => f x
+                  | ControlFlow.done x => ok x
+                | fail e => fail e
+                | div => div)
+              (loop._proof_1 body) x
+          | ControlFlow.done x => ok x
+        | fail e => fail e
+        | div => div)))
+
+Running as unit: run-r4aba0010f4c74613adb1eafb5a57b9d6.scope; invocation ID: 8fa175076e9045f08f54bbb645a82ff9

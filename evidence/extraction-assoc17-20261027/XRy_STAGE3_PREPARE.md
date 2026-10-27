@@ -1,0 +1,7 @@
+# Whole scratch preparation, cached claim still raw
+
+L062 XRy_PrepareRawScratch.prepare proves full mapped Result and SAME returned scratch equality from the emitted narrowed prepare body to the cohort scratch skeleton with raw powers and raw cached claim. L064 XRy_PreparePowers.prepare replaces powers with installed powersPublic, deriving its canonical-input premise from the SAME reached gamma scalar return. Both fold branches, the zero alpha branch, every query/claim error and scratch selection are included. The only leaf hypothesis is the externally CLOSED LPk low sampler equality. The remaining dictionary difference is explicit: exceptClaim.claim is XRo_Join_PreparedBoundaries.cachedClaim, not installed actual.claim.
+
+This is not the requested whole installed prepare closure. A2 OPEN: prove the concrete cached-claim association on the SAME reached inputs/outputs, including six point selections, parser errors, Dot raw state/finish, seven powers/parts and the weighted sum. A3 OPEN: canonical arithmetic is checked, whole installed claim/native P6 association is not. L066/L068 transport source multiplication/addition to the actual claim carrier and L069 transports arbitrary canonical weighted folds. These local results remove no adopted-top premise.
+
+All accepted module audits standard axioms/subsets. No runtime/Kani/shipped source or release artifact changed. No full-manifest replay was appropriate or claimed. Pre-70 obstruction record is XRy_OBSTRUCTION70.md. Persistent cache retained.
