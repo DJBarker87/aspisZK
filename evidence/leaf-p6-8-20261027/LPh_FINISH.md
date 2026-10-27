@@ -1,0 +1,3 @@
+# Stage 3: corrected verified-reduce consumer
+
+LPh_K008 PASS (exit0,1.356501780s,220124KiB peak,swap0). Exact target fast_pairing::canonical::LPh_dot::LPh_finish_canonical. This is LPg K029's arbitrary-sums finish canonical-range consumer with the required -Z stubbing feature now enabled; no timeout increase. It uses stub_verified(reduce), paired with the inherited LPg_K003 passing canonical-range contract on the same retained reduce body and identical ensures clause. The freeze/graph check and unchanged lock receipt are retained. This establishes canonical range only, not finish's modular value, history invariant, or same accumulator/model carrier. No deployed premise removed.
