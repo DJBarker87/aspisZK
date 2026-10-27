@@ -11,8 +11,6 @@ assert json.loads((H/'d324-resolution-verification.json').read_text())['mismatch
 module=sys.argv[1];assert module.startswith('PV_B3_') or module in json.loads((H/'d324-project-resolution.json').read_text())['modules'],module
 shared_env=json.loads(ORIGINAL_JENV.read_text())
 shared_env['LEAN_PATH']='/home/dombarker/project-offloads/aspis-joint-20261019/objects:'+shared_env['LEAN_PATH']
-if module.startswith('PV_B3_MaskRow') or module.startswith('PV_B3_ResumeAudit'):
- shared_env['LEAN_PATH']=str(H/'reference-objects')+':'+shared_env['LEAN_PATH']
 JENV.write_text(json.dumps(shared_env,indent=2)+'\n')
 DRIVER=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py')
 module=sys.argv[1];assert module.startswith('PV_B3_') or module in json.loads((H/'d324-project-resolution.json').read_text())['modules'],module
@@ -65,6 +63,7 @@ if '.' in module:
  sub['compile_environment_change']=context['private_output_parent']
 cmd=['timeout','900','python3',str(DRIVER),str(JENV),str(O),str(S),str(O/(module.replace('.','/')+'.olean')),str(p),'7000']
 status=run(label,cmd,'one focused Lean module via pinned run2.py, env J, -M7000; private source/object overlay')
+sub['lean_source_revision']=(H/'proof-revision').read_text().strip() if (H/'proof-revision').exists() else 'see SHA-matched source snapshot and own source authority record'
 sub['source_authority_record']='d324-project-resolution.json / d324-private-source-authority.json, h5 own HEAD; external h4 verified'
 R=H/label;(R/'source.lean').write_bytes(p.read_bytes());(R/'submission.json').write_text(json.dumps(sub,indent=2)+'\n')
 charged=(R/'receipt/receipt.json').exists()

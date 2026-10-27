@@ -74,6 +74,6 @@ else:p.write_text(s)
 meta={'roots':roots,'private_cone':order,'audit_declarations':list(dict.fromkeys(names)),
  'closing_source_sha256':hashlib.sha256(s.encode()).hexdigest(),
  'layout':'axiom audit first; focused closure theorem then checked and printed in the same final target',
- 'project_extra_imports':'six privately compiled h5 R1Z modules recorded in d324-op134-dictionary-resolution.json'}
+ 'project_extra_imports':'seven privately compiled h5 R1Z modules recorded in d324-op134-dictionary-resolution.json'}
 if '--check' not in sys.argv:(D/'d324-closure-manifest.json').write_text(json.dumps(meta,indent=2)+'\n')
 print(json.dumps({'private_modules':len(order),'axiom_reports':len(set(names)),'source_sha256':meta['closing_source_sha256']}))
