@@ -151,3 +151,11 @@ pub fn statement_points(x:&[aspis_core::field::QM31;10])->[[aspis_core::field::Q
 pub fn circle_sample(block:&[u8;32],row:aspis_core::r0_transcript::CircleRow)->aspis_core::circle::SecureCirclePoint {
     aspis_r1_cost_probe::sampler::circle_sample(block,row)
 }
+
+#[cfg(kani)]
+pub mod owned_circle;
+
+#[cfg(kani)]
+pub fn merkle_leaf(hash:aspis_core::HashFn,tag:u8,values:&[u8])->[u8;32] {
+    aspis_core::r0::merkle::leaf(hash,tag,values)
+}

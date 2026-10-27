@@ -5,6 +5,8 @@ pub mod owned;
 pub mod captured_mask;
 pub mod owned_points;
 pub mod owned_wide_new;
+#[path="../source-proof/owned_circle.rs"]
+pub mod owned_circle;
 #[cfg(not(pv_cb_extract))]
 mod checks {
     use aspis_core::field::{M31,CM31,QM31,PreparedQm31Multiplier};
@@ -119,6 +121,69 @@ mod checks {
         let expected = super::owned_wide_new::new(input[0], input[1]);
         same(actual.c0(), expected.c0);
         same(actual.c1(), expected.c1);
+    }
+
+    fn limb(value: QM31, coordinate: usize) -> u32 {
+        match coordinate {
+            0 => value.c0.a.0,
+            1 => value.c0.b.0,
+            2 => value.c1.a.0,
+            _ => value.c1.b.0,
+        }
+    }
+    // Each property keeps every raw arithmetic input. Only the asserted
+    // output coordinate changes; no other coordinate equality is assumed.
+    macro_rules! horner_word {
+        ($name:ident, $coordinate:expr) => {
+            #[kani::proof]
+            #[kani::unwind(30)]
+            fn $name() {
+                let term = q(kani::any());
+                let coefficients = [term; 27];
+                let index: usize = kani::any();
+                kani::assume(index < 26);
+                let prepared = PreparedQm31Multiplier::new(q(kani::any()));
+                let state = q(kani::any());
+                let actual = shipped::horner_step(&coefficients, prepared, index, state);
+                let expected = reference::horner_step(&coefficients, prepared, index, state);
+                assert_eq!(limb(actual, $coordinate), limb(expected, $coordinate));
+            }
+        };
+    }
+    macro_rules! power_word {
+        ($name:ident, $coordinate:expr) => {
+            #[kani::proof]
+            #[kani::unwind(6)]
+            fn $name() {
+                let input = q(kani::any());
+                let actual = shipped::power26(input);
+                let expected = reference::power26_step(input);
+                assert_eq!(limb(actual, $coordinate), limb(expected, $coordinate));
+            }
+        };
+    }
+    horner_word!(horner_word0, 0);
+    horner_word!(horner_word1, 1);
+    horner_word!(horner_word2, 2);
+    horner_word!(horner_word3, 3);
+    power_word!(power26_word0, 0);
+    power_word!(power26_word1, 1);
+    power_word!(power26_word2, 2);
+    power_word!(power26_word3, 3);
+
+    #[kani::proof]
+    #[kani::unwind(40)]
+    fn circle_sample_reference() {
+        let block = kani::any::<[u8; 32]>();
+        let row = if kani::any::<bool>() {
+            aspis_core::r0_transcript::CircleRow::First
+        } else {
+            aspis_core::r0_transcript::CircleRow::Second
+        };
+        let actual = aspis_r1_cost_probe::sampler::circle_sample(&block, row);
+        let expected = super::owned_circle::circle_sample(&block, row);
+        same(actual.x, expected.x);
+        same(actual.y, expected.y);
     }
 
 }

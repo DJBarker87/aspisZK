@@ -21,6 +21,7 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
  if out.returncode:print(name,'reservation refused',out.returncode);sys.exit(out.returncode)
  if stage=='charon' and project in ['proof','source-proof','step-proof']:
   inputs=[project+'/lib.rs']
+  if project in ['source-proof','step-proof']:inputs+=['source-proof/owned_circle.rs']
   if project=='step-proof':inputs+=['step-proof/owned_points.rs','step-proof/owned_wide_new.rs']
   for relative in inputs:
    subprocess.run(['scp',str(root/'tools/pv-cb-20261026'/relative),'dombarker@100.108.41.90:'+base+'/'+relative],check=True)

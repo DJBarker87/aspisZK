@@ -1,0 +1,26 @@
+{
+  "op": 117,
+  "status": "PARTIAL; changed-property split preparation, not run",
+  "harnesses": [
+    "checks::horner_word0",
+    "checks::horner_word1",
+    "checks::horner_word2",
+    "checks::horner_word3",
+    "checks::power26_word0",
+    "checks::power26_word1",
+    "checks::power26_word2",
+    "checks::power26_word3"
+  ],
+  "replacement_of": [
+    "kani-step-horner-uniform-013",
+    "kani-step-power-011"
+  ],
+  "change": "Only one of four raw output words is asserted per new harness; all arithmetic inputs remain unrestricted, and no other output equality is assumed.",
+  "horner_bounds": "Uniform scalar coefficient representative, arbitrary raw prepared base and state; index<26 covers the actual reverse Horner body. Unwind30 covers27 coefficient cells and3 prepared components. Existing Lean locality/scalar-representative and reach lemmas remain required for arbitrary coefficient arrays; these native gates alone are not a generic-array or root source law.",
+  "power_bounds": "Arbitrary four raw input words; straight fixed square/multiply chain; unwind6 covers raw-input construction; no data-dependent loop.",
+  "composition": "All four output projections are needed for a complete helper value equality. Full op117 still needs fresh shipped-control/reference binding and the final source equation.",
+  "source_sha256": "6e5ecfe5fbe43b8ecd4b16b02fea0cdb8e548d1e43b992590aa5e23dad3e44cb",
+  "no_stubs": true,
+  "kani_runs_charged": 0,
+  "configuration_failure_policy": "Stop entire remaining Kani queue at first configuration failure; no unchanged timed-out gate or cap/timeout increase."
+}
