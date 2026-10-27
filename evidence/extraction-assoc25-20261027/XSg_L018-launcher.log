@@ -1,0 +1,53 @@
+{"attempt": "XSg_L018", "exit_status": 1, "wall_seconds": 7.640262785949744, "peak_rss_kib": "4775020", "swaps": "0", "print_axioms": ["'XSg_AccumulatePhase.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSg_generated/XSg_AccumulatePhase.lean:19:70: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+p : verifier.Prepared
+a out : verifier.Accumulator
+node : aspis_core.field.M31
+value : aspis_core.field.wide_exact.WideExact
+pending after : verifier.BatchedWeights
+canon : XRp_PowersQAdd.CanonicalQ a.power
+small : (↑a.weights).length ≤ 256
+len : (↑pending.raw).length = (↑a.weights).length
+phase : ∀ row ∈ ↑pending.raw, XSg_RowPhase.Bound (↑pending.terms) row
+run : verifier.accumulate_batched_with_node p a node value pending = ok (out, after)
+frame : (↑after.raw).length = (↑pending.raw).length ∧ pending.terms + 1#
+...
+XSg_generated/XSg_AccumulatePhase.lean:19:70: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+p : verifier.Prepared
+a out : verifier.Accumulator
+node : aspis_core.field.M31
+value : aspis_core.field.wide_exact.WideExact
+pending after : verifier.BatchedWeights
+canon : XRp_PowersQAdd.CanonicalQ a.power
+small : (↑a.weights).length ≤ 256
+len : (↑pending.raw).length = (↑a.weights).length
+phase : ∀ row ∈ ↑pending.raw, XSg_RowPhase.Bound (↑pending.terms) row
+run : verifier.accumulate_batched_with_node p a node value pending = ok (out, after)
+frame : (↑after.raw).length = (↑pending.raw).length ∧ pending.terms + 1#usize = ok after.terms
+h : pending.terms + 1#usize = ok after.terms
+⊢ ↑after.terms = ↑pending.terms + 1
+XSg_generated/XSg_AccumulatePhase.lean:38:22: error: Type mismatch: After simplification, term
+  small
+ has type
+  @LE.le ℕ instLENat (↑a.weights).length 256
+but is expected to have type
+  @LE.le ℕ instLENat (↑(Usize.ofNatCore (↑a.weights).length ⋯)) 256
+XSg_generated/XSg_AccumulatePhase.lean:38:70: error: Type mismatch: After simplification, term
+  len
+ has type
+  @Eq ℕ (↑pending.raw).length (↑a.weights).length
+but is expected to have type
+  @Eq ℕ (↑pending.raw).length ↑(Usize.ofNatCore (↑a.weights).length ⋯)
+'XSg_AccumulatePhase.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1abd5b3dd96940ef912b62b7f6837208.scope; invocation ID: 5968b942cb4b439f8213968dca8b8bd4

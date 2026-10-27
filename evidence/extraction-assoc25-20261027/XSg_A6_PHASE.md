@@ -1,0 +1,5 @@
+# A6 periodic phase checkpoint
+
+XSg_HybridPhase.source (L023) establishes the periodic raw-row envelope at EVERY successful reached prefix of the SAME accepted hybrid execution, with canonical power, matching pending/query counters and matching bounded widths. The initial envelope is derived from the actual constructor, not assumed per query. XSg_RowLoop uses the generic source loop invariant and the processed/unprocessed cursor predicate XSg_Sweep.Inv; no row loop is hand-unrolled. XSg_RowPhase connects the complete emitted update to the checked owned row and proves the next phase.
+
+This closes the periodic phase sub-obligation. A6 remains OPEN: eager/deferred whole Result, state, reservation and chronological attempted-digest transport are not established. No headline premise removed; no new trust. Standard axioms only on the accepted prints. L001 was a dependency-path configuration preflight, no Lean launch; corrected in L002 without changing the launcher. Failed theorem prints are excluded.

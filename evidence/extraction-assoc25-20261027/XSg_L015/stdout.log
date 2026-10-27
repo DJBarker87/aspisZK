@@ -1,0 +1,15 @@
+XSg_generated/XSg_RowLoop.lean:22:3: error: Type mismatch
+  XSg_RowLoopPhase.step v q i width basis (↑before.terms) canon bm small (iter, b) r inv hr
+has type
+  match r, hr with
+  | done b_1, run => ∀ row ∈ ↑b_1.raw, XSg_RowPhase.Bound (↑before.terms + 1) row
+  | cont next, run =>
+    XSg_RowLoopPhase.Inv (↑before.terms) (↑width) next ∧
+      XSc_RangeMeasure.remaining next.1 < XSc_RangeMeasure.remaining (iter, b).1
+but is expected to have type
+  match r with
+  | done v => ∀ row ∈ ↑v.raw, XSg_RowPhase.Bound (↑before.terms + 1) row
+  | cont next =>
+    XSg_RowLoopPhase.Inv (↑before.terms) (↑width) next ∧
+      XSc_RangeMeasure.remaining next.1 < XSc_RangeMeasure.remaining (iter, b).1
+'XSg_RowLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

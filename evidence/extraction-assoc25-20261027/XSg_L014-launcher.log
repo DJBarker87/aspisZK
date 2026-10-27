@@ -1,0 +1,46 @@
+{"attempt": "XSg_L014", "exit_status": 1, "wall_seconds": 6.083022174949292, "peak_rss_kib": "4759452", "swaps": "0", "print_axioms": ["'XSg_RowLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSg_generated/XSg_RowLoop.lean:19:2: error: Application type mismatch: The argument
+  XSg_RowLoopPhase.step v q i width basis (↑before.terms) canon bm small
+has type
+  ∀ (s : XSg_RowLoopPhase.S) (r : ControlFlow XSg_RowLoopPhase.S verifier.BatchedWeights),
+    XSg_RowLoopPhase.Inv (↑before.terms) (↑width) s →
+      ∀ (run : verifier.accumulate_batched_with_node_loop1.body v q i width basis s.1 s.2 = ok r),
+        match r, run with
+        | done b, run => ∀ row ∈ ↑b.raw, XSg_RowPhase.Bound (↑before.terms + 1) row
+        | cont next, run =>
+          XSg_RowLoopPhase.Inv (↑before.terms) (↑width) next ∧
+            XSc_RangeMeasure.remaining next.1 < XSc_RangeMeasure.remaining s.1
+but is exp
+...
+_generated/XSg_RowLoop.lean:19:2: error: Application type mismatch: The argument
+  XSg_RowLoopPhase.step v q i width basis (↑before.terms) canon bm small
+has type
+  ∀ (s : XSg_RowLoopPhase.S) (r : ControlFlow XSg_RowLoopPhase.S verifier.BatchedWeights),
+    XSg_RowLoopPhase.Inv (↑before.terms) (↑width) s →
+      ∀ (run : verifier.accumulate_batched_with_node_loop1.body v q i width basis s.1 s.2 = ok r),
+        match r, run with
+        | done b, run => ∀ row ∈ ↑b.raw, XSg_RowPhase.Bound (↑before.terms + 1) row
+        | cont next, run =>
+          XSg_RowLoopPhase.Inv (↑before.terms) (↑width) next ∧
+            XSc_RangeMeasure.remaining next.1 < XSc_RangeMeasure.remaining s.1
+but is expected to have type
+  ∀ (s : XSg_RowLoopPhase.S) (r : ControlFlow XSg_RowLoopPhase.S verifier.BatchedWeights),
+    XSg_RowLoopPhase.Inv (↑before.terms) (↑width) s →
+      (match s with
+          | (iter1, weights1) => verifier.accumulate_batched_with_node_loop1.body v q i width basis iter1 weights1) =
+          ok r →
+        match r with
+        | done v => ∀ row ∈ ↑v.raw, XSg_RowPhase.Bound (↑before.terms + 1) row
+        | cont next =>
+          XSg_RowLoopPhase.Inv (↑before.terms) (↑width) next ∧
+            XSc_RangeMeasure.remaining next.1 < XSc_RangeMeasure.remaining s.1
+in the application
+  XRl_LoopInvariant.preserve
+    (fun x =>
+      match x with
+      | (iter1, weights1) => verifier.accumulate_batched_with_node_loop1.body v q i width basis iter1 weights1)
+    (XSg_RowLoopPhase.Inv ↑before.terms ↑width) (fun b => ∀ row ∈ ↑b.raw, XSg_RowPhase.Bound (↑before.terms + 1) row)
+    (fun s => XSc_RangeMeasure.remaining s.1) (XSg_RowLoopPhase.step v q i width basis (↑before.terms) canon bm small)
+'XSg_RowLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r09ebd02e6f424b5592b271f11c2ae18a.scope; invocation ID: f0dfca03df3c4b93b319b176165f16ce

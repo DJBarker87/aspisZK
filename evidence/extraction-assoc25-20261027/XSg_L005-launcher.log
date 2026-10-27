@@ -1,0 +1,60 @@
+{"attempt": "XSg_L005", "exit_status": 1, "wall_seconds": 3.9266754589625634, "peak_rss_kib": "4770024", "swaps": "0", "print_axioms": ["'XSg_RowPhase.safe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XSg_RowPhase.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSg_generated/XSg_RowPhase.lean:16:76: error: 'change' tactic failed, pattern
+  ↑j < 4
+is not definitionally equal to target
+  ↑j < Array.length row
+XSg_generated/XSg_RowPhase.lean:42:54: error: Application type mismatch: The argument
+  run
+has type
+  verifier.update_residue_row (Array.make 4#usize [a, b, c, d] ⋯) q basis (decide (terms &&& 3#usize = 3#usize)) =
+    ok out
+but is expected to have type
+  verifier.update_residue_row (Array.make 4#usize [a, b, c, d] ⋯) q basis (decide (↑terms % 4 = 3)) = ok ?m.753
+in the application
+  Eq.trans (Eq.symm (Eq.trans eq hy)) run
+XSg_generated/XSg_RowPhase.lean:29:28: error: unsolved goals
+out : Row
+q : aspis_core.field.QM31
+basis : U32
+terms : Usize
+...
+esidue_row (Array.make 4#usize [a, b, c, d] ⋯) q basis (decide (terms &&& 3#usize = 3#usize)) =
+    ok out
+but is expected to have type
+  verifier.update_residue_row (Array.make 4#usize [a, b, c, d] ⋯) q basis (decide (↑terms % 4 = 3)) = ok ?m.753
+in the application
+  Eq.trans (Eq.symm (Eq.trans eq hy)) run
+XSg_generated/XSg_RowPhase.lean:29:28: error: unsolved goals
+out : Row
+q : aspis_core.field.QM31
+basis : U32
+terms : Usize
+canon : XRp_PowersQAdd.CanonicalQ q
+bm : ↑basis < 2 ^ 31 - 1
+a b c d : U64
+phase : Bound (↑terms) (Array.make 4#usize [a, b, c, d] ⋯)
+run :
+  verifier.update_residue_row (Array.make 4#usize [a, b, c, d] ⋯) q basis (decide (terms &&& 3#usize = 3#usize)) =
+    ok out
+x : Fin 4 → U64 := fun j => if j = 0 then a else if j = 1 then b else if j = 2 then c else d
+shaped : S7Kani2OwnedRowRefinement.makeRow x = Array.make 4#usize [a, b, c, d] ⋯
+xp : ∀ (j : Fin 4), ↑(x j) < 2 ^ 34 + ↑terms % 4 * (2 ^ 31 - 2) ^ 2
+y : Fin 4 → U64
+hy :
+  S7Kani2OwnedRow.residue_owned (Array.make 4#usize [a, b, c, d] ⋯) (XRu_PushTransport.power q) basis
+      (decide (↑terms % 4 = 3)) =
+    ok (S7Kani2OwnedRowRefinement.makeRow y)
+hval :
+  ∀ (j : Fin 4),
+    ↑(y j) =
+      AspisR1BatchedFoldSourceStep.sourcePush (↑terms) (↑(x j))
+        (↑(S7Kani2OwnedRowRefinement.powerLimb (XRu_PushTransport.power q) j) * ↑basis)
+eq :
+  verifier.update_residue_row (Array.make 4#usize [a, b, c, d] ⋯) q basis (decide (↑terms % 4 = 3)) =
+    S7Kani2OwnedRow.residue_owned (Array.make 4#usize [a, b, c, d] ⋯) { c0 := (q.c0.a, q.c0.b), c1 := (q.c1.a, q.c1.b) }
+      basis (decide (↑terms % 4 = 3))
+⊢ Bound (↑terms + 1) out
+'XSg_RowPhase.safe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XSg_RowPhase.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc80f019304814fb288fd289ba946c648.scope; invocation ID: 05663f9f44394700ad3a03cb747ef158

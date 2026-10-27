@@ -1,0 +1,15 @@
+XSg_generated/XSg_AccumulatePhase.lean:19:19: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.add_spec.mp`
+XSg_generated/XSg_AccumulatePhase.lean:17:63: error: unsolved goals
+p : verifier.Prepared
+a out : verifier.Accumulator
+node : aspis_core.field.M31
+value : aspis_core.field.wide_exact.WideExact
+pending after : verifier.BatchedWeights
+canon : XRp_PowersQAdd.CanonicalQ a.power
+small : (↑a.weights).length ≤ 256
+len : (↑pending.raw).length = (↑a.weights).length
+phase : ∀ row ∈ ↑pending.raw, XSg_RowPhase.Bound (↑pending.terms) row
+run : verifier.accumulate_batched_with_node p a node value pending = ok (out, after)
+frame : (↑after.raw).length = (↑pending.raw).length ∧ pending.terms + 1#usize = ok after.terms
+⊢ ∀ row ∈ ↑after.raw, XSg_RowPhase.Bound (↑after.terms) row
+'XSg_AccumulatePhase.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
