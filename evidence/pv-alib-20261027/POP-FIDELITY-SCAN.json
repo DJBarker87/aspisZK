@@ -1,0 +1,19 @@
+{
+  "row": "V184",
+  "function": "pop_slices_reference",
+  "lean_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CBL_PopSlices.lean",
+  "lean_sha256": "191fc35be4215a264678a37eb390b6abc830480fc151f7f90a5f1f90c89323ee",
+  "dropped_restoration_matches": [],
+  "disposition": "No element/iterator mutable borrow in the selected reference: out.push returns out1 and the loop continuation carries out1. No restoration is discarded. This scan gives no native-to-reference world equivalence credit.",
+  "rust_reference": "pub fn pop_slices_reference<T:Copy>(v:&[T],out:&mut Vec<T>)->Option<T> {\n    if v.len()==0 {None} else {\n        let last=v.len()-1;let mut i=0;\n        while i<last {out.push(v[i]);i+=1;}\n        Some(v[last])\n    }\n}\n",
+  "word_noncopy": {
+    "path": "crates/aspis-r1-cost-probe/src/host_commitment.rs",
+    "lines": [
+      107,
+      108,
+      109
+    ],
+    "source": "enum Word { Base(Vec<M31>), Secure(Vec<QM31>), }",
+    "finding": "Word has Vec payloads and no Copy implementation. The prior std-plan statement that Word is Copy is false; a native T:Copy reference cannot instantiate T=Result<Word,Error>."
+  }
+}

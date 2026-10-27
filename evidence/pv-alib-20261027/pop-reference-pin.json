@@ -1,0 +1,9 @@
+{
+  "reference_source": "tools/pv-cblib-20261027/lib.rs",
+  "reference_body": "pub fn pop_slices_reference<T:Copy>(v:&[T],out:&mut Vec<T>)->Option<T> {\n    if v.len()==0 {None} else {\n        let last=v.len()-1;let mut i=0;\n        while i<last {out.push(v[i]);i+=1;}\n        Some(v[last])\n    }\n}",
+  "reference_body_sha256": "831217228180aaf3f201053708e3a8c5def23a487f907ef8798beeaac7668b22",
+  "test_source_sha256": "f07746f022fecb22f4b47039a15c3e3107c12fe767989540e8a58f505873f227",
+  "row": "V184",
+  "statement_under_test": "For every admissible generic Vec input, native Vec.pop and the selected copy reference, started with an empty output, agree in the complete returned value and allocation/deallocation world trace.",
+  "caveat": "Tests the native-to-reference strengthening needed for an allocation/world source law, not an already accepted Lean theorem."
+}
