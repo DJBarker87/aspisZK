@@ -55,3 +55,29 @@ Full reached-failure independence for admitted deployed witnesses remains
 OPEN. No premise has been removed, no trust item added, and option A has not
 been inferred from these narrower examples. Stage 3 remains conditional on
 settling this source obligation.
+
+## Capacity-relaunch continuation
+
+Recovered receipts, including host-only IDs 41815–41827. IDs 41813 and 41828
+were preflight-only and are retired without a Lean charge; no ID is reused.
+The prior local tally understated attempts until those receipts were collected.
+
+Checked 41850/41851: the same-public admitted path family has differing pole
+sets, and hence a challenge chi for which the two `NoPole` propositions are
+opposites. This does not yet prove that the public P_R1 gate accepts that
+challenge, that the native oracle realizes it, or that the emitted full body
+has the respective success/rejection outcomes. Those are still required for
+the D215 counterexample. No availability premise is removed.
+
+Memory failures 41830/41832/41834/41843 were isolated to cardinality conversion:
+normalizing a concrete finite function-space enumeration hit the existing
+-M7000 limit (peak about 7 GiB, swap 0). Caps were not raised. Replacement:
+`PV_OptB_FieldCard.cardDigest_generic` and `PV_OptB_NatCard` prove the shape
+abstractly and transport through `Nat.card`; 41850 then checks in 1.98 s at
+4,099,516 KiB, swap 0, standard axioms. Failed outputs remain evidence and
+are not accepted axioms audits.
+
+The actual emitted retry and entropy steps also check (41837, 41839, 41853,
+41854): Rejected recurses; a callback error stops at the entered position;
+a non-Rejected body error exits before the next callback. Body outcomes are
+explicit hypotheses, not facts asserted about admitted witnesses.

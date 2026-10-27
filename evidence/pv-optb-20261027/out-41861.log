@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_OptB_SourcePoleBoundary.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ct_pole.all_slots_clear (alloc.vec.Vec.deref rows) masks chi
+in the target expression
+  (do
+      let r2 ←
+        ExternalFuns.op12
+            host_semantic.no_pole.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
+            (core.result.Result.Ok masks) ()
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let b ← ct_pole.all_slots_clear (alloc.vec.Vec.deref rows) val1 chi
+          ok (core.result.Result.Ok b)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+            (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Ok clear)
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+compiled : Compiled
+lam chi : aspis_core.field.QM31
+rows : Rows
+masks : Std.Array U16 64#usize
+clear : Bool
+rowLaw : host_semantic.lean_copy_row_values compiled.trace lam = ok (core.result.Result.Ok rows)
+maskLaw :
+  aspis_statement.pool_v1.pair_forest_hiding.pool_v1_pair_forest_copy_active_row_masks_v1 =
+    ok (core.result.Result.Ok masks)
+scanLaw : ct_pole.all_slots_clear (alloc.vec.Vec.deref rows) masks chi = ok clear
+⊢ (do
+      let r2 ←
+        ExternalFuns.op12
+            host_semantic.no_pole.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
+            (core.result.Result.Ok masks) ()
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let b ← ct_pole.all_slots_clear (alloc.vec.Vec.deref rows) val1 chi
+          ok (core.result.Result.Ok b)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+            (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Ok clear)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (64 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_OptB_SourcePoleBoundary.scanned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

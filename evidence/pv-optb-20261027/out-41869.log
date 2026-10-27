@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_OptB_SourcePoleClosure.lean:14:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  host_semantic.no_pole compiled lam chi
+in the target expression
+  (let (pvpfmccv, p) := (compiled, pub)
+    let (lambda, chi) := (lam, chi)
+    do
+    let r ← host_semantic.no_pole pvpfmccv lambda chi
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        if val = true then do
+          let pvplpsv ← p.transition
+          let r1 ←
+            aspis_statement.pool_v1.pair_forest_semantic_oracle.build_pool_v1_pair_forest_copy_helper_v1 pvpfmccv.trace
+                pvplpsv.live_snapshot.next_pair_index lambda chi
+          core.result.Result.map_err
+              (host_semantic.build_with_material.closure.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairTraceErrorV1Error
+                hash commitment)
+              r1 ()
+        else ok (core.result.Result.Err r1_wire.Error.ActivePole)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (alloc.vec.Vec aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Err r1_wire.Error.ActivePole)
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H T : Type
+hash : aspis_core.digest.Digest32 H
+commitment : host_semantic.Commitments T
+compiled : Compiled
+pub : Pub
+lam chi : aspis_core.field.QM31
+pole : host_semantic.no_pole compiled lam chi = ok (core.result.Result.Ok false)
+⊢ (let (pvpfmccv, p) := (compiled, pub)
+    let (lambda, chi) := (lam, chi)
+    do
+    let r ← host_semantic.no_pole pvpfmccv lambda chi
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        if val = true then do
+          let pvplpsv ← p.transition
+          let r1 ←
+            aspis_statement.pool_v1.pair_forest_semantic_oracle.build_pool_v1_pair_forest_copy_helper_v1 pvpfmccv.trace
+                pvplpsv.live_snapshot.next_pair_index lambda chi
+          core.result.Result.map_err
+              (host_semantic.build_with_material.closure.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairTraceErrorV1Error
+                hash commitment)
+              r1 ()
+        else ok (core.result.Result.Err r1_wire.Error.ActivePole)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (alloc.vec.Vec aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Err r1_wire.Error.ActivePole)
+'R1Z.PV_OptB_SourcePoleClosure.pole_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
