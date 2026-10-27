@@ -87,3 +87,44 @@ the local data generator reject its input, then scp found no source file.
 No Lean process or scope was launched for023; its admission/config remain.
 The corrected probe emits explicit scalar strings (027). It was an own-task
 source-generation failure, not a host/launcher failure or barrier bypass.
+
+## Stage 4: same execution cuts and internal numeric return
+
+JGl_CompositionCuts.value inverts the SAME actual composition, binds its
+selected constructor to JGl_ConcreteSelected.data, and identifies all three
+original opening gathers, actual boxed/poseidon selectors and actual semantic
+return. Its evaluator and copy observations are derived from that one call;
+no independently successful child is an input hypothesis.
+
+077/078/079 exposed expensive broad substitution over the closed source
+constructor while assembling that join. Replacement080 uses targeted rewrites
+at the individual cuts;081 fixes a rewrite typo and passes in3.35s. The original
+calls, arguments, output tuple and guards remain unchanged. Failed candidates
+are retained; no cap/heartbeat/depth increase was used.
+
+JGl_InternalSameRun.inhabited (087) explicitly applies FJh_InternalOnRun.value
+at JGb's SAME retained evaluator operands and return. The complete width16
+internal-pair value/canonicality is obtained from that run, with no operand
+mismatch and no separately supplied internal success.
+
+JGl_InternalNumeric.source (086) additionally proves the exact original
+interpolated_internal_pair call at the certified concrete a/local inputs,
+returning the complete retained16-cell JGl_NumericData.internal array. Its
+numeric model is checked lane by lane (083/084/085), then composed with the
+imported FJh value and existing forward success. This is unconditional source
+success, not an accepted TX1/TX2 result.
+
+The direct leading-vector candidates073/082 hit default heartbeats. Replacement
+088/089 records finite phase candidates;090–095 kernel-certifies each phase.
+096–098 found the native-width Fin representation/let transparency obstacle in
+broad rewriting of the composed vector. Replacement099 uses explicit congrArg
+applications of those named phase equations and passes in3.02s. Thus
+JGl_LeadingMath.value identifies the complete mathematical leading vector.
+The uncompiled packed-leading literal identification candidate is not claimed.
+
+Still open: numeric full-pair/packed residual composition and full copy value,
+then exact public terminal identification, original masked gate, enclosing
+prepare/TX1 acceptance and SAME1768 returned writer bytes. No claim of
+JGl_TerminalIdentified, JGl_TX1.accepted1 or JGl_Fixture.inhabited is made.
+No false premise or vacuity counterexample was established. The actual terminal
+probe matches the required limbs, but it remains diagnostic evidence only.
