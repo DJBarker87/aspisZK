@@ -11005,3 +11005,15 @@ phase-paired-002-baseline/candidate (16.9 GiB) under codex-cx-prover-rw-20261023
 focused-paired-001 kept; nothing had them open. Host free 620 → 643 GiB. Worker rule (j) added. New jobs
 queued for the next free slots: option B endpoint (statement + witness-independence of the failure event)
 and the inversion zero-boundary proof. Rows removed outright: 0. Privacy target not yet established.
+
+## D249 (Stream B) 2026-10-27 06:55 UTC: Stream A's contract amendment noted for privacy
+
+Stream A reports an owner-approved amendment to SECURITY-CONTRACT-20261021.md ("Owner-approved
+amendment, 2026-10-27", research 503f682c76): the D188 Aeneas extraction trust item is read at TRACE
+fidelity (the pinned translation preserves the accepted Result and the chronological attempted
+digest-call sequence of the extracted monadic execution, same body/inputs/replies/pins, no new Lean
+axiom). Privacy arguments cite D188 by that name and do not restate it. The soundness trust inventory
+(design/TRUST-INVENTORY-APPENDIX-DRAFT-20261027.md, approved) covers soundness surfaces only; the privacy
+trust surfaces are the separately adopted T (D248: three PV_RunJoin_TrustItems fields) plus V371. Route A
+(translator re-pin) was not approved. Stream A's session moved to a new address; the D248 handoffs (client
+bundle pin, Docker caps) were re-sent there. Privacy target not yet established.
