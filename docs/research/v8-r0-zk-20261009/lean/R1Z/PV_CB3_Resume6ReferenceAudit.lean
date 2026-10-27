@@ -9,7 +9,6 @@ import R1Z.PV_CB3_DigitBlocks
 import R1Z.PV_CB3_DigitInjective
 import R1Z.PV_CB3_DigitSequence
 import R1Z.PV_CB3_EqualityBits
-import R1Z.PV_CB3_FinalAudit
 import R1Z.PV_CB3_GammaArrayInjective
 import R1Z.PV_CB3_GammaBounds
 import R1Z.PV_CB3_GammaBytes
