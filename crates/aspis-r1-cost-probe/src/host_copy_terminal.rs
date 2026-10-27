@@ -304,20 +304,20 @@ fn pattern_values_windowed(
         power = power.mul(lambda);
         slot += 1;
     }
-    let prepared: [PreparedQm31Multiplier; 8] = powers.map(PreparedQm31Multiplier::new);
-    let window = |start: usize| {
-        let mut value = QM31::ZERO;
-        let mut slot = 0usize;
-        while slot < 8 {
-            value = value.add(prepared[slot].mul(openings[start + slot]));
-            slot += 1;
-        }
-        value
-    };
-    let window_0 = window(0);
-    let window_1 = window(1);
-    let window_2 = window(2);
-    let window_8 = window(8);
+    let prepared = [
+        PreparedQm31Multiplier::new(powers[0]),
+        PreparedQm31Multiplier::new(powers[1]),
+        PreparedQm31Multiplier::new(powers[2]),
+        PreparedQm31Multiplier::new(powers[3]),
+        PreparedQm31Multiplier::new(powers[4]),
+        PreparedQm31Multiplier::new(powers[5]),
+        PreparedQm31Multiplier::new(powers[6]),
+        PreparedQm31Multiplier::new(powers[7]),
+    ];
+    let window_0 = pattern_window(openings, prepared, 0);
+    let window_1 = pattern_window(openings, prepared, 1);
+    let window_2 = pattern_window(openings, prepared, 2);
+    let window_8 = pattern_window(openings, prepared, 8);
     let mut result = [QM31::ZERO; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1];
     result[0] = window_0.add(prepared[7].mul(window_8));
     result[1] = window_0;
@@ -1162,4 +1162,15 @@ pub fn pool_v1_pair_forest_copy_lane_boolean_extraction_v1(
         append_index,
         variant,
     ))
+}
+
+#[inline(always)]
+fn pattern_window(openings: &[QM31; POSEIDON2_WIDTH], prepared: [PreparedQm31Multiplier; 8], start: usize) -> QM31 {
+    let mut value = QM31::ZERO;
+    let mut slot = 0usize;
+    while slot < 8 {
+        value = value.add(prepared[slot].mul(openings[start + slot]));
+        slot += 1;
+    }
+    value
 }

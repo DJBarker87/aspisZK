@@ -169,16 +169,26 @@ pub fn project(public: Public<'_>) -> OwnedPublic {
     out.recipient[7] = recipient[7].0;
     out.change[7] = change[7].0;
     out.next_root[7] = transition.candidate_afterstate.next_root[7].0;
-    let mut level = 0usize;
-    while level < 20 {
-        let mut i = 0usize;
-        while i < 8 {
-            out.frontier[level][i] = frontier_word(&transition.live_snapshot.frontier, level, i);
-            out.next_frontier[level][i] = frontier_word(&transition.candidate_afterstate.next_frontier, level, i);
-            i += 1;
-        }
-        level += 1;
-    }
+    out = project_frontier_level(out, transition, 0);
+    out = project_frontier_level(out, transition, 1);
+    out = project_frontier_level(out, transition, 2);
+    out = project_frontier_level(out, transition, 3);
+    out = project_frontier_level(out, transition, 4);
+    out = project_frontier_level(out, transition, 5);
+    out = project_frontier_level(out, transition, 6);
+    out = project_frontier_level(out, transition, 7);
+    out = project_frontier_level(out, transition, 8);
+    out = project_frontier_level(out, transition, 9);
+    out = project_frontier_level(out, transition, 10);
+    out = project_frontier_level(out, transition, 11);
+    out = project_frontier_level(out, transition, 12);
+    out = project_frontier_level(out, transition, 13);
+    out = project_frontier_level(out, transition, 14);
+    out = project_frontier_level(out, transition, 15);
+    out = project_frontier_level(out, transition, 16);
+    out = project_frontier_level(out, transition, 17);
+    out = project_frontier_level(out, transition, 18);
+    out = project_frontier_level(out, transition, 19);
     out
 }
 pub fn public_bytes(public: Public<'_>) -> Result<([u8; 1455], usize), Error> {
@@ -203,3 +213,24 @@ pub fn terminal_qm31(
 
 #[inline(never)]
 fn frontier_word(frontier: &[[M31; 8]; 20], level: usize, i: usize) -> u32 { frontier[level][i].0 }
+
+#[inline(always)]
+fn project_frontier_level(mut out: OwnedPublic, transition: aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1, level: usize) -> OwnedPublic {
+    out.frontier[level][0] = transition.live_snapshot.frontier[level][0].0;
+    out.next_frontier[level][0] = transition.candidate_afterstate.next_frontier[level][0].0;
+    out.frontier[level][1] = transition.live_snapshot.frontier[level][1].0;
+    out.next_frontier[level][1] = transition.candidate_afterstate.next_frontier[level][1].0;
+    out.frontier[level][2] = transition.live_snapshot.frontier[level][2].0;
+    out.next_frontier[level][2] = transition.candidate_afterstate.next_frontier[level][2].0;
+    out.frontier[level][3] = transition.live_snapshot.frontier[level][3].0;
+    out.next_frontier[level][3] = transition.candidate_afterstate.next_frontier[level][3].0;
+    out.frontier[level][4] = transition.live_snapshot.frontier[level][4].0;
+    out.next_frontier[level][4] = transition.candidate_afterstate.next_frontier[level][4].0;
+    out.frontier[level][5] = transition.live_snapshot.frontier[level][5].0;
+    out.next_frontier[level][5] = transition.candidate_afterstate.next_frontier[level][5].0;
+    out.frontier[level][6] = transition.live_snapshot.frontier[level][6].0;
+    out.next_frontier[level][6] = transition.candidate_afterstate.next_frontier[level][6].0;
+    out.frontier[level][7] = transition.live_snapshot.frontier[level][7].0;
+    out.next_frontier[level][7] = transition.candidate_afterstate.next_frontier[level][7].0;
+    out
+}

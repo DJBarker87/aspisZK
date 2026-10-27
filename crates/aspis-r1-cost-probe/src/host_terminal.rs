@@ -506,7 +506,9 @@ fn add_value_lanes(
     selectors: &Selectors,
 ) {
     let value_selectors =
-        [0usize, 2, 4].map(|local| selectors.row(16 * VALUE_AUXILIARY_BLOCK + local));
+        [selectors.row(16 * VALUE_AUXILIARY_BLOCK),
+         selectors.row(16 * VALUE_AUXILIARY_BLOCK + 2),
+         selectors.row(16 * VALUE_AUXILIARY_BLOCK + 4)];
     let range_selector = QM31::ZERO
         .add(value_selectors[0])
         .add(value_selectors[1])
@@ -1300,11 +1302,15 @@ fn composition_parts(
     );
     let prepared_theta = PreparedQm31Multiplier::new(theta);
     let mut composition = copy.residual;
-    for lane in semantic.into_iter().rev() {
-        composition = prepared_theta.mul(composition).add(lane);
+    let mut index = semantic.len();
+    while index > 0 {
+        index -= 1;
+        composition = prepared_theta.mul(composition).add(semantic[index]);
     }
-    for lane in poseidon.into_iter().rev() {
-        composition = prepared_theta.mul(composition).add(lane);
+    index = poseidon.len();
+    while index > 0 {
+        index -= 1;
+        composition = prepared_theta.mul(composition).add(poseidon[index]);
     }
     Ok((
         composition,

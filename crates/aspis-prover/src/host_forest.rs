@@ -255,11 +255,30 @@ pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(
         si += 1;
     }
 
-    let mut level = 0usize;
-    while level < POOL_V1_PAIR_FOREST_PRIVATE_DIRECTIONS_V1 {
-        links = append_forest_level(links, level)?;
-        level += 1;
-    }
+    links = append_forest_level(links, 0)?;
+    links = append_forest_level(links, 1)?;
+    links = append_forest_level(links, 2)?;
+    links = append_forest_level(links, 3)?;
+    links = append_forest_level(links, 4)?;
+    links = append_forest_level(links, 5)?;
+    links = append_forest_level(links, 6)?;
+    links = append_forest_level(links, 7)?;
+    links = append_forest_level(links, 8)?;
+    links = append_forest_level(links, 9)?;
+    links = append_forest_level(links, 10)?;
+    links = append_forest_level(links, 11)?;
+    links = append_forest_level(links, 12)?;
+    links = append_forest_level(links, 13)?;
+    links = append_forest_level(links, 14)?;
+    links = append_forest_level(links, 15)?;
+    links = append_forest_level(links, 16)?;
+    links = append_forest_level(links, 17)?;
+    links = append_forest_level(links, 18)?;
+    links = append_forest_level(links, 19)?;
+    links = append_forest_level(links, 20)?;
+    links = append_forest_level(links, 21)?;
+    links = append_forest_level(links, 22)?;
+    links = append_forest_level(links, 23)?;
     if links.len() != POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1 {
         return Err(PoolV1PairHidingLayoutErrorV1::Shape);
     }
