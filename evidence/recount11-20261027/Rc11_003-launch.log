@@ -1,0 +1,45 @@
+{"attempt": "Rc11_003", "exit_status": 0, "wall_seconds": 2.3778122710064054, "peak_rss_kib": "5544016", "swaps": "0", "print_axioms": ["'AspisR1.ARX_LawEquivalence.admittedMean' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARX_RestrictedCharge.chargeOn' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.S2Z.Oracle.P1Realization : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun sha256 H => ∀ (bytes : AspisV8R19.DuplexFrames.Bytes), sha256 bytes = H bytes
+def AspisR1.S2Z.Oracle.RuntimeSyscall : (AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun hashv sha256 =>
+  ∀ (parts : AspisR1.S2Z.Oracle.Parts) (digest : AspisR1.S2Z.Oracle.Digest),
+    hashv parts = Aeneas.Std.Result.ok digest →
+      AspisV8R19.SqueezeOracleBridge.decodeState digest = sha256 (AspisV8R19.SqueezeOracl
+...
+),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = Option.some run →
+      run.2.2 = Bool.true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_TwoPass.annotatedWith D rust (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c P)))
+def AspisR1.F3T_Runtime.runtimeMass : AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes
+    AspisV8R19.SourceDuplexStep.State (Option AspisR1.F3T_Experiment.RunView) →
+  ℚ :=
+fun v =>
+  match v.2 with
+  | Option.none => 0
+  | Option.some run => AspisR1.RawRecordedOracleExtractionMassBin.failureMass (AspisR1.F3T_Experiment.view run)
+def AspisR1.F3T_Runtime.deployedFailure : AspisR1.F3T_Runtime.Runtime → ℚ :=
+fun runtime => AspisV8R19.MemoizedProgramLaw.lazyMean runtime FS.emptyTable AspisR1.F3T_Runtime.runtimeMass
+def AspisR1.F3T_RuntimeBound.failureModel : AspisR1.F3T_Runtime.Runtime → ℚ :=
+fun runtime => AspisR1.F3T_Runtime.deployedFailure runtime + AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18)
+def AspisR1.F3T_Numeric.total : ℕ → ℚ :=
+fun Q =>
+  ↑(Q + 34) * AspisR1.PerAttemptEnvelope.B + AspisR1.F3T_Numeric.collisionLoss Q + AspisR1.F3T_Numeric.accountLoss Q +
+      1 / 2 ^ 126 +
+    1 / 2 ^ 454
+def AspisR1.F3T_Numeric.collisionLoss : ℕ → ℚ :=
+fun Q => 6 * ↑(Q + 1161) ^ 2 / 2 ^ 256
+def AspisR1.F3T_Numeric.accountLoss : ℕ → ℚ :=
+fun Q => 6 * ↑(Q + 2965) ^ 2 / 2 ^ 256
+def AspisR1.F3U_Numeric.margin : ℚ :=
+1 / 2 ^ 108 - 6 * (1161 ^ 2 + 2965 ^ 2) / 2 ^ 256 - 1 / 2 ^ 126 - 1 / 2 ^ 454
+def AspisR1.F3U_RangeEdges.maxQueries : ℕ :=
+7388980242446479800895501321004157112314840375
+'AspisR1.ARX_LawEquivalence.admittedMean' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ARX_RestrictedCharge.chargeOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r5b8e22ab9e9449a1bf3fb87efc2de878.scope; invocation ID: 6861fa848b1643389fc9e5f33946db38
