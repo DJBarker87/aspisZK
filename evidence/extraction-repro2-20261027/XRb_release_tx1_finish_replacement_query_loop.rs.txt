@@ -1,0 +1,14 @@
+fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: BatchedWeights, end: usize) -> Result<(Accumulator, BatchedWeights), Error> {
+    let mut state = Ok((a, pending));
+    loop {
+        match state {
+            Err(error) => return Err(error),
+            Ok((a, pending)) => {
+                if a.next >= end {
+                    return Ok((a, pending));
+                }
+                state = query_values(proof, p, a, g, obs, geometry, pending);
+            }
+        }
+    }
+}
