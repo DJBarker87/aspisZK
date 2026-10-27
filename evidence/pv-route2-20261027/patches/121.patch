@@ -1,0 +1,42 @@
+--- a/crates/aspis-core/src/state_only_sumcheck.rs
++++ b/crates/aspis-core/src/state_only_sumcheck.rs
+@@ -166,22 +166,15 @@
+     let x4 = x2.square();
+     let powers = [challenge, x2, x3];
+     let prepared_x4 = PreparedQm31Multiplier::new(x4);
+-    let block_value = |block: usize| {
+-        let start = 4 * block;
+-        polynomial[start].add(qm31_sum_products3(
+-            powers,
+-            [
+-                polynomial[start + 1],
+-                polynomial[start + 2],
+-                polynomial[start + 3],
+-            ],
+-        ))
+-    };
+-    let mut accumulator = block_value(6);
++    fn block_value(polynomial: &StateOnlySumcheckPolynomial, powers: [QM31;3], block:usize)->QM31 {
++        let start=4*block;
++        polynomial[start].add(qm31_sum_products3(powers,[polynomial[start+1],polynomial[start+2],polynomial[start+3]]))
++    }
++    let mut accumulator = block_value(polynomial,powers,6);
+     let mut block = 6usize;
+     while block > 0 {
+         block -= 1;
+-        accumulator = prepared_x4.mul(accumulator).add(block_value(block));
++        accumulator = prepared_x4.mul(accumulator).add(block_value(polynomial,powers,block));
+     }
+     accumulator
+ }
+@@ -207,8 +200,8 @@
+             ],
+         ))
+     };
+-    (0..6).rev().fold(block_value(6), |accumulator, block| {
+-        prepared_x4.mul(accumulator).add(block_value(block))
++    (0..6).rev().fold(block_value(polynomial,powers,6), |accumulator, block| {
++        prepared_x4.mul(accumulator).add(block_value(polynomial,powers,block))
+     })
+ }
+ 

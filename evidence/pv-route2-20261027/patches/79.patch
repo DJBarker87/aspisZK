@@ -1,0 +1,18 @@
+--- a/crates/aspis-core/src/r0/encoder.rs
++++ b/crates/aspis-core/src/r0/encoder.rs
+@@ -11,9 +11,12 @@
+     let basis = basis::values::<E, 512>(x);
+     let mut p0 = E::ZERO;
+     let mut p1 = E::ZERO;
+-    for (pair, n) in q.chunks_exact(2).zip(basis) {
+-        p0 = p0.add(pair[0].mul(n));
+-        p1 = p1.add(pair[1].mul(n));
++    let mut i = 0usize;
++    while i < 512 {
++        let n = basis[i];
++        p0 = p0.add(q[2*i].mul(n));
++        p1 = p1.add(q[2*i+1].mul(n));
++        i += 1;
+     }
+     (p0, p1)
+ }

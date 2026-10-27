@@ -1,0 +1,36 @@
+--- a/crates/aspis-r1-cost-probe/src/weights.rs
++++ b/crates/aspis-r1-cost-probe/src/weights.rs
+@@ -11,8 +11,7 @@
+  while i<N {
+   out[i]=p;
+   i+=1;
+-  if i==N { return out; }
+-  p=p.mul(x);
++  if i<N { p=p.mul(x); }
+  }
+  out
+ }
+@@ -226,11 +225,11 @@
+             4=>if j<56 { self.extra[j/28].pow((j%28) as u64) } else {K::ZERO},
+             1..=3 if self.variant==Variant::D => {
+                 let r=self.variant.row(j);
+-                (0..10).fold(K::ONE,|v,b|v.mul(if r&(1<<b)==0 {K::ONE.sub(self.points[kind-1][9-b])}else{self.points[kind-1][9-b]}))
++                {let mut v=K::ONE;let mut b=0usize;while b<10 {v=v.mul(if r&(1<<b)==0 {K::ONE.sub(self.points[kind-1][9-b])}else{self.points[kind-1][9-b]});b+=1;}v}
+             },
+             _=> {
+                 let k=if kind<4 {kind-1}else{kind-2};
+-                (0..5).fold(K::ONE,|v,d|v.mul(self.factors[k][d][(j>>(2*d))&3]))
++                {let mut v=K::ONE;let mut d=0usize;while d<5 {v=v.mul(self.factors[k][d][(j>>(2*d))&3]);d+=1;}v}
+             }
+         }
+     }
+@@ -350,7 +349,8 @@
+     pub fn materialize(&self,kappa:E)->Result<Vec<E>,Error> {
+         let kp=powers::<7>(kappa);
+         let mut w=match aspis_core::r0::heap::filled(1024,E::ZERO) { Ok(v) => v, Err(_) => return Err(Error::Allocation) };
+-        for (j,v) in w.iter_mut().enumerate() {for kind in 0..7 {*v=v.add(kp[kind].mul_qm31(self.raw(kind,j)));}}
++        let mut j=0usize;
++        while j<w.len() {let mut kind=0usize;while kind<7 {w[j]=w[j].add(kp[kind].mul_qm31(self.raw(kind,j)));kind+=1;}j+=1;}
+         Ok(w)
+     }
+ }
