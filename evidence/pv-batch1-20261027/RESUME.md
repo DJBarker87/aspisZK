@@ -39,3 +39,15 @@ All three fresh extractions passed. See extraction-resume.json and the
 verbatim generated-*/ directories. backend-ports.json records the import
 renamings, two positive31 literal ports in254, and literal4/masked-count
 ports in258. They are not yet Lean checked. No shared env-J sources written.
+
+Lean attempt53600 failed before elaboration: the private-root adapter removed
+J/objects from the first namespace search position, exposing a partial Aeneas
+namespace in commit54/objects. The complete Aeneas.olean exists in J/objects
+(sha d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d).
+Correct the task-private adapter to keep private objects first and J/objects
+second, preserving the standing launcher's shared namespace priority. Only
+the task-private env/launcher change; shared env/launcher/sources stay untouched.
+Fingerprint the environment as well as dependencies. The changed environment
+justifies retrying the unchanged small lemma with next unused53601.
+53600 charged1/100: exit1,0.170s outer wall,190948KiB peak RSS,swap0; no
+#print axioms output because import resolution failed before elaboration.
