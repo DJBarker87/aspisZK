@@ -25,7 +25,7 @@ for key in ['RUSTFLAGS','ASPIS_R1_POOL_PROGRAM_ID','ASPIS_R1_REGISTRY_PROGRAM_ID
 if mode=='devnet':
  ids=json.loads((H/'devnet-ids.json').read_text());env.update(ASPIS_R1_POOL_PROGRAM_ID=ids['pool'],ASPIS_R1_REGISTRY_PROGRAM_ID=ids['registry'])
 (out/'command.json').write_text(json.dumps(dict(command=cmd,source_revision=rev,env={k:v for k,v in env.items() if k.startswith(('CARGO_','ASPIS_','S10_','RUST'))},precedent='evidence/lowering2-20261026/Low2_build_host.py'),indent=2)+'\n')
-run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(runner),str(out/'receipt'),'optimized SBF compilation and diagnostic emission','--','timeout','600',*cmd]
+run=['/home/dombarker/.local/bin/systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(runner),str(out/'receipt'),'optimized SBF compilation and diagnostic emission','--','timeout','600',*cmd]
 status=subprocess.run(run,cwd=W/'src',env=env).returncode
 if status:sys.exit(status)
 a=out/'artifacts'/('aspis_pool.so' if mode=='pool' else 'aspis_r1_cost_probe_program.so')
