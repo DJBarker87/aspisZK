@@ -72,33 +72,81 @@ mod FJe_reference {
 
     fn local(input: [QM31;4]) -> QM31 { extension_from_raw_limbs(local_raw(input)) }
 
-    fn external(s: [QM31; 16]) -> [QM31; 4] {
-        let p: [QM31; 4] = core::array::from_fn(|g|
-            local([s[4*g],s[4*g+1],s[4*g+2],s[4*g+3]]));
-        let sum = QM31::ZERO.add(p[0]).add(p[1]).add(p[2]).add(p[3]);
-        core::array::from_fn(|g| p[g].add(sum))
+    fn external(state: [QM31; POSEIDON2_WIDTH]) -> [QM31; 4] {
+        let mut local_packed = [QM31::ZERO; 4];
+        let mut group = 0usize;
+        while group < 4 {
+            let start = 4 * group;
+            let input = [
+                state[start],
+                state[start + 1],
+                state[start + 2],
+                state[start + 3],
+            ];
+            local_packed[group] = external_local_packed(input);
+            group += 1;
+        }
+        let sum = QM31::ZERO
+            .add(local_packed[0])
+            .add(local_packed[1])
+            .add(local_packed[2])
+            .add(local_packed[3]);
+        local_packed.map(|value| value.add(sum))
     }
 
-    fn m31_packed(s: [QM31; 16], c: [u32; 16]) -> [QM31; 4] {
-        let nonlinear = core::array::from_fn(|j| {
-            let mut x = s[j]; x.c0.a = x.c0.a.add(M31(c[j])); pow5(x)
-        });
-        external(nonlinear)
+    fn m31_packed(
+        mut state: [QM31; POSEIDON2_WIDTH],
+        constants: [u32; POSEIDON2_WIDTH],
+    ) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {
+        for lane in 0..POSEIDON2_WIDTH {
+            state[lane].c0.a = state[lane].c0.a.add(M31(constants[lane]));
+            state[lane] = pow5(state[lane]);
+        }
+        external(state)
     }
 
-    fn leading(o: &StateOnlyPoseidonOpenings) -> [QM31; 4] {
-        let mut s = core::array::from_fn(|j|
-            if j < RATE { o.z[j].add(o.xor12_z[j]) } else { o.z[j] });
-        external_linear_lazy(&mut s);
-        m31_packed(full_round_m31_constants(s, EXTERNAL_INITIAL[0]), EXTERNAL_INITIAL[1])
+    fn leading(
+        openings: &StateOnlyPoseidonOpenings,
+    ) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {
+        let mut state = openings.z;
+        for lane in 0..RATE {
+            state[lane] = state[lane].add(openings.xor12_z[lane]);
+        }
+        external_linear_lazy(&mut state);
+        m31_packed(
+            full_round_m31_constants(state, EXTERNAL_INITIAL[0]),
+            EXTERNAL_INITIAL[1],
+        )
     }
 
-    fn full(s: [QM31;16], local: &[QM31;16]) -> [QM31;4] {
-        let w = [local[1],local[9],local[10]];
-        let even = interpolate_three_constant_columns(w,EXTERNAL_INITIAL[2],EXTERNAL_FINAL[0],EXTERNAL_FINAL[2]);
-        let odd = interpolate_three_constant_columns(w,EXTERNAL_INITIAL[3],EXTERNAL_FINAL[1],EXTERNAL_FINAL[3]);
-        let first = full_round(s,even);
-        external(core::array::from_fn(|j| pow5(first[j].add(odd[j]))))
+    fn qm_packed(
+        mut state: [QM31; POSEIDON2_WIDTH],
+        constants: [QM31; POSEIDON2_WIDTH],
+    ) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {
+        for lane in 0..POSEIDON2_WIDTH {
+            state[lane] = pow5(state[lane].add(constants[lane]));
+        }
+        external(state)
+    }
+
+    fn full(
+        state: [QM31; POSEIDON2_WIDTH],
+        local: &[QM31; 16],
+    ) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {
+        let weights = [local[1], local[9], local[10]];
+        let even = interpolate_three_constant_columns(
+            weights,
+            EXTERNAL_INITIAL[2],
+            EXTERNAL_FINAL[0],
+            EXTERNAL_FINAL[2],
+        );
+        let odd = interpolate_three_constant_columns(
+            weights,
+            EXTERNAL_INITIAL[3],
+            EXTERNAL_FINAL[1],
+            EXTERNAL_FINAL[3],
+        );
+        qm_packed(full_round(state, even), odd)
     }
 
     fn any_q() -> QM31 {
@@ -119,6 +167,60 @@ mod FJe_reference {
         let t=rows(input);
         for r in 0..4 { for l in 0..4 { kani::assume(t[r][l] < 7*u64::from(P)); } }
     }
+    fn assume_q(x:QM31) {
+        kani::assume(x.c0.a.0<P); kani::assume(x.c0.b.0<P);
+        kani::assume(x.c1.a.0<P); kani::assume(x.c1.b.0<P);
+    }
+    fn assume_external_intermediates(s:[QM31;16]) {
+        let p:[QM31;4]=core::array::from_fn(|g| {
+            let x=[s[4*g],s[4*g+1],s[4*g+2],s[4*g+3]];
+            assume_rows(x);
+            let q=external_local_packed(x);
+            // Derived by FJe_RawLocalCanon.local_value, with K007 safety.
+            assume_q(q); q
+        });
+        let a=QM31::ZERO.add(p[0]); assume_q(a);
+        let b=a.add(p[1]); assume_q(b);
+        let c=b.add(p[2]); assume_q(c);
+        let d=c.add(p[3]); assume_q(d);
+    }
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn external_group3_word3() {
+        let s=any_state();
+        assume_external_intermediates(s);
+        kani::cover!(true, "external group3 word3 canonical domain inhabited");
+        let a=external_linear_packed(s); let b=external(s);
+        assert_eq!(a[3].c1.b.0,b[3].c1.b.0);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn external_group2_derived() {
+        let s=any_state();
+        assume_external_intermediates(s);
+        kani::cover!(true, "external group2 derived bounds inhabited");
+        assert_q(external_linear_packed(s)[2],external(s)[2]);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn external_group1_release() {
+        let s=any_state();
+        for g in 0..4 { assume_rows([s[4*g],s[4*g+1],s[4*g+2],s[4*g+3]]); }
+        kani::cover!(true, "external group1 release domain inhabited");
+        assert_q(external_linear_packed(s)[1],external(s)[1]);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn external_group0() {
+        let s=any_state();
+        for g in 0..4 { assume_rows([s[4*g],s[4*g+1],s[4*g+2],s[4*g+3]]); }
+        kani::cover!(true, "external group0 domain inhabited");
+        assert_q(external_linear_packed(s)[0],external(s)[0]);
+    }
+
     #[kani::proof]
     #[kani::unwind(6)]
     fn local_raw_all_bounded() {

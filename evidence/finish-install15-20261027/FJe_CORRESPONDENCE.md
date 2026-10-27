@@ -37,3 +37,13 @@ an admitted source-output equation. FJe_RawReference.value and output_bound
 check the owned raw formula's field value and <56P reduction range. The pure
 unchanged dependency PoseidonExternalPackedAlgebra was missing and compiled012
 on the coherent SInt2 selection;no old native packed-proof chain was imported.
+
+K008 and K009 exposed continued whole/group external solver growth. K010 was
+REJECTED by Kani before verification because overflow checks are mandatory;
+the checked profile is restored and no result from it is used. K011 derives
+additional local-result/partial-sum canonical bounds (actual local conversion
+029 and existing FIv_NativeValue.add),but still timed out. K012 isolates one
+output limb and reuses the SAME actual raw helper inside the owned external
+reference;this is a real call,no stub. Lower raw equality K007 and the closed
+form013 remain the association for that leaf. No successful whole external
+bridge is asserted from these failed/subcomponent runs.
