@@ -11198,3 +11198,19 @@ events in the headline's existing bad-event union is not yet instantiated. Launc
 control only): the native bindings, then containment against a named term of the existing bound, or a
 checked counterexample for the owner. Six slots: runjoin12, optb, srcid9, cblib2, op223, inv2. Rows
 removed outright: 0. Privacy target not yet established.
+
+## D259 (Stream B) 2026-10-27 08:40 UTC: inversion round 2 merged: zero events contained in the existing poleBad; inv3 launched
+
+pv-inv2 (`codex/pv-inv2-20261027`, research-based; 100/100 Lean, 6/6 Kani control checks passed; final
+audits 181 theorems standard axioms, swap 0; no crates/programs change; no forbidden tokens) merged into
+research (5222276e4a). Proved: conditional native tuple/inverse bindings for the inversion descriptor
+banks, registry activity facts, packing safety, and SAME-COIN CONTAINMENT of the inversion zero events in
+the EXISTING HVZK event `poleBad` (R0Z/HvzkS.lean, HvzkV.lean; its mass bound `poleBad_mass_le` already
+feeds the headline), with the retained charge 8 · (4096 / ((2^31 − 1)^4 − 1)): the bound, simE and the
+observer are unchanged. Still OPEN for V380: the installed registry/bank/coupling bindings (partly on
+runjoin12's records), mask blocks 48-63, and the complete observation law of the inversion branches. No
+witness-dependent zero (no protocol leak) found. Launched pv-inv3 (new branch `codex/pv-inv3-20261027`
+from research in the same worktree; IDs 43900-44199, 100 Lean / 6 Kani control only): mask blocks 48-63,
+the bindings that do not need the selected record, the observation law, or a checked counterexample for
+the owner. Six slots: runjoin12, optb, srcid9, cblib2, op223, inv3. Rows removed outright: 0. Privacy
+target not yet established.
