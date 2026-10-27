@@ -10,8 +10,8 @@ array operations,tail push/finish and scalar finish are imported unchanged.
 These laws assert returnability/canonicality,not numerical circle gate equality.
 No new source-operation admission. Concrete instantiation is the next stage.
 
-Attempts032..057:21 passing Lean processes,4 failures (043,046,048,051,053
-are five failures; correction:20 passes),047 dependency preflight before Lean.
+Attempts032..057:20 passing Lean processes,5 failures (043,046,048,051,053),
+and047 dependency preflight before Lean.
 Geometry failures fixed the lexical <=i (InitialSeg) token with spaces;
 046 fixed the explicit cursor alias rewrite;053 corrected two generic names.
 All are retained. No memory kill or timeout in this stage; all successes have
