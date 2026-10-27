@@ -28,3 +28,14 @@ admitted after the next full wait with34,225,520,640bytes reserved.
 
 Pool passed: exact121f3e29…,605704bytes; exit0,39.930s,peak678204KiB,swap0.
 All three gate(a) pins passed; gate-a-resume.json contains the complete receipts.
+
+Fresh extraction began after admitted staging retry1. Op230 Charon and
+pinned Aeneas completed; op254 Charon completed. Op254 Aeneas admission
+refused before a scope, so the task driver waits three minutes and retries
+only Aeneas with a fresh label; it does not rerun the successful Charon phase.
+No Lean compile or ID consumed at this point.
+
+All three fresh extractions passed. See extraction-resume.json and the
+verbatim generated-*/ directories. backend-ports.json records the import
+renamings, two positive31 literal ports in254, and literal4/masked-count
+ports in258. They are not yet Lean checked. No shared env-J sources written.

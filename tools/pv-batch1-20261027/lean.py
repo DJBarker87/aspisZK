@@ -24,7 +24,7 @@ for name in re.findall(r'^import (\S+)',src.read_text(),re.M):
  assert p is not None,('missing dependency',name)
  deps[name]={'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
 fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest()
-submission=dict(attempt=a,module=module,source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),source_revision=(H/'candidate/source-revision.txt').read_text().strip(),dependencies=deps,deps_fingerprint=fp,private_source_root=str(S),private_object_root=str(O),launcher_original_sha256=hashlib.sha256(launcher.encode()).hexdigest(),launcher_private_sha256=hashlib.sha256(private.encode()).hexdigest(),launcher_delta='source/object roots only; no shared source write')
+submission=dict(attempt=a,module=module,source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),source_revision=(H/'proof-revision.txt').read_text().strip(),rust_source_revision=(H/'candidate/source-revision.txt').read_text().strip(),dependencies=deps,deps_fingerprint=fp,private_source_root=str(S),private_object_root=str(O),launcher_original_sha256=hashlib.sha256(launcher.encode()).hexdigest(),launcher_private_sha256=hashlib.sha256(private.encode()).hexdigest(),launcher_delta='source/object roots only; no shared source write')
 (R/'submission.json').write_text(json.dumps(submission,indent=2)+'\n')
 with (R/'reservation.json').open('w') as log:
  pre=subprocess.run(['python3',str(H/'Port13GATE_admission.py')],stdout=log,stderr=subprocess.STDOUT)

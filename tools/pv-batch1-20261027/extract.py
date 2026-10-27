@@ -27,7 +27,8 @@ def run(label,cmd,cwd):
   r=subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(runner),str(o/'receipt'),'optimized MIR compilation and symbolic extraction; no elimination','--',*cmd],cwd=cwd,stdout=log,stderr=subprocess.STDOUT)
  if r.returncode:raise SystemExit(r.returncode)
 
-op=int(sys.argv[1]);suffix=sys.argv[2]
+op=int(sys.argv[1]);suffix=sys.argv[2];phase=sys.argv[3] if len(sys.argv)>3 else 'both'
+assert phase in ['both','charon','aeneas']
 file,name={230:('prover_helper_sum.rs','state_only_copy_helper_sum'),254:('prover_powers.rs','powers'),258:('ct_pole.rs','all_slots_clear')}[op]
 src=H/'candidate/src/crates/aspis-r1-cost-probe/src'/file;s=src.read_text()
 code='use aspis_core::field::{QM31, WideExact as E};\n'
@@ -40,6 +41,6 @@ p=H/'probes'/str(op);p.mkdir(parents=True,exist_ok=True)
 (p/'Cargo.toml').write_text('[package]\nname="pv-b1-probe"\nversion="0.0.0"\nedition="2021"\n[workspace]\n[lib]\npath="lib.rs"\n[dependencies]\naspis-core={path="'+str(H/'candidate/src/crates/aspis-core')+'",features=["r0","ct-host-prover"]}\n[profile.release]\nopt-level=3\noverflow-checks=false\n')
 llbc=H/f'PV_B1_{op}.llbc'
 cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract','CARGO_TARGET_DIR='+str(H/'charon-target'),str(X/'charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from','crate::'+name,'--include','pv_b1_probe::*','--include','aspis_core::field::*','--dest-file',str(llbc),'--','--manifest-path',str(p/'Cargo.toml'),'--release','--offline','--lib','--jobs','4']
-run(f'charon-{op}-{suffix}',cmd,p)
+if phase in ['both','charon']:run(f'charon-{op}-{suffix}',cmd,p)
 o=H/f'generated-{op}';o.mkdir(exist_ok=True)
-run(f'aeneas-{op}-{suffix}',['timeout','180',str(PIN),'-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',f'PV_B1_{op}','-dest',str(o),'-split-files','-emit-json',str(llbc)],p)
+if phase in ['both','aeneas']:run(f'aeneas-{op}-{suffix}',['timeout','180',str(PIN),'-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',f'PV_B1_{op}','-dest',str(o),'-split-files','-emit-json',str(llbc)],p)
