@@ -1,3 +1,4 @@
+import R0Z.M31Prime
 import R1Z.PV_Src_ExternalBlockWrite
 import R1Z.PV_Src_ExternalCopyBlockStep
 
@@ -13,9 +14,10 @@ theorem loop (n : Nat) (original current : State) (g : Usize)
     (suffix : ∀ j, 4*g.val ≤ j → j < 16 → current.val[j]! = original.val[j]!) :
     poseidon2.builder_reference.external_owned_loop0 current g =
       R0PoseidonCopy.ext_groups_loop original current g := by
+  letI : Fact (Nat.Prime 2147483647) := ⟨R0Z.m31_prime⟩
   induction n generalizing current g with
   | zero =>
-    have hg : ¬g < 4#usize := by rw [UScalar.lt_equiv];simp;omega
+    have hg : ¬g < 4#usize := by rw [UScalar.lt_equiv];simp <;> omega
     rw [poseidon2.builder_reference.external_owned_loop0,if_neg hg,
       R0PoseidonCopy.ext_groups_loop,if_neg hg]
   | succ n ih =>
@@ -33,14 +35,14 @@ theorem loop (n : Nat) (original current : State) (g : Usize)
       (by rw [offset_val g hg _ (by decide)];rfl)
     have hs0 := suffix (base g).val (by rw [base_val g hg]) (by rw [base_val g hg];omega)
     have hs1 := suffix (Usize.wrapping_add (base g) 1#usize).val
-      (by rw [offset_val g hg _ (by decide)];simp;omega)
-      (by rw [offset_val g hg _ (by decide)];simp;omega)
+      (by rw [offset_val g hg _ (by decide)];simp <;> omega)
+      (by rw [offset_val g hg _ (by decide)];simp <;> omega)
     have hs2 := suffix (Usize.wrapping_add (base g) 2#usize).val
-      (by rw [offset_val g hg _ (by decide)];simp;omega)
-      (by rw [offset_val g hg _ (by decide)];simp;omega)
+      (by rw [offset_val g hg _ (by decide)];simp <;> omega)
+      (by rw [offset_val g hg _ (by decide)];simp <;> omega)
     have hs3 := suffix (Usize.wrapping_add (base g) 3#usize).val
-      (by rw [offset_val g hg _ (by decide)];simp;omega)
-      (by rw [offset_val g hg _ (by decide)];simp;omega)
+      (by rw [offset_val g hg _ (by decide)];simp <;> omega)
+      (by rw [offset_val g hg _ (by decide)];simp <;> omega)
     rw [PV_Src_ExternalBlockStep.source current g hg m (by rw [hs0,hs1,hs2,hs3];exact hm),
       PV_Src_ExternalCopyBlockStep.source original current g hg m hm]
     exact ih _ _ (by rw [BuilderRecordsArray.next_val g (by omega)];omega)

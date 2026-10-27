@@ -61,21 +61,12 @@ theorem source (s : State) (g : Usize) (hg : g.val < 4)
     poseidon2.builder_reference.external_owned_loop0 s3 (Usize.wrapping_add g 1#usize)) = _
   simp only [index_ok s _ b0,index_ok s _ b1,index_ok s _ b2,index_ok s _ b3,bind_tc_ok,
     PV_Src_ExternalMat4Copy.equals_copy,Array.make]
-  change (do
-    let x ← R0PoseidonCopy.mat4 _ _ _ _
-    let x0 ← Array.index_usize x 0#usize
-    let s0 ← Array.update s (base g) x0
-    let x1 ← Array.index_usize x 1#usize
-    let s1 ← Array.update s0 (Usize.wrapping_add (base g) 1#usize) x1
-    let x2 ← Array.index_usize x 2#usize
-    let s2 ← Array.update s1 (Usize.wrapping_add (base g) 2#usize) x2
-    let x3 ← Array.index_usize x 3#usize
-    let s3 ← Array.update s2 (Usize.wrapping_add (base g) 3#usize) x3
-    poseidon2.builder_reference.external_owned_loop0 s3 (Usize.wrapping_add g 1#usize)) = _
+  simp only [R0Z.PoseidonRefine.gl0,R0Z.PoseidonRefine.gl1,
+    R0Z.PoseidonRefine.gl2,R0Z.PoseidonRefine.gl3]
   rw [hm]
   simp only [bind_tc_ok,index_ok m 0#usize (by decide),index_ok m 1#usize (by decide),
     index_ok m 2#usize (by decide),index_ok m 3#usize (by decide),
-    update_ok _ _ _ b0,update_ok _ _ _ b1,update_ok _ _ _ b2,update_ok _ _ _ b3,write]
+    update_ok _ _ _ b0,update_ok _ _ _ b1,update_ok _ _ _ b2,update_ok _ _ _ b3,write,UScalar.ofNatCore_val_eq]
 
 #print axioms base_val
 #print axioms offset_val

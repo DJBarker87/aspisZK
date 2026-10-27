@@ -31,10 +31,11 @@ theorem extend (a b : State) (g : Usize) (hg : g.val < 4)
       (show (base g).val < (16#usize : Usize).val by rw [base_val g hg];simp;omega)]
     rw [offset_val g hg _ (by decide),offset_val g hg _ (by decide),
       offset_val g hg _ (by decide),base_val g hg]
+    simp only [UScalar.ofNatCore_val_eq] at *
     split <;> (try rfl)
     split <;> (try rfl)
     split <;> (try rfl)
-    rw [if_pos (by omega)]
+    simp only [if_pos (show j=4*g.val by omega)]
 
 #print axioms extend
 end R1Z.PV_Src_ExternalWritePrefix

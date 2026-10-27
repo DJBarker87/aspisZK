@@ -34,7 +34,7 @@ theorem source (s out : State) (g : Usize) (hg : g.val < 4)
     index_ok s _ b2,index_ok s _ b3,hm,index_ok m 0#usize (by decide),
     index_ok m 1#usize (by decide),index_ok m 2#usize (by decide),
     index_ok m 3#usize (by decide),update_ok _ _ _ b0,update_ok _ _ _ b1,
-    update_ok _ _ _ b2,update_ok _ _ _ b3,write]
+    update_ok _ _ _ b2,update_ok _ _ _ b3,write,UScalar.ofNatCore_val_eq]
 
 #print axioms mul_comm
 #print axioms source

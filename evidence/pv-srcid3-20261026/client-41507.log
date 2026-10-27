@@ -1,0 +1,36 @@
+Host restored; allocation 8, next unused ID 41507
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0530); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ExternalBlockStep.lean:37:42: error: unsolved goals
+s : State
+g : Usize
+hg : ↑g < 4
+m : Std.Array U32 4#usize
+hm :
+  R0PoseidonCopy.mat4 (↑s)[↑(base g)]! (↑s)[↑((base g).wrapping_add 1#usize)]! (↑s)[↑((base g).wrapping_add 2#usize)]!
+      (↑s)[↑((base g).wrapping_add 3#usize)]! =
+    ok m
+b0 : ↑(base g) < ↑16#usize
+b1 : ↑((base g).wrapping_add 1#usize) < ↑16#usize
+b2 : ↑((base g).wrapping_add 2#usize) < ↑16#usize
+b3 : ↑((base g).wrapping_add 3#usize) < ↑16#usize
+⊢ poseidon2.builder_reference.external_owned_loop0
+      ((((Std.Array.set s (base g) (↑m)[↑0#usize]!).set ((base g).wrapping_add 1#usize) (↑m)[↑1#usize]!).set
+            ((base g).wrapping_add 2#usize) (↑m)[↑2#usize]!).set
+        ((base g).wrapping_add 3#usize) (↑m)[↑3#usize]!)
+      (g.wrapping_add 1#usize) =
+    poseidon2.builder_reference.external_owned_loop0
+      ((((Std.Array.set s (base g) (↑m)[0]!).set ((base g).wrapping_add 1#usize) (↑m)[1]!).set
+            ((base g).wrapping_add 2#usize) (↑m)[2]!).set
+        ((base g).wrapping_add 3#usize) (↑m)[3]!)
+      (g.wrapping_add 1#usize)
+'R1Z.PV_Src_ExternalBlockStep.base_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_ExternalBlockStep.offset_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_ExternalBlockStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.96
+	Maximum resident set size (kbytes): 4129772
+	Swaps: 0
+	Exit status: 1
+

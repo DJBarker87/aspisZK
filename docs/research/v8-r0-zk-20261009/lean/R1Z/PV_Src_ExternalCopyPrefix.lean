@@ -1,3 +1,4 @@
+import R0Z.M31Prime
 import R1Z.PV_Src_ExternalWritePrefix
 import R1Z.PV_Src_ExternalCopyBlockStep
 
@@ -11,6 +12,7 @@ open PV_Src_ExternalBlockStep
 theorem loop (n : Nat) (s a b : State) (g : Usize) (count : g.val+n=4)
     (h : ∀ j, j < 4*g.val → a.val[j]! = b.val[j]!) :
     R0PoseidonCopy.ext_groups_loop s a g = R0PoseidonCopy.ext_groups_loop s b g := by
+  letI : Fact (Nat.Prime 2147483647) := ⟨R0Z.m31_prime⟩
   induction n generalizing a b g with
   | zero =>
     have hab : a=b := by
