@@ -66,7 +66,19 @@ theorem bounded (column : Slice Q) (weights : host_multilinear.SparseWeights) :
     simp only [PV_B3_Result.bind_assoc, bind_tc_ok]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     rintro ⟨row,weight⟩ hr
-    with_unfolding_all dsimp only
+    with_unfolding_all change
+      ((do
+        let q ← Slice.index_usize column row
+        let product ← aspis_core.field.QM31.mul weight q
+        let next ← aspis_core.field.QM31.add sum product
+        ok (cont (next,Usize.wrapping_add i 1#usize))) >>= fun cf => match cf with
+          | .done y => ok y
+          | .cont y => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y) =
+        (do
+          let q ← Slice.index_usize column row
+          let product ← aspis_core.field.QM31.mul weight q
+          let next ← aspis_core.field.QM31.add sum product
+          steps column weights n (i.val+1) next)
     simp only [PV_B3_Result.bind_assoc, bind_tc_ok]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro q hq
