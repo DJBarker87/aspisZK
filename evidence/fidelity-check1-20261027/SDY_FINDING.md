@@ -105,7 +105,7 @@ write paths:
   It consumes the accumulated restoration **function**, applies it to the
   initial full iterator, and recovers the array from its slice.
 - Finish's enumeration restoration uses `XRn_Join_enumerateRestored`
-  (ABI:44–49): it applies the accumulated function to the original enumeration
+  (ABI:44–48): it applies the accumulated function to the original enumeration
   and projects the resulting iterator. Multiproof's inner loop instead returns
   its fully restored enumeration directly; it uses the plain enumeration
   projection (StdExtra:19–24), followed by the slice and array restorations.
@@ -157,3 +157,83 @@ adopted-cohort association and source-to-ELF obligations remain. D188 credit
 for `low_base_p_digits` remains excluded by D188-P3. Existing cohort theorems
 remain theorems about their pinned cohort. No shipped Rust/ELF defect, root
 invalidity, new trust item or changed security metric is claimed.
+
+## Verification, resource receipts and handoff
+
+Budget consumed: **60/60 Lean attempt slots** (59 compiler launches and one
+missing-dependency preflight), **2/15 Rust runs**, **0 Kani**. No further prover
+run was launched after slot60. Compiler runs:36 pass,23 fail/stop; all failed
+receipts are retained and excluded from final proof credit. The early dependency
+ordering failure L003 has no compiler timing/RSS/axioms and is explicitly marked
+not measured in `SDY_L003_preflight.json`; it did not bypass admission.
+
+Each compiler receipt records exact target/argv, source revision and SHA256,
+selected dependency objects/sidecars, exit, wall time, peak RSS, swaps, full
+printed axioms/errors and checked scope limits. All scopes were
+MemoryHigh=6G / MemoryMax=8G / MemorySwapMax=0 / TasksMax=64, Lean -M7000.
+Admission required reservation JSON `allowed:true` **and** script exit0;
+the committed invocation code enforces both before copying compiler inputs.
+No admission refusals/retries occurred. Only one owned capped scope ran at a
+time; no other worker's job was stopped or modified.
+
+| Final target | Exit | Wall seconds | Peak RSS KiB | Swap | Source revision (dirty, exact sources pinned in receipt) |
+|---|---:|---:|---:|---:|---|
+| SDY_L059 / SDY_MpA | 0 | 3.537470696028322 | 2698308 | 0 | 9cc3a59f794bf31be2119f53c14d5e60f7bb6b3e |
+| SDY_L060 / SDY_MpBC | 0 | 5.346750786993653 | 2712672 | 0 | same |
+| SDY_R002 / twelve native fixtures | 0 | 1.9734432370169088 | 233416 | 0 | fc7ae2a2ba9faef4adb0f9920786a63fde53f6fb |
+
+The Lean compiler aggregate wall time was 223.2427195800119 seconds; peak
+7168740 KiB; all swaps 0. The peak is **failed** L025's kernel memory-limit
+rejection, not an accepted theorem. `SDY_resource_replacement.json` records its
+cause and replacement. L028's preliminary split was manually stopped after
+excessive growth. Neither was rerun unchanged or with a raised cap. The eventual
+L029/L030 symbolic-step split passes in 2.4556471050018445 / 1.4372487859800458
+seconds respectively. Other failed attempts concern bounds, checked additions,
+concrete slice reduction, constructor typing and shared-iterator loop association;
+the final bodies use symbolic slice/range facts and explicit finite loop steps.
+There was no timed-out run. R001's missing test-local std import is corrected
+in R002. No failure is presented as evidence that the corresponding theorem
+is false.
+
+Native source validation additionally checks **538 Rust/manifest files** in the
+scratch source overlay against frozen git blob identities, treating the three
+cfg(test) appendices explicitly (`SDY_frozen_tree_check.json`: zero mismatches).
+The frozen lock SHA256 before/after each native run is
+`5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef`;
+resolved package tuples were validated before each run. Graph/lock records and
+both failed/successful wrapper snapshots are retained. Unchanged source files
+were accessed through symlinks; only the owned three source overlays and lock
+were written. No second full source corpus was copied. The inherited compiled cache was reused read-only.
+
+Reused: the coherent SInt2 objects and source/object manifests, pinned XRn kit,
+raw extraction/producer provenance and prior raw elaboration failure. Newly
+checked: 17 private kit modules, symbolic helpers, all twelve complete fixture
+Results, frozen-source/lock/graph checks and the whole-file wildcard scan.
+`SDY_AXIOMS.json` is a selection audit of the final passing prints; an extra
+aggregate Lean audit module was not run after the budget was exhausted.
+`SDY_Audit.lean.candidate.txt` and standalone B/C tail candidate text are
+unexecuted planning artifacts; **L060's SDY_MpBC is the compiled B/C owner**.
+The initial fixture-writing scripts and edits are retained as working history;
+the final source snapshots and accepted receipt hashes are authoritative.
+
+`SDY_VERIFICATION.json` / `SDY_attempts.jsonl` audit final source hashes, accepted
+axioms, limits, admissions, kit inverse equality and scope. Build outputs owned
+by this job were hashed and removed: 96 files, 83936001 bytes
+(`SDY_cleanup.json`); source and receipts retained. Keys and wallets were
+untouched. All changes are under `evidence/fidelity-check1-20261027/` and all
+modules use SDY_. Session A worktrees/candidates were untouched. Commits are
+local; no push or merge.
+
+No shipped file or cfg(kani) harness changed, so no SBF rebuild was triggered.
+The three ELF pins are **inherited, not freshly reproduced**:
+
+- default `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`
+- devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`
+- Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`
+
+No whole frozen manifest, adversarial/runtime suite or root replay was run;
+this is a focused diagnostic with no changed shipped artifact. The remaining
+lead deliverable is an owner-scoped decision on general D188 fidelity and
+adapter/cohort association, while separately resolving the confirmed
+`low_base_p_digits` missing write. This packet repairs neither. The 100-bit
+release target remains **not established**.

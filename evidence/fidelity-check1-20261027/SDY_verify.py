@@ -7,6 +7,9 @@ for r in receipts:
  if not ad['allowed']:errors.append(a+' refused')
  if r['limits']!={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}:errors.append(a+' wrong limits')
  if str(r['swaps'])!='0':errors.append(a+' swapped')
+ if r['kind']=='rust':
+  for f,h in r['source_hashes'].items():
+   if sha(E/a/'sources'/f)!=h:errors.append(a+' bad native source snapshot '+f)
  if r['kind']=='lean':
   for f,h in r['source_hashes'].items():
    if sha(E/a/'sources'/f)!=h:errors.append(a+' bad source snapshot '+f)
