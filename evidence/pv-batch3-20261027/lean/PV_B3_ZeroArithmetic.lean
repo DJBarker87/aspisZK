@@ -21,8 +21,6 @@ def prepared : host_arithmetic.PreparedQm31Multiplier :=
   ⟨Array.repeat 3#usize (Array.repeat 3#usize 0#u32)⟩
 theorem prepare : host_arithmetic.PreparedQm31Multiplier.new Z = ok prepared := by
   with_unfolding_all rfl
-theorem prepared_mul : host_arithmetic.PreparedQm31Multiplier.mul prepared Z = ok Z := by
-  with_unfolding_all rfl
 
 theorem index_repeat {A : Type} (n : Usize) (x : A) (i : Usize) (h : i.val < n.val) :
     Array.index_usize (Array.repeat n x) i = ok x := by
@@ -40,6 +38,21 @@ theorem update_repeat {A : Type} (n : Usize) (x : A) (i : Usize) (h : i.val < n.
     · rw [Function.update_of_ne hk]
   rw [he]
 
+abbrev CZero : aspis_core.field.CM31 := ⟨0#u32,0#u32⟩
+theorem component_zero : host_arithmetic.prepared_component_mul (Array.repeat 3#usize 0#u32) CZero = ok CZero := by
+  with_unfolding_all rfl
+theorem cadd_zero : aspis_core.field.CM31.add CZero CZero = ok CZero := by with_unfolding_all rfl
+theorem csub_zero : aspis_core.field.CM31.sub CZero CZero = ok CZero := by with_unfolding_all rfl
+theorem hostr_zero : host_arithmetic.cm31_mul_r CZero = ok CZero := by with_unfolding_all rfl
+
+theorem prepared_mul : host_arithmetic.PreparedQm31Multiplier.mul prepared Z = ok Z := by
+  simp (disch := decide) only [host_arithmetic.PreparedQm31Multiplier.mul,
+    prepared,aspis_core.field.QM31.ZERO,index_repeat,component_zero,cadd_zero,csub_zero,hostr_zero,bind_tc_ok]
+
+#print axioms component_zero
+#print axioms cadd_zero
+#print axioms csub_zero
+#print axioms hostr_zero
 #print axioms add
 #print axioms mul
 #print axioms one_mul
