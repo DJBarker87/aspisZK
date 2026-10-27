@@ -10911,3 +10911,30 @@ Kani) on bucket-a rows no live job holds: V228-V230 (pool_v1 pair-forest hiding 
 encoder eval_message), then V239/V241 if cb7 has not reached them; laws via PV_CBM_CallbackBundle. Six
 slots: cb6, cb7, cblib, srcid7, runjoin11, cbmid. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D245 (Stream B) 2026-10-27 03:00 UTC: runjoin11 stopped at the exact missing source fact: the shipped records leaf has no extraction; runjoin12 launched on it alone
+
+pv-runjoin11 (`codex/pv-runjoin-20261026`, head 458a0c1ff2; 5/100 Lean all accepted, 2/4 Kani passed,
+root cells 21/21; three focused trust audits standard axioms, swap 0; no forbidden tokens; 8 cfg(kani)
+lines added to the existing child module). It pinned the literal transfer/withdrawal public records and
+transitions from the ed1c1cef71 fixture bytes (PV_RunJoin_RecordedTransfer / RecordedWithdrawal) and then
+stopped, as instructed, at ONE exact missing fact (evidence/pv-runjoin11-20261027/stage1-missing-fact.md,
+stage2-missing-fact.md): the shipped records leaf `records` (crates/aspis-statement/src/pool_v1/
+pair_forest_copy_builder.rs:227-270, via CopyRecords::new and pair_forest_trace.rs:275) has NO extraction
+in the Lean closure: BuilderForestAdmissionPort.lean:4362 declares `class Records` as an opaque class
+parameter and :4376 sets the source leaf to `sourceRecords.call`; the owned reference
+PV_Src_RecordDynamic.dictionary is not identified with that leaf, and its complete-Result equation
+(srcid6) does not establish the identification. The missing proposition, on the SAME fixture arguments
+(witness from deterministic_input_witness_v1, recipient digest(300)/digest(400)/600, change
+digest(500)/digest(600)/400, snapshot r0_fixture::prepare(false)): `Records.call R_shipped w 600 (some
+recipient) change snapshot 77 = @PV_Src_RecordDynamic.call E_shipped w 600 (some recipient) change
+snapshot 77`, where R_shipped is the (absent) extraction of the actual Rust function. Downstream and still
+OPEN: `@PV_Src_NativeInput.run E_shipped R_shipped i = .ok (.Ok i.compiled)` and the transition equality at
+the actual selected i; deployed public binding; non-vacuity; constructed P {source public binding, trace}
+unchanged; record 2/8/6; T unchanged. This is the shared obstruction of D242 made exact: a missing
+source-refinement proof, not a cryptographic assumption (AGENTS.md §3). Launched pv-runjoin12 (same
+branch, IDs 40900-41199, 100 Lean / 12 Kani) on that single deliverable: route A direct Charon/Aeneas
+extraction of `records`; route B the P6 link through the existing tools/r1-builder-reference/
+records_reference.rs (Kani shipped = reference, no stubs, bounded; extraction of the reference), recorded
+as a P6 gate; then the identification per fixture, compiler-return and transition equations. Six slots:
+cb6, cb7, cblib, srcid7, cbmid, runjoin12. Rows removed outright: 0. Privacy target not yet established.
