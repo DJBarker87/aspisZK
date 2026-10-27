@@ -1,0 +1,25 @@
+import LPa_BoundaryWitness
+import LPa_Nonvacuity
+open Aeneas Aeneas.Std Result XRk_Release XRk_FieldExternal
+set_option autoImplicit false
+namespace LPc.Nonvacuity
+theorem zero_canonical : LPa.Add.Canonical qzero := by decide
+/-- A full28-entry caller-domain witness, proved by inherited symbolic fold induction. -/
+theorem boundary_inhabited :
+    ∃ p : Array aspis_core.field.QM31 28#usize,
+      (∀ q ∈ p.val, LPa.Add.Canonical q) ∧
+      r1_semantic.semantic_boundary p = ok qzero := by
+  refine ⟨LPa.Boundary.zeroPolynomial, ?_, LPa.Boundary.zero_accepted⟩
+  intro q hq
+  have eq : q = qzero := by simpa [LPa.Boundary.zeroPolynomial] using hq
+  subst q
+  exact zero_canonical
+/-- A tiny native-model stage witness at a real admitted row, not an empty loop. -/
+def zeroFrame : Slice U8 := ⟨List.replicate 37 0#u8, by decide⟩
+theorem decoder_stage_inhabited :
+    r1_wire.ValidatedRecord.decode_k 1#usize ⟨25#u8,zeroFrame⟩ 0#usize =
+      ok (.Ok (Array.make 1#usize [qzero])) := by rfl
+#print axioms zero_canonical
+#print axioms boundary_inhabited
+#print axioms decoder_stage_inhabited
+end LPc.Nonvacuity

@@ -1,0 +1,28 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -122,7 +122,8 @@
+         }
+         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+     }
+-#[cfg(kani)] mod LPa_dot { include!("LPa_dot.rs"); } }
++#[cfg(kani)] mod LPa_dot { include!("LPa_dot.rs"); }
++#[cfg(kani)] mod LPc_dot { include!("LPc_dot.rs"); } }
+ 
+ 
+ use aspis_core::field::{CM31, QM31, WideExact as E};
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPc_dot.rs
+@@ -0,0 +1,13 @@
++use super::*;
++fn cell<const J:usize>() {
++ let x:[u32;4]=kani::any(); let y:[u32;4]=kani::any();
++ kani::assume(x.iter().all(|v|*v<P));kani::assume(y.iter().all(|v|*v<P));
++ let a=Q::from_limbs(x).unwrap();let b=Q::from_limbs(y).unwrap();
++ let sums:[u64;4]=kani::any();let mut actual=Dot{sums};
++ let raw=a.raw(b);actual.push(a,b);
++ assert_eq!(actual.sums[J],sums[J].wrapping_add((raw[J]%(1u64<<31)).wrapping_add(raw[J]/(1u64<<31))));
++}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell0(){cell::<0>()}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell1(){cell::<1>()}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell2(){cell::<2>()}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell3(){cell::<3>()}

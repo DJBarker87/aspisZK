@@ -1,0 +1,57 @@
+LPc_generated/LPc_DecodeSuccess.lean:14:6: error: Dependent elimination failed: Failed to solve equation
+  ok (core.result.Result.Ok out) =
+    Decidable.rec (fun h => (fun x => fail Error.panic) h)
+      (fun h => (fun x => ok (core.result.Result.Err (r1_wire.Error.Length r.row))) h) instDecidableOr
+LPc_generated/LPc_DecodeSuccess.lean:15:6: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have start := ↑offset * 32;
+    have size := ↑N * 32;
+    have finish := start + size;
+    if start > Usize.max ∨ size > Usize.max ∨ finish > Usize.max then
+      ok (core.result.Result.Err (r1_wire.Error.Length r.row))
+    else
+      have payload := List.drop 5 ↑r.framed;
+      if finish > payload.length then ok (core.result.Result.Err (r1_wire.Error.Length r.row))
+      else
+        have vs := LPa.Decode.values payload start ↑N;
+        match LPa.firstBad (fun i => !(vs[i]?.getD (true, qzero)).1) ↑N with
+        | some i =>
+          if h : ↑offset + i ≤ UScalar.cMax UScalarTy.Usize then
+            ok (core.result.Result.Err (r1_wire.Error.NonCanonical r.row (UScalar.ofNat (↑offset + i) h)))
+          else fail Error.panic
+        | none =>
+          have xs := List.map Prod.snd vs;
+          if h : xs.length = ↑N then ok (core.result.Result.Ok ⟨xs, h⟩) else fail Error.panic) =
+    ok (core.result.Result.Ok out)
+of `success`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isFalse.isFalse
+N : Usize
+r : r1_wire.ValidatedRecord
+offset : Usize
+out : Std.Array aspis_core.field.QM31 N
+h✝¹ : ¬r.row < 14#u8
+h✝ : ¬(↑r.framed).length < 5
+success :
+  (have start := ↑offset * 32;
+    have size := ↑N * 32;
+    have finish := start + size;
+    if start > Usize.max ∨ size > Usize.max ∨ finish > Usize.max then
+      ok (core.result.Result.Err (r1_wire.Error.Length r.row))
+    else
+      have payload := List.drop 5 ↑r.framed;
+      if finish > payload.length then ok (core.result.Result.Err (r1_wire.Error.Length r.row))
+      else
+        have vs := LPa.Decode.values payload start ↑N;
+        match LPa.firstBad (fun i => !(vs[i]?.getD (true, qzero)).1) ↑N with
+        | some i =>
+          if h : ↑offset + i ≤ UScalar.cMax UScalarTy.Usize then
+            ok (core.result.Result.Err (r1_wire.Error.NonCanonical r.row (UScalar.ofNat (↑offset + i) h)))
+          else fail Error.panic
+        | none =>
+          have xs := List.map Prod.snd vs;
+          if h : xs.length = ↑N then ok (core.result.Result.Ok ⟨xs, h⟩) else fail Error.panic) =
+    ok (core.result.Result.Ok out)
+⊢ ∀ q ∈ ↑out, LPa.Add.Canonical q
+'LPc.Decode.success_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

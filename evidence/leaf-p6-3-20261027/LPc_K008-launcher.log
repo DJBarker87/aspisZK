@@ -1,0 +1,51 @@
+{"attempt": "LPc_K008", "exit_status": 1, "wall_seconds": 92.82745189004345, "peak_rss_kib": "2780604", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+                                      ^^^^^^^^^^^ help: convert the identifier to snake case: `lpc_expand1`
+
+warning: function `LPc_expand2` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPc_compact.rs:16:39
+   |
+16 | #[kani::proof] #[kani::unwind(35)] fn LPc_expand2(){expansion::<2>()}
+   |                                       ^^^^^^^^^^^ help: convert the identifier to snake case: `lpc_expand2`
+
+warning: function `LPc_expand3` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPc_compact.rs:17:39
+   |
+17 | #[kani::proof] #[kani::unwind(35)] fn LPc_expand3(){expansion::<3>()}
+   |                                       ^^^^^^^^^^^ help: convert the identifier to snake case: `lpc_expand3`
+
+warning: function `LPc_check464` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPc_compact.rs:19:39
+   |
+19 | #[kani::proof] #[kani::unwind(32)] fn LPc_check464(){
+   |                                       ^^^^^^^^^^^^ help: convert the identifier to snake case: `lpc_check464`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.23s
+Checking harness r1_wire::LPc_wire::LPc_claim_decode2...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - r1_wire::LPc_wire::LPc_claim_decode2
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rf1157e36e7e345ada83e4c0a1ae40623.scope; invocation ID: 6abb23f54f79456db9269cdb213fbf0c
