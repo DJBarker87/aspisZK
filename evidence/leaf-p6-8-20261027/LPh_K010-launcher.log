@@ -1,0 +1,53 @@
+{"attempt": "LPh_K010", "exit_status": 0, "wall_seconds": 49.09765197098022, "peak_rss_kib": "6383484", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rte
+...
+of] #[kani::unwind(18)] fn LPh_expand_before(){expand::<0>()}
+   |                                       ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_expand_before`
+
+warning: function `LPh_expand_low` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:18:39
+   |
+18 | #[kani::proof] #[kani::unwind(18)] fn LPh_expand_low(){expand::<1>()}
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_expand_low`
+
+warning: function `LPh_expand_high` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:19:39
+   |
+19 | #[kani::proof] #[kani::unwind(18)] fn LPh_expand_high(){expand::<2>()}
+   |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_expand_high`
+
+warning: function `LPh_expand_after` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:20:39
+   |
+20 | #[kani::proof] #[kani::unwind(18)] fn LPh_expand_after(){expand::<3>()}
+   |                                       ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_expand_after`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.41s
+Checking harness verifier::LPh_verifier::LPh_echeck1...
+
+VERIFICATION RESULT:
+ ** 0 of 431 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 46.10159s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r5d84e218dea44b3f8e34659f0b1774c9.scope; invocation ID: 711d1940610d40f3bb829b211eb0c02b

@@ -1,0 +1,53 @@
+{"attempt": "LPh_K024", "exit_status": 0, "wall_seconds": 8.286181158968247, "peak_rss_kib": "362344", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+[kani::proof] #[kani::unwind(18)] fn LPh_live_before(){live_window::<0>()}
+   |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_live_before`
+
+warning: function `LPh_live_low` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:29:39
+   |
+29 | #[kani::proof] #[kani::unwind(18)] fn LPh_live_low(){live_window::<1>()}
+   |                                       ^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_live_low`
+
+warning: function `LPh_live_high` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:30:39
+   |
+30 | #[kani::proof] #[kani::unwind(18)] fn LPh_live_high(){live_window::<2>()}
+   |                                       ^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_live_high`
+
+warning: function `LPh_live_after` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPh_compact.rs:31:39
+   |
+31 | #[kani::proof] #[kani::unwind(18)] fn LPh_live_after(){live_window::<3>()}
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lph_live_after`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.73s
+Checking harness r1_wire::LPh_wire::LPh_write_before...
+
+VERIFICATION RESULT:
+ ** 0 of 367 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 6.010725s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rcffb4fc1605a4174ad9f68b40ddeba2d.scope; invocation ID: de3cad23cdf441bdb601c7d95d3a3b19

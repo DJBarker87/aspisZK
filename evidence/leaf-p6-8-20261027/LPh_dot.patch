@@ -58,7 +58,7 @@
  
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/LPh_dot.rs
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,36 @@
 +use super::*;
 +fn raw_spec(x:Q,y:Q)->[u64;4] {
 + let [a,b,c,d]=x.0.map(u64::from); let [e,f,g,h]=y.0.map(u64::from);
@@ -73,17 +73,18 @@
 + (a*h).wrapping_add(b*g).wrapping_add(c*f).wrapping_add(d*e)]
 +}
 +
++static mut LPh_RAW:[u64;4]=[0;4];
 +fn raw_stub(a:Q,b:Q)->[u64;4]{
 + for j in 0..4{assert!(a.0[j]<P && b.0[j]<P,"LPh raw canonical input");}
 + let spec=raw_spec(a,b);let out:[u64;4]=kani::any();
-+ for j in 0..4{kani::assume(out[j]==spec[j]);}out
++ for j in 0..4{kani::assume(out[j]==spec[j]);} unsafe{LPh_RAW=out;} out
 +}
 +fn cell<const J:usize>(){
 + let a:[u32;4]=kani::any();let b:[u32;4]=kani::any();
 + for j in 0..4{kani::assume(a[j]<P && b[j]<P);}
 + let a=Q::from_limbs(a).unwrap();let b=Q::from_limbs(b).unwrap();
-+ let old:[u64;4]=kani::any();let mut dot=Dot{sums:old};let raw=raw_spec(a,b);
-+ dot.push(a,b);
++ let old:[u64;4]=kani::any();let mut dot=Dot{sums:old};
++ dot.push(a,b); let raw=unsafe{LPh_RAW};
 + assert_eq!(dot.sums[J],old[J].wrapping_add((raw[J]&u64::from(P)).wrapping_add(raw[J]>>31)));
 +}
 +#[kani::proof] #[kani::stub(Q::raw,raw_stub)] #[kani::unwind(6)] fn LPh_cell0(){cell::<0>()}

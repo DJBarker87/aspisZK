@@ -1,0 +1,29 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -346,3 +346,5 @@
+ #[cfg(kani)] mod LPc_candidate { include!("LPc_candidate.rs"); }
+ 
+ #[cfg(kani)] mod LPg_candidate { include!("LPg_candidate.rs"); }
++
++#[cfg(kani)] mod LPh_candidate { include!("LPh_candidate.rs"); }
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPh_candidate.rs
+@@ -0,0 +1,18 @@
++use super::*;
++fn view<const EMPTY:bool>(){
++ let mut p:[u8;compact::OFF_OPENINGS]=kani::any();for j in compact::OFF_INACTIVE..compact::OFF_ROUND0{p[j]=0;}
++ let sem:[u8;1]=kani::any();let y:[u8;1]=kani::any();
++ let a=if EMPTY{&sem[..0]}else{&sem[..]};let b=if EMPTY{&y[..0]}else{&y[..]};let ap=a.as_ptr();let bp=b.as_ptr();
++ let got=wide_view(&p,a,b).unwrap();assert!(core::ptr::eq(got.semantic.as_ptr(),ap));assert!(core::ptr::eq(got.y1.as_ptr(),bp));
++ assert_eq!(got.semantic.len(),a.len());assert_eq!(got.y1.len(),b.len());
++ assert!(core::ptr::eq(got.folded_root.unwrap().as_ptr(),p[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].as_ptr()));
++}
++#[kani::proof] #[kani::unwind(35)] fn LPh_nonempty(){view::<false>()}
++#[kani::proof] #[kani::unwind(35)] fn LPh_empty_backed(){view::<true>()}
++fn identity<'a>(a:&'a[u8],b:&'a[u8])->(&'a[u8],&'a[u8]){(a,b)}
++#[kani::proof] fn LPh_zst_identity(){
++ let a:[u8;0]=kani::any();let b:[u8;0]=kani::any();let sa:&[u8]=&a;let sb:&[u8]=&b;let ap=sa.as_ptr();let bp=sb.as_ptr();
++ let (x,y)=identity(sa,sb);
++ assert!(core::ptr::eq(x.as_ptr(),ap),"captured semantic pointer");assert!(core::ptr::eq(y.as_ptr(),bp),"captured y1 pointer");
++ assert!(core::ptr::eq(x.as_ptr(),a.as_ptr()),"fresh ZST semantic pointer");assert!(core::ptr::eq(y.as_ptr(),b.as_ptr()),"fresh ZST y1 pointer");
++}

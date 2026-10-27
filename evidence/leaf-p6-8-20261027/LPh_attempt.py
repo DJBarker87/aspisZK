@@ -23,19 +23,29 @@ for retry in range(11):
 else:raise SystemExit('STOP reservation retries')
 cfg=dict(attempt=a,kind=kind,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,reservation_retries=retry)
 if kind=='kani':
- cfg.update(sources=['LPh_src/Cargo.toml','LPh_src/Cargo.lock']+['LPh_src/'+p for p in json.loads((E/'LPh_sources.json').read_text())],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/LPh_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/LPh_target','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse'],deps_fingerprint={'release_revision':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','source_manifest':'LPh_source-provenance.json','boundary':'scratch frozen source plus LPa and LPh cfg-only harness patches'},expected_time='optimized Kani compilation then bounded native stage '+target,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1'})
+ cfg.update(sources=['LPh_src/Cargo.toml','LPh_src/Cargo.lock']+['LPh_src/'+p for p in json.loads((E/'LPh_sources.json').read_text())],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/LPh_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/LPh_target','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse'],deps_fingerprint={'release_revision':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','source_manifest':'LPh_source-provenance.json','boundary':'scratch frozen source plus LPa and LPh cfg-only harness patches'},expected_time='optimized Kani compilation then bounded native stage '+target,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1','TMPDIR':B+'/LPh_tmp'})
 else:
  src=('LPh_inherited/' if kind=='inherited' else 'LPh_generated/')+target+'.lean';obj='LPh_objects/'+target+'.olean'
  cfg['kind']='lean'
  cfg.update(module=target,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R',('LPh_inherited' if kind=='inherited' else 'LPh_generated'),'-o',obj,src],env={'LEAN_PATH':B+'/LPh_objects:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'},deps_fingerprint={'scope':'coherent SInt2 objects plus LPh new modules'},expected_time='single symbolic module; no concrete large numeral normalization')
  r=ssh(f'mkdir -p {B}/LPh_generated {B}/LPh_objects');assert r.returncode==0,r.stderr
- if kind=='replay':
+ if kind in ['replay','inherited']:
   R='/home/dombarker/project-offloads/codex-cx-replay-dry-20261026/'
   cfg['env']['LEAN_PATH']=B+'/LPh_objects:'+':'.join(R+x for x in ['RPv_overlay','RPu_overlay','RPt_overlay','RPz8_overlay','RPz7_overlay','RPz4_trusted','RPz_trusted'])
+ if kind=='inherited':
+  local=Path(next(x['repository_source'] for x in json.loads((E/'LPh_inherited-plan.json').read_text()) if x['module']==target))
+  r=ssh(f'mkdir -p {B}/LPh_inherited/'+str(Path(target.replace(".","/")).parent));assert r.returncode==0,r.stderr
+  subprocess.run(['scp','-q',str(local),H+':'+B+'/'+src],check=True)
  if kind!='inherited':subprocess.run(['scp','-q',str(E/(target+'.lean')),H+':'+B+'/'+src],check=True)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 subprocess.run(['scp','-q',str(E/(a+'.json')),H+':'+B+'/'+a+'.json'],check=True)
+if kind=='kani' and (a=='LPh_K029' or a=='LPh_K030'):
+ cfg['command'][cfg['command'].index('terse')]='old'
+ cfg['command']+=['--cbmc-args','--trace']
+ (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
+ subprocess.run(['scp','-q',str(E/(a+'.json')),H+':'+B+'/'+a+'.json'],check=True)
 if kind=='kani':
+ r=ssh(f'mkdir -p {B}/LPh_tmp');assert r.returncode==0,r.stderr
  import LPh_graph
  LPh_graph.check(a)
 r=ssh(f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 {('S2W_run_host.py' if kind=='kani' else 'S2W_lean_host.py')} {a}.json')

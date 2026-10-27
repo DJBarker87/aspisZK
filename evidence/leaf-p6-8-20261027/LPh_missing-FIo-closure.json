@@ -1,0 +1,533 @@
+[
+  {
+    "module": "Port5Q1_Ten",
+    "repository_source": "lean/Port5Q1_Ten.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "Op4P_Extract.Types",
+    "repository_source": "lean/Op4P_Extract/Types.lean",
+    "exists": true,
+    "imports": [
+      "Aeneas"
+    ]
+  },
+  {
+    "module": "Op4P_Extract.Funs",
+    "repository_source": "lean/Op4P_Extract/Funs.lean",
+    "exists": true,
+    "imports": [
+      "Aeneas",
+      "Op4P_Extract.Types"
+    ]
+  },
+  {
+    "module": "Op4P_Refinement",
+    "repository_source": "lean/Op4P_Refinement.lean",
+    "exists": true,
+    "imports": [
+      "Op4P_Extract.Funs",
+      "MultiproofConeStrictScan"
+    ]
+  },
+  {
+    "module": "Op4P_Install",
+    "repository_source": "lean/Op4P_Install.lean",
+    "exists": true,
+    "imports": [
+      "Op4P_Refinement",
+      "Op3I_Install"
+    ]
+  },
+  {
+    "module": "Op4P_Cuts",
+    "repository_source": "lean/Op4P_Cuts.lean",
+    "exists": true,
+    "imports": [
+      "Op4P_Install",
+      "Op3I_Cuts"
+    ]
+  },
+  {
+    "module": "PAln_RowBounds",
+    "repository_source": "lean/PAln_RowBounds.lean",
+    "exists": true,
+    "imports": [
+      "PSem_SemanticRows"
+    ]
+  },
+  {
+    "module": "PAln_Arithmetic",
+    "repository_source": "lean/PAln_Arithmetic.lean",
+    "exists": true,
+    "imports": [
+      "PSem_Control"
+    ]
+  },
+  {
+    "module": "PAln_Offsets",
+    "repository_source": "lean/PAln_Offsets.lean",
+    "exists": true,
+    "imports": [
+      "PSem_SourceCuts",
+      "PAln_Arithmetic"
+    ]
+  },
+  {
+    "module": "PAln_ViewCuts",
+    "repository_source": "lean/PAln_ViewCuts.lean",
+    "exists": true,
+    "imports": [
+      "PAln_Offsets"
+    ]
+  },
+  {
+    "module": "PAln_Physical",
+    "repository_source": "lean/PAln_Physical.lean",
+    "exists": true,
+    "imports": [
+      "PAln_ViewCuts"
+    ]
+  },
+  {
+    "module": "RawTx1DigestLog",
+    "repository_source": "lean/RawTx1DigestLog.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "PAln_OpeningCalls",
+    "repository_source": "lean/PAln_OpeningCalls.lean",
+    "exists": true,
+    "imports": [
+      "CurrentPreparedScratchReachability",
+      "ExtractedDigest32Callers"
+    ]
+  },
+  {
+    "module": "PAln_InactiveDecode",
+    "repository_source": "lean/PAln_InactiveDecode.lean",
+    "exists": true,
+    "imports": [
+      "PAln_Physical"
+    ]
+  },
+  {
+    "module": "PAln_Borrowed",
+    "repository_source": "lean/PAln_Borrowed.lean",
+    "exists": true,
+    "imports": [
+      "PSem_SourceCuts",
+      "CurrentPreparedScratchReachability"
+    ]
+  },
+  {
+    "module": "PAln_MatchingFacts",
+    "repository_source": "lean/PAln_MatchingFacts.lean",
+    "exists": true,
+    "imports": [
+      "R1LiteralMatchingData"
+    ]
+  },
+  {
+    "module": "ExtractedSourceSemanticSampler",
+    "repository_source": "lean/ExtractedSourceSemanticSampler.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "PAln_RootConvert",
+    "repository_source": "lean/PAln_RootConvert.lean",
+    "exists": true,
+    "imports": [
+      "PAln_Physical"
+    ]
+  },
+  {
+    "module": "PAln_Row30Source",
+    "repository_source": "lean/PAln_Row30Source.lean",
+    "exists": true,
+    "imports": [
+      "PAln_RootConvert"
+    ]
+  },
+  {
+    "module": "PAln_OpeningReach",
+    "repository_source": "lean/PAln_OpeningReach.lean",
+    "exists": true,
+    "imports": [
+      "PAln_Borrowed"
+    ]
+  },
+  {
+    "module": "PAln_OpeningStages",
+    "repository_source": "lean/PAln_OpeningStages.lean",
+    "exists": true,
+    "imports": [
+      "PAln_OpeningReach"
+    ]
+  },
+  {
+    "module": "PAln_BothBuffers",
+    "repository_source": "lean/PAln_BothBuffers.lean",
+    "exists": true,
+    "imports": [
+      "PSem_SourceCuts",
+      "S1PrepareBothBuffersV1",
+      "S1WideViewY1V1"
+    ]
+  },
+  {
+    "module": "PSem_Root",
+    "repository_source": "lean/PSem_Root.lean",
+    "exists": true,
+    "imports": [
+      "PSem_SemanticRows"
+    ]
+  },
+  {
+    "module": "PSem_RoundCalls",
+    "repository_source": "lean/PSem_RoundCalls.lean",
+    "exists": true,
+    "imports": [
+      "ExtractedSemanticRoundsModel",
+      "ExtractedDigest32Begin"
+    ]
+  },
+  {
+    "module": "PSem_SemanticTrace",
+    "repository_source": "lean/PSem_SemanticTrace.lean",
+    "exists": true,
+    "imports": [
+      "PSem_RoundCalls",
+      "PSem_SourceCuts",
+      "ExtractedSourceFull25Frames",
+      "S1SemanticFinishBoundsV1"
+    ]
+  },
+  {
+    "module": "PAln_FullCut",
+    "repository_source": "lean/PAln_FullCut.lean",
+    "exists": true,
+    "imports": [
+      "PAln_OpeningStages",
+      "PAln_BothBuffers",
+      "PSem_Values",
+      "PSem_Root",
+      "PSem_SemanticRows",
+      "PSem_SemanticTrace"
+    ]
+  },
+  {
+    "module": "PAln_CurrentPhysical",
+    "repository_source": "lean/PAln_CurrentPhysical.lean",
+    "exists": true,
+    "imports": [
+      "PAln_Row30Source",
+      "PAln_FullCut"
+    ]
+  },
+  {
+    "module": "AspisR1CircleSampleWrapper.RawCircleSampleActualPolicyUnconditionalV1",
+    "repository_source": "lean/AspisR1CircleSampleWrapper/RawCircleSampleActualPolicyUnconditionalV1.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "AspisR1CircleSampleWrapper.RawCircleSampleActualFallbackCoordinatesV1",
+    "repository_source": "lean/AspisR1CircleSampleWrapper/RawCircleSampleActualFallbackCoordinatesV1.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "PAln_FieldRead",
+    "repository_source": "lean/PAln_FieldRead.lean",
+    "exists": true,
+    "imports": [
+      "PAln_RowBounds",
+      "R1FoldedLeafCodec"
+    ]
+  },
+  {
+    "module": "PAln_LowRead",
+    "repository_source": "lean/PAln_LowRead.lean",
+    "exists": true,
+    "imports": [
+      "PAln_FieldRead"
+    ]
+  },
+  {
+    "module": "PAln_Transcript",
+    "repository_source": "lean/PAln_Transcript.lean",
+    "exists": true,
+    "imports": [
+      "PAln_RowBounds"
+    ]
+  },
+  {
+    "module": "RawSourceLiteralInitialCall",
+    "repository_source": "lean/RawSourceLiteralInitialCall.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "PAln_SemanticRead",
+    "repository_source": "lean/PAln_SemanticRead.lean",
+    "exists": true,
+    "imports": [
+      "RawSourceLiteralInitialCall"
+    ]
+  },
+  {
+    "module": "PAln_TypedRows",
+    "repository_source": "lean/PAln_TypedRows.lean",
+    "exists": true,
+    "imports": [
+      "PAln_Transcript",
+      "PAln_SemanticRead"
+    ]
+  },
+  {
+    "module": "PAln_AlignedRead",
+    "repository_source": "lean/PAln_AlignedRead.lean",
+    "exists": true,
+    "imports": [
+      "PAln_TypedRows"
+    ]
+  },
+  {
+    "module": "PAln_SequenceRead",
+    "repository_source": "lean/PAln_SequenceRead.lean",
+    "exists": true,
+    "imports": [
+      "PAln_LowRead",
+      "R1SelectedFieldSequenceCodec"
+    ]
+  },
+  {
+    "module": "PAln_SemanticLayout",
+    "repository_source": "lean/PAln_SemanticLayout.lean",
+    "exists": true,
+    "imports": [
+      "PAln_SequenceRead"
+    ]
+  },
+  {
+    "module": "PAln_CircleDecode",
+    "repository_source": "lean/PAln_CircleDecode.lean",
+    "exists": true,
+    "imports": [
+      "PAln_SemanticLayout"
+    ]
+  },
+  {
+    "module": "PAln_CircleCalls",
+    "repository_source": "lean/PAln_CircleCalls.lean",
+    "exists": true,
+    "imports": [
+      "S1SemanticFinishModelV1",
+      "ExtractedDigest32Callers",
+      "ExtractedSourceFull25Frames"
+    ]
+  },
+  {
+    "module": "Port4B_FoldedCut",
+    "repository_source": "lean/Port4B_FoldedCut.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "PAln_Records",
+    "repository_source": "lean/PAln_Records.lean",
+    "exists": true,
+    "imports": [
+      "PAln_CircleDecode",
+      "PAln_AlignedRead"
+    ]
+  },
+  {
+    "module": "PAln_Ready",
+    "repository_source": "lean/PAln_Ready.lean",
+    "exists": true,
+    "imports": [
+      "PAln_AlignedRead"
+    ]
+  },
+  {
+    "module": "PAln_LiteralPrefix",
+    "repository_source": "lean/PAln_LiteralPrefix.lean",
+    "exists": true,
+    "imports": [
+      "PAln_Records",
+      "PAln_Ready"
+    ]
+  },
+  {
+    "module": "PAln_SubSlice",
+    "repository_source": "lean/PAln_SubSlice.lean",
+    "exists": true,
+    "imports": [
+      "PAln_RowBounds"
+    ]
+  },
+  {
+    "module": "PAln_OpeningDecode",
+    "repository_source": "lean/PAln_OpeningDecode.lean",
+    "exists": true,
+    "imports": [
+      "PAln_SequenceRead",
+      "PAln_SubSlice"
+    ]
+  },
+  {
+    "module": "PAln_RowKappa",
+    "repository_source": "lean/PAln_RowKappa.lean",
+    "exists": true,
+    "imports": [
+      "PAln_OpeningDecode"
+    ]
+  },
+  {
+    "module": "PAln_RowFirst",
+    "repository_source": "lean/PAln_RowFirst.lean",
+    "exists": true,
+    "imports": [
+      "PAln_OpeningDecode"
+    ]
+  },
+  {
+    "module": "PAln_RowLast",
+    "repository_source": "lean/PAln_RowLast.lean",
+    "exists": true,
+    "imports": [
+      "PAln_OpeningDecode"
+    ]
+  },
+  {
+    "module": "PAln_DataRead",
+    "repository_source": "lean/PAln_DataRead.lean",
+    "exists": true,
+    "imports": [
+      "PAln_LiteralPrefix",
+      "PAln_RowKappa",
+      "PAln_RowFirst",
+      "PAln_RowLast"
+    ]
+  },
+  {
+    "module": "Op4P_Accepted",
+    "repository_source": "lean/Op4P_Accepted.lean",
+    "exists": true,
+    "imports": [
+      "Op4P_Cuts",
+      "Op3I_Accepted",
+      "S2W_D189Consolidation"
+    ]
+  },
+  {
+    "module": "Port5Q2_Checkpoint",
+    "repository_source": "lean/Port5Q2_Checkpoint.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "PSem_Accepted",
+    "repository_source": "lean/PSem_Accepted.lean",
+    "exists": true,
+    "imports": [
+      "Tx1Q_Accepted",
+      "PSem_SemanticRows"
+    ]
+  },
+  {
+    "module": "PAln_Reselect",
+    "repository_source": "lean/PAln_Reselect.lean",
+    "exists": true,
+    "imports": [
+      "PSem_Accepted"
+    ]
+  },
+  {
+    "module": "PAln_SourceRun",
+    "repository_source": "lean/PAln_SourceRun.lean",
+    "exists": true,
+    "imports": [
+      "PAln_OpeningStages",
+      "PSem_Root",
+      "PSem_SemanticRows",
+      "PSem_SemanticTrace"
+    ]
+  },
+  {
+    "module": "PAln_RunFacts",
+    "repository_source": "lean/PAln_RunFacts.lean",
+    "exists": true,
+    "imports": [
+      "PAln_SourceRun",
+      "PSem_Root",
+      "PSem_SemanticRows",
+      "PSem_SemanticTrace"
+    ]
+  },
+  {
+    "module": "PAln_WhenAligned",
+    "repository_source": "lean/PAln_WhenAligned.lean",
+    "exists": true,
+    "imports": [
+      "PAln_DataRead",
+      "PSem_TypedPrefix"
+    ]
+  },
+  {
+    "module": "PAln_SelectedAccepted",
+    "repository_source": "lean/PAln_SelectedAccepted.lean",
+    "exists": true,
+    "imports": [
+      "PSem_Accepted",
+      "PAln_Reselect",
+      "PAln_RunFacts",
+      "PAln_WhenAligned",
+      "PSem_SemanticRows"
+    ]
+  },
+  {
+    "module": "RawSourceGlobalOracleInitial",
+    "repository_source": "lean/RawSourceGlobalOracleInitial.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "PAln_Public",
+    "repository_source": "lean/PAln_Public.lean",
+    "exists": true,
+    "imports": [
+      "PAln_SelectedAccepted",
+      "RawSourceGlobalOracleInitial"
+    ]
+  },
+  {
+    "module": "Port5Q1_QueryBlock",
+    "repository_source": "lean/Port5Q1_QueryBlock.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "Port5Q2_Prepared",
+    "repository_source": "lean/Port5Q2_Prepared.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "CompPoly.LinearAlgebra.Dense.KernelInPlaceCorrectness",
+    "repository_source": "lean/CompPoly/LinearAlgebra/Dense/KernelInPlaceCorrectness.lean",
+    "exists": false,
+    "imports": null
+  },
+  {
+    "module": "CompPoly.LinearAlgebra.Dense.RrefShape",
+    "repository_source": "lean/CompPoly/LinearAlgebra/Dense/RrefShape.lean",
+    "exists": false,
+    "imports": null
+  }
+]
