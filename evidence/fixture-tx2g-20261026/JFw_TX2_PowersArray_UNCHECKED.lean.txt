@@ -1,0 +1,29 @@
+import JFw_TX2_Coefficients
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFw_TX2_PowersArray
+open Aeneas Aeneas.Std Result
+def value : Array FIo_Install.NE 29#usize :=
+  ⟨List.ofFn JFw_TX2_Coefficients.value,by simp⟩
+theorem native : JFr_TX2_FirstLane.native=value := by
+  apply Subtype.ext
+  apply List.ext_getElem
+  · rw [JFr_TX2_FirstLane.native.property,value,List.length_ofFn]
+    rfl
+  · intro i hi hj
+    have bound : i<29 := by rw [JFr_TX2_FirstLane.native.property] at hi;exact hi
+    have h := JFw_TX2_Coefficients.source ⟨i,bound⟩
+    simpa only [JFr_TX2_FirstLane.native,FIp_DotsAdapter.toArray,List.getElem_map,
+      value,List.getElem_ofFn,JFw_TX2_PowersExplicit.entry] using h
+
+theorem source : JFr_TX2_Powers.value=FIp_DotsAdapter.fromArray value := by
+  rw [← native]
+  apply Subtype.ext
+  change _=List.map FIo_Install.fromE (List.map FIo_Install.toE _)
+  simp only [List.map_map]
+  have h : FIo_Install.fromE ∘ FIo_Install.toE=id := by funext x;rfl
+  rw [h,List.map_id]
+#print axioms native
+#print axioms source
+end AspisR1.JFw_TX2_PowersArray
+end
