@@ -25,3 +25,5 @@ and standard axioms on the generic SAME-output bridge and explicit-body frontier
 See JHh_OBSTRUCTION70.json. Actual-body identity, the concrete conditional child,
 accepted1, and the joint pair remain OPEN at this checkpoint. No top premise
 has been removed; no caps/timeouts increased or unchanged killed job rerun.
+
+071-073 pass split levels06-08,09-11,12-17 and the terminal/native tree0 join under the inherited SHA class. Memory066 replacement is checked; Source73 exports JHh_C_Gw_Tree0.tree. Tree1/tree2 and the candidate/SDK consumer remain pending.
