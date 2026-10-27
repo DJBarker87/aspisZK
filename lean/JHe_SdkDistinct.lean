@@ -8,7 +8,11 @@ namespace AspisR1.JHe_SdkDistinct
 open Aeneas Aeneas.Std Result ControlFlow S2W_D189Entry
 open _root_.AdapterRw
 attribute [local irreducible] JHb_Header.account JFx_NativeBytes.publicInput JFx_NativeBytes.checkpoint
-abbrev account (n : Nat) := JHb_World.e1.snapshot n (S2W_D189Wrappers.firstSizes n).1 (S2W_D189Wrappers.firstSizes n).2
+def sizes : Nat → Nat
+  | 0 => 58295
+  | 1 => 1880
+  | _ => 1768
+abbrev account (n : Nat) := JHb_World.e1.snapshot n (sizes n) (sizes n)
 def value : Array AdapterRw.Cuts.Account 3#usize := Array.make 3#usize [account 0,account 1,account 2]
 
 theorem key_ne (base : Ops) (stage : VTop_Stages.Ops) (i j : Fin 3) (different : i≠j) :

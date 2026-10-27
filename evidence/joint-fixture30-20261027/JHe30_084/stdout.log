@@ -1,0 +1,180 @@
+JHe_SdkParent.lean:22:109: error: unsolved goals
+base : Ops
+stage : VTop_Stages.Ops
+saved : alloc.vec.Vec U8
+size : (↑saved).length = 1768
+child :
+  first_decoded (JHe_Natives.sdk base stage) (S6N_Getters.publicValue JGx_RealStatement.value)
+      JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize =
+    ok (core.result.Result.Ok saved)
+count : Slice.len JHb_World.e1.first = 3#usize
+rawLength : JHb_Header.account.len = 58295#usize
+savedLength : saved.len = 1768#usize
+cpLength : JHe_SdkReads.checkpoint.len = 1768#usize
+checked : Usize.checked_add 688#usize 57607#usize = some 58295#usize
+offset : Usize.wrapping_add 688#usize 8#usize = 696#usize
+common :
+  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common JGx_RealStatement.value =
+    ok (S6N_Getters.commonValue JGx_RealStatement.value)
+semantic :
+  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+      JGx_RealStatement.value =
+    ok (S6N_Getters.publicValue JGx_RealStatement.value)
+index : JHe_Natives.data1.index_usize 1#usize = ok 10#u8
+cast : UScalar.cast UScalarTy.Usize 10#u8 = 10#usize
+⊢ (do
+      let r9 ←
+        r1_pool_adapter.owned.require_distinct_accounts (JHe_Natives.sdk base stage)
+            (Array.make 3#usize
+              [JHb_World.e1.snapshot 0 58295 58295, JHb_World.e1.snapshot 1 1880 1880,
+                JHb_World.e1.snapshot 2 1768 1768]
+              ⋯)
+      let cf8 ←
+        match r9 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf8 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let proof_length ← aspis_r1_cost_probe.compact.PROOF_BYTES
+          let r13 ←
+            match Usize.checked_add 688#usize proof_length with
+              | none => ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+              | some v => ok (core.result.Result.Ok v)
+          let cf11 ←
+            match r13 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf11 with
+            | core.ops.control_flow.ControlFlow.Continue val5 =>
+              if (58295#usize != val5) = true then
+                ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+              else do
+                let s1 ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JHb_Header.account
+                      { start := 688#usize, «end» := val5 }
+                let r14 ←
+                  first_decoded (JHe_Natives.sdk base stage) (S6N_Getters.publicValue JGx_RealStatement.value)
+                      JFx_NativeBytes.publicInput s1 10#usize
+                let cf12 ←
+                  match r14 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf12 with
+                  | core.ops.control_flow.ControlFlow.Continue val6 =>
+                    if (val6.len != 1768#usize) = true then
+                      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                    else ok (core.result.Result.Ok val6)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame solana_program_error.ProgramError) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    ok (core.result.Result.Ok saved)
+JHe_SdkParent.lean:50:4: warning: This simp argument is unused:
+  JHe_SdkDistinct.source
+
+Hint: Omit it from the simp argument list.
+  simp only [̵J̵H̵e̵_̵S̵d̵k̵I̵n̵p̵u̵t̵G̵a̵t̵e̵.̵i̵n̵s̵t̵r̵u̵c̵t̵i̵o̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵t̵r̵u̵e̵,̵c̵o̵u̵n̵t̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵(̵S̵2̵W̵_̵D̵1̵8̵9̵E̵n̵t̵r̵y̵.̵f̵i̵r̵s̵t̵_̵i̵n̵d̵e̵x̵[̲J̲H̲e̲_̲S̲d̲k̲I̲n̲p̲u̲t̲G̲a̲t̲e̲.̲i̲n̲s̲t̲r̲u̲c̲t̲i̲o̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲c̲o̲u̲n̲t̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲(̲S̲2̲W̲_̲D̲1̲8̲9̲E̲n̲t̲r̲y̲.̲f̲i̲r̲s̲t̲_̲i̲n̲d̲e̲x̲ JHb_World.e1).1,
+      (S2W_D189Entry.first_index J̵H̵b̵_̵W̵o̵r̵l̵d̵.̵e̵1̵)̵.̵2̵.̵1̵,̵(̵S̵2̵W̵_̵D̵1̵8̵9̵E̵n̵t̵r̵y̵.̵f̵i̵r̵s̵t̵_̵i̵n̵d̵e̵x̵J̲H̲b̲_̲W̲o̲r̲l̲d̲.̲e̲1̲)̲.̲2̲.̲1̲,̲ ̲(̲S̲2̲W̲_̲D̲1̲8̲9̲E̲n̲t̲r̲y̲.̲f̲i̲r̲s̲t̲_̲i̲n̲d̲e̲x̲ JHb_World.e1).2.2,
+      J̵H̵e̵_̵S̵d̵k̵D̵i̵s̵t̵i̵n̵c̵t̵.̵s̵o̵u̵r̵c̵e̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵c̵_̵C̵o̵r̵r̵e̵c̵t̵e̵d̵O̵w̵n̵e̵r̵s̵h̵i̵p̵.̵r̵e̵a̵d̵o̵n̵l̵y̵_̵g̵u̵a̵r̵d̵s̵.̵1̵,̵J̵H̵c̵_̵C̵o̵r̵r̵e̵c̵t̵e̵d̵O̵w̵n̵e̵r̵s̵h̵i̵p̵.̵r̵e̵a̵d̵o̵n̵l̵y̵_̵g̵u̵a̵r̵d̵s̵.̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵e̵_̵S̵d̵k̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵.̵s̵o̵u̵r̵c̵e̵,̵J̵H̵e̵_̵S̵d̵k̵R̵e̵a̵d̵s̵.̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵_̵r̵e̵a̵d̵,̵J̵H̵e̵_̵S̵d̵k̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵.̵z̵e̵r̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵e̵_̵S̵d̵k̵R̵e̵a̵d̵s̵.̵p̵u̵b̵l̵i̵c̵I̵n̵p̵u̵t̵,̵J̵H̵e̵_̵S̵d̵k̵C̵o̵d̵e̵c̵.̵d̵e̵c̵o̵d̵e̵d̵,̵J̵H̵e̵_̵S̵d̵k̵C̵o̵d̵e̵c̵.̵v̵a̵l̵i̵d̵a̵t̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵m̵m̵o̵n̵,̵J̵H̵e̵_̵S̵d̵k̵C̵o̵d̵e̵c̵.̵e̵n̵c̵o̵d̵e̵d̵,̵J̵H̵e̵_̵S̵d̵k̵R̵e̵a̵d̵s̵.̵p̵r̵o̵o̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵a̵s̵p̵i̵s̵_̵r̵1̵_̵c̵o̵s̵t̵_̵p̵r̵o̵b̵e̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵P̵R̵O̵O̵F̵_̵B̵Y̵T̵E̵S̵,̵J̵G̵x̵_̵S̵d̵k̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵p̵r̵o̵o̵f̵S̵t̵a̵r̵t̵,̵l̵i̵f̵t̵,̵c̵h̵e̵c̵k̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵o̵k̵_̵o̵r̵,̵r̵a̵w̵L̵e̵n̵g̵t̵h̵,̵J̵H̵e̵_̵S̵d̵k̵I̵n̵p̵u̵t̵G̵a̵t̵e̵.̵h̵e̵a̵d̵e̵r̵P̵r̵e̵f̵i̵x̵,̵J̵H̵e̵_̵S̵d̵k̵I̵n̵p̵u̵t̵G̵a̵t̵e̵.̵c̵o̵m̵p̵a̵r̵i̵s̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵o̵f̵f̵s̵e̵t̵,̵J̵H̵e̵_̵S̵d̵k̵I̵n̵p̵u̵t̵G̵a̵t̵e̵.̵t̵a̵g̵,̵a̵s̵p̵i̵s̵_̵r̵1̵_̵c̵o̵s̵t̵_̵p̵r̵o̵b̵e̵.̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵e̵m̵a̵n̵t̵i̵c̵,̵J̵H̵b̵_̵H̵e̵a̵d̵e̵r̵.̵s̵u̵f̵f̵i̵x̵,̵i̵n̵d̵e̵x̵,̵c̵a̵s̵t̵,̵c̵h̵i̵l̵d̵,̵s̵a̵v̵e̵d̵L̵e̵n̵g̵t̵h̵,̵c̵p̵L̵e̵n̵g̵t̵h̵]̵c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲J̲H̲c̲_̲C̲o̲r̲r̲e̲c̲t̲e̲d̲O̲w̲n̲e̲r̲s̲h̲i̲p̲.̲r̲e̲a̲d̲o̲n̲l̲y̲_̲g̲u̲a̲r̲d̲s̲.̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲c̲_̲C̲o̲r̲r̲e̲c̲t̲e̲d̲O̲w̲n̲e̲r̲s̲h̲i̲p̲.̲r̲e̲a̲d̲o̲n̲l̲y̲_̲g̲u̲a̲r̲d̲s̲.̲2̲,̲ ̲J̲H̲e̲_̲S̲d̲k̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲.̲s̲o̲u̲r̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲e̲_̲S̲d̲k̲R̲e̲a̲d̲s̲.̲c̲h̲e̲c̲k̲p̲o̲i̲n̲t̲_̲r̲e̲a̲d̲,̲ ̲J̲H̲e̲_̲S̲d̲k̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲.̲z̲e̲r̲o̲,̲ ̲J̲H̲e̲_̲S̲d̲k̲R̲e̲a̲d̲s̲.̲p̲u̲b̲l̲i̲c̲I̲n̲p̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲e̲_̲S̲d̲k̲C̲o̲d̲e̲c̲.̲d̲e̲c̲o̲d̲e̲d̲,̲ ̲J̲H̲e̲_̲S̲d̲k̲C̲o̲d̲e̲c̲.̲v̲a̲l̲i̲d̲a̲t̲e̲d̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲c̲o̲m̲m̲o̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲e̲_̲S̲d̲k̲C̲o̲d̲e̲c̲.̲e̲n̲c̲o̲d̲e̲d̲,̲ ̲J̲H̲e̲_̲S̲d̲k̲R̲e̲a̲d̲s̲.̲p̲r̲o̲o̲f̲,̲ ̲a̲s̲p̲i̲s̲_̲r̲1̲_̲c̲o̲s̲t̲_̲p̲r̲o̲b̲e̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲P̲R̲O̲O̲F̲_̲B̲Y̲T̲E̲S̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲G̲x̲_̲S̲d̲k̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲p̲r̲o̲o̲f̲S̲t̲a̲r̲t̲,̲ ̲l̲i̲f̲t̲,̲ ̲c̲h̲e̲c̲k̲e̲d̲,̲ ̲c̲o̲r̲e̲.̲o̲p̲t̲i̲o̲n̲.̲O̲p̲t̲i̲o̲n̲.̲o̲k̲_̲o̲r̲,̲ ̲r̲a̲w̲L̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲e̲_̲S̲d̲k̲I̲n̲p̲u̲t̲G̲a̲t̲e̲.̲h̲e̲a̲d̲e̲r̲P̲r̲e̲f̲i̲x̲,̲ ̲J̲H̲e̲_̲S̲d̲k̲I̲n̲p̲u̲t̲G̲a̲t̲e̲.̲c̲o̲m̲p̲a̲r̲i̲s̲o̲n̲,̲ ̲o̲f̲f̲s̲e̲t̲,̲ ̲J̲H̲e̲_̲S̲d̲k̲I̲n̲p̲u̲t̲G̲a̲t̲e̲.̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲s̲p̲i̲s̲_̲r̲1̲_̲c̲o̲s̲t̲_̲p̲r̲o̲b̲e̲.̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲t̲a̲g̲,̲ ̲s̲e̲m̲a̲n̲t̲i̲c̲,̲ ̲J̲H̲b̲_̲H̲e̲a̲d̲e̲r̲.̲s̲u̲f̲f̲i̲x̲,̲ ̲i̲n̲d̲e̲x̲,̲ ̲c̲a̲s̲t̲,̲ ̲c̲h̲i̲l̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲a̲v̲e̲d̲L̲e̲n̲g̲t̲h̲,̲ ̲c̲p̲L̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHe_SdkParent.lean:55:78: warning: This simp argument is unused:
+  checked
+
+Hint: Omit it from the simp argument list.
+  simp only [JHe_SdkInputGate.instruction, ̲bind_tc_ok, ̲if_true, ̲count, ̲bne_self_eq_false,
+      Bool.false_eq_true, ̲if_false, ̲(S2W_D189Entry.first_index JHb_World.e1).1,
+      (S2W_D189Entry.first_index JHb_World.e1).2.1, ̲(S2W_D189Entry.first_index JHb_World.e1).2.2,
+      JHe_SdkDistinct.source, ̲core.result.Result.Insts.CoreOpsTry.branch,
+      JHc_CorrectedOwnership.readonly_guards.1, ̲JHc_CorrectedOwnership.readonly_guards.2,
+      JHe_SdkCheckpoint.source, ̲JHe_SdkReads.checkpoint_read, ̲JHe_SdkCheckpoint.zero,
+      JHe_SdkReads.publicInput, ̲JHe_SdkCodec.decoded, ̲JHe_SdkCodec.validated,
+      core.result.Result.map_err, ̲common, ̲JHe_SdkCodec.encoded, ̲JHe_SdkReads.proof,
+      aspis_r1_cost_probe.verifier.PROOF_BYTES, ̲JGx_SdkConstants.proofStart, ̲lift,c̵h̵e̵c̵k̵e̵d̵,̵
+      core.option.Option.ok_or, ̲rawLength, ̲JHe_SdkInputGate.headerPrefix, ̲JHe_SdkInputGate.comparison,
+      offset, ̲JHe_SdkInputGate.tag, ̲aspis_r1_cost_probe.transport.Variant.tag,
+  ̵  ̵ ̵ ̵semantic,
+  ̲ ̲ ̲ ̲ ̲JHb_Header.suffix, ̲index, ̲cast, ̲child, ̲savedLength, ̲cpLength]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHe_SdkParent.lean:58:13: warning: This simp argument is unused:
+  JHb_Header.suffix
+
+Hint: Omit it from the simp argument list.
+  simp only [JHe_SdkInputGate.instruction, ̲bind_tc_ok, ̲if_true, ̲count, ̲bne_self_eq_false,
+      Bool.false_eq_true, ̲if_false, ̲(S2W_D189Entry.first_index JHb_World.e1).1,
+      (S2W_D189Entry.first_index JHb_World.e1).2.1, ̲(S2W_D189Entry.first_index JHb_World.e1).2.2,
+      JHe_SdkDistinct.source, ̲core.result.Result.Insts.CoreOpsTry.branch,
+      JHc_CorrectedOwnership.readonly_guards.1, ̲JHc_CorrectedOwnership.readonly_guards.2,
+      JHe_SdkCheckpoint.source, ̲JHe_SdkReads.checkpoint_read, ̲JHe_SdkCheckpoint.zero,
+      JHe_SdkReads.publicInput, ̲JHe_SdkCodec.decoded, ̲JHe_SdkCodec.validated,
+      core.result.Result.map_err, ̲common, ̲JHe_SdkCodec.encoded, ̲JHe_SdkReads.proof,
+      aspis_r1_cost_probe.verifier.PROOF_BYTES, ̲JGx_SdkConstants.proofStart, ̲lift, ̲checked,
+      core.option.Option.ok_or, ̲rawLength, ̲JHe_SdkInputGate.headerPrefix, ̲JHe_SdkInputGate.comparison,
+      offset, ̲JHe_SdkInputGate.tag, ̲aspis_r1_cost_probe.transport.Variant.tag, ̲s̲e̲m̲a̲n̲t̲i̲c̲,̲ ̲i̲n̲d̲e̲x̲,̲ ̲c̲a̲s̲t̲,̲
+      s̵e̵m̵a̵n̵t̵i̵c,̵J̵H̵b̵_̵H̵e̵a̵d̵e̵r̵.̵s̵u̵f̵f̵i̵x̵,̵i̵n̵d̵e̵x̵,̵c̵a̵s̵t̵,̵c̵hild, ̲savedLength, ̲cpLength]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHe_SdkParent.lean:58:42: warning: This simp argument is unused:
+  child
+
+Hint: Omit it from the simp argument list.
+  simp only [JHe_SdkInputGate.instruction, ̲bind_tc_ok, ̲if_true, ̲count, ̲bne_self_eq_false,
+      Bool.false_eq_true, ̲if_false, ̲(S2W_D189Entry.first_index JHb_World.e1).1,
+      (S2W_D189Entry.first_index JHb_World.e1).2.1, ̲(S2W_D189Entry.first_index JHb_World.e1).2.2,
+      JHe_SdkDistinct.source, ̲core.result.Result.Insts.CoreOpsTry.branch,
+      JHc_CorrectedOwnership.readonly_guards.1, ̲JHc_CorrectedOwnership.readonly_guards.2,
+      JHe_SdkCheckpoint.source, ̲JHe_SdkReads.checkpoint_read, ̲JHe_SdkCheckpoint.zero,
+      JHe_SdkReads.publicInput, ̲JHe_SdkCodec.decoded, ̲JHe_SdkCodec.validated,
+      core.result.Result.map_err, ̲common, ̲JHe_SdkCodec.encoded, ̲JHe_SdkReads.proof,
+      aspis_r1_cost_probe.verifier.PROOF_BYTES, ̲JGx_SdkConstants.proofStart, ̲lift, ̲checked,
+      core.option.Option.ok_or, ̲rawLength, ̲JHe_SdkInputGate.headerPrefix, ̲JHe_SdkInputGate.comparison,
+      offset, ̲JHe_SdkInputGate.tag, ̲aspis_r1_cost_probe.transport.Variant.tag,
+  ̵  ̵ ̵ ̵semantic,
+  ̲ ̲ ̲ ̲ ̲JHb_Header.suffix, ̲index, ̲cast,c̵h̵i̵l̵d̵,̵ ̲savedLength, ̲cpLength]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHe_SdkParent.lean:58:48: warning: This simp argument is unused:
+  savedLength
+
+Hint: Omit it from the simp argument list.
+  simp only [JHe_SdkInputGate.instruction, ̲bind_tc_ok, ̲if_true, ̲count, ̲bne_self_eq_false,
+      Bool.false_eq_true, ̲if_false, ̲(S2W_D189Entry.first_index JHb_World.e1).1,
+      (S2W_D189Entry.first_index JHb_World.e1).2.1, ̲(S2W_D189Entry.first_index JHb_World.e1).2.2,
+      JHe_SdkDistinct.source, ̲core.result.Result.Insts.CoreOpsTry.branch,
+      JHc_CorrectedOwnership.readonly_guards.1, ̲JHc_CorrectedOwnership.readonly_guards.2,
+      JHe_SdkCheckpoint.source, ̲JHe_SdkReads.checkpoint_read, ̲JHe_SdkCheckpoint.zero,
+      JHe_SdkReads.publicInput, ̲JHe_SdkCodec.decoded, ̲JHe_SdkCodec.validated,
+      core.result.Result.map_err, ̲common, ̲JHe_SdkCodec.encoded, ̲JHe_SdkReads.proof,
+      aspis_r1_cost_probe.verifier.PROOF_BYTES, ̲JGx_SdkConstants.proofStart, ̲lift, ̲checked,
+      core.option.Option.ok_or, ̲rawLength, ̲JHe_SdkInputGate.headerPrefix, ̲JHe_SdkInputGate.comparison,
+      offset, ̲JHe_SdkInputGate.tag, ̲aspis_r1_cost_probe.transport.Variant.tag,
+  ̵  ̵ ̵ ̵semantic,
+  ̲ ̲ ̲ ̲ ̲JHb_Header.suffix, ̲index, ̲cast, ̲child,s̵a̵v̵e̵d̵L̵e̵n̵g̵t̵h̵,̵ ̲cpLength]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHe_SdkParent.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
