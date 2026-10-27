@@ -1,7 +1,7 @@
 import R1Z.PV_Src_PortInternalMeaning
 set_option autoImplicit false
 namespace R1Z.PV_Src_PortInternalResult
-open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.PoseidonRefine
 open BuilderForestAdmissionPort PV_Src_PortSboxStep PV_Src_PortTraceRounds
 variable {K : Type} [Field K] [CharP K 2147483647]
 
