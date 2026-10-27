@@ -1,0 +1,3 @@
+# Authentication-prefix split
+
+Attempt056 manually stopped for growing proof checking at62.904s/RSS6788516KiB/swap0,exit143. It had not timed out or been killed by memory pressure. Caps unchanged. The whole outer Result case split followed by a huge concrete-tail rfl was replaced by congruence on the single op48 bind; cases now concern only its inner decoder result, before comparing the tail. This is a source/proof change, not an unchanged rerun.057 prints cached native authentication and copied draft tails for inspection. No mathematical counterexample or complete validation success is inferred from the resource failure.

@@ -1,0 +1,5 @@
+import JHd_Authentication
+set_option autoImplicit false
+#print AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts
+#print AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry
+#print AspisR1.JHd_Authentication.afterMaster
