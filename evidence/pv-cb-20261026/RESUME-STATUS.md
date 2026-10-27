@@ -1,5 +1,7 @@
 # Resume status
 
+**Resume 3 FINAL override:** [RESUME3-LIVE-STATUS.md](RESUME3-LIVE-STATUS.md) supersedes every budget, next-ID and PREPARED statement below. **69/69 Lean used (66 green,3 failed); Kani queue stopped after2/10 runs on first configuration failure.18/73 →23/73 candidate rows;0 endpoint premises removed.** Final integrated64-declaration audit:27168. Next unused assigned ID27169 is reserved for a future budget, not permission to launch now. The rest of this file is historical.
+
 **Resume 3 override:** see [RESUME3-PREPARED.md](RESUME3-PREPARED.md).
 Remaining budget is **69 Lean / 10 Kani**. Use IDs **27100–27399**, next
 unused **27100**; the old 24000–24699 range is unsafe and must never be reused.

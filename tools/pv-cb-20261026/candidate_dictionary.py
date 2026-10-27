@@ -46,6 +46,7 @@ for label,ids in groups:
   for binder in re.findall(r'\(([^()]*)\)',args):
    if ' : ' in binder:explicit.extend(binder.split(' : ',1)[0].split())
   if n==229:explicit=['base','ops','a','b']
+  if n==84:explicit=['ops','hash','tag','values']
   if n!=229:stmt=stmt.replace('(ops : ExternalFuns)','(base : ExternalTypes) (ops : @ExternalFuns (native base))',1)
   # All exact carriers/functions are qualified, including the LatePublic transport.
   for name in ['encodeW','decodeW','encodeArray','decodePoints','encodeRow','decodePoint','encode','decode']:
@@ -70,7 +71,11 @@ if helper_plan.exists():
  audit+='\n-- Generic/carrier/P6 helper audit for the newly discharged rows.\n'
  audit+=''.join(f'#print axioms {name}\n' for name in json.loads(helper_plan.read_text())['covered_declarations'] if name not in source_names)
 outputs[lean/'PV_CB_CandidateAudit.lean']=audit
-report=dict(status='PREPARED, not compiled; no extra row discharge',selected_ops=[r['op'] for r in rows],modules=['PV_CB_CandidateDictionary']+['PV_CB_Candidate'+g[0] for g in groups]+['PV_CB_CandidateAudit'],purpose='Check that all independently discharged source/value selections coexist in one ExternalFuns record, preserving the common native carrier and all remaining callbacks.')
+# Public is the last dependency and carries the final audit commands itself.
+# This provides a complete audited closure even when no extra wrapper replay remains.
+public_path=lean/'PV_CB_CandidatePublic.lean'
+outputs[public_path]=''.join(f'import R1Z.PV_CB_Candidate{label}\n' for label,_ in groups if label!='Public')+outputs[public_path]+'\n-- Audit both'+audit.split('\n-- Audit both',1)[1]
+report=dict(status='Generated static manifest; validation and current compiled audit location are in RESUME3-FINAL-RESULT.json; no extra row discharge',selected_ops=[r['op'] for r in rows],modules=['PV_CB_CandidateDictionary']+['PV_CB_Candidate'+g[0] for g in groups]+['PV_CB_CandidateAudit'],purpose='Check that all independently discharged source/value selections coexist in one ExternalFuns record, preserving the common native carrier and all remaining callbacks.')
 outputs[root/'evidence/pv-cb-20261026/candidate-dictionary-prepared.json']=json.dumps(report,indent=2)+'\n'
 if sys.argv[1:]==['--check']:
  mismatches=[str(p.relative_to(root)) for p,s in outputs.items() if not p.exists() or p.read_text()!=s]

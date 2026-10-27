@@ -4,7 +4,7 @@ import R1Z.PV_CB_Op109Exact
 import R1Z.PV_CB_Op118Exact
 
 -- Focused audit of newly discharged source laws and their generic/carrier helpers.
--- The all-row candidate audit remains separately blocked on the recorded cache closure.
+-- Uncompiled draft, superseded by the integrated final audit in CandidatePublic (receipt27168).
 #print axioms R1Z.PV_CB_Op105Exact.op105_source
 #print axioms R1Z.PV_CB_Op107Transport.native_roundtrip
 #print axioms R1Z.PV_CB_Op107Transport.extracted_roundtrip

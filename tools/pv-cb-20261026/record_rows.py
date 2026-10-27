@@ -21,5 +21,5 @@ for word in sys.argv[1:]:
  a=[y for y in a if y['op']!=n]+[x]
 a.sort(key=lambda x:x['op']);count=sum(x['status']=='ROW-DISCHARGED(candidate)' for x in a)
 (p/'RESUME-SOURCE-ROWS.json').write_text(json.dumps(a,indent=2)+'\n')
-(p/'RESUME-SOURCE-ROWS.md').write_text(f'# Source equation resume\n\nBefore: 0/73 discharged; current: {count}/73. No endpoint removal claimed.\n\n|op|row|status|theorem|receipt / obstruction|\n|---:|---|---|---|---|\n'+''.join(f"|{x['op']}|{x['row']}|{x['status']}|{x['theorem'] or '—'}|{x['receipt']}; {x['note']}|\n" for x in a))
+(p/'RESUME-SOURCE-ROWS.md').write_text(f'# Source equation resume\n\nOriginal-job baseline: 0/73; this resume: 18/73 → {count}/73. No endpoint removal claimed.\n\n|op|row|status|theorem|receipt / obstruction|\n|---:|---|---|---|---|\n'+''.join(f"|{x['op']}|{x['row']}|{x['status']}|{x['theorem'] or '—'}|{x['receipt']}; restored replay {x.get('restored_replay_receipt','not yet recorded')}; {x['note']}|\n" for x in a))
 print(f'{count}/73 source rows discharged')

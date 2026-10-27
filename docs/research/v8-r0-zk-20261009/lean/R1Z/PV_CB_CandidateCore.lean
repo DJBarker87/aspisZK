@@ -36,7 +36,7 @@ theorem op84 (base : ExternalTypes) (ops : @ExternalFuns (native base))
       PV_CB_ShippedOp84Fresh.aspis_core.r0.merkle.leaf hash tag values := by
   letI : ExternalTypes := native base
   change (PV_CB_Op84Exact.selected ops).op84 hash tag values = _
-  exact R1Z.PV_CB_Op84Exact.op84_source ops tag values
+  exact R1Z.PV_CB_Op84Exact.op84_source ops hash tag values
 #print axioms op84
 theorem op86 (base : ExternalTypes) (ops : @ExternalFuns (native base)) :
     (selected base ops).op86 = .ok PV_CB_ShippedOp86.aspis_core.r0.opening.LANES := by
