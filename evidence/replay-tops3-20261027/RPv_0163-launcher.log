@@ -1,0 +1,23 @@
+{"attempt": "RPv_0163", "exit_status": 0, "wall_seconds": 1.5337471730308607, "peak_rss_kib": "3029704", "swaps": "0", "print_axioms": ["'AspisR1.FIy_Writeback.length' depends on axioms: [propext]", "'AspisR1.FIy_Writeback.index' depends on axioms: [propext]"]}
+List.getElem?_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} :
+  (l.set i a)[j]? = if i = j then if i < l.length then some a else none else l[j]?
+List.getElem?_set_self.{u_1} {α : Type u_1} {l : List α} {i : ℕ} {a : α} (h : i < l.length) : (l.set i a)[i]? = some a
+List.getElem?_set_ne.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} (h : i ≠ j) {a : α} : (l.set i a)[j]? = l[j]?
+List.getElem?_mapIdx.{u_1, u_2} {α : Type u_1} {α✝ : Type u_2} {f : ℕ → α → α✝} {l : List α} {i : ℕ} :
+  (List.mapIdx f l)[i]? = Option.map (f i) l[i]?
+List.ext_getElem?.{u_1} {α : Type u_1} {l₁ l₂ : List α} (h : ∀ (i : ℕ), l₁[i]? = l₂[i]?) : l₁ = l₂
+def Aeneas.Std.Slice.setAtNat.{u} : {α : Type u} → Slice α → ℕ →
+...
+List.getElem?_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} :
+  (l.set i a)[j]? = if i = j then if i < l.length then some a else none else l[j]?
+List.getElem?_set_self.{u_1} {α : Type u_1} {l : List α} {i : ℕ} {a : α} (h : i < l.length) : (l.set i a)[i]? = some a
+List.getElem?_set_ne.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} (h : i ≠ j) {a : α} : (l.set i a)[j]? = l[j]?
+List.getElem?_mapIdx.{u_1, u_2} {α : Type u_1} {α✝ : Type u_2} {f : ℕ → α → α✝} {l : List α} {i : ℕ} :
+  (List.mapIdx f l)[i]? = Option.map (f i) l[i]?
+List.ext_getElem?.{u_1} {α : Type u_1} {l₁ l₂ : List α} (h : ∀ (i : ℕ), l₁[i]? = l₂[i]?) : l₁ = l₂
+def Aeneas.Std.Slice.setAtNat.{u} : {α : Type u} → Slice α → ℕ → α → Slice α :=
+fun {α} v i x => ⟨(↑v).set i x, ⋯⟩
+'AspisR1.FIy_Writeback.length' depends on axioms: [propext]
+'AspisR1.FIy_Writeback.index' depends on axioms: [propext]
+
+Running as unit: run-r03d5e8165c91400fb2ef6b6959fce1c3.scope; invocation ID: 2c1857a989f74ae5b71f6af995672b0e

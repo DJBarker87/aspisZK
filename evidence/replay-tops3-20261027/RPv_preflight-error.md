@@ -1,0 +1,1 @@
+The first dependency-pin preflight stopped before any Lean invocation because the continuation job config omitted RPu_overlay. Restored its required position between RPv_overlay and RPt_overlay. No host runner changes, compiler retry, or predecessor object changes.

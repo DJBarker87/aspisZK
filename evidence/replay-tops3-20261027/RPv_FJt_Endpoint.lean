@@ -1,0 +1,45 @@
+import RPv_FJt_AcceptedMaskedLiteral
+import RPv_FJq_LastPhysical
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJt_Endpoint
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+open AspisR1CurrentCaller InstalledPreparation
+open MultiproofConeCanonical OraclePortCompactDraft OraclePortStoredDecisionDraftC4
+open FIz_ConcretePack (embed)
+/-- The literal semantic endpoint for the explicit fixed FIq installation,
+retaining only the public/challenge associations as local residual joins.
+No adopted-root premise is removed by this theorem. -/
+theorem value (std : ClaimsUnrolledFinish.StdCalls) (ops : Ops) (seed : FinishModel.Boundaries)
+    {H : Type} (D : aspis_core.digest.Digest32 H)
+    (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (bytes : Slice U8) (hash : H) (sem : AspisR1CurrentCaller.r1_semantic.Verified H)
+    (bounds : FJa_PublicBounds.Bounds (FJa_PublicCopy.native (FirstComposition.toRetainedPublic pub)))
+    (accepted : (AspisS1NativeBufferClaimTrace.semanticBase ops
+      (ClaimsUnrolledFinish.install std (FIq_Install.boundaries seed))).op9 D pub bytes hash none=ok (.Ok sem))
+    (pre : AspisR1PublicPreparation.r1_wire.Prefix) (sourceParsed : PrefixAdapter.parseAccepted bytes=ok (.Ok pre))
+    (stored : Bytes) (p : Parsed) (q : Fin 22 → Fin 262144) (tr : RawCutTranscriptRun.ErasedPrefix)
+    (parsed : OraclePortStoredParserC4.parseReached stored tr=some p)
+    (records : p.semantic=pre.records.val.map (fun s=>bytesOf s.val))
+    (data : MatchingSupport.Data AspisWideTower.WideExact)
+    (read : LiteralMatchingData.read (typedRows p q tr)=some data)
+    (literalPub : R0P.Public SemanticPublicWire.M31) (v : LiteralOpeningView.View)
+    (viewRead : LiteralOpeningView.read (typedRows p q tr)=some v)
+    (publicSame : SpendDataMap.mapPublic embed (FIw_PublicModel.ofPublic
+      (FJa_PublicCopy.native (FirstComposition.toRetainedPublic pub)))=
+      SpendDataMap.mapPublic ExactBaseProjection.embed literalPub)
+    (challengesSame : v.semantic.map Prod.snd=FJq_ChallengeSlots.values (retainedSem sem).challenges (retainedSem sem).alpha)
+    (polys : Fin 10 → Polynomial AspisWideTower.WideExact)
+    (polyRead : R0P.Mask.semPolysZ (SelectedSemanticPrefixFacts.lift v.semantic)=some polys) :
+    (polys 9).eval ((v.semantic.map Prod.snd).getD 24 0)=R3SemanticRemainingJoins.terminal literalPub v data := by
+  obtain ⟨before,after,running,rounds,can,formula⟩:=FJt_AcceptedMaskedLiteral.value std ops seed D pub bytes hash sem
+    bounds accepted pre sourceParsed p q tr (OraclePortStoredParserC4.parsed _ _ _ parsed).2.2
+    records data read literalPub v publicSame challengesSame
+  have last:=FJq_LastPhysical.value (retainedDigest D) bytes pre sourceParsed before after running
+    (retainedSem sem).alpha rounds stored p q tr parsed records v viewRead
+    (retainedSem sem).challenges challengesSame polys polyRead
+  exact last.trans formula
+#print axioms value
+end AspisR1.FJt_Endpoint
+end

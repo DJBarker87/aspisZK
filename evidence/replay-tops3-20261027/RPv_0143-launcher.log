@@ -1,0 +1,30 @@
+{"attempt": "RPv_0143", "exit_status": 0, "wall_seconds": 1.1207291769678704, "peak_rss_kib": "2632716", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.array.Array.index : {T I Output : Type} →
+  {N : Usize} → core.ops.index.Index (Slice T) I Output → Std.Array T N → I → Result Output :=
+fun {T I Output} {N} inst a i => inst.index a.to_slice i
+def Aeneas.Std.core.ops.index.IndexSlice : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → core.ops.index.Index (Slice T) I Output :=
+fun {T I Output} inst => { index := core.slice.index.Slice.index inst }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.RangeTo Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeToUsize,
+...
+def Aeneas.Std.core.array.Array.index : {T I Output : Type} →
+  {N : Usize} → core.ops.index.Index (Slice T) I Output → Std.Array T N → I → Result Output :=
+fun {T I Output} {N} inst a i => inst.index a.to_slice i
+def Aeneas.Std.core.ops.index.IndexSlice : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → core.ops.index.Index (Slice T) I Output :=
+fun {T I Output} inst => { index := core.slice.index.Slice.index inst }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.RangeTo Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeToUsize,
+    get := core.slice.index.SliceIndexRangeToUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeToUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeToUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeToUsizeSlice.index_mut }
+
+Running as unit: run-rc99c919104744fde8027406d36bb6cf1.scope; invocation ID: fef8bb68955947afaf856d6564da3f18

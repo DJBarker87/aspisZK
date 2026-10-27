@@ -1,0 +1,3 @@
+# Replay booking scope
+
+The completion target is AspisR1.FJv_Top.deployed, with the inherited 83T/3P/13G inventory in evidence/stack1-20261027/FJv_recount.json. Its before/after complete kernel statements are retained there. This job changes only module import aliases, no theorem statement or proof body. Premises removed/added/changed: 0/0/0 (T0/P0/G0/C0). L187 is coherent replay evidence only and is not a premise-removal claim. FJv_Deployed is a specialized, non-adopted replay target. No claim of joint native/runtime inhabitation or deployed 100-bit closure is made. Source-to-ELF and other retained obligations remain open. The frozen3, RuntimePersistence, game and trace-fidelity decisions are unchanged.
