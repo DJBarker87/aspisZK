@@ -12236,3 +12236,16 @@ SHA-pinned freeze records the only fallback for needed-but-unresolved modules, r
 import closure to be pinned by one of the two records, and otherwise requires a stop naming the
 module. runjoin19 resumes with that audit, then late_append and the bank, then the compiler-return
 composition. Rows removed outright: 0. Privacy target not yet established.
+
+## D306 (Stream B) 2026-10-27 17:38 UTC: pv-reach result; pv-reach2 launched
+
+pv-reach used its 100-attempt budget (90 passed, 10 failed; 0 Kani; standard axioms; combined audit
+44100 exit 0, 1.71 s, 4.23 GB peak, no swap, revision fcd0358000, on retained objects, not a clean
+replay). It proves extracted control-flow prefix certificates, named callee boundaries, guard branch
+decompositions and the retry-entry split over ProverRwFull. Complete reached sets and exclusion
+theorems are not proved, so V404 and V405 stay OPEN. Attempt 44005 repeated an unchanged failing
+import; the worker recorded the deviation without credit. No shipped code changed; branch pushed
+(eb627aa1d8). pv-reach2 resumes in the same worktree: whole-run membership per fixture shape,
+exclusion of every other dictionary entry, and non-vacuity, with native data only as named
+association hypotheses (IDs 44200-44499). Rows removed outright: 0. Privacy target not yet
+established.
