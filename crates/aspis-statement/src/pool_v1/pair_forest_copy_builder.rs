@@ -235,52 +235,21 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
     let mut sibs = [[0u32; 8]; 24];
     bits[0] = u32::from(pair.selected_second);
     sibs[0] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = other; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[1] = ((pair.membership.index >> 0) & 1) as u32;
-    sibs[1] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[0]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[2] = ((pair.membership.index >> 1) & 1) as u32;
-    sibs[2] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[1]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[3] = ((pair.membership.index >> 2) & 1) as u32;
-    sibs[3] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[2]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[4] = ((pair.membership.index >> 3) & 1) as u32;
-    sibs[4] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[3]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[5] = ((pair.membership.index >> 4) & 1) as u32;
-    sibs[5] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[4]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[6] = ((pair.membership.index >> 5) & 1) as u32;
-    sibs[6] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[5]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[7] = ((pair.membership.index >> 6) & 1) as u32;
-    sibs[7] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[6]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[8] = ((pair.membership.index >> 7) & 1) as u32;
-    sibs[8] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[7]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[9] = ((pair.membership.index >> 8) & 1) as u32;
-    sibs[9] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[8]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[10] = ((pair.membership.index >> 9) & 1) as u32;
-    sibs[10] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[9]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[11] = ((pair.membership.index >> 10) & 1) as u32;
-    sibs[11] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[10]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[12] = ((pair.membership.index >> 11) & 1) as u32;
-    sibs[12] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[11]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[13] = ((pair.membership.index >> 12) & 1) as u32;
-    sibs[13] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[12]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[14] = ((pair.membership.index >> 13) & 1) as u32;
-    sibs[14] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[13]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[15] = ((pair.membership.index >> 14) & 1) as u32;
-    sibs[15] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[14]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[16] = ((pair.membership.index >> 15) & 1) as u32;
-    sibs[16] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[15]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[17] = ((pair.membership.index >> 16) & 1) as u32;
-    sibs[17] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[16]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[18] = ((pair.membership.index >> 17) & 1) as u32;
-    sibs[18] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[17]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[19] = ((pair.membership.index >> 18) & 1) as u32;
-    sibs[19] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[18]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[20] = ((pair.membership.index >> 19) & 1) as u32;
-    sibs[20] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = pair.membership.siblings[19]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[21] = u32::from(input.super_root_directions[0]);
-    sibs[21] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = input.super_root_siblings[0]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[22] = u32::from(input.super_root_directions[1]);
-    sibs[22] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = input.super_root_siblings[1]; [w0, w1, w2, w3, w4, w5, w6, w7] };
-    bits[23] = u32::from(input.super_root_directions[2]);
-    sibs[23] = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = input.super_root_siblings[2]; [w0, w1, w2, w3, w4, w5, w6, w7] };
+    let mut level = 1;
+    while level < 21 {
+        bits[level] = ((pair.membership.index >> (level - 1)) & 1) as u32;
+        let sib = pair.membership.siblings[level - 1];
+        let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = sib;
+        sibs[level] = [w0, w1, w2, w3, w4, w5, w6, w7];
+        level += 1;
+    }
+    while level < 24 {
+        bits[level] = u32::from(input.super_root_directions[level - 21]);
+        let sib = input.super_root_siblings[level - 21];
+        let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = sib;
+        sibs[level] = [w0, w1, w2, w3, w4, w5, w6, w7];
+        level += 1;
+    }
     let empty = pair_empty_roots();
     let mut w = RW {
         input_value: pair.value,
@@ -303,50 +272,28 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
         transfer: false,
         asset: asset.0,
         next_pair_index: snapshot.next_pair_index,
-        frontier: [
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[0]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[1]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[2]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[3]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[4]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[5]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[6]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[7]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[8]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[9]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[10]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[11]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[12]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[13]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[14]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[15]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[16]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[17]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[18]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = snapshot.frontier[19]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-        ],
-        empty: [
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[0]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[1]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[2]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[3]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[4]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[5]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[6]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[7]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[8]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[9]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[10]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[11]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[12]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[13]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[14]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[15]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[16]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[17]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[18]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-            { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = empty[19]; [w0, w1, w2, w3, w4, w5, w6, w7] },
-        ],
+        frontier: {
+            let mut frontier = [[0u32; 8]; 20];
+            let mut l = 0;
+            while l < 20 {
+                let sib = snapshot.frontier[l];
+                let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = sib;
+                frontier[l] = [w0, w1, w2, w3, w4, w5, w6, w7];
+                l += 1;
+            }
+            frontier
+        },
+        empty: {
+            let mut roots = [[0u32; 8]; 20];
+            let mut l = 0;
+            while l < 20 {
+                let sib = empty[l];
+                let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = sib;
+                roots[l] = [w0, w1, w2, w3, w4, w5, w6, w7];
+                l += 1;
+            }
+            roots
+        },
     };
     match rec {
         Some(r) => {
