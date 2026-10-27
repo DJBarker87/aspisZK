@@ -1,0 +1,55 @@
+{"attempt": "XRu_L079", "exit_status": 1, "wall_seconds": 1.3641679720021784, "peak_rss_kib": "2651948", "swaps": "0", "print_axioms": ["'XRu_RowBoth.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRu_RowBoth.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'XRu_RowBoth.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+XRu_generated/XRu_RowBoth.lean:60:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let (iter, intoBack) ← XRn_Join_intoIter (XRu_RowFold.row x0 x1 x2 x3)
+    let back ← verifier.update_residue_row_loop1 iter id
+    ok (intoBack back)
+in the target expression
+  (do
+      let __x ← XRn_Join_intoIter (XRu_RowFold.row x0 x1 x2 x3)
+      match __x with
+        | (iter, intoBack) => do
+          let back ← verifier.update_residue_row_loop1 iter id
+          ok (intoBack back)) =
+    S7Kani2OwnedRow.residue_owned (Array.make 4#usize [a, b, c, d] ⋯)
+      { c0 := (power.c0.a, power.c0
+...
+right✝¹ :
+  ↑x3 = if false = true then AspisV8R17.RawReducer.foldBits (↑d + ↑power.c1.b * ↑basis) else ↑d + ↑power.c1.b * ↑basis
+y3 : U64
+f3 : AspisR1.ExtractedCurrentReducer.foldExecution x3 = ok y3
+right✝ : ↑y3 = AspisV8R17.RawReducer.foldBits ↑x3
+t3 : S7OwnedP6Scalar.residue_scalar_owned d power.c1.b basis true = ok y3
+run :
+  verifier.update_residue_row_loop0 { start := 0#usize, «end» := 4#usize } (Array.make 4#usize [a, b, c, d] ⋯) basis
+      (Array.make 4#usize [power.c0.a, power.c0.b, power.c1.a, power.c1.b] ⋯) =
+    ok (Array.make 4#usize [x0, x1, x2, x3] ⋯)
+folded :
+  (do
+      let (iter, intoBack) ← XRn_Join_intoIter (XRu_RowFold.row x0 x1 x2 x3)
+      let back ← verifier.update_residue_row_loop1 iter id
+      ok (intoBack back)) =
+    ok (XRu_RowFold.row y0 y1 y2 y3)
+⊢ (do
+      let __x ← XRn_Join_intoIter (XRu_RowFold.row x0 x1 x2 x3)
+      match __x with
+        | (iter, intoBack) => do
+          let back ← verifier.update_residue_row_loop1 iter id
+          ok (intoBack back)) =
+    S7Kani2OwnedRow.residue_owned (Array.make 4#usize [a, b, c, d] ⋯)
+      { c0 := (power.c0.a, power.c0.b), c1 := (power.c1.a, power.c1.b) } basis true
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XRu_RowBoth.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7ca07e56e540470ca1c05b94868eba02.scope; invocation ID: 5c3b886abf2d4309bf7f4e500def59b5

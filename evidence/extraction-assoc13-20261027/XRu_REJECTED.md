@@ -1,0 +1,5 @@
+# Excluded attempts
+
+All failed receipts are retained and excluded from proof/axioms credit. L066 dependent array destructuring; L069/L071 scalar binder typing/shape; L073 trailing tactic after a solved goal; L075 let normalization; L079 rewrite transparency; L082/L083 pending-step let/carrier/addition issues; L086/L087 loop dependent match/zero elaboration; L089 irreducible row constants; L091 default heartbeat limit; L097 no-progress dsimp; L099/L100 attempted five-zero-byte accepted record fixture (unresolved primitive reads, plus L100 missing arithmetic import). The last fixture is archived REJECTED and is NOT non-vacuity evidence.
+
+L091 was never replayed unchanged or with raised limits. XRu_RecordCuts is its smaller accepted frame-prefix replacement; full cross-parser Result transport stays OPEN. No memory-killed job occurred. L092 is a precompiler direct-object refusal, not a compiler process; replay-based L093 inspected the actual owners without rebuilding a root closure or changing launchers.

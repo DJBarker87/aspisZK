@@ -1,0 +1,168 @@
+XRu_generated/XRu_NewStep.lean:28:101: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c ≥ 1
+where
+ a := ↑(↑weights).length
+ b := ↑↑(raw, index).2
+ c := ↑↑index
+ d := ↑(alloc.vec.Vec.length raw)
+XRu_generated/XRu_NewStep.lean:36:75: error: Application type mismatch: The argument
+  index
+has type
+  Usize
+but is expected to have type
+  U64
+in the application
+  AspisR1.ExtractedCurrentReducerOps.add_success index
+XRu_generated/XRu_NewStep.lean:36:93: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+weights : Slice aspis_core.field.QM31
+raw : Raw
+index : Usize
+len : (↑(raw, index).1).length = (↑weights).length
+bound : ↑(raw, index).2 ≤ (↑weights).length
+active : index < weights.len
+w : aspis_core.field.QM31
+left✝ : weights.index_usize index = ok w
+old : Std.Array U64 4#usize
+back : Std.Array U64 4#usize → alloc.vec.Vec (Std.Array U64 4#usize)
+hmut :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) raw index = ok (old, back)
+ho : old = (↑raw)[↑index]
+hback : back = alloc.vec.Vec.set raw index
+hm : alloc.vec.Vec.index_mut_usize raw index = ok (old, back)
+hm' : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) raw index = ok (old, back)
+next : UScalar UScalarTy.Usize
+hn : index + 1#usize = ok next
+run✝³ :
+  (if index < weights.len then do
+      let w ← weights.index_usize index
+      let i2 ← lift (UScalar.cast UScalarTy.U64 w.c0.a)
+      let i4 ← lift (UScalar.cast UScalarTy.U64 w.c0.b)
+      let i6 ← lift (UScalar.cast UScalarTy.U64 w.c1.a)
+      let i8 ← lift (UScalar.cast UScalarTy.U64 w.c1.b)
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) raw index
+      let index1 ← index + 1#usize
+      ok (cont (index_mut_back (Array.make 4#usize [i2, i4, i6, i8] ⋯), index1))
+    else ok (done raw)) =
+    ok
+      (cont
+        (back
+            (Array.make 4#usize
+              [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b, UScalar.cast UScalarTy.U64 w.c1.a,
+                UScalar.cast UScalarTy.U64 w.c1.b]
+              ⋯),
+          next))
+run✝² :
+  (do
+      let w ← weights.index_usize index
+      let i2 ← lift (UScalar.cast UScalarTy.U64 w.c0.a)
+      let i4 ← lift (UScalar.cast UScalarTy.U64 w.c0.b)
+      let i6 ← lift (UScalar.cast UScalarTy.U64 w.c1.a)
+      let i8 ← lift (UScalar.cast UScalarTy.U64 w.c1.b)
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) raw index
+      let index1 ← index + 1#usize
+      ok (cont (index_mut_back (Array.make 4#usize [i2, i4, i6, i8] ⋯), index1))) =
+    ok
+      (cont
+        (back
+            (Array.make 4#usize
+              [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b, UScalar.cast UScalarTy.U64 w.c1.a,
+                UScalar.cast UScalarTy.U64 w.c1.b]
+              ⋯),
+          next))
+run✝¹ :
+  (do
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) raw index
+      let index1 ← index + 1#usize
+      ok
+          (cont
+            (index_mut_back
+                (Array.make 4#usize
+                  [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b,
+                    UScalar.cast UScalarTy.U64 w.c1.a, UScalar.cast UScalarTy.U64 w.c1.b]
+                  ⋯),
+              index1))) =
+    ok
+      (cont
+        (back
+            (Array.make 4#usize
+              [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b, UScalar.cast UScalarTy.U64 w.c1.a,
+                UScalar.cast UScalarTy.U64 w.c1.b]
+              ⋯),
+          next))
+run✝ :
+  (do
+      let index1 ← index + 1#usize
+      ok
+          (cont
+            (back
+                (Array.make 4#usize
+                  [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b,
+                    UScalar.cast UScalarTy.U64 w.c1.a, UScalar.cast UScalarTy.U64 w.c1.b]
+                  ⋯),
+              index1))) =
+    ok
+      (cont
+        (back
+            (Array.make 4#usize
+              [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b, UScalar.cast UScalarTy.U64 w.c1.a,
+                UScalar.cast UScalarTy.U64 w.c1.b]
+              ⋯),
+          next))
+run :
+  ok
+      (cont
+        (back
+            (Array.make 4#usize
+              [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b, UScalar.cast UScalarTy.U64 w.c1.a,
+                UScalar.cast UScalarTy.U64 w.c1.b]
+              ⋯),
+          next)) =
+    ok
+      (cont
+        (back
+            (Array.make 4#usize
+              [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b, UScalar.cast UScalarTy.U64 w.c1.a,
+                UScalar.cast UScalarTy.U64 w.c1.b]
+              ⋯),
+          next))
+⊢ ↑sorry + ↑sorry < 2 ^ 64
+XRu_generated/XRu_NewStep.lean:42:29: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c ≤ 0
+where
+ a := ↑(↑weights).length
+ b := ↑↑(raw, index).2
+ c := ↑↑index
+ d := ↑(↑raw).length
+XRu_generated/XRu_NewStep.lean:42:39: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ 0
+where
+ a := ↑↑(raw, index).2
+ b := ↑↑index
+ c := ↑(↑raw).length
+'XRu_NewStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
