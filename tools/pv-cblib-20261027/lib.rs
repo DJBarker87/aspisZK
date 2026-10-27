@@ -457,3 +457,89 @@ pub fn sha_pad_owned_split8(buffer:[u8;64],pos:usize,suffix:[u8;8])
         (first,None,first,0)
     }
 }
+
+// Owned byte codecs for the pinned soft compression driver.
+pub fn sha_load_be4(b:[u8;4])->u32 {
+    ((b[0] as u32)<<24u32)|((b[1] as u32)<<16u32)|((b[2] as u32)<<8u32)|(b[3] as u32)
+}
+pub fn sha_store_be4(w:u32)->[u8;4] {
+    [(w>>24u32) as u8,(w>>16u32) as u8,(w>>8u32) as u8,w as u8]
+}
+pub fn sha_load_lane0(b:[u8;64])->u32 { sha_load_be4([b[0],b[1],b[2],b[3]]) }
+pub fn sha_load_lane1(b:[u8;64])->u32 { sha_load_be4([b[4],b[5],b[6],b[7]]) }
+pub fn sha_load_lane2(b:[u8;64])->u32 { sha_load_be4([b[8],b[9],b[10],b[11]]) }
+pub fn sha_load_lane3(b:[u8;64])->u32 { sha_load_be4([b[12],b[13],b[14],b[15]]) }
+pub fn sha_load_lane4(b:[u8;64])->u32 { sha_load_be4([b[16],b[17],b[18],b[19]]) }
+pub fn sha_load_lane5(b:[u8;64])->u32 { sha_load_be4([b[20],b[21],b[22],b[23]]) }
+pub fn sha_load_lane6(b:[u8;64])->u32 { sha_load_be4([b[24],b[25],b[26],b[27]]) }
+pub fn sha_load_lane7(b:[u8;64])->u32 { sha_load_be4([b[28],b[29],b[30],b[31]]) }
+pub fn sha_load_lane8(b:[u8;64])->u32 { sha_load_be4([b[32],b[33],b[34],b[35]]) }
+pub fn sha_load_lane9(b:[u8;64])->u32 { sha_load_be4([b[36],b[37],b[38],b[39]]) }
+pub fn sha_load_lane10(b:[u8;64])->u32 { sha_load_be4([b[40],b[41],b[42],b[43]]) }
+pub fn sha_load_lane11(b:[u8;64])->u32 { sha_load_be4([b[44],b[45],b[46],b[47]]) }
+pub fn sha_load_lane12(b:[u8;64])->u32 { sha_load_be4([b[48],b[49],b[50],b[51]]) }
+pub fn sha_load_lane13(b:[u8;64])->u32 { sha_load_be4([b[52],b[53],b[54],b[55]]) }
+pub fn sha_load_lane14(b:[u8;64])->u32 { sha_load_be4([b[56],b[57],b[58],b[59]]) }
+pub fn sha_load_lane15(b:[u8;64])->u32 { sha_load_be4([b[60],b[61],b[62],b[63]]) }
+pub fn sha_load64(b:[u8;64])->[u32;16] { [sha_load_lane0(b),sha_load_lane1(b),sha_load_lane2(b),sha_load_lane3(b),sha_load_lane4(b),sha_load_lane5(b),sha_load_lane6(b),sha_load_lane7(b),sha_load_lane8(b),sha_load_lane9(b),sha_load_lane10(b),sha_load_lane11(b),sha_load_lane12(b),sha_load_lane13(b),sha_load_lane14(b),sha_load_lane15(b)] }
+pub fn sha_byte_codec_root(b:[u8;64],w:u32)->([u32;16],[u8;4]) {(sha_load64(b),sha_store_be4(w))}
+
+// Copy-only borrowed pop avoids the foreign remove and owned Drop frontiers.
+pub fn pop_copy_resize_reference<T:Copy>(v:&mut Vec<T>)->Option<T> {
+    let n=v.len();
+    if n==0 { None } else {
+        let last=v[n-1];
+        v.resize(n-1,last);
+        Some(last)
+    }
+}
+// Unix join update using only extracted indexing, resize and append primitives.
+pub fn join_resize_reference(base:&mut Vec<u8>,path:&[u8]) {
+    if path.len()>0 && path[0]==b'/' {base.resize(0,0);}
+    else if base.len()>0 && base[base.len()-1]!=b'/' {base.push(b'/');}
+    base.extend_from_slice(path);
+}
+
+pub fn sha_length_suffix64(w:u64)->[u8;8] {
+    [(w>>56u32) as u8,(w>>48u32) as u8,(w>>40u32) as u8,(w>>32u32) as u8,
+     (w>>24u32) as u8,(w>>16u32) as u8,(w>>8u32) as u8,w as u8]
+}
+pub fn sha_compress_byte_owned(state:[u32;8],block:[u8;64])->[u32;8] {
+    sha_fallback_reference::extracted_block(state,sha_load64(block))
+}
+pub fn sha_digest32(state:[u32;8])->[u8;32] {
+    let a=sha_store_be4(state[0]);let b=sha_store_be4(state[1]);
+    let c=sha_store_be4(state[2]);let d=sha_store_be4(state[3]);
+    let e=sha_store_be4(state[4]);let f=sha_store_be4(state[5]);
+    let g=sha_store_be4(state[6]);let h=sha_store_be4(state[7]);
+    [a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3],c[0],c[1],c[2],c[3],d[0],d[1],d[2],d[3],
+     e[0],e[1],e[2],e[3],f[0],f[1],f[2],f[3],g[0],g[1],g[2],g[3],h[0],h[1],h[2],h[3]]
+}
+pub fn sha_finalize_soft_owned(state:[u32;8],blocks:u64,buffer:[u8;64],pos:usize)
+ ->([u8;32],[u32;8],[u8;64],usize) {
+    let bits=8u64.wrapping_mul((pos as u64).wrapping_add(64u64.wrapping_mul(blocks)));
+    let (first,second,retained,newpos)=sha_pad_owned_split8(buffer,pos,sha_length_suffix64(bits));
+    let mut next=sha_compress_byte_owned(state,first);
+    if let Some(block)=second {next=sha_compress_byte_owned(next,block);}
+    (sha_digest32(next),next,retained,newpos)
+}
+
+// Fixed-carrier buffer driver: owns its working state and retains every outcome.
+pub fn sha_update_soft_owned(mut state:[u32;8],mut blocks:u64,mut buffer:[u8;64],mut pos:usize,data:&[u8])
+ ->([u32;8],u64,[u8;64],usize) {
+    let mut i=0;
+    while i<data.len() {
+        buffer[pos]=data[i];pos+=1;i+=1;
+        if pos==64 {state=sha_compress_byte_owned(state,buffer);blocks=blocks.wrapping_add(1);pos=0;}
+    }
+    (state,blocks,buffer,pos)
+}
+pub fn sha_default_soft_owned()->([u32;8],u64,[u8;64],usize) {
+    ([0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19],0,[0u8;64],0)
+}
+pub fn sha_digest_soft_owned(data:&[u8])->[u8;32] {
+    let (state,blocks,buffer,pos)=sha_default_soft_owned();
+    let (state,blocks,buffer,pos)=sha_update_soft_owned(state,blocks,buffer,pos,data);
+    let (digest,_,_,_)=sha_finalize_soft_owned(state,blocks,buffer,pos);
+    digest
+}

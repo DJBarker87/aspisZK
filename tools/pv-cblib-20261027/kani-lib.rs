@@ -226,3 +226,48 @@ mod resume8_links {
         assert_eq!(native,Err(expected));
     }
 }
+
+#[cfg(kani)]
+mod resume9_links {
+    fn load(b:[u8;4])->u32 {
+        ((b[0] as u32)<<24u32)|((b[1] as u32)<<16u32)|((b[2] as u32)<<8u32)|(b[3] as u32)
+    }
+    fn store(w:u32)->[u8;4] {
+        [(w>>24u32) as u8,(w>>16u32) as u8,(w>>8u32) as u8,w as u8]
+    }
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn load_be4() {let b:[u8;4]=kani::any();assert_eq!(u32::from_be_bytes(b),load(b));}
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn store_be4() {let w:u32=kani::any();assert_eq!(w.to_be_bytes(),store(w));}
+    fn pop_resize<T:Copy>(v:&mut Vec<T>)->Option<T> {
+        let n=v.len();if n==0 {None} else {let last=v[n-1];v.resize(n-1,last);Some(last)}
+    }
+    #[kani::proof]
+    #[kani::unwind(8)]
+    fn pop_resize_u8() {
+        let raw:[u8;2]=kani::any();let n:usize=kani::any();kani::assume(n<=2);
+        let mut a=raw[..n].to_vec();let mut b=raw[..n].to_vec();
+        assert_eq!(a.pop(),pop_resize(&mut b));
+        let i:usize=kani::any();assert_eq!(a.len(),b.len());assert_eq!(a.get(i),b.get(i));
+    }
+    fn join_resize(base:&mut Vec<u8>,path:&[u8]) {
+        if path.len()>0 && path[0]==b'/' {base.resize(0,0);}
+        else if base.len()>0 && base[base.len()-1]!=b'/' {base.push(b'/');}
+        base.extend_from_slice(path);
+    }
+    #[kani::proof]
+    #[kani::unwind(10)]
+    fn join_resize_two() {
+        use std::os::unix::ffi::OsStrExt;
+        let a:[u8;2]=kani::any();let b:[u8;2]=kani::any();
+        let n:usize=kani::any();let m:usize=kani::any();kani::assume(n<=2 && m<=2);
+        let p=std::path::Path::new(std::ffi::OsStr::from_bytes(&a[..n]));
+        let q=std::path::Path::new(std::ffi::OsStr::from_bytes(&b[..m]));
+        let native=p.join(q);let mut reference=a[..n].to_vec();join_resize(&mut reference,&b[..m]);
+        let i:usize=kani::any();
+        assert_eq!(native.as_os_str().as_bytes().len(),reference.len());
+        assert_eq!(native.as_os_str().as_bytes().get(i),reference.get(i));
+    }
+}

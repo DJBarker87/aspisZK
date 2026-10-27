@@ -50,3 +50,11 @@ endpoint/deployment premise is removed by this candidate publication.
 Final third-pass audits:41797/41798/41799, all exit0 and standard axioms only.
 Current publication: `PV_CBL_AppendBundle`; full soft block source theorem:
 `PV_CBL_SoftBlockSource.source`. No digest row or endpoint closure is inferred.
+
+Fourth pass checkpoint: candidate rows **7 → 7**. Extraction route now proves
+complete fixed padding contents, both one/two-block branches, exact retained
+first buffer and reset position in `PV_CBL_PadContentSource.source` (52430).
+This closes the owned-reference content gap, not native loan/callback/Drop
+semantics of V231/V233. Byte codecs extract with no external template;
+source-to-byte-value and sixteen-lane composition are in progress. No SHA-NI
+refinement or shipped change is made. New pass tally: TALLY-resume9.json.
