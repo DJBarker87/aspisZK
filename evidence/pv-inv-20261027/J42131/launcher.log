@@ -1,0 +1,31 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0738); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Inv_RawMap.lean:10:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_Inv_RawMap.put_map`:
+  [Zero W]
+  [DecidableEq W]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Zero W] [DecidableEq W] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Inv_RawMap.lean:20:4: error: Type mismatch: After simplification, term
+  congrArg some (Eq.symm (put_map f s 0 e))
+ has type
+  @Eq (Option (Slots U W)) (some (put (slots f s) 0 (entry f e))) (some (slots f (put s 0 e)))
+but is expected to have type
+  @Eq (Option (Slots U W)) (some (put (slots f s) 0 { value := f e.value, weight := e.weight }))
+    (some (slots f (put s 0 e)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Inv_RawMap.lean:22:6: error: Type mismatch: After simplification, term
+  congrArg some (Eq.symm (put_map f s 1 e))
+ has type
+  @Eq (Option (Slots U W)) (some (put (slots f s) 1 (entry f e))) (some (slots f (put s 1 e)))
+but is expected to have type
+  @Eq (Option (Slots U W)) (some (put (slots f s) 1 { value := f e.value, weight := e.weight }))
+    (some (slots f (put s 1 e)))
+'R1Z.PV_Inv_RawMap.put_map' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_Inv_RawMap.step_map' depends on axioms: [propext, sorryAx]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.56
+	Maximum resident set size (kbytes): 1439888
+	Swaps: 0
+	Exit status: 1
