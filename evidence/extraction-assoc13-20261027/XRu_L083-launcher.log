@@ -1,0 +1,95 @@
+{"attempt": "XRu_L083", "exit_status": 1, "wall_seconds": 1.3911428880528547, "peak_rss_kib": "2667432", "swaps": "0", "print_axioms": ["'XRu_NewStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRu_generated/XRu_NewStep.lean:28:101: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c ≥ 1
+where
+ a := ↑(↑weights).length
+ b := ↑↑(raw, index).2
+ c := ↑↑index
+ d := ↑(alloc.vec.Vec.length raw)
+XRu_generated/XRu_NewStep.lean:36:75: error: Application type mismatch: The argument
+  index
+has type
+  Usize
+but is expected to have type
+  U64
+in the application
+  AspisR1.ExtractedCurrentReducerOps.add_success index
+XRu_generated/XRu_NewStep.lean:36:93: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+weigh
+...
+ :
+  (do
+      let index1 ← index + 1#usize
+      ok
+          (cont
+            (back
+                (Array.make 4#usize
+                  [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b,
+                    UScalar.cast UScalarTy.U64 w.c1.a, UScalar.cast UScalarTy.U64 w.c1.b]
+                  ⋯),
+              index1))) =
+    ok
+      (cont
+        (back
+            (Array.make 4#usize
+              [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b, UScalar.cast UScalarTy.U64 w.c1.a,
+                UScalar.cast UScalarTy.U64 w.c1.b]
+              ⋯),
+          next))
+run :
+  ok
+      (cont
+        (back
+            (Array.make 4#usize
+              [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b, UScalar.cast UScalarTy.U64 w.c1.a,
+                UScalar.cast UScalarTy.U64 w.c1.b]
+              ⋯),
+          next)) =
+    ok
+      (cont
+        (back
+            (Array.make 4#usize
+              [UScalar.cast UScalarTy.U64 w.c0.a, UScalar.cast UScalarTy.U64 w.c0.b, UScalar.cast UScalarTy.U64 w.c1.a,
+                UScalar.cast UScalarTy.U64 w.c1.b]
+              ⋯),
+          next))
+⊢ ↑sorry + ↑sorry < 2 ^ 64
+XRu_generated/XRu_NewStep.lean:42:29: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c ≤ 0
+where
+ a := ↑(↑weights).length
+ b := ↑↑(raw, index).2
+ c := ↑↑index
+ d := ↑(↑raw).length
+XRu_generated/XRu_NewStep.lean:42:39: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ 0
+where
+ a := ↑↑(raw, index).2
+ b := ↑↑index
+ c := ↑(↑raw).length
+'XRu_NewStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ree660d2aeccd4fbfb71cec50bb1fc023.scope; invocation ID: 363ba11bf5794034a8117ba25003dc70

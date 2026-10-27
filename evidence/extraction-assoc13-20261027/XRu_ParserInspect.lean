@@ -1,0 +1,10 @@
+import XRr_FinalAudit
+import ExtractedPrefixParseCore
+#check XRn_Join_Release.r1_wire.validate_record_fields
+#check AspisR1PrefixAggregateParser.r1_wire.validate_record_fields
+#check XRn_Join_Release.aspis_core.field.wide_exact.WideExact.from_le_bytes
+#check AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_le_bytes
+#check AspisR1PublicPreparation.r1_semantic.verify_observed
+#check AspisR1PublicPreparation.r1_semantic.verify_finish
+#check AspisR1PublicPreparation.r1_wire.semantic_rounds
+#print axioms XRr_SemanticSample.source

@@ -1,0 +1,80 @@
+XRu_generated/XRu_RowNoFlush.lean:26:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.update_residue_row_loop0 { start := 0#usize, «end» := 4#usize } (Array.make 4#usize [a, b, c, d] ⋯) basis
+    (Array.make 4#usize [power.c0.a, power.c0.b, power.c1.a, power.c1.b] ⋯)
+in the target expression
+  (let i := power.c0.a;
+    let i1 := power.c0.b;
+    let i2 := power.c1.a;
+    let i3 := power.c1.b;
+    do
+    let row1 ←
+      verifier.update_residue_row_loop0 { start := 0#usize, «end» := 4#usize } (Array.make 4#usize [a, b, c, d] ⋯) basis
+          (Array.make 4#usize [i, i1, i2, i3] ⋯)
+    if false = true then do
+        let (iter, into_iter_back) ← XRn_Join_intoIter row1
+        let back ← verifier.update_residue_row_loop1 iter fun im => im
+        ok (into_iter_back back)
+      else ok row1) =
+    S7Kani2OwnedRow.residue_owned (Array.make 4#usize [a, b, c, d] ⋯)
+      { c0 := (power.c0.a, power.c0.b), c1 := (power.c1.a, power.c1.b) } basis false
+
+power : aspis_core.field.QM31
+basis : U32
+a b c d : U64
+safe :
+  ∀ (j : Usize) (raw : U64),
+    ↑j < 4 →
+      (Array.make 4#usize [a, b, c, d] ⋯).index_usize j = ok raw →
+        ↑raw + ↑(S7Kani2OwnedRow.limb { c0 := (power.c0.a, power.c0.b), c1 := (power.c1.a, power.c1.b) } j) * ↑basis <
+          2 ^ 64
+s0 : ↑a + ↑power.c0.a * ↑basis < 18446744073709551616
+s1 : ↑b + ↑power.c0.b * ↑basis < 18446744073709551616
+s2 : ↑c + ↑power.c1.a * ↑basis < 18446744073709551616
+s3 : ↑d + ↑power.c1.b * ↑basis < 18446744073709551616
+x0 : U64
+h0 : S7OwnedP6Scalar.residue_scalar_owned a power.c0.a basis false = ok x0
+right✝³ :
+  ↑x0 = if false = true then AspisV8R17.RawReducer.foldBits (↑a + ↑power.c0.a * ↑basis) else ↑a + ↑power.c0.a * ↑basis
+x1 : U64
+h1 : S7OwnedP6Scalar.residue_scalar_owned b power.c0.b basis false = ok x1
+right✝² :
+  ↑x1 = if false = true then AspisV8R17.RawReducer.foldBits (↑b + ↑power.c0.b * ↑basis) else ↑b + ↑power.c0.b * ↑basis
+x2 : U64
+h2 : S7OwnedP6Scalar.residue_scalar_owned c power.c1.a basis false = ok x2
+right✝¹ :
+  ↑x2 = if false = true then AspisV8R17.RawReducer.foldBits (↑c + ↑power.c1.a * ↑basis) else ↑c + ↑power.c1.a * ↑basis
+x3 : U64
+h3 : S7OwnedP6Scalar.residue_scalar_owned d power.c1.b basis false = ok x3
+right✝ :
+  ↑x3 = if false = true then AspisV8R17.RawReducer.foldBits (↑d + ↑power.c1.b * ↑basis) else ↑d + ↑power.c1.b * ↑basis
+run :
+  verifier.update_residue_row_loop0 { start := 0#usize, «end» := 4#usize } (Array.make 4#usize [a, b, c, d] ⋯) basis
+      (Array.make 4#usize [power.c0.a, power.c0.b, power.c1.a, power.c1.b] ⋯) =
+    ok (Array.make 4#usize [x0, x1, x2, x3] ⋯)
+⊢ (let i := power.c0.a;
+    let i1 := power.c0.b;
+    let i2 := power.c1.a;
+    let i3 := power.c1.b;
+    do
+    let row1 ←
+      verifier.update_residue_row_loop0 { start := 0#usize, «end» := 4#usize } (Array.make 4#usize [a, b, c, d] ⋯) basis
+          (Array.make 4#usize [i, i1, i2, i3] ⋯)
+    if false = true then do
+        let (iter, into_iter_back) ← XRn_Join_intoIter row1
+        let back ← verifier.update_residue_row_loop1 iter fun im => im
+        ok (into_iter_back back)
+      else ok row1) =
+    S7Kani2OwnedRow.residue_owned (Array.make 4#usize [a, b, c, d] ⋯)
+      { c0 := (power.c0.a, power.c0.b), c1 := (power.c1.a, power.c1.b) } basis false
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XRu_RowNoFlush.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

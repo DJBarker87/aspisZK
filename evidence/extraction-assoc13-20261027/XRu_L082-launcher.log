@@ -1,0 +1,59 @@
+{"attempt": "XRu_L082", "exit_status": 1, "wall_seconds": 1.1228120860178024, "peak_rss_kib": "2651756", "swaps": "0", "print_axioms": ["'XRu_NewStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRu_generated/XRu_NewStep.lean:21:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have i := weights.len;
+    if (raw, index).2 < i then do
+      let w ← weights.index_usize (raw, index).2
+      have i1 : aspis_core.field.M31 := w.c0.a
+      let i2 ← lift (UScalar.cast UScalarTy.U64 i1)
+      have i3 : aspis_core.field.M31 := w.c0.b
+      let i4 ← lift (UScalar.cast UScalarTy.U64 i3)
+      have i5 : aspis_core.field.M31 := w.c1.a
+      let i6 ← lift (UScalar.cast UScalarTy.U64 i5)
+      have i7 : aspis_core.field.M31 := w.c1.b
+      let i8 ← lift (UScalar.cast UScalarTy.U64 i7)
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.
+...
+ut (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) (raw, index).1
+            (raw, index).2
+      have raw2 : alloc.vec.Vec (Std.Array U64 4#usize) := index_mut_back (Array.make 4#usize [i2, i4, i6, i8] ⋯)
+      let index1 ← (raw, index).2 + 1#usize
+      ok (cont (raw2, index1))
+    else ok (done (raw, index).1)) =
+    ok r
+of `run`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+weights : Slice aspis_core.field.QM31
+r : ControlFlow S Raw
+raw : Raw
+index : Usize
+run :
+  (have i := weights.len;
+    if (raw, index).2 < i then do
+      let w ← weights.index_usize (raw, index).2
+      have i1 : aspis_core.field.M31 := w.c0.a
+      let i2 ← lift (UScalar.cast UScalarTy.U64 i1)
+      have i3 : aspis_core.field.M31 := w.c0.b
+      let i4 ← lift (UScalar.cast UScalarTy.U64 i3)
+      have i5 : aspis_core.field.M31 := w.c1.a
+      let i6 ← lift (UScalar.cast UScalarTy.U64 i5)
+      have i7 : aspis_core.field.M31 := w.c1.b
+      let i8 ← lift (UScalar.cast UScalarTy.U64 i7)
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) (raw, index).1
+            (raw, index).2
+      have raw2 : alloc.vec.Vec (Std.Array U64 4#usize) := index_mut_back (Array.make 4#usize [i2, i4, i6, i8] ⋯)
+      let index1 ← (raw, index).2 + 1#usize
+      ok (cont (raw2, index1))
+    else ok (done (raw, index).1)) =
+    ok r
+len : (↑(raw, index).1).length = (↑weights).length
+bound : ↑(raw, index).2 ≤ (↑weights).length
+⊢ match r, run with
+  | done out, run => (↑out).length = (↑weights).length
+  | cont next, run => Inv weights next ∧ measure weights next < measure weights (raw, index)
+'XRu_NewStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc6996945e69f40e9b3d18d9bd0719ff2.scope; invocation ID: ec497a5d5ee74b898f09ea104af1f684
