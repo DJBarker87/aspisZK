@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0024); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+  (ops : R1Z.PV_Join_LedgerSource.World base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (i : R1Z.PV_Src_NativeInput.Input) (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address),
+  R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+    (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_Join_FixtureInputs.inputs base ops hash i))
+    (R1Z.PV_RunJoin_LedgerBody.body schedule unix address (R1Z.PV_Join_FixtureInputs.inputs base ops hash i)) :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] base {N C} ops hash i schedule unix address =>
+  R1Z.PV_Join_LedgerSource.body_source base ops (fun x => R1Z.PV_Join_FixtureInputs.publicInput base i)
+    (fun x => R1Z.PV_Join_FixtureInputs.compiled base i.compiled) (fun x => hash) schedule unix address
+'R1Z.PV_Join_FixtureInputs.body_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_FixtureInputs.same_record : ∀ [inst : ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns]
+  (base : ProverRwFull.ExternalTypes) {N C : Type}
+  (ops : R1Z.PV_Join_LedgerSource.World base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (i : R1Z.PV_Src_NativeInput.Input) (s : R1Z.PV_Join_LedgerSource.World base N C),
+  (R1Z.PV_Join_FixtureInputs.inputs base ops hash i).pub s = R1Z.PV_Join_FixtureInputs.publicInput base i ∧
+    (R1Z.PV_Join_FixtureInputs.inputs base ops hash i).compiled s =
+      R1Z.PV_Join_FixtureInputs.compiled base i.compiled :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] base {N C} ops hash i s => ⟨rfl, rfl⟩
+'R1Z.PV_Join_FixtureInputs.same_record' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem R1Z.PV_Join_FixtureInputs.semantic_columns : ∀ [ProverRwRngCaller.NativeTypes]
+  [ProverRwRngCaller.ErasureFns] (base : ProverRwFull.ExternalTypes)
+  (c : R1Z.PV_RunJoin_NominalCompiledData.SourceCompiled),
+  (R1Z.PV_Join_FixtureInputs.compiled base c).semantic_c1.c1 = c.semantic_c1.c1 :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] base c => rfl
+'R1Z.PV_Join_FixtureInputs.semantic_columns' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_FixtureSelected.both_source : ∀ [inst : ProverRwRngCaller.NativeTypes]
+  [ProverRwRngCaller.ErasureFns] {CommitHandle N C : Type} (base : ProverRwFull.ExternalTypes)
+  (ops : R1Z.PV_Join_LedgerSource.World base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (selection :
+    R0Z.ZkStatement.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R1Z.BuilderSource.prover.Instance → R1Z.PV_Src_NativeInput.Input)
+  (a b : CommitHandle) (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address),
+  have transfer := selection (R1Z.PV_RunJoin_DeployedFixtures.transferX a) R1Z.PV_RunJoin_CanonicalFixtures.transfer;
+  have withdrawal :=
+    selection (R1Z.PV_RunJoin_DeployedFixtures.withdrawalX b) R1Z.PV_RunJoin_CanonicalFixtures.withdrawal;
+  R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+      (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_Join_FixtureInputs.inputs base ops hash transfer))
+      (R1Z.PV_RunJoin_LedgerBody.body schedule unix address (R1Z.PV_Join_FixtureInputs.inputs base ops hash transfer)) ∧
+    R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+      (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_Join_FixtureInputs.inputs base ops hash withdrawal))
+      (R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+        (R1Z.PV_Join_FixtureInputs.inputs base ops hash withdrawal)) :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] {CommitHandle N C} base ops hash selection a b
+    schedule unix address =>
+  ⟨R1Z.PV_Join_FixtureInputs.body_source base ops hash
+      (selection (R1Z.PV_RunJoin_DeployedFixtures.transferX a) R1Z.PV_RunJoin_CanonicalFixtures.transfer) schedule unix
+      address,
+    R1Z.PV_Join_FixtureInputs.body_source base ops hash
+      (selection (R1Z.PV_RunJoin_DeployedFixtures.withdrawalX b) R1Z.PV_RunJoin_CanonicalFixtures.withdrawal) schedule
+      unix address⟩
+'R1Z.PV_Join_FixtureSelected.both_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.19
+	Maximum resident set size (kbytes): 4344036
+	Swaps: 0
+	Exit status: 0

@@ -51,3 +51,12 @@ Stage 2: P6 preflight and checked counterexample.
 - Inventory remains 30; zero new source laws, zero rows universally excluded
   from both fixtures. Six native-effect entries explicitly deferred in
   inventory.json; deferral earns no premise-removal credit.
+
+Final stage: attempts 36802, 36803, 36804 passed, respectively 64, 63 and
+128 axiom reports. Last three actual Lean invocations reserved for audit.
+All new and inherited PV_Join theorem statements were printed in the two
+portions, and all axioms audited in the final combined target. Source revision
+6386cb7f6d; no release-manifest replay. Pinned Lean cache retained; own new
+pole-target Cargo cache removed. The timeout's complete child RSS peak was
+not retained; its receipt explicitly records the live lower bound and GNU
+time limitation rather than treating wrapper RSS as aggregate RSS.
