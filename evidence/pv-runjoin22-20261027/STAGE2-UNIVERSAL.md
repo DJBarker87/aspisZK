@@ -1,0 +1,21 @@
+# Universal proof stage
+
+The exact original SourceIdentification quantifiers are recorded in STAGE1-QUANTIFIERS.md. No selector search was performed.
+
+Accepted UniversalRecords22 (38973) identifies the returned record and public record for every native argument tuple. Its dictionary theorem is obtained directly from the all-argument Records identification (the four selected-second/recipient branches), with no fixture specialization. Words follows from Checked; publicCorr follows from successful compilation and canonical frontier words. No installed-record/public association is assumed in those lemmas.
+
+Accepted UniversalBuild22 (38974) defines the canonical mapping using the actual deterministic returned record. Admission is exactly RspendPlus on the native projected canonical public and the lifted semantic witness of that record. `public_eq` is universal over arbitrary inputs : I → Input and requires only admission to construct toInstance. `build_eq` additionally requires, universally, successful actual compilation to the caller-supplied payload, Checked, and canonical frontier words. `transport_eq` proves the fixed extracted reference transport equals D18 at every index. `identification` composes precisely these theorems into SourceIdentification. These are **conditional universal** results: universal compiler success has not been proved or hidden in a new trust item.
+
+Accepted UniversalTransition22 (38960) proves every successful return uses the supplied snapshot in every public snapshot field and the same afterstate in its trace/public statement. UniversalLate22 (38975) lifts the late_append join to arbitrary snapshots/trees/append results by named symbolic laws. UniversalTreeFrame22 (38977) and UniversalAppend22 (38990) establish constructor field preservation and the append index/receipt fields, including both final-level and reconstruction branches. No whole run, bank or hash recurrence is kernel-normalized.
+
+The symbolic bank composition from 64adb93457 was reused and checked after an import-only removal of its fixture dependency (38978–38985, with 38981 refused/uncharged and retired). UniversalBankChecks22 (38986) proves aggregate validation iff all 57 individual block validators succeed, for every arbitrary bank. It does not discharge the 57 universal block certificates for source-generated banks.
+
+The only changes to previously proved Lean modules are unused/transitive import fixes in RecordsAdapter16, GeneralBranches16, BankRow17 and ValueBits20; theorem statements/bodies are unchanged. Their changed focused paths were recompiled privately. No shipped source changed.
+
+PayloadAssociation22 (38987) proves a diagnostic boundary: altering only caller-supplied cached trace variant metadata preserves native run arguments, public projection, returned records and mathematical Admission, while breaking cached-payload/compiler-return association whenever the original payload was returned successfully. This is a conditional obstruction to deriving compile_call from admission of raw Input data alone. It is **not** a counterexample to V153 about actual returned compiler outputs, and is not a stop. It does not replace any selected input or assert an altered payload was actually returned by the compiler.
+
+Whole ledger rows removed: none. Endpoint premises removed/added/weakened: 0/0/0. No universal native compiler-success, complete RunJoin/ROMView/observer agreement, byte binding or environmental-P witness is inferred. No T field is added.
+
+CompilerFrame22 (38992) additionally proves the private directions, value-bit arrays and request variant on every successful compiler return. ReturnedLate22 (38995) identifies the actual late_append call/result for both compiler variants. All these proofs invert symbolic control flow and use named primitive call laws.
+
+The last candidate38996 attempted to derive the public afterstate index progression from the general constructor/append laws. It fails to eliminate the Err→mapped-Err→Continue branches and to infer remaining source-join witnesses. The exact rejected source and diagnostics are retained; it is not a checked row counterexample. Its module is archived in drafts/ and is not imported by any accepted proof.

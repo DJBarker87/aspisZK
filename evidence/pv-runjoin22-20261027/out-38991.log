@@ -1,0 +1,1343 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin22-lean/sources/R1Z/PV_RunJoin_UniversalCompilerFrame22.lean:29:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_Src_NativeDirections.run input
+in the target expression
+  (do
+      let records ←
+        pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot
+            { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none,
+                change_commitment := pubChange, asset := pubAsset }.asset
+      let a ← input.pair.pair_leaf.selected_commitment input.pair.selected_second
+      let a1 ← records.input_leaf
+      let b ←
+        core.cmp.impls.PartialEqShared.ne
+            (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray 8#usize
+              aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+            a a1
+      if b = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.SelectedCommitmentMismatch)
+        else do
+          let a2 ← records.path_digest 1#usize
+          let r ← input.pair.pair_leaf.leaf_digest
+          let r1 ←
+            BuilderForestStdPort.core.result.Result.map_err
+                (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) r
+                pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let b1 ← core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a2 val
+              if b1 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.SelectedCommitmentMismatch)
+                else do
+                  let a3 ← records.path_digest 21#usize
+                  let b2 ←
+                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a3 anchor
+                  if b2 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                    else do
+                      let nullifier ← records.nullifier
+                      let b3 ←
+                        core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 nullifier
+                            { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none,
+                                change_commitment := pubChange, asset := pubAsset }.nullifier
+                      if b3 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.NullifierMismatch)
+                        else do
+                          let a4 ← format.pool_v1_nullifier input.pair.nullifier_key input.pair.salt
+                          let b4 ←
+                            core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                nullifier a4
+                          if b4 = true then
+                              ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.NullifierMismatch)
+                            else do
+                              let change_commitment ← records.change
+                              match
+                                  { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none,
+                                      change_commitment := pubChange, asset := pubAsset }.recipient_commitment with
+                                | none => do
+                                  let b5 ←
+                                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                        change_commitment
+                                        { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none,
+                                            change_commitment := pubChange, asset := pubAsset }.change_commitment
+                                  if b5 = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          pair_trace.PoolV1PairTraceErrorV1.ChangeCommitmentMismatch)
+                                    else do
+                                      let r2 ← pair_tree_profile.PoolV1PairLeafWitnessV1.single_output change_commitment
+                                      let r3 ←
+                                        BuilderForestStdPort.core.result.Result.map_err
+                                            (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1
+                                              pair_trace.PoolV1PairTraceErrorV1)
+                                            r2 pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+                                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                      match cf1 with
+                                        | core.ops.control_flow.ControlFlow.Continue a => do
+                                          let output_pair ← records.output_pair
+                                          let r4 ← pair_forest_trace.late_append records snapshot output_pair
+                                          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                          match cf2 with
+                                            | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                              let s ← lift input.super_root_siblings.to_slice
+                                              let i ← core.slice.Slice.iter s
+                                              let f ←
+                                                BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+                                                    (core.iter.traits.iterator.IteratorSliceIter
+                                                      (Std.Array aspis_core.field.M31 8#usize))
+                                                    (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                      aspis_core.field.M31 8#usize)
+                                                    i
+                                              let __x ←
+                                                BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+                                                    (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+                                                      (core.iter.traits.iterator.IteratorSliceIter
+                                                        (Std.Array aspis_core.field.M31 8#usize))
+                                                      (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                        aspis_core.field.M31 8#usize)
+                                                      (core.iter.traits.iterator.IteratorSliceIter
+                                                        aspis_core.field.M31))
+                                                    pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                                    f ()
+                                              match __x with
+                                                | (b6, snd) =>
+                                                  if b6 = true then
+                                                    ok
+                                                      (core.result.Result.Err
+                                                        pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+                                                  else do
+                                                    let anchor ← records.path_digest 24#usize
+                                                    let b7 ←
+                                                      core.array.equality.PartialEqArray.ne
+                                                          aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                                                          { anchor := pubAnchor, nullifier := pubNullifier,
+                                                              recipient_commitment := none,
+                                                              change_commitment := pubChange, asset := pubAsset }.anchor
+                                                    if b7 = true then
+                                                        ok
+                                                          (core.result.Result.Err
+                                                            pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                                                      else do
+                                                        let o ← records.banks
+                                                        let r5 ←
+                                                          BuilderForestStdPort.core.option.Option.ok_or o
+                                                              pair_trace.PoolV1PairTraceErrorV1.Shape
+                                                        let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                        match cf3 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                            let r6 ←
+                                                              pair_forest_trace.validate_forest_poseidon_rows val2
+                                                            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                            match cf4 with
+                                                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                let private_directions ←
+                                                                  BuilderForestStdPort.core.array.from_fn 24#usize
+                                                                      pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                                                      (input.pair, input)
+                                                                let a5 ← pair_trace.value_bits input.pair.value
+                                                                let a6 ← pair_trace.value_bits out
+                                                                let a7 ← pair_trace.value_bits change.value
+                                                                ok
+                                                                    (core.result.Result.Ok
+                                                                      {
+                                                                        trace :=
+                                                                          { stable := { c1 := val2.stable },
+                                                                            late := val2.late,
+                                                                            variant :=
+                                                                              pair_trace.PoolV1PairTraceVariantV1.Withdrawal,
+                                                                            private_directions := private_directions,
+                                                                            value_bits :=
+                                                                              Array.make 3#usize [a5, a6, a7] ⋯,
+                                                                            public_outputs :=
+                                                                              pair_trace.PoolV1PairTracePublicOutputsV1.Withdrawal
+                                                                                anchor nullifier change_commitment
+                                                                                output_pair,
+                                                                            afterstate := val1 },
+                                                                        semantic_c1 := { c1 := val2.merged },
+                                                                        public_statement :=
+                                                                          { live_snapshot := snapshot,
+                                                                            candidate_afterstate := val1 } })
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                  (core.convert.FromSame
+                                                                    pair_trace.PoolV1PairTraceErrorV1)
+                                                                  residual
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                              (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1)
+                                                              residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                            (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                | some expected => do
+                                  let recipient_commitment ← records.recipient
+                                  let b5 ←
+                                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                        recipient_commitment expected
+                                  if b5 = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          pair_trace.PoolV1PairTraceErrorV1.RecipientCommitmentMismatch)
+                                    else do
+                                      let b6 ←
+                                        core.array.equality.PartialEqArray.ne
+                                            aspis_core.field.M31.Insts.CoreCmpPartialEqM31 change_commitment
+                                            { anchor := pubAnchor, nullifier := pubNullifier,
+                                                recipient_commitment := none, change_commitment := pubChange,
+                                                asset := pubAsset }.change_commitment
+                                      if b6 = true then
+                                          ok
+                                            (core.result.Result.Err
+                                              pair_trace.PoolV1PairTraceErrorV1.ChangeCommitmentMismatch)
+                                        else do
+                                          let r2 ←
+                                            pair_tree_profile.PoolV1PairLeafWitnessV1.two_outputs recipient_commitment
+                                                change_commitment
+                                          let r3 ←
+                                            BuilderForestStdPort.core.result.Result.map_err
+                                                (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1
+                                                  pair_trace.PoolV1PairTraceErrorV1)
+                                                r2 pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+                                          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                          match cf1 with
+                                            | core.ops.control_flow.ControlFlow.Continue a => do
+                                              let output_pair ← records.output_pair
+                                              let r4 ← pair_forest_trace.late_append records snapshot output_pair
+                                              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                              match cf2 with
+                                                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                                  let s ← lift input.super_root_siblings.to_slice
+                                                  let i ← core.slice.Slice.iter s
+                                                  let f ←
+                                                    BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+                                                        (core.iter.traits.iterator.IteratorSliceIter
+                                                          (Std.Array aspis_core.field.M31 8#usize))
+                                                        (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                          aspis_core.field.M31 8#usize)
+                                                        i
+                                                  let __x ←
+                                                    BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+                                                        (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+                                                          (core.iter.traits.iterator.IteratorSliceIter
+                                                            (Std.Array aspis_core.field.M31 8#usize))
+                                                          (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                            aspis_core.field.M31 8#usize)
+                                                          (core.iter.traits.iterator.IteratorSliceIter
+                                                            aspis_core.field.M31))
+                                                        pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                                        f ()
+                                                  match __x with
+                                                    | (b7, snd) =>
+                                                      if b7 = true then
+                                                        ok
+                                                          (core.result.Result.Err
+                                                            pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+                                                      else do
+                                                        let anchor ← records.path_digest 24#usize
+                                                        let b8 ←
+                                                          core.array.equality.PartialEqArray.ne
+                                                              aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                                                              { anchor := pubAnchor, nullifier := pubNullifier,
+                                                                  recipient_commitment := none,
+                                                                  change_commitment := pubChange,
+                                                                  asset := pubAsset }.anchor
+                                                        if b8 = true then
+                                                            ok
+                                                              (core.result.Result.Err
+                                                                pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                                                          else do
+                                                            let o ← records.banks
+                                                            let r5 ←
+                                                              BuilderForestStdPort.core.option.Option.ok_or o
+                                                                  pair_trace.PoolV1PairTraceErrorV1.Shape
+                                                            let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                            match cf3 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                                let r6 ←
+                                                                  pair_forest_trace.validate_forest_poseidon_rows val2
+                                                                let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                                match cf4 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                    let private_directions ←
+                                                                      BuilderForestStdPort.core.array.from_fn 24#usize
+                                                                          pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                                                          (input.pair, input)
+                                                                    let a5 ← pair_trace.value_bits input.pair.value
+                                                                    let a6 ← pair_trace.value_bits out
+                                                                    let a7 ← pair_trace.value_bits change.value
+                                                                    ok
+                                                                        (core.result.Result.Ok
+                                                                          {
+                                                                            trace :=
+                                                                              { stable := { c1 := val2.stable },
+                                                                                late := val2.late,
+                                                                                variant :=
+                                                                                  pair_trace.PoolV1PairTraceVariantV1.PrivateTransfer,
+                                                                                private_directions :=
+                                                                                  private_directions,
+                                                                                value_bits :=
+                                                                                  Array.make 3#usize [a5, a6, a7] ⋯,
+                                                                                public_outputs :=
+                                                                                  pair_trace.PoolV1PairTracePublicOutputsV1.PrivateTransfer
+                                                                                    anchor nullifier
+                                                                                    recipient_commitment
+                                                                                    change_commitment output_pair,
+                                                                                afterstate := val1 },
+                                                                            semantic_c1 := { c1 := val2.merged },
+                                                                            public_statement :=
+                                                                              { live_snapshot := snapshot,
+                                                                                candidate_afterstate := val1 } })
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                      (core.convert.FromSame
+                                                                        pair_trace.PoolV1PairTraceErrorV1)
+                                                                      residual
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                  (core.convert.FromSame
+                                                                    pair_trace.PoolV1PairTraceErrorV1)
+                                                                  residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                    (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual) =
+    ok (core.result.Result.Ok compiled)
+
+case none
+inst✝¹ : ExternalLinear
+inst✝ : Records
+input : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1
+out : U32
+recipient : Option payment_relation.PoolV1OutputNoteWitnessV1
+change : payment_relation.PoolV1OutputNoteWitnessV1
+anchor : Std.Array U32 8#usize
+snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1
+compiled : pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+pubAnchor pubNullifier pubChange : Std.Array aspis_core.field.M31 8#usize
+pubAsset : aspis_core.field.M31
+h :
+  (do
+      let records ←
+        pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot
+            { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none,
+                change_commitment := pubChange, asset := pubAsset }.asset
+      let a ← input.pair.pair_leaf.selected_commitment input.pair.selected_second
+      let a1 ← records.input_leaf
+      let b ←
+        core.cmp.impls.PartialEqShared.ne
+            (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray 8#usize
+              aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+            a a1
+      if b = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.SelectedCommitmentMismatch)
+        else do
+          let a2 ← records.path_digest 1#usize
+          let r ← input.pair.pair_leaf.leaf_digest
+          let r1 ←
+            BuilderForestStdPort.core.result.Result.map_err
+                (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) r
+                pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let b1 ← core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a2 val
+              if b1 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.SelectedCommitmentMismatch)
+                else do
+                  let a3 ← records.path_digest 21#usize
+                  let b2 ←
+                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a3 anchor
+                  if b2 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                    else do
+                      let nullifier ← records.nullifier
+                      let b3 ←
+                        core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 nullifier
+                            { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none,
+                                change_commitment := pubChange, asset := pubAsset }.nullifier
+                      if b3 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.NullifierMismatch)
+                        else do
+                          let a4 ← format.pool_v1_nullifier input.pair.nullifier_key input.pair.salt
+                          let b4 ←
+                            core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                nullifier a4
+                          if b4 = true then
+                              ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.NullifierMismatch)
+                            else do
+                              let change_commitment ← records.change
+                              match
+                                  { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none,
+                                      change_commitment := pubChange, asset := pubAsset }.recipient_commitment with
+                                | none => do
+                                  let b5 ←
+                                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                        change_commitment
+                                        { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none,
+                                            change_commitment := pubChange, asset := pubAsset }.change_commitment
+                                  if b5 = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          pair_trace.PoolV1PairTraceErrorV1.ChangeCommitmentMismatch)
+                                    else do
+                                      let r2 ← pair_tree_profile.PoolV1PairLeafWitnessV1.single_output change_commitment
+                                      let r3 ←
+                                        BuilderForestStdPort.core.result.Result.map_err
+                                            (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1
+                                              pair_trace.PoolV1PairTraceErrorV1)
+                                            r2 pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+                                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                      match cf1 with
+                                        | core.ops.control_flow.ControlFlow.Continue a => do
+                                          let output_pair ← records.output_pair
+                                          let r4 ← pair_forest_trace.late_append records snapshot output_pair
+                                          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                          match cf2 with
+                                            | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                              let s ← lift input.super_root_siblings.to_slice
+                                              let i ← core.slice.Slice.iter s
+                                              let f ←
+                                                BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+                                                    (core.iter.traits.iterator.IteratorSliceIter
+                                                      (Std.Array aspis_core.field.M31 8#usize))
+                                                    (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                      aspis_core.field.M31 8#usize)
+                                                    i
+                                              let __x ←
+                                                BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+                                                    (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+                                                      (core.iter.traits.iterator.IteratorSliceIter
+                                                        (Std.Array aspis_core.field.M31 8#usize))
+                                                      (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                        aspis_core.field.M31 8#usize)
+                                                      (core.iter.traits.iterator.IteratorSliceIter
+                                                        aspis_core.field.M31))
+                                                    pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                                    f ()
+                                              match __x with
+                                                | (b6, snd) =>
+                                                  if b6 = true then
+                                                    ok
+                                                      (core.result.Result.Err
+                                                        pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+                                                  else do
+                                                    let anchor ← records.path_digest 24#usize
+                                                    let b7 ←
+                                                      core.array.equality.PartialEqArray.ne
+                                                          aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                                                          { anchor := pubAnchor, nullifier := pubNullifier,
+                                                              recipient_commitment := none,
+                                                              change_commitment := pubChange, asset := pubAsset }.anchor
+                                                    if b7 = true then
+                                                        ok
+                                                          (core.result.Result.Err
+                                                            pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                                                      else do
+                                                        let o ← records.banks
+                                                        let r5 ←
+                                                          BuilderForestStdPort.core.option.Option.ok_or o
+                                                              pair_trace.PoolV1PairTraceErrorV1.Shape
+                                                        let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                        match cf3 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                            let r6 ←
+                                                              pair_forest_trace.validate_forest_poseidon_rows val2
+                                                            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                            match cf4 with
+                                                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                let private_directions ←
+                                                                  BuilderForestStdPort.core.array.from_fn 24#usize
+                                                                      pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                                                      (input.pair, input)
+                                                                let a5 ← pair_trace.value_bits input.pair.value
+                                                                let a6 ← pair_trace.value_bits out
+                                                                let a7 ← pair_trace.value_bits change.value
+                                                                ok
+                                                                    (core.result.Result.Ok
+                                                                      {
+                                                                        trace :=
+                                                                          { stable := { c1 := val2.stable },
+                                                                            late := val2.late,
+                                                                            variant :=
+                                                                              pair_trace.PoolV1PairTraceVariantV1.Withdrawal,
+                                                                            private_directions := private_directions,
+                                                                            value_bits :=
+                                                                              Array.make 3#usize [a5, a6, a7] ⋯,
+                                                                            public_outputs :=
+                                                                              pair_trace.PoolV1PairTracePublicOutputsV1.Withdrawal
+                                                                                anchor nullifier change_commitment
+                                                                                output_pair,
+                                                                            afterstate := val1 },
+                                                                        semantic_c1 := { c1 := val2.merged },
+                                                                        public_statement :=
+                                                                          { live_snapshot := snapshot,
+                                                                            candidate_afterstate := val1 } })
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                  (core.convert.FromSame
+                                                                    pair_trace.PoolV1PairTraceErrorV1)
+                                                                  residual
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                              (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1)
+                                                              residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                            (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                | some expected => do
+                                  let recipient_commitment ← records.recipient
+                                  let b5 ←
+                                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                        recipient_commitment expected
+                                  if b5 = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          pair_trace.PoolV1PairTraceErrorV1.RecipientCommitmentMismatch)
+                                    else do
+                                      let b6 ←
+                                        core.array.equality.PartialEqArray.ne
+                                            aspis_core.field.M31.Insts.CoreCmpPartialEqM31 change_commitment
+                                            { anchor := pubAnchor, nullifier := pubNullifier,
+                                                recipient_commitment := none, change_commitment := pubChange,
+                                                asset := pubAsset }.change_commitment
+                                      if b6 = true then
+                                          ok
+                                            (core.result.Result.Err
+                                              pair_trace.PoolV1PairTraceErrorV1.ChangeCommitmentMismatch)
+                                        else do
+                                          let r2 ←
+                                            pair_tree_profile.PoolV1PairLeafWitnessV1.two_outputs recipient_commitment
+                                                change_commitment
+                                          let r3 ←
+                                            BuilderForestStdPort.core.result.Result.map_err
+                                                (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1
+                                                  pair_trace.PoolV1PairTraceErrorV1)
+                                                r2 pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+                                          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                          match cf1 with
+                                            | core.ops.control_flow.ControlFlow.Continue a => do
+                                              let output_pair ← records.output_pair
+                                              let r4 ← pair_forest_trace.late_append records snapshot output_pair
+                                              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                              match cf2 with
+                                                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                                  let s ← lift input.super_root_siblings.to_slice
+                                                  let i ← core.slice.Slice.iter s
+                                                  let f ←
+                                                    BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+                                                        (core.iter.traits.iterator.IteratorSliceIter
+                                                          (Std.Array aspis_core.field.M31 8#usize))
+                                                        (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                          aspis_core.field.M31 8#usize)
+                                                        i
+                                                  let __x ←
+                                                    BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+                                                        (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+                                                          (core.iter.traits.iterator.IteratorSliceIter
+                                                            (Std.Array aspis_core.field.M31 8#usize))
+                                                          (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                            aspis_core.field.M31 8#usize)
+                                                          (core.iter.traits.iterator.IteratorSliceIter
+                                                            aspis_core.field.M31))
+                                                        pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                                        f ()
+                                                  match __x with
+                                                    | (b7, snd) =>
+                                                      if b7 = true then
+                                                        ok
+                                                          (core.result.Result.Err
+                                                            pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+                                                      else do
+                                                        let anchor ← records.path_digest 24#usize
+                                                        let b8 ←
+                                                          core.array.equality.PartialEqArray.ne
+                                                              aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                                                              { anchor := pubAnchor, nullifier := pubNullifier,
+                                                                  recipient_commitment := none,
+                                                                  change_commitment := pubChange,
+                                                                  asset := pubAsset }.anchor
+                                                        if b8 = true then
+                                                            ok
+                                                              (core.result.Result.Err
+                                                                pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                                                          else do
+                                                            let o ← records.banks
+                                                            let r5 ←
+                                                              BuilderForestStdPort.core.option.Option.ok_or o
+                                                                  pair_trace.PoolV1PairTraceErrorV1.Shape
+                                                            let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                            match cf3 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                                let r6 ←
+                                                                  pair_forest_trace.validate_forest_poseidon_rows val2
+                                                                let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                                match cf4 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                    let private_directions ←
+                                                                      BuilderForestStdPort.core.array.from_fn 24#usize
+                                                                          pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                                                          (input.pair, input)
+                                                                    let a5 ← pair_trace.value_bits input.pair.value
+                                                                    let a6 ← pair_trace.value_bits out
+                                                                    let a7 ← pair_trace.value_bits change.value
+                                                                    ok
+                                                                        (core.result.Result.Ok
+                                                                          {
+                                                                            trace :=
+                                                                              { stable := { c1 := val2.stable },
+                                                                                late := val2.late,
+                                                                                variant :=
+                                                                                  pair_trace.PoolV1PairTraceVariantV1.PrivateTransfer,
+                                                                                private_directions :=
+                                                                                  private_directions,
+                                                                                value_bits :=
+                                                                                  Array.make 3#usize [a5, a6, a7] ⋯,
+                                                                                public_outputs :=
+                                                                                  pair_trace.PoolV1PairTracePublicOutputsV1.PrivateTransfer
+                                                                                    anchor nullifier
+                                                                                    recipient_commitment
+                                                                                    change_commitment output_pair,
+                                                                                afterstate := val1 },
+                                                                            semantic_c1 := { c1 := val2.merged },
+                                                                            public_statement :=
+                                                                              { live_snapshot := snapshot,
+                                                                                candidate_afterstate := val1 } })
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                      (core.convert.FromSame
+                                                                        pair_trace.PoolV1PairTraceErrorV1)
+                                                                      residual
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                  (core.convert.FromSame
+                                                                    pair_trace.PoolV1PairTraceErrorV1)
+                                                                  residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                    (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual) =
+    ok (core.result.Result.Ok compiled)
+⊢ compiled.trace.private_directions = BuilderRecordsPath.bits (PV_Src_NativeDirections.reference input) ∧
+    compiled.trace.value_bits =
+        Array.make 3#usize
+          [PV_RunJoin_ValueBits20.bits input.pair.value, PV_RunJoin_ValueBits20.bits out,
+            PV_RunJoin_ValueBits20.bits change.value]
+          ⋯ ∧
+      compiled.trace.variant =
+        if
+            { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := none,
+                    change_commitment := pubChange, asset := pubAsset }.recipient_commitment.isSome =
+              true then
+          pair_trace.PoolV1PairTraceVariantV1.PrivateTransfer
+        else pair_trace.PoolV1PairTraceVariantV1.Withdrawal
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin22-lean/sources/R1Z/PV_RunJoin_UniversalCompilerFrame22.lean:29:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_Src_NativeDirections.run input
+in the target expression
+  (do
+      let records ←
+        pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot
+            { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := some val✝,
+                change_commitment := pubChange, asset := pubAsset }.asset
+      let a ← input.pair.pair_leaf.selected_commitment input.pair.selected_second
+      let a1 ← records.input_leaf
+      let b ←
+        core.cmp.impls.PartialEqShared.ne
+            (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray 8#usize
+              aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+            a a1
+      if b = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.SelectedCommitmentMismatch)
+        else do
+          let a2 ← records.path_digest 1#usize
+          let r ← input.pair.pair_leaf.leaf_digest
+          let r1 ←
+            BuilderForestStdPort.core.result.Result.map_err
+                (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) r
+                pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let b1 ← core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a2 val
+              if b1 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.SelectedCommitmentMismatch)
+                else do
+                  let a3 ← records.path_digest 21#usize
+                  let b2 ←
+                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a3 anchor
+                  if b2 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                    else do
+                      let nullifier ← records.nullifier
+                      let b3 ←
+                        core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 nullifier
+                            { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := some val✝,
+                                change_commitment := pubChange, asset := pubAsset }.nullifier
+                      if b3 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.NullifierMismatch)
+                        else do
+                          let a4 ← format.pool_v1_nullifier input.pair.nullifier_key input.pair.salt
+                          let b4 ←
+                            core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                nullifier a4
+                          if b4 = true then
+                              ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.NullifierMismatch)
+                            else do
+                              let change_commitment ← records.change
+                              match
+                                  { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := some val✝,
+                                      change_commitment := pubChange, asset := pubAsset }.recipient_commitment with
+                                | none => do
+                                  let b5 ←
+                                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                        change_commitment
+                                        { anchor := pubAnchor, nullifier := pubNullifier,
+                                            recipient_commitment := some val✝, change_commitment := pubChange,
+                                            asset := pubAsset }.change_commitment
+                                  if b5 = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          pair_trace.PoolV1PairTraceErrorV1.ChangeCommitmentMismatch)
+                                    else do
+                                      let r2 ← pair_tree_profile.PoolV1PairLeafWitnessV1.single_output change_commitment
+                                      let r3 ←
+                                        BuilderForestStdPort.core.result.Result.map_err
+                                            (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1
+                                              pair_trace.PoolV1PairTraceErrorV1)
+                                            r2 pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+                                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                      match cf1 with
+                                        | core.ops.control_flow.ControlFlow.Continue a => do
+                                          let output_pair ← records.output_pair
+                                          let r4 ← pair_forest_trace.late_append records snapshot output_pair
+                                          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                          match cf2 with
+                                            | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                              let s ← lift input.super_root_siblings.to_slice
+                                              let i ← core.slice.Slice.iter s
+                                              let f ←
+                                                BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+                                                    (core.iter.traits.iterator.IteratorSliceIter
+                                                      (Std.Array aspis_core.field.M31 8#usize))
+                                                    (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                      aspis_core.field.M31 8#usize)
+                                                    i
+                                              let __x ←
+                                                BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+                                                    (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+                                                      (core.iter.traits.iterator.IteratorSliceIter
+                                                        (Std.Array aspis_core.field.M31 8#usize))
+                                                      (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                        aspis_core.field.M31 8#usize)
+                                                      (core.iter.traits.iterator.IteratorSliceIter
+                                                        aspis_core.field.M31))
+                                                    pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                                    f ()
+                                              match __x with
+                                                | (b6, snd) =>
+                                                  if b6 = true then
+                                                    ok
+                                                      (core.result.Result.Err
+                                                        pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+                                                  else do
+                                                    let anchor ← records.path_digest 24#usize
+                                                    let b7 ←
+                                                      core.array.equality.PartialEqArray.ne
+                                                          aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                                                          { anchor := pubAnchor, nullifier := pubNullifier,
+                                                              recipient_commitment := some val✝,
+                                                              change_commitment := pubChange, asset := pubAsset }.anchor
+                                                    if b7 = true then
+                                                        ok
+                                                          (core.result.Result.Err
+                                                            pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                                                      else do
+                                                        let o ← records.banks
+                                                        let r5 ←
+                                                          BuilderForestStdPort.core.option.Option.ok_or o
+                                                              pair_trace.PoolV1PairTraceErrorV1.Shape
+                                                        let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                        match cf3 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                            let r6 ←
+                                                              pair_forest_trace.validate_forest_poseidon_rows val2
+                                                            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                            match cf4 with
+                                                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                let private_directions ←
+                                                                  BuilderForestStdPort.core.array.from_fn 24#usize
+                                                                      pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                                                      (input.pair, input)
+                                                                let a5 ← pair_trace.value_bits input.pair.value
+                                                                let a6 ← pair_trace.value_bits out
+                                                                let a7 ← pair_trace.value_bits change.value
+                                                                ok
+                                                                    (core.result.Result.Ok
+                                                                      {
+                                                                        trace :=
+                                                                          { stable := { c1 := val2.stable },
+                                                                            late := val2.late,
+                                                                            variant :=
+                                                                              pair_trace.PoolV1PairTraceVariantV1.Withdrawal,
+                                                                            private_directions := private_directions,
+                                                                            value_bits :=
+                                                                              Array.make 3#usize [a5, a6, a7] ⋯,
+                                                                            public_outputs :=
+                                                                              pair_trace.PoolV1PairTracePublicOutputsV1.Withdrawal
+                                                                                anchor nullifier change_commitment
+                                                                                output_pair,
+                                                                            afterstate := val1 },
+                                                                        semantic_c1 := { c1 := val2.merged },
+                                                                        public_statement :=
+                                                                          { live_snapshot := snapshot,
+                                                                            candidate_afterstate := val1 } })
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                  (core.convert.FromSame
+                                                                    pair_trace.PoolV1PairTraceErrorV1)
+                                                                  residual
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                              (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1)
+                                                              residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                            (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                | some expected => do
+                                  let recipient_commitment ← records.recipient
+                                  let b5 ←
+                                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                        recipient_commitment expected
+                                  if b5 = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          pair_trace.PoolV1PairTraceErrorV1.RecipientCommitmentMismatch)
+                                    else do
+                                      let b6 ←
+                                        core.array.equality.PartialEqArray.ne
+                                            aspis_core.field.M31.Insts.CoreCmpPartialEqM31 change_commitment
+                                            { anchor := pubAnchor, nullifier := pubNullifier,
+                                                recipient_commitment := some val✝, change_commitment := pubChange,
+                                                asset := pubAsset }.change_commitment
+                                      if b6 = true then
+                                          ok
+                                            (core.result.Result.Err
+                                              pair_trace.PoolV1PairTraceErrorV1.ChangeCommitmentMismatch)
+                                        else do
+                                          let r2 ←
+                                            pair_tree_profile.PoolV1PairLeafWitnessV1.two_outputs recipient_commitment
+                                                change_commitment
+                                          let r3 ←
+                                            BuilderForestStdPort.core.result.Result.map_err
+                                                (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1
+                                                  pair_trace.PoolV1PairTraceErrorV1)
+                                                r2 pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+                                          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                          match cf1 with
+                                            | core.ops.control_flow.ControlFlow.Continue a => do
+                                              let output_pair ← records.output_pair
+                                              let r4 ← pair_forest_trace.late_append records snapshot output_pair
+                                              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                              match cf2 with
+                                                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                                  let s ← lift input.super_root_siblings.to_slice
+                                                  let i ← core.slice.Slice.iter s
+                                                  let f ←
+                                                    BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+                                                        (core.iter.traits.iterator.IteratorSliceIter
+                                                          (Std.Array aspis_core.field.M31 8#usize))
+                                                        (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                          aspis_core.field.M31 8#usize)
+                                                        i
+                                                  let __x ←
+                                                    BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+                                                        (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+                                                          (core.iter.traits.iterator.IteratorSliceIter
+                                                            (Std.Array aspis_core.field.M31 8#usize))
+                                                          (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                            aspis_core.field.M31 8#usize)
+                                                          (core.iter.traits.iterator.IteratorSliceIter
+                                                            aspis_core.field.M31))
+                                                        pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                                        f ()
+                                                  match __x with
+                                                    | (b7, snd) =>
+                                                      if b7 = true then
+                                                        ok
+                                                          (core.result.Result.Err
+                                                            pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+                                                      else do
+                                                        let anchor ← records.path_digest 24#usize
+                                                        let b8 ←
+                                                          core.array.equality.PartialEqArray.ne
+                                                              aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                                                              { anchor := pubAnchor, nullifier := pubNullifier,
+                                                                  recipient_commitment := some val✝,
+                                                                  change_commitment := pubChange,
+                                                                  asset := pubAsset }.anchor
+                                                        if b8 = true then
+                                                            ok
+                                                              (core.result.Result.Err
+                                                                pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                                                          else do
+                                                            let o ← records.banks
+                                                            let r5 ←
+                                                              BuilderForestStdPort.core.option.Option.ok_or o
+                                                                  pair_trace.PoolV1PairTraceErrorV1.Shape
+                                                            let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                            match cf3 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                                let r6 ←
+                                                                  pair_forest_trace.validate_forest_poseidon_rows val2
+                                                                let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                                match cf4 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                    let private_directions ←
+                                                                      BuilderForestStdPort.core.array.from_fn 24#usize
+                                                                          pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                                                          (input.pair, input)
+                                                                    let a5 ← pair_trace.value_bits input.pair.value
+                                                                    let a6 ← pair_trace.value_bits out
+                                                                    let a7 ← pair_trace.value_bits change.value
+                                                                    ok
+                                                                        (core.result.Result.Ok
+                                                                          {
+                                                                            trace :=
+                                                                              { stable := { c1 := val2.stable },
+                                                                                late := val2.late,
+                                                                                variant :=
+                                                                                  pair_trace.PoolV1PairTraceVariantV1.PrivateTransfer,
+                                                                                private_directions :=
+                                                                                  private_directions,
+                                                                                value_bits :=
+                                                                                  Array.make 3#usize [a5, a6, a7] ⋯,
+                                                                                public_outputs :=
+                                                                                  pair_trace.PoolV1PairTracePublicOutputsV1.PrivateTransfer
+                                                                                    anchor nullifier
+                                                                                    recipient_commitment
+                                                                                    change_commitment output_pair,
+                                                                                afterstate := val1 },
+                                                                            semantic_c1 := { c1 := val2.merged },
+                                                                            public_statement :=
+                                                                              { live_snapshot := snapshot,
+                                                                                candidate_afterstate := val1 } })
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                      (core.convert.FromSame
+                                                                        pair_trace.PoolV1PairTraceErrorV1)
+                                                                      residual
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                  (core.convert.FromSame
+                                                                    pair_trace.PoolV1PairTraceErrorV1)
+                                                                  residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                    (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual) =
+    ok (core.result.Result.Ok compiled)
+
+case some
+inst✝¹ : ExternalLinear
+inst✝ : Records
+input : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1
+out : U32
+recipient : Option payment_relation.PoolV1OutputNoteWitnessV1
+change : payment_relation.PoolV1OutputNoteWitnessV1
+anchor : Std.Array U32 8#usize
+snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1
+compiled : pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+pubAnchor pubNullifier pubChange : Std.Array aspis_core.field.M31 8#usize
+pubAsset : aspis_core.field.M31
+val✝ : Std.Array aspis_core.field.M31 8#usize
+h :
+  (do
+      let records ←
+        pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot
+            { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := some val✝,
+                change_commitment := pubChange, asset := pubAsset }.asset
+      let a ← input.pair.pair_leaf.selected_commitment input.pair.selected_second
+      let a1 ← records.input_leaf
+      let b ←
+        core.cmp.impls.PartialEqShared.ne
+            (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray 8#usize
+              aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+            a a1
+      if b = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.SelectedCommitmentMismatch)
+        else do
+          let a2 ← records.path_digest 1#usize
+          let r ← input.pair.pair_leaf.leaf_digest
+          let r1 ←
+            BuilderForestStdPort.core.result.Result.map_err
+                (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1 pair_trace.PoolV1PairTraceErrorV1) r
+                pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let b1 ← core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a2 val
+              if b1 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.SelectedCommitmentMismatch)
+                else do
+                  let a3 ← records.path_digest 21#usize
+                  let b2 ←
+                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a3 anchor
+                  if b2 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                    else do
+                      let nullifier ← records.nullifier
+                      let b3 ←
+                        core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 nullifier
+                            { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := some val✝,
+                                change_commitment := pubChange, asset := pubAsset }.nullifier
+                      if b3 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.NullifierMismatch)
+                        else do
+                          let a4 ← format.pool_v1_nullifier input.pair.nullifier_key input.pair.salt
+                          let b4 ←
+                            core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                nullifier a4
+                          if b4 = true then
+                              ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.NullifierMismatch)
+                            else do
+                              let change_commitment ← records.change
+                              match
+                                  { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := some val✝,
+                                      change_commitment := pubChange, asset := pubAsset }.recipient_commitment with
+                                | none => do
+                                  let b5 ←
+                                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                        change_commitment
+                                        { anchor := pubAnchor, nullifier := pubNullifier,
+                                            recipient_commitment := some val✝, change_commitment := pubChange,
+                                            asset := pubAsset }.change_commitment
+                                  if b5 = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          pair_trace.PoolV1PairTraceErrorV1.ChangeCommitmentMismatch)
+                                    else do
+                                      let r2 ← pair_tree_profile.PoolV1PairLeafWitnessV1.single_output change_commitment
+                                      let r3 ←
+                                        BuilderForestStdPort.core.result.Result.map_err
+                                            (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1
+                                              pair_trace.PoolV1PairTraceErrorV1)
+                                            r2 pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+                                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                      match cf1 with
+                                        | core.ops.control_flow.ControlFlow.Continue a => do
+                                          let output_pair ← records.output_pair
+                                          let r4 ← pair_forest_trace.late_append records snapshot output_pair
+                                          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                          match cf2 with
+                                            | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                              let s ← lift input.super_root_siblings.to_slice
+                                              let i ← core.slice.Slice.iter s
+                                              let f ←
+                                                BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+                                                    (core.iter.traits.iterator.IteratorSliceIter
+                                                      (Std.Array aspis_core.field.M31 8#usize))
+                                                    (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                      aspis_core.field.M31 8#usize)
+                                                    i
+                                              let __x ←
+                                                BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+                                                    (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+                                                      (core.iter.traits.iterator.IteratorSliceIter
+                                                        (Std.Array aspis_core.field.M31 8#usize))
+                                                      (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                        aspis_core.field.M31 8#usize)
+                                                      (core.iter.traits.iterator.IteratorSliceIter
+                                                        aspis_core.field.M31))
+                                                    pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                                    f ()
+                                              match __x with
+                                                | (b6, snd) =>
+                                                  if b6 = true then
+                                                    ok
+                                                      (core.result.Result.Err
+                                                        pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+                                                  else do
+                                                    let anchor ← records.path_digest 24#usize
+                                                    let b7 ←
+                                                      core.array.equality.PartialEqArray.ne
+                                                          aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                                                          { anchor := pubAnchor, nullifier := pubNullifier,
+                                                              recipient_commitment := some val✝,
+                                                              change_commitment := pubChange, asset := pubAsset }.anchor
+                                                    if b7 = true then
+                                                        ok
+                                                          (core.result.Result.Err
+                                                            pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                                                      else do
+                                                        let o ← records.banks
+                                                        let r5 ←
+                                                          BuilderForestStdPort.core.option.Option.ok_or o
+                                                              pair_trace.PoolV1PairTraceErrorV1.Shape
+                                                        let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                        match cf3 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                            let r6 ←
+                                                              pair_forest_trace.validate_forest_poseidon_rows val2
+                                                            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                            match cf4 with
+                                                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                let private_directions ←
+                                                                  BuilderForestStdPort.core.array.from_fn 24#usize
+                                                                      pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                                                      (input.pair, input)
+                                                                let a5 ← pair_trace.value_bits input.pair.value
+                                                                let a6 ← pair_trace.value_bits out
+                                                                let a7 ← pair_trace.value_bits change.value
+                                                                ok
+                                                                    (core.result.Result.Ok
+                                                                      {
+                                                                        trace :=
+                                                                          { stable := { c1 := val2.stable },
+                                                                            late := val2.late,
+                                                                            variant :=
+                                                                              pair_trace.PoolV1PairTraceVariantV1.Withdrawal,
+                                                                            private_directions := private_directions,
+                                                                            value_bits :=
+                                                                              Array.make 3#usize [a5, a6, a7] ⋯,
+                                                                            public_outputs :=
+                                                                              pair_trace.PoolV1PairTracePublicOutputsV1.Withdrawal
+                                                                                anchor nullifier change_commitment
+                                                                                output_pair,
+                                                                            afterstate := val1 },
+                                                                        semantic_c1 := { c1 := val2.merged },
+                                                                        public_statement :=
+                                                                          { live_snapshot := snapshot,
+                                                                            candidate_afterstate := val1 } })
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                  (core.convert.FromSame
+                                                                    pair_trace.PoolV1PairTraceErrorV1)
+                                                                  residual
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                              (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1)
+                                                              residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                            (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                | some expected => do
+                                  let recipient_commitment ← records.recipient
+                                  let b5 ←
+                                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                                        recipient_commitment expected
+                                  if b5 = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          pair_trace.PoolV1PairTraceErrorV1.RecipientCommitmentMismatch)
+                                    else do
+                                      let b6 ←
+                                        core.array.equality.PartialEqArray.ne
+                                            aspis_core.field.M31.Insts.CoreCmpPartialEqM31 change_commitment
+                                            { anchor := pubAnchor, nullifier := pubNullifier,
+                                                recipient_commitment := some val✝, change_commitment := pubChange,
+                                                asset := pubAsset }.change_commitment
+                                      if b6 = true then
+                                          ok
+                                            (core.result.Result.Err
+                                              pair_trace.PoolV1PairTraceErrorV1.ChangeCommitmentMismatch)
+                                        else do
+                                          let r2 ←
+                                            pair_tree_profile.PoolV1PairLeafWitnessV1.two_outputs recipient_commitment
+                                                change_commitment
+                                          let r3 ←
+                                            BuilderForestStdPort.core.result.Result.map_err
+                                                (BuiltinFnOnce pair_tree_profile.PoolV1PairLeafErrorV1
+                                                  pair_trace.PoolV1PairTraceErrorV1)
+                                                r2 pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+                                          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                          match cf1 with
+                                            | core.ops.control_flow.ControlFlow.Continue a => do
+                                              let output_pair ← records.output_pair
+                                              let r4 ← pair_forest_trace.late_append records snapshot output_pair
+                                              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                              match cf2 with
+                                                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                                  let s ← lift input.super_root_siblings.to_slice
+                                                  let i ← core.slice.Slice.iter s
+                                                  let f ←
+                                                    BuilderForestStdPort.core.iter.traits.iterator.Iterator.flatten.default
+                                                        (core.iter.traits.iterator.IteratorSliceIter
+                                                          (Std.Array aspis_core.field.M31 8#usize))
+                                                        (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                          aspis_core.field.M31 8#usize)
+                                                        i
+                                                  let __x ←
+                                                    BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+                                                        (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+                                                          (core.iter.traits.iterator.IteratorSliceIter
+                                                            (Std.Array aspis_core.field.M31 8#usize))
+                                                          (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
+                                                            aspis_core.field.M31 8#usize)
+                                                          (core.iter.traits.iterator.IteratorSliceIter
+                                                            aspis_core.field.M31))
+                                                        pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                                        f ()
+                                                  match __x with
+                                                    | (b7, snd) =>
+                                                      if b7 = true then
+                                                        ok
+                                                          (core.result.Result.Err
+                                                            pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+                                                      else do
+                                                        let anchor ← records.path_digest 24#usize
+                                                        let b8 ←
+                                                          core.array.equality.PartialEqArray.ne
+                                                              aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                                                              { anchor := pubAnchor, nullifier := pubNullifier,
+                                                                  recipient_commitment := some val✝,
+                                                                  change_commitment := pubChange,
+                                                                  asset := pubAsset }.anchor
+                                                        if b8 = true then
+                                                            ok
+                                                              (core.result.Result.Err
+                                                                pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                                                          else do
+                                                            let o ← records.banks
+                                                            let r5 ←
+                                                              BuilderForestStdPort.core.option.Option.ok_or o
+                                                                  pair_trace.PoolV1PairTraceErrorV1.Shape
+                                                            let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                            match cf3 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                                let r6 ←
+                                                                  pair_forest_trace.validate_forest_poseidon_rows val2
+                                                                let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                                match cf4 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                    let private_directions ←
+                                                                      BuilderForestStdPort.core.array.from_fn 24#usize
+                                                                          pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                                                          (input.pair, input)
+                                                                    let a5 ← pair_trace.value_bits input.pair.value
+                                                                    let a6 ← pair_trace.value_bits out
+                                                                    let a7 ← pair_trace.value_bits change.value
+                                                                    ok
+                                                                        (core.result.Result.Ok
+                                                                          {
+                                                                            trace :=
+                                                                              { stable := { c1 := val2.stable },
+                                                                                late := val2.late,
+                                                                                variant :=
+                                                                                  pair_trace.PoolV1PairTraceVariantV1.PrivateTransfer,
+                                                                                private_directions :=
+                                                                                  private_directions,
+                                                                                value_bits :=
+                                                                                  Array.make 3#usize [a5, a6, a7] ⋯,
+                                                                                public_outputs :=
+                                                                                  pair_trace.PoolV1PairTracePublicOutputsV1.PrivateTransfer
+                                                                                    anchor nullifier
+                                                                                    recipient_commitment
+                                                                                    change_commitment output_pair,
+                                                                                afterstate := val1 },
+                                                                            semantic_c1 := { c1 := val2.merged },
+                                                                            public_statement :=
+                                                                              { live_snapshot := snapshot,
+                                                                                candidate_afterstate := val1 } })
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                      (core.convert.FromSame
+                                                                        pair_trace.PoolV1PairTraceErrorV1)
+                                                                      residual
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                                  (core.convert.FromSame
+                                                                    pair_trace.PoolV1PairTraceErrorV1)
+                                                                  residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                    (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual) =
+    ok (core.result.Result.Ok compiled)
+⊢ compiled.trace.private_directions = BuilderRecordsPath.bits (PV_Src_NativeDirections.reference input) ∧
+    compiled.trace.value_bits =
+        Array.make 3#usize
+          [PV_RunJoin_ValueBits20.bits input.pair.value, PV_RunJoin_ValueBits20.bits out,
+            PV_RunJoin_ValueBits20.bits change.value]
+          ⋯ ∧
+      compiled.trace.variant =
+        if
+            { anchor := pubAnchor, nullifier := pubNullifier, recipient_commitment := some val✝,
+                    change_commitment := pubChange, asset := pubAsset }.recipient_commitment.isSome =
+              true then
+          pair_trace.PoolV1PairTraceVariantV1.PrivateTransfer
+        else pair_trace.PoolV1PairTraceVariantV1.Withdrawal
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_UniversalCompilerFrame22.payload' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_UniversalCompilerFrame22.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

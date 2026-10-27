@@ -1,0 +1,52 @@
+'R1Z.PV_RunJoin_UniversalTreeFrame22.construct' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin22-lean/sources/R1Z/PV_RunJoin_UniversalTreeFrame22.lean:36:8: error: unknown tactic
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin22-lean/sources/R1Z/PV_RunJoin_UniversalTreeFrame22.lean:33:93: error: unsolved goals
+inst✝ : ExternalLinear
+tree next : incremental_merkle.tree_reference.OwnedTree
+leaf : Digest
+receipt : incremental_merkle.AppendOneV1
+h :
+  (do
+      let i ← incremental_merkle.POOL_V1_LEAF_CAPACITY
+      if tree.inner.next_leaf_index = i then ok (core.result.Result.Err incremental_merkle.PoolV1TreeError.TreeFull)
+        else do
+          let __x ←
+            incremental_merkle.tree_reference.OwnedTree.append_one_loop tree.inner.next_leaf_index tree.empty
+                tree.inner.frontier leaf 0#usize
+          match __x with
+            | (frontier, root, carry_level) => do
+              let next_leaf_index ← lift (tree.inner.next_leaf_index.wrapping_add 1#u64)
+              if carry_level = format.POOL_V1_TREE_DEPTH then do
+                  let rhlv ← root_history.root_history_location next_leaf_index
+                  ok
+                      (core.result.Result.Ok
+                        ({ inner := { next_leaf_index := next_leaf_index, root := root, frontier := frontier },
+                            empty := tree.empty },
+                          { leaf_index := tree.inner.next_leaf_index, root_sequence := next_leaf_index, root := root,
+                            history := rhlv }))
+                else do
+                  let frontier1 ← frontier.update carry_level root
+                  have a : Std.Array aspis_core.field.M31 8#usize := Array.repeat 8#usize aspis_core.field.M31.ZERO
+                  let r ←
+                    { next_leaf_index := next_leaf_index, root := a,
+                            frontier := frontier1 }.reconstruct_nonfull_root_from_level
+                        tree.empty carry_level
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let rhlv ← root_history.root_history_location next_leaf_index
+                      ok
+                          (core.result.Result.Ok
+                            ({ inner := { next_leaf_index := next_leaf_index, root := val, frontier := frontier1 },
+                                empty := tree.empty },
+                              { leaf_index := tree.inner.next_leaf_index, root_sequence := next_leaf_index, root := val,
+                                history := rhlv }))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (incremental_merkle.tree_reference.OwnedTree × incremental_merkle.AppendOneV1)
+                        (core.convert.FromSame incremental_merkle.PoolV1TreeError) residual) =
+    ok (core.result.Result.Ok (next, receipt))
+⊢ next.inner.next_leaf_index = tree.inner.next_leaf_index.wrapping_add 1#u64 ∧
+    receipt.leaf_index = tree.inner.next_leaf_index ∧
+      receipt.root_sequence = next.inner.next_leaf_index ∧ receipt.root = next.inner.root
+'R1Z.PV_RunJoin_UniversalTreeFrame22.append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

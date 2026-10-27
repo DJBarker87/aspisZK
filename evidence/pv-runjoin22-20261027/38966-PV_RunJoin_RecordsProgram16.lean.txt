@@ -1,0 +1,318 @@
+import R1Z.PV_RunJoin_RecordsAdapter16
+import R1Z.PV_RunJoin_BindControl16
+set_option autoImplicit false
+namespace PV_RunJoin_RecordsProgram16
+open Aeneas Aeneas.Std Result ControlFlow Error PV_RunJoin_Records
+def program (raw : Array U32 8#usize → Result (Array U32 8#usize))
+  (input : pool_v1.pair_forest_trace.PoolV1PairForestInputNoteWitnessV1)
+  (out : Std.U32)
+  (rec : Option pool_v1.payment_relation.PoolV1OutputNoteWitnessV1)
+  (chg : pool_v1.payment_relation.PoolV1OutputNoteWitnessV1)
+  (snapshot : pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1)
+  (asset : aspis_core.field.M31)
+  (empty : Array (Array aspis_core.field.M31 8#usize) 21#usize) :
+  Result (pool_v1.pair_forest_copy_builder.RW ×
+    pool_v1.pair_forest_copy_builder.RP)
+  := do
+  let (b, other) ←
+    if input.pair.selected_second
+    then ok (true, input.pair.pair_leaf.first_commitment)
+    else ok (false, input.pair.pair_leaf.second_commitment)
+  let s1 ← Array.index_usize input.pair.membership.siblings 0#usize
+  let s2 ← Array.index_usize input.pair.membership.siblings 1#usize
+  let s3 ← Array.index_usize input.pair.membership.siblings 2#usize
+  let s4 ← Array.index_usize input.pair.membership.siblings 3#usize
+  let s5 ← Array.index_usize input.pair.membership.siblings 4#usize
+  let s6 ← Array.index_usize input.pair.membership.siblings 5#usize
+  let s7 ← Array.index_usize input.pair.membership.siblings 6#usize
+  let s8 ← Array.index_usize input.pair.membership.siblings 7#usize
+  let s9 ← Array.index_usize input.pair.membership.siblings 8#usize
+  let s10 ← Array.index_usize input.pair.membership.siblings 9#usize
+  let s11 ← Array.index_usize input.pair.membership.siblings 10#usize
+  let s12 ← Array.index_usize input.pair.membership.siblings 11#usize
+  let s13 ← Array.index_usize input.pair.membership.siblings 12#usize
+  let s14 ← Array.index_usize input.pair.membership.siblings 13#usize
+  let s15 ← Array.index_usize input.pair.membership.siblings 14#usize
+  let s16 ← Array.index_usize input.pair.membership.siblings 15#usize
+  let s17 ← Array.index_usize input.pair.membership.siblings 16#usize
+  let s18 ← Array.index_usize input.pair.membership.siblings 17#usize
+  let s19 ← Array.index_usize input.pair.membership.siblings 18#usize
+  let s20 ← Array.index_usize input.pair.membership.siblings 19#usize
+  let s21 ← Array.index_usize input.super_root_siblings 0#usize
+  let s22 ← Array.index_usize input.super_root_siblings 1#usize
+  let s23 ← Array.index_usize input.super_root_siblings 2#usize
+  let d0 ← Array.index_usize input.super_root_directions 0#usize
+  let d1 ← Array.index_usize input.super_root_directions 1#usize
+  let d2 ← Array.index_usize input.super_root_directions 2#usize
+  let i ← lift (core.convert.num.FromU32Bool.from b)
+  let i1 ← lift (Std.U32.wrapping_shr input.pair.membership.index 0#u32)
+  let i2 ← lift (i1 &&& 1#u32)
+  let i3 ← lift (Std.U32.wrapping_shr input.pair.membership.index 1#u32)
+  let i4 ← lift (i3 &&& 1#u32)
+  let i5 ← lift (Std.U32.wrapping_shr input.pair.membership.index 2#u32)
+  let i6 ← lift (i5 &&& 1#u32)
+  let i7 ← lift (Std.U32.wrapping_shr input.pair.membership.index 3#u32)
+  let i8 ← lift (i7 &&& 1#u32)
+  let i9 ← lift (Std.U32.wrapping_shr input.pair.membership.index 4#u32)
+  let i10 ← lift (i9 &&& 1#u32)
+  let i11 ← lift (Std.U32.wrapping_shr input.pair.membership.index 5#u32)
+  let i12 ← lift (i11 &&& 1#u32)
+  let i13 ← lift (Std.U32.wrapping_shr input.pair.membership.index 6#u32)
+  let i14 ← lift (i13 &&& 1#u32)
+  let i15 ← lift (Std.U32.wrapping_shr input.pair.membership.index 7#u32)
+  let i16 ← lift (i15 &&& 1#u32)
+  let i17 ← lift (Std.U32.wrapping_shr input.pair.membership.index 8#u32)
+  let i18 ← lift (i17 &&& 1#u32)
+  let i19 ← lift (Std.U32.wrapping_shr input.pair.membership.index 9#u32)
+  let i20 ← lift (i19 &&& 1#u32)
+  let i21 ← lift (Std.U32.wrapping_shr input.pair.membership.index 10#u32)
+  let i22 ← lift (i21 &&& 1#u32)
+  let i23 ← lift (Std.U32.wrapping_shr input.pair.membership.index 11#u32)
+  let i24 ← lift (i23 &&& 1#u32)
+  let i25 ← lift (Std.U32.wrapping_shr input.pair.membership.index 12#u32)
+  let i26 ← lift (i25 &&& 1#u32)
+  let i27 ← lift (Std.U32.wrapping_shr input.pair.membership.index 13#u32)
+  let i28 ← lift (i27 &&& 1#u32)
+  let i29 ← lift (Std.U32.wrapping_shr input.pair.membership.index 14#u32)
+  let i30 ← lift (i29 &&& 1#u32)
+  let i31 ← lift (Std.U32.wrapping_shr input.pair.membership.index 15#u32)
+  let i32 ← lift (i31 &&& 1#u32)
+  let i33 ← lift (Std.U32.wrapping_shr input.pair.membership.index 16#u32)
+  let i34 ← lift (i33 &&& 1#u32)
+  let i35 ← lift (Std.U32.wrapping_shr input.pair.membership.index 17#u32)
+  let i36 ← lift (i35 &&& 1#u32)
+  let i37 ← lift (Std.U32.wrapping_shr input.pair.membership.index 18#u32)
+  let i38 ← lift (i37 &&& 1#u32)
+  let i39 ← lift (Std.U32.wrapping_shr input.pair.membership.index 19#u32)
+  let i40 ← lift (i39 &&& 1#u32)
+  let i41 ← lift (core.convert.num.FromU32Bool.from d0)
+  let i42 ← lift (core.convert.num.FromU32Bool.from d1)
+  let i43 ← lift (core.convert.num.FromU32Bool.from d2)
+  let a ← raw other
+  let a1 ← raw s1
+  let a2 ← raw s2
+  let a3 ← raw s3
+  let a4 ← raw s4
+  let a5 ← raw s5
+  let a6 ← raw s6
+  let a7 ← raw s7
+  let a8 ← raw s8
+  let a9 ← raw s9
+  let a10 ← raw s10
+  let a11 ← raw s11
+  let a12 ← raw s12
+  let a13 ← raw s13
+  let a14 ← raw s14
+  let a15 ← raw s15
+  let a16 ← raw s16
+  let a17 ← raw s17
+  let a18 ← raw s18
+  let a19 ← raw s19
+  let a20 ← raw s20
+  let a21 ← raw s21
+  let a22 ← raw s22
+  let a23 ← raw s23
+  let f0 ← Array.index_usize snapshot.frontier 0#usize
+  let f1 ← Array.index_usize snapshot.frontier 1#usize
+  let f2 ← Array.index_usize snapshot.frontier 2#usize
+  let f3 ← Array.index_usize snapshot.frontier 3#usize
+  let f4 ← Array.index_usize snapshot.frontier 4#usize
+  let f5 ← Array.index_usize snapshot.frontier 5#usize
+  let f6 ← Array.index_usize snapshot.frontier 6#usize
+  let f7 ← Array.index_usize snapshot.frontier 7#usize
+  let f8 ← Array.index_usize snapshot.frontier 8#usize
+  let f9 ← Array.index_usize snapshot.frontier 9#usize
+  let f10 ← Array.index_usize snapshot.frontier 10#usize
+  let f11 ← Array.index_usize snapshot.frontier 11#usize
+  let f12 ← Array.index_usize snapshot.frontier 12#usize
+  let f13 ← Array.index_usize snapshot.frontier 13#usize
+  let f14 ← Array.index_usize snapshot.frontier 14#usize
+  let f15 ← Array.index_usize snapshot.frontier 15#usize
+  let f16 ← Array.index_usize snapshot.frontier 16#usize
+  let f17 ← Array.index_usize snapshot.frontier 17#usize
+  let f18 ← Array.index_usize snapshot.frontier 18#usize
+  let f19 ← Array.index_usize snapshot.frontier 19#usize
+  let e0 ← Array.index_usize empty 0#usize
+  let e1 ← Array.index_usize empty 1#usize
+  let e2 ← Array.index_usize empty 2#usize
+  let e3 ← Array.index_usize empty 3#usize
+  let e4 ← Array.index_usize empty 4#usize
+  let e5 ← Array.index_usize empty 5#usize
+  let e6 ← Array.index_usize empty 6#usize
+  let e7 ← Array.index_usize empty 7#usize
+  let e8 ← Array.index_usize empty 8#usize
+  let e9 ← Array.index_usize empty 9#usize
+  let e10 ← Array.index_usize empty 10#usize
+  let e11 ← Array.index_usize empty 11#usize
+  let e12 ← Array.index_usize empty 12#usize
+  let e13 ← Array.index_usize empty 13#usize
+  let e14 ← Array.index_usize empty 14#usize
+  let e15 ← Array.index_usize empty 15#usize
+  let e16 ← Array.index_usize empty 16#usize
+  let e17 ← Array.index_usize empty 17#usize
+  let e18 ← Array.index_usize empty 18#usize
+  let e19 ← Array.index_usize empty 19#usize
+  let a24 ←
+    raw input.pair.nullifier_key
+  let a25 ←
+    raw input.pair.salt
+  let a26 ←
+    raw
+      input.pair.pair_leaf.first_commitment
+  let a27 ←
+    raw
+      input.pair.pair_leaf.second_commitment
+  let a28 ← raw chg.owner_key
+  let a29 ← raw chg.salt
+  let a30 ← raw f0
+  let a31 ← raw f1
+  let a32 ← raw f2
+  let a33 ← raw f3
+  let a34 ← raw f4
+  let a35 ← raw f5
+  let a36 ← raw f6
+  let a37 ← raw f7
+  let a38 ← raw f8
+  let a39 ← raw f9
+  let a40 ← raw f10
+  let a41 ← raw f11
+  let a42 ← raw f12
+  let a43 ← raw f13
+  let a44 ← raw f14
+  let a45 ← raw f15
+  let a46 ← raw f16
+  let a47 ← raw f17
+  let a48 ← raw f18
+  let a49 ← raw f19
+  let a50 ← raw e0
+  let a51 ← raw e1
+  let a52 ← raw e2
+  let a53 ← raw e3
+  let a54 ← raw e4
+  let a55 ← raw e5
+  let a56 ← raw e6
+  let a57 ← raw e7
+  let a58 ← raw e8
+  let a59 ← raw e9
+  let a60 ← raw e10
+  let a61 ← raw e11
+  let a62 ← raw e12
+  let a63 ← raw e13
+  let a64 ← raw e14
+  let a65 ← raw e15
+  let a66 ← raw e16
+  let a67 ← raw e17
+  let a68 ← raw e18
+  let a69 ← raw e19
+  match rec with
+  | none =>
+    ok
+      ({
+         input_value := input.pair.value,
+         output_value := out,
+         change_value := chg.value,
+         sk := a24,
+         salt := a25,
+         bits :=
+           (Array.make 24#usize [
+             i, i2, i4, i6, i8, i10, i12, i14, i16, i18, i20, i22, i24, i26,
+             i28, i30, i32, i34, i36, i38, i40, i41, i42, i43
+             ]),
+         sibs :=
+           (Array.make 24#usize [
+             a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14,
+             a15, a16, a17, a18, a19, a20, a21, a22, a23
+             ]),
+         pair_first := a26,
+         pair_occupied := input.pair.pair_leaf.second_occupied,
+         pair_second := a27,
+         pair_inverse := input.pair.pair_leaf.second_occupancy_inverse,
+         recipient_owner := pool_v1.pair_forest_copy_builder.ZERO8,
+         recipient_salt := pool_v1.pair_forest_copy_builder.ZERO8,
+         change_owner := a28,
+         change_salt := a29
+       },
+      {
+        transfer := false,
+        asset,
+        next_pair_index := snapshot.next_pair_index,
+        frontier :=
+          (Array.make 20#usize [
+            a30, a31, a32, a33, a34, a35, a36, a37, a38, a39, a40, a41, a42,
+            a43, a44, a45, a46, a47, a48, a49
+            ]),
+        empty :=
+          (Array.make 20#usize [
+            a50, a51, a52, a53, a54, a55, a56, a57, a58, a59, a60, a61, a62,
+            a63, a64, a65, a66, a67, a68, a69
+            ])
+      })
+  | some r =>
+    let a70 ← raw r.owner_key
+    let a71 ← raw r.salt
+    ok
+      ({
+         input_value := input.pair.value,
+         output_value := out,
+         change_value := chg.value,
+         sk := a24,
+         salt := a25,
+         bits :=
+           (Array.make 24#usize [
+             i, i2, i4, i6, i8, i10, i12, i14, i16, i18, i20, i22, i24, i26,
+             i28, i30, i32, i34, i36, i38, i40, i41, i42, i43
+             ]),
+         sibs :=
+           (Array.make 24#usize [
+             a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14,
+             a15, a16, a17, a18, a19, a20, a21, a22, a23
+             ]),
+         pair_first := a26,
+         pair_occupied := input.pair.pair_leaf.second_occupied,
+         pair_second := a27,
+         pair_inverse := input.pair.pair_leaf.second_occupancy_inverse,
+         recipient_owner := a70,
+         recipient_salt := a71,
+         change_owner := a28,
+         change_salt := a29
+       },
+      {
+        transfer := true,
+        asset,
+        next_pair_index := snapshot.next_pair_index,
+        frontier :=
+          (Array.make 20#usize [
+            a30, a31, a32, a33, a34, a35, a36, a37, a38, a39, a40, a41, a42,
+            a43, a44, a45, a46, a47, a48, a49
+            ]),
+        empty :=
+          (Array.make 20#usize [
+            a50, a51, a52, a53, a54, a55, a56, a57, a58, a59, a60, a61, a62,
+            a63, a64, a65, a66, a67, a68, a69
+            ])
+      })
+
+
+attribute [local irreducible] pool_v1.pair_forest_copy_builder.records.raw_owned Array.index_usize Aeneas.Std.bind
+
+theorem source (i : pool_v1.pair_forest_trace.PoolV1PairForestInputNoteWitnessV1)
+    (out : U32) (rec : Option pool_v1.payment_relation.PoolV1OutputNoteWitnessV1)
+    (chg : pool_v1.payment_relation.PoolV1OutputNoteWitnessV1)
+    (snap : pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) (asset : U32)
+    (empty : Array (Array U32 8#usize) 21#usize) :
+    pool_v1.pair_forest_copy_builder.records.owned i out rec chg snap asset empty =
+    program pool_v1.pair_forest_copy_builder.records.raw_owned i out rec chg snap asset empty := by
+  rcases i with ⟨⟨sk, salt, value, leaf, selected, membership⟩, supers, directions⟩
+  cases selected
+  all_goals
+    unfold pool_v1.pair_forest_copy_builder.records.owned program
+    repeat' pv_congr_bind16
+    rfl
+
+theorem projector : pool_v1.pair_forest_copy_builder.records.raw_owned =
+    (fun d => ok d) := funext R1Z.PV_RunJoin_RecordsAdapter16.raw_owned_all_words
+
+#print axioms program
+#print axioms source
+#print axioms projector
+end PV_RunJoin_RecordsProgram16

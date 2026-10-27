@@ -1,0 +1,12 @@
+import AspisV8R19.SamplerClosureProductCorrectness
+
+#print axioms AspisV8R19.SamplerClosureProductCorrectness.raw_coordinates
+#print axioms AspisV8R19.SamplerClosureProductCorrectness.canonical_product
+#print axioms AspisV8R19.SamplerClosureProductCorrectness.public_product
+#print axioms AspisV8R19.SamplerClosureProductCorrectness.encode_canonical
+#print axioms AspisV8R19.SamplerClosureProductCorrectness.decode_encode
+#print axioms AspisV8R19.SamplerClosureProductCorrectness.encode_decode
+#print axioms AspisV8R19.SamplerClosureProductCorrectness.guard_execution
+#print axioms AspisV8R19.SamplerClosureProductCorrectness.public_execution
+#print axioms AspisV8R19.SamplerClosureProductCorrectness.result_correct
+#print axioms AspisV8R19.SamplerClosureProductCorrectness.no_failure
