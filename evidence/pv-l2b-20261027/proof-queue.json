@@ -637,7 +637,7 @@
     "namespace": "PV_L2B_Guards"
   },
   {
-    "body": "theorem inactive_balance {I A : Type} [Fintype I] [DecidableEq I] [AddCommGroup A]\n    (d : I) (v : I \u2192 A) :\n    (\u2211 i : I, if i=d then -(\u2211 j in Finset.univ.erase d, v j) else v i)=0 := by\n  classical\n  rw [\u2190 Finset.add_sum_erase _ _ (Finset.mem_univ d)]\n  simp only [ite_true]\n  have hs : (\u2211 i in Finset.univ.erase d, if i=d then -(\u2211 j in Finset.univ.erase d, v j) else v i) = \u2211 i in Finset.univ.erase d, v i := by\n    apply Finset.sum_congr rfl\n    intro i hi\n    simp only [Finset.mem_erase] at hi\n    simp [hi.1]\n  rw [hs]; exact neg_add_cancel _",
+    "body": "theorem inactive_balance {I A : Type} [Fintype I] [DecidableEq I] [AddCommGroup A]\n    (d : I) (v : I \u2192 A) :\n    (\u2211 i : I, if i=d then -(\u2211 j \u2208 Finset.univ.erase d, v j) else v i)=0 := by\n  classical\n  rw [\u2190 Finset.add_sum_erase _ _ (Finset.mem_univ d)]\n  simp only [ite_true]\n  have hs : (\u2211 i \u2208 Finset.univ.erase d, if i=d then -(\u2211 j \u2208 Finset.univ.erase d, v j) else v i) = \u2211 i \u2208 Finset.univ.erase d, v i := by\n    apply Finset.sum_congr rfl\n    intro i hi\n    simp only [Finset.mem_erase] at hi\n    simp [hi.1]\n  rw [hs]; exact neg_add_cancel _",
     "theorems": [
       "inactive_balance"
     ],
@@ -645,7 +645,7 @@
     "namespace": "PV_L2B_Guards"
   },
   {
-    "body": "theorem padding_total {I A : Type} [Fintype I] [AddCommGroup A]\n    (active : I \u2192 Bool) (padding : I \u2192 A)\n    (hz : \u2200 i, active i=true \u2192 padding i=0)\n    (hs : (\u2211 i : I, if active i then 0 else padding i)=0) :\n    (\u2211 i : I, padding i)=0 := by\n  classical\n  have h : (\u2211 i : I, padding i) = \u2211 i : I, if active i then 0 else padding i := by\n    apply Finset.sum_congr rfl\n    intro i hi\n    cases ha : active i <;> simp [ha,hz i ha]\n  exact h.trans hs",
+    "body": "theorem padding_total {I A : Type} [Fintype I] [AddCommGroup A]\n    (active : I \u2192 Bool) (padding : I \u2192 A)\n    (hz : \u2200 i, active i=true \u2192 padding i=0)\n    (hs : (\u2211 i : I, if active i then 0 else padding i)=0) :\n    (\u2211 i : I, padding i)=0 := by\n  classical\n  have h : (\u2211 i : I, padding i) = \u2211 i : I, if active i then 0 else padding i := by\n    apply Finset.sum_congr rfl\n    intro i hi\n    cases ha : active i with\n    | false => simp [ha]\n    | true => simp [ha,hz i ha]\n  exact h.trans hs",
     "theorems": [
       "padding_total"
     ],
@@ -653,7 +653,7 @@
     "namespace": "PV_L2B_Guards"
   },
   {
-    "body": "theorem padding_preserves_sum {I A : Type} [Fintype I] [AddCommGroup A]\n    (helper padding : I \u2192 A) (hh : (\u2211 i : I, helper i)=0)\n    (hp : (\u2211 i : I, padding i)=0) :\n    (\u2211 i : I, helper i+padding i)=0 := by rw [Finset.sum_add_distrib,hh,hp,add_zero]",
+    "body": "theorem padding_preserves_sum {I A : Type} [Fintype I] [AddCommGroup A]\n    (helper padding : I \u2192 A) (hh : (\u2211 i : I, helper i)=0)\n    (hp : (\u2211 i : I, padding i)=0) :\n    (\u2211 i : I, (helper i + padding i))=0 := by rw [Finset.sum_add_distrib,hh,hp,add_zero]",
     "theorems": [
       "padding_preserves_sum"
     ],
@@ -717,22 +717,15 @@
     "namespace": "PV_L2B_Guards"
   },
   {
-    "body": "theorem rejection_cursor_joint {A B : Type} (f : A \u2192 B) (n : Nat) (xs : List (Option A)) :\n    (PV_L2B_Rejection.trace n (xs.map (Option.map f)),\n      PV_L2B_Cursor.offset (PV_L2B_Rejection.scan n (xs.map (Option.map f))).1) =\n    (PV_L2B_Rejection.trace n xs, PV_L2B_Cursor.offset (PV_L2B_Rejection.scan n xs).1) := by\n  rw [PV_L2B_Rejection.trace_relabel,PV_L2B_Rejection.count_map]\ntheorem accepted_conditional_uniform (q u p : \u211a) (n : Nat)\n    (hp : p\u22600) (h : u*p=1-q) (hs : PV_L2B_SamplerLaw.success q n\u22600) :\n    PV_L2B_SamplerLaw.valueMass q u n / PV_L2B_SamplerLaw.success q n = 1/p := by\n  rw [PV_L2B_SamplerLaw.uniform_on_success q u p n hp h]\n  field_simp",
+    "body": "theorem rejection_cursor_joint {A B : Type} (f : A \u2192 B) (n : Nat) (xs : List (Option A)) :\n    (PV_L2B_Rejection.trace n (xs.map (Option.map f)),\n      PV_L2B_Cursor.offset (PV_L2B_Rejection.scan n (xs.map (Option.map f))).1) =\n    (PV_L2B_Rejection.trace n xs, PV_L2B_Cursor.offset (PV_L2B_Rejection.scan n xs).1) := by\n  rw [PV_L2B_Rejection.trace_relabel,PV_L2B_Rejection.count_map]\ntheorem accepted_conditional_uniform (q u p : \u211a) (n : Nat)\n    (hp : p\u22600) (h : u*p=1-q) (hs : PV_L2B_SamplerLaw.success q n\u22600) :\n    PV_L2B_SamplerLaw.valueMass q u n / PV_L2B_SamplerLaw.success q n = 1/p := by\n  rw [PV_L2B_SamplerLaw.uniform_on_success q u p n hp h]\n  field_simp\ntheorem constant_guard_joint {View Trace : Type} (v w : View) (tv tw : Trace)\n    (hv : v=w) (ht : tv=tw) (checks : Nat) :\n    (v,tv,PV_L2B_Guards.firstFailure (List.replicate checks false)) = (w,tw,checks) := by\n  rw [hv,ht,PV_L2B_Guards.passing_trace]",
     "theorems": [
       "rejection_cursor_joint",
-      "accepted_conditional_uniform"
+      "accepted_conditional_uniform",
+      "constant_guard_joint"
     ],
     "module": "PV_L2B_JointTransport",
     "namespace": "PV_L2B_JointTransport",
     "initial": "import PV_L2B_Rejection\nimport PV_L2B_Cursor\nimport PV_L2B_EntropyTrace\nimport PV_L2B_Guards\nset_option autoImplicit false\nnamespace PV_L2B_JointTransport\nend PV_L2B_JointTransport\n"
-  },
-  {
-    "body": "theorem constant_guard_joint {View Trace : Type} (v w : View) (tv tw : Trace)\n    (hv : v=w) (ht : tv=tw) (checks : Nat) :\n    (v,tv,PV_L2B_Guards.firstFailure (List.replicate checks false)) = (w,tw,checks) := by\n  rw [hv,ht,PV_L2B_Guards.passing_trace]",
-    "theorems": [
-      "constant_guard_joint"
-    ],
-    "module": "PV_L2B_JointTransport",
-    "namespace": "PV_L2B_JointTransport"
   },
   {
     "body": "theorem outside_existing_event {I O : Type} (real sim : I \u2192 O) (bad : I \u2192 Prop)\n    (agreement : \u2200 i, \u00ac bad i \u2192 real i=sim i) (i : I) :\n    real i \u2260 sim i \u2192 bad i := by\n  intro h; by_contra hb; exact h (agreement i hb)",

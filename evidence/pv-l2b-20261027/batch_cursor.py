@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One finite sequence of focused cursor proofs in one reserved 8 GiB scope.
+"""One finite sequence of focused source-trace proofs in one reserved 8 GiB scope.
 
 Uses the unchanged env-J executor. Every compile has its own time/axioms/ID
 receipt. No shared launcher, source, object, or reservation code is changed.
@@ -71,7 +71,7 @@ for x in specs:
  rec=dict(attempt=a,module=module,target=module,revision=rev,source=str(f.relative_to(ROOT)),sha256=hashlib.sha256(x['source'].encode()).hexdigest(),
   exit=int(re.search(r'^exit=(\d+)',out,re.M)[1]),deps_fingerprint=hashlib.sha256((d/'dependencies.json').read_bytes()).hexdigest(),
   axioms=re.findall(r"'[^\n]+(?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",out),
-  caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,lean_M=7000,TasksMax=64),scope='single sequential cursor stage; admission '+str(startid))
+  caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,lean_M=7000,TasksMax=64),scope='single sequential '+module+' stage; admission '+str(startid))
  for k,pat in [('wall',r'Elapsed \(wall clock\) time.*: (.+)'),('peak_RSS_KiB',r'Maximum resident set size \(kbytes\): (\d+)'),('swap',r'Swaps: (\d+)')]:rec[k]=re.search(pat,tm)[1]
  (d/'receipt.json').write_text(json.dumps(rec,indent=2)+'\n')
  with (E/'attempts.jsonl').open('a') as out:out.write(json.dumps(rec)+'\n')

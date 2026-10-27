@@ -310,3 +310,15 @@ theorem accepted_conditional_uniform (q u p : ℚ) (n : Nat)
   field_simp'''
   item['theorems'].append('accepted_conditional_uniform')
 pathlib.Path('evidence/pv-l2b-20261027/proof-queue.json').write_text(json.dumps(q,indent=2)+'\n')
+for item in q:
+ item['body']=item['body'].replace('∑ j in ', '∑ j ∈ ').replace('∑ i in ', '∑ i ∈ ')
+ if item['theorems']==['padding_total']:
+  item['body']=item['body'].replace('cases ha : active i <;> simp [ha,hz i ha]', 'cases ha : active i with\n    | false => simp [ha]\n    | true => simp [ha,hz i ha]')
+pathlib.Path('evidence/pv-l2b-20261027/proof-queue.json').write_text(json.dumps(q,indent=2)+'\n')
+
+for item in q:
+ item['body']=item['body'].replace('helper i+padding i','(helper i + padding i)')
+first=next(i for i in q if i['module']=='PV_L2B_JointTransport')
+second=q[q.index(first)+1]
+first['body']+='\n'+second['body'];first['theorems']+=second['theorems'];q.remove(second)
+pathlib.Path('evidence/pv-l2b-20261027/proof-queue.json').write_text(json.dumps(q,indent=2)+'\n')
