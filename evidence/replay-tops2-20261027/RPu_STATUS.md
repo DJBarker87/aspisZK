@@ -20,3 +20,6 @@ Priority: FJp/FJu closure and complete root audits, then FJv critical dependency
 path, reserving batched declaration audits. Only new RPu names are installed.
 No premises removed by replay: T0/P0/G0/C0. No new joint non-vacuity claim.
 Security target not yet established.
+
+Final: 500/500 attempts pass; see RPu_HANDOFF.md for sealed root results and
+remaining FJv frontier. No further compiler attempts are authorized.
