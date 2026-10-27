@@ -5,6 +5,8 @@ name=sys.argv[1];assert not (E/(name+'.json')).exists()
 def ssh(s):return subprocess.run(['ssh',host,s],capture_output=True,text=True)
 # Read-only check of the exact native dependency source tree before execution.
 files=sorted(str(p.relative_to(R)) for crate in ['aspis-core','aspis-statement'] for p in (R/'crates'/crate/'src').rglob('*.rs'))
+files+=sorted(str(p.relative_to(R)) for name in ['writers','blockwriters','poseidon'] for p in (R/'docs/research/v8-r0-zk-20261009/refine'/name).rglob('*.rs'))
+files+=['Cargo.toml','Cargo.lock','crates/aspis-core/Cargo.toml','crates/aspis-statement/Cargo.toml']
 expected={p:hashlib.sha256((R/p).read_bytes()).hexdigest() for p in files}
 code="import pathlib,json,hashlib;root=pathlib.Path("+repr(H+'/runjoin27-native-source')+");print(json.dumps({p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in "+repr(files)+"}))"
 r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr
