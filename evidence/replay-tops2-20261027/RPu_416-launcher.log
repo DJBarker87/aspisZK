@@ -1,0 +1,21 @@
+{"attempt": "RPu_416", "exit_status": 0, "wall_seconds": 2.843794573971536, "peak_rss_kib": "5398120", "swaps": "0", "print_axioms": []}
+def AspisR1.FIp_PowersState.Inv : {N : Usize} → NE → State N → Prop :=
+fun {N} x s =>
+  FIo_PowersCanonical.Inv s ∧
+    ↑s.2.2 ≤ ↑N ∧
+      decodeWide (wide s.2.1) = decodeWide (wide x) ^ ↑s.2.2 ∧
+        ∀ j < ↑s.2.2, FIp_ArrayValue.value s.1 j = decodeWide (wide x) ^ j
+def AspisR1.FIp_PowersState.Post : {N : Usize} → NE → Std.Array NE N → Prop :=
+fun {N} x a => FIo_ArrayCanon.Holds a ∧ ∀ j < ↑N, FIp_ArrayValue.value a j = decodeWide (wide x) ^ j
+
+...
+def AspisR1.FIp_PowersState.Inv : {N : Usize} → NE → State N → Prop :=
+fun {N} x s =>
+  FIo_PowersCanonical.Inv s ∧
+    ↑s.2.2 ≤ ↑N ∧
+      decodeWide (wide s.2.1) = decodeWide (wide x) ^ ↑s.2.2 ∧
+        ∀ j < ↑s.2.2, FIp_ArrayValue.value s.1 j = decodeWide (wide x) ^ j
+def AspisR1.FIp_PowersState.Post : {N : Usize} → NE → Std.Array NE N → Prop :=
+fun {N} x a => FIo_ArrayCanon.Holds a ∧ ∀ j < ↑N, FIp_ArrayValue.value a j = decodeWide (wide x) ^ j
+
+Running as unit: run-ra4415c1fb58d4d4488318db54b12b48f.scope; invocation ID: c8a02c8dc58a4b4ead21a9ea8578bd1d

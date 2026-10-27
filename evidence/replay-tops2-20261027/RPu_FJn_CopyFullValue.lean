@@ -1,0 +1,41 @@
+import RPu_FJk_CopyRawValue
+import RPu_FJk_PatternValues
+import RPu_FJn_ActiveValue
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJn_CopyFullValue
+open Aeneas Aeneas.Std Result FIq_Native
+open pool_v1.pair_forest_copy_terminal
+open FIv_NativeValue (K Canon decode)
+open FIw_ArrayValue (canonical decoded)
+attribute [local irreducible] R0P.copyLinks R0P.copyResidual R0P.copyActiveLiteral
+/-- Complete native13/14 copy evaluator VALUE on the original parsed operands.
+No pattern,link,active output or child-success premise remains. -/
+theorem value (a : Array field.QM31 16#usize) (h : field.QM31) (s : Selectors)
+    (lambda chi : field.QM31) (index : U64) (v : PoolV1PairForestCompiledVariantV1)
+    (copy : PoolV1PairForestCompiledCopyTerminalV1)
+    (ha : canonical a) (hh : Canon h) (hhigh : canonical s.high) (hlow : canonical s.low)
+    (hlambda : Canon lambda) (hchi : Canon chi)
+    (run : evaluate_with_selectors a h s lambda chi index v=ok copy) :
+    Canon copy.residual ∧ Canon copy.active ∧
+      (decode copy.residual,decode copy.active)=
+      R0P.copyEvaluateWithSelectors (decoded a) (decode h) (FIw_CopyEndpoint.modelSelectors s)
+        (decode lambda) (decode chi) index.val (FJk_CopyDescriptor.variant v) := by
+  obtain ⟨patterns,rp,_,ra,ca,cr,cv⟩ := FJk_CopyRawValue.value a h s lambda chi index v copy
+    ha hh hhigh hlow hlambda hchi run
+  have pv := FJk_PatternValues.value a lambda patterns ha hlambda rp
+  have av := FJn_ActiveValue.value s copy.active hhigh hlow ra
+  have shape : R0P.copyEvaluateWithSelectors (decoded a) (decode h) (FIw_CopyEndpoint.modelSelectors s)
+      (decode lambda) (decode chi) index.val (FJk_CopyDescriptor.variant v)=
+      (R0P.copyActiveLiteral (FIw_CopyEndpoint.modelSelectors s)*
+        R0P.copyResidual (FJk_CopyFullFold.model s patterns index v) (decode h) (decode chi),
+       R0P.copyActiveLiteral (FIw_CopyEndpoint.modelSelectors s)) := by
+    unfold R0P.copyEvaluateWithSelectors FJk_CopyFullFold.model FJk_CopyFullFold.initial
+    rw [pv.2]
+    rfl
+  refine ⟨cr,ca,?_⟩
+  exact (Prod.ext (cv.trans (congrArg (fun x=>x*R0P.copyResidual
+    (FJk_CopyFullFold.model s patterns index v) (decode h) (decode chi)) av.2)) av.2).trans shape.symm
+#print axioms value
+end AspisR1.FJn_CopyFullValue
+end

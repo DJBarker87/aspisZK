@@ -1,0 +1,8 @@
+def AspisR1.FIp_PowersState.Inv : {N : Usize} → NE → State N → Prop :=
+fun {N} x s =>
+  FIo_PowersCanonical.Inv s ∧
+    ↑s.2.2 ≤ ↑N ∧
+      decodeWide (wide s.2.1) = decodeWide (wide x) ^ ↑s.2.2 ∧
+        ∀ j < ↑s.2.2, FIp_ArrayValue.value s.1 j = decodeWide (wide x) ^ j
+def AspisR1.FIp_PowersState.Post : {N : Usize} → NE → Std.Array NE N → Prop :=
+fun {N} x a => FIo_ArrayCanon.Holds a ∧ ∀ j < ↑N, FIp_ArrayValue.value a j = decodeWide (wide x) ^ j
