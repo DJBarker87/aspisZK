@@ -7,3 +7,5 @@ The replacement compares every scalar word explicitly, with24,20 and8 iteration 
 Run05 ten-minute review (06:13 UTC): full dynamic comparison still in CBMC, roughly4.5GB memory, no result. The metadata contains no stubs/contracts and unwind25. Continue only to the unchanged900s limit; no cap or backend-check changes. Presence of a memcmp symbol in a GOTO binary alone is not a reachability result; all unwinding assertions remain active and final verification is required.
 
 Run05 timed out at900.0907s, exit124, peak5070848000 RSS bytes, swap0. No equality, unwinding result, assertion failure or ROW counterexample is credited. Its ended scope is inactive.
+
+Run07 (pointwise, independent fixed table, source helper once) timed out at900.0399s, exit124, peak5412978688 RSS bytes, swap0. It establishes no equality/counterexample. Review at07:01 UTC found the same one-helper aggregation still active at roughly5.1GB; no cap was raised. Source/helper provenance is retained, including the cfg-only adapter suffix and exact unchanged reference prefix. Another unchanged whole-helper aggregation is not justified.

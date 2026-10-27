@@ -3,6 +3,12 @@ import pathlib,subprocess,sys,json,hashlib,shlex
 R=pathlib.Path(__file__).resolve().parents[2]; E=R/'evidence/pv-runjoin12-20261027'
 H='/home/dombarker/project-offloads/codex-pv-runjoin-20261026'; host='dombarker@100.108.41.90'
 name=sys.argv[1];phase=sys.argv[2];assert phase in ['charon','aeneas']
+if phase=='aeneas' and len(sys.argv)>3:
+ preflight=E/(sys.argv[3]+'.llbc')
+ if preflight.exists():
+  data=json.loads(preflight.read_text());assert not data['has_errors'], 'reject LLBC with translation errors'
+  assert isinstance(data['translated']['fun_decls'][0]['body'],dict), 'reject opaque root before extraction: no implementation body'
+
 assert not (E/(name+'.json')).exists()
 def ssh(s):return subprocess.run(['ssh',host,s],capture_output=True,text=True)
 r=ssh(f'python3 {H}/reservation-existing.py {H}/evidence/{name}-reservation.json > {H}/evidence/{name}-reservation.log 2>&1\ncat {H}/evidence/{name}-reservation.log')

@@ -80,3 +80,9 @@ fn raw_owned(d: Digest) -> [u32; 8] {
 #[cfg(aeneas_ref)]
 #[path = "pv_runjoin12_shipped.rs"]
 pub(super) mod pv_runjoin12_shipped;
+
+// Kani compares the shipped raw helper to this already extracted implementation.
+#[cfg(kani)]
+pub(super) fn pv_runjoin12_raw_owned_check(d: Digest) -> [u32;8] {
+    raw_owned(d)
+}

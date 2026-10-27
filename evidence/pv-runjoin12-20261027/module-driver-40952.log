@@ -1,0 +1,69 @@
+LAUNCH 40952 R1Z/PV_RunJoin_ParentRoundTotal
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0825); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+      let (_, trace1) ←
+        poseidon2.merkle_node_compress_v3.closure.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple.call_mut
+            () { round := round, kind := kind index, input := input, output := out }
+      ok (last, (), r, i)) =
+    ok (last, (), r, i)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ParentRoundTotal.lean:23:41: warning: This simp argument is unused:
+  callback_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵u̵l̵l̵S̵t̵e̵p̵s̵,̵h̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵a̵l̵l̵b̵a̵c̵k̵_̵e̵q̵,̵h̵l̵]̵[̲f̲u̲l̲l̲S̲t̲e̲p̲s̲,̲ ̲h̲o̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ParentRoundTotal.lean:39:4: error: unsolved goals
+case cons.refine_1
+tail : List (Usize × U32)
+ih :
+  ∀ (s input : State) (round : U8),
+    Canonical s →
+      ∃ out nextRound nextInput,
+        PV_RunJoin_SourceInternalRounds.steps callback tail s () round input = ok (out, (), nextRound, nextInput) ∧
+          internal tail s = ok out ∧ Canonical out
+s input : State
+round : U8
+hs : Canonical s
+index : Usize
+c : U32
+out : Std.Array U32 16#usize
+ho : R0PoseidonCopy.internal_round s c R0PoseidonCopy.INTERNAL_SHIFTS = ok out
+hcan : Canonical out
+last : State
+r : U8
+i : State
+hl : PV_RunJoin_SourceInternalRounds.steps callback tail out () (round.wrapping_add 1#u8) out = ok (last, (), r, i)
+hp : internal tail out = ok last
+hc : Canonical last
+⊢ (do
+      let (_, trace1) ←
+        poseidon2.merkle_node_compress_v3.closure.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple.call_mut
+            ()
+            { round := round, kind := poseidon2.Poseidon2RoundKind.Internal (UScalar.cast UScalarTy.U8 index),
+              input := input, output := out }
+      ok (last, (), r, i)) =
+    ok (last, (), r, i)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ParentRoundTotal.lean:39:69: warning: This simp argument is unused:
+  callback_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵R̵u̵n̵J̵o̵i̵n̵_̵S̵o̵u̵r̵c̵e̵I̵n̵t̵e̵r̵n̵a̵l̵R̵o̵u̵n̵d̵s̵.̵s̵t̵e̵p̵s̵,̵h̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵a̵l̵l̵b̵a̵c̵k̵_̵e̵q̵,̵h̵l̵]̵[̲P̲V̲_̲R̲u̲n̲J̲o̲i̲n̲_̲S̲o̲u̲r̲c̲e̲I̲n̲t̲e̲r̲n̲a̲l̲R̲o̲u̲n̲d̲s̲.̲s̲t̲e̲p̲s̲,̲ ̲h̲o̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_ParentRoundTotal.full_total_threaded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_ParentRoundTotal.internal_total_threaded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.57
+	Maximum resident set size (kbytes): 4130124
+	Swaps: 0
+	Exit status: 1
+
+RECEIPT {"attempt": 40952, "target": "R1Z/PV_RunJoin_ParentRoundTotal", "exit": 1, "wall_seconds": 1.57, "peak_rss_bytes": 4229246976, "swaps": 0, "accepted": false}

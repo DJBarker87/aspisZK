@@ -380,3 +380,6 @@ mod pv_runjoin12;
 
 #[path = "pv_runjoin12_exact.rs"]
 mod pv_runjoin12_exact;
+
+#[path = "pv_runjoin12_raw.rs"]
+mod pv_runjoin12_raw;
