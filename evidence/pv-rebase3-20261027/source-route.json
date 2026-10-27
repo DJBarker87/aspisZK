@@ -1,0 +1,148 @@
+{
+  "source_revision": "233c8e8c13c5eda89a4ea28c68dbcb1a7cda6f87",
+  "pinned_client_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+  "files": [
+    {
+      "path": "scripts/r1_devnet_spend.py",
+      "sha256": "0cbd802e3b437c48dba55db7014aa95be22a74b955d73e07551cd87d8b320617",
+      "bytes": 17565,
+      "matches_pinned_client": true
+    },
+    {
+      "path": "scripts/Client64_proof_accounts.py",
+      "sha256": "77e1f48192b289c7f2d801098fe6ed894ff2dec6df7cacc8b3623306291ecf81",
+      "bytes": 8448,
+      "matches_pinned_client": true
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+      "bytes": 2102,
+      "matches_pinned_client": true
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "bytes": 16511,
+      "matches_pinned_client": true
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "bytes": 4995,
+      "matches_pinned_client": true
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/RealR1_client.rs",
+      "sha256": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1",
+      "bytes": 1633,
+      "matches_pinned_client": true
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "sha256": "e696427450eb2b9061a24ad46dd4b3432d9fc5bae14aba5938840a4e8bc61e34",
+      "bytes": 79991,
+      "matches_pinned_client": false,
+      "rule": "D187 candidate entropy rewrite retained; same selected64 API and 64-byte fill, not byte-identical research source"
+    }
+  ],
+  "call_chain": [
+    {
+      "file": "scripts/r1_devnet_spend.py",
+      "line": 171,
+      "role": "Python operational orchestration, including manifest/errors/publication/events",
+      "symbol_or_call": "p,proofkey=proof_plan("
+    },
+    {
+      "file": "scripts/Client64_proof_accounts.py",
+      "line": 114,
+      "role": "retained keys, exclusive claim and durable resume state",
+      "symbol_or_call": "def proof_plan("
+    },
+    {
+      "file": "scripts/Client64_proof_accounts.py",
+      "line": 179,
+      "role": "enters the configured pinned runner",
+      "symbol_or_call": "plan = invoke(request)"
+    },
+    {
+      "file": "scripts/r1_devnet_spend.py",
+      "line": 27,
+      "role": "subprocess boundary to devnet_spend",
+      "symbol_or_call": "def invoke("
+    },
+    {
+      "file": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 13,
+      "role": "Rust entry: action=prove JSON branch; include signing/errors in complete client experiment",
+      "symbol_or_call": "fn main()"
+    },
+    {
+      "file": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 15,
+      "role": "dispatch",
+      "symbol_or_call": "plan::run(&q)?"
+    },
+    {
+      "file": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 28,
+      "role": "planner dispatch",
+      "symbol_or_call": "pub fn run("
+    },
+    {
+      "file": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 80,
+      "role": "operational selected64 prover entry",
+      "symbol_or_call": "fn prove(q:"
+    },
+    {
+      "file": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 116,
+      "role": "selected adapter call with concrete ordered retained-key callback",
+      "symbol_or_call": "RealR1_client::prove_for_proof_accounts("
+    },
+    {
+      "file": "crates/aspis-r1-cost-probe/src/RealR1_client.rs",
+      "line": 20,
+      "role": "S2, eight attempts, 64 private bytes, public nonce = proof-account key",
+      "symbol_or_call": "pub fn prove_for_proof_accounts("
+    },
+    {
+      "file": "crates/aspis-r1-cost-probe/src/RealR1_client.rs",
+      "line": 28,
+      "role": "selected entropy callback",
+      "symbol_or_call": "StateOnlyAttemptSecrets::generate_for_mask_nonce("
+    },
+    {
+      "file": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 354,
+      "role": "retry owner; only Rejected retries",
+      "symbol_or_call": "pub fn prove_masked_retrying_with("
+    },
+    {
+      "file": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 105,
+      "role": "public serialization/hash and context before reserve/body",
+      "symbol_or_call": "pub fn prove_masked_attempt("
+    },
+    {
+      "file": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 119,
+      "role": "reservation and complete private body",
+      "symbol_or_call": "fn prove_masked_with_attempt("
+    },
+    {
+      "file": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 392,
+      "role": "durable nonce reservation before secret derivation",
+      "symbol_or_call": "pub fn reserve_and_build_pool_v1_pair_forest_mask_material_v1("
+    },
+    {
+      "file": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 208,
+      "role": "remaining prover body",
+      "symbol_or_call": "fn prove_from_semantics("
+    }
+  ],
+  "scope": "Exact source equality for the client planner/account/adapter chain; selected64 entropy API uses the preserved D187 candidate implementation. Candidate prover rewrite is intentionally retained; this is not whole-source equality to research or a formal refinement proof."
+}
