@@ -31,6 +31,8 @@ for r in rows:
  if n in notes:v,kind,note=notes[n]
  elif n in ['XRn_Join_mpow','XRn_Join_qpow']:
   v,kind='UNFAITHFUL','Aspis power stand-in (mislabelled library)';note='Retained KSA failure: exponent2 at base2 yields1, square is4. Not a std/core item. Correct with raw emitted power/fixed-chain inverse association; KSA_FINDING failure matrix and KSA_L002, not newly replayed.'
+ elif r['counterpart'].startswith('library model (derived'):
+  v,kind='UNDETERMINED','derived Aspis Clone/PartialEq external';note=f'{k}: scalar identity/structural comparison looks plausible, but no pinned P7 declaration for this Aspis derive and no proved relation between the source newtype/record and kit carrier. Actual derive expansion, nested limb comparison including noncanonical representatives, panic/error freedom and unchanged borrow ownership require association. No fresh native derive differential; std u8 equality fixtures do not cover this model.'
  elif r['kind'] in ['abbrev','structure','inductive']:
   v,kind='UNDETERMINED','Aspis carrier/type (mislabelled library)';note=f'{k} is a representation/alias, not an external std function. Missing a source/adopted-carrier association for its uses; P7 cannot establish Aspis nominal-carrier identity.'
  elif 'Carriers' in r['file'] or n in ['XRn_Join_nativeAfter','XRn_Join_nativeLive','XRn_Join_nativePublic','XRn_Join_nativeQ','XRn_Join_nativeTransition','XRn_Join_oldAfter','XRn_Join_oldLive','XRn_Join_oldPublic','XRn_Join_oldTransition','XRn_Join_oldChallenges','XRn_Join_releaseQ','XRn_Join_newError']:
@@ -44,7 +46,7 @@ for r in rows:
 ranked=sorted(rows,key=lambda r:(-r['kernel_witness_count'],-r['raw_qualified_occurrences'],r['alphabetical_row']))
 (E/'KSC1_verdicts.json').write_text(json.dumps(dict(counts=dict(collections.Counter(r['verdict'] for r in rows)),ordering='descending retained kernel-witness count, then exact qualified-name raw occurrences, then alphabetical assignment row; static prioritisation only',rows=ranked),indent=2)+'\n')
 header='''
-## Per-model verdicts (complete assigned half)
+## Per-model verdicts (complete corrected assigned half)
 
 Ordering uses retained KSA kernel witness counts, then qualified raw-emission
 occurrences, as the available static use evidence. These are first-unresolved-node
