@@ -11735,3 +11735,26 @@ branch, IDs 53600-53899 unused) reverts weights.rs, makes op254 a prover-local c
 edited module's gate, re-runs gate (a), then the extraction, source laws and fixture gate. Six slots:
 cblib4, runjoin16, l2b, route2b, integ1, batch1b. Rows removed outright: 0 (V164's source hypothesis is
 gone on the CANDIDATE, which is not yet adopted). Privacy target not yet established.
+
+## D283 (Stream B) 2026-10-27 12:45 UTC: L2 simulator laws proved for the rejection samplers (native associations open); V164 down to two case premises owned elsewhere; N7 fix prepared as a patch pending the owner
+
+pv-l2b (`codex/pv-l2b-20261027`, candidate sibling; 100/100 Lean = 96 passed / 4 retained failures, 6/6
+control-only Kani; audits 53297-53299 standard axioms, peak 1.91 GB, swap 0; no source change). Proved:
+scalar source-control projection, rejection/count relabelling, cursor and refill identities, the IDEAL
+simulator laws (mask scalar: rejection probability 2^-31 per draw, cap 16, exhaustion 2^-496, accepted
+value uniform on [0, P) independent of the rejection count; entropy seed: zero-rejection classes with
+exact conditional weights, accepted nonzero seed pairs uniform), entropy short circuits and the
+conditional guard algebra. Still OPEN on V352/V354/V357/V360: the native associations per guard site
+(N2 padding producer/native sum; N3 native canonicality and parser round trip; N4 inactive-row set and
+balancing folds; N5 helper multiset and inverse boundary; N6 native oracle, interpolation and running
+claim) and the E1/E2 stream associations, all on the deployed RunJoin/simE coupling; V371 is needed only
+for the physical timing transfer. The L2 branch merges into the candidate with the siblings; the track
+pauses on the native interpretation. V164 on the candidate after op223: `reservation` (the durable
+mask-nonce store's reservation returned ok: a native store effect, RunJoin) and `P_proof_bytes` (V163's
+data equation) are the only hypotheses left. Launched pv-n7 (`codex/pv-n7-20261027` from candidate
+0c9dc9a4cc in the pv-l3 worktree): inventory the private fields crossing the Python → devnet_spend
+boundary and PREPARE (patch only, not applied) fixed-width encoding with a constant-time Rust decoder and
+matching Python writer, disassembly evidence for the decoder, fixture-byte and ELF-gate checks on a
+scratch build, and design/PV-N7-20261027.md, so the owner can decide on a measured change. Six slots:
+cblib4, runjoin16, route2b, integ1, batch1b, n7. Rows removed outright: 0. Privacy target not yet
+established.
