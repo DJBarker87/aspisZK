@@ -1,0 +1,49 @@
+Running as unit: run-rd6fbeacc7cf7418abf85b2433c85d197.scope; invocation ID: e7344fe25aeb40b6aae811fb29c7a600
+{"attempt": "XRe_K020", "exit_status": 1, "wall_seconds": 92.15915446699364, "peak_rss_kib": "1184988", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` an
+...
+identifier to snake case: `xre_checkpoint_semantic_alpha`
+
+warning: function `XRe_checkpoint_coordinates` should have a snake case name
+  --> XRe_harnesses.rs:97:39
+   |
+97 | #[kani::proof] #[kani::unwind(36)] fn XRe_checkpoint_coordinates() {
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xre_checkpoint_coordinates`
+
+warning: function `XRe_checkpoint_weights` should have a snake case name
+   --> XRe_harnesses.rs:103:39
+    |
+103 | #[kani::proof] #[kani::unwind(70)] fn XRe_checkpoint_weights() {
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xre_checkpoint_weights`
+
+warning: function `XRe_expand_values_indexed` should have a snake case name
+   --> XRe_harnesses.rs:110:39
+    |
+110 | #[kani::proof] #[kani::unwind(35)] fn XRe_expand_values_indexed() {
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xre_expand_values_indexed`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.54s
+Checking harness XRe_harnesses::XRe_checkpoint_weights...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - XRe_harnesses::XRe_checkpoint_weights
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
