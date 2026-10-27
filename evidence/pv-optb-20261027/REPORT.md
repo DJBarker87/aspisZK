@@ -64,3 +64,25 @@ same next OS fault. The raw control and malformed-input examples do not close
 that obligation. Then derive the endogenous B experiment under a proved joint
 signal transport and identify the precise changed trace premise. Until then,
 no OS-availability gap is removed.
+
+## Final budget and reserved audit receipts
+
+Lean 100/100: 52 passes and 48 failures. Kani 0/6.
+Stopped because the Lean budget is exhausted; no further compiler attempt was run.
+IDs 41813 and 41828 were preflight-only, retired, and uncharged.
+No IDs were reused. The last three charged attempts were the audits below.
+
+| Target | ID | Exit | Wall | Peak RSS KiB | Swap |
+|---|---:|---:|---|---:|---:|
+| R1Z/PV_OptB_AuditModel | 41899 | 0 | 0:04.40 | 4237124 | 0 |
+| R1Z/PV_OptB_AuditSource | 41900 | 0 | 0:03.71 | 4241040 | 0 |
+| R1Z/PV_OptB_AuditEndpoint | 41901 | 0 | 0:04.97 | 4266924 | 0 |
+
+All final audits use only a subset of propext, Classical.choice, Quot.sound.
+Exact axiom output, target, source SHA, wall, RSS, swap and exit are retained
+in receipts.jsonl and raw logs. Source revision for all three audits: `a7780f17aa9166b7bbd6739b1804924e7573ee67`. Caps: MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, Lean -M7000.
+
+Kani was not used for the chained-field source gap, per lead ruling (k).
+The old malformed native probe remains diagnostic evidence only. The native
+Cargo target cache (119 MiB) was removed after testing; all four task ledger
+directories were verified retained. No wallet/account key was removed.
