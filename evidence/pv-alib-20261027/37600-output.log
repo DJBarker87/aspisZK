@@ -1,0 +1,34 @@
+R1Z.PV_AL_SplitSelected.native_callback : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op209 (R1Z.PV_AL_SplitNativeShape.nativeTrait base ops 6) v =
+    Aeneas.Std.Result.ok
+      (R1Z.PV_AL_SplitCarrier.blockSlice (R1Z.PV_AL_SplitNativeShape.Size base 6) v, R1Z.PV_AL_SplitCarrier.tailSlice v)
+R1Z.PV_AL_SplitSelected.consumed : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.block_buffer.Eager.Insts.Block_bufferSealedSealed.split_blocks
+      (R1Z.PV_AL_SplitNativeShape.nativeTrait base ops 6) v =
+    Aeneas.Std.Result.ok
+      (R1Z.PV_AL_SplitCarrier.blockSlice (R1Z.PV_AL_SplitNativeShape.Size base 6) v, R1Z.PV_AL_SplitCarrier.tailSlice v)
+R1Z.PV_AL_SplitBridge.source_reference : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.PV_AL_SplitBridge.observe base ops v = R1Z.PV_AL_SplitObservation.observe v 64#usize
+R1Z.PV_AL_SplitBridge.consumed_reassembles : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  ∃ blocks tail,
+    ProverRwFull.block_buffer.Eager.Insts.Block_bufferSealedSealed.split_blocks
+          (R1Z.PV_AL_SplitNativeShape.nativeTrait base ops 6) v =
+        Aeneas.Std.Result.ok (blocks, tail) ∧
+      (List.map R1Z.PV_AL_SplitCarrier.decodeBlock ↑blocks).flatten ++ ↑tail = ↑v
+R1Z.PV_AL_CircleNative.source_reference : ∀ (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (row : PV_AL_CircleOwned.aspis_core.r0_transcript.CircleRow),
+  R1Z.PV_AL_CircleNative.nativeCircle block row = PV_AL_CircleOwned.circle_owned block row
+@R1Z.PV_AL_CircleSelected.native_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (row : R1Z.PV_AL_CircleCarriers.NR),
+  ProverRwFull.ExternalFuns.op259 block row = do
+    let point ← R1Z.PV_AL_CircleNative.nativeCircle block (R1Z.PV_AL_CircleCarriers.encodeRow row)
+    Aeneas.Std.Result.ok (R1Z.PV_AL_CircleCarriers.decodePoint point)
+@R1Z.PV_AL_CircleSelected.consumed : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (row : R1Z.PV_AL_CircleCarriers.NR),
+  ProverRwFull.sampler.circle_sample block row = do
+    let point ← R1Z.PV_AL_CircleNative.nativeCircle block (R1Z.PV_AL_CircleCarriers.encodeRow row)
+    Aeneas.Std.Result.ok (R1Z.PV_AL_CircleCarriers.decodePoint point)

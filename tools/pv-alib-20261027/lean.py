@@ -5,12 +5,14 @@ R=Path(__file__).resolve().parents[2]; E=R/'evidence/pv-alib-20261027'
 D='/home/dombarker/project-offloads/codex-pv-alib-20261027'
 H='dombarker@100.108.41.90'; B='/home/dombarker/project-offloads'
 G=B+'/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
-n=int(sys.argv[1]); m=sys.argv[2]; assert 52500<=n<=52999
+n=int(sys.argv[1]); m=sys.argv[2]; assert 37600<=n<=37699
 assert m.startswith('R1Z/PV_AL_')
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean'); assert p.exists()
 tp=E/'TALLY.json'; t=json.loads(tp.read_text())
 assert n not in t['used_ids']+t['excluded_prior_ids'] and t['lean_charged']<100
-assert (n<52997 and t['lean_charged']<97) or 'Audit' in m
+assert n<37697 or 'Audit' in m
+assert json.loads((E/'resume3-external-verification.json').read_text())['ok']
+assert json.loads((E/'resume3-project-preflight.json').read_text())['ok']
 sha=hashlib.sha256(p.read_bytes()).hexdigest()
 def ssh(c):return subprocess.run(['ssh',H,c],text=True,capture_output=True)
 imports=re.findall(r'^import (\S+)',p.read_text(),re.M)

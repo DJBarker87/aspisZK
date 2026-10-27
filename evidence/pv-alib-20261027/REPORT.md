@@ -1,3 +1,45 @@
+# pv-alib resume3 — audit and candidate replay checkpoint
+
+Same worktree and branch, starting at `828c0ce4af`. Historical report follows
+and is superseded by this checkpoint wherever status or ID allocation differs.
+
+52775 output and axioms were recovered read-only from `runs/52775`; no replay
+of its unchanged source occurred. Receipt `52775.json`: exit 0, 1.07 s,
+2,637,212 KiB peak RSS, zero swaps, source revision
+`80c2e3cfda4c696a740df920ff5e06f01c797a7c`, standard axioms only.
+
+Before the first resume compile, all 5,673 external objects were verified
+against research's coherent replay manifest, including actual LEAN_PATH
+selection. `resume3-external-verification.json` has zero mismatches. Project
+cone sources were checked against the EJR record and committed SHA source
+records; `resume3-project-preflight.json` has no missing module or mismatch.
+Own MoveWorld/MoveSelected drafts were absent remotely and await private staging.
+
+V233 and V265: no longer provisional for the scoped library/source candidate
+claim. Combined audit `PV_AL_Rows233265Audit`, 37698: exit 0, 1.08 s,
+2,630,884 KiB, zero swaps, revision `828c0ce4af`, 159 axiom reports, all subsets
+of {propext, Classical.choice, Quot.sound}. It covers every closing theorem
+and own support declarations of both cones. Rejected 37697 had duplicate
+namespace qualification in generated queries; no theorem failure or credit.
+
+One cached candidate cone replay `PV_AL_Rows233265Replay`, 37600: exit 0,
+0.97 s, 2,634,172 KiB, zero swaps, same revision. All 41 project modules
+import together; seven closing signatures check. Its axioms result is the
+combined audit 37698; this replay itself emits signature checks only.
+`resume3-candidate-cone.json` and 37600's dependency-object hashes freeze the
+exact cone. This is focused cached candidate evidence, not a full manifest
+or deployed endpoint replay. V232 and SHA-NI semantics remain untouched.
+
+V184 remains OPEN while the native/world and selected bridges are checked.
+No endpoint premise or trust field has changed. Target not yet established.
+
+ID correction: all historical 52700-52775 uses were invalid cross-job reuse;
+their evidence is retained without reruns. Resume3 uses 37600-37699 ONLY,
+with 37697-37699 reserved for audits. 3 of the remaining 25 Lean attempts
+are now spent; 22 Lean attempts and 4 Kani runs remain.
+
+---
+
 # pv-alib resume from 86aae376c0 — host-stop handoff
 
 Worktree `/Users/dominic/ZK/.worktrees/pv-alib`, branch
