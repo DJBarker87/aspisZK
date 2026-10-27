@@ -11304,3 +11304,18 @@ D187 with the projected timing cost; a Lean model of SHA-NI and what it would tr
 recommendation, without changing the build. Env-J: Stream B's 40000-44999 is nearly allocated; a further
 range was requested from Stream A. Six slots: runjoin12, op223, canon, recount4, optb2, cblib3. Rows
 removed outright: 0. Privacy target not yet established.
+
+## D264 (Stream B) 2026-10-27 09:20 UTC: env-J launcher range extended to 50000-59999 (range-only edit, agreed with Stream A)
+
+Agreed split: 50000-54999 Stream B, 55000-59999 Stream A; 45000-49999 stays Stream A's; 5000-49999
+behaviour, the 20000-27099 block and the duplicate guard unchanged. Host edit with backup
+`tools/run-joint.sh.bak-streamB-20261027b` (sha256 11cc87d94e7069923fda1948c498a5e6ced8afc36a9a3c225dbdb277eeb27121,
+= the D238 version); new file sha256 7ac8a13e34b33d2cb41b3ef4bf52e97498fe744b48010069950c63d6dd980c66;
+`sh -n` clean:
+
+```diff
+@@ -21 +21 @@
+-  case "$A" in 5[0-7][0-9][0-9]|[6-9][0-9][0-9][0-9]|1[0-9][0-9][0-9][0-9]|2[0-9][0-9][0-9][0-9]|3[0-9][0-9][0-9][0-9]|4[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
++  case "$A" in 5[0-7][0-9][0-9]|[6-9][0-9][0-9][0-9]|1[0-9][0-9][0-9][0-9]|2[0-9][0-9][0-9][0-9]|3[0-9][0-9][0-9][0-9]|4[0-9][0-9][0-9][0-9]|5[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
+```
+Privacy target not yet established.
