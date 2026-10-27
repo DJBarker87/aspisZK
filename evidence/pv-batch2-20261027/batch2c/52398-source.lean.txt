@@ -1,0 +1,497 @@
+import R1Z.PV_B2_C_251FieldTotal
+import R1Z.PV_B2_C_251WideTotal
+import R1Z.PV_B2_C_AddSmallAgreement
+import R1Z.PV_B2_C_ConstructorCompose
+import R1Z.PV_B2_C_ConstructorCut2
+import R1Z.PV_B2_C_ConstructorCut3
+import R1Z.PV_B2_C_ConstructorCut4
+import R1Z.PV_B2_C_ConstructorEnvironment
+import R1Z.PV_B2_C_ConstructorRow0
+import R1Z.PV_B2_C_ConstructorRow1
+import R1Z.PV_B2_C_ConstructorRow2
+import R1Z.PV_B2_C_ConstructorRow3
+import R1Z.PV_B2_C_ConstructorRow4
+import R1Z.PV_B2_C_ConstructorStage0
+import R1Z.PV_B2_C_ConstructorStage1
+import R1Z.PV_B2_C_ConstructorStage2
+import R1Z.PV_B2_C_ConstructorStage3
+import R1Z.PV_B2_C_ConstructorStage4
+import R1Z.PV_B2_C_ConstructorSuccess
+import R1Z.PV_B2_C_DRowRange
+import R1Z.PV_B2_C_DRowResult
+import R1Z.PV_B2_C_EmissionProbe
+import R1Z.PV_B2_C_ErrorRepair
+import R1Z.PV_B2_C_FullEmissionProbe
+import R1Z.PV_B2_C_GammaHelpers
+import R1Z.PV_B2_C_GammaNumeric
+import R1Z.PV_B2_C_GammaSource
+import R1Z.PV_B2_C_GammaTotal
+import R1Z.PV_B2_C_MachineArithmetic
+import R1Z.PV_B2_C_MaterializeCompose
+import R1Z.PV_B2_C_MaterializeWrapper
+import R1Z.PV_B2_C_MutationLoop
+import R1Z.PV_B2_C_MutationStep
+import R1Z.PV_B2_C_MutationTotal
+import R1Z.PV_B2_C_NativeGammaCarrier
+import R1Z.PV_B2_C_Powers7Total
+import R1Z.PV_B2_C_PowersBody
+import R1Z.PV_B2_C_PowersTotal
+import R1Z.PV_B2_C_RawWeights251Funs
+import R1Z.PV_B2_C_RawWeights251Types
+import R1Z.PV_B2_C_RawWeights253Funs
+import R1Z.PV_B2_C_RawWeights253Types
+import R1Z.PV_B2_C_ResultCongruence
+import R1Z.PV_B2_C_Row0Cps
+import R1Z.PV_B2_C_Row1Cps
+import R1Z.PV_B2_C_Row2Cps
+import R1Z.PV_B2_C_Row3Cps
+import R1Z.PV_B2_C_Row4Cps
+import R1Z.PV_B2_C_SamplerEnvironment
+import R1Z.PV_B2_C_ShiftAdapter
+import R1Z.PV_B2_C_Table
+import R1Z.PV_B2_C_TableRange
+import R1Z.PV_B2_C_U32Arithmetic
+
+#print axioms PV_B2_251c1.aspis_core.field.CM31
+#print axioms PV_B2_251c1.aspis_core.field.CM31.add
+#print axioms PV_B2_251c1.aspis_core.field.CM31.double
+#print axioms PV_B2_251c1.aspis_core.field.CM31.mul
+#print axioms PV_B2_251c1.aspis_core.field.CM31.square
+#print axioms PV_B2_251c1.aspis_core.field.CM31.sub
+#print axioms PV_B2_251c1.aspis_core.field.M31
+#print axioms PV_B2_251c1.aspis_core.field.M31.add
+#print axioms PV_B2_251c1.aspis_core.field.M31.double
+#print axioms PV_B2_251c1.aspis_core.field.M31.mul
+#print axioms PV_B2_251c1.aspis_core.field.M31.reduce_u64
+#print axioms PV_B2_251c1.aspis_core.field.M31.sub
+#print axioms PV_B2_251c1.aspis_core.field.P
+#print axioms PV_B2_251c1.aspis_core.field.QM31
+#print axioms PV_B2_251c1.aspis_core.field.QM31.ONE
+#print axioms PV_B2_251c1.aspis_core.field.QM31.ZERO
+#print axioms PV_B2_251c1.aspis_core.field.QM31.add
+#print axioms PV_B2_251c1.aspis_core.field.QM31.mul
+#print axioms PV_B2_251c1.aspis_core.field.QM31.pow
+#print axioms PV_B2_251c1.aspis_core.field.QM31.pow_loop
+#print axioms PV_B2_251c1.aspis_core.field.QM31.pow_loop.body
+#print axioms PV_B2_251c1.aspis_core.field.QM31.square
+#print axioms PV_B2_251c1.aspis_core.field.QM31.sub
+#print axioms PV_B2_251c1.aspis_core.field.ct.add
+#print axioms PV_B2_251c1.aspis_core.field.ct.reduce64
+#print axioms PV_B2_251c1.aspis_core.field.ct.sub
+#print axioms PV_B2_251c1.aspis_core.field.ct.subtract_p
+#print axioms PV_B2_251c1.aspis_core.field.mul_by_r
+#print axioms PV_B2_251c1.aspis_core.field.reduce_u64
+#print axioms PV_B2_251c1.aspis_core.field.wide_exact.WideExact
+#print axioms PV_B2_251c1.aspis_core.field.wide_exact.WideExact.ONE
+#print axioms PV_B2_251c1.aspis_core.field.wide_exact.WideExact.ZERO
+#print axioms PV_B2_251c1.aspis_core.field.wide_exact.WideExact.add
+#print axioms PV_B2_251c1.aspis_core.field.wide_exact.WideExact.from_limbs
+#print axioms PV_B2_251c1.aspis_core.field.wide_exact.WideExact.impl.c0
+#print axioms PV_B2_251c1.aspis_core.field.wide_exact.WideExact.impl.c1
+#print axioms PV_B2_251c1.aspis_core.field.wide_exact.WideExact.mul
+#print axioms PV_B2_251c1.aspis_core.field.wide_exact.mul_u
+#print axioms PV_B2_251c1.aspis_core.r0.opening.COPY_ACTIVE_ROW_MASKS
+#print axioms PV_B2_251c1.host_weights.HOST_COEFFICIENT_TO_ROW
+#print axioms PV_B2_251c1.host_weights.Weights
+#print axioms PV_B2_251c1.host_weights.Weights.materialize
+#print axioms PV_B2_251c1.host_weights.host_row
+#print axioms PV_B2_251c1.host_weights.host_row_loop0
+#print axioms PV_B2_251c1.host_weights.host_row_loop0.body
+#print axioms PV_B2_251c1.host_weights.host_row_loop1
+#print axioms PV_B2_251c1.host_weights.host_row_loop1.body
+#print axioms PV_B2_251c1.host_weights.materialize_cell
+#print axioms PV_B2_251c1.host_weights.materialize_values
+#print axioms PV_B2_251c1.host_weights.materialize_values_loop
+#print axioms PV_B2_251c1.host_weights.materialize_values_loop.body
+#print axioms PV_B2_251c1.host_weights.mul_qm31
+#print axioms PV_B2_251c1.host_weights.point_factor
+#print axioms PV_B2_251c1.host_weights.point_raw
+#print axioms PV_B2_251c1.host_weights.powers7
+#print axioms PV_B2_251c1.host_weights.raw_value
+#print axioms PV_B2_251c1.host_weights.tensor_raw
+#print axioms PV_B2_251c1.prover_powers.powers
+#print axioms PV_B2_251c1.prover_powers.powers_loop
+#print axioms PV_B2_251c1.prover_powers.powers_loop.body
+#print axioms PV_B2_251c1.pv_b2_materialize
+#print axioms PV_B2_251c1.transport.TAU
+#print axioms PV_B2_251c1.transport.Variant
+#print axioms PV_B2_251c1.transport.Variant.Insts.CoreCmpPartialEqVariant.eq
+#print axioms PV_B2_251c1.verifier.Error
+#print axioms PV_B2_253c1.aspis_core.field.CM31
+#print axioms PV_B2_253c1.aspis_core.field.CM31.add
+#print axioms PV_B2_253c1.aspis_core.field.CM31.double
+#print axioms PV_B2_253c1.aspis_core.field.CM31.mul
+#print axioms PV_B2_253c1.aspis_core.field.CM31.square
+#print axioms PV_B2_253c1.aspis_core.field.CM31.sub
+#print axioms PV_B2_253c1.aspis_core.field.M31
+#print axioms PV_B2_253c1.aspis_core.field.M31.add
+#print axioms PV_B2_253c1.aspis_core.field.M31.double
+#print axioms PV_B2_253c1.aspis_core.field.M31.mul
+#print axioms PV_B2_253c1.aspis_core.field.M31.reduce_u64
+#print axioms PV_B2_253c1.aspis_core.field.M31.sub
+#print axioms PV_B2_253c1.aspis_core.field.P
+#print axioms PV_B2_253c1.aspis_core.field.QM31
+#print axioms PV_B2_253c1.aspis_core.field.QM31.ONE
+#print axioms PV_B2_253c1.aspis_core.field.QM31.ZERO
+#print axioms PV_B2_253c1.aspis_core.field.QM31.mul
+#print axioms PV_B2_253c1.aspis_core.field.QM31.pow
+#print axioms PV_B2_253c1.aspis_core.field.QM31.pow_loop
+#print axioms PV_B2_253c1.aspis_core.field.QM31.pow_loop.body
+#print axioms PV_B2_253c1.aspis_core.field.QM31.square
+#print axioms PV_B2_253c1.aspis_core.field.QM31.sub
+#print axioms PV_B2_253c1.aspis_core.field.ct.add
+#print axioms PV_B2_253c1.aspis_core.field.ct.reduce64
+#print axioms PV_B2_253c1.aspis_core.field.ct.sub
+#print axioms PV_B2_253c1.aspis_core.field.ct.subtract_p
+#print axioms PV_B2_253c1.aspis_core.field.mul_by_r
+#print axioms PV_B2_253c1.aspis_core.field.reduce_u64
+#print axioms PV_B2_253c1.aspis_core.r0.opening.COPY_ACTIVE_ROW_MASKS
+#print axioms PV_B2_253c1.host_weights.HOST_COEFFICIENT_TO_ROW
+#print axioms PV_B2_253c1.host_weights.Weights
+#print axioms PV_B2_253c1.host_weights.Weights.raw
+#print axioms PV_B2_253c1.host_weights.host_row
+#print axioms PV_B2_253c1.host_weights.host_row_loop0
+#print axioms PV_B2_253c1.host_weights.host_row_loop0.body
+#print axioms PV_B2_253c1.host_weights.host_row_loop1
+#print axioms PV_B2_253c1.host_weights.host_row_loop1.body
+#print axioms PV_B2_253c1.host_weights.point_factor
+#print axioms PV_B2_253c1.host_weights.point_raw
+#print axioms PV_B2_253c1.host_weights.raw_value
+#print axioms PV_B2_253c1.host_weights.tensor_raw
+#print axioms PV_B2_253c1.pv_b2_raw
+#print axioms PV_B2_253c1.transport.TAU
+#print axioms PV_B2_253c1.transport.Variant
+#print axioms PV_B2_253c1.transport.Variant.Insts.CoreCmpPartialEqVariant.eq
+#print axioms PV_B2_C_249.aspis_core.field.CM31
+#print axioms PV_B2_C_249.aspis_core.field.M31
+#print axioms PV_B2_C_249.aspis_core.field.P
+#print axioms PV_B2_C_249.aspis_core.field.QM31
+#print axioms PV_B2_C_249.aspis_core.field.wide_exact.WideExact
+#print axioms PV_B2_C_249.aspis_core.field.wide_exact.WideExact.from_limbs
+#print axioms PV_B2_C_249.host_sampler.add_small_base_p
+#print axioms PV_B2_C_249.host_sampler.add_small_base_p_loop
+#print axioms PV_B2_C_249.host_sampler.add_small_base_p_loop.body
+#print axioms PV_B2_C_249.host_sampler.decode8
+#print axioms PV_B2_C_249.host_sampler.gamma_sample
+#print axioms PV_B2_C_249.host_sampler.low_base_p_digits
+#print axioms PV_B2_C_249.host_sampler.low_base_p_digits_loop0
+#print axioms PV_B2_C_249.host_sampler.low_base_p_digits_loop0.body
+#print axioms PV_B2_C_249.host_sampler.low_base_p_digits_loop1
+#print axioms PV_B2_C_249.host_sampler.low_base_p_digits_loop1.body
+#print axioms PV_B2_C_249.host_sampler.low_base_p_digits_loop1_loop0
+#print axioms PV_B2_C_249.host_sampler.low_base_p_digits_loop1_loop0.body
+#print axioms PV_B2_C_249.host_sampler.low_base_p_digits_loop2
+#print axioms PV_B2_C_249.host_sampler.low_base_p_digits_loop2.body
+#print axioms PV_B2_C_251FieldTotal.CM31_add
+#print axioms PV_B2_C_251FieldTotal.CM31_mul
+#print axioms PV_B2_C_251FieldTotal.CM31_sub
+#print axioms PV_B2_C_251FieldTotal.M31_add
+#print axioms PV_B2_C_251FieldTotal.M31_double
+#print axioms PV_B2_C_251FieldTotal.M31_mul
+#print axioms PV_B2_C_251FieldTotal.M31_reduce_u64
+#print axioms PV_B2_C_251FieldTotal.M31_sub
+#print axioms PV_B2_C_251FieldTotal.P
+#print axioms PV_B2_C_251FieldTotal.QM31_ONE
+#print axioms PV_B2_C_251FieldTotal.QM31_ZERO
+#print axioms PV_B2_C_251FieldTotal.QM31_add
+#print axioms PV_B2_C_251FieldTotal.QM31_mul
+#print axioms PV_B2_C_251FieldTotal.QM31_sub
+#print axioms PV_B2_C_251FieldTotal.ct_add
+#print axioms PV_B2_C_251FieldTotal.ct_reduce64
+#print axioms PV_B2_C_251FieldTotal.ct_sub
+#print axioms PV_B2_C_251FieldTotal.ct_subtract_p
+#print axioms PV_B2_C_251FieldTotal.mul_by_r
+#print axioms PV_B2_C_251FieldTotal.reduce_u64
+#print axioms PV_B2_C_251WideTotal.WideExact_add
+#print axioms PV_B2_C_251WideTotal.WideExact_mul
+#print axioms PV_B2_C_251WideTotal.mul_u
+#print axioms PV_B2_C_AddSmallAgreement.body
+#print axioms PV_B2_C_AddSmallAgreement.loop
+#print axioms PV_B2_C_AddSmallAgreement.wrapper
+#print axioms PV_B2_C_ArrayDigits.decode
+#print axioms PV_B2_C_ArrayDigits.read
+#print axioms PV_B2_C_ArrayTotal.bind
+#print axioms PV_B2_C_ArrayTotal.bind_rust
+#print axioms PV_B2_C_ArrayTotal.borrow
+#print axioms PV_B2_C_ArrayTotal.read
+#print axioms PV_B2_C_ArrayTotal.write
+#print axioms PV_B2_C_ByteBits.shape
+#print axioms PV_B2_C_ByteBits.source
+#print axioms PV_B2_C_ByteShape.source
+#print axioms PV_B2_C_ByteWord.machine
+#print axioms PV_B2_C_Bytes.body
+#print axioms PV_B2_C_Bytes.loop
+#print axioms PV_B2_C_ConstructorCompose.factored_total
+#print axioms PV_B2_C_ConstructorCuts.cut2_total
+#print axioms PV_B2_C_ConstructorCuts.cut3_total
+#print axioms PV_B2_C_ConstructorCuts.cut4_total
+#print axioms PV_B2_C_ConstructorCuts.flat2_eq_cut2
+#print axioms PV_B2_C_ConstructorCuts.flat2_total
+#print axioms PV_B2_C_ConstructorCuts.flat3_eq_cut3
+#print axioms PV_B2_C_ConstructorCuts.flat3_total
+#print axioms PV_B2_C_ConstructorCuts.flat4_eq_cut4
+#print axioms PV_B2_C_ConstructorCuts.flat4_total
+#print axioms PV_B2_C_ConstructorRows.row0_cps
+#print axioms PV_B2_C_ConstructorRows.row0_total
+#print axioms PV_B2_C_ConstructorRows.row1_cps
+#print axioms PV_B2_C_ConstructorRows.row1_total
+#print axioms PV_B2_C_ConstructorRows.row2_cps
+#print axioms PV_B2_C_ConstructorRows.row2_total
+#print axioms PV_B2_C_ConstructorRows.row3_cps
+#print axioms PV_B2_C_ConstructorRows.row3_total
+#print axioms PV_B2_C_ConstructorRows.row4_cps
+#print axioms PV_B2_C_ConstructorRows.row4_total
+#print axioms PV_B2_C_ConstructorStages.stage0_eq
+#print axioms PV_B2_C_ConstructorStages.stage0_total
+#print axioms PV_B2_C_ConstructorStages.stage1_eq
+#print axioms PV_B2_C_ConstructorStages.stage1_total
+#print axioms PV_B2_C_ConstructorStages.stage2_eq
+#print axioms PV_B2_C_ConstructorStages.stage2_total
+#print axioms PV_B2_C_ConstructorStages.stage3_eq
+#print axioms PV_B2_C_ConstructorStages.stage3_total
+#print axioms PV_B2_C_ConstructorStages.stage4_eq
+#print axioms PV_B2_C_ConstructorStages.stage4_total
+#print axioms PV_B2_C_ConstructorSuccess.new_eq_staged
+#print axioms PV_B2_C_ConstructorSuccess.new_total
+#print axioms PV_B2_C_ConstructorSuccess.staged_total
+#print axioms PV_B2_C_DRowRange.source
+#print axioms PV_B2_C_DRowResult.complete
+#print axioms PV_B2_C_DRowResult.failure_iff
+#print axioms PV_B2_C_DRowResult.invalid_continuation
+#print axioms PV_B2_C_Decode.constructor_transport
+#print axioms PV_B2_C_DecodeResult.source
+#print axioms PV_B2_C_DecodeResult.unwrap
+#print axioms PV_B2_C_Digits.body
+#print axioms PV_B2_C_Digits.loop
+#print axioms PV_B2_C_Division.body
+#print axioms PV_B2_C_Division.loop
+#print axioms PV_B2_C_EmissionProbe.limbs
+#print axioms PV_B2_C_EmissionProbe.probe
+#print axioms PV_B2_C_EmissionProbe.weights
+#print axioms PV_B2_C_ErrorRepair.copied_raw_failure
+#print axioms PV_B2_C_ErrorRepair.copied_row_failure
+#print axioms PV_B2_C_ErrorRepair.index_failure
+#print axioms PV_B2_C_ErrorRepair.op253_counterexample_repaired
+#print axioms PV_B2_C_FieldTotal.CM31_add
+#print axioms PV_B2_C_FieldTotal.CM31_mul
+#print axioms PV_B2_C_FieldTotal.CM31_sub
+#print axioms PV_B2_C_FieldTotal.M31_add
+#print axioms PV_B2_C_FieldTotal.M31_double
+#print axioms PV_B2_C_FieldTotal.M31_mul
+#print axioms PV_B2_C_FieldTotal.M31_reduce_u64
+#print axioms PV_B2_C_FieldTotal.M31_sub
+#print axioms PV_B2_C_FieldTotal.P
+#print axioms PV_B2_C_FieldTotal.QM31_ONE
+#print axioms PV_B2_C_FieldTotal.QM31_ZERO
+#print axioms PV_B2_C_FieldTotal.QM31_add
+#print axioms PV_B2_C_FieldTotal.QM31_mul
+#print axioms PV_B2_C_FieldTotal.QM31_sub
+#print axioms PV_B2_C_FieldTotal.ct_add
+#print axioms PV_B2_C_FieldTotal.ct_reduce64
+#print axioms PV_B2_C_FieldTotal.ct_sub
+#print axioms PV_B2_C_FieldTotal.ct_subtract_p
+#print axioms PV_B2_C_FieldTotal.mul_by_r
+#print axioms PV_B2_C_FieldTotal.reduce_u64
+#print axioms PV_B2_C_FullEmissionProbe.probe
+#print axioms PV_B2_C_GammaCarrier.after_low
+#print axioms PV_B2_C_GammaCarrier.source
+#print axioms PV_B2_C_GammaCarrier.tail_source
+#print axioms PV_B2_C_GammaHelpers.add_refines
+#print axioms PV_B2_C_GammaHelpers.add_total_value
+#print axioms PV_B2_C_GammaHelpers.canonical_indexed
+#print axioms PV_B2_C_GammaHelpers.decode_total
+#print axioms PV_B2_C_GammaHelpers.low_agreement
+#print axioms PV_B2_C_GammaHelpers.low_refines
+#print axioms PV_B2_C_GammaHelpers.refine_source
+#print axioms PV_B2_C_GammaHelpers.total_source
+#print axioms PV_B2_C_GammaNumeric.gamma_digits_success
+#print axioms PV_B2_C_GammaNumeric.gamma_rank_success
+#print axioms PV_B2_C_GammaNumeric.sample_total
+#print axioms PV_B2_C_GammaSource.canonical_array
+#print axioms PV_B2_C_GammaSource.carrier_identity
+#print axioms PV_B2_C_GammaSource.normalized_eq
+#print axioms PV_B2_C_GammaSource.normalized_source
+#print axioms PV_B2_C_GammaSource.op249_source
+#print axioms PV_B2_C_GammaSource.raw_eq
+#print axioms PV_B2_C_GammaSource.result_identity
+#print axioms PV_B2_C_LowDigits.source
+#print axioms PV_B2_C_MachineArithmetic.add_exact
+#print axioms PV_B2_C_MachineArithmetic.mul_exact
+#print axioms PV_B2_C_MachineArithmetic.shift_exact
+#print axioms PV_B2_C_MachineArithmetic.sub_exact
+#print axioms PV_B2_C_MachineArithmetic.u64_add_exact
+#print axioms PV_B2_C_MaterializeCompose.source
+#print axioms PV_B2_C_MaterializeWrapper.divergence
+#print axioms PV_B2_C_MaterializeWrapper.error
+#print axioms PV_B2_C_MaterializeWrapper.result
+#print axioms PV_B2_C_MaterializeWrapper.total
+#print axioms PV_B2_C_MutationLoop.done
+#print axioms PV_B2_C_MutationLoop.step
+#print axioms PV_B2_C_MutationLoop.update_total
+#print axioms PV_B2_C_MutationStep.body_done
+#print axioms PV_B2_C_MutationStep.body_step
+#print axioms PV_B2_C_MutationStep.cell_divergence
+#print axioms PV_B2_C_MutationStep.cell_failure
+#print axioms PV_B2_C_MutationTotal.CellsTotal
+#print axioms PV_B2_C_MutationTotal.loop_total
+#print axioms PV_B2_C_MutationTotal.next_val
+#print axioms PV_B2_C_NativeGammaCarrier.gamma
+#print axioms PV_B2_C_NativeGammaCarrier.map_injective
+#print axioms PV_B2_C_NativeGammaCarrier.roundtrip
+#print axioms PV_B2_C_NativeGammaCarrier.roundtrip_raw
+#print axioms PV_B2_C_OrdinaryReference.sampler_owned.low_base_p_digits
+#print axioms PV_B2_C_Powers7Total.Total
+#print axioms PV_B2_C_Powers7Total.bind_total
+#print axioms PV_B2_C_Powers7Total.read7
+#print axioms PV_B2_C_Powers7Total.source
+#print axioms PV_B2_C_PowersBody.body_total
+#print axioms PV_B2_C_PowersBody.next_val
+#print axioms PV_B2_C_PowersTotal.done
+#print axioms PV_B2_C_PowersTotal.loop_total
+#print axioms PV_B2_C_PowersTotal.source
+#print axioms PV_B2_C_PowersTotal.step
+#print axioms PV_B2_C_RankDigits.source
+#print axioms PV_B2_C_ReleaseCheck.done
+#print axioms PV_B2_C_ReleaseCheck.source
+#print axioms PV_B2_C_ReleaseCheck.step
+#print axioms PV_B2_C_ResultCongruence.pair
+#print axioms PV_B2_C_Sampler.aspis_core.field.P
+#print axioms PV_B2_C_Sampler.aspis_core.field.wide_exact.WideExact.from_limbs
+#print axioms PV_B2_C_Sampler.host_sampler.add_small_base_p
+#print axioms PV_B2_C_Sampler.host_sampler.add_small_base_p_loop
+#print axioms PV_B2_C_Sampler.host_sampler.add_small_base_p_loop.body
+#print axioms PV_B2_C_Sampler.host_sampler.decode8
+#print axioms PV_B2_C_Sampler.host_sampler.gamma_sample
+#print axioms PV_B2_C_Sampler.host_sampler.low_base_p_digits
+#print axioms PV_B2_C_Sampler.host_sampler.low_base_p_digits_loop0
+#print axioms PV_B2_C_Sampler.host_sampler.low_base_p_digits_loop0.body
+#print axioms PV_B2_C_Sampler.host_sampler.low_base_p_digits_loop1
+#print axioms PV_B2_C_Sampler.host_sampler.low_base_p_digits_loop1.body
+#print axioms PV_B2_C_Sampler.host_sampler.low_base_p_digits_loop1_loop0
+#print axioms PV_B2_C_Sampler.host_sampler.low_base_p_digits_loop1_loop0.body
+#print axioms PV_B2_C_Sampler.host_sampler.low_base_p_digits_loop2
+#print axioms PV_B2_C_Sampler.host_sampler.low_base_p_digits_loop2.body
+#print axioms PV_B2_C_Sampler.host_sampler.ordinary_sample
+#print axioms PV_B2_C_SamplerCarrier.map_bind
+#print axioms PV_B2_C_SamplerCarrier.roundtrip
+#print axioms PV_B2_C_SamplerCarrier.roundtrip_raw
+#print axioms PV_B2_C_SamplerHelpers.bytes_body
+#print axioms PV_B2_C_SamplerHelpers.bytes_loop
+#print axioms PV_B2_C_SamplerHelpers.carry_body
+#print axioms PV_B2_C_SamplerHelpers.carry_loop
+#print axioms PV_B2_C_SamplerHelpers.check_loop
+#print axioms PV_B2_C_SamplerHelpers.digits_body
+#print axioms PV_B2_C_SamplerHelpers.digits_loop
+#print axioms PV_B2_C_SamplerHelpers.division_body
+#print axioms PV_B2_C_SamplerHelpers.division_loop
+#print axioms PV_B2_C_SamplerHelpers.low
+#print axioms PV_B2_C_SamplerHelpers.small
+#print axioms PV_B2_C_ShiftAdapter.cast_low_bits
+#print axioms PV_B2_C_ShiftAdapter.shift_cast
+#print axioms PV_B2_C_Table.length0
+#print axioms PV_B2_C_Table.length1
+#print axioms PV_B2_C_Table.length10
+#print axioms PV_B2_C_Table.length11
+#print axioms PV_B2_C_Table.length12
+#print axioms PV_B2_C_Table.length13
+#print axioms PV_B2_C_Table.length14
+#print axioms PV_B2_C_Table.length15
+#print axioms PV_B2_C_Table.length16
+#print axioms PV_B2_C_Table.length17
+#print axioms PV_B2_C_Table.length18
+#print axioms PV_B2_C_Table.length19
+#print axioms PV_B2_C_Table.length2
+#print axioms PV_B2_C_Table.length20
+#print axioms PV_B2_C_Table.length21
+#print axioms PV_B2_C_Table.length22
+#print axioms PV_B2_C_Table.length23
+#print axioms PV_B2_C_Table.length24
+#print axioms PV_B2_C_Table.length25
+#print axioms PV_B2_C_Table.length26
+#print axioms PV_B2_C_Table.length27
+#print axioms PV_B2_C_Table.length28
+#print axioms PV_B2_C_Table.length29
+#print axioms PV_B2_C_Table.length3
+#print axioms PV_B2_C_Table.length30
+#print axioms PV_B2_C_Table.length31
+#print axioms PV_B2_C_Table.length4
+#print axioms PV_B2_C_Table.length5
+#print axioms PV_B2_C_Table.length6
+#print axioms PV_B2_C_Table.length7
+#print axioms PV_B2_C_Table.length8
+#print axioms PV_B2_C_Table.length9
+#print axioms PV_B2_C_Table.length_values
+#print axioms PV_B2_C_Table.table
+#print axioms PV_B2_C_TableRange.chunk0_range
+#print axioms PV_B2_C_TableRange.chunk10_range
+#print axioms PV_B2_C_TableRange.chunk11_range
+#print axioms PV_B2_C_TableRange.chunk12_range
+#print axioms PV_B2_C_TableRange.chunk13_range
+#print axioms PV_B2_C_TableRange.chunk14_range
+#print axioms PV_B2_C_TableRange.chunk15_range
+#print axioms PV_B2_C_TableRange.chunk16_range
+#print axioms PV_B2_C_TableRange.chunk17_range
+#print axioms PV_B2_C_TableRange.chunk18_range
+#print axioms PV_B2_C_TableRange.chunk19_range
+#print axioms PV_B2_C_TableRange.chunk1_range
+#print axioms PV_B2_C_TableRange.chunk20_range
+#print axioms PV_B2_C_TableRange.chunk21_range
+#print axioms PV_B2_C_TableRange.chunk22_range
+#print axioms PV_B2_C_TableRange.chunk23_range
+#print axioms PV_B2_C_TableRange.chunk24_range
+#print axioms PV_B2_C_TableRange.chunk25_range
+#print axioms PV_B2_C_TableRange.chunk26_range
+#print axioms PV_B2_C_TableRange.chunk27_range
+#print axioms PV_B2_C_TableRange.chunk28_range
+#print axioms PV_B2_C_TableRange.chunk29_range
+#print axioms PV_B2_C_TableRange.chunk2_range
+#print axioms PV_B2_C_TableRange.chunk30_range
+#print axioms PV_B2_C_TableRange.chunk31_range
+#print axioms PV_B2_C_TableRange.chunk3_range
+#print axioms PV_B2_C_TableRange.chunk4_range
+#print axioms PV_B2_C_TableRange.chunk5_range
+#print axioms PV_B2_C_TableRange.chunk6_range
+#print axioms PV_B2_C_TableRange.chunk7_range
+#print axioms PV_B2_C_TableRange.chunk8_range
+#print axioms PV_B2_C_TableRange.chunk9_range
+#print axioms PV_B2_C_TableRange.member_bound
+#print axioms PV_B2_C_TableRange.read_range
+#print axioms PV_B2_C_TableRange.values_range
+#print axioms PV_B2_C_U32Arithmetic.add_exact
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.CM31.add
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.CM31.mul
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.CM31.sub
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.M31.add
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.M31.double
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.M31.mul
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.M31.reduce_u64
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.M31.sub
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.P
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.QM31.ONE
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.QM31.ZERO
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.QM31.add
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.QM31.mul
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.QM31.sub
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.ct.add
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.ct.reduce64
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.ct.sub
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.ct.subtract_p
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.mul_by_r
+#print axioms PV_B2_C_WeightsNative.aspis_core.field.reduce_u64
+#print axioms PV_B2_C_WeightsNative.host_weights.Weights
+#print axioms PV_B2_C_WeightsNative.host_weights.Weights.new
+#print axioms PV_B2_C_WeightsNative.host_weights.double
+#print axioms PV_B2_C_WeightsNative.host_weights.state_only_statement_points
+#print axioms PV_B2_C_WeightsTotal.double
+#print axioms PV_B2_C_WeightsTotal.points
+#print axioms PV_B2_C_ordinary_sample.low_canonical
+#print axioms PV_B2_C_ordinary_sample.op250_source
+#print axioms R1Z.PV_B2_C_CheckedBytes.body
+#print axioms R1Z.PV_B2_C_CheckedBytes.loop
+#print axioms R1Z.PV_B2_C_CheckedDigits.body
+#print axioms R1Z.PV_B2_C_CheckedDigits.digits
+#print axioms R1Z.PV_B2_C_CheckedDigits.loop
+#print axioms R1Z.PV_B2_C_CheckedDiv.body
+#print axioms R1Z.PV_B2_C_CheckedDiv.loop
+#print axioms R1Z.PV_B2_C_CheckedDiv.pass
+#print axioms R1Z.PV_B2_C_CheckedDiv.zero
