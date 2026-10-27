@@ -1,0 +1,13 @@
+import R1Z.PV_RunJoin_JoinedCausalHeadline
+import R1Z.PV_RunJoin_TrustSeparation
+import R1Z.PV_RunJoin_RecordedTransfer
+import R1Z.PV_RunJoin_RecordedWithdrawal
+#print R1Z.PV_RunJoin_TrustItems
+#print R1Z.PV_RunJoin_TrustEndpoint.ProofObligations
+#print R1Z.PV_RunJoin_Deployed.Runtime
+#print R1Z.PV_RunJoin_Boundary.Data
+#check @R1Z.PV_RunJoin_JoinedCausalHeadline.proofs
+#print axioms R1Z.PV_RunJoin_JoinedCausalHeadline.proofs
+#print axioms R1Z.PV_RunJoin_JoinedCausalHeadline.privacy_headline_deployed_candidate
+#print axioms R1Z.PV_RunJoin_TrustEndpoint.toPremises
+#print axioms R1Z.PV_RunJoin_TrustSeparation.trace_refinement_is_separate

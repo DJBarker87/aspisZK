@@ -60,7 +60,7 @@ command=[launcher,str(attempt),module,'J','7000','8',deps['fingerprint']]
 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
 record=dict(attempt=attempt,target=module,source_revision=revision,source_sha256=sha,source_snapshot=snapshot,
  dependencies=deps['imports'],deps_fingerprint=deps['fingerprint'],command=command,reservation=admission,
- limits=dict(lean_memory_mb=7000,MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),
+ limits=dict(lean_memory_mb=7000,MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=128),
  source_was_uncommitted=(subprocess.run(['git','show','HEAD:'+str(source.relative_to(root))],cwd=root,capture_output=True).stdout != source.read_bytes()),shared_backup=backup,utc=datetime.datetime.now(datetime.timezone.utc).isoformat())
 with (e/'launches.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
 print('LAUNCH '+str(attempt)+' '+module,flush=True)
