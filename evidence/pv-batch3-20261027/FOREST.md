@@ -9,7 +9,7 @@ Redirected chains:
 - host_semantic::lean_copy_row_values -> host_forest::forest registry -> legacy registry and forest schedule;
 - host_semantic::{build_pair_forest,build_pair_forest_with_material} -> copied helper builder -> copied row builder -> forest registry (the actual public function names are in the diff).
 
-The copied row/helper caller wrappers preserve the original Vec return carriers and original tuple/weight semantics, including first-zero-weight slot placement. The roots selected for extraction are the fixed-carrier inventory/registry functions, not these allocating wrappers. No change to the zero-weight behavior is authorized. Public terminal chains still use their original statement implementation until the later terminal group.
+The copied row/helper caller wrappers preserve the original Vec return carriers and original tuple/weight semantics, including first-zero-weight slot placement. The roots selected for extraction are the fixed-carrier inventory/registry functions, not these allocating wrappers. Op224 will include its own separately extracted Drop-free row/helper implementation in the following group; this group’s copied allocating wrapper only redirects the registry caller chain. No change to the zero-weight behavior is authorized. Public terminal chains still use their original statement implementation until the later terminal group.
 
 Validation status at source freeze: first host optimized cargo check failed because the sparse host snapshot lacked the original include file refine/diffharness/tests/glue_gen.rs; the include is restored byte-for-byte, a changed compiler input. No Lean attempt charged. ELF checks, projections and source-law proof gates remain pending; this is not adoption evidence.
 

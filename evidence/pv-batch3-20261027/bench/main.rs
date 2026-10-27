@@ -18,9 +18,10 @@ fn main(){
  assert_eq!(copy::pool_v1_pair_forest_copy_active_row_masks_v1(),original::pool_v1_pair_forest_copy_active_row_masks_v1());
  assert_eq!(copy::pool_v1_pair_forest_copy_inactive_row_masks_v1(),original::pool_v1_pair_forest_copy_inactive_row_masks_v1());
  let registry=copy::build_pool_v1_pair_forest_copy_registry_v1().unwrap();assert_eq!(&registry.data[..registry.len],trace::build_pool_v1_pair_forest_copy_registry_v1().unwrap());
- println!("{\"differential\":\"schedule, cells, rows, active/inactive masks, registry agree\",\"kind\":\"finite native check, not source theorem\"}");
+ println!("{}", "{\"differential\":\"schedule, cells, rows, active/inactive masks, registry agree\",\"kind\":\"finite native check, not source theorem\"}");
  bench("132",original::pool_v1_pair_forest_relation_free_mask_cells_v1,copy::materialize_mask_cells);
  bench("133",original::pool_v1_pair_forest_copy_active_rows_v1,copy::materialize_active_rows);
  bench("134",original::pool_v1_pair_forest_copy_active_row_masks_v1,copy::pool_v1_pair_forest_copy_active_row_masks_v1);
+ bench("134-inactive",original::pool_v1_pair_forest_copy_inactive_row_masks_v1,copy::pool_v1_pair_forest_copy_inactive_row_masks_v1);
  bench("228",trace::build_pool_v1_pair_forest_copy_registry_v1,copy::build_pool_v1_pair_forest_copy_registry_v1);
 }
