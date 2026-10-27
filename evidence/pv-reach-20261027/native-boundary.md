@@ -46,3 +46,18 @@ failure guard, not a fixture premise. It has not been instantiated on the
 selected native transfer/withdrawal dictionaries and earns no fixture
 exclusion credit. The remaining generated prefix/guard equations add no
 Prop hypotheses. Typeclass carriers remain abstract, not deployed instances.
+
+Identification with the actual installed native dictionaries also retains
+these existing types, without assuming or discharging them:
+
+```lean
+external_law : R1Z.PV_Src_ExternalAssociation.Associated external
+records_law : R1Z.PV_Src_RecordAssociation.Associated external records
+```
+
+The latter is the D245 `records.call = PV_Src_RecordDynamic.call` association
+on the identical witness, output value, recipient, change, snapshot and asset.
+Neither is instantiated here, including on the two fixture inputs. These
+necessary boundaries are not an exhaustive V167 native-effect law: ordered
+oracle/world effects, failure/divergence and the complete deployed caller
+association remain open as well.
