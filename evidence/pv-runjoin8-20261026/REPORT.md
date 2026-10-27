@@ -1,3 +1,23 @@
+# pv-runjoin8 final status — budget exhausted
+
+Branch `codex/pv-runjoin-20261026`, base `3478e00a58`. The deployed privacy target is **NOT established**.
+
+The constructed candidate headline now derives the original `RemainingProofs.initial` and `.causal`; its original three-field remaining record is reduced to the unchanged `.trace` hypothesis. Identity and common-public binding remain explicit there. This removes two P hypotheses at the stated constructor, **zero deployed endpoint rows**. Actual selection/returned compilation, compiler success/admission, runtime/carrier/initializer/account callback/complete observer installation, full extracted trace, and release association remain open. Exact before/after signatures are in `P-before-after.json`, `P-obligations.md`, source snapshots 35085/35086, and final audit 35113.
+
+T is byte-for-byte unchanged with exactly three fields: `entropy_law : E1 d.law`; `entropy_kernel : ∀ c, d.nativeWeight c = weight 128 d.law d.frame d.coordinates c`; `observation : ∀ c, d.nativeObservation c = d.extractedObservation c`. No P fact entered T; no A/B repair was assumed. Deployed record counts remain runtime/boundary **2→2**, fields **8→8**, residuals **6→6**. Transfer **P∧T non-vacuity OPEN**; withdrawal **P∧T non-vacuity OPEN**.
+
+Checked source progress includes arbitrary-raw-word scalar multiplication/reduction, canonical addition/subtraction, actual nonlinear pow5, the entire owned external layer with totality/canonicality/field semantics, selected-family words/public correspondence under exact source joins, symbolic extracted root-loop control/writes, and the candidate causal headline. All 14 new active Lean modules have accepted matching source hashes; uncompiled installation/root/callback joins remain explicit drafts.
+
+Validation: **100/100 Lean attempts, 78 accepted, 22 rejected; 8/8 Kani runs, 7 successes, 1 timeout**. Kani covers only root cells 0,1,2,3,7,13,20, with no stubs; the original three-cell aggregate timed out. No checked shipped ROW counterexample. Fourteen reservation refusals were zero-charge and observed the required waits. Final focused audit 35113: exit 0, **1.79 s**, **4,414,947,328 bytes RSS**, **swap 0**, revision/source hash/full axiom lines in its receipt; only `[propext, Classical.choice, Quot.sound]`. All Lean attempts totaled 287.14 s measured compiler wall time; largest RSS 4,511,948,800 bytes, no swaps. Run 1 Kani aggregate RSS was not sampled; its retained child-rusage figure is not an aggregate peak. See `metrics-summary.json`, `receipt-index.tsv`, and raw receipts/logs.
+
+The older whole `TrustFinalAudit` and frozen release closure remain blocked: final compile-free preflight lists **52 missing objects**, no unknown sources, beginning `R1Z.PDict_Static222_13`. No full manifest was attempted without its prerequisites. Next: finish that pinned transport/caller closure, check `InstalledTrustLedger.proofs` and the combined installed/causal draft, then exhibit actual transfer/withdrawal runtimes satisfying all remaining P and prove complete extracted trace including side channels.
+
+Production Rust body is unchanged; additions are confined to cfg(kani) harness modules. Cargo/solver scratch is removed, retained Lean caches/evidence preserved, no wallet/account key created or destroyed. `final-source-audit.json` verifies path scope, source/receipt correspondence, unchanged T/P records and the production-body hash. Commit history is in `COMMIT-LOG.txt`; final metadata commits follow that captured history.
+
+---
+
+## Historical stage notes
+
 # pv-runjoin8 continuation
 
 Branch codex/pv-runjoin-20261026, entry 3478e00a58.
