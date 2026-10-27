@@ -1,0 +1,41 @@
+{"attempt": "XRx_L070", "exit_status": 1, "wall_seconds": 1.0899048779974692, "peak_rss_kib": "2636876", "swaps": "0", "print_axioms": []}
+XRx_generated/XRx_RuntimeOwners.lean:2:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.array.mapListFnMut`
+def Aeneas.Std.core.array.Array.map : {T F U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.ops.function.FnMut F T U → Aeneas.Std.Array T N → F → Aeneas.Std.Result (Aeneas.Std.Array U N) :=
+fun {T F U} {N} callback self f =>
+  match h : AspisV8R19.TraversalRuntime.mapState callback.call_mut (↑self) f with
+  | Aeneas.Std.Result.ok (ys, _last) => Aeneas.Std.Result.ok ⟨ys, ⋯⟩
+  | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+  | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+XRx_generated/XRx_RuntimeOwners.lean:4:7: error(lean.unknownIdentifier): Unknow
+...
+XRx_generated/XRx_RuntimeOwners.lean:2:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.array.mapListFnMut`
+def Aeneas.Std.core.array.Array.map : {T F U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.ops.function.FnMut F T U → Aeneas.Std.Array T N → F → Aeneas.Std.Result (Aeneas.Std.Array U N) :=
+fun {T F U} {N} callback self f =>
+  match h : AspisV8R19.TraversalRuntime.mapState callback.call_mut (↑self) f with
+  | Aeneas.Std.Result.ok (ys, _last) => Aeneas.Std.Result.ok ⟨ys, ⋯⟩
+  | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+  | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+XRx_generated/XRx_RuntimeOwners.lean:4:7: error(lean.unknownIdentifier): Unknown identifier `Aeneas.Std.core.array.Array.map_spec`
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.IterMut T →
+    Aeneas.Std.Result
+      (Option T ×
+        Aeneas.Std.core.slice.iter.IterMut T ×
+          (Aeneas.Std.core.slice.iter.IterMut T → Option T → Aeneas.Std.core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    Aeneas.Std.Result.ok (some x, it, back)
+  else Aeneas.Std.Result.ok (none, it, fun it x => it)
+
+Running as unit: run-r0fe00b2d5dd94c2b8348c7284d0c95db.scope; invocation ID: 2a869e6a588d4d41ac21a51bcd146cdc
