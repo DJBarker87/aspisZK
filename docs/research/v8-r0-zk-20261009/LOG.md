@@ -11964,3 +11964,18 @@ closure audit (36 targets, including ArrayReference244 and its File/OS-world dep
 PublicPreparation source-cohort discrepancies. The lead merged the branch into the prover candidate and
 removed its worktree. The candidate now contains every Stream B sibling except the live code-changing
 branches (records, batch 1, batch 2). Rows removed outright: 0. Privacy target not yet established.
+
+## D293 (Stream B) 2026-10-27 14:35 UTC: first V374 window aborted on a backwards procedure (drain before marker); corrected marker-first window launched
+
+pv-dudect-run (`codex/pv-dudect-20261027`, 30c33282ed; evidence only): waited 14:10:31-14:25:31 UTC for
+running scopes to drain BEFORE writing the marker; with both streams launching continuously the host
+never drained, so it aborted without writing QUIET_WINDOW.json (absence verified 14:25:46); both binary
+pins matched; all 12 experiments 0 samples per class, no |t|, no verdict, no finding and no no-leak
+conclusion. The procedure was the lead's error: only the marker stops new scopes, so the drain must
+follow it. Corrected order (Stream A agreed; cap requested by Stream A to keep their 10 × 180 s
+retry budget safe): write the marker FIRST with until = start + 1500 s, wait at most 10 minutes for
+already-running scopes, start measuring as soon as they finish, delete the marker by trap and on
+completion, never extend. Launched pv-dudect-run2 (same branch) with that order and the unchanged
+preregistered plan V374-PLAN-v2. Four live slots: batch1b, runjoin17, batch2, dudect-run2 (two held:
+disk 25 GiB, and batch 3 waits for batch 2's timing pre-check). Rows removed outright: 0. Privacy target
+not yet established.
