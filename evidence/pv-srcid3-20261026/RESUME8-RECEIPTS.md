@@ -14,8 +14,22 @@ Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scop
 | 41513 | R1Z/PV_Src_ExternalWritePrefix | 1 | REJECTED | 0:01.99 | 4121264 | 0 | 6ddc8e0ea0 | 1/1 |
 | 41514 | R1Z/PV_Src_ExternalWritePrefix | 0 | standard | 0:02.07 | 4145244 | 0 | 6ddc8e0ea0 | 1/1 |
 | 41515 | R1Z/PV_Src_ExternalCopyPrefix | 0 | standard | 0:01.91 | 4141812 | 0 | 6ddc8e0ea0 | 1/1 |
+| 41517 | R1Z/PV_Src_ExternalGroupsCopy | 0 | standard | 0:01.81 | 4138804 | 0 | dfbc7320a6 | 1/1 |
+| 41518 | R1Z/PV_Src_ExternalSumStep | 0 | standard | 0:01.94 | 4106988 | 0 | dfbc7320a6 | 2/2 |
+| 41519 | R1Z/PV_Src_ExternalSumLoop | 0 | standard | 0:01.86 | 4107196 | 0 | dfbc7320a6 | 1/1 |
+| 41520 | R1Z/PV_Src_ExternalSumCells | 0 | standard | 0:02.03 | 4118668 | 0 | dfbc7320a6 | 1/1 |
+| 41521 | R1Z/PV_Src_ExternalSumValue | 0 | standard | 0:01.71 | 4105060 | 0 | dfbc7320a6 | 3/3 |
+| 41522 | R1Z/PV_Src_ExternalSumModel | 0 | standard | 0:01.78 | 4113024 | 0 | dfbc7320a6 | 2/2 |
+| 41523 | R1Z/PV_Src_ExternalLaneStep | 0 | standard | 0:01.79 | 4145200 | 0 | dfbc7320a6 | 2/2 |
+| 41525 | R1Z/PV_Src_ExternalLaneLoop | 0 | standard | 0:01.80 | 4145044 | 0 | dfbc7320a6 | 1/1 |
+| 41526 | R1Z/PV_Src_ExternalLaneCells | 0 | standard | 0:01.87 | 4157048 | 0 | dfbc7320a6 | 2/2 |
+| 41527 | R1Z/PV_Src_ExternalLaneValue | 0 | standard | 0:01.72 | 4140336 | 0 | dfbc7320a6 | 2/2 |
+| 41528 | R1Z/PV_Src_ExternalLaneModel | 1 | REJECTED | 0:01.99 | 4130072 | 0 | dfbc7320a6 | 2/2 |
+| 41530 | R1Z/PV_Src_ExternalLaneModel | 0 | standard | 0:02.12 | 4151296 | 0 | dfbc7320a6 | 2/2 |
+| 41531 | R1Z/PV_Src_ExternalGroupsModel | 0 | standard | 0:01.69 | 4140876 | 0 | dfbc7320a6 | 1/1 |
+| 41532 | R1Z/PV_Src_ExternalModel | 1 | REJECTED | 0:01.94 | 4126512 | 0 | dfbc7320a6 | 1/1 |
 
-Charged Lean attempts: 10/60. Reservation refusals: 7, uncharged. Next unused ID: 41517.
+Charged Lean attempts: 24/60. Reservation refusals: 10, uncharged. Next unused ID: 41534.
 
 ## Shared replacements
 

@@ -28,9 +28,12 @@ theorem model (s : State) (sums : Sums)
     rw [hj j]
     exact PV_Src_ExternalLaneStep.canonical _ _ _
   · intro j
-    rw [hj j,PV_Src_ExternalLaneValue.lift s sums _
-      (hs (j.val%4) (Nat.mod_lt _ (by decide)))]
-    rfl
+    rw [hj j]
+    let lane : Usize := Usize.ofNatCore j.val (by have := j.isLt;scalar_tac)
+    have hv : lane.val = j.val := by scalar_tac
+    simpa only [hv] using PV_Src_ExternalLaneValue.lift s sums lane
+      (by rw [hv];exact hs (j.val%4) (Nat.mod_lt _ (by decide)))
+
 
 #print axioms total
 #print axioms model

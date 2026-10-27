@@ -17,7 +17,7 @@ def cell (s : State) (col : Usize) : U64 :=
 
 theorem offset (col : Usize) (hc : col.val < 4) (k : Usize) (hk : k.val ≤ 12) :
     (Usize.wrapping_add col k).val = col.val+k.val := by
-  rw [uadd _ _ (by omega)]
+  rw [uadd _ _ (by simp;omega)]
 
 theorem step (s : State) (sums : Sums) (col : Usize) (hc : col.val < 4) :
     poseidon2.builder_reference.external_owned_loop1 s sums col =

@@ -14,7 +14,7 @@ t='/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
 e=root/'evidence/pv-srcid3-20261026';e.mkdir(exist_ok=True)
 ledger=e/'resume8-attempts.jsonl'
 prior=[json.loads(x) for x in ledger.read_text().splitlines()] if ledger.exists() else []
-if len(prior)>=57 and m not in {'PV_Src_FinalAudit7A','PV_Src_FinalAudit7B','PV_Src_FinalAudit7C'}:
+if len(prior)>=57 and m not in {'PV_Src_FinalAudit8A','PV_Src_FinalAudit8B','PV_Src_FinalAudit8C'}:
  print('LAST THREE CHARGED ATTEMPTS RESERVED FOR FULL AUDIT');sys.exit(75)
 if ledger.is_file() and len(ledger.read_text().splitlines())>=60:
  print('LEAN BUDGET EXHAUSTED: no host action; zero charge')
