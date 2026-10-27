@@ -2,6 +2,7 @@
 from pathlib import Path
 import sys
 s='''import R1Z.PV_B2_D_RowRange
+import R1Z.PV_B2_D_SubValue
 import R1Z.PV_B2_D_PowTotal
 set_option autoImplicit false
 namespace PV_B2_D_RawTotal
@@ -48,8 +49,8 @@ for k in [1,2,3,5,6]:
  s+=f'''theorem kind{k} (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).val) :
     Total (host_weights.raw_value w {k}#usize j) := by
   have hb5 : ({idx}).val < (5#usize).val := by
-    rcases System.Platform.numBits_eq with h | h <;>
-      simp [Usize.wrapping_sub,UScalar.wrapping_sub,UScalar.val,Usize.ofNat_bv,UScalarTy.numBits,h]
+    rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
+    scalar_tac
   have ht : Total (do let a ← Array.index_usize w.factors ({idx}); host_weights.tensor_raw a j) :=
     PV_B2_C_ArrayTotal.bind _ _ (read _ _ hb5) (fun a => PV_B2_D_RawHelpersTotal.tensor a j)
   unfold host_weights.raw_value
@@ -69,8 +70,8 @@ for k in [1,2,3,5,6]:
   · simp only [if_true]
     obtain ⟨r,hr,_⟩ := PV_B2_D_RowRange.source w.variant j hj
     have hb3 : ({idx}).val < (3#usize).val := by
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [Usize.wrapping_sub,UScalar.wrapping_sub,UScalar.val,Usize.ofNat_bv,UScalarTy.numBits,h]
+      rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
+      scalar_tac
     apply PV_B2_C_ArrayTotal.bind _ _ ⟨r,hr⟩
     intro row
     exact PV_B2_C_ArrayTotal.bind _ _ (read _ _ hb3) (fun p => PV_B2_D_RawHelpersTotal.point p row)

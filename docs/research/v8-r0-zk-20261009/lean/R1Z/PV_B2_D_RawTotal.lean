@@ -1,4 +1,5 @@
 import R1Z.PV_B2_D_RowRange
+import R1Z.PV_B2_D_SubValue
 import R1Z.PV_B2_D_PowTotal
 set_option autoImplicit false
 namespace PV_B2_D_RawTotal
@@ -56,8 +57,8 @@ theorem kind4 (w : host_weights.Weights) (j : Usize) :
 theorem kind1 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).val) :
     Total (host_weights.raw_value w 1#usize j) := by
   have hb5 : (Usize.wrapping_sub 1#usize 1#usize).val < (5#usize).val := by
-    rcases System.Platform.numBits_eq with h | h <;>
-      simp [Usize.wrapping_sub,UScalar.wrapping_sub,UScalar.val,Usize.ofNat_bv,UScalarTy.numBits,h]
+    rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
+    scalar_tac
   have ht : Total (do let a ← Array.index_usize w.factors (Usize.wrapping_sub 1#usize 1#usize); host_weights.tensor_raw a j) :=
     PV_B2_C_ArrayTotal.bind _ _ (read _ _ hb5) (fun a => PV_B2_D_RawHelpersTotal.tensor a j)
   unfold host_weights.raw_value
@@ -75,8 +76,8 @@ theorem kind1 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
   · simp only [if_true]
     obtain ⟨r,hr,_⟩ := PV_B2_D_RowRange.source w.variant j hj
     have hb3 : (Usize.wrapping_sub 1#usize 1#usize).val < (3#usize).val := by
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [Usize.wrapping_sub,UScalar.wrapping_sub,UScalar.val,Usize.ofNat_bv,UScalarTy.numBits,h]
+      rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
+      scalar_tac
     apply PV_B2_C_ArrayTotal.bind _ _ ⟨r,hr⟩
     intro row
     exact PV_B2_C_ArrayTotal.bind _ _ (read _ _ hb3) (fun p => PV_B2_D_RawHelpersTotal.point p row)
@@ -84,8 +85,8 @@ theorem kind1 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
 theorem kind2 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).val) :
     Total (host_weights.raw_value w 2#usize j) := by
   have hb5 : (Usize.wrapping_sub 2#usize 1#usize).val < (5#usize).val := by
-    rcases System.Platform.numBits_eq with h | h <;>
-      simp [Usize.wrapping_sub,UScalar.wrapping_sub,UScalar.val,Usize.ofNat_bv,UScalarTy.numBits,h]
+    rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
+    scalar_tac
   have ht : Total (do let a ← Array.index_usize w.factors (Usize.wrapping_sub 2#usize 1#usize); host_weights.tensor_raw a j) :=
     PV_B2_C_ArrayTotal.bind _ _ (read _ _ hb5) (fun a => PV_B2_D_RawHelpersTotal.tensor a j)
   unfold host_weights.raw_value
@@ -103,8 +104,8 @@ theorem kind2 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
   · simp only [if_true]
     obtain ⟨r,hr,_⟩ := PV_B2_D_RowRange.source w.variant j hj
     have hb3 : (Usize.wrapping_sub 2#usize 1#usize).val < (3#usize).val := by
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [Usize.wrapping_sub,UScalar.wrapping_sub,UScalar.val,Usize.ofNat_bv,UScalarTy.numBits,h]
+      rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
+      scalar_tac
     apply PV_B2_C_ArrayTotal.bind _ _ ⟨r,hr⟩
     intro row
     exact PV_B2_C_ArrayTotal.bind _ _ (read _ _ hb3) (fun p => PV_B2_D_RawHelpersTotal.point p row)
@@ -112,8 +113,8 @@ theorem kind2 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
 theorem kind3 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).val) :
     Total (host_weights.raw_value w 3#usize j) := by
   have hb5 : (Usize.wrapping_sub 3#usize 1#usize).val < (5#usize).val := by
-    rcases System.Platform.numBits_eq with h | h <;>
-      simp [Usize.wrapping_sub,UScalar.wrapping_sub,UScalar.val,Usize.ofNat_bv,UScalarTy.numBits,h]
+    rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
+    scalar_tac
   have ht : Total (do let a ← Array.index_usize w.factors (Usize.wrapping_sub 3#usize 1#usize); host_weights.tensor_raw a j) :=
     PV_B2_C_ArrayTotal.bind _ _ (read _ _ hb5) (fun a => PV_B2_D_RawHelpersTotal.tensor a j)
   unfold host_weights.raw_value
@@ -131,8 +132,8 @@ theorem kind3 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
   · simp only [if_true]
     obtain ⟨r,hr,_⟩ := PV_B2_D_RowRange.source w.variant j hj
     have hb3 : (Usize.wrapping_sub 3#usize 1#usize).val < (3#usize).val := by
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [Usize.wrapping_sub,UScalar.wrapping_sub,UScalar.val,Usize.ofNat_bv,UScalarTy.numBits,h]
+      rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
+      scalar_tac
     apply PV_B2_C_ArrayTotal.bind _ _ ⟨r,hr⟩
     intro row
     exact PV_B2_C_ArrayTotal.bind _ _ (read _ _ hb3) (fun p => PV_B2_D_RawHelpersTotal.point p row)
@@ -140,8 +141,8 @@ theorem kind3 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
 theorem kind5 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).val) :
     Total (host_weights.raw_value w 5#usize j) := by
   have hb5 : (Usize.wrapping_sub 5#usize 2#usize).val < (5#usize).val := by
-    rcases System.Platform.numBits_eq with h | h <;>
-      simp [Usize.wrapping_sub,UScalar.wrapping_sub,UScalar.val,Usize.ofNat_bv,UScalarTy.numBits,h]
+    rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
+    scalar_tac
   have ht : Total (do let a ← Array.index_usize w.factors (Usize.wrapping_sub 5#usize 2#usize); host_weights.tensor_raw a j) :=
     PV_B2_C_ArrayTotal.bind _ _ (read _ _ hb5) (fun a => PV_B2_D_RawHelpersTotal.tensor a j)
   unfold host_weights.raw_value
@@ -155,8 +156,8 @@ theorem kind5 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).
 theorem kind6 (w : host_weights.Weights) (j : Usize) (hj : j.val < (1024#usize).val) :
     Total (host_weights.raw_value w 6#usize j) := by
   have hb5 : (Usize.wrapping_sub 6#usize 2#usize).val < (5#usize).val := by
-    rcases System.Platform.numBits_eq with h | h <;>
-      simp [Usize.wrapping_sub,UScalar.wrapping_sub,UScalar.val,Usize.ofNat_bv,UScalarTy.numBits,h]
+    rw [PV_B2_D_SubValue.sub_val _ _ (by scalar_tac)]
+    scalar_tac
   have ht : Total (do let a ← Array.index_usize w.factors (Usize.wrapping_sub 6#usize 2#usize); host_weights.tensor_raw a j) :=
     PV_B2_C_ArrayTotal.bind _ _ (read _ _ hb5) (fun a => PV_B2_D_RawHelpersTotal.tensor a j)
   unfold host_weights.raw_value

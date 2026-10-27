@@ -11,7 +11,7 @@ theorem csquare (c : aspis_core.field.CM31) : Total (aspis_core.field.CM31.squar
   exact ⟨_,rfl⟩
 theorem cdouble (c : aspis_core.field.CM31) : Total (aspis_core.field.CM31.double c) := by
   unfold aspis_core.field.CM31.double
-  simp only [PV_B2_C_251FieldTotal.M31_double,bind_tc_ok]
+  simp only [PV_B2_C_251FieldTotal.CM31_add,PV_B2_C_251FieldTotal.M31_double,bind_tc_ok]
   exact ⟨_,rfl⟩
 theorem square (q : Q) : Total (aspis_core.field.QM31.square q) := by
   unfold aspis_core.field.QM31.square
@@ -65,7 +65,7 @@ theorem loop_total (e : U64) (b a : Q) : Total (aspis_core.field.QM31.pow_loop e
     · refine ⟨a,?_⟩
       unfold aspis_core.field.QM31.pow_loop
       rw [Aeneas.Std.loop.eq_def]
-      simp only [aspis_core.field.QM31.pow_loop.body,he,if_neg,bind_tc_ok]
+      simp only [aspis_core.field.QM31.pow_loop.body,he,if_neg,if_false,bind_tc_ok]
 
 theorem source (q : Q) (e : U64) : Total (aspis_core.field.QM31.pow q e) :=
   loop_total e q aspis_core.field.QM31.ONE
