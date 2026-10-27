@@ -1,0 +1,41 @@
+import FJb_RawConversion
+import PoseidonInternalLinearExact
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJh_InternalInner
+open Aeneas Aeneas.Std Result
+abbrev native := FIq_Native.state_only_poseidon.internal_linear_lazy_loop0_loop0
+abbrev old := AspisR1SelectedMaskProbe.state_only_poseidon.internal_linear_lazy_loop0_loop0
+/-- Integer-only four-limb traversal; symbolic induction, no field evaluation. -/
+theorem same (n : Nat) (p : Array U64 4#usize) (w : Array U32 4#usize)
+    (i : Usize) (span : i.val+n=4) : native p w i=old p w i := by
+  induction n generalizing p i with
+  | zero =>
+    have hn : ¬i<4#usize := by scalar_tac
+    rw [FIq_Native.state_only_poseidon.internal_linear_lazy_loop0_loop0.eq_def,
+      AspisR1SelectedMaskProbe.state_only_poseidon.internal_linear_lazy_loop0_loop0.eq_def,
+      if_neg hn]
+  | succ n ih =>
+    have hi : i<4#usize := by scalar_tac
+    rw [FIq_Native.state_only_poseidon.internal_linear_lazy_loop0_loop0.eq_def,
+      AspisR1SelectedMaskProbe.state_only_poseidon.internal_linear_lazy_loop0_loop0.eq_def,
+      if_pos hi]
+    have spec : (i+1#usize : Result Usize) ⦃j=>j.val=i.val+1⦄ := by
+      apply UScalar.add_spec
+      scalar_tac
+    obtain ⟨j,hj,vj⟩ := WP.spec_imp_exists spec
+    simp only [hj,bind_tc_ok]
+    congr 1
+    funext a
+    congr 1
+    funext b
+    congr 1
+    funext c
+    congr 1
+    funext d
+    congr 1
+    funext next
+    exact ih next j (by omega)
+#print axioms same
+end AspisR1.FJh_InternalInner
+end

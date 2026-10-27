@@ -10,7 +10,7 @@ attempt=f'FJh_{n:03}'
 assert not (P/attempt).exists(),attempt
 src=R/'lean'/f'{mod}.lean'
 if not mod.startswith('FJh_'):
- src=R/'docs/research/100bit-spend-path-20261013/lean'/f'{mod}.lean'
+ src=R/'docs/research/100bit-spend-path-20261013/lean'/(mod.replace('.', '/')+'.lean')
  assert src.is_file(), 'Only unchanged repository dependencies may be rebuilt'
 cfg=json.loads((R/'evidence/recount5-20261026/Rc5_001.json').read_text())
 paths=cfg['env']['LEAN_PATH'].split(':');paths.insert(1,'/home/dombarker/project-offloads/codex-cx-parse-final-20261026');paths.insert(1,B+'/F3Y_delivered')
@@ -19,7 +19,7 @@ cfg.update(attempt=attempt,sources=[src.name],source_revision=subprocess.check_o
 # partial historical namespace directory; no objects or launcher are changed.
 paths.insert(paths.index('/home/dombarker/project-offloads/codex-cx-import-union-20261022/objects'),'/home/dombarker/project-offloads/codex-cx-prover-commit22-20261021/r4-cache')
 paths.append('/home/dombarker/project-offloads/codex-cx-replay-dry-20261026/RPz_objects')
-cfg['env']['LEAN_PATH']=':'.join(paths);cfg['command'][-3:]=['-o',mod+'.olean',src.name]
+cfg['env']['LEAN_PATH']=':'.join(paths);cfg['command'][-3:]=['-o',mod.replace('.', '/')+'.olean',src.name]
 (P/(attempt+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 barrier=f'python3 /home/dombarker/project-offloads/codex-cx-s2c-20261023/reservation.py {B}/{attempt}-reservation.json'
 retries=[]
@@ -33,6 +33,8 @@ for retry in range(11):
  if 'FileNotFoundError' in (r.stdout+r.stderr) and retry==0:
   retries.append(dict(retry=retry,wait_seconds=30,reason=r.stdout+r.stderr));time.sleep(30);continue
  print(r.stderr);sys.exit(r.returncode)
+if '.' in mod:
+ ssh('mkdir -p '+shlex.quote(B+'/'+mod.rsplit('.',1)[0].replace('.','/')),check=True)
 subprocess.run(['scp','-q',str(src),str(P/(attempt+'.json')),HOST+':'+B+'/'],check=True)
 cmd=f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py {attempt}.json'
 r=ssh(cmd,capture_output=True,text=True);print(r.stdout+r.stderr)
