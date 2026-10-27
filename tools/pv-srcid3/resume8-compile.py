@@ -23,7 +23,7 @@ flag=pathlib.Path('/private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-
 if not flag.is_file():
  print('HOST REBUILD GATE CLOSED: no host access or compile; zero charge')
  sys.exit(78)
-print('Host restoration instructions: '+flag.read_text(),flush=True)
+print('Host restored; allocation 8, next unused ID',a,flush=True)
 for prior_path in e.glob('reservation-41*.json'):
  prior=json.loads(prior_path.read_text())
  if prior.get('allowed') is False and prior.get('utc'):
