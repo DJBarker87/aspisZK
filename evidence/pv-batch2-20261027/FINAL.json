@@ -1,350 +1,2399 @@
 {
   "branch": "codex/pv-batch2-20261027",
-  "base": "73070ddd512bc4e79edfc0db714fb64dc74e87b8",
-  "applied_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
-  "stop": "transfer indicative median +4.1491556% exceeds +3%; no extractor or Lean launch",
-  "elf_gate": true,
-  "timing": [
-    {
-      "fixture": "transfer",
-      "seconds": {
-        "baseline": [
-          13.861992638,
-          15.277775741,
-          16.185164935,
-          15.582113507,
-          16.433339917
-        ],
-        "candidate": [
-          14.245554579,
-          14.946171965,
-          18.071950805,
-          18.011438199,
-          16.228639645
-        ]
-      },
-      "medians": {
-        "baseline": 15.582113507,
-        "candidate": 16.228639645
-      },
-      "ratio": 1.041491556181359,
-      "within_three_percent": false
-    },
-    {
-      "fixture": "withdrawal",
-      "seconds": {
-        "baseline": [
-          14.21131397,
-          15.032520432,
-          17.687727444,
-          16.190779525,
-          16.161496564
-        ],
-        "candidate": [
-          14.245844638,
-          15.357552602,
-          16.602763134,
-          18.190192381,
-          15.769175877
-        ]
-      },
-      "medians": {
-        "baseline": 16.161496564,
-        "candidate": 15.769175877
-      },
-      "ratio": 0.975724977854223,
-      "within_three_percent": true
-    }
-  ],
-  "function_cost": {
-    "scope": "Finite native inclusive microbenchmark on one fixed input; allocation included for original new and both materialize owners; not a source proof, worst-case bound, or attribution of whole-prover regression",
+  "resume_base": "5d8dfbebb2",
+  "control_revision": "73070ddd512bc4e79edfc0db714fb64dc74e87b8",
+  "applied_rust_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
+  "frozen_partial_proof_revision": "ac62b467cb2f16d4900aeb4bcf85864648ab44df",
+  "stop": "100/100 Lean compile attempts exhausted; source/original equality and all V256-V260 bridges remain open",
+  "target": "not yet established",
+  "cost_projection": {
+    "method": "Requested sum of observed copy calls times prior inclusive microbenchmark deltas; raw calls nested in materialize are also counted, so inclusive cost overlaps. Finite fixture estimate, not a bound. Instrumented timings are not performance measurements.",
+    "threshold_seconds": 0.2876,
     "rows": [
       {
-        "name": "249_original",
-        "iterations": 100000,
-        "wall_seconds": 0.005631844,
-        "microseconds_per_call": 0.05631844
+        "fixture": "transfer",
+        "coin": 100,
+        "proof_attempts": 1,
+        "parts": [
+          {
+            "op": 249,
+            "copy_calls": 1,
+            "original_calls": 0,
+            "delta_us_per_call": 0.007626640000000004,
+            "projected_delta_us": 0.007626640000000004
+          },
+          {
+            "op": 250,
+            "copy_calls": 3,
+            "original_calls": 0,
+            "delta_us_per_call": 0.020073829999999997,
+            "projected_delta_us": 0.06022148999999999
+          },
+          {
+            "op": 251,
+            "copy_calls": 1,
+            "original_calls": 0,
+            "delta_us_per_call": -3.5768299999999726,
+            "projected_delta_us": -3.5768299999999726
+          },
+          {
+            "op": 252,
+            "copy_calls": 1,
+            "original_calls": 0,
+            "delta_us_per_call": 0.09345519999999996,
+            "projected_delta_us": 0.09345519999999996
+          },
+          {
+            "op": 253,
+            "copy_calls": 8192,
+            "original_calls": 0,
+            "delta_us_per_call": -0.001108510000000007,
+            "projected_delta_us": -9.080913920000057
+          }
+        ],
+        "projected_delta_us": -12.49644059000003,
+        "projected_delta_seconds": -1.2496440590000031e-05,
+        "percent_of_14_38s": -8.69015340055635e-05,
+        "passes": true
       },
       {
-        "name": "249_copy",
-        "iterations": 100000,
-        "wall_seconds": 0.006394508,
-        "microseconds_per_call": 0.06394508
+        "fixture": "withdrawal",
+        "coin": 100,
+        "proof_attempts": 1,
+        "parts": [
+          {
+            "op": 249,
+            "copy_calls": 1,
+            "original_calls": 0,
+            "delta_us_per_call": 0.007626640000000004,
+            "projected_delta_us": 0.007626640000000004
+          },
+          {
+            "op": 250,
+            "copy_calls": 3,
+            "original_calls": 0,
+            "delta_us_per_call": 0.020073829999999997,
+            "projected_delta_us": 0.06022148999999999
+          },
+          {
+            "op": 251,
+            "copy_calls": 1,
+            "original_calls": 0,
+            "delta_us_per_call": -3.5768299999999726,
+            "projected_delta_us": -3.5768299999999726
+          },
+          {
+            "op": 252,
+            "copy_calls": 1,
+            "original_calls": 0,
+            "delta_us_per_call": 0.09345519999999996,
+            "projected_delta_us": 0.09345519999999996
+          },
+          {
+            "op": 253,
+            "copy_calls": 8192,
+            "original_calls": 0,
+            "delta_us_per_call": -0.001108510000000007,
+            "projected_delta_us": -9.080913920000057
+          }
+        ],
+        "projected_delta_us": -12.49644059000003,
+        "projected_delta_seconds": -1.2496440590000031e-05,
+        "percent_of_14_38s": -8.69015340055635e-05,
+        "passes": true
+      }
+    ]
+  },
+  "elf_gate": {
+    "status": "matching prior gate reused; no crates/programs change since resume",
+    "pins": {
+      "passed": true,
+      "source_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
+      "rows": [
+        {
+          "source_revision": "5b92d4aa18",
+          "mode": "default",
+          "sha256": "f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4",
+          "bytes": 1563728,
+          "expected": "f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4",
+          "matches": true,
+          "receipt": "evidence/pv-batch2-20261027/candidate/build-default-001/receipt/receipt.json",
+          "exit_status": 0,
+          "wall_seconds": 37.285,
+          "peak_rss_kib": 685408,
+          "swaps": 0,
+          "print_axioms": "N/A: no Lean compilation"
+        },
+        {
+          "source_revision": "5b92d4aa18",
+          "mode": "devnet",
+          "sha256": "63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299",
+          "bytes": 1563728,
+          "expected": "63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299",
+          "matches": true,
+          "receipt": "evidence/pv-batch2-20261027/candidate/build-devnet-001/receipt/receipt.json",
+          "exit_status": 0,
+          "wall_seconds": 37.613,
+          "peak_rss_kib": 686164,
+          "swaps": 0,
+          "print_axioms": "N/A: no Lean compilation"
+        },
+        {
+          "source_revision": "5b92d4aa18",
+          "mode": "pool",
+          "sha256": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548",
+          "bytes": 605704,
+          "expected": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548",
+          "matches": true,
+          "receipt": "evidence/pv-batch2-20261027/candidate/build-pool-001/receipt/receipt.json",
+          "exit_status": 0,
+          "wall_seconds": 43.973,
+          "peak_rss_kib": 676836,
+          "swaps": 0,
+          "print_axioms": "N/A: no Lean compilation"
+        }
+      ]
+    },
+    "original_evidence": "ELF-GATE.json"
+  },
+  "timing": {
+    "historical_precheck": [
+      {
+        "fixture": "transfer",
+        "seconds": {
+          "baseline": [
+            13.861992638,
+            15.277775741,
+            16.185164935,
+            15.582113507,
+            16.433339917
+          ],
+          "candidate": [
+            14.245554579,
+            14.946171965,
+            18.071950805,
+            18.011438199,
+            16.228639645
+          ]
+        },
+        "medians": {
+          "baseline": 15.582113507,
+          "candidate": 16.228639645
+        },
+        "ratio": 1.041491556181359,
+        "within_three_percent": false
       },
       {
-        "name": "250_original",
-        "iterations": 100000,
-        "wall_seconds": 0.003016388,
-        "microseconds_per_call": 0.03016388
-      },
-      {
-        "name": "250_copy",
-        "iterations": 100000,
-        "wall_seconds": 0.005023771,
-        "microseconds_per_call": 0.05023771
-      },
-      {
-        "name": "252_original",
-        "iterations": 10000,
-        "wall_seconds": 0.014463693,
-        "microseconds_per_call": 1.4463693
-      },
-      {
-        "name": "252_copy",
-        "iterations": 10000,
-        "wall_seconds": 0.015398245,
-        "microseconds_per_call": 1.5398245
-      },
-      {
-        "name": "253_original",
-        "iterations": 100000,
-        "wall_seconds": 0.007202839,
-        "microseconds_per_call": 0.07202839
-      },
-      {
-        "name": "253_copy",
-        "iterations": 100000,
-        "wall_seconds": 0.007091988,
-        "microseconds_per_call": 0.07091987999999999
-      },
-      {
-        "name": "251_original",
-        "iterations": 100,
-        "wall_seconds": 0.058453853,
-        "microseconds_per_call": 584.53853
-      },
-      {
-        "name": "251_copy_with_allocation",
-        "iterations": 100,
-        "wall_seconds": 0.05809617,
-        "microseconds_per_call": 580.9617000000001
+        "fixture": "withdrawal",
+        "seconds": {
+          "baseline": [
+            14.21131397,
+            15.032520432,
+            17.687727444,
+            16.190779525,
+            16.161496564
+          ],
+          "candidate": [
+            14.245844638,
+            15.357552602,
+            16.602763134,
+            18.190192381,
+            15.769175877
+          ]
+        },
+        "medians": {
+          "baseline": 16.161496564,
+          "candidate": 15.769175877
+        },
+        "ratio": 0.975724977854223,
+        "within_three_percent": true
       }
     ],
-    "probe_sha256": "cfda8f02f37ee9a34575f8e6489f4ee503471e337c2fe76340d920fc5671faba"
+    "lead_ruling": "D296: historical precheck inconclusive, not regression; no unchanged rerun",
+    "quiet_control_seconds": 14.38,
+    "adoption_gate": "lead quiet-window combined candidate gate remains pending"
   },
-  "receipts": [
+  "extraction": [
     {
-      "path": "candidate/build-baseline-001/receipt/receipt.json",
-      "command": [
-        "cargo",
-        "build",
-        "--release",
-        "--offline",
-        "--locked",
-        "-j",
-        "4",
-        "-p",
-        "aspis-r1-cost-probe",
-        "--example",
-        "prover_rw_gate",
-        "--features",
-        "optimized-terminal,r1p-check,ct-host-prover"
-      ],
-      "source_revision": "73070ddd512bc4e79edfc0db714fb64dc74e87b8",
-      "exit_status": 0,
-      "wall_seconds": 38.824,
-      "peak_rss_kib": 569536,
-      "swaps": 0,
-      "cgroup_memory_peak_bytes": 873742336,
-      "print_axioms": "N/A: no Lean compilation"
+      "packet": "extraction",
+      "op": 249,
+      "exit": 0,
+      "root_emitted": true,
+      "function_count": 16,
+      "error": null,
+      "receipt": "evidence/pv-batch2-20261027/extraction/aeneas-249-001/receipt.json"
     },
     {
-      "path": "candidate/build-candidate-003/receipt/receipt.json",
-      "command": [
-        "cargo",
-        "build",
-        "--release",
-        "--offline",
-        "--locked",
-        "-j",
-        "4",
-        "-p",
-        "aspis-r1-cost-probe",
-        "--example",
-        "prover_rw_gate",
-        "--features",
-        "optimized-terminal,r1p-check,ct-host-prover"
-      ],
-      "source_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
-      "exit_status": 0,
-      "wall_seconds": 4.411,
-      "peak_rss_kib": 327896,
-      "swaps": 0,
-      "cgroup_memory_peak_bytes": 311377920,
-      "print_axioms": "N/A: no Lean compilation"
+      "packet": "extraction",
+      "op": 250,
+      "exit": 0,
+      "root_emitted": true,
+      "function_count": 13,
+      "error": null,
+      "receipt": "evidence/pv-batch2-20261027/extraction/aeneas-250-001/receipt.json"
     },
     {
-      "path": "candidate/build-default-001/receipt/receipt.json",
-      "command": [
-        "timeout",
-        "600",
-        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
-        "--manifest-path",
-        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src/programs/r1-cost-probe/Cargo.toml",
-        "--sbf-out-dir",
-        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/build-default-001/artifacts",
-        "--features",
-        "pool-adapter,private-leaf-salts",
-        "--skip-tools-install",
-        "--offline",
-        "-j",
-        "4",
-        "--",
-        "--locked"
-      ],
-      "source_revision": "5b92d4aa18",
-      "exit_status": 0,
-      "wall_seconds": 37.285,
-      "peak_rss_kib": 685408,
-      "swaps": 0,
-      "cgroup_memory_peak_bytes": 1197428736,
-      "print_axioms": "N/A: no Lean compilation"
+      "packet": "extraction",
+      "op": 251,
+      "exit": 2,
+      "root_emitted": false,
+      "function_count": 0,
+      "error": "[\u001b[92mInfo\u001b[39m ] Imported: /home/dombarker/project-offloads/codex-pv-batch2-20261027/extraction/PV_B2_251.llbc\nUncaught exception:\n  \n  (Failure\n   \"ProverRwRngExtractor006: fail-closed preflight: structured Drop requires destructor semantics\")\n\nRaised at Stdlib.failwith in file \"stdlib.ml\", line 29, characters 17-33\nCalled from Dune__exe__Main in file \"Main.ml\", lines 760-761, characters 8-74\n",
+      "receipt": "evidence/pv-batch2-20261027/extraction/aeneas-251-001/receipt.json"
     },
     {
-      "path": "candidate/build-devnet-001/receipt/receipt.json",
-      "command": [
-        "timeout",
-        "600",
-        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
-        "--manifest-path",
-        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src/programs/r1-cost-probe/Cargo.toml",
-        "--sbf-out-dir",
-        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/build-devnet-001/artifacts",
-        "--features",
-        "pool-adapter,private-leaf-salts",
-        "--skip-tools-install",
-        "--offline",
-        "-j",
-        "4",
-        "--",
-        "--locked"
-      ],
-      "source_revision": "5b92d4aa18",
-      "exit_status": 0,
-      "wall_seconds": 37.613,
-      "peak_rss_kib": 686164,
-      "swaps": 0,
-      "cgroup_memory_peak_bytes": 1202151424,
-      "print_axioms": "N/A: no Lean compilation"
+      "packet": "extraction",
+      "op": 252,
+      "exit": 0,
+      "root_emitted": false,
+      "function_count": 0,
+      "error": null,
+      "receipt": "evidence/pv-batch2-20261027/extraction/aeneas-252-001/receipt.json"
     },
     {
-      "path": "candidate/build-function-cost-002/receipt/receipt.json",
-      "command": [
-        "python3",
-        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/build-function-cost.py"
-      ],
-      "source_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
-      "exit_status": 0,
-      "wall_seconds": 31.741,
-      "peak_rss_kib": 569616,
-      "swaps": 0,
-      "cgroup_memory_peak_bytes": 906768384,
-      "print_axioms": "N/A: no Lean compilation"
+      "packet": "extraction",
+      "op": 253,
+      "exit": 0,
+      "root_emitted": false,
+      "function_count": 0,
+      "error": null,
+      "receipt": "evidence/pv-batch2-20261027/extraction/aeneas-253-001/receipt.json"
     },
     {
-      "path": "candidate/build-pool-001/receipt/receipt.json",
-      "command": [
-        "timeout",
-        "600",
-        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
-        "--manifest-path",
-        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src/programs/aspis-pool/Cargo.toml",
-        "--sbf-out-dir",
-        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/build-pool-001/artifacts",
-        "--features",
-        "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
-        "--skip-tools-install",
-        "--offline",
-        "-j",
-        "4",
-        "--",
-        "--locked"
-      ],
-      "source_revision": "5b92d4aa18",
-      "exit_status": 0,
-      "wall_seconds": 43.973,
-      "peak_rss_kib": 676836,
-      "swaps": 0,
-      "cgroup_memory_peak_bytes": 1075781632,
-      "print_axioms": "N/A: no Lean compilation"
+      "packet": "extraction-weights",
+      "op": 251,
+      "exit": 2,
+      "root_emitted": false,
+      "function_count": 0,
+      "error": "[\u001b[92mInfo\u001b[39m ] Imported: /home/dombarker/project-offloads/codex-pv-batch2-20261027/extraction-weights/PV_B2_251.llbc\nUncaught exception:\n  \n  (Failure\n   \"ProverRwRngExtractor006: fail-closed preflight: structured Drop requires destructor semantics\")\n\nRaised at Stdlib.failwith in file \"stdlib.ml\", line 29, characters 17-33\nCalled from Dune__exe__Main in file \"Main.ml\", lines 760-761, characters 8-74\n",
+      "receipt": "evidence/pv-batch2-20261027/extraction-weights/aeneas-251-002/receipt.json"
     },
     {
-      "path": "candidate/function-cost-run-001/receipt/receipt.json",
-      "command": [
-        "/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/pv-batch2-function-cost"
-      ],
-      "source_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
-      "exit_status": 0,
-      "wall_seconds": 0.183,
-      "peak_rss_kib": 1760,
-      "swaps": 0,
-      "cgroup_memory_peak_bytes": 16203776,
-      "print_axioms": "N/A: no Lean compilation"
+      "packet": "extraction-weights",
+      "op": 252,
+      "exit": 0,
+      "root_emitted": true,
+      "function_count": 24,
+      "error": null,
+      "receipt": "evidence/pv-batch2-20261027/extraction-weights/aeneas-252-002/receipt.json"
     },
     {
-      "path": "candidate/timing-precheck-scope-001/receipt/receipt.json",
-      "command": [
-        "python3",
-        "/home/dombarker/project-offloads/codex-pv-batch2-20261027/precheck.py"
-      ],
-      "source_revision": "5b92d4aa185486cc735c0a3eb75a3024171ca482",
-      "exit_status": 3,
-      "wall_seconds": 318.784,
-      "peak_rss_kib": 675672,
-      "swaps": 0,
-      "cgroup_memory_peak_bytes": 724373504,
-      "print_axioms": "N/A: no Lean compilation"
+      "packet": "extraction-weights",
+      "op": 253,
+      "exit": 2,
+      "root_emitted": false,
+      "function_count": 0,
+      "error": "[\u001b[92mInfo\u001b[39m ] Imported: /home/dombarker/project-offloads/codex-pv-batch2-20261027/extraction-weights/PV_B2_253.llbc\nUncaught exception:\n  \n  Not_found\n\nRaised at Stdlib__Map.Make.find in file \"map.ml\", line 141, characters 10-25\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence.(fun) in file \"interp/InterpReduceCollapse.ml\", line 1991, characters 9-40\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 1989-1992, characters 4-24\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_no_markers_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 2009-2010, characters 4-43\nCalled from Aeneas__InterpJoin.match_ctx_with_target in file \"interp/InterpJoin.ml\", lines 1809-1810, characters 4-52\nCalled from Aeneas__InterpStatements.eval_switch_with_join.match_ctx in file \"interp/InterpStatements.ml\", lines 1407-1409, characters 8-59\nCalled from Stdlib__List.map in file \"list.ml\", line 86, characters 15-19\nCalled from Aeneas__InterpStatements.eval_switch_with_join in file \"interp/InterpStatements.ml\", line 1428, characters 15-38\nCalled from Aeneas__InterpStatements.eval_switch_raw.(fun) in file \"interp/InterpStatements.ml\", line 1121, characters 18-68\nCalled from Aeneas__InterpStatements.eval_switch.(fun) in file \"interp/InterpStatements.ml\", line 1060, characters 10-50\nCalled from Aeneas__InterpStatements.eval_statement.(fun) in file \"interp/InterpStatements.ml\", line 866, characters 10-44\nCalled from Aeneas__InterpStatements.eval_statement_list.(fun) in file \"interp/InterpStatements.ml\", line 875, characters 29-57\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled fro",
+      "receipt": "evidence/pv-batch2-20261027/extraction-weights/aeneas-253-002/receipt.json"
     }
   ],
-  "lean_attempts": 0,
-  "lean_budget": 100,
-  "kani_attempts": 0,
-  "kani_budget": 0,
-  "used_envj_ids": [],
   "per_op": [
     {
       "op": 249,
       "row": "V256",
-      "name": "gamma_sample",
-      "source_law": "NOT ATTEMPTED: timing stop",
-      "copy_equality": "NOT ATTEMPTED: timing stop",
-      "bridge": "OPEN; original row unchanged"
+      "source": "raw full closure emitted and type-checked; complete-Result carrier equality PV_B2_GammaCarrier.source; gamma rank law remains open",
+      "copy_equality": "OPEN: original shipped sampler versus copy, arbitrary inputs and errors",
+      "bridge": "OPEN"
     },
     {
       "op": 250,
       "row": "V257",
-      "name": "ordinary_sample",
-      "source_law": "NOT ATTEMPTED: timing stop",
-      "copy_equality": "NOT ATTEMPTED: timing stop",
-      "bridge": "OPEN; original row unchanged"
+      "source": "PV_B2_ordinary_sample.op250_source: unconditional exact canonical digit output of normalized emission; PV_B2_RankDigits.source: exact residue; not native original association",
+      "copy_equality": "OPEN: original shipped sampler versus copy, arbitrary inputs and errors",
+      "bridge": "OPEN"
     },
     {
       "op": 251,
       "row": "V258",
-      "name": "Weights.materialize",
-      "source_law": "NOT ATTEMPTED: timing stop",
-      "copy_equality": "NOT ATTEMPTED: timing stop",
-      "bridge": "OPEN; original row unchanged"
+      "source": "pinned extractor refused structured Drop in dependency closure; no accepted full emission",
+      "copy_equality": "OPEN: including caller allocation and complete mutation/Result transport",
+      "bridge": "OPEN"
     },
     {
       "op": 252,
       "row": "V259",
-      "name": "Weights.new",
-      "source_law": "NOT ATTEMPTED: timing stop",
-      "copy_equality": "NOT ATTEMPTED: timing stop",
-      "bridge": "OPEN; original row unchanged"
+      "source": "raw complete closure emitted; raw API compatibility and 24 normalized declaration checks; 20 field value/totality laws; double/statement-point totality. Whole constructor value law and totality unfinished; two aggregation drafts rejected at default limits",
+      "copy_equality": "OPEN: original Box constructor versus fixed-storage copy, errors/effects",
+      "bridge": "OPEN"
     },
     {
       "op": 253,
       "row": "V260",
-      "name": "Weights.raw",
-      "source_law": "NOT ATTEMPTED: timing stop",
-      "copy_equality": "NOT ATTEMPTED: timing stop",
-      "bridge": "OPEN; original row unchanged"
+      "source": "pinned extractor internal Not_found at InterpReduceCollapse.ml:1991; no accepted full emission",
+      "copy_equality": "OPEN: arbitrary kind/index, malformed inputs and complete errors",
+      "bridge": "OPEN"
     }
   ],
-  "fixture_byte_gate": "NOT RUN: stopped before proof stage; successful proof generation and verification do not establish byte equality",
-  "formal_audit": "NOT RUN; no new Lean theorem; #print axioms N/A",
+  "fixture_byte_gate": "NOT RUN: ordered source/copy/row stage incomplete at budget exhaustion; old successful proof generation/verification is not byte equality",
+  "formal_audit": {
+    "scope": "accepted partial closure only, not full frozen privacy/deployment manifest or adoption",
+    "audits": [
+      {
+        "target": "R1Z/PV_B2_AuditSampler",
+        "attempt": 53597,
+        "exit_status": 0,
+        "wall_seconds": 1.45,
+        "peak_rss_kib": 3831400,
+        "swaps": 0,
+        "source_revision": "ac62b467cb2f16d4900aeb4bcf85864648ab44df",
+        "source_sha256": "8fabdc240839bf8890c96cddf83a3b17d3ff682fcc42f769517da7f23568c7cc",
+        "worktree_source_dirty": false,
+        "deps_fingerprint": "4b116827a3855732e70029073a42fc7d324dd398ab61410c19a3049d7627e0b3",
+        "dependency_objects": {
+          "R1Z.PV_B2_ArrayDigits": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_ArrayDigits.olean",
+            "sha256": "eca5c65fb5628e1eddb6312a1ae9bd092ca72d2c50169c56589a352972bbec71"
+          },
+          "R1Z.PV_B2_ArrayInspect": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_ArrayInspect.olean",
+            "sha256": "f3f9729422314aec2cdb640248cc8977d47ed437f4fcf52d5afeb03ba5d3aea1"
+          },
+          "R1Z.PV_B2_ArrayTotal": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_ArrayTotal.olean",
+            "sha256": "04244d51dbff38196dcd5df768e9555629fdb02f496895cbb284986c28928879"
+          },
+          "R1Z.PV_B2_ByteBits": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_ByteBits.olean",
+            "sha256": "67b8cc30821397317a09ae5a93636956fdfbef8b967896bf21e701b59a406377"
+          },
+          "R1Z.PV_B2_ByteShape": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_ByteShape.olean",
+            "sha256": "5864c5ca035c5c27095f360533b2b2753b20385006eadc37c4c03b71240df04f"
+          },
+          "R1Z.PV_B2_ByteWord": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_ByteWord.olean",
+            "sha256": "36fa8ac2a78df2a9fe74f25b622b9cbe4523db50e631f7c456ec6687d7744e08"
+          },
+          "R1Z.PV_B2_Bytes": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Bytes.olean",
+            "sha256": "929396dc64841e1b074c2acdf4fd0a61b44ce610ea2fcc313fb67b7b978bdcdd"
+          },
+          "R1Z.PV_B2_CheckedBytes": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_CheckedBytes.olean",
+            "sha256": "9eb6e66dc44bd5199b9eb4c733e76ea66b620a0cc3207d91655d70e3ec97fd39"
+          },
+          "R1Z.PV_B2_CheckedDigits": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_CheckedDigits.olean",
+            "sha256": "6e6a2ef8ace517cffa1ed1fb1247b73c0c7f994feb89bc1ebfb35f6b9d91761d"
+          },
+          "R1Z.PV_B2_CheckedDiv": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_CheckedDiv.olean",
+            "sha256": "9f3d1907f80504af936bfe3a07956f89fdfa6b29aa0494873910e71006dce34f"
+          },
+          "R1Z.PV_B2_Decode": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Decode.olean",
+            "sha256": "08b357e26241b868fdffb6388c65aeba8ab00323edf4f60160d5abe8bb98c285"
+          },
+          "R1Z.PV_B2_DecodeResult": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_DecodeResult.olean",
+            "sha256": "13473e9de831267f6bf273452e67d24bedd4e8641b6a41159592fd9141a70bb1"
+          },
+          "R1Z.PV_B2_Digits": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Digits.olean",
+            "sha256": "39a597edce839e28dd56ff46535b7d5551b9295efe26c8cf62a3c3b3805f7c23"
+          },
+          "R1Z.PV_B2_Division": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Division.olean",
+            "sha256": "96cd0fa8c0e8dca8b3a77ebebd310db16f015b4d58fc6a08e6f88412cea47877"
+          },
+          "R1Z.PV_B2_GammaCarrier": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_GammaCarrier.olean",
+            "sha256": "5928f8e992fcd75b4779d41baedafd144bb41f0ba5e0ed11432290fcac2c9eac"
+          },
+          "R1Z.PV_B2_LowDigits": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_LowDigits.olean",
+            "sha256": "010b56e2d1fe4e41e7bfe8c161129f11501ef4afc140ec13b6059e32fafb6b1e"
+          },
+          "R1Z.PV_B2_OrdinaryReference": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_OrdinaryReference.olean",
+            "sha256": "b916178b6f7a723b1b8c027a2505a475b86251101c9aceec552899de4d0fb814"
+          },
+          "R1Z.PV_B2_RankDigits": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_RankDigits.olean",
+            "sha256": "c08a0f1a1c79cd25569d312304df2f809b472f5ab1c657c6cda4930302fa23e2"
+          },
+          "R1Z.PV_B2_RawSamplerFuns": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_RawSamplerFuns.olean",
+            "sha256": "d87b7d95a9bb387ed537353b22d2a344bd26d360b71c01e962ac37d65f6eabf6"
+          },
+          "R1Z.PV_B2_RawSamplerTypes": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_RawSamplerTypes.olean",
+            "sha256": "5fc7427cfdb3bf86594db174faca4fb158b74923ca6d109ac539a17e4401eada"
+          },
+          "R1Z.PV_B2_ReleaseCheck": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_ReleaseCheck.olean",
+            "sha256": "c4e653d464b7cc1726d7373a2ae395a181cc897b6739906bedb4fb6f5f37745f"
+          },
+          "R1Z.PV_B2_Sampler": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Sampler.olean",
+            "sha256": "3db57a8b8c0fdc12bf5ad7dbc7de7f2889286bc756047cefdc42a9283370c902"
+          },
+          "R1Z.PV_B2_SamplerCarrier": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_SamplerCarrier.olean",
+            "sha256": "6fac1e99b0530bd587b6fe879f2cfc020959ffaf3fcc3e22efc4d91e6e5f80d9"
+          },
+          "R1Z.PV_B2_SamplerHelpers": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_SamplerHelpers.olean",
+            "sha256": "768984b31513dccab591b3f93df9ab7e3a599d10542bbc2a64b3f44aa708c2f6"
+          },
+          "R1Z.PV_B2_ordinary_sample": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_ordinary_sample.olean",
+            "sha256": "75fd14e715e1bd1636a2228aa56faadcf469af9453a188e5bfc01d4578061a2b"
+          }
+        },
+        "limits": {
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "cgroup_memory_peak_bytes": 408064000,
+        "print_axioms": [
+          {
+            "declaration": "PV_B2_249.aspis_core.field.CM31",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_249.aspis_core.field.M31",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_249.aspis_core.field.P",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.aspis_core.field.QM31",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_249.aspis_core.field.wide_exact.WideExact",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_249.aspis_core.field.wide_exact.WideExact.from_limbs",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.add_small_base_p",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.add_small_base_p_loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.add_small_base_p_loop.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.decode8",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.gamma_sample",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.low_base_p_digits",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.low_base_p_digits_loop0",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.low_base_p_digits_loop0.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.low_base_p_digits_loop1",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.low_base_p_digits_loop1.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.low_base_p_digits_loop1_loop0",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.low_base_p_digits_loop1_loop0.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.low_base_p_digits_loop2",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_249.host_sampler.low_base_p_digits_loop2.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ArrayDigits.decode",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ArrayDigits.read",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ArrayTotal.bind",
+            "axioms": [
+              "propext"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ArrayTotal.bind_rust",
+            "axioms": [
+              "propext"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ArrayTotal.borrow",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ArrayTotal.read",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ArrayTotal.write",
+            "axioms": [
+              "propext",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ByteBits.shape",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ByteBits.source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ByteShape.source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ByteWord.machine",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Bytes.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Bytes.loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Decode.constructor_transport",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_DecodeResult.source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_DecodeResult.unwrap",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_Digits.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Digits.loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Division.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Division.loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_GammaCarrier.after_low",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_GammaCarrier.source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_GammaCarrier.tail_source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_LowDigits.source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_OrdinaryReference.sampler_owned.low_base_p_digits",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_RankDigits.source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ReleaseCheck.done",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ReleaseCheck.source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ReleaseCheck.step",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.aspis_core.field.P",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.aspis_core.field.wide_exact.WideExact.from_limbs",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.add_small_base_p",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.add_small_base_p_loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.add_small_base_p_loop.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.decode8",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.gamma_sample",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.low_base_p_digits",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.low_base_p_digits_loop0",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.low_base_p_digits_loop0.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.low_base_p_digits_loop1",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.low_base_p_digits_loop1.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.low_base_p_digits_loop1_loop0",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.low_base_p_digits_loop1_loop0.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.low_base_p_digits_loop2",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.low_base_p_digits_loop2.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_Sampler.host_sampler.ordinary_sample",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerCarrier.map_bind",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_SamplerCarrier.roundtrip",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_SamplerCarrier.roundtrip_raw",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.bytes_body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.bytes_loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.carry_body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.carry_loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.check_loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.digits_body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.digits_loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.division_body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.division_loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.low",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_SamplerHelpers.small",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ordinary_sample.low_canonical",
+            "axioms": [
+              "propext"
+            ]
+          },
+          {
+            "declaration": "PV_B2_ordinary_sample.op250_source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "R1Z.PV_B2_CheckedBytes.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "R1Z.PV_B2_CheckedBytes.loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "R1Z.PV_B2_CheckedDigits.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "R1Z.PV_B2_CheckedDigits.digits",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "R1Z.PV_B2_CheckedDigits.loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "R1Z.PV_B2_CheckedDiv.body",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "R1Z.PV_B2_CheckedDiv.loop",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "R1Z.PV_B2_CheckedDiv.pass",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "R1Z.PV_B2_CheckedDiv.zero",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          }
+        ],
+        "standard_axioms": true,
+        "formal_accepted": true,
+        "receipt": "53597.json"
+      },
+      {
+        "target": "R1Z/PV_B2_AuditWeights",
+        "attempt": 53598,
+        "exit_status": 0,
+        "wall_seconds": 1.069,
+        "peak_rss_kib": 2624644,
+        "swaps": 0,
+        "source_revision": "ac62b467cb2f16d4900aeb4bcf85864648ab44df",
+        "source_sha256": "32b6eb84dce090c6b93ca62668d8deeb699b9d8c8bfa690c08cdcc83e5b97244",
+        "worktree_source_dirty": false,
+        "deps_fingerprint": "4b4c92a42f8c0687b19d3cc6648e374781199ffa7df5b85fa98992017f5692b5",
+        "dependency_objects": {
+          "R1Z.PV_B2_Total_CM31_add": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_CM31_add.olean",
+            "sha256": "03c4b512fc83ab76bf208c5c1544e85b182e25c61ce49f655b45e771030b1faa"
+          },
+          "R1Z.PV_B2_Total_CM31_mul": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_CM31_mul.olean",
+            "sha256": "5792a3b853a396ac0735a1e301a285fa77b1932582319b59776a6504ae156a1d"
+          },
+          "R1Z.PV_B2_Total_CM31_sub": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_CM31_sub.olean",
+            "sha256": "3b37d3fd39b790f52ee212e4300a45e8dacb557c2a87b541ef0cc22d72134f5d"
+          },
+          "R1Z.PV_B2_Total_M31_add": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_M31_add.olean",
+            "sha256": "ca19dbbc8e084ceeb116aab9c21e0df0fd91f91594b38c442e22482830e4e39f"
+          },
+          "R1Z.PV_B2_Total_M31_double": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_M31_double.olean",
+            "sha256": "faed2d785f6fbcfe854cdec99c134079e465920536fb36dad3e53531334a2aa3"
+          },
+          "R1Z.PV_B2_Total_M31_mul": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_M31_mul.olean",
+            "sha256": "1da6717dd3191f0223b9f750145aa96a8384d7c595415058b27c4b7825766874"
+          },
+          "R1Z.PV_B2_Total_M31_reduce_u64": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_M31_reduce_u64.olean",
+            "sha256": "50dbf76b283c75c2ee6e9358d6d646fc07c7e1c7f8d05ae5718fdcf8fd67d5aa"
+          },
+          "R1Z.PV_B2_Total_M31_sub": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_M31_sub.olean",
+            "sha256": "92d42d26867d88600ae58b546292aa4028886cdfd9390923661bc100ca3cdf3a"
+          },
+          "R1Z.PV_B2_Total_P": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_P.olean",
+            "sha256": "31392500b0f97e91411874f4f705b51f6db5d4c6719567ee7f63722a9f7ce915"
+          },
+          "R1Z.PV_B2_Total_QM31_ONE": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_QM31_ONE.olean",
+            "sha256": "86d567cb060b2fcc31b8644e08a303cc57b5ba7b02414b69a4ce9afacd300232"
+          },
+          "R1Z.PV_B2_Total_QM31_ZERO": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_QM31_ZERO.olean",
+            "sha256": "88c1f5ffbdd37fdc6b34b83f028a61ad19c990b7ed5edd59ac11480d029eaa67"
+          },
+          "R1Z.PV_B2_Total_QM31_add": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_QM31_add.olean",
+            "sha256": "9f1f5bd9f59e7244ffd67ea1504b60be698459cdc0805c805f558ca423028f31"
+          },
+          "R1Z.PV_B2_Total_QM31_mul": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_QM31_mul.olean",
+            "sha256": "011fd79fa6fa8792f78a86f57321da93dc238746d9d0a315e469de0e27a3cf11"
+          },
+          "R1Z.PV_B2_Total_QM31_sub": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_QM31_sub.olean",
+            "sha256": "85e1cffb9909a2bf3e06198658613599d36a8493b7f7d129f76af6b8374510cc"
+          },
+          "R1Z.PV_B2_Total_ct_add": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_ct_add.olean",
+            "sha256": "79d1a11f0def6ee28335b71b6c3e878d4badee86e37f0029364e1196dfbf37d4"
+          },
+          "R1Z.PV_B2_Total_ct_reduce64": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_ct_reduce64.olean",
+            "sha256": "dc254c23c2894eb3556ae88edb0545e15c28bdb890fcce0725527a3fb485ae56"
+          },
+          "R1Z.PV_B2_Total_ct_sub": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_ct_sub.olean",
+            "sha256": "95aea21385b56d99ab0cdd6c186d2246c5b5dacd95b4c3a381b8c55049604d36"
+          },
+          "R1Z.PV_B2_Total_ct_subtract_p": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_ct_subtract_p.olean",
+            "sha256": "75b23e6ab11aa7fa824119b2aa66a5acbdba7a6314fda46bcd68749280901ed4"
+          },
+          "R1Z.PV_B2_Total_mul_by_r": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_mul_by_r.olean",
+            "sha256": "eb44b036666d31a012e6329f398f6eaeec8f3f43e21e5a22e0924ff415787561"
+          },
+          "R1Z.PV_B2_Total_reduce_u64": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_Total_reduce_u64.olean",
+            "sha256": "d3fa84d2b9a7bba497b46a1108a34914fd1a4416eca516d044c8f6b588014447"
+          },
+          "R1Z.PV_B2_W_00_P": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_00_P.olean",
+            "sha256": "ff919396cf1379f025a0ca6c4fee56bdcd94c714cb2bbc63c4977341e635836c"
+          },
+          "R1Z.PV_B2_W_01_ct_subtract_p": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_01_ct_subtract_p.olean",
+            "sha256": "51839a05ffac2f21c594996f6f78b8a531bfd89bf1d246209b9b1b94ac89e467"
+          },
+          "R1Z.PV_B2_W_02_ct_reduce64": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_02_ct_reduce64.olean",
+            "sha256": "ace02ba6b406dc68843b56b3bf24087280cefc929c2b7f5cfdaba6807309bcce"
+          },
+          "R1Z.PV_B2_W_03_ct_add": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_03_ct_add.olean",
+            "sha256": "b005c3c35926a69f5a5eb27390a0415b7fa1d8378e21bae36dcb7159894dd956"
+          },
+          "R1Z.PV_B2_W_04_ct_sub": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_04_ct_sub.olean",
+            "sha256": "8c5a60875364c5bdfc2f18845c774f125db032ebe0dfa811e22d1a0f7c759019"
+          },
+          "R1Z.PV_B2_W_05_reduce_u64": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_05_reduce_u64.olean",
+            "sha256": "424cc279283d187b8b90a5ac0a465f7295a0afb3640c92cb06b7edbc2a236e16"
+          },
+          "R1Z.PV_B2_W_06_M31_mul": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_06_M31_mul.olean",
+            "sha256": "b89907d3704c86709f8e32ad67cba670c775b4e868f201ed75e2a127dbf60348"
+          },
+          "R1Z.PV_B2_W_07_M31_reduce_u64": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_07_M31_reduce_u64.olean",
+            "sha256": "b44ec7d39b4e48d1df1df005406810384c5b0a395df7236648608794dcc7679f"
+          },
+          "R1Z.PV_B2_W_08_M31_add": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_08_M31_add.olean",
+            "sha256": "75989ad4b77f8f4e28d0c00ccc1f623ae239c3266f3e35fdcd1be715056704fb"
+          },
+          "R1Z.PV_B2_W_09_M31_double": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_09_M31_double.olean",
+            "sha256": "5dec00e95802bb138c6415346e5220d16590f08e43362ab0b886ac34e4d1b63b"
+          },
+          "R1Z.PV_B2_W_10_CM31_add": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_10_CM31_add.olean",
+            "sha256": "f1d9d58e565ec8bc76de833320f72385ab730b366fea2f47abecc67573b41716"
+          },
+          "R1Z.PV_B2_W_11_M31_sub": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_11_M31_sub.olean",
+            "sha256": "140c41a0ec31836e74297596d6aa8bc79d80e6b66ffcf9f1e3626d6f4b88d169"
+          },
+          "R1Z.PV_B2_W_12_CM31_sub": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_12_CM31_sub.olean",
+            "sha256": "bf48b5af5090f0388fe4446f2ae7139b0b253dc9ca98ac8d74f78dbb1e7102de"
+          },
+          "R1Z.PV_B2_W_13_CM31_mul": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_13_CM31_mul.olean",
+            "sha256": "0cbc6cc3c0341e74272b4a56d99e7d8bd57090419c134fa8acedefaaa7b66c73"
+          },
+          "R1Z.PV_B2_W_14_mul_by_r": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_14_mul_by_r.olean",
+            "sha256": "2b7423f45abf06445cd5a1e32d61e98f96632cb530d571bf972663c06612d9f6"
+          },
+          "R1Z.PV_B2_W_15_QM31_ZERO": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_15_QM31_ZERO.olean",
+            "sha256": "c355549b2121f137d43c6ee947587cd5fe36a8eae844302b9f77acb16caa534f"
+          },
+          "R1Z.PV_B2_W_16_QM31_ONE": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_16_QM31_ONE.olean",
+            "sha256": "73def83c409c26c41e97dbb0b00d6ef3cf7e944d0aca1d5d7c605b9cb16bbc81"
+          },
+          "R1Z.PV_B2_W_17_QM31_add": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_17_QM31_add.olean",
+            "sha256": "be599db3946b67322332e34cc6fb8f049057923e26c6d190f19a730171b7f238"
+          },
+          "R1Z.PV_B2_W_18_QM31_sub": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_18_QM31_sub.olean",
+            "sha256": "c521c0ea5d4847bee48865429be7586a0b04c0517f0abb6697c4b0352074595c"
+          },
+          "R1Z.PV_B2_W_19_QM31_mul": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_19_QM31_mul.olean",
+            "sha256": "9dae95d2237a7300c080e547eb686c0c498f1e99c050b30cf09a85a1828c4328"
+          },
+          "R1Z.PV_B2_W_20_host_weights_double": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_20_host_weights_double.olean",
+            "sha256": "4c225bc791ea14758a1004673ed164a77587d3e57c0823d740c4f07cca397d8e"
+          },
+          "R1Z.PV_B2_W_21_host_weights_state_only_statement_points": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_21_host_weights_state_only_statement_points.olean",
+            "sha256": "6e05a6433c7968f4d747d515fb46e7479c1b0fb138f799077f3d2116bb61f678"
+          },
+          "R1Z.PV_B2_W_22_host_weights_Weights_new": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_22_host_weights_Weights_new.olean",
+            "sha256": "7c3c1e4223c36ea5154c8f4009f780ba113ae8a5917168ba904fd2ee1fe022a1"
+          },
+          "R1Z.PV_B2_W_23_pv_b2_new": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_W_23_pv_b2_new.olean",
+            "sha256": "5a1a015c8cf6760cb6210f1403de096af3c0ef3437e711f298e8829c26d2cefc"
+          },
+          "R1Z.PV_B2_WeightsFuns": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_WeightsFuns.olean",
+            "sha256": "3c770c094f4ff86cf189168419f67f025c8050227ea62bcccb5fc61271e554eb"
+          },
+          "R1Z.PV_B2_WeightsNativeTypes": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_WeightsNativeTypes.olean",
+            "sha256": "b4e4a732dddce30f4ca83e8c552777d94725dd38dca03bc2d29a3bf8970ebd68"
+          },
+          "R1Z.PV_B2_WeightsTotal": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_WeightsTotal.olean",
+            "sha256": "f4d8ab95e39f8ad18958e700f8abacf852f5e84d52b389b42202708207e47905"
+          },
+          "R1Z.PV_B2_WeightsTypes": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_WeightsTypes.olean",
+            "sha256": "1aef979a126ee3faf0026f4b80b0509dbcb226aa4966f2807355de6ba9b85362"
+          }
+        },
+        "limits": {
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "cgroup_memory_peak_bytes": 290496512,
+        "print_axioms": [
+          {
+            "declaration": "PV_B2_252.aspis_core.circle.SecureCirclePoint",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.CM31",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.CM31.add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.CM31.mul",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.CM31.sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.M31",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.M31.add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.M31.double",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.M31.mul",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.M31.reduce_u64",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.M31.sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.P",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.QM31",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.QM31.ONE",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.QM31.ZERO",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.QM31.add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.QM31.mul",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.QM31.sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.ct.add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.ct.reduce64",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.ct.sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.ct.subtract_p",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.mul_by_r",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.aspis_core.field.reduce_u64",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.host_weights.Weights",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.host_weights.Weights.new",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.host_weights.double",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.host_weights.state_only_statement_points",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.pv_b2_new",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_252.transport.Variant",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_252.verifier.Error",
+            "axioms": []
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.CM31_add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.CM31_mul",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.CM31_sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.M31_add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.M31_double",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.M31_mul",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.M31_reduce_u64",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.M31_sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.P",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.QM31_ONE",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.QM31_ZERO",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.QM31_add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.QM31_mul",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.QM31_sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.ct_add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.ct_reduce64",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.ct_sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.ct_subtract_p",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.mul_by_r",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.reduce_u64",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.CM31.add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.CM31.mul",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.CM31.sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.M31.add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.M31.double",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.M31.mul",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.M31.reduce_u64",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.M31.sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.P",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.QM31.ONE",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.QM31.ZERO",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.QM31.add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.QM31.mul",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.QM31.sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.ct.add",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.ct.reduce64",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.ct.sub",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.ct.subtract_p",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.mul_by_r",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.aspis_core.field.reduce_u64",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.host_weights.Weights",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.host_weights.Weights.new",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.host_weights.double",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.host_weights.state_only_statement_points",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsNative.pv_b2_new",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsTotal.double",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsTotal.points",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          }
+        ],
+        "standard_axioms": true,
+        "formal_accepted": true,
+        "receipt": "53598.json"
+      },
+      {
+        "target": "R1Z/PV_B2_AuditManifest",
+        "attempt": 53599,
+        "exit_status": 0,
+        "wall_seconds": 1.41,
+        "peak_rss_kib": 3832580,
+        "swaps": 0,
+        "source_revision": "ac62b467cb2f16d4900aeb4bcf85864648ab44df",
+        "source_sha256": "af0bc356047743e48ff80708d8fe3c25c0e2036b81adf98bcbfcf6287650d7ef",
+        "worktree_source_dirty": false,
+        "deps_fingerprint": "6b33558bf36bf4bf213dd5d645d2f8482bee9ce101a0e5881328198a1779739b",
+        "dependency_objects": {
+          "R1Z.PV_B2_AuditSampler": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_AuditSampler.olean",
+            "sha256": "b491110824b999abedce9433d451c13e2de8d35c241b26221b34314192f7e166"
+          },
+          "R1Z.PV_B2_AuditWeights": {
+            "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_AuditWeights.olean",
+            "sha256": "fd9de8838a1be17fde45c6cd3cae5d13fde9c003a3bb92b90a273297326b0823"
+          }
+        },
+        "limits": {
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "cgroup_memory_peak_bytes": 406757376,
+        "print_axioms": [
+          {
+            "declaration": "PV_B2_ordinary_sample.op250_source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_GammaCarrier.source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_RankDigits.source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_LowDigits.source",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_WeightsTotal.points",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          },
+          {
+            "declaration": "PV_B2_FieldTotal.QM31_mul",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ]
+          }
+        ],
+        "standard_axioms": true,
+        "formal_accepted": true,
+        "receipt": "53599.json"
+      }
+    ],
+    "accepted_current_modules": 73,
+    "printed_declarations": 169,
+    "archived_drafts": [
+      {
+        "module": "R1Z/PV_B2_ConstructorTotal",
+        "source_sha256": "95f0e49332c61b8e8f94c7102389f77a49436a3f9dd45baebdcf1eca3fad5a0a",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_ConstructorTotal.lean.txt",
+        "reason": "latest source not accepted",
+        "last_attempt": 54994
+      },
+      {
+        "module": "R1Z/PV_B2_Field_CM31_add",
+        "source_sha256": "ef26bcbe757804ceac026d258e48d894fba66da75637206e0dd12ae9869d24f1",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_CM31_add.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_CM31_mul",
+        "source_sha256": "f8e413f2df95d0a11fd107e0b73358a9237055ed486b58eb410e3f092977d077",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_CM31_mul.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_CM31_sub",
+        "source_sha256": "0783ebf2170035ea9bac5af0dde2a485f06d69ce10ee32d71d8499408ff4cf52",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_CM31_sub.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_M31_add",
+        "source_sha256": "9059b659a149df4cad8a71850aef8975dfc5792ad9bef629adc83d968e8dd2e5",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_M31_add.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_M31_double",
+        "source_sha256": "67ec50bf61273f0d36c68329115f51e961c5fffa762b33d7072cb6c10eff8214",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_M31_double.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_M31_mul",
+        "source_sha256": "959a6e42fd6f5e869283843478cd0b3dbea5136587f6d4110a87f5c96fdaf47f",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_M31_mul.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_M31_reduce_u64",
+        "source_sha256": "f486a6463bdd3d951934207dcd0c52f59ab39365c9a0c0e2c4f40b12f569b7e6",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_M31_reduce_u64.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_M31_sub",
+        "source_sha256": "47d3697430d60e5f3c1ba6eff2ae05f04f01a238b59a938b8b7ec949ffce0d26",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_M31_sub.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_P",
+        "source_sha256": "3d48c2bacefe9db8a54b08c61a7cefe1b1b3dcaac3145cf51b4aefad1e50ad4e",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_P.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_QM31_ONE",
+        "source_sha256": "63a11e18b56b8b86a835116e365e2227cc07128362ca9c6e2d72a4da71f85f72",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_QM31_ONE.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_QM31_ZERO",
+        "source_sha256": "ae6cb7c5eb44731198096018d4709fed835c8c2cca0c2c69e29fddcd0fa9d246",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_QM31_ZERO.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_QM31_add",
+        "source_sha256": "e1d4cb42c42a407b88bb97b096865b09d7a7eadbf9c2f0deffa58d2ef6a59528",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_QM31_add.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_QM31_mul",
+        "source_sha256": "6883606ee71671cb716d9ebeba24c33d909b3d9d74d88af73efff78490d411b4",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_QM31_mul.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_QM31_sub",
+        "source_sha256": "9ef0115f5016a4df7b20b16174a5614505427f7eb756d374af1bbb4fc64b4475",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_QM31_sub.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_ct_add",
+        "source_sha256": "58f3a7d8be777adc1b6d9367e13ebf8fca7aa0d73ad36a54eae7dfaddbac88d9",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_ct_add.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_ct_reduce64",
+        "source_sha256": "c6102a6066568b6a624196ffd708c1b53a763ce5eb653e31b7b656321f9d1177",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_ct_reduce64.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_ct_sub",
+        "source_sha256": "0c6dbf677e371937f82d08618ecd3e407082aa54a2b6160ebc890dbba585ec82",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_ct_sub.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_ct_subtract_p",
+        "source_sha256": "0339a4d5b34b24bbde7a206be9e8a34d8b5249cf3f318fd5bf361dd41248cd84",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_ct_subtract_p.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_mul_by_r",
+        "source_sha256": "d5445f6ef1dffe91987bf3f5a64e08d39f80c46004f3e29c319598a8ccb52077",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_mul_by_r.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_Field_reduce_u64",
+        "source_sha256": "e1b120581aaa25cfece128190f32626395cfa694e590d116435ad369f8099464",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_Field_reduce_u64.lean.txt",
+        "reason": "unmeasured draft",
+        "last_attempt": null
+      },
+      {
+        "module": "R1Z/PV_B2_WordInspect",
+        "source_sha256": "f148d2be8ad04d2d6ee3342f406c5c5fdb03ee47c75584c0b23e88c70e34f304",
+        "path": "evidence/pv-batch2-20261027/drafts/PV_B2_WordInspect.lean.txt",
+        "reason": "latest source not accepted",
+        "last_attempt": 54913
+      }
+    ],
+    "all_accepted_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "preflight": "ACCEPTED-CHECK.json",
+    "full_frozen_manifest": "NOT RUN: no endpoint or all-row closure established"
+  },
+  "lean_attempts": 100,
+  "lean_budget": 100,
+  "kani_attempts": 0,
+  "kani_budget": 0,
+  "used_envj_ids": [
+    54900,
+    54901,
+    54902,
+    54903,
+    54904,
+    54905,
+    54906,
+    54907,
+    54908,
+    54909,
+    54910,
+    54911,
+    54912,
+    54913,
+    54914,
+    54915,
+    54916,
+    54917,
+    54918,
+    54919,
+    54920,
+    54921,
+    54922,
+    54923,
+    54924,
+    54925,
+    54926,
+    54927,
+    54928,
+    54929,
+    54930,
+    54931,
+    54932,
+    54933,
+    54934,
+    54935,
+    54936,
+    54937,
+    54938,
+    54939,
+    54940,
+    54941,
+    54942,
+    54943,
+    54944,
+    54945,
+    54946,
+    54947,
+    54948,
+    54949,
+    54950,
+    54951,
+    54952,
+    54953,
+    54954,
+    54955,
+    54956,
+    54957,
+    54958,
+    54959,
+    54960,
+    54961,
+    54962,
+    54963,
+    54964,
+    54965,
+    54966,
+    54967,
+    54968,
+    54969,
+    54970,
+    54971,
+    54972,
+    54973,
+    54974,
+    54975,
+    54976,
+    54977,
+    54978,
+    54979,
+    54980,
+    54981,
+    54982,
+    54983,
+    54984,
+    54985,
+    54986,
+    54987,
+    54988,
+    54989,
+    54990,
+    54991,
+    54992,
+    54993,
+    54994,
+    54995,
+    54996,
+    54997,
+    54998,
+    54999,
+    53326,
+    53327,
+    53328,
+    53597,
+    53598,
+    53599
+  ],
+  "next_unused_regular_id": 53329,
+  "uncharged": [
+    {
+      "id": 54903,
+      "module": "R1Z/PV_B2_Sampler",
+      "classification": "preflight setup failure",
+      "evidence": [
+        "54903-preflight-error.txt"
+      ]
+    },
+    {
+      "id": 54905,
+      "module": "R1Z/PV_B2_Division",
+      "classification": "preflight setup failure",
+      "evidence": [
+        "54905-preflight-error.txt"
+      ]
+    },
+    {
+      "id": 54921,
+      "module": "R1Z/PV_B2_ByteBits",
+      "classification": "host admission refusal",
+      "evidence": [
+        "54921-reservation.log",
+        "54921-source.lean.txt",
+        "54921-submission.json",
+        "54921-launcher.log"
+      ]
+    },
+    {
+      "id": 54925,
+      "module": "R1Z/PV_B2_Decode",
+      "classification": "host admission refusal",
+      "evidence": [
+        "54925-launcher.log",
+        "54925-submission.json",
+        "54925-reservation.log",
+        "54925-source.lean.txt"
+      ]
+    },
+    {
+      "id": 54928,
+      "module": "R1Z/PV_B2_ReleaseCheck",
+      "classification": "host admission refusal",
+      "evidence": [
+        "54928-source.lean.txt",
+        "54928-reservation.log",
+        "54928-launcher.log",
+        "54928-submission.json"
+      ]
+    },
+    {
+      "id": 54999,
+      "module": "R1Z/PV_B2_SamplerHelpers",
+      "classification": "host admission refusal",
+      "evidence": [
+        "54999-reservation.log",
+        "54999-source.lean.txt",
+        "54999-launcher.log",
+        "54999-submission.json"
+      ]
+    }
+  ],
+  "compile_exits": {
+    "passed": 77,
+    "failed": 23,
+    "formal_accepted": 76,
+    "nonstandard_successes_rejected": [
+      54918
+    ]
+  },
+  "lean_receipts": "LEAN-RECEIPTS.json",
   "premises": {
     "removed": [],
     "retained": [
@@ -364,9 +2413,36 @@
       "observation"
     ]
   },
-  "candidate_obligations": "Each redirected copy needs complete Result, arbitrary-input observable/error equivalence, source/row bridge and native effect/side-channel binding; none discharged",
-  "target": "not yet established",
-  "next_deliverable": "Lead review of the timing stop and per-function costs; a revised authorized candidate must pass all three ELF pins and the same pre-check before extraction/proofs resume",
-  "keys": "retained securely; no transactions or cleanup",
-  "cache": "Pre-existing host compilation caches reused; no private target directory, Lean objects, or local target directory created"
+  "native_obligations": "allocation/OS-failure witness independence, complete source/copy effect association, L1/L2/L3 and all existing endpoint/deployment conditions retained; no addition to T",
+  "keys": "all task/SBF keys and fixture ledgers retained; no transactions, refunds or key cleanup",
+  "shared_envj": "read-only shared objects through private links; no shared source or object written",
+  "next_deliverable": "factor the constructor proof at fixed factor-row boundaries; close gamma rank/original sampler association; remove the materialize dependency Drop and raw loan-collapse barriers without changing the pinned extractor; prove all arbitrary-input original/copy/row bridges, then fixture-byte gate and release/adoption audit",
+  "cache_cleanup": {
+    "utc": 1793118824.4947877,
+    "paths": [
+      {
+        "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/charon-target",
+        "files_including_private_object_links": 822,
+        "suspected_key_paths": [],
+        "action": "removed key-free compiled scratch"
+      },
+      {
+        "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects",
+        "files_including_private_object_links": 3018,
+        "suspected_key_paths": [],
+        "action": "removed key-free compiled scratch"
+      }
+    ],
+    "object_manifest": "OUTPUT-OBJECT-PINS.json",
+    "keys": "all original task/SBF keys, source, fixtures and nonce ledgers retained; no key file removed or moved",
+    "shared_caches": "untouched",
+    "print_axioms": "N/A: file hygiene, no build"
+  },
+  "native_scope_receipts": "NATIVE-SCOPE-RECEIPTS.json",
+  "historical_final": "FINAL-before-D296-resume.json",
+  "key_retention_after_resume": "key-retention-after-resume.json",
+  "output_object_pins": "OUTPUT-OBJECT-PINS.json",
+  "final_source_checks": "ACCEPTED-CHECK.json",
+  "admissions": "candidate/lean-*/reservation.json and admission-barrier.json; all100 charged admitted",
+  "audit_current_modules": 76
 }
