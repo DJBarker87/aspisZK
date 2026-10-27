@@ -1,0 +1,27 @@
+import FJk_CopyDescriptor
+import CopyLinkWeightExact
+set_option autoImplicit false
+namespace AspisR1.FJk_CopyWeightTransport
+open Aeneas Aeneas.Std Result FIq_Native
+open pool_v1.pair_forest_copy_terminal
+def endpoint (e : CompiledPoolV1PairForestEndpoint) :
+    AspisR1CopyEndpointCandidate.pool_v1.pair_forest_copy_terminal.CompiledPoolV1PairForestEndpoint :=
+  ⟨e.row,e.slot,e.pattern⟩
+def link (l : CompiledPoolV1PairForestLink) : CopyLinkWeightExact.Raw :=
+  ⟨l.tag,l.weight_kind,l.weight_level,endpoint l.producer,endpoint l.consumer⟩
+def variant : PoolV1PairForestCompiledVariantV1 → CopyLinkWeightExact.Variant
+  | .PrivateTransfer => .PrivateTransfer
+  | .Withdrawal => .Withdrawal
+/-- Both bodies are joined only at this scalar helper, on actual descriptor fields. -/
+theorem source (l : CompiledPoolV1PairForestLink) (index : U64)
+    (v : PoolV1PairForestCompiledVariantV1) :
+    link_weight l index v=CopyLinkWeightExact.weightFn (link l) index (variant v) := by
+  cases v <;>
+    simp only [link_weight,CopyLinkWeightExact.weightFn,
+      AspisR1CopyLinkWeightCandidate.pool_v1.pair_forest_copy_terminal.link_weight,
+      link,variant,
+      PoolV1PairForestCompiledVariantV1.Insts.CoreCmpPartialEqPoolV1PairForestCompiledVariantV1.eq,
+      AspisR1CopyLinkWeightCandidate.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.Insts.CoreCmpPartialEqPoolV1PairForestCompiledVariantV1.eq,
+      FIq_Native.field.M31.ONE,AspisR1CopyLinkWeightCandidate.field.M31.ONE]
+#print axioms source
+end AspisR1.FJk_CopyWeightTransport

@@ -1,0 +1,85 @@
+FJk_CopyStep.lean:36:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIw_CopyEndpoint.modelEndpoint l.producer ⋯ ⋯ ⋯
+in the target expression
+  canonical cv' ∧
+    canonical cw' ∧
+      (decoded cv', decoded cw') =
+        R0P.copyAccumulateEndpoint (decoded cv) (decoded cw) (FIw_CopyEndpoint.modelEndpoint l.consumer ⋯ ⋯ ⋯) (↑l.tag)
+          (↑↑weight) (decoded patterns) (FIw_CopyEndpoint.modelSelectors s)
+
+pv pw cv cw pv' pw' cv' cw' : Std.Array field.QM31 2#usize
+l : CompiledPoolV1PairForestLink
+index : U64
+v : PoolV1PairForestCompiledVariantV1
+patterns : Std.Array field.QM31 14#usize
+s : Selectors
+weight : U32
+hpv : canonical pv
+hpw : canonical pw
+hcv : canonical cv
+hcw : canonical cw
+hp : canonical patterns
+hh : canonical s.high
+hl : canonical s.low
+hg : JGa_LinkBounds.Good l
+rwgt : link_weight l index v = ok weight
+rp : accumulate_endpoint pv pw l.producer l.tag weight patterns s = ok (pv', pw')
+rc : accumulate_endpoint cv cw l.consumer l.tag weight patterns s = ok (cv', cw')
+weightV :
+  ↑↑weight = R0P.copyLinkWeight (FJk_CopyDescriptor.link l) (↑index) (FJk_CopyDescriptor.variant v) ∧ ↑weight ≤ 1
+p :
+  canonical pv' ∧
+    canonical pw' ∧
+      (decoded pv', decoded pw') =
+        R0P.copyAccumulateEndpoint (decoded pv) (decoded pw) (FJk_CopyDescriptor.endpoint l.producer) (↑l.tag)
+          (↑↑weight) (decoded patterns) (FIw_CopyEndpoint.modelSelectors s)
+c :
+  canonical cv' ∧
+    canonical cw' ∧
+      (decoded cv', decoded cw') =
+        R0P.copyAccumulateEndpoint (decoded cv) (decoded cw) (FIw_CopyEndpoint.modelEndpoint l.consumer ⋯ ⋯ ⋯) (↑l.tag)
+          (↑↑weight) (decoded patterns) (FIw_CopyEndpoint.modelSelectors s)
+⊢ { producerValues := decoded pv', producerWeights := decoded pw', consumerValues := decoded cv',
+      consumerWeights := decoded cw' } =
+    have w :=
+      R0P.copyLinkWeight
+        { tag := ↑l.tag, weightKind := ⟨↑l.weight_kind % 5, ⋯⟩, weightLevel := ↑l.weight_level,
+          producer := FJk_CopyDescriptor.endpoint l.producer, consumer := FJk_CopyDescriptor.endpoint l.consumer }
+        (↑index) (FJk_CopyDescriptor.variant v);
+    have p :=
+      R0P.copyAccumulateEndpoint
+        { producerValues := decoded pv, producerWeights := decoded pw, consumerValues := decoded cv,
+            consumerWeights := decoded cw }.producerValues
+        { producerValues := decoded pv, producerWeights := decoded pw, consumerValues := decoded cv,
+            consumerWeights := decoded cw }.producerWeights
+        { tag := ↑l.tag, weightKind := ⟨↑l.weight_kind % 5, ⋯⟩, weightLevel := ↑l.weight_level,
+            producer := FJk_CopyDescriptor.endpoint l.producer,
+            consumer := FJk_CopyDescriptor.endpoint l.consumer }.producer
+        { tag := ↑l.tag, weightKind := ⟨↑l.weight_kind % 5, ⋯⟩, weightLevel := ↑l.weight_level,
+            producer := FJk_CopyDescriptor.endpoint l.producer, consumer := FJk_CopyDescriptor.endpoint l.consumer }.tag
+        w (decoded patterns) (FIw_CopyEndpoint.modelSelectors s);
+    have c :=
+      R0P.copyAccumulateEndpoint
+        { producerValues := decoded pv, producerWeights := decoded pw, consumerValues := decoded cv,
+            consumerWeights := decoded cw }.consumerValues
+        { producerValues := decoded pv, producerWeights := decoded pw, consumerValues := decoded cv,
+            consumerWeights := decoded cw }.consumerWeights
+        { tag := ↑l.tag, weightKind := ⟨↑l.weight_kind % 5, ⋯⟩, weightLevel := ↑l.weight_level,
+            producer := FJk_CopyDescriptor.endpoint l.producer,
+            consumer := FJk_CopyDescriptor.endpoint l.consumer }.consumer
+        { tag := ↑l.tag, weightKind := ⟨↑l.weight_kind % 5, ⋯⟩, weightLevel := ↑l.weight_level,
+            producer := FJk_CopyDescriptor.endpoint l.producer, consumer := FJk_CopyDescriptor.endpoint l.consumer }.tag
+        w (decoded patterns) (FIw_CopyEndpoint.modelSelectors s);
+    { producerValues := p.1, producerWeights := p.2, consumerValues := c.1, consumerWeights := c.2 }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJk_CopyStep.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
