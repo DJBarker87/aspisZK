@@ -26,8 +26,9 @@ records the adopted aggregate of exactly entropy_law, entropy_kernel, observatio
 (with entropy_law overlapping V329). V371 is the explicitly retained L3 hardware
 trust exception pending DOITM. Former native T rows become P, retaining their
 unproved residuals; they are not silently admitted as extra TrustItems fields.
-Classical ROM/P1 (V391) is a C experiment/model boundary, not a new OS trust field
-or a claim of a computational SHA proof. REDUCED still means unresolved, not
+Classical ROM/P1 (V391) is a P model-instantiation/association obligation with
+its ideal-oracle scope retained, not a fourth OS trust field or a computational
+SHA proof. C retains its original contradictory/vacuity-suspect meaning. REDUCED still means unresolved, not
 proved. T row counts must not be read as counts of independent trust fields.
 V400 becomes P: option B is adopted, reached-failure witness independence is not.
 

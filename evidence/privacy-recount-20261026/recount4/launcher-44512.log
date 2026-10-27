@@ -1,0 +1,66 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0904); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.publicCorr : ∀ (i : I)
+      (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic records.p)
+          (R1J.SpendWitnessMap.mapPub
+            (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.admission : ∀ (i : I)
+      (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R1Z.BuilderSpendRelation.RspendPlus
+          (R1J.SpendWitnessMap.mapPub
+            (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+          (R1Z.BuilderCanonical.liftWitness
+            (R1Z.BuilderRecordCanonical.witness (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w)))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j
+constructor:
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.mk {K : Type} [Field K] [CharP K 2147483647]
+    [R1Z.BuilderForestAdmissionPort.ExternalLinear] [R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+    {inputs : I → R1Z.PV_Src_NativeInput.Input} {transport : Fin 1024 ≃ Fin 1024}
+    (compile_call :
+      ∀ (i : I),
+        R1Z.PV_Src_NativeInput.run (inputs i) =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (inputs i).compiled))
+    (words :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R0Z.WriterRefine.WitnessOk (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w))
+    (publicCorr :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic records.p)
+            (R1J.SpendWitnessMap.mapPub
+              (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i)))))
+    (admission :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R1Z.BuilderSpendRelation.RspendPlus
+            (R1J.SpendWitnessMap.mapPub
+              (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+            (R1Z.BuilderCanonical.liftWitness
+              (R1Z.BuilderRecordCanonical.witness (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w))))
+    (row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j) :
+    R1Z.PV_Src_NativeIdentification.PV_Src_Premises inputs transport
+'R1Z.PV_Src_NativeIdentification.PV_Src_Premises' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_Src_NativeIdentification.prover {K : Type} [Field K] [CharP K 2147483647] {I : Type}
+  (inputs : I → R1Z.PV_Src_NativeInput.Input) (transport : Fin 1024 ≃ Fin 1024) : R0Z.ZkStatement.HonestProver K
+def R1Z.PV_Src_NativeIdentification.prover : {K : Type} →
+  [inst : Field K] →
+    [CharP K 2147483647] →
+      {I : Type} → (I → R1Z.PV_Src_NativeInput.Input) → Fin 1024 ≃ Fin 1024 → R0Z.ZkStatement.HonestProver K :=
+fun {K} [Field K] [CharP K 2147483647] {I} inputs transport =>
+  { Instance := I, transport := transport,
+    «public» := fun i =>
+      R1J.SpendWitnessMap.mapPub
+        (R1Z.BuilderPublicProjection.semanticPublic
+          (R1Z.PV_Src_Public.output (R1Z.PV_Src_NativeInput.publicInput (inputs i)))),
+    build := fun i => R1Z.PV_Src_NativeInput.columns R1Z.PV_Src_Forest_Columns.read (inputs i).compiled.semantic_c1.c1 }
+'R1Z.PV_Src_NativeIdentification.prover' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.57
+	Maximum resident set size (kbytes): 4088064
+	Swaps: 0
+	Exit status: 0

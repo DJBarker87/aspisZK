@@ -1,0 +1,7 @@
+# Smaller complete P6 gate
+
+The owned reference's actual Rust signature takes an explicit `[Digest;21] empty` argument. A new pair of harnesses compares the entire shipped `(RW,RP)` result with that exact owned reference at the independently pinned `POOL_V1_PAIR_EMPTY_ROOTS_V1` input. All witness/public fields are compared. No helper is stubbed, and the shipped function still executes its complete pair_empty_roots computation, including its final unused cell.
+
+This avoids executing pair_empty_roots twice. The empty input is fixed before either record result; it is not selected from the shipped output to force equality. The table is the existing frozen source constant, with historical 21/21 single-parent source-cell receipts. Those predecessor receipts justify the finite aggregation but do not replace the new full gate.
+
+If successful, this is a P6 source association with the extracted owned reference at that table, including the shipped first20 root words via `RP.empty`; it is not a Lean theorem. The Lean installed reference may compute the common source helper symbolically. Any transport from this fixed-table check to a dynamic-helper wrapper must be explicitly recorded as P6 composition using the checked source helper/table association and purity, not asserted as a new Lean equality or silently hidden in R_shipped. The all-field check must succeed first. No equality, source adoption, compiler result, or public binding is currently credited.

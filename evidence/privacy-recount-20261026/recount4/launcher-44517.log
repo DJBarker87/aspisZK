@@ -1,0 +1,66 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0905); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver
+                          8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                          (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input).transport
+                            R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                          (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode).IdealRand →
+                      ℚ :=
+fun {CommitHandle Aux} template outputs x rust observer_program {E} failure signal adv =>
+  match (motive :=
+    Option E →
+      (R1Z.ProverCommitReencode16.experiment
+            (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+            (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs x
+                (R1Z.PrivacyR1AcctModel.seed
+                  (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs
+                      x).toWire
+                  R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib R1Z.PhaseWireLog2Bin.opens)).toProver
+            8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+            (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input).transport
+              R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+            (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode).IdealRand →
+        ℚ)
+    signal with
+  | none =>
+    R0Z.HvzkS.idealTestS
+      (R1Z.ProverCommitReencode16.experiment
+        (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+        (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs x
+            (R1Z.PrivacyR1AcctModel.seed
+              (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                  (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs
+                  x).toWire
+              R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib R1Z.PhaseWireLog2Bin.opens)).toProver
+        8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+        (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input).transport
+          R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+        (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode)
+      (R1Z.RomObserverBin.observerMap rust observer_program adv) x
+      (R0Z.RefPayload.simE (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input).transport
+        R1Z.PrivacyR1AcctBasis.basis outputs x)
+  | some e => fun x => R0Z.FsStatement.bit (rust.observe adv (failure e adv))
+'R1Z.PV_OptB_Endpoint.idealTestSB' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.96
+	Maximum resident set size (kbytes): 4209024
+	Swaps: 0
+	Exit status: 0

@@ -3,8 +3,9 @@ import subprocess,json,re,hashlib
 P=Path(__file__).resolve().parent
 refs={'research':'research','rw':'codex/cx-prover-rw-20261023','cb':'codex/pv-cb-20261026','cb3':'codex/pv-cb3-20261026','cbmid':'codex/pv-cbmid-20261027','cblib':'codex/pv-cblib-20261027','extract':'codex/pv-extract-20261027','op223':'codex/pv-op223-20261027','join':'codex/pv-join-20261026','runjoin':'codex/pv-runjoin-20261026','optb':'codex/pv-optb-20261027'}
 def git(*args):return subprocess.check_output(['git',*args])
-pins={k:git('rev-parse',r).decode().strip() for k,r in refs.items()}
-(P/'pins.json').write_text(json.dumps({'branches':refs,'revisions':pins,'worktree_base':git('rev-parse','HEAD').decode().strip(),'cblib2':'no separate branch; continuation is on cblib, RESUME.md and OPS.md audited'},indent=2)+'\n')
+existing=json.loads((P/'pins.json').read_text()) if (P/'pins.json').exists() else None
+pins=existing['revisions'] if existing else {k:git('rev-parse',r).decode().strip() for k,r in refs.items()}
+if not existing:(P/'pins.json').write_text(json.dumps({'branches':refs,'revisions':pins,'worktree_base':git('rev-parse','HEAD').decode().strip(),'cblib2':'no separate branch; continuation is on cblib, RESUME.md and OPS.md audited'},indent=2)+'\n')
 manifest=[];trees={}
 for k,rev in pins.items():
  trees[k]={}

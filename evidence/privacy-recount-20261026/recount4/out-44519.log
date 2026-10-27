@@ -1,0 +1,49 @@
+R1Z.PV_Join_Wire_Caller.refinement_of_data (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  {S : Type} (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+  (pub : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (v : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (binding digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool)
+  (reservation : store.reserve s digest attempt.mask_nonce = Aeneas.Std.Result.ok (accepted, after))
+  (model :
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwFull.prover.MaskedFixtureAudit)
+        ProverRwFull.verifier.Error)) :
+  R1Z.ProverRwBodyDataCriterion.data
+        (R1Z.ProverRwBodyNativeWideInstall.execute (R1Z.PV_Join_Wire_Selection.selected base ops) store pub compiled v
+          hash binding digest attempt s) =
+      model →
+    R1Z.ProverRwBodyNativeWideInstall.execute (R1Z.PV_Join_Wire_Selection.selected base ops) store pub compiled v hash
+        binding digest attempt s =
+      R1Z.ProverRwBodyCandidateData.withState after model
+theorem R1Z.PV_Join_Wire_Caller.refinement_of_data : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns) {S : Type}
+  (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+  (pub : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (v : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (binding digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool),
+  store.reserve s digest attempt.mask_nonce = Aeneas.Std.Result.ok (accepted, after) →
+    ∀
+      (model :
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwFull.prover.MaskedFixtureAudit)
+            ProverRwFull.verifier.Error)),
+      R1Z.ProverRwBodyDataCriterion.data
+            (R1Z.ProverRwBodyNativeWideInstall.execute (R1Z.PV_Join_Wire_Selection.selected base ops) store pub compiled
+              v hash binding digest attempt s) =
+          model →
+        R1Z.ProverRwBodyNativeWideInstall.execute (R1Z.PV_Join_Wire_Selection.selected base ops) store pub compiled v
+            hash binding digest attempt s =
+          R1Z.ProverRwBodyCandidateData.withState after model :=
+⋯
+'R1Z.PV_Join_Wire_Caller.refinement_of_data' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
