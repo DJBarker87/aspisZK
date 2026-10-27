@@ -1,0 +1,19 @@
+def Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+def Aeneas.Std.Usize.wrapping_shr : Usize → U32 → Usize :=
+fun x s => UScalar.wrapping_shr x s
+def Aeneas.Std.Usize.wrapping_add : Usize → Usize → Usize :=
+fun x y => UScalar.wrapping_add x y
+theorem Aeneas.Std.UScalar.cast_val_eq : ∀ {src_ty : UScalarTy} (tgt_ty : UScalarTy) (x : UScalar src_ty),
+  ↑(UScalar.cast tgt_ty x) = ↑x % 2 ^ tgt_ty.numBits :=
+fun {src_ty} tgt_ty x =>
+  id
+    (of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (Eq.trans (BitVec.toNat_setWidth tgt_ty.numBits x.bv)
+              (congrFun' (congrArg HMod.hMod (UScalar.bv_toNat x)) (2 ^ tgt_ty.numBits))))
+          (congrFun' (congrArg HMod.hMod (UScalar.bv_toNat x)) (2 ^ tgt_ty.numBits)))
+        (eq_self (↑x % 2 ^ tgt_ty.numBits))))
+'PV_B3_MaskSparseScalar.block_value' depends on axioms: [propext, Classical.choice, Quot.sound]
