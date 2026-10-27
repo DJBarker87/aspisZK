@@ -1,0 +1,54 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -44,3 +44,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] mod LPf_replay;
+--- /dev/null
++++ b/crates/aspis-core/src/field/LPf_contracts.rs
+@@ -0,0 +1,11 @@
++use super::*;
++pub(super) fn LPf_reduce_ref(n:u64)->u32 {
++ let b=2147483648u64;
++ let n=n%b+n/b; let n=n%b+n/b;
++ if n>=u64::from(P){(n-u64::from(P)) as u32}else{n as u32}
++}
++#[kani::proof_for_contract(reduce_u64)]
++fn LPf_reduce_contract(){let n:u64=kani::any();let _=reduce_u64(n);}
++#[kani::proof_for_contract(M31::mul)]
++#[kani::stub_verified(reduce_u64)]
++fn LPf_mul_contract(){let a=M31(kani::any());let b=M31(kani::any());let _=a.mul(b);}
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -28,6 +28,7 @@
+ pub const M31_QUARTER: M31 = M31(0x2000_0000);
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::ensures(|r: &u32| *r == LPf_contracts::LPf_reduce_ref(x) && *r < P))]
+ fn reduce_u64(x: u64) -> u32 {
+     // reference_canonical: two mask/shift folds bring any u64 to at most
+     // P+3, then one conditional subtract canonicalizes. Supporting the full
+@@ -130,6 +131,7 @@
+     }
+ 
+     #[inline(always)]
++    #[cfg_attr(kani, kani::ensures(|r: &M31| r.0 == LPf_contracts::LPf_reduce_ref(self.0 as u64 * rhs.0 as u64) && r.0 < P))]
+     pub fn mul(self, rhs: M31) -> M31 {
+         #[cfg(feature = "r0-op-count")]
+         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FMul);
+@@ -3266,3 +3268,5 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)] #[path="field/LPf_contracts.rs"] mod LPf_contracts;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPf_replay.rs
+@@ -0,0 +1 @@
++// LPf caller stages added after verified contracts.
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPf_verifier.rs
+@@ -0,0 +1 @@
++// LPf checkpoint stages.

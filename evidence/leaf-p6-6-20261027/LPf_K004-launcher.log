@@ -1,0 +1,55 @@
+{"attempt": "LPf_K004", "exit_status": 0, "wall_seconds": 4.882855003001168, "peak_rss_kib": "570584", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt
+...
+s/aspis-core/src/merkle.rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `LPf_contracts` should have a snake case name
+    --> crates/aspis-core/src/field.rs:3272:51
+     |
+3272 | #[cfg(kani)] #[path="field/LPf_contracts.rs"] mod LPf_contracts;
+     |                                                   ^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_contracts`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `LPf_reduce_ref` should have a snake case name
+ --> crates/aspis-core/src/field/LPf_contracts.rs:2:15
+  |
+2 | pub(super) fn LPf_reduce_ref(n:u64)->u32 {
+  |               ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_reduce_ref`
+
+warning: function `LPf_reduce_contract` should have a snake case name
+ --> crates/aspis-core/src/field/LPf_contracts.rs:8:4
+  |
+8 | fn LPf_reduce_contract(){let n:u64=kani::any();let _=reduce_u64(n);}
+  |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_reduce_contract`
+
+warning: function `LPf_mul_contract` should have a snake case name
+  --> crates/aspis-core/src/field/LPf_contracts.rs:11:4
+   |
+11 | fn LPf_mul_contract(){let a=M31(kani::any());let b=M31(kani::any());let _=a.mul(b);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_mul_contract`
+
+    Finished `dev` profile [optimized] target(s) in 4.31s
+Checking harness field::LPf_contracts::LPf_reduce_contract...
+
+VERIFICATION RESULT:
+ ** 0 of 68 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.10685486s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r2a34fda604974706b7a1dc3d546a73fa.scope; invocation ID: adccefbe725e412a8691c0034a5948cf
