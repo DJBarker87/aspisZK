@@ -1,0 +1,84 @@
+@[irreducible] def Aeneas.Std.UScalar.max : UScalarTy → ℕ :=
+wrapped✝.1
+@[irreducible] def Aeneas.Std.Usize.max : ℕ :=
+wrapped✝.1
+theorem Aeneas.Std.Usize.cMax_bound_concrete : 4294967295 ≤ Usize.max ∧ Usize.max + 1 = 2 ^ System.Platform.numBits :=
+Usize.cMax_bound_concrete._proof_1_1
+theorem Aeneas.Std.UScalar.mul_spec : ∀ {ty : UScalarTy} {x y : UScalar ty},
+  ↑x * ↑y ≤ UScalar.max ty → x * y ⦃ z => ↑z = ↑x * ↑y ⦄ :=
+fun {ty} {x y} hmax => WP.spec_mono (UScalar.mul_bv_spec hmax) UScalar.mul_spec._proof_1_1
+theorem Aeneas.Std.UScalar.add_spec : ∀ {ty : UScalarTy} {x y : UScalar ty},
+  ↑x + ↑y ≤ UScalar.max ty → x + y ⦃ z => ↑z = ↑x + ↑y ⦄ :=
+fun {ty} {x y} hmax =>
+  have h := UScalar.add_equiv x y;
+  Aeneas.Std.UScalar.add_equiv.match_1.splitter✝
+    (fun x_1 =>
+      x + y = x_1 →
+        (match x + y with
+          | Result.ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+          | Result.fail e => ¬UScalar.inBounds ty (↑x + ↑y)
+          | x => ⊥) →
+          x + y ⦃ z => ↑z = ↑x + ↑y ⦄)
+    (x + y)
+    (fun z h =>
+      Eq.ndrec (motive := fun x_1 =>
+        x + y = x_1 →
+          (match x_1 with
+            | Result.ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+            | Result.fail e => ¬UScalar.inBounds ty (↑x + ↑y)
+            | x => ⊥) →
+            x + y ⦃ z => ↑z = ↑x + ↑y ⦄)
+        (fun heq =>
+          id fun h =>
+            of_eq_true
+              (Eq.trans (Eq.trans (congrFun' (congrArg WP.spec heq) fun z => ↑z = ↑x + ↑y) (WP.spec_ok._simp_1 z))
+                (Eq.trans (Eq.trans (congrFun' (congrArg Eq h.2.1) (↑x + ↑y)) Nat.add_left_cancel_iff._simp_1)
+                  (eq_self ↑y))))
+        (Eq.symm h) (Eq.refl (x + y)))
+    (fun e h =>
+      Eq.ndrec (motive := fun x_1 =>
+        x + y = x_1 →
+          (match x_1 with
+            | Result.ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+            | Result.fail e => ¬UScalar.inBounds ty (↑x + ↑y)
+            | x => ⊥) →
+            x + y ⦃ z => ↑z = ↑x + ↑y ⦄)
+        (fun heq =>
+          id fun h =>
+            Eq.mpr (id (Eq.trans (congrFun' (congrArg WP.spec heq) fun z => ↑z = ↑x + ↑y) (WP.spec_fail._simp_1 e)))
+              (have this :=
+                of_eq_true
+                  (pow_pos._simp_1 (of_eq_true (Eq.trans Order.lt_two_iff._simp_1 zero_le._simp_1)) ty.numBits);
+              UScalar.add_spec._proof_1_2 (Eq.mp (congrArg (LE.le (↑x + ↑y)) (UScalar.max_def ty)) hmax)
+                (Eq.mp not_lt._simp_1 h) this))
+        (Eq.symm h) (Eq.refl (x + y)))
+    (fun x_1 x_2 x_3 h =>
+      Eq.ndrec (motive := fun x_4 =>
+        (∀ (z : UScalar ty), x_4 = Result.ok z → False) →
+          (∀ (e : Error), x_4 = Result.fail e → False) →
+            (match x + y with
+              | Result.ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+              | Result.fail e => ¬UScalar.inBounds ty (↑x + ↑y)
+              | x => ⊥) →
+              x + y ⦃ z => ↑z = ↑x + ↑y ⦄)
+        (fun x_4 x_5 =>
+          Eq.ndrec (motive := fun x_6 =>
+            (∀ (z : UScalar ty), x_6 = Result.ok z → False) →
+              (∀ (e : Error), x_6 = Result.fail e → False) →
+                (match x_6 with
+                  | Result.ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+                  | Result.fail e => ¬UScalar.inBounds ty (↑x + ↑y)
+                  | x => ⊥) →
+                  x + y ⦃ z => ↑z = ↑x + ↑y ⦄)
+            (fun x_6 x_7 =>
+              Eq.mpr
+                (id
+                  (implies_congr
+                    (Aeneas.Std.UScalar.add_equiv.match_1.eq_3✝ (fun x => Prop) (x + y)
+                      (fun z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv)
+                      (fun e => ¬UScalar.inBounds ty (↑x + ↑y)) (fun x => ⊥) x_6 x_7)
+                    (Eq.refl (x + y ⦃ z => ↑z = ↑x + ↑y ⦄))))
+                fun h => False.elim h)
+            (Eq.refl (x + y)) x_4 x_5)
+        h x_2 x_3)
+    (Eq.refl (x + y)) h

@@ -1,0 +1,83 @@
+FJh_ProjectedAfter.lean:44:13: error(lean.unknownIdentifier): Unknown identifier `FIv_NativeValue.sub`
+FJh_ProjectedAfter.lean:36:87: error: unsolved goals
+target internal theta : NQ
+lead full : Packed
+w : FJe_Sum3BridgeBase.Right
+p : Std.Array NP 3#usize
+block : NP
+g : Usize
+hg : ↑g < ↑4#usize
+out : NQ
+ct : Canon target
+ci : Canon internal
+cb : Canon theta
+cl : canonical lead
+cf : canonical full
+cw : canonical w
+hp : ∀ (i : Fin 3), PreparedFor (prepared (FJe_Sum3Value.cell p i)) (qm (FJe_Sum3Value.cell w i))
+hb : PreparedFor (prepared block) (qm theta)
+run✝⁵ :
+  (do
+      let l ← Array.index_usize lead g
+      let dl ← field.QM31.sub target l
+      let f ← Array.index_usize full g
+      let df ← field.QM31.sub target f
+      let di ← field.QM31.sub target internal
+      let sum ← field.qm31_sum_products3_prepared p (Array.make 3#usize [dl, df, di] ⋯)
+      field.PreparedQm31Multiplier.mul block sum) =
+    ok out
+l : NQ
+rl : Array.index_usize lead g = ok l
+run✝⁴ :
+  (do
+      let dl ← field.QM31.sub target l
+      let f ← Array.index_usize full g
+      let df ← field.QM31.sub target f
+      let di ← field.QM31.sub target internal
+      let sum ← field.qm31_sum_products3_prepared p (Array.make 3#usize [dl, df, di] ⋯)
+      field.PreparedQm31Multiplier.mul block sum) =
+    ok out
+dl : field.QM31
+rdl : field.QM31.sub target l = ok dl
+run✝³ :
+  (do
+      let f ← Array.index_usize full g
+      let df ← field.QM31.sub target f
+      let di ← field.QM31.sub target internal
+      let sum ← field.qm31_sum_products3_prepared p (Array.make 3#usize [dl, df, di] ⋯)
+      field.PreparedQm31Multiplier.mul block sum) =
+    ok out
+f : NQ
+rf : Array.index_usize full g = ok f
+run✝² :
+  (do
+      let df ← field.QM31.sub target f
+      let di ← field.QM31.sub target internal
+      let sum ← field.qm31_sum_products3_prepared p (Array.make 3#usize [dl, df, di] ⋯)
+      field.PreparedQm31Multiplier.mul block sum) =
+    ok out
+df : field.QM31
+rdf : field.QM31.sub target f = ok df
+run✝¹ :
+  (do
+      let di ← field.QM31.sub target internal
+      let sum ← field.qm31_sum_products3_prepared p (Array.make 3#usize [dl, df, di] ⋯)
+      field.PreparedQm31Multiplier.mul block sum) =
+    ok out
+di : field.QM31
+rdi : field.QM31.sub target internal = ok di
+run✝ :
+  (do
+      let sum ← field.qm31_sum_products3_prepared p (Array.make 3#usize [dl, df, di] ⋯)
+      field.PreparedQm31Multiplier.mul block sum) =
+    ok out
+sum : field.QM31
+rs : field.qm31_sum_products3_prepared p (Array.make 3#usize [dl, df, di] ⋯) = ok sum
+run : field.PreparedQm31Multiplier.mul block sum = ok out
+⊢ Canon out ∧
+    decode out =
+      decode theta *
+        (decode (FJe_Sum3Value.cell w ⟨0, ⋯⟩) * (decode target - decoded lead ⟨↑g, hg⟩) +
+            decode (FJe_Sum3Value.cell w ⟨1, ⋯⟩) * (decode target - decoded full ⟨↑g, hg⟩) +
+          decode (FJe_Sum3Value.cell w ⟨2, ⋯⟩) * (decode target - decode internal))
+'AspisR1.FJh_ProjectedAfter.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
