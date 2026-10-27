@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 p=Path('docs/research/v8-r0-zk-20261009/lean/R1Z')
 s='''import R1Z.PV_CBL_ShaPadFixed
 import R1Z.PV_CBL_ArrayReadValue
@@ -19,4 +20,6 @@ for i in range(8):s+=f'  rw [PV_CBL_ArrayReadValue.read suffix {i}#usize (by dec
 
 for i in range(8):s+=f'  rw [PV_CBL_ArrayStep.write _ {56+i}#usize _ (by decide)'+(',bind_tc_ok' if i<7 else '')+']\n'
 s+='  rfl\n#print axioms value\n#print axioms source\nend R1Z.PV_CBL_PadSuffixValue\n'
-(p/'PV_CBL_PadSuffixValue.lean').write_text(s)
+q=p/'PV_CBL_PadSuffixValue.lean'
+if '--check' in sys.argv: assert q.read_text()==s
+else: q.write_text(s)

@@ -58,3 +58,12 @@ This closes the owned-reference content gap, not native loan/callback/Drop
 semantics of V231/V233. Byte codecs extract with no external template;
 source-to-byte-value and sixteen-lane composition are in progress. No SHA-NI
 refinement or shipped change is made. New pass tally: TALLY-resume9.json.
+
+Fourth pass second checkpoint: **7 → 7**, route extraction for supporting
+SHA reference facts. `PV_CBL_ByteWordsSource.source` (52448) proves all sixteen
+big-endian decoder lanes together; `PV_CBL_SoftByteSource.source` (52449)
+composes them with the complete extracted soft block on arbitrary byte block
+and state. No V232 dispatcher or V231–V238 wrapper credit is inferred.
+The last accepted own modules remain below 2.7 million KiB RSS, swap zero.
+Finalization/reference upload is admission-gated; no timed-out arithmetic
+Kani gate, local Lean compile, SHA-NI refinement or production edit ran.
