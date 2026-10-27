@@ -1,0 +1,19 @@
+reservation: populated 15 GiB + 8 GiB; window=0 (London 1539); env=J
+/home/dombarker/project-offloads/codex-pv-d188-20261027/sources/PV_D188_Op72Eval.lean:7:35: error: Tactic `decide` failed for proposition
+  (List.replicate 20 255#u8).length ≤ Usize.max
+because its `Decidable` instance
+  (List.replicate 20 255#u8).length.decLe Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (List.replicate 20 255#u8).length.ble Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.08
+	Maximum resident set size (kbytes): 2617080
+	Swaps: 0
+	Exit status: 1
