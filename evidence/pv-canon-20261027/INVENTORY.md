@@ -44,3 +44,9 @@ uses multiplication/reduction before addition. Thus P_oracle is useful for the
 whole field invariant but is NOT necessary for the op121 coefficient domain if
 this exact current installation is the installed deployed dictionary. The
 installed dictionary association itself remains P_installed.
+
+Workflow correction (before ID 44221): the initial private runner recorded its
+reservation after copying the new proof source. The scopes themselves were
+always reservation/barrier capped. The runner now records admission before
+any source scp, as local-lean rule 7 requires, and retains each attempted source
+snapshot. No shared source was written during the initial runs either.

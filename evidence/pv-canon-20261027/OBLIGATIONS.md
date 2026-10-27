@@ -34,3 +34,13 @@ be included. Domain canonicality alone does not establish this source law.
 Direct extraction's loop/closure obstruction (D251/D257) does not authorize
 changing op121. Route (ii) remains a candidate requiring lead adoption and the
 usual shipped association gates. No source rewrite is made here.
+
+## Current-prefix theorem scope
+
+`PV_Canon_Prefix.op121_arguments` is intended to conclude canonicality from
+exact interpolation, semantic, update and read equations in the extracted
+`host_sumcheck.prove_sumcheck_round`, for the named current selected dictionary.
+It is not by itself a trace-extraction theorem for the whole recursive caller.
+A full reached-call theorem must show every op121 event supplies those four
+equations and round<10, including the recursive entry starting at round zero.
+Any final report must distinguish those two claims.

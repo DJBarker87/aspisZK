@@ -6,6 +6,13 @@ tp=E/'tally.json'; t=json.loads(tp.read_text()) if tp.exists() else dict(lean=0,
 assert t['lean']<100; n=t['next_id']; assert n<=44499
 t['next_id']+=1; t['attempts'].append(dict(id=n,module=m));tp.write_text(json.dumps(t,indent=2)+'\n')
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+(E/f'{n}-source.lean.txt').write_bytes(p.read_bytes())
+precode="from pathlib import Path; import subprocess; O=Path("+repr(D)+")/'preflight'/"+repr(str(n))+"; O.mkdir(parents=True); r=subprocess.run(['python3','/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/reservation.py',str(O/'reservation.json')],stdout=open(O/'reservation.log','w'),stderr=subprocess.STDOUT); print((O/'reservation.log').read_text()); raise SystemExit(r.returncode)"
+pre=subprocess.run(['ssh',H,'python3 -'],input=precode,text=True,capture_output=True)
+(E/f'{n}-pre-scp-reservation.log').write_text(pre.stdout+pre.stderr)
+if pre.returncode:
+ print(pre.stdout+pre.stderr+'UNCHARGED before source copy; wait 180s');raise SystemExit(pre.returncode)
+
 # A private overlay consumes env-J read-only. Existing reservation/barrier/run2 are reused.
 code='''from pathlib import Path
 import subprocess,json,os,hashlib,time,re
