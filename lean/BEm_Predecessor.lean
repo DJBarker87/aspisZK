@@ -1,0 +1,45 @@
+import BEl_AccountComposition
+import BEl_Batch
+import BEl_BatchLoop
+import BEl_BatchStep
+import BEl_BatchTree
+import BEl_CodeCongr
+import BEl_CoordinateLog
+import BEl_FullLog
+import BEl_GateBounds
+import BEl_LawComposition
+import BEl_LeafReference
+import BEl_LocalCut
+import BEl_LogCoordinates
+import BEl_NativeBatchCut
+import BEl_Nonvacuity
+import BEl_OriginalReference
+import BEl_Packet
+import BEl_PartialRecorder
+import BEl_PhysicalCut
+import BEl_PrefixRecorder
+import BEl_RawBackend
+import BEl_ReachedReference
+import BEl_Recorder
+import BEl_RecorderErasure
+import BEl_ReferenceObservation
+import BEl_ReferenceSource
+import BEl_ReturnRecorder
+import BEl_SliceShape
+import BEl_SlotObservation
+import BEl_SourceRecords
+import BEl_Statements
+import BEl_Top
+import BEl_WeakObservation
+set_option autoImplicit false
+set_option pp.all true
+set_option pp.universes true
+set_option pp.proofs false
+#print AspisR1.BEl_PhysicalCut.transfer
+#print AspisR1.BEl_NativeBatchCut.observation
+#print AspisR1.BEl_AccountComposition.conditional
+#print AspisR1.Rc10_Top.deployed
+#print axioms AspisR1.BEl_PhysicalCut.transfer
+#print axioms AspisR1.BEl_NativeBatchCut.observation
+#print axioms AspisR1.BEl_AccountComposition.conditional
+#print axioms AspisR1.Rc10_Top.deployed
