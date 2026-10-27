@@ -1,0 +1,247 @@
+ {
+    use super::*;
+    fn empty_reference<T>(v: &Vec<T>) -> bool { v.len() == 0 }
+    fn pop_reference<T>(v: &mut Vec<T>) -> Option<T> {
+        if v.len() == 0 { None } else { Some(v.remove(v.len() - 1)) }
+    }
+    fn word(seed: [u32; 4], secure: bool, filled: bool) -> Word {
+        if secure {
+            let mut v = Vec::new();
+            if filled { v.push(QM31 { c0: aspis_core::field::CM31 { a: M31(seed[0]), b: M31(seed[1]) }, c1: aspis_core::field::CM31 { a: M31(seed[2]), b: M31(seed[3]) } }); }
+            Word::Secure(v)
+        } else {
+            let mut v = Vec::new();
+            if filled { v.push(M31(seed[0])); }
+            Word::Base(v)
+        }
+    }
+    fn same_word(a: &Word, b: &Word) -> bool {
+        match (a,b) {
+            (Word::Base(x), Word::Base(y)) => x == y,
+            (Word::Secure(x), Word::Secure(y)) => x == y,
+            _ => false,
+        }
+    }
+    fn same_result(a: &Result<Word, Error>, b: &Result<Word, Error>) -> bool {
+        match (a,b) {
+            (Ok(x), Ok(y)) => same_word(x,y),
+            (Err(x), Err(y)) => x == y,
+            _ => false,
+        }
+    }
+    // Every error variant is covered. Error carries no payload.
+    fn error(i: u8) -> Error {
+        match i {
+            0 => Error::IndexOutOfRange, 1 => Error::WrongLength,
+            2 => Error::ZeroDenominator, 3 => Error::Allocation,
+            4 => Error::NonCanonical, 5 => Error::WrongField,
+            6 => Error::InvalidPoints, 7 => Error::QuotientNotInImage,
+            8 => Error::RankDeficient, 9 => Error::Parse,
+            10 => Error::Semantic, 11 => Error::Schedule,
+            12 => Error::Sampler, 13 => Error::Commitment,
+            14 => Error::Authentication, 15 => Error::V1, _ => Error::V2,
+        }
+    }
+    fn paired_vectors() -> (Vec<Result<Word, Error>>, Vec<Result<Word, Error>>) {
+        let n: usize = kani::any(); kani::assume(n <= 2);
+        let mut v = Vec::new(); let mut w = Vec::new();
+        for _ in 0..n {
+            let good: bool = kani::any(); let seed: [u32;4] = kani::any();
+            let secure: bool = kani::any(); let filled: bool = kani::any();
+            let i: u8 = kani::any(); kani::assume(i <= 16);
+            v.push(if good { Ok(word(seed,secure,filled)) } else { Err(error(i)) });
+            w.push(if good { Ok(word(seed,secure,filled)) } else { Err(error(i)) });
+        }
+        (v,w)
+    }
+    fn array_reference(v: &[QM31]) -> Option<[QM31;1024]> {
+        if v.len()!=1024 {return None;}
+        let mut out=[QM31::ZERO;1024];let mut i=0;
+        while i<1024 {out[i]=v[i];i+=1;}
+        Some(out)
+    }
+    fn array_full_reference(v: Vec<QM31>) -> Result<[QM31;1024],Vec<QM31>> {
+        match array_reference(&v) {Some(a)=>Ok(a),None=>Err(v)}
+    }
+    // Safe field-wise reference over the exact private prover element type.
+    fn copy_result_reference(item: &Result<Word,Error>) -> Result<Word,Error> {
+        match item {
+            Ok(Word::Base(values)) => {
+                let mut out=Vec::new();let mut i=0;
+                while i<values.len() {out.push(M31(values[i].0));i+=1;}
+                Ok(Word::Base(out))
+            },
+            Ok(Word::Secure(values)) => {
+                let mut out=Vec::new();let mut i=0;
+                while i<values.len() {
+                    let q=values[i];
+                    out.push(QM31 {c0:aspis_core::field::CM31 {a:M31(q.c0.a.0),b:M31(q.c0.b.0)},
+                                   c1:aspis_core::field::CM31 {a:M31(q.c1.a.0),b:M31(q.c1.b.0)}});
+                    i+=1;
+                }
+                Ok(Word::Secure(out))
+            },
+            Err(e) => Err(*e),
+        }
+    }
+    fn pop_owned_reference(v: &Vec<Result<Word,Error>>) -> (Option<Result<Word,Error>>,Vec<Result<Word,Error>>) {
+        let mut out=Vec::new();let mut last=None;let mut i=0;
+        while i<v.len() {
+            let item=copy_result_reference(&v[i]);
+            if i+1==v.len() {last=Some(item);} else {out.push(item);}
+            i+=1;
+        }
+        (last,out)
+    }
+    fn arbitrary_q() -> QM31 {
+        QM31 {c0:aspis_core::field::CM31 {a:M31(kani::any()),b:M31(kani::any())},
+              c1:aspis_core::field::CM31 {a:M31(kani::any()),b:M31(kani::any())}}
+    }
+    #[kani::proof]
+    #[kani::unwind(1030)]
+    fn op36_exact_qm31() {
+        let success:bool=kani::any();
+        let i:usize=kani::any();
+        if success {
+            let mut input=[QM31::ZERO;1024];
+            for j in 0..1024 {input[j]=arbitrary_q();}
+            let v=Vec::from(input);
+            let reference=array_full_reference(v.clone());
+            let native:Result<[QM31;1024],Vec<QM31>>=v.try_into();
+            match (native,reference) {
+                (Ok(a),Ok(b)) => assert_eq!(a.get(i),b.get(i)),
+                _ => unreachable!(),
+            }
+        } else {
+            let n:usize=kani::any();kani::assume(n<=2);
+            let values=[arbitrary_q(),arbitrary_q()];let mut v=Vec::new();
+            for j in 0..n {v.push(values[j]);}
+            let reference=array_full_reference(v.clone());
+            let native:Result<[QM31;1024],Vec<QM31>>=v.try_into();
+            match (native,reference) {
+                (Err(a),Err(b)) => {
+                    assert_eq!(a.len(),n);
+                    assert_eq!(a.len(),b.len());
+                    assert_eq!(a.get(i),b.get(i));
+                },
+                _ => unreachable!(),
+            }
+        }
+    }
+    #[kani::proof]
+    fn op35_exact_word() {
+        let native = Vec::<Result<Word, Error>>::default();
+        let reference = Vec::<Result<Word, Error>>::new();
+        assert_eq!(native.len(), reference.len());
+        assert_eq!(native.capacity(), reference.capacity());
+        assert_eq!(native.len(), 0);
+    }
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn op34_exact_word() {
+        let (v,_) = paired_vectors();
+        assert_eq!(v.is_empty(), empty_reference(&v));
+    }
+    fn same_result_at(a: &Result<Word,Error>, b: &Result<Word,Error>, lane:usize) {
+        match (a,b) {
+            (Ok(Word::Base(x)),Ok(Word::Base(y))) => {
+                assert_eq!(x.len(),y.len());assert_eq!(x.get(lane),y.get(lane));
+            },
+            (Ok(Word::Secure(x)),Ok(Word::Secure(y))) => {
+                assert_eq!(x.len(),y.len());assert_eq!(x.get(lane),y.get(lane));
+            },
+            (Err(x),Err(y)) => assert_eq!(x,y),
+            _ => unreachable!(),
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn op33_exact_word() {
+        let (mut v,w) = paired_vectors();
+        let (b,w)=pop_owned_reference(&w);
+        let a=v.pop();
+        let lane:usize=kani::any();let index:usize=kani::any();
+        match (a,b) {
+            (None,None) => (),
+            (Some(x),Some(y)) => same_result_at(&x,&y,lane),
+            _ => unreachable!(),
+        }
+        assert_eq!(v.len(),w.len());
+        match (v.get(index),w.get(index)) {
+            (None,None) => (),
+            (Some(x),Some(y)) => same_result_at(x,y,lane),
+            _ => unreachable!(),
+        }
+    }
+
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn op33_single_word() {
+        let present:bool=kani::any();let good:bool=kani::any();
+        let seed:[u32;4]=kani::any();let secure:bool=kani::any();let filled:bool=kani::any();
+        let tag:u8=kani::any();kani::assume(tag<=16);
+        let mut v=Vec::new();let mut w=Vec::new();
+        if present {
+            v.push(if good {Ok(word(seed,secure,filled))} else {Err(error(tag))});
+            w.push(if good {Ok(word(seed,secure,filled))} else {Err(error(tag))});
+        }
+        let (b,w)=pop_owned_reference(&w);
+        let a=v.pop();let lane:usize=kani::any();
+        match (a,b) {
+            (None,None)=>(),
+            (Some(x),Some(y))=>same_result_at(&x,&y,lane),
+            _=>unreachable!(),
+        }
+        assert_eq!(v.len(),0);assert_eq!(w.len(),0);
+    }
+}
+
+#[cfg(kani)]
+mod pv_cblib_resume_checks {
+    use super::*;
+    #[kani::proof]
+    #[kani::unwind(3)]
+    fn pop_error_single() {
+        let tag:u8=kani::any();kani::assume(tag<=16);
+        let e=match tag {
+            0=>Error::IndexOutOfRange,1=>Error::WrongLength,2=>Error::ZeroDenominator,
+            3=>Error::Allocation,4=>Error::NonCanonical,5=>Error::WrongField,
+            6=>Error::InvalidPoints,7=>Error::QuotientNotInImage,8=>Error::RankDeficient,
+            9=>Error::Parse,10=>Error::Semantic,11=>Error::Schedule,12=>Error::Sampler,
+            13=>Error::Commitment,14=>Error::Authentication,15=>Error::V1,_=>Error::V2,
+        };
+        let present:bool=kani::any();
+        let mut v:Vec<Result<Word,Error>>=Vec::new();
+        if present {v.push(Err(e));}
+        let result=v.pop();
+        match (present,result) {
+            (false,None)=>(),
+            (true,Some(Err(x)))=>assert_eq!(x,e),
+            _=>unreachable!(),
+        }
+        assert_eq!(v.len(),0);
+    }
+}
+
+#[cfg(kani)]
+mod pv_cblib_array_reject_checks {
+    use super::*;
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn op36_reject_small() {
+        let n:usize=kani::any();kani::assume(n<=2);
+        let mut v=Vec::new();
+        let mut w=Vec::new();
+        for _ in 0..n {
+            let limbs:[u32;4]=kani::any();
+            let q=QM31 {c0:aspis_core::field::CM31{a:M31(limbs[0]),b:M31(limbs[1])},
+                        c1:aspis_core::field::CM31{a:M31(limbs[2]),b:M31(limbs[3])}};
+            v.push(q);w.push(q);
+        }
+        let result:Result<[QM31;1024],Vec<QM31>>=v.try_into();
+        match result {
+            Ok(_)=>unreachable!(),
+            Err(x)=>{let i:usize=kani::any();assert_eq!(x.len(),w.len());assert_eq!(x.get(i),w.get(i));}
+        }
+    }
+}

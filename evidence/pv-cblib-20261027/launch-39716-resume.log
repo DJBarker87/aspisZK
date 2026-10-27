@@ -1,0 +1,66 @@
+reservation: populated 17 GiB + 8 GiB; window=1 (London 0704); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+String.append_empty : ∀ {s : String}, s ++ "" = s
+String.toList_split_empty : ∀ {ρ : Type} (pat : ρ) [inst : String.Slice.Pattern.Model.PatternModel pat]
+  [String.Slice.Pattern.Model.StrictPatternModel pat] {σ : String.Slice → Type}
+  [inst_2 : String.Slice.Pattern.ToForwardSearcher pat σ]
+  [inst_3 : (s : String.Slice) → Std.Iterator (σ s) Id (String.Slice.Pattern.SearchStep s)]
+  [inst_4 : ∀ (s : String.Slice), Std.Iterators.Finite (σ s) Id]
+  [String.Slice.Pattern.Model.LawfulToForwardSearcherModel pat], List.map String.Slice.copy ("".split pat).toList = [""]
+String.empty_append : ∀ {s : String}, "" ++ s = s
+String.append : String → String → String
+String.utf8ByteSize_empty : "".utf8ByteSize = 0
+String.length_empty : "".length = 0
+String.Slice.toInt?_eq_of_eq_minus_append : ∀ {s : String.Slice} {t : String},
+  s.copy = "-" ++ t → s.toInt? = Option.map (fun n => -↑n) t.toNat?
+String.toList_empty : "".toList = []
+String.Slice.dropSuffix?_string_empty : ∀ {s : String.Slice}, s.dropSuffix? "" = some s
+String.singleton_ne_empty : ∀ {c : Char}, String.singleton c ≠ ""
+String.Slice.skipSuffix?_string_empty : ∀ {s : String.Slice}, s.skipSuffix? "" = some s.endPos
+String.Slice.skipPrefix?_string_empty : ∀ {s : String.Slice}, s.skipPrefix? "" = some s.startPos
+String.dropPrefix?_string_empty : ∀ {s : String}, s.dropPrefix? "" = some s.toSlice
+String.push_ne_empty : ∀ {s : String} {c : Char}, s.push c ≠ ""
+String.Slice.Pos.Splits.exists_eq_singleton_append : ∀ {t₁ t₂ : String} {s : String.Slice} {p : s.Pos}
+  (hp : p ≠ s.endPos), p.Splits t₁ t₂ → ∃ t₂', t₂ = String.singleton (p.get hp) ++ t₂'
+String.Slice.Pattern.Model.not_matches_empty : ∀ {ρ : Type} {pat : ρ}
+  [inst : String.Slice.Pattern.Model.PatternModel pat] [String.Slice.Pattern.Model.StrictPatternModel pat],
+  ¬String.Slice.Pattern.Model.PatternModel.Matches pat ""
+String.startsWith_string_empty : ∀ {s : String}, s.startsWith "" = true
+String.toInt?_minus_append : ∀ {s : String}, ("-" ++ s).toInt? = Option.map (fun n => -↑n) s.toNat?
+String.endsWith_char_iff_exists_append : ∀ {c : Char} {s : String},
+  s.endsWith c = true ↔ ∃ t, s = t ++ String.singleton c
+String.length_append : ∀ (s t : String), (s ++ t).length = s.length + t.length
+String.Pos.Splits.exists_eq_singleton_append : ∀ {t₁ t₂ s : String} {p : s.Pos} (hp : p ≠ s.endPos),
+  p.Splits t₁ t₂ → ∃ t₂', t₂ = String.singleton (p.get hp) ++ t₂'
+String.Slice.startsWith_string_empty : ∀ {s : String.Slice}, s.startsWith "" = true
+String.Slice.Pattern.Model.ForwardStringSearcher.exists_revMatchesAt_iff_eq_append : ∀ {pat : String}
+  {s : String.Slice}, (∃ pos, String.Slice.Pattern.Model.RevMatchesAt pat pos) ↔ ∃ t₁ t₂, s.copy = t₁ ++ pat ++ t₂
+String.Slice.Pos.Splits.lt_iff_exists_eq_append : ∀ {s : String.Slice} {p₁ p₂ : s.Pos} {t₁ t₂ t₃ t₄ : String},
+  p₁.Splits t₁ t₂ → p₂.Splits t₃ t₄ → (p₁ < p₂ ↔ ∃ t₅, t₅ ≠ "" ∧ t₃ = t₁ ++ t₅ ∧ t₂ = t₅ ++ t₄)
+String.Pos.Raw.isValid_iff_exists_append : ∀ {s : String} {p : String.Pos.Raw},
+  String.Pos.Raw.IsValid s p ↔ ∃ s₁ s₂, s = s₁ ++ s₂ ∧ p = s₁.rawEndPos
+String.Pos.Raw.isValidForSlice_iff_exists_append : ∀ {s : String.Slice} {p : String.Pos.Raw},
+  String.Pos.Raw.IsValidForSlice s p ↔ ∃ t₁ t₂, s.copy = t₁ ++ t₂ ∧ p = t₁.rawEndPos
+String.toByteArray_empty : "".toByteArray = ByteArray.empty
+String.Slice.Pattern.Model.ForwardSliceSearcher.exists_matchesAt_iff_eq_append : ∀ {pat s : String.Slice},
+  (∃ pos, String.Slice.Pattern.Model.MatchesAt pat pos) ↔ ∃ t₁ t₂, s.copy = t₁ ++ pat.copy ++ t₂
+String.Slice.Pattern.Model.NoSuffixPatternModel.eq_empty : ∀ {ρ : Type} {pat : ρ}
+  {inst : String.Slice.Pattern.Model.PatternModel pat} [self : String.Slice.Pattern.Model.NoSuffixPatternModel pat]
+  (s t : String),
+  String.Slice.Pattern.Model.PatternModel.Matches pat t →
+    String.Slice.Pattern.Model.PatternModel.Matches pat (s ++ t) → s = ""
+structure String : Type
+number of parameters: 0
+fields:
+  String.toByteArray : ByteArray
+  String.isValidUTF8 : self.toByteArray.IsValidUTF8
+constructor:
+  String.ofByteArray (toByteArray : ByteArray) (isValidUTF8 : toByteArray.IsValidUTF8) : String
+def Aeneas.Std.Str : Type :=
+Aeneas.Std.Slice Aeneas.Std.U8
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.98
+	Maximum resident set size (kbytes): 2653276
+	Swaps: 0
+	Exit status: 0

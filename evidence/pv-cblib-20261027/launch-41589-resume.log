@@ -1,0 +1,66 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0925); env=J
+slot: /tmp/aspis-r0-lean-slot-2.lock
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize),
+  ↑r.end ≤ v.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.alloc.vec.Vec.index_mut (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice α) v
+        r ⦃Std.Do.PostCond.noThrow fun r_1 =>
+        ⌜Aeneas.Std.WP.uncurry'
+            (fun s1 back =>
+              ↑s1 = List.slice 0 ↑r.end ↑v ∧
+                s1.length = ↑r.end ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑v).setSlice! 0 ↑s')
+            r_1⌝⦄
+Aeneas.Std.alloc.vec.Vec.with_capacity : (T : Type) → Aeneas.Std.Usize → Aeneas.Std.alloc.vec.Vec T
+Aeneas.Std.alloc.vec.Vec.set_getElem!_eq._simp_1_2 : ∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }},
+  (a1 = a2) = (↑a1 = ↑a2)
+Aeneas.Std.alloc.vec.Vec.setSlice!.eq_1 : ∀ {α : Type u} (s : Aeneas.Std.alloc.vec.Vec α) (i : ℕ) (s' : List α),
+  s.setSlice! i s' = ⟨(↑s).setSlice! i s', ⋯⟩
+Aeneas.Std.alloc.vec.Vec.getElem_set_neq._proof_3 : ∀ (α : Type u_1) (v : Aeneas.Std.alloc.vec.Vec α)
+  (i j : Aeneas.Std.Usize) (x : α), ↑j < (v.set i x).length → ↑j < (↑v).length
+Aeneas.Std.alloc.vec.Vec.push : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → α → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec α)
+Aeneas.Std.alloc.vec.Vec.set_opt : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → Aeneas.Std.Usize → Option α → Aeneas.Std.alloc.vec.Vec α
+Aeneas.Std.alloc.vec.Vec.set_getElem_eq._simp_1_2 : ∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }},
+  (a1 = a2) = (↑a1 = ↑a2)
+Aeneas.Std.alloc.vec.Vec.setSlice! : {α : Type u} → Aeneas.Std.alloc.vec.Vec α → ℕ → List α → Aeneas.Std.alloc.vec.Vec α
+Aeneas.Std.alloc.vec.Vec.resize._proof_1 : ∀ {T : Type} (v : Aeneas.Std.alloc.vec.Vec T) (new_len : Aeneas.Std.Usize)
+  (value : T), ((↑v).resize (↑new_len) value).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.update.eq_1 : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize) (x : α),
+  v.update i x =
+    match (↑v)[↑i]? with
+    | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+    | some val => Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+Aeneas.Std.alloc.vec.Vec.new : (α : Type u) → Aeneas.Std.alloc.vec.Vec α
+Aeneas.Std.alloc.vec.Vec.push_spec._proof_1_1 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α) (x : α),
+  (↑v).length + 1 ≤ Aeneas.Std.U32.max ∨ (↑v).length + 1 ≤ Aeneas.Std.Usize.max →
+    ((↑v).concat x).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.index_RangeFrom_spec.mvcgen_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize),
+  ↑r.start ≤ v.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice α) v
+        r ⦃Std.Do.PostCond.noThrow fun r_1 => ⌜↑r_1 = List.drop ↑r.start ↑v ∧ r_1.length = v.length - ↑r.start⌝⦄
+Aeneas.Std.alloc.vec.Vec.push._proof_1 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α),
+  (decide ((↑v).length + 1 ≤ Aeneas.Std.U32.max) || decide ((↑v).length + 1 ≤ Aeneas.Std.Usize.max)) = true →
+    (↑v).length < Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.get! : {α : Type u} → [Inhabited α] → Aeneas.Std.alloc.vec.Vec α → ℕ → α
+Aeneas.Std.alloc.vec.Vec.getElem_Usize_eq : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize)
+  (h : ↑i < (↑v).length), v[i] = (↑v)[↑i]
+Aeneas.Std.alloc.vec.Vec.getElem_set_neq._proof_1 : ∀ (i : ℕ),
+  i + 1 ≤ Aeneas.Std.UScalarTy.Usize.numBits → i < Aeneas.Std.UScalarTy.Usize.numBits
+structure String : Type
+number of parameters: 0
+fields:
+  String.toByteArray : ByteArray
+  String.isValidUTF8 : self.toByteArray.IsValidUTF8
+constructor:
+  String.ofByteArray (toByteArray : ByteArray) (isValidUTF8 : toByteArray.IsValidUTF8) : String
+def Aeneas.Std.Str : Type :=
+Aeneas.Std.Slice Aeneas.Std.U8
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.85
+	Maximum resident set size (kbytes): 2654172
+	Swaps: 0
+	Exit status: 0

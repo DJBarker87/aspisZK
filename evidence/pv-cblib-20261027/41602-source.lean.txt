@@ -1,0 +1,20 @@
+import R1Z.PV_CBL_FallbackFeedForward
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_BlockStage16
+open PV_CBL_FallbackArray4 PV_CBL_FallbackScalar PV_CBL_FallbackRoundsModel
+set_option autoImplicit false
+
+def source (original : Array U32 8#usize) (abef cdgh : A4)
+    (_w0 _w1 _w2 _w3 : A4) : Result (Array U32 8#usize) :=
+  PV_CBL_FallbackFeedForward.source original abef cdgh
+def value (original current : State) (_w0 _w1 _w2 _w3 : A4) : State :=
+  PV_CBL_FallbackFeedForward.value original current
+theorem shape (original current : State) (w0 w1 w2 w3 : A4) :
+    source (PV_CBL_FallbackStateCodec.encode original)
+      (pack current.a current.b current.e current.f) (pack current.c current.d current.g current.h)
+      w0 w1 w2 w3 = ok (PV_CBL_FallbackStateCodec.encode (value original current w0 w1 w2 w3)) :=
+  PV_CBL_FallbackFeedForward.shape original current
+#print axioms source
+#print axioms value
+#print axioms shape
+end R1Z.PV_CBL_BlockStage16

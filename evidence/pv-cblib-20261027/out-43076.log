@@ -1,0 +1,561 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_FallbackBlockFactored.lean:121:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_CBL_FallbackFourModel.source ?abef ?cdgh ?w ?k >>= ?next
+in the target expression
+  (do
+      let i ← state.index_usize 0#usize
+      let i1 ← state.index_usize 1#usize
+      let i2 ← state.index_usize 4#usize
+      let i3 ← state.index_usize 5#usize
+      let i4 ← state.index_usize 2#usize
+      let i5 ← state.index_usize 3#usize
+      let i6 ← state.index_usize 6#usize
+      let i7 ← state.index_usize 7#usize
+      let i8 ← input.index_usize 3#usize
+      let i9 ← input.index_usize 2#usize
+      let i10 ← input.index_usize 1#usize
+      let i11 ← input.index_usize 0#usize
+      let i12 ← input.index_usize 7#usize
+      let i13 ← input.index_usize 6#usize
+      let i14 ← input.index_usize 5#usize
+      let i15 ← input.index_usize 4#usize
+      let i16 ← input.index_usize 11#usize
+      let i17 ← input.index_usize 10#usize
+      let i18 ← input.index_usize 9#usize
+      let i19 ← input.index_usize 8#usize
+      let i20 ← input.index_usize 15#usize
+      let i21 ← input.index_usize 14#usize
+      let i22 ← input.index_usize 13#usize
+      let i23 ← input.index_usize 12#usize
+      let a ← PV_CBL_FallbackBlock.sha_fallback_consts.K32X4
+      let a1 ← a.index_usize 0#usize
+      let t1 ← PV_CBL_FallbackBlock.sha_fallback_reference.add (Array.make 4#usize [i8, i9, i10, i11] ⋯) a1
+      let cdgh ←
+        PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 (Array.make 4#usize [i4, i5, i6, i7] ⋯)
+            (Array.make 4#usize [i, i1, i2, i3] ⋯) t1
+      let t2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t1
+      let abef ←
+        PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 (Array.make 4#usize [i, i1, i2, i3] ⋯) cdgh
+            t2
+      let a2 ← a.index_usize 1#usize
+      let t11 ← PV_CBL_FallbackBlock.sha_fallback_reference.add (Array.make 4#usize [i12, i13, i14, i15] ⋯) a2
+      let cdgh1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh abef t11
+      let t21 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t11
+      let abef1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef cdgh1 t21
+      let a3 ← a.index_usize 2#usize
+      let t12 ← PV_CBL_FallbackBlock.sha_fallback_reference.add (Array.make 4#usize [i16, i17, i18, i19] ⋯) a3
+      let cdgh2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh1 abef1 t12
+      let t22 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t12
+      let abef2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef1 cdgh2 t22
+      let a4 ← a.index_usize 3#usize
+      let t13 ← PV_CBL_FallbackBlock.sha_fallback_reference.add (Array.make 4#usize [i20, i21, i22, i23] ⋯) a4
+      let cdgh3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh2 abef2 t13
+      let t23 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t13
+      let abef3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef2 cdgh3 t23
+      let w4 ←
+        PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i8, i9, i10, i11] ⋯)
+            (Array.make 4#usize [i12, i13, i14, i15] ⋯) (Array.make 4#usize [i16, i17, i18, i19] ⋯)
+            (Array.make 4#usize [i20, i21, i22, i23] ⋯)
+      let a5 ← a.index_usize 4#usize
+      let t14 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w4 a5
+      let cdgh4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh3 abef3 t14
+      let t24 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t14
+      let abef4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef3 cdgh4 t24
+      let w0 ←
+        PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i12, i13, i14, i15] ⋯)
+            (Array.make 4#usize [i16, i17, i18, i19] ⋯) (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4
+      let a6 ← a.index_usize 5#usize
+      let t15 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w0 a6
+      let cdgh5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh4 abef4 t15
+      let t25 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t15
+      let abef5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef4 cdgh5 t25
+      let w1 ←
+        PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i16, i17, i18, i19] ⋯)
+            (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4 w0
+      let a7 ← a.index_usize 6#usize
+      let t16 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w1 a7
+      let cdgh6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh5 abef5 t16
+      let t26 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t16
+      let abef6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef5 cdgh6 t26
+      let w2 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4 w0 w1
+      let a8 ← a.index_usize 7#usize
+      let t17 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w2 a8
+      let cdgh7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh6 abef6 t17
+      let t27 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t17
+      let abef7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef6 cdgh7 t27
+      let w3 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w4 w0 w1 w2
+      let a9 ← a.index_usize 8#usize
+      let t18 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w3 a9
+      let cdgh8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh7 abef7 t18
+      let t28 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t18
+      let abef8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef7 cdgh8 t28
+      let w41 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w0 w1 w2 w3
+      let a10 ← a.index_usize 9#usize
+      let t19 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w41 a10
+      let cdgh9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh8 abef8 t19
+      let t29 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t19
+      let abef9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef8 cdgh9 t29
+      let w01 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w1 w2 w3 w41
+      let a11 ← a.index_usize 10#usize
+      let t110 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w01 a11
+      let cdgh10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh9 abef9 t110
+      let t210 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t110
+      let abef10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef9 cdgh10 t210
+      let w11 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w2 w3 w41 w01
+      let a12 ← a.index_usize 11#usize
+      let t111 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w11 a12
+      let cdgh11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh10 abef10 t111
+      let t211 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t111
+      let abef11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef10 cdgh11 t211
+      let w21 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w3 w41 w01 w11
+      let a13 ← a.index_usize 12#usize
+      let t112 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w21 a13
+      let cdgh12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh11 abef11 t112
+      let t212 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t112
+      let abef12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef11 cdgh12 t212
+      let w31 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w41 w01 w11 w21
+      let a14 ← a.index_usize 13#usize
+      let t113 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w31 a14
+      let cdgh13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh12 abef12 t113
+      let t213 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t113
+      let abef13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef12 cdgh13 t213
+      let w42 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w01 w11 w21 w31
+      let a15 ← a.index_usize 14#usize
+      let t114 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w42 a15
+      let cdgh14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh13 abef13 t114
+      let t214 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t114
+      let abef14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef13 cdgh14 t214
+      let w02 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w11 w21 w31 w42
+      let a16 ← a.index_usize 15#usize
+      let t115 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w02 a16
+      let cdgh15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh14 abef14 t115
+      let t215 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t115
+      let abef15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef14 cdgh15 t215
+      let a17 ← abef15.index_usize 0#usize
+      let b ← abef15.index_usize 1#usize
+      let e ← abef15.index_usize 2#usize
+      let f ← abef15.index_usize 3#usize
+      let c ← cdgh15.index_usize 0#usize
+      let d ← cdgh15.index_usize 1#usize
+      let g ← cdgh15.index_usize 2#usize
+      let h ← cdgh15.index_usize 3#usize
+      let i24 ← lift (core.num.U32.wrapping_add i a17)
+      let state1 ← state.update 0#usize i24
+      let i25 ← state1.index_usize 1#usize
+      let i26 ← lift (core.num.U32.wrapping_add i25 b)
+      let state2 ← state1.update 1#usize i26
+      let i27 ← state2.index_usize 2#usize
+      let i28 ← lift (core.num.U32.wrapping_add i27 c)
+      let state3 ← state2.update 2#usize i28
+      let i29 ← state3.index_usize 3#usize
+      let i30 ← lift (core.num.U32.wrapping_add i29 d)
+      let state4 ← state3.update 3#usize i30
+      let i31 ← state4.index_usize 4#usize
+      let i32 ← lift (core.num.U32.wrapping_add i31 e)
+      let state5 ← state4.update 4#usize i32
+      let i33 ← state5.index_usize 5#usize
+      let i34 ← lift (core.num.U32.wrapping_add i33 f)
+      let state6 ← state5.update 5#usize i34
+      let i35 ← state6.index_usize 6#usize
+      let i36 ← lift (core.num.U32.wrapping_add i35 g)
+      let state7 ← state6.update 6#usize i36
+      let i37 ← state7.index_usize 7#usize
+      let i38 ← lift (core.num.U32.wrapping_add i37 h)
+      state7.update 7#usize i38) =
+    do
+    let i ← state.index_usize 0#usize
+    let i1 ← state.index_usize 1#usize
+    let i2 ← state.index_usize 4#usize
+    let i3 ← state.index_usize 5#usize
+    let i4 ← state.index_usize 2#usize
+    let i5 ← state.index_usize 3#usize
+    let i6 ← state.index_usize 6#usize
+    let i7 ← state.index_usize 7#usize
+    let i8 ← input.index_usize 3#usize
+    let i9 ← input.index_usize 2#usize
+    let i10 ← input.index_usize 1#usize
+    let i11 ← input.index_usize 0#usize
+    let i12 ← input.index_usize 7#usize
+    let i13 ← input.index_usize 6#usize
+    let i14 ← input.index_usize 5#usize
+    let i15 ← input.index_usize 4#usize
+    let i16 ← input.index_usize 11#usize
+    let i17 ← input.index_usize 10#usize
+    let i18 ← input.index_usize 9#usize
+    let i19 ← input.index_usize 8#usize
+    let i20 ← input.index_usize 15#usize
+    let i21 ← input.index_usize 14#usize
+    let i22 ← input.index_usize 13#usize
+    let i23 ← input.index_usize 12#usize
+    let a ← PV_CBL_FallbackBlock.sha_fallback_consts.K32X4
+    let a1 ← a.index_usize 0#usize
+    let (abef, cdgh) ←
+      PV_CBL_FallbackFourModel.source (Array.make 4#usize [i, i1, i2, i3] ⋯) (Array.make 4#usize [i4, i5, i6, i7] ⋯)
+          (Array.make 4#usize [i8, i9, i10, i11] ⋯) a1
+    let a2 ← a.index_usize 1#usize
+    let (abef1, cdgh1) ← PV_CBL_FallbackFourModel.source abef cdgh (Array.make 4#usize [i12, i13, i14, i15] ⋯) a2
+    let a3 ← a.index_usize 2#usize
+    let (abef2, cdgh2) ← PV_CBL_FallbackFourModel.source abef1 cdgh1 (Array.make 4#usize [i16, i17, i18, i19] ⋯) a3
+    let a4 ← a.index_usize 3#usize
+    let (abef3, cdgh3) ← PV_CBL_FallbackFourModel.source abef2 cdgh2 (Array.make 4#usize [i20, i21, i22, i23] ⋯) a4
+    let w4 ←
+      PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i8, i9, i10, i11] ⋯)
+          (Array.make 4#usize [i12, i13, i14, i15] ⋯) (Array.make 4#usize [i16, i17, i18, i19] ⋯)
+          (Array.make 4#usize [i20, i21, i22, i23] ⋯)
+    let a5 ← a.index_usize 4#usize
+    let (abef4, cdgh4) ← PV_CBL_FallbackFourModel.source abef3 cdgh3 w4 a5
+    let w0 ←
+      PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i12, i13, i14, i15] ⋯)
+          (Array.make 4#usize [i16, i17, i18, i19] ⋯) (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4
+    let a6 ← a.index_usize 5#usize
+    let (abef5, cdgh5) ← PV_CBL_FallbackFourModel.source abef4 cdgh4 w0 a6
+    let w1 ←
+      PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i16, i17, i18, i19] ⋯)
+          (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4 w0
+    let a7 ← a.index_usize 6#usize
+    let (abef6, cdgh6) ← PV_CBL_FallbackFourModel.source abef5 cdgh5 w1 a7
+    let w2 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4 w0 w1
+    let a8 ← a.index_usize 7#usize
+    let (abef7, cdgh7) ← PV_CBL_FallbackFourModel.source abef6 cdgh6 w2 a8
+    let w3 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w4 w0 w1 w2
+    let a9 ← a.index_usize 8#usize
+    let (abef8, cdgh8) ← PV_CBL_FallbackFourModel.source abef7 cdgh7 w3 a9
+    let w41 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w0 w1 w2 w3
+    let a10 ← a.index_usize 9#usize
+    let (abef9, cdgh9) ← PV_CBL_FallbackFourModel.source abef8 cdgh8 w41 a10
+    let w01 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w1 w2 w3 w41
+    let a11 ← a.index_usize 10#usize
+    let (abef10, cdgh10) ← PV_CBL_FallbackFourModel.source abef9 cdgh9 w01 a11
+    let w11 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w2 w3 w41 w01
+    let a12 ← a.index_usize 11#usize
+    let (abef11, cdgh11) ← PV_CBL_FallbackFourModel.source abef10 cdgh10 w11 a12
+    let w21 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w3 w41 w01 w11
+    let a13 ← a.index_usize 12#usize
+    let (abef12, cdgh12) ← PV_CBL_FallbackFourModel.source abef11 cdgh11 w21 a13
+    let w31 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w41 w01 w11 w21
+    let a14 ← a.index_usize 13#usize
+    let (abef13, cdgh13) ← PV_CBL_FallbackFourModel.source abef12 cdgh12 w31 a14
+    let w42 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w01 w11 w21 w31
+    let a15 ← a.index_usize 14#usize
+    let (abef14, cdgh14) ← PV_CBL_FallbackFourModel.source abef13 cdgh13 w42 a15
+    let w02 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w11 w21 w31 w42
+    let a16 ← a.index_usize 15#usize
+    let (abef15, cdgh15) ← PV_CBL_FallbackFourModel.source abef14 cdgh14 w02 a16
+    let a17 ← Array.index_usize abef15 0#usize
+    let b ← Array.index_usize abef15 1#usize
+    let e ← Array.index_usize abef15 2#usize
+    let f ← Array.index_usize abef15 3#usize
+    let c ← Array.index_usize cdgh15 0#usize
+    let d ← Array.index_usize cdgh15 1#usize
+    let g ← Array.index_usize cdgh15 2#usize
+    let h ← Array.index_usize cdgh15 3#usize
+    let i24 ← lift (core.num.U32.wrapping_add i a17)
+    let state1 ← state.update 0#usize i24
+    let i25 ← state1.index_usize 1#usize
+    let i26 ← lift (core.num.U32.wrapping_add i25 b)
+    let state2 ← state1.update 1#usize i26
+    let i27 ← state2.index_usize 2#usize
+    let i28 ← lift (core.num.U32.wrapping_add i27 c)
+    let state3 ← state2.update 2#usize i28
+    let i29 ← state3.index_usize 3#usize
+    let i30 ← lift (core.num.U32.wrapping_add i29 d)
+    let state4 ← state3.update 3#usize i30
+    let i31 ← state4.index_usize 4#usize
+    let i32 ← lift (core.num.U32.wrapping_add i31 e)
+    let state5 ← state4.update 4#usize i32
+    let i33 ← state5.index_usize 5#usize
+    let i34 ← lift (core.num.U32.wrapping_add i33 f)
+    let state6 ← state5.update 5#usize i34
+    let i35 ← state6.index_usize 6#usize
+    let i36 ← lift (core.num.U32.wrapping_add i35 g)
+    let state7 ← state6.update 6#usize i36
+    let i37 ← state7.index_usize 7#usize
+    let i38 ← lift (core.num.U32.wrapping_add i37 h)
+    state7.update 7#usize i38
+
+state : Std.Array U32 8#usize
+input : Std.Array U32 16#usize
+⊢ (do
+      let i ← state.index_usize 0#usize
+      let i1 ← state.index_usize 1#usize
+      let i2 ← state.index_usize 4#usize
+      let i3 ← state.index_usize 5#usize
+      let i4 ← state.index_usize 2#usize
+      let i5 ← state.index_usize 3#usize
+      let i6 ← state.index_usize 6#usize
+      let i7 ← state.index_usize 7#usize
+      let i8 ← input.index_usize 3#usize
+      let i9 ← input.index_usize 2#usize
+      let i10 ← input.index_usize 1#usize
+      let i11 ← input.index_usize 0#usize
+      let i12 ← input.index_usize 7#usize
+      let i13 ← input.index_usize 6#usize
+      let i14 ← input.index_usize 5#usize
+      let i15 ← input.index_usize 4#usize
+      let i16 ← input.index_usize 11#usize
+      let i17 ← input.index_usize 10#usize
+      let i18 ← input.index_usize 9#usize
+      let i19 ← input.index_usize 8#usize
+      let i20 ← input.index_usize 15#usize
+      let i21 ← input.index_usize 14#usize
+      let i22 ← input.index_usize 13#usize
+      let i23 ← input.index_usize 12#usize
+      let a ← PV_CBL_FallbackBlock.sha_fallback_consts.K32X4
+      let a1 ← a.index_usize 0#usize
+      let t1 ← PV_CBL_FallbackBlock.sha_fallback_reference.add (Array.make 4#usize [i8, i9, i10, i11] ⋯) a1
+      let cdgh ←
+        PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 (Array.make 4#usize [i4, i5, i6, i7] ⋯)
+            (Array.make 4#usize [i, i1, i2, i3] ⋯) t1
+      let t2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t1
+      let abef ←
+        PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 (Array.make 4#usize [i, i1, i2, i3] ⋯) cdgh
+            t2
+      let a2 ← a.index_usize 1#usize
+      let t11 ← PV_CBL_FallbackBlock.sha_fallback_reference.add (Array.make 4#usize [i12, i13, i14, i15] ⋯) a2
+      let cdgh1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh abef t11
+      let t21 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t11
+      let abef1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef cdgh1 t21
+      let a3 ← a.index_usize 2#usize
+      let t12 ← PV_CBL_FallbackBlock.sha_fallback_reference.add (Array.make 4#usize [i16, i17, i18, i19] ⋯) a3
+      let cdgh2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh1 abef1 t12
+      let t22 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t12
+      let abef2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef1 cdgh2 t22
+      let a4 ← a.index_usize 3#usize
+      let t13 ← PV_CBL_FallbackBlock.sha_fallback_reference.add (Array.make 4#usize [i20, i21, i22, i23] ⋯) a4
+      let cdgh3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh2 abef2 t13
+      let t23 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t13
+      let abef3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef2 cdgh3 t23
+      let w4 ←
+        PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i8, i9, i10, i11] ⋯)
+            (Array.make 4#usize [i12, i13, i14, i15] ⋯) (Array.make 4#usize [i16, i17, i18, i19] ⋯)
+            (Array.make 4#usize [i20, i21, i22, i23] ⋯)
+      let a5 ← a.index_usize 4#usize
+      let t14 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w4 a5
+      let cdgh4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh3 abef3 t14
+      let t24 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t14
+      let abef4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef3 cdgh4 t24
+      let w0 ←
+        PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i12, i13, i14, i15] ⋯)
+            (Array.make 4#usize [i16, i17, i18, i19] ⋯) (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4
+      let a6 ← a.index_usize 5#usize
+      let t15 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w0 a6
+      let cdgh5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh4 abef4 t15
+      let t25 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t15
+      let abef5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef4 cdgh5 t25
+      let w1 ←
+        PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i16, i17, i18, i19] ⋯)
+            (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4 w0
+      let a7 ← a.index_usize 6#usize
+      let t16 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w1 a7
+      let cdgh6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh5 abef5 t16
+      let t26 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t16
+      let abef6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef5 cdgh6 t26
+      let w2 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4 w0 w1
+      let a8 ← a.index_usize 7#usize
+      let t17 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w2 a8
+      let cdgh7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh6 abef6 t17
+      let t27 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t17
+      let abef7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef6 cdgh7 t27
+      let w3 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w4 w0 w1 w2
+      let a9 ← a.index_usize 8#usize
+      let t18 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w3 a9
+      let cdgh8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh7 abef7 t18
+      let t28 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t18
+      let abef8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef7 cdgh8 t28
+      let w41 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w0 w1 w2 w3
+      let a10 ← a.index_usize 9#usize
+      let t19 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w41 a10
+      let cdgh9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh8 abef8 t19
+      let t29 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t19
+      let abef9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef8 cdgh9 t29
+      let w01 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w1 w2 w3 w41
+      let a11 ← a.index_usize 10#usize
+      let t110 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w01 a11
+      let cdgh10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh9 abef9 t110
+      let t210 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t110
+      let abef10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef9 cdgh10 t210
+      let w11 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w2 w3 w41 w01
+      let a12 ← a.index_usize 11#usize
+      let t111 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w11 a12
+      let cdgh11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh10 abef10 t111
+      let t211 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t111
+      let abef11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef10 cdgh11 t211
+      let w21 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w3 w41 w01 w11
+      let a13 ← a.index_usize 12#usize
+      let t112 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w21 a13
+      let cdgh12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh11 abef11 t112
+      let t212 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t112
+      let abef12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef11 cdgh12 t212
+      let w31 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w41 w01 w11 w21
+      let a14 ← a.index_usize 13#usize
+      let t113 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w31 a14
+      let cdgh13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh12 abef12 t113
+      let t213 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t113
+      let abef13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef12 cdgh13 t213
+      let w42 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w01 w11 w21 w31
+      let a15 ← a.index_usize 14#usize
+      let t114 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w42 a15
+      let cdgh14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh13 abef13 t114
+      let t214 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t114
+      let abef14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef13 cdgh14 t214
+      let w02 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w11 w21 w31 w42
+      let a16 ← a.index_usize 15#usize
+      let t115 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w02 a16
+      let cdgh15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh14 abef14 t115
+      let t215 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t115
+      let abef15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef14 cdgh15 t215
+      let a17 ← abef15.index_usize 0#usize
+      let b ← abef15.index_usize 1#usize
+      let e ← abef15.index_usize 2#usize
+      let f ← abef15.index_usize 3#usize
+      let c ← cdgh15.index_usize 0#usize
+      let d ← cdgh15.index_usize 1#usize
+      let g ← cdgh15.index_usize 2#usize
+      let h ← cdgh15.index_usize 3#usize
+      let i24 ← lift (core.num.U32.wrapping_add i a17)
+      let state1 ← state.update 0#usize i24
+      let i25 ← state1.index_usize 1#usize
+      let i26 ← lift (core.num.U32.wrapping_add i25 b)
+      let state2 ← state1.update 1#usize i26
+      let i27 ← state2.index_usize 2#usize
+      let i28 ← lift (core.num.U32.wrapping_add i27 c)
+      let state3 ← state2.update 2#usize i28
+      let i29 ← state3.index_usize 3#usize
+      let i30 ← lift (core.num.U32.wrapping_add i29 d)
+      let state4 ← state3.update 3#usize i30
+      let i31 ← state4.index_usize 4#usize
+      let i32 ← lift (core.num.U32.wrapping_add i31 e)
+      let state5 ← state4.update 4#usize i32
+      let i33 ← state5.index_usize 5#usize
+      let i34 ← lift (core.num.U32.wrapping_add i33 f)
+      let state6 ← state5.update 5#usize i34
+      let i35 ← state6.index_usize 6#usize
+      let i36 ← lift (core.num.U32.wrapping_add i35 g)
+      let state7 ← state6.update 6#usize i36
+      let i37 ← state7.index_usize 7#usize
+      let i38 ← lift (core.num.U32.wrapping_add i37 h)
+      state7.update 7#usize i38) =
+    do
+    let i ← state.index_usize 0#usize
+    let i1 ← state.index_usize 1#usize
+    let i2 ← state.index_usize 4#usize
+    let i3 ← state.index_usize 5#usize
+    let i4 ← state.index_usize 2#usize
+    let i5 ← state.index_usize 3#usize
+    let i6 ← state.index_usize 6#usize
+    let i7 ← state.index_usize 7#usize
+    let i8 ← input.index_usize 3#usize
+    let i9 ← input.index_usize 2#usize
+    let i10 ← input.index_usize 1#usize
+    let i11 ← input.index_usize 0#usize
+    let i12 ← input.index_usize 7#usize
+    let i13 ← input.index_usize 6#usize
+    let i14 ← input.index_usize 5#usize
+    let i15 ← input.index_usize 4#usize
+    let i16 ← input.index_usize 11#usize
+    let i17 ← input.index_usize 10#usize
+    let i18 ← input.index_usize 9#usize
+    let i19 ← input.index_usize 8#usize
+    let i20 ← input.index_usize 15#usize
+    let i21 ← input.index_usize 14#usize
+    let i22 ← input.index_usize 13#usize
+    let i23 ← input.index_usize 12#usize
+    let a ← PV_CBL_FallbackBlock.sha_fallback_consts.K32X4
+    let a1 ← a.index_usize 0#usize
+    let (abef, cdgh) ←
+      PV_CBL_FallbackFourModel.source (Array.make 4#usize [i, i1, i2, i3] ⋯) (Array.make 4#usize [i4, i5, i6, i7] ⋯)
+          (Array.make 4#usize [i8, i9, i10, i11] ⋯) a1
+    let a2 ← a.index_usize 1#usize
+    let (abef1, cdgh1) ← PV_CBL_FallbackFourModel.source abef cdgh (Array.make 4#usize [i12, i13, i14, i15] ⋯) a2
+    let a3 ← a.index_usize 2#usize
+    let (abef2, cdgh2) ← PV_CBL_FallbackFourModel.source abef1 cdgh1 (Array.make 4#usize [i16, i17, i18, i19] ⋯) a3
+    let a4 ← a.index_usize 3#usize
+    let (abef3, cdgh3) ← PV_CBL_FallbackFourModel.source abef2 cdgh2 (Array.make 4#usize [i20, i21, i22, i23] ⋯) a4
+    let w4 ←
+      PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i8, i9, i10, i11] ⋯)
+          (Array.make 4#usize [i12, i13, i14, i15] ⋯) (Array.make 4#usize [i16, i17, i18, i19] ⋯)
+          (Array.make 4#usize [i20, i21, i22, i23] ⋯)
+    let a5 ← a.index_usize 4#usize
+    let (abef4, cdgh4) ← PV_CBL_FallbackFourModel.source abef3 cdgh3 w4 a5
+    let w0 ←
+      PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i12, i13, i14, i15] ⋯)
+          (Array.make 4#usize [i16, i17, i18, i19] ⋯) (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4
+    let a6 ← a.index_usize 5#usize
+    let (abef5, cdgh5) ← PV_CBL_FallbackFourModel.source abef4 cdgh4 w0 a6
+    let w1 ←
+      PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i16, i17, i18, i19] ⋯)
+          (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4 w0
+    let a7 ← a.index_usize 6#usize
+    let (abef6, cdgh6) ← PV_CBL_FallbackFourModel.source abef5 cdgh5 w1 a7
+    let w2 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Array.make 4#usize [i20, i21, i22, i23] ⋯) w4 w0 w1
+    let a8 ← a.index_usize 7#usize
+    let (abef7, cdgh7) ← PV_CBL_FallbackFourModel.source abef6 cdgh6 w2 a8
+    let w3 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w4 w0 w1 w2
+    let a9 ← a.index_usize 8#usize
+    let (abef8, cdgh8) ← PV_CBL_FallbackFourModel.source abef7 cdgh7 w3 a9
+    let w41 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w0 w1 w2 w3
+    let a10 ← a.index_usize 9#usize
+    let (abef9, cdgh9) ← PV_CBL_FallbackFourModel.source abef8 cdgh8 w41 a10
+    let w01 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w1 w2 w3 w41
+    let a11 ← a.index_usize 10#usize
+    let (abef10, cdgh10) ← PV_CBL_FallbackFourModel.source abef9 cdgh9 w01 a11
+    let w11 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w2 w3 w41 w01
+    let a12 ← a.index_usize 11#usize
+    let (abef11, cdgh11) ← PV_CBL_FallbackFourModel.source abef10 cdgh10 w11 a12
+    let w21 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w3 w41 w01 w11
+    let a13 ← a.index_usize 12#usize
+    let (abef12, cdgh12) ← PV_CBL_FallbackFourModel.source abef11 cdgh11 w21 a13
+    let w31 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w41 w01 w11 w21
+    let a14 ← a.index_usize 13#usize
+    let (abef13, cdgh13) ← PV_CBL_FallbackFourModel.source abef12 cdgh12 w31 a14
+    let w42 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w01 w11 w21 w31
+    let a15 ← a.index_usize 14#usize
+    let (abef14, cdgh14) ← PV_CBL_FallbackFourModel.source abef13 cdgh13 w42 a15
+    let w02 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w11 w21 w31 w42
+    let a16 ← a.index_usize 15#usize
+    let (abef15, cdgh15) ← PV_CBL_FallbackFourModel.source abef14 cdgh14 w02 a16
+    let a17 ← Array.index_usize abef15 0#usize
+    let b ← Array.index_usize abef15 1#usize
+    let e ← Array.index_usize abef15 2#usize
+    let f ← Array.index_usize abef15 3#usize
+    let c ← Array.index_usize cdgh15 0#usize
+    let d ← Array.index_usize cdgh15 1#usize
+    let g ← Array.index_usize cdgh15 2#usize
+    let h ← Array.index_usize cdgh15 3#usize
+    let i24 ← lift (core.num.U32.wrapping_add i a17)
+    let state1 ← state.update 0#usize i24
+    let i25 ← state1.index_usize 1#usize
+    let i26 ← lift (core.num.U32.wrapping_add i25 b)
+    let state2 ← state1.update 1#usize i26
+    let i27 ← state2.index_usize 2#usize
+    let i28 ← lift (core.num.U32.wrapping_add i27 c)
+    let state3 ← state2.update 2#usize i28
+    let i29 ← state3.index_usize 3#usize
+    let i30 ← lift (core.num.U32.wrapping_add i29 d)
+    let state4 ← state3.update 3#usize i30
+    let i31 ← state4.index_usize 4#usize
+    let i32 ← lift (core.num.U32.wrapping_add i31 e)
+    let state5 ← state4.update 4#usize i32
+    let i33 ← state5.index_usize 5#usize
+    let i34 ← lift (core.num.U32.wrapping_add i33 f)
+    let state6 ← state5.update 5#usize i34
+    let i35 ← state6.index_usize 6#usize
+    let i36 ← lift (core.num.U32.wrapping_add i35 g)
+    let state7 ← state6.update 6#usize i36
+    let i37 ← state7.index_usize 7#usize
+    let i38 ← lift (core.num.U32.wrapping_add i37 h)
+    state7.update 7#usize i38
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_CBL_FallbackBlockFactored.block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_FallbackBlockFactored.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

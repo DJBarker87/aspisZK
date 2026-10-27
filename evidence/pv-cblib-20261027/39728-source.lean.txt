@@ -1,0 +1,15 @@
+import R1Z.PV_CBL_PathJoinChecked
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_PathJoinCheckedCases
+set_option autoImplicit false
+
+theorem complete (base path : Slice U8) :
+    (∃ v, PV_CBL_PathJoinChecked.reference base path=ok v ∧
+      v.val=PV_CBL_PathJoinValue.join base.val path.val) ∨
+    PV_CBL_PathJoinChecked.reference base path=fail .maximumSizeExceeded := by
+  unfold PV_CBL_PathJoinChecked.reference
+  split
+  · exact Or.inl ⟨_,rfl,rfl⟩
+  · exact Or.inr rfl
+#print axioms complete
+end R1Z.PV_CBL_PathJoinCheckedCases

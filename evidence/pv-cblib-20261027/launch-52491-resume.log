@@ -1,0 +1,48 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 1209); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestSoftTotal.lean:14:50: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_CBL_DigestSoft.sha_update_soft_owned PV_CBL_DigestDefaultValue.state 0#u64 (Array.repeat 64#usize 0#u8) 0#usize
+    data
+in the target expression
+  ∃ output,
+    (let (state, blocks, buffer, pos) := (PV_CBL_DigestDefaultValue.state, 0#u64, Array.repeat 64#usize 0#u8, 0#usize)
+      do
+      let (state1, blocks1, buffer1, pos1) ← PV_CBL_DigestSoft.sha_update_soft_owned state blocks buffer pos data
+      let (digest, _, _, _) ← PV_CBL_FinalSoft.sha_finalize_soft_owned state1 blocks1 buffer1 pos1
+      ok digest) =
+      ok output
+
+data : Slice U8
+updated : Std.Array U32 8#usize × U64 × Std.Array U8 64#usize × Usize
+hu :
+  PV_CBL_DigestSoft.sha_update_soft_owned PV_CBL_DigestDefaultValue.state 0#u64 (Array.repeat 64#usize 0#u8) 0#usize
+      data =
+    ok updated
+hp : ↑updated.2.2.2 < 64
+final : Std.Array U8 32#usize × Std.Array U32 8#usize × Std.Array U8 64#usize × Usize
+hf : PV_CBL_FinalSoft.sha_finalize_soft_owned updated.1 updated.2.1 updated.2.2.1 updated.2.2.2 = ok final
+⊢ ∃ output,
+    (let (state, blocks, buffer, pos) := (PV_CBL_DigestDefaultValue.state, 0#u64, Array.repeat 64#usize 0#u8, 0#usize)
+      do
+      let (state1, blocks1, buffer1, pos1) ← PV_CBL_DigestSoft.sha_update_soft_owned state blocks buffer pos data
+      let (digest, _, _, _) ← PV_CBL_FinalSoft.sha_finalize_soft_owned state1 blocks1 buffer1 pos1
+      ok digest) =
+      ok output
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_CBL_DigestSoftTotal.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.50
+	Maximum resident set size (kbytes): 2639256
+	Swaps: 0
+	Exit status: 1

@@ -1,0 +1,75 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestUpdateStep.lean:29:27: error: unexpected token ',*'; expected ']'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestUpdateStep.lean:24:42: error: unsolved goals
+case isTrue
+data : Slice U8
+state : Std.Array U32 8#usize
+blocks : U64
+buffer : Std.Array U8 64#usize
+pos i : Usize
+hp : ↑pos < 64
+hi : ↑i < (↑data).length
+hl : i < data.len
+h✝ : pos.wrapping_add 1#usize = 64#usize
+⊢ (let (_, index_mut_back) := ((↑buffer)[↑pos]!, fun x => buffer.set pos x)
+    do
+    let state1 ← PV_CBL_FinalSoft.sha_compress_byte_owned state (index_mut_back (↑data)[↑i])
+    ok
+        (cont
+          (state1, core.num.U64.wrapping_add blocks 1#u64, index_mut_back (↑data)[↑i], 0#usize,
+            i.wrapping_add 1#usize))) =
+    ok
+      (cont
+        ((if pos.wrapping_add 1#usize = 64#usize then
+              (PV_CBL_SoftByteSource.value state (buffer.set pos (↑data)[↑i]), blocks.wrapping_add 1#u64,
+                buffer.set pos (↑data)[↑i], 0#usize)
+            else (state, blocks, buffer.set pos (↑data)[↑i], pos.wrapping_add 1#usize)).1,
+          (if pos.wrapping_add 1#usize = 64#usize then
+                (PV_CBL_SoftByteSource.value state (buffer.set pos (↑data)[↑i]), blocks.wrapping_add 1#u64,
+                  buffer.set pos (↑data)[↑i], 0#usize)
+              else (state, blocks, buffer.set pos (↑data)[↑i], pos.wrapping_add 1#usize)).2.1,
+          (if pos.wrapping_add 1#usize = 64#usize then
+                  (PV_CBL_SoftByteSource.value state (buffer.set pos (↑data)[↑i]), blocks.wrapping_add 1#u64,
+                    buffer.set pos (↑data)[↑i], 0#usize)
+                else (state, blocks, buffer.set pos (↑data)[↑i], pos.wrapping_add 1#usize)).2.2.1,
+          (if pos.wrapping_add 1#usize = 64#usize then
+                  (PV_CBL_SoftByteSource.value state (buffer.set pos (↑data)[↑i]), blocks.wrapping_add 1#u64,
+                    buffer.set pos (↑data)[↑i], 0#usize)
+                else (state, blocks, buffer.set pos (↑data)[↑i], pos.wrapping_add 1#usize)).2.2.2,
+          i.wrapping_add 1#usize))
+
+case isFalse
+data : Slice U8
+state : Std.Array U32 8#usize
+blocks : U64
+buffer : Std.Array U8 64#usize
+pos i : Usize
+hp : ↑pos < 64
+hi : ↑i < (↑data).length
+hl : i < data.len
+h✝ : ¬pos.wrapping_add 1#usize = 64#usize
+⊢ (let (_, index_mut_back) := ((↑buffer)[↑pos]!, fun x => buffer.set pos x)
+    ok (cont (state, blocks, index_mut_back (↑data)[↑i], pos.wrapping_add 1#usize, i.wrapping_add 1#usize))) =
+    ok
+      (cont
+        ((if pos.wrapping_add 1#usize = 64#usize then
+              (PV_CBL_SoftByteSource.value state (buffer.set pos (↑data)[↑i]), blocks.wrapping_add 1#u64,
+                buffer.set pos (↑data)[↑i], 0#usize)
+            else (state, blocks, buffer.set pos (↑data)[↑i], pos.wrapping_add 1#usize)).1,
+          (if pos.wrapping_add 1#usize = 64#usize then
+                (PV_CBL_SoftByteSource.value state (buffer.set pos (↑data)[↑i]), blocks.wrapping_add 1#u64,
+                  buffer.set pos (↑data)[↑i], 0#usize)
+              else (state, blocks, buffer.set pos (↑data)[↑i], pos.wrapping_add 1#usize)).2.1,
+          (if pos.wrapping_add 1#usize = 64#usize then
+                  (PV_CBL_SoftByteSource.value state (buffer.set pos (↑data)[↑i]), blocks.wrapping_add 1#u64,
+                    buffer.set pos (↑data)[↑i], 0#usize)
+                else (state, blocks, buffer.set pos (↑data)[↑i], pos.wrapping_add 1#usize)).2.2.1,
+          (if pos.wrapping_add 1#usize = 64#usize then
+                  (PV_CBL_SoftByteSource.value state (buffer.set pos (↑data)[↑i]), blocks.wrapping_add 1#u64,
+                    buffer.set pos (↑data)[↑i], 0#usize)
+                else (state, blocks, buffer.set pos (↑data)[↑i], pos.wrapping_add 1#usize)).2.2.2,
+          i.wrapping_add 1#usize))
+'R1Z.PV_CBL_DigestUpdateStep.Snapshot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_DigestUpdateStep.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_DigestUpdateStep.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,21 @@
+import R1Z.PV_CBL_DigestUpdateStep
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_DigestUpdateInvariant
+set_option autoImplicit false
+theorem eager (state : Array U32 8#usize) (blocks : U64) (buffer : Array U8 64#usize)
+    (pos : Usize) (byte : U8) (hp : pos.val<64) :
+    (PV_CBL_DigestUpdateStep.next state blocks buffer pos byte).2.2.2.val<64 := by
+  have inc := PV_CBL_ArrayStep.increment pos 64#usize hp
+  unfold PV_CBL_DigestUpdateStep.next
+  split
+  · decide
+  · next hn =>
+    change (Usize.wrapping_add pos 1#usize).val<64
+    have he : (Usize.wrapping_add pos 1#usize).val≠64 := by
+      intro h
+      apply hn
+      apply UScalar.eq_of_val_eq
+      exact h
+    omega
+#print axioms eager
+end R1Z.PV_CBL_DigestUpdateInvariant

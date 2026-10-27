@@ -1,0 +1,31 @@
+import R1Z.PV_CBL_ArraySliceResult
+import R1Z.PV_CBL_ArraySuccess
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_ArraySliceLaw
+set_option autoImplicit false
+/-- The chosen reference clone is identity; actual native Copy/Clone association
+is retained separately, including the N=1024 owned Result/allocator boundary. -/
+def marker (T : Type) : core.marker.Copy T := {cloneInst := {clone := fun x => ok x}}
+theorem clone {T : Type} (v : Slice T) :
+    alloc.slice.Slice.to_vec (marker T).cloneInst v=ok v := by
+  obtain ⟨out,ho,he⟩ := WP.spec_imp_exists
+    (alloc.slice.Slice.to_vec_spec (marker T).cloneInst v (by intro x hx; rfl))
+  exact ho.trans (congrArg ok he.symm)
+def value {T : Type} (N : Usize) (v : Slice T) :
+    core.result.Result (Array T N) (alloc.vec.Vec T) :=
+  if h : Slice.len v=N then .Ok ⟨v.val,congrArg UScalar.val h⟩ else .Err v
+theorem source {T : Type} (N : Usize) (v : Slice T) (zero : T) :
+    PV_CBL_ArraySliceResult.array_slice_result_reference N (marker T) v zero=ok (value N v) := by
+  by_cases h : Slice.len v=N
+  · obtain ⟨a,ha,hav⟩ := PV_CBL_ArraySuccess.success N (marker T) v zero h
+    have he : a=(⟨v.val,congrArg UScalar.val h⟩ : Array T N) := Subtype.ext hav
+    simp only [PV_CBL_ArraySliceResult.array_slice_result_reference,ha,bind_tc_ok,
+      value,dif_pos h,he]
+  · simp only [PV_CBL_ArraySliceResult.array_slice_result_reference,
+      PV_CBL_ArrayGuard.wrong_length N (marker T) v zero h,bind_tc_ok,clone,
+      value,dif_neg h] <;> rfl
+#print axioms marker
+#print axioms clone
+#print axioms value
+#print axioms source
+end R1Z.PV_CBL_ArraySliceLaw

@@ -1,0 +1,126 @@
+String.utf8ByteSize_append : ∀ {s t : String}, (s ++ t).utf8ByteSize = s.utf8ByteSize + t.utf8ByteSize
+String.Slice.dropPrefix?_string_empty : ∀ {s : String.Slice}, s.dropPrefix? "" = some s
+String.Slice.Pattern.Model.NoPrefixPatternModel.eq_empty : ∀ {ρ : Type} {pat : ρ}
+  {inst : String.Slice.Pattern.Model.PatternModel pat} [self : String.Slice.Pattern.Model.NoPrefixPatternModel pat]
+  (s t : String),
+  String.Slice.Pattern.Model.PatternModel.Matches pat s →
+    String.Slice.Pattern.Model.PatternModel.Matches pat (s ++ t) → t = ""
+String.toList_append : ∀ {s t : String}, (s ++ t).toList = s.toList ++ t.toList
+String.Slice.endsWith_char_eq_false_iff_forall_append : ∀ {c : Char} {s : String.Slice},
+  s.endsWith c = false ↔ ∀ (t : String), s.copy ≠ t ++ String.singleton c
+String.Slice.endsWith_char_iff_exists_append : ∀ {c : Char} {s : String.Slice},
+  s.endsWith c = true ↔ ∃ t, s.copy = t ++ String.singleton c
+String.skipPrefix?_string_empty : ∀ {s : String}, s.skipPrefix? "" = some s.startPos
+String.endPos_empty : "".rawEndPos = 0
+String.Slice.Pos.Splits.eq_append : ∀ {s : String.Slice} {p : s.Pos} {t₁ t₂ : String},
+  p.Splits t₁ t₂ → s.copy = t₁ ++ t₂
+String.Pos.Splits.le_iff_exists_eq_append : ∀ {s : String} {p₁ p₂ : s.Pos} {t₁ t₂ t₃ t₄ : String},
+  p₁.Splits t₁ t₂ → p₂.Splits t₃ t₄ → (p₁ ≤ p₂ ↔ ∃ t₅, t₃ = t₁ ++ t₅ ∧ t₂ = t₅ ++ t₄)
+String.Pos.Raw.isValid_append : ∀ {s t : String} {p : String.Pos.Raw},
+  String.Pos.Raw.IsValid (s ++ t) p ↔ String.Pos.Raw.IsValid s p ∨ s.rawEndPos ≤ p ∧ String.Pos.Raw.IsValid t (p - s)
+String.toByteArray_append : ∀ {s t : String}, (s ++ t).toByteArray = s.toByteArray ++ t.toByteArray
+String.Slice.endsWith_string_empty : ∀ {s : String.Slice}, s.endsWith "" = true
+String.Pos.set_eq_append : ∀ {s : String} {p : s.Pos} {c : Char} {hp : p ≠ s.endPos},
+  p.set c hp = (s.sliceTo p).copy ++ String.singleton c ++ (s.sliceFrom (p.next hp)).copy
+String.Slice.Pattern.Model.StrictPatternModel.not_matches_empty : ∀ {ρ : Type} {pat : ρ}
+  {inst : String.Slice.Pattern.Model.PatternModel pat} [self : String.Slice.Pattern.Model.StrictPatternModel pat],
+  ¬String.Slice.Pattern.Model.PatternModel.Matches pat ""
+String.Internal.append : String → String → String
+String.fromUTF8? : ByteArray → Option String
+String.ofList_append : ∀ {l₁ l₂ : List Char}, String.ofList (l₁ ++ l₂) = String.ofList l₁ ++ String.ofList l₂
+String.Pos.Splits.lt_iff_exists_eq_append : ∀ {s : String} {p₁ p₂ : s.Pos} {t₁ t₂ t₃ t₄ : String},
+  p₁.Splits t₁ t₂ → p₂.Splits t₃ t₄ → (p₁ < p₂ ↔ ∃ t₅, t₅ ≠ "" ∧ t₃ = t₁ ++ t₅ ∧ t₂ = t₅ ++ t₄)
+String.endsWith_char_eq_false_iff_forall_append : ∀ {c : Char} {s : String},
+  s.endsWith c = false ↔ ∀ (t : String), s ≠ t ++ String.singleton c
+String.Internal.toArray_empty : String.Internal.toArray "" = #[]
+String.join_append : ∀ {l m : List String}, String.join (l ++ m) = String.join l ++ String.join m
+String.data_empty : "".toList = []
+String.Slice.Pattern.Model.ForwardSliceSearcher.exists_revMatchesAt_iff_eq_append : ∀ {pat s : String.Slice},
+  (∃ pos, String.Slice.Pattern.Model.RevMatchesAt pat pos) ↔ ∃ t₁ t₂, s.copy = t₁ ++ pat.copy ++ t₂
+String.intercalate_cons_append : ∀ {s t u : String} {l : List String},
+  s.intercalate ((t ++ u) :: l) = t ++ s.intercalate (u :: l)
+String.startsWith_char_iff_exists_append : ∀ {c : Char} {s : String},
+  s.startsWith c = true ↔ ∃ t, s = String.singleton c ++ t
+String.data_append : ∀ {l₁ l₂ : String}, (l₁ ++ l₂).toList = l₁.toList ++ l₂.toList
+String.Slice.Pattern.Model.ForwardStringSearcher.toSearcher_empty : ∀ (s : String.Slice),
+  String.Slice.Pattern.ToForwardSearcher.toSearcher "" s =
+    { internalState := String.Slice.Pattern.ForwardSliceSearcher.emptyBefore s.startPos }
+String.Slice.startsWith_char_iff_exists_append : ∀ {c : Char} {s : String.Slice},
+  s.startsWith c = true ↔ ∃ t, s.copy = String.singleton c ++ t
+String.Pos.Splits.eq_append : ∀ {s : String} {p : s.Pos} {t₁ t₂ : String}, p.Splits t₁ t₂ → s = t₁ ++ t₂
+String.isNat_append_underscore_append : ∀ {s t : String}, s.isNat = true → t.isNat = true → (s ++ "_" ++ t).isNat = true
+String.push_empty : ∀ {c : Char}, "".push c = String.singleton c
+String.Slice.startsWith_char_eq_false_iff_forall_append : ∀ {c : Char} {s : String.Slice},
+  s.startsWith c = false ↔ ∀ (t : String), s.copy ≠ String.singleton c ++ t
+String.startsWith_char_eq_false_iff_forall_append : ∀ {c : Char} {s : String},
+  s.startsWith c = false ↔ ∀ (t : String), s ≠ String.singleton c ++ t
+String.Slice.Pattern.Model.ForwardStringSearcher.exists_matchesAt_iff_eq_append : ∀ {pat : String} {s : String.Slice},
+  (∃ pos, String.Slice.Pattern.Model.MatchesAt pat pos) ↔ ∃ t₁ t₂, s.copy = t₁ ++ pat ++ t₂
+String.rawEndPos_empty : "".rawEndPos = 0
+String.Slice.Pos.Splits.le_iff_exists_eq_append : ∀ {s : String.Slice} {p₁ p₂ : s.Pos} {t₁ t₂ t₃ t₄ : String},
+  p₁.Splits t₁ t₂ → p₂.Splits t₃ t₄ → (p₁ ≤ p₂ ↔ ∃ t₅, t₃ = t₁ ++ t₅ ∧ t₂ = t₅ ++ t₄)
+String.map_eq_empty : ∀ {f : Char → Char} {s : String}, String.map f s = "" ↔ s = ""
+String.push_eq_append : ∀ {s : String} (c : Char), s.push c = s ++ String.singleton c
+String.toUTF8 : String → ByteArray
+String.eq_singleton_append : ∀ {s : String} (h : s.startPos ≠ s.endPos),
+  ∃ t, s = String.singleton (s.startPos.get h) ++ t
+String.append_empty : ∀ {s : String}, s ++ "" = s
+String.toList_split_empty : ∀ {ρ : Type} (pat : ρ) [inst : String.Slice.Pattern.Model.PatternModel pat]
+  [String.Slice.Pattern.Model.StrictPatternModel pat] {σ : String.Slice → Type}
+  [inst_2 : String.Slice.Pattern.ToForwardSearcher pat σ]
+  [inst_3 : (s : String.Slice) → Std.Iterator (σ s) Id (String.Slice.Pattern.SearchStep s)]
+  [inst_4 : ∀ (s : String.Slice), Std.Iterators.Finite (σ s) Id]
+  [String.Slice.Pattern.Model.LawfulToForwardSearcherModel pat], List.map String.Slice.copy ("".split pat).toList = [""]
+String.empty_append : ∀ {s : String}, "" ++ s = s
+String.append : String → String → String
+String.utf8ByteSize_empty : "".utf8ByteSize = 0
+String.length_empty : "".length = 0
+String.Slice.toInt?_eq_of_eq_minus_append : ∀ {s : String.Slice} {t : String},
+  s.copy = "-" ++ t → s.toInt? = Option.map (fun n => -↑n) t.toNat?
+String.toList_empty : "".toList = []
+String.Slice.dropSuffix?_string_empty : ∀ {s : String.Slice}, s.dropSuffix? "" = some s
+String.singleton_ne_empty : ∀ {c : Char}, String.singleton c ≠ ""
+String.Slice.skipSuffix?_string_empty : ∀ {s : String.Slice}, s.skipSuffix? "" = some s.endPos
+String.Slice.skipPrefix?_string_empty : ∀ {s : String.Slice}, s.skipPrefix? "" = some s.startPos
+String.dropPrefix?_string_empty : ∀ {s : String}, s.dropPrefix? "" = some s.toSlice
+String.push_ne_empty : ∀ {s : String} {c : Char}, s.push c ≠ ""
+String.Slice.Pos.Splits.exists_eq_singleton_append : ∀ {t₁ t₂ : String} {s : String.Slice} {p : s.Pos}
+  (hp : p ≠ s.endPos), p.Splits t₁ t₂ → ∃ t₂', t₂ = String.singleton (p.get hp) ++ t₂'
+String.Slice.Pattern.Model.not_matches_empty : ∀ {ρ : Type} {pat : ρ}
+  [inst : String.Slice.Pattern.Model.PatternModel pat] [String.Slice.Pattern.Model.StrictPatternModel pat],
+  ¬String.Slice.Pattern.Model.PatternModel.Matches pat ""
+String.startsWith_string_empty : ∀ {s : String}, s.startsWith "" = true
+String.toInt?_minus_append : ∀ {s : String}, ("-" ++ s).toInt? = Option.map (fun n => -↑n) s.toNat?
+String.endsWith_char_iff_exists_append : ∀ {c : Char} {s : String},
+  s.endsWith c = true ↔ ∃ t, s = t ++ String.singleton c
+String.length_append : ∀ (s t : String), (s ++ t).length = s.length + t.length
+String.Pos.Splits.exists_eq_singleton_append : ∀ {t₁ t₂ s : String} {p : s.Pos} (hp : p ≠ s.endPos),
+  p.Splits t₁ t₂ → ∃ t₂', t₂ = String.singleton (p.get hp) ++ t₂'
+String.Slice.startsWith_string_empty : ∀ {s : String.Slice}, s.startsWith "" = true
+String.Slice.Pattern.Model.ForwardStringSearcher.exists_revMatchesAt_iff_eq_append : ∀ {pat : String}
+  {s : String.Slice}, (∃ pos, String.Slice.Pattern.Model.RevMatchesAt pat pos) ↔ ∃ t₁ t₂, s.copy = t₁ ++ pat ++ t₂
+String.Slice.Pos.Splits.lt_iff_exists_eq_append : ∀ {s : String.Slice} {p₁ p₂ : s.Pos} {t₁ t₂ t₃ t₄ : String},
+  p₁.Splits t₁ t₂ → p₂.Splits t₃ t₄ → (p₁ < p₂ ↔ ∃ t₅, t₅ ≠ "" ∧ t₃ = t₁ ++ t₅ ∧ t₂ = t₅ ++ t₄)
+String.Pos.Raw.isValid_iff_exists_append : ∀ {s : String} {p : String.Pos.Raw},
+  String.Pos.Raw.IsValid s p ↔ ∃ s₁ s₂, s = s₁ ++ s₂ ∧ p = s₁.rawEndPos
+String.Pos.Raw.isValidForSlice_iff_exists_append : ∀ {s : String.Slice} {p : String.Pos.Raw},
+  String.Pos.Raw.IsValidForSlice s p ↔ ∃ t₁ t₂, s.copy = t₁ ++ t₂ ∧ p = t₁.rawEndPos
+String.toByteArray_empty : "".toByteArray = ByteArray.empty
+String.Slice.Pattern.Model.ForwardSliceSearcher.exists_matchesAt_iff_eq_append : ∀ {pat s : String.Slice},
+  (∃ pos, String.Slice.Pattern.Model.MatchesAt pat pos) ↔ ∃ t₁ t₂, s.copy = t₁ ++ pat.copy ++ t₂
+String.Slice.Pattern.Model.NoSuffixPatternModel.eq_empty : ∀ {ρ : Type} {pat : ρ}
+  {inst : String.Slice.Pattern.Model.PatternModel pat} [self : String.Slice.Pattern.Model.NoSuffixPatternModel pat]
+  (s t : String),
+  String.Slice.Pattern.Model.PatternModel.Matches pat t →
+    String.Slice.Pattern.Model.PatternModel.Matches pat (s ++ t) → s = ""
+structure String : Type
+number of parameters: 0
+fields:
+  String.toByteArray : ByteArray
+  String.isValidUTF8 : self.toByteArray.IsValidUTF8
+constructor:
+  String.ofByteArray (toByteArray : ByteArray) (isValidUTF8 : toByteArray.IsValidUTF8) : String
+def Aeneas.Std.Str : Type :=
+Aeneas.Std.Slice Aeneas.Std.U8
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

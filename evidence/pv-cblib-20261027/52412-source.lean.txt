@@ -1,0 +1,24 @@
+import R1Z.PV_CBL_ShaPadFixed
+import R1Z.PV_CBL_ArrayReadValue
+import R1Z.PV_CBL_ArrayStep
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_PadSuffixValue
+set_option autoImplicit false
+def value (out : Array U8 64#usize) (suffix : Array U8 8#usize) : Array U8 64#usize :=
+  ((((((((out.set 56#usize suffix.val[0]!).set 57#usize suffix.val[1]!).set 58#usize suffix.val[2]!).set 59#usize suffix.val[3]!).set 60#usize suffix.val[4]!).set 61#usize suffix.val[5]!).set 62#usize suffix.val[6]!).set 63#usize suffix.val[7]!)
+theorem source (out : Array U8 64#usize) (suffix : Array U8 8#usize) :
+    PV_CBL_ShaPadFixed.sha_pad_suffix8 out suffix = ok (value out suffix) := by
+  unfold PV_CBL_ShaPadFixed.sha_pad_suffix8
+  rw [PV_CBL_ArrayReadValue.read suffix 0#usize (by decide),bind_tc_ok]
+  rw [PV_CBL_ArrayReadValue.read suffix 1#usize (by decide),bind_tc_ok]
+  rw [PV_CBL_ArrayReadValue.read suffix 2#usize (by decide),bind_tc_ok]
+  rw [PV_CBL_ArrayReadValue.read suffix 3#usize (by decide),bind_tc_ok]
+  rw [PV_CBL_ArrayReadValue.read suffix 4#usize (by decide),bind_tc_ok]
+  rw [PV_CBL_ArrayReadValue.read suffix 5#usize (by decide),bind_tc_ok]
+  rw [PV_CBL_ArrayReadValue.read suffix 6#usize (by decide),bind_tc_ok]
+  rw [PV_CBL_ArrayReadValue.read suffix 7#usize (by decide),bind_tc_ok]
+  simp only [PV_CBL_ArrayStep.write _ _ _ (by decide),bind_tc_ok]
+  rfl
+#print axioms value
+#print axioms source
+end R1Z.PV_CBL_PadSuffixValue

@@ -1,0 +1,26 @@
+import R1Z.PV_CBL_PadZeroStep
+import R1Z.PV_CBL_ArrayPrefix
+open Aeneas Aeneas.Std Result ControlFlow
+namespace R1Z.PV_CBL_PadZeroContent
+set_option autoImplicit false
+/-- Each byte below the cursor is retained; every byte from the cursor is zero. -/
+theorem loop_content (out : Array U8 64#usize) (i : Usize) :
+    ∃ a, PV_CBL_ShaPadFixed.sha_pad_zero_loop out i = ok a ∧
+      ∀ (j : Nat), j<64 → a.val[j]! = if j<i.val then out.val[j]! else 0#u8 := by
+  generalize he : 64-i.val=fuel
+  induction fuel using Nat.strong_induction_on generalizing out i with
+  | h fuel ih =>
+    rw [PV_CBL_PadZeroStep.unfold_loop]
+    by_cases hi : i.val<64
+    · rw [PV_CBL_PadZeroStep.continuing out i hi,bind_tc_ok]
+      have inc := PV_CBL_ArrayStep.increment i 64#usize hi
+      obtain ⟨a,ha,hc⟩ := ih _ (by omega) (out.set i 0#u8)
+        (Usize.wrapping_add i 1#usize) rfl
+      refine ⟨a,ha,?_⟩
+      intro j hj
+      rw [hc j hj,inc,PV_CBL_ArrayPrefix.set_get out i 0#u8 j hi]
+      by_cases hji : j<i.val <;> by_cases heq : j=i.val <;> simp_all <;> omega
+    · rw [PV_CBL_PadZeroStep.done out i (by omega),bind_tc_ok]
+      exact ⟨out,rfl,by intro j hj; rw [if_pos (by omega)]⟩
+#print axioms loop_content
+end R1Z.PV_CBL_PadZeroContent

@@ -1,0 +1,112 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestUpdateStep.lean:35:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  next state blocks buffer pos (↑data)[↑i]
+in the target expression
+  (let (_, index_mut_back) := ((↑buffer)[↑pos]!, fun x => buffer.set pos x)
+    if pos.wrapping_add 1#usize = 64#usize then do
+      let state1 ← PV_CBL_FinalSoft.sha_compress_byte_owned state (index_mut_back (↑data)[↑i])
+      ok
+          (cont
+            (state1, core.num.U64.wrapping_add blocks 1#u64, index_mut_back (↑data)[↑i], 0#usize,
+              i.wrapping_add 1#usize))
+    else ok (cont (state, blocks, index_mut_back (↑data)[↑i], pos.wrapping_add 1#usize, i.wrapping_add 1#usize))) =
+    ok
+      (cont
+        ((next state blocks buffer pos (↑data)[↑i]).1, (next state blocks buffer pos (↑data)[↑i]).2.1,
+          (next state blocks buffer pos (↑data)[↑i]).2.2.1, (next state blocks buffer pos (↑data)[↑i]).2.2.2,
+          i.wrapping_add 1#usize))
+
+case pos
+data : Slice U8
+state : Std.Array U32 8#usize
+blocks : U64
+buffer : Std.Array U8 64#usize
+pos i : Usize
+hp : ↑pos < 64
+hi : ↑i < (↑data).length
+hl : i < data.len
+hc : pos.wrapping_add 1#usize = 64#usize
+hv :
+  next state blocks buffer pos (↑data)[↑i] =
+    (PV_CBL_SoftByteSource.value state (buffer.set pos (↑data)[↑i]), blocks.wrapping_add 1#u64,
+      buffer.set pos (↑data)[↑i], 0#usize)
+⊢ (let (_, index_mut_back) := ((↑buffer)[↑pos]!, fun x => buffer.set pos x)
+    if pos.wrapping_add 1#usize = 64#usize then do
+      let state1 ← PV_CBL_FinalSoft.sha_compress_byte_owned state (index_mut_back (↑data)[↑i])
+      ok
+          (cont
+            (state1, core.num.U64.wrapping_add blocks 1#u64, index_mut_back (↑data)[↑i], 0#usize,
+              i.wrapping_add 1#usize))
+    else ok (cont (state, blocks, index_mut_back (↑data)[↑i], pos.wrapping_add 1#usize, i.wrapping_add 1#usize))) =
+    ok
+      (cont
+        ((next state blocks buffer pos (↑data)[↑i]).1, (next state blocks buffer pos (↑data)[↑i]).2.1,
+          (next state blocks buffer pos (↑data)[↑i]).2.2.1, (next state blocks buffer pos (↑data)[↑i]).2.2.2,
+          i.wrapping_add 1#usize))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestUpdateStep.lean:42:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  next state blocks buffer pos (↑data)[↑i]
+in the target expression
+  (let (_, index_mut_back) := ((↑buffer)[↑pos]!, fun x => buffer.set pos x)
+    if pos.wrapping_add 1#usize = 64#usize then do
+      let state1 ← PV_CBL_FinalSoft.sha_compress_byte_owned state (index_mut_back (↑data)[↑i])
+      ok
+          (cont
+            (state1, core.num.U64.wrapping_add blocks 1#u64, index_mut_back (↑data)[↑i], 0#usize,
+              i.wrapping_add 1#usize))
+    else ok (cont (state, blocks, index_mut_back (↑data)[↑i], pos.wrapping_add 1#usize, i.wrapping_add 1#usize))) =
+    ok
+      (cont
+        ((next state blocks buffer pos (↑data)[↑i]).1, (next state blocks buffer pos (↑data)[↑i]).2.1,
+          (next state blocks buffer pos (↑data)[↑i]).2.2.1, (next state blocks buffer pos (↑data)[↑i]).2.2.2,
+          i.wrapping_add 1#usize))
+
+case neg
+data : Slice U8
+state : Std.Array U32 8#usize
+blocks : U64
+buffer : Std.Array U8 64#usize
+pos i : Usize
+hp : ↑pos < 64
+hi : ↑i < (↑data).length
+hl : i < data.len
+hc : ¬pos.wrapping_add 1#usize = 64#usize
+hv : next state blocks buffer pos (↑data)[↑i] = (state, blocks, buffer.set pos (↑data)[↑i], pos.wrapping_add 1#usize)
+⊢ (let (_, index_mut_back) := ((↑buffer)[↑pos]!, fun x => buffer.set pos x)
+    if pos.wrapping_add 1#usize = 64#usize then do
+      let state1 ← PV_CBL_FinalSoft.sha_compress_byte_owned state (index_mut_back (↑data)[↑i])
+      ok
+          (cont
+            (state1, core.num.U64.wrapping_add blocks 1#u64, index_mut_back (↑data)[↑i], 0#usize,
+              i.wrapping_add 1#usize))
+    else ok (cont (state, blocks, index_mut_back (↑data)[↑i], pos.wrapping_add 1#usize, i.wrapping_add 1#usize))) =
+    ok
+      (cont
+        ((next state blocks buffer pos (↑data)[↑i]).1, (next state blocks buffer pos (↑data)[↑i]).2.1,
+          (next state blocks buffer pos (↑data)[↑i]).2.2.1, (next state blocks buffer pos (↑data)[↑i]).2.2.2,
+          i.wrapping_add 1#usize))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_CBL_DigestUpdateStep.Snapshot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_DigestUpdateStep.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_DigestUpdateStep.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

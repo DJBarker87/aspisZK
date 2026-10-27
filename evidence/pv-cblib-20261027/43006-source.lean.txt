@@ -1,0 +1,15 @@
+import R1Z.PV_CBL_StringViewSource
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_StringViewValue
+set_option autoImplicit false
+theorem total (s : String) : PV_CBL_StringOwnedReference.string_owned_reference s = ok s := rfl
+theorem result (s t : String) :
+    PV_CBL_StringOwnedReference.string_owned_reference s = ok t ↔ s=t := by
+  simp only [PV_CBL_StringOwnedReference.string_owned_reference, Result.ok.injEq]
+theorem failure (s : String) (e : Error) :
+    PV_CBL_StringOwnedReference.string_owned_reference s ≠ fail e := by
+  simp only [PV_CBL_StringOwnedReference.string_owned_reference, reduceCtorEq, not_false_eq_true]
+#print axioms total
+#print axioms result
+#print axioms failure
+end R1Z.PV_CBL_StringViewValue

@@ -1,0 +1,16 @@
+import R1Z.PV_CBL_ByteWordsSource
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_ByteWordsContent
+set_option autoImplicit false
+/-- Generic list-level word decoding, independent of the generated lane names. -/
+def word (b : Array U8 64#usize) (lane : Nat) : U32 :=
+  PV_CBL_ByteCodecValue.load b.val[4*lane]! b.val[4*lane+1]!
+    b.val[4*lane+2]! b.val[4*lane+3]!
+theorem coordinate (b : Array U8 64#usize) (lane : Nat) (hl : lane<16) :
+    (PV_CBL_ByteWordsSource.value b).val[lane]! = word b lane := by
+  have hc : lane=0 ∨ lane=1 ∨ lane=2 ∨ lane=3 ∨ lane=4 ∨ lane=5 ∨ lane=6 ∨ lane=7 ∨
+    lane=8 ∨ lane=9 ∨ lane=10 ∨ lane=11 ∨ lane=12 ∨ lane=13 ∨ lane=14 ∨ lane=15 := by omega
+  rcases hc with rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl <;> rfl
+#print axioms word
+#print axioms coordinate
+end R1Z.PV_CBL_ByteWordsContent

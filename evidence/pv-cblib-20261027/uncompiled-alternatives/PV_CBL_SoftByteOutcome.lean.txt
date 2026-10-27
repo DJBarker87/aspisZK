@@ -1,0 +1,18 @@
+import R1Z.PV_CBL_SoftByteSource
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_SoftByteOutcome
+set_option autoImplicit false
+theorem result (state : Array U32 8#usize) (block : Array U8 64#usize)
+    (out : Array U32 8#usize) (h : PV_CBL_SoftByteSource.reference state block=ok out) :
+    out=PV_CBL_SoftByteSource.value state block := by
+  rw [PV_CBL_SoftByteSource.source] at h
+  cases h
+  rfl
+theorem no_fail (state : Array U32 8#usize) (block : Array U8 64#usize) (error : Error) :
+    PV_CBL_SoftByteSource.reference state block≠fail error := by
+  rw [PV_CBL_SoftByteSource.source]
+  intro h
+  cases h
+#print axioms result
+#print axioms no_fail
+end R1Z.PV_CBL_SoftByteOutcome

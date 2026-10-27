@@ -1,0 +1,66 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0959); env=J
+slot: /tmp/aspis-r0-lean-slot-2.lock
+        motive (i + 1) (bs.get! i :: r) (ByteArray.toList.loop bs (i + 1) (bs.get! i :: r)) →
+          motive i r (ByteArray.toList.loop bs (i + 1) (bs.get! i :: r))) →
+    (∀ (i : ℕ) (r : List UInt8), ¬i < bs.size → motive i r r.reverse) →
+      ∀ (i : ℕ) (r : List UInt8), motive i r (ByteArray.toList.loop bs i r)
+String.Pos.Splits.toByteArray_right_eq : ∀ {s : String} {p : s.Pos} {t₁ t₂ : String},
+  p.Splits t₁ t₂ → t₂.toByteArray = s.toByteArray.extract p.offset.byteIdx s.utf8ByteSize
+ByteArray.toList.loop : ByteArray → ℕ → List UInt8 → List UInt8
+ByteArray.toList.eq_1 : ∀ (bs : ByteArray), bs.toList = ByteArray.toList.loop bs 0 []
+ByteArray.toList.loop._unary.induct_unfolding : ∀ (bs : ByteArray) (motive : (_ : ℕ) ×' List UInt8 → List UInt8 → Prop),
+  (∀ (i : ℕ) (r : List UInt8),
+      i < bs.size →
+        motive ⟨i + 1, bs.get! i :: r⟩ (ByteArray.toList.loop._unary bs ⟨i + 1, bs.get! i :: r⟩) →
+          motive ⟨i, r⟩ (ByteArray.toList.loop._unary bs ⟨i + 1, bs.get! i :: r⟩)) →
+    (∀ (i : ℕ) (r : List UInt8), ¬i < bs.size → motive ⟨i, r⟩ r.reverse) →
+      ∀ (_x : (_ : ℕ) ×' List UInt8), motive _x (ByteArray.toList.loop._unary bs _x)
+String.toByteArray_eq_empty_iff._simp_1 : ∀ {s : String}, (s.toByteArray = ByteArray.empty) = (s = "")
+ByteArray.toList.loop._unary._proof_1 : ∀ (bs : ByteArray) (i : ℕ) (r : List UInt8),
+  i < bs.size →
+    InvImage (fun x1 x2 => x1 < x2)
+      (fun x =>
+        let ⟨i, r⟩ := x
+        bs.size - i)
+      ⟨i + 1, bs.get! i :: r⟩ ⟨i, r⟩
+ByteArray.toList : ByteArray → List UInt8
+ByteArray.toList.loop.eq_def : ∀ (bs : ByteArray) (i : ℕ) (r : List UInt8),
+  ByteArray.toList.loop bs i r = if i < bs.size then ByteArray.toList.loop bs (i + 1) (bs.get! i :: r) else r.reverse
+String.Pos.Splits.toByteArray_eq_right : ∀ {s : String} {p : s.Pos} {t₁ t₂ : String},
+  p.Splits t₁ t₂ → t₂.toByteArray = s.toByteArray.extract p.offset.byteIdx s.toByteArray.size
+String.ext : ∀ {s₁ s₂ : String}, s₁.toList = s₂.toList → s₁ = s₂
+String.toByteArray_copy_slice : ∀ {s : String} {p₁ p₂ : s.Pos} {h : p₁ ≤ p₂},
+  (s.slice p₁ p₂ h).copy.toByteArray = s.toByteArray.extract p₁.offset.byteIdx p₂.offset.byteIdx
+String.toByteArray_push : ∀ {s : String} {c : Char}, (s.push c).toByteArray = s.toByteArray ++ [c].utf8Encode
+String.toByteArray_utf8EncodeChar_of_utf8DecodeChar?_eq_some : ∀ {b : ByteArray} {c : Char},
+  b.utf8DecodeChar? 0 = some c → (String.utf8EncodeChar c).toByteArray = b.extract 0 c.utf8Size
+String.Slice.utf8ByteSize_eq_size_toByteArray_copy : ∀ {s : String.Slice}, s.utf8ByteSize = s.copy.toByteArray.size
+ByteArray.toList_data_append' : ∀ {a b : ByteArray}, (a.append b).data.toList = a.data.toList ++ b.data.toList
+ByteArray.toList.loop._unsafe_rec : ByteArray → ℕ → List UInt8 → List UInt8
+String.fromUTF8! : ByteArray → String
+String.fromUTF8 : (a : ByteArray) → a.IsValidUTF8 → String
+String.toByteArray_extract : ∀ {s : String} {b e : s.Pos},
+  (String.extract b e).toByteArray = s.toByteArray.extract b.offset.byteIdx e.offset.byteIdx
+String.toByteArray_inj : ∀ {s t : String}, s.toByteArray = t.toByteArray ↔ s = t
+String.size_toByteArray : ∀ {s : String}, s.toByteArray.size = s.utf8ByteSize
+ByteArray.toList.loop.eq_1 : ∀ (bs : ByteArray) (i : ℕ) (r : List UInt8),
+  ByteArray.toList.loop bs i r = if i < bs.size then ByteArray.toList.loop bs (i + 1) (bs.get! i :: r) else r.reverse
+String.Slice.toByteArray_copy_eq_empty_iff : ∀ {s : String.Slice},
+  s.copy.toByteArray = ByteArray.empty ↔ s.isEmpty = true
+String.toByteArray_empty : "".toByteArray = ByteArray.empty
+String.copy_toByteArray_sliceTo : ∀ {s : String} {pos : s.Pos},
+  (s.sliceTo pos).copy.toByteArray = s.toByteArray.extract 0 pos.offset.byteIdx
+String.Slice.toByteArray_copy_ne_empty_iff : ∀ {s : String.Slice},
+  s.copy.toByteArray ≠ ByteArray.empty ↔ s.isEmpty = false
+String.Slice.toByteArray_str_eq : ∀ {s : String.Slice},
+  s.str.toByteArray =
+    s.str.toByteArray.extract 0 s.startInclusive.offset.byteIdx ++ s.copy.toByteArray ++
+      s.str.toByteArray.extract s.endExclusive.offset.byteIdx s.str.toByteArray.size
+String.Slice.toByteArray_copy : ∀ {s : String.Slice},
+  s.copy.toByteArray = s.str.toByteArray.extract s.startInclusive.offset.byteIdx s.endExclusive.offset.byteIdx
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.33
+	Maximum resident set size (kbytes): 2647876
+	Swaps: 0
+	Exit status: 0

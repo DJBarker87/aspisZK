@@ -1,0 +1,22 @@
+List.ext_getElem.{u_1} {α : Type u_1} {l₁ l₂ : List α} (hl : l₁.length = l₂.length)
+  (h : ∀ (i : ℕ) (h₁ : i < l₁.length) (h₂ : i < l₂.length), l₁[i] = l₂[i]) : l₁ = l₂
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_PadListFacts.lean:7:7: error(lean.unknownIdentifier): Unknown constant `List.getElem!_eq_getElem`
+List.getElem_append_left.{u_1} {α : Type u_1} {i : ℕ} {«as» bs : List α} (h : i < «as».length)
+  {h' : i < («as» ++ bs).length} : («as» ++ bs)[i] = «as»[i]
+List.getElem_append_right.{u_1} {α : Type u_1} {«as» bs : List α} {i : ℕ} (h₁ : «as».length ≤ i)
+  {h₂ : i < («as» ++ bs).length} : («as» ++ bs)[i] = bs[i - «as».length]
+List.getElem_take.{u_1} {α : Type u_1} {xs : List α} {j i : ℕ} {h : i < (List.take j xs).length} :
+  (List.take j xs)[i] = xs[i]
+List.getElem_replicate.{u_1} {α : Type u_1} {a : α} {n i : ℕ} (h : i < (List.replicate n a).length) :
+  (List.replicate n a)[i] = a
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_PadListFacts.lean:12:7: error: overloaded, errors 
+  Unknown constant `Array.index_usize_eq`
+  
+  Unknown constant `Aeneas.Std.Array.index_usize_eq`
+Aeneas.Std.Array.set_val_eq.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α) :
+  ↑(v.set i x) = (↑v).set (↑i) x
+List.set_eq_take_append_cons_drop.{u_1} {α : Type u_1} {l : List α} {i : ℕ} {a : α} :
+  l.set i a = if i < l.length then List.take i l ++ a :: List.drop (i + 1) l else l
+List.take_append_drop.{u_1} {α : Type u_1} (i : ℕ) (l : List α) : List.take i l ++ List.drop i l = l
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

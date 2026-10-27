@@ -1,0 +1,35 @@
+import R1Z.PV_CBL_ArrayResult
+import R1Z.ProverRwFullExternalFuns
+open Aeneas Aeneas.Std Result
+noncomputable section
+namespace R1Z.PV_CBL_ArraySelection
+open ProverRwFull
+set_option autoImplicit false
+variable [ExternalTypes]
+
+/-- Candidate shape only: native P6 and the complete extracted wrapper are
+required before this may be published as an op36_source callback law. -/
+def transport {T : Type} (N : Usize) (ht : T = PV_CBL_ArrayQM31.Q)
+    (hn : N = 1024#usize) (v : alloc.vec.Vec T) :
+    Result (core.result.Result (Array T N) (alloc.vec.Vec T)) := by
+  subst T
+  subst N
+  exact PV_CBL_ArrayResult.reference v
+
+def selected (ops : ExternalFuns) : ExternalFuns := by
+  classical
+  exact {ops with op36 := fun {T} A N v =>
+    if h : T = PV_CBL_ArrayQM31.Q ∧ N = (1024#usize : Usize) then
+      transport N h.1 h.2 v
+    else @ExternalFuns.op36 _ ops T A N v}
+
+theorem specialized_shape (ops : ExternalFuns) (A : Type)
+    (v : alloc.vec.Vec PV_CBL_ArrayQM31.Q) :
+    @ExternalFuns.op36 _ (selected ops) PV_CBL_ArrayQM31.Q A 1024#usize v =
+      PV_CBL_ArrayResult.reference v := by
+  simp only [selected,dif_pos (show PV_CBL_ArrayQM31.Q=PV_CBL_ArrayQM31.Q ∧
+    (1024#usize:Usize)=1024#usize from ⟨rfl,rfl⟩)]
+
+#print axioms transport
+#print axioms specialized_shape
+end R1Z.PV_CBL_ArraySelection
