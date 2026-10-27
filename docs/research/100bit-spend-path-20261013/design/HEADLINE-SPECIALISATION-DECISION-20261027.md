@@ -1,5 +1,7 @@
 # Decision: adopt the installation-specialised headline FJv_Deployed? (lead, 2026-10-27)
 
+**APPROVED by the owner 2026-10-27 ("i gpo with all your recommendations"): the recommended option is adopted and recorded in SECURITY-CONTRACT-20261021.md, 'Owner-approved amendment, 2026-10-27 (second)'.**
+
 Status: DECISION REQUESTED from the owner. Nothing adopted.
 
 ## The two theorems

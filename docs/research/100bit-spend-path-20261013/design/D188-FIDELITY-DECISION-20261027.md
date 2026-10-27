@@ -1,5 +1,7 @@
 # Decision: how to repair D188 after finding D188-P3 (lead, 2026-10-27)
 
+**APPROVED by the owner 2026-10-27 ("i gpo with all your recommendations"): the recommended option is adopted and recorded in SECURITY-CONTRACT-20261021.md, 'Owner-approved amendment, 2026-10-27 (second)'.**
+
 ## What happened
 
 The owner-approved trust item D188 says the pinned Charon/Aeneas translation

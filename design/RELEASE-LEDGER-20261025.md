@@ -258,6 +258,19 @@ public chi against witness-derived slots; private witness/key fields are parsed
 as decimal JSON with digit-count branches; and `aspis-prover/insecure-spend-
 fixture` is enabled in the binary. The release recipe (features, toolchain,
 constant-time private-input decoding) is an open owner decision.
+**Client toolchain pin (owner-approved 2026-10-27; LOG D270).** The native
+client build uses exactly rustc 1.94.1 (commit
+e408947bfd200af42db322daf0fadfe7e26d3bd1, 2026-03-25) and cargo 1.94.1
+(29ea6fb6a, 2026-03-24), with LLVM 21.1.8 and host/target
+x86_64-unknown-linux-gnu, the recorded RUSTFLAGS
+(`-C link-arg=-Wl,--threads=4`), and no target-cpu change. These are the
+toolchain the candidate's timing, differential and L3 evidence were produced
+with. A rust-toolchain file for the client build is still to be added (Stream B
+owns the client build). The pin is re-confirmed at prover candidate adoption.
+This approval covers ONLY the toolchain. The release recipe's features (for
+example ct-host-prover, and removing insecure-spend-fixture) and constant-time
+private-input decoding (LOG D272) remain open owner decisions, so "the shipped
+client binary" is still not fully defined.
 
 ## Exact release gates
 
