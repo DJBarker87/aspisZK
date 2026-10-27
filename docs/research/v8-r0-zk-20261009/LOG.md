@@ -10766,3 +10766,20 @@ deployed public binding from PV_Src_*, concrete runtime/observer per fixture for
 missing objects and the L2 source closure toward `trace`. Stream B's agreed range 35000-39999 has 700 IDs
 left (39300-39999); a further range will be agreed with Stream A before it runs out. Six slots: srcid6,
 rw21, cb6, recount3, cb7, runjoin10. Rows removed outright: 0. Privacy target not yet established.
+
+## D238 (Stream B) 2026-10-27 01:45 UTC: env-J launcher range extended to 40000-49999 (range-only edit, agreed with Stream A)
+
+Agreed split: 40000-44999 Stream B, 45000-49999 Stream A; 5000-39999 behaviour and the duplicate guard
+unchanged. Edit on the host, backup `tools/run-joint.sh.bak-streamB-20261027` (sha256
+c1fa8fe3cbd248ef01cf2cc7a54496bb16fe7722ad655599e31c7a60a27d6d27), new file sha256
+11cc87d94e7069923fda1948c498a5e6ced8afc36a9a3c225dbdb277eeb27121, `sh -n` clean:
+
+```diff
+--- r1-privacy-build-integration-20261019/tools/run-joint.sh.bak-streamB-20261027
++++ r1-privacy-build-integration-20261019/tools/run-joint.sh
+@@ -21 +21 @@
+-  case "$A" in 5[0-7][0-9][0-9]|[6-9][0-9][0-9][0-9]|1[0-9][0-9][0-9][0-9]|2[0-9][0-9][0-9][0-9]|3[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
++  case "$A" in 5[0-7][0-9][0-9]|[6-9][0-9][0-9][0-9]|1[0-9][0-9][0-9][0-9]|2[0-9][0-9][0-9][0-9]|3[0-9][0-9][0-9][0-9]|4[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
+```
+Stream B's next job ranges: 39300-39599, 39600-39899, then 40000+ in blocks of 300. Privacy target not
+yet established.
