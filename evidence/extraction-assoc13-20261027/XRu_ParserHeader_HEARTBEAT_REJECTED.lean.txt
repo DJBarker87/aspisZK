@@ -12,7 +12,7 @@ theorem source (row : U8) (bytes : Slice U8) (early : row.val<14) :
  have h : ¬row≥14#u8 := by scalar_tac
  unfold r1_wire.parse_record AspisR1PrefixAggregateParser.r1_wire.parse_record
  rw [XRu_ParserShapes.source row]
- simp only [if_neg h]
- rfl
+ simp only [if_neg h,mapR_bind]
+ repeat' first | rfl | (congr 1) | (funext x) | (split)
 #print axioms source
 end XRu_ParserHeader

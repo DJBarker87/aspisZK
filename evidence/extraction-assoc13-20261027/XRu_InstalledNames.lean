@@ -1,9 +1,7 @@
-import ExtractedSemanticRoundsModel
-import ExtractedVerifyFinishModel
-import XRr_FinalAudit
+import RPx_Deployed
 #check AspisR1PublicPreparation.RoundModel.step
 #check AspisR1PublicPreparation.RoundModel.rounds
 #check AspisR1PublicPreparation.FinishModel.finish
 #check AspisR1PublicPreparation.FinishModel.Boundaries
-#print axioms XRr_RecordAssociation.validated
-#print axioms XRr_SemanticSample.source
+#check AspisR1.IDa_Deployed.boundaries
+#check AspisR1.IDa_Deployed.deployedConfiguration
