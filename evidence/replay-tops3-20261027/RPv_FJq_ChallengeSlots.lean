@@ -1,0 +1,19 @@
+import RPv_FJq_MainCells
+import RPz7_ExtractedDigest32Begin
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJq_ChallengeSlots
+open Aeneas Aeneas.Std
+open AspisR1PublicPreparation
+open FIz_ConcretePack (embed)
+/-- Wide interpretations of the SAME ordered source begin and round values. -/
+def values (c : r1_wire.Challenges) (alpha : Array aspis_core.field.QM31 10#usize) :=
+  (BeginCalls.challengeList c++alpha.val).map (fun x=>embed (FIp_SemanticValues.decode x))
+theorem length (c : r1_wire.Challenges) (alpha : Array aspis_core.field.QM31 10#usize) :
+    (values c alpha).length=25 := by
+  simp only [values,BeginCalls.challengeList,List.length_map,List.length_append,List.length_cons,
+    List.length_nil,c.zc.property,alpha.property]
+  rfl
+#print axioms length
+end AspisR1.FJq_ChallengeSlots
+end
