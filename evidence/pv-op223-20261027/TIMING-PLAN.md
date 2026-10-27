@@ -7,7 +7,7 @@ Control Rust source: `258c685f5083c19ac238cecc0ade75dc6499f4f6`;
 its crates/, programs/ and Cargo.lock bytes equal rebase candidate `3f9177b647`.
 Use the unchanged `prover_rw_gate` fixture harness from each source, compiled
 with `cargo build --release --locked --offline -j 4 -p aspis-r1-cost-probe
---features ct-host-prover --example prover_rw_gate`. Pin both binaries by hash
+--features optimized-terminal,r1p-check,ct-host-prover --example prover_rw_gate`. Pin both binaries by hash
 and size before entering the quiet window.
 
 Host directory `/home/dombarker/project-offloads/codex-pv-op223-20261027/`.

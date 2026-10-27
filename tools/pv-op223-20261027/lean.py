@@ -28,9 +28,14 @@ cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generi
 label='lean-'+str(n)
 a=subprocess.run(['ssh',H,shlex.join(['python3',D+'/run_host.py',label,json.dumps(cmd)])],text=True,capture_output=True);(E/f'{n}-launcher.log').write_text(a.stdout+a.stderr);print(a.stdout+a.stderr)
 res=subprocess.run(['ssh',H,'cat '+D+'/'+label+'/receipt/receipt.json'],text=True,capture_output=True)
-if res.returncode:print('UNCHARGED refusal; preserve cooldown');sys.exit(a.returncode or 1)
+if res.returncode:
+ for name in ['admission-before.json','reservation.log','admission-barrier.json','output.log']:
+  rr=subprocess.run(['ssh',H,'cat '+D+'/'+label+'/'+name],text=True,capture_output=True)
+  if rr.returncode==0:(E/f'{n}-{name}').write_text(rr.stdout)
+ print('UNCHARGED refusal; preserve cooldown');sys.exit(a.returncode or 1)
 rec=json.loads(res.stdout);t=json.loads(tp.read_text());t['lean_charged']+=1;t['attempts'][-1].update(charged=True,exit=rec['exit_status']);tp.write_text(json.dumps(t,indent=2)+'\n')
 for name in ['stdout.log','stderr.log','time.log']:
  v=subprocess.check_output(['ssh',H,'cat '+D+'/'+label+'/receipt/'+name],text=True);(E/f'{n}-{name}').write_text(v)
  if name=='stdout.log':meta['axiom_output']=v;print(v)
+rec['print_axioms']=[line for line in meta.get('axiom_output','').splitlines() if 'axioms' in line] if rec['exit_status']==0 else 'compile failed; no accepted theorem from this attempt'
 meta.update(rec);(E/f'{n}.json').write_text(json.dumps(meta,indent=2)+'\n');sys.exit(rec['exit_status'])
