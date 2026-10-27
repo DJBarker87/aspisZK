@@ -1,0 +1,13 @@
+# Adopted headline before/after and ledger delta
+
+Actual top: AspisR1.RPx_Deployed.deployed. Complete inherited kernel statement is retained in XSe_top_before.lean.txt and XSe_top_after.lean.txt. They are byte-identical with SHA2568ae0107f9dbb7374135912ff9dda3597ad0096023d0deed471b0cd4dcf305523. These are unchanged inherited statement evidence, not a new root proof/release replay. Reused root audit: XSc_L003 on its original coherent replay cohort; predecessor co-import XSe_L001 supplies the checked inherited local closure.
+
+Ledger method: atomic-family / SAME-witness / shared-once / L185=L159. Adopted booked83T/0P/13G, L154 statement parameter. Actual-top removed0,added0,changed0; deltaT0/P0/G0/C0. No fresh absolute recount. All quantifiers, carriers, adversary, failure event, conclusion, game, metric, bounds, trust and release source/ELF pins unchanged. Every association row A0–A8 remains individually OPEN. No D188-P2 frozen-release credit.
+
+Local before/after:
+- XRz_PushCanonical.source required canonical power/basis and periodic row phase. XSe_HybridCanonical/PowerDomain derive power at EVERY SAME successful reached query prefix; XSe_QueryBasis derives canonical basis at its actual row loop. Periodic reached phase and eager/deferred whole Result/state/trace equation remain open.
+- XSc_HybridCheckpointShape derived64 restored weights/next10. XSe_HybridSaved additionally derives S2,canonical rho/power/all64 weights on THAT accepted hybrid saved cut. It still does not establish all S1S7S8StateProvenance fields or every reached call site.
+- XRz_RecordTransport/RecordAt required an independent universal validator callback. XSe_RecordTransport/RecordAt retain the SAME row,bytes,offset and complete Result, and DERIVE the validator's native domain from those source-selected header/slice cuts. This discharges the local callback premise. The whole installed A8/root premise is not discharged.
+- XSe_ParseStages transports the complete27-stage fold through nominal error carriers; final literal cohort parser/installed verification and attempted-trace composition remain open.
+
+Non-vacuity: XSe_RecordNonvacuity.source/cohort exhibit actual validator success for every row on SAME empty bytes; XSe_ByteNonvacuity.source proves decoder totality on arbitrary bytes; XSe_FinishCanonical.source provides actual complete materialization success with canonical outputs for every raw state at the derived length domain. Reused XRp SAME-block sampler disagreement and XRr stopped/rejected witnesses retain their scopes. No accepted TX1/TX2 or joint adopted-root inhabitant is supplied. Failure to establish joint non-vacuity remains visible; no new satisfiability claim is made.

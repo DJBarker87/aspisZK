@@ -1,0 +1,26 @@
+import XSe_NewPhaseSource
+import XRz_HybridCuts
+open Aeneas Aeneas.Std Result XRn_Join_Release
+set_option autoImplicit false
+namespace XSe_HybridInitialPhase
+/-- Initial phase envelope is established at the actual first query's pending
+state, obtained from the SAME accepted hybrid run. -/
+theorem source {H : Type} (D : aspis_core.digest.Digest32 H)
+ (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+ (physical proof : Slice U8) (split : Usize) (hash : H)
+ (obs : Option (verifier.Phase → Result Unit)) (saved : alloc.vec.Vec U8)
+ (run : XRz_HybridTx1.tx1 XRz_HybridSampler.adopted D pub physical proof split hash obs=ok (.Ok saved)) :
+ ∃ (p : verifier.Prepared) (g : Array aspis_core.field.wide_exact.WideExact 29#usize)
+ (initial a : verifier.Accumulator) (geo : verifier.QueryGeometry)
+ (pending0 pending : verifier.BatchedWeights),
+ verifier.Accumulator.new .S2=ok (.Ok initial) ∧
+ verifier.BatchedWeights.new initial.weights.deref=ok (.Ok pending0) ∧
+ XSe_InitialRowPhase.Small pending0.raw ∧ pending0.terms=0#usize ∧
+ verifier.candidate.query_loop proof p initial g obs geo pending0 split=ok (.Ok (a,pending)) := by
+ obtain ⟨_,shape,zero,p,g,initial,root,geo,pending0,a,pending,slice,restore,finished,
+  _,_,_,_,hinit,_,_,hnew,hquery,_,_,_⟩ :=
+  XRz_HybridCuts.source XRz_HybridSampler.adopted D pub physical proof split hash obs saved run
+ have domain := XSe_NewPhaseSource.source initial.weights.deref pending0 hnew
+ exact ⟨p,g,initial,a,geo,pending0,pending,hinit,hnew,domain.1,domain.2,hquery⟩
+#print axioms source
+end XSe_HybridInitialPhase
