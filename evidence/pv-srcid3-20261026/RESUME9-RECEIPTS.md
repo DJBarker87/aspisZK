@@ -92,8 +92,20 @@ Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scop
 | 42789 | R1Z/PV_Src_RootDynamicStages | 0 | standard | 0:01.75 | 4289644 | 0 | 0718aa31d7 | 1/1 |
 | 42790 | R1Z/PV_Src_RootDynamicPublicStages | 0 | standard | 0:01.74 | 4290448 | 0 | 0718aa31d7 | 1/1 |
 | 42791 | R1Z/PV_Src_RootDynamicWords | 0 | standard | 0:01.71 | 4214416 | 0 | 0718aa31d7 | 1/1 |
+| 42793 | R1Z/PV_Src_RootDynamicPremises | 1 | REJECTED | 0:01.60 | 4270920 | 0 | 0718aa31d7 | 1/1 |
+| 42794 | R1Z/PV_Src_RootDynamicPremises | 0 | standard | 0:01.84 | 4293700 | 0 | 0718aa31d7 | 1/1 |
+| 42795 | R1Z/PV_Src_RootDynamicIdentification | 1 | REJECTED | 0:01.68 | 4268608 | 0 | 0718aa31d7 | 1/1 |
+| 42796 | R1Z/PV_Src_RootDynamicIdentification | 0 | standard | 0:01.67 | 4289420 | 0 | 0718aa31d7 | 1/1 |
+| 42797 | R1Z/PV_Src_PublicRootAssociation | 0 | standard | 0:01.78 | 4218784 | 0 | 0718aa31d7 | 1/1 |
+| 42798 | R1Z/PV_Src_RecordAssociation | 0 | standard | 0:01.68 | 4214944 | 0 | 0718aa31d7 | 1/1 |
+| 42799 | R1Z/PV_Src_PublicInstalledRoot | 0 | standard | 0:01.71 | 4217024 | 0 | 0718aa31d7 | 1/1 |
+| 42800 | R1Z/PV_Src_NativeInstalledRootReduced | 0 | standard | 0:01.75 | 4219912 | 0 | 0718aa31d7 | 1/1 |
+| 42801 | R1Z/PV_Src_SourceCompilerRootClosed | 0 | standard | 0:01.57 | 4216444 | 0 | 0718aa31d7 | 1/1 |
+| 42802 | R1Z/PV_Src_FinalAudit9A | 0 | standard | 0:01.73 | 4295320 | 0 | 23ffdd8494 | 269/269 |
+| 42803 | R1Z/PV_Src_FinalAudit9B | 0 | standard | 0:01.76 | 4294856 | 0 | 23ffdd8494 | 269/269 |
+| 42804 | R1Z/PV_Src_FinalAudit9C | 0 | standard | 0:01.90 | 4328556 | 0 | 23ffdd8494 | 269/269 |
 
-Charged Lean attempts: 88/100. Reservation refusals: 5, uncharged. Next unused ID: 42793.
+Charged Lean attempts: 100/100. Reservation refusals: 5, uncharged. Next unused ID: 42805.
 
 ## Source discipline
 
