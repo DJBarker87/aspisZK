@@ -1,0 +1,38 @@
+{"attempt": "JHi_TX2_071", "exit_status": 1, "wall_seconds": 5.219481114007067, "peak_rss_kib": "5430532", "swaps": "0", "print_axioms": ["'AspisR1.JHi_RawTerminalValidation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHi_RawTerminalValidation.lean:40:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  statement_public_common value
+in the target expression
+  (do
+      let (pool, deployment, anchor_sequence, anchor, nullifier, _) ←
+        statement_public_common
+            (PoolV1PairForestTerminalStatementV1.PrivateTransfer JHg_RawCommon.common JHg_RawPrefix.payment)
+      let b3 ← core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 pool JHg_RawCommon.common.master_account
+      if b3 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+        else do
+          let b4 ←
+            core.array.equality.PartialEqArray.ne cor
+...
+               | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                                  | core.result.Result.Err e => do
+                                    let t ←
+                                      validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                          () e
+                                    ok (core.result.Result.Err t)
+                              let cf2 ←
+                                match r5 with
+                                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                  | core.result.Result.Err e =>
+                                    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                              match cf2 with
+                                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Ok ())
+'AspisR1.JHi_RawTerminalValidation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rbdda6a661457450aad31aeaad3a24f0e.scope; invocation ID: 581a8c8ed68946aca4dc9b2f844bf1be
+

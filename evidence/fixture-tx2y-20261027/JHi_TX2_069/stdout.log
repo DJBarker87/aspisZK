@@ -1,0 +1,1236 @@
+'_private.JHi_LateAccepted.0.AspisR1.JHi_LateAccepted.array_slice_length' depends on axioms: [propext, Quot.sound]
+JHi_LateAccepted.lean:14:80: error: unsolved goals
+output : Slice U8
+size : output.length = 1520
+output1 : Slice U8
+_✝²⁰ : [> let output1 ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8 <]
+output1_post2 : ↑output1 = List.replicate output.length 0#u8
+s : Slice U8
+index_mut_back : Slice U8 → Slice U8
+_✝¹⁹ :
+  [> let(s, index_mut_back) ← core.slice.index.SliceIndexRangeToUsizeSlice.index_mut { «end» := 8#usize } output1 <]
+s_post3✝ : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑output1).setSlice! 0 ↑s'
+s2 : Slice U8
+_✝¹⁸ :
+  [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice <]
+s2_post : s2 = POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+output3 : Slice U8
+_✝¹⁷ : [> let output3 ← (index_mut_back s2).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION <]
+output3_post✝ : output3 = (index_mut_back s2).set 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION
+output4 : Slice U8
+_✝¹⁶ : [> let output4 ← output3.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Slice U8
+_✝¹⁵ :
+  [> let(s3, index_mut_back1) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 10#usize, «end» := 12#usize } output4 <]
+s5 : Slice U8
+_✝¹⁴ :
+  [> let s5 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s3
+      (core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Slice U8
+_✝¹³ :
+  [> let(s6, index_mut_back2) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 12#usize, «end» := 16#usize }
+      (index_mut_back1 s5) <]
+s8 : Slice U8
+_✝¹² :
+  [> let s8 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s6
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Slice U8
+_✝¹¹ :
+  [> let(s9, index_mut_back3) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 16#usize, «end» := 20#usize }
+      (index_mut_back2 s8) <]
+s11 : Slice U8
+_✝¹⁰ :
+  [> let s11 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s9
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Slice U8
+_✝⁹ :
+  [> let(s12, index_mut_back4) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 20#usize, «end» := 24#usize }
+      (index_mut_back3 s11) <]
+s14 : Slice U8
+_✝⁸ :
+  [> let s14 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s12
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice <]
+i7 : Usize
+_✝⁷ : [> let i7 ← 32#usize + 800#usize <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Slice U8
+_✝⁶ :
+  [> let(s15, index_mut_back5) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 32#usize, «end» := i7 } (index_mut_back4 s14) <]
+r : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+s16 : Slice U8
+_✝⁵ : [> let(r, s16) ← encode_pool_v1_pair_live_snapshot_v1 JHg_RawCommon.common.lane_transition.live_snapshot s15 <]
+r1 : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+_✝⁴ :
+  [> let r1 ←
+    core.result.Result.map_err
+      encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1
+      r () <]
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    Unit
+_✝³ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r1 <]
+a✝ : Unit
+r2 : Std.Array U8 688#usize
+_✝² :
+  [> let r2 ←
+    aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+      JHg_RawCommon.common.lane_transition.candidate_afterstate <]
+x✝² :
+  core.result.Result (Std.Array U8 688#usize) aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1
+r3 : core.result.Result (Std.Array U8 688#usize) PoolV1PairLatePublicStatementErrorV1
+_✝¹ :
+  [> let r3 ←
+    core.result.Result.map_err
+      encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1
+      x✝² () <]
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    (Std.Array U8 688#usize)
+_✝ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3 <]
+residual : core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1
+r4 : PoolV1PairLatePublicStatementErrorV1
+_ :
+  [> let r4 ←
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+      (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual <]
+x✝¹ : PoolV1PairLatePublicStatementErrorV1
+x✝ : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+bytes : POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES = ok 1520#usize
+afterbytes : aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES = ok 688#usize
+sizeU : output.len = 1520#usize
+next :
+  JHg_RawCommon.common.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64 =
+    some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index
+compare :
+  core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64)
+      (some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index)
+      (some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index) =
+    ok false
+s_post3 : ∀ (s' : Slice U8), True
+s_post1 : ↑s = List.slice 0 8 (List.replicate 1520 0#u8)
+s_post2 : (List.slice 0 8 (List.replicate 1520 0#u8)).length = 8
+output3_post :
+  (index_mut_back POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set 8#usize
+      POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION =
+    ⟨((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+        POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION,
+      ⋯⟩
+output4_post :
+  output4 =
+    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+            POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+      ⋯⟩
+s3_post1 :
+  ↑s3 =
+    List.slice 10 12
+      ((((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+            POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT)
+s3_post2 :
+  (List.slice 10 12
+        ((((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+              POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+          (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT)).length =
+    12 - 10
+s3_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back1 s2_1 =
+      Slice.setSlice!
+        ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+          ⋯⟩
+        10 ↑s2_1
+s5_post : s5 = (core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 12 16
+      ↑(Slice.setSlice!
+          ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                  POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+              (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+            ⋯⟩
+          10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice)
+s6_post2 :
+  (List.slice 12 16
+        ↑(Slice.setSlice!
+            ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                    POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+              ⋯⟩
+            10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice)).length =
+    16 - 12
+s6_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back2 s2_1 =
+      (Slice.setSlice!
+            ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                    POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+              ⋯⟩
+            10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+        12 ↑s2_1
+s8_post : s8 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 16 20
+      ↑((Slice.setSlice!
+              ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                      (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                  (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                ⋯⟩
+              10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+          12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice)
+s9_post2 :
+  (List.slice 16 20
+        ↑((Slice.setSlice!
+                ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                    (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                  ⋯⟩
+                10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+            12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice)).length =
+    20 - 16
+s9_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back3 s2_1 =
+      ((Slice.setSlice!
+                ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                    (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                  ⋯⟩
+                10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+            12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+        16 ↑s2_1
+s11_post : s11 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 20 24
+      ↑(((Slice.setSlice!
+                  ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                          (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                      (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                    ⋯⟩
+                  10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+              12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+          16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice)
+s12_post2 :
+  (List.slice 20 24
+        ↑(((Slice.setSlice!
+                    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                      ⋯⟩
+                    10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+            16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice)).length =
+    24 - 20
+s12_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back4 s2_1 =
+      (((Slice.setSlice!
+                    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                      ⋯⟩
+                    10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+            16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+        20 ↑s2_1
+s14_post : s14 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice
+i7_post : ↑i7 = 32 + 800
+s15_post1 :
+  ↑s15 =
+    List.slice 32 (32 + 800)
+      ↑((((Slice.setSlice!
+                      ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                              (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                          (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                        ⋯⟩
+                      10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                  12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+              16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+          20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice)
+s15_post2 :
+  (List.slice 32 (32 + 800)
+        ↑((((Slice.setSlice!
+                        ⟨(((List.replicate 1520 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                          ⋯⟩
+                        10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                    12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+                16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+            20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice)).length =
+    32 + 800 - 32
+s15_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back5 s2_1 =
+      ((((Slice.setSlice!
+                        ⟨(((List.replicate 1520 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                          ⋯⟩
+                        10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                    12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+                16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+            20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice).setSlice!
+        32 ↑s2_1
+r_post1 : r = core.result.Result.Ok ()
+r_post2 :
+  encode_pool_v1_pair_live_snapshot_v1 JHg_RawCommon.common.lane_transition.live_snapshot s15 =
+    ok (core.result.Result.Ok (), s16)
+r_post3 : (↑s16).length = 800
+r1_post : ∀ (value : Unit), True → r1 = core.result.Result.Ok value
+cf_post :
+  (match r1 with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue a✝)
+h✝¹ : cf = core.ops.control_flow.ControlFlow.Continue a✝
+r2_post1 : x✝² = core.result.Result.Ok r2
+r2_post2 :
+  aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+      JHg_RawCommon.common.lane_transition.candidate_afterstate =
+    ok (core.result.Result.Ok r2)
+r3_post :
+  ∀ (value : Std.Array U8 688#usize),
+    core.result.Result.Ok r2 = core.result.Result.Ok value → r3 = core.result.Result.Ok value
+cf1_post :
+  (match r3 with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err x✝¹))
+h✝ : cf1 = core.ops.control_flow.ControlFlow.Break (core.result.Result.Err x✝¹)
+r4_post1 : residual = core.result.Result.Err x✝¹
+r4_post2 : r4 = x✝¹
+r4_post3 : x✝ = core.result.Result.Err x✝¹
+⊢ core.result.Result.Err x✝¹ = core.result.Result.Ok ()
+
+output : Slice U8
+size : output.length = 1520
+output1 : Slice U8
+_✝¹⁷ : [> let output1 ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8 <]
+output1_post2 : ↑output1 = List.replicate output.length 0#u8
+s : Slice U8
+index_mut_back : Slice U8 → Slice U8
+_✝¹⁶ :
+  [> let(s, index_mut_back) ← core.slice.index.SliceIndexRangeToUsizeSlice.index_mut { «end» := 8#usize } output1 <]
+s_post3✝ : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑output1).setSlice! 0 ↑s'
+s2 : Slice U8
+_✝¹⁵ :
+  [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice <]
+s2_post : s2 = POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+output3 : Slice U8
+_✝¹⁴ : [> let output3 ← (index_mut_back s2).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION <]
+output3_post✝ : output3 = (index_mut_back s2).set 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION
+output4 : Slice U8
+_✝¹³ : [> let output4 ← output3.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Slice U8
+_✝¹² :
+  [> let(s3, index_mut_back1) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 10#usize, «end» := 12#usize } output4 <]
+s5 : Slice U8
+_✝¹¹ :
+  [> let s5 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s3
+      (core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Slice U8
+_✝¹⁰ :
+  [> let(s6, index_mut_back2) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 12#usize, «end» := 16#usize }
+      (index_mut_back1 s5) <]
+s8 : Slice U8
+_✝⁹ :
+  [> let s8 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s6
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Slice U8
+_✝⁸ :
+  [> let(s9, index_mut_back3) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 16#usize, «end» := 20#usize }
+      (index_mut_back2 s8) <]
+s11 : Slice U8
+_✝⁷ :
+  [> let s11 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s9
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Slice U8
+_✝⁶ :
+  [> let(s12, index_mut_back4) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 20#usize, «end» := 24#usize }
+      (index_mut_back3 s11) <]
+s14 : Slice U8
+_✝⁵ :
+  [> let s14 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s12
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice <]
+i7 : Usize
+_✝⁴ : [> let i7 ← 32#usize + 800#usize <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Slice U8
+_✝³ :
+  [> let(s15, index_mut_back5) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 32#usize, «end» := i7 } (index_mut_back4 s14) <]
+r : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+s16 : Slice U8
+_✝² : [> let(r, s16) ← encode_pool_v1_pair_live_snapshot_v1 JHg_RawCommon.common.lane_transition.live_snapshot s15 <]
+r1 : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+_✝¹ :
+  [> let r1 ←
+    core.result.Result.map_err
+      encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1
+      r () <]
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    Unit
+_✝ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r1 <]
+residual : core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1
+r4 : PoolV1PairLatePublicStatementErrorV1
+_ :
+  [> let r4 ←
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+      (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual <]
+x✝¹ : PoolV1PairLatePublicStatementErrorV1
+x✝ : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+bytes : POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES = ok 1520#usize
+afterbytes : aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES = ok 688#usize
+sizeU : output.len = 1520#usize
+next :
+  JHg_RawCommon.common.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64 =
+    some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index
+compare :
+  core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64)
+      (some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index)
+      (some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index) =
+    ok false
+s_post3 : ∀ (s' : Slice U8), True
+s_post1 : ↑s = List.slice 0 8 (List.replicate 1520 0#u8)
+s_post2 : (List.slice 0 8 (List.replicate 1520 0#u8)).length = 8
+output3_post :
+  (index_mut_back POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set 8#usize
+      POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION =
+    ⟨((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+        POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION,
+      ⋯⟩
+output4_post :
+  output4 =
+    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+            POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+      ⋯⟩
+s3_post1 :
+  ↑s3 =
+    List.slice 10 12
+      ((((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+            POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT)
+s3_post2 :
+  (List.slice 10 12
+        ((((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+              POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+          (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT)).length =
+    12 - 10
+s3_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back1 s2_1 =
+      Slice.setSlice!
+        ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+          ⋯⟩
+        10 ↑s2_1
+s5_post : s5 = (core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 12 16
+      ↑(Slice.setSlice!
+          ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                  POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+              (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+            ⋯⟩
+          10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice)
+s6_post2 :
+  (List.slice 12 16
+        ↑(Slice.setSlice!
+            ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                    POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+              ⋯⟩
+            10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice)).length =
+    16 - 12
+s6_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back2 s2_1 =
+      (Slice.setSlice!
+            ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                    POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+              ⋯⟩
+            10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+        12 ↑s2_1
+s8_post : s8 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 16 20
+      ↑((Slice.setSlice!
+              ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                      (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                  (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                ⋯⟩
+              10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+          12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice)
+s9_post2 :
+  (List.slice 16 20
+        ↑((Slice.setSlice!
+                ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                    (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                  ⋯⟩
+                10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+            12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice)).length =
+    20 - 16
+s9_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back3 s2_1 =
+      ((Slice.setSlice!
+                ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                    (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                  ⋯⟩
+                10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+            12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+        16 ↑s2_1
+s11_post : s11 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 20 24
+      ↑(((Slice.setSlice!
+                  ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                          (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                      (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                    ⋯⟩
+                  10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+              12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+          16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice)
+s12_post2 :
+  (List.slice 20 24
+        ↑(((Slice.setSlice!
+                    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                      ⋯⟩
+                    10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+            16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice)).length =
+    24 - 20
+s12_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back4 s2_1 =
+      (((Slice.setSlice!
+                    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                      ⋯⟩
+                    10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+            16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+        20 ↑s2_1
+s14_post : s14 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice
+i7_post : ↑i7 = 32 + 800
+s15_post1 :
+  ↑s15 =
+    List.slice 32 (32 + 800)
+      ↑((((Slice.setSlice!
+                      ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                              (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                          (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                        ⋯⟩
+                      10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                  12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+              16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+          20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice)
+s15_post2 :
+  (List.slice 32 (32 + 800)
+        ↑((((Slice.setSlice!
+                        ⟨(((List.replicate 1520 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                          ⋯⟩
+                        10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                    12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+                16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+            20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice)).length =
+    32 + 800 - 32
+s15_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back5 s2_1 =
+      ((((Slice.setSlice!
+                        ⟨(((List.replicate 1520 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                          ⋯⟩
+                        10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                    12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+                16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+            20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice).setSlice!
+        32 ↑s2_1
+r_post1 : r = core.result.Result.Ok ()
+r_post2 :
+  encode_pool_v1_pair_live_snapshot_v1 JHg_RawCommon.common.lane_transition.live_snapshot s15 =
+    ok (core.result.Result.Ok (), s16)
+r_post3 : (↑s16).length = 800
+r1_post : ∀ (value : Unit), True → r1 = core.result.Result.Ok value
+cf_post :
+  (match r1 with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err x✝¹))
+h✝ : cf = core.ops.control_flow.ControlFlow.Break (core.result.Result.Err x✝¹)
+r4_post1 : residual = core.result.Result.Err x✝¹
+r4_post2 : r4 = x✝¹
+r4_post3 : x✝ = core.result.Result.Err x✝¹
+⊢ core.result.Result.Err x✝¹ = core.result.Result.Ok ()
+output : Slice U8
+size : output.length = 1520
+output1 : Slice U8
+_✝²⁰ : [> let output1 ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8 <]
+output1_post2 : ↑output1 = List.replicate output.length 0#u8
+s : Slice U8
+index_mut_back : Slice U8 → Slice U8
+_✝¹⁹ :
+  [> let(s, index_mut_back) ← core.slice.index.SliceIndexRangeToUsizeSlice.index_mut { «end» := 8#usize } output1 <]
+s_post3✝ : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑output1).setSlice! 0 ↑s'
+s2 : Slice U8
+_✝¹⁸ :
+  [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice <]
+s2_post : s2 = POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+output3 : Slice U8
+_✝¹⁷ : [> let output3 ← (index_mut_back s2).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION <]
+output3_post✝ : output3 = (index_mut_back s2).set 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION
+output4 : Slice U8
+_✝¹⁶ : [> let output4 ← output3.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Slice U8
+_✝¹⁵ :
+  [> let(s3, index_mut_back1) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 10#usize, «end» := 12#usize } output4 <]
+s5 : Slice U8
+_✝¹⁴ :
+  [> let s5 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s3
+      (core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Slice U8
+_✝¹³ :
+  [> let(s6, index_mut_back2) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 12#usize, «end» := 16#usize }
+      (index_mut_back1 s5) <]
+s8 : Slice U8
+_✝¹² :
+  [> let s8 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s6
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Slice U8
+_✝¹¹ :
+  [> let(s9, index_mut_back3) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 16#usize, «end» := 20#usize }
+      (index_mut_back2 s8) <]
+s11 : Slice U8
+_✝¹⁰ :
+  [> let s11 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s9
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Slice U8
+_✝⁹ :
+  [> let(s12, index_mut_back4) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 20#usize, «end» := 24#usize }
+      (index_mut_back3 s11) <]
+s14 : Slice U8
+_✝⁸ :
+  [> let s14 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s12
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice <]
+i7 : Usize
+_✝⁷ : [> let i7 ← 32#usize + 800#usize <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Slice U8
+_✝⁶ :
+  [> let(s15, index_mut_back5) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 32#usize, «end» := i7 } (index_mut_back4 s14) <]
+r : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+s16 : Slice U8
+_✝⁵ : [> let(r, s16) ← encode_pool_v1_pair_live_snapshot_v1 JHg_RawCommon.common.lane_transition.live_snapshot s15 <]
+r1 : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+_✝⁴ :
+  [> let r1 ←
+    core.result.Result.map_err
+      encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1
+      r () <]
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    Unit
+_✝³ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r1 <]
+a✝ : Unit
+r2 : Std.Array U8 688#usize
+_✝² :
+  [> let r2 ←
+    aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+      JHg_RawCommon.common.lane_transition.candidate_afterstate <]
+x✝² :
+  core.result.Result (Std.Array U8 688#usize) aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1
+r3 : core.result.Result (Std.Array U8 688#usize) PoolV1PairLatePublicStatementErrorV1
+_✝¹ :
+  [> let r3 ←
+    core.result.Result.map_err
+      encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1
+      x✝² () <]
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    (Std.Array U8 688#usize)
+_✝ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3 <]
+residual : core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1
+r4 : PoolV1PairLatePublicStatementErrorV1
+_ :
+  [> let r4 ←
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+      (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual <]
+x✝¹ : PoolV1PairLatePublicStatementErrorV1
+x✝ : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+bytes : POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES = ok 1520#usize
+afterbytes : aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES = ok 688#usize
+sizeU : output.len = 1520#usize
+next :
+  JHg_RawCommon.common.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64 =
+    some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index
+compare :
+  core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64)
+      (some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index)
+      (some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index) =
+    ok false
+s_post3 : ∀ (s' : Slice U8), True
+s_post1 : ↑s = List.slice 0 8 (List.replicate 1520 0#u8)
+s_post2 : (List.slice 0 8 (List.replicate 1520 0#u8)).length = 8
+output3_post :
+  (index_mut_back POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set 8#usize
+      POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION =
+    ⟨((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+        POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION,
+      ⋯⟩
+output4_post :
+  output4 =
+    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+            POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+      ⋯⟩
+s3_post1 :
+  ↑s3 =
+    List.slice 10 12
+      ((((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+            POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT)
+s3_post2 :
+  (List.slice 10 12
+        ((((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+              POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+          (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT)).length =
+    12 - 10
+s3_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back1 s2_1 =
+      Slice.setSlice!
+        ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+          ⋯⟩
+        10 ↑s2_1
+s5_post : s5 = (core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 12 16
+      ↑(Slice.setSlice!
+          ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                  POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+              (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+            ⋯⟩
+          10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice)
+s6_post2 :
+  (List.slice 12 16
+        ↑(Slice.setSlice!
+            ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                    POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+              ⋯⟩
+            10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice)).length =
+    16 - 12
+s6_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back2 s2_1 =
+      (Slice.setSlice!
+            ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                    POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+              ⋯⟩
+            10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+        12 ↑s2_1
+s8_post : s8 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 16 20
+      ↑((Slice.setSlice!
+              ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                      (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                  (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                ⋯⟩
+              10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+          12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice)
+s9_post2 :
+  (List.slice 16 20
+        ↑((Slice.setSlice!
+                ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                    (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                  ⋯⟩
+                10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+            12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice)).length =
+    20 - 16
+s9_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back3 s2_1 =
+      ((Slice.setSlice!
+                ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                    (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                  ⋯⟩
+                10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+            12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+        16 ↑s2_1
+s11_post : s11 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 20 24
+      ↑(((Slice.setSlice!
+                  ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                          (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                      (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                    ⋯⟩
+                  10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+              12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+          16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice)
+s12_post2 :
+  (List.slice 20 24
+        ↑(((Slice.setSlice!
+                    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                      ⋯⟩
+                    10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+            16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice)).length =
+    24 - 20
+s12_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back4 s2_1 =
+      (((Slice.setSlice!
+                    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                      ⋯⟩
+                    10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+            16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+        20 ↑s2_1
+s14_post : s14 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice
+i7_post : ↑i7 = 32 + 800
+s15_post1 :
+  ↑s15 =
+    List.slice 32 (32 + 800)
+      ↑((((Slice.setSlice!
+                      ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                              (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                          (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                        ⋯⟩
+                      10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                  12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+              16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+          20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice)
+s15_post2 :
+  (List.slice 32 (32 + 800)
+        ↑((((Slice.setSlice!
+                        ⟨(((List.replicate 1520 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                          ⋯⟩
+                        10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                    12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+                16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+            20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice)).length =
+    32 + 800 - 32
+s15_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back5 s2_1 =
+      ((((Slice.setSlice!
+                        ⟨(((List.replicate 1520 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                          ⋯⟩
+                        10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                    12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+                16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+            20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice).setSlice!
+        32 ↑s2_1
+r_post1 : r = core.result.Result.Ok ()
+r_post2 :
+  encode_pool_v1_pair_live_snapshot_v1 JHg_RawCommon.common.lane_transition.live_snapshot s15 =
+    ok (core.result.Result.Ok (), s16)
+r_post3 : (↑s16).length = 800
+r1_post : ∀ (value : Unit), True → r1 = core.result.Result.Ok value
+cf_post :
+  (match r1 with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue a✝)
+h✝¹ : cf = core.ops.control_flow.ControlFlow.Continue a✝
+r2_post1 : x✝² = core.result.Result.Ok r2
+r2_post2 :
+  aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+      JHg_RawCommon.common.lane_transition.candidate_afterstate =
+    ok (core.result.Result.Ok r2)
+r3_post :
+  ∀ (value : Std.Array U8 688#usize),
+    core.result.Result.Ok r2 = core.result.Result.Ok value → r3 = core.result.Result.Ok value
+cf1_post :
+  (match r3 with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err x✝¹))
+h✝ : cf1 = core.ops.control_flow.ControlFlow.Break (core.result.Result.Err x✝¹)
+r4_post1 : residual = core.result.Result.Err x✝¹
+r4_post2 : r4 = x✝¹
+r4_post3 : x✝ = core.result.Result.Err x✝¹
+⊢ core.result.Result.Err x✝¹ = core.result.Result.Ok ()
+output : Slice U8
+size : output.length = 1520
+output1 : Slice U8
+_✝¹⁷ : [> let output1 ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8 <]
+output1_post2 : ↑output1 = List.replicate output.length 0#u8
+s : Slice U8
+index_mut_back : Slice U8 → Slice U8
+_✝¹⁶ :
+  [> let(s, index_mut_back) ← core.slice.index.SliceIndexRangeToUsizeSlice.index_mut { «end» := 8#usize } output1 <]
+s_post3✝ : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑output1).setSlice! 0 ↑s'
+s2 : Slice U8
+_✝¹⁵ :
+  [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice <]
+s2_post : s2 = POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+output3 : Slice U8
+_✝¹⁴ : [> let output3 ← (index_mut_back s2).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION <]
+output3_post✝ : output3 = (index_mut_back s2).set 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION
+output4 : Slice U8
+_✝¹³ : [> let output4 ← output3.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Slice U8
+_✝¹² :
+  [> let(s3, index_mut_back1) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 10#usize, «end» := 12#usize } output4 <]
+s5 : Slice U8
+_✝¹¹ :
+  [> let s5 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s3
+      (core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Slice U8
+_✝¹⁰ :
+  [> let(s6, index_mut_back2) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 12#usize, «end» := 16#usize }
+      (index_mut_back1 s5) <]
+s8 : Slice U8
+_✝⁹ :
+  [> let s8 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s6
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Slice U8
+_✝⁸ :
+  [> let(s9, index_mut_back3) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 16#usize, «end» := 20#usize }
+      (index_mut_back2 s8) <]
+s11 : Slice U8
+_✝⁷ :
+  [> let s11 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s9
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Slice U8
+_✝⁶ :
+  [> let(s12, index_mut_back4) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 20#usize, «end» := 24#usize }
+      (index_mut_back3 s11) <]
+s14 : Slice U8
+_✝⁵ :
+  [> let s14 ←
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 s12
+      (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice <]
+i7 : Usize
+_✝⁴ : [> let i7 ← 32#usize + 800#usize <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Slice U8
+_✝³ :
+  [> let(s15, index_mut_back5) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 32#usize, «end» := i7 } (index_mut_back4 s14) <]
+r : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+s16 : Slice U8
+_✝² : [> let(r, s16) ← encode_pool_v1_pair_live_snapshot_v1 JHg_RawCommon.common.lane_transition.live_snapshot s15 <]
+r1 : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+_✝¹ :
+  [> let r1 ←
+    core.result.Result.map_err
+      encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1
+      r () <]
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    Unit
+_✝ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r1 <]
+residual : core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1
+r4 : PoolV1PairLatePublicStatementErrorV1
+_ :
+  [> let r4 ←
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+      (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual <]
+x✝¹ : PoolV1PairLatePublicStatementErrorV1
+x✝ : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+bytes : POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES = ok 1520#usize
+afterbytes : aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES = ok 688#usize
+sizeU : output.len = 1520#usize
+next :
+  JHg_RawCommon.common.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64 =
+    some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index
+compare :
+  core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64)
+      (some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index)
+      (some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index) =
+    ok false
+s_post3 : ∀ (s' : Slice U8), True
+s_post1 : ↑s = List.slice 0 8 (List.replicate 1520 0#u8)
+s_post2 : (List.slice 0 8 (List.replicate 1520 0#u8)).length = 8
+output3_post :
+  (index_mut_back POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set 8#usize
+      POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION =
+    ⟨((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+        POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION,
+      ⋯⟩
+output4_post :
+  output4 =
+    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+            POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+      ⋯⟩
+s3_post1 :
+  ↑s3 =
+    List.slice 10 12
+      ((((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+            POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT)
+s3_post2 :
+  (List.slice 10 12
+        ((((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+              POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+          (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT)).length =
+    12 - 10
+s3_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back1 s2_1 =
+      Slice.setSlice!
+        ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+          ⋯⟩
+        10 ↑s2_1
+s5_post : s5 = (core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 12 16
+      ↑(Slice.setSlice!
+          ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                  POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+              (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+            ⋯⟩
+          10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice)
+s6_post2 :
+  (List.slice 12 16
+        ↑(Slice.setSlice!
+            ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                    POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+              ⋯⟩
+            10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice)).length =
+    16 - 12
+s6_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back2 s2_1 =
+      (Slice.setSlice!
+            ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set (↑8#usize)
+                    POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+              ⋯⟩
+            10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+        12 ↑s2_1
+s8_post : s8 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 16 20
+      ↑((Slice.setSlice!
+              ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                      (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                  (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                ⋯⟩
+              10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+          12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice)
+s9_post2 :
+  (List.slice 16 20
+        ↑((Slice.setSlice!
+                ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                    (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                  ⋯⟩
+                10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+            12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice)).length =
+    20 - 16
+s9_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back3 s2_1 =
+      ((Slice.setSlice!
+                ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                    (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                  ⋯⟩
+                10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+            12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+        16 ↑s2_1
+s11_post : s11 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 20 24
+      ↑(((Slice.setSlice!
+                  ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                          (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                      (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                    ⋯⟩
+                  10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+              12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+          16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice)
+s12_post2 :
+  (List.slice 20 24
+        ↑(((Slice.setSlice!
+                    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                      ⋯⟩
+                    10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+            16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice)).length =
+    24 - 20
+s12_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back4 s2_1 =
+      (((Slice.setSlice!
+                    ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                        (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                      ⋯⟩
+                    10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+            16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+        20 ↑s2_1
+s14_post : s14 = (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice
+i7_post : ↑i7 = 32 + 800
+s15_post1 :
+  ↑s15 =
+    List.slice 32 (32 + 800)
+      ↑((((Slice.setSlice!
+                      ⟨(((List.replicate 1520 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                              (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                          (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                        ⋯⟩
+                      10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                  12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+              16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+          20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice)
+s15_post2 :
+  (List.slice 32 (32 + 800)
+        ↑((((Slice.setSlice!
+                        ⟨(((List.replicate 1520 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                          ⋯⟩
+                        10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                    12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+                16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+            20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice)).length =
+    32 + 800 - 32
+s15_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back5 s2_1 =
+      ((((Slice.setSlice!
+                        ⟨(((List.replicate 1520 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION).set
+                            (↑9#usize) POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT,
+                          ⋯⟩
+                        10 ↑(core.num.U16.to_le_bytes (UScalar.cast UScalarTy.U16 32#usize)).to_slice).setSlice!
+                    12 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 800#usize)).to_slice).setSlice!
+                16 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 688#usize)).to_slice).setSlice!
+            20 ↑(core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice).setSlice!
+        32 ↑s2_1
+r_post1 : r = core.result.Result.Ok ()
+r_post2 :
+  encode_pool_v1_pair_live_snapshot_v1 JHg_RawCommon.common.lane_transition.live_snapshot s15 =
+    ok (core.result.Result.Ok (), s16)
+r_post3 : (↑s16).length = 800
+r1_post : ∀ (value : Unit), True → r1 = core.result.Result.Ok value
+cf_post :
+  (match r1 with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err x✝¹))
+h✝ : cf = core.ops.control_flow.ControlFlow.Break (core.result.Result.Err x✝¹)
+r4_post1 : residual = core.result.Result.Err x✝¹
+r4_post2 : r4 = x✝¹
+r4_post3 : x✝ = core.result.Result.Err x✝¹
+⊢ core.result.Result.Err x✝¹ = core.result.Result.Ok ()
+JHi_LateAccepted.lean:37:67: warning: This simp argument is unused:
+  bytes
+
+Hint: Omit it from the simp argument list.
+  simp only [lift, ̲bind_tc_ok, ̲compare, ̲Bool.false_eq_true, ̲↓reduceIte,b̵y̵t̵e̵s̵,̵ ̲afterbytes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHi_LateAccepted.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JHi_LateAccepted.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

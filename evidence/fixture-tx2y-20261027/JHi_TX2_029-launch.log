@@ -1,0 +1,41 @@
+{"attempt": "JHi_TX2_029", "exit_status": 1, "wall_seconds": 7.6233660579891875, "peak_rss_kib": "5435044", "swaps": "0", "print_axioms": ["'AspisR1.JHi_PaymentBody.raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHi_PaymentBody.lean:51:86: error: unsolved goals
+⊢ (do
+      let cpv ← aspis_statement.pool_v1.payment_relation.transfer_common JHg_RawPrefix.payment
+      let output1 ←
+        aspis_statement.pool_v1.payment_relation.encode_common (Array.repeat 216#usize 0#u8)
+            aspis_statement.pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC
+            aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer cpv
+      let (s, index_mut_back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            output1
+            { start := aspis_statement.pool_v1.payment_relation.FIRST_OUTPUT_OR_D
+...
+t_relation.SECOND_OUTPUT_OFFSET }
+      let a1 ← aspis_statement.atomic_statement.encode_digest_canonical JHg_RawPrefix.payment.change_commitment
+      let s4 ← lift a1.to_slice
+      let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+      ok (core.result.Result.Ok (index_mut_back1 s5))) =
+    do
+    let x ← aspis_statement.pool_v1.payment_relation.transfer_common JHg_RawPrefix.payment
+    let x ←
+      aspis_statement.pool_v1.payment_relation.encode_common (Array.repeat 216#usize 0#u8)
+          aspis_statement.pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC
+          aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer x
+    let x ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) x
+          { start := aspis_statement.pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET,
+            «end» := aspis_statement.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }
+    let x_1 ← aspis_statement.atomic_statement.encode_digest_canonical JHg_RawPrefix.payment.recipient_commitment
+    let x_2 ← lift x_1.to_slice
+    let x_3 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x.1 x_2
+    let x ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8))
+          (x.2 x_3) { start := aspis_statement.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }
+    let x_4 ← aspis_statement.atomic_statement.encode_digest_canonical JHg_RawPrefix.payment.change_commitment
+    let x_5 ← lift x_4.to_slice
+    let x_6 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x.1 x_5
+    ok (core.result.Result.Ok (x.2 x_6))
+'AspisR1.JHi_PaymentBody.raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r479fb70b6f5d4800bcfc84fb5a1113b2.scope; invocation ID: 311e92385c424c2797ec4ecd52d9d109

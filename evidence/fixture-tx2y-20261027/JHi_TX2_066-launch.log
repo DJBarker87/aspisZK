@@ -1,0 +1,47 @@
+{"attempt": "JHi_TX2_066", "exit_status": 1, "wall_seconds": 11.121024401974864, "peak_rss_kib": "5482952", "swaps": "0", "print_axioms": ["'_private.JHi_LateAccepted.0.AspisR1.JHi_LateAccepted.array_slice_length' depends on axioms: [propext, Quot.sound]", "'AspisR1.JHi_LateAccepted.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JHi_LateAccepted.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'_private.JHi_LateAccepted.0.AspisR1.JHi_LateAccepted.array_slice_length' depends on axioms: [propext, Quot.sound]
+JHi_LateAccepted.lean:17:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i ← 32#usize + 800#usize
+    let i1 ← 8#usize + aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_PAYLOAD_BYTES
+    i + i1
+is not definitionally equal to the right-hand side
+  ok 1520#usize
+
+output : Slice U8
+size : output.length = 1520
+⊢ (do
+      let i ← 32#usize + 800#usize
+      let i1 ← 8#usize + aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_PAYLOAD_BYTES
+      i + i1) =
+    ok 1520#usize
+JHi_LateAccepted.lean:31:12: error: simp_all made no p
+...
+result.Result.map_err
+                encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1
+                r2 ()
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (s17, index_mut_back6) ←
+                core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut { start := i7 } (index_mut_back5 s16)
+              let s19 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s17 val.to_slice
+              ok (core.result.Result.Ok (), index_mut_back6 s19)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+              ok (r4, index_mut_back5 s16)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r4 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+          ok (r4, index_mut_back5 s16)) ⦃
+    result => result.1 = core.result.Result.Ok () ∧ (↑result.2).length = 1520 ⦄
+'AspisR1.JHi_LateAccepted.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JHi_LateAccepted.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r078321a017d24dcd8f3256c2a6a1019e.scope; invocation ID: 589ab3a21c6545078ef968c767f8b3bc

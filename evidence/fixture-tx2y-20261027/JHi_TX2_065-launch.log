@@ -1,0 +1,40 @@
+{"attempt": "JHi_TX2_065", "exit_status": 1, "wall_seconds": 7.838103083020542, "peak_rss_kib": "5454408", "swaps": "0", "print_axioms": ["'_private.JHi_LateAccepted.0.AspisR1.JHi_LateAccepted.array_slice_length' depends on axioms: [propext, Quot.sound]", "'AspisR1.JHi_LateAccepted.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JHi_LateAccepted.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'_private.JHi_LateAccepted.0.AspisR1.JHi_LateAccepted.array_slice_length' depends on axioms: [propext, Quot.sound]
+JHi_LateAccepted.lean:13:80: error: unsolved goals
+output : Slice U8
+size : (↑output).length = 1520
+⊢ (do
+      let i1 ← POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES
+      if (output.len != i1) = true then
+          ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.WrongLength, output)
+        else do
+          let o ← lift (JHg_RawCommon.common.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64)
+          let b ←
+            core.cmp.PartialEq.ne.default (core.option.Option.Insts.CoreCmpPartialEqOption.eq core.cmp.PartialEqU64) o
+                (some JHg
+...
+̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲A̲s̲p̲i̲s̲S̲6̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_LateAccepted.lean:19:60: warning: This simp argument is unused:
+  AspisS6SliceFrame.setSlice_length
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵a̵r̵r̵a̵y̵_̵s̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵A̵t̵N̵a̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵S̵6̵N̵a̵t̵i̵v̵e̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵,̵A̵s̵p̵i̵s̵S̵6̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵[̲a̲r̲r̲a̲y̲_̲s̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲A̲t̲N̲a̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲S̲6̲N̲a̲t̲i̲v̲e̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_LateAccepted.lean:19:94: warning: This simp argument is unused:
+  List.length_replicate
+
+Hint: Omit it from the simp argument list.
+  simp_all only [array_slice_length, ̲Slice.length, ̲Slice.set, ̲Slice.setAtNat,
+      AspisS6NativeSliceFrame.setSlice_length, ̲List.length_set, ̲AspisS6SliceFrame.setSlice_length,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHi_LateAccepted.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JHi_LateAccepted.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6901d9b731f44100b49f338d3d06b000.scope; invocation ID: b94415ccff2d4bf69a78714dda09f7af

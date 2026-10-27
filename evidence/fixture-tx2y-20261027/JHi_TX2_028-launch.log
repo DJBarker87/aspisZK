@@ -1,0 +1,44 @@
+{"attempt": "JHi_TX2_028", "exit_status": 1, "wall_seconds": 4.67440279701259, "peak_rss_kib": "5429168", "swaps": "0", "print_axioms": ["'AspisR1.JHi_PaymentBody.raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHi_PaymentBody.lean:51:86: error: unsolved goals
+⊢ (do
+      let cpv ← aspis_statement.pool_v1.payment_relation.transfer_common JHg_RawPrefix.payment
+      let output1 ←
+        aspis_statement.pool_v1.payment_relation.encode_common (Array.repeat 216#usize 0#u8)
+            aspis_statement.pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC
+            aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer cpv
+      let (s, index_mut_back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            output1
+            { start := aspis_statement.pool_v1.payment_relation.FIRST_OUTPUT_OR_D
+...
+_relation.encode_common (Array.repeat 216#usize 0#u8)
+          aspis_statement.pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC
+          aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer x
+    let x ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) x
+          { start := aspis_statement.pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET,
+            «end» := aspis_statement.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }
+    let x ←
+      let (s, index_mut_back) := x
+        do
+        let a ← aspis_statement.atomic_statement.encode_digest_canonical JHg_RawPrefix.payment.recipient_commitment
+        let s1 ← lift a.to_slice
+        let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+        let (s3, index_mut_back1) ←
+          core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8))
+              (index_mut_back s2) { start := aspis_statement.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }
+        let a1 ← aspis_statement.atomic_statement.encode_digest_canonical JHg_RawPrefix.payment.change_commitment
+        let s4 ← lift a1.to_slice
+        let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+        ok (index_mut_back1 s5)
+    ok (core.result.Result.Ok x)
+JHi_PaymentBody.lean:55:32: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲o̲d̲y̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHi_PaymentBody.raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r712dc70d829f46c8bbbd8807af8143d3.scope; invocation ID: 1d3ba0dc9a6e4496bda3c03f517c69f9
