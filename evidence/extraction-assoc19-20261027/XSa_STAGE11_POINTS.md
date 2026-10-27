@@ -1,0 +1,7 @@
+# Stage 11: full six-point loop, parts prefix and whole raw factor
+
+XSa_PointRun.done (L081), XSa_PointBody.body (L084) and XSa_PointLoop.paired (L086) compose the actual six-point prepared_claim_loop with the raw typed-parts reference. The SAME sem/y1/g,k,parts,iterator are used; all parser failures/divergence, first Parse rejection, checked point+1, actual typed array updates and terminal weighted sum are retained. Current canonicality is preserved and point-result canonicality is DERIVED via XSa_PartCanonical; no successful point/claim observation hypothesis is added.
+
+XSa_PointList.paired (L089) identifies that reference with the raw list accumulator by a proved prefix invariant; XSa_ClaimInitial.front/canonical/actual (L090) identifies initialization and the inactive cell. XSa_ListClaimRaw.factor (L097) factors the entire raw prepared_claim into generic point-list collection and sum; XSa_ClaimRaw.factor (L098) instantiates its list powers with the typed SAME seven powers. The sole powers observation is supplied by the checked derived powers theorem, not assumed as whole-claim credit.
+
+All accepted top prints standard-only; no resource failure, cap change, source/binary/trust change. L080/L082/L083/L085/L087/L088/L091-L096 are excluded elaboration/tactic diagnostics. The final cachedClaim composition has at most two attempts L099/L100 and determines the remaining handoff status; no earlier failure or draft is credited as that theorem. Whole narrowed prepare/contextual binding and native P6/A3 remain unclaimed.
