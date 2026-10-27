@@ -1,0 +1,63 @@
+structure Aeneas.Std.core.iter.adapters.rev.Rev.{u} (T : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.adapters.rev.Rev.iter : T
+constructor:
+  Aeneas.Std.core.iter.adapters.rev.Rev.mk.{u} {T : Type u} (iter : T) : core.iter.adapters.rev.Rev T
+def Aeneas.Std.core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next : {I Item : Type} →
+  core.iter.traits.double_ended.DoubleEndedIterator I Item →
+    core.iter.adapters.rev.Rev I → Result (Option Item × core.iter.adapters.rev.Rev I) :=
+fun {I Item} DEInst self => do
+  let __x ← DEInst.next_back self.iter
+  match __x with
+    | (o, it) => Result.ok (o, { iter := it })
+@[reducible] def Aeneas.Std.core.ops.range.Range.Insts.DoubleEndedIterator : {A : Type} →
+  core.iter.range.Step A → core.iter.traits.double_ended.DoubleEndedIterator (core.ops.range.Range A) A :=
+fun {A} StepInst =>
+  { iteratorInst := core.iter.traits.iterator.IteratorRange StepInst,
+    next_back := core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back StepInst }
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : core.iter.range.Step (UScalar UScalarTy.Usize) :=
+core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some val => Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0.eq_def {N : Usize}
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize)) (weights : Std.Array field.QM31 N)
+  (prepared : field.PreparedQm31Multiplier) :
+  pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter weights prepared = do
+    let (o, iter1) ←
+      core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+          (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter
+    match o with
+      | none => Result.ok weights
+      | some index => do
+        let parent ← weights.index_usize index
+        let right ← prepared.mul parent
+        let q ← parent.sub right
+        let i ← 2#usize * index
+        let weights1 ← weights.update i q
+        let i1 ← i + 1#usize
+        let a ← weights1.update i1 right
+        pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter1 a prepared
+def Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  core.slice.iter.Iter T → Result (Option T × core.slice.iter.Iter T) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    Result.ok (some x, it)
+  else Result.ok (none, it)
+structure Aeneas.Std.core.slice.iter.Iter (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.Iter.slice : Slice T
+  Aeneas.Std.core.slice.iter.Iter.i : ℕ
+constructor:
+  Aeneas.Std.core.slice.iter.Iter.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.Iter T
