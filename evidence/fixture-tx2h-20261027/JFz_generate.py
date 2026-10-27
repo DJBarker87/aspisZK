@@ -166,7 +166,7 @@ print('Python proposed circle matches:',[d['match'] for d in DATA])
 # Each slot is a small finite closure: symbolic head lanes, three raw pushes,
 # finish and addition. Imports precede the declarations; no recurrence unfolds.
 for path,s in list(PENDING.items()):
- if not re.search(r'lean/JFz_TX2_Q(?:[2-9]|10|11)_',path):write(path,s)
+ if not re.search(r'lean/JFz_TX2_Q(?:[2-9]|10|11)_',path) and not (re.search(r'Head[0-3](Lo|Hi)\.lean$',path) and not path.endswith('Head0Lo.lean')):write(path,s)
 for i in range(2,12):
  pre=f'JFz_TX2_Q{i}_'
  groups={pre+f'Slot{k}':[pre+f'Head{k}']+[pre+f'Raw{k}{r}' for r in range(3)]+[pre+f'Tail{k}',pre+f'Dot{k}'] for k in range(4)}

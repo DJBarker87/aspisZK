@@ -8,7 +8,7 @@ for m in mods:
  print(f'BEGIN {n:03} {m}',flush=True)
  r=subprocess.run([sys.executable,str(P/'JFz_TX2_compile.py'),str(n),m],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
  (P/f'JFz_TX2_{n:03}-driver.log').write_text(r.stdout)
- print(r.stdout[-1200:],flush=True)
+ print(r.stdout[-1200:] if r.returncode else 'Focused compile passed; full output retained.',flush=True)
  print(f'END {n:03} exit={r.returncode}',flush=True)
  if r.returncode:sys.exit(r.returncode)
  n+=1

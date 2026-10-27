@@ -26,6 +26,6 @@ for p in sorted((R/'lean').glob('JFz_TX2_*.lean')):
    name=ns+'.'+theorem
    if "'"+name+"'" not in prints:errors.append('Missing axiom audit: '+name)
  if re.search(r'\b(sorry|axiom|admit|native_decide)\b|set_option (maxHeartbeats|maxRecDepth)',s):errors.append('Forbidden proof form: '+p.name)
-result=dict(entry_revision='b3892fade6',current_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),lean_used=len(rows),lean_limit=100,kani_used=0,kani_limit=10,passed=sum(x['exit_status']==0 for x in rows),rejected=sum(x['exit_status']!=0 for x in rows),wall_seconds=sum(x['wall_seconds'] for x in rows),peak_rss_kib=max(int(x['peak_rss_kib']) for x in rows),swaps=sum(int(x['swaps']) for x in rows),passing_current_sources=valid,errors=errors,attempts=rows)
+result=dict(entry_revision='eb7eab86b9e06595ce4e37a7f20fe44616d845e1',current_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),lean_used=len(rows),lean_limit=100,kani_used=0,kani_limit=10,passed=sum(x['exit_status']==0 for x in rows),rejected=sum(x['exit_status']!=0 for x in rows),wall_seconds=sum(x['wall_seconds'] for x in rows),peak_rss_kib=max(int(x['peak_rss_kib']) for x in rows),swaps=sum(int(x['swaps']) for x in rows),passing_current_sources=valid,errors=errors,attempts=rows)
 (P/'JFz_VALIDATION.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps({k:result[k] for k in ['lean_used','passed','rejected','wall_seconds','peak_rss_kib','swaps','errors']}))

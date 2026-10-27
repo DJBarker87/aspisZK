@@ -56,7 +56,7 @@ abbrev FP := Port5Q1_QueryPorts.FP
 #print axioms {n}
 '''
  for j,iv in enumerate([ix,iy,iz]):
-  s+=f'''theorem inv{j} : (S7JoinBasisMachine.decode ((JFv_TX2_Rows.value {i}).words[{j+2}]?.getD 0#u32))⁻¹=({iv}:FP) := by
+  s+=f'''theorem inv{j} : (S7JoinBasisMachine.decode (JFv_TX2_Rows.value {i}).{['lineX','lineY','lineZ'][j]})⁻¹=({iv}:FP) := by
   exact JFv_TX2_Query0Inverse.reciprocal {d['row'][j+2]} {iv} (by norm_num)
 theorem cast{j} : algebraMap FP FE {iv}=({iv}:FE) := map_natCast _ _
 #print axioms inv{j}
@@ -70,7 +70,8 @@ theorem cast{j} : algebraMap FP FE {iv}=({iv}:FE) := map_natCast _ _
   have scalar : CheckpointBytes5Output.ofE JFq_Alpha1.scalar=alpha := rfl
   rw [scalar,cast0,cast1,cast2]
   unfold FoldRuntimeAlgebra.lineWithInverses
-  rw [v0,v1,v2,v3,JFw_TX2_CircleNumbers.quarter,half,c0_eq,c1_eq,h0_eq,h2_eq,h1_eq,h3_eq,horner2,horner1,horner0]
+  simp only [v0,v1,v2,v3,JFw_TX2_CircleNumbers.quarter,half,c0_eq,c1_eq,h0_eq,h2_eq,h1_eq,h3_eq]
+  rw [horner2,horner1,horner0]
 
 theorem source {{C : Type}} (err : C) (seed : Port3_NativeGeometryBody.Ops C) :
     SAQ_LineQuery.line JFq_Alpha1.scalar (JFn_Values.value {i})
@@ -79,7 +80,12 @@ theorem source {{C : Type}} (err : C) (seed : Port3_NativeGeometryBody.Ops C) :
   have sem := (SAQ_LineQuery.exact_line _ _ _ _ run).1
   rw [JFv_TX2_CircleGeometry.decoded err seed {i} 2,
     JFv_TX2_CircleGeometry.decoded err seed {i} 3,
-    JFv_TX2_CircleGeometry.decoded err seed {i} 4,inv0,inv1,inv2,formula] at sem
+    JFv_TX2_CircleGeometry.decoded err seed {i} 4] at sem
+  change CheckpointBytes5Output.ofE out=FoldRuntimeAlgebra.lineWithInverses _
+    (algebraMap FP FE (S7JoinBasisMachine.decode (JFv_TX2_Rows.value {i}).lineX)⁻¹)
+    (algebraMap FP FE (S7JoinBasisMachine.decode (JFv_TX2_Rows.value {i}).lineY)⁻¹)
+    (algebraMap FP FE (S7JoinBasisMachine.decode (JFv_TX2_Rows.value {i}).lineZ)⁻¹) _ at sem
+  rw [inv0,inv1,inv2,formula] at sem
   have co : FIo_WideValues.Canon (FIo_Install.toE out) := (SAQ_WideABI.w_canonical out).mp canon
   have cv : FIo_WideValues.Canon (FIo_Install.toE value) := by
     change (({out[0]}<2147483647 ∧ {out[1]}<2147483647) ∧ ({out[2]}<2147483647 ∧ {out[3]}<2147483647)) ∧
