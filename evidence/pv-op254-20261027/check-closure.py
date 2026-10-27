@@ -26,7 +26,7 @@ def visit(m):
  assert not re.search(r'\b(sorry|admit|native_decide|implemented_by)\b',source.read_text()),('forbidden token',m)
  assert not re.search(r'^\s*axiom\s',source.read_text(),re.M),('axiom declaration',m)
  rows.append(dict(module=m,**{k:r[k] for k in ['path','blob','revision']},source_sha256=actual,object_sha256=sha(obj),accepted_attempt=run['attempt']))
-roots=['PV_B1_Close254','PV_B1_Close230','PV_B1_Close258','PV_B1_PoleWitnesses','PV_B1_ActualContext','PV_B1_PreservedCallbacks','PV_B1_Fidelity','PV_B1_Shift31','PV_B1_MaskShift']
+roots=['PV_B1_Close254','PV_B1_Close230','PV_B1_Close258','PV_B1_PoleWitnesses','PV_B1_ActualContext','PV_B1_PreservedCallbacks','PV_B1_Fidelity','PV_B1_Shift31','PV_B1_MaskShift','PV_B1_Nonvacuity']
 for m in roots:visit(m)
 result=dict(roots=roots,project_modules=len(rows),external_roots=sorted(externals),project_objects=rows,status='all frozen sources, private objects and accepted import hashes match; no project objects borrowed')
 (H/'closure-preflight.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({k:v for k,v in result.items() if k!='project_objects'}))
