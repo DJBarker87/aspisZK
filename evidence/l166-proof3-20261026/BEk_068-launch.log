@@ -1,0 +1,39 @@
+{"attempt": "BEk_068", "exit_status": 0, "wall_seconds": 1.9619279590551741, "peak_rss_kib": "4383444", "swaps": "0", "print_axioms": ["'AspisR1.BEi_Execution.Executes' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+inductive AspisR1.BEi_Execution.Executes : {S A : Type} →
+  (AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S) →
+    AspisR1.SdkC_Source.Code A → S → AspisR1.SdkC_Source.Log → Aeneas.Std.Result A → S → AspisR1.SdkC_Source.Log → Prop
+number of parameters: 3
+constructors:
+AspisR1.BEi_Execution.Executes.done : ∀ {S A : Type}
+  {call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S} (a : A) (state : S)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.BEi_Execution.Executes call (AspisR1.CheckpointBytes5Effect.Code.done a) state before (Aeneas.Std.Result.ok a)
+    state before
+AspisR1.BEi_Execution.Executes.stepOk : ∀ {S A : Type}
+ 
+...
+ource.Digest → AspisR1.SdkC_Source.Code A)
+  (state middle after : S) (before log : AspisR1.SdkC_Source.Log) (digest : AspisR1.SdkC_Source.Digest)
+  (value : Aeneas.Std.Result A),
+  call parts state = (Aeneas.Std.Result.ok digest, middle) →
+    AspisR1.BEi_Execution.Executes call (k digest) middle
+        (before ++ [{ parts := parts, returned := Aeneas.Std.Result.ok digest }]) value after log →
+      AspisR1.BEi_Execution.Executes call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state before value after
+        log
+AspisR1.BEi_Execution.Executes.readFail : ∀ {S A : Type}
+  {call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S}
+  (parts : AspisR1.SdkC_Source.Parts) (k : AspisR1.SdkC_Source.Digest → AspisR1.SdkC_Source.Code A) (state after : S)
+  (before : AspisR1.SdkC_Source.Log) (error : Aeneas.Std.Error),
+  call parts state = (Aeneas.Std.Result.fail error, after) →
+    AspisR1.BEi_Execution.Executes call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state before
+      (Aeneas.Std.Result.fail error) after (before ++ [{ parts := parts, returned := Aeneas.Std.Result.fail error }])
+AspisR1.BEi_Execution.Executes.readDiv : ∀ {S A : Type}
+  {call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S}
+  (parts : AspisR1.SdkC_Source.Parts) (k : AspisR1.SdkC_Source.Digest → AspisR1.SdkC_Source.Code A) (state after : S)
+  (before : AspisR1.SdkC_Source.Log),
+  call parts state = (Aeneas.Std.Result.div, after) →
+    AspisR1.BEi_Execution.Executes call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state before
+      Aeneas.Std.Result.div after (before ++ [{ parts := parts, returned := Aeneas.Std.Result.div }])
+'AspisR1.BEi_Execution.Executes' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9c3aa5475809431485ee1350480c7a8c.scope; invocation ID: fb5471f2bf2e4d599b8af6fbd26a206f

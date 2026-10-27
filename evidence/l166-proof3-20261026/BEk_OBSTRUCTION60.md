@@ -1,7 +1,8 @@
 # L166 physical local association: obstruction at the attempt60 gate
 
-Initial assessment after compiler20. The final budget receipt records the
-attempt60 gate; no actual physical association is claimed by the source
+Gate reached after compiler60:54 passed,6 excluded development failures.
+BEk_GATE60.json records the checked partial and the still-open physical goal.
+No actual physical association is claimed by the source
 operational theorem `BEk_LocalAssociation.of_step_projection`.
 
 ## Exact definition required

@@ -76,3 +76,71 @@ then instantiate the checked step projection and consume BEk's queried-address
 slot exports and ARU original-cylinder join. No wait for ARR/ARQ_Join.Target.
 D188 Parse-versus-panic remains a fidelity note; rejected error kinds are
 irrelevant under the ruling. No new trust item or owner ruling is proposed.
+
+
+## Final validation and resource receipts
+
+**Budget exhausted:100/100 Lean invocations;94 pass,6 excluded development
+failures;0/20 Kani;0 dependency rebuilds.** The first20 invocations checked the
+new proof modules and actual-root environment;21..97 are77 DISTINCT inherited
+statement/trust-boundary inventories, not new proofs or release progress.
+98 is non-vacuity-scope audit;99 is the fresh combined partial-proof audit;
+100 is the final unchanged actual-root audit. No further proof invocation.
+
+Final partial target **BEk_FinalAudit.lean (099)**: exit0,
+wall2.467533308023121s,peakRSS5541980KiB,swap0;
+revision anchorcbe93c1d0dd40f707564a0e8f715ca6b4bcbc4f5 plus dirty source SHA256
+9e0ca2f6c8254f3425568897f26f3fa04aa758b10e05f7965eb8bafaec7edd98.
+It imports all13 new proof modules and prints all17 new public theorem axioms.
+Only propext/Classical.choice/Quot.sound occur (or none). Full statements and
+axiom lines are in stdout/receipt; failed compiler sorryAx outputs are excluded.
+
+Final root target **BEk_AfterRoot.lean (100)**: exit0,
+wall2.4170999220223166s,peakRSS5509400KiB,swap0;
+revision anchorcbe93c1d0dd40f707564a0e8f715ca6b4bcbc4f5 plus dirty source SHA256
+282a63a034c4ccf01ab23d801fcacb5b7052455d2749243f7a7379232af524c9.
+Before004/after100 kernel prints are byte-identical and unelided,113647bytes;
+SHA25639b9c00e7c4251663a83dfaf148365ef53e03d6c9702623e10e008f64ed1be2e.
+BEk_root_cache.json pins the reused root object. This is fresh focused cached
+validation, NOT a root rebuild or coherent frozen-release manifest replay.
+The literal source/statement and all actual binders remain unchanged.
+
+Total compiler wall227.3742265549954s;maximum peakRSS5565636KiB;
+swap0. Every invocation used lake env lean-j1-M7000-DElab.async=false,
+one admitted scope at a time,MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64.
+Every receipt records exact target/argv,revision,source SHA256,selected dependency
+objects/tool fingerprint,exit,wall,RSS,swap,limits and full axioms/errors.
+Reservation stdout/stderr was captured BEFORE uploads. All100 own scopes are
+terminal. No timeout,memory kill,cap increase,unchanged resource-failure rerun,
+package replay,launcher repair,foreign job kill or barrier bypass occurred.
+
+Failures001/002 were missing transitive-object/path-order diagnostics;
+006/008/009/018 were corrected elaboration errors. The recorded path-order
+change puts the existing ARU r4 cache ahead of the partial package directory;
+no inherited source/object was rewritten or rebuilt. Existing SInt2 workspace
+and pinned caches were reused. BEk_HOST_FINAL.json verifies18 current own host
+source hashes,records source/object hashes+sizes and all terminal scopes.
+Five unused audit object files were removed. The13 accepted proof modules'
+objects remain in the coherent shared cache for lead reuse; no second corpus,
+Rust target,solver temporary files or disposable build workspace was created.
+No binaries/objects/ELFs/archives are committed.
+
+BEk_validate.py PASS:100-invocation budget,caps,source snapshot hashes,
+standard axioms/all new public audits,byte-identical root,independent atomic
+recount and source-only scope. BEk_VALIDATION.json and BEk_attempts.jsonl retain
+metrics and full per-invocation metadata. Raw compiler/wrapper logs are kept
+verbatim, including pretty-printer whitespace. Source/script/document whitespace
+checks are separate from those raw logs. The attempt60 gate file is finalized.
+
+No shipped/cfg(kani) source changed,so the ELF rebuild trigger did not fire.
+No Rust,Kani or SBF build ran. Inherited pins,NOT newly rebuilt/reproduced:
+
+- default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4
+- devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299
+- Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548
+
+Stage commits before final receipt commit:95b5c124b5 baseline;
+65c29c0a1a reached source inputs;252caedefe conditional step/prefix;
+ad71c92d20 original-cylinder composition;cbe93c1d0d attempt60 obstruction.
+All commits stay local;no push or merge. The100-bit release target remains
+not established. No complete physical BEk_Top is claimed.

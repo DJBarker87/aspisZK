@@ -55,6 +55,9 @@ base=subprocess.check_output(['git','rev-parse','95b5c124b5^'],cwd=R,text=True).
 paths=subprocess.check_output(['git','diff','--name-only',base],cwd=R,text=True).splitlines()
 assert all(x.startswith('evidence/l166-proof3-20261026/') or x.startswith('lean/BEk_') for x in paths)
 assert all(not re.search(r'\.(?:olean|ir|elf|tar|gz|so|a|bin)$',x) for x in paths)
+root_before=json.loads((P/'BEk_004/receipt.json').read_text())['deps_fingerprint']['selected_objects']['Rc10_Top.olean']
+root_after=json.loads((P/'BEk_100/receipt.json').read_text())['deps_fingerprint']['selected_objects']['Rc10_Top.olean']
+(P/'BEk_root_cache.json').write_text(json.dumps(dict(before=root_before,after=root_after,object_identical=root_before['sha256']==root_after['sha256'],validation='Fresh focused statement/axiom checks of the selected coherent cached root; not a root rebuild or frozen manifest replay'),indent=2)+'\n')
 (P/'BEk_attempts.jsonl').write_text(''.join(json.dumps(x)+'\n' for x in rows))
 summary=dict(status='PASS; partial proof only; target not established',lean_invocations=len(rows),passed=passed,excluded_failures=len(rows)-passed,dependency_builds=0,distinct_statement_scope_reviews=77,kani_runs=0,wall_seconds=sum(r['wall_seconds'] for r in rows),maximum_rss_kib=max(int(r['peak_rss_kib']) for r in rows),swaps=0,new_theorems=new,standard_axiom_audit_lines=len(printed),before_after_kernel_identical=True,kernel_sha256=hashlib.sha256(before).hexdigest(),base_revision=base,root_delta=ledger['delta'],local_physical_association='OPEN',L166='OPEN')
 (P/'BEk_VALIDATION.json').write_text(json.dumps(summary,indent=2)+'\n')
