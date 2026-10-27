@@ -1,0 +1,46 @@
+{"attempt": "JGg18_095", "exit_status": 1, "wall_seconds": 4.038292185054161, "peak_rss_kib": "5857128", "swaps": "0", "print_axioms": ["'AspisR1.JGg_PrepareForward.checked_add' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGg_PrepareForward.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGg_PrepareForward.checked_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGg_PrepareForward.lean:54:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let cf1 ←
+      match core.result.Result.Ok claim with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val1 =>
+        ok
+          (core.result.Result.Ok
+              { variant := transport.Variant.S2, roots := sem.roots, gamma := gamma, kappa := kappa,
+                alpha := Array.make 2#u
+...
+_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 =>
+          ok
+            (core.result.Result.Ok
+                { variant := transport.Variant.S2, roots := sem.roots, gamma := gamma, kappa := kappa,
+                  alpha := Array.make 2#usize [a0, a1] ⋯, rho := rho, queries := queries, semantic_alpha := sem.alpha,
+                  z := sem.z, claim := val1, state := t6.state },
+              scratch)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, scratch)) =
+    ok
+      (core.result.Result.Ok
+          (PreparedScratchReachability.output sem view gamma kappa (Array.make 2#usize [a0, a1] ⋯) rho queries claim
+            t6),
+        scratch)
+JGg_PrepareForward.lean:38:85: warning: This simp argument is unused:
+  read_discriminant
+
+Hint: Omit it from the simp argument list.
+  simp [̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵f̵o̵l̵d̵s̵,̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵V̵a̵r̵i̵a̵n̵t̵.̵e̵q̵,̵r̵e̵a̵d̵_̵d̵i̵s̵c̵r̵i̵m̵i̵n̵a̵n̵t̵,̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵r̵e̵a̵d̵_̵d̵i̵s̵c̵r̵i̵m̵i̵n̵a̵n̵t̵]̵[̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲f̲o̲l̲d̲s̲,̲ ̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲C̲m̲p̲P̲a̲r̲t̲i̲a̲l̲E̲q̲V̲a̲r̲i̲a̲n̲t̲.̲e̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲r̲e̲a̲d̲_̲d̲i̲s̲c̲r̲i̲m̲i̲n̲a̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGg_PrepareForward.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9db7623e8f7d441f8e5070d2a06e6724.scope; invocation ID: a9df59665c0e43ad8871f88b0ab06460
+

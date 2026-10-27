@@ -1,0 +1,55 @@
+{"attempt": "JGg18_072", "exit_status": 1, "wall_seconds": 2.679709187010303, "peak_rss_kib": "5855652", "swaps": "0", "print_axioms": ["'AspisR1.JGg_QueryFinish.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGg_QueryFinish.lean:14:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Query31ConcreteMaterializedSchedule.actualConcreteDecode Query31ConcreteDriverTraceFacts.sourceDefaultState b a
+in the target expression
+  (do
+      let r ← closedHashQueries.decode b a
+      let r1 ←
+        core.result.Result.map_err
+            (transcript.Transcript.queries.closure.Insts.CoreOpsFunctionFnOnceTupleQuerySampleErrorError D) r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (q, state7) := val
+          do
+          let u ← q.index_usize 0#usize
+          let we ← cl
+...
+race.value 5#u16 16#usize we16
+          let u17 ← q.index_usize 17#usize
+          let we17 ← closedHashQueries.embed u17
+          trace.value 5#u16 17#usize we17
+          let u18 ← q.index_usize 18#usize
+          let we18 ← closedHashQueries.embed u18
+          trace.value 5#u16 18#usize we18
+          let u19 ← q.index_usize 19#usize
+          let we19 ← closedHashQueries.embed u19
+          trace.value 5#u16 19#usize we19
+          let u20 ← q.index_usize 20#usize
+          let we20 ← closedHashQueries.embed u20
+          trace.value 5#u16 20#usize we20
+          let u21 ← q.index_usize 21#usize
+          let we21 ← closedHashQueries.embed u21
+          trace.value 5#u16 21#usize we21
+          ok (core.result.Result.Ok q, { state := state7, hash := self.hash })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Std.Array U32 22#usize)
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, self)) =
+    ok (core.result.Result.Ok q, { state := selected, hash := self.hash })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGg_QueryFinish.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r995a79d8a8d24cd183d5f8976f3d6ff5.scope; invocation ID: 11d9bbf8a8e84ce0adbbc6a2b7fe337c
+

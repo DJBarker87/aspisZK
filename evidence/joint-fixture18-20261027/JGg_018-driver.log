@@ -1,0 +1,67 @@
+{"attempt": "JGg18_018", "exit_status": 1, "wall_seconds": 1.2885848919977434, "peak_rss_kib": "2643656", "swaps": "0", "print_axioms": ["'AspisR1.JGg_QueryTotal.loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGg_QueryTotal.words_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGg_QueryTotal.lean:16:23: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+f : F
+g : ℕ → T
+stable : ∀ (i : Usize), ↑i < ↑N → callback.call_mut f i = ok (g ↑i, f)
+small : ↑N ≤ 8
+i : Usize
+acc : List T
+bound : ↑N - ↑i ≤ 0
+stop : ¬i < N
+⊢ (if h : i < N then div else ok (acc.reverse, f)) = ok (acc.reverse, f)
+JGg_QueryTotal.lean:25:17: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+f : F
+g : ℕ → T
+stable : ∀ (i : Usize), ↑i < ↑N → callback.call_mut f i = ok (g ↑i, f)
+small : ↑N ≤ 8
+fuel : ℕ
+ih : ∀ (i : Usize) (acc : List T), ↑N - ↑i ≤ fuel → ∃ out, arrayFromFnLoop N callback fuel i f acc = ok (out, f)
+i : Usize
+acc 
+...
+ggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGg_QueryTotal.lean:51:19: error: unsolved goals
+case cons
+block : Std.Array U8 32#usize
+callback : core.ops.function.FnMut AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure Usize U32 :=
+  AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+stable :
+  ∀ (i : Usize),
+    ↑i < ↑8#usize →
+      callback.call_mut block i = ok (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block ↑i, block)
+values : List U32
+loop : arrayFromFnLoop 8#usize callback 9 0#usize block [] = ok (values, block)
+ranks : Std.Array U32 8#usize
+rank : AspisR1QueryScanUnrolled.r0_transcript.block_rank block = ok ranks
+x : U32
+xs : List U32
+ih :
+  AspisV8R19.TraversalRuntime.mapState
+      AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32.call_mut xs () =
+    ok (List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord xs, ())
+⊢ (do
+      let __x ← ok (List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord xs, ())
+      ok (AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord x :: __x.1, __x.2)) =
+    ok
+      (AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord x ::
+          List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord xs,
+        ())
+'AspisR1.JGg_QueryTotal.words_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9598b36fc2ce4013a4ef4b82f551ba24.scope; invocation ID: 6ab8a69b948b4e43ac11bfb430f8740a
+

@@ -1,0 +1,72 @@
+theorem AspisR1Post25SamplerPreparedCarrier.ordinary_sample_success_CE_coordinate_bounds : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (out : AspisR1Post25SamplerPreparedCarrier.CandidateE),
+  AspisR1Post25Sampler.sampler.ordinary_sample block = Aeneas.Std.Result.ok out →
+    ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c0.c0.a < 2147483647 ∧
+      ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c0.c0.b < 2147483647 ∧
+        ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c0.c1.a < 2147483647 ∧
+          ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c0.c1.b < 2147483647 ∧
+            ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c1.c0.a < 2147483647 ∧
+              ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c1.c0.b < 2147483647 ∧
+                ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c1.c1.a < 2147483647 ∧
+                  ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c1.c1.b < 2147483647 :=
+fun block out h =>
+  let ⟨h0, right✝⟩ := AspisR1Post25SamplerCanonical.ordinary_sample_success_bounds block out h
+  let ⟨h1, right✝¹⟩ := right✝
+  let ⟨h2, right✝²⟩ := right✝¹
+  let ⟨h3, right✝³⟩ := right✝²
+  let ⟨h4, right✝⁴⟩ := right✝³
+  let ⟨h5, right✝⁵⟩ := right✝⁴
+  let ⟨h6, h7⟩ := right✝⁵
+  ⟨h0, ⟨h1, ⟨h2, ⟨h3, ⟨h4, ⟨h5, ⟨h6, h7⟩⟩⟩⟩⟩⟩⟩
+JGg_SamplerInspection.lean:6:7: error(lean.unknownIdentifier): Unknown constant `AspisR1Post25Transcript.GammaCandidateSourceModel.candidate_gamma_total`
+def AspisR1PublicPreparation.sampler.qm31_sample : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+  Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31 :=
+fun block => do
+  let digits ← AspisR1PublicPreparation.sampler.qm31_digits block
+  let i ← digits.index_usize 0#usize
+  let i1 ← digits.index_usize 1#usize
+  let c ← AspisR1PublicPreparation.aspis_core.field.CM31.new i i1
+  let i2 ← digits.index_usize 2#usize
+  let i3 ← digits.index_usize 3#usize
+  let c1 ← AspisR1PublicPreparation.aspis_core.field.CM31.new i2 i3
+  Aeneas.Std.Result.ok { c0 := c, c1 := c1 }
+JGg_SamplerInspection.lean:8:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PublicPreparation.PreparedFromQmSourceBridge.sourceFromQm`
+def AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries : AspisR1CurrentCaller.BorrowedClaimPrepared.PBoundaries✝ :=
+AspisR1ClaimPreparedBridge.concreteBoundaries
+  (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries
+    (AspisR1CurrentCaller.OriginalSerializerInstallation.withOriginalSerializer
+      AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling)
+    AspisS1M31Embedding.Total.embed)
+def AspisR1ClaimPreparedBridge.powersPublic : (N : Aeneas.Std.Usize) →
+  AspisR1ClaimPreparedBridge.PE → Aeneas.Std.Result (Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE N) :=
+fun N x => do
+  let ys ← AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x)
+  Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE ys)
+def AspisR1ClaimPreparedBridge.claimPublic : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_semantic.Verified H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1ClaimPreparedBridge.PE →
+          Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE 29#usize →
+            AspisR1ClaimPreparedBridge.PE →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1ClaimPreparedBridge.PE AspisR1PublicPreparation.verifier.Error) :=
+fun {H} D sem y1 inactive g kappa => do
+  let r ←
+    AspisR1CurrentPreparedClaim.verifier.prepared_claim
+        (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+        (AspisR1ClaimPreparedBridge.toClaimDigest D) (AspisR1ClaimPreparedBridge.toClaimSem sem) y1
+        (AspisR1ClaimPreparedBridge.toClaimE inactive)
+        (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE g)
+        (AspisR1ClaimPreparedBridge.toClaimE kappa)
+  Aeneas.Std.Result.ok
+      (match r with
+      | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok (AspisR1ClaimPreparedBridge.fromClaimE x)
+      | Aeneas.Std.core.result.Result.Err e =>
+        Aeneas.Std.core.result.Result.Err (AspisR1ClaimPreparedBridge.fromClaimError e))
+theorem AspisR1QueryScanUnrolled.r0_transcript.block_rank_word_from_le_bytes : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (j : ℕ) (hj : j < 8),
+  ↑(AspisR1QueryScanUnrolled.r0_transcript.wordAt✝ block j hj) =
+    (BitVec.fromLEBytes
+        (List.map Aeneas.Std.U8.bv ↑(AspisR1QueryScanUnrolled.r0_transcript.wordBytes✝ block j hj))).toNat :=
+fun block j hj => Eq.refl ↑(AspisR1QueryScanUnrolled.r0_transcript.wordAt✝ block j hj)

@@ -1,0 +1,16 @@
+import JGg_PreparationOpening
+set_option autoImplicit false
+namespace AspisR1.JGg_NextClaim
+open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+open AspisR1CurrentCaller.BorrowedClaimPrepared AspisR1ClaimPreparedBridge
+
+/-- The concrete retained preparation's last child is the actual installed
+borrowed claim procedure. This identifies the next source obligation; it does
+not assert that the child returns successfully. -/
+theorem source {Hash : Type} (D : aspis_core.Digest32 Hash) (sem : r1_semantic.Verified Hash)
+    (y1 : Slice U8) (inactive kappa : aspis_core.field.WideExact)
+    (powers : Array aspis_core.field.WideExact 29#usize) :
+    closedHashBoundaries.claim D sem y1 inactive powers kappa=
+      claimPublic D sem y1 inactive powers kappa := rfl
+#print axioms source
+end AspisR1.JGg_NextClaim
