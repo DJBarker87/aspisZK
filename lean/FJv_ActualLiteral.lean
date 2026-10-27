@@ -1,0 +1,79 @@
+import FJp_ActualLiteral
+import FJv_Literal
+import FIs_Literal
+import FJp_NativeJoin
+import FJp_Native
+import FJp_ConsSecond
+import FJp_NativeLiteral
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJv_ActualLiteral
+open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+open AspisR1CurrentCaller InstalledPreparation
+open MultiproofConeCanonical OraclePortCompactDraft OraclePortStoredDecisionDraftC4
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw
+theorem strengthen {C : Type} (err : C) (seed : DrvC_Installation.Configuration FIo_Install.W C)
+    (r : NP6_StdModel.Reservation) (B : FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls)
+    (saved : alloc.vec.Vec U8) (f : S2W_NativeConsolidation.FirstCut) (s : S2W_NativeConsolidation.SecondCut)
+    (run : Tx1Q_Execution.Run
+      (Tx1Q_Execution.actual (Op5T_Concrete.current (FIp_Install.configuration err seed r).currentBase)
+        (FIp_Install.configuration err seed r).reserved (FIp_Install.configuration err seed r).query
+        (FIp_Install.configuration err seed r).geometry (F3M_CircleSource.install B) std)
+      (FIp_Install.configuration err seed r).reserved (FIp_Install.configuration err seed r).query
+      (FIp_Install.configuration err seed r).geometry
+      (SdkD_PairBatches.current (FIp_Install.configuration err seed r).adapter (FIp_Install.configuration err seed r).currentBase
+        (FIp_Install.configuration err seed r).stageBase (FIp_Install.configuration err seed r).finish
+        (FIp_Install.configuration err seed r).reserved (FIp_Install.configuration err seed r).query
+        (FIp_Install.configuration err seed r).geometry (F3M_CircleSource.install B) std) ()
+      (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved)
+    (H : Bytes → State) (trace : List (Bytes × State)) (authParsed : Parsed) (t : Cons_Native.Witness)
+    (accounts1 accounts2 : S2W_ExtractionBoundary.Accounts)
+    (cuts : S2W_NativeConsolidation.SourceCuts
+      (ClaimsUnrolledSdk.sdkOps
+        (Tx2I_Install.install (FIp_Install.configuration err seed r).adapter
+          (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base (FIp_Install.configuration err seed r).stageBase)
+            (FIp_Install.configuration err seed r).reserved (FIp_Install.configuration err seed r).query
+            (FIp_Install.configuration err seed r).geometry)) (FIp_Install.configuration err seed r).finish)
+        (Uni_Install.current (FIp_Install.configuration err seed r).currentBase
+          (FIp_Install.configuration err seed r).reserved (FIp_Install.configuration err seed r).query
+          (FIp_Install.configuration err seed r).geometry) (F3M_CircleSource.install B) std)
+      accounts1 accounts2 saved f s)
+    (sourceParsed : OraclePortCompactDraft.parse (bytesOf f.proof.val)=some authParsed)
+    (sameProof : bytesOf s.proof.val=bytesOf f.proof.val)
+    (sameSaved : bytesOf s.checkpoint.val=bytesOf saved.val)
+    (size : f.proof.val.length=57607)
+    (authentication : ∀ (data : MatchingSupport.Data OraclePortCheckpointAbiC5.E)
+      (rho : OraclePortCheckpointAbiC5.K) (q : Fin 22 → Fin 262144),
+      Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared run.p) data q rho →
+      AuS1_Finish.Collision H trace authParsed q ∨
+      ∃ recovered : Nat → Option Bytes,∀ pos,pos<22 → recovered (OraclePortSelectedDraft.index q 2 pos)=some (OraclePortPackedChoiceC4.payload authParsed 2 pos))
+    (enriched : FIs_Native.Calls (AuS1_Install.base (FIp_Install.configuration err seed r).stageBase)
+      (FIp_Install.configuration err seed r).finish (FIp_Install.configuration err seed r).reserved
+      (FIp_Install.configuration err seed r).query (FIp_Install.configuration err seed r).geometry
+      (Tx1Q_Install.digest (SdkD_PairBatches.current
+        (FIp_Install.configuration err seed r).adapter (FIp_Install.configuration err seed r).currentBase
+        (FIp_Install.configuration err seed r).stageBase (FIp_Install.configuration err seed r).finish
+        (FIp_Install.configuration err seed r).reserved (FIp_Install.configuration err seed r).query
+        (FIp_Install.configuration err seed r).geometry (F3M_CircleSource.install B) std)) () s.pub s.proof s.checkpoint t)
+    (old : FIs_Literal.Outcome (FIp_Install.configuration err seed r).adapter
+      (FIp_Install.configuration err seed r).currentBase (FIp_Install.configuration err seed r).reserved
+      (FIp_Install.configuration err seed r).query (FIp_Install.configuration err seed r).geometry
+      (FIp_Install.configuration err seed r).stageBase (FIp_Install.configuration err seed r).finish
+      B std saved f s run H trace authParsed t) :
+    FJv_Literal.Outcome (FIp_Install.configuration err seed r).adapter
+      (FIp_Install.configuration err seed r).currentBase (FIp_Install.configuration err seed r).reserved
+      (FIp_Install.configuration err seed r).query (FIp_Install.configuration err seed r).geometry
+      (FIp_Install.configuration err seed r).stageBase (FIp_Install.configuration err seed r).finish
+      B std saved f s run H trace authParsed t := by
+  let c := FIp_Install.configuration err seed r
+  have matched := FJp_ActualLiteral.strengthen err seed r B std saved f s run H trace authParsed t
+    accounts1 accounts2 cuts sourceParsed sameProof sameSaved size authentication old
+  have chained := FJu_NativeLiteral.strengthen c.adapter c.currentBase c.reserved c.query c.geometry
+    c.stageBase c.finish B std saved f s run H trace authParsed t sameProof matched
+  exact FJv_Literal.strengthen c.adapter c.currentBase c.reserved c.query c.geometry
+    c.stageBase c.finish B std saved f s run H trace authParsed t _ () enriched
+    r seed.finish rfl ⟨rfl,rfl,rfl⟩ sameProof sameSaved chained
+#print axioms strengthen
+end AspisR1.FJv_ActualLiteral
+end
