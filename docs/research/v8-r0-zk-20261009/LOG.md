@@ -11856,3 +11856,22 @@ the merged source-parent theorem. The +124/−45 rewrite of a shipped function i
 ELF gate now and by the combined fixture/differential/timing gates before adoption. Launched pv-runjoin17
 (same branch, IDs 50600-50899 still unused). Five live slots: route2b, batch1b, integ2, quiet, runjoin17.
 Rows removed outright: 0. Privacy target not yet established.
+
+## D288 (Stream B) 2026-10-27 13:40 UTC: consolidation merged into the prover candidate (nine siblings; cfg(kani)-only shipped change; ELF pins match; 533-target audit)
+
+pv-integ2 (`codex/pv-integ2-20261027` from 0c9dc9a4cc; 26/100 Lean, no Kani). Merged in order with
+--no-ff and NO conflicts: pv-cb3, pv-cb9, pv-cbmid, pv-op134, pv-cblib, pv-join (incl. its earlier
+pv-cb/pv-cb3 merges), pv-l2b, pv-n7, pv-route2. The only shipped-file change relative to 0c9dc9a4cc:
+three appended `#[cfg(kani)]` modules in crates/aspis-r1-cost-probe/src/host_commitment.rs (+249 lines,
+production prefix unchanged; ruling (l) evidence); no programs/ or scripts/ change; tools/ additions are
+standalone proof tooling. All three ELF pins rebuilt and matching. 816 PV objects reused; 25
+missing-object re-checks passed; combined audit 54597: 533 targets, standard axioms only, 2.59 s, 4.38
+GB, swap 0. Row table (evidence/pv-integ2-20261027/ROWS.md) separates candidate laws, reference-only
+results, consumer import paths and remaining obligations. The lead merged the integrated sibling into the
+prover candidate (codex/cx-prover-rw-20261023 now contains rebase + client route + op223 + integ1
+evidence + these nine siblings). Still outside the candidate: the live code-changing branches
+pv-runjoin (records) and pv-batch1, the dictionary branch (cfg(kani)-only, cleared in D286, for a later
+consolidation) and pv-l3 (evidence already on research). Integration removes no endpoint premise; next on
+the candidate are the records and batch-1 changes, then the combined differential and timing gates. The
+op223 timing gate (pv-quiet) measures the fixed revision 8873306db1 and is unaffected by this
+evidence/cfg(kani)-only merge. Rows removed outright: 0. Privacy target not yet established.
