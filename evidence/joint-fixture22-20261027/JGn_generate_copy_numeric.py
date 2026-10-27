@@ -41,3 +41,41 @@ else:p.write_text(data)
 manifest=dict(powers=powers,patterns=patterns,descriptors=descriptors,source_sha256=hashlib.sha256(src.encode()).hexdigest(),strategy='Symbolic original FJk source VALUE theorems; bounded per-pattern word certificates. No native loop reduction.')
 if '--check' not in sys.argv:(P/'JGn_COPY_NUMERIC_INPUTS.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print('copy numeric generator checked' if '--check' in sys.argv else 'copy numeric data generated')
+# Persist the per-pattern kernel certificate shape and canonicality guard.
+s='''import JGn_CopyData
+import FJk_PatternRegistry
+import JGl_WordProof
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGn_PatternMath
+open FIw_ArrayValue (decoded)
+'''
+for i in range(14):
+ s+=f'''theorem lane{i} : FJk_PatternOuterValue.model JGl_NumericData.a JGn_CopyPowers.powers ⟨{i},by decide⟩=
+    decoded JGn_CopyData.patterns ⟨{i},by decide⟩ := by
+  unfold FJk_PatternOuterValue.model
+  rw [FJk_PatternRegistry.value]
+  jgl_words
+#print axioms lane{i}
+'''
+s+='''theorem value : FJk_PatternOuterValue.model JGl_NumericData.a JGn_CopyPowers.powers=
+    decoded JGn_CopyData.patterns := by
+  funext i
+  fin_cases i
+'''+''.join(f'  · exact lane{i}\n' for i in range(14))+'#print axioms value\nend AspisR1.JGn_PatternMath\nend\n'
+canonical='''import JGn_CopyData
+import JGl_NumericCanonical
+set_option autoImplicit false
+namespace AspisR1.JGn_CopyCanonical
+open FIw_ArrayValue (canonical)
+theorem patterns : canonical JGn_CopyData.patterns := by
+  apply JGl_NumericCanonical.fromCells
+  intro i
+  fin_cases i
+'''
+for a,b,c,d in patterns:canonical+=f'  · change ({a}<2147483647 ∧ {b}<2147483647) ∧ ({c}<2147483647 ∧ {d}<2147483647)\n    omega\n'
+canonical+='#print axioms patterns\nend AspisR1.JGn_CopyCanonical\n'
+for mod,body in [('JGn_PatternMath',s),('JGn_CopyCanonical',canonical)]:
+ p=R/'lean'/(mod+'.lean')
+ if '--check' in sys.argv:assert p.read_text()==body,mod
+ else:p.write_text(body)
