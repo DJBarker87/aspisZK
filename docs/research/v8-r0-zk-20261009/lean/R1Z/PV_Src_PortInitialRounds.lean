@@ -22,6 +22,7 @@ theorem source {F : Type}
       (sourceExternalLinear := PV_Src_ExternalReference.dictionary) callback iter s trace round input =
       fullSteps callback (fun i => poseidon2.Poseidon2RoundKind.ExternalInitial (UScalar.cast .U8 i))
         xs s trace round input := by
+  letI : ExternalLinear := PV_Src_ExternalReference.dictionary
   induction ht generalizing s input trace round with
   | done it it' hn =>
     simp only [iterator] at hn

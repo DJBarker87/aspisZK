@@ -23,6 +23,7 @@ theorem source {F : Type}
             input,output := out} : poseidon2.Poseidon2RoundTransition)
         poseidon2.permute_optimized_with_trace_loop2 (sourceExternalLinear := PV_Src_ExternalReference.dictionary) callback after out trace1
           (U8.wrapping_add round 1#u8) out) := by
+  letI : ExternalLinear := PV_Src_ExternalReference.dictionary
   rw [poseidon2.permute_optimized_with_trace_loop2,hn]
   simp only [bind_tc_ok,lift]
   have he := congrArg (fun body : Result State => do
@@ -33,7 +34,8 @@ theorem source {F : Type}
     poseidon2.permute_optimized_with_trace_loop2 (sourceExternalLinear := PV_Src_ExternalReference.dictionary) callback after out trace1
       (U8.wrapping_add round 1#u8) out)
     (PV_Src_PortFullRoundCopy.final_round s c hs hc)
-  simpa only [PV_Src_PortFullRoundModel.final_round,bind_assoc_eq,lift,bind_tc_ok] using he
+  simp only [PV_Src_PortFullRoundModel.final_round,bind_assoc_eq,lift,bind_tc_ok] at he
+  convert he using 1 <;> rfl
 
 #print axioms source
 end R1Z.PV_Src_PortFinalRoundStep
