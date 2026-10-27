@@ -7,7 +7,7 @@ files=[]
 for p in h.rglob('*'):
  r=p.relative_to(h);s=str(r)
  if any(x in r.parts for x in ['src','native-target','sbf-target-verifier','sbf-target-pool','artifacts','diagnostics','bin','fixtures-candidate','fixtures-research']):continue
- if p.is_file() and p.name in ['receipt.json','time.log','stdout.log','stderr.log','reservation.json','command.json','comparison.json','binary-pins.json','fixture-comparison.json','meta.json','route-symbols.json','route-disassembly.txt','symbols.txt','relocations.txt','key-retention.json','source-verification.json'] or (p.is_file() and p.name.endswith('-launcher.log')):
+ if p.is_file() and p.name in ['receipt.json','time.log','stdout.log','stderr.log','reservation.json','command.json','comparison.json','binary-pins.json','fixture-comparison.json','meta.json','route-symbols.json','route-disassembly.txt','symbols.txt','relocations.txt','key-retention.json','source-verification.json','cleanup.json','cleanup-initial.json'] or (p.is_file() and p.name.endswith('-launcher.log')):
   files.append(s)
 print(json.dumps(files))
 '''%H
