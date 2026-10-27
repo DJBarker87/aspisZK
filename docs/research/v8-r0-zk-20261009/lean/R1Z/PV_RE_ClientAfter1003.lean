@@ -1,5 +1,5 @@
 import R1Z.PV_RE_AfterPrefix1003
-import R1Z.PV_RE_AfterChecks10
+import R1Z.PV_RE_AfterChecksB10
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RE_ClientAfter1003
@@ -7,7 +7,7 @@ open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RE_RetryStep PV_RE_PublicPrefix6 PV_RE_AttemptHashPrefix6 PV_RE_AttemptBindingHash7
 variable [ExternalTypes]
 open PV_RE_AfterPrefix1003
-theorem prefix {C : Type} (ops : ExternalFuns)
+theorem entered {C : Type} (ops : ExternalFuns)
     (entropy : RawEntropy C) (pub : Public) (compiled : Compiled) (hash : Hash)
     (store : Store) (state state1 : C) (secret : Secrets)
     (entropy_prefix : (EntropyWrapper (ProverRwOuterMapErr.selected ops) entropy).call_mut state 0#usize =
@@ -24,8 +24,8 @@ theorem prefix {C : Type} (ops : ExternalFuns)
     ∃ next, @RealR1_client.prove_for_proof_accounts _ (ProverRwOuterMapErr.selected ops) C entropy pub compiled hash store state = (aspis_core.state_only_hiding.StateOnlyHidingContext.encode (ProverRwOuterContextModel.context digest secret.mask_nonce) >>= next) := by
   letI : ExternalFuns := ProverRwOuterMapErr.selected ops
   intro store1 h0 entropy h1 material h2
-  apply PV_RE_BindTransport10.compose _ _ _
-    (PV_RE_AfterChecks10.client_to_afterChecks ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash)
-  exact PV_RE_AfterPrefix1003.prefix aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore secret hash binding (ProverRwOuterContextModel.context digest secret.mask_nonce) store store1 h0 entropy h1 material h2
-#print axioms prefix
+  apply PV_RE_BindTransportB10.compose _ _ _
+    (PV_RE_AfterChecksB10.client_to_afterChecks ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash)
+  exact PV_RE_AfterPrefix1003.entered aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore secret hash binding (ProverRwOuterContextModel.context digest secret.mask_nonce) store store1 h0 entropy h1 material h2
+#print axioms entered
 end R1Z.PV_RE_ClientAfter1003

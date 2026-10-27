@@ -6,7 +6,7 @@ namespace R1Z.PV_RE_ClientStore1000
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RE_RetryStep PV_RE_PublicPrefix6 PV_RE_AttemptHashPrefix6 PV_RE_AttemptBindingHash7
 variable [ExternalTypes]
-theorem prefix {C : Type} (ops : ExternalFuns)
+theorem entered {C : Type} (ops : ExternalFuns)
     (entropy : RawEntropy C) (pub : Public) (compiled : Compiled) (hash : Hash)
     (store : Store) (state state1 : C) (secret : Secrets)
     (entropy_prefix : (EntropyWrapper (ProverRwOuterMapErr.selected ops) entropy).call_mut state 0#usize =
@@ -22,8 +22,8 @@ theorem prefix {C : Type} (ops : ExternalFuns)
   obtain ⟨next,hn⟩ := PV_RE_ReserveGuards9.client_to_store ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash
   unfold aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve at hn
   rw [PV_RE_ClientEntry.bind_assoc] at hn
-  obtain ⟨tail,ht⟩ := PV_RE_StorePrefix1000.prefix store digest secret.mask_nonce 
+  obtain ⟨tail,ht⟩ := PV_RE_StorePrefix1000.entered store digest secret.mask_nonce 
   rw [ht,PV_RE_ClientEntry.bind_assoc] at hn
   exact ⟨_,hn⟩
-#print axioms prefix
+#print axioms entered
 end R1Z.PV_RE_ClientStore1000

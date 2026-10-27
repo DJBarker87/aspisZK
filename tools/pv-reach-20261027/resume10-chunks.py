@@ -21,7 +21,11 @@ if single:
  import re
  m=single.replace('/','.')
  if m in mapping:
-  row=mapping[m]
+  row=mapping[m].copy()
+  if row['authority']=='h5' and m.startswith('R1Z.PV_RE_'):
+   import re
+   data=subprocess.check_output(['git','show',rev+':'+row['path']])
+   row.update(revision=rev,blob=subprocess.check_output(['git','rev-parse',rev+':'+row['path']],text=True).strip(),sha256=hashlib.sha256(data).hexdigest(),imports=re.findall(r'^import\s+(\S+)',data.decode(),re.M))
  else:
   path='docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean'
   data=subprocess.check_output(['git','show',rev+':'+path]);blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip()

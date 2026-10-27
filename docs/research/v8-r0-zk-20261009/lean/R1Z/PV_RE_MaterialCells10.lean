@@ -1,4 +1,4 @@
-import R1Z.PV_RE_AfterChecks10
+import R1Z.PV_RE_AfterChecksB10
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RE_MaterialCells10
@@ -9,7 +9,7 @@ abbrev Hash := Slice (Slice U8) → Result (Array U8 32#usize)
 
 /-- The source-selected layout leaves reach the actual material-cell callback.
 The callback's entire continuation, including all inner errors, is retained. -/
-theorem prefix (ops : ExternalFuns) {S : Type}
+theorem entered (ops : ExternalFuns) {S : Type}
     (inst : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
     (hash : Hash) (binding digest nonce entropy : Array U8 32#usize) (store : S) :
     letI : ExternalFuns := ProverRwOuterMapErr.selected ops
@@ -28,5 +28,5 @@ theorem prefix (ops : ExternalFuns) {S : Type}
     (aspis_core.state_only_hiding.PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1 >>= _) = _
   rw [hf]
   exact ⟨_,rfl⟩
-#print axioms prefix
+#print axioms entered
 end R1Z.PV_RE_MaterialCells10

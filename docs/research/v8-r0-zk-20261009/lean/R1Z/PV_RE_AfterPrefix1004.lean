@@ -1,4 +1,4 @@
-import R1Z.PV_RE_BindTransport10
+import R1Z.PV_RE_BindTransportB10
 import R1Z.ProverRwOuterAfterChecks
 set_option autoImplicit false
 noncomputable section
@@ -11,7 +11,7 @@ abbrev Material := aspis_prover.state_only_hiding.StateOnlyMaskMaterial
 abbrev Pre := aspis_prover.state_only_entropy.PreReservedNonce
 abbrev Hash := Slice (Slice U8) → Result (Array U8 32#usize)
 abbrev Z := Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)
-theorem prefix {S : Type} (inst : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+theorem entered {S : Type} (inst : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
     (secret : Secrets) (hash : Hash) (binding : Array U8 32#usize)
     (context : Context) (store : S)
     (store1 : S) (h0 : inst.reserve store context.statement_digest context.mask_nonce = .ok (true,store1))
@@ -30,5 +30,5 @@ theorem prefix {S : Type} (inst : aspis_prover.state_only_hiding.StateOnlyMaskNo
   change ∃ next, (aspis_core.state_only_hiding.StateOnlyHidingContext.encode context >>= _) = _
   rw [h3]
   exact ⟨_,rfl⟩
-#print axioms prefix
+#print axioms entered
 end R1Z.PV_RE_AfterPrefix1004

@@ -1,10 +1,14 @@
-import R1Z.PV_RE_NativeAssociations10
+import R1Z.PV_RE_NativeAssociationsB10
 import R1Z.PV_Src_PublicRootAssociation
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RE_NativePublic10
 open Aeneas Aeneas.Std Result BuilderForestAdmissionPort
 open BuilderForestAdmissionPort.pool_v1 PV_Src_NativeInput
+local instance : CharP PV_Src_FrozenFixtures.Scalar 2147483647 :=
+  charP_of_injective_algebraMap
+    (algebraMap (ZMod AspisCircleGroupOrder.P) PV_Src_FrozenFixtures.Scalar).injective
+    AspisCircleGroupOrder.P
 
 def inputs (compiled : Bool → pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
     (anchor : Array U32 8#usize) (pool domain destination : PV_Src_PublicRecords.Context)
