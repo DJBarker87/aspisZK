@@ -1,0 +1,3 @@
+All64 field recurrence cells are checked: WeightCells00..15 receipts060-069 and073-078; named BasisFactors0..11 receipts047-058 and PowerLimbs059. Every cell reduces12 fixed query contributions only after six named symbolic Chebyshev cuts per node. Initial cells select the inherited native checkpoint weights. No whole buffer or whole native recurrence normalization is used. All cell axioms standard. Table-to-actual-slice equality is the next join, followed by dot equality and finish. No top-premise removal or wrapper acceptance claimed.
+
+070 combined-root audit failed at memory threshold; split PairAudit018/QueryAudit072 and separate TopAudit071 pass. RESOURCE070 records failure/replacement. Caps unchanged, no unchanged retry.
