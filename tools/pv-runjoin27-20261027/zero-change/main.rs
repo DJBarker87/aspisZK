@@ -1,5 +1,6 @@
 //! Counterexample data are the public deterministic fixture; no wallet key.
 use aspis_core::field::{M31, P};
+use aspis_statement::pool_v1::pair_trace::{PoolV1PairInputNoteWitnessV1, PoolV1PairTraceErrorV1};
 use aspis_statement::{derive_owner_key, pool_v1::*, poseidon2::Digest};
 fn digest(seed: u32) -> Digest {core::array::from_fn(|i| M31((seed + 17*i as u32 + 1)%P))}
 fn main() {
