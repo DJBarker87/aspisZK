@@ -48,5 +48,5 @@ c=subprocess.run([sys.executable,str(root/'tools/pv-cb3-20261026/resume_lean.py'
 r=json.loads(p.read_text())
 if (out/f'{attempt}.json').exists():
  r['lean_charged'].append(attempt)
- q=out/f'{attempt}.json';v=json.loads(q.read_text());v['limits']['TasksMax']=128;v['source_snapshot']=f'{attempt}-source.lean.txt';q.write_text(json.dumps(v,indent=2)+'\n')
+ q=out/f'{attempt}.json';v=json.loads(q.read_text());v['limits']['TasksMax']=64;v['tasksmax_source']='Restored launcher body commands64; shim is transparent. Historical cgroup value itself is not sampled.';v['source_snapshot']=f'{attempt}-source.lean.txt';q.write_text(json.dumps(v,indent=2)+'\n')
 p.write_text(json.dumps(r,indent=2)+'\n');sys.exit(c.returncode)

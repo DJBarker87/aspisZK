@@ -4,9 +4,10 @@ import subprocess,sys,json,shlex,time,datetime
 root=Path(__file__).resolve().parents[2];stage=sys.argv[1]; variant=sys.argv[2] if len(sys.argv)>2 else 'op223-built'
 assert stage in ('charon','aeneas')
 base='/home/dombarker/project-offloads/codex-pv-cb3-20261026';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy';pinned='/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools'
-assert variant in ('op223-built','op249-staged','op253-built','op34-hide-allocator','op34-method','op35-default','op258-reference','op253-source','op134-source','op79-source','op134-reference','op253-reference')
+assert variant in ('op223-built','op249-staged','op253-built','op34-hide-allocator','op34-method','op35-default','op258-reference','op253-source','op134-source','op79-source','op134-reference','op253-reference','op253-owned')
 name=stage+'-source-'+variant+'-'+(sys.argv[3] if len(sys.argv)>3 else 'resume')
 entries={
+'op253-owned':('pv_cb3_source::resume6_weights::owned_raw','pv_cb3_source::resume6_weights::*','PV_CB3_Op253Owned'),
 'op253-reference':('pv_cb3_source::resume6_weights::raw','pv_cb3_source::resume6_weights::*','PV_CB3_Op253Reference'),
 'op134-reference':('pv_cb3_kani::resume6_mask_reference::masks','pv_cb3_kani::resume6_mask_reference::*','PV_CB3_Op134Reference'),
 'op258-reference':('pv_cb3_kani::reference::all_slots_clear','pv_cb3_kani::reference::*','PV_CB3_Op258Reference'),

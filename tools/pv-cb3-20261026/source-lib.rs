@@ -133,4 +133,14 @@ mod resume6_weight_checks {
         for k in 0..3 {for d in 0..10 {canonical(w.points[k][d]);}}
         equal(w.raw(kind,j),super::resume6_weights::raw(&w,kind,j));
     }
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn mixed_kind() {
+        let w=weights();let kind:usize=kani::any();let j:usize=kani::any();
+        kani::assume(kind>=1 && kind<=6 && kind!=4);kani::assume(j<1024);
+        for k in 0..5 {for d in 0..5 {for s in 0..4 {canonical(w.factors[k][d][s]);}}}
+        for k in 0..3 {for d in 0..10 {canonical(w.points[k][d]);}}
+        equal(w.raw(kind,j),super::resume6_weights::raw(&w,kind,j));
+    }
+
 }
