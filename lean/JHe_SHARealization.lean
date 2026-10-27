@@ -3,12 +3,9 @@ import JHe_SHAEquations1
 import JHe_SHAEquations2
 set_option autoImplicit false
 namespace AspisR1
-/-- Exactly453 concrete batch SHA equations, partitioned to keep record elaboration bounded. -/
+/-- Exactly 453 concrete batch SHA equations as three finite law families. -/
 class JHe_SHARealization : Prop where
-  tree0 : JHe_SHA0
-  tree1 : JHe_SHA1
-  tree2 : JHe_SHA2
-instance [s : JHe_SHARealization] : JHe_SHA0 := s.tree0
-instance [s : JHe_SHARealization] : JHe_SHA1 := s.tree1
-instance [s : JHe_SHARealization] : JHe_SHA2 := s.tree2
+  tree0 : ∀ i : Fin 157, JFp_SHADigest.digest (JHe_SHAInputs0.input i)=JHe_SHAInputs0.expected i
+  tree1 : ∀ i : Fin 157, JFp_SHADigest.digest (JHe_SHAInputs1.input i)=JHe_SHAInputs1.expected i
+  tree2 : ∀ i : Fin 139, JFp_SHADigest.digest (JHe_SHAInputs2.input i)=JHe_SHAInputs2.expected i
 end AspisR1
