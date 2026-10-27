@@ -1,6 +1,8 @@
 """Reproducible focused source extraction, using the standing resource gate."""
 import json,shlex,subprocess,sys
 from pathlib import Path
+from resume5_wait_guard import check as wait_guard
+wait_guard()
 root=Path(__file__).resolve().parents[2]
 op,entry,include=sys.argv[1:4]
 project=sys.argv[6] if len(sys.argv)>6 else ('source-proof' if int(op)>=71 else 'proof')

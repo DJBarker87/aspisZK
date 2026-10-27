@@ -1,6 +1,8 @@
 """Execute one named mask P6 harness through the standing host admission gate."""
 from pathlib import Path
 import subprocess,shlex,json,sys
+from resume5_wait_guard import check as wait_guard
+wait_guard()
 root=Path(__file__).resolve().parents[2]
 name,harness=sys.argv[1:3]
 timeout=int(sys.argv[3]) if len(sys.argv)>3 else 900

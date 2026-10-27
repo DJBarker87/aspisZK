@@ -13,3 +13,12 @@
 
 All capped scopes in this resume have remained serial. These deviations do not
 supply validation evidence, row credit, or endpoint-premise removal.
+
+2. Forest Aeneas retry resume5-forest-r04 launched after150.660379seconds
+   from r03 refusal rather than180. The preceding Python assertion failed,
+   but the newline-separated shell continued to the next Python command.
+   The retry was admitted and translated successfully; caps were unchanged
+   and the preceding Charon scope was absent. This is a real wait-rule
+   deviation, not a compliant wait. A driver-level fail-closed wait guard is
+   added before any subsequent compile/extraction/native admission so a shell
+   continuation cannot bypass it. The receipt remains charged as executed.

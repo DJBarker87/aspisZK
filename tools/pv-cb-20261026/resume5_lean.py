@@ -1,6 +1,8 @@
 """One focused new-module compile through the unchanged shared launcher."""
 from pathlib import Path
 import hashlib,json,re,shlex,subprocess,sys
+from resume5_wait_guard import check as wait_guard
+wait_guard()
 root=Path(__file__).resolve().parents[2];ev=root/'evidence/pv-cb-20261026'
 n=int(sys.argv[1]);module=sys.argv[2];assert 41200<=n<=41499
 p=root/'docs/research/v8-r0-zk-20261009/lean'/(module+'.lean')
