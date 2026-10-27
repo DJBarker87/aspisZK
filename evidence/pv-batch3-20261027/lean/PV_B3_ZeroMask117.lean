@@ -112,15 +112,99 @@ theorem maskfactor9 : Array.index_usize host_arithmetic.MASK_ONLY_FACTOR_EXPONEN
   unfold host_arithmetic.MASK_ONLY_FACTOR_EXPONENTS
   rfl
 #print axioms maskfactor9
+theorem and3_0 : (0#usize &&& 3#usize) = 0#usize := by with_unfolding_all rfl
+#print axioms and3_0
+theorem and3_1 : (1#usize &&& 3#usize) = 1#usize := by with_unfolding_all rfl
+#print axioms and3_1
+theorem and3_2 : (2#usize &&& 3#usize) = 2#usize := by with_unfolding_all rfl
+#print axioms and3_2
+theorem and3_3 : (3#usize &&& 3#usize) = 3#usize := by with_unfolding_all rfl
+#print axioms and3_3
+theorem and3_4 : (4#usize &&& 3#usize) = 0#usize := by with_unfolding_all rfl
+#print axioms and3_4
+theorem and3_5 : (5#usize &&& 3#usize) = 1#usize := by with_unfolding_all rfl
+#print axioms and3_5
+theorem and3_6 : (6#usize &&& 3#usize) = 2#usize := by with_unfolding_all rfl
+#print axioms and3_6
+theorem and3_7 : (7#usize &&& 3#usize) = 3#usize := by with_unfolding_all rfl
+#print axioms and3_7
+theorem and3_8 : (8#usize &&& 3#usize) = 0#usize := by with_unfolding_all rfl
+#print axioms and3_8
+theorem and3_9 : (9#usize &&& 3#usize) = 1#usize := by with_unfolding_all rfl
+#print axioms and3_9
+theorem and3_10 : (10#usize &&& 3#usize) = 2#usize := by with_unfolding_all rfl
+#print axioms and3_10
+theorem and3_11 : (11#usize &&& 3#usize) = 3#usize := by with_unfolding_all rfl
+#print axioms and3_11
+theorem and3_12 : (12#usize &&& 3#usize) = 0#usize := by with_unfolding_all rfl
+#print axioms and3_12
+theorem and3_13 : (13#usize &&& 3#usize) = 1#usize := by with_unfolding_all rfl
+#print axioms and3_13
+theorem and3_14 : (14#usize &&& 3#usize) = 2#usize := by with_unfolding_all rfl
+#print axioms and3_14
+theorem and3_15 : (15#usize &&& 3#usize) = 3#usize := by with_unfolding_all rfl
+#print axioms and3_15
+theorem cast0 : UScalar.cast .Usize 0#u8 = 0#usize := by with_unfolding_all rfl
+#print axioms cast0
+theorem cast1 : UScalar.cast .Usize 1#u8 = 1#usize := by with_unfolding_all rfl
+#print axioms cast1
+theorem cast2 : UScalar.cast .Usize 2#u8 = 2#usize := by with_unfolding_all rfl
+#print axioms cast2
+theorem cast3 : UScalar.cast .Usize 3#u8 = 3#usize := by with_unfolding_all rfl
+#print axioms cast3
+theorem cast4 : UScalar.cast .Usize 4#u8 = 4#usize := by with_unfolding_all rfl
+#print axioms cast4
+theorem cast5 : UScalar.cast .Usize 5#u8 = 5#usize := by with_unfolding_all rfl
+#print axioms cast5
+theorem cast6 : UScalar.cast .Usize 6#u8 = 6#usize := by with_unfolding_all rfl
+#print axioms cast6
+theorem cast7 : UScalar.cast .Usize 7#u8 = 7#usize := by with_unfolding_all rfl
+#print axioms cast7
+theorem cast8 : UScalar.cast .Usize 8#u8 = 8#usize := by with_unfolding_all rfl
+#print axioms cast8
+theorem cast9 : UScalar.cast .Usize 9#u8 = 9#usize := by with_unfolding_all rfl
+#print axioms cast9
+theorem cast10 : UScalar.cast .Usize 10#u8 = 10#usize := by with_unfolding_all rfl
+#print axioms cast10
+theorem cast11 : UScalar.cast .Usize 11#u8 = 11#usize := by with_unfolding_all rfl
+#print axioms cast11
+theorem cast12 : UScalar.cast .Usize 12#u8 = 12#usize := by with_unfolding_all rfl
+#print axioms cast12
+theorem cast13 : UScalar.cast .Usize 13#u8 = 13#usize := by with_unfolding_all rfl
+#print axioms cast13
+theorem cast14 : UScalar.cast .Usize 14#u8 = 14#usize := by with_unfolding_all rfl
+#print axioms cast14
+theorem cast15 : UScalar.cast .Usize 15#u8 = 15#usize := by with_unfolding_all rfl
+#print axioms cast15
+theorem cast16 : UScalar.cast .Usize 16#u8 = 16#usize := by with_unfolding_all rfl
+#print axioms cast16
+theorem cast17 : UScalar.cast .Usize 17#u8 = 17#usize := by with_unfolding_all rfl
+#print axioms cast17
+theorem cast18 : UScalar.cast .Usize 18#u8 = 18#usize := by with_unfolding_all rfl
+#print axioms cast18
+theorem cast19 : UScalar.cast .Usize 19#u8 = 19#usize := by with_unfolding_all rfl
+#print axioms cast19
+theorem cast20 : UScalar.cast .Usize 20#u8 = 20#usize := by with_unfolding_all rfl
+#print axioms cast20
+theorem cast21 : UScalar.cast .Usize 21#u8 = 21#usize := by with_unfolding_all rfl
+#print axioms cast21
+theorem cast22 : UScalar.cast .Usize 22#u8 = 22#usize := by with_unfolding_all rfl
+#print axioms cast22
+theorem cast24 : UScalar.cast .Usize 24#u8 = 24#usize := by with_unfolding_all rfl
+#print axioms cast24
+theorem cast25 : UScalar.cast .Usize 25#u8 = 25#usize := by with_unfolding_all rfl
+#print axioms cast25
+theorem cast26 : UScalar.cast .Usize 26#u8 = 26#usize := by with_unfolding_all rfl
+#print axioms cast26
 theorem selected : host_arithmetic.selected_coefficients (Array.repeat 16#usize Z) =
     ok (Array.repeat 27#usize Z) := by
   simp (disch := decide) only [host_arithmetic.selected_coefficients,
-    factor0,factor1,factor2,factor3,factor4,factor5,factor6,factor7,factor8,factor9,factor10,factor11,factor12,factor13,factor14,factor15,lift,index_repeat,update_repeat,tower0,tower1,tower2,tower3,bind_tc_ok]
+    factor0,factor1,factor2,factor3,factor4,factor5,factor6,factor7,factor8,factor9,factor10,factor11,factor12,factor13,factor14,factor15,and3_0,and3_1,and3_2,and3_3,and3_4,and3_5,and3_6,and3_7,and3_8,and3_9,and3_10,and3_11,and3_12,and3_13,and3_14,and3_15,cast0,cast1,cast2,cast3,cast4,cast5,cast6,cast7,cast8,cast9,cast10,cast11,cast12,cast13,cast14,cast15,cast16,cast17,cast18,cast19,cast20,cast21,cast22,cast24,cast25,cast26,lift,index_repeat,update_repeat,tower0,tower1,tower2,tower3,bind_tc_ok]
 
 theorem mask : host_arithmetic.mask_only_coefficients (Array.repeat 27#usize Z)
     (Array.repeat 10#usize Z) = ok (Array.repeat 27#usize Z) := by
   simp (disch := decide) only [host_arithmetic.mask_only_coefficients,
-    maskfactor0,maskfactor1,maskfactor2,maskfactor3,maskfactor4,maskfactor5,maskfactor6,maskfactor7,maskfactor8,maskfactor9,lift,index_repeat,update_repeat,tower0,tower1,tower2,tower3,bind_tc_ok]
+    maskfactor0,maskfactor1,maskfactor2,maskfactor3,maskfactor4,maskfactor5,maskfactor6,maskfactor7,maskfactor8,maskfactor9,and3_0,and3_1,and3_2,and3_3,and3_4,and3_5,and3_6,and3_7,and3_8,and3_9,and3_10,and3_11,and3_12,and3_13,and3_14,and3_15,cast0,cast1,cast2,cast3,cast4,cast5,cast6,cast7,cast8,cast9,cast10,cast11,cast12,cast13,cast14,cast15,cast16,cast17,cast18,cast19,cast20,cast21,cast22,cast24,cast25,cast26,lift,index_repeat,update_repeat,tower0,tower1,tower2,tower3,bind_tc_ok]
 
 theorem horner : host_arithmetic.selected_horner (Array.repeat 27#usize Z) Z = ok Z := by
   simp (disch := decide) only [host_arithmetic.selected_horner,aspis_core.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,prepare,
