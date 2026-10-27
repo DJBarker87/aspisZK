@@ -2,8 +2,9 @@ from pathlib import Path
 import hashlib,json,re,shlex,subprocess,sys,time,datetime
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-batch2-20261027/batch2d';D='/home/dombarker/project-offloads/codex-pv-batch2-20261027';H='dombarker@100.108.41.90'
 n=int(sys.argv[1]);module=sys.argv[2];assert 39800<=n<=39899
+if (E/'HOST-BARRIER-STOP.json').exists():raise SystemExit('STOP: recorded fatal host barrier error; lead repair required before any further compile')
 # Refuse locally before consuming an ID if the most recent host hold is young.
-for hold in E.glob('*-reservation.log'):
+for hold in list(E.glob('*-reservation.log'))+list(E.glob('*-admission-barrier.json')):
  try:
   hr=json.loads(hold.read_text())
   if hr.get('allowed') is False:
@@ -78,6 +79,10 @@ if res.returncode:
  for name in ['admission-before.json','reservation.log','admission-barrier.json','output.log']:
   rr=subprocess.run(['ssh',H,'cat '+D+'/candidate/'+label+'/'+name],text=True,capture_output=True)
   if rr.returncode==0:(E/f'{n}-{name}').write_text(rr.stdout)
+ bf=E/f'{n}-admission-barrier.json'
+ if bf.exists() and json.loads(bf.read_text()).get('error'):
+  br=json.loads(bf.read_text());(E/'HOST-BARRIER-STOP.json').write_text(json.dumps(dict(attempt=n,module=module,error=br['error'],compiler_launched=False,rule='local-lean.txt rule6'),indent=2)+'\n')
+  raise SystemExit('STOP: infrastructure barrier failure: '+br['error'])
  print('UNCHARGED refusal; preserve cooldown');sys.exit(a.returncode or 1)
 rec=json.loads(res.stdout);t=json.loads(tp.read_text());t['lean_charged']+=1;t['remaining_lean_budget']=100-t['lean_charged'];t['lean_attempts']=t['lean_charged'];t['used_ids']=[a['id'] for a in t['attempts']];t['next_id']=t['next_env_j_id'];t['attempts'][-1].update(charged=True,exit=rec['exit_status']);tp.write_text(json.dumps(t,indent=2)+'\n')
 for name in ['stdout.log','stderr.log','time.log']:
