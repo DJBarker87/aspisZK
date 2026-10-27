@@ -250,6 +250,14 @@ audit (L3 disassembly) must say "toolchain unpinned". Choosing that pin is a
 release-scope decision for the owner. The bundle must also be re-pinned when
 the prover candidate is adopted: the candidate differs from 5228877938 in 26
 pinned files and lacks 6 (Stream B, 2026-10-27).
+**Caveat (LOG D272, 2026-10-27): the recipe of record is NOT a release
+recipe.** Stream B's L3 audit of the binary it produces found material timing
+leaks: without the non-default feature `aspis-r1-cost-probe/ct-host-prover` the
+pole check (host_semantic.rs:292) compiles to short-circuit comparisons of
+public chi against witness-derived slots; private witness/key fields are parsed
+as decimal JSON with digit-count branches; and `aspis-prover/insecure-spend-
+fixture` is enabled in the binary. The release recipe (features, toolchain,
+constant-time private-input decoding) is an open owner decision.
 
 ## Exact release gates
 
