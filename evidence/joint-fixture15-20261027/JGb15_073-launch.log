@@ -1,0 +1,45 @@
+{"attempt": "JGb15_073", "exit_status": 1, "wall_seconds": 1.568534001999069, "peak_rss_kib": "3020988", "swaps": "0", "print_axioms": ["'AspisR1.JGb_Sum3Outer.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGb_Sum3Outer.lean:31:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let q ← right.index_usize it.start
+    let right_sum ← q.c0.add q.c1
+    let m ← AspisR1SelectedMaskProbe.field.M31.add q.c0.a q.c0.b
+    let m1 ← AspisR1SelectedMaskProbe.field.M31.add q.c1.a q.c1.b
+    let m2 ← AspisR1SelectedMaskProbe.field.M31.add right_sum.a right_sum.b
+    let sums1 ←
+      JGb_Sum3Component.probe { start := 0#usize, «end» := 3#usize } (JGb_ArrayMap.array prepared left) sums it.start
+          (Array.make 3#usize
+            [Array.make 3#usize [q.c0.a, q.c0.b, m] ⋯, Array.make 3#usize [q.c1.a, q.c1.b, m1] ⋯,
+              Array.make 3#usize [right_sum.a, right_sum.b, m2] ⋯]
+            ⋯)
+...
+m.b, m2] ⋯]
+              ⋯)
+      probe it1 (JGb_ArrayMap.array prepared left) (JGb_ArrayMap.array qm right) sums1) =
+    do
+    let x ← right.index_usize it.start
+    let right_sum ← { a := x.c0.a, b := x.c0.b }.add { a := x.c1.a, b := x.c1.b }
+    let m ← AspisR1SelectedMaskProbe.field.M31.add x.c0.a x.c0.b
+    let m1 ← AspisR1SelectedMaskProbe.field.M31.add x.c1.a x.c1.b
+    let m2 ← right_sum.a.add right_sum.b
+    let sums1 ←
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0
+          { start := 0#usize, «end» := 3#usize } (JGb_ArrayMap.array prepared left) sums it.start
+          (Array.make 3#usize
+            [Array.make 3#usize [x.c0.a, x.c0.b, m] ⋯, Array.make 3#usize [x.c1.a, x.c1.b, m1] ⋯,
+              Array.make 3#usize [right_sum.a, right_sum.b, m2] ⋯]
+            ⋯)
+    AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0 it1 (JGb_ArrayMap.array prepared left)
+        (JGb_ArrayMap.array qm right) sums1
+JGb_Sum3Outer.lean:29:51: warning: This simp argument is unused:
+  ← FIv_NativeCM.add
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵I̵v̵_̵N̵a̵t̵i̵v̵e̵A̵r̵i̵t̵h̵m̵e̵t̵i̵c̵.̵b̵i̵n̵d̵_̵m̵a̵p̵,̵q̵m̵,̵c̵m̵,̵←̵ ̵F̵I̵v̵_̵N̵a̵t̵i̵v̵e̵C̵M̵.̵a̵d̵d̵,̵m̵3̵1̵_̵a̵d̵d̵]̵[̲F̲I̲v̲_̲N̲a̲t̲i̲v̲e̲A̲r̲i̲t̲h̲m̲e̲t̲i̲c̲.̲b̲i̲n̲d̲_̲m̲a̲p̲,̲ ̲q̲m̲,̲ ̲c̲m̲,̲ ̲m̲3̲1̲_̲a̲d̲d̲]̲
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGb_Sum3Outer.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r98c8ec6acea14cdcad806788fddcbc48.scope; invocation ID: c545d074ae2348fa87b63c865f11cf01

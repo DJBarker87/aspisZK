@@ -1,0 +1,84 @@
+{"attempt": "JGb15_016", "exit_status": 1, "wall_seconds": 1.2122119379928336, "peak_rss_kib": "3015912", "swaps": "0", "print_axioms": ["'AspisR1.JGb_ArrayMap.read' depends on axioms: [propext, sorryAx]"]}
+JGb_ArrayMap.lean:13:2: error: unsolved goals
+case h_1
+A B : Type
+N : Usize
+f : A → B
+a : Std.Array A N
+i : Usize
+x✝ : Option A
+heq✝ : a[i]? = none
+⊢ fail Error.arrayOutOfBounds =
+    match ⟨List.map f ↑a, ⋯⟩[i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+JGb_ArrayMap.lean:14:4: error: Tactic `rfl` failed: The left-hand side
+  map f (ok x✝)
+is not definitionally equal to the right-hand side
+  match ⟨List.map f ↑a, ⋯⟩[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+
+case h_2
+A B : Type
+N : Usize
+f : A → B
+a : Std.Array A N
+i : Usize
+x✝¹ : Option A
+x✝ : A
+heq✝ : a[i]? = some x✝
+⊢ map f (ok x✝) =
+    match ⟨List.map f ↑a, ⋯⟩[i]? with
+    | none => fa
+...
+JGb_ArrayMap.lean:13:2: error: unsolved goals
+case h_1
+A B : Type
+N : Usize
+f : A → B
+a : Std.Array A N
+i : Usize
+x✝ : Option A
+heq✝ : a[i]? = none
+⊢ fail Error.arrayOutOfBounds =
+    match ⟨List.map f ↑a, ⋯⟩[i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+JGb_ArrayMap.lean:14:4: error: Tactic `rfl` failed: The left-hand side
+  map f (ok x✝)
+is not definitionally equal to the right-hand side
+  match ⟨List.map f ↑a, ⋯⟩[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+
+case h_2
+A B : Type
+N : Usize
+f : A → B
+a : Std.Array A N
+i : Usize
+x✝¹ : Option A
+x✝ : A
+heq✝ : a[i]? = some x✝
+⊢ map f (ok x✝) =
+    match ⟨List.map f ↑a, ⋯⟩[i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+JGb_ArrayMap.lean:11:19: warning: This simp argument is unused:
+  List.length_map
+
+Hint: Omit it from the simp argument list.
+  simp only [array,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGb_ArrayMap.lean:13:15: warning: This simp argument is unused:
+  List.getElem_map
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵m̵a̵p̵,̵m̵a̵p̵]̵[̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGb_ArrayMap.read' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r8f7d060125b84d149eddfbc9f0aab88f.scope; invocation ID: f59c63c86b2244239a9a8d16a75bd675

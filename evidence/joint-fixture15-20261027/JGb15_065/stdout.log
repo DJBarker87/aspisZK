@@ -1,0 +1,55 @@
+JGb_Sum3Channel.lean:26:14: error: unsolved goals
+case succ
+left : Std.Array NP 3#usize
+index : Usize
+right : Components
+component : Usize
+n : ℕ
+ih :
+  ∀ (it : core.ops.range.Range Usize) (sums : Sums),
+    ↑it.start + n = ↑it.end →
+      loop it left sums index right component = probe it (JGb_ArrayMap.array prepared left) sums index right component
+it : core.ops.range.Range Usize
+sums : Sums
+span : ↑it.start + (n + 1) = ↑it.end
+it1 : ExtractedMaskForwardRange.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize it = ok (some it.start, it1)
+hs : ↑it1.start = ↑it.start + 1
+he : it1.end = it.end
+right✝ : ↑it.start + 1 ≤ Usize.max
+span1 : ↑it1.start + n = ↑it1.end
+recur :
+  ∀ (s : Sums),
+    loop it1 left s index right component = probe it1 (JGb_ArrayMap.array prepared left) s index right component
+⊢ (do
+      let pqm ← left.index_usize index
+      let a ← pqm.components.index_usize component
+      let m ← a.index_usize it.start
+      let i ← lift (UScalar.cast UScalarTy.U64 m)
+      let a1 ← Array.index_usize right component
+      let m1 ← a1.index_usize it.start
+      let i1 ← lift (UScalar.cast UScalarTy.U64 m1)
+      let i2 ← i * i1
+      let a2 ← Array.index_usize sums component
+      let i3 ← a2.index_usize it.start
+      let i4 ← i3 + i2
+      let (a3, index_mut_back) ← Array.index_mut_usize sums component
+      let a4 ← a3.update it.start i4
+      probe it1 (JGb_ArrayMap.array prepared left) (index_mut_back a4) index right component) =
+    do
+    let x ← left.index_usize index
+    let a ← x.components.index_usize component
+    let m ← a.index_usize it.start
+    let i ← lift (UScalar.cast UScalarTy.U64 m)
+    let a1 ← Array.index_usize right component
+    let m1 ← a1.index_usize it.start
+    let i1 ← lift (UScalar.cast UScalarTy.U64 m1)
+    let i2 ← i * i1
+    let a2 ← Array.index_usize sums component
+    let i3 ← a2.index_usize it.start
+    let i4 ← i3 + i2
+    let __x ← Array.index_mut_usize sums component
+    let a4 ← __x.1.update it.start i4
+    AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0 it1
+        (JGb_ArrayMap.array prepared left) (__x.2 a4) index right component
+'AspisR1.JGb_Sum3Channel.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,58 @@
+JGb_Sum3Channel.lean:29:9: error: unexpected rec
+JGb_Sum3Channel.lean:21:9: error: unsolved goals
+case zero
+left : Std.Array NP 3#usize
+index : Usize
+right : Components
+component : Usize
+it : core.ops.range.Range Usize
+sums : Sums
+span : ↑it.start + 0 = ↑it.end
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize it = ok (none, it)
+⊢ (let (o, iter1) := (none, it)
+    match o with
+    | none => ok sums
+    | some channel => do
+      let pqm ← left.index_usize index
+      let a ← pqm.components.index_usize component
+      let m ← a.index_usize channel
+      let i ← lift (UScalar.cast UScalarTy.U64 m)
+      let a1 ← Array.index_usize right component
+      let m1 ← a1.index_usize channel
+      let i1 ← lift (UScalar.cast UScalarTy.U64 m1)
+      let i2 ← i * i1
+      let a2 ← Array.index_usize sums component
+      let i3 ← a2.index_usize channel
+      let i4 ← i3 + i2
+      let (a3, index_mut_back) ← Array.index_mut_usize sums component
+      let a4 ← a3.update channel i4
+      have a5 : Std.Array (Std.Array U64 3#usize) 3#usize := index_mut_back a4
+      FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0 iter1 left a5 index right component) =
+    do
+    let __x ← ok (none, it)
+    match __x with
+      | (o, iter1) =>
+        match o with
+        | none => ok sums
+        | some channel => do
+          let pqm ← (JGb_ArrayMap.array prepared left).index_usize index
+          let a ← pqm.components.index_usize component
+          let m ← a.index_usize channel
+          let i ← lift (UScalar.cast UScalarTy.U64 m)
+          let a1 ← Array.index_usize right component
+          let m1 ← a1.index_usize channel
+          let i1 ← lift (UScalar.cast UScalarTy.U64 m1)
+          let i2 ← i * i1
+          let a2 ← Array.index_usize sums component
+          let i3 ← a2.index_usize channel
+          let i4 ← i3 + i2
+          let __x ← Array.index_mut_usize sums component
+          match __x with
+            | (a3, index_mut_back) => do
+              let a4 ← a3.update channel i4
+              have a5 : Std.Array (Std.Array U64 3#usize) 3#usize := index_mut_back a4
+              AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0 iter1
+                  (JGb_ArrayMap.array prepared left) a5 index right component
+JGb_Sum3Channel.lean:29:4: error: unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+'AspisR1.JGb_Sum3Channel.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

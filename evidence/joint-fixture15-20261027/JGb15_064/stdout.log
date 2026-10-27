@@ -1,0 +1,59 @@
+JGb_Sum3Channel.lean:21:9: error: unsolved goals
+case zero
+left : Std.Array NP 3#usize
+index : Usize
+right : Components
+component : Usize
+it : core.ops.range.Range Usize
+sums : Sums
+span : ↑it.start + 0 = ↑it.end
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize it = ok (none, it)
+⊢ (let (o, iter1) := (none, it)
+    match o with
+    | none => ok sums
+    | some channel => do
+      let pqm ← left.index_usize index
+      let a ← pqm.components.index_usize component
+      let m ← a.index_usize channel
+      let i ← lift (UScalar.cast UScalarTy.U64 m)
+      let a1 ← Array.index_usize right component
+      let m1 ← a1.index_usize channel
+      let i1 ← lift (UScalar.cast UScalarTy.U64 m1)
+      let i2 ← i * i1
+      let a2 ← Array.index_usize sums component
+      let i3 ← a2.index_usize channel
+      let i4 ← i3 + i2
+      let (a3, index_mut_back) ← Array.index_mut_usize sums component
+      let a4 ← a3.update channel i4
+      FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0 iter1 left (index_mut_back a4) index right
+          component) =
+    ok sums
+JGb_Sum3Channel.lean:34:15: error: Ambiguous term
+  bind_map
+Possible interpretations:
+  FIv_NativeArithmetic.bind_map : ∀ (f : ?m.143 → ?m.144) (m : Result ?m.143) (k : ?m.144 → Result ?m.145),
+    (do
+        let x ← map f m
+        k x) =
+      do
+      let x ← m
+      k (f x)
+  
+  LawfulMonad.bind_map : ∀ (f : ?m.143 (?m.146 → ?m.147)) (x : ?m.143 ?m.146),
+    (do
+        let x_1 ← f
+        x_1 <$> x) =
+      f <*> x
+JGb_Sum3Channel.lean:34:4: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGb_Sum3Channel.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
