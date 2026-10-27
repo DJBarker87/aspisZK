@@ -11094,3 +11094,21 @@ Kani): inventory every inversion call site reachable from the deployed caller wi
 prove witness-bearing operands nonzero outside an already-charged bad event, or stop on a checked
 witness-dependent zero (a protocol leak for the owner). Six slots: cblib, runjoin12, srcid8, optb,
 extract, inv. Rows removed outright: 0. Privacy target not yet established.
+
+## D254 (Stream B) 2026-10-27 07:45 UTC: srcid8 exhausted; merge gate held on three Stream A shared sources; srcid9 launched (Lean only)
+
+pv-srcid8 (`codex/pv-srcid3-20261026`, head 3873ce854e; 60/60 Lean, 2/2 Kani both timed out at 900/180 s,
+no counterexample; no crates/programs change; no forbidden tokens; full audit 207 modules / 727 standard
+reports / swap 0; 46 objects recompiled into its own objects dir). Proved: exact owned external-layer
+Result equality; the source round recurrences instantiated at the frozen 4/14/4 constants. Source parent
+cells 0/21 (the 21 RunJoin mathematical cells are pinned read-only); deployed PV_Src_Premises 5 → 5;
+shipped Records and installed compiler associations still missing (runjoin12). MERGE GATE v2 still
+BLOCKED on 3 project gaps, now characterised exactly: the shared env-J sources for
+AspisFormal.V6PublishedTheoremInterfaces (shared 80610f3a…, HEAD 904f5e5b…; compiled by Stream A attempt
+30037), R0P.LogUpChain (89e6f147… vs a9b0e52d…; 30159) and R0P.SemRounds (84cd1819… vs 564b9026…; 30161)
+differ from research HEAD and from every recent committed version of those paths; research changed the V6
+file in 6c1455a61e. The worker left them untouched (ruling (h)); the lead has asked Stream A which source
+is authoritative. Launched pv-srcid9 (same branch, IDs 42700-42999, 100 Lean, no Kani per ruling (k)):
+the 21 source root-parent cells and the root-helper equation in Lean from the pinned mathematical cells,
+the merge gate once Stream A answers, Records from runjoin12 if published. Six slots: cblib, runjoin12,
+optb, extract, inv, srcid9. Rows removed outright: 0. Privacy target not yet established.
