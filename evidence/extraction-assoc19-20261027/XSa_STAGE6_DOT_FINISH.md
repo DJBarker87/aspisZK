@@ -1,0 +1,5 @@
+# Stage 6: concrete push and finish pair
+
+XSa_DotActual.push (L039) derives concrete installed Dot return and SAME four sums from canonical inputs, with arbitrary pre-state. XSa_DotPushPair.paired (L044) joins both raw coefficient Dot pushes, actual ordered source pushes, checked count increment and SAME next state for count<29, canonical coefficient and canonical checked scalar. XSa_FinishWord.reduce (L040), XSa_FinishFour.four (L042) and XSa_FinishPair.paired (L046) join full raw/source finish and canonical wide output for arbitrary eight U64 sums and arbitrary count. No successful-call/finish witness is supplied as a premise. Only standard axioms.
+
+L039 initial transport255 occurred before scope and recovered after30seconds. Subsequent actual process passed; proof budget counts39 once. Failed elaboration snapshots L041/L043/L045 excluded. No timeout, memory kill, cap increase, new native trust or shipped change. Complete29-lane and six-point composition still pending; A2/A3 and actual headline unchanged.

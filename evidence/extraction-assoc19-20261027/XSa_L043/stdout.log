@@ -1,0 +1,42 @@
+XSa_generated/XSa_DotPushPair.lean:21:49: error: Type mismatch
+  hv.left
+has type
+  XRp_PowersQAdd.CanonicalQ (XRn_Join_FieldExternal.newQ v.c0)
+but is expected to have type
+  XSa_QRawTotal.canonical (eq v.c0)
+XSa_generated/XSa_DotPushPair.lean:22:49: error: Type mismatch
+  hv.right
+has type
+  XRp_PowersQAdd.CanonicalQ (XRn_Join_FieldExternal.newQ v.c1)
+but is expected to have type
+  XSa_QRawTotal.canonical (eq v.c1)
+XSa_generated/XSa_DotPushPair.lean:15:94: error: unsolved goals
+a b : Dot
+count : Usize
+hc : ↑count < 29
+v : C.E
+hv : XRy_WideMultiply.Canonical v
+q : E.Q
+hq : XSa_CheckedQ.valid q = true
+hcan : XSa_QRawTotal.canonical q
+hlo : XSa_QRawTotal.canonical (eq v.c0)
+hhi : XSa_QRawTotal.canonical (eq v.c1)
+a' : Dot
+ra : fast_pairing.canonical.Dot.push a (XRn_Join_toQ (eq v.c0)) (XRn_Join_toQ q) = ok a'
+ta :
+  AspisR1EbyKPushDotBackend.dotViaRaw AspisR1EbyKPushDecodedProductUpdate.QRaw { sums := a.sums }
+      (XRn_Join_toQ (eq v.c0)) (XRn_Join_toQ q) =
+    ok { sums := a'.sums }
+b' : Dot
+rb : fast_pairing.canonical.Dot.push b (XRn_Join_toQ (eq v.c1)) (XRn_Join_toQ q) = ok b'
+tb :
+  AspisR1EbyKPushDotBackend.dotViaRaw AspisR1EbyKPushDecodedProductUpdate.QRaw { sums := b.sums }
+      (XRn_Join_toQ (eq v.c1)) (XRn_Join_toQ q) =
+    ok { sums := b'.sums }
+next : UScalar UScalarTy.Usize
+en : count + 1#usize = ok next
+hn : ↑next = ↑count + ↑1#usize
+hb : ¬count ≥ AspisR1EbyKPushExplicitOpsV1.maxTerms
+⊢ ok (core.result.Result.Ok (), { c0 := { sums := a'.sums }, c1 := { sums := b'.sums }, count := next }) =
+    ok (core.result.Result.Ok (), state a' b' next)
+'XSa_DotPushPair.paired' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
