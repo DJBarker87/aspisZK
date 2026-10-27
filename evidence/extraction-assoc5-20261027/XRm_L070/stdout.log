@@ -1,0 +1,120 @@
+XRm_generated/XRm_ComplexValues.lean:55:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(U64.wrapping_add (UScalar.cast UScalarTy.U64 ?a) (UScalar.cast UScalarTy.U64 ?b))
+in the target expression
+  ↑↑z =
+    ↑(↑((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)) *
+          ↑((core.convert.num.FromU64U32.from b.a).wrapping_add (core.convert.num.FromU64U32.from b.b)) %
+        UScalar.size UScalarTy.U64)
+
+case refl
+a b : aspis_core.field.CM31
+ha : C a
+hb : C b
+x : XRk_Field.field.M31
+hx : XRk_Field.field.M31.mul a.a b.a = ok x
+y : XRk_Field.field.M31
+hy : XRk_Field.field.M31.mul a.b b.b = ok y
+z : XRk_Field.field.M31
+hz :
+  XRk_Field.field.M31.reduce_u64
+      (((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)).wrapping_mul
+        ((core.convert.num.FromU64U32.from b.a).wrapping_add (core.convert.num.FromU64U32.from b.b))) =
+    ok z
+r : XRk_Field.field.M31
+hr : x.sub y = ok r
+s : XRk_Field.field.M31
+hs : z.sub x = ok s
+t : XRk_Field.field.M31
+ht : s.sub y = ok t
+run✝⁵ :
+  (do
+      let m0 ← XRk_Field.field.M31.mul a.a b.a
+      let m1 ← XRk_Field.field.M31.mul a.b b.b
+      have i : aspis_core.field.M31 := a.a
+      let i1 ← lift (core.convert.num.FromU64U32.from i)
+      have i2 : aspis_core.field.M31 := a.b
+      let i3 ← lift (core.convert.num.FromU64U32.from i2)
+      let i4 ← lift (i1.wrapping_add i3)
+      have i5 : aspis_core.field.M31 := b.a
+      let i6 ← lift (core.convert.num.FromU64U32.from i5)
+      have i7 : aspis_core.field.M31 := b.b
+      let i8 ← lift (core.convert.num.FromU64U32.from i7)
+      let i9 ← lift (i6.wrapping_add i8)
+      let i10 ← lift (i4.wrapping_mul i9)
+      let m2 ← XRk_Field.field.M31.reduce_u64 i10
+      let m ← m0.sub m1
+      let m3 ← m2.sub m0
+      let m4 ← m3.sub m1
+      ok { a := m, b := m4 }) =
+    ok { a := r, b := t }
+run✝⁴ :
+  (do
+      let m1 ← XRk_Field.field.M31.mul a.b b.b
+      have i : aspis_core.field.M31 := a.a
+      let i1 ← lift (core.convert.num.FromU64U32.from i)
+      have i2 : aspis_core.field.M31 := a.b
+      let i3 ← lift (core.convert.num.FromU64U32.from i2)
+      let i4 ← lift (i1.wrapping_add i3)
+      have i5 : aspis_core.field.M31 := b.a
+      let i6 ← lift (core.convert.num.FromU64U32.from i5)
+      have i7 : aspis_core.field.M31 := b.b
+      let i8 ← lift (core.convert.num.FromU64U32.from i7)
+      let i9 ← lift (i6.wrapping_add i8)
+      let i10 ← lift (i4.wrapping_mul i9)
+      let m2 ← XRk_Field.field.M31.reduce_u64 i10
+      let m ← x.sub m1
+      let m3 ← m2.sub x
+      let m4 ← m3.sub m1
+      ok { a := m, b := m4 }) =
+    ok { a := r, b := t }
+run✝³ :
+  (do
+      let m2 ←
+        XRk_Field.field.M31.reduce_u64
+            (((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)).wrapping_mul
+              ((core.convert.num.FromU64U32.from b.a).wrapping_add (core.convert.num.FromU64U32.from b.b)))
+      let m ← x.sub y
+      let m3 ← m2.sub x
+      let m4 ← m3.sub y
+      ok { a := m, b := m4 }) =
+    ok { a := r, b := t }
+run✝² :
+  (do
+      let m ← x.sub y
+      let m3 ← z.sub x
+      let m4 ← m3.sub y
+      ok { a := m, b := m4 }) =
+    ok { a := r, b := t }
+run✝¹ :
+  (do
+      let m3 ← z.sub x
+      let m4 ← m3.sub y
+      ok { a := r, b := m4 }) =
+    ok { a := r, b := t }
+run✝ :
+  (do
+      let m4 ← s.sub y
+      ok { a := r, b := m4 }) =
+    ok { a := r, b := t }
+run : ok { a := r, b := t } = ok { a := r, b := t }
+cx : M x
+cy : M y
+cz : M z
+cs : s < XRm_M31Canonical.P
+vx : ↑↑x = ↑↑a.a * ↑↑b.a
+vy : ↑↑y = ↑↑a.b * ↑↑b.b
+vz :
+  ↑↑z =
+    ↑(↑((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)) *
+          ↑((core.convert.num.FromU64U32.from b.a).wrapping_add (core.convert.num.FromU64U32.from b.b)) %
+        UScalar.size UScalarTy.U64)
+vr : ↑↑r = ↑↑x - ↑↑y
+vs : ↑↑s = ↑↑z - ↑↑x
+vt : ↑↑t = ↑↑s - ↑↑y
+ba : ↑a.a + ↑a.b < 4294967296
+bb : ↑b.a + ↑b.b < 4294967296
+product : (↑a.a + ↑a.b) * (↑b.a + ↑b.b) < 4294967296 * 4294967296
+⊢ ↑↑{ a := r, b := t }.a = ↑↑a.a * ↑↑b.a - ↑↑a.b * ↑↑b.b ∧ ↑↑{ a := r, b := t }.b = ↑↑a.a * ↑↑b.b + ↑↑a.b * ↑↑b.a
+'XRm_ComplexValues.reduce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRm_ComplexValues.sum_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRm_ComplexValues.cmul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

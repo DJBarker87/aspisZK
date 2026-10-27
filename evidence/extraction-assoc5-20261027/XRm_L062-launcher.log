@@ -1,0 +1,60 @@
+{"attempt": "XRm_L062", "exit_status": 1, "wall_seconds": 3.324532759957947, "peak_rss_kib": "2646912", "swaps": "0", "print_axioms": ["'XRm_FieldValues.cast_two31_eq_one' depends on axioms: [propext, Quot.sound]", "'XRm_FieldValues.residue_mersenneFold31' depends on axioms: [propext, Quot.sound]", "'XRm_FieldValues.residue_rawM31ReduceU64' depends on axioms: [propext, Quot.sound]", "'XRm_FieldValues.reduce_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRm_FieldValues.sub_val' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRm_FieldValues.add_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRm_FieldValues.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRm_FieldValues.sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRm_FieldValues.mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRm_generated/XRm_FieldValues.lean:56:42: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑a + ↑b) % 4294967296
+in the target expression
+  (↑a + ↑b) % u32Cardinality = ↑a + ↑b
+
+a b : U32
+h : ↑a + ↑b < 4294967296
+⊢ (↑a + ↑b) % u32Cardinality = ↑a + ↑b
+XRm_generated/XRm_FieldValues.lean:109:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑a * ↑b % 18446744073709551616
+in the target expression
+  ↑a * ↑b % u64Cardinality = ↑a * ↑b
+
+a b out : U32
+run✝ :
+  (do
+      let i3 ←
+        XRk_Field.field.reduce_u64 (U64.wrapping_mul (UScalar.cast UScalarTy.U64 a) (UScalar.cast UScalarTy.U64 b))
+      ok i3) =
+    ok out
+hr :
+  XRk_Field.field.
+...
+XRm_generated/XRm_FieldValues.lean:56:42: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑a + ↑b) % 4294967296
+in the target expression
+  (↑a + ↑b) % u32Cardinality = ↑a + ↑b
+
+a b : U32
+h : ↑a + ↑b < 4294967296
+⊢ (↑a + ↑b) % u32Cardinality = ↑a + ↑b
+XRm_generated/XRm_FieldValues.lean:109:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑a * ↑b % 18446744073709551616
+in the target expression
+  ↑a * ↑b % u64Cardinality = ↑a * ↑b
+
+a b out : U32
+run✝ :
+  (do
+      let i3 ←
+        XRk_Field.field.reduce_u64 (U64.wrapping_mul (UScalar.cast UScalarTy.U64 a) (UScalar.cast UScalarTy.U64 b))
+      ok i3) =
+    ok out
+hr :
+  XRk_Field.field.reduce_u64 (U64.wrapping_mul (UScalar.cast UScalarTy.U64 a) (UScalar.cast UScalarTy.U64 b)) = ok out
+run : ok out = ok out
+bound : ↑a * ↑b < 18446744073709551616
+⊢ ↑a * ↑b % u64Cardinality = ↑a * ↑b
+'XRm_FieldValues.cast_two31_eq_one' depends on axioms: [propext, Quot.sound]
+'XRm_FieldValues.residue_mersenneFold31' depends on axioms: [propext, Quot.sound]
+'XRm_FieldValues.residue_rawM31ReduceU64' depends on axioms: [propext, Quot.sound]
+'XRm_FieldValues.reduce_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRm_FieldValues.sub_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRm_FieldValues.add_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRm_FieldValues.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRm_FieldValues.sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRm_FieldValues.mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r644cd9caefa04e0e8bd3523da0ff6196.scope; invocation ID: 6e8f0c5c40ac43f291e0b0852f2e3b28

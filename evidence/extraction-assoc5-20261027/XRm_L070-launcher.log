@@ -1,0 +1,75 @@
+{"attempt": "XRm_L070", "exit_status": 1, "wall_seconds": 3.8328066800022498, "peak_rss_kib": "2641552", "swaps": "0", "print_axioms": ["'XRm_ComplexValues.reduce' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRm_ComplexValues.sum_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRm_ComplexValues.cmul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRm_generated/XRm_ComplexValues.lean:55:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(U64.wrapping_add (UScalar.cast UScalarTy.U64 ?a) (UScalar.cast UScalarTy.U64 ?b))
+in the target expression
+  ↑↑z =
+    ↑(↑((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)) *
+          ↑((core.convert.num.FromU64U32.from b.a).wrapping_add (core.convert.num.FromU64U32.from b.b)) %
+        UScalar.size UScalarTy.U64)
+
+case refl
+a b : aspis_core.field.CM31
+ha : C a
+hb : C b
+x : XRk_Field.field.M31
+hx : XRk_Field.field.M31.mul a.a b.a = ok x
+y : XRk_Field.field.M31
+hy : XRk_Field.field.M31.mul a.b b.b = ok y
+z : XRk_Field.field.M31
+hz
+...
+ := m4 }) =
+    ok { a := r, b := t }
+run✝³ :
+  (do
+      let m2 ←
+        XRk_Field.field.M31.reduce_u64
+            (((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)).wrapping_mul
+              ((core.convert.num.FromU64U32.from b.a).wrapping_add (core.convert.num.FromU64U32.from b.b)))
+      let m ← x.sub y
+      let m3 ← m2.sub x
+      let m4 ← m3.sub y
+      ok { a := m, b := m4 }) =
+    ok { a := r, b := t }
+run✝² :
+  (do
+      let m ← x.sub y
+      let m3 ← z.sub x
+      let m4 ← m3.sub y
+      ok { a := m, b := m4 }) =
+    ok { a := r, b := t }
+run✝¹ :
+  (do
+      let m3 ← z.sub x
+      let m4 ← m3.sub y
+      ok { a := r, b := m4 }) =
+    ok { a := r, b := t }
+run✝ :
+  (do
+      let m4 ← s.sub y
+      ok { a := r, b := m4 }) =
+    ok { a := r, b := t }
+run : ok { a := r, b := t } = ok { a := r, b := t }
+cx : M x
+cy : M y
+cz : M z
+cs : s < XRm_M31Canonical.P
+vx : ↑↑x = ↑↑a.a * ↑↑b.a
+vy : ↑↑y = ↑↑a.b * ↑↑b.b
+vz :
+  ↑↑z =
+    ↑(↑((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)) *
+          ↑((core.convert.num.FromU64U32.from b.a).wrapping_add (core.convert.num.FromU64U32.from b.b)) %
+        UScalar.size UScalarTy.U64)
+vr : ↑↑r = ↑↑x - ↑↑y
+vs : ↑↑s = ↑↑z - ↑↑x
+vt : ↑↑t = ↑↑s - ↑↑y
+ba : ↑a.a + ↑a.b < 4294967296
+bb : ↑b.a + ↑b.b < 4294967296
+product : (↑a.a + ↑a.b) * (↑b.a + ↑b.b) < 4294967296 * 4294967296
+⊢ ↑↑{ a := r, b := t }.a = ↑↑a.a * ↑↑b.a - ↑↑a.b * ↑↑b.b ∧ ↑↑{ a := r, b := t }.b = ↑↑a.a * ↑↑b.b + ↑↑a.b * ↑↑b.a
+'XRm_ComplexValues.reduce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRm_ComplexValues.sum_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRm_ComplexValues.cmul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r79582e79374c40049d2924c4d10255aa.scope; invocation ID: 7f94d52752f94962b78e2ff34306bb64
