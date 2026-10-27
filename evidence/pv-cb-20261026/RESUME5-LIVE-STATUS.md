@@ -1,12 +1,15 @@
 # Resume5 live status
 
-97/100 charged Lean attempts:77 pass,20 reject. Next unused41299; final3 reserved
-for joint audit. Kani7/12, all timed out. Native controller38667 is paused with
-no native scope active. See RESUME5-FOCUSED-STAGE.md and RESUME5-TALLY.json.
+Lean100/100:80 pass,20 rejected. Final joint audits41300–41302 all pass,
+65/108/19 declarations, standard axioms only. Next unused41303 but no remaining
+Lean budget.81-entry focused manifest checked;80 accepted own objects retained.
+Kani8 completed:all timed out. The live serial queue continues; authoritative
+charged/running status is RESUME5-TALLY.json. No additional Lean scope may launch.
 
-Target not yet established. No stable PV_CB_Op223Source.op223_source theorem.
-Both actual tuple constructors supply checked canonical offsets. All16 returned
-words are canonical under selected-cell read validity. Sampled caller transport
-is proved under explicit native source16 equality; neither that native equality
-nor full compiled trace/auxiliary translation association is supplied.
-V164 P_source_p6/P_proof_bytes/reservation unchanged; rows23/73, endpoint removals0.
+Target not established. No stable PV_CB_Op223Source.op223_source theorem.
+Actual legacy/forest constructors have checked offset/row/bank invariants;
+all16 returned words are canonical under selected-cell read validity. Sampled
+caller transport requires unproved native canonical16 agreement. Auxiliary
+translation extraction fails loan validation. Both original V164 modules are
+byte-identical to the before snapshot. P_source_p6/P_proof_bytes/reservation
+retained; candidate rows23/73; endpoint premises removed0.
