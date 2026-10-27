@@ -1,16 +1,17 @@
-import SDY_Join_Funs
+import SDY_Loop
+import AdapterRwScalar
 open Aeneas Aeneas.Std Result ControlFlow
 set_option autoImplicit false
-namespace SDY_MpC
-open SDY_Join_Release
+namespace SDY_MpA
+open SDY_Join_Release AspisR1.AdapterRw.Scalar
 abbrev Node := Array U8 32#usize
 def node (x : U8) : Node := Array.repeat 32#usize x
 def hash : aspis_core.digest.Digest32 Unit := {digest := fun _ parts => ok (node ((parts.val[1]?.map (fun s => s.val[0]?.getD 0#u8)).getD 0#u8))}
-def idx : Array U32 16#usize := ⟨10#u32 :: List.replicate 15 0#u32,by simp⟩
-def val : Array Node 16#usize := ⟨node 9#u8 :: List.replicate 15 (node 0#u8),by simp⟩
+def idx : Array U32 16#usize := ⟨8#u32 :: List.replicate 15 0#u32,by simp⟩
+def val : Array Node 16#usize := ⟨node 5#u8 :: List.replicate 15 (node 0#u8),by simp⟩
 def outidx : Array U32 16#usize := ⟨1#u32 :: List.replicate 15 0#u32,by simp⟩
-def outval : Array Node 16#usize := ⟨node 4#u8 :: List.replicate 15 (node 0#u8),by simp⟩
-def nodes : Slice U8 := ⟨List.replicate 224 4#u8,by simp⟩
+def outval : Array Node 16#usize := ⟨node 5#u8 :: List.replicate 15 (node 0#u8),by simp⟩
+def nodes : Slice U8 := ⟨List.replicate 224 2#u8,by simp⟩
 abbrev Iter := core.iter.adapters.enumerate.Enumerate (core.slice.iter.IterMut Node)
 abbrev Back := Iter → Iter
 abbrev State := Iter × Back × Usize × Usize
@@ -20,50 +21,50 @@ def it (j : Usize) : Iter := ⟨⟨children.to_slice,j.val⟩,j⟩
 def restore (j : Nat) (v : Node) : Back := fun r => {r with iter := {r.iter with slice := r.iter.slice.setAtNat j v}}
 def step (s : State) := body idx val 1#usize nodes 1#u32 none s.1 s.2.1 s.2.2.1 s.2.2.2
 def fin8 (b : Back) : Back := b
-def fin7 (b : Back) : Back := fin8 (fun r => b (restore 7 (node 4#u8) r))
-def fin6 (b : Back) : Back := fin7 (fun r => b (restore 6 (node 4#u8) r))
-def fin5 (b : Back) : Back := fin6 (fun r => b (restore 5 (node 4#u8) r))
-def fin4 (b : Back) : Back := fin5 (fun r => b (restore 4 (node 4#u8) r))
-def fin3 (b : Back) : Back := fin4 (fun r => b (restore 3 (node 4#u8) r))
-def fin2 (b : Back) : Back := fin3 (fun r => b (restore 2 (node 9#u8) r))
-def fin1 (b : Back) : Back := fin2 (fun r => b (restore 1 (node 4#u8) r))
-def fin0 (b : Back) : Back := fin1 (fun r => b (restore 0 (node 4#u8) r))
-theorem step0 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 0#usize) b 0#usize 0#usize = ok (.cont (it 1#usize,fun r => b (restore 0 (node 4#u8) r),32#usize,0#usize)) := by
+def fin7 (b : Back) : Back := fin8 (fun r => b (restore 7 (node 2#u8) r))
+def fin6 (b : Back) : Back := fin7 (fun r => b (restore 6 (node 2#u8) r))
+def fin5 (b : Back) : Back := fin6 (fun r => b (restore 5 (node 2#u8) r))
+def fin4 (b : Back) : Back := fin5 (fun r => b (restore 4 (node 2#u8) r))
+def fin3 (b : Back) : Back := fin4 (fun r => b (restore 3 (node 2#u8) r))
+def fin2 (b : Back) : Back := fin3 (fun r => b (restore 2 (node 2#u8) r))
+def fin1 (b : Back) : Back := fin2 (fun r => b (restore 1 (node 2#u8) r))
+def fin0 (b : Back) : Back := fin1 (fun r => b (restore 0 (node 5#u8) r))
+theorem step0 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 0#usize) b 0#usize 0#usize = ok (.cont (it 1#usize,fun r => b (restore 0 (node 5#u8) r),0#usize,1#usize)) := by
   unfold body multiproof.verify_in_place_loop0_loop0_loop0.body
   simp [SDY_Join_enumerateNext,core.slice.iter.IteratorIterMut.next,it,children,node]
   rfl
 #print axioms step0
-theorem step1 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 1#usize) b 32#usize 0#usize = ok (.cont (it 2#usize,fun r => b (restore 1 (node 4#u8) r),64#usize,0#usize)) := by
+theorem step1 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 1#usize) b 0#usize 1#usize = ok (.cont (it 2#usize,fun r => b (restore 1 (node 2#u8) r),32#usize,1#usize)) := by
   unfold body multiproof.verify_in_place_loop0_loop0_loop0.body
   simp [SDY_Join_enumerateNext,core.slice.iter.IteratorIterMut.next,it,children,node]
   rfl
 #print axioms step1
-theorem step2 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 2#usize) b 64#usize 0#usize = ok (.cont (it 3#usize,fun r => b (restore 2 (node 9#u8) r),64#usize,1#usize)) := by
+theorem step2 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 2#usize) b 32#usize 1#usize = ok (.cont (it 3#usize,fun r => b (restore 2 (node 2#u8) r),64#usize,1#usize)) := by
   unfold body multiproof.verify_in_place_loop0_loop0_loop0.body
   simp [SDY_Join_enumerateNext,core.slice.iter.IteratorIterMut.next,it,children,node]
   rfl
 #print axioms step2
-theorem step3 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 3#usize) b 64#usize 1#usize = ok (.cont (it 4#usize,fun r => b (restore 3 (node 4#u8) r),96#usize,1#usize)) := by
+theorem step3 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 3#usize) b 64#usize 1#usize = ok (.cont (it 4#usize,fun r => b (restore 3 (node 2#u8) r),96#usize,1#usize)) := by
   unfold body multiproof.verify_in_place_loop0_loop0_loop0.body
   simp [SDY_Join_enumerateNext,core.slice.iter.IteratorIterMut.next,it,children,node]
   rfl
 #print axioms step3
-theorem step4 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 4#usize) b 96#usize 1#usize = ok (.cont (it 5#usize,fun r => b (restore 4 (node 4#u8) r),128#usize,1#usize)) := by
+theorem step4 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 4#usize) b 96#usize 1#usize = ok (.cont (it 5#usize,fun r => b (restore 4 (node 2#u8) r),128#usize,1#usize)) := by
   unfold body multiproof.verify_in_place_loop0_loop0_loop0.body
   simp [SDY_Join_enumerateNext,core.slice.iter.IteratorIterMut.next,it,children,node]
   rfl
 #print axioms step4
-theorem step5 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 5#usize) b 128#usize 1#usize = ok (.cont (it 6#usize,fun r => b (restore 5 (node 4#u8) r),160#usize,1#usize)) := by
+theorem step5 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 5#usize) b 128#usize 1#usize = ok (.cont (it 6#usize,fun r => b (restore 5 (node 2#u8) r),160#usize,1#usize)) := by
   unfold body multiproof.verify_in_place_loop0_loop0_loop0.body
   simp [SDY_Join_enumerateNext,core.slice.iter.IteratorIterMut.next,it,children,node]
   rfl
 #print axioms step5
-theorem step6 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 6#usize) b 160#usize 1#usize = ok (.cont (it 7#usize,fun r => b (restore 6 (node 4#u8) r),192#usize,1#usize)) := by
+theorem step6 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 6#usize) b 160#usize 1#usize = ok (.cont (it 7#usize,fun r => b (restore 6 (node 2#u8) r),192#usize,1#usize)) := by
   unfold body multiproof.verify_in_place_loop0_loop0_loop0.body
   simp [SDY_Join_enumerateNext,core.slice.iter.IteratorIterMut.next,it,children,node]
   rfl
 #print axioms step6
-theorem step7 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 7#usize) b 192#usize 1#usize = ok (.cont (it 8#usize,fun r => b (restore 7 (node 4#u8) r),224#usize,1#usize)) := by
+theorem step7 (b : Back) : body idx val 1#usize nodes 1#u32 none (it 7#usize) b 192#usize 1#usize = ok (.cont (it 8#usize,fun r => b (restore 7 (node 2#u8) r),224#usize,1#usize)) := by
   unfold body multiproof.verify_in_place_loop0_loop0_loop0.body
   simp [SDY_Join_enumerateNext,core.slice.iter.IteratorIterMut.next,it,children,node]
   rfl
@@ -133,9 +134,9 @@ theorem run3 (b : Back) : loop step (it 3#usize,b,64#usize,1#usize) = ok (224#us
   rw [step3]
   exact run4 _
 #print axioms run3
-theorem run2 (b : Back) : loop step (it 2#usize,b,64#usize,0#usize) = ok (224#usize,1#usize,none,fin2 b (it 8#usize)) := by
+theorem run2 (b : Back) : loop step (it 2#usize,b,32#usize,1#usize) = ok (224#usize,1#usize,none,fin2 b (it 8#usize)) := by
   rw [loop.eq_def]
-  change (match body idx val 1#usize nodes 1#u32 none (it 2#usize) b 64#usize 0#usize with
+  change (match body idx val 1#usize nodes 1#u32 none (it 2#usize) b 32#usize 1#usize with
     | ok (.cont s) => loop step s
     | ok (.done v) => ok v
     | fail e => fail e
@@ -143,9 +144,9 @@ theorem run2 (b : Back) : loop step (it 2#usize,b,64#usize,0#usize) = ok (224#us
   rw [step2]
   exact run3 _
 #print axioms run2
-theorem run1 (b : Back) : loop step (it 1#usize,b,32#usize,0#usize) = ok (224#usize,1#usize,none,fin1 b (it 8#usize)) := by
+theorem run1 (b : Back) : loop step (it 1#usize,b,0#usize,1#usize) = ok (224#usize,1#usize,none,fin1 b (it 8#usize)) := by
   rw [loop.eq_def]
-  change (match body idx val 1#usize nodes 1#u32 none (it 1#usize) b 32#usize 0#usize with
+  change (match body idx val 1#usize nodes 1#u32 none (it 1#usize) b 0#usize 1#usize with
     | ok (.cont s) => loop step s
     | ok (.done v) => ok v
     | fail e => fail e
@@ -264,7 +265,7 @@ theorem orun : multiproof.verify_in_place_loop0 hash {start:=0#u32,«end»:=6#u3
   rw [loop.eq_def,outerFirst]
   exact orunLast
 #print axioms orun
-def singleton : Slice U32 := ⟨[10#u32],by simp⟩
+def singleton : Slice U32 := ⟨[8#u32],by simp⟩
 theorem formed : multiproof.well_formed singleton = ok true := by
   unfold multiproof.well_formed
   simp [singleton,multiproof.MAX_BATCH,core.slice.Slice.is_empty,core.slice.Slice.windows]
@@ -292,4 +293,4 @@ theorem emitted : multiproof.verify_in_place hash () .Eight (node 0#u8) idx val 
   rw [orun]
   rfl
 #print axioms emitted
-end SDY_MpC
+end SDY_MpA

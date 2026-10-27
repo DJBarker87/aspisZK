@@ -4,7 +4,7 @@ Raw Funs SHA256 f4b2d17c061ce7062d64146531788b6448328e656fb6dbd6192f2d61db31a3b5
 No premise removed; no release credit claimed.
 
 All four write paths retain their writes syntactically:
-- multiproof.rs:177,182: child1 passed to next_back at raw:1198–1199,1214–1215,1232–1233,1249–1250; final iterator returned through back at1180; enumerate_back/iter_mut_back/to_slice_mut_back at1363–1365; idx/val stores (Rust189–190) explicitly Array.update at1369–1370 (binary1318–1319,1341–1342,1300–1301). Full exact ranges retained in final report after audit.
+- multiproof.rs:177,182: child1 passed to next_back at raw:1196–1197,1213–1214,1230–1231,1247–1248; final iterator returned through back at1180; enumerate_back/iter_mut_back/to_slice_mut_back at1362–1364; idx/val stores (Rust189–190) explicitly Array.update at1368–1369 (binary1307–1308,1326–1327,1344–1345). Full exact ranges retained in final report after audit.
 - verifier.rs:240 row[j] via Array.update raw1941; :243 flush via next_back(some limb1) raw1976–1977; composed back restored into row at2011–2012.
 - sampler.rs:93 digit via next_back(some digit1) raw3499–3500; returned back applied at3528–3529. Carry retained at3498,3526–3529.
 - verifier.rs:226 *w via next_back(some(i,w)) raw6374–6375, composed back applied through enumerate_back/iter_mut_back at6406–6408.

@@ -1,0 +1,320 @@
+SDY_generated/SDY_MpA.lean:21:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let d ← aspis_core.r0.merkle.parent_with_digest hash () (children.from_slice (fin0 id (it 8#usize)).iter.slice)
+    let idx1 ← idx.update 0#usize 1#u32
+    let val1 ← val.update 0#usize d
+    let w ← ok 1#usize
+    ok (cont (multiproof.Arity.Eight, idx1, val1, 224#usize, w, 1#usize, none))
+is not definitionally equal to the right-hand side
+  ok (cont (multiproof.Arity.Eight, outidx, outval, 224#usize, 1#usize, 1#usize, none))
+
+⊢ (do
+      let d ← aspis_core.r0.merkle.parent_with_digest hash () (children.from_slice (fin0 id (it 8#usize)).iter.slice)
+      let idx1 ← idx.update 0#usize 1#u32
+      let val1 ← val.update 0#usize d
+      let w ← ok 1#usize
+      ok (cont (multiproof.Arity.Eight, idx1, val1, 224#usize, w, 1#usize, none))) =
+    ok (cont (multiproof.Arity.Eight, outidx, outval, 224#usize, 1#usize, 1#usize, none))
+'SDY_MpA.parent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'SDY_MpA.pstep_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SDY_MpA.pend' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SDY_MpA.prunEnd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SDY_MpA.prun' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'SDY_MpA.rejectStep_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:55:13: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵h̵m̵,̵h̵c̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲m̲,̲ ̲h̲c̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'SDY_MpA.rejectBody' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SDY_MpA.rejectInner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SDY_MpA.rejectParent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SDY_MpA.rejectLevel' depends on axioms: [propext, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:83:2: error: 'change' tactic failed, pattern
+  (do
+      let __x ←
+        multiproof.verify_in_place_loop0_loop0 hash () multiproof.Arity.Eight idx val 1#usize nodes 0#usize 0#usize
+            0#usize none
+      match __x with
+        | (a, x, v, n, offset, p, i) =>
+          match i with
+          | 1#32#uscalar => ok (cont ({ start := 1#u32, «end» := 6#u32 }, a, x, v, n, offset, p))
+          | x_1 =>
+            match p with
+            | none => ok (done (x, v, none))
+            | some val => ok (done (x, v, p))) =
+    ?m.65
+is not definitionally equal to target
+  (do
+      let (o, iter1) ←
+        core.iter.range.IteratorRange.next core.iter.range.StepU32
+            ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize, none).1
+      match o with
+        | none =>
+          if
+              ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize, none).2.2.2.2.1 =
+                1#usize then
+            do
+            let i ←
+              multiproof.index_at
+                  ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize, none).2.2.1
+                  0#usize
+            if i = 0#u32 then do
+                let b ←
+                  multiproof.root_matches
+                      ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize,
+                                none).2.2.2.1
+                      (node 0#u8)
+                if b = true then
+                    have i1 := nodes.len;
+                    ok
+                      (done
+                        (({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize,
+                                  none).2.2.1,
+                          ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize,
+                                    none).2.2.2.1,
+                          some
+                            (decide
+                              (({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize,
+                                              none).2.2.2.2.2.1 =
+                                i1))))
+                  else
+                    ok
+                      (done
+                        (({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize,
+                                  none).2.2.1,
+                          ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize,
+                                    none).2.2.2.1,
+                          some false))
+              else
+                ok
+                  (done
+                    (({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize,
+                              none).2.2.1,
+                      ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize,
+                                none).2.2.2.1,
+                      some false))
+          else
+            ok
+              (done
+                (({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize, none).2.2.1,
+                  ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, val, 1#usize, 0#usize,
+                            none).2.2.2.1,
+                  some false))
+        | some val => do
+          let (arity1, idx1, val1, n1, at2, pending_return1, i) ←
+            multiproof.verify_in_place_loop0_loop0 hash ()
+                ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, SDY_MpA.val, 1#usize, 0#usize,
+                      none).2.1
+                ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, SDY_MpA.val, 1#usize, 0#usize,
+                        none).2.2.1
+                ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, SDY_MpA.val, 1#usize, 0#usize,
+                          none).2.2.2.1
+                ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, SDY_MpA.val, 1#usize, 0#usize,
+                            none).2.2.2.2.1
+                nodes
+                ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, SDY_MpA.val, 1#usize, 0#usize,
+                              none).2.2.2.2.2.1
+                0#usize 0#usize
+                ({ start := 0#u32, «end» := 6#u32 }, multiproof.Arity.Eight, idx, SDY_MpA.val, 1#usize, 0#usize,
+                              none).2.2.2.2.2.2
+          match i with
+            | 1#32#uscalar => ok (cont (iter1, arity1, idx1, val1, n1, at2, pending_return1))
+            | x =>
+              match pending_return1 with
+              | none => ok (done (idx1, val1, none))
+              | some val => ok (done (idx1, val1, pending_return1))) =
+    ok (cont ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize, none))
+'SDY_MpA.outerFirst' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:93:2: error: 'change' tactic failed, pattern
+  (do
+      let __x ←
+        multiproof.verify_in_place_loop0_loop0 hash () multiproof.Arity.Eight outidx outval 1#usize nodes 224#usize
+            0#usize 0#usize none
+      match __x with
+        | (a, x, v, n, offset, p, i) =>
+          match i with
+          | 1#32#uscalar => ok (cont ({ start := 2#u32, «end» := 6#u32 }, a, x, v, n, offset, p))
+          | x_1 =>
+            match p with
+            | none => ok (done (x, v, none))
+            | some val => ok (done (x, v, p))) =
+    ?m.42
+is not definitionally equal to target
+  (do
+      let (o, iter1) ←
+        core.iter.range.IteratorRange.next core.iter.range.StepU32
+            ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize, none).1
+      match o with
+        | none =>
+          if
+              ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                            none).2.2.2.2.1 =
+                1#usize then
+            do
+            let i ←
+              multiproof.index_at
+                  ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                          none).2.2.1
+                  0#usize
+            if i = 0#u32 then do
+                let b ←
+                  multiproof.root_matches
+                      ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                                none).2.2.2.1
+                      (node 0#u8)
+                if b = true then
+                    have i1 := nodes.len;
+                    ok
+                      (done
+                        (({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize,
+                                  224#usize, none).2.2.1,
+                          ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize,
+                                    224#usize, none).2.2.2.1,
+                          some
+                            (decide
+                              (({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize,
+                                              224#usize, none).2.2.2.2.2.1 =
+                                i1))))
+                  else
+                    ok
+                      (done
+                        (({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize,
+                                  224#usize, none).2.2.1,
+                          ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize,
+                                    224#usize, none).2.2.2.1,
+                          some false))
+              else
+                ok
+                  (done
+                    (({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                              none).2.2.1,
+                      ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                                none).2.2.2.1,
+                      some false))
+          else
+            ok
+              (done
+                (({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                          none).2.2.1,
+                  ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                            none).2.2.2.1,
+                  some false))
+        | some val => do
+          let (arity1, idx1, val1, n1, at2, pending_return1, i) ←
+            multiproof.verify_in_place_loop0_loop0 hash ()
+                ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                      none).2.1
+                ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                        none).2.2.1
+                ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                          none).2.2.2.1
+                ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                            none).2.2.2.2.1
+                nodes
+                ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                              none).2.2.2.2.2.1
+                0#usize 0#usize
+                ({ start := 1#u32, «end» := 6#u32 }, multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize,
+                              none).2.2.2.2.2.2
+          match i with
+            | 1#32#uscalar => ok (cont (iter1, arity1, idx1, val1, n1, at2, pending_return1))
+            | x =>
+              match pending_return1 with
+              | none => ok (done (idx1, val1, none))
+              | some val => ok (done (idx1, val1, pending_return1))) =
+    ok (done (outidx, outval, some false))
+'SDY_MpA.outerLast' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'SDY_MpA.orunLast' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'SDY_MpA.orun' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:120:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  loop ?body ?x
+in the target expression
+  (do
+      let x ←
+        match
+            if ↑⟨[8#u32], singleton._proof_1⟩[0] < 262144 then
+              ok (cont ({ slice := ⟨[8#u32], singleton._proof_1⟩, i := 1 }, ()))
+            else ok (done (false, { slice := ⟨[8#u32], singleton._proof_1⟩, i := 1 }, ())) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x => do
+                  let (item, self'') ←
+                    if h : x.1.i < (↑x.1.slice).length then
+                        ok (some x.1.slice[x.1.i], { slice := x.1.slice, i := x.1.i + 1 })
+                      else ok (none, x.1)
+                  match item with
+                    | none => ok (done (true, self'', x.2))
+                    | some value => if ↑value < 262144 then ok (cont (self'', x.2)) else ok (done (false, self'', x.2)))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok x.1) =
+    ok true
+
+hh : 1#u32 <<< 18#u32 = ok 262144#u32
+⊢ (do
+      let x ←
+        match
+            if ↑⟨[8#u32], singleton._proof_1⟩[0] < 262144 then
+              ok (cont ({ slice := ⟨[8#u32], singleton._proof_1⟩, i := 1 }, ()))
+            else ok (done (false, { slice := ⟨[8#u32], singleton._proof_1⟩, i := 1 }, ())) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x => do
+                  let (item, self'') ←
+                    if h : x.1.i < (↑x.1.slice).length then
+                        ok (some x.1.slice[x.1.i], { slice := x.1.slice, i := x.1.i + 1 })
+                      else ok (none, x.1)
+                  match item with
+                    | none => ok (done (true, self'', x.2))
+                    | some value => if ↑value < 262144 then ok (cont (self'', x.2)) else ok (done (false, self'', x.2)))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok x.1) =
+    ok true
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Slice U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑a
+SDY_generated/SDY_MpA.lean:114:86: warning: This simp argument is unused:
+  singleton
+
+Hint: Omit it from the simp argument list.
+  simp [core.slice.iter.Windows.Insts.CoreIterTraitsIteratorIteratorSharedASlice.next,̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SDY_generated/SDY_MpA.lean:119:47: warning: This simp argument is unused:
+  singleton
+
+Hint: Omit it from the simp argument list.
+  simp [core.slice.iter.IteratorSliceIter.next,s̵i̵n̵g̵l̵e̵t̵o̵n̵,̵
+  ̲ ̲ ̲ ̲ ̲multiproof.well_formed.closure_1.Insts.CoreOpsFunctionFnMutTupleSharedU32Bool.call_mut,
+  ̲ ̲ ̲ ̲ ̲multiproof.LEAF_BITS, ̲hh]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'SDY_MpA.formed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:128:10: error: Function expected at
+  List.length_replicate
+but this term has type
+  (List.replicate ?m.37 ?m.38).length = ?m.37
+
+Note: Expected a function because this term is being applied to the argument
+  _
+'SDY_MpA.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

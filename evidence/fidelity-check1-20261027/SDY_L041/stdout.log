@@ -1,0 +1,10 @@
+def List.slice.{u_1} : {α : Type u_1} → ℕ → ℕ → List α → List α :=
+fun {α} start end_ ls => List.take (end_ - start) (List.drop start ls)
+def Aeneas.Std.core.slice.Slice.copy_from_slice : {T : Type} →
+  core.marker.Copy T → Slice T → Slice T → Result (Slice T) :=
+fun {T} x s src => if s.len = src.len then ok src else fail Error.panic
+SDY_generated/SDY_Slice.lean:21:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'SDY_Slice.read' depends on axioms: [propext, sorryAx, Quot.sound]

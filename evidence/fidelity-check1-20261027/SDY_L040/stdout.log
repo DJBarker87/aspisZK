@@ -1,0 +1,29 @@
+def List.slice.{u_1} : {α : Type u_1} → ℕ → ℕ → List α → List α :=
+fun {α} start end_ ls => List.take (end_ - start) (List.drop start ls)
+def Aeneas.Std.core.slice.Slice.copy_from_slice : {T : Type} →
+  core.marker.Copy T → Slice T → Slice T → Result (Slice T) :=
+fun {T} x s src => if s.len = src.len then ok src else fail Error.panic
+SDY_generated/SDY_Slice.lean:20:8: warning: `Subtype.eq` has been deprecated: Use `Subtype.ext` instead
+SDY_generated/SDY_Slice.lean:20:2: error: Tactic `apply` failed: could not unify the conclusion of `@Subtype.eq`
+  ?a1 = ?a2
+with the goal
+  (if True ∧ True then ok (some ⟨List.slice (↑a) (↑b) (List.replicate 224 x), ⋯⟩) else ok none) = ok (some (sibling x))
+
+Note: The full type of `@Subtype.eq` is
+  ∀ {α : Sort ?u.31} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 = ↑a2 → a1 = a2
+
+x : U8
+a b : Usize
+lo : ↑a ≤ ↑b
+hi : ↑b ≤ 224
+width : ↑b - ↑a = 32
+cond : a ≤ b ∧ ↑b ≤ 224
+⊢ (if True ∧ True then ok (some ⟨List.slice (↑a) (↑b) (List.replicate 224 x), ⋯⟩) else ok none) = ok (some (sibling x))
+SDY_generated/SDY_Slice.lean:18:18: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [cond,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'SDY_Slice.read' depends on axioms: [propext, sorryAx, Quot.sound]

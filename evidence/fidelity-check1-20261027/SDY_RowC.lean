@@ -1,4 +1,4 @@
-import SDY_Join_Funs
+import SDY_Loop
 open Aeneas Aeneas.Std Result ControlFlow
 set_option autoImplicit false
 namespace SDY_RowC
@@ -14,65 +14,42 @@ def row3 : Array U64 4#usize := ⟨[2147483648#u64,2#u64,3#u64,0#u64],by simp⟩
 def row4 : Array U64 4#usize := ⟨[2147483648#u64,2#u64,3#u64,4#u64],by simp⟩
 def power : aspis_core.field.QM31 := ⟨⟨1#u32,2#u32⟩,⟨3#u32,4#u32⟩⟩
 def output : Array U64 4#usize := ⟨[1#u64,2#u64,3#u64,4#u64],by simp⟩
-theorem rstep0 : rb limbs {start:=0#usize,«end»:=4#usize} row0 1#u32 = ok (.cont ({start:=1#usize,«end»:=4#usize},row1,1#u32)) := by rfl
+theorem rstep0 : rb limbs {start:=0#usize,«end»:=4#usize} row0 1#u32 = ok (.cont ({start:=1#usize,«end»:=4#usize},row1,1#u32)) := by
+  unfold rb verifier.update_residue_row_loop0.body
+  rw [SDY_Loop.range 0#usize 1#usize 4#usize (by decide) rfl]
+  rfl
 #print axioms rstep0
-theorem rstep1 : rb limbs {start:=1#usize,«end»:=4#usize} row1 1#u32 = ok (.cont ({start:=2#usize,«end»:=4#usize},row2,1#u32)) := by rfl
+theorem rstep1 : rb limbs {start:=1#usize,«end»:=4#usize} row1 1#u32 = ok (.cont ({start:=2#usize,«end»:=4#usize},row2,1#u32)) := by
+  unfold rb verifier.update_residue_row_loop0.body
+  rw [SDY_Loop.range 1#usize 2#usize 4#usize (by decide) rfl]
+  rfl
 #print axioms rstep1
-theorem rstep2 : rb limbs {start:=2#usize,«end»:=4#usize} row2 1#u32 = ok (.cont ({start:=3#usize,«end»:=4#usize},row3,1#u32)) := by rfl
+theorem rstep2 : rb limbs {start:=2#usize,«end»:=4#usize} row2 1#u32 = ok (.cont ({start:=3#usize,«end»:=4#usize},row3,1#u32)) := by
+  unfold rb verifier.update_residue_row_loop0.body
+  rw [SDY_Loop.range 2#usize 3#usize 4#usize (by decide) rfl]
+  rfl
 #print axioms rstep2
-theorem rstep3 : rb limbs {start:=3#usize,«end»:=4#usize} row3 1#u32 = ok (.cont ({start:=4#usize,«end»:=4#usize},row4,1#u32)) := by rfl
+theorem rstep3 : rb limbs {start:=3#usize,«end»:=4#usize} row3 1#u32 = ok (.cont ({start:=4#usize,«end»:=4#usize},row4,1#u32)) := by
+  unfold rb verifier.update_residue_row_loop0.body
+  rw [SDY_Loop.range 3#usize 4#usize 4#usize (by decide) rfl]
+  rfl
 #print axioms rstep3
 theorem rstep4 : rb limbs {start:=4#usize,«end»:=4#usize} row4 1#u32 = ok (.done row4) := by rfl
 #print axioms rstep4
 theorem rrun4 : loop rs ({start:=4#usize,«end»:=4#usize},row4,1#u32) = ok row4 := by
-  rw [loop.eq_def]
-  change (match rb limbs {start:=4#usize,«end»:=4#usize} row4 1#u32 with
-    | ok (.cont s) => loop rs s
-    | ok (.done v) => ok v
-    | fail e => fail e
-    | div => div) = _
-  rw [rstep4]
-  rfl
+  exact SDY_Loop.done rs _ _ rstep4
 #print axioms rrun4
 theorem rrun3 : loop rs ({start:=3#usize,«end»:=4#usize},row3,1#u32) = ok row4 := by
-  rw [loop.eq_def]
-  change (match rb limbs {start:=3#usize,«end»:=4#usize} row3 1#u32 with
-    | ok (.cont s) => loop rs s
-    | ok (.done v) => ok v
-    | fail e => fail e
-    | div => div) = _
-  rw [rstep3]
-  exact rrun4
+  exact SDY_Loop.next rs _ _ _ rstep3 rrun4
 #print axioms rrun3
 theorem rrun2 : loop rs ({start:=2#usize,«end»:=4#usize},row2,1#u32) = ok row4 := by
-  rw [loop.eq_def]
-  change (match rb limbs {start:=2#usize,«end»:=4#usize} row2 1#u32 with
-    | ok (.cont s) => loop rs s
-    | ok (.done v) => ok v
-    | fail e => fail e
-    | div => div) = _
-  rw [rstep2]
-  exact rrun3
+  exact SDY_Loop.next rs _ _ _ rstep2 rrun3
 #print axioms rrun2
 theorem rrun1 : loop rs ({start:=1#usize,«end»:=4#usize},row1,1#u32) = ok row4 := by
-  rw [loop.eq_def]
-  change (match rb limbs {start:=1#usize,«end»:=4#usize} row1 1#u32 with
-    | ok (.cont s) => loop rs s
-    | ok (.done v) => ok v
-    | fail e => fail e
-    | div => div) = _
-  rw [rstep1]
-  exact rrun2
+  exact SDY_Loop.next rs _ _ _ rstep1 rrun2
 #print axioms rrun1
 theorem rrun0 : loop rs ({start:=0#usize,«end»:=4#usize},row0,1#u32) = ok row4 := by
-  rw [loop.eq_def]
-  change (match rb limbs {start:=0#usize,«end»:=4#usize} row0 1#u32 with
-    | ok (.cont s) => loop rs s
-    | ok (.done v) => ok v
-    | fail e => fail e
-    | div => div) = _
-  rw [rstep0]
-  exact rrun1
+  exact SDY_Loop.next rs _ _ _ rstep0 rrun1
 #print axioms rrun0
 abbrev Iter := core.slice.iter.IterMut U64
 abbrev Back := Iter → Iter
@@ -86,80 +63,45 @@ def fin3 (b : Back) : Back := fin4 (fun r => b (restore 3 4#u64 r))
 def fin2 (b : Back) : Back := fin3 (fun r => b (restore 2 3#u64 r))
 def fin1 (b : Back) : Back := fin2 (fun r => b (restore 1 2#u64 r))
 def fin0 (b : Back) : Back := fin1 (fun r => b (restore 0 1#u64 r))
-theorem step0 (b : Back) : body (it 0) b = ok (.cont (it 1,fun r => b (restore 0 1#u64 r))) := by
-  unfold body verifier.update_residue_row_loop1.body
+theorem step0 (b : Back) : step (it 0,b) = ok (.cont (it 1,fun r => b (restore 0 1#u64 r))) := by
+  unfold step body verifier.update_residue_row_loop1.body
   simp [core.slice.iter.IteratorIterMut.next,it,row4,restore]
   rfl
 #print axioms step0
-theorem step1 (b : Back) : body (it 1) b = ok (.cont (it 2,fun r => b (restore 1 2#u64 r))) := by
-  unfold body verifier.update_residue_row_loop1.body
+theorem step1 (b : Back) : step (it 1,b) = ok (.cont (it 2,fun r => b (restore 1 2#u64 r))) := by
+  unfold step body verifier.update_residue_row_loop1.body
   simp [core.slice.iter.IteratorIterMut.next,it,row4,restore]
   rfl
 #print axioms step1
-theorem step2 (b : Back) : body (it 2) b = ok (.cont (it 3,fun r => b (restore 2 3#u64 r))) := by
-  unfold body verifier.update_residue_row_loop1.body
+theorem step2 (b : Back) : step (it 2,b) = ok (.cont (it 3,fun r => b (restore 2 3#u64 r))) := by
+  unfold step body verifier.update_residue_row_loop1.body
   simp [core.slice.iter.IteratorIterMut.next,it,row4,restore]
   rfl
 #print axioms step2
-theorem step3 (b : Back) : body (it 3) b = ok (.cont (it 4,fun r => b (restore 3 4#u64 r))) := by
-  unfold body verifier.update_residue_row_loop1.body
+theorem step3 (b : Back) : step (it 3,b) = ok (.cont (it 4,fun r => b (restore 3 4#u64 r))) := by
+  unfold step body verifier.update_residue_row_loop1.body
   simp [core.slice.iter.IteratorIterMut.next,it,row4,restore]
   rfl
 #print axioms step3
-theorem step4 (b : Back) : body (it 4) b = ok (.done b) := by
-  unfold body verifier.update_residue_row_loop1.body
+theorem step4 (b : Back) : step (it 4,b) = ok (.done b) := by
+  unfold step body verifier.update_residue_row_loop1.body
   simp [core.slice.iter.IteratorIterMut.next,it,row4,restore]
   skip
 #print axioms step4
 theorem run4 (b : Back) : loop step (it 4,b) = ok (fin4 b) := by
-  rw [loop.eq_def]
-  change (match body (it 4) b with
-    | ok (.cont s) => loop step s
-    | ok (.done v) => ok v
-    | fail e => fail e
-    | div => div) = _
-  rw [step4]
-  rfl
+  exact SDY_Loop.done step _ _ (step4 b)
 #print axioms run4
 theorem run3 (b : Back) : loop step (it 3,b) = ok (fin3 b) := by
-  rw [loop.eq_def]
-  change (match body (it 3) b with
-    | ok (.cont s) => loop step s
-    | ok (.done v) => ok v
-    | fail e => fail e
-    | div => div) = _
-  rw [step3]
-  exact run4 _
+  exact SDY_Loop.next step _ _ _ (step3 b) (run4 _)
 #print axioms run3
 theorem run2 (b : Back) : loop step (it 2,b) = ok (fin2 b) := by
-  rw [loop.eq_def]
-  change (match body (it 2) b with
-    | ok (.cont s) => loop step s
-    | ok (.done v) => ok v
-    | fail e => fail e
-    | div => div) = _
-  rw [step2]
-  exact run3 _
+  exact SDY_Loop.next step _ _ _ (step2 b) (run3 _)
 #print axioms run2
 theorem run1 (b : Back) : loop step (it 1,b) = ok (fin1 b) := by
-  rw [loop.eq_def]
-  change (match body (it 1) b with
-    | ok (.cont s) => loop step s
-    | ok (.done v) => ok v
-    | fail e => fail e
-    | div => div) = _
-  rw [step1]
-  exact run2 _
+  exact SDY_Loop.next step _ _ _ (step1 b) (run2 _)
 #print axioms run1
 theorem run0 (b : Back) : loop step (it 0,b) = ok (fin0 b) := by
-  rw [loop.eq_def]
-  change (match body (it 0) b with
-    | ok (.cont s) => loop step s
-    | ok (.done v) => ok v
-    | fail e => fail e
-    | div => div) = _
-  rw [step0]
-  exact run1 _
+  exact SDY_Loop.next step _ _ _ (step0 b) (run1 _)
 #print axioms run0
 theorem emitted : verifier.update_residue_row row0 power 1#u32 true = ok output := by
   unfold verifier.update_residue_row
