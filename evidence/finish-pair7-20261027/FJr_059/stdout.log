@@ -1,0 +1,31 @@
+FJr_DualFold16.lean:21:2: error: Tactic `apply` failed: could not unify the conclusion of `Finset.sum_congr rfl`
+  Finset.sum ?m.133 ?m.130 = Finset.sum ?m.133 ?m.131
+with the goal
+  RoundPairing.quarter *
+      ∑ i_1,
+        RoundPairing.quarter * (raw (childIndex (childIndex i s) i_1) * a0 ^ ((4 - ↑i_1) % 4)) * a1 ^ ((4 - ↑s) % 4) =
+    ∑ x,
+      RoundPairing.quarter * RoundPairing.quarter *
+        (raw (childIndex (childIndex i ⟨(4 * ↑s + ↑x) / 4, ⋯⟩) ⟨(4 * ↑s + ↑x) % 4, ⋯⟩) *
+            a0 ^ FJc_LowModel.perm ((4 * ↑s + ↑x) % 4) *
+          a1 ^ FJc_LowModel.perm ((4 * ↑s + ↑x) / 4))
+
+Note: The full type of `Finset.sum_congr rfl` is
+  (∀ x ∈ ?m.133, ?m.130 x = ?m.131 x) → Finset.sum ?m.133 ?m.130 = Finset.sum ?m.133 ?m.131
+
+E : Type
+inst✝ : Field E
+raw : Fin 1024 → E
+a0 a1 : E
+i : Fin 64
+s : Fin 4
+a✝ : s ∈ Finset.univ
+⊢ RoundPairing.quarter *
+      ∑ i_1,
+        RoundPairing.quarter * (raw (childIndex (childIndex i s) i_1) * a0 ^ ((4 - ↑i_1) % 4)) * a1 ^ ((4 - ↑s) % 4) =
+    ∑ x,
+      RoundPairing.quarter * RoundPairing.quarter *
+        (raw (childIndex (childIndex i ⟨(4 * ↑s + ↑x) / 4, ⋯⟩) ⟨(4 * ↑s + ↑x) % 4, ⋯⟩) *
+            a0 ^ FJc_LowModel.perm ((4 * ↑s + ↑x) % 4) *
+          a1 ^ FJc_LowModel.perm ((4 * ↑s + ↑x) / 4))
+'AspisR1.FJr_DualFold16.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

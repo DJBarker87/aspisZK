@@ -1,0 +1,157 @@
+FJr_CircleOuterCell.lean:87:70: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+FJr_CircleOuterCell.lean:89:8: error: unsolved goals
+case pos
+z : Z
+cz : CanonZ z
+iter cursor : FIo_RangeNext.Range
+factors next : Factors
+hf : canon factors
+he : ↑iter.end = 2
+run✝⁷ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done factors)
+        | some k => do
+          let scp ← Array.index_usize z k
+          let q ← scp.x.mul scp.y
+          let i ← lift (Usize.wrapping_add 3#usize k)
+          let (a, index_mut_back) ← Array.index_mut_usize factors i
+          let a1 ← a.update 0#usize (Array.make 4#usize [FIn_WeightsExtract.field.QM31.ONE, scp.y, scp.x, q] ⋯)
+          let x ← FIn_WeightsExtract.double scp.x
+          have a2 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize :=
+            index_mut_back a1
+          let factors1 ← FIn_WeightsExtract.weights_new_loop1_loop0 { start := 1#usize, «end» := 5#usize } a2 k x
+          ok (cont (iter1, factors1))) =
+    ok (cont (cursor, next))
+k : UScalar UScalarTy.Usize
+p : FIn_WeightsExtract.circle.SecureCirclePoint
+hp : Array.index_usize z k = ok p
+q : FIn_WeightsExtract.field.QM31
+hq : p.x.mul p.y = ok q
+row : Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize
+back :
+  Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize →
+    Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize
+updated : Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize
+hu : row.update 0#usize (Array.make 4#usize [FIn_WeightsExtract.field.QM31.ONE, p.y, p.x, q] ⋯) = ok updated
+x : FIn_WeightsExtract.field.QM31
+hx : FIn_WeightsExtract.double p.x = ok x
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some k, cursor)
+run✝⁶ :
+  (let (o, iter1) := (some k, cursor)
+    match o with
+    | none => ok (done factors)
+    | some k => do
+      let scp ← Array.index_usize z k
+      let q ← scp.x.mul scp.y
+      let i ← lift (Usize.wrapping_add 3#usize k)
+      let (a, index_mut_back) ← Array.index_mut_usize factors i
+      let a1 ← a.update 0#usize (Array.make 4#usize [FIn_WeightsExtract.field.QM31.ONE, scp.y, scp.x, q] ⋯)
+      let x ← FIn_WeightsExtract.double scp.x
+      have a2 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize :=
+        index_mut_back a1
+      let factors1 ← FIn_WeightsExtract.weights_new_loop1_loop0 { start := 1#usize, «end» := 5#usize } a2 k x
+      ok (cont (iter1, factors1))) =
+    ok (cont (cursor, next))
+run✝⁵ :
+  (do
+      let q ← p.x.mul p.y
+      let i ← lift (Usize.wrapping_add 3#usize k)
+      let (a, index_mut_back) ← Array.index_mut_usize factors i
+      let a1 ← a.update 0#usize (Array.make 4#usize [FIn_WeightsExtract.field.QM31.ONE, p.y, p.x, q] ⋯)
+      let x ← FIn_WeightsExtract.double p.x
+      have a2 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize :=
+        index_mut_back a1
+      let factors1 ← FIn_WeightsExtract.weights_new_loop1_loop0 { start := 1#usize, «end» := 5#usize } a2 k x
+      ok (cont (cursor, factors1))) =
+    ok (cont (cursor, next))
+run✝⁴ :
+  (do
+      let i ← lift (Usize.wrapping_add 3#usize k)
+      let (a, index_mut_back) ← Array.index_mut_usize factors i
+      let a1 ← a.update 0#usize (Array.make 4#usize [FIn_WeightsExtract.field.QM31.ONE, p.y, p.x, q] ⋯)
+      let x ← FIn_WeightsExtract.double p.x
+      have a2 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize :=
+        index_mut_back a1
+      let factors1 ← FIn_WeightsExtract.weights_new_loop1_loop0 { start := 1#usize, «end» := 5#usize } a2 k x
+      ok (cont (cursor, factors1))) =
+    ok (cont (cursor, next))
+run✝³ :
+  (let (a, index_mut_back) := (row, back)
+    do
+    let a1 ← a.update 0#usize (Array.make 4#usize [FIn_WeightsExtract.field.QM31.ONE, p.y, p.x, q] ⋯)
+    let x ← FIn_WeightsExtract.double p.x
+    have a2 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize :=
+      index_mut_back a1
+    let factors1 ← FIn_WeightsExtract.weights_new_loop1_loop0 { start := 1#usize, «end» := 5#usize } a2 k x
+    ok (cont (cursor, factors1))) =
+    ok (cont (cursor, next))
+run✝² :
+  (do
+      let x ← FIn_WeightsExtract.double p.x
+      have a2 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize := back updated
+      let factors1 ← FIn_WeightsExtract.weights_new_loop1_loop0 { start := 1#usize, «end» := 5#usize } a2 k x
+      ok (cont (cursor, factors1))) =
+    ok (cont (cursor, next))
+run✝¹ :
+  (have a2 := back updated;
+    do
+    let factors1 ← FIn_WeightsExtract.weights_new_loop1_loop0 { start := 1#usize, «end» := 5#usize } a2 k x
+    ok (cont (cursor, factors1))) =
+    ok (cont (cursor, next))
+hlast : FIn_WeightsExtract.weights_new_loop1_loop0 { start := 1#usize, «end» := 5#usize } (back updated) k x = ok next
+run✝ : ok (cont (cursor, next)) = ok (cont (cursor, next))
+hidx : lift (Usize.wrapping_add 3#usize k) = ok (Usize.wrapping_add 3#usize k)
+hr : Array.index_mut_usize factors (Usize.wrapping_add 3#usize k) = ok (row, back)
+run :
+  (do
+      let (a, index_mut_back) ← Array.index_mut_usize factors (Usize.wrapping_add 3#usize k)
+      let a1 ← a.update 0#usize (Array.make 4#usize [FIn_WeightsExtract.field.QM31.ONE, p.y, p.x, q] ⋯)
+      let x ← FIn_WeightsExtract.double p.x
+      have a2 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize :=
+        index_mut_back a1
+      let factors1 ← FIn_WeightsExtract.weights_new_loop1_loop0 { start := 1#usize, «end» := 5#usize } a2 k x
+      ok (cont (cursor, factors1))) =
+    ok (cont (cursor, next))
+pr : k = iter.start ∧ cursor.end = iter.end ∧ ↑cursor.start = ↑iter.start + 1 ∧ ↑iter.start < ↑iter.end
+hk : ↑k < 2
+cp : Canon p.x ∧ Canon p.y
+vq : Canon q ∧ decode q = decode p.x * decode p.y
+vx : Canon x ∧ decode x = FJd_LoopReference.double (decode p.x)
+dig : Std.Array FIn_WeightsExtract.field.QM31 4#usize :=
+  Array.make 4#usize [FIn_WeightsExtract.field.QM31.ONE, p.y, p.x, q] ⋯
+cd : FJc_WeightArray.canonical dig
+vd : ∀ (s : Fin 4), FJc_WeightArray.value dig ↑s = FJr_CircleInnerCell.quad (decode p.y) (decode p.x) s
+readRow : Array.index_usize factors (Usize.wrapping_add 3#usize k) = ok row
+eb : back = Std.Array.set factors (Usize.wrapping_add 3#usize k)
+cr : FJf_FactorArray.rowCanon row
+cu : FJf_FactorArray.rowCanon updated
+cb : canon (back updated)
+inner : FJr_CircleInnerLoop.Post (decode x) (back updated) (3 + ↑k) next
+j d : ℕ
+s : Fin 4
+hj : 3 + ↑k = j
+hd : ¬d = 0
+hd5 : d < 5
+⊢ (if 1 ≤ d ∧ True then
+      FJr_CircleInnerCell.quad (FJr_CircleInnerLoop.advance (FJd_LoopReference.double (decode p.x)) (d - 1))
+        (FJd_LoopReference.double (FJr_CircleInnerLoop.advance (FJd_LoopReference.double (decode p.x)) (d - 1))) s
+    else FJf_FactorArray.value (back updated) j d ↑s) =
+    FJr_CircleInnerCell.quad (FJr_CircleInnerLoop.advance (FJd_LoopReference.double (decode p.x)) (d - 1))
+      (FJd_LoopReference.double (FJr_CircleInnerLoop.advance (FJd_LoopReference.double (decode p.x)) (d - 1))) s
+FJr_CircleOuterCell.lean:89:45: warning: This simp argument is unused:
+  if_pos (by omega : 1 ≤ d)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵j̵,̵h̵d̵5̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵ ̵:̵ ̵1̵≤̵d̵)̵,̵d̵i̵g̵i̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲j̲,̲ ̲h̲d̲5̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲d̲i̲g̲i̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJr_CircleOuterCell.lean:90:28: warning: This simp argument is unused:
+  true_and
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵j̵,̵h̵d̵5̵,̵t̵r̵u̵e̵_̵a̵n̵d̵,̵a̵n̵d̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲j̲,̲ ̲h̲d̲5̲,̲ ̲a̲n̲d̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJr_CircleOuterCell.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

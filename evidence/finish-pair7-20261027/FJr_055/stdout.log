@@ -1,0 +1,16 @@
+FJr_InactiveRowIndex.lean:8:87: error: unsolved goals
+i : Fin 64
+s t : Fin 4
+hi : ↑i < 64
+hs : ↑s < 4
+ht : ↑t < 4
+h0 : ↑(childIndex (childIndex i s) t) % 4 = ↑t
+h1 : ↑(childIndex (childIndex i s) t) / 4 % 4 = ↑s
+h2 : ↑(childIndex (childIndex i s) t) / 16 % 4 = ↑i % 4
+h3 : ↑(childIndex (childIndex i s) t) / 64 % 4 = ↑i / 4 % 4
+h4 : ↑(childIndex (childIndex i s) t) / 256 % 4 = ↑i / 16
+low0 : (4 * ↑s + ↑t) % 4 = ↑t
+low1 : (4 * ↑s + ↑t) / 4 = ↑s
+⊢ 64 * ↑t + 256 * ↑s + 16 * (↑i % 4) + ↑i / 4 % 4 + 4 * (↑i / 16) =
+    64 * ↑t + 256 * ↑s + ↑i % 4 * 16 + ↑i / 4 % 4 + 4 * (↑i / 16)
+'AspisR1.FJr_InactiveRowIndex.value' depends on axioms: [propext, sorryAx, Quot.sound]

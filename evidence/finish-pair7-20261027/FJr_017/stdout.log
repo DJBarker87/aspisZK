@@ -1,0 +1,108 @@
+FJr_LibraContraction.lean:60:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑parts)[4]?
+in the target expression
+  (↑parts)[↑4#usize]? = some old
+
+f : Slice U8
+libra : Std.Array NE 4#usize
+cl : FIo_ArrayCanon.Holds libra
+iter : FIo_RangeNext.Range
+parts : Std.Array NE 7#usize
+old0 : NE
+cold : FIo_WideValues.Canon old0
+he : ↑iter.end = 4
+hs : ↑iter.start ≤ 4
+value : FIp_ArrayValue.value parts 4 = sumPrefix f libra ↑iter.start
+hslot : (↑parts)[4]? = some old0
+cursor : core.ops.range.Range (UScalar UScalarTy.Usize)
+j : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, parts).1 = ok (some j, cursor)
+old : FIo_Native.aspis_core.field.wide_exact.WideExact
+hold : (iter, parts).2.index_usize 4#usize = ok old
+fv : FIo_Native.aspis_core.field.wide_exact.WideExact
+hfv : FIo_Native.weights.field f j = ok fv
+lv : FIo_Native.aspis_core.field.wide_exact.WideExact
+hlv : libra.index_usize j = ok lv
+product : FIo_Native.aspis_core.field.wide_exact.WideExact
+hproduct : fv.mul lv = ok product
+sum : FIo_Native.aspis_core.field.wide_exact.WideExact
+hsum : old.add product = ok sum
+updated : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize
+hupdated : (iter, parts).2.update 4#usize sum = ok updated
+run✝⁶ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, parts).1
+      match o with
+        | none => ok (done (iter, parts).2)
+        | some j => do
+          let we ← (iter, parts).2.index_usize 4#usize
+          let we1 ← FIo_Native.weights.field f j
+          let we2 ← libra.index_usize j
+          let we3 ← we1.mul we2
+          let we4 ← we.add we3
+          let a ← (iter, parts).2.update 4#usize we4
+          ok (cont (iter1, a))) =
+    ok (cont (cursor, updated))
+run✝⁵ :
+  (let (o, iter1) := (some j, cursor)
+    match o with
+    | none => ok (done (iter, parts).2)
+    | some j => do
+      let we ← (iter, parts).2.index_usize 4#usize
+      let we1 ← FIo_Native.weights.field f j
+      let we2 ← libra.index_usize j
+      let we3 ← we1.mul we2
+      let we4 ← we.add we3
+      let a ← (iter, parts).2.update 4#usize we4
+      ok (cont (iter1, a))) =
+    ok (cont (cursor, updated))
+run✝⁴ :
+  (do
+      let we1 ← FIo_Native.weights.field f j
+      let we2 ← libra.index_usize j
+      let we3 ← we1.mul we2
+      let we4 ← old.add we3
+      let a ← (iter, parts).2.update 4#usize we4
+      ok (cont (cursor, a))) =
+    ok (cont (cursor, updated))
+run✝³ :
+  (do
+      let we2 ← libra.index_usize j
+      let we3 ← fv.mul we2
+      let we4 ← old.add we3
+      let a ← (iter, parts).2.update 4#usize we4
+      ok (cont (cursor, a))) =
+    ok (cont (cursor, updated))
+run✝² :
+  (do
+      let we3 ← fv.mul lv
+      let we4 ← old.add we3
+      let a ← (iter, parts).2.update 4#usize we4
+      ok (cont (cursor, a))) =
+    ok (cont (cursor, updated))
+run✝¹ :
+  (do
+      let we4 ← old.add product
+      let a ← (iter, parts).2.update 4#usize we4
+      ok (cont (cursor, a))) =
+    ok (cont (cursor, updated))
+run✝ :
+  (do
+      let a ← (iter, parts).2.update 4#usize sum
+      ok (cont (cursor, a))) =
+    ok (cont (cursor, updated))
+run : ok (cont (cursor, updated)) = ok (cont (cursor, updated))
+pr : j = iter.start ∧ cursor.end = iter.end ∧ ↑cursor.start = ↑iter.start + 1 ∧ ↑iter.start < ↑iter.end
+slot : (↑parts)[↑4#usize]? = some old
+⊢ old = old0
+FJr_LibraContraction.lean:69:12: error(lean.unknownIdentifier): Unknown identifier `FJf_ArraySlots.update_slot`
+FJr_LibraContraction.lean:90:67: warning: This simp argument is unused:
+  sumPrefix
+
+Hint: Omit it from the simp argument list.
+  simp only [FIp_ArrayValue.value, ̲zero, ̲FIo_Constants.zero.2,̵s̵u̵m̵P̵r̵e̵f̵i̵x̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJr_LibraContraction.sumPrefix_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJr_LibraContraction.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJr_LibraContraction.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
