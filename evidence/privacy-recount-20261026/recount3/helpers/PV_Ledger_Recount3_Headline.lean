@@ -1,0 +1,6 @@
+import R1Z.PrivacyR1HeadlineDeployedReal
+set_option pp.explicit true
+#check @R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
+#print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
+#check @R1Z.PrivacyR1HeadlineDeployedReal.old_refinement_implies
+#print axioms R1Z.PrivacyR1HeadlineDeployedReal.old_refinement_implies

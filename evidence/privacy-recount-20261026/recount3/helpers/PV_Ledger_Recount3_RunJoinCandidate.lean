@@ -1,0 +1,7 @@
+import R1Z.PV_RunJoin_TrustLedger
+set_option pp.explicit true
+#print R1Z.PV_RunJoin_TrustLedger.RemainingProofs
+#check @R1Z.PV_RunJoin_TrustLedger.candidate_proofs
+#print axioms R1Z.PV_RunJoin_TrustLedger.candidate_proofs
+#check @R1Z.PV_RunJoin_TrustLedger.privacy_headline_deployed_candidate
+#print axioms R1Z.PV_RunJoin_TrustLedger.privacy_headline_deployed_candidate
