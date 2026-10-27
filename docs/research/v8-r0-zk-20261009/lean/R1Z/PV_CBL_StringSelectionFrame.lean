@@ -1,9 +1,9 @@
 import R1Z.PV_CBL_CallbackBundle
 open Aeneas Aeneas.Std Result
+noncomputable section
 namespace R1Z.PV_CBL_StringSelectionFrame
 open ProverRwFull
 set_option autoImplicit false
-noncomputable section
 theorem op25 (b : ExternalTypes) (ops : @ExternalFuns (PV_CBL_CallbackBundle.StringTypes b))
     (s : String) :
     @ExternalFuns.op25 (PV_CBL_CallbackBundle.StringTypes b)

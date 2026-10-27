@@ -5,10 +5,18 @@ root=Path(__file__).resolve().parents[2];stage=sys.argv[1]; variant=sys.argv[2] 
 assert stage in ('charon','aeneas')
 base='/home/dombarker/project-offloads/codex-pv-cblib-20261027';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy';pinned='/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools'
 entries={
+'op217-mono':('pv_cblib_source::sha_default','pv_cblib_source::sha_default+digest::core_api::wrapper::_::default+digest::core_api::ct_variable::_::default+sha2::core_api::_::new+block_buffer::_::default+generic_array::_::default','PV_CBL_Op217Mono'),
+'fallback-block-opt':('pv_cblib_source::sha_fallback_reference::extracted_block','pv_cblib_source::sha_fallback_reference::_+pv_cblib_source::sha_fallback_consts::_','PV_CBL_FallbackBlock'),
+'op36-retain-opt':('pv_cblib_source::array_retained_reference','pv_cblib_source::array_retained_reference+pv_cblib_source::array_reference','PV_CBL_ArrayRetainedReference'),
+'op33-retain-opt':('pv_cblib_source::pop_retained_reference','pv_cblib_source::pop_retained_reference','PV_CBL_PopRetainedReference'),
+'fallback-round-opt':('pv_cblib_source::sha_fallback_reference::extracted_round','pv_cblib_source::sha_fallback_reference::extracted_round+pv_cblib_source::sha_fallback_reference::sha256_digest_round_x2','PV_CBL_FallbackRound'),
+'fallback-schedule-opt':('pv_cblib_source::sha_fallback_reference::extracted_schedule','pv_cblib_source::sha_fallback_reference::_','PV_CBL_FallbackSchedule'),
+'sha-round-opt':('sha2::sha256::soft::sha256_digest_round_x2','sha2::sha256::soft::sha256_digest_round_x2','PV_CBL_ShaRound'),
+'sha-schedule-opt':('sha2::sha256::soft::schedule','sha2::sha256::soft::schedule+sha2::sha256::soft::sha256msg1+sha2::sha256::soft::sha256msg2+sha2::sha256::soft::sha256load+sha2::sha256::soft::shl+sha2::sha256::soft::shr+sha2::sha256::soft::xor+sha2::sha256::soft::or+sha2::sha256::soft::add','PV_CBL_ShaSchedule'),
 'op30-ref-new-opt':('pv_cblib_source::string_capacity_reference','pv_cblib_source::string_capacity_reference+alloc::string::_::new','PV_CBL_StringNewReference'),
 'join-mut-opt':('pv_cblib_source::join_mut_reference','pv_cblib_source::join_mut_reference','PV_CBL_JoinMutReference'),
-'sha-dispatch-opt':('pv_cblib_source::sha_update_blocks','sha2::sha256::compress256+sha2::sha256::x86::compress+sha2::sha256::x86::digest_blocks+sha2::sha256::soft::_','PV_CBL_ShaDispatch'),
-'sha-fallback-opt':('pv_cblib_source::sha_update_blocks','sha2::sha256::soft::_+sha2::consts::K32X4+sha2::consts::BLOCK_LEN','PV_CBL_ShaFallback'),
+'sha-dispatch-opt':('sha2::sha256::compress256','sha2::sha256::compress256+sha2::sha256::x86::_+sha2::sha256::soft::_','PV_CBL_ShaDispatch'),
+'sha-fallback-opt':('sha2::sha256::soft::compress','sha2::sha256::soft::_+sha2::consts::K32X4+sha2::consts::BLOCK_LEN','PV_CBL_ShaFallback'),
 'op30-ref-opt':('pv_cblib_source::string_capacity_reference','pv_cblib_source::string_capacity_reference','PV_CBL_StringCapacityReference'),
 'string-owned-opt':('pv_cblib_source::string_owned_reference','pv_cblib_source::string_owned_reference','PV_CBL_StringOwnedReference'),
 'join-ref-opt':('pv_cblib_source::join_bytes_reference','pv_cblib_source::join_bytes_reference','PV_CBL_JoinBytesReferenceOpt'),

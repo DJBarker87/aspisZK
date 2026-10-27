@@ -10,8 +10,9 @@ mod pv_cblib_library_checks {
             compress256(&mut c.state,core::slice::from_ref(b));
         }
     }
-    #[kani::proof]
-    #[kani::unwind(70)]
+    // Historical arithmetic harness: retained as preparation evidence only.
+    // Ruling (k): never execute this with Kani.
+    #[allow(dead_code)]
     fn op208_one_block() {
         let state:[u32;8]=kani::any();let count:u64=kani::any();
         let bytes:[u8;64]=kani::any();

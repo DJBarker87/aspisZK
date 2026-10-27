@@ -550,3 +550,30 @@ mod pv_cblib_library_checks {
         }
     }
 }
+
+#[cfg(kani)]
+mod pv_cblib_resume_checks {
+    use super::*;
+    #[kani::proof]
+    #[kani::unwind(3)]
+    fn pop_error_single() {
+        let tag:u8=kani::any();kani::assume(tag<=16);
+        let e=match tag {
+            0=>Error::IndexOutOfRange,1=>Error::WrongLength,2=>Error::ZeroDenominator,
+            3=>Error::Allocation,4=>Error::NonCanonical,5=>Error::WrongField,
+            6=>Error::InvalidPoints,7=>Error::QuotientNotInImage,8=>Error::RankDeficient,
+            9=>Error::Parse,10=>Error::Semantic,11=>Error::Schedule,12=>Error::Sampler,
+            13=>Error::Commitment,14=>Error::Authentication,15=>Error::V1,_=>Error::V2,
+        };
+        let present:bool=kani::any();
+        let mut v:Vec<Result<Word,Error>>=Vec::new();
+        if present {v.push(Err(e));}
+        let result=v.pop();
+        match (present,result) {
+            (false,None)=>(),
+            (true,Some(Err(x)))=>assert_eq!(x,e),
+            _=>unreachable!(),
+        }
+        assert_eq!(v.len(),0);
+    }
+}
