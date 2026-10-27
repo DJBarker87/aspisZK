@@ -1,0 +1,325 @@
+JGo_TX2_WeightRow0.lean:20:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  TAU.index_usize 0#usize
+in the target expression
+  (let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 5#usize })
+    match o with
+    | none => ok (done factors00)
+    | some d => do
+      let i ← TAU.index_usize d
+      let i1 ← lift (Usize.wrapping_mul 2#usize i)
+      let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+      let a ← points.index_usize 0#usize
+      let a1 ← a.index_usize i2
+      let i3 ← lift (Usize.wrapping_mul 2#usize i)
+      let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+      let b ← a.index_usize i4
+      let q ← field.QM31.ONE.sub a1
+      let q1 ← field.QM31.ONE.sub b
+      let q2 ← q.mul q1
+      let q3 ← a1.mul q1
+      let q4 ← q.mul b
+      let q5 ← a1.mul b
+      let (a2, index_mut_back) ← Array.index_mut_usize factors00 0#usize
+      let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+      ok (cont (iter1, index_mut_back a3))) =
+    ok (cont ({ start := 1#usize, «end» := 5#usize }, factors01))
+
+ix :
+  ↑(Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize 3#usize)) = 9 - 2 * ↑3#usize ∧
+    ↑(Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize 3#usize)) = 8 - 2 * ↑3#usize
+ix9 : Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize 3#usize) = 3#usize
+ix8 : Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize 3#usize) = 2#usize
+⊢ (let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 5#usize })
+    match o with
+    | none => ok (done factors00)
+    | some d => do
+      let i ← TAU.index_usize d
+      let i1 ← lift (Usize.wrapping_mul 2#usize i)
+      let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+      let a ← points.index_usize 0#usize
+      let a1 ← a.index_usize i2
+      let i3 ← lift (Usize.wrapping_mul 2#usize i)
+      let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+      let b ← a.index_usize i4
+      let q ← field.QM31.ONE.sub a1
+      let q1 ← field.QM31.ONE.sub b
+      let q2 ← q.mul q1
+      let q3 ← a1.mul q1
+      let q4 ← q.mul b
+      let q5 ← a1.mul b
+      let (a2, index_mut_back) ← Array.index_mut_usize factors00 0#usize
+      let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+      ok (cont (iter1, index_mut_back a3))) =
+    ok (cont ({ start := 1#usize, «end» := 5#usize }, factors01))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGo_TX2_WeightRow0.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGo_TX2_WeightRow0.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  TAU.index_usize 1#usize
+in the target expression
+  (let (o, iter1) := (some 1#usize, { start := 2#usize, «end» := 5#usize })
+    match o with
+    | none => ok (done factors01)
+    | some d => do
+      let i ← TAU.index_usize d
+      let i1 ← lift (Usize.wrapping_mul 2#usize i)
+      let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+      let a ← points.index_usize 0#usize
+      let a1 ← a.index_usize i2
+      let i3 ← lift (Usize.wrapping_mul 2#usize i)
+      let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+      let b ← a.index_usize i4
+      let q ← field.QM31.ONE.sub a1
+      let q1 ← field.QM31.ONE.sub b
+      let q2 ← q.mul q1
+      let q3 ← a1.mul q1
+      let q4 ← q.mul b
+      let q5 ← a1.mul b
+      let (a2, index_mut_back) ← Array.index_mut_usize factors01 0#usize
+      let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+      ok (cont (iter1, index_mut_back a3))) =
+    ok (cont ({ start := 2#usize, «end» := 5#usize }, factors02))
+
+ix :
+  ↑(Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize 4#usize)) = 9 - 2 * ↑4#usize ∧
+    ↑(Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize 4#usize)) = 8 - 2 * ↑4#usize
+ix9 : Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize 4#usize) = 1#usize
+ix8 : Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize 4#usize) = 0#usize
+⊢ (let (o, iter1) := (some 1#usize, { start := 2#usize, «end» := 5#usize })
+    match o with
+    | none => ok (done factors01)
+    | some d => do
+      let i ← TAU.index_usize d
+      let i1 ← lift (Usize.wrapping_mul 2#usize i)
+      let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+      let a ← points.index_usize 0#usize
+      let a1 ← a.index_usize i2
+      let i3 ← lift (Usize.wrapping_mul 2#usize i)
+      let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+      let b ← a.index_usize i4
+      let q ← field.QM31.ONE.sub a1
+      let q1 ← field.QM31.ONE.sub b
+      let q2 ← q.mul q1
+      let q3 ← a1.mul q1
+      let q4 ← q.mul b
+      let q5 ← a1.mul b
+      let (a2, index_mut_back) ← Array.index_mut_usize factors01 0#usize
+      let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+      ok (cont (iter1, index_mut_back a3))) =
+    ok (cont ({ start := 2#usize, «end» := 5#usize }, factors02))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGo_TX2_WeightRow0.step1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGo_TX2_WeightRow0.lean:50:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  TAU.index_usize 2#usize
+in the target expression
+  (let (o, iter1) := (some 2#usize, { start := 3#usize, «end» := 5#usize })
+    match o with
+    | none => ok (done factors02)
+    | some d => do
+      let i ← TAU.index_usize d
+      let i1 ← lift (Usize.wrapping_mul 2#usize i)
+      let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+      let a ← points.index_usize 0#usize
+      let a1 ← a.index_usize i2
+      let i3 ← lift (Usize.wrapping_mul 2#usize i)
+      let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+      let b ← a.index_usize i4
+      let q ← field.QM31.ONE.sub a1
+      let q1 ← field.QM31.ONE.sub b
+      let q2 ← q.mul q1
+      let q3 ← a1.mul q1
+      let q4 ← q.mul b
+      let q5 ← a1.mul b
+      let (a2, index_mut_back) ← Array.index_mut_usize factors02 0#usize
+      let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+      ok (cont (iter1, index_mut_back a3))) =
+    ok (cont ({ start := 3#usize, «end» := 5#usize }, factors03))
+
+ix :
+  ↑(Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize 2#usize)) = 9 - 2 * ↑2#usize ∧
+    ↑(Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize 2#usize)) = 8 - 2 * ↑2#usize
+ix9 : Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize 2#usize) = 5#usize
+ix8 : Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize 2#usize) = 4#usize
+⊢ (let (o, iter1) := (some 2#usize, { start := 3#usize, «end» := 5#usize })
+    match o with
+    | none => ok (done factors02)
+    | some d => do
+      let i ← TAU.index_usize d
+      let i1 ← lift (Usize.wrapping_mul 2#usize i)
+      let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+      let a ← points.index_usize 0#usize
+      let a1 ← a.index_usize i2
+      let i3 ← lift (Usize.wrapping_mul 2#usize i)
+      let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+      let b ← a.index_usize i4
+      let q ← field.QM31.ONE.sub a1
+      let q1 ← field.QM31.ONE.sub b
+      let q2 ← q.mul q1
+      let q3 ← a1.mul q1
+      let q4 ← q.mul b
+      let q5 ← a1.mul b
+      let (a2, index_mut_back) ← Array.index_mut_usize factors02 0#usize
+      let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+      ok (cont (iter1, index_mut_back a3))) =
+    ok (cont ({ start := 3#usize, «end» := 5#usize }, factors03))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGo_TX2_WeightRow0.step2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGo_TX2_WeightRow0.lean:65:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  TAU.index_usize 3#usize
+in the target expression
+  (let (o, iter1) := (some 3#usize, { start := 4#usize, «end» := 5#usize })
+    match o with
+    | none => ok (done factors03)
+    | some d => do
+      let i ← TAU.index_usize d
+      let i1 ← lift (Usize.wrapping_mul 2#usize i)
+      let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+      let a ← points.index_usize 0#usize
+      let a1 ← a.index_usize i2
+      let i3 ← lift (Usize.wrapping_mul 2#usize i)
+      let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+      let b ← a.index_usize i4
+      let q ← field.QM31.ONE.sub a1
+      let q1 ← field.QM31.ONE.sub b
+      let q2 ← q.mul q1
+      let q3 ← a1.mul q1
+      let q4 ← q.mul b
+      let q5 ← a1.mul b
+      let (a2, index_mut_back) ← Array.index_mut_usize factors03 0#usize
+      let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+      ok (cont (iter1, index_mut_back a3))) =
+    ok (cont ({ start := 4#usize, «end» := 5#usize }, factors04))
+
+ix :
+  ↑(Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize 0#usize)) = 9 - 2 * ↑0#usize ∧
+    ↑(Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize 0#usize)) = 8 - 2 * ↑0#usize
+ix9 : Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize 0#usize) = 9#usize
+ix8 : Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize 0#usize) = 8#usize
+⊢ (let (o, iter1) := (some 3#usize, { start := 4#usize, «end» := 5#usize })
+    match o with
+    | none => ok (done factors03)
+    | some d => do
+      let i ← TAU.index_usize d
+      let i1 ← lift (Usize.wrapping_mul 2#usize i)
+      let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+      let a ← points.index_usize 0#usize
+      let a1 ← a.index_usize i2
+      let i3 ← lift (Usize.wrapping_mul 2#usize i)
+      let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+      let b ← a.index_usize i4
+      let q ← field.QM31.ONE.sub a1
+      let q1 ← field.QM31.ONE.sub b
+      let q2 ← q.mul q1
+      let q3 ← a1.mul q1
+      let q4 ← q.mul b
+      let q5 ← a1.mul b
+      let (a2, index_mut_back) ← Array.index_mut_usize factors03 0#usize
+      let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+      ok (cont (iter1, index_mut_back a3))) =
+    ok (cont ({ start := 4#usize, «end» := 5#usize }, factors04))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGo_TX2_WeightRow0.step3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGo_TX2_WeightRow0.lean:80:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  TAU.index_usize 4#usize
+in the target expression
+  (let (o, iter1) := (some 4#usize, { start := 5#usize, «end» := 5#usize })
+    match o with
+    | none => ok (done factors04)
+    | some d => do
+      let i ← TAU.index_usize d
+      let i1 ← lift (Usize.wrapping_mul 2#usize i)
+      let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+      let a ← points.index_usize 0#usize
+      let a1 ← a.index_usize i2
+      let i3 ← lift (Usize.wrapping_mul 2#usize i)
+      let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+      let b ← a.index_usize i4
+      let q ← field.QM31.ONE.sub a1
+      let q1 ← field.QM31.ONE.sub b
+      let q2 ← q.mul q1
+      let q3 ← a1.mul q1
+      let q4 ← q.mul b
+      let q5 ← a1.mul b
+      let (a2, index_mut_back) ← Array.index_mut_usize factors04 0#usize
+      let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+      ok (cont (iter1, index_mut_back a3))) =
+    ok (cont ({ start := 5#usize, «end» := 5#usize }, factors05))
+
+ix :
+  ↑(Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize 1#usize)) = 9 - 2 * ↑1#usize ∧
+    ↑(Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize 1#usize)) = 8 - 2 * ↑1#usize
+ix9 : Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize 1#usize) = 7#usize
+ix8 : Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize 1#usize) = 6#usize
+⊢ (let (o, iter1) := (some 4#usize, { start := 5#usize, «end» := 5#usize })
+    match o with
+    | none => ok (done factors04)
+    | some d => do
+      let i ← TAU.index_usize d
+      let i1 ← lift (Usize.wrapping_mul 2#usize i)
+      let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+      let a ← points.index_usize 0#usize
+      let a1 ← a.index_usize i2
+      let i3 ← lift (Usize.wrapping_mul 2#usize i)
+      let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+      let b ← a.index_usize i4
+      let q ← field.QM31.ONE.sub a1
+      let q1 ← field.QM31.ONE.sub b
+      let q2 ← q.mul q1
+      let q3 ← a1.mul q1
+      let q4 ← q.mul b
+      let q5 ← a1.mul b
+      let (a2, index_mut_back) ← Array.index_mut_usize factors04 0#usize
+      let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+      ok (cont (iter1, index_mut_back a3))) =
+    ok (cont ({ start := 5#usize, «end» := 5#usize }, factors05))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGo_TX2_WeightRow0.step4' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

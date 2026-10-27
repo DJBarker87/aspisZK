@@ -78,6 +78,9 @@ open Aeneas Aeneas.Std Result ControlFlow FIn_WeightsExtract JGo_TX2_WeightData
 # Factor row bodies only, all small named calls; joins follow after focused checks.
 for k in range(5):
  s='''import JGo_TX2_WeightData
+import FJf_Coordinates
+import JGo_TX2_Range
+import Port3_Wrapping
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.JGo_TX2_WeightRow'''+str(k)+'''
@@ -89,6 +92,16 @@ open Aeneas Aeneas.Std Result ControlFlow FIn_WeightsExtract JGo_TX2_WeightData
    s+=f'''theorem step{d} : weights_new_loop0_loop0.body points {k}#usize
     {{start:={d}#usize,«end»:=5#usize}} factors{n:02}=
       ok (.cont ({{start:={d+1}#usize,«end»:=5#usize}},factors{n+1:02})) := by
+  have ix := FJf_Coordinates.indices {tau[d]}#usize (by decide)
+  have ix9 : Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize {tau[d]}#usize)={9-2*tau[d]}#usize :=
+    UScalar.eq_of_val_eq ix.1
+  have ix8 : Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize {tau[d]}#usize)={8-2*tau[d]}#usize :=
+    UScalar.eq_of_val_eq ix.2
+  unfold weights_new_loop0_loop0.body
+  rw [JGo_TX2_Range.next {d}#usize 5#usize {d+1}#usize (by decide) (by decide),bind_tc_ok]
+  dsimp only
+  rw [show Array.index_usize TAU {d}#usize=ok {tau[d]}#usize from by unfold TAU;rfl,bind_tc_ok]
+  simp only [lift,bind_tc_ok,ix9,ix8]
   with_unfolding_all rfl
 #print axioms step{d}
 '''
@@ -101,6 +114,12 @@ open Aeneas Aeneas.Std Result ControlFlow FIn_WeightsExtract JGo_TX2_WeightData
    s+=f"""theorem step{d} : weights_new_loop1_loop0.body {point}#usize
     {{start:={d}#usize,«end»:=5#usize}} factors{n:02} x{point}_{d}=
       ok (.cont ({{start:={d+1}#usize,«end»:=5#usize}},factors{n+1:02},x{point}_{d+1})) := by
+  have index : Usize.wrapping_add 3#usize {point}#usize={k}#usize :=
+    UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value 3#usize {point}#usize (by decide))
+  unfold weights_new_loop1_loop0.body
+  rw [JGo_TX2_Range.next {d}#usize 5#usize {d+1}#usize (by decide) (by decide),bind_tc_ok]
+  dsimp only
+  simp only [lift,bind_tc_ok,index]
   with_unfolding_all rfl
 #print axioms step{d}
 """

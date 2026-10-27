@@ -1,0 +1,33 @@
+JGo_TX2_WeightPoints.lean:28:2: error: Tactic `apply` failed: could not unify the conclusion of `JGo_TX2_LoopChain.source
+  (fun s => state_only_prefix.state_only_statement_points_loop.body alpha s.1 s.2.1 s.2.2) states 10 successor10`
+  Std.loop (fun s => state_only_prefix.state_only_statement_points_loop.body alpha s.1 s.2.1 s.2.2) (states 0) =
+    ok successor10
+with the goal
+  Std.loop
+      (fun x =>
+        match x with
+        | (iter1, successor1, carry1) =>
+          state_only_prefix.state_only_statement_points_loop.body alpha iter1 successor1 carry1)
+      ({ iter := { start := 0#usize, «end» := 10#usize } }, alpha, field.QM31.ONE) =
+    ok successor10
+
+Note: The full type of `JGo_TX2_LoopChain.source
+  (fun s => state_only_prefix.state_only_statement_points_loop.body alpha s.1 s.2.1 s.2.2) states 10 successor10` is
+  (∀ i < 10,
+      state_only_prefix.state_only_statement_points_loop.body alpha (states i).1 (states i).2.1 (states i).2.2 =
+        ok (cont (states (i + 1)))) →
+    state_only_prefix.state_only_statement_points_loop.body alpha (states 10).1 (states 10).2.1 (states 10).2.2 =
+        ok (done successor10) →
+      Std.loop (fun s => state_only_prefix.state_only_statement_points_loop.body alpha s.1 s.2.1 s.2.2) (states 0) =
+        ok successor10
+
+⊢ Std.loop
+      (fun x =>
+        match x with
+        | (iter1, successor1, carry1) =>
+          state_only_prefix.state_only_statement_points_loop.body alpha iter1 successor1 carry1)
+      ({ iter := { start := 0#usize, «end» := 10#usize } }, alpha, field.QM31.ONE) =
+    ok successor10
+'AspisR1.JGo_TX2_WeightPoints.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGo_TX2_WeightPoints.lean:46:8: error: (kernel) excessive memory consumption detected
+'AspisR1.JGo_TX2_WeightPoints.source' depends on axioms: [propext, Classical.choice, Quot.sound, source]
