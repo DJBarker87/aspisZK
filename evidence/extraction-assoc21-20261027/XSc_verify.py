@@ -9,6 +9,7 @@ for d in sorted(E.glob('XSc_L[0-9][0-9][0-9]')):
  if r['exit_status']!=0:failures.append(r['attempt']);continue
  for source,digest in r['source_hashes'].items():
   name=Path(source).name;local=E/name
+  if not local.exists():local=E/'XSc_dependencies'/(name+'.txt')
   if not local.exists():continue
   if hashlib.sha256(local.read_bytes()).hexdigest()!=digest:continue
   if name=='XSc_QueryNext.lean':continue # duplicate XRr fact, explicitly excluded

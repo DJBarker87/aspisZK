@@ -9,3 +9,5 @@ Checked packets reused, not re-proved:
 These native P6 packets do not identify oldAggregate.validate_record_fields with XRn kit automatically. The exact carrier equation in XRz_RecordTransport.source remains a required installed association, not a new trusted item. Full installed A8 includes chronological attempted digest calls on rejected paths.
 
 Checkpoint LPm was absent at initial research8a9c42855312521de840218ec3d6898824b8144f. At research71afa87dc52453a40541d8f3d664266346490f65 it is merged and CLOSED on S1S7S8StateProvenance: S2,64weights,next10,22 bounded queries,canonical saved fields and SAME model state. Immutable packet/source snapshots in XSc_LPm_*.txt; no re-proof or fresh LPm kernel replay. The whole A7 hybrid/kit/cohort checkpoint carrier/trace join remains OPEN. No live session A tree accessed.
+
+At researchb7ff20b5bc4, LPp circle_sample is CLOSED against the adopted R72 inverse/fallback helper owners. Exact immutable leaf packet saved as XSc_LPp_circle_leaf.md.txt. This does not identify XRn_Join_qpow with that helper or repair the historical qpow obstruction. No such universal identity is used.

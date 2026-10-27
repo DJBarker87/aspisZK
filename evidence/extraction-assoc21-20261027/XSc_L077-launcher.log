@@ -1,0 +1,33 @@
+{"attempt": "XSc_L077", "exit_status": 0, "wall_seconds": 1.1081299469806254, "peak_rss_kib": "2653072", "swaps": "0", "print_axioms": []}
+AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_limbs (limbs : Std.Array U32 8#usize) :
+  Result (Option AspisR1PrefixAggregateParser.field.wide_exact.WideExact)
+aspis_core.field.wide_exact.WideExact.from_limbs (xs : Std.Array U32 8#usize) : Result (Option XRn_Join_Wide)
+@[reducible] def XRn_Join_Wide : Type :=
+aspis_core.field.wide_exact.WideExact
+XSc_RecordFieldTypes.wide (x : OW) : XRn_Join_Wide
+def aspis_core.field.wide_exact.WideExact.from_limbs : Std.Array U32 8#usize → Result (Option XRn_Join_Wide) :=
+fun xs =>
+  ok
+    (if ((↑xs).all fun x => decide (x < 2147483647#u32)) = true then
+      some
+        { c0 := XRn_Join_FieldExternal.oldQ (XRn_Join_q (List.take 4 ↑xs)),
+  
+...
+AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_limbs (limbs : Std.Array U32 8#usize) :
+  Result (Option AspisR1PrefixAggregateParser.field.wide_exact.WideExact)
+aspis_core.field.wide_exact.WideExact.from_limbs (xs : Std.Array U32 8#usize) : Result (Option XRn_Join_Wide)
+@[reducible] def XRn_Join_Wide : Type :=
+aspis_core.field.wide_exact.WideExact
+XSc_RecordFieldTypes.wide (x : OW) : XRn_Join_Wide
+def aspis_core.field.wide_exact.WideExact.from_limbs : Std.Array U32 8#usize → Result (Option XRn_Join_Wide) :=
+fun xs =>
+  ok
+    (if ((↑xs).all fun x => decide (x < 2147483647#u32)) = true then
+      some
+        { c0 := XRn_Join_FieldExternal.oldQ (XRn_Join_q (List.take 4 ↑xs)),
+          c1 := XRn_Join_FieldExternal.oldQ (XRn_Join_q (List.drop 4 ↑xs)) }
+    else none)
+def Aeneas.Std.core.num.U32.from_le_bytes : Std.Array U8 4#usize → U32 :=
+fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map U8.bv ↑a))#uscalar
+
+Running as unit: run-re1c866bda70c4272b31a5c37df3acde6.scope; invocation ID: e5c74837a1dc4248a747335f36f260c9
