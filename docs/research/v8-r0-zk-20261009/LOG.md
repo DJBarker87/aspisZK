@@ -12173,3 +12173,31 @@ The merged candidate's three-ELF gate is re-run in the combined gate. runjoin18 
 worktree: restore the missing producer object through the env-J rebuild record, then the production
 nullifier loop, output-pair/append/bank validation, and the compiler-return equation. No shipped-code
 change is allowed in it. Rows removed outright: 0. Privacy target not yet established.
+
+## D303 (Stream B) 2026-10-27 17:08 UTC: batch 2 and pv-d188 merged into the candidate; batch2c, pv-alib and pv-reach launched
+
+batch2b used its 100-attempt budget. Its call-count projection is -12.5 us per proof, inside the stop
+threshold, and the three ELF pins match. It proves op250's exact canonical digit output, op249's
+carrier transport, and op252's field laws and statement-point totality. op251's extraction is refused
+(structured Drop in its closure) and op253's extraction crashes inside the extractor. No copy-equality
+or V256-V260 bridge is proved, so no row moves.
+
+pv-d188 used its 40-attempt budget over the Stream B emissions outside Stream A's twelve-leaf Funs.
+It inventories 92 mutation-bearing declarations in 24 files and finds 41 fresh projections in
+agreement. Row dispositions: 33 credit stands, 21 suspended (native/effect claims, none currently
+counted as closed), one body-scoped withdrawal qualification on V388. No closed Stream B callback row
+is withdrawn. Its read-only inspection confirms that batch 2's sampler copies use indexed writes and
+route around the defective low_base_p_digits body.
+
+Both branches were merged into the prover candidate (2c959082c9, aa27e73f99, pushed). Batch 1 and
+batch 2 had each redirected the same two powers call sites to its own identical prover-local copy;
+the lead kept batch 1's prover_powers (op254, gated) at the call sites and kept batch 2's modules
+alongside, so every resolved line comes from one parent. The gate example and devnet_spend
+type-check with their recipe features. The merged candidate's three-ELF gate runs in the combined
+gate. The pv-d188 worktree and branch were removed.
+
+New jobs: batch2c (op251/op253 Drop-free copies, op252 factoring, copy equalities and the V256-V260
+bridges; IDs 52000-52499); pv-alib (bucket-(a) rows V265 circle_sample, V184 Vec.pop, V233
+split_blocks; IDs 52500-52999); pv-reach (bucket-(a) rows V404/V405 per-fixture execution
+reachability over the extracted prover; IDs 44000-44499; no shipped-code change). With runjoin18
+and batch3, five slots are live. Rows removed outright: 0. Privacy target not yet established.
