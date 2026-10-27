@@ -26,3 +26,7 @@ Retained failed drafts: 011 parenthesis/precedence error in a new predicate;
 029 argument/rewrite orientation errors; 030 missing explicit SourceInputs
 argument. Replaced sources passed012/031. No timeout, memory kill, cap increase,
 new heartbeat/recursion setting or unchanged failing-source rerun.
+
+The specialised kernel comparison passed046. Its inherited final diagnostic
+label incorrectly said Pair;049 recompiles the audit with the correct terminal
+label. This changes no theorem, predicate, or comparison operation.

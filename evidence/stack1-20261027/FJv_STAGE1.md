@@ -11,5 +11,5 @@ matching consumer, FJu same-run first/chain consumer and FJs pair consumer
 operate on that witness and original parser/checkpoint operands. No law,
 source association or Shape is added to the top statement.
 
-Focused receipts 001–008 passed with only standard axioms; top/audits follow.
+Focused receipts 001–009 passed with only standard axioms. Top009 passed; KernelComparison010 verifies exact root type identity after two predicate replacements and the four nested native wrapper bodies. Stage commit: 4d1db68e72.
 No source/Rust/ELF changes or release-wide replay.
