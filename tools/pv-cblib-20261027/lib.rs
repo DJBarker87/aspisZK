@@ -96,3 +96,7 @@ pub fn array_result_reference(v: Vec<aspis_core::field::QM31>) -> Result<[aspis_
     while i<1024 {out[i]=v[i];i+=1;}
     Ok(out)
 }
+// Actual sha2 constructor supporting the op217 default dependency chain.
+pub fn sha_core_new(n: usize) -> Result<sha2::Sha256VarCore,digest::InvalidOutputSize> {
+    <sha2::Sha256VarCore as digest::core_api::VariableOutputCore>::new(n)
+}

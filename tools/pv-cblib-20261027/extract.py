@@ -5,6 +5,10 @@ root=Path(__file__).resolve().parents[2];stage=sys.argv[1]; variant=sys.argv[2] 
 assert stage in ('charon','aeneas')
 base='/home/dombarker/project-offloads/codex-pv-cblib-20261027';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy';pinned='/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools'
 entries={
+'join-ref-opt':('pv_cblib_source::join_bytes_reference','pv_cblib_source::join_bytes_reference','PV_CBL_JoinBytesReferenceOpt'),
+'op30-opt':('pv_cblib_source::string_capacity','alloc::string::_::with_capacity','PV_CBL_Op30Opt'),
+'op31-opt':('pv_cblib_source::string_push','alloc::string::_::push_str','PV_CBL_Op31Opt'),
+'op217-core-new-opt':('pv_cblib_source::sha_core_new','sha2::core_api::{impl digest::core_api::VariableOutputCore for sha2::core_api::Sha256VarCore}::new+sha2::core_api::Sha256VarCore+sha2::consts::H256_224+sha2::consts::H256_256','PV_CBL_ShaCoreNew'),
 'op33-exact-opt':('aspis_r1_cost_probe::host_commitment::pv_cblib_library_checks::pop_owned_reference','aspis_r1_cost_probe::host_commitment::pv_cblib_library_checks::pop_owned_reference+aspis_r1_cost_probe::host_commitment::pv_cblib_library_checks::copy_result_reference','PV_CBL_Op33ExactReference'),
 'op36-owned-opt':('pv_cblib_source::array_result_reference','pv_cblib_source::array_reference+pv_cblib_source::array_qm31_reference+pv_cblib_source::array_result_reference','PV_CBL_Op36OwnedReference'),
 'op36-full-opt':('pv_cblib_source::array_full_reference','pv_cblib_source::array_reference+pv_cblib_source::array_qm31_reference+pv_cblib_source::array_full_reference+aspis_core::field::QM31::ZERO+aspis_core::field::{impl core::clone::Clone for aspis_core::field::QM31}::clone+aspis_core::field::{impl core::clone::Clone for aspis_core::field::CM31}::clone+aspis_core::field::{impl core::clone::Clone for aspis_core::field::M31}::clone','PV_CBL_Op36FullReference'),
@@ -41,7 +45,7 @@ entries={
 }
 assert variant in entries
 m=re.match(r'op(\d+)',variant)
-op=int(m[1]) if m else (26 if variant=='join-ref' else 25)
+op=int(m[1]) if m else (26 if variant in ('join-ref','join-ref-opt') else 25)
 subprocess.run([sys.executable,str(root/'tools/pv-cblib-20261027/precheck.py'),str(op)],check=True)
 entry,include,namespace=entries[variant]
 name=stage+'-source-'+variant+'-'+(sys.argv[3] if len(sys.argv)>3 else '001')
