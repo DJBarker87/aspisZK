@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_PackedRecords.lean:14:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_PackedRecords.private_record`:
+  [Fintype K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_PackedRecords.lean:43:37: error: Application type mismatch: The argument
+  selected
+has type
+  ok (core.result.Result.Ok actual) = ok (core.result.Result.Ok (input i).compiled)
+but is expected to have type
+  ok (Except.ok actual) = ok (Except.ok (input i).compiled)
+in the application
+  ok.inj selected
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_PackedRecords.lean:41:35: error: unsolved goals
+K : Type
+inst✝⁶ : Field K
+inst✝⁵ : Fintype K
+inst✝⁴ : DecidableEq K
+inst✝³ : Algebra (ZMod AspisCircleGroupOrder.P) K
+inst✝² : CharP K 2147483647
+inst✝¹ : BuilderForestAdmissionPort.ExternalLinear
+inst✝ : BuilderForestAdmissionPort.Records
+i : PV_Src_CheckedCanonical.Data
+actual : pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+success : PV_Src_NativeInput.run (input i) = ok (core.result.Result.Ok actual)
+selected : ok (core.result.Result.Ok actual) = ok (core.result.Result.Ok (input i).compiled)
+⊢ actual = (input i).compiled
+'R1Z.PV_RunJoin_PackedRecords.private_record' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedRecords.checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedRecords.admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedRecords.returned_unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

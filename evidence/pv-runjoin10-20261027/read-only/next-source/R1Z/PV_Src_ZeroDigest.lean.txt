@@ -1,0 +1,22 @@
+import R1Z.PV_Src_ReferenceTransfer
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Src_ZeroDigest
+open Aeneas Aeneas.Std R0Z.WriterRefine R1J.SpendWitnessMap
+
+theorem encoded : AspisBuilderRecordsReference.pool_v1.pair_forest_copy_builder.ZERO8 =
+    d32 (fun _ => 0) := by
+  apply BuilderRecordCanonical.array_ext
+  intro j hj
+  rw [d32,arr8_get _ j (by simpa using hj)]
+  have hj8 : j < 8 := by simpa using hj
+  rw [AspisBuilderRecordsReference.pool_v1.pair_forest_copy_builder.ZERO8]
+  change (List.replicate 8 (0#u32 : U32))[j]! = w32 0
+  simp only [List.getElem!_eq_getElem?_getD,List.getElem?_replicate,
+    if_pos hj8,Option.getD_some]
+  apply UScalar.eq_of_val_eq
+  rw [w32_val]
+  rfl
+
+#print axioms encoded
+end R1Z.PV_Src_ZeroDigest
