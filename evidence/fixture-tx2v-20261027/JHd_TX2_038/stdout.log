@@ -1,0 +1,44 @@
+'AspisR1.JHd_RequestNative.shared' depends on axioms: [propext, Classical.choice, Quot.sound]
+JHd_RequestNative.lean:33:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR20Request.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_request_reference_v1
+    JHd_RequestWindow.value
+in the target expression
+  (match core.result.Result.Ok JHd_RequestWindow.value with
+    | core.result.Result.Err a =>
+      ok
+        (core.result.Result.Err
+          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength)
+    | core.result.Result.Ok array => do
+      let result ←
+        AspisR20Request.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_request_reference_v1 array
+      match result with
+        | core.result.Result.Err error =>
+          ok (core.result.Result.Err (JHd_RequestCarrier.mapPoolV1PairForestTerminalFormatErrorV1 error))
+        | core.result.Result.Ok request => ok (core.result.Result.Ok (JHd_RequestCarrier.request request))) =
+    ok (core.result.Result.Ok JHd_RequestCarrier.actual)
+
+⊢ (match core.result.Result.Ok JHd_RequestWindow.value with
+    | core.result.Result.Err a =>
+      ok
+        (core.result.Result.Err
+          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength)
+    | core.result.Result.Ok array => do
+      let result ←
+        AspisR20Request.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_request_reference_v1 array
+      match result with
+        | core.result.Result.Err error =>
+          ok (core.result.Result.Err (JHd_RequestCarrier.mapPoolV1PairForestTerminalFormatErrorV1 error))
+        | core.result.Result.Ok request => ok (core.result.Result.Ok (JHd_RequestCarrier.request request))) =
+    ok (core.result.Result.Ok JHd_RequestCarrier.actual)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (320 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JHd_RequestNative.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

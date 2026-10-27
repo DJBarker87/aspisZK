@@ -1,0 +1,112 @@
+JHd_RequestDecode.lean:39:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let s ← lift JHd_RequestWindow.value.to_slice
+    let i1 ←
+      do
+        let i ← 3#usize * 32#usize
+        let i1 ← 8#usize + i
+        i1 + pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_BYTES
+    if (s.len != i1) = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.WrongLength)
+      else
+        ok
+          (core.result.Result.Ok
+            { verifier_profile := JHd_RequestValue.value.verifier_profile,
+              verifier_release := JHd_RequestValue.value.verifier_release,
+              pool_program := JHd_RequestValue.value.pool_program,
+              «public» := PoolV1PairForestTerminalPaymentV1.PrivateTransfer JHd_RequestPayment.value })
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok JHd_RequestValue.value)
+
+size : JHd_RequestWindow.value.to_slice.len = 320#usize
+magic :
+  Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 JHd_RequestHead.magic
+      POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC =
+    ok false
+kind : transition_kind 1#u8 = ok (core.result.Result.Ok pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer)
+⊢ (do
+      let s ← lift JHd_RequestWindow.value.to_slice
+      let i1 ←
+        do
+          let i ← 3#usize * 32#usize
+          let i1 ← 8#usize + i
+          i1 + pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_BYTES
+      if (s.len != i1) = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.WrongLength)
+        else
+          ok
+            (core.result.Result.Ok
+              { verifier_profile := JHd_RequestValue.value.verifier_profile,
+                verifier_release := JHd_RequestValue.value.verifier_release,
+                pool_program := JHd_RequestValue.value.pool_program,
+                «public» := PoolV1PairForestTerminalPaymentV1.PrivateTransfer JHd_RequestPayment.value })) =
+    ok (core.result.Result.Ok JHd_RequestValue.value)
+JHd_RequestDecode.lean:25:13: warning: This simp argument is unused:
+  size
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵i̵z̵e̵,̵P̵O̵O̵L̵_̵V̵1̵_̵P̵A̵I̵R̵_̵F̵O̵R̵E̵S̵T̵_̵T̵E̵R̵M̵I̵N̵A̵L̵_̵R̵E̵Q̵U̵E̵S̵T̵_̵B̵Y̵T̵E̵S̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲P̲O̲O̲L̲_̲V̲1̲_̲P̲A̲I̲R̲_̲F̲O̲R̲E̲S̲T̲_̲T̲E̲R̲M̲I̲N̲A̲L̲_̲R̲E̲Q̲U̲E̲S̲T̲_̲B̲Y̲T̲E̲S̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+      show (320#usize !̵=̵3̵2̵0̵#̵u̵s̵i̵z̵e̵)̵=̵f̵a̵l̵s̵e̵!̲=̲ ̲3̲2̲0̲#̲u̲s̲i̲z̲e̲)̲ ̲=̲ ̲f̲a̲l̲s̲e̲ from r̵f̵l̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵H̵e̵a̵d̵.̵f̵i̵r̵s̵t̵,̵m̵a̵g̵i̵c̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵H̵e̵a̵d̵.̵b̵4̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵H̵e̵a̵d̵.̵b̵5̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵H̵e̵a̵d̵.̵b̵6̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵H̵e̵a̵d̵.̵b̵7̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵O̵O̵L̵_̵V̵1̵_̵P̵A̵I̵R̵_̵F̵O̵R̵E̵S̵T̵_̵T̵E̵R̵M̵I̵N̵A̵L̵_̵V̵E̵R̵S̵I̵O̵N̵,̵p̵o̵o̵l̵_̵v̵1̵.̵f̵o̵r̵m̵a̵t̵.̵P̵O̵O̵L̵_̵V̵1̵_̵D̵I̵G̵E̵S̵T̵_̵E̵N̵C̵O̵D̵I̵N̵G̵_̵V̵E̵R̵S̵I̵O̵N̵,̵r̲f̲l̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲H̲e̲a̲d̲.̲f̲i̲r̲s̲t̲,̲ ̲m̲a̲g̲i̲c̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲H̲e̲a̲d̲.̲b̲4̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲H̲e̲a̲d̲.̲b̲5̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲H̲e̲a̲d̲.̲b̲6̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲H̲e̲a̲d̲.̲b̲7̲,̲ ̲P̲O̲O̲L̲_̲V̲1̲_̲P̲A̲I̲R̲_̲F̲O̲R̲E̲S̲T̲_̲T̲E̲R̲M̲I̲N̲A̲L̲_̲V̲E̲R̲S̲I̲O̲N̲,̲
+  ̲ ̲ ̲ ̲ ̲p̲o̲o̲l̲_̲v̲1̲.̲f̲o̲r̲m̲a̲t̲.̲P̲O̲O̲L̲_̲V̲1̲_̲D̲I̲G̲E̲S̲T̲_̲E̲N̲C̲O̲D̲I̲N̲G̲_̲V̲E̲R̲S̲I̲O̲N̲,̲ show (̵1̵#̵u̵8̵ ̵!̵=̵1̵#̵u̵8̵)̵=̵f̵a̵l̵s̵e̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵s̵h̵o̵w̵(̲1̲#̲u̲8̲ ̲!̲=̲ ̲1̲#̲u̲8̲)̲ ̲=̲ ̲f̲a̲l̲s̲e̲ ̲f̲r̲o̲m̲ ̲r̲f̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ (0#u8 !̵=̵0̵#̵u̵8̵)̵=̵f̵a̵l̵s̵e̵!̲=̲ ̲0̲#̲u̲8̲)̲ ̲=̲ ̲f̲a̲l̲s̲e̲ from rfl, k̵i̵n̵d̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵R̵E̵Q̵U̵E̵S̵T̵_̵P̵A̵Y̵M̵E̵N̵T̵_̵O̵F̵F̵S̵E̵T̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵S̵u̵f̵f̵i̵x̵.̵s̵o̵u̵r̵c̵e̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵P̵a̵y̵l̵o̵a̵d̵.̵s̵o̵u̵r̵c̵e̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵]̵k̲i̲n̲d̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲R̲E̲Q̲U̲E̲S̲T̲_̲P̲A̲Y̲M̲E̲N̲T̲_̲O̲F̲F̲S̲E̲T̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲S̲u̲f̲f̲i̲x̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲P̲a̲y̲l̲o̲a̲d̲.̲s̲o̲u̲r̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHd_RequestDecode.lean:26:4: warning: This simp argument is unused:
+  show (320#usize != 320#usize) = false from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵i̵z̵e̵,̵P̵O̵O̵L̵_̵V̵1̵_̵P̵A̵I̵R̵_̵F̵O̵R̵E̵S̵T̵_̵T̵E̵R̵M̵I̵N̵A̵L̵_̵R̵E̵Q̵U̵E̵S̵T̵_̵B̵Y̵T̵E̵S̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲s̲i̲z̲e̲,̲ ̲P̲O̲O̲L̲_̲V̲1̲_̲P̲A̲I̲R̲_̲F̲O̲R̲E̲S̲T̲_̲T̲E̲R̲M̲I̲N̲A̲L̲_̲R̲E̲Q̲U̲E̲S̲T̲_̲B̲Y̲T̲E̲S̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲H̲e̲a̲d̲.̲f̲i̲r̲s̲t̲,̲ ̲m̲a̲g̲i̲c̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲H̲e̲a̲d̲.̲b̲4̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲H̲e̲a̲d̲.̲b̲5̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲H̲e̲a̲d̲.̲b̲6̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲H̲e̲a̲d̲.̲b̲7̲,̲ ̲P̲O̲O̲L̲_̲V̲1̲_̲P̲A̲I̲R̲_̲F̲O̲R̲E̲S̲T̲_̲T̲E̲R̲M̲I̲N̲A̲L̲_̲V̲E̲R̲S̲I̲O̲N̲,̲
+  ̲ ̲ ̲ ̲ ̲p̲o̲o̲l̲_̲v̲1̲.̲f̲o̲r̲m̲a̲t̲.̲P̲O̲O̲L̲_̲V̲1̲_̲D̲I̲G̲E̲S̲T̲_̲E̲N̲C̲O̲D̲I̲N̲G̲_̲V̲E̲R̲S̲I̲O̲N̲,̲ show (̵3̵2̵0̵#̵u̵s̵i̵z̵e̵ ̵!̵=̵3̵2̵0̵#̵u̵s̵i̵z̵e̵)̵=̵f̵a̵l̵s̵e̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵H̵e̵a̵d̵.̵f̵i̵r̵s̵t̵,̵m̵a̵g̵i̵c̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵H̵e̵a̵d̵.̵b̵4̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵H̵e̵a̵d̵.̵b̵5̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵H̵e̵a̵d̵.̵b̵6̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵H̵e̵a̵d̵.̵b̵7̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵O̵O̵L̵_̵V̵1̵_̵P̵A̵I̵R̵_̵F̵O̵R̵E̵S̵T̵_̵T̵E̵R̵M̵I̵N̵A̵L̵_̵V̵E̵R̵S̵I̵O̵N̵,̵p̵o̵o̵l̵_̵v̵1̵.̵f̵o̵r̵m̵a̵t̵.̵P̵O̵O̵L̵_̵V̵1̵_̵D̵I̵G̵E̵S̵T̵_̵E̵N̵C̵O̵D̵I̵N̵G̵_̵V̵E̵R̵S̵I̵O̵N̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵h̵o̵w̵ ̵(1#u8 !̵=̵1̵#̵u̵8̵)̵=̵f̵a̵l̵s̵e̵!̲=̲ ̲1̲#̲u̲8̲)̲ ̲=̲ ̲f̲a̲l̲s̲e̲ from r̵f̵l̵,̵s̵h̵o̵w̵r̲f̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ (0#u8 !̵=̵0̵#̵u̵8̵)̵=̵f̵a̵l̵s̵e̵!̲=̲ ̲0̲#̲u̲8̲)̲ ̲=̲ ̲f̲a̲l̲s̲e̲ from rfl, k̵i̵n̵d̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵R̵E̵Q̵U̵E̵S̵T̵_̵P̵A̵Y̵M̵E̵N̵T̵_̵O̵F̵F̵S̵E̵T̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵S̵u̵f̵f̵i̵x̵.̵s̵o̵u̵r̵c̵e̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵P̵a̵y̵l̵o̵a̵d̵.̵s̵o̵u̵r̵c̵e̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵]̵k̲i̲n̲d̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲R̲E̲Q̲U̲E̲S̲T̲_̲P̲A̲Y̲M̲E̲N̲T̲_̲O̲F̲F̲S̲E̲T̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲S̲u̲f̲f̲i̲x̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲P̲a̲y̲l̲o̲a̲d̲.̲s̲o̲u̲r̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHd_RequestDecode.lean:36:15: warning: This simp argument is unused:
+  core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp only [̵R̵E̵Q̵U̵E̵S̵T̵_̵P̵R̵O̵F̵I̵L̵E̵_̵O̵F̵F̵S̵E̵T̵,̵R̵E̵Q̵U̵E̵S̵T̵_̵R̵E̵L̵E̵A̵S̵E̵_̵O̵F̵F̵S̵E̵T̵,̵R̵E̵Q̵U̵E̵S̵T̵_̵P̵O̵O̵L̵_̵P̵R̵O̵G̵R̵A̵M̵_̵O̵F̵F̵S̵E̵T̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵p̵r̵o̵f̵i̵l̵e̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵r̵e̵l̵e̵a̵s̵e̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵p̵o̵o̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵p̵r̵o̵f̵i̵l̵e̵_̵c̵a̵s̵t̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵r̵e̵l̵e̵a̵s̵e̵_̵c̵a̵s̵t̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵p̵o̵o̵l̵_̵c̵a̵s̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵V̵a̵l̵u̵e̵.̵p̵r̵o̵f̵i̵l̵e̵_̵n̵o̵n̵z̵e̵r̵o̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵V̵a̵l̵u̵e̵.̵r̵e̵l̵e̵a̵s̵e̵_̵n̵o̵n̵z̵e̵r̵o̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵V̵a̵l̵u̵e̵.̵p̵o̵o̵l̵_̵n̵o̵n̵z̵e̵r̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲R̲E̲Q̲U̲E̲S̲T̲_̲P̲R̲O̲F̲I̲L̲E̲_̲O̲F̲F̲S̲E̲T̲,̲ ̲R̲E̲Q̲U̲E̲S̲T̲_̲R̲E̲L̲E̲A̲S̲E̲_̲O̲F̲F̲S̲E̲T̲,̲ ̲R̲E̲Q̲U̲E̲S̲T̲_̲P̲O̲O̲L̲_̲P̲R̲O̲G̲R̲A̲M̲_̲O̲F̲F̲S̲E̲T̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲p̲r̲o̲f̲i̲l̲e̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲r̲e̲l̲e̲a̲s̲e̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲p̲o̲o̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲p̲r̲o̲f̲i̲l̲e̲_̲c̲a̲s̲t̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲r̲e̲l̲e̲a̲s̲e̲_̲c̲a̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲p̲o̲o̲l̲_̲c̲a̲s̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲V̲a̲l̲u̲e̲.̲p̲r̲o̲f̲i̲l̲e̲_̲n̲o̲n̲z̲e̲r̲o̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲V̲a̲l̲u̲e̲.̲r̲e̲l̲e̲a̲s̲e̲_̲n̲o̲n̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲V̲a̲l̲u̲e̲.̲p̲o̲o̲l̲_̲n̲o̲n̲z̲e̲r̲o̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHd_RequestDecode.lean:36:42: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵R̵E̵Q̵U̵E̵S̵T̵_̵P̵R̵O̵F̵I̵L̵E̵_̵O̵F̵F̵S̵E̵T̵,̵R̵E̵Q̵U̵E̵S̵T̵_̵R̵E̵L̵E̵A̵S̵E̵_̵O̵F̵F̵S̵E̵T̵,̵R̵E̵Q̵U̵E̵S̵T̵_̵P̵O̵O̵L̵_̵P̵R̵O̵G̵R̵A̵M̵_̵O̵F̵F̵S̵E̵T̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵p̵r̵o̵f̵i̵l̵e̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵r̵e̵l̵e̵a̵s̵e̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵p̵o̵o̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵p̵r̵o̵f̵i̵l̵e̵_̵c̵a̵s̵t̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵r̵e̵l̵e̵a̵s̵e̵_̵c̵a̵s̵t̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵B̵i̵n̵d̵i̵n̵g̵s̵.̵p̵o̵o̵l̵_̵c̵a̵s̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵V̵a̵l̵u̵e̵.̵p̵r̵o̵f̵i̵l̵e̵_̵n̵o̵n̵z̵e̵r̵o̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵V̵a̵l̵u̵e̵.̵r̵e̵l̵e̵a̵s̵e̵_̵n̵o̵n̵z̵e̵r̵o̵,̵J̵H̵d̵_̵R̵e̵q̵u̵e̵s̵t̵V̵a̵l̵u̵e̵.̵p̵o̵o̵l̵_̵n̵o̵n̵z̵e̵r̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲R̲E̲Q̲U̲E̲S̲T̲_̲P̲R̲O̲F̲I̲L̲E̲_̲O̲F̲F̲S̲E̲T̲,̲ ̲R̲E̲Q̲U̲E̲S̲T̲_̲R̲E̲L̲E̲A̲S̲E̲_̲O̲F̲F̲S̲E̲T̲,̲ ̲R̲E̲Q̲U̲E̲S̲T̲_̲P̲O̲O̲L̲_̲P̲R̲O̲G̲R̲A̲M̲_̲O̲F̲F̲S̲E̲T̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲p̲r̲o̲f̲i̲l̲e̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲r̲e̲l̲e̲a̲s̲e̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲p̲o̲o̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲p̲r̲o̲f̲i̲l̲e̲_̲c̲a̲s̲t̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲r̲e̲l̲e̲a̲s̲e̲_̲c̲a̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲B̲i̲n̲d̲i̲n̲g̲s̲.̲p̲o̲o̲l̲_̲c̲a̲s̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲V̲a̲l̲u̲e̲.̲p̲r̲o̲f̲i̲l̲e̲_̲n̲o̲n̲z̲e̲r̲o̲,̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲V̲a̲l̲u̲e̲.̲r̲e̲l̲e̲a̲s̲e̲_̲n̲o̲n̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲d̲_̲R̲e̲q̲u̲e̲s̲t̲V̲a̲l̲u̲e̲.̲p̲o̲o̲l̲_̲n̲o̲n̲z̲e̲r̲o̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHd_RequestDecode.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
