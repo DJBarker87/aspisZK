@@ -13,14 +13,13 @@ pub const K32: [u32; 64] = [
 
 
 fn rr(x:u32,n:u32)->u32 {(x>>n)|(x<<(32u32-n))}
-#[inline(never)] fn compress(mut state:[u32;8],block:[u8;64])->[u32;8]{
+fn compress(state:&mut [u32;8],block:&[u8;64]){
  let mut w=[0u32;64];let mut i=0usize;
  while i<16 {w[i]=((block[4*i] as u32)<<24u32)|((block[4*i+1] as u32)<<16u32)|((block[4*i+2] as u32)<<8u32)|(block[4*i+3] as u32);i+=1;}
  while i<64 {let x=w[i-15];let y=w[i-2];let s0=rr(x,7)^rr(x,18)^(x>>3u32);let s1=rr(y,17)^rr(y,19)^(y>>10u32);w[i]=w[i-16].wrapping_add(s0).wrapping_add(w[i-7]).wrapping_add(s1);i+=1;}
  let mut a=state[0];let mut b=state[1];let mut c=state[2];let mut d=state[3];let mut e=state[4];let mut f=state[5];let mut g=state[6];let mut h=state[7];i=0;
  while i<64 {let s1=rr(e,6)^rr(e,11)^rr(e,25);let ch=(e&f)^(!e&g);let t1=h.wrapping_add(s1).wrapping_add(ch).wrapping_add(K32[i]).wrapping_add(w[i]);let s0=rr(a,2)^rr(a,13)^rr(a,22);let maj=(a&b)^(a&c)^(b&c);let t2=s0.wrapping_add(maj);h=g;g=f;f=e;e=d.wrapping_add(t1);d=c;c=b;b=a;a=t1.wrapping_add(t2);i+=1;}
  state[0]=state[0].wrapping_add(a);state[1]=state[1].wrapping_add(b);state[2]=state[2].wrapping_add(c);state[3]=state[3].wrapping_add(d);state[4]=state[4].wrapping_add(e);state[5]=state[5].wrapping_add(f);state[6]=state[6].wrapping_add(g);state[7]=state[7].wrapping_add(h);
-state
 }
 pub fn new()->Sha256 {Sha256{state:[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19],blocks:0,buffer:[0;64],pos:0}}
 #[inline(never)] fn pack(state:[u32;8])->[u8;32]{[(state[0]>>24u32) as u8,(state[0]>>16u32) as u8,(state[0]>>8u32) as u8,(state[0]>>0u32) as u8,(state[1]>>24u32) as u8,(state[1]>>16u32) as u8,(state[1]>>8u32) as u8,(state[1]>>0u32) as u8,(state[2]>>24u32) as u8,(state[2]>>16u32) as u8,(state[2]>>8u32) as u8,(state[2]>>0u32) as u8,(state[3]>>24u32) as u8,(state[3]>>16u32) as u8,(state[3]>>8u32) as u8,(state[3]>>0u32) as u8,(state[4]>>24u32) as u8,(state[4]>>16u32) as u8,(state[4]>>8u32) as u8,(state[4]>>0u32) as u8,(state[5]>>24u32) as u8,(state[5]>>16u32) as u8,(state[5]>>8u32) as u8,(state[5]>>0u32) as u8,(state[6]>>24u32) as u8,(state[6]>>16u32) as u8,(state[6]>>8u32) as u8,(state[6]>>0u32) as u8,(state[7]>>24u32) as u8,(state[7]>>16u32) as u8,(state[7]>>8u32) as u8,(state[7]>>0u32) as u8]}
@@ -41,15 +40,15 @@ buffer}
 pub fn update(s:&mut Sha256,input:&[u8]){
  let start=s.pos;let rem=64-start;let n=input.len();let mut i=0usize;
  if n<rem {s.buffer=copy_bytes(s.buffer,start,input,0,n);s.pos=start+n;return;}
- if start!=0 {s.buffer=copy_bytes(s.buffer,start,input,0,rem);s.state=compress(s.state,s.buffer);s.blocks=s.blocks.wrapping_add(1);i=rem;}
- while n-i>=64 {let block=copy_bytes([0u8;64],0,input,i,64);s.state=compress(s.state,block);s.blocks=s.blocks.wrapping_add(1);i+=64;}
+ if start!=0 {s.buffer=copy_bytes(s.buffer,start,input,0,rem);compress(&mut s.state,&s.buffer);s.blocks=s.blocks.wrapping_add(1);i=rem;}
+ while n-i>=64 {let block=copy_bytes([0u8;64],0,input,i,64);compress(&mut s.state,&block);s.blocks=s.blocks.wrapping_add(1);i+=64;}
  let tail=n-i;s.buffer=copy_bytes(s.buffer,0,input,i,tail);s.pos=tail;
 }
 pub fn finalize_variable_core(s:&mut Sha256)->[u8;32]{
  let bit_len=(s.pos as u64).wrapping_add(64u64.wrapping_mul(s.blocks)).wrapping_mul(8);let pos=s.pos;
  s.buffer=pad(s.buffer,pos);
- if pos>55 {s.state=compress(s.state,s.buffer);let block=length([0u8;64],bit_len);s.state=compress(s.state,block);}
- else {s.buffer=length(s.buffer,bit_len);s.state=compress(s.state,s.buffer);}
+ if pos>55 {compress(&mut s.state,&s.buffer);let block=length([0u8;64],bit_len);compress(&mut s.state,&block);}
+ else {s.buffer=length(s.buffer,bit_len);compress(&mut s.state,&s.buffer);}
  s.pos=0;pack(s.state)
 }
 pub fn finalize_fixed_core(s:&mut Sha256,out:&mut [u8;32]){*out=finalize_variable_core(s);}
