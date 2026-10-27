@@ -1,0 +1,155 @@
+//! Single native array versus one scalar coordinate, with no reference array.
+//! Keeps arbitrary rows, position, native bounds checks and complete from_fn.
+#![cfg(kani)]
+#[path="../proof-world244/row.rs"]
+mod reference_row;
+// Array inputs retain all words; no native operation is replaced.
+use aspis_core::field::{M31, CM31, QM31, WideExact};
+use aspis_r1_cost_probe::transport::Variant;
+
+fn variant() -> Variant {
+    let tag:u8 = kani::any();
+    kani::assume(tag < 3);
+    match tag { 0 => Variant::S1, 1 => Variant::S2, _ => Variant::D }
+}
+
+fn m31_rows() -> [M31; 1024] {
+    let bits: [u32; 1024] = kani::any();
+    let mut rows = [M31::ZERO; 1024];
+    let mut i = 0;
+    while i < 1024 { rows[i] = M31(bits[i]); i += 1; }
+    rows
+}
+fn qm31_rows() -> [QM31; 1024] {
+    let bits: [[u32;4]; 1024] = kani::any();
+    let mut rows = [QM31::ZERO; 1024];
+    let mut i = 0;
+    while i < 1024 {
+        rows[i] = QM31 { c0:CM31 { a:M31(bits[i][0]), b:M31(bits[i][1]) },
+            c1:CM31 { a:M31(bits[i][2]), b:M31(bits[i][3]) } };
+        i += 1;
+    }
+    rows
+}
+fn wide_rows() -> [WideExact; 1024] {
+    let bits: [[u32;8]; 1024] = kani::any();
+    let mut rows = [WideExact::ZERO; 1024];
+    let mut i = 0;
+    while i < 1024 {
+        // Every valid WideExact can be selected; invalid limb words map to zero.
+        rows[i] = WideExact::from_limbs(bits[i]).unwrap_or(WideExact::ZERO);
+        i += 1;
+    }
+    rows
+}
+
+
+#[kani::proof]
+#[kani::unwind(1026)]
+pub fn coordinate_m31_all() {
+    let rows = m31_rows();
+    let variant = variant();
+    let position:usize = kani::any(); kani::assume(position < 1024);
+    let expected = rows[reference_row::row(variant,position)];
+    let actual = variant.coefficients(&rows);
+    assert!(actual[position].0 == expected.0);
+}
+
+#[kani::proof]
+#[kani::unwind(1026)]
+pub fn coordinate_m31_s1() {
+    let rows = m31_rows();
+    let variant = Variant::S1;
+    let position:usize = kani::any(); kani::assume(position < 1024);
+    let expected = rows[reference_row::row(variant,position)];
+    let actual = variant.coefficients(&rows);
+    assert!(actual[position].0 == expected.0);
+}
+
+#[kani::proof]
+#[kani::unwind(1026)]
+pub fn coordinate_m31_d() {
+    let rows = m31_rows();
+    let variant = Variant::D;
+    let position:usize = kani::any(); kani::assume(position < 1024);
+    let expected = rows[reference_row::row(variant,position)];
+    let actual = variant.coefficients(&rows);
+    assert!(actual[position].0 == expected.0);
+}
+
+#[kani::proof]
+#[kani::unwind(1026)]
+pub fn coordinate_qm31_all() {
+    let rows = qm31_rows();
+    let variant = variant();
+    let position:usize = kani::any(); kani::assume(position < 1024);
+    let expected = rows[reference_row::row(variant,position)];
+    let actual = variant.coefficients(&rows);
+    assert!(actual[position] == expected);
+}
+
+#[kani::proof]
+#[kani::unwind(1026)]
+pub fn coordinate_qm31_s1() {
+    let rows = qm31_rows();
+    let variant = Variant::S1;
+    let position:usize = kani::any(); kani::assume(position < 1024);
+    let expected = rows[reference_row::row(variant,position)];
+    let actual = variant.coefficients(&rows);
+    assert!(actual[position] == expected);
+}
+
+#[kani::proof]
+#[kani::unwind(1026)]
+pub fn coordinate_qm31_d() {
+    let rows = qm31_rows();
+    let variant = Variant::D;
+    let position:usize = kani::any(); kani::assume(position < 1024);
+    let expected = rows[reference_row::row(variant,position)];
+    let actual = variant.coefficients(&rows);
+    assert!(actual[position] == expected);
+}
+
+#[kani::proof]
+#[kani::unwind(1026)]
+pub fn coordinate_wide_all() {
+    let rows = wide_rows();
+    let variant = variant();
+    let position:usize = kani::any(); kani::assume(position < 1024);
+    let expected = rows[reference_row::row(variant,position)];
+    let actual = variant.coefficients(&rows);
+    assert!(actual[position].to_limbs() == expected.to_limbs());
+}
+
+#[kani::proof]
+#[kani::unwind(1026)]
+pub fn coordinate_wide_s1() {
+    let rows = wide_rows();
+    let variant = Variant::S1;
+    let position:usize = kani::any(); kani::assume(position < 1024);
+    let expected = rows[reference_row::row(variant,position)];
+    let actual = variant.coefficients(&rows);
+    assert!(actual[position].to_limbs() == expected.to_limbs());
+}
+
+#[kani::proof]
+#[kani::unwind(1026)]
+pub fn coordinate_wide_d() {
+    let rows = wide_rows();
+    let variant = Variant::D;
+    let position:usize = kani::any(); kani::assume(position < 1024);
+    let expected = rows[reference_row::row(variant,position)];
+    let actual = variant.coefficients(&rows);
+    assert!(actual[position].to_limbs() == expected.to_limbs());
+}
+
+#[kani::proof]
+#[kani::unwind(7)]
+pub fn row_index_native_reference() {
+    let variant = variant();
+    let position:usize = kani::any(); kani::assume(position < 1024);
+    let native = variant.row(position);
+    let reference = reference_row::row(variant,position);
+    assert!(native == reference);
+    assert!(native < 1024);
+}

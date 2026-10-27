@@ -1,0 +1,129 @@
+import R1Z.PDict_Static222_23
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_Static222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap
+/-- Carrier transport candidate for `prover.opening_claim_bytes_loop`. -/
+theorem erase_384 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.opening_claim_bytes_loop (types base F) (selected base F ops) = @prover.opening_claim_bytes_loop base ops := by
+  delta prover.opening_claim_bytes_loop
+  try simp only [erase_383 base F ops]
+  all_goals rfl
+#print axioms erase_384
+
+/-- Carrier transport candidate for `prover.opening_claim_bytes`. -/
+theorem erase_385 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.opening_claim_bytes (types base F) (selected base F ops) = @prover.opening_claim_bytes base ops := by
+  delta prover.opening_claim_bytes
+  try simp only [erase_384 base F ops]
+  all_goals rfl
+#print axioms erase_385
+
+/-- Carrier transport candidate for `prover.opening_coefficients_loop.body`. -/
+theorem erase_386 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.opening_coefficients_loop.body (types base F) (selected base F ops) = @prover.opening_coefficients_loop.body base ops := by
+  delta prover.opening_coefficients_loop.body
+  try simp only [erase_273 base F ops]
+  all_goals rfl
+#print axioms erase_386
+
+/-- Carrier transport candidate for `prover.opening_coefficients_loop`. -/
+theorem erase_387 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.opening_coefficients_loop (types base F) (selected base F ops) = @prover.opening_coefficients_loop base ops := by
+  delta prover.opening_coefficients_loop
+  try simp only [erase_386 base F ops]
+  all_goals rfl
+#print axioms erase_387
+
+/-- Carrier transport candidate for `prover.opening_coefficients`. -/
+theorem erase_388 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.opening_coefficients (types base F) (selected base F ops) = @prover.opening_coefficients base ops := by
+  delta prover.opening_coefficients
+  try simp only [erase_387 base F ops]
+  all_goals rfl
+#print axioms erase_388
+
+/-- Carrier transport candidate for `prover.opening_inactive_loop.body`. -/
+theorem erase_389 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.opening_inactive_loop.body (types base F) (selected base F ops) = @prover.opening_inactive_loop.body base ops := by
+  delta prover.opening_inactive_loop.body
+  all_goals rfl
+#print axioms erase_389
+
+/-- Carrier transport candidate for `prover.opening_inactive_loop`. -/
+theorem erase_390 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.opening_inactive_loop (types base F) (selected base F ops) = @prover.opening_inactive_loop base ops := by
+  delta prover.opening_inactive_loop
+  try simp only [erase_389 base F ops]
+  all_goals rfl
+#print axioms erase_390
+
+/-- Carrier transport candidate for `prover.opening_inactive`. -/
+theorem erase_391 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.opening_inactive (types base F) (selected base F ops) = @prover.opening_inactive base ops := by
+  delta prover.opening_inactive
+  try simp only [erase_390 base F ops]
+  all_goals rfl
+#print axioms erase_391
+
+/-- Carrier transport candidate for `host_compact.compact_semantic_row`. -/
+theorem erase_393 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_compact.compact_semantic_row (types base F) (selected base F ops) = @host_compact.compact_semantic_row base ops := by
+  delta host_compact.compact_semantic_row
+  try simp only [erase_199 base F ops]
+  all_goals rfl
+#print axioms erase_393
+
+/-- Carrier transport candidate for `host_compact.compact_semantic_loop.body`. -/
+theorem erase_394 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_compact.compact_semantic_loop.body (types base F) (selected base F ops) = @host_compact.compact_semantic_loop.body base ops := by
+  delta host_compact.compact_semantic_loop.body
+  try simp only [erase_393 base F ops]
+  all_goals rfl
+#print axioms erase_394
+
+/-- Carrier transport candidate for `host_compact.compact_semantic_loop`. -/
+theorem erase_395 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_compact.compact_semantic_loop (types base F) (selected base F ops) = @host_compact.compact_semantic_loop base ops := by
+  delta host_compact.compact_semantic_loop
+  try simp only [erase_394 base F ops]
+  all_goals rfl
+#print axioms erase_395
+
+/-- Carrier transport candidate for `host_compact.compact_semantic`. -/
+theorem erase_396 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_compact.compact_semantic (types base F) (selected base F ops) = @host_compact.compact_semantic base ops := by
+  delta host_compact.compact_semantic
+  try simp only [erase_395 base F ops]
+  all_goals rfl
+#print axioms erase_396
+
+/-- Carrier transport candidate for `host_tree.multiproof_levels`. -/
+theorem erase_397 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_tree.multiproof_levels (types base F) (selected base F ops) = @host_tree.multiproof_levels base ops := by
+  have hmutual : @host_tree.multiproof_levels.mutual (types base F) (selected base F ops) =
+      @host_tree.multiproof_levels.mutual base ops := by
+    funext tree bits
+    delta host_tree.multiproof_levels.mutual
+    apply fixed_equal
+    funext recur out level depth
+    rfl
+  delta host_tree.multiproof_levels
+  rw [hmutual]
+#print axioms erase_397
+
+/-- Carrier transport candidate for `host_tree.check_indices_loop.body`. -/
+theorem erase_398 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_tree.check_indices_loop.body (types base F) (selected base F ops) = @host_tree.check_indices_loop.body base ops := by
+  delta host_tree.check_indices_loop.body
+  all_goals rfl
+#print axioms erase_398
+
+/-- Carrier transport candidate for `host_tree.check_indices_loop`. -/
+theorem erase_399 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @host_tree.check_indices_loop (types base F) (selected base F ops) = @host_tree.check_indices_loop base ops := by
+  delta host_tree.check_indices_loop
+  try simp only [erase_398 base F ops]
+  all_goals rfl
+#print axioms erase_399
+end R1Z.PDict_Static222

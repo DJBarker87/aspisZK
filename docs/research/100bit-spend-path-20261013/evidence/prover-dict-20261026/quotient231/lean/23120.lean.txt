@@ -1,0 +1,54 @@
+import R1Z.PDict_RemainingCommute231_05
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_RemainingCommute231
+open Aeneas Aeneas.Std Result ProverRwFull
+open PDict_RemainingExt231 (replace stage0)
+open ProverRwDictionaryTower
+open ProverRwDictionaryScalar in
+
+theorem stage6 [types : ExternalTypes] (ops other : ExternalFuns) :
+    @ProverRwDictionaryScalar.selected types (@replace types ops other) =
+    @replace types (@ProverRwDictionaryScalar.selected types ops) other := by
+  letI : ExternalTypes := types
+  let upd (d : @ExternalFuns (types)) : @ExternalFuns (types) :=
+    { d with
+    op42 := .ok (fromW AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO)
+    op52 := (fun a b => mapResult fromW (AspisR1ProducerRelease47.field.wide_exact.WideExact.mul_m31 (toW a) b))
+    op55 := .ok AspisR1ProducerRelease47.field.M31.ZERO
+    op56 := .ok AspisR1ProducerRelease47.field.M31.ONE
+    op57 := AspisR1ProducerRelease47.field.M31.mul
+    op58 := AspisR1ProducerRelease47.field.M31.double
+    op59 := AspisR1ProducerRelease47.inverse_ref
+    op61 := (fun a => mapResult fromC (AspisR1ProducerRelease47.field.CM31.from_m31 a))
+    op65 := .ok (fromQ AspisR1ProducerRelease47.field.QM31.ONE)
+    op66 := (fun c => mapResult fromQ (AspisR1ProducerRelease47.field.QM31.from_cm31 (toC c)))
+    op70 := (fun a b => mapResult fromQ (AspisR1ProducerRelease47.field.QM31.mul_m31 (toQ a) b))
+    op73 := AspisR1ProducerRelease47.field.M31.add
+    op74 := AspisR1ProducerRelease47.field.M31.sub
+    op87 := .ok AspisR1ProducerRelease47.field.M31.ZERO
+    op88 := .ok (fromW AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO)
+    op89 := .ok (fromQ AspisR1ProducerRelease47.field.QM31.ZERO)
+    op90 := .ok AspisR1ProducerRelease47.field.M31.ONE
+    op91 := .ok (fromW AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE)
+    op92 := .ok (fromQ AspisR1ProducerRelease47.field.QM31.ONE)
+    op93 := AspisR1ProducerRelease47.field.M31.add
+    op94 := wAdd
+    op95 := qAdd
+    op96 := AspisR1ProducerRelease47.field.M31.sub
+    op97 := (fun a b => mapResult fromW (AspisR1ProducerRelease47.field.wide_exact.WideExact.sub (toW a) (toW b)))
+    op98 := qSub
+    op99 := AspisR1ProducerRelease47.field.M31.neg
+    op102 := AspisR1ProducerRelease47.field.M31.mul
+    op103 := wMul
+    op104 := qMul
+    op106 := mFrom
+    op108 := (fun a => mapResult fromQ (qFrom a))}
+  have hu (d : @ExternalFuns (types)) :
+      upd (@replace (types) d other) = @replace (types) (upd d) other := by rfl
+  change upd (@ProverRwDictionaryTower.selected types (@replace (types) ops other)) =
+    @replace (types) (upd (@ProverRwDictionaryTower.selected types ops)) other
+  exact (congrArg upd (@stage5 types ops other)).trans (hu (@ProverRwDictionaryTower.selected types ops))
+
+#print axioms stage6
+end R1Z.PDict_RemainingCommute231

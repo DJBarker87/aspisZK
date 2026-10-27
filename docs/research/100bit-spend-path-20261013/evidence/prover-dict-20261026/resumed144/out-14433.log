@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_RejectTree.lean:18:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let o ← ok none
+    let cf ← core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a =>
+        have level := Array.repeat 16#usize 0#u32;
+        have i := indices.len;
+        do
+        let (s, index_mut_back) ←
+          core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+              level { «end» := i }
+        let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU32 s indices
+        have level1 : Std.Array U32 16#usize := index_mut_back s1
+        have i1 : Usize := indices.len
+        let i2 ← multiproof.LEAF_BITS
+        let i3 ← host_tree.count_levels level1 i1 0#u32 0#usize i2
+        ok (some i3)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual Usize residual
+is not definitionally equal to the right-hand side
+  ok none
+
+base : ExternalTypes
+ops : ExternalFuns
+indices : Slice U32
+empty : indices.length = 0
+check : host_tree.check_indices indices = ok none
+⊢ (do
+      let o ← ok none
+      let cf ← core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          have level := Array.repeat 16#usize 0#u32;
+          have i := indices.len;
+          do
+          let (s, index_mut_back) ←
+            core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                level { «end» := i }
+          let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU32 s indices
+          have level1 : Std.Array U32 16#usize := index_mut_back s1
+          have i1 : Usize := indices.len
+          let i2 ← multiproof.LEAF_BITS
+          let i3 ← host_tree.count_levels level1 i1 0#u32 0#usize i2
+          ok (some i3)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual Usize residual) =
+    ok none
+'R1Z.PDict_RejectTree.empty_node_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

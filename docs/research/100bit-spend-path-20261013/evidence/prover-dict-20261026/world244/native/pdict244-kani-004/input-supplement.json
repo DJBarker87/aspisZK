@@ -1,0 +1,35 @@
+{
+  "authorization_base": "dfd8a438bc10509be652365de65ea98566d13725",
+  "proof_inputs": {
+    "tools/prover-dict-20261026/proof-world244/Cargo.lock": "00554520696691322328dd2a094e175eb072c1f2fd0e3752cc1721191c185ec8",
+    "tools/prover-dict-20261026/proof-world244/native.rs": "f1df5d0645563adcc4691cb2a42a47cb9e554e239b0eb75029c18abae3ddcee5",
+    "tools/prover-dict-20261026/proof-world244/Cargo.toml": "a31f0bffb3eb24ff4fadd7f12fbe8a2a80889d1ef9bc7489a785f8f95e501532",
+    "tools/prover-dict-20261026/proof-world244/coefficients.rs": "6a313c92d03310390e733d525c2d644cc81f5f9d7ba46bb18c3295aead987429",
+    "tools/prover-dict-20261026/proof-world244/lib.rs": "fcc1b0bc1e6c763b9a3837ffabac759809a59e6f78fcff3a263d504d7e53807a",
+    "tools/prover-dict-20261026/proof-world244/world.rs": "801c3f1e3d8ea831fa06e39f3cde024768a5ebf2468964aa3300621a37a2571c",
+    "/home/dombarker/project-offloads/codex-cx-prover-dict-20261026/src/tools/prover-dict-20261026/PDict_native244.py": "698c71836c67d917500efd6c3b9deb5d3d51815857926401d5c6db7bf17903fa"
+  },
+  "command": [
+    "timeout",
+    "120",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "tools/prover-dict-20261026/proof-world244/Cargo.toml",
+    "--lib",
+    "--harness",
+    "native::formatter_two_writes_shared_sink",
+    "--exact",
+    "--solver",
+    "kissat",
+    "-j",
+    "4",
+    "--output-format",
+    "terse"
+  ],
+  "exit": 0,
+  "statement_qualification": "Pure native projections and bounded array/sink contracts only. No syscalls, stubs, disabled checks, native OS world or universal Drop claim.",
+  "expected_work": "Compilation with opt-level3, then the named Kani contract; no arithmetic elimination.",
+  "scope_qualification": "Sequential contracts share one 6G/8G/swap0/Tasks64 scope. GNU time is per command; cgroup peak is cumulative.",
+  "ambient_revision_qualification": "The historical snapshot label in the raw runner is retained. These exact proof-only inputs supplement its production-source inventory."
+}

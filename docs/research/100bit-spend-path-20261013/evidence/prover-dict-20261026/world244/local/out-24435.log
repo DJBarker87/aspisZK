@@ -1,0 +1,26 @@
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_CopyCorrect244.lean:21:4: error: AppBuilder for `Eq.ndrec`, invalid motive
+  fun out =>
+    body (out, i) ⦃ control =>
+      match control with
+      | done out => out = rows
+      | cont next => invariant next ∧ measure next < measure (out, i) ⦄
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_CopyCorrect244.lean:36:22: error: Application type mismatch: The argument
+  body_spec
+has type
+  ∀ (state : Std.Array T 1024#usize × Usize),
+    invariant state →
+      body state ⦃ control =>
+        match control with
+        | done out => out = rows
+        | cont next => invariant next ∧ measure next < measure state ⦄
+but is expected to have type
+  ∀ (x : Std.Array T 1024#usize × Usize),
+    invariant x →
+      body x ⦃ r =>
+        match r with
+        | done y => y = rows
+        | cont x' => invariant x' ∧ measure x' < measure x ⦄
+in the application
+  loop.spec_decr_nat measure invariant (fun out => out = rows) body (rows, index) body_spec
+'R1Z.PDict_CopyCorrect244.loop_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PDict_CopyCorrect244.owned_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,1852 @@
+'R1Z.PDict_FallibleTransport.bind_congr' does not depend on any axioms
+'R1Z.PDict_FallibleTransport.map_prod' does not depend on any axioms
+'R1Z.PDict_FallibleTransport.map_result' does not depend on any axioms
+'R1Z.PDict_FallibleTransport.map_control' does not depend on any axioms
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:42:133: error: unsolved goals
+b : ExternalTypes
+F : Type
+ops : ExternalFuns
+s : Store
+sd nonce : Std.Array U8 32#usize
+hs :
+  { directory := (store b F s).directory, last_error := none } =
+    store b F { directory := s.directory, last_error := none }
+path : std.path.PathBuf
+options oo : std.fs.OpenOptions
+write_back : std.fs.OpenOptions → std.fs.OpenOptions
+⊢ (let (oo, write_back) := (oo, write_back)
+    do
+    let (oo1, create_new_back) ← oo.create_new true
+    let (oo3, mode_back) ←
+      std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode (write_back (create_new_back oo1)) 384#u32
+    let r ← std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath (mode_back oo3) path
+    core.result.Result.rec
+        (fun a => do
+          let s_1 ← lift aspis_prover.state_only_entropy.RESERVATION_MAGIC.to_slice
+          let (r1, file1) ← std.fs.File.Insts.StdIoWrite.write_all a s_1
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          core.ops.control_flow.ControlFlow.rec
+              (fun a => do
+                let s1 ← lift sd.to_slice
+                let (r2, file2) ← std.fs.File.Insts.StdIoWrite.write_all file1 s1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                core.ops.control_flow.ControlFlow.rec
+                    (fun a => do
+                      let s2 ← lift nonce.to_slice
+                      let (r3, file3) ← std.fs.File.Insts.StdIoWrite.write_all file2 s2
+                      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                      core.ops.control_flow.ControlFlow.rec
+                          (fun a => do
+                            let r4 ← file3.sync_all
+                            let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                            core.ops.control_flow.ControlFlow.rec
+                                (fun a => do
+                                  let p ← std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref (store b F s).directory
+                                  let r5 ← aspis_prover.state_only_entropy.sync_directory p
+                                  let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                  core.ops.control_flow.ControlFlow.rec
+                                      (fun a =>
+                                        Result.ok
+                                          (core.result.Result.Ok true,
+                                            store b F { directory := s.directory, last_error := none }))
+                                      (fun a => do
+                                        let r6 ←
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Bool (core.convert.FromSame std.io.error.Error) a
+                                        Result.ok (r6, store b F { directory := s.directory, last_error := none }))
+                                      cf4)
+                                (fun a => do
+                                  let r6 ←
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Bool (core.convert.FromSame std.io.error.Error) a
+                                  Result.ok (r6, store b F { directory := s.directory, last_error := none }))
+                                cf3)
+                          (fun a => do
+                            let r6 ←
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                                  (core.convert.FromSame std.io.error.Error) a
+                            Result.ok (r6, store b F { directory := s.directory, last_error := none }))
+                          cf2)
+                    (fun a => do
+                      let r6 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                            (core.convert.FromSame std.io.error.Error) a
+                      Result.ok (r6, store b F { directory := s.directory, last_error := none }))
+                    cf1)
+              (fun a => do
+                let r6 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                      (core.convert.FromSame std.io.error.Error) a
+                Result.ok (r6, store b F { directory := s.directory, last_error := none }))
+              cf)
+        (fun a => do
+          let ek ← a.kind
+          let b_1 ← core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq ek core.io.error.ErrorKind.AlreadyExists
+          let r6 ← if b_1 = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err a)
+          Result.ok (r6, store b F { directory := s.directory, last_error := none }))
+        r) =
+    resultMap (pairStore b F)
+      (let (oo, write_back) := (oo, write_back)
+      do
+      let (oo1, create_new_back) ← oo.create_new true
+      let (oo3, mode_back) ←
+        std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode (write_back (create_new_back oo1)) 384#u32
+      let r ← std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath (mode_back oo3) path
+      core.result.Result.rec
+          (fun a => do
+            let s_1 ← lift aspis_prover.state_only_entropy.RESERVATION_MAGIC.to_slice
+            let (r1, file1) ← std.fs.File.Insts.StdIoWrite.write_all a s_1
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+            core.ops.control_flow.ControlFlow.rec
+                (fun a => do
+                  let s1 ← lift sd.to_slice
+                  let (r2, file2) ← std.fs.File.Insts.StdIoWrite.write_all file1 s1
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  core.ops.control_flow.ControlFlow.rec
+                      (fun a => do
+                        let s2 ← lift nonce.to_slice
+                        let (r3, file3) ← std.fs.File.Insts.StdIoWrite.write_all file2 s2
+                        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                        core.ops.control_flow.ControlFlow.rec
+                            (fun a => do
+                              let r4 ← file3.sync_all
+                              let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                              core.ops.control_flow.ControlFlow.rec
+                                  (fun a => do
+                                    let p ← std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref s.directory
+                                    let r5 ← aspis_prover.state_only_entropy.sync_directory p
+                                    let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                    core.ops.control_flow.ControlFlow.rec
+                                        (fun a =>
+                                          Result.ok
+                                            (core.result.Result.Ok true,
+                                              { directory := s.directory, last_error := none }))
+                                        (fun a => do
+                                          let r6 ←
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Bool (core.convert.FromSame std.io.error.Error) a
+                                          Result.ok (r6, { directory := s.directory, last_error := none }))
+                                        cf4)
+                                  (fun a => do
+                                    let r6 ←
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Bool (core.convert.FromSame std.io.error.Error) a
+                                    Result.ok (r6, { directory := s.directory, last_error := none }))
+                                  cf3)
+                            (fun a => do
+                              let r6 ←
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                                    (core.convert.FromSame std.io.error.Error) a
+                              Result.ok (r6, { directory := s.directory, last_error := none }))
+                            cf2)
+                      (fun a => do
+                        let r6 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                              (core.convert.FromSame std.io.error.Error) a
+                        Result.ok (r6, { directory := s.directory, last_error := none }))
+                      cf1)
+                (fun a => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                        (core.convert.FromSame std.io.error.Error) a
+                  Result.ok (r6, { directory := s.directory, last_error := none }))
+                cf)
+          (fun a => do
+            let ek ← a.kind
+            let b_1 ←
+              core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq ek core.io.error.ErrorKind.AlreadyExists
+            let r6 ←
+              if b_1 = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err a)
+            Result.ok (r6, { directory := s.directory, last_error := none }))
+          r)
+b : ProverRwFull.ExternalTypes
+F : Type
+ops : @ProverRwFull.ExternalFuns b
+s : @R1Z.PDict_FormatterStoreMap.Store b
+sd nonce :
+  Aeneas.Std.Array.{0} Aeneas.Std.U8
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+      (@of_decide_eq_true
+        (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+          (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+        (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+          (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+        (@id.{0}
+          (@Eq.{1} Bool
+            (@Decidable.decide
+              (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+              (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+            Bool.true)
+          (@Eq.refl.{1} Bool Bool.true))))
+hs :
+  @Eq.{1}
+    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+      (R1Z.PDict_FormatterTypeMaps.types b F))
+    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+      (R1Z.PDict_FormatterTypeMaps.types b F)
+      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+        (R1Z.PDict_FormatterTypeMaps.types b F) (R1Z.PDict_FormatterStoreMap.store b F s))
+      (@Option.none.{0} ProverRwFull.core.io.error.ErrorKind))
+    (R1Z.PDict_FormatterStoreMap.store b F
+      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk b
+        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory b s)
+        (@Option.none.{0} ProverRwFull.core.io.error.ErrorKind)))
+path : @ProverRwFull.std.path.PathBuf (R1Z.PDict_FormatterTypeMaps.types b F)
+options oo : @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F)
+write_back :
+  @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F) →
+    @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F)
+⊢ @Eq.{1}
+    (Aeneas.Std.Result.{0}
+      (Prod.{0, 0}
+        (Aeneas.Std.core.result.Result.{0, 0} Bool
+          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+          (R1Z.PDict_FormatterTypeMaps.types b F))))
+    (let (oo, write_back) :=
+      @Prod.mk.{0, 0} (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+        (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F) →
+          @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+        oo write_back
+    @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+      (Prod.{0, 0} (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+        (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F) →
+          @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F)))
+      (Prod.{0, 0}
+        (Aeneas.Std.core.result.Result.{0, 0} Bool
+          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+          (R1Z.PDict_FormatterTypeMaps.types b F)))
+      (@ProverRwFull.std.fs.OpenOptions.create_new b ops oo Bool.true)
+      (@Aeneas.Std.uncurry.{0, 0, 1} (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+        (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F) →
+          @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+        (Aeneas.Std.Result.{0}
+          (Prod.{0, 0}
+            (Aeneas.Std.core.result.Result.{0, 0} Bool
+              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+              (R1Z.PDict_FormatterTypeMaps.types b F))))
+        fun (oo1 : @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+          (create_new_back :
+            @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F) →
+              @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F)) =>
+        @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+          (Prod.{0, 0} (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+            (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F) →
+              @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F)))
+          (Prod.{0, 0}
+            (Aeneas.Std.core.result.Result.{0, 0} Bool
+              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+              (R1Z.PDict_FormatterTypeMaps.types b F)))
+          (@ProverRwFull.std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode b ops
+            (write_back (create_new_back oo1))
+            (Aeneas.Std.U32.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 384) (instOfNatNat (nat_lit 384)))
+              ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible._proof_1))
+          (@Aeneas.Std.uncurry.{0, 0, 1} (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+            (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F) →
+              @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+            (Aeneas.Std.Result.{0}
+              (Prod.{0, 0}
+                (Aeneas.Std.core.result.Result.{0, 0} Bool
+                  (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                  (R1Z.PDict_FormatterTypeMaps.types b F))))
+            fun (oo3 : @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+              (mode_back :
+                @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F) →
+                  @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F)) =>
+            @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+              (Aeneas.Std.core.result.Result.{0, 0} (@ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F))
+                (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+              (Prod.{0, 0}
+                (Aeneas.Std.core.result.Result.{0, 0} Bool
+                  (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                  (R1Z.PDict_FormatterTypeMaps.types b F)))
+              (@ProverRwFull.std.fs.OpenOptions.open b ops
+                (@ProverRwFull.std.path.PathBuf (R1Z.PDict_FormatterTypeMaps.types b F))
+                (@ProverRwFull.std.path.PathBuf.Insts.CoreConvertAsRefPath (R1Z.PDict_FormatterTypeMaps.types b F)
+                  (R1Z.PDict_FormatterDictionaryMap.selected b F ops))
+                (mode_back oo3) path)
+              fun
+                (r :
+                  Aeneas.Std.core.result.Result.{0, 0}
+                    (@ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F))
+                    (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+              @Aeneas.Std.core.result.Result.rec.{1, 0, 0}
+                (@ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F))
+                (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))
+                (fun
+                    (x :
+                      Aeneas.Std.core.result.Result.{0, 0}
+                        (@ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F))
+                        (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                  Aeneas.Std.Result.{0}
+                    (Prod.{0, 0}
+                      (Aeneas.Std.core.result.Result.{0, 0} Bool
+                        (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                        (R1Z.PDict_FormatterTypeMaps.types b F))))
+                (fun (a : @ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F)) =>
+                  @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                    (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                    (Prod.{0, 0}
+                      (Aeneas.Std.core.result.Result.{0, 0} Bool
+                        (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                    (@Aeneas.Std.lift.{0} (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                      (@Aeneas.Std.Array.to_slice.{0} Aeneas.Std.U8
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+                          ProverRwFull.aspis_core.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS._proof_1)
+                        ProverRwFull.aspis_prover.state_only_entropy.RESERVATION_MAGIC))
+                    fun (s_1 : Aeneas.Std.Slice.{0} Aeneas.Std.U8) =>
+                    @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                      (Prod.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} Unit
+                          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                        (@ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F)))
+                      (Prod.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} Bool
+                          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                          (R1Z.PDict_FormatterTypeMaps.types b F)))
+                      (@ProverRwFull.std.fs.File.Insts.StdIoWrite.write_all b ops a s_1)
+                      (@Aeneas.Std.uncurry.{0, 0, 1}
+                        (Aeneas.Std.core.result.Result.{0, 0} Unit
+                          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                        (@ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F))
+                        (Aeneas.Std.Result.{0}
+                          (Prod.{0, 0}
+                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                              (R1Z.PDict_FormatterTypeMaps.types b F))))
+                        fun
+                          (r1 :
+                            Aeneas.Std.core.result.Result.{0, 0} Unit
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                          (file1 : @ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F)) =>
+                        @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                          (Aeneas.Std.core.ops.control_flow.ControlFlow
+                            (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                            Unit)
+                          (Prod.{0, 0}
+                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                          (@Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch Unit
+                            (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)) r1)
+                          fun
+                            (cf :
+                              Aeneas.Std.core.ops.control_flow.ControlFlow
+                                (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                  (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                Unit) =>
+                          @Aeneas.Std.core.ops.control_flow.ControlFlow.rec.{1}
+                            (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                            Unit
+                            (fun
+                                (x :
+                                  Aeneas.Std.core.ops.control_flow.ControlFlow
+                                    (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                      (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                    Unit) =>
+                              Aeneas.Std.Result.{0}
+                                (Prod.{0, 0}
+                                  (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                    (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                    (R1Z.PDict_FormatterTypeMaps.types b F))))
+                            (fun (a : Unit) =>
+                              @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                                (Prod.{0, 0}
+                                  (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                    (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                (@Aeneas.Std.lift.{0} (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                                  (@Aeneas.Std.Array.to_slice.{0} Aeneas.Std.U8
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                                      ProverRwFull.aspis_prover.state_only_entropy.entropy_nonzero32_loop.body._proof_1)
+                                    sd))
+                                fun (s1 : Aeneas.Std.Slice.{0} Aeneas.Std.U8) =>
+                                @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                  (Prod.{0, 0}
+                                    (Aeneas.Std.core.result.Result.{0, 0} Unit
+                                      (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                    (@ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                  (Prod.{0, 0}
+                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                      (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                      (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                  (@ProverRwFull.std.fs.File.Insts.StdIoWrite.write_all b ops file1 s1)
+                                  (@Aeneas.Std.uncurry.{0, 0, 1}
+                                    (Aeneas.Std.core.result.Result.{0, 0} Unit
+                                      (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                    (@ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F))
+                                    (Aeneas.Std.Result.{0}
+                                      (Prod.{0, 0}
+                                        (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                          (R1Z.PDict_FormatterTypeMaps.types b F))))
+                                    fun
+                                      (r2 :
+                                        Aeneas.Std.core.result.Result.{0, 0} Unit
+                                          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                      (file2 : @ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F)) =>
+                                    @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                      (Aeneas.Std.core.ops.control_flow.ControlFlow
+                                        (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                        Unit)
+                                      (Prod.{0, 0}
+                                        (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                          (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                      (@Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch Unit
+                                        (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)) r2)
+                                      fun
+                                        (cf1 :
+                                          Aeneas.Std.core.ops.control_flow.ControlFlow
+                                            (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                              (@ProverRwFull.std.io.error.Error
+                                                (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                            Unit) =>
+                                      @Aeneas.Std.core.ops.control_flow.ControlFlow.rec.{1}
+                                        (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                        Unit
+                                        (fun
+                                            (x :
+                                              Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                                  (@ProverRwFull.std.io.error.Error
+                                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                Unit) =>
+                                          Aeneas.Std.Result.{0}
+                                            (Prod.{0, 0}
+                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                (@ProverRwFull.std.io.error.Error
+                                                  (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                (R1Z.PDict_FormatterTypeMaps.types b F))))
+                                        (fun (a : Unit) =>
+                                          @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                            (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                                            (Prod.{0, 0}
+                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                (@ProverRwFull.std.io.error.Error
+                                                  (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                            (@Aeneas.Std.lift.{0} (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                                              (@Aeneas.Std.Array.to_slice.{0} Aeneas.Std.U8
+                                                (Aeneas.Std.Usize.ofNat
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                                                  ProverRwFull.aspis_prover.state_only_entropy.entropy_nonzero32_loop.body._proof_1)
+                                                nonce))
+                                            fun (s2 : Aeneas.Std.Slice.{0} Aeneas.Std.U8) =>
+                                            @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                              (Prod.{0, 0}
+                                                (Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                  (@ProverRwFull.std.io.error.Error
+                                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                (@ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                              (Prod.{0, 0}
+                                                (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                  (@ProverRwFull.std.io.error.Error
+                                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                  (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                              (@ProverRwFull.std.fs.File.Insts.StdIoWrite.write_all b ops file2 s2)
+                                              (@Aeneas.Std.uncurry.{0, 0, 1}
+                                                (Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                  (@ProverRwFull.std.io.error.Error
+                                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                (@ProverRwFull.std.fs.File (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                (Aeneas.Std.Result.{0}
+                                                  (Prod.{0, 0}
+                                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                      (@ProverRwFull.std.io.error.Error
+                                                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                      (R1Z.PDict_FormatterTypeMaps.types b F))))
+                                                fun
+                                                  (r3 :
+                                                    Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                      (@ProverRwFull.std.io.error.Error
+                                                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                  (file3 :
+                                                    @ProverRwFull.std.fs.File
+                                                      (R1Z.PDict_FormatterTypeMaps.types b F)) =>
+                                                @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                                  (Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                    (Aeneas.Std.core.result.Result.{0, 0}
+                                                      Aeneas.Std.core.convert.Infallible
+                                                      (@ProverRwFull.std.io.error.Error
+                                                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                    Unit)
+                                                  (Prod.{0, 0}
+                                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                      (@ProverRwFull.std.io.error.Error
+                                                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                      (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                  (@Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch Unit
+                                                    (@ProverRwFull.std.io.error.Error
+                                                      (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                    r3)
+                                                  fun
+                                                    (cf2 :
+                                                      Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                        (Aeneas.Std.core.result.Result.{0, 0}
+                                                          Aeneas.Std.core.convert.Infallible
+                                                          (@ProverRwFull.std.io.error.Error
+                                                            (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                        Unit) =>
+                                                  @Aeneas.Std.core.ops.control_flow.ControlFlow.rec.{1}
+                                                    (Aeneas.Std.core.result.Result.{0, 0}
+                                                      Aeneas.Std.core.convert.Infallible
+                                                      (@ProverRwFull.std.io.error.Error
+                                                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                    Unit
+                                                    (fun
+                                                        (x :
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                            (Aeneas.Std.core.result.Result.{0, 0}
+                                                              Aeneas.Std.core.convert.Infallible
+                                                              (@ProverRwFull.std.io.error.Error
+                                                                (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                            Unit) =>
+                                                      Aeneas.Std.Result.{0}
+                                                        (Prod.{0, 0}
+                                                          (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                            (@ProverRwFull.std.io.error.Error
+                                                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                          (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                            (R1Z.PDict_FormatterTypeMaps.types b F))))
+                                                    (fun (a : Unit) =>
+                                                      @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                        Aeneas.Std.instBindResult.{0}
+                                                        (Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                          (@ProverRwFull.std.io.error.Error
+                                                            (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                        (Prod.{0, 0}
+                                                          (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                            (@ProverRwFull.std.io.error.Error
+                                                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                          (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                            (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                        (@ProverRwFull.std.fs.File.sync_all b ops file3)
+                                                        fun
+                                                          (r4 :
+                                                            Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                              (@ProverRwFull.std.io.error.Error
+                                                                (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                                                        @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                          Aeneas.Std.instBindResult.{0}
+                                                          (Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                            (Aeneas.Std.core.result.Result.{0, 0}
+                                                              Aeneas.Std.core.convert.Infallible
+                                                              (@ProverRwFull.std.io.error.Error
+                                                                (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                            Unit)
+                                                          (Prod.{0, 0}
+                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                              (@ProverRwFull.std.io.error.Error
+                                                                (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                          (@Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch Unit
+                                                            (@ProverRwFull.std.io.error.Error
+                                                              (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                            r4)
+                                                          fun
+                                                            (cf3 :
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                                (Aeneas.Std.core.result.Result.{0, 0}
+                                                                  Aeneas.Std.core.convert.Infallible
+                                                                  (@ProverRwFull.std.io.error.Error
+                                                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                Unit) =>
+                                                          @Aeneas.Std.core.ops.control_flow.ControlFlow.rec.{1}
+                                                            (Aeneas.Std.core.result.Result.{0, 0}
+                                                              Aeneas.Std.core.convert.Infallible
+                                                              (@ProverRwFull.std.io.error.Error
+                                                                (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                            Unit
+                                                            (fun
+                                                                (x :
+                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                                    (Aeneas.Std.core.result.Result.{0, 0}
+                                                                      Aeneas.Std.core.convert.Infallible
+                                                                      (@ProverRwFull.std.io.error.Error
+                                                                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                    Unit) =>
+                                                              Aeneas.Std.Result.{0}
+                                                                (Prod.{0, 0}
+                                                                  (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                    (@ProverRwFull.std.io.error.Error
+                                                                      (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                    (R1Z.PDict_FormatterTypeMaps.types b F))))
+                                                            (fun (a : Unit) =>
+                                                              @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                                Aeneas.Std.instBindResult.{0}
+                                                                (@ProverRwFull.std.path.Path
+                                                                  (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                                (Prod.{0, 0}
+                                                                  (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                    (@ProverRwFull.std.io.error.Error
+                                                                      (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                (@ProverRwFull.std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref
+                                                                  b ops
+                                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                                    (R1Z.PDict_FormatterTypeMaps.types b F)
+                                                                    (R1Z.PDict_FormatterStoreMap.store b F s)))
+                                                                fun
+                                                                  (p :
+                                                                    @ProverRwFull.std.path.Path
+                                                                      (R1Z.PDict_FormatterTypeMaps.types b F)) =>
+                                                                @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                                  Aeneas.Std.instBindResult.{0}
+                                                                  (Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                                    (@ProverRwFull.std.io.error.Error
+                                                                      (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                  (Prod.{0, 0}
+                                                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                      (@ProverRwFull.std.io.error.Error
+                                                                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                      (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                  (@ProverRwFull.aspis_prover.state_only_entropy.sync_directory
+                                                                    b ops p)
+                                                                  fun
+                                                                    (r5 :
+                                                                      Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                                        (@ProverRwFull.std.io.error.Error
+                                                                          (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                                                                  @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                                    Aeneas.Std.instBindResult.{0}
+                                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                                      (Aeneas.Std.core.result.Result.{0, 0}
+                                                                        Aeneas.Std.core.convert.Infallible
+                                                                        (@ProverRwFull.std.io.error.Error
+                                                                          (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                      Unit)
+                                                                    (Prod.{0, 0}
+                                                                      (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                        (@ProverRwFull.std.io.error.Error
+                                                                          (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                    (@Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                      Unit
+                                                                      (@ProverRwFull.std.io.error.Error
+                                                                        (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                                      r5)
+                                                                    fun
+                                                                      (cf4 :
+                                                                        Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                                          (Aeneas.Std.core.result.Result.{0, 0}
+                                                                            Aeneas.Std.core.convert.Infallible
+                                                                            (@ProverRwFull.std.io.error.Error
+                                                                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                          Unit) =>
+                                                                    @Aeneas.Std.core.ops.control_flow.ControlFlow.rec.{1}
+                                                                      (Aeneas.Std.core.result.Result.{0, 0}
+                                                                        Aeneas.Std.core.convert.Infallible
+                                                                        (@ProverRwFull.std.io.error.Error
+                                                                          (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                      Unit
+                                                                      (fun
+                                                                          (x :
+                                                                            Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                                              (Aeneas.Std.core.result.Result.{0, 0}
+                                                                                Aeneas.Std.core.convert.Infallible
+                                                                                (@ProverRwFull.std.io.error.Error
+                                                                                  (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                    F)))
+                                                                              Unit) =>
+                                                                        Aeneas.Std.Result.{0}
+                                                                          (Prod.{0, 0}
+                                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                              (@ProverRwFull.std.io.error.Error
+                                                                                (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                  F)))
+                                                                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                              (R1Z.PDict_FormatterTypeMaps.types b F))))
+                                                                      (fun (a : Unit) =>
+                                                                        @Aeneas.Std.Result.ok.{0}
+                                                                          (Prod.{0, 0}
+                                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                              (@ProverRwFull.std.io.error.Error
+                                                                                (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                  F)))
+                                                                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                          (@Prod.mk.{0, 0}
+                                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                              (@ProverRwFull.std.io.error.Error
+                                                                                (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                  F)))
+                                                                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                              (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                                            (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+                                                                              Bool
+                                                                              (@ProverRwFull.std.io.error.Error
+                                                                                (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                                              Bool.true)
+                                                                            (R1Z.PDict_FormatterStoreMap.store b F
+                                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+                                                                                b
+                                                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                                                  b s)
+                                                                                (@Option.none.{0}
+                                                                                  ProverRwFull.core.io.error.ErrorKind)))))
+                                                                      (fun
+                                                                          (a :
+                                                                            Aeneas.Std.core.result.Result.{0, 0}
+                                                                              Aeneas.Std.core.convert.Infallible
+                                                                              (@ProverRwFull.std.io.error.Error
+                                                                                (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                  F))) =>
+                                                                        @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                                          Aeneas.Std.instBindResult.{0}
+                                                                          (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                            (@ProverRwFull.std.io.error.Error
+                                                                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                          (Prod.{0, 0}
+                                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                              (@ProverRwFull.std.io.error.Error
+                                                                                (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                  F)))
+                                                                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                          (@Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            Bool
+                                                                            (@ProverRwFull.std.io.error.Error
+                                                                              (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                                            (@ProverRwFull.std.io.error.Error
+                                                                              (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                                            (Aeneas.Std.core.convert.FromSame
+                                                                              (@ProverRwFull.std.io.error.Error
+                                                                                (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                  F)))
+                                                                            a)
+                                                                          fun
+                                                                            (r6 :
+                                                                              Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                                (@ProverRwFull.std.io.error.Error
+                                                                                  (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                    F))) =>
+                                                                          @Aeneas.Std.Result.ok.{0}
+                                                                            (Prod.{0, 0}
+                                                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                                (@ProverRwFull.std.io.error.Error
+                                                                                  (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                    F)))
+                                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                                (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                  F)))
+                                                                            (@Prod.mk.{0, 0}
+                                                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                                (@ProverRwFull.std.io.error.Error
+                                                                                  (R1Z.PDict_FormatterTypeMaps.types b
+                                                                                    F)))
+                                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                                (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                                              r6
+                                                                              (R1Z.PDict_FormatterStoreMap.store b F
+                                                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+                                                                                  b
+                                                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                                                    b s)
+                                                                                  (@Option.none.{0}
+                                                                                    ProverRwFull.core.io.error.ErrorKind)))))
+                                                                      cf4)
+                                                            (fun
+                                                                (a :
+                                                                  Aeneas.Std.core.result.Result.{0, 0}
+                                                                    Aeneas.Std.core.convert.Infallible
+                                                                    (@ProverRwFull.std.io.error.Error
+                                                                      (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                                                              @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                                Aeneas.Std.instBindResult.{0}
+                                                                (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                  (@ProverRwFull.std.io.error.Error
+                                                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                (Prod.{0, 0}
+                                                                  (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                    (@ProverRwFull.std.io.error.Error
+                                                                      (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                (@Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  Bool
+                                                                  (@ProverRwFull.std.io.error.Error
+                                                                    (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                                  (@ProverRwFull.std.io.error.Error
+                                                                    (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                                  (Aeneas.Std.core.convert.FromSame
+                                                                    (@ProverRwFull.std.io.error.Error
+                                                                      (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                  a)
+                                                                fun
+                                                                  (r6 :
+                                                                    Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                      (@ProverRwFull.std.io.error.Error
+                                                                        (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                                                                @Aeneas.Std.Result.ok.{0}
+                                                                  (Prod.{0, 0}
+                                                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                      (@ProverRwFull.std.io.error.Error
+                                                                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                      (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                  (@Prod.mk.{0, 0}
+                                                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                      (@ProverRwFull.std.io.error.Error
+                                                                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                      (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                                    r6
+                                                                    (R1Z.PDict_FormatterStoreMap.store b F
+                                                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+                                                                        b
+                                                                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                                          b s)
+                                                                        (@Option.none.{0}
+                                                                          ProverRwFull.core.io.error.ErrorKind)))))
+                                                            cf3)
+                                                    (fun
+                                                        (a :
+                                                          Aeneas.Std.core.result.Result.{0, 0}
+                                                            Aeneas.Std.core.convert.Infallible
+                                                            (@ProverRwFull.std.io.error.Error
+                                                              (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                                                      @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                        Aeneas.Std.instBindResult.{0}
+                                                        (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                          (@ProverRwFull.std.io.error.Error
+                                                            (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                        (Prod.{0, 0}
+                                                          (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                            (@ProverRwFull.std.io.error.Error
+                                                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                          (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                            (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                        (@Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          Bool
+                                                          (@ProverRwFull.std.io.error.Error
+                                                            (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                          (@ProverRwFull.std.io.error.Error
+                                                            (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                          (Aeneas.Std.core.convert.FromSame
+                                                            (@ProverRwFull.std.io.error.Error
+                                                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                          a)
+                                                        fun
+                                                          (r6 :
+                                                            Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                              (@ProverRwFull.std.io.error.Error
+                                                                (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                                                        @Aeneas.Std.Result.ok.{0}
+                                                          (Prod.{0, 0}
+                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                              (@ProverRwFull.std.io.error.Error
+                                                                (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                          (@Prod.mk.{0, 0}
+                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                              (@ProverRwFull.std.io.error.Error
+                                                                (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                              (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                            r6
+                                                            (R1Z.PDict_FormatterStoreMap.store b F
+                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+                                                                b
+                                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                                  b s)
+                                                                (@Option.none.{0}
+                                                                  ProverRwFull.core.io.error.ErrorKind)))))
+                                                    cf2))
+                                        (fun
+                                            (a :
+                                              Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                                (@ProverRwFull.std.io.error.Error
+                                                  (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                                          @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                              (@ProverRwFull.std.io.error.Error
+                                                (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                            (Prod.{0, 0}
+                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                (@ProverRwFull.std.io.error.Error
+                                                  (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                            (@Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Bool
+                                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))
+                                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))
+                                              (Aeneas.Std.core.convert.FromSame
+                                                (@ProverRwFull.std.io.error.Error
+                                                  (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                              a)
+                                            fun
+                                              (r6 :
+                                                Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                  (@ProverRwFull.std.io.error.Error
+                                                    (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                                            @Aeneas.Std.Result.ok.{0}
+                                              (Prod.{0, 0}
+                                                (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                  (@ProverRwFull.std.io.error.Error
+                                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                  (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                              (@Prod.mk.{0, 0}
+                                                (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                  (@ProverRwFull.std.io.error.Error
+                                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                  (R1Z.PDict_FormatterTypeMaps.types b F))
+                                                r6
+                                                (R1Z.PDict_FormatterStoreMap.store b F
+                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+                                                    b
+                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                      b s)
+                                                    (@Option.none.{0} ProverRwFull.core.io.error.ErrorKind)))))
+                                        cf1))
+                            (fun
+                                (a :
+                                  Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                    (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                              @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                  (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                (Prod.{0, 0}
+                                  (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                    (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                    (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                (@Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  Bool (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))
+                                  (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))
+                                  (Aeneas.Std.core.convert.FromSame
+                                    (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                  a)
+                                fun
+                                  (r6 :
+                                    Aeneas.Std.core.result.Result.{0, 0} Bool
+                                      (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                                @Aeneas.Std.Result.ok.{0}
+                                  (Prod.{0, 0}
+                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                      (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                      (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                  (@Prod.mk.{0, 0}
+                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                      (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                      (R1Z.PDict_FormatterTypeMaps.types b F))
+                                    r6
+                                    (R1Z.PDict_FormatterStoreMap.store b F
+                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk b
+                                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                          b s)
+                                        (@Option.none.{0} ProverRwFull.core.io.error.ErrorKind)))))
+                            cf))
+                (fun (a : @ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)) =>
+                  @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                    ProverRwFull.core.io.error.ErrorKind
+                    (Prod.{0, 0}
+                      (Aeneas.Std.core.result.Result.{0, 0} Bool
+                        (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                        (R1Z.PDict_FormatterTypeMaps.types b F)))
+                    (@ProverRwFull.std.io.error.Error.kind b ops a) fun (ek : ProverRwFull.core.io.error.ErrorKind) =>
+                    @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} Bool
+                      (Prod.{0, 0}
+                        (Aeneas.Std.core.result.Result.{0, 0} Bool
+                          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                          (R1Z.PDict_FormatterTypeMaps.types b F)))
+                      (@ProverRwFull.core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq
+                        (R1Z.PDict_FormatterTypeMaps.types b F) (R1Z.PDict_FormatterDictionaryMap.selected b F ops) ek
+                        ProverRwFull.core.io.error.ErrorKind.AlreadyExists)
+                      fun (b_1 : Bool) =>
+                      @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                        (Aeneas.Std.core.result.Result.{0, 0} Bool
+                          (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                        (Prod.{0, 0}
+                          (Aeneas.Std.core.result.Result.{0, 0} Bool
+                            (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                          (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                            (R1Z.PDict_FormatterTypeMaps.types b F)))
+                        (@ite.{1}
+                          (Aeneas.Std.Result.{0}
+                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))))
+                          (@Eq.{1} Bool b_1 Bool.true) (instDecidableEqBool b_1 Bool.true)
+                          (@Aeneas.Std.Result.ok.{0}
+                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                            (@Aeneas.Std.core.result.Result.Ok.{0, 0} Bool
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)) Bool.false))
+                          (@Aeneas.Std.Result.ok.{0}
+                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                            (@Aeneas.Std.core.result.Result.Err.{0, 0} Bool
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)) a)))
+                        fun
+                          (r6 :
+                            Aeneas.Std.core.result.Result.{0, 0} Bool
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F))) =>
+                        @Aeneas.Std.Result.ok.{0}
+                          (Prod.{0, 0}
+                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                              (R1Z.PDict_FormatterTypeMaps.types b F)))
+                          (@Prod.mk.{0, 0}
+                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                              (@ProverRwFull.std.io.error.Error (R1Z.PDict_FormatterTypeMaps.types b F)))
+                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                              (R1Z.PDict_FormatterTypeMaps.types b F))
+                            r6
+                            (R1Z.PDict_FormatterStoreMap.store b F
+                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk b
+                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                  b s)
+                                (@Option.none.{0} ProverRwFull.core.io.error.ErrorKind)))))
+                r)))
+    (@R1Z.PDict_FormatterDictionaryMap.resultMap
+      (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+        (@R1Z.PDict_FormatterStoreMap.Store b))
+      (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+        (@R1Z.PDict_FormatterStoreMap.Store (R1Z.PDict_FormatterTypeMaps.types b F)))
+      (@R1Z.PDict_FormatterStoreMap.pairStore b F
+        (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b)))
+      (let (oo, write_back) :=
+        @Prod.mk.{0, 0} (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+          (@ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F) →
+            @ProverRwFull.std.fs.OpenOptions (R1Z.PDict_FormatterTypeMaps.types b F))
+          oo write_back
+      @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+        (Prod.{0, 0} (@ProverRwFull.std.fs.OpenOptions b)
+          (@ProverRwFull.std.fs.OpenOptions b → @ProverRwFull.std.fs.OpenOptions b))
+        (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+          (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+        (@ProverRwFull.std.fs.OpenOptions.create_new b ops oo Bool.true)
+        (@Aeneas.Std.uncurry.{0, 0, 1} (@ProverRwFull.std.fs.OpenOptions b)
+          (@ProverRwFull.std.fs.OpenOptions b → @ProverRwFull.std.fs.OpenOptions b)
+          (Aeneas.Std.Result.{0}
+            (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b)))
+          fun (oo1 : @ProverRwFull.std.fs.OpenOptions b)
+            (create_new_back : @ProverRwFull.std.fs.OpenOptions b → @ProverRwFull.std.fs.OpenOptions b) =>
+          @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+            (Prod.{0, 0} (@ProverRwFull.std.fs.OpenOptions b)
+              (@ProverRwFull.std.fs.OpenOptions b → @ProverRwFull.std.fs.OpenOptions b))
+            (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+            (@ProverRwFull.std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode b ops
+              (write_back (create_new_back oo1))
+              (Aeneas.Std.U32.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 384) (instOfNatNat (nat_lit 384)))
+                ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible._proof_1))
+            (@Aeneas.Std.uncurry.{0, 0, 1} (@ProverRwFull.std.fs.OpenOptions b)
+              (@ProverRwFull.std.fs.OpenOptions b → @ProverRwFull.std.fs.OpenOptions b)
+              (Aeneas.Std.Result.{0}
+                (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b)))
+              fun (oo3 : @ProverRwFull.std.fs.OpenOptions b)
+                (mode_back : @ProverRwFull.std.fs.OpenOptions b → @ProverRwFull.std.fs.OpenOptions b) =>
+              @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                (Aeneas.Std.core.result.Result.{0, 0} (@ProverRwFull.std.fs.File b)
+                  (@ProverRwFull.std.io.error.Error b))
+                (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                (@ProverRwFull.std.fs.OpenOptions.open b ops (@ProverRwFull.std.path.PathBuf b)
+                  (@ProverRwFull.std.path.PathBuf.Insts.CoreConvertAsRefPath b ops) (mode_back oo3) path)
+                fun
+                  (r :
+                    Aeneas.Std.core.result.Result.{0, 0} (@ProverRwFull.std.fs.File b)
+                      (@ProverRwFull.std.io.error.Error b)) =>
+                @Aeneas.Std.core.result.Result.rec.{1, 0, 0} (@ProverRwFull.std.fs.File b)
+                  (@ProverRwFull.std.io.error.Error b)
+                  (fun
+                      (x :
+                        Aeneas.Std.core.result.Result.{0, 0} (@ProverRwFull.std.fs.File b)
+                          (@ProverRwFull.std.io.error.Error b)) =>
+                    Aeneas.Std.Result.{0}
+                      (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b)))
+                  (fun (a : @ProverRwFull.std.fs.File b) =>
+                    @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                      (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                      (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                      (@Aeneas.Std.lift.{0} (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                        (@Aeneas.Std.Array.to_slice.{0} Aeneas.Std.U8
+                          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+                            ProverRwFull.aspis_core.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS._proof_1)
+                          ProverRwFull.aspis_prover.state_only_entropy.RESERVATION_MAGIC))
+                      fun (s_1 : Aeneas.Std.Slice.{0} Aeneas.Std.U8) =>
+                      @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                        (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Unit (@ProverRwFull.std.io.error.Error b))
+                          (@ProverRwFull.std.fs.File b))
+                        (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                          (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                        (@ProverRwFull.std.fs.File.Insts.StdIoWrite.write_all b ops a s_1)
+                        (@Aeneas.Std.uncurry.{0, 0, 1}
+                          (Aeneas.Std.core.result.Result.{0, 0} Unit (@ProverRwFull.std.io.error.Error b))
+                          (@ProverRwFull.std.fs.File b)
+                          (Aeneas.Std.Result.{0}
+                            (Prod.{0, 0}
+                              (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b)))
+                          fun (r1 : Aeneas.Std.core.result.Result.{0, 0} Unit (@ProverRwFull.std.io.error.Error b))
+                            (file1 : @ProverRwFull.std.fs.File b) =>
+                          @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                            (Aeneas.Std.core.ops.control_flow.ControlFlow
+                              (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                (@ProverRwFull.std.io.error.Error b))
+                              Unit)
+                            (Prod.{0, 0}
+                              (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                            (@Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch Unit
+                              (@ProverRwFull.std.io.error.Error b) r1)
+                            fun
+                              (cf :
+                                Aeneas.Std.core.ops.control_flow.ControlFlow
+                                  (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                    (@ProverRwFull.std.io.error.Error b))
+                                  Unit) =>
+                            @Aeneas.Std.core.ops.control_flow.ControlFlow.rec.{1}
+                              (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                (@ProverRwFull.std.io.error.Error b))
+                              Unit
+                              (fun
+                                  (x :
+                                    Aeneas.Std.core.ops.control_flow.ControlFlow
+                                      (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                        (@ProverRwFull.std.io.error.Error b))
+                                      Unit) =>
+                                Aeneas.Std.Result.{0}
+                                  (Prod.{0, 0}
+                                    (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b)))
+                              (fun (a : Unit) =>
+                                @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                  (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                                  (Prod.{0, 0}
+                                    (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                                  (@Aeneas.Std.lift.{0} (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                                    (@Aeneas.Std.Array.to_slice.{0} Aeneas.Std.U8
+                                      (Aeneas.Std.Usize.ofNat
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                                        ProverRwFull.aspis_prover.state_only_entropy.entropy_nonzero32_loop.body._proof_1)
+                                      sd))
+                                  fun (s1 : Aeneas.Std.Slice.{0} Aeneas.Std.U8) =>
+                                  @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                    (Prod.{0, 0}
+                                      (Aeneas.Std.core.result.Result.{0, 0} Unit (@ProverRwFull.std.io.error.Error b))
+                                      (@ProverRwFull.std.fs.File b))
+                                    (Prod.{0, 0}
+                                      (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                                    (@ProverRwFull.std.fs.File.Insts.StdIoWrite.write_all b ops file1 s1)
+                                    (@Aeneas.Std.uncurry.{0, 0, 1}
+                                      (Aeneas.Std.core.result.Result.{0, 0} Unit (@ProverRwFull.std.io.error.Error b))
+                                      (@ProverRwFull.std.fs.File b)
+                                      (Aeneas.Std.Result.{0}
+                                        (Prod.{0, 0}
+                                          (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                            (@ProverRwFull.std.io.error.Error b))
+                                          (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                            b)))
+                                      fun
+                                        (r2 :
+                                          Aeneas.Std.core.result.Result.{0, 0} Unit
+                                            (@ProverRwFull.std.io.error.Error b))
+                                        (file2 : @ProverRwFull.std.fs.File b) =>
+                                      @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                        (Aeneas.Std.core.ops.control_flow.ControlFlow
+                                          (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                            (@ProverRwFull.std.io.error.Error b))
+                                          Unit)
+                                        (Prod.{0, 0}
+                                          (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                            (@ProverRwFull.std.io.error.Error b))
+                                          (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                            b))
+                                        (@Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch Unit
+                                          (@ProverRwFull.std.io.error.Error b) r2)
+                                        fun
+                                          (cf1 :
+                                            Aeneas.Std.core.ops.control_flow.ControlFlow
+                                              (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                                (@ProverRwFull.std.io.error.Error b))
+                                              Unit) =>
+                                        @Aeneas.Std.core.ops.control_flow.ControlFlow.rec.{1}
+                                          (Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                            (@ProverRwFull.std.io.error.Error b))
+                                          Unit
+                                          (fun
+                                              (x :
+                                                Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                  (Aeneas.Std.core.result.Result.{0, 0}
+                                                    Aeneas.Std.core.convert.Infallible
+                                                    (@ProverRwFull.std.io.error.Error b))
+                                                  Unit) =>
+                                            Aeneas.Std.Result.{0}
+                                              (Prod.{0, 0}
+                                                (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                  (@ProverRwFull.std.io.error.Error b))
+                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                  b)))
+                                          (fun (a : Unit) =>
+                                            @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                              (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                                              (Prod.{0, 0}
+                                                (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                  (@ProverRwFull.std.io.error.Error b))
+                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                  b))
+                                              (@Aeneas.Std.lift.{0} (Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+                                                (@Aeneas.Std.Array.to_slice.{0} Aeneas.Std.U8
+                                                  (Aeneas.Std.Usize.ofNat
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                                                    ProverRwFull.aspis_prover.state_only_entropy.entropy_nonzero32_loop.body._proof_1)
+                                                  nonce))
+                                              fun (s2 : Aeneas.Std.Slice.{0} Aeneas.Std.U8) =>
+                                              @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                                (Prod.{0, 0}
+                                                  (Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                    (@ProverRwFull.std.io.error.Error b))
+                                                  (@ProverRwFull.std.fs.File b))
+                                                (Prod.{0, 0}
+                                                  (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                    (@ProverRwFull.std.io.error.Error b))
+                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                    b))
+                                                (@ProverRwFull.std.fs.File.Insts.StdIoWrite.write_all b ops file2 s2)
+                                                (@Aeneas.Std.uncurry.{0, 0, 1}
+                                                  (Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                    (@ProverRwFull.std.io.error.Error b))
+                                                  (@ProverRwFull.std.fs.File b)
+                                                  (Aeneas.Std.Result.{0}
+                                                    (Prod.{0, 0}
+                                                      (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                        (@ProverRwFull.std.io.error.Error b))
+                                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                        b)))
+                                                  fun
+                                                    (r3 :
+                                                      Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                        (@ProverRwFull.std.io.error.Error b))
+                                                    (file3 : @ProverRwFull.std.fs.File b) =>
+                                                  @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                                    (Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                      (Aeneas.Std.core.result.Result.{0, 0}
+                                                        Aeneas.Std.core.convert.Infallible
+                                                        (@ProverRwFull.std.io.error.Error b))
+                                                      Unit)
+                                                    (Prod.{0, 0}
+                                                      (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                        (@ProverRwFull.std.io.error.Error b))
+                                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                        b))
+                                                    (@Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch Unit
+                                                      (@ProverRwFull.std.io.error.Error b) r3)
+                                                    fun
+                                                      (cf2 :
+                                                        Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                          (Aeneas.Std.core.result.Result.{0, 0}
+                                                            Aeneas.Std.core.convert.Infallible
+                                                            (@ProverRwFull.std.io.error.Error b))
+                                                          Unit) =>
+                                                    @Aeneas.Std.core.ops.control_flow.ControlFlow.rec.{1}
+                                                      (Aeneas.Std.core.result.Result.{0, 0}
+                                                        Aeneas.Std.core.convert.Infallible
+                                                        (@ProverRwFull.std.io.error.Error b))
+                                                      Unit
+                                                      (fun
+                                                          (x :
+                                                            Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                              (Aeneas.Std.core.result.Result.{0, 0}
+                                                                Aeneas.Std.core.convert.Infallible
+                                                                (@ProverRwFull.std.io.error.Error b))
+                                                              Unit) =>
+                                                        Aeneas.Std.Result.{0}
+                                                          (Prod.{0, 0}
+                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                              (@ProverRwFull.std.io.error.Error b))
+                                                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                              b)))
+                                                      (fun (a : Unit) =>
+                                                        @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                          Aeneas.Std.instBindResult.{0}
+                                                          (Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                            (@ProverRwFull.std.io.error.Error b))
+                                                          (Prod.{0, 0}
+                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                              (@ProverRwFull.std.io.error.Error b))
+                                                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                              b))
+                                                          (@ProverRwFull.std.fs.File.sync_all b ops file3)
+                                                          fun
+                                                            (r4 :
+                                                              Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                                (@ProverRwFull.std.io.error.Error b)) =>
+                                                          @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                            Aeneas.Std.instBindResult.{0}
+                                                            (Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                              (Aeneas.Std.core.result.Result.{0, 0}
+                                                                Aeneas.Std.core.convert.Infallible
+                                                                (@ProverRwFull.std.io.error.Error b))
+                                                              Unit)
+                                                            (Prod.{0, 0}
+                                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                (@ProverRwFull.std.io.error.Error b))
+                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                b))
+                                                            (@Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch Unit
+                                                              (@ProverRwFull.std.io.error.Error b) r4)
+                                                            fun
+                                                              (cf3 :
+                                                                Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                                  (Aeneas.Std.core.result.Result.{0, 0}
+                                                                    Aeneas.Std.core.convert.Infallible
+                                                                    (@ProverRwFull.std.io.error.Error b))
+                                                                  Unit) =>
+                                                            @Aeneas.Std.core.ops.control_flow.ControlFlow.rec.{1}
+                                                              (Aeneas.Std.core.result.Result.{0, 0}
+                                                                Aeneas.Std.core.convert.Infallible
+                                                                (@ProverRwFull.std.io.error.Error b))
+                                                              Unit
+                                                              (fun
+                                                                  (x :
+                                                                    Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                                      (Aeneas.Std.core.result.Result.{0, 0}
+                                                                        Aeneas.Std.core.convert.Infallible
+                                                                        (@ProverRwFull.std.io.error.Error b))
+                                                                      Unit) =>
+                                                                Aeneas.Std.Result.{0}
+                                                                  (Prod.{0, 0}
+                                                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                      (@ProverRwFull.std.io.error.Error b))
+                                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                      b)))
+                                                              (fun (a : Unit) =>
+                                                                @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                                  Aeneas.Std.instBindResult.{0}
+                                                                  (@ProverRwFull.std.path.Path b)
+                                                                  (Prod.{0, 0}
+                                                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                      (@ProverRwFull.std.io.error.Error b))
+                                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                      b))
+                                                                  (@ProverRwFull.std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref
+                                                                    b ops
+                                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                                      b s))
+                                                                  fun (p : @ProverRwFull.std.path.Path b) =>
+                                                                  @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                                    Aeneas.Std.instBindResult.{0}
+                                                                    (Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                                      (@ProverRwFull.std.io.error.Error b))
+                                                                    (Prod.{0, 0}
+                                                                      (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                        (@ProverRwFull.std.io.error.Error b))
+                                                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                        b))
+                                                                    (@ProverRwFull.aspis_prover.state_only_entropy.sync_directory
+                                                                      b ops p)
+                                                                    fun
+                                                                      (r5 :
+                                                                        Aeneas.Std.core.result.Result.{0, 0} Unit
+                                                                          (@ProverRwFull.std.io.error.Error b)) =>
+                                                                    @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                                      Aeneas.Std.instBindResult.{0}
+                                                                      (Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                                        (Aeneas.Std.core.result.Result.{0, 0}
+                                                                          Aeneas.Std.core.convert.Infallible
+                                                                          (@ProverRwFull.std.io.error.Error b))
+                                                                        Unit)
+                                                                      (Prod.{0, 0}
+                                                                        (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                          (@ProverRwFull.std.io.error.Error b))
+                                                                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                          b))
+                                                                      (@Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                        Unit (@ProverRwFull.std.io.error.Error b) r5)
+                                                                      fun
+                                                                        (cf4 :
+                                                                          Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                                            (Aeneas.Std.core.result.Result.{0, 0}
+                                                                              Aeneas.Std.core.convert.Infallible
+                                                                              (@ProverRwFull.std.io.error.Error b))
+                                                                            Unit) =>
+                                                                      @Aeneas.Std.core.ops.control_flow.ControlFlow.rec.{1}
+                                                                        (Aeneas.Std.core.result.Result.{0, 0}
+                                                                          Aeneas.Std.core.convert.Infallible
+                                                                          (@ProverRwFull.std.io.error.Error b))
+                                                                        Unit
+                                                                        (fun
+                                                                            (x :
+                                                                              Aeneas.Std.core.ops.control_flow.ControlFlow
+                                                                                (Aeneas.Std.core.result.Result.{0, 0}
+                                                                                  Aeneas.Std.core.convert.Infallible
+                                                                                  (@ProverRwFull.std.io.error.Error b))
+                                                                                Unit) =>
+                                                                          Aeneas.Std.Result.{0}
+                                                                            (Prod.{0, 0}
+                                                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                                (@ProverRwFull.std.io.error.Error b))
+                                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                                b)))
+                                                                        (fun (a : Unit) =>
+                                                                          @Aeneas.Std.Result.ok.{0}
+                                                                            (Prod.{0, 0}
+                                                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                                (@ProverRwFull.std.io.error.Error b))
+                                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                                b))
+                                                                            (@Prod.mk.{0, 0}
+                                                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                                (@ProverRwFull.std.io.error.Error b))
+                                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                                b)
+                                                                              (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+                                                                                Bool
+                                                                                (@ProverRwFull.std.io.error.Error b)
+                                                                                Bool.true)
+                                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+                                                                                b
+                                                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                                                  b s)
+                                                                                (@Option.none.{0}
+                                                                                  ProverRwFull.core.io.error.ErrorKind))))
+                                                                        (fun
+                                                                            (a :
+                                                                              Aeneas.Std.core.result.Result.{0, 0}
+                                                                                Aeneas.Std.core.convert.Infallible
+                                                                                (@ProverRwFull.std.io.error.Error b)) =>
+                                                                          @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                                            Aeneas.Std.instBindResult.{0}
+                                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                              (@ProverRwFull.std.io.error.Error b))
+                                                                            (Prod.{0, 0}
+                                                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                                (@ProverRwFull.std.io.error.Error b))
+                                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                                b))
+                                                                            (@Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                              Bool (@ProverRwFull.std.io.error.Error b)
+                                                                              (@ProverRwFull.std.io.error.Error b)
+                                                                              (Aeneas.Std.core.convert.FromSame
+                                                                                (@ProverRwFull.std.io.error.Error b))
+                                                                              a)
+                                                                            fun
+                                                                              (r6 :
+                                                                                Aeneas.Std.core.result.Result.{0, 0}
+                                                                                  Bool
+                                                                                  (@ProverRwFull.std.io.error.Error
+                                                                                    b)) =>
+                                                                            @Aeneas.Std.Result.ok.{0}
+                                                                              (Prod.{0, 0}
+                                                                                (Aeneas.Std.core.result.Result.{0, 0}
+                                                                                  Bool
+                                                                                  (@ProverRwFull.std.io.error.Error b))
+                                                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                                  b))
+                                                                              (@Prod.mk.{0, 0}
+                                                                                (Aeneas.Std.core.result.Result.{0, 0}
+                                                                                  Bool
+                                                                                  (@ProverRwFull.std.io.error.Error b))
+                                                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                                  b)
+                                                                                r6
+                                                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+                                                                                  b
+                                                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                                                    b s)
+                                                                                  (@Option.none.{0}
+                                                                                    ProverRwFull.core.io.error.ErrorKind))))
+                                                                        cf4)
+                                                              (fun
+                                                                  (a :
+                                                                    Aeneas.Std.core.result.Result.{0, 0}
+                                                                      Aeneas.Std.core.convert.Infallible
+                                                                      (@ProverRwFull.std.io.error.Error b)) =>
+                                                                @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                                  Aeneas.Std.instBindResult.{0}
+                                                                  (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                    (@ProverRwFull.std.io.error.Error b))
+                                                                  (Prod.{0, 0}
+                                                                    (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                      (@ProverRwFull.std.io.error.Error b))
+                                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                      b))
+                                                                  (@Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    Bool (@ProverRwFull.std.io.error.Error b)
+                                                                    (@ProverRwFull.std.io.error.Error b)
+                                                                    (Aeneas.Std.core.convert.FromSame
+                                                                      (@ProverRwFull.std.io.error.Error b))
+                                                                    a)
+                                                                  fun
+                                                                    (r6 :
+                                                                      Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                        (@ProverRwFull.std.io.error.Error b)) =>
+                                                                  @Aeneas.Std.Result.ok.{0}
+                                                                    (Prod.{0, 0}
+                                                                      (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                        (@ProverRwFull.std.io.error.Error b))
+                                                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                        b))
+                                                                    (@Prod.mk.{0, 0}
+                                                                      (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                        (@ProverRwFull.std.io.error.Error b))
+                                                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                        b)
+                                                                      r6
+                                                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+                                                                        b
+                                                                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                                          b s)
+                                                                        (@Option.none.{0}
+                                                                          ProverRwFull.core.io.error.ErrorKind))))
+                                                              cf3)
+                                                      (fun
+                                                          (a :
+                                                            Aeneas.Std.core.result.Result.{0, 0}
+                                                              Aeneas.Std.core.convert.Infallible
+                                                              (@ProverRwFull.std.io.error.Error b)) =>
+                                                        @Bind.bind.{0, 0} Aeneas.Std.Result.{0}
+                                                          Aeneas.Std.instBindResult.{0}
+                                                          (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                            (@ProverRwFull.std.io.error.Error b))
+                                                          (Prod.{0, 0}
+                                                            (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                              (@ProverRwFull.std.io.error.Error b))
+                                                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                              b))
+                                                          (@Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            Bool (@ProverRwFull.std.io.error.Error b)
+                                                            (@ProverRwFull.std.io.error.Error b)
+                                                            (Aeneas.Std.core.convert.FromSame
+                                                              (@ProverRwFull.std.io.error.Error b))
+                                                            a)
+                                                          fun
+                                                            (r6 :
+                                                              Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                (@ProverRwFull.std.io.error.Error b)) =>
+                                                          @Aeneas.Std.Result.ok.{0}
+                                                            (Prod.{0, 0}
+                                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                (@ProverRwFull.std.io.error.Error b))
+                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                b))
+                                                            (@Prod.mk.{0, 0}
+                                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                                (@ProverRwFull.std.io.error.Error b))
+                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                                b)
+                                                              r6
+                                                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+                                                                b
+                                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                                  b s)
+                                                                (@Option.none.{0}
+                                                                  ProverRwFull.core.io.error.ErrorKind))))
+                                                      cf2))
+                                          (fun
+                                              (a :
+                                                Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                                  (@ProverRwFull.std.io.error.Error b)) =>
+                                            @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                              (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                (@ProverRwFull.std.io.error.Error b))
+                                              (Prod.{0, 0}
+                                                (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                  (@ProverRwFull.std.io.error.Error b))
+                                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                  b))
+                                              (@Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Bool (@ProverRwFull.std.io.error.Error b)
+                                                (@ProverRwFull.std.io.error.Error b)
+                                                (Aeneas.Std.core.convert.FromSame (@ProverRwFull.std.io.error.Error b))
+                                                a)
+                                              fun
+                                                (r6 :
+                                                  Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                    (@ProverRwFull.std.io.error.Error b)) =>
+                                              @Aeneas.Std.Result.ok.{0}
+                                                (Prod.{0, 0}
+                                                  (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                    (@ProverRwFull.std.io.error.Error b))
+                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                    b))
+                                                (@Prod.mk.{0, 0}
+                                                  (Aeneas.Std.core.result.Result.{0, 0} Bool
+                                                    (@ProverRwFull.std.io.error.Error b))
+                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+                                                    b)
+                                                  r6
+                                                  (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+                                                    b
+                                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                                      b s)
+                                                    (@Option.none.{0} ProverRwFull.core.io.error.ErrorKind))))
+                                          cf1))
+                              (fun
+                                  (a :
+                                    Aeneas.Std.core.result.Result.{0, 0} Aeneas.Std.core.convert.Infallible
+                                      (@ProverRwFull.std.io.error.Error b)) =>
+                                @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                  (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                                  (Prod.{0, 0}
+                                    (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                                    (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                                  (@Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Bool (@ProverRwFull.std.io.error.Error b) (@ProverRwFull.std.io.error.Error b)
+                                    (Aeneas.Std.core.convert.FromSame (@ProverRwFull.std.io.error.Error b)) a)
+                                  fun
+                                    (r6 :
+                                      Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b)) =>
+                                  @Aeneas.Std.Result.ok.{0}
+                                    (Prod.{0, 0}
+                                      (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                                    (@Prod.mk.{0, 0}
+                                      (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b)
+                                      r6
+                                      (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk b
+                                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                          b s)
+                                        (@Option.none.{0} ProverRwFull.core.io.error.ErrorKind))))
+                              cf))
+                  (fun (a : @ProverRwFull.std.io.error.Error b) =>
+                    @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                      ProverRwFull.core.io.error.ErrorKind
+                      (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                        (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                      (@ProverRwFull.std.io.error.Error.kind b ops a) fun (ek : ProverRwFull.core.io.error.ErrorKind) =>
+                      @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} Bool
+                        (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                          (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                        (@ProverRwFull.core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq b ops ek
+                          ProverRwFull.core.io.error.ErrorKind.AlreadyExists)
+                        fun (b_1 : Bool) =>
+                        @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                          (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                          (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                            (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                          (@ite.{1}
+                            (Aeneas.Std.Result.{0}
+                              (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b)))
+                            (@Eq.{1} Bool b_1 Bool.true) (instDecidableEqBool b_1 Bool.true)
+                            (@Aeneas.Std.Result.ok.{0}
+                              (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                              (@Aeneas.Std.core.result.Result.Ok.{0, 0} Bool (@ProverRwFull.std.io.error.Error b)
+                                Bool.false))
+                            (@Aeneas.Std.Result.ok.{0}
+                              (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                              (@Aeneas.Std.core.result.Result.Err.{0, 0} Bool (@ProverRwFull.std.io.error.Error b) a)))
+                          fun (r6 : Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b)) =>
+                          @Aeneas.Std.Result.ok.{0}
+                            (Prod.{0, 0}
+                              (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b))
+                            (@Prod.mk.{0, 0}
+                              (Aeneas.Std.core.result.Result.{0, 0} Bool (@ProverRwFull.std.io.error.Error b))
+                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore b) r6
+                              (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk b
+                                (@ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory
+                                  b s)
+                                (@Option.none.{0} ProverRwFull.core.io.error.ErrorKind))))
+                  r))))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:23: warning: This simp argument is unused:
+  map_prod
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_p̵ro̵d̵,̵ ̵m̵a̵p̵_̵r̵esult, map_control, map_ok, pairStore, PDict_FormatterIOMap.io14,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19, PDict_FormatterIOMap.io20,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22, PDict_FormatterIOMap.io23,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25, PDict_FormatterIOMap.io26,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28, PDict_FormatterIOMap.io29,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:33: warning: This simp argument is unused:
+  map_result
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_r̵e̵s̵u̵l̵t̵,̵ ̵m̵a̵p̵_̵control, map_ok, pairStore, PDict_FormatterIOMap.io14,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19, PDict_FormatterIOMap.io20,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22, PDict_FormatterIOMap.io23,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25, PDict_FormatterIOMap.io26,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28, PDict_FormatterIOMap.io29,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:45: warning: This simp argument is unused:
+  map_control
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_result, map_c̵on̵t̵r̵o̵l̵,̵ ̵m̵a̵p̵_̵o̵k, pairStore, PDict_FormatterIOMap.io14,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19, PDict_FormatterIOMap.io20,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22, PDict_FormatterIOMap.io23,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25, PDict_FormatterIOMap.io26,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28, PDict_FormatterIOMap.io29,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:58: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_result, map_control, m̵a̵p_̵o̵k̵,̵ ̵p̵airStore, PDict_FormatterIOMap.io14,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19, PDict_FormatterIOMap.io20,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22, PDict_FormatterIOMap.io23,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25, PDict_FormatterIOMap.io26,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28, PDict_FormatterIOMap.io29,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:66: warning: This simp argument is unused:
+  pairStore
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_result, map_control, map_ok, p̵P̲D̲i̲c̲t̲_̲F̲o̲r̲m̲at̲t̲e̲r̲I̲O̲M̲a̲p̲.̲ir̵S̵t̵or̵e̵1̲4̲,
+  ̲ P̵D̵i̵c̵t̵_̵F̵o̵r̵m̵a̵t̵t̵e̵r̵I̵O̵M̵a̵p̵.̵i̵o̵1̵4̵,̵  ̲ ̲PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19, PDict_FormatterIOMap.io20,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22, PDict_FormatterIOMap.io23,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25, PDict_FormatterIOMap.io26,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28, PDict_FormatterIOMap.io29,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:77: warning: This simp argument is unused:
+  PDict_FormatterIOMap.io14
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_result, map_control, map_ok, pairStore,
+  ̲ P̵D̵i̵c̵t̵_̵F̵o̵r̵m̵a̵t̵t̵e̵r̵I̵O̵M̵a̵p̵.̵i̵o̵1̵4̵,̵  ̲ ̲PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19, PDict_FormatterIOMap.io20,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22, PDict_FormatterIOMap.io23,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25, PDict_FormatterIOMap.io26,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28, PDict_FormatterIOMap.io29,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:320: warning: This simp argument is unused:
+  PDict_FormatterIOMap.io26
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_result, map_control, map_ok, pairStore,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io14, PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io20, PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io23, PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25,
+  ̲ P̵D̵i̵c̵t̵_̵F̵o̵r̵m̵a̵t̵t̵e̵r̵I̵O̵M̵a̵p̵.̵i̵o̵2̵6̵,̵  ̲ ̲PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28, PDict_FormatterIOMap.io29,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:347: warning: This simp argument is unused:
+  PDict_FormatterIOMap.io27
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_result, map_control, map_ok, pairStore,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io14, PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io20, PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io23, PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io26, PDict_FormatterIOMap.io27̵,̵ ̵P̵D̵i̵c̵t̵_̵F̵o̵r̵m̵a̵t̵t̵e̵r̵I̵O̵M̵a̵p̵.̵i̵o̵2̵8, PDict_FormatterIOMap.io29,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:374: warning: This simp argument is unused:
+  PDict_FormatterIOMap.io28
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_result, map_control, map_ok, pairStore,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io14, PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io20, PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io23, PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io26, PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28̵9̲,
+  ̲ P̵D̵i̵c̵t̵_̵F̵o̵r̵m̵a̵t̵t̵e̵r̵I̵O̵M̵a̵p̵.̵i̵o̵2̵9̵,̵  ̲ ̲PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:401: warning: This simp argument is unused:
+  PDict_FormatterIOMap.io29
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_result, map_control, map_ok, pairStore,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io14, PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io20, PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io23, PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io26, PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28,
+  ̲ P̵D̵i̵c̵t̵_̵F̵o̵r̵m̵a̵t̵t̵e̵r̵I̵O̵M̵a̵p̵.̵i̵o̵2̵9̵,̵  ̲ ̲PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:428: warning: This simp argument is unused:
+  PDict_FormatterIOMap.io30
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_result, map_control, map_ok, pairStore,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io14, PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io20, PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io23, PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io26, PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io29, PDict_FormatterIOMap.io30̵,̵ ̵P̵D̵i̵c̵t̵_̵F̵o̵r̵m̵a̵t̵t̵e̵r̵I̵O̵M̵a̵p̵.̵i̵o̵3̵1, PDict_FormatterIOMap.io261,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FallibleTransport.lean:52:455: warning: This simp argument is unused:
+  PDict_FormatterIOMap.io31
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, map_prod, map_result, map_control, map_ok, pairStore,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io14, PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io20, PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io23, PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io26, PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28,
+  ̲  ̲ ̲ ̲PDict_FormatterIOMap.io29, PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io3̵2̲6̲1,
+  ̲ P̵D̵i̵c̵t̵_̵F̵o̵r̵m̵a̵t̵t̵e̵r̵I̵O̵M̵a̵p̵.̵i̵o̵2̵6̵1̵,̵  ̲ ̲PDict_FormatterIOMap.sync_directory]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PDict_FallibleTransport.fallible' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

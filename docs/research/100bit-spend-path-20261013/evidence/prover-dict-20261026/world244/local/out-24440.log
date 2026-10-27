@@ -1,0 +1,28 @@
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_TapeCorrect244.lean:20:4: error: unsolved goals
+case pos
+tape : Tape
+operation : U8
+small : ↑tape.used < 16
+reply : Reply
+read : tape.replies.index_usize tape.used = ok reply
+position : (↑tape.replies)[↑tape.used]? = some reply
+atIndex : (view tape).files[(view tape).fileUsed]? = some (event reply)
+same : reply.operation = operation
+model :
+  PDict_EventWorld244.step operation (view tape) =
+    some
+      ((event reply).reply,
+        { entropy := (view tape).entropy, entropyUsed := (view tape).entropyUsed, files := (view tape).files,
+          fileUsed := (view tape).fileUsed + 1 })
+request : (event reply).request = operation
+⊢ ok
+      (some reply,
+        { entropy := (view tape).entropy, entropyUsed := (view tape).entropyUsed, files := (view tape).files,
+          fileUsed := ↑tape.used + 1 }) =
+    ok
+      (some reply,
+        { entropy := (view tape).entropy, entropyUsed := (view tape).entropyUsed, files := (view tape).files,
+          fileUsed := (view tape).fileUsed + 1 })
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_TapeCorrect244.lean:31:12: error(lean.unknownIdentifier): Unknown constant `List.getElem?_eq_none.mpr`
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_TapeCorrect244.lean:32:6: error: No goals to be solved
+'R1Z.PDict_TapeCorrect244.reference_next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

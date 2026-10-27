@@ -1,0 +1,28 @@
+import R1Z.PDict_RemainingDictionary231
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_RemainingCaller231
+open Aeneas Aeneas.Std Result ProverRwFull
+open PDict_RemainingDictionary231 (native selected)
+
+/-- Replace precisely the three discharged source fields, keeping every other
+field and all native carriers fixed. -/
+@[reducible] def replace [ExternalTypes] (ops other : ExternalFuns) : ExternalFuns :=
+  { ops with op78 := @other.op78, op231 := other.op231, op247 := other.op247 }
+
+theorem dictionary_independent (base : ExternalTypes)
+    (ops other : @ExternalFuns (native base)) :
+    selected base (@replace (native base) ops other) = selected base ops := rfl
+
+/-- Actual proof-account caller, all arguments and outcomes, at the selected
+source dictionary. This is not a native execution/world or carrier lift. -/
+theorem client_independent (base : ExternalTypes)
+    (ops other : @ExternalFuns (native base)) :
+    @RealR1_client.prove_for_proof_accounts (native base)
+      (selected base (@replace (native base) ops other)) =
+    @RealR1_client.prove_for_proof_accounts (native base) (selected base ops) := by
+  rw [dictionary_independent base ops other]
+
+#print axioms dictionary_independent
+#print axioms client_independent
+end R1Z.PDict_RemainingCaller231

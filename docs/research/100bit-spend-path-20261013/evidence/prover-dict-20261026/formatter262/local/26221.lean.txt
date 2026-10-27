@@ -1,0 +1,50 @@
+import R1Z.PDict_CoordinatesEq262
+import R1Z.PDict_ArrayRead262
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_OwnedCorrect262
+open Aeneas Aeneas.Std Result PDict_OwnedPrefix262 PDict_OwnedTarget262
+abbrev Variant := PDict_OwnedCell262.Variant
+
+/-- Complete Result equality for the actual extracted owned reference, for all
+T/Copy/variant/rows. No row-read hypothesis remains. Native from_fn is separate. -/
+theorem owned_value {T : Type} (copy : core.marker.Copy T) (variant : Variant)
+    (rows : Array T 1024#usize) :
+    PDict_OwnedSource244.coefficients.owned copy variant rows = .ok (target variant rows) := by
+  have initial : Prefix rows (target variant rows) 0#usize := by
+    intro k bound impossible
+    have zero : (0#usize).val = 0 := by scalar_tac
+    rw [zero] at impossible
+    omega
+  obtain ⟨out, run, coordinates⟩ := PDict_OwnedLoop262.loop_coordinates variant rows
+    (target variant rows) rows 0#usize (row_reads variant rows) initial
+  have same := PDict_CoordinatesEq262.eq_of_coordinates out (target variant rows) coordinates
+  rw [same] at run
+  exact run
+
+/-- Exact per-coordinate source equation, including complete Result behaviour.
+This is the extracted owned reference, not the native std::array::from_fn gate. -/
+theorem owned_read {T : Type} (copy : core.marker.Copy T) (variant : Variant)
+    (rows : Array T 1024#usize) (i : Usize) (small : i.val < 1024) :
+    (do let out ← PDict_OwnedSource244.coefficients.owned copy variant rows
+        Array.index_usize out i) =
+    (do let source ← PDict_OwnedSource244.row.row variant i
+        Array.index_usize rows source) := by
+  let position : Fin 1024 := ⟨i.val,small⟩
+  have same : index position = i := UScalar.eq_of_val_eq (index_value position)
+  have rowCall := source_call variant position
+  rw [same] at rowCall
+  have resultBound : i.val < (target variant rows).length := by scalar_tac
+  have sourceBound : (source variant position).val < rows.length := by
+    have := source_bound variant position
+    scalar_tac
+  rw [owned_value, rowCall]
+  simp only [bind_tc_ok]
+  rw [PDict_ArrayRead262.read _ i resultBound,
+    PDict_ArrayRead262.read _ _ sourceBound]
+  congr 1
+  exact target_coordinate variant rows i small
+
+#print axioms owned_value
+#print axioms owned_read
+end R1Z.PDict_OwnedCorrect262

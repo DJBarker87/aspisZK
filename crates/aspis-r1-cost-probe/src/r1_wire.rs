@@ -848,3 +848,440 @@ pub mod fields29 {
         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
     }
 }
+
+#[cfg(kani)]
+pub(crate) mod pdict_error_contracts {
+    use super::Error;
+    pub(crate) fn arbitrary_error() -> Error {
+        let tag: u8 = kani::any();
+        kani::assume(tag < 12);
+        match tag {
+            0 => Error::Allocation,
+            1 => Error::RowOrder { expected: kani::any(), actual: kani::any() },
+            2 => Error::InvalidRow,
+            3 => Error::Tag { row: kani::any() },
+            4 => Error::Length { row: kani::any() },
+            5 => Error::NonCanonical { row: kani::any(), value: kani::any() },
+            6 => Error::Boundary { round: kani::any() },
+            7 => Error::Terminal,
+            8 => Error::EqualCirclePoints,
+            9 => Error::TrailingBytes,
+            10 => Error::Public,
+            _ => Error::ActivePole,
+        }
+    }
+    #[kani::proof]
+    fn complete_wire_error_equality() {
+        let a = arbitrary_error();
+        let b = arbitrary_error();
+        let expected = match (a,b) {
+            (Error::Allocation,Error::Allocation) => true,
+            (Error::RowOrder { expected:a,actual:b },Error::RowOrder { expected:c,actual:d }) => a==c && b==d,
+            (Error::InvalidRow,Error::InvalidRow) => true,
+            (Error::Tag { row:a },Error::Tag { row:b }) => a==b,
+            (Error::Length { row:a },Error::Length { row:b }) => a==b,
+            (Error::NonCanonical { row:a,value:b },Error::NonCanonical { row:c,value:d }) => a==c && b==d,
+            (Error::Boundary { round:a },Error::Boundary { round:b }) => a==b,
+            (Error::Terminal,Error::Terminal) => true,
+            (Error::EqualCirclePoints,Error::EqualCirclePoints) => true,
+            (Error::TrailingBytes,Error::TrailingBytes) => true,
+            (Error::Public,Error::Public) => true,
+            (Error::ActivePole,Error::ActivePole) => true,
+            _ => false,
+        };
+        assert_eq!(a==b,expected);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_typenum_contracts {
+    use sha2::digest::typenum::{UTerm,B0,B1,Equal,Greater,Unsigned,Bit};
+    #[kani::proof]
+    fn terminal_numeric_entries() {
+        assert_eq!(UTerm::to_isize(),0); assert_eq!(UTerm::ISIZE,0);
+        assert_eq!(UTerm::to_i64(),0); assert_eq!(UTerm::I64,0);
+        assert_eq!(UTerm::to_i32(),0); assert_eq!(UTerm::I32,0);
+        assert_eq!(UTerm::to_i16(),0); assert_eq!(UTerm::I16,0);
+        assert_eq!(UTerm::to_i8(),0); assert_eq!(UTerm::I8,0);
+        assert_eq!(UTerm::to_usize(),0); assert_eq!(UTerm::USIZE,0);
+        assert_eq!(UTerm::to_u64(),0); assert_eq!(UTerm::U64,0);
+        assert_eq!(UTerm::to_u32(),0); assert_eq!(UTerm::U32,0);
+        assert_eq!(UTerm::to_u16(),0); assert_eq!(UTerm::U16,0);
+        assert_eq!(UTerm::to_u8(),0); assert_eq!(UTerm::U8,0);
+        let t=UTerm::default(); assert_eq!(t.clone(),t);
+        assert!(B1::to_bool()); assert!(B1::BOOL);
+        assert_eq!(B1::to_u8(),1); assert_eq!(B1::U8,1);
+        let b1=B1::new(); assert_eq!(b1,B1::default()); assert_eq!(b1.clone(),b1);
+        assert!(!B0::to_bool()); assert!(!B0::BOOL);
+        assert_eq!(B0::to_u8(),0); assert_eq!(B0::U8,0);
+        let b0=B0::new(); assert_eq!(b0,B0::default()); assert_eq!(b0.clone(),b0);
+        assert_eq!(<Equal as sha2::digest::typenum::Ord>::to_ordering(),core::cmp::Ordering::Equal);
+        assert_eq!(<Greater as sha2::digest::typenum::Ord>::to_ordering(),core::cmp::Ordering::Greater);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_numeric_contracts {
+    use sha2::digest::typenum::{Unsigned,Bit,UInt,B0,B1,consts::*};
+    fn numeric<U:Unsigned,B:Bit>() {
+        assert_eq!(UInt::<U,B>::to_isize(), (B::to_u8() as isize) | U::to_isize().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::ISIZE, (B::U8 as isize) | U::ISIZE.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_i64(), (B::to_u8() as i64) | U::to_i64().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::I64, (B::U8 as i64) | U::I64.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_i32(), (B::to_u8() as i32) | U::to_i32().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::I32, (B::U8 as i32) | U::I32.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_i16(), (B::to_u8() as i16) | U::to_i16().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::I16, (B::U8 as i16) | U::I16.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_i8(), (B::to_u8() as i8) | U::to_i8().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::I8, (B::U8 as i8) | U::I8.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_usize(), (B::to_u8() as usize) | U::to_usize().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::USIZE, (B::U8 as usize) | U::USIZE.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_u64(), (B::to_u8() as u64) | U::to_u64().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::U64, (B::U8 as u64) | U::U64.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_u32(), (B::to_u8() as u32) | U::to_u32().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::U32, (B::U8 as u32) | U::U32.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_u16(), (B::to_u8() as u16) | U::to_u16().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::U16, (B::U8 as u16) | U::U16.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_u8(), (B::to_u8() as u8) | U::to_u8().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::U8, (B::U8 as u8) | U::U8.wrapping_shl(1));
+    }
+    #[kani::proof]
+    fn numeric_source_recursion() {
+        numeric::<U0,B0>(); numeric::<U0,B1>();
+        numeric::<U1,B0>(); numeric::<U1,B1>();
+        numeric::<U2,B0>(); numeric::<U2,B1>();
+        numeric::<U4,B0>(); numeric::<U4,B1>();
+        numeric::<U8,B0>(); numeric::<U8,B1>();
+        numeric::<U16,B0>(); numeric::<U16,B1>();
+        numeric::<U32,B0>(); numeric::<U32,B1>();
+        numeric::<U64,B0>(); numeric::<U64,B1>();
+        numeric::<U128,B0>(); numeric::<U128,B1>();
+        numeric::<U256,B0>(); numeric::<U256,B1>();
+        numeric::<U512,B0>(); numeric::<U512,B1>();
+    }
+}
+
+#[cfg(kani)]
+mod pdict_comparison_contracts {
+    use sha2::digest::typenum::{UTerm,UInt,B0,B1,Equal,Greater,Less,consts::U512};
+    use sha2::digest::typenum::private::{PrivateCmp,IsLessOrEqualPrivate,IsLessPrivate};
+    #[kani::proof]
+    fn terminal_comparison_entries() {
+        assert_eq!(UTerm.private_cmp(&UTerm,Equal),Equal);
+        assert_eq!(UTerm.private_cmp(&UTerm,Greater),Greater);
+        assert_eq!(UTerm.private_cmp(&UTerm,Less),Less);
+        assert_eq!(UTerm.private_cmp(&UInt::<U512,B0>::default(),Equal),Less);
+        assert_eq!(UTerm.private_cmp(&UInt::<U512,B1>::default(),Greater),Less);
+        assert_eq!(UTerm.private_cmp(&UInt::<UTerm,B0>::default(),Less),Less);
+        let a:u64=kani::any(); let b:u64=kani::any();
+        assert_eq!(a.is_less_or_equal_private(b,Equal),B1);
+        assert_eq!(a.is_less_private(b,Less),B1);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_primitive_contracts {
+    use sha2::digest::{block_buffer::{BlockBuffer,Eager},typenum::consts::U64};
+    #[kani::proof]
+    fn truncation_and_eager_default() {
+        use sha2::digest::core_api::{TruncSide,VariableOutputCore};
+        assert!(matches!(<sha2::Sha256VarCore as VariableOutputCore>::TRUNC_SIDE,TruncSide::Left));
+        let _:Eager=Default::default();
+        assert_eq!(core::mem::size_of::<Eager>(),0);
+    }
+    #[kani::proof]
+    #[kani::unwind(67)]
+    fn eager_sha_block_boundary() {
+        let data:[u8;65]=kani::any();
+        let pos:usize=kani::any(); kani::assume(pos<=65);
+        let buffer=BlockBuffer::<U64,Eager>::try_new(&data[..pos]);
+        assert_eq!(buffer.is_ok(),pos<64);
+        if let Ok(buffer)=buffer { assert_eq!(buffer.get_pos(),pos); }
+    }
+    #[kani::proof]
+    fn slice_and_shared_as_ref() {
+        let data:[u8;4]=kani::any();
+        let n:usize=kani::any(); kani::assume(n<=4);
+        let slice=&data[..n];
+        let returned:&[u8]=slice.as_ref();
+        assert!(core::ptr::eq(slice,returned));
+        let value:u64=kani::any();
+        struct Probe { value:u64 }
+        impl AsRef<u64> for Probe { fn as_ref(&self)->&u64 { &self.value } }
+        let probe=Probe{value}; let shared=&probe;
+        let actual:&u64=shared.as_ref();
+        assert!(core::ptr::eq(actual,&probe.value));
+        assert_eq!(*actual,value);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_ordering_contracts {
+    use sha2::digest::typenum::{B0,B1,consts::*,IsLess,IsLessOrEqual};
+    #[kani::proof]
+    fn source_ordering_instances() {
+        assert_eq!(U64::default().is_less(U256::default()),B1);
+        assert_eq!(U64::default().is_less_or_equal(U256::default()),B1);
+        assert_eq!(U64::default().is_less(U64::default()),B0);
+        assert_eq!(U64::default().is_less_or_equal(U64::default()),B1);
+        assert_eq!(U512::default().is_less(U256::default()),B0);
+        assert_eq!(U512::default().is_less_or_equal(U256::default()),B0);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_representation_contracts {
+    #[kani::proof]
+    fn f64_raw_bit_roundtrip() {
+        let bits:u64=kani::any();
+        assert_eq!(f64::from_bits(bits).to_bits(),bits);
+    }
+    #[kani::proof]
+    fn uint_default_clone_all_scalar_fields() {
+        use core::sync::atomic::{AtomicU8,Ordering};
+        use sha2::digest::typenum::UInt;
+        static STEP:AtomicU8=AtomicU8::new(0);
+        #[derive(Clone,Copy,Debug,PartialEq,Eq)] struct Upper(u64);
+        #[derive(Clone,Copy,Debug,PartialEq,Eq)] struct Lower(u8);
+        impl Default for Upper { fn default()->Self {
+            assert_eq!(STEP.fetch_add(1,Ordering::Relaxed),0); Self(kani::any())
+        }}
+        impl Default for Lower { fn default()->Self {
+            assert_eq!(STEP.fetch_add(1,Ordering::Relaxed),1); Self(kani::any())
+        }}
+        STEP.store(0,Ordering::Relaxed);
+        let native=UInt::<Upper,Lower>::default();
+        assert_eq!(STEP.load(Ordering::Relaxed),2);
+        assert_eq!(native.clone(),native);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_error_value_contracts {
+    #[kani::proof]
+    fn complete_getrandom_error_value_codec() {
+        let raw=core::num::NonZeroI32::new(kani::any())
+            .unwrap_or(core::num::NonZeroI32::new(1).unwrap());
+        assert_eq!(core::mem::size_of::<getrandom::Error>(),4);
+        assert_eq!(core::mem::align_of::<getrandom::Error>(),4);
+        // Every nonzero code is a valid value of the sole NonZeroI32 field.
+        // No OS function, entropy provider or destructor is stubbed or called.
+        let error:getrandom::Error=unsafe { core::mem::transmute(raw) };
+        let cloned=error.clone(); assert_eq!(error,cloned);
+        let copied=error;
+        let encoded:core::num::NonZeroI32=unsafe { core::mem::transmute(copied) };
+        assert_eq!(encoded,raw);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_options_contracts {
+    use std::fs::OpenOptions;
+    use std::os::unix::fs::OpenOptionsExt;
+    #[derive(Clone,Copy,Debug,PartialEq,Eq)]
+    struct State {
+        read:bool, write:bool, append:bool, truncate:bool, create:bool,
+        create_new:bool, custom_flags:i32, mode:u32,
+    }
+    // Complete primitive-field view of the pinned Unix OpenOptions schema.
+    // Reading a bool at an incorrect offset is checked by Kani's validity rules.
+    fn view(options:&OpenOptions)->State {
+        assert_eq!(core::mem::size_of::<OpenOptions>(),core::mem::size_of::<State>());
+        assert_eq!(core::mem::align_of::<OpenOptions>(),core::mem::align_of::<State>());
+        assert!(!core::mem::needs_drop::<OpenOptions>());
+        unsafe { core::mem::transmute_copy(options) }
+    }
+    fn arbitrary()->(OpenOptions,State) {
+        let state=State{read:kani::any(),write:kani::any(),append:kani::any(),
+            truncate:kani::any(),create:kani::any(),create_new:kani::any(),
+            custom_flags:kani::any(),mode:kani::any()};
+        let mut options=OpenOptions::new();
+        options.read(state.read).write(state.write).append(state.append)
+            .truncate(state.truncate).create(state.create).create_new(state.create_new)
+            .custom_flags(state.custom_flags).mode(state.mode);
+        assert_eq!(view(&options),state);
+        (options,state)
+    }
+    #[kani::proof]
+    fn complete_options_state_and_new() {
+        let options=OpenOptions::new();
+        assert_eq!(view(&options),State{read:false,write:false,append:false,
+            truncate:false,create:false,create_new:false,custom_flags:0,mode:0o666});
+        let _=arbitrary();
+    }
+    #[kani::proof]
+    fn write_loan_and_frame() {
+        let (mut options,mut expected)=arbitrary();
+        let flag:bool=kani::any();
+        let receiver=&mut options as *mut OpenOptions;
+        let returned=options.write(flag) as *mut OpenOptions;
+        assert_eq!(receiver,returned);
+        expected.write=flag; assert_eq!(view(&options),expected);
+    }
+    #[kani::proof]
+    fn create_new_loan_and_frame() {
+        let (mut options,mut expected)=arbitrary();
+        let flag:bool=kani::any();
+        let receiver=&mut options as *mut OpenOptions;
+        let returned=options.create_new(flag) as *mut OpenOptions;
+        assert_eq!(receiver,returned);
+        expected.create_new=flag; assert_eq!(view(&options),expected);
+    }
+    #[kani::proof]
+    fn mode_loan_and_frame() {
+        let (mut options,mut expected)=arbitrary();
+        let mode:u32=kani::any();
+        let receiver=&mut options as *mut OpenOptions;
+        let returned=options.mode(mode) as *mut OpenOptions;
+        assert_eq!(receiver,returned);
+        expected.mode=mode; assert_eq!(view(&options),expected);
+    }
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn path_short_bytes_and_shared_view() {
+        use std::os::unix::ffi::OsStringExt;
+        use std::path::{Path,PathBuf};
+        let bytes:[u8;4]=kani::any(); let len:usize=kani::any(); kani::assume(len<=4);
+        let owned=std::ffi::OsString::from_vec(bytes[..len].to_vec());
+        let buf=PathBuf::from(owned);
+        let a=buf.as_path(); let b:&Path=buf.as_ref(); let c:&Path=&*buf;
+        assert!(core::ptr::eq(a,b)); assert!(core::ptr::eq(a,c));
+        assert!(core::ptr::eq(a,a.as_ref()));
+        assert_eq!(a.as_os_str().as_encoded_bytes(),&bytes[..len]);
+    }
+    #[kani::proof]
+    fn native_layout_fields_and_alignment() {
+        let shift:u32=kani::any(); kani::assume(shift<64);
+        let size:usize=kani::any(); let align=1usize<<shift;
+        if let Ok(layout)=std::alloc::Layout::from_size_align(size,align) {
+            assert_eq!(layout.size(),size); assert_eq!(layout.align(),align);
+        }
+        let empty=std::alloc::Layout::from_size_align(0,align).unwrap();
+        assert_eq!(empty.size(),0); assert_eq!(empty.align(),align);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_resume_contracts {
+    #[kani::proof]
+    fn generic_array32_native_order() {
+        let input: [u8;32] = kani::any();
+        let native: sha2::digest::generic_array::GenericArray<u8,sha2::digest::consts::U32> = input.into();
+        let output: [u8;32] = native.into();
+        assert!(output == input);
+    }
+
+    #[kani::proof]
+    fn formatter_preserves_sink_error() {
+        use std::fmt::{self,Write};
+        struct Probe;
+        impl fmt::Debug for Probe {
+            fn fmt(&self, f:&mut fmt::Formatter<'_>)->fmt::Result { f.write_str("x") }
+        }
+        struct Sink { fail:bool, called:bool }
+        impl Write for Sink {
+            fn write_str(&mut self,s:&str)->fmt::Result {
+                assert!(s=="x"); self.called=true;
+                if self.fail {Err(fmt::Error)} else {Ok(())}
+            }
+        }
+        let fail:bool=kani::any();
+        let mut sink=Sink{fail,called:false};
+        let result=write!(&mut sink,"{:?}",Probe);
+        assert!(sink.called);
+        assert!(result.is_err()==fail);
+    }
+
+    #[kani::proof]
+    fn io_error_simple_roundtrip() {
+        use std::io::{Error,ErrorKind};
+        let choice:bool=kani::any();
+        let kind=if choice {ErrorKind::AlreadyExists} else {ErrorKind::Other};
+        let error=Error::from(kind);
+        assert!(error.kind()==kind);
+        assert!(error.raw_os_error().is_none());
+        assert!(error.get_ref().is_none());
+    }
+}
+
+#[cfg(kani)]
+mod pdict_array_fields {
+    #[repr(C)]
+    #[derive(Clone,Copy)]
+    struct Even<U> { parent1:U,parent2:U }
+    #[repr(C)]
+    #[derive(Clone,Copy)]
+    struct Odd { parent1:[u8;0],parent2:[u8;0],data:u8 }
+    type Fields = Even<Even<Even<Even<Even<Odd>>>>>;
+    #[kani::proof]
+    fn native_conversion_matches_extracted_fields() {
+        use sha2::digest::{generic_array::GenericArray,consts::U32};
+        let input:[u8;32]=kani::any();
+        let native:GenericArray<u8,U32>=input.into();
+        // Both layouts are pinned repr(C), scalar-only, size32/alignment1.
+        // Every possible bit pattern is initialized and valid for both types.
+        let fields:Fields=unsafe{core::mem::transmute(native.clone())};
+        let index:usize=kani::any();kani::assume(index<32);
+        let f=if index<16{fields.parent1}else{fields.parent2};
+        let f=if index%16<8{f.parent1}else{f.parent2};
+        let f=if index%8<4{f.parent1}else{f.parent2};
+        let f=if index%4<2{f.parent1}else{f.parent2};
+        let f=if index%2==0{f.parent1}else{f.parent2};
+        let output:[u8;32]=native.into();
+        assert!(output[index]==f.data);
+        assert!(output[index]==input[index]);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_resource_diagnostics {
+    #[kani::proof]
+    fn file_is_owned_resource_not_plain_integer() {
+        use std::fs::File;
+        use std::os::fd::RawFd;
+        assert!(core::mem::size_of::<File>()==core::mem::size_of::<RawFd>());
+        assert!(core::mem::align_of::<File>()==core::mem::align_of::<RawFd>());
+        assert!(core::mem::needs_drop::<File>());
+        assert!(!core::mem::needs_drop::<RawFd>());
+    }
+    #[kani::proof]
+    fn io_error_all_os_codes() {
+        let code:i32=kani::any();
+        let error=std::io::Error::from_raw_os_error(code);
+        assert!(error.raw_os_error()==Some(code));
+        assert!(error.get_ref().is_none());
+    }
+    #[kani::proof]
+    fn io_custom_payload_and_drop() {
+        use std::{io::Error,sync::atomic::{AtomicUsize,Ordering}};
+        static DROPS:AtomicUsize=AtomicUsize::new(0);
+        #[derive(Debug)] struct Payload(i32);
+        impl core::fmt::Display for Payload {
+            fn fmt(&self,f:&mut core::fmt::Formatter<'_>)->core::fmt::Result {f.write_str("payload")}
+        }
+        impl std::error::Error for Payload {}
+        impl Drop for Payload {fn drop(&mut self){DROPS.fetch_add(1,Ordering::SeqCst);}}
+        DROPS.store(0,Ordering::SeqCst);
+        let value:i32=kani::any();
+        let error=Error::other(Payload(value));
+        assert!(error.raw_os_error().is_none());
+        assert!(error.get_ref().unwrap().downcast_ref::<Payload>().unwrap().0==value);
+        assert!(DROPS.load(Ordering::SeqCst)==0);
+        drop(error);
+        assert!(DROPS.load(Ordering::SeqCst)==1);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_salt_clear {
+    #[kani::proof]
+    fn complete_cell_zero_and_frame() {
+        struct Frame { before:u64,cell:[u8;32],after:u64 }
+        let before:u64=kani::any();let after:u64=kani::any();
+        let mut frame=Frame{before,cell:kani::any(),after};
+        crate::host_commitment::clear_private_salt(&mut frame.cell);
+        assert!(frame.cell==[0;32]);
+        assert!(frame.before==before);
+        assert!(frame.after==after);
+    }
+}

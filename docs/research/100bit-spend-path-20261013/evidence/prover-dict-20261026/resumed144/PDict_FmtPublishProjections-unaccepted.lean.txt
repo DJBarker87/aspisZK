@@ -1,0 +1,18 @@
+import R1Z.PDict_FmtQueryOpenings
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FmtErase
+open Aeneas Aeneas.Std ProverRwFull
+variable [ExternalTypes]
+
+/-- Full symbolic source-function equality for `prover.publish_compact`. -/
+theorem erase_420 (ops other : ExternalFuns) :
+    @prover.publish_compact _ (replace ops other) = @prover.publish_compact _ ops := by
+  funext variant p
+  delta prover.publish_compact
+  try simp only [erase_396 ops other, erase_405 ops other, erase_419 ops other]
+  all_goals simp only [replace]
+  all_goals rfl
+#print axioms erase_420
+
+end R1Z.PDict_FmtErase

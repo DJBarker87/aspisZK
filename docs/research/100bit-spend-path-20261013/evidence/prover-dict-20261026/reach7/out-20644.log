@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_OwnedErrorTransport.lean:34:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  std.io.error.Error.kind ?e
+in the target expression
+  (match core.result.Result.Err e with
+    | core.result.Result.Ok b => ok (b, s)
+    | core.result.Result.Err e => do
+      let k ← e.kind
+      ok (false, { directory := s.directory, last_error := some k })) =
+    ok (finishOwned (owned kind (core.result.Result.Err e)) s)
+
+case Err
+inst✝ : ExternalTypes
+ops : ExternalFuns
+kind : std.io.error.Error → Kind
+hkind : ∀ (e : std.io.error.Error), e.kind = ok (kind e)
+s : Store
+e : std.io.error.Error
+⊢ (match core.result.Result.Err e with
+    | core.result.Result.Ok b => ok (b, s)
+    | core.result.Result.Err e => do
+      let k ← e.kind
+      ok (false, { directory := s.directory, last_error := some k })) =
+    ok (finishOwned (owned kind (core.result.Result.Err e)) s)
+'R1Z.PDict_OwnedErrorTransport.source_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_OwnedErrorTransport.finish_transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PDict_OwnedErrorTransport.reserve_transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

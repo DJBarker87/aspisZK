@@ -1,0 +1,47 @@
+{
+  "source_revision": "41e05299e9 plus exact proof-only hashes below",
+  "proof_inputs": {
+    "tools/prover-dict-20261026/proof-coordinate262/Cargo.lock": {
+      "sha256": "71e189ab4911041fae842f8db7df88f2526d6d5cb18f84fe1f959c147b254bbb",
+      "bytes": 7057
+    },
+    "tools/prover-dict-20261026/proof-coordinate262/Cargo.toml": {
+      "sha256": "16e207a2e4ab5c23cd940429652ce0182ec454982eb12a77734e9b67ed29cc81",
+      "bytes": 307
+    },
+    "tools/prover-dict-20261026/proof-coordinate262/lib.rs": {
+      "sha256": "568414b12472943f2724716337a1a527bbe8bb58203eec7d635f28d91bbfe3d8",
+      "bytes": 4978
+    },
+    "tools/prover-dict-20261026/proof-world244/row.rs": {
+      "sha256": "70deb50ae3f77666a4f7b6500ea3c52f9f7f347d5664fc6eba017a3f7445e540",
+      "bytes": 5824
+    },
+    "/home/dombarker/project-offloads/codex-cx-prover-dict-20261026/src/tools/prover-dict-20261026/PDict_native262.py": {
+      "sha256": "b6bc2b1806754bdbcbad2b02a31dbaee08bf5fb960e09a921095ccee29351ba9",
+      "bytes": 1928
+    }
+  },
+  "command": [
+    "timeout",
+    "120",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "tools/prover-dict-20261026/proof-coordinate262/Cargo.toml",
+    "--lib",
+    "--harness",
+    "coordinate_qm31_all",
+    "--exact",
+    "--solver",
+    "kissat",
+    "-j",
+    "4",
+    "--output-format",
+    "terse"
+  ],
+  "exit_status": 124,
+  "statement": "One native output array vs scalar expected coordinate; arbitrary selected inputs, no stubs, all bounds/overflow/unwinding guards retained.",
+  "expected_work": "Optimized opt-level3 compilation, then the named array/bitvector contract; no arithmetic elimination.",
+  "raw_revision_qualification": "The historical source-revision.txt in the reused host workspace is not relabelled. This supplement pins new proof inputs; the source binding checks the unchanged production modules separately."
+}

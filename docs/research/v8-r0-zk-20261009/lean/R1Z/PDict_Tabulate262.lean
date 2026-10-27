@@ -1,0 +1,18 @@
+import Aeneas
+set_option autoImplicit false
+namespace R1Z.PDict_Tabulate262
+open Aeneas Aeneas.Std
+
+/-- Generic tabulation keeps all use-site lengths symbolic in the proof. -/
+def tabulate {T : Type} (n : Usize) (f : Fin n.val → T) : Array T n :=
+  ⟨List.ofFn f, List.length_ofFn⟩
+
+theorem get {T : Type} (n : Usize) (f : Fin n.val → T) (index : Usize)
+    (bound : index.val < n.val) (lengthBound : index.val < (tabulate n f).length) :
+    (tabulate n f)[index]'lengthBound = f ⟨index.val,bound⟩ := by
+  change (List.ofFn f)[index.val]'_ = _
+  exact List.getElem_ofFn _
+
+#print axioms tabulate
+#print axioms get
+end R1Z.PDict_Tabulate262

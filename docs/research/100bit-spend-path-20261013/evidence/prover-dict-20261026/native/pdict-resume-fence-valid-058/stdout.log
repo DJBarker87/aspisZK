@@ -1,0 +1,11 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error: memory fences cannot have `Relaxed` ordering
+  --> lib.rs:40:40
+   |
+40 |     core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::Relaxed);
+   |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: consider using ordering modes `Acquire`, `Release`, `AcqRel` or `SeqCst`
+   = note: `#[deny(invalid_atomic_ordering)]` on by default
+
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.

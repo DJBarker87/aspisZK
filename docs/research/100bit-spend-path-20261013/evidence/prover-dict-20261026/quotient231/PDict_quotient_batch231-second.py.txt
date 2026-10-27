@@ -1,0 +1,46 @@
+"""Finite proof experiment list; uses the unchanged scoped receipt runner.
+Run inside exactly one admitted 6G/8G/swap0/Tasks64 scope, sequentially.
+No admission, scope, locking, monitoring or toolchain infrastructure is changed.
+"""
+from pathlib import Path
+import hashlib,json,subprocess,sys
+cases=[
+'reverse_bits_all_u32',
+'error_static_message_bytes_kind_retry',
+'error_collision_message_bytes_kind_retry',
+'error_noncollision_message_bytes_kind_retry',
+'file_flush_live_owner',
+'file_open_nul_path_no_world_stub',
+'error_simple_retry_projection',
+'error_os_retry_projection',
+'file_open_nonempty_no_world_stub',
+'array_from_fn_1024_order_and_pointwise_value',
+'formatter_all_r0_variants_all_options',
+'file_empty_write_all_preserves_owner',
+'file_create_new_mode_nul_no_world_stub',
+]
+inputs=['tools/prover-dict-20261026/proof-quotient/lib.rs',
+        'tools/prover-dict-20261026/proof-quotient/Cargo.toml',
+        'tools/prover-dict-20261026/proof-remaining/reverse.rs',
+        'tools/prover-dict-20261026/PDict_quotient_batch231.py']
+pins={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in inputs}
+rows=[]
+for number,case in enumerate(cases[3:],18):
+    label=f'pdict-q231-kani-{number:03d}'
+    cmd=['timeout','120','cargo','kani','--manifest-path',
+         'tools/prover-dict-20261026/proof-quotient/Cargo.toml','--lib',
+         '--harness',case,'--exact','--solver','kissat','-j','4',
+         '--output-format','terse']
+    print(label,case,flush=True)
+    ret=subprocess.run([sys.executable,'tools/prover-rw-20261023/host-run.py',label,*cmd]).returncode
+    folder=Path('receipts')/label
+    (folder/'input-supplement.json').write_text(json.dumps(dict(
+        worktree_revision='4cd294bc606a713f9fa107bae8f116a1abdd6028',
+        proof_only_sources=pins,target=cmd,exit=ret,
+        scope_qualification='Sequential harnesses share one admitted scope; cgroup peaks are cumulative across this batch. GNU time is per target.',
+        source_revision_qualification='Historical host snapshot label retained in raw receipt. Exact proof inputs above supplement its incomplete inventory.'),indent=2)+'\n')
+    rows.append(dict(attempt=label,harness=case,exit=ret))
+    if not (folder/'receipt.json').exists():
+        print('No completed receipt: stop batch for admission/infrastructure review.',flush=True)
+        break
+Path('receipts/q231-batch-summary.json').write_text(json.dumps(rows,indent=2)+'\n')
