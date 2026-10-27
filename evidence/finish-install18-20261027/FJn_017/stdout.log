@@ -1,0 +1,51 @@
+FJn_CopyEvaluatorMap.lean:14:2: error: 'change' tactic failed, pattern
+  (f
+        (R0P.copyActiveLiteral s *
+          R0P.copyResidual
+            (List.foldl (FJn_CopyRowMap.stepFn s (R0P.copyPatternValuesLiteral o lambda) n v)
+              { producerValues := fun x => 0, producerWeights := fun x => 0, consumerValues := fun x => 0,
+                consumerWeights := fun x => 0 }
+              R0P.copyLinks)
+            h chi),
+      f (R0P.copyActiveLiteral s)) =
+    ?m.64
+is not definitionally equal to target
+  let r :=
+    have patterns := R0P.copyPatternValuesLiteral o lambda;
+    have initial :=
+      { producerValues := fun x => 0, producerWeights := fun x => 0, consumerValues := fun x => 0,
+        consumerWeights := fun x => 0 };
+    have row :=
+      List.foldl
+        (fun row link =>
+          have weight := R0P.copyLinkWeight link n v;
+          have producer :=
+            R0P.copyAccumulateEndpoint row.producerValues row.producerWeights link.producer link.tag weight patterns s;
+          have consumer :=
+            R0P.copyAccumulateEndpoint row.consumerValues row.consumerWeights link.consumer link.tag weight patterns s;
+          { producerValues := producer.1, producerWeights := producer.2, consumerValues := consumer.1,
+            consumerWeights := consumer.2 })
+        initial R0P.copyLinks;
+    have active := R0P.copyActiveLiteral s;
+    (active * R0P.copyResidual row h chi, active);
+  (f r.1, f r.2) =
+    have patterns := R0P.copyPatternValuesLiteral (fun i => f (o i)) (f lambda);
+    have initial :=
+      { producerValues := fun x => 0, producerWeights := fun x => 0, consumerValues := fun x => 0,
+        consumerWeights := fun x => 0 };
+    have row :=
+      List.foldl
+        (fun row link =>
+          have weight := R0P.copyLinkWeight link n v;
+          have producer :=
+            R0P.copyAccumulateEndpoint row.producerValues row.producerWeights link.producer link.tag weight patterns
+              (FJn_CopyMaskMap.selectors f s);
+          have consumer :=
+            R0P.copyAccumulateEndpoint row.consumerValues row.consumerWeights link.consumer link.tag weight patterns
+              (FJn_CopyMaskMap.selectors f s);
+          { producerValues := producer.1, producerWeights := producer.2, consumerValues := consumer.1,
+            consumerWeights := consumer.2 })
+        initial R0P.copyLinks;
+    have active := R0P.copyActiveLiteral (FJn_CopyMaskMap.selectors f s);
+    (active * R0P.copyResidual row (f h) (f chi), active)
+'AspisR1.FJn_CopyEvaluatorMap.value' depends on axioms: [propext, sorryAx, Quot.sound]

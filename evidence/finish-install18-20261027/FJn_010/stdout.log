@@ -1,0 +1,47 @@
+FJn_CopyMaskMap.lean:14:5: error: unsolved goals
+case isTrue
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+low : Fin 16 → K
+m : ℕ
+a : K
+i : Fin 16
+h✝ : (List.filter (fun i => m.testBit ↑i) (List.ofFn fun i => i)).length > 8
+⊢ f a - f (low i) =
+    if (List.filter (fun i => m.testBit ↑i) (List.ofFn id)).length > 8 then f a - f (low i) else f a + f (low i)
+
+case isFalse
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+low : Fin 16 → K
+m : ℕ
+a : K
+i : Fin 16
+h✝ : ¬(List.filter (fun i => m.testBit ↑i) (List.ofFn fun i => i)).length > 8
+⊢ f a + f (low i) =
+    if (List.filter (fun i => m.testBit ↑i) (List.ofFn id)).length > 8 then f a - f (low i) else f a + f (low i)
+FJn_CopyMaskMap.lean:15:12: error: `simp` made no progress
+FJn_CopyMaskMap.lean:15:12: error: `simp` made no progress
+FJn_CopyMaskMap.lean:18:73: error: unsolved goals
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+s : R0P.CopySelectors K
+⊢ List.foldl
+      (fun sum i =>
+        if R0P.copyActiveRowMasks i ≠ 0 then
+          sum + f (s.high i) * R0P.copySelectorMaskSum16 (fun j => f (s.low j)) (R0P.copyActiveRowMasks i)
+        else sum)
+      0 (List.ofFn fun block => block) =
+    List.foldl
+      (fun sum block =>
+        have mask := R0P.copyActiveRowMasks block;
+        if mask ≠ 0 then sum + (selectors f s).high block * R0P.copySelectorMaskSum16 (selectors f s).low mask else sum)
+      0 (List.ofFn fun block => block)
+'AspisR1.FJn_CopyMaskMap.mask' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJn_CopyMaskMap.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
