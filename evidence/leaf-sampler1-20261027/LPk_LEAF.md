@@ -34,3 +34,22 @@ L001/L002 are rejected proof errors, repaired before acceptance (not timeouts).
 K001 stopped at metadata: missing scratch dependency sources, no Kani launch.
 K002 reached compilation and stopped on a missing unchanged include file.
 The frozen include was copied; no dependency or frozen source was modified.
+
+## Stage 3 (model composition)
+L006/L008 pass. `LPk_Induction.pass_join/digits_join/eight_digits` induct over
+arbitrary local step relations and ordered passes. `LPk_Result.native_result`
+joins the decoded block, all eight digit carriers, final quotient array and
+returned low limb to the cohort's complete Result. Its explicit trace input is
+NOT yet derived for the frozen Rust: the native gate below remains mandatory.
+All new top theorems have printed standard-axiom audits. L005/L007 were rejected
+projection/word-bound rewrite errors, repaired before acceptance.
+
+## Native arithmetic review
+K005 timed out at the unchanged 90-second harness limit (wall 91.917 s,
+328884 KiB RSS, swap 0). It asks q*P+r=packed dividend and r<P for one native
+step on rem<P and arbitrary u32 limb. No division-equivalence assertion and no
+field multiplication is present. This shape will not be rerun unchanged.
+K003 first failed on another missing frozen include; K004 on the scratch module
+path. Both are compile failures, not semantic failures. K005 repaired the path.
+The scratch harness is retained as patches only (the earlier direct evidence
+source file is removed); no repository crates/ or programs/ file changed.
