@@ -1,0 +1,1083 @@
+SDY_generated/SDY_MpA.lean:9:46: error: Fields missing: `coremarkerCopyInst`
+
+Hint: Add missing fields:
+  
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲m̲a̲r̲k̲e̲r̲C̲o̲p̲y̲I̲n̲s̲t̲ ̲:̲=̲ ̲_̲
+SDY_generated/SDY_MpA.lean:14:52: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+SDY_generated/SDY_MpA.lean:35:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 0#usize + 1#usize
+    let i1 ← multiproof.index_at idx 0#usize
+    let i2 ← i1 >>> 3#i32
+    if i2 = 1#u32 then do
+        let i3 ← lift (i1 &&& 7#u32)
+        let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+        if i4 = 0#usize then do
+            let child1 ← multiproof.value_at val 0#usize
+            let i5 ← 0#usize + 1#usize
+            ok
+                (cont
+                  ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 1 },
+                      count := x },
+                    fun e => b { iter := { slice := e.iter.slice.setAtNat 0 child1, i := e.iter.i }, count := e.count },
+                    0#usize, i5))
+          else do
+            let i5 ← 0#usize + 32#usize
+            let o1 ←
+              core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes
+                  { start := 0#usize, «end» := i5 }
+            match o1 with
+              | none =>
+                ok
+                  (done
+                    (0#usize, 0#usize, some false,
+                      b
+                        {
+                          iter :=
+                            {
+                              slice :=
+                                (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 0
+                                  (Array.repeat 32#usize 0#u8),
+                              i := 1 },
+                          count := x }))
+              | some sibling => do
+                let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+                let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+                ok
+                    (cont
+                      ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 1 },
+                          count := x },
+                        fun e =>
+                        b
+                          { iter := { slice := e.iter.slice.setAtNat 0 (to_slice_mut_back s1), i := e.iter.i },
+                            count := e.count },
+                        i5, 0#usize))
+      else do
+        let i5 ← 0#usize + 32#usize
+        let o1 ←
+          core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 0#usize, «end» := i5 }
+        match o1 with
+          | none =>
+            ok
+              (done
+                (0#usize, 0#usize, some false,
+                  b
+                    {
+                      iter :=
+                        {
+                          slice :=
+                            (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 0
+                              (Array.repeat 32#usize 0#u8),
+                          i := 1 },
+                      count := x }))
+          | some sibling => do
+            let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+            let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+            ok
+                (cont
+                  ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 1 },
+                      count := x },
+                    fun e =>
+                    b
+                      { iter := { slice := e.iter.slice.setAtNat 0 (to_slice_mut_back s1), i := e.iter.i },
+                        count := e.count },
+                    i5, 0#usize))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 1 }, count := 1#usize },
+        fun r => b (restore 0 (Array.repeat 32#usize 5#u8) r), 0#usize, 1#usize))
+
+b : Back
+⊢ (do
+      let x ← 0#usize + 1#usize
+      let i1 ← multiproof.index_at idx 0#usize
+      let i2 ← i1 >>> 3#i32
+      if i2 = 1#u32 then do
+          let i3 ← lift (i1 &&& 7#u32)
+          let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+          if i4 = 0#usize then do
+              let child1 ← multiproof.value_at val 0#usize
+              let i5 ← 0#usize + 1#usize
+              ok
+                  (cont
+                    ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 1 },
+                        count := x },
+                      fun e =>
+                      b { iter := { slice := e.iter.slice.setAtNat 0 child1, i := e.iter.i }, count := e.count },
+                      0#usize, i5))
+            else do
+              let i5 ← 0#usize + 32#usize
+              let o1 ←
+                core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes
+                    { start := 0#usize, «end» := i5 }
+              match o1 with
+                | none =>
+                  ok
+                    (done
+                      (0#usize, 0#usize, some false,
+                        b
+                          {
+                            iter :=
+                              {
+                                slice :=
+                                  (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 0
+                                    (Array.repeat 32#usize 0#u8),
+                                i := 1 },
+                            count := x }))
+                | some sibling => do
+                  let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+                  let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+                  ok
+                      (cont
+                        ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 1 },
+                            count := x },
+                          fun e =>
+                          b
+                            { iter := { slice := e.iter.slice.setAtNat 0 (to_slice_mut_back s1), i := e.iter.i },
+                              count := e.count },
+                          i5, 0#usize))
+        else do
+          let i5 ← 0#usize + 32#usize
+          let o1 ←
+            core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 0#usize, «end» := i5 }
+          match o1 with
+            | none =>
+              ok
+                (done
+                  (0#usize, 0#usize, some false,
+                    b
+                      {
+                        iter :=
+                          {
+                            slice :=
+                              (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 0
+                                (Array.repeat 32#usize 0#u8),
+                            i := 1 },
+                        count := x }))
+            | some sibling => do
+              let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+              let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+              ok
+                  (cont
+                    ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 1 },
+                        count := x },
+                      fun e =>
+                      b
+                        { iter := { slice := e.iter.slice.setAtNat 0 (to_slice_mut_back s1), i := e.iter.i },
+                          count := e.count },
+                      i5, 0#usize))) =
+    ok
+      (cont
+        ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 1 },
+            count := 1#usize },
+          fun r => b (restore 0 (Array.repeat 32#usize 5#u8) r), 0#usize, 1#usize))
+'SDY_MpA.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:40:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 1#usize + 1#usize
+    let i1 ← 0#usize + 32#usize
+    let o1 ←
+      core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 0#usize, «end» := i1 }
+    match o1 with
+      | none =>
+        ok
+          (done
+            (0#usize, 1#usize, some false,
+              b
+                {
+                  iter :=
+                    {
+                      slice :=
+                        (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 1
+                          (Array.repeat 32#usize 0#u8),
+                      i := 2 },
+                  count := x }))
+      | some sibling => do
+        let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+        let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+        ok
+            (cont
+              ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 2 },
+                  count := x },
+                fun e =>
+                b
+                  { iter := { slice := e.iter.slice.setAtNat 1 (to_slice_mut_back s1), i := e.iter.i },
+                    count := e.count },
+                i1, 1#usize))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 2 }, count := 2#usize },
+        fun r => b (restore 1 (Array.repeat 32#usize 2#u8) r), 32#usize, 1#usize))
+
+b : Back
+⊢ (do
+      let x ← 1#usize + 1#usize
+      let i1 ← 0#usize + 32#usize
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 0#usize, «end» := i1 }
+      match o1 with
+        | none =>
+          ok
+            (done
+              (0#usize, 1#usize, some false,
+                b
+                  {
+                    iter :=
+                      {
+                        slice :=
+                          (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 1
+                            (Array.repeat 32#usize 0#u8),
+                        i := 2 },
+                    count := x }))
+        | some sibling => do
+          let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+          let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+          ok
+              (cont
+                ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 2 },
+                    count := x },
+                  fun e =>
+                  b
+                    { iter := { slice := e.iter.slice.setAtNat 1 (to_slice_mut_back s1), i := e.iter.i },
+                      count := e.count },
+                  i1, 1#usize))) =
+    ok
+      (cont
+        ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 2 },
+            count := 2#usize },
+          fun r => b (restore 1 (Array.repeat 32#usize 2#u8) r), 32#usize, 1#usize))
+'SDY_MpA.step1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:45:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 2#usize + 1#usize
+    let i1 ← 32#usize + 32#usize
+    let o1 ←
+      core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 32#usize, «end» := i1 }
+    match o1 with
+      | none =>
+        ok
+          (done
+            (32#usize, 1#usize, some false,
+              b
+                {
+                  iter :=
+                    {
+                      slice :=
+                        (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 2
+                          (Array.repeat 32#usize 0#u8),
+                      i := 3 },
+                  count := x }))
+      | some sibling => do
+        let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+        let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+        ok
+            (cont
+              ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 3 },
+                  count := x },
+                fun e =>
+                b
+                  { iter := { slice := e.iter.slice.setAtNat 2 (to_slice_mut_back s1), i := e.iter.i },
+                    count := e.count },
+                i1, 1#usize))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 3 }, count := 3#usize },
+        fun r => b (restore 2 (Array.repeat 32#usize 2#u8) r), 64#usize, 1#usize))
+
+b : Back
+⊢ (do
+      let x ← 2#usize + 1#usize
+      let i1 ← 32#usize + 32#usize
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 32#usize, «end» := i1 }
+      match o1 with
+        | none =>
+          ok
+            (done
+              (32#usize, 1#usize, some false,
+                b
+                  {
+                    iter :=
+                      {
+                        slice :=
+                          (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 2
+                            (Array.repeat 32#usize 0#u8),
+                        i := 3 },
+                    count := x }))
+        | some sibling => do
+          let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+          let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+          ok
+              (cont
+                ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 3 },
+                    count := x },
+                  fun e =>
+                  b
+                    { iter := { slice := e.iter.slice.setAtNat 2 (to_slice_mut_back s1), i := e.iter.i },
+                      count := e.count },
+                  i1, 1#usize))) =
+    ok
+      (cont
+        ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 3 },
+            count := 3#usize },
+          fun r => b (restore 2 (Array.repeat 32#usize 2#u8) r), 64#usize, 1#usize))
+'SDY_MpA.step2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:50:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 3#usize + 1#usize
+    let i1 ← 64#usize + 32#usize
+    let o1 ←
+      core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 64#usize, «end» := i1 }
+    match o1 with
+      | none =>
+        ok
+          (done
+            (64#usize, 1#usize, some false,
+              b
+                {
+                  iter :=
+                    {
+                      slice :=
+                        (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 3
+                          (Array.repeat 32#usize 0#u8),
+                      i := 4 },
+                  count := x }))
+      | some sibling => do
+        let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+        let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+        ok
+            (cont
+              ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 4 },
+                  count := x },
+                fun e =>
+                b
+                  { iter := { slice := e.iter.slice.setAtNat 3 (to_slice_mut_back s1), i := e.iter.i },
+                    count := e.count },
+                i1, 1#usize))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 4 }, count := 4#usize },
+        fun r => b (restore 3 (Array.repeat 32#usize 2#u8) r), 96#usize, 1#usize))
+
+b : Back
+⊢ (do
+      let x ← 3#usize + 1#usize
+      let i1 ← 64#usize + 32#usize
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 64#usize, «end» := i1 }
+      match o1 with
+        | none =>
+          ok
+            (done
+              (64#usize, 1#usize, some false,
+                b
+                  {
+                    iter :=
+                      {
+                        slice :=
+                          (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 3
+                            (Array.repeat 32#usize 0#u8),
+                        i := 4 },
+                    count := x }))
+        | some sibling => do
+          let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+          let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+          ok
+              (cont
+                ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 4 },
+                    count := x },
+                  fun e =>
+                  b
+                    { iter := { slice := e.iter.slice.setAtNat 3 (to_slice_mut_back s1), i := e.iter.i },
+                      count := e.count },
+                  i1, 1#usize))) =
+    ok
+      (cont
+        ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 4 },
+            count := 4#usize },
+          fun r => b (restore 3 (Array.repeat 32#usize 2#u8) r), 96#usize, 1#usize))
+'SDY_MpA.step3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:55:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 4#usize + 1#usize
+    let i1 ← 96#usize + 32#usize
+    let o1 ←
+      core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 96#usize, «end» := i1 }
+    match o1 with
+      | none =>
+        ok
+          (done
+            (96#usize, 1#usize, some false,
+              b
+                {
+                  iter :=
+                    {
+                      slice :=
+                        (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 4
+                          (Array.repeat 32#usize 0#u8),
+                      i := 5 },
+                  count := x }))
+      | some sibling => do
+        let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+        let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+        ok
+            (cont
+              ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 5 },
+                  count := x },
+                fun e =>
+                b
+                  { iter := { slice := e.iter.slice.setAtNat 4 (to_slice_mut_back s1), i := e.iter.i },
+                    count := e.count },
+                i1, 1#usize))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 5 }, count := 5#usize },
+        fun r => b (restore 4 (Array.repeat 32#usize 2#u8) r), 128#usize, 1#usize))
+
+b : Back
+⊢ (do
+      let x ← 4#usize + 1#usize
+      let i1 ← 96#usize + 32#usize
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 96#usize, «end» := i1 }
+      match o1 with
+        | none =>
+          ok
+            (done
+              (96#usize, 1#usize, some false,
+                b
+                  {
+                    iter :=
+                      {
+                        slice :=
+                          (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 4
+                            (Array.repeat 32#usize 0#u8),
+                        i := 5 },
+                    count := x }))
+        | some sibling => do
+          let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+          let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+          ok
+              (cont
+                ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 5 },
+                    count := x },
+                  fun e =>
+                  b
+                    { iter := { slice := e.iter.slice.setAtNat 4 (to_slice_mut_back s1), i := e.iter.i },
+                      count := e.count },
+                  i1, 1#usize))) =
+    ok
+      (cont
+        ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 5 },
+            count := 5#usize },
+          fun r => b (restore 4 (Array.repeat 32#usize 2#u8) r), 128#usize, 1#usize))
+'SDY_MpA.step4' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:60:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 5#usize + 1#usize
+    let i1 ← 128#usize + 32#usize
+    let o1 ←
+      core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 128#usize, «end» := i1 }
+    match o1 with
+      | none =>
+        ok
+          (done
+            (128#usize, 1#usize, some false,
+              b
+                {
+                  iter :=
+                    {
+                      slice :=
+                        (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 5
+                          (Array.repeat 32#usize 0#u8),
+                      i := 6 },
+                  count := x }))
+      | some sibling => do
+        let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+        let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+        ok
+            (cont
+              ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 6 },
+                  count := x },
+                fun e =>
+                b
+                  { iter := { slice := e.iter.slice.setAtNat 5 (to_slice_mut_back s1), i := e.iter.i },
+                    count := e.count },
+                i1, 1#usize))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 6 }, count := 6#usize },
+        fun r => b (restore 5 (Array.repeat 32#usize 2#u8) r), 160#usize, 1#usize))
+
+b : Back
+⊢ (do
+      let x ← 5#usize + 1#usize
+      let i1 ← 128#usize + 32#usize
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 128#usize, «end» := i1 }
+      match o1 with
+        | none =>
+          ok
+            (done
+              (128#usize, 1#usize, some false,
+                b
+                  {
+                    iter :=
+                      {
+                        slice :=
+                          (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 5
+                            (Array.repeat 32#usize 0#u8),
+                        i := 6 },
+                    count := x }))
+        | some sibling => do
+          let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+          let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+          ok
+              (cont
+                ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 6 },
+                    count := x },
+                  fun e =>
+                  b
+                    { iter := { slice := e.iter.slice.setAtNat 5 (to_slice_mut_back s1), i := e.iter.i },
+                      count := e.count },
+                  i1, 1#usize))) =
+    ok
+      (cont
+        ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 6 },
+            count := 6#usize },
+          fun r => b (restore 5 (Array.repeat 32#usize 2#u8) r), 160#usize, 1#usize))
+'SDY_MpA.step5' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:65:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 6#usize + 1#usize
+    let i1 ← 160#usize + 32#usize
+    let o1 ←
+      core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 160#usize, «end» := i1 }
+    match o1 with
+      | none =>
+        ok
+          (done
+            (160#usize, 1#usize, some false,
+              b
+                {
+                  iter :=
+                    {
+                      slice :=
+                        (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 6
+                          (Array.repeat 32#usize 0#u8),
+                      i := 7 },
+                  count := x }))
+      | some sibling => do
+        let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+        let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+        ok
+            (cont
+              ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 7 },
+                  count := x },
+                fun e =>
+                b
+                  { iter := { slice := e.iter.slice.setAtNat 6 (to_slice_mut_back s1), i := e.iter.i },
+                    count := e.count },
+                i1, 1#usize))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 7 }, count := 7#usize },
+        fun r => b (restore 6 (Array.repeat 32#usize 2#u8) r), 192#usize, 1#usize))
+
+b : Back
+⊢ (do
+      let x ← 6#usize + 1#usize
+      let i1 ← 160#usize + 32#usize
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 160#usize, «end» := i1 }
+      match o1 with
+        | none =>
+          ok
+            (done
+              (160#usize, 1#usize, some false,
+                b
+                  {
+                    iter :=
+                      {
+                        slice :=
+                          (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 6
+                            (Array.repeat 32#usize 0#u8),
+                        i := 7 },
+                    count := x }))
+        | some sibling => do
+          let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+          let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+          ok
+              (cont
+                ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 7 },
+                    count := x },
+                  fun e =>
+                  b
+                    { iter := { slice := e.iter.slice.setAtNat 6 (to_slice_mut_back s1), i := e.iter.i },
+                      count := e.count },
+                  i1, 1#usize))) =
+    ok
+      (cont
+        ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 7 },
+            count := 7#usize },
+          fun r => b (restore 6 (Array.repeat 32#usize 2#u8) r), 192#usize, 1#usize))
+'SDY_MpA.step6' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:70:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 7#usize + 1#usize
+    let i1 ← 192#usize + 32#usize
+    let o1 ←
+      core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 192#usize, «end» := i1 }
+    match o1 with
+      | none =>
+        ok
+          (done
+            (192#usize, 1#usize, some false,
+              b
+                {
+                  iter :=
+                    {
+                      slice :=
+                        (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 7
+                          (Array.repeat 32#usize 0#u8),
+                      i := 8 },
+                  count := x }))
+      | some sibling => do
+        let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+        let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+        ok
+            (cont
+              ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 8 },
+                  count := x },
+                fun e =>
+                b
+                  { iter := { slice := e.iter.slice.setAtNat 7 (to_slice_mut_back s1), i := e.iter.i },
+                    count := e.count },
+                i1, 1#usize))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 8 }, count := 8#usize },
+        fun r => b (restore 7 (Array.repeat 32#usize 2#u8) r), 224#usize, 1#usize))
+
+b : Back
+⊢ (do
+      let x ← 7#usize + 1#usize
+      let i1 ← 192#usize + 32#usize
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) nodes { start := 192#usize, «end» := i1 }
+      match o1 with
+        | none =>
+          ok
+            (done
+              (192#usize, 1#usize, some false,
+                b
+                  {
+                    iter :=
+                      {
+                        slice :=
+                          (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice.setAtNat 7
+                            (Array.repeat 32#usize 0#u8),
+                        i := 8 },
+                    count := x }))
+        | some sibling => do
+          let (s, to_slice_mut_back) ← lift (Array.repeat 32#usize 0#u8).to_slice_mut
+          let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s sibling
+          ok
+              (cont
+                ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 8 },
+                    count := x },
+                  fun e =>
+                  b
+                    { iter := { slice := e.iter.slice.setAtNat 7 (to_slice_mut_back s1), i := e.iter.i },
+                      count := e.count },
+                  i1, 1#usize))) =
+    ok
+      (cont
+        ({ iter := { slice := (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).to_slice, i := 8 },
+            count := 8#usize },
+          fun r => b (restore 7 (Array.repeat 32#usize 2#u8) r), 224#usize, 1#usize))
+'SDY_MpA.step7' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:75:2: warning: 'skip' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'SDY_MpA.step8' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'SDY_MpA.run8' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:89:2: error: 'change' tactic failed, pattern
+  (match body idx val 1#usize nodes 1#u32 none (it 7#usize) b 192#usize 1#usize with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.62
+is not definitionally equal to target
+  (match step (it 7#usize, b, 192#usize, 1#usize) with
+    | ok r =>
+      match r with
+      | cont x => loop step x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (224#usize, 1#usize, none, fin7 b (it 8#usize))
+'SDY_MpA.run7' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:99:2: error: 'change' tactic failed, pattern
+  (match body idx val 1#usize nodes 1#u32 none (it 6#usize) b 160#usize 1#usize with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.62
+is not definitionally equal to target
+  (match step (it 6#usize, b, 160#usize, 1#usize) with
+    | ok r =>
+      match r with
+      | cont x => loop step x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (224#usize, 1#usize, none, fin6 b (it 8#usize))
+'SDY_MpA.run6' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:109:2: error: 'change' tactic failed, pattern
+  (match body idx val 1#usize nodes 1#u32 none (it 5#usize) b 128#usize 1#usize with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.62
+is not definitionally equal to target
+  (match step (it 5#usize, b, 128#usize, 1#usize) with
+    | ok r =>
+      match r with
+      | cont x => loop step x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (224#usize, 1#usize, none, fin5 b (it 8#usize))
+'SDY_MpA.run5' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:119:2: error: 'change' tactic failed, pattern
+  (match body idx val 1#usize nodes 1#u32 none (it 4#usize) b 96#usize 1#usize with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.62
+is not definitionally equal to target
+  (match step (it 4#usize, b, 96#usize, 1#usize) with
+    | ok r =>
+      match r with
+      | cont x => loop step x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (224#usize, 1#usize, none, fin4 b (it 8#usize))
+'SDY_MpA.run4' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:129:2: error: 'change' tactic failed, pattern
+  (match body idx val 1#usize nodes 1#u32 none (it 3#usize) b 64#usize 1#usize with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.62
+is not definitionally equal to target
+  (match step (it 3#usize, b, 64#usize, 1#usize) with
+    | ok r =>
+      match r with
+      | cont x => loop step x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (224#usize, 1#usize, none, fin3 b (it 8#usize))
+'SDY_MpA.run3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:139:2: error: 'change' tactic failed, pattern
+  (match body idx val 1#usize nodes 1#u32 none (it 2#usize) b 32#usize 1#usize with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.62
+is not definitionally equal to target
+  (match step (it 2#usize, b, 32#usize, 1#usize) with
+    | ok r =>
+      match r with
+      | cont x => loop step x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (224#usize, 1#usize, none, fin2 b (it 8#usize))
+'SDY_MpA.run2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:149:2: error: 'change' tactic failed, pattern
+  (match body idx val 1#usize nodes 1#u32 none (it 1#usize) b 0#usize 1#usize with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.62
+is not definitionally equal to target
+  (match step (it 1#usize, b, 0#usize, 1#usize) with
+    | ok r =>
+      match r with
+      | cont x => loop step x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (224#usize, 1#usize, none, fin1 b (it 8#usize))
+'SDY_MpA.run1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:159:2: error: 'change' tactic failed, pattern
+  (match body idx val 1#usize nodes 1#u32 none (it 0#usize) b 0#usize 0#usize with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.62
+is not definitionally equal to target
+  (match step (it 0#usize, b, 0#usize, 0#usize) with
+    | ok r =>
+      match r with
+      | cont x => loop step x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (224#usize, 1#usize, none, fin0 b (it 8#usize))
+'SDY_MpA.run0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'SDY_MpA.inner' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:178:10: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+SDY_generated/SDY_MpA.lean:179:20: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.done` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ForInStep.done`
+  [apply] `SDY_Loop.done`
+  [apply] `Lean.Doc.done`
+  [apply] `Lean.TransformStep.done`
+  [apply] `ProofWidgets.CheckRequestResponse.done`
+  [apply] `Std.CancellationContext.done`
+  [apply] `Std.IterStep.done`
+  [apply] `Std.PlausibleIterStep.done`
+  [apply] `done`
+  [apply] `StepStar.TaskOrDone.done`
+  [apply] `ByteArray.utf8DecodeChar?.FirstByte.done`
+  [apply] `Lean.Elab.Tactic.done`
+  [apply] `Lean.Expr.FindStep.done`
+  [apply] `Lean.Parser.Tactic.done`
+  [apply] `Lean.PersistentHashMap.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.done`
+  [apply] `Lean.Elab.Tactic.Grind.done`
+  [apply] `Lean.Meta.Grind.Action.done`
+  [apply] `Lean.Meta.Simp.Step.done`
+  [apply] `Lean.Meta.Simp.StepQ.done`
+  [apply] `Lean.Parser.Tactic.Grind.done`
+  [apply] `Std.DTreeMap.Internal.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.below.done`
+  [apply] `Lean.Language.SnapshotTree.foldSnaps.Control.done`
+  [apply] `Std.Iterators.Types.Drop.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.DropWhile.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.FilterMap.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.Take.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.TakeWhile.PlausibleStep.done`
+'SDY_MpA.parent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'SDY_MpA.pend' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:188:24: error: No goals to be solved
+'SDY_MpA.prunEnd' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:193:2: error: 'change' tactic failed, pattern
+  (match
+      multiproof.verify_in_place_loop0_loop0.body hash () 1#usize nodes multiproof.Arity.Eight idx val 0#usize 0#usize
+        0#usize none with
+    | ok (cont s) => loop pstep s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.92
+is not definitionally equal to target
+  (match pstep (multiproof.Arity.Eight, idx, val, 0#usize, 0#usize, 0#usize, none) with
+    | ok r =>
+      match r with
+      | cont x => loop pstep x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize, none, 1#u32)
+'SDY_MpA.prun' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:203:160: error: Tactic `rfl` failed: The left-hand side
+  body outidx outval 1#usize nodes 0#u32 none (it 0#usize) id 224#usize 0#usize
+is not definitionally equal to the right-hand side
+  ok (done (224#usize, 0#usize, some false, it 1#usize))
+
+⊢ body outidx outval 1#usize nodes 0#u32 none (it 0#usize) id 224#usize 0#usize =
+    ok (done (224#usize, 0#usize, some false, it 1#usize))
+'SDY_MpA.rejectBody' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:208:2: error: 'change' tactic failed, pattern
+  (match body outidx outval 1#usize nodes 0#u32 none (it 0#usize) id 224#usize 0#usize with
+    | ok (cont s) => loop rejectStep s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.85
+is not definitionally equal to target
+  (match rejectStep (it 0#usize, id, 224#usize, 0#usize) with
+    | ok r =>
+      match r with
+      | cont x => loop rejectStep x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (224#usize, 0#usize, some false, it 1#usize)
+'SDY_MpA.rejectInner' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:224:19: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+SDY_generated/SDY_MpA.lean:225:29: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.done` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ForInStep.done`
+  [apply] `SDY_Loop.done`
+  [apply] `Lean.Doc.done`
+  [apply] `Lean.TransformStep.done`
+  [apply] `ProofWidgets.CheckRequestResponse.done`
+  [apply] `Std.CancellationContext.done`
+  [apply] `Std.IterStep.done`
+  [apply] `Std.PlausibleIterStep.done`
+  [apply] `done`
+  [apply] `StepStar.TaskOrDone.done`
+  [apply] `ByteArray.utf8DecodeChar?.FirstByte.done`
+  [apply] `Lean.Elab.Tactic.done`
+  [apply] `Lean.Expr.FindStep.done`
+  [apply] `Lean.Parser.Tactic.done`
+  [apply] `Lean.PersistentHashMap.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.done`
+  [apply] `Lean.Elab.Tactic.Grind.done`
+  [apply] `Lean.Meta.Grind.Action.done`
+  [apply] `Lean.Meta.Simp.Step.done`
+  [apply] `Lean.Meta.Simp.StepQ.done`
+  [apply] `Lean.Parser.Tactic.Grind.done`
+  [apply] `Std.DTreeMap.Internal.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.below.done`
+  [apply] `Lean.Language.SnapshotTree.foldSnaps.Control.done`
+  [apply] `Std.Iterators.Types.Drop.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.DropWhile.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.FilterMap.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.Take.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.TakeWhile.PlausibleStep.done`
+'SDY_MpA.rejectParent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:231:2: error: 'change' tactic failed, pattern
+  (match
+      multiproof.verify_in_place_loop0_loop0.body hash () 1#usize nodes multiproof.Arity.Eight outidx outval 224#usize
+        0#usize 0#usize none with
+    | ok (cont s) => loop pstep s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ?m.92
+is not definitionally equal to target
+  (match pstep (multiproof.Arity.Eight, outidx, outval, 224#usize, 0#usize, 0#usize, none) with
+    | ok r =>
+      match r with
+      | cont x => loop pstep x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (multiproof.Arity.Eight, outidx, outval, 1#usize, 224#usize, some false, 0#u32)
+'SDY_MpA.rejectLevel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:242:26: error: unexpected token 'at'; expected ')'
+SDY_generated/SDY_MpA.lean:242:10: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+'SDY_MpA.outerFirst' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:252:26: error: unexpected token 'at'; expected ')'
+SDY_generated/SDY_MpA.lean:252:10: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+'SDY_MpA.outerLast' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:261:29: error: No goals to be solved
+'SDY_MpA.orunLast' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'SDY_MpA.orun' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:268:38: error: unsolved goals
+⊢ 1 ≤ Usize.max
+SDY_generated/SDY_MpA.lean:269:8: warning: declaration uses `sorry`
+SDY_generated/SDY_MpA.lean:274:86: warning: This simp argument is unused:
+  singleton
+
+Hint: Omit it from the simp argument list.
+  simp [core.slice.iter.Windows.Insts.CoreIterTraitsIteratorIteratorSharedASlice.next,̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SDY_generated/SDY_MpA.lean:276:2: warning: 'rw [loop.eq_def]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+SDY_generated/SDY_MpA.lean:277:2: warning: 'simp [core.slice.iter.IteratorSliceIter.next, singleton,
+  multiproof.well_formed.closure_1.Insts.CoreOpsFunctionFnMutTupleSharedU32Bool.call_mut,
+  multiproof.LEAF_BITS]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+SDY_generated/SDY_MpA.lean:278:2: warning: 'rw [loop.eq_def]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+SDY_generated/SDY_MpA.lean:279:2: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+SDY_generated/SDY_MpA.lean:277:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+SDY_generated/SDY_MpA.lean:278:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+SDY_generated/SDY_MpA.lean:279:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+SDY_generated/SDY_MpA.lean:271:8: warning: declaration uses `sorry`
+'SDY_MpA.formed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:284:2: error: 'change' tactic failed, pattern
+  (do
+      let b ← multiproof.well_formed singleton
+      if b = true then do
+          let __x ←
+            multiproof.verify_in_place_loop0 hash { start := 0#u32, «end» := 6#u32 } () multiproof.Arity.Eight
+                (node 0#u8) idx val 1#usize nodes 0#usize none
+          match __x with
+            | (x, v, p) =>
+              match p with
+              | none => fail Error.panic
+              | some b => ok (b, x, v)
+        else ok (false, idx, val)) =
+    ?m.19
+is not definitionally equal to target
+  (if 1#usize = 0#usize then ok (false, idx, val)
+    else
+      if 1#usize > multiproof.MAX_BATCH then ok (false, idx, val)
+      else do
+        let s ←
+          core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+              { «end» := 1#usize }
+        let b ← multiproof.well_formed s
+        if b = true then
+            have i := nodes.len;
+            do
+            let i1 ← i % 32#usize
+            if (i1 != 0#usize) = true then ok (false, idx, val)
+              else do
+                let i2 ← multiproof.Arity.Eight.levels
+                let (idx1, val1, pending_return) ←
+                  multiproof.verify_in_place_loop0 hash { start := 0#u32, «end» := i2 } () multiproof.Arity.Eight
+                      (node 0#u8) idx val 1#usize nodes 0#usize none
+                match pending_return with
+                  | none => fail Error.panic
+                  | some b1 => ok (b1, idx1, val1)
+          else ok (false, idx, val)) =
+    ok (false, outidx, outval)
+'SDY_MpA.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

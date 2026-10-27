@@ -1,0 +1,50 @@
+{"attempt": "SDY_L023", "exit_status": 0, "wall_seconds": 1.1756297249812633, "peak_rss_kib": "2651868", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some range', { start := n, «end» := range.end })
+    else ok (none, range)
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : core.iter.range.Step (UScalar UScalarTy.Usize) :=
+core.iter.range.UScalarStep UScalarTy.Usize core.clone
+...
+ x => some ({ toFin := ⟨2, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                  ⟨fun x =>
+                    Nat.rec (fun x => some ({ toFin := ⟨3, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                      ⟨fun x =>
+                        Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                          ⟨fun x => none, PUnit.unit⟩,
+                        fun x => none, PUnit.unit⟩,
+                    fun x =>
+                    Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                      ⟨fun x => none, PUnit.unit⟩,
+                    fun x => none, PUnit.unit⟩,
+                fun x =>
+                Nat.rec (fun x => some ({ toFin := ⟨3, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                  ⟨fun x =>
+                    Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                      ⟨fun x => none, PUnit.unit⟩,
+                    fun x => none, PUnit.unit⟩,
+                fun x =>
+                Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                  ⟨fun x => none, PUnit.unit⟩,
+                fun x => none, PUnit.unit⟩)))
+      v.1)
+  (fun e => fail e) div
+  (Result.rec
+    (fun v =>
+      Option.rec (fail Error.panic)
+        (fun val => ok (some ({ toFin := ⟨0, ⋯⟩ }#uscalar), { start := val, «end» := { toFin := ⟨4, ⋯⟩ }#uscalar })) v)
+    (fun e => fail e) div
+    (Decidable.rec (fun h => ok none) (fun h => ok (some ({ toFin := ⟨1, ⋯⟩ }#uscalar)))
+      (Decidable.rec (fun h => isFalse ⋯) (fun h => isTrue ⋯)
+        (Bool.rec (isFalse ⋯) (isTrue ⋯)
+          (Nat.rec (fun x => false) (fun n n_ih x => x.1 n) (wrapped✝.1 UScalarTy.Usize)
+            ⟨fun x => true, PUnit.unit⟩)))))
+
+Running as unit: run-rfa5c7195e9894b3c9fe5186ce466d6b6.scope; invocation ID: 1dd1a535f8cb484799554c1e9e6a4593

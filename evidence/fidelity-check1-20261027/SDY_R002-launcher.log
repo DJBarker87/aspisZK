@@ -1,0 +1,43 @@
+{"attempt": "SDY_R002", "exit_status": 0, "wall_seconds": 1.9734432370169088, "peak_rss_kib": "233416", "swaps": "0", "print_axioms": "N/A: rust"}
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more in
+...
+ case: `sdy_fidelity`
+
+warning: function `SDY_multiproof` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/multiproof.rs:364:8
+    |
+364 |     fn SDY_multiproof() {
+    |        ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `sdy_multiproof`
+
+warning: `aspis-r1-cost-probe` (lib test) generated 25 warnings (run `cargo fix --lib -p aspis-r1-cost-probe --tests` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1.72s
+     Running unittests src/lib.rs (SDY_target/release/deps/aspis_r1_cost_probe-bb8daa4e05ff576d)
+
+running 3 tests
+SDY multiproof 8 5 2 => false [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] val0=5 tailZero=true
+SDY multiproof 9 7 3 => false [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] val0=3 tailZero=true
+SDY add [0, 0, 0, 0, 0, 0, 0, 0] 1 => [1, 0, 0, 0, 0, 0, 0, 0] false
+SDY add [2147483646, 2147483646, 2147483646, 2147483646, 2147483646, 2147483646, 2147483646, 2147483646] 1 => [0, 0, 0, 0, 0, 0, 0, 0] true
+SDY add [5, 5, 5, 5, 5, 5, 5, 5] 2147483647 => [5, 6, 5, 5, 5, 5, 5, 5] false
+SDY multiproof 10 9 4 => false [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] val0=4 tailZero=true
+SDY residue [1, 2, 3, 4] flush=false => [3, 6, 9, 12]
+SDY residue [2147483648, 2147483649, 4294967296, 7] flush=true => [1, 2, 2, 7]
+SDY residue [2147483647, 0, 0, 0] flush=true => [1, 2, 3, 4]
+SDY finish [1, 2, 3, 4] => [1, 2, 3, 4]
+SDY finish [2147483648, 2147483649, 4294967296, 7] => [1, 2, 2, 7]
+SDY finish [2147483647, 4294967294, 0, 2147483652] => [0, 0, 0, 5]
+test multiproof::SDY_fidelity::SDY_multiproof ... ok
+test sampler::SDY_fidelity::SDY_sampler ... ok
+test verifier::SDY_fidelity::SDY_residue_finish ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.00s
+
+
+Running as unit: run-r83c3f410a764442fb3a716a9aa7088b6.scope; invocation ID: 5eb0417b9aff4c7880c3094e26958d86

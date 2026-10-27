@@ -1,0 +1,202 @@
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some range', { start := n, «end» := range.end })
+    else ok (none, range)
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : core.iter.range.Step (UScalar UScalarTy.Usize) :=
+core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize
+Result.rec
+  (fun v =>
+    Option.rec
+      (ok
+        (done
+          ⟨[{ toFin := ⟨1, ⋯⟩ }#uscalar, { toFin := ⟨2, ⋯⟩ }#uscalar, { toFin := ⟨3, ⋯⟩ }#uscalar,
+              { toFin := ⟨4, ⋯⟩ }#uscalar],
+            ⋯⟩))
+      (fun val =>
+        Result.rec
+          (fun v_1 =>
+            Result.rec
+              (fun v_2 =>
+                Result.rec
+                  (fun v_3 =>
+                    Result.rec
+                      (fun v_4 =>
+                        Result.rec (fun v_5 => ok (cont (v.2, v_5, { toFin := ⟨2, ⋯⟩ }#uscalar))) (fun e => fail e) div
+                          (Option.rec (fail Error.arrayOutOfBounds)
+                            (fun val_1 =>
+                              ok
+                                ⟨Nat.rec
+                                    (fun x =>
+                                      [v_4, { toFin := ⟨2, ⋯⟩ }#uscalar, { toFin := ⟨3, ⋯⟩ }#uscalar,
+                                        { toFin := ⟨4, ⋯⟩ }#uscalar])
+                                    (fun n n_ih x => { toFin := ⟨1, ⋯⟩ }#uscalar :: x.1 n v_4) val.1.1.1
+                                    ⟨fun x x_1 =>
+                                      Nat.rec (fun x => [x_1, { toFin := ⟨3, ⋯⟩ }#uscalar, { toFin := ⟨4, ⋯⟩ }#uscalar])
+                                        (fun n n_ih x => { toFin := ⟨2, ⋯⟩ }#uscalar :: x.1 n x_1) x
+                                        ⟨fun x x_2 =>
+                                          Nat.rec (fun x => [x_2, { toFin := ⟨4, ⋯⟩ }#uscalar])
+                                            (fun n n_ih x => { toFin := ⟨3, ⋯⟩ }#uscalar :: x.1 n x_2) x
+                                            ⟨fun x x_3 =>
+                                              Nat.rec (fun x => [x_3])
+                                                (fun n n_ih x => { toFin := ⟨4, ⋯⟩ }#uscalar :: x.1 n x_3) x
+                                                ⟨fun x x_4 => [], PUnit.unit⟩,
+                                              fun x x_3 => [], PUnit.unit⟩,
+                                          fun x x_2 =>
+                                          Nat.rec (fun x => [x_2])
+                                            (fun n n_ih x => { toFin := ⟨4, ⋯⟩ }#uscalar :: x.1 n x_2) x
+                                            ⟨fun x x_3 => [], PUnit.unit⟩,
+                                          fun x x_2 => [], PUnit.unit⟩,
+                                      fun x x_1 =>
+                                      Nat.rec (fun x => [x_1, { toFin := ⟨4, ⋯⟩ }#uscalar])
+                                        (fun n n_ih x => { toFin := ⟨3, ⋯⟩ }#uscalar :: x.1 n x_1) x
+                                        ⟨fun x x_2 =>
+                                          Nat.rec (fun x => [x_2])
+                                            (fun n n_ih x => { toFin := ⟨4, ⋯⟩ }#uscalar :: x.1 n x_2) x
+                                            ⟨fun x x_3 => [], PUnit.unit⟩,
+                                          fun x x_2 => [], PUnit.unit⟩,
+                                      fun x x_1 =>
+                                      Nat.rec (fun x => [x_1])
+                                        (fun n n_ih x => { toFin := ⟨4, ⋯⟩ }#uscalar :: x.1 n x_1) x
+                                        ⟨fun x x_2 => [], PUnit.unit⟩,
+                                      fun x x_1 => [], PUnit.unit⟩,
+                                  ⋯⟩)
+                            (Nat.rec (fun x => some ({ toFin := ⟨1, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) val.1.1.1
+                              ⟨fun x =>
+                                Nat.rec (fun x => some ({ toFin := ⟨2, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                                  ⟨fun x =>
+                                    Nat.rec (fun x => some ({ toFin := ⟨3, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                                      ⟨fun x =>
+                                        Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                                          ⟨fun x => none, PUnit.unit⟩,
+                                        fun x => none, PUnit.unit⟩,
+                                    fun x =>
+                                    Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                                      ⟨fun x => none, PUnit.unit⟩,
+                                    fun x => none, PUnit.unit⟩,
+                                fun x =>
+                                Nat.rec (fun x => some ({ toFin := ⟨3, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                                  ⟨fun x =>
+                                    Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                                      ⟨fun x => none, PUnit.unit⟩,
+                                    fun x => none, PUnit.unit⟩,
+                                fun x =>
+                                Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                                  ⟨fun x => none, PUnit.unit⟩,
+                                fun x => none, PUnit.unit⟩)))
+                      (fun e => fail e) div
+                      (Option.rec (fail Error.integerOverflow) (fun val => ok val)
+                        (Decidable.rec (fun h => none)
+                          (fun h =>
+                            some
+                              ({
+                                  toFin :=
+                                    ⟨(Nat.rec ⟨fun x => x, PUnit.unit⟩ (fun n n_ih => ⟨fun x => (n_ih.1 x).succ, n_ih⟩)
+                                            v_3.1.1.1).1
+                                        v_1.1.1.1,
+                                      ⋯⟩ }#uscalar))
+                          (Bool.rec (isFalse ⋯) (isTrue ⋯)
+                            (Decidable.rec (fun h => false) (fun h => true)
+                              (Decidable.rec (fun h => isFalse ⋯) (fun h => isTrue ⋯)
+                                (Bool.rec (isFalse ⋯) (isTrue ⋯)
+                                  ((Nat.rec ⟨fun x => true, PUnit.unit⟩
+                                        (fun n n_ih =>
+                                          ⟨fun x => Nat.rec (fun x => false) (fun n_1 n_ih x => x.1 n_1) x n_ih, n_ih⟩)
+                                        ((Nat.rec ⟨fun x => x, PUnit.unit⟩
+                                              (fun n n_ih => ⟨fun x => (n_ih.1 x).succ, n_ih⟩) v_3.1.1.1).1
+                                          v_1.1.1.1)).1
+                                    18446744073709551615))))))))
+                  (fun e => fail e) div
+                  (Option.rec (fail Error.integerOverflow) (fun val => ok val)
+                    (Decidable.rec (fun h => none)
+                      (fun h =>
+                        some
+                          ({
+                              toFin :=
+                                ⟨(Nat.rec ⟨fun x => x, PUnit.unit⟩ (fun n n_ih => ⟨fun x => (n_ih.1 x).succ, n_ih⟩)
+                                        v_2.1.1.1).1
+                                    ((Nat.rec ⟨fun x => x, PUnit.unit⟩ (fun n n_ih => ⟨fun x => (n_ih.1 x).succ, n_ih⟩)
+                                          v_2.1.1.1).1
+                                      0),
+                                  ⋯⟩ }#uscalar))
+                      (Bool.rec (isFalse ⋯) (isTrue ⋯)
+                        (Decidable.rec (fun h => false) (fun h => true)
+                          (Decidable.rec (fun h => isFalse ⋯) (fun h => isTrue ⋯)
+                            (Bool.rec (isFalse ⋯) (isTrue ⋯)
+                              ((Nat.rec ⟨fun x => true, PUnit.unit⟩
+                                    (fun n n_ih =>
+                                      ⟨fun x => Nat.rec (fun x => false) (fun n_1 n_ih x => x.1 n_1) x n_ih, n_ih⟩)
+                                    ((Nat.rec ⟨fun x => x, PUnit.unit⟩ (fun n n_ih => ⟨fun x => (n_ih.1 x).succ, n_ih⟩)
+                                          v_2.1.1.1).1
+                                      ((Nat.rec ⟨fun x => x, PUnit.unit⟩
+                                            (fun n n_ih => ⟨fun x => (n_ih.1 x).succ, n_ih⟩) v_2.1.1.1).1
+                                        0))).1
+                                18446744073709551615))))))))
+              (fun e => fail e) div
+              (Option.rec (fail Error.arrayOutOfBounds) (fun val => ok val)
+                (Nat.rec (fun x => some ({ toFin := ⟨1, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) val.1.1.1
+                  ⟨fun x =>
+                    Nat.rec (fun x => some ({ toFin := ⟨2, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                      ⟨fun x =>
+                        Nat.rec (fun x => some ({ toFin := ⟨3, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                          ⟨fun x =>
+                            Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                              ⟨fun x => none, PUnit.unit⟩,
+                            fun x => none, PUnit.unit⟩,
+                        fun x =>
+                        Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                          ⟨fun x => none, PUnit.unit⟩,
+                        fun x => none, PUnit.unit⟩,
+                    fun x =>
+                    Nat.rec (fun x => some ({ toFin := ⟨3, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                      ⟨fun x =>
+                        Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                          ⟨fun x => none, PUnit.unit⟩,
+                        fun x => none, PUnit.unit⟩,
+                    fun x =>
+                    Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                      ⟨fun x => none, PUnit.unit⟩,
+                    fun x => none, PUnit.unit⟩)))
+          (fun e => fail e) div
+          (Option.rec (fail Error.arrayOutOfBounds) (fun val => ok val)
+            (Nat.rec (fun x => some ({ toFin := ⟨1, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) val.1.1.1
+              ⟨fun x =>
+                Nat.rec (fun x => some ({ toFin := ⟨2, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                  ⟨fun x =>
+                    Nat.rec (fun x => some ({ toFin := ⟨3, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                      ⟨fun x =>
+                        Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                          ⟨fun x => none, PUnit.unit⟩,
+                        fun x => none, PUnit.unit⟩,
+                    fun x =>
+                    Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                      ⟨fun x => none, PUnit.unit⟩,
+                    fun x => none, PUnit.unit⟩,
+                fun x =>
+                Nat.rec (fun x => some ({ toFin := ⟨3, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                  ⟨fun x =>
+                    Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                      ⟨fun x => none, PUnit.unit⟩,
+                    fun x => none, PUnit.unit⟩,
+                fun x =>
+                Nat.rec (fun x => some ({ toFin := ⟨4, ⋯⟩ }#uscalar)) (fun n n_ih x => x.1 n) x
+                  ⟨fun x => none, PUnit.unit⟩,
+                fun x => none, PUnit.unit⟩)))
+      v.1)
+  (fun e => fail e) div
+  (Result.rec
+    (fun v =>
+      Option.rec (fail Error.panic)
+        (fun val => ok (some ({ toFin := ⟨0, ⋯⟩ }#uscalar), { start := val, «end» := { toFin := ⟨4, ⋯⟩ }#uscalar })) v)
+    (fun e => fail e) div
+    (Decidable.rec (fun h => ok none) (fun h => ok (some ({ toFin := ⟨1, ⋯⟩ }#uscalar)))
+      (Decidable.rec (fun h => isFalse ⋯) (fun h => isTrue ⋯)
+        (Bool.rec (isFalse ⋯) (isTrue ⋯)
+          (Nat.rec (fun x => false) (fun n n_ih x => x.1 n) (wrapped✝.1 UScalarTy.Usize)
+            ⟨fun x => true, PUnit.unit⟩)))))

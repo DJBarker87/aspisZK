@@ -1,0 +1,52 @@
+{"attempt": "SDY_L039", "exit_status": 1, "wall_seconds": 5.2805083969724365, "peak_rss_kib": "2691684", "swaps": "0", "print_axioms": ["'SDY_MpA.step_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'SDY_MpA.step0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.step1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.step2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.step3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.step4' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.step5' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.step6' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.step7' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.step8' depends on axioms: [propext, Classical.choice, Quot.sound]", "'SDY_MpA.run8' depends on axioms: [propext, Classical.choice, Quot.sound]", "'SDY_MpA.run7' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.run6' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.run5' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.run4' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.run3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.run2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.run1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.run0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.inner' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.parent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.pstep_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.pend' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.prunEnd' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.prun' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.rejectStep_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'SDY_MpA.rejectBody' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.rejectInner' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.rejectParent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.rejectLevel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.outerFirst' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.outerLast' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.orunLast' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.orun' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.formed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'SDY_MpA.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+SDY_generated/SDY_MpA.lean:9:41: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `Aeneas.Std.core.clone.Clone.mk` has 2 explicit field, but only 1 was provided
+'SDY_MpA.step_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:40:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  0#usize + 1#usize
+in the target expression
+  (do
+      let x ← ok 1#usize
+      let i1 ← multiproof.index_at idx 0#usize
+      let i2 ← i1 >>> 3#i32
+      if i2 = 1#u32 then do
+          let i3 ← lift (i1 &&& 7#u32)
+          let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+          if i4 = 0#usize then do
+              let ch
+...
+             | none => ok (done (true, self'', predicate'))
+                      | some value => do
+                        let (holds, predicate'') ←
+                          multiproof.well_formed.closure_1.Insts.CoreOpsFunctionFnMutTupleSharedU32Bool.call_mut
+                              predicate' value
+                        if holds = true then ok (cont (self'', predicate''))
+                          else ok (done (false, self'', predicate'')))
+                (i1, ())
+          ok (outcome.1, outcome.2.1)
+      ok b2) =
+    ok true
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ⟨[8#u32], singleton._proof_1⟩
+  has type
+    { l // l.length ≤ Usize.max }
+  but is expected to have type
+    Slice U32
+  in the application
+    core.slice.Slice.iter ⟨[8#u32], singleton._proof_1⟩
+SDY_generated/SDY_MpA.lean:217:86: warning: This simp argument is unused:
+  singleton
+
+Hint: Omit it from the simp argument list.
+  simp [core.slice.iter.Windows.Insts.CoreIterTraitsIteratorIteratorSharedASlice.next,̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'SDY_MpA.formed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+SDY_generated/SDY_MpA.lean:228:2: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'SDY_MpA.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-raf8d8ab09102401a8a39f32273348ab1.scope; invocation ID: f14d038d65e14f0b8efe4dd0eee18177
