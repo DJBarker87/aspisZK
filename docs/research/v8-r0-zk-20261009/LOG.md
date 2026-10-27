@@ -11660,3 +11660,26 @@ source and fingerprint match, with a final #print axioms audit and the list of h
 present; receipts numbered in the reserved 28000-29999 range. This is a coherence check now (AGENTS.md
 §7), not the final release replay. Six slots: op223, route2, cblib4, runjoin16, l2b, replay. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D280 (Stream B) 2026-10-27 11:50 UTC: route (ii) at scale: 4 accepted, 16 refused mostly on destructor semantics; Drop-free measurement launched before an owner choice
+
+pv-route2 (`codex/pv-route2-20261027`, head 922ca3d252; 60/60 Lean = 56 passed / 4 failed (shift-operand
+backend ports, then corrected), no Kani; no crates/programs or extractor change; standard axioms on all
+56). Pinned Aeneas sha256 562e1f51…, Charon daad69be…, preflight on (design/PV-ROUTE2-20261027.md).
+ACCEPTED emissions (compiler outputs, not handwritten): op223 (V240), op230 (V247), op254 (V261), op258
+(V264): 8 files, +46/−10 lines; batch 1 "small leaves" (compressor and helper sum prover-local; powers and
+pole in place in aspis-r1-cost-probe, which no production program depends on). REFUSED: 16 ops, chiefly
+"structured Drop requires destructor semantics" (functions owning Vec/Box/String) and the escaping-
+reference guard: 79 (internal loan failure, an owned-array successor unmeasured), 117, 121, 132, 133, 134,
+222, 224, 226, 227, 228, 249, 250, 251, 252, 253 (Not_found in InterpReduceCollapse). UNMEASURED: 36, 205,
+212, 215, 216, 217, 219. Core/statement functions are compiled into all three production programs, so
+their route (ii) form must be a prover-local copy. Lead assessment: index rewrites cure loops and borrows
+but not destructors; past the four small leaves route (ii) needs Drop-free rewrites (fixed arrays or
+caller buffers instead of heap-owning types: a substantially larger D187 change with timing risk) or a
+newer extraction toolchain with destructor support (a change of the toolchain behind the D188 trust item;
+Stream A reports the owner did not approve a translator re-pin). Before asking the owner, the lead wants
+data: launched pv-route2b (same branch, IDs 53300-53599, 60 Lean) to measure whether Drop-free prover-local
+variants of at least four representative Drop refusals are ACCEPTED by the unchanged extractor, to measure
+the seven unmeasured ops, and to update the batch estimates with size and timing risk; no patch applied.
+Six slots: op223, cblib4, runjoin16, l2b, replay, route2b. Rows removed outright: 0. Privacy target not yet
+established.
