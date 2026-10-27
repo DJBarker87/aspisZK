@@ -1,0 +1,44 @@
+import RPt_ARS_ReachedMass
+import RPz7_F3T_Combined
+import RPz7_F3T_RuntimeBound
+import RPz8_F3U_Range
+import RPz8_F3U_Numeric
+import RPt_ARQ_AccountCharge
+import RPz8_ARQ_AccountView
+import RPz8_SCF_Domination
+import RPz8_SCF_RequiredTransport
+import RPz8_SCE_AccountMass
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ARS_ReachedNumeric
+open Aeneas Aeneas.Std Result S2Trust S2W_D189Entry S2W_D189Wrappers
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw
+open AspisV8R19.OracleResampling AspisV8R19.CausalFirstHitUnionBound
+open SCE_Experiment F3T_Experiment F3T_ByteCarrier
+
+/-- CONDITIONAL unchanged numeric envelope. The missing all-world support
+is not proved by this arithmetic; the accountLoss occurs exactly once. -/
+theorem numeric {A F C : Type} (c : DrvC_Installation.Configuration F C)
+    (D : LiteralByteProtocol.Decoder) (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+    (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+    (allocator : Allocator A) (id : S2W_ExtractionBoundary.Program) (a : Adversary A)
+    (Q0 Q1 : Nat) (prefixBound : ∀ H, (eval H a.first).1.length ≤ Q0)
+    (choiceBound : ARS_ReachedBudget.ChoiceBound c hashv copy allocator id a Q1)
+    (law : SCF_RequiredTransport.CleanAccountTransport c D hashv copy allocator id a Q0 Q1
+      ARQ_Observer.project (ARQ_Observer.select c id)) :
+    F3T_RuntimeBound.failureModel (runtime c hashv copy allocator id a) ≤ F3T_Numeric.total (Q0+Q1) := by
+  have mass := ARS_ReachedMass.bound c D hashv copy allocator id a Q0 Q1 prefixBound choiceBound law
+  have lifted : ∀ H : Bytes → State,(eval H (lift c (submission a))).1.length ≤ Q0+Q1 := by
+    intro H
+    rw [lift_eval,submission_eval]
+    exact (prefixBound H).trans (Nat.le_add_right _ _)
+  have model := add_le_add (F3T_ModelClaims.failure_bound D (lift c (submission a)) (Q0+Q1) lifted)
+    (le_refl (F3T_Numeric.accountLoss (Q0+Q1)))
+  rw [F3T_Combined.arithmetic] at model
+  unfold F3T_RuntimeBound.failureModel F3T_ModelClaims.failure at *
+  linarith
+
+#print axioms numeric
+end AspisR1.ARS_ReachedNumeric
+end
