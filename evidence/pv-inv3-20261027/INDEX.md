@@ -97,6 +97,9 @@
 | [J43994](J43994/receipt.json) | R1Z/PV_Inv_RawBankTuple | 0 | 0:03.68 | 4074324 | 0 | 3247030b01 |
 | [J43995](J43995/receipt.json) | R1Z/PV_Inv_NativeTupleJoin | 0 | 0:04.47 | 4073484 | 0 | 3247030b01 |
 | [J43996](J43996/receipt.json) | R1Z/PV_Inv_GuardedRegistry | 0 | 0:02.52 | 3577476 | 0 | 3247030b01 |
+| [J44197](J44197/receipt.json) | R1Z/PV_Inv_AuditInv3Masks | 0 | 0:03.26 | 3291948 | 0 | 8dfae8e480 |
+| [J44198](J44198/receipt.json) | R1Z/PV_Inv_AuditInv3Bindings | 0 | 0:02.74 | 3288432 | 0 | 8dfae8e480 |
+| [J44199](J44199/receipt.json) | R1Z/PV_Inv_AuditInv3Coupling | 0 | 0:03.65 | 3574640 | 0 | 8dfae8e480 |
 | [K01](K01/receipt.json) | tail_mask_index | 0 | 0:00.56 | 125900 | 0 | 3247030b01 |
 | [K02](K02/receipt.json) | mask_dedup | 0 | 0:00.84 | 124956 | 0 | 3247030b01 |
 | [K03](K03/receipt.json) | mask_sort_swap | 0 | 0:00.50 | 125360 | 0 | 3247030b01 |
