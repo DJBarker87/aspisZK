@@ -52,3 +52,27 @@ fn source_root_13() { check::<13, 14>(); }
 #[kani::proof]
 #[kani::unwind(33)]
 fn source_root_20() { check::<20, 21>(); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn source_root_04() { check::<4, 5>(); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn source_root_05() { check::<5, 6>(); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn source_root_06() { check::<6, 7>(); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn source_root_08() { check::<8, 9>(); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn source_root_09() { check::<9, 10>(); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn source_root_10() { check::<10, 11>(); }
