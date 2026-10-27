@@ -144,3 +144,17 @@ pinned external definitions; each of the twelve opaque leaves is defined as
 the Lean model of its owned reference, with its Kani bridge recorded as an
 open P6 obligation. Then prove the association items against the emitted
 release definitions.
+
+## Update 2026-10-27 (XRj_): emitted release Funs needs adapters
+
+extraction-assoc2: external Types and the unchanged release Types compile;
+FunsExternal 65/103 defined (4 leaf models); 7 model laws; per-iteration
+Kani 9/10. The unchanged emitted Funs does not compile against the pinned
+Aeneas library: a mutable-iterator ABI mismatch, a closure return-state
+mismatch and `compact` namespace shadowing. These are tooling seams, not
+semantics (likely why the historical producer was an adapted union). Lead
+ruling (extraction-assoc3, XRk_): resolve through externals with the
+emitted signatures and namespace arrangement first; otherwise only a
+scripted, reproducible, audited transform limited to name qualification or
+signature adaptation, every changed declaration listed with before/after
+text (XRk_ADAPTERS.md). No change to function-body logic.
