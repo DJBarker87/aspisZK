@@ -1,0 +1,224 @@
+LPb_ByteFold.scalar_words : ∀ (x : XRk_Release.aspis_core.field.QM31),
+  XRk_qBytes x = List.flatMap XRk_wordBytes (LPb_ByteFold.words x)
+LPb_ByteFold.append_spec : ∀ (initialBytes : List Aeneas.Std.U8) (xs : List XRk_Release.aspis_core.field.QM31),
+  LPb_ByteFold.appendScalars initialBytes xs = initialBytes ++ List.flatMap XRk_qBytes xs
+LPb_ByteFold.weights_sequence : ∀ (a : XRk_Release.verifier.Accumulator),
+  List.flatMap XRk_qBytes ↑a.weights = LPb_ByteFold.appendScalars [] ↑a.weights
+LPb_ByteFold.word_length : ∀ (x : Aeneas.Std.U32), (XRk_wordBytes x).length = 4
+LPb_ByteFold.scalar_length : ∀ (x : XRk_Release.aspis_core.field.QM31), (XRk_qBytes x).length = 16
+LPb_ByteFold.scalars_length : ∀ (xs : List XRk_Release.aspis_core.field.QM31),
+  (List.flatMap XRk_qBytes xs).length = 16 * xs.length
+LPb_ByteFold.weights64 : ∀ (a : XRk_Release.verifier.Accumulator),
+  (↑a.weights).length = 64 → (LPb_ByteFold.appendScalars [] ↑a.weights).length = 1024
+@LPb_CheckpointAttempts.first_failure : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (p : XRk_Release.verifier.Prepared) (a : XRk_Release.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (e : Aeneas.Std.Error),
+  XRk_digest D hash [proof] = Aeneas.Std.Result.fail e →
+    LPb_CheckpointSequence.logged D p a proof pub hash = ([[proof]], Aeneas.Std.Result.fail e)
+@LPb_CheckpointAttempts.second_failure : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (p : XRk_Release.verifier.Prepared) (a : XRk_Release.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (ph : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (e : Aeneas.Std.Error),
+  XRk_digest D hash [proof] = Aeneas.Std.Result.ok ph →
+    XRk_digest D hash [pub] = Aeneas.Std.Result.fail e →
+      LPb_CheckpointSequence.logged D p a proof pub hash = ([[proof], [pub]], Aeneas.Std.Result.fail e)
+@LPb_CheckpointAttempts.successful_stages : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (p : XRk_Release.verifier.Prepared) (a : XRk_Release.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (ph uh checksum : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (ws : List (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) (payload : Aeneas.Std.Slice Aeneas.Std.U8)
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  XRk_digest D hash [proof] = Aeneas.Std.Result.ok ph →
+    XRk_digest D hash [pub] = Aeneas.Std.Result.ok uh →
+      LPb_CheckpointSequence.wideStages p a = Aeneas.Std.Result.ok ws →
+        XRk_asSlice (LPb_CheckpointLayout.bytes p a ph uh ws) = Aeneas.Std.Result.ok payload →
+          XRk_digest D hash [LPb_CheckpointLayout.label, payload] = Aeneas.Std.Result.ok checksum →
+            LPb_CheckpointSequence.lastStage p (LPb_CheckpointLayout.bytes p a ph uh ws) checksum =
+                Aeneas.Std.Result.ok out →
+              LPb_CheckpointSequence.logged D p a proof pub hash =
+                ([[proof], [pub], [LPb_CheckpointLayout.label, payload]], Aeneas.Std.Result.ok out)
+LPb_CheckpointFinalValue.finish_value : ∀ (bs : List Aeneas.Std.U8) (sum : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (size : ℕ) (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  LPb_CheckpointFinalValue.finish bs sum size = Aeneas.Std.Result.ok out → ↑out = bs ++ ↑sum
+LPb_CheckpointFinalValue.value : ∀ (p : XRk_Release.verifier.Prepared) (bs : List Aeneas.Std.U8)
+  (sum : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  LPb_CheckpointSequence.lastStage p bs sum = Aeneas.Std.Result.ok out → ↑out = bs ++ ↑sum
+LPb_CheckpointLayout.slice_value : ∀ (xs : List Aeneas.Std.U8) (out : Aeneas.Std.Slice Aeneas.Std.U8),
+  XRk_asSlice xs = Aeneas.Std.Result.ok out → ↑out = xs
+@LPb_CheckpointNativeGap.model_trace_bytes : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (p : XRk_Release.verifier.Prepared) (a : XRk_Release.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  verifier.checkpoint D p a proof pub hash = Aeneas.Std.Result.ok out →
+    ∃ ph uh ws payload checksum,
+      XRk_digest D hash [proof] = Aeneas.Std.Result.ok ph ∧
+        XRk_digest D hash [pub] = Aeneas.Std.Result.ok uh ∧
+          LPb_CheckpointSequence.wideStages p a = Aeneas.Std.Result.ok ws ∧
+            XRk_asSlice (LPb_CheckpointLayout.bytes p a ph uh ws) = Aeneas.Std.Result.ok payload ∧
+              XRk_digest D hash [LPb_CheckpointLayout.label, payload] = Aeneas.Std.Result.ok checksum ∧
+                LPb_CheckpointSequence.logged D p a proof pub hash =
+                    ([[proof], [pub], [LPb_CheckpointLayout.label, payload]], Aeneas.Std.Result.ok out) ∧
+                  ↑out = ↑payload ++ ↑checksum
+@LPb_CheckpointPrefixes.wide_failure : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (p : XRk_Release.verifier.Prepared) (a : XRk_Release.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (ph uh : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (e : Aeneas.Std.Error),
+  XRk_digest D hash [proof] = Aeneas.Std.Result.ok ph →
+    XRk_digest D hash [pub] = Aeneas.Std.Result.ok uh →
+      LPb_CheckpointSequence.wideStages p a = Aeneas.Std.Result.fail e →
+        LPb_CheckpointSequence.logged D p a proof pub hash = ([[proof], [pub]], Aeneas.Std.Result.fail e)
+@LPb_CheckpointPrefixes.payload_failure : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (p : XRk_Release.verifier.Prepared) (a : XRk_Release.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (ph uh : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (ws : List (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) (e : Aeneas.Std.Error),
+  XRk_digest D hash [proof] = Aeneas.Std.Result.ok ph →
+    XRk_digest D hash [pub] = Aeneas.Std.Result.ok uh →
+      LPb_CheckpointSequence.wideStages p a = Aeneas.Std.Result.ok ws →
+        XRk_asSlice (LPb_CheckpointLayout.bytes p a ph uh ws) = Aeneas.Std.Result.fail e →
+          LPb_CheckpointSequence.logged D p a proof pub hash = ([[proof], [pub]], Aeneas.Std.Result.fail e)
+@LPb_CheckpointPrefixes.checksum_failure : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (p : XRk_Release.verifier.Prepared) (a : XRk_Release.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (ph uh : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (ws : List (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) (payload : Aeneas.Std.Slice Aeneas.Std.U8)
+  (e : Aeneas.Std.Error),
+  XRk_digest D hash [proof] = Aeneas.Std.Result.ok ph →
+    XRk_digest D hash [pub] = Aeneas.Std.Result.ok uh →
+      LPb_CheckpointSequence.wideStages p a = Aeneas.Std.Result.ok ws →
+        XRk_asSlice (LPb_CheckpointLayout.bytes p a ph uh ws) = Aeneas.Std.Result.ok payload →
+          XRk_digest D hash [LPb_CheckpointLayout.label, payload] = Aeneas.Std.Result.fail e →
+            LPb_CheckpointSequence.logged D p a proof pub hash =
+              ([[proof], [pub], [LPb_CheckpointLayout.label, payload]], Aeneas.Std.Result.fail e)
+@LPb_CheckpointSequence.checkpoint_model_stages : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (p : XRk_Release.verifier.Prepared) (a : XRk_Release.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H),
+  verifier.checkpoint D p a proof pub hash = LPb_CheckpointSequence.sequence D p a proof pub hash
+@LPb_CheckpointSequence.erase : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (p : XRk_Release.verifier.Prepared) (a : XRk_Release.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H),
+  (LPb_CheckpointSequence.logged D p a proof pub hash).2 = verifier.checkpoint D p a proof pub hash
+@LPb_ClaimFailure.stopped_fold : ∀ {H : Type} (sem : XRk_Release.r1_semantic.Verified H)
+  (y1 : Aeneas.Std.Slice Aeneas.Std.U8) (g : Aeneas.Std.Array XRk_Wide 29#usize) (point : ℕ) (indices : List ℕ),
+  List.foldlM (LPb_ClaimStages.step sem y1 g point) none indices = Aeneas.Std.Result.ok none
+LPb_ClaimFailure.stopped_finish : LPb_ClaimStages.finish none = Aeneas.Std.Result.ok none
+@LPb_ClaimStages.part_model_stages : ∀ {H : Type} (sem : XRk_Release.r1_semantic.Verified H)
+  (y1 : Aeneas.Std.Slice Aeneas.Std.U8) (g : Aeneas.Std.Array XRk_Wide 29#usize) (point : ℕ),
+  XRk_preparedPart sem y1 g point = LPb_ClaimStages.sequence sem y1 g point
+@LPb_ClaimStages.stopped_step : ∀ {H : Type} (sem : XRk_Release.r1_semantic.Verified H)
+  (y1 : Aeneas.Std.Slice Aeneas.Std.U8) (g : Aeneas.Std.Array XRk_Wide 29#usize) (point l : ℕ),
+  LPb_ClaimStages.step sem y1 g point none l = Aeneas.Std.Result.ok none
+@LPb_CollectLengths.none_absorbing : ∀ {T : Type} (call : ℕ → Aeneas.Std.Result (Option T)) (indices : List ℕ),
+  List.foldlM (LPb_CollectLengths.step call) none indices = Aeneas.Std.Result.ok none
+@LPb_CollectLengths.length_of_success : ∀ {T : Type} (call : ℕ → Aeneas.Std.Result (Option T)) (indices : List ℕ)
+  (seed out : List T),
+  List.foldlM (LPb_CollectLengths.step call) (some seed) indices = Aeneas.Std.Result.ok (some out) →
+    out.length = seed.length + indices.length
+@LPb_FoldStages.congr : ∀ {α β : Type} (xs : List α) (initial : β) (f g : β → α → Aeneas.Std.Result β),
+  (∀ (state : β) (item : α), f state item = g state item) → List.foldlM f initial xs = List.foldlM g initial xs
+LPb_FoldStages.powers_zero : ∀ (x p : XRk_Wide), XRk_powers x 0 p = Aeneas.Std.Result.ok []
+LPb_FoldStages.powers_one : ∀ (x p : XRk_Wide), XRk_powers x 1 p = Aeneas.Std.Result.ok [p]
+LPb_FoldStages.powers_next : ∀ (x p : XRk_Wide) (n : ℕ),
+  XRk_powers x (n + 2) p = do
+    let next ← LPb_FoldStages.powerStep x p
+    let rest ← XRk_powers x (n + 1) next
+    Aeneas.Std.Result.ok (p :: rest)
+LPb_FoldStages.powers_seven : ∀ (x p : XRk_Wide),
+  XRk_powers x 7 p = do
+    let next ← LPb_FoldStages.powerStep x p
+    let rest ← XRk_powers x 6 next
+    Aeneas.Std.Result.ok (p :: rest)
+@LPb_ListWidths.flatMap_length : ∀ {α β : Type} (f : α → List β) (width : ℕ),
+  (∀ (a : α), (f a).length = width) → ∀ (xs : List α), (List.flatMap f xs).length = width * xs.length
+LPb_ListWidths.array_bytes : ∀ (n : Aeneas.Std.Usize) (xs : List (Aeneas.Std.Array Aeneas.Std.U8 n)),
+  (List.flatMap Subtype.val xs).length = ↑n * xs.length
+@LPb_Logged.erase_bind : ∀ {α β : Type} (r : LPb_Logged.Run α) (k : α → LPb_Logged.Run β),
+  (LPb_Logged.bind r k).2 = do
+    let a ← r.2
+    (k a).2
+@LPb_Logged.bind_ok : ∀ {α β : Type} (tr : List LPb_Logged.Query) (a : α) (k : α → LPb_Logged.Run β),
+  LPb_Logged.bind (tr, Aeneas.Std.Result.ok a) k = (tr ++ (k a).1, (k a).2)
+@LPb_Logged.bind_failure : ∀ {α β : Type} (tr : List LPb_Logged.Query) (e : Aeneas.Std.Error)
+  (k : α → LPb_Logged.Run β), LPb_Logged.bind (tr, Aeneas.Std.Result.fail e) k = (tr, Aeneas.Std.Result.fail e)
+@LPb_Logged.bind_diverge : ∀ {α β : Type} (tr : List LPb_Logged.Query) (k : α → LPb_Logged.Run β),
+  LPb_Logged.bind (tr, Aeneas.Std.Result.div) k = (tr, Aeneas.Std.Result.div)
+@LPb_Logged.attempted_failure : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H) (hash : H)
+  (q : LPb_Logged.Query) (e : Aeneas.Std.Error),
+  XRk_digest D hash q = Aeneas.Std.Result.fail e → LPb_Logged.attempt D hash q = ([q], Aeneas.Std.Result.fail e)
+LPb_Nonvacuity.query_domain : ∃ q, q = []
+LPb_Nonvacuity.scalar_index_domain : ∃ l, l < 29
+LPb_Nonvacuity.weight_index_domain : ∃ i, i < 64
+LPb_Nonvacuity.scalar_rejection_domain : ∃ x, 2147483647 ≤ x ∧ x ≤ 4294967295
+LPb_Nonvacuity.attempted_failure_witness : ∃ tr r,
+  (LPb_Logged.bind (tr, r) fun x => LPb_Logged.lift (Aeneas.Std.Result.ok ())) =
+    (tr, Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+LPb_PayloadWidth.payload_width : ∀ (p : XRk_Release.verifier.Prepared) (a : XRk_Release.verifier.Accumulator)
+  (ph uh : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (ws : List (Aeneas.Std.Array Aeneas.Std.U8 32#usize)),
+  ws.length = 6 → (↑a.weights).length = 64 → (LPb_CheckpointLayout.bytes p a ph uh ws).length = 1736
+@LPb_PreparedSequence.prepared_model_stages : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (sem : XRk_Release.r1_semantic.Verified H) (y1 : Aeneas.Std.Slice Aeneas.Std.U8) (inactive : XRk_Wide)
+  (g : Aeneas.Std.Array XRk_Wide 29#usize) (kappa : XRk_Wide),
+  verifier.prepared_claim D sem y1 inactive g kappa = LPb_PreparedSequence.sequence D sem y1 inactive g kappa
+LPb_PreparedWitness.powers_length : ∀ (x : LPb_PreparedWitness.E) (n : ℕ) (p : LPb_PreparedWitness.E)
+  (out : List LPb_PreparedWitness.E), XRk_powers x n p = Aeneas.Std.Result.ok out → out.length = n
+@LPb_PreparedWitness.trace : ∀ {H : Type} (D : XRk_Release.aspis_core.digest.Digest32 H)
+  (sem : XRk_Release.r1_semantic.Verified H) (y1 : Aeneas.Std.Slice Aeneas.Std.U8) (inactive : LPb_PreparedWitness.E)
+  (g : Aeneas.Std.Array LPb_PreparedWitness.E 29#usize) (kappa claim : LPb_PreparedWitness.E),
+  verifier.prepared_claim D sem y1 inactive g kappa = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claim) →
+    ∃ one zero powers partValues,
+      aspis_core.field.wide_exact.WideExact.ONE = Aeneas.Std.Result.ok one ∧
+        aspis_core.field.wide_exact.WideExact.ZERO = Aeneas.Std.Result.ok zero ∧
+          XRk_powers kappa 7 one = Aeneas.Std.Result.ok powers ∧
+            powers.length = 7 ∧
+              LPb_PreparedWitness.parts sem y1 g = Aeneas.Std.Result.ok (some partValues) ∧
+                partValues.length = 6 ∧
+                  LPb_PreparedWitness.weighted powers partValues inactive zero = Aeneas.Std.Result.ok claim
+@LPb_ResultInversion.bind_success : ∀ {α β : Type} (m : Aeneas.Std.Result α) (k : α → Aeneas.Std.Result β) (v : β),
+  (do
+        let x ← m
+        k x) =
+      Aeneas.Std.Result.ok v →
+    ∃ x, m = Aeneas.Std.Result.ok x ∧ k x = Aeneas.Std.Result.ok v
+'LPb_ByteFold.scalar_words' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ByteFold.append_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ByteFold.weights_sequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ByteFold.word_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ByteFold.scalar_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ByteFold.scalars_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ByteFold.weights64' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointAttempts.first_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointAttempts.second_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointAttempts.successful_stages' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointFinalValue.finish_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointFinalValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointLayout.slice_value' depends on axioms: [propext]
+'LPb_CheckpointNativeGap.model_trace_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointPrefixes.wide_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointPrefixes.payload_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointPrefixes.checksum_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointSequence.checkpoint_model_stages' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CheckpointSequence.erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ClaimFailure.stopped_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ClaimFailure.stopped_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ClaimStages.part_model_stages' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ClaimStages.stopped_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_CollectLengths.none_absorbing' depends on axioms: [propext]
+'LPb_CollectLengths.length_of_success' depends on axioms: [propext]
+'LPb_FoldStages.congr' depends on axioms: [Quot.sound]
+'LPb_FoldStages.powers_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_FoldStages.powers_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_FoldStages.powers_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_FoldStages.powers_seven' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ListWidths.flatMap_length' depends on axioms: [propext, Quot.sound]
+'LPb_ListWidths.array_bytes' depends on axioms: [propext, Quot.sound]
+'LPb_Logged.erase_bind' depends on axioms: [propext]
+'LPb_Logged.bind_ok' depends on axioms: [propext]
+'LPb_Logged.bind_failure' depends on axioms: [propext]
+'LPb_Logged.bind_diverge' depends on axioms: [propext]
+'LPb_Logged.attempted_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_Nonvacuity.query_domain' depends on axioms: [propext]
+'LPb_Nonvacuity.scalar_index_domain' depends on axioms: [propext, Quot.sound]
+'LPb_Nonvacuity.weight_index_domain' depends on axioms: [propext, Quot.sound]
+'LPb_Nonvacuity.scalar_rejection_domain' depends on axioms: [propext, Quot.sound]
+'LPb_Nonvacuity.attempted_failure_witness' depends on axioms: [propext]
+'LPb_PayloadWidth.payload_width' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_PreparedSequence.prepared_model_stages' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_PreparedWitness.powers_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_PreparedWitness.trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPb_ResultInversion.bind_success' depends on axioms: [propext]
