@@ -1,0 +1,89 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_ProducerCallsite.lean:50:20: error: unsolved goals
+case isFalse.isFalse.Ok
+inst✝ : ExternalTypes
+ops : ExternalFuns
+f g : Compressor
+trace : Trace
+tuple : PV_CB_ProducerTuple.Tuple
+vt : PV_CB_ProducerTraceData.Valid trace
+vo : PV_CB_CanonicalArrays.Valid OffsetValid tuple.limbs
+tag : U32
+lambda : Q
+agree :
+  ∀ (values : Std.Array U32 16#usize),
+    PV_CB_CanonicalArrays.Valid PV_CB_CanonicalM31.Valid values →
+      f tag values.to_slice lambda = g tag values.to_slice lambda
+side : Usize
+values : PV_CB_Op223Callsite.Values
+arity : PV_CB_Op223Callsite.Arity
+h✝¹ : ¬core.convert.num.FromUsizeU16.from tuple.row ≥ 1024#usize
+a : Std.Array Usize 2#usize
+ha :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array Usize 2#usize)) arity
+      (core.convert.num.FromUsizeU16.from tuple.row) =
+    ok a
+i : Usize
+hi : a.index_usize side = ok i
+h✝ : ¬i ≥ 2#usize
+slot : Usize
+hslot : a.index_usize side = ok slot
+a1 : Std.Array Usize 2#usize
+index_mut_back : Std.Array Usize 2#usize → alloc.vec.Vec (Std.Array Usize 2#usize)
+hp :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Std.Array Usize 2#usize)) arity
+      (core.convert.num.FromUsizeU16.from tuple.row) =
+    ok (a1, index_mut_back)
+i1 : Usize
+hi1 : a1.index_usize side = ok i1
+unused : Usize
+index_mut_back1 : Usize → Std.Array Usize 2#usize
+hp2 : a1.index_mut_usize side = ok (unused, index_mut_back1)
+produced : Std.Array aspis_core.field.M31 16#usize
+hr : host_semantic.copy_tuple_values trace tuple = ok (core.result.Result.Ok produced)
+valid : PV_CB_CanonicalArrays.Valid PV_CB_CanonicalM31.Valid produced
+⊢ (do
+      let compressed ← ExternalFuns.op223 tag produced.to_slice lambda
+      let a2 ←
+        alloc.vec.Vec.index
+            (core.slice.index.SliceIndexUsizeSlice (Std.Array (Std.Array aspis_core.field.QM31 2#usize) 2#usize)) values
+            (core.convert.num.FromUsizeU16.from tuple.row)
+      let a3 ← a2.index_usize side
+      let q ← a3.index_usize slot
+      let next ← ExternalFuns.op67 q compressed
+      let (a4, index_mut_back2) ←
+        alloc.vec.Vec.index_mut
+            (core.slice.index.SliceIndexUsizeSlice (Std.Array (Std.Array aspis_core.field.QM31 2#usize) 2#usize)) values
+            (core.convert.num.FromUsizeU16.from tuple.row)
+      let (a5, index_mut_back3) ← a4.index_mut_usize side
+      let a6 ← a5.update slot next
+      ok
+          (core.result.Result.Ok
+            (index_mut_back2 (index_mut_back3 a6), index_mut_back (index_mut_back1 (i1.wrapping_add 1#usize))))) =
+    do
+    let compressed ← ExternalFuns.op223 tag produced.to_slice lambda
+    let a2 ←
+      alloc.vec.Vec.index
+          (core.slice.index.SliceIndexUsizeSlice (Std.Array (Std.Array aspis_core.field.QM31 2#usize) 2#usize)) values
+          (core.convert.num.FromUsizeU16.from tuple.row)
+    let a3 ← a2.index_usize side
+    let q ← a3.index_usize slot
+    let next ← ExternalFuns.op67 q compressed
+    let (a4, index_mut_back2) ←
+      alloc.vec.Vec.index_mut
+          (core.slice.index.SliceIndexUsizeSlice (Std.Array (Std.Array aspis_core.field.QM31 2#usize) 2#usize)) values
+          (core.convert.num.FromUsizeU16.from tuple.row)
+    let (a5, index_mut_back3) ← a4.index_mut_usize side
+    let a6 ← a5.update slot next
+    ok
+        (core.result.Result.Ok
+          (index_mut_back2 (index_mut_back3 a6), index_mut_back (index_mut_back1 (i1.wrapping_add 1#usize))))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_ProducerCallsite.lean:52:73: warning: This simp argument is unused:
+  agree produced valid
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵g̵r̵e̵e̵ ̵p̵r̵o̵d̵u̵c̵e̵d̵ ̵v̵a̵l̵i̵d̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB_ProducerCallsite.endpoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

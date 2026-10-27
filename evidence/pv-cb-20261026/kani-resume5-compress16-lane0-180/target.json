@@ -1,0 +1,40 @@
+{
+  "target": [
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb-20261026/source-kani-target",
+    "RUSTFLAGS=--cfg kani",
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb-20261026/step-proof/Cargo.toml",
+    "--lib",
+    "--harness",
+    "checks::compress16_lane0",
+    "--output-format",
+    "terse",
+    "-j",
+    "4"
+  ],
+  "source_revision": "22dc7f45b3f7d38cbfd6b8e4ed5cc45ade0da0fb",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A Kani; separate Lean source/axioms receipts",
+  "harness": "compress16_lane0",
+  "no_stubs": true,
+  "expected_time": "cached optimized compilation, then CBMC proof generation for this one named harness",
+  "configuration_change": "New explicitly partitioned harness after timeout; taskset CPU0-3 and unchanged caps",
+  "profile": "step-proof profile.dev opt-level3, overflow-checks=false, debug-assertions=false; source uses explicit wrapping CT arithmetic",
+  "solver_selection": "default",
+  "unwind_bound": 18,
+  "timeout_seconds": 180
+}

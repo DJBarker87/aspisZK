@@ -1,0 +1,39 @@
+{
+  "target": [
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "timeout",
+    "900",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb-20261026/source-kani-target",
+    "RUSTFLAGS=--cfg kani",
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb-20261026/step-proof/Cargo.toml",
+    "--lib",
+    "--harness",
+    "checks::compress16_canonical_reference",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "terse",
+    "-j",
+    "4"
+  ],
+  "source_revision": "148ce95eec50bdfeaea1294806f1dcb0b2ceaef5",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A Kani; separate Lean source/axioms receipts",
+  "harness": "compress16_canonical_reference",
+  "no_stubs": true,
+  "expected_time": "cached optimized compilation, then CBMC proof generation for this one named harness",
+  "configuration_change": "Ruling (i): one retry after 180s timeout, now 900s, same harness and unwind bound; taskset CPU0-3 and unchanged caps",
+  "profile": "step-proof profile.dev opt-level3, overflow-checks=false, debug-assertions=false; source uses explicit wrapping CT arithmetic"
+}

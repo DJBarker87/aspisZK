@@ -1,0 +1,20 @@
+{
+  "source_snapshot_revision": "237e13556180d2ce0320a2760f89b35b5f4f02bb",
+  "module": {
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19CanonicalAuditRefinement.lean",
+    "sha256": "9d2fd8d1745ca25ae0efe0e5f8f3664b9c17bc312c7ab0b2148c5b2357b194c7",
+    "source": "import R1Z.ProverRw19P6Caller\nimport R1Z.ProverRw19AuditCaller\nimport R1Z.PV_RW_DataPartsIff\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.ProverRw19CanonicalAuditRefinement\nopen Aeneas Aeneas.Std Result ProverRwFull ProverRwBodyDataCriterion\nvariable [ExternalTypes]\n\n-- Conditional whole-body refinement with a canonical mathematical audit.\n-- No concrete whole-model byte function or byte equality is supplied here.\n-- P_source_p6 and P_proof_bytes remain exact named open obligations.\ntheorem refinement (ops : ExternalFuns)\n    (P_source_p6 : ops.op223 =\n      @ProverRwP6CompressSource.compress _ (PV_CurrentScaleInstall.selected ops))\n    {S : Type} (store : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)\n    (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)\n    (compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)\n    (v : transport.Variant) (hash : Slice (Slice U8) \u2192 Result (Array U8 32#usize))\n    (binding digest : Array U8 32#usize)\n    (attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets)\n    (s after : S) (accepted : Bool)\n    (reservation : store.\u00abreserve\u00bb s digest attempt.mask_nonce=ok (accepted,after))\n    (modelBytes : Result ProverRw19AuditData.ByteStatus)\n    (P_proof_bytes : PV_RW_DataProduct.observe PV_RW_DataProduct.first\n        (data (ProverRwP6BodyStore.execute (PV_RW_CombinedBodyData.closed ops)\n          store pub compiled v hash binding digest attempt s)) = modelBytes) :\n    ProverRwP6BodyStore.execute (ProverRw18ContextJoin.original ops)\n      store pub compiled v hash binding digest attempt s =\n        ProverRwBodyCandidateData.withState after (ProverRw19AuditData.attachAudit modelBytes) := by\n  rw [ProverRw19P6Caller.caller ops P_source_p6]\n  apply ProverRwP6BodyData.refinement_of_data (PV_RW_CombinedBodyData.closed ops)\n    store pub compiled v hash binding digest attempt s after accepted reservation\n      (ProverRw19AuditData.attachAudit modelBytes)\n  apply ProverRw19AuditData.data_of_bytes\n  \u00b7 exact ProverRw19AuditCaller.good (PV_RW_CombinedBodyData.closed ops)\n      store pub compiled v hash binding digest attempt s\n  \u00b7 exact P_proof_bytes\n\n#print axioms refinement\nend R1Z.ProverRw19CanonicalAuditRefinement\n"
+  },
+  "shared_source_sha256": "9d2fd8d1745ca25ae0efe0e5f8f3664b9c17bc312c7ab0b2148c5b2357b194c7",
+  "before_hypotheses": [
+    "P_source_p6",
+    "reservation",
+    "P_proof_bytes"
+  ],
+  "candidate_after_hypotheses": [
+    "reservation",
+    "P_proof_bytes"
+  ],
+  "candidate_status": "focused compile 43382 exit 0; final frozen audit pending",
+  "dictionary_change": "arbitrary ops specialized to PV_Op223_Source.selected ops; exactly callback223 installed from applied extraction"
+}

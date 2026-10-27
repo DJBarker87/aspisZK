@@ -1,0 +1,118 @@
+import R1Z.PV_CB_ProducerLimb
+import R1Z.PV_CB_ProducerRead
+import R1Z.PV_CB_ProducerTry
+import R1Z.PV_CB_ProducerMake16
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_CB_ProducerTuple
+open Aeneas Aeneas.Std Result ProverRwFull PV_CB_ProducerLimb
+variable [ExternalTypes]
+abbrev Tuple := aspis_statement.pool_v1.pair_trace.PoolV1PairCopyTupleV1
+
+theorem tuple (ops : ExternalFuns) (trace : Trace) (input : Tuple)
+    (vt : TraceReads trace)
+    (vo : PV_CB_CanonicalArrays.Valid OffsetValid input.limbs) :
+    PV_CB_ProducerPost.Good (PV_CB_CanonicalArrays.Valid PV_CB_CanonicalM31.Valid)
+      (@host_semantic.copy_tuple_values _ (ProverRwDictionaryScalar.selected ops) trace input) := by
+  unfold host_semantic.copy_tuple_values
+  apply PV_CB_ProducerBind.bind
+  intro limb0 read0
+  apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+  · exact PV_CB_ProducerLimb.limb ops trace limb0 vt
+      (vo limb0 (PV_CB_ProducerRead.array_mem input.limbs 0#usize limb0 read0))
+  · intro value0 valid0
+    apply PV_CB_ProducerBind.bind
+    intro limb1 read1
+    apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+    · exact PV_CB_ProducerLimb.limb ops trace limb1 vt
+        (vo limb1 (PV_CB_ProducerRead.array_mem input.limbs 1#usize limb1 read1))
+    · intro value1 valid1
+      apply PV_CB_ProducerBind.bind
+      intro limb2 read2
+      apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+      · exact PV_CB_ProducerLimb.limb ops trace limb2 vt
+          (vo limb2 (PV_CB_ProducerRead.array_mem input.limbs 2#usize limb2 read2))
+      · intro value2 valid2
+        apply PV_CB_ProducerBind.bind
+        intro limb3 read3
+        apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+        · exact PV_CB_ProducerLimb.limb ops trace limb3 vt
+            (vo limb3 (PV_CB_ProducerRead.array_mem input.limbs 3#usize limb3 read3))
+        · intro value3 valid3
+          apply PV_CB_ProducerBind.bind
+          intro limb4 read4
+          apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+          · exact PV_CB_ProducerLimb.limb ops trace limb4 vt
+              (vo limb4 (PV_CB_ProducerRead.array_mem input.limbs 4#usize limb4 read4))
+          · intro value4 valid4
+            apply PV_CB_ProducerBind.bind
+            intro limb5 read5
+            apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+            · exact PV_CB_ProducerLimb.limb ops trace limb5 vt
+                (vo limb5 (PV_CB_ProducerRead.array_mem input.limbs 5#usize limb5 read5))
+            · intro value5 valid5
+              apply PV_CB_ProducerBind.bind
+              intro limb6 read6
+              apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+              · exact PV_CB_ProducerLimb.limb ops trace limb6 vt
+                  (vo limb6 (PV_CB_ProducerRead.array_mem input.limbs 6#usize limb6 read6))
+              · intro value6 valid6
+                apply PV_CB_ProducerBind.bind
+                intro limb7 read7
+                apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+                · exact PV_CB_ProducerLimb.limb ops trace limb7 vt
+                    (vo limb7 (PV_CB_ProducerRead.array_mem input.limbs 7#usize limb7 read7))
+                · intro value7 valid7
+                  apply PV_CB_ProducerBind.bind
+                  intro limb8 read8
+                  apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+                  · exact PV_CB_ProducerLimb.limb ops trace limb8 vt
+                      (vo limb8 (PV_CB_ProducerRead.array_mem input.limbs 8#usize limb8 read8))
+                  · intro value8 valid8
+                    apply PV_CB_ProducerBind.bind
+                    intro limb9 read9
+                    apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+                    · exact PV_CB_ProducerLimb.limb ops trace limb9 vt
+                        (vo limb9 (PV_CB_ProducerRead.array_mem input.limbs 9#usize limb9 read9))
+                    · intro value9 valid9
+                      apply PV_CB_ProducerBind.bind
+                      intro limb10 read10
+                      apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+                      · exact PV_CB_ProducerLimb.limb ops trace limb10 vt
+                          (vo limb10 (PV_CB_ProducerRead.array_mem input.limbs 10#usize limb10 read10))
+                      · intro value10 valid10
+                        apply PV_CB_ProducerBind.bind
+                        intro limb11 read11
+                        apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+                        · exact PV_CB_ProducerLimb.limb ops trace limb11 vt
+                            (vo limb11 (PV_CB_ProducerRead.array_mem input.limbs 11#usize limb11 read11))
+                        · intro value11 valid11
+                          apply PV_CB_ProducerBind.bind
+                          intro limb12 read12
+                          apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+                          · exact PV_CB_ProducerLimb.limb ops trace limb12 vt
+                              (vo limb12 (PV_CB_ProducerRead.array_mem input.limbs 12#usize limb12 read12))
+                          · intro value12 valid12
+                            apply PV_CB_ProducerBind.bind
+                            intro limb13 read13
+                            apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+                            · exact PV_CB_ProducerLimb.limb ops trace limb13 vt
+                                (vo limb13 (PV_CB_ProducerRead.array_mem input.limbs 13#usize limb13 read13))
+                            · intro value13 valid13
+                              apply PV_CB_ProducerBind.bind
+                              intro limb14 read14
+                              apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+                              · exact PV_CB_ProducerLimb.limb ops trace limb14 vt
+                                  (vo limb14 (PV_CB_ProducerRead.array_mem input.limbs 14#usize limb14 read14))
+                              · intro value14 valid14
+                                apply PV_CB_ProducerBind.bind
+                                intro limb15 read15
+                                apply PV_CB_ProducerTry.bind PV_CB_CanonicalM31.Valid
+                                · exact PV_CB_ProducerLimb.limb ops trace limb15 vt
+                                    (vo limb15 (PV_CB_ProducerRead.array_mem input.limbs 15#usize limb15 read15))
+                                · intro value15 valid15
+                                  apply PV_CB_ProducerPost.pure
+                                  exact PV_CB_ProducerMake16.valid value0 value1 value2 value3 value4 value5 value6 value7 value8 value9 value10 value11 value12 value13 value14 value15
+                                    valid0 valid1 valid2 valid3 valid4 valid5 valid6 valid7 valid8 valid9 valid10 valid11 valid12 valid13 valid14 valid15
+#print axioms tuple
+end R1Z.PV_CB_ProducerTuple

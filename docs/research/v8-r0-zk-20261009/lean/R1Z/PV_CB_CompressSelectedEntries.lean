@@ -1,0 +1,32 @@
+import R1Z.PV_CB_CompressCanonicalContext
+import R1Z.PV_CurrentScaleInstall
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_CB_CompressSelectedEntries
+open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes]
+
+theorem entry61 (ops : ExternalFuns) :
+    (PV_CurrentScaleInstall.selected ops).op61 = PV_CB_CompressConstructors.fromM31 := rfl
+
+theorem entry66 (ops : ExternalFuns) :
+    (PV_CurrentScaleInstall.selected ops).op66 = PV_CB_CompressConstructors.fromCM31 := rfl
+
+theorem entry67 (ops : ExternalFuns) :
+    (PV_CurrentScaleInstall.selected ops).op67 = PV_CB_CurrentQuartic.S.add := by
+  change (PV_CurrentDictionary.selected ops).op67 = PV_CB_CurrentQuartic.S.add
+  exact funext (fun a => funext (fun b => PV_CurrentDictionary.add_source ops a b))
+
+theorem entry69 (ops : ExternalFuns) :
+    (PV_CurrentScaleInstall.selected ops).op69 = PV_CB_CurrentQuartic.S.mul := by
+  change (PV_CurrentDictionary.selected ops).op69 = PV_CB_CurrentQuartic.S.mul
+  exact funext (fun a => funext (fun b => PV_CurrentDictionary.mul_source ops a b))
+
+theorem entry70 (ops : ExternalFuns) :
+    (PV_CurrentScaleInstall.selected ops).op70 = PV_CB_CurrentQuartic.S.scale := rfl
+#print axioms entry61
+#print axioms entry66
+#print axioms entry67
+#print axioms entry69
+#print axioms entry70
+end R1Z.PV_CB_CompressSelectedEntries

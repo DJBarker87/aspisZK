@@ -1,0 +1,32 @@
+{
+  "target": [
+    "docker",
+    "create",
+    "--name",
+    "pv-extract-diagnostic-001",
+    "--network",
+    "none",
+    "--memory",
+    "8g",
+    "--memory-swap",
+    "8g",
+    "--pids-limit",
+    "64",
+    "--cpus",
+    "4",
+    "--user",
+    "0",
+    "--mount",
+    "type=bind,src=/home/dombarker/project-offloads/codex-pv-extract-20261027/pipeline,dst=/job",
+    "--mount",
+    "type=bind,src=/home/dombarker/project-offloads/codex-pv-extract-20261027/build-diagnostic-001,dst=/receipt",
+    "--entrypoint",
+    "/bin/bash",
+    "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+    "-c",
+    "while [ ! -f /receipt/go ]; do sleep 0.1; done; exec /usr/bin/time -v -o /receipt/time.log opam exec -- bash /job/build-base.sh"
+  ],
+  "phase": "optimized OCaml compilation of copied Charon/Aeneas; no arithmetic gate",
+  "revision": "7599dff5b274d52324ae8681664f6b343f9a81ac",
+  "print_axioms": "N/A OCaml compilation"
+}

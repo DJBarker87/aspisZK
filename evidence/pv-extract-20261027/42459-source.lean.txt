@@ -1,0 +1,28 @@
+import R1Z.PV_Ext_Closed_25_compress
+import R1Z.ProverRwP6CompressSource
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Ext_ClosedCandidate
+open Aeneas Aeneas.Std Result ProverRwFull
+namespace Src
+abbrev compress := PV_Ext_IndexClosed.compress_tagged_tuple
+abbrev cm_from := PV_Ext_IndexClosed.aspis_core.field.CM31.from_m31
+abbrev qm_from := PV_Ext_IndexClosed.aspis_core.field.QM31.from_cm31
+abbrev add := PV_Ext_IndexClosed.aspis_core.field.QM31.add
+abbrev mul := PV_Ext_IndexClosed.aspis_core.field.QM31.mul
+abbrev scale := PV_Ext_IndexClosed.aspis_core.field.QM31.mul_m31
+end Src
+variable [ExternalTypes]
+/-- Installs the five *closed candidate* arithmetic dependencies. This neither
+    installs op223 nor identifies a shipped callback with the candidate. -/
+@[reducible] def fields (ops : ExternalFuns) : ExternalFuns :=
+  {ops with op61 := Src.cm_from, op66 := Src.qm_from, op67 := Src.add,
+    op69 := Src.mul, op70 := Src.scale}
+
+/-- Arbitrary-input, complete Result equality for the index candidate against
+    P6 using its extracted arithmetic. No canonicality or desired-output premise. -/
+theorem candidate_reference (ops : ExternalFuns) :
+    Src.compress = @ProverRwP6CompressSource.compress _ (fields ops) := rfl
+
+#print axioms candidate_reference
+end R1Z.PV_Ext_ClosedCandidate

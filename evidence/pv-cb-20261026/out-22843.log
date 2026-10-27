@@ -1,0 +1,100 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskLinearsFinite.lean:42:4: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.64 ?m.65 ?m.66).mpr`
+  ?m.64 >>= ?m.65 = ?m.64 >>= ?m.66
+with the goal
+  (do
+      let cf ←
+        let (o, iter1) := (some (pred e), before (pred e))
+          match o with
+          | none => ok (done (suffix, weighted))
+          | some variable1 => do
+            let q ← Array.index_usize point variable1
+            let suffix1 ← ProverRwP7CurrentFieldSource.aspis_core.field.QM31.add suffix q
+            if (variable1 != 0#usize) = true then do
+                let weighted1 ← ProverRwP7CurrentFieldSource.aspis_core.field.QM31.add weighted suffix1
+                ok (cont (iter1, suffix1, weighted1))
+              else ok (cont (iter1, suffix1, weighted))
+      match cf with
+        | cont next =>
+          loop
+            (fun x => do
+              let (o, iter1) ←
+                core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+                    (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) x.1
+              match o with
+                | none => ok (done (x.2.1, x.2.2))
+                | some variable1 => do
+                  let q ← Array.index_usize point variable1
+                  let suffix1 ← x.2.1.add q
+                  if (variable1 != 0#usize) = true then do
+                      let weighted1 ← x.2.2.add suffix1
+                      ok (cont (iter1, suffix1, weighted1))
+                    else ok (cont (iter1, suffix1, x.2.2)))
+            next
+        | done out => ok out) =
+    do
+    let q ← Array.index_usize point (pred e)
+    let suffix1 ← S.add suffix q
+    let weighted1 ← if (pred e != 0#usize) = true then S.add weighted suffix1 else ok weighted
+    finite point fuel (pred e) suffix1 weighted1
+
+Note: The full type of `(bind_eq_iff ?m.64 ?m.65 ?m.66).mpr` is
+  (∀ (v : ?m.62), ?m.64 = ok v → ?m.65 v = ?m.66 v) → ?m.64 >>= ?m.65 = ?m.64 >>= ?m.66
+
+case succ
+point : Points
+fuel : ℕ
+ih :
+  ∀ (e : Usize) (suffix weighted : Q),
+    ↑e = fuel →
+      loop
+          (fun x =>
+            match x with
+            | (iter1, suffix1, weighted1) =>
+              PV_CB_MaskSource.state_only_hiding.selected_mask_linears_loop.body point iter1 suffix1 weighted1)
+          (before e, suffix, weighted) =
+        finite point fuel e suffix weighted
+e : Usize
+suffix weighted : Q
+size : ↑e = fuel + 1
+step :
+  core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (before e) =
+    ok (some (pred e), before (pred e))
+⊢ (do
+      let cf ←
+        let (o, iter1) := (some (pred e), before (pred e))
+          match o with
+          | none => ok (done (suffix, weighted))
+          | some variable1 => do
+            let q ← Array.index_usize point variable1
+            let suffix1 ← ProverRwP7CurrentFieldSource.aspis_core.field.QM31.add suffix q
+            if (variable1 != 0#usize) = true then do
+                let weighted1 ← ProverRwP7CurrentFieldSource.aspis_core.field.QM31.add weighted suffix1
+                ok (cont (iter1, suffix1, weighted1))
+              else ok (cont (iter1, suffix1, weighted))
+      match cf with
+        | cont next =>
+          loop
+            (fun x => do
+              let (o, iter1) ←
+                core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+                    (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) x.1
+              match o with
+                | none => ok (done (x.2.1, x.2.2))
+                | some variable1 => do
+                  let q ← Array.index_usize point variable1
+                  let suffix1 ← x.2.1.add q
+                  if (variable1 != 0#usize) = true then do
+                      let weighted1 ← x.2.2.add suffix1
+                      ok (cont (iter1, suffix1, weighted1))
+                    else ok (cont (iter1, suffix1, x.2.2)))
+            next
+        | done out => ok out) =
+    do
+    let q ← Array.index_usize point (pred e)
+    let suffix1 ← S.add suffix q
+    let weighted1 ← if (pred e != 0#usize) = true then S.add weighted suffix1 else ok weighted
+    finite point fuel (pred e) suffix1 weighted1
+'R1Z.PV_CB_MaskLinearsFinite.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,188 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:15:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  next (between i stop)
+in the target expression
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := i, «end» := stop }
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    PV_CB_ForwardLoop.body (cell data PV_CB_MaskIndices.S.factors) { start := i, «end» := stop } coeff
+
+case pos
+data : Std.Array Q 16#usize
+coeff : Coeff
+i stop : Usize
+more : ↑i < ↑stop
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := i, «end» := stop }
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    PV_CB_ForwardLoop.body (cell data PV_CB_MaskIndices.S.factors) { start := i, «end» := stop } coeff
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (27 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:18:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  next (between i stop)
+in the target expression
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := i, «end» := stop }
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    PV_CB_ForwardLoop.body (cell data PV_CB_MaskIndices.S.factors) { start := i, «end» := stop } coeff
+
+case neg
+data : Std.Array Q 16#usize
+coeff : Coeff
+i stop : Usize
+more : ¬↑i < ↑stop
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := i, «end» := stop }
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    PV_CB_ForwardLoop.body (cell data PV_CB_MaskIndices.S.factors) { start := i, «end» := stop } coeff
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (27 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:28:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  next (between i stop)
+in the target expression
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := i, «end» := stop }
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.MASK_ONLY_FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    PV_CB_ForwardLoop.body (cell data PV_CB_MaskIndices.S.maskFactors) { start := i, «end» := stop } coeff
+
+case pos
+data : Std.Array Q 10#usize
+coeff : Coeff
+i stop : Usize
+more : ↑i < ↑stop
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := i, «end» := stop }
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.MASK_ONLY_FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    PV_CB_ForwardLoop.body (cell data PV_CB_MaskIndices.S.maskFactors) { start := i, «end» := stop } coeff
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (27 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskFillBody.lean:31:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  next (between i stop)
+in the target expression
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := i, «end» := stop }
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.MASK_ONLY_FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    PV_CB_ForwardLoop.body (cell data PV_CB_MaskIndices.S.maskFactors) { start := i, «end» := stop } coeff
+
+case neg
+data : Std.Array Q 10#usize
+coeff : Coeff
+i stop : Usize
+more : ¬↑i < ↑stop
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := i, «end» := stop }
+      match o with
+        | none => ok (done coeff)
+        | some column => do
+          let q ← data.index_usize column
+          let i ← lift (column &&& 3#usize)
+          let q1 ← PV_CB_MaskSource.state_only_hiding.mul_tower_basis q i
+          let i1 ← PV_CB_MaskSource.state_only_hiding.MASK_ONLY_FACTOR_EXPONENTS.index_usize column
+          let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+          let a ← Array.update coeff i2 q1
+          ok (cont (iter1, a))) =
+    PV_CB_ForwardLoop.body (cell data PV_CB_MaskIndices.S.maskFactors) { start := i, «end» := stop } coeff
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (27 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_CB_MaskFillBody.c1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_MaskFillBody.mask' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

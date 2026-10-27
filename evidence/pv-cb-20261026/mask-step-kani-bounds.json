@@ -1,0 +1,66 @@
+{
+  "status": "Partial: c1/mask/linear/tower/full-linears/index checks pass; full mirror, combined Horner, scalar-representative Horner, power timeout. No final source law.",
+  "c1_step": {
+    "domain": "all16 raw128-bit QM31 inputs, all27 raw coefficients, all column<16",
+    "unwind": 30,
+    "sufficiency": "largest library initialization/map/comparison loop length27, plus terminating check; scalar input arrays length4. No recurrence run.",
+    "receipt": "kani-step-c1-004/collected-receipt.json",
+    "status": "PASS no stubs; unwinding assertions enabled"
+  },
+  "mask_step": {
+    "domain": "all10 raw QM31 inputs, all27 raw coefficients, all column<10",
+    "unwind": 30,
+    "sufficiency": "same maximum length27",
+    "receipt": "kani-step-mask-005/collected-receipt.json",
+    "status": "PASS no stubs; unwinding assertions enabled"
+  },
+  "linear_step": {
+    "domain": "all10 point coordinates, all variable<10 and arbitrary raw suffix/weighted",
+    "unwind": 12,
+    "sufficiency": "largest map/initialization length10",
+    "receipt": "kani-step-linear-006/collected-receipt.json",
+    "status": "PASS no stubs; unwinding assertions enabled"
+  },
+  "horner_step": {
+    "domain": "all27 raw coefficients, all exponent<26, shared arbitrary; prepared is new(linear) for arbitrary raw linear",
+    "unwind": 30,
+    "sufficiency": "largest map/initialization length27; prepared construction and multiplication have fixed scalar calls",
+    "status": "TIMEOUT180, not rerun unchanged",
+    "receipt": "kani-step-horner-007/collected-receipt.json"
+  },
+  "tower_step": {
+    "domain": "arbitrary raw QM31, all coordinate<4",
+    "unwind": 6,
+    "sufficiency": "input array length4; no recurrence",
+    "status": "PASS",
+    "receipt": "kani-step-tower-008/collected-receipt.json"
+  },
+  "linears": {
+    "domain": "all10 raw coordinates",
+    "unwind": 12,
+    "sufficiency": "shipped reverse loop and reference recursion each perform exactly10 updates; input/map length10",
+    "status": "PASS",
+    "receipt": "kani-step-linears-010/collected-receipt.json"
+  },
+  "power26": {
+    "domain": "arbitrary raw QM31",
+    "unwind": 6,
+    "sufficiency": "four input words and a fixed addition chain, no recurrence",
+    "status": "TIMEOUT180 not rerun unchanged",
+    "receipt": "kani-step-power-011/collected-receipt.json"
+  },
+  "horner_index": {
+    "domain": "all27 raw coefficients, index<26",
+    "unwind": 30,
+    "sufficiency": "map27 and fixed integer decrement within usize bounds; no multiply",
+    "status": "PASS",
+    "receipt": "kani-step-horner-index-012/collected-receipt.json"
+  },
+  "horner_uniform": {
+    "domain": "arbitrary raw repeated coefficient; arbitrary prepared raw linear and shared; exponent<26",
+    "unwind": 30,
+    "sufficiency": "uniform27 array; scalar calls; requires separate locality theorem for lifting",
+    "status": "TIMEOUT180; not rerun unchanged",
+    "receipt": "kani-step-horner-uniform-013/collected-receipt.json"
+  }
+}

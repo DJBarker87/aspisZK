@@ -1,0 +1,65 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_OwnedMaskLinearsEq.lean:14:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_CB_MaskLinearsFinite.S.loop (before 10#usize) point ?m.24 ?m.25
+in the target expression
+  (do
+      let (suffix, weighted) ←
+        PV_CB_MaskLinearsFinite.finite point 10 10#usize ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO
+            ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO
+      let q ← suffix.mul_m31 3#u32
+      let q1 ← weighted.mul_m31 22#u32
+      let q2 ← q.add q1
+      let q3 ← suffix.mul_m31 275#u32
+      let q4 ← weighted.mul_m31 150#u32
+      let q5 ← q3.add q4
+      ok (q2, q5)) =
+    do
+    let (suffix, weighted) ←
+      PV_CB_MaskSource.state_only_hiding.selected_mask_linears_loop { iter := { start := 0#usize, «end» := 10#usize } }
+          point ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO
+          ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO
+    let q ← suffix.mul_m31 3#u32
+    let q1 ← weighted.mul_m31 22#u32
+    let q2 ← q.add q1
+    let q3 ← suffix.mul_m31 275#u32
+    let q4 ← weighted.mul_m31 150#u32
+    let q5 ← q3.add q4
+    ok (q2, q5)
+
+point : Std.Array Q 10#usize
+⊢ (do
+      let (suffix, weighted) ←
+        PV_CB_MaskLinearsFinite.finite point 10 10#usize ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO
+            ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO
+      let q ← suffix.mul_m31 3#u32
+      let q1 ← weighted.mul_m31 22#u32
+      let q2 ← q.add q1
+      let q3 ← suffix.mul_m31 275#u32
+      let q4 ← weighted.mul_m31 150#u32
+      let q5 ← q3.add q4
+      ok (q2, q5)) =
+    do
+    let (suffix, weighted) ←
+      PV_CB_MaskSource.state_only_hiding.selected_mask_linears_loop { iter := { start := 0#usize, «end» := 10#usize } }
+          point ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO
+          ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO
+    let q ← suffix.mul_m31 3#u32
+    let q1 ← weighted.mul_m31 22#u32
+    let q2 ← q.add q1
+    let q3 ← suffix.mul_m31 275#u32
+    let q4 ← weighted.mul_m31 150#u32
+    let q5 ← q3.add q4
+    ok (q2, q5)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_CB_OwnedMaskLinearsEq.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

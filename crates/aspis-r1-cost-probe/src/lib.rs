@@ -58,3 +58,6 @@ mod ct_pole;
 // Fixed public-shape scheduling for the host CT adoption candidate.
 #[cfg(feature="ct-host-prover")]
 pub mod host_work;
+
+#[cfg(all(feature = "prover", feature = "r1p-check"))]
+mod prover_shared;

@@ -1,0 +1,44 @@
+Running as unit: run-rcb1fd781ac9b4e93917e08cf8136f8e2.scope; invocation ID: fa82cbb4846f42b1a398170887d11ec1
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-pv-cb-20261026/PV_CB_ShippedOp205.llbc
+[[91mError[39m] Detected groups of mixed mutually recursive definitions (such as a type mutually recursive with a function, or a function mutually recursive with a trait implementation):
+
+# Group 1:
+- trait impl(Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/iter.rs', lines 117:0-119:22): generic_array::iter::{impl core::iter::traits::iterator::Iterator<T> for generic_array::iter::GenericArrayIter<T, N, Clause0_ArrayType>}
+- fun decl(Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/iter.rs', lines 175:4-175:44): generic_array::iter::{impl core::iter::traits::iterator::Iterator<T> for generic_array::iter::GenericArrayIter<T, N, Clause0_ArrayType>}::nth
+- trait impl(Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/iter.rs', lines 240:0-242:22): generic_array::iter::{impl core::iter::traits::exact_size::ExactSizeIterator<T> for generic_array::iter::GenericArrayIter<T, N, Clause0_ArrayType>}
+
+The declarations in this group are (transitively) used at the following location(s):
+- fun decl(Source: 'lib.rs', lines 88:0-88:83): pv_cb_source::sha_final: Source: 'lib.rs', lines 88:62-88:74
+
+[[91mError[39m] Detected groups of mixed mutually recursive definitions (such as a type mutually recursive with a function, or a function mutually recursive with a trait implementation):
+
+# Group 1:
+- trait impl(Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/iter.rs', lines 117:0-119:22): generic_array::iter::{impl core::iter::traits::iterator::Iterator<T> for generic_array::iter::GenericArrayIter<T, N, Clause0_ArrayType>}
+- fun decl(Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/iter.rs', lines 175:4-175:44): generic_array::iter::{impl core::iter::traits::iterator::Iterator<T> for generic_array::iter::GenericArrayIter<T, N, Clause0_ArrayType>}::nth
+- trait impl(Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/iter.rs', lines 240:0-242:22): generic_array::iter::{impl core::iter::traits::exact_size::ExactSizeIterator<T> for generic_array::iter::GenericArrayIter<T, N, Clause0_ArrayType>}
+
+The declarations in this group are (transitively) used at the following location(s):
+- fun decl(Source: 'lib.rs', lines 88:0-88:83): pv_cb_source::sha_final: Source: 'lib.rs', lines 88:62-88:74
+
+Compiler source: interp/Interp.ml, line 103
+
+Uncaught exception:
+  
+  (Failure
+    "Detected groups of mixed mutually recursive definitions (such as a type mutually recursive with a function, or a function mutually recursive with a trait implementation):\
+   \n\
+   \n# Group 1:\
+   \n- trait impl(Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/iter.rs', lines 117:0-119:22): generic_array::iter::{impl core::iter::traits::iterator::Iterator<T> for generic_array::iter::GenericArrayIter<T, N, Clause0_ArrayType>}\
+   \n- fun decl(Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/iter.rs', lines 175:4-175:44): generic_array::iter::{impl core::iter::traits::iterator::Iterator<T> for generic_array::iter::GenericArrayIter<T, N, Clause0_ArrayType>}::nth\
+   \n- trait impl(Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/iter.rs', lines 240:0-242:22): generic_array::iter::{impl core::iter::traits::exact_size::ExactSizeIterator<T> for generic_array::iter::GenericArrayIter<T, N, Clause0_ArrayType>}\
+   \n\
+   \nThe declarations in this group are (transitively) used at the following location(s):\
+   \n- fun decl(Source: 'lib.rs', lines 88:0-88:83): pv_cb_source::sha_final: Source: 'lib.rs', lines 88:62-88:74\
+   \n\
+   \nCompiler source: interp/Interp.ml, line 103")
+
+Raised at Aeneas__Errors.save_error_opt_span in file "Errors.ml", line 107, characters 4-23
+Called from Aeneas__Interp.compute_contexts in file "interp/Interp.ml", lines 103-106, characters 5-61
+Called from Aeneas__Translate.translate_crate_to_pure in file "Translate.ml", line 323, characters 18-40
+Called from Aeneas__Translate.translate_crate in file "Translate.ml", line 2199, characters 31-71
+Called from Dune__exe__Main in file "Main.ml", lines 743-744, characters 8-37

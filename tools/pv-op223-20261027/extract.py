@@ -1,0 +1,4 @@
+import json,subprocess
+D='/home/dombarker/project-offloads/codex-pv-op223-20261027';T='/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools'
+cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','CARGO_TARGET_DIR='+D+'/charon-target',T+'/charon','cargo','--preset','aeneas','--mir','optimized','--sysroot','default','--start-from','crate::prover_shared::compress_tagged_tuple','--include','aspis_r1_cost_probe::prover_shared::compress_tagged_tuple','--include','aspis_core::field::*','--dest-file',D+'/PV_Op223_Applied.llbc','--','--manifest-path',D+'/source/crates/aspis-r1-cost-probe/Cargo.toml','--release','--offline','--lib','--jobs','4','--features','ct-host-prover']
+subprocess.run(['ssh','dombarker@100.108.41.90','python3',D+'/run_host.py','charon-applied-001',"'"+json.dumps(cmd)+"'"],check=True)

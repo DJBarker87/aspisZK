@@ -1,0 +1,15 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0422); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+def Aeneas.Std.Array.update.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some val => Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+'Aeneas.Std.Array.update' depends on axioms: [propext]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.68
+	Maximum resident set size (kbytes): 4280184
+	Swaps: 0
+	Exit status: 0
