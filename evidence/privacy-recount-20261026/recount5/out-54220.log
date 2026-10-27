@@ -1,0 +1,17 @@
+R1Z.PV_CBL_PadContentSource.source (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize)
+  (suffix : Aeneas.Std.Array Aeneas.Std.U8 8#usize) (hp : ↑pos < 64) :
+  ∃ first second,
+    PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos suffix = Aeneas.Std.Result.ok (first, second, first, 0#usize) ∧
+      ↑first = R1Z.PV_CBL_PaddingModel.first ↑buffer ↑pos ↑suffix ∧
+        Option.map (fun a => ↑a) second = R1Z.PV_CBL_PaddingModel.second ↑pos ↑suffix
+theorem R1Z.PV_CBL_PadContentSource.source : ∀ (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize)
+  (pos : Aeneas.Std.Usize) (suffix : Aeneas.Std.Array Aeneas.Std.U8 8#usize),
+  ↑pos < 64 →
+    ∃ first second,
+      PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos suffix = Aeneas.Std.Result.ok (first, second, first, 0#usize) ∧
+        ↑first = R1Z.PV_CBL_PaddingModel.first ↑buffer ↑pos ↑suffix ∧
+          Option.map (fun a => ↑a) second = R1Z.PV_CBL_PaddingModel.second ↑pos ↑suffix :=
+⋯
+'R1Z.PV_CBL_PadContentSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

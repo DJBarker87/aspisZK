@@ -27,7 +27,7 @@ rows=json.loads((P.parent/'recount4/rows4.json').read_text());audit=[]
 for r in rows:
  path,_,decl=r.get('definition','').partition('#');sources=[]
  for k in pins:
-  s=read(k,path)
+  s=read(k,path) if path else None
   if s is not None:
    x=next(x for x in reversed(manifest) if x['ref']==k and x['path']==path)
    sources.append({**{v:x[v] for v in ['ref','path','blob','sha256']},'declaration':decl})

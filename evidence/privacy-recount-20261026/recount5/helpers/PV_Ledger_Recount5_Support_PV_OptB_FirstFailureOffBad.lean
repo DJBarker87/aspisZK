@@ -1,0 +1,8 @@
+import R1Z.PV_OptB_FirstFailureOffBad
+set_option pp.proofs false
+#check R1Z.PV_OptB_FirstFailureOffBad.signal_pair
+#print R1Z.PV_OptB_FirstFailureOffBad.signal_pair
+#print axioms R1Z.PV_OptB_FirstFailureOffBad.signal_pair
+#check R1Z.PV_OptB_FirstFailureOffBad.independent_off_bad_on_first_failures
+#print R1Z.PV_OptB_FirstFailureOffBad.independent_off_bad_on_first_failures
+#print axioms R1Z.PV_OptB_FirstFailureOffBad.independent_off_bad_on_first_failures

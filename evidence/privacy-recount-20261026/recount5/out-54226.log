@@ -1,0 +1,28 @@
+R1Z.PV_CBL_DigestUpdateSource.loop_source (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize) (blocks : Aeneas.Std.U64)
+  (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+  (i : Aeneas.Std.Usize) (hp : ↑pos < 64) :
+  PV_CBL_DigestSoft.sha_update_soft_owned_loop state blocks buffer pos data i =
+    Aeneas.Std.Result.ok (R1Z.PV_CBL_DigestUpdateModel.value (state, blocks, buffer, pos) (List.drop ↑i ↑data))
+theorem R1Z.PV_CBL_DigestUpdateSource.loop_source : ∀ (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (blocks : Aeneas.Std.U64) (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize)
+  (data : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize),
+  ↑pos < 64 →
+    PV_CBL_DigestSoft.sha_update_soft_owned_loop state blocks buffer pos data i =
+      Aeneas.Std.Result.ok (R1Z.PV_CBL_DigestUpdateModel.value (state, blocks, buffer, pos) (List.drop ↑i ↑data)) :=
+⋯
+'R1Z.PV_CBL_DigestUpdateSource.loop_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CBL_DigestUpdateSource.source (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize) (blocks : Aeneas.Std.U64)
+  (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+  (hp : ↑pos < 64) :
+  PV_CBL_DigestSoft.sha_update_soft_owned state blocks buffer pos data =
+    Aeneas.Std.Result.ok (R1Z.PV_CBL_DigestUpdateModel.value (state, blocks, buffer, pos) ↑data)
+theorem R1Z.PV_CBL_DigestUpdateSource.source : ∀ (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (blocks : Aeneas.Std.U64) (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize)
+  (data : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑pos < 64 →
+    PV_CBL_DigestSoft.sha_update_soft_owned state blocks buffer pos data =
+      Aeneas.Std.Result.ok (R1Z.PV_CBL_DigestUpdateModel.value (state, blocks, buffer, pos) ↑data) :=
+⋯
+'R1Z.PV_CBL_DigestUpdateSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

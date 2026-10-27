@@ -1,0 +1,32 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 1258); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+R1Z.PV_CBL_DigestSoftSource.updated (data : Aeneas.Std.Slice Aeneas.Std.U8) : R1Z.PV_CBL_DigestUpdateStep.Snapshot
+def R1Z.PV_CBL_DigestSoftSource.updated : Aeneas.Std.Slice Aeneas.Std.U8 → R1Z.PV_CBL_DigestUpdateStep.Snapshot :=
+fun data =>
+  R1Z.PV_CBL_DigestUpdateModel.value
+    (R1Z.PV_CBL_DigestDefaultValue.state, 0#u64, Aeneas.Std.Array.repeat 64#usize 0#u8, 0#usize) ↑data
+'R1Z.PV_CBL_DigestSoftSource.updated' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CBL_DigestSoftSource.eager (data : Aeneas.Std.Slice Aeneas.Std.U8) :
+  ↑(R1Z.PV_CBL_DigestSoftSource.updated data).2.2.2 < 64
+theorem R1Z.PV_CBL_DigestSoftSource.eager : ∀ (data : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑(R1Z.PV_CBL_DigestSoftSource.updated data).2.2.2 < 64 :=
+⋯
+'R1Z.PV_CBL_DigestSoftSource.eager' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CBL_DigestSoftSource.value (data : Aeneas.Std.Slice Aeneas.Std.U8) : Aeneas.Std.Array Aeneas.Std.U8 32#usize
+def R1Z.PV_CBL_DigestSoftSource.value : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Array Aeneas.Std.U8 32#usize :=
+fun data =>
+  let q := R1Z.PV_CBL_DigestSoftSource.updated data;
+  R1Z.PV_CBL_DigestBytesValue.value (R1Z.PV_CBL_FinalizeSoftSource.state q.1 q.2.1 q.2.2.1 q.2.2.2 ⋯)
+'R1Z.PV_CBL_DigestSoftSource.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CBL_DigestSoftSource.source (data : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_CBL_DigestSoft.sha_digest_soft_owned data = Aeneas.Std.Result.ok (R1Z.PV_CBL_DigestSoftSource.value data)
+theorem R1Z.PV_CBL_DigestSoftSource.source : ∀ (data : Aeneas.Std.Slice Aeneas.Std.U8),
+  PV_CBL_DigestSoft.sha_digest_soft_owned data = Aeneas.Std.Result.ok (R1Z.PV_CBL_DigestSoftSource.value data) :=
+⋯
+'R1Z.PV_CBL_DigestSoftSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.47
+	Maximum resident set size (kbytes): 2642196
+	Swaps: 0
+	Exit status: 0

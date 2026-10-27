@@ -1,0 +1,22 @@
+R1Z.PV_CBL_ByteWordsSource.value (b : Aeneas.Std.Array Aeneas.Std.U8 64#usize) :
+  Aeneas.Std.Array Aeneas.Std.U32 16#usize
+def R1Z.PV_CBL_ByteWordsSource.value : Aeneas.Std.Array Aeneas.Std.U8 64#usize →
+  Aeneas.Std.Array Aeneas.Std.U32 16#usize :=
+fun b =>
+  Aeneas.Std.Array.make 16#usize
+    [R1Z.PV_CBL_ByteLane00.value b, R1Z.PV_CBL_ByteLane01.value b, R1Z.PV_CBL_ByteLane02.value b,
+      R1Z.PV_CBL_ByteLane03.value b, R1Z.PV_CBL_ByteLane04.value b, R1Z.PV_CBL_ByteLane05.value b,
+      R1Z.PV_CBL_ByteLane06.value b, R1Z.PV_CBL_ByteLane07.value b, R1Z.PV_CBL_ByteLane08.value b,
+      R1Z.PV_CBL_ByteLane09.value b, R1Z.PV_CBL_ByteLane10.value b, R1Z.PV_CBL_ByteLane11.value b,
+      R1Z.PV_CBL_ByteLane12.value b, R1Z.PV_CBL_ByteLane13.value b, R1Z.PV_CBL_ByteLane14.value b,
+      R1Z.PV_CBL_ByteLane15.value b]
+    ⋯
+'R1Z.PV_CBL_ByteWordsSource.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CBL_ByteWordsSource.source (b : Aeneas.Std.Array Aeneas.Std.U8 64#usize) :
+  PV_CBL_ShaBytes.sha_load64 b = Aeneas.Std.Result.ok (R1Z.PV_CBL_ByteWordsSource.value b)
+theorem R1Z.PV_CBL_ByteWordsSource.source : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 64#usize),
+  PV_CBL_ShaBytes.sha_load64 b = Aeneas.Std.Result.ok (R1Z.PV_CBL_ByteWordsSource.value b) :=
+⋯
+'R1Z.PV_CBL_ByteWordsSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

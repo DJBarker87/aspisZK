@@ -1,0 +1,49 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 1301); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+R1Z.PV_CBL_FinalizeSoftValue.next (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (first : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (second : Option (Aeneas.Std.Array Aeneas.Std.U8 64#usize)) :
+  Aeneas.Std.Array Aeneas.Std.U32 8#usize
+def R1Z.PV_CBL_FinalizeSoftValue.next : Aeneas.Std.Array Aeneas.Std.U32 8#usize →
+  Aeneas.Std.Array Aeneas.Std.U8 64#usize →
+    Option (Aeneas.Std.Array Aeneas.Std.U8 64#usize) → Aeneas.Std.Array Aeneas.Std.U32 8#usize :=
+fun state first second =>
+  have initial := R1Z.PV_CBL_SoftByteSource.value state first;
+  match second with
+  | none => initial
+  | some b => R1Z.PV_CBL_SoftByteSource.value initial b
+'R1Z.PV_CBL_FinalizeSoftValue.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CBL_FinalizeSoftValue.source (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize) (blocks : Aeneas.Std.U64)
+  (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize) (hp : ↑pos < 64) :
+  ∃ first second,
+    PV_CBL_FinalSoft.sha_finalize_soft_owned state blocks buffer pos =
+        Aeneas.Std.Result.ok
+          (R1Z.PV_CBL_DigestBytesValue.value (R1Z.PV_CBL_FinalizeSoftValue.next state first second),
+            R1Z.PV_CBL_FinalizeSoftValue.next state first second, first, 0#usize) ∧
+      ↑first =
+          R1Z.PV_CBL_PaddingModel.first ↑buffer ↑pos
+            ↑(R1Z.PV_CBL_Suffix64Value.value (R1Z.PV_CBL_ShaBitLength.bitLength pos blocks)) ∧
+        Option.map (fun a => ↑a) second =
+          R1Z.PV_CBL_PaddingModel.second ↑pos
+            ↑(R1Z.PV_CBL_Suffix64Value.value (R1Z.PV_CBL_ShaBitLength.bitLength pos blocks))
+theorem R1Z.PV_CBL_FinalizeSoftValue.source : ∀ (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (blocks : Aeneas.Std.U64) (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize),
+  ↑pos < 64 →
+    ∃ first second,
+      PV_CBL_FinalSoft.sha_finalize_soft_owned state blocks buffer pos =
+          Aeneas.Std.Result.ok
+            (R1Z.PV_CBL_DigestBytesValue.value (R1Z.PV_CBL_FinalizeSoftValue.next state first second),
+              R1Z.PV_CBL_FinalizeSoftValue.next state first second, first, 0#usize) ∧
+        ↑first =
+            R1Z.PV_CBL_PaddingModel.first ↑buffer ↑pos
+              ↑(R1Z.PV_CBL_Suffix64Value.value (R1Z.PV_CBL_ShaBitLength.bitLength pos blocks)) ∧
+          Option.map (fun a => ↑a) second =
+            R1Z.PV_CBL_PaddingModel.second ↑pos
+              ↑(R1Z.PV_CBL_Suffix64Value.value (R1Z.PV_CBL_ShaBitLength.bitLength pos blocks)) :=
+⋯
+'R1Z.PV_CBL_FinalizeSoftValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.17
+	Maximum resident set size (kbytes): 2642224
+	Swaps: 0
+	Exit status: 0
