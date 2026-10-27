@@ -1,0 +1,57 @@
+ARX_Residual.lean:30:15: error: don't know how to synthesize implicit argument `Tx`
+  @ARX_Mass.bounded W A C ?m.42 L copy allocator c err r native1 native2 hashv a extraction std D words owners Q0 Q1
+    queries
+context:
+W A C Tx : Type
+L : Library W (ℕ → Record)
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+c : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+r : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+    hashv
+a : Adversary A
+std : S2W_TrustedStd.TrustedStd copy
+D : LiteralByteProtocol.Decoder
+words : CanonicalCutEnrichedTranscript.Words
+owners :
+  FIp_GlobalOwners.Owners (FIp_Install.configuration err c r)
+    (Rc2_Install.configuration (Rc5_Install.seed err (FIp_Install.select r c)) r).boundaries
+Q0 Q1 : ℕ
+queries : ∀ (H : Bytes → State), (ARW_Induced.issued native1 copy allocator CPH_Program.verifier a H).length ≤ Q0 + Q1
+cfg : DrvC_Installation.Configuration FIo_Install.W C := ⋯
+⊢ Type
+ARX_Residual.lean:30:7: error: failed to infer `have` declaration type
+ARX_Residual.lean:28:155: error: unsolved goals
+W A C Tx : Type
+L : Library W (ℕ → Record)
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+c : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+r : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+    hashv
+a : Adversary A
+std : S2W_TrustedStd.TrustedStd copy
+D : LiteralByteProtocol.Decoder
+words : CanonicalCutEnrichedTranscript.Words
+owners :
+  FIp_GlobalOwners.Owners (FIp_Install.configuration err c r)
+    (Rc2_Install.configuration (Rc5_Install.seed err (FIp_Install.select r c)) r).boundaries
+Q0 Q1 : ℕ
+queries : ∀ (H : Bytes → State), (ARW_Induced.issued native1 copy allocator CPH_Program.verifier a H).length ≤ Q0 + Q1
+cfg : DrvC_Installation.Configuration FIo_Install.W C := FIp_Install.configuration err c r
+⊢ F3T_RuntimeBound.failureModel (ARX_AdmittedRuntime.runtime L copy allocator c err r native1 native2 hashv a) ≤
+    F3T_Numeric.total (Q0 + Q1)
+'AspisR1.ARX_Residual.numeric' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ARX_Residual.margin_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
