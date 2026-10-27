@@ -1,139 +1,126 @@
-# D282 integrated candidate gates
+# D298 integrated candidate gates — 2026-10-27
 
-Branch `codex/pv-integ1-20261027`; integrated source
-`0c9dc9a4cc` (full revision in `tools/pv-integ1-20261027/source-revision.txt`).
-No implementation or proof source edits are authorized by this task.
-Target not yet established. No privacy endpoint premise is removed by integration
-measurements; all existing mathematical, deployment, E1/E2, real RunJoin,
-OS-failure-independence and L1/L2/L3 obligations retain their meanings. T remains
-exactly entropy_law, entropy_kernel and observation.
+Branch `codex/pv-integ3-20261027`; runtime and proof source
+`9ff5a4594ec1cad5b5d12c7cb5a49270f9b098e3`.
+This supersedes the D282 status previously in this README; its evidence remains
+unchanged beside `d298/`. No implementation or Lean source was edited.
+**Target not yet established.** No privacy endpoint premise was removed.
 
-## Stage 1: verifier artifacts
+## 1. All three verifier ELFs — PASS
 
-PASS: all three rebuilt ELFs match the requested pins. See `elf-summary.json`
-and the per-build comparisons/receipts. Default and devnet are 1,563,728 bytes;
-Pool size is recorded in the summary. Confirmed default SHA-256
-`f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`;
-devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`;
-Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`.
-Every build runs alone in a 6G/8G/zero-swap/64-task scope after admission and
-barrier checks. Expected work: optimized SBF compilation, not proof generation.
-Source identity is checked byte-for-byte by `source-identity.json`.
-The initial launch failed before compilation because the copied diagnostic
-wrapper lacked execute permission; execute permission was restored for the new
-launch. Three aggregate-reservation refusals and three-minute cooldowns preceded the
-successful default build. Their admission receipts are preserved separately.
+Fresh rebuilds of the integrated candidate using the `0c9dc9a4cc` integration
+recipe reproduce all requested pins. These are candidate rebuilds, not reused
+predecessor measurements. Full command, source pin, admission, GNU time and
+resource receipts are under `d298/build-*/`; `d298/elf-summary.json` indexes pins.
 
-## Stage 2: client build and route
+| ELF | SHA256 | Bytes | Exit | Wall s | Peak RSS KiB | Swap |
+|---|---|---:|---:|---:|---:|---:|---:|
+| default | `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4` | 1563728 | 0 | 53.313 | 685816 | 0 |
+| devnet | `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299` | 1563728 | 0 | 36.024 | 685972 | 0 |
+| pool | `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548` | 605704 | 0 | 64.929 | 680280 | 0 |
 
-PASS. SHA-256 `5fc6c98d2e34b873faae3773064f6b0eda505623b161a703647c7787b2f46688`,
-2,747,928 bytes. `route-symbols.json`, `route-disassembly.txt` and
-`op223-site.json` retain resolved call paths from `devnet_spend::main` to
-`generate_for_mask_nonce` and `prover_shared::compress_tagged_tuple`, plus the
-source call at host_semantic.rs:423. This is binary/source route evidence, not
-a whole-prover refinement theorem. Build exit 0, 126.807 seconds, peak process
-RSS 636,300 KiB, swap 0; see capped receipt for aggregate peak. Two admission
-refusals preceded the successful third client admission.
+All runs are serial 6G high/8G max/zero swap/64-task scopes, with both
+`allowed:true` and exit0 required for admission and an in-scope barrier.
+One Pool reservation refusal consumed a three-minute cooldown. Its next
+admitted launch failed before project compilation on rustc helper-thread
+`WouldBlock`; the changed retry restricted CPU affinity to 0–3 under unchanged
+caps and -j4. Failed and refused receipts are retained. No ELF mismatch occurred.
+SBF stack diagnostics remain in the logs; the outputs are byte-identical to pins.
 
-Label: **recommended recipe pending owner approval; toolchain unpinned**.
-Recipe: host rustc 1.94.1, release, offline, locked, four build jobs:
+## 2. Recommended devnet_spend build and route — PASS
 
-```
+**recommended recipe pending owner approval; toolchain unpinned**
+
+Client SHA256 `8a929b74d3246b71f05b631b7a386b22f179bf7ccafb254be21766c6edf86207`; 2746024 bytes.
+Host compiler is rustc 1.94.1 (e408947bf, 2026-03-25); `-Vv` is retained.
+
+```sh
 cargo build --manifest-path tools/r1-cost-probe/Cargo.toml --release --offline --locked -j 4 --features r1p-check,aspis-r1-cost-probe/ct-host-prover --bin devnet_spend
 ```
 
-## Stage 3: fixed-coin fixtures
+Compilation used taskset CPU0–3 and the same capped scope; runtime fixture
+executions use the normal CPU set. `d298/client-summary.json`, command,
+binary pins and resource receipt identify the actual build. `d298/binary-route/`
+contains selected disassembly, resolved direct/GOT call paths, symbols and
+relocation/disassembly hashes. Starting from `devnet_spend::main`, the actual
+optimized ELF reaches `generate_for_mask_nonce` and
+`prover_shared::compress_tagged_tuple`; `op223-site.json` pins the op223
+source call and PC path. No reachable generic96 route was found by the
+resolved-edge traversal. This is static route evidence, not executable/model
+adequacy or an endpoint privacy proof.
 
-PASS against `c57a344726`; transfer and withdrawal, deterministic coin 0.
-`baseline-reuse.json` establishes unchanged implementation/harness/lockfile
-inputs since the control artifact build. `fixture-control-pin-check.json`
-checks control proof/public pins and complete control result records against
-the evidence actually committed at c57. Both proof files are 57,607 bytes and
-verify through tx1/tx2. See `fixture-comparison.json` and capped receipts.
-All public/proof bytes, deterministic result record bytes (canonical JSON)
-and durable ledger file bytes are identical. The raw measurement `result.json`
-files differ **only** in elapsed `seconds`; both raw hashes, values and all
-differing fields are retained. Those measurement files are not claimed to be
-byte-identical. This uses the prior fixture gate definition, excluding only
-elapsed-time metadata.
-Proof/public bytes, every deterministic result field and durable reservation
-records were compared. Runtime measurements are evidence metadata, not quiet-window timing.
+## 3. Fixed-coin fixture bytes — PASS for established deterministic records
 
-## Stage 4: Lean import audit and focused re-check
+Freshly built both exact revisions: control `37e5e133f8` and candidate
+`9ff5a4594e`. Exported inputs match git byte-for-byte (7,013 control and
+7,037 candidate files; both `*-source-identity.json`). Both optimized runs
+generate transfer0 and withdrawal0 using coin0, count1.
 
-`lean-import-audit.json` lists the changed/new imported source files BEFORE any
-compile. This includes the canonical P6 source and ten imported files newly
-present at their canonical paths. Objects are inspected read-only. No shared
-env-J source is installed or overwritten. Assigned IDs 53900–54199, budget
-30 Lean attempts, zero Kani. PASS: `R1Z.PV_Op223_Source.op223_source` (53906) and
-`R1Z.PV_Op223_V164.refinement` (53907) type-check against the integrated-tree
-source and the retained audited import objects. All five printed axiom lists
-contain only `propext`, `Classical.choice`, `Quot.sound`. Exact source hashes,
-dependency object hashes/fingerprints, commands, caps, exits, walls, process and
-cgroup peaks, zero swaps, and axiom output are in the per-ID receipts and
-`lean-summary.json`. This is a focused re-check, not a clean deployment closure
-replay or a privacy endpoint claim.
+| Fixture | Public bytes | Proof bytes | Ledger records | Deterministic result |
+|---|---|---|---|---|
+| transfer | identical | identical | identical | identical |
+| withdrawal | identical | identical | identical | identical |
 
-Budget: **5/30 charged Lean attempts**, **0 Kani**. 53900, 53903 and 53905
-failed before theorem elaboration at missing private overlay imports
-(P6Bridge, Init.Prelude, Aeneas.Command respectively). These are environment
-preflight failures, not theorem counterexamples. Replacements were changed
-private object environments, under the original caps. IDs 53901, 53902 and
-53904 were uncharged admission refusals, with three-minute cooldowns and fresh
-IDs. The retained op223 cache uses directory symlinks; the initial file-only
-copy missed them. `retained-prefix-overlay.json` records preserving those
-links and hash-checking all 231 imported objects in the audit, excluding the
-two rebuilt targets. Earlier overlay records preserve the attempted fixes.
-No shared source or object was overwritten.
+**Literal raw result.json bytes differ in diagnostic elapsed `seconds` only.**
+The established D282/batch1 comparator excludes that one field and compares
+canonical serialized records; every other result field and every ledger file
+is byte-identical. Raw hashes, sizes, complete records and exact differing
+fields are retained in `d298/fixture-comparison.json`; no raw JSON equality
+is claimed. This interpretation was disclosed during execution. Both verifier
+stages succeed. No proof/public/durable record disagreement occurred.
+These are two deterministic fixture pairs, not the 1,000-pair differential.
 
+## 4. Lean import-change check — no recompilation required
 
-Changed/new imported files (listed before compiling):
+Changed imported sources, listed before any potential compile: **none**.
+`d298/lean-source-assessment.json` records 217 resolved source rows.
+The op223 closure matches the already integrated/audited `0c9dc9a4cc` files;
+all 82 batch1 modules match batch1 head `c9abf274fa`. The stronger whole-tree
+check finds no modified/deleted existing Lean file from either predecessor.
+Added modules do not change the resolved imports. Ruling(h') source authority
+remains the env-J rebuild/rebuild2 records; no shared source/object was written.
 
-- `R1Z.PV_RW_DataPartsIff` — `docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_DataPartsIff.lean`
-- `R1Z.PV_RW_DataProduct` — `docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_DataProduct.lean`
-- `R1Z.ProverRw19AuditCaller` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19AuditCaller.lean`
-- `R1Z.ProverRw19AuditData` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19AuditData.lean`
-- `R1Z.ProverRw19AuditValue` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19AuditValue.lean`
-- `R1Z.ProverRw19AuditSource` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19AuditSource.lean`
-- `R1Z.ProverRw19P6Caller` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19P6Caller.lean`
-- `R1Z.ProverRw19P6Join` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19P6Join.lean`
-- `R1Z.ProverRw19P6ContextIdentity` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19P6ContextIdentity.lean`
-- `R1Z.ProverRw19CanonicalAuditRefinement` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19CanonicalAuditRefinement.lean`
-- `R1Z.ProverRwP6CompressSource` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRwP6CompressSource.lean`
+Per the task's conditional rule, **0/30 Lean attempts, 0 Kani**. IDs
+**28000–28099 all unused**. This is reuse of unchanged focused proof evidence,
+not a new compile or coherent deployment-closure replay.
 
-The ten additions are new canonical paths relative to the op223 branch;
-the read-only object source bytes match the integrated files. P6 source bytes
-also match the integrated version. Aeneas library objects are unchanged
-external-toolchain inputs, recorded by object hash.
+Reused successful receipt/axiom evidence:
 
+- `53906.json` / `53907.json` beside this README: `PV_Op223_Source.op223_source`
+  and `PV_Op223_V164.refinement` on the preceding integrated closure.
+- `evidence/pv-batch1-20261027/lean-receipts/53701/receipt.json`:
+  source laws and equality theorems for op230,254,258, plus shifts/row laws.
+- Batch1 `53702` typed audit and `53703` frozen-manifest audit; all 82 final
+  source hashes are covered in its `FINAL-AUDIT.json`.
 
-## Stage 5: combined next-cycle gates — PLAN ONLY
+Their accepted axiom lists are subsets of propext,Classical.choice,Quot.sound.
+The old receipts retain exact target, source/dependency hashes, exit, wall,
+RSS, swap and full printed axiom output. No forbidden primitive was added.
 
-This is the combined **op223 + route (ii) batch 1 + records** adoption gate,
-not an op223-only rerun. Use `evidence/pv-op223-20261027/TIMING-PLAN.md` as the
-standing timing template. Freeze the next combined candidate's full revision
-before preparation; it does not exist as an established target in this receipt.
-Control is exactly `c57a344726`, not op223's pre-rebase control `258c685f50`.
-Neither the 1,000-pair differential nor timing is authorized to run here.
+## 5. Combined next-cycle plan — NOT RUN
 
-Preparation commands for the next cycle (lead supplies `NEXT_REV`, the full
-reviewed combined candidate revision; these commands were NOT executed):
+This plan gates **op223 + route (ii) batch 1 (230/254/258) + records**.
+Candidate: `9ff5a4594ec1cad5b5d12c7cb5a49270f9b098e3` (implementation frozen).
+Control: `c57a344726745387efb38d1571d885c69ce829ee`.
+Template: `evidence/pv-op223-20261027/TIMING-PLAN.md`.
+The lead must freeze a new revision and repeat affected prerequisite gates if records or any covered source changes. These commands are a plan, not execution receipts.
+
+Require all three ELF pins, fixed-coin deterministic fixture bytes and records,
+route symbols, and the relevant Lean source/axiom audit before differential execution.
+Recommended recipe pending owner approval; toolchain unpinned. Record host rustc
+1.94.1 `-Vv`, both Cargo.lock files, source identities and binary SHA256/size.
+
+## Prepare and build (future cycle only)
 
 ```sh
 export HOST=dombarker@100.108.41.90
-export D=/home/dombarker/project-offloads/codex-pv-integ1-20261027
-: "${NEXT_REV:?Set the reviewed combined op223 + batch-1 + records revision}"
-git rev-parse --verify "${NEXT_REV}^{commit}"
+export D=/home/dombarker/project-offloads/codex-pv-integ1-20261027/d298
+export NEXT_REV=9ff5a4594ec1cad5b5d12c7cb5a49270f9b098e3
 ssh "$HOST" "mkdir -p $D/combined/baseline/source $D/combined/candidate/source"
-```
-
-Export the same native build inputs as this integration task, from each exact
-revision (including both lockfiles); do not overlay modified harness inputs:
-
-```sh
 for side in baseline candidate; do
-  rev=c57a344726
+  rev=c57a344726745387efb38d1571d885c69ce829ee
   test "$side" = baseline || rev="$NEXT_REV"
+  ssh "$HOST" "python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/reservation.py $D/combined/upload-$side.json > $D/combined/upload-$side.log 2>&1 && python3 -c 'import json; assert json.load(open(\"$D/combined/upload-$side.json\"))[\"allowed\"]'" || exit $?
   git archive "$rev" Cargo.toml Cargo.lock .cargo crates programs audit xtask tools \
     docs/research/v8-r0-zk-20261009/refine \
     docs/research/v8-r0-zk-20261009/c3 \
@@ -141,93 +128,81 @@ for side in baseline candidate; do
     ssh "$HOST" "tar xf - -C $D/combined/$side/source"
   git rev-parse "$rev" | ssh "$HOST" "cat > $D/combined/$side/source-revision.txt"
 done
-```
-
-Install the path-adapted reservation/barrier/receipt runners and planned gate
-scripts with the following preparation-only command. It verifies both source
-pins, refuses to overwrite an existing runner, records all runner hashes, and
-does not launch a build, differential or timing:
-
-```sh
-python3 tools/pv-integ1-20261027/prepare_combined_runners.py "$NEXT_REV"
-```
-
-The baseline and candidate have separate job-owned cargo targets. No shared
-source is written.
-
-Exact build commands after installing those runner paths:
-
-```sh
+python3 tools/pv-integ3-20261027/prepare_combined_runners.py "$NEXT_REV"
 for side in baseline candidate; do
   ssh "$HOST" "python3 $D/combined/$side/native.py $side build-fixture cargo build --release --offline --locked -j 4 -p aspis-r1-cost-probe --example prover_rw_gate --features optimized-terminal,r1p-check,ct-host-prover"
   ssh "$HOST" "python3 $D/combined/$side/native.py $side build-differential cargo build --release --offline --locked -j 4 -p aspis-r1-cost-probe --example prover_rw_differential --features optimized-terminal,r1p-check,ct-host-prover"
 done
 ```
 
-Both builds use host rustc 1.94.1; record `rustc -Vv`, features, source hashes,
-lockfiles and binary SHA-256/size before any execution. The three rebuilt ELF
-pins, integrated fixed-coin fixture comparison, and relevant focused Lean
-re-checks must pass first. Re-check these prerequisites on the final combined
-revision if the covered sources change.
+Run and retain the shared reservation receipt before each upload as well as
+before each scope: admission requires **allowed:true AND exit0**. Retain runner
+hashes; runners refuse existing output paths. Builds are serial and expected
+to spend time in optimized compilation; differential/timing time is expected
+in complete retry-owner proof generation and P_R1 elimination. One scope,
+MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; never raise caps.
 
-Exact 1,000-pair whole-prover differential command:
+## 1,000-pair whole-prover differential
 
 ```sh
 ssh "$HOST" "python3 $D/combined/run_host.py combined-differential-001 '[\"python3\", \"$D/combined/corpus.py\"]'"
 ```
 
-This is the unchanged whole-prover harness/comparator with fresh coins
-6000–6999 and matched coins on both sides: 1,000 pairs, 600 complete proof
-pairs, 100 rejected-prefix pairs, 400 errors and four complete oracle-log pairs
-(coins 6006, 6007, 6010, 6011). Require exact result observations, public/proof
-bytes, durable records and complete oracle-stream equality wherever emitted.
-Fail immediately on any disagreement. At most three prover processes total,
-all optimized, within one 6G/8G/zero-swap/64-task scope. A task-limit event, OOM,
-missing case, incomplete comparison or binary pin change invalidates the cohort.
-Expected time is whole-prover proof generation and P_R1 elimination, not build
-compilation. Retain the per-pair comparison records, complete result receipts,
-resource reviews and SHA/size manifest before deleting only raw proof corpus.
+Use unchanged whole-prover harness and comparator, matched fresh coins
+6000–6999: 1,000 pairs, 600 complete proof pairs, 100 rejected-prefix pairs,
+400 error observations and four complete oracle-log pairs (6006,6007,6010,6011).
+Require exact public/proof bytes, result observations, durable records and
+complete emitted oracle streams; abort immediately on any disagreement.
+Maximum three optimized prover processes total inside the single capped scope.
+Any missing case, incomplete comparison, binary pin change, task-limit event
+or OOM invalidates the cohort. Retain complete comparisons and resource/exit/
+wall/RSS/swap/source receipts; review after ten minutes without a newly completed
+case. Do not rerun an unchanged failed cohort. Hash and collect evidence before
+removing raw corpus; securely retain all keys and authority-bearing records.
 
-Only after that passes, the lead coordinates a quiet window with Stream A.
-The worker never edits/deletes `QUIET_WINDOW.json`. Exact timing command:
+## Lead-coordinated quiet timing, after differential PASS
 
 ```sh
 ssh "$HOST" "python3 $D/combined/run_host.py combined-quiet-001 '[\"python3\", \"$D/combined/timing.py\", \"combined-quiet-001-results\"]'"
 ```
 
-Baseline first, then candidate; five fresh processes each, identical coins
-100–104, transfer and withdrawal in every process. Require per-fixture candidate
-median **< 15 seconds** and **≤ 1.10 × baseline median**, using reported prover
-seconds. Compare matched public/proof bytes. Retain all samples and result
-records, exact commands, binary pins, before/after quiet guards, host load and
-scope inventories and capped receipts. Any populated foreign capped scope or
-failed quiet guard invalidates the window; partial samples do not count as
-qualified timing. On admission refusal wait three minutes and use a fresh
-receipt label, up to ten retries; never bypass the barrier or raise caps.
-No unchanged invalidated timing rerun. Retain all keys securely; remove only
-this cycle's cargo targets and raw corpus after evidence collection.
+The lead coordinates Stream A and the quiet-window marker. Workers never edit
+or remove it or bypass reservation holds. Baseline first, then candidate; five
+fresh processes each with identical coins 100–104; each generates transfer and
+withdrawal. Per fixture, require candidate median **strictly <15 seconds** and
+**≤1.10× control median**, using the harness's reported prover seconds. Compare
+matched public/proof bytes and deterministic result/ledger records as well.
+Retain every sample and full result record, before/after quiet guards, load and
+scope inventories, binary hashes/sizes, commands and capped resource receipts.
+A foreign populated capped scope or failed quiet guard invalidates the window;
+partial samples are not qualified timing. An invalid window needs a changed,
+lead-coordinated window before retrying. Reservation/quiet holds: three-minute
+cooldown, fresh receipt labels, up to ten retries; no cap increase.
 
-## Cleanup, scope and final disposition
+No differential or timing was run by D298. Target not yet established. No
+endpoint premise is discharged by this plan, and T remains exactly
+entropy_law, entropy_kernel, observation.
 
-All three job-owned Cargo targets and the private Lean object overlay/cache
-were removed after collecting receipts and object pins. `cleanup.json` retains
-three SBF keypairs in their artifact directories at mode 0600 and records their
-public keys. No wallet key was deleted, deployed, spent or refunded. The first
-cleanup stopped on a Cargo `.fingerprint` JSON whose filename contained
-`keypair`; `cleanup-preflight-failure.json` records the classification fix and
-`final-cleanup.json` confirms no Cargo targets remain. No shared source/object,
-root checkout, other worktree, or other job's artifact was modified.
+## Cleanup, premise accounting and handoff
 
-All changes in this branch are confined to `evidence/pv-integ1-20261027/` and
-`tools/pv-integ1-20261027/`. Implementation and Lean proof source bytes remain
-those of `0c9dc9a4cc`. No forbidden proof primitive or new axiom was introduced.
-Before and after this task, V164 still requires the reservation equation and
-`P_proof_bytes`; this task removes no privacy theorem premise and adds no trust
-item. Formal source-to-model, E1/E2, real RunJoin, OS-failure independence,
-L1/L2/L3 and endpoint/deployment closure obligations are retained unchanged.
+`d298/cleanup.json` records deletion of all four D298 cargo targets and secure
+retention of 3 generated SBF keys at mode0600.
+No key was destroyed; no deployment, transaction, authority change or refund
+was performed. Fixtures, binaries and evidence remain in the job-owned host
+directory `/home/dombarker/project-offloads/codex-pv-integ1-20261027/d298/`.
+The earlier host run and all shared env-J sources/objects are untouched.
 
-The successful runs and earlier setup/admission failures are all retained;
-no ELF mismatch or deterministic fixture disagreement occurred. Raw timing
-metadata is explicitly unequal, as explained in stage 3. The only next-cycle
-work proposed here is the combined differential and lead-coordinated quiet
-window above. **Neither was executed. Target not yet established.**
+`d298/PROCESS.md` records launch failures and a procedural deviation: the
+initial upload lacked a separate pre-scp reservation receipt, although both
+admission gates preceded compilation. Later uploads have dedicated receipts.
+
+Before/after endpoint and deployment premises are unchanged: removed0,added0,
+weakened0. T remains exactly entropy_law,entropy_kernel,observation. These
+integration measurements retain source/executable adequacy, E1/E2, actual
+RunJoin, entropy/kernel bridge, witness-independent native OS failure, client
+proof-account adoption, inversion boundary, L1/L2/L3, and endpoint/deployment
+closure obligations. No fact was folded into T or simulator/observer weakened.
+
+Next deliverable: execute the combined 1,000-pair differential on the frozen
+candidate, then the lead-coordinated quiet-window timing gate. Neither ran
+here. No release/adoption or privacy target claim is made. No push.

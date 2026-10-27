@@ -36,6 +36,9 @@ for fixture in ['transfer','withdrawal']:
   for name in ['public.bin','proof.bin']:
    a=(O/'baseline'/f'sample-{coin-100}'/f'{fixture}-{coin}'/name).read_bytes();b=(O/'candidate'/f'sample-{coin-100}'/f'{fixture}-{coin}'/name).read_bytes()
    files[name]=dict(byte_identical=a==b,baseline_sha256=hashlib.sha256(a).hexdigest(),candidate_sha256=hashlib.sha256(b).hexdigest(),baseline_bytes=len(a),candidate_bytes=len(b))
-  comparisons.append(dict(fixture=fixture,coin=coin,files=files))
-r=dict(baseline_first=True,same_host_session=True,rows=rows,timing=timing,comparisons=comparisons,passed=all(t['under_15_seconds'] and t['within_10_percent'] for t in timing) and all(f['byte_identical'] for c in comparisons for f in c['files'].values()),scope='Fixture medians only; no universal cost or side-channel theorem')
+  paths={who:O/who/f'sample-{coin-100}'/f'{fixture}-{coin}' for who in ['baseline','candidate']}
+  records={who:{k:v for k,v in json.loads((path/'result.json').read_text()).items() if k!='seconds'} for who,path in paths.items()}
+  ledgers={who:{str(p.relative_to(path/'ledger')):p.read_bytes() for p in (path/'ledger').rglob('*') if p.is_file()} for who,path in paths.items()}
+  comparisons.append(dict(fixture=fixture,coin=coin,files=files,deterministic_records_equal=records['baseline']==records['candidate'],ledger_bytes_equal=ledgers['baseline']==ledgers['candidate']))
+r=dict(baseline_first=True,same_host_session=True,rows=rows,timing=timing,comparisons=comparisons,passed=all(t['under_15_seconds'] and t['within_10_percent'] for t in timing) and all(f['byte_identical'] for c in comparisons for f in c['files'].values()) and all(c['deterministic_records_equal'] and c['ledger_bytes_equal'] for c in comparisons),scope='Fixture medians only; no universal cost or side-channel theorem')
 (O/'comparison.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({k:v for k,v in r.items() if k!='comparisons'},indent=2));sys.exit(0 if r['passed'] else 3)

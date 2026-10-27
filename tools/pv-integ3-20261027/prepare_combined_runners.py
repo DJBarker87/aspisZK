@@ -20,7 +20,10 @@ for side,pin in [('baseline',BASE),('candidate',REV)]:
  assert (H/side/'source/Cargo.toml').exists()
 for rel,source in payload.items():
  p=H/rel;assert not p.exists(),p;p.write_text(source)
-(H/'quiet-preflight.py').write_bytes((Path('/home/dombarker/project-offloads/codex-pv-op223-20261027/quiet-preflight.py')).read_bytes())
+quiet=(Path('/home/dombarker/project-offloads/codex-pv-op223-20261027/quiet-preflight.py')).read_bytes()
+assert not (H/'quiet-preflight.py').exists()
+(H/'quiet-preflight.py').write_bytes(quiet)
+payload['quiet-preflight.py']=quiet.decode()
 (H/'runner-pins.json').write_text(json.dumps({rel:hashlib.sha256(source.encode()).hexdigest() for rel,source in payload.items()},indent=2)+'\\n')
 print('Prepared only; no build, differential or timing launched')
 '''.replace('ROOT',repr(D+'/combined')).replace('PAYLOAD',repr(payload)).replace('BASE',repr(subprocess.check_output(['git','rev-parse','c57a344726'],text=True).strip())).replace('REV',repr(rev))
