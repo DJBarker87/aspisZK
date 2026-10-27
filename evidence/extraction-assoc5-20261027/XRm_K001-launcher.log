@@ -1,0 +1,55 @@
+{"attempt": "XRm_K001", "exit_status": 1, "wall_seconds": 28.95894257701002, "peak_rss_kib": "533268", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling version_check v0.9.5
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `her
+...
+] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+   Compiling xrm-boundary-iteration v0.1.0 (/home/dombarker/project-offloads/codex-cx-extraction-assoc5-20261027/XRm_crate)
+error[E0432]: unresolved import `aspis_r1_cost_probe::candidate`
+ --> XRm_harnesses.rs:4:27
+  |
+4 | use aspis_r1_cost_probe::{candidate, verifier::{self,Prepared,Accumulator},transport::Variant};
+  |                           ^^^^^^^^^ no `candidate` in the root
+  |
+  = help: consider importing one of these modules instead:
+          crate::XRm_harnesses::verifier::candidate
+          aspis_r1_cost_probe::verifier::candidate
+
+warning: unused imports: `fast_pairing` and `field`
+ --> XRm_lib.rs:3:27
+  |
+3 | use aspis_r1_cost_probe::{fast_pairing,weights::{field,powers}};
+  |                           ^^^^^^^^^^^^           ^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `xrm-boundary-iteration` (lib) due to 1 previous error; 1 warning emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r0ffcac3d7608466f93c6eb917d914bf4.scope; invocation ID: 8fd3206fdf224aaeb551be2c4ae15e64

@@ -6,13 +6,19 @@ theorem add (a b out : U32) (ha : a<P) (hb : b<P)
     (run : XRk_Field.field.M31.add a b=ok out) : out<P := by
   unfold XRk_Field.field.M31.add XRk_Field.field.P at run
   simp only [lift,bind_tc_ok] at run
-  split at run <;> scalar_tac
+  split at run <;> cases Result.ok.inj run <;> unfold P at * <;> scalar_tac_preprocess <;>
+    simp only [U32.wrapping_add_val_eq,U32.wrapping_sub_val_eq,
+      UScalar.size_def,UScalarTy.U32_numBits_eq,
+      show (2147483647#u32).val=2147483647 from rfl] at * <;> omega
 
 theorem sub (a b out : U32) (ha : a<P) (hb : b<P)
     (run : XRk_Field.field.M31.sub a b=ok out) : out<P := by
   unfold XRk_Field.field.M31.sub XRk_Field.field.P at run
   simp only [lift,bind_tc_ok] at run
-  split at run <;> scalar_tac
+  split at run <;> cases Result.ok.inj run <;> unfold P at * <;> scalar_tac_preprocess <;>
+    simp only [U32.wrapping_add_val_eq,U32.wrapping_sub_val_eq,
+      UScalar.size_def,UScalarTy.U32_numBits_eq,
+      show (2147483647#u32).val=2147483647 from rfl] at * <;> omega
 #print axioms add
 #print axioms sub
 end XRm_M31Canonical
