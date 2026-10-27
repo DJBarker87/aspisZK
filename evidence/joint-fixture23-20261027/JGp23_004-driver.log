@@ -1,0 +1,38 @@
+{"attempt": "JGp23_004", "exit_status": 1, "wall_seconds": 6.7091970150358975, "peak_rss_kib": "6187700", "swaps": "0", "print_axioms": ["'AspisR1.JGp_Allocation.allocated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGp_Allocation.lean:23:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (14759 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGp_Allocation.allocated' depends on axioms: [propext, sorryAx, Classical.choice, 
+...
+JGp_Allocation.lean:23:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (14759 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGp_Allocation.allocated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+def AspisR1.OraclePortStdAllocation.filled : {T : Type} →
+  Usize → T → Bool → Result (Except OraclePortStdAllocation.AllocationError (alloc.vec.Vec T)) :=
+fun {T} n value reserved =>
+  if reserved = true then do
+    let v ← OraclePortCkptAbi2Vec.appendModel (alloc.vec.Vec.new T) (List.replicate (↑n) value)
+    ok (Except.ok v)
+  else ok (Except.error OraclePortStdAllocation.AllocationError.allocation)
+
+Running as unit: run-r0716414bb66f442b9b9b26f937aee28d.scope; invocation ID: 6d0abf23dbc44d398c01996aa71e01a7
+

@@ -1,0 +1,46 @@
+{"attempt": "JGp23_003", "exit_status": 1, "wall_seconds": 36.48011076700641, "peak_rss_kib": "6408748", "swaps": "0", "print_axioms": ["'AspisR1.JGp_PrepareLayout.logical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGp_PrepareLayout.y1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGp_PrepareLayout.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGp_PrepareLayout.offsetY1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGp_PrepareLayout.inactive' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+JGp_PrepareLayout.lean:16:19: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+JGp_PrepareLayout.lean:17:14: error(lean.unknownIdentifier): Unknown constant `slots`
+'AspisR1.JGp_PrepareLayout.logical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGp_PrepareLayout.y1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGp_PrepareLayout.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGp_PrepareLayout.offsetY1' 
+...
+
+                        (ite_cond_eq_true
+                          (ok
+                            (Except.ok
+                              ⟨List.replicate (↑n) value, OraclePortStdAllocation.filledSpec._proof_2 n value⟩))
+                          (ok (Except.error OraclePortStdAllocation.AllocationError.allocation)) (eq_self true))))
+                    fun out =>
+                    match out with
+                    | Except.error a => ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)
+                    | Except.ok v => ok (core.result.Result.Ok v))
+                  (bind_tc_ok
+                    (Except.ok ⟨List.replicate (↑n) value, OraclePortStdAllocation.filledSpec._proof_2 n value⟩)
+                    fun y =>
+                    match y with
+                    | Except.error a => ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)
+                    | Except.ok v => ok (core.result.Result.Ok v))))
+              (ite_cond_eq_true
+                (ok
+                  (core.result.Result.Ok
+                    ⟨List.replicate (↑n) value,
+                      Eq.mpr (id (congrFun' (congrArg LE.le List.length_replicate) Usize.max))
+                        (CheckpointBytes3Allocation.filled_exact._proof_1 n)⟩))
+                (ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)) (eq_self true)))
+            (eq_self
+              (ok
+                (core.result.Result.Ok
+                  ⟨List.replicate (↑n) value, OraclePortStdAllocation.filledSpec._proof_2 n value⟩)))))
+    (Eq.refl reserved)
+def Aeneas.Std.alloc.vec.from_elem : {T : Type} → core.clone.Clone T → T → Usize → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst x n => do
+  let l ← List.clone cloneInst.clone (List.replicate (↑n) x)
+  ok ⟨↑l, ⋯⟩
+
+Running as unit: run-ra42263b7d2834a84ac63e332480981ea.scope; invocation ID: c1d4bd4af4e442f993a47813e7dde67a

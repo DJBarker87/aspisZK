@@ -1,0 +1,68 @@
+'AspisR1.JGp_BatchInput.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1CurrentCaller.Tx1Reachability.afterPrepare : Ops →
+  {H : Type} →
+    aspis_core.digest.Digest32 H →
+      Slice U8 →
+        Slice U8 →
+          Usize →
+            H →
+              Option (verifier.Phase → Result Unit) →
+                verifier.Prepared →
+                  Std.Array aspis_core.field.wide_exact.WideExact 29#usize →
+                    Result (core.result.Result (alloc.vec.Vec U8) verifier.Error) :=
+fun ops {H} aspis_coredigestDigest32Inst public_bytes proof k hash obs val g1 => do
+  let r3 ← ops.op20 transport.Variant.S2
+  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+  match cf3 with
+    | core.ops.control_flow.ControlFlow.Continue val1 => do
+      verifier.mark obs verifier.Phase.Prepare
+      let i ← compact.OFF_FOLDED_ROOT ops
+      let i1 ← compact.OFF_ROUND1 ops
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof { start := i, «end» := i1 }
+      let r4 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+      let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4
+      let r5 ← ops.op6 aspis_coredigestDigest32Inst proof val folded_root 0#usize hash
+      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+      match cf4 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          verifier.mark obs (verifier.Phase.Merkle 0#usize)
+          let r6 ← ops.op19 val.queries 0#usize k
+          let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+          match cf5 with
+            | core.ops.control_flow.ControlFlow.Continue val2 =>
+              have s1 := val1.weights.deref;
+              do
+              let r7 ← ops.op18 s1
+              let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r7
+              match cf6 with
+                | core.ops.control_flow.ControlFlow.Continue val3 => do
+                  let r8 ← ops.op7 proof val val1 g1 obs val2 val3 k
+                  let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r8
+                  match cf7 with
+                    | core.ops.control_flow.ControlFlow.Continue val4 =>
+                      let (a, pending) := val4
+                      do
+                      let (s2, deref_mut_back) ← lift a.weights.deref_mut
+                      let s3 ← ops.op17 pending s2
+                      have v : alloc.vec.Vec aspis_core.field.QM31 := deref_mut_back s3
+                      let bytes ←
+                        ops.op16 aspis_coredigestDigest32Inst val
+                            { weights := v, rhs := a.rhs, power := a.power, next := a.next } proof public_bytes hash
+                      verifier.mark obs verifier.Phase.CheckpointWrite
+                      ok (core.result.Result.Ok bytes)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame verifier.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+        (core.convert.FromSame verifier.Error) residual

@@ -1,0 +1,92 @@
+JGp_PreparedQueries.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (gamma, t1).2
+in the target expression
+  PreparedModel.scalar closedHashBoundaries.sampling D0 t1 28#u8 inactive.to_slice false = ok (kappa, t2)
+
+H : Type
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H
+hash : H
+sem : r1_semantic.Verified H
+view : verifier.View
+out : verifier.Prepared
+input scratch : Std.Array aspis_core.field.WideExact 29#usize
+state : sem.transcript.state = encodeState JFu_Q26Source.ratchet
+variant : view.variant = transport.Variant.S2
+y1 : view.y1 = JGg_Opening27.payload
+inactiveInput :
+  AspisR1CurrentCaller.OriginalSerializerInstallation.sourceBytes view.inactive = ok (Array.repeat 32#usize 0#u8)
+round0 : view.round0 = JGg_Opening29.payload
+folded : view.folded_root = some JGe_View.folded
+round1 : ↑JGe_View.folded ++ ↑view.round1 = ↑JGg_Opening30.payload
+finalMessage : view.final_message = JGg_Opening31.payload
+run :
+  PreparedScratchModel.prepare closedHashBoundaries
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) sem view hash input =
+    ok (core.result.Result.Ok out, scratch)
+D0 : aspis_core.Digest32 H := retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)
+reached : PreparedScratchReachability.Reachable closedHashBoundaries D0 sem view hash out scratch
+t1 t2 t3 t4 t5 t6 : transcript.Transcript H
+inactive root : Std.Array U8 32#usize
+bytes1 bytes2 : alloc.vec.Vec U8
+gamma kappa a0 a1 : aspis_core.field.WideExact
+rho : aspis_core.field.QM31
+queries : Std.Array U32 22#usize
+claim : aspis_core.field.WideExact
+serialized : closedHashBoundaries.sampling.toBytes view.inactive = ok inactive
+kappaCall : PreparedModel.scalar closedHashBoundaries.sampling D0 t1 28#u8 inactive.to_slice false = ok (kappa, t2)
+a0Call : PreparedModel.scalar closedHashBoundaries.sampling D0 t2 29#u8 view.round0 false = ok (a0, t3)
+rootCall : core.option.Option.unwrap view.folded_root = ok root
+first :
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 256#usize) root.to_slice =
+    ok bytes1
+second : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 view.round1 = ok bytes2
+a1Call : PreparedModel.scalar closedHashBoundaries.sampling D0 t3 30#u8 bytes2.deref false = ok (a1, t4)
+query : closedHashBoundaries.sampling.queries D0 t4 31#u8 view.final_message = ok (core.result.Result.Ok queries, t5)
+rhoCall :
+  PreparedModel.scalar_k closedHashBoundaries.sampling D0 t5 32#u8 PreparedScratchReachability.emptyPayload =
+    ok (rho, t6)
+powers : closedHashBoundaries.powers 29#usize gamma = ok scratch
+claimed : closedHashBoundaries.claim D0 sem view.y1 view.inactive scratch kappa = ok (core.result.Result.Ok claim)
+output :
+  out = PreparedScratchReachability.output sem view gamma kappa (Array.make 2#usize [a0, a1] ⋯) rho queries claim t6
+g k b0 b1 : aspis_core.field.WideExact
+r : aspis_core.field.QM31
+gc :
+  PreparedModel.scalar closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening27.before, hash := hash } 27#u8 JGg_Opening27.payload true =
+    ok (g, { state := encodeState JGg_Opening27.next0, hash := hash })
+kc :
+  PreparedModel.scalar closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening28.before, hash := hash } 28#u8 JGg_Opening28.payload false =
+    ok (k, { state := encodeState JGg_Opening28.next0, hash := hash })
+b0c :
+  PreparedModel.scalar closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening29.before, hash := hash } 29#u8 JGg_Opening29.payload false =
+    ok (b0, { state := encodeState JGg_Opening29.next0, hash := hash })
+b1c :
+  PreparedModel.scalar closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening30.before, hash := hash } 30#u8 JGg_Opening30.payload false =
+    ok (b1, { state := encodeState JGg_Opening30.next0, hash := hash })
+rc :
+  PreparedModel.scalar_k closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening32.before, hash := hash } 32#u8 JGg_Opening32.payload =
+    ok (r, { state := encodeState JGg_Opening32.next0, hash := hash })
+seedCall :
+  have D0 := retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D);
+  transcript.Transcript.new D0 hash sem.transcript.state view.variant =
+    ok { state := encodeState JGe_OpeningInit.state, hash := hash }
+seed :
+  transcript.Transcript.new D0 hash sem.transcript.state view.variant =
+    ok { state := encodeState JGe_OpeningInit.state, hash := hash }
+gammaCall :
+  PreparedModel.scalar closedHashBoundaries.sampling D0 { state := encodeState JGe_OpeningInit.state, hash := hash }
+      27#u8 JGg_Opening27.payload true =
+    ok (gamma, t1)
+et1 : (gamma, t1).2 = (g, { state := encodeState JGg_Opening27.next0, hash := hash }).2
+⊢ out.queries = JFq_Queries.value
+'AspisR1.JGp_PreparedQueries.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

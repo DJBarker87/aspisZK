@@ -1,0 +1,52 @@
+{"attempt": "JGp23_060", "exit_status": 1, "wall_seconds": 6.887819882016629, "peak_rss_kib": "5857288", "swaps": "0", "print_axioms": ["'AspisR1.JGp_QueryNumeric.identified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGp_QueryNumeric.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGp_QueryNumeric.lean:30:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => List.take 22 ↑s3.accepted = ↑s3.accepted
+Error: Application type mismatch: The argument
+  s3.accepted
+has type
+  Std.Array U32 22#usize
+but is expected to have type
+  { l // l.length = _a }
+in the application
+  ↑s3.accepted
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that '
+...
+↑s3.accepted
+⊢ s3.accepted = JFq_Queries.value
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGp_QueryNumeric.lean:47:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGp_QueryNumeric.lean:37:68: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish, ̲count,
+        AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_COUNT,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGp_QueryNumeric.identified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGp_QueryNumeric.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0db9694034bf495ca42260f6f2c3b43c.scope; invocation ID: eea6a0fc9fcb4bafa8130e3fae0c8862
+

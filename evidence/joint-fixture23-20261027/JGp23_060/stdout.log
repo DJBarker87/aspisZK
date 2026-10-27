@@ -1,0 +1,164 @@
+JGp_QueryNumeric.lean:30:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => List.take 22 ↑s3.accepted = ↑s3.accepted
+Error: Application type mismatch: The argument
+  s3.accepted
+has type
+  Std.Array U32 22#usize
+but is expected to have type
+  { l // l.length = _a }
+in the application
+  ↑s3.accepted
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+q : Std.Array U32 22#usize
+run :
+  Query31ConcreteMaterializedSchedule.actualConcreteDecode Query31ConcreteDriverTraceFacts.sourceDefaultState
+      JGg_QueryDecode.blocks JGg_QueryDecode.advances =
+    ok (core.result.Result.Ok (q, encodeState JGg_Opening31.next2))
+s1 : Query31ModelScanCall.QueryScan
+call1 :
+  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords
+      Query31ConcreteDriverTraceFacts.sourceDefaultState (encodeState JGg_Opening31.block0) =
+    ok (false, s1)
+valid1 : validState s1
+state1 : q22StateOf s1 = { accepted := [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859], draws := 8 }
+s2 : Query31ModelScanCall.QueryScan
+call2 :
+  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords s1
+      (encodeState JGg_Opening31.block1) =
+    ok (false, s2)
+valid2 : validState s2
+state2 :
+  q22StateOf s2 =
+    {
+      accepted :=
+        [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859, 193093, 159813, 132355, 218094, 178080, 149624,
+          166165, 42158],
+      draws := 16 }
+s3 : Query31ModelScanCall.QueryScan
+call3 :
+  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords s2
+      (encodeState JGg_Opening31.block2) =
+    ok (true, s3)
+valid3 : validState s3
+state3 :
+  q22StateOf s3 =
+    {
+      accepted :=
+        [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859, 193093, 159813, 132355, 218094, 178080, 149624,
+          166165, 42158, 179622, 21248, 63860, 55377, 185637, 14297],
+      draws := 22 }
+count : s3.accepted_len = 22#usize
+hp :
+  List.map (fun x => ↑x) (List.take ↑22#usize ↑s3.accepted) =
+    {
+        accepted :=
+          [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859, 193093, 159813, 132355, 218094, 178080, 149624,
+            166165, 42158, 179622, 21248, 63860, 55377, 185637, 14297],
+        draws := 22 }.accepted
+⊢ List.take 22 ↑s3.accepted = ↑s3.accepted
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGp_QueryNumeric.lean:31:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.take 22 ↑s3.accepted
+in the target expression
+  List.map (fun x => ↑x) (List.take ↑22#usize ↑s3.accepted) =
+    {
+        accepted :=
+          [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859, 193093, 159813, 132355, 218094, 178080, 149624,
+            166165, 42158, 179622, 21248, 63860, 55377, 185637, 14297],
+        draws := 22 }.accepted
+
+q : Std.Array U32 22#usize
+run :
+  Query31ConcreteMaterializedSchedule.actualConcreteDecode Query31ConcreteDriverTraceFacts.sourceDefaultState
+      JGg_QueryDecode.blocks JGg_QueryDecode.advances =
+    ok (core.result.Result.Ok (q, encodeState JGg_Opening31.next2))
+s1 : Query31ModelScanCall.QueryScan
+call1 :
+  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords
+      Query31ConcreteDriverTraceFacts.sourceDefaultState (encodeState JGg_Opening31.block0) =
+    ok (false, s1)
+valid1 : validState s1
+state1 : q22StateOf s1 = { accepted := [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859], draws := 8 }
+s2 : Query31ModelScanCall.QueryScan
+call2 :
+  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords s1
+      (encodeState JGg_Opening31.block1) =
+    ok (false, s2)
+valid2 : validState s2
+state2 :
+  q22StateOf s2 =
+    {
+      accepted :=
+        [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859, 193093, 159813, 132355, 218094, 178080, 149624,
+          166165, 42158],
+      draws := 16 }
+s3 : Query31ModelScanCall.QueryScan
+call3 :
+  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords s2
+      (encodeState JGg_Opening31.block2) =
+    ok (true, s3)
+valid3 : validState s3
+state3 :
+  q22StateOf s3 =
+    {
+      accepted :=
+        [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859, 193093, 159813, 132355, 218094, 178080, 149624,
+          166165, 42158, 179622, 21248, 63860, 55377, 185637, 14297],
+      draws := 22 }
+count : s3.accepted_len = 22#usize
+hp :
+  List.map (fun x => ↑x) (List.take ↑22#usize ↑s3.accepted) =
+    {
+        accepted :=
+          [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859, 193093, 159813, 132355, 218094, 178080, 149624,
+            166165, 42158, 179622, 21248, 63860, 55377, 185637, 14297],
+        draws := 22 }.accepted
+take : List.take 22 ↑s3.accepted = ↑s3.accepted
+⊢ s3.accepted = JFq_Queries.value
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGp_QueryNumeric.lean:47:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGp_QueryNumeric.lean:37:68: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish, ̲count,
+        AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_COUNT,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGp_QueryNumeric.identified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGp_QueryNumeric.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,47 @@
+{"attempt": "JGp23_014", "exit_status": 1, "wall_seconds": 6.136506647977512, "peak_rss_kib": "6192292", "swaps": "0", "print_axioms": ["'AspisR1.JGp_Prepare.total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGp_Prepare.inhabited' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGp_Prepare.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGp_Prepare.lean:50:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.slice.Slice.split_at_mut JGn_PrepareBuffer.buffer 13831#usize
+in the target expression
+  (let (s, deref_mut_back) := (⟨↑JGp_Allocation.buffer, ⋯⟩, fun s => ⟨↑s, ⋯⟩)
+    do
+    let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s 13831#usize
+    let i3 ← compact.OFF_SEMANTIC (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+    let i4 ← compact.OFF_Y1 (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+    let s1 ←
+      core.slice.index.Slice.index (co
+...
+        | core.ops.control_flow.ControlFlow.Break residual => do
+                let r7 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r7, input)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r7 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (verifier.Error.Insts.CoreConvertFromCodecError
+                    (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo))
+                  residual
+            ok (r7, input)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r7 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (verifier.Error.Insts.CoreConvertFromCodecError
+                (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo))
+              residual
+        ok (r7, input)) =
+    ok (core.result.Result.Ok out, scratch)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGp_Prepare.inhabited' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rcb2ab392599a4547b1f979ea7f5ee676.scope; invocation ID: f73c4a3e751840e19a569fedfe1a9082

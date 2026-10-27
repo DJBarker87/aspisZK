@@ -1,0 +1,20 @@
+JGp_Allocation.lean:23:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (14759 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGp_Allocation.allocated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+def AspisR1.OraclePortStdAllocation.filled : {T : Type} →
+  Usize → T → Bool → Result (Except OraclePortStdAllocation.AllocationError (alloc.vec.Vec T)) :=
+fun {T} n value reserved =>
+  if reserved = true then do
+    let v ← OraclePortCkptAbi2Vec.appendModel (alloc.vec.Vec.new T) (List.replicate (↑n) value)
+    ok (Except.ok v)
+  else ok (Except.error OraclePortStdAllocation.AllocationError.allocation)

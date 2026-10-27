@@ -1,0 +1,100 @@
+JGp_PrepareLayout.lean:16:19: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+JGp_PrepareLayout.lean:17:14: error(lean.unknownIdentifier): Unknown constant `slots`
+'AspisR1.JGp_PrepareLayout.logical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGp_PrepareLayout.y1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGp_PrepareLayout.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGp_PrepareLayout.offsetY1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGp_PrepareLayout.inactive' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.CheckpointBytes3Allocation.filled_exact : ∀ (reserved : Bool) (n : Usize)
+  (value : AspisR1Stage2.aspis_core.field.QM31),
+  CheckpointBytes3Allocation.filled reserved n value =
+    if reserved = true then ok (core.result.Result.Ok ⟨List.replicate (↑n) value, ⋯⟩)
+    else ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation) :=
+fun reserved n value =>
+  Bool.casesOn (motive := fun t =>
+    reserved = t →
+      CheckpointBytes3Allocation.filled reserved n value =
+        if reserved = true then
+          ok
+            (core.result.Result.Ok
+              ⟨List.replicate (↑n) value,
+                Eq.mpr (id (congrFun' (congrArg LE.le List.length_replicate) Usize.max))
+                  (CheckpointBytes3Allocation.filled_exact._proof_1 n)⟩)
+        else ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation))
+    reserved
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Bind.bind
+                      (Eq.trans (OraclePortStdAllocation.filled_exact n value false)
+                        (ite_cond_eq_false
+                          (ok
+                            (Except.ok
+                              ⟨List.replicate (↑n) value, OraclePortStdAllocation.filledSpec._proof_2 n value⟩))
+                          (ok (Except.error OraclePortStdAllocation.AllocationError.allocation)) Bool.false_eq_true)))
+                    fun out =>
+                    match out with
+                    | Except.error a => ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)
+                    | Except.ok v => ok (core.result.Result.Ok v))
+                  (bind_tc_ok (Except.error OraclePortStdAllocation.AllocationError.allocation) fun y =>
+                    match y with
+                    | Except.error a => ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)
+                    | Except.ok v => ok (core.result.Result.Ok v))))
+              (ite_cond_eq_false
+                (ok
+                  (core.result.Result.Ok
+                    ⟨List.replicate (↑n) value,
+                      Eq.mpr (id (congrFun' (congrArg LE.le List.length_replicate) Usize.max))
+                        (CheckpointBytes3Allocation.filled_exact._proof_1 n)⟩))
+                (ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)) Bool.false_eq_true))
+            (eq_self (ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)))))
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Bind.bind
+                      (Eq.trans (OraclePortStdAllocation.filled_exact n value true)
+                        (ite_cond_eq_true
+                          (ok
+                            (Except.ok
+                              ⟨List.replicate (↑n) value, OraclePortStdAllocation.filledSpec._proof_2 n value⟩))
+                          (ok (Except.error OraclePortStdAllocation.AllocationError.allocation)) (eq_self true))))
+                    fun out =>
+                    match out with
+                    | Except.error a => ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)
+                    | Except.ok v => ok (core.result.Result.Ok v))
+                  (bind_tc_ok
+                    (Except.ok ⟨List.replicate (↑n) value, OraclePortStdAllocation.filledSpec._proof_2 n value⟩)
+                    fun y =>
+                    match y with
+                    | Except.error a => ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)
+                    | Except.ok v => ok (core.result.Result.Ok v))))
+              (ite_cond_eq_true
+                (ok
+                  (core.result.Result.Ok
+                    ⟨List.replicate (↑n) value,
+                      Eq.mpr (id (congrFun' (congrArg LE.le List.length_replicate) Usize.max))
+                        (CheckpointBytes3Allocation.filled_exact._proof_1 n)⟩))
+                (ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)) (eq_self true)))
+            (eq_self
+              (ok
+                (core.result.Result.Ok
+                  ⟨List.replicate (↑n) value, OraclePortStdAllocation.filledSpec._proof_2 n value⟩)))))
+    (Eq.refl reserved)
+def Aeneas.Std.alloc.vec.from_elem : {T : Type} → core.clone.Clone T → T → Usize → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst x n => do
+  let l ← List.clone cloneInst.clone (List.replicate (↑n) x)
+  ok ⟨↑l, ⋯⟩

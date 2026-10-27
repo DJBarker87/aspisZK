@@ -1,0 +1,42 @@
+{"attempt": "JGp23_021", "exit_status": 1, "wall_seconds": 5.706992173043545, "peak_rss_kib": "6181188", "swaps": "0", "print_axioms": ["'AspisR1.JGp_TX1Initial.zeroCall' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGp_TX1Initial.inhabited' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGp_TX1Initial.zeroCall' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGp_TX1Initial.lean:38:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.candidate.tx1 (WAdm_Execution.actual ?ops true ?query ?geo ?B ?std) ?D ?semantic ?pub JFx_NativeBytes.proof
+    10#usize ?hash none
+in the target expression
+  verifier.candidate.tx1 (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) (toCurrentPublic JFs_PublicSerialization.value)
+      JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize hash none =
+    Tx1Reachability.afterPrepare (JGp_PrepareLayout.installed 
+...
+aspis_core.field.wide_exact.WideExact 29#usize
+prepare :
+  verifier.candidate.prepare (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) (toCurrentPublic JFs_PublicSerialization.value)
+      JFx_NativeBytes.proof hash none (Array.repeat 29#usize zero) =
+    ok (core.result.Result.Ok p, scratch)
+initial : Tx1Q_Carriers.C.A
+pending : Tx1Q_Carriers.C.B
+init : Tx1Q_PrefixInstall.initial true transport.Variant.S2 = ok (core.result.Result.Ok initial)
+pend : Tx1Q_PrefixInstall.newPending true initial.weights.deref = ok (core.result.Result.Ok pending)
+⊢ verifier.candidate.tx1 (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) (toCurrentPublic JFs_PublicSerialization.value)
+      JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize hash none =
+    Tx1Reachability.afterPrepare (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize
+      hash none p scratch
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGp_TX1Initial.inhabited' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rdc10e0267a424e86aa26bda337dc2487.scope; invocation ID: db808b266d374026b94f14c95c458763
+
