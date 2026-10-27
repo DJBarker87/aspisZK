@@ -2989,3 +2989,28 @@ review: verified the two endpoint definitions and the equivalence directly.
 Remaining actual P on FJu_Top: native L142, F3Y_G_L142, native L146,
 F3Y_G_L146, L154 (external query budget). Deployed 100-bit target: not yet
 established.
+
+## L142 discharged and stacked, 2026-10-27 (stack1, FJv_)
+
+`AspisR1.FJv_Top.deployed` = FJu_Top.deployed with native L142 and
+F3Y_G_L142 also removed (port of FJs_; global owner obligation is now only
+`FJu_Remaining.Endpoint`, last evaluation = terminal; `FJv_GlobalOwners.
+weaken` from the FJu owners; native Outcome keeps only that semantic
+hypothesis; conclusion unchanged; standard axioms). Lead review: definitions
+read directly.
+
+| Root | Actual antecedent | Deployment-inclusive |
+|---|---|---|
+| ARX_Root.deployed (adopted statement) | 83T/11P/13G | 89T/27P/13G |
+| **FJv_Top.deployed (current proved top)** | **83T/3P/13G** | **89T/19P/13G** |
+| FJv_Deployed.deployed (specialised; NOT adopted, owner decision pending) | 83T/1P/13G | 89T/17P/13G |
+
+Remaining actual P on FJv_Top: native L146 and F3Y_G_L146 (these range over
+the free terminal callback of the configuration binder and cannot be
+removed without specialising the statement), and L154 (the adversary's
+issued-query budget). FJv_Deployed specialises the configuration to
+`IDa_Deployed.deployedConfiguration missing indexError reservation`
+(installed finish, boundaries with terminal := FIq_Terminal.terminal, std;
+the six residual inputs universally quantified with no law) and removes both
+L146 rows; it is booked only if the owner adopts it. Deployed 100-bit
+target: not yet established.
