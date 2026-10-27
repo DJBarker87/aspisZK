@@ -37,3 +37,11 @@ Inherited final part0 arithmetic remains on THAT array. This is the requested
 local part1 meaning, conditional on the explicitly stated enclosing inputs;
 no deployed L142 premise removal is claimed. No obstruction70 is due because
 part1 compiled at10. Next deliverable: successor part2 stages1–6.
+
+Part2 stage1: RegularTrace016 derives the actual three successful regular
+calls on SAME scratch/parts. PairTrace019 exposes that regular call in the
+accepted Pair trace together with the existing shared/inactive/Libra/final
+cuts. Both pass with standard axioms. This new provenance extends the old
+trace; the FJg arithmetic lemmas are imported unchanged. Failed011–015,
+017–018 are retained diagnostics (allocation binder, tuple/bind reduction,
+then explicit existential cut selection); none is counted as a proof.
