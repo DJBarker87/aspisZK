@@ -16,7 +16,8 @@ check is claimed yet. Dependency preflight caught and corrected an Initial /
 Level00 grouping cycle before compilation. The generator now checks its DAG.
 
 The source-graph object inventory is incomplete for the actual cached cohort:
-some checkout imports differ from retained object dependencies. New environment
+the first walker searched only root-level sources and missed nested canonical
+source directories. This did NOT establish any source/object mismatch. New environment
 inventory probes are prepared to enumerate actual loaded module names and
 object sizes, including external modules. They are not yet checked; the original
 RSS curve remains valid. No raw-source graph is silently promoted to a complete

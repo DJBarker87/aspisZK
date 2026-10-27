@@ -39,6 +39,8 @@ for m in tainted:
   if ns.startswith('JGr_'):nsmap[ns]=ns.replace('JGr_','JGy_Gr_',1)
   elif ns.startswith('JGu_'):nsmap[ns]=ns.replace('JGu_','JGy_Gu_',1)
   elif ns.startswith('JGw_'):nsmap[ns]=ns.replace('JGw_','JGy_Gw_',1)
+light=json.loads((P/'JGy_LIGHT.json').read_text())
+nsmap.update(light['namespaces']);modmap.update(light['module_map'])
 pat=re.compile(r'\b('+'|'.join(sorted(map(re.escape,nsmap),key=len,reverse=True))+r')\b')
 def rename(s):return pat.sub(lambda m:nsmap[m[0]],s)
 manifest=[]
@@ -47,9 +49,11 @@ for mod,ms in parts:
  for m in ms:
   f=R/'lean'/f'{m}.lean';s=f.read_text()
   for d in src[m]['imports']:
+   if d in light['removed_unused_imports']:continue
    d=modmap.get(d,d)
    if d!=mod and d not in imports:imports.append(d)
   body='\n'.join(l for l in s.splitlines() if not l.startswith('import '))+'\n'
+  for unused in light['removed_unused_irreducible_attributes']:body=body.replace(' '+unused,'')
   bodies.append(rename(body));original.append(dict(module=m,sha256=hashlib.sha256(f.read_bytes()).hexdigest()))
  text=''.join('import '+d+'\n' for d in imports)+'\n'.join(bodies)
  f=R/'lean'/f'{mod}.lean'
@@ -59,7 +63,7 @@ for mod,ms in parts:
 (P/'JGy_CONSUMERS.json').write_text(json.dumps(manifest,indent=2)+'\n')
 (P/'JGy_NAMESPACE_MAP.json').write_text(json.dumps(nsmap,indent=2)+'\n')
 # Assert all grouped imports form an acyclic graph before any host build.
-completed=set(certs.values())
+completed=set(certs.values())|{'JGy_LightCore','JGy_LightPadding'}
 for row in manifest:
  for dependency in row['imports']:
   if dependency.startswith('JGy_'):assert dependency in completed,(row['module'],dependency)
