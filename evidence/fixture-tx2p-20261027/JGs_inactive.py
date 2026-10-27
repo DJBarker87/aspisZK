@@ -124,7 +124,7 @@ theorem source : FIo_Native.weights.grouped_inactive_pair JGq_PairShape.w JGq_Pa
   rw [variant,bind_tc_ok]
   simp only [ite_true,eq_self,JGq_PairShape.length,lift,bind_tc_ok,width]
   unfold FIo_Native.weights.s2_grouped_inactive_pair
-  rw [coefficients,bind_tc_ok,paired]
+  simp only [coefficients,bind_tc_ok,paired]
 #print axioms source
 ''';out['JGs_Inactive']=s+end
 for mod,s in out.items():
