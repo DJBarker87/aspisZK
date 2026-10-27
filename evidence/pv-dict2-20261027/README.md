@@ -75,3 +75,39 @@ in this allocation. `recheck-summary.json` is the exact pending list and receipt
 index. The final audit imports every successfully rebuilt module and audits all
 reachable PDict declarations and direct-consumer declarations; its explicit
 requested-root omission is in audit-scope.json. It is not a full-manifest replay.
+
+## Final audit and stop
+
+J54897 `R1Z.PV_Dict2_Audit`: exit 0, wall 2.874 s,
+peak RSS 4373276 KiB, swap 0, source revision
+2fbe775160aeb4232ef180d1c7acbf41f5191071. All 4,530 reports are empty or subsets of
+propext / Classical.choice / Quot.sound. Full stdout, retained exact source,
+GNU time and submission/receipt JSON are prefixed 54897. The 6,849 actually
+loaded module objects are pinned in audit-object-bindings.json (zero missing);
+this inventory was taken immediately after the audit with no intervening own
+scope. The audit omits the unfinished ArrayReference244 closure, as recorded
+in audit-scope.json. The two shared-source/cohort discrepancies in
+SOURCE-COHORTS.md remain unresolved; no shared source was written.
+
+Final budget: 60/60 actual Lean compiles, 56 accepted / four rejected cache
+packaging attempts; five uncharged admission refusals. IDs 54600–54663 and
+54897 were consumed without reuse. 54898–54899 remain unused audit-reserved IDs,
+but there is no remaining compile budget. Zero Kani. No ELF mismatch or Lean
+merge conflict occurred. Stop: compile budget exhausted, with 36 queued targets
+unrechecked. No frozen full-manifest replay was run or claimed.
+
+Next deliverable: resolve the PublicPreparation cohort authority with the lead,
+then complete RemainingCommute231_24–39, RemainingCaller231/Values231/Audit231,
+the File/OS-world/owned-copy/tape closure, and ArrayReference244; audit that
+completed closure against the chosen integrated cohort. Use the exact pending
+list in recheck-summary.json. Native coefficient from_fn, File/OS-world and
+Error/Formatter adequacy, actual deployed RunJoin, E1/E2, L1/L2/L3 and the
+proof-account client/release closure remain substantive obligations. No privacy
+endpoint premise was removed, added, weakened, or relabelled as trust. Target
+not yet established.
+
+Rebuildable owned caches were checked for keypair-shaped JSON and cleaned
+separately; cleanup.json records outcomes. All three generated artifact keys
+remain mode 0600 in the owned artifact directories (key-retention.json). No
+fund transfer, authority change, key cleanup, shared launcher edit or shared
+source write occurred.
