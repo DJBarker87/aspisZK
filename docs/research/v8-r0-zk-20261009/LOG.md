@@ -12380,3 +12380,19 @@ route (ii): the copy must return exactly the frozen Result on every input, inclu
 variant, with the three-ELF gate, and the counterexample input becomes an equality theorem. op251
 and op252 are audited for the same pattern. batch2d resumes with 92 attempts. Rows removed outright:
 0. Privacy target not yet established.
+
+## D313 (Stream B) 2026-10-27 18:27 UTC: runjoin20 result; ruling (h4) covers every external module; runjoin21 launched
+
+runjoin20 used its 100-attempt budget (standard axioms; no shipped-code change). It proves the actual
+fixture Parts and bank returns, 57 named block certificates per fixture and target-table
+validation. Still open: identifying the source-produced blocks with the certified rows, then the
+compiler-return equation at the selected index and its successors. Endpoint premises removed 0;
+recount 5 unchanged (400 P / 3 T / 4 C; OPEN 93). Branch pushed (8b9801a9bd).
+
+Its endpoint audit was blocked by the 18 stale library hashes (resolved by ruling (h4)) and by 47
+imports pinned in neither the env-J inventory nor a freeze record: Init, Lean, Std, Batteries and
+Mathlib modules. The lead checked that all 47 are in the coherent privacy replay's external-object
+manifest, which pins 5,673 external objects. The (h4) scope is extended to every external module,
+with hash verification before the first compile. runjoin21 resumes with the audit, the block
+identification and the compiler-return composition (IDs 37000-37099). Rows removed outright: 0.
+Privacy target not yet established.
