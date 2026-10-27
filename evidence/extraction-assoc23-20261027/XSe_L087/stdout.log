@@ -1,0 +1,20 @@
+XSe_generated/XSe_RecordNonvacuity.lean:6:56: error: Tactic `decide` failed for proposition
+  [0#u8, 0#u8, 0#u8, 0#u8, 0#u8].length ≤ Usize.max
+because its `Decidable` instance
+  [0#u8, 0#u8, 0#u8, 0#u8, 0#u8].length.decLe Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match [0#u8, 0#u8, 0#u8, 0#u8, 0#u8].length.ble Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+XSe_generated/XSe_RecordNonvacuity.lean:9:71: error: Tactic `rfl` failed: The left-hand side
+  r1_wire.parse_record 0#u8 header
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok empty)
+
+⊢ r1_wire.parse_record 0#u8 header = ok (core.result.Result.Ok empty)
+'XSe_RecordNonvacuity.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XSe_RecordNonvacuity.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

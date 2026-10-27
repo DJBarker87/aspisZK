@@ -1,0 +1,11 @@
+import XSc_RecordByteLength
+import XSc_RecordFieldGeneral
+import XSc_WordTransport
+#print Aeneas.Std.Slice.index_usize
+#check Aeneas.Std.Slice.index_usize_spec
+#print Aeneas.Std.Slice.len
+#check List.take_succ_cons
+#check List.drop_eq_getElem_cons
+#check List.getElem_cons_drop
+#check List.getElem?_eq_getElem
+#check List.take_eq_iff

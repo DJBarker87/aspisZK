@@ -1,0 +1,63 @@
+XSe_generated/XSe_HybridCanonical.lean:32:17: error(lean.unknownIdentifier): Unknown identifier `XSe_PrepareVariant.source`
+XSe_generated/XSe_HybridCanonical.lean:25:38: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+physical proof : Slice U8
+split : Usize
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+saved : alloc.vec.Vec U8
+run : XRz_HybridTx1.tx1 XRz_HybridSampler.adopted D pub physical proof split hash obs = ok (core.result.Result.Ok saved)
+left✝⁷ : split = compact.SPLIT
+shape : transport.Variant
+zero : aspis_core.field.wide_exact.WideExact
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+initial : verifier.Accumulator
+root : Std.Array U8 32#usize
+geo : verifier.QueryGeometry
+pending0 : verifier.BatchedWeights
+a : verifier.Accumulator
+pending : verifier.BatchedWeights
+slice : Slice aspis_core.field.QM31
+restore : Slice aspis_core.field.QM31 → alloc.vec.Vec aspis_core.field.QM31
+finished : Slice aspis_core.field.QM31
+left✝⁶ : verifier.candidate.parse_shape proof = ok (core.result.Result.Ok shape)
+left✝⁵ : verifier.candidate.canonical_scan proof = ok (core.result.Result.Ok ())
+left✝⁴ : aspis_core.field.wide_exact.WideExact.ZERO = ok zero
+hprepare :
+  XRz_HybridPrepare.prepare XRz_HybridSampler.adopted D pub proof hash obs (Array.repeat 29#usize zero) =
+    ok (core.result.Result.Ok p, g)
+hinit : verifier.Accumulator.new transport.Variant.S2 = ok (core.result.Result.Ok initial)
+left✝³ : verifier.candidate.batch_merkle D proof p root 0#usize hash = ok (core.result.Result.Ok ())
+left✝² : verifier.QueryGeometry.for_range p.queries 0#usize split = ok (core.result.Result.Ok geo)
+hnew : verifier.BatchedWeights.new initial.weights.deref = ok (core.result.Result.Ok pending0)
+hquery :
+  verifier.candidate.query_loop proof p initial g obs geo pending0 split = ok (core.result.Result.Ok (a, pending))
+left✝¹ : lift a.weights.deref_mut = ok (slice, restore)
+left✝ : pending.finish slice = ok finished
+right✝ :
+  verifier.checkpoint D p { weights := restore finished, rhs := a.rhs, power := a.power, next := a.next } proof physical
+      hash =
+    ok saved
+semantic y1 : Slice U8
+v : verifier.View
+sem : r1_semantic.Verified H
+hview : verifier.candidate.wide_view proof semantic y1 = ok (core.result.Result.Ok v)
+hprepared :
+  XRz_HybridPrepared.prepared XRz_HybridSampler.adopted D sem v hash (Array.repeat 29#usize zero) =
+    ok (core.result.Result.Ok p, g)
+rho : XRp_PowersQAdd.CanonicalQ p.rho
+⊢ ∃ p g initial a geo pending0 pending,
+    p.variant = transport.Variant.S2 ∧
+      XRp_PowersQAdd.CanonicalQ p.rho ∧
+        verifier.Accumulator.new transport.Variant.S2 = ok (core.result.Result.Ok initial) ∧
+          verifier.BatchedWeights.new initial.weights.deref = ok (core.result.Result.Ok pending0) ∧
+            verifier.candidate.query_loop proof p initial g obs geo pending0 split =
+                ok (core.result.Result.Ok (a, pending)) ∧
+              ∀ (a : verifier.Accumulator) (pending : verifier.BatchedWeights),
+                XSc_QueryPath.Reached proof p g obs geo split (core.result.Result.Ok (initial, pending0))
+                    (core.result.Result.Ok (a, pending)) →
+                  XRp_PowersQAdd.CanonicalQ a.power
+'XSe_HybridCanonical.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

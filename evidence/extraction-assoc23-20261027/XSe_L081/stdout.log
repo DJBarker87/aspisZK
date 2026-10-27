@@ -1,0 +1,71 @@
+XSe_generated/XSe_BasisOuter.lean:28:39: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+m node : aspis_core.field.M31
+width n : Usize
+basis out : Basis
+canonical : Canonical basis
+positive : 0 < ↑n
+run :
+  loop
+      (fun x =>
+        match x with
+        | (node1, basis1, n1) => verifier.accumulate_batched_with_node_loop0.body m width node1 basis1 n1)
+      (node, basis, n) =
+    ok out
+v : aspis_core.field.M31
+b : Basis
+k : Usize
+hc : Canonical b ∧ 0 < ↑k
+active : k < width
+b1 : Std.Array aspis_core.field.M31 256#usize
+hrows : verifier.accumulate_batched_with_node_loop0_loop0 { start := 0#usize, «end» := k } v b k = ok b1
+square : XRn_Join_Field.field.M31
+left✝² : aspis_core.field.M31.mul v v = ok square
+twice : XRn_Join_Field.field.M31
+left✝¹ : aspis_core.field.M31.double square = ok twice
+v1 : XRn_Join_Field.field.M31
+left✝ : aspis_core.field.M31.sub twice m = ok v1
+k1 : UScalar UScalarTy.Usize
+hdouble : k * 2#usize = ok k1
+hr✝⁴ :
+  (do
+      let basis1 ← verifier.accumulate_batched_with_node_loop0_loop0 { start := 0#usize, «end» := k } v b k
+      let m1 ← aspis_core.field.M31.mul v v
+      let m2 ← aspis_core.field.M31.double m1
+      let node1 ← aspis_core.field.M31.sub m2 m
+      let n1 ← k * 2#usize
+      ok (cont (node1, basis1, n1))) =
+    ok (cont (v1, b1, k1))
+hr✝³ :
+  (do
+      let m1 ← aspis_core.field.M31.mul v v
+      let m2 ← aspis_core.field.M31.double m1
+      let node1 ← aspis_core.field.M31.sub m2 m
+      let n1 ← k * 2#usize
+      ok (cont (node1, b1, n1))) =
+    ok (cont (v1, b1, k1))
+hr✝² :
+  (do
+      let m2 ← aspis_core.field.M31.double square
+      let node1 ← aspis_core.field.M31.sub m2 m
+      let n1 ← k * 2#usize
+      ok (cont (node1, b1, n1))) =
+    ok (cont (v1, b1, k1))
+hr✝¹ :
+  (do
+      let node1 ← aspis_core.field.M31.sub twice m
+      let n1 ← k * 2#usize
+      ok (cont (node1, b1, n1))) =
+    ok (cont (v1, b1, k1))
+hr✝ :
+  (do
+      let n1 ← k * 2#usize
+      ok (cont (v1, b1, n1))) =
+    ok (cont (v1, b1, k1))
+hr : ok (cont (v1, b1, k1)) = ok (cont (v1, b1, k1))
+⊢ ↑k1 = ↑k * 2
+'XSe_BasisOuter.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

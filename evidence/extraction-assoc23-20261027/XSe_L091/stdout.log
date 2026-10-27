@@ -1,0 +1,178 @@
+XSe_generated/XSe_RecordNonvacuity.lean:14:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let o ←
+      match 0#u8 with
+        | 0#8#uscalar => ok (some (0#u8, 0#usize))
+        | 1#8#uscalar => ok (some (0#u8, 0#usize))
+        | 2#8#uscalar => ok (some (1#u8, 32#usize))
+        | 14#8#uscalar => ok (some (3#u8, 32#usize))
+        | 25#8#uscalar => do
+          let i ← r1_wire.CLAIMS
+          let i1 ← i + r1_wire.LANES
+          let i2 ← i1 * 32#usize
+          ok (some (4#u8, i2))
+        | 26#8#uscalar => do
+          let i ← r1_wire.LANES * 32#usize
+          ok (some (5#u8, i))
+        | x =>
+          if 3#u8 ≤ 0#u8 then
+            if 0#u8 ≤ 13#u8 then ok (some (0#u8, 0#usize))
+            else
+              if 15#u8 ≤ 0#u8 then
+                if 0#u8 ≤ 24#u8 then do
+                  let i ← 28#usize * 32#usize
+                  ok (some (2#u8, i))
+                else ok none
+              else ok none
+          else
+            if 15#u8 ≤ 0#u8 then
+              if 0#u8 ≤ 24#u8 then do
+                let i ← 28#usize * 32#usize
+                ok (some (2#u8, i))
+              else ok none
+            else ok none
+    let r ←
+      match o, r1_wire.Error.InvalidRow with
+        | some value, x => ok (core.result.Result.Ok value)
+        | none, error => ok (core.result.Result.Err error)
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        let (tag, size) := val
+        do
+        let i1 ← 5#usize + size
+        if (header.len != i1) = true then ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))
+          else do
+            let i2 ← header.index_usize 0#usize
+            if (i2 != tag) = true then ok (core.result.Result.Err (r1_wire.Error.Tag 0#u8))
+              else do
+                let i3 ← header.index_usize 1#usize
+                let i4 ← header.index_usize 2#usize
+                let i5 ← header.index_usize 3#usize
+                let i6 ← header.index_usize 4#usize
+                let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+                let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+                if (i8 != size) = true then ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))
+                  else do
+                    let payload ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) header
+                          { start := 5#usize }
+                    if 0#u8 ≥ 14#u8 then do
+                        let r1 ← r1_wire.validate_record_fields 0#u8 payload
+                        let cf1 ←
+                          match r1 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                        match cf1 with
+                          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (Slice U8) (core.convert.FromSame r1_wire.Error) residual
+                      else ok (core.result.Result.Ok payload)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+          (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok empty)
+
+add : 5#usize + 0#usize = ok 5#usize
+⊢ (do
+      let o ←
+        match 0#u8 with
+          | 0#8#uscalar => ok (some (0#u8, 0#usize))
+          | 1#8#uscalar => ok (some (0#u8, 0#usize))
+          | 2#8#uscalar => ok (some (1#u8, 32#usize))
+          | 14#8#uscalar => ok (some (3#u8, 32#usize))
+          | 25#8#uscalar => do
+            let i ← r1_wire.CLAIMS
+            let i1 ← i + r1_wire.LANES
+            let i2 ← i1 * 32#usize
+            ok (some (4#u8, i2))
+          | 26#8#uscalar => do
+            let i ← r1_wire.LANES * 32#usize
+            ok (some (5#u8, i))
+          | x =>
+            if 3#u8 ≤ 0#u8 then
+              if 0#u8 ≤ 13#u8 then ok (some (0#u8, 0#usize))
+              else
+                if 15#u8 ≤ 0#u8 then
+                  if 0#u8 ≤ 24#u8 then do
+                    let i ← 28#usize * 32#usize
+                    ok (some (2#u8, i))
+                  else ok none
+                else ok none
+            else
+              if 15#u8 ≤ 0#u8 then
+                if 0#u8 ≤ 24#u8 then do
+                  let i ← 28#usize * 32#usize
+                  ok (some (2#u8, i))
+                else ok none
+              else ok none
+      let r ←
+        match o, r1_wire.Error.InvalidRow with
+          | some value, x => ok (core.result.Result.Ok value)
+          | none, error => ok (core.result.Result.Err error)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (tag, size) := val
+          do
+          let i1 ← 5#usize + size
+          if (header.len != i1) = true then ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))
+            else do
+              let i2 ← header.index_usize 0#usize
+              if (i2 != tag) = true then ok (core.result.Result.Err (r1_wire.Error.Tag 0#u8))
+                else do
+                  let i3 ← header.index_usize 1#usize
+                  let i4 ← header.index_usize 2#usize
+                  let i5 ← header.index_usize 3#usize
+                  let i6 ← header.index_usize 4#usize
+                  let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+                  let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+                  if (i8 != size) = true then ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))
+                    else do
+                      let payload ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) header
+                            { start := 5#usize }
+                      if 0#u8 ≥ 14#u8 then do
+                          let r1 ← r1_wire.validate_record_fields 0#u8 payload
+                          let cf1 ←
+                            match r1 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf1 with
+                            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (Slice U8) (core.convert.FromSame r1_wire.Error) residual
+                        else ok (core.result.Result.Ok payload)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Ok empty)
+XSe_generated/XSe_RecordNonvacuity.lean:13:98: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.row_shape, ̲core.option.Option.ok_or, ̲core.result.Result.Insts.CoreOpsTry.branch,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̲ ̲ ̲ ̲add]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XSe_generated/XSe_RecordNonvacuity.lean:13:109: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.row_shape, ̲core.option.Option.ok_or, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲bind_tc_ok,̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSe_RecordNonvacuity.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XSe_RecordNonvacuity.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

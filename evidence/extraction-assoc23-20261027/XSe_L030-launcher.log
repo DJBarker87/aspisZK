@@ -1,0 +1,62 @@
+{"attempt": "XSe_L030", "exit_status": 1, "wall_seconds": 1.3041804379899986, "peak_rss_kib": "2653544", "swaps": "0", "print_axioms": ["'XSe_ValidatorIter.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSe_generated/XSe_ValidatorIter.lean:31:3: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  XRo_Join_Carriers.mapR flow
+      (let (item, after) := (some (i, chunk), { iter := { chunks := rest, remainder := remainder }, count := count })
+      match item with
+      | none => ok (done (core.result.Result.Ok ()))
+      | some (i, bytes) => do
+        let status ← XSe_ValidatorStage.old row i bytes
+        match status with
+          | core.result.Result.Err e => ok (done (core.result.Result.Err e))
+          | core.result.Result.Ok a => ok (cont after)) =
+    do
+    let status ← XSe_ValidatorStage.old row i chunk
+    match status with
+      | 
+...
+     | some (i, bytes) => do
+        let status ← XSe_ValidatorStage.old row i bytes
+        match status with
+          | core.result.Result.Err e => ok (done (core.result.Result.Err e))
+          | core.result.Result.Ok a => ok (cont after)) =
+    do
+    let status ← XSe_ValidatorStage.old row i chunk
+    match status with
+      | core.result.Result.Err e => ok (done (core.result.Result.Err e))
+      | core.result.Result.Ok a => ok (cont (rest, count))
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.16} {β : α → Sort ?u.15} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case e_a
+row : U8
+i : Usize
+remainder chunk : Slice U8
+rest : List (Slice U8)
+count : UScalar UScalarTy.Usize
+⊢ XRo_Join_Carriers.mapR flow
+      (let (item, after) := (some (i, chunk), { iter := { chunks := rest, remainder := remainder }, count := count })
+      match item with
+      | none => ok (done (core.result.Result.Ok ()))
+      | some (i, bytes) => do
+        let status ← XSe_ValidatorStage.old row i bytes
+        match status with
+          | core.result.Result.Err e => ok (done (core.result.Result.Err e))
+          | core.result.Result.Ok a => ok (cont after)) =
+    do
+    let status ← XSe_ValidatorStage.old row i chunk
+    match status with
+      | core.result.Result.Err e => ok (done (core.result.Result.Err e))
+      | core.result.Result.Ok a => ok (cont (rest, count))
+XSe_generated/XSe_ValidatorIter.lean:29:25: warning: This simp argument is unused:
+  XRo_Join_Carriers.mapR_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵X̵R̵o̵_̵J̵o̵i̵n̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵m̵a̵p̵R̵_̵b̵i̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSe_ValidatorIter.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r77f3c5df2a9e4c8d8accdbd85bffed59.scope; invocation ID: 6af5451c776e4ae29ed39e94444f3cd2

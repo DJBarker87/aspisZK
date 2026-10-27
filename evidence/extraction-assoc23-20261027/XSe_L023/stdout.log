@@ -1,0 +1,38 @@
+XSe_generated/XSe_ValidatorBody.lean:37:11: error: unsolved goals
+case e_a.some.false
+row : U8
+iter : Iter
+after : core.iter.adapters.enumerate.Enumerate (core.slice.iter.ChunksExact U8)
+i : Usize
+bytes : Slice U8
+w : AspisR1PrefixAggregateParser.field.wide_exact.WideExact
+hz : (w.c1.c0.a == 0#u32 && w.c1.c0.b == 0#u32 && w.c1.c1.a == 0#u32 && w.c1.c1.b == 0#u32) = false
+⊢ ok (done (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row i))) = do
+    let status ←
+      if false = true then ok (core.result.Result.Ok ())
+        else ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row i))
+    match status with
+      | core.result.Result.Err e => ok (done (core.result.Result.Err e))
+      | core.result.Result.Ok a => ok (cont after)
+
+case e_a.some.true
+row : U8
+iter : Iter
+after : core.iter.adapters.enumerate.Enumerate (core.slice.iter.ChunksExact U8)
+i : Usize
+bytes : Slice U8
+w : AspisR1PrefixAggregateParser.field.wide_exact.WideExact
+hz : (w.c1.c0.a == 0#u32 && w.c1.c0.b == 0#u32 && w.c1.c1.a == 0#u32 && w.c1.c1.b == 0#u32) = true
+⊢ (if false = true then
+      ok (done (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row i)))
+    else ok (cont after)) =
+    ok (cont after)
+XSe_generated/XSe_ValidatorBody.lean:44:43: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp_all only [XSe_OldHighZero.zero, B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSe_ValidatorBody.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

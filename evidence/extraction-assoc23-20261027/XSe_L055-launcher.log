@@ -1,0 +1,59 @@
+{"attempt": "XSe_L055", "exit_status": 1, "wall_seconds": 1.484997165040113, "peak_rss_kib": "2665324", "swaps": "0", "print_axioms": ["'XSe_BooleanScan.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSe_generated/XSe_BooleanScan.lean:34:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  good item
+in the target expression
+  (XRo_Join_Carriers.mapR XSe_EnumeratedDriver.finish do
+      let next ←
+        match if false = true then core.result.Result.Ok () else core.result.Result.Err (error i) with
+          | core.result.Result.Err e => ok (core.result.Result.Err e)
+          | core.result.Result.Ok a => ok (core.result.Result.Ok j)
+      XSe_ListDriver.fold (XSe_EnumeratedDriver.step (fun i => i + 1#usize) (stage good error)) rest next) =
+    match if false = true then first good rest (↑i + 1) else some ↑i with
+    | none => ok (core.result.Result.Ok ())
+    | 
+...
+d rest (↑i + 1))
+
+case cons.true
+I E : Type
+good : I → Bool
+error : Usize → E
+item : I
+rest : List I
+ih :
+  ∀ (i : Usize),
+    ↑i + rest.length ≤ UScalar.cMax UScalarTy.Usize →
+      XRo_Join_Carriers.mapR XSe_EnumeratedDriver.finish
+          (XSe_ListDriver.fold (XSe_EnumeratedDriver.step (fun i => i + 1#usize) (stage good error)) rest
+            (core.result.Result.Ok i)) =
+        result error (first good rest ↑i)
+i : Usize
+bound : ↑i + (item :: rest).length ≤ UScalar.cMax UScalarTy.Usize
+j : Usize := UScalar.ofNat (↑i + 1) ⋯
+hj : i + 1#usize = ok j
+hg : good item = true
+⊢ (XRo_Join_Carriers.mapR XSe_EnumeratedDriver.finish do
+      let next ← ok (core.result.Result.Ok j)
+      XSe_ListDriver.fold (XSe_EnumeratedDriver.step (fun i => i + 1#usize) (stage good error)) rest next) =
+    result error (first good rest (↑i + 1))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+XSe_generated/XSe_BooleanScan.lean:33:19: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵g̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵f̵i̵r̵s̵t̵,̵r̵e̵s̵u̵l̵t̵]̵[̲h̲g̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSe_BooleanScan.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-radeff682801a449bb53c8fd99472acca.scope; invocation ID: 7857b3b91ab14b51a24c8c2bddf81593

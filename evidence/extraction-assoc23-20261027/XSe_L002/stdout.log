@@ -1,0 +1,17 @@
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Aeneas.Std.Slice α → Aeneas.Std.Usize → Aeneas.Std.Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some x => Aeneas.Std.Result.ok x
+Aeneas.Std.Slice.index_usize_spec.{u} {α : Type u} (v : Aeneas.Std.Slice α) (i : Aeneas.Std.Usize)
+  (hbound : ↑i < v.length) : Aeneas.Std.WP.spec (v.index_usize i) fun x => x = (↑v)[↑i]
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Aeneas.Std.Slice α → Aeneas.Std.Usize :=
+fun {α} v => Aeneas.Std.Usize.ofNatCore (↑v).length ⋯
+List.take_succ_cons.{u} {α : Type u} {a : α} {«as» : List α} {i : ℕ} :
+  List.take (i + 1) (a :: «as») = a :: List.take i «as»
+List.drop_eq_getElem_cons.{u_1} {α : Type u_1} {i : ℕ} {l : List α} (h : i < l.length) :
+  List.drop i l = l[i] :: List.drop (i + 1) l
+List.getElem_cons_drop.{u_1} {α : Type u_1} {«as» : List α} {i : ℕ} (h : i < «as».length) :
+  «as»[i] :: List.drop (i + 1) «as» = List.drop i «as»
+List.getElem?_eq_getElem.{u_1} {α : Type u_1} {l : List α} {i : ℕ} (h : i < l.length) : l[i]? = some l[i]
+XSe_generated/XSe_ByteInspect.lean:11:7: error(lean.unknownIdentifier): Unknown constant `List.take_eq_iff`
