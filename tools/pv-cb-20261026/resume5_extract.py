@@ -30,6 +30,8 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
   if include:
    for pattern in include.split('+'):args+=['--include',pattern]
   for pattern in opaque:args+=['--opaque',pattern]
+  if len(sys.argv)>9 and sys.argv[9]=='inline':
+   args+=['--rustc-arg=-Zinline-mir=yes','--rustc-arg=-Zinline-mir-threshold=100000','--rustc-arg=-Zcross-crate-inline-threshold=100000']
   args+=['--dest-file',f'{base}/PV_CB_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{project}/Cargo.toml','--release','--offline','--lib','--jobs','4',*(['--features','ct-host-prover' if project.endswith('aspis-r1-cost-probe') else 'r0'] if project.startswith('source/crates/') else [])]
  else:
   assert ssh(f'mkdir -p {base}/shipped-op{op}-generated').returncode==0
@@ -39,7 +41,7 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
  cmd=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',f'{dest}/time.log',*args]
  out=ssh(f'{shlex.join(cmd)} > {dest}/output.log 2>&1')
  (local/'transport.log').write_text(out.stdout)
- subprocess.run([sys.executable,str(root/'tools/pv-cb-20261026/collect_native.py'),name,f'PV_CB_ShippedOp{op}.llbc',f'shipped-op{op}-generated/Funs.lean',f'shipped-op{op}-generated/Types.lean',f'shipped-op{op}-generated/translation.json','source-proof/lib.rs','source-proof/Cargo.toml','source-proof/Cargo.lock',*(['step-proof/lib.rs','step-proof/owned_points.rs','step-proof/owned_wide_new.rs','step-proof/Cargo.toml','step-proof/Cargo.lock'] if project=='step-proof' else []),'source/crates/aspis-core/src/field.rs','source/crates/aspis-core/src/field/ct.rs','source/crates/aspis-core/src/field/wide_exact.rs','source/crates/aspis-core/src/r0/scalar.rs','source/crates/aspis-core/src/state_only_hiding.rs','source/crates/aspis-core/src/state_only_prefix.rs'],check=True)
+ subprocess.run([sys.executable,str(root/'tools/pv-cb-20261026/collect_native.py'),name,f'PV_CB_ShippedOp{op}.llbc',f'shipped-op{op}-generated/Funs.lean',f'shipped-op{op}-generated/Types.lean',f'shipped-op{op}-generated/translation.json','source-proof/lib.rs','source-proof/Cargo.toml','source-proof/Cargo.lock',*(['step-proof/lib.rs','step-proof/owned_points.rs','step-proof/owned_wide_new.rs','step-proof/Cargo.toml','step-proof/Cargo.lock'] if project=='step-proof' else []),'source/crates/aspis-statement/src/logup.rs','source/crates/aspis-core/src/field.rs','source/crates/aspis-core/src/field/ct.rs','source/crates/aspis-core/src/field/wide_exact.rs','source/crates/aspis-core/src/r0/scalar.rs','source/crates/aspis-core/src/state_only_hiding.rs','source/crates/aspis-core/src/state_only_prefix.rs'],check=True)
  receipt=json.loads((local/'collected-receipt.json').read_text());receipt.update(target)
  (local/'collected-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
  print(name,'exit',receipt['exit'])

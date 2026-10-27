@@ -1,0 +1,35 @@
+import R1Z.PV_CB_ProducerCell
+import R1Z.PV_CB_ProducerBind
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_CB_ProducerLimb
+open Aeneas Aeneas.Std Result ProverRwFull PV_CB_ProducerCell
+variable [ExternalTypes]
+abbrev Trace := aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestTraceV1
+abbrev Limb := aspis_statement.pool_v1.pair_trace.PoolV1PairTupleLimbV1
+
+def TraceReads (trace : Trace) : Prop :=
+  Reads (Array.to_slice trace.stable.c1) ∧ Reads (Array.to_slice trace.late)
+def OffsetValid (limb : Limb) : Prop :=
+  match limb with | .Zero => True | .Cell _ offset => Valid offset
+
+theorem limb (ops : ExternalFuns) (trace : Trace) (input : Limb)
+    (vt : TraceReads trace) (vo : OffsetValid input) :
+    PV_CB_ProducerPost.Good Valid
+      (@host_semantic.copy_tuple_limb _ (ProverRwDictionaryScalar.selected ops) trace input) := by
+  cases input with
+  | Zero =>
+    apply PV_CB_ProducerPost.pure
+    change (0#u32).val < 2147483647
+    decide
+  | Cell source offset =>
+    simp only [host_semantic.copy_tuple_limb]
+    apply PV_CB_ProducerBind.bind
+    intro column hcolumn
+    apply PV_CB_ProducerBind.bind
+    intro row hrow
+    cases source.bank with
+    | Stable => exact cell ops _ column row offset vt.1 vo
+    | Late => exact cell ops _ column row offset vt.2 vo
+#print axioms limb
+end R1Z.PV_CB_ProducerLimb

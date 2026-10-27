@@ -37,6 +37,7 @@ deps=json.loads(subprocess.check_output(['ssh',host,'python3','-'],input=probe,t
 fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest()
 meta=dict(attempt=n,module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),deps_fingerprint=fp,dependency_object_hashes=deps)
 (ev/f'{n}-submission.json').write_text(json.dumps(meta,indent=2)+'\n')
+(ev/f'{n}-source.lean.txt').write_bytes(p.read_bytes())
 dest=base+'/aspis-joint-20261019/sources/'+module+'.lean'
 if readonly:
  existing=subprocess.run(['ssh',host,'test -f '+shlex.quote(dest)])

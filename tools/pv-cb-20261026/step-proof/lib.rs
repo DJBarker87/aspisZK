@@ -267,4 +267,55 @@ mod checks {
         same(actual.y, expected.y);
     }
 
+    // Resume5 partitions: all calls are to the actual shipped compressor.
+    // Length and output projection are explicit; no arithmetic stubs/contracts.
+    macro_rules! compress_partition {
+        ($name:ident,$length:expr,$coordinate:expr) => {
+            #[kani::proof]
+            #[kani::unwind(18)]
+            fn $name() {
+                let tag_word:u32=kani::any(); kani::assume(tag_word<aspis_core::field::P);
+                let words:[u32;$length]=kani::any(); let mut values=[M31::ZERO;$length];
+                for i in 0..$length {kani::assume(words[i]<aspis_core::field::P);values[i]=M31(words[i]);}
+                let lambda=cq(kani::any());
+                let actual=aspis_statement::logup::compress_tagged_tuple(M31(tag_word),&values,lambda);
+                let expected=super::owned_compress::compress(M31(tag_word),&values,lambda);
+                if $coordinate==4 { same(actual,expected); }
+                else { assert_eq!(limb(actual,$coordinate),limb(expected,$coordinate)); }
+            }
+        };
+    }
+    compress_partition!(compress16_lane0,16,0);
+    compress_partition!(compress1_all,1,4);
+    compress_partition!(compress0_all,0,4);
+    compress_partition!(compress2_lane0,2,0);
+
+    // Smaller op117 partitions keep arbitrary canonical arithmetic inputs.
+    // Index26 is excluded by the actual26-step Horner caller.
+    macro_rules! horner_index_lane {
+        ($name:ident,$index:expr,$lane:expr) => {
+            #[kani::proof]
+            #[kani::unwind(30)]
+            fn $name() {
+                let term=cq(kani::any());let coefficients=[term;27];
+                let prepared=PreparedQm31Multiplier::new(cq(kani::any()));
+                let state=cq(kani::any());
+                let actual=shipped::horner_step(&coefficients,prepared,$index,state);
+                let expected=reference::horner_step(&coefficients,prepared,$index,state);
+                assert_eq!(limb(actual,$lane),limb(expected,$lane));
+            }
+        };
+    }
+    horner_index_lane!(horner_index0_lane0,0,0);
+    horner_index_lane!(horner_index0_lane1,0,1);
+    horner_index_lane!(horner_index25_lane2,25,2);
+    horner_index_lane!(horner_index25_lane3,25,3);
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn power26_base_lane0() {
+        let input=M31(kani::any());kani::assume(input.0<aspis_core::field::P);
+        let value=QM31::from_cm31(CM31::from_m31(input));
+        assert_eq!(limb(shipped::power26(value),0),limb(reference::power26_step(value),0));
+    }
+
 }

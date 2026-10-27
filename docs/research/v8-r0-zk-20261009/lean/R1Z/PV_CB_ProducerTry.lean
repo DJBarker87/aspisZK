@@ -1,0 +1,27 @@
+import R1Z.PV_CB_ProducerBind
+set_option autoImplicit false
+namespace R1Z.PV_CB_ProducerTry
+open Aeneas Aeneas.Std Result PV_CB_ProducerPost
+
+theorem bind {A B E : Type} (va : A → Prop) (vb : B → Prop)
+    (run : Result (core.result.Result A E))
+    (next : A → Result (core.result.Result B E))
+    (post : Good va run) (step : ∀ input, va input → Good vb (next input)) :
+    Good vb (do
+      let r ← run
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+      | .Continue value => next value
+      | .Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          B (core.convert.FromSame E) residual) := by
+  apply PV_CB_ProducerBind.bind
+  intro result hresult
+  cases result with
+  | Ok value => exact step value (post value hresult)
+  | Err err =>
+    simpa only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame,bind_tc_ok] using (PV_CB_ProducerPost.error vb (core.convert.FromSame.from err))
+#print axioms bind
+end R1Z.PV_CB_ProducerTry
