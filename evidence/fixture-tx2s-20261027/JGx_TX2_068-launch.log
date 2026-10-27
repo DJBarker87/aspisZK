@@ -1,0 +1,54 @@
+{"attempt": "JGx_TX2_068", "exit_status": 1, "wall_seconds": 1.7474068180308677, "peak_rss_kib": "4382844", "swaps": "0", "print_axioms": ["'AspisR1.JGx_EntryReads.data' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGx_EntryReads.count' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+JGx_EntryReads.lean:13:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if
+      (↑(entry.buffers (entry.handles index).1)).length = first ∨
+        (↑(entry.buffers (entry.handles index).1)).length = second then
+    ?m.26
+  else ?m.27
+in the target expression
+  (match
+      (have bytes := entry.buffers (entry.handles index).1;
+        have __src := (entry.records (entry.handles index).1).owned;
+        { key := __src.key, owner := __src.owner, is_signer := __src.is_signer, is_writable := __src.is_writable,
+          executable := __src.executable, length := core.result.Result.Ok bytes.len,
+          bytes :=
+            if (↑bytes).length = first ∨ (↑bytes).len
+...
+) =
+    ok (core.result.Result.Ok (entry.buffers (entry.handles index).1))
+
+ops : AdapterRw.Ops
+entry : Entry
+index first second : ℕ
+length :
+  (↑(entry.buffers (entry.handles index).1)).length = first ∨ (↑(entry.buffers (entry.handles index).1)).length = second
+⊢ (match
+      (have bytes := entry.buffers (entry.handles index).1;
+        have __src := (entry.records (entry.handles index).1).owned;
+        { key := __src.key, owner := __src.owner, is_signer := __src.is_signer, is_writable := __src.is_writable,
+          executable := __src.executable, length := core.result.Result.Ok bytes.len,
+          bytes :=
+            if (↑bytes).length = first ∨ (↑bytes).length = second then core.result.Result.Ok bytes
+            else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData }).bytes with
+    | core.result.Result.Ok bytes =>
+      have s := bytes.deref;
+      ok (core.result.Result.Ok s)
+    | core.result.Result.Err error1 => do
+      let pe ← ops.op35 error1
+      ok (core.result.Result.Err pe)) =
+    ok (core.result.Result.Ok (entry.buffers (entry.handles index).1))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+'AspisR1.JGx_EntryReads.data' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGx_EntryReads.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0d20d440119649ae9a54b18f46e0195c.scope; invocation ID: c76e917dae834839b82911739a5da688

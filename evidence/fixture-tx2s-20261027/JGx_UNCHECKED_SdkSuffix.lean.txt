@@ -1,0 +1,27 @@
+import JGx_SdkInstantiatedTail
+import JGx_SdkLength
+import JGx_SdkInputReads
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGx_SdkSuffix
+open Aeneas Aeneas.Std Result DrvC_Installation S2W_D189Entry S2W_D189Wrappers
+
+theorem source {C : Type} (c : Configuration FIo_Install.W C) (err : C) (entry : Entry)
+    (validated : AdapterRw.r1_pool_adapter.ValidatedAsqa) (headerBytes : Array U8 688#usize)
+    (proof : entry.buffers (entry.handles 0).1=JGx_ProofAccount.value headerBytes)
+    (checkpoint : entry.buffers (entry.handles 6).1=JFx_NativeBytes.checkpoint)
+    (proofLength : validated.proof_length=57607#usize)
+    (encoder : (DrvC_Installation.sdk (JGx_Configuration.value c err)).op22 validated.statement=ok (.Ok JGx_PublicArray.value))
+    (common : (DrvC_Installation.sdk (JGx_Configuration.value c err)).op19=ok 1520#usize)
+    (realizes : JFn_HashBoundary.Realizes JFp_SHADigest.digest) :
+    JGx_SdkContinuation.afterValidation (DrvC_Installation.sdk (JGx_Configuration.value c err))
+      (entry.second secondSizes) validated=
+      (DrvC_Installation.sdk (JGx_Configuration.value c err)).op53 validated.statement := by
+  rw [JGx_SdkInputReads.source _ entry validated headerBytes proof checkpoint]
+  have rawLength : Slice.len (JGx_ProofAccount.value headerBytes)=58295#usize :=
+    UScalar.eq_of_val_eq (JGx_ProofAccount.length headerBytes)
+  rw [JGx_SdkLength.source _ validated _ _ _ proofLength rawLength encoder]
+  exact JGx_SdkInstantiatedTail.source c err validated headerBytes common realizes
+#print axioms source
+end AspisR1.JGx_SdkSuffix
+end

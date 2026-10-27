@@ -1,0 +1,34 @@
+import JGx_NativeReduction
+import JGx_SecondWrapper
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGx_TX2
+open Aeneas Aeneas.Std Result DrvC_Installation S2W_D189Entry S2W_D189Wrappers
+
+/-- Conditional native SDK wrapper composition. The ASQ8/source prefix,
+physical encoder and emit_result observations below are STILL obligations;
+this is not a computed accepted2 fixture or a premise-removal claim. -/
+theorem accepted2 {C A : Type} (c : Configuration FIo_Install.W C) (err : C) (entry : Entry)
+    (program : S2W_ExtractionBoundary.Program) (data : Slice U8) (slot : S2W_ExtractionBoundary.Slot)
+    (validated : AdapterRw.r1_pool_adapter.ValidatedAsqa) (headerBytes : Array U8 688#usize)
+    (magic : JGx_MagicGate.value (DrvC_Installation.sdk (JGx_Configuration.value c err)) data=ok false)
+    (validation : AdapterRw.r1_pool_adapter.owned.validate_asq8
+      (DrvC_Installation.sdk (JGx_Configuration.value c err)) program (entry.second secondSizes) data slot=ok (.Ok validated))
+    (proof : entry.buffers (entry.handles 0).1=JGx_ProofAccount.value headerBytes)
+    (checkpoint : entry.buffers (entry.handles 6).1=JFx_NativeBytes.checkpoint)
+    (proofLength : validated.proof_length=57607#usize)
+    (encoder : (DrvC_Installation.sdk (JGx_Configuration.value c err)).op22 validated.statement=ok (.Ok JGx_PublicArray.value))
+    (common : (DrvC_Installation.sdk (JGx_Configuration.value c err)).op19=ok 1520#usize)
+    (realizes : JFn_HashBoundary.Realizes JFp_SHADigest.digest)
+    (emitted : (DrvC_Installation.sdk (JGx_Configuration.value c err)).op53 validated.statement=ok (.Ok ()))
+    (allocator : Allocator A) (initial allocated final : A)
+    (allocation : reserve allocator (admittedSizes entry 7 secondSizes) initial=ok allocated)
+    (cleanup : allocator.cleanup allocated=ok final) :
+    S2W_D189Wrappers.second (JGx_Natives.second c err) allocator entry program data slot initial=
+      ok (.Ok (entry.heap,final)) :=
+  JGx_SecondWrapper.source _ allocator entry program data slot initial allocated final allocation
+    ((JGx_NativeReduction.source c err entry program data slot validated headerBytes magic validation
+      proof checkpoint proofLength encoder common realizes).trans emitted) cleanup
+#print axioms accepted2
+end AspisR1.JGx_TX2
+end
