@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[2]
 for t,pre,n in [(0,'JGf','185'),(1,'JGh','185'),(2,'JGc','163')]:
@@ -53,5 +54,7 @@ theorem source {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Has
 end AspisR1.{ns}
 end
 '''
- (R/f'lean/{ns}.lean').write_text(s)
+ out=R/f'lean/{ns}.lean'
+ if '--check' in sys.argv: assert out.read_text()==s,ns
+ else: out.write_text(s)
 print('Generated native owned verifier compositions')

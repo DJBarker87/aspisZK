@@ -13,6 +13,7 @@ def term(s):
 def ls(xs):return '['+','.join(xs)+']'
 def val(n):return f'encodeState value{n}'
 mods=[]
+shapes=[]
 for t,pre in [(0,'JGf'),(1,'JGh'),(2,'JGc')]:
  texts=[f.read_text() for f in sorted((R/'lean').glob(f'{pre}_TX2_M{t}Level*.lean'))]
  text='\n'.join(texts)+ (R/f'lean/{pre}_TX2_M{t}Leaves.lean').read_text()
@@ -69,6 +70,7 @@ attribute [local irreducible] JFx_NativeBytes.proof JGh_TX2_NodeViews.nodes0 JGh
    rows.append(dict(w=w,k=k,n=n,left=left,right=right,i=i,ni=ni,pair=pair,before=before,cell=cell))
    i=ni
   last=len(rows)
+  shapes.append(dict(module=ns,tree=t,height=h,input_indices=inds,parent_indices=outs,cursor_start=32*startcell,cursor_end=32*cell,rows=rows))
   s+=f'''def output (s : reference.Scratch) : reference.Scratch := {{s{last:02} s with n:={last}#usize}}
  def indicesOut : List U32 := {ls([f'{x}#u32' for x in outs])}
  def valuesOut : List (Array U8 32#usize) := {ls([val(coords[h+1,x]) for x in outs])}
@@ -178,5 +180,6 @@ end
   else:out.write_text(s)
  assert cell==count,(t,cell,count)
 P=Path(__file__).resolve().parent
+(P/'JGm_LEVEL_SHAPES.json').write_text(json.dumps(shapes,indent=2)+'\n')
 (P/'JGm_LEVEL_MODULES.json').write_text(json.dumps(mods,indent=2)+'\n')
 print('Generated' if '--check' not in sys.argv else 'Checked',len(mods),'native level modules')

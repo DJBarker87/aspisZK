@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 import re
 R=Path(__file__).resolve().parents[2]
@@ -44,5 +45,7 @@ open Aeneas Aeneas.Std Result MultiproofConeRef
 end AspisR1.{ns}
 end
 '''
- (R/f'lean/{ns}.lean').write_text(s)
+ out=R/f'lean/{ns}.lean'
+ if '--check' in sys.argv: assert out.read_text()==s,ns
+ else: out.write_text(s)
 print('Generated three actual native index scans')

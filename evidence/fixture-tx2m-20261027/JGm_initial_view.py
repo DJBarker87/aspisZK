@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[2]
 for t in range(3):
@@ -39,5 +40,7 @@ open AspisV8R19.SqueezeOracleBridge
 end AspisR1.{ns}
 end
 '''
- (R/f'lean/{ns}.lean').write_text(s)
+ out=R/f'lean/{ns}.lean'
+ if '--check' in sys.argv: assert out.read_text()==s,ns
+ else: out.write_text(s)
 print('Generated native initial prefix views')

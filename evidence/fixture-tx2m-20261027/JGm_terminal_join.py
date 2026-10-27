@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 R=Path(__file__).resolve().parents[2]
 for t,pre,count in [(0,'JGf',163),(1,'JGh',163),(2,'JGc',141)]:
@@ -114,5 +115,7 @@ theorem tree {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
 end AspisR1.{ns}
 end
 '''
- (R/f'lean/{ns}.lean').write_text(s)
+ out=R/f'lean/{ns}.lean'
+ if '--check' in sys.argv: assert out.read_text()==s,ns
+ else: out.write_text(s)
 print('Generated three native terminal/padding/leaf-loop joins')

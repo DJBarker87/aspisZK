@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 import re
 R=Path(__file__).resolve().parents[2]
@@ -38,5 +39,7 @@ open {model}
 #print axioms source{n}
 '''
  s+=f'end AspisR1.{ns}\nend\n'
- (R/f'lean/{ns}.lean').write_text(s)
+ out=R/f'lean/{ns}.lean'
+ if '--check' in sys.argv: assert out.read_text()==s,ns
+ else: out.write_text(s)
  print(t,len(found))
