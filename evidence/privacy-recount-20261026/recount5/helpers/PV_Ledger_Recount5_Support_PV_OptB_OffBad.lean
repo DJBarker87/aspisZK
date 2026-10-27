@@ -1,0 +1,8 @@
+import R1Z.PV_OptB_OffBad
+set_option pp.proofs false
+#check R1Z.PV_OptB_Factorization.off_bad_failure_presence
+#print R1Z.PV_OptB_Factorization.off_bad_failure_presence
+#print axioms R1Z.PV_OptB_Factorization.off_bad_failure_presence
+#check R1Z.PV_OptB_Factorization.off_bad_exact_error
+#print R1Z.PV_OptB_Factorization.off_bad_exact_error
+#print axioms R1Z.PV_OptB_Factorization.off_bad_exact_error

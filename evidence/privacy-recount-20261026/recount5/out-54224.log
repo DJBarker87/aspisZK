@@ -1,0 +1,22 @@
+R1Z.PV_CBL_FinalizeSoftTotal.total (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize) (blocks : Aeneas.Std.U64)
+  (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize) (hp : ↑pos < 64) :
+  ∃ output, PV_CBL_FinalSoft.sha_finalize_soft_owned state blocks buffer pos = Aeneas.Std.Result.ok output
+theorem R1Z.PV_CBL_FinalizeSoftTotal.total : ∀ (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (blocks : Aeneas.Std.U64) (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize),
+  ↑pos < 64 →
+    ∃ output, PV_CBL_FinalSoft.sha_finalize_soft_owned state blocks buffer pos = Aeneas.Std.Result.ok output :=
+⋯
+'R1Z.PV_CBL_FinalizeSoftTotal.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CBL_FinalizeSoftTotal.no_fail (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize) (blocks : Aeneas.Std.U64)
+  (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize) (hp : ↑pos < 64)
+  (error : Aeneas.Std.Error) :
+  PV_CBL_FinalSoft.sha_finalize_soft_owned state blocks buffer pos ≠ Aeneas.Std.Result.fail error
+theorem R1Z.PV_CBL_FinalizeSoftTotal.no_fail : ∀ (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (blocks : Aeneas.Std.U64) (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize),
+  ↑pos < 64 →
+    ∀ (error : Aeneas.Std.Error),
+      PV_CBL_FinalSoft.sha_finalize_soft_owned state blocks buffer pos ≠ Aeneas.Std.Result.fail error :=
+⋯
+'R1Z.PV_CBL_FinalizeSoftTotal.no_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,20 @@
+R1Z.PV_CBL_SoftByteSource.value (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (block : Aeneas.Std.Array Aeneas.Std.U8 64#usize) : Aeneas.Std.Array Aeneas.Std.U32 8#usize
+def R1Z.PV_CBL_SoftByteSource.value : Aeneas.Std.Array Aeneas.Std.U32 8#usize →
+  Aeneas.Std.Array Aeneas.Std.U8 64#usize → Aeneas.Std.Array Aeneas.Std.U32 8#usize :=
+fun state block =>
+  R1Z.PV_CBL_FallbackStateCodec.encode
+    (R1Z.PV_CBL_SoftBlockSource.value (R1Z.PV_CBL_FallbackStateCodec.decode state)
+      (R1Z.PV_CBL_ByteWordsSource.value block))
+'R1Z.PV_CBL_SoftByteSource.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CBL_SoftByteSource.source (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (block : Aeneas.Std.Array Aeneas.Std.U8 64#usize) :
+  R1Z.PV_CBL_SoftByteSource.reference state block = Aeneas.Std.Result.ok (R1Z.PV_CBL_SoftByteSource.value state block)
+theorem R1Z.PV_CBL_SoftByteSource.source : ∀ (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (block : Aeneas.Std.Array Aeneas.Std.U8 64#usize),
+  R1Z.PV_CBL_SoftByteSource.reference state block =
+    Aeneas.Std.Result.ok (R1Z.PV_CBL_SoftByteSource.value state block) :=
+⋯
+'R1Z.PV_CBL_SoftByteSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
