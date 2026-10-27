@@ -11342,3 +11342,25 @@ direct extraction of the shipped function with the unchanged tool and its source
 refuses it, the exact refusal, a route (ii) design entry and the complete reference side. Six slots:
 runjoin12, op223, canon, optb2, cblib3, op134. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D266 (Stream B) 2026-10-27 09:55 UTC: option B round 2 merged (IndependentOffBad stated over existing events; native instance open); L3 disassembly audit launched
+
+pv-optb2 (`codex/pv-optb-20261027`, research-based; budget exhausted; three focused audits 44897/44898/44702
+exit 0, ≤4.74 s / 4.27 GB / swap 0, standard axioms; no crates/programs change; no forbidden tokens) merged
+into research (6c88a07f9c); worktree and branch removed. `IndependentOffBad` is stated as ruled in D262:
+∀ w u, pub w = pub u → ∀ os coins, ¬bad w os coins → ¬bad u os coins → signal w os coins = signal u os coins,
+where `bad` is the union of EXISTING charged events only (poleBad, HitEv, CollEv, lazyBad, exhQ, realFresh,
+realBad, seedGuess, fuel failure). Proved: public-decoder equivalence, off-pole retry-index agreement,
+emitted attempt-control lemmas, a conditional deployed synchronisation, complete first-draw failure
+equality, and joint failure transport that preserves the existing charges. OPEN: the concrete native
+instance (reachable-state body/public-verdict synchronisation at the fixed HOST_HASH; association of the
+actual failure metadata with the charged coordinates) and the endogenous privacy_headline_deployed_B;
+the earlier B theorem remains the fixed-signal form. No qualifying native counterexample. These remain
+on the native interpretation (bucket b), so the B track pauses (AGENTS.md §7) until runjoin12 lands.
+Launched pv-l3dis (existing `codex/pv-l3-20261026`, worktree recreated; IDs 50300-50599, 30 Lean, static
+analysis only) on V373, the L3 disassembly audit of the prover as it ships for x86_64 Linux:
+exact build identity, every secret-dependent kernel and call site disassembled from the built binary,
+findings per site (clean / secret-dependent branch / secret-dependent address / variable-latency op /
+relies on V371 because DOITM is off), any secret-dependent branch or address reported as a checked
+finding; never a claim of absence of leakage. Six slots: runjoin12, op223, canon, cblib3, op134, l3dis.
+Rows removed outright: 0. Privacy target not yet established.
