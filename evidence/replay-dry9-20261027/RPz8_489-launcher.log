@@ -1,0 +1,39 @@
+{"attempt": "RPz8_489", "exit_status": 0, "wall_seconds": 1.9712542780325748, "peak_rss_kib": "5369744", "swaps": "0", "print_axioms": []}
+def FS.hitsBad : {I A : Type} →
+  [DecidableEq I] →
+    (I → AspisV8PairedCommitment.Table I A → A → Prop) → AspisV8PairedCommitment.Table I A → List (I × A) → Prop :=
+fun {I A} [DecidableEq I] bad x x_1 =>
+  List.brecOn (motive := fun x => AspisV8PairedCommitment.Table I A → Prop) x_1 (FS.hitsBad._f bad) x
+equations:
+@[backward_defeq] theorem FS.hitsBad.eq_1 : ∀ {I A : Type} [inst : DecidableEq I]
+  (bad : I → AspisV8PairedCommitment.Table I A → A → Prop) (x : AspisV8PairedCommitment.Table I A),
+  FS.hitsBad bad x [] = False
+@[backward_defeq] theorem FS.hitsBad.eq_2 : ∀ {I A : Type} [inst : DecidableEq I]
+  (bad : I → AspisV8PairedCommitment.Table I A → A → Prop) (x : AspisV8PairedCommitmen
+...
+_1, u_2} : {Input : Type u_1} →
+  {Answer : Type u_2} →
+    [DecidableEq Input] →
+      AspisV8PairedCommitment.Table Input Answer → Input → Answer → AspisV8PairedCommitment.Table Input Answer :=
+fun {Input} {Answer} [DecidableEq Input] table input answer query => if query = input then some answer else table query
+FS2.Duplex.tableBefore_eq {I A : Type} [DecidableEq I] (H : I → A) (tr : List (I × A))
+  (t : AspisV8PairedCommitment.Table I A) (a b : I) :
+  (∀ q ∈ tr, q.2 = H q.1) → FS.tableBefore t tr a b = if FS2.Duplex.Before tr b a then some (H b) else t b
+def AspisR1.BinRawByteCollisionTargets.event : {O : Type} →
+  AspisV8R19.SourceDuplexStep.State →
+    ℕ → AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State O → Prop :=
+fun {O} iv Q v =>
+  FS.hitsBad (AspisR1.AllAddressCollision.bad iv AspisR1.BinRawByteCollisionTargets.pred Q) FS.emptyTable v.1
+def AspisR1.AllAddressCollision.bad : {I A : Type} →
+  {B : ℕ} → A → (Fin B → I → Option A) → ℕ → I → AspisV8PairedCommitment.Table I A → A → Prop :=
+fun {I A} {B} iv pred Q a T f =>
+  AspisR1.AllAddressCollision.Small T Q ∧
+    (f = iv ∨ (∃ b, T b = some f) ∨ ∃ j b, (b = a ∨ T b ≠ none) ∧ pred j b = some f)
+AspisR1.AllAddressCollisionTrace.small_before_read {I A : Type} [DecidableEq I] [Fintype A] [Inhabited A] (H : I → A)
+  (tr : List (I × A)) (a : I) (hcons : ∀ q ∈ tr, q.2 = H q.1) (ha : FS2.Duplex.Read tr a) (Q : ℕ)
+  (hQ : FS.firstReads FS.emptyTable tr ≤ Q) : AspisR1.AllAddressCollision.Small (FS.tableBefore FS.emptyTable tr a) Q
+AspisR1.TraceAppend.hitsBad_of_prefix {I A : Type} [DecidableEq I]
+  (bad : I → AspisV8PairedCommitment.Table I A → A → Prop) (t : AspisV8PairedCommitment.Table I A)
+  (tr tail : List (I × A)) : FS.hitsBad bad t tr → FS.hitsBad bad t (tr ++ tail)
+
+Running as unit: run-r0e4fbf625bad4e21bd7d89a3665f0e5b.scope; invocation ID: 51bec446726c40bda7e388a4a4974f30

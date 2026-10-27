@@ -1,0 +1,38 @@
+{"attempt": "RPz8_529", "exit_status": 0, "wall_seconds": 2.1490941650117747, "peak_rss_kib": "5408556", "swaps": "0", "print_axioms": ["'AspisR1.ARP_Interface.accepted_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARP_Interface.representation' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.ARP_Interface.accepted_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ARP_Interface.representation' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.ARP_Interface.BankSupported : {A F C : Type} →
+  DrvC_Installation.Configuration F C →
+    (SdkC_Source.Parts → Result SdkC_Source.Digest) →
+      (Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) →
+        Allocator A →
+          S2W_ExtractionBoundary.Program →
+            {Tx : Type} →
+              Adversary A →
+                S2W_ExtractionBoundary.First → S2W_ExtractionBoundary.Second → S2W_ExtractionBoundary.Program → Prop :=
+fun {A F C} c hashv copy allocato
+...
+'AspisR1.ARP_Interface.accepted_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ARP_Interface.representation' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.ARP_Interface.BankSupported : {A F C : Type} →
+  DrvC_Installation.Configuration F C →
+    (SdkC_Source.Parts → Result SdkC_Source.Digest) →
+      (Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) →
+        Allocator A →
+          S2W_ExtractionBoundary.Program →
+            {Tx : Type} →
+              Adversary A →
+                S2W_ExtractionBoundary.First → S2W_ExtractionBoundary.Second → S2W_ExtractionBoundary.Program → Prop :=
+fun {A F C} c hashv copy allocator id {Tx} a n1 n2 system =>
+  ∀ (H : Bytes → State) (saved : alloc.vec.Vec U8) (post : Heap (ℕ → Record)) (final : A),
+    accepted (eval H (account c hashv copy allocator id a)).2 = true →
+      (eval H (firstCode c hashv copy allocator id (eval H a.first).2)).2 =
+          ok (core.result.Result.Ok (saved, post, final)) →
+        ∃ p t u actions,
+          CPH_Game.DeployedPairExecution p t u (eval H a.first).2.entry
+              (eval H (a.second (eval H a.first).2 saved post final)).2.entry saved actions n1 n2 copy allocator id ∧
+            CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p) (CPG_Projection.ordinary p system)
+              (CPG_Projection.before p) (CPG_Projection.tentative p) (CPG_Projection.success p)
+              (CPG_Projection.loaded p)
+
+Running as unit: run-r8224d7c113254c7ea06f59ed1aec0831.scope; invocation ID: 22ccbae3289a4c25926ff0ed321f990e

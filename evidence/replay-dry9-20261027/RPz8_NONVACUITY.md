@@ -10,9 +10,7 @@ accepted-source premise, installation/primitive/geometry gates and
 collision disjunction. `FIo_Nonvacuity.same_result` retains its successful
 installed Pair-call premise and exports the native result of that SAME
 call. `FIo_Nonvacuity.arithmetic_fixed` is a definitional installed arithmetic
-identity. Their RPz8 sources change imports only. Fresh compile and axiom
-receipts will be indexed by RPz8_frontier.json / RPz8_axiom-audit.json when
-complete; this note does not promote a pending compile to a result.
+identity. Their RPz8 sources change imports only. Fresh compiles pass at RPz8_336 and RPz8_337. Their full printed axioms are retained in those receipts and stdout logs; all are subsets of propext, Classical.choice and Quot.sound.
 
 RPz7's explicit `.Parsed` Phase witness remains a checked, inherited
 constructor witness. The broader candidate root also imports concrete
