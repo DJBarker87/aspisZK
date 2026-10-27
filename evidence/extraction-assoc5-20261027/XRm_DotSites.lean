@@ -54,6 +54,7 @@ theorem tail (q : Array U8 608#usize) (g : Array XRk_Wide 29#usize)
   obtain ⟨unused1,hu1,run⟩ := bind_success _ _ _ run
   have accepted1 := unwrap_unit r unused1 hu1
   subst r
+  simp only [core.result.Result.unwrap,bind_tc_ok] at run
   obtain ⟨i11,hi11,run⟩ := bind_success _ _ _ run
   obtain ⟨i12,hi12,run⟩ := bind_success _ _ _ run
   obtain ⟨i13,hi13,run⟩ := bind_success _ _ _ run
@@ -68,6 +69,7 @@ theorem tail (q : Array U8 608#usize) (g : Array XRk_Wide 29#usize)
   obtain ⟨unused2,hu2,run⟩ := bind_success _ _ _ run
   have accepted2 := unwrap_unit r1 unused2 hu2
   subst r1
+  simp only [core.result.Result.unwrap,bind_tc_ok] at run
   obtain ⟨i16,hi16,run⟩ := bind_success _ _ _ run
   obtain ⟨i17,hi17,run⟩ := bind_success _ _ _ run
   obtain ⟨offset1,hoffset1,run⟩ := bind_success _ _ _ run
@@ -81,11 +83,12 @@ theorem tail (q : Array U8 608#usize) (g : Array XRk_Wide 29#usize)
   obtain ⟨unused3,hu3,run⟩ := bind_success _ _ _ run
   have accepted3 := unwrap_unit r2 unused3 hu3
   subst r2
+  simp only [core.result.Result.unwrap,bind_tc_ok] at run
   obtain ⟨we3,hwe3,run⟩ := bind_success _ _ _ run
   refine ⟨[(we,q1),(we1,q2),(we2,q3)],tail3,?_,rfl,?_,value,we3,hwe3,run⟩
   · exact .push (.push (.push (.initial tail htail) we q1 htail1) we1 q2 htail2) we2 q3 htail3
   · intro v member
-    simp only [List.mem_cons,List.mem_singleton] at member
+    simp only [List.mem_cons,List.not_mem_nil,or_false] at member
     rcases member with first | second | third
     · subst v; exact XRm_PowersCanonical.array_read g _ we canonical hwe
     · subst v; exact XRm_PowersCanonical.array_read g _ we1 canonical hwe1

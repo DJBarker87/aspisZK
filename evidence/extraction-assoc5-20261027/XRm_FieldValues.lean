@@ -48,11 +48,12 @@ theorem sub_val (a b : U32) (h : b.val≤a.val) :
   change (UScalar.overflowing_sub a b).fst.val = _
   have hn : ¬a.val<b.val := by omega
   have hs := UScalar.overflowing_sub_eq a b
-  simpa only [hn,if_false] using hs.1
+  simp only [hn,↓reduceIte] at hs
+  exact hs.1
 
 theorem add_val (a b : U32) (h : a.val+b.val<4294967296) :
     (a.wrapping_add b).val=a.val+b.val := by
-  rw [U32.wrapping_add_val_eq,show UScalar.size .U32=4294967296 from rfl,Nat.mod_eq_of_lt h]
+  rw [U32.wrapping_add_val_eq,u32_size_eq,show u32Cardinality=4294967296 by norm_num [u32Cardinality],Nat.mod_eq_of_lt h]
 
 theorem add (a b out : U32) (ha : a<2147483647#u32) (hb : b<2147483647#u32)
     (run : XRk_Field.field.M31.add a b=ok out) :
@@ -105,7 +106,7 @@ theorem mul (a b out : U32)
     exact h
   have hv : (U64.wrapping_mul (UScalar.cast .U64 a) (UScalar.cast .U64 b)).val=a.val*b.val := by
     rw [U64.wrapping_mul_val_eq,U32.cast_U64_val_eq,U32.cast_U64_val_eq,
-      show UScalar.size .U64=18446744073709551616 from rfl,Nat.mod_eq_of_lt bound]
+      u64_size_eq,show u64Cardinality=18446744073709551616 by norm_num [u64Cardinality],Nat.mod_eq_of_lt bound]
   rw [reduce_value _ _ hr,hv,Nat.cast_mul]
 
 #print axioms cast_two31_eq_one
