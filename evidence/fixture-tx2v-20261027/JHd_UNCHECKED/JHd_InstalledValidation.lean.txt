@@ -1,0 +1,35 @@
+import JHd_Configuration
+import JHb_RequestCarrier
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHd_InstalledValidation
+open Aeneas Aeneas.Std Result DrvC_Installation S2W_D189Wrappers
+abbrev ops {C : Type} (c : Configuration FIo_Install.W C) (err : C) :=
+  DrvC_Installation.sdk (JHd_Configuration.value c err)
+
+theorem source {C : Type} (c : Configuration FIo_Install.W C) (err : C) (slot : U64)
+    (a : AdapterRw.r1_pool_adapter.AuthenticatedAsq8Accounts)
+    (authentication : AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts (ops c err)
+      CPH_Program.verifier (JHb_World.e2.second secondSizes) JHb_Programs.pool 3#u8 slot=ok (.Ok a))
+    (scan : (ops c err).op51 JHb_Header.account=ok (.Ok JHd_ScanValue.value))
+    (reconstruction : (ops c err).op52 JHd_RequestCarrier.actual a JHd_ScanValue.candidate=
+      ok (.Ok JGx_RealStatement.value)) :
+    AdapterRw.r1_pool_adapter.owned.validate_asq8 (ops c err) CPH_Program.verifier
+      (JHb_World.e2.second secondSizes) JHb_DataRequest.value (.Ok slot)=ok (.Ok JGx_Validated.value) := by
+  have fixed:=JHd_Configuration.fixed c err
+  have h:=JHd_Validation.source (ops c err) slot a
+    (by simpa only [fixed] using authentication)
+    (by simpa only [fixed] using scan)
+    (by simpa only [fixed] using reconstruction)
+  simpa only [fixed] using h
+#print axioms source
+
+theorem magic {C : Type} (c : Configuration FIo_Install.W C) (err : C) :
+    JGx_MagicGate.value (ops c err) JHb_DataRequest.value=ok false := by
+  have h:=JHb_RequestCarrier.magic (ops c err)
+  have same : JGx_MagicGate.value (JGx_MagicStd.install (ops c err)) JHb_DataRequest.value=
+      JGx_MagicGate.value (ops c err) JHb_DataRequest.value := rfl
+  exact same ▸ h
+#print axioms magic
+end AspisR1.JHd_InstalledValidation
+end

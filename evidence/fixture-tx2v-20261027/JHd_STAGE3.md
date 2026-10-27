@@ -1,0 +1,7 @@
+# Stage3: actual validation conditional on exact child observations
+
+JHd_Validation.source (066) compiles actual AdapterRw.validate_asq8 on JHb_World.e2 and retained request bytes, for the explicitly selected reference leaves. Its ONLY successful-child hypotheses are the SAME dictionary's authenticate_asq8_accounts returning a, op51 on JHb_Header.account returning JHd_ScanValue.value, and op52 on that request/a/candidate returning JGx_RealStatement.value. It returns JGx_Validated.value. Request decode/bindings, selected Pool ID, nullifier/lane3, runtime-slot success branch and raw proof account read are computed. This reorganises and partially computes a local validation premise; it does NOT remove any actual headline premise.
+
+ReferenceSlots selects real reference decoder/getter bodies and source constants, leaving authentication/scanner/reconstruction/emitter children abstract. It is not asserted equal to the installed SDK. The proposed whole-record fixed-point proof in Configuration failed071. No semantic impossibility follows from a failed rfl. That draft and its uncompiled InstalledValidation consumer are archived without credit. ProofWindow070's final source has no retrievable compiler outcome and is also archived, despite earlier proof_tag/tag subdeclarations passing.
+
+No unconditional validate_asq8, accepted2, native emission association or joint pair is delivered. Host interruption prevents the remaining planned source work and one module-system trial. All delivered modules have exact-current-hash passing receipts in JHd_VALIDATION.json.
