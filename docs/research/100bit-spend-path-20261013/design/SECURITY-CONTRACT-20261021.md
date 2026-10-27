@@ -189,3 +189,53 @@ zero-query margin 2^-108 − 6(1161²+2965²)/2^256 − 2^-126 − 2^-454 > 0.
 Not approved by this amendment: route A (translator upgrade and D188 re-pin),
 any change to the target, constants or adversary, and any release claim. The
 deployed security target is **not yet established**.
+
+## Owner-approved amendment, 2026-10-27 (second): headline specialisation, query-bound classification, D188 narrowing
+
+Approved by the owner on 2026-10-27 (owner message, verbatim: "i gpo with all your recommendations"). It
+covers the lead's recommendations in HEADLINE-SPECIALISATION-DECISION-20261027.md,
+D188-FIDELITY-DECISION-20261027.md and the closure status update. The target
+(100-bit classical per-attempt security, no grinding credit), metric,
+adversary, failure event, numeric bound and implementation are unchanged.
+
+1. **Headline statement.** The soundness headline is stated for the installed
+   configuration: `AspisR1.RPx_Deployed.deployed`. Its complete kernel
+   statement is byte-identical to the reviewed `AspisR1.FJv_Deployed.deployed`
+   (SHA-256 8ae0107f9dbb7374135912ff9dda3597ad0096023d0deed471b0cd4dcf305523;
+   evidence/replay-deployed2-20261027/RPx_Deployed.kernel.lean.txt, compared
+   with evidence/stack1-20261027/FJv_after_deployed.kernel.lean.txt). It fixes
+   the configuration to `IDa_Deployed.deployedConfiguration missing indexError
+   reservation`: installed finish, boundaries with terminal :=
+   FIq_Terminal.terminal, and std. The six residual implementation inputs stay
+   universally quantified, with no law. The proof differs from FJv_Deployed's
+   only in one helper, restated over the pinned cohort's Phase carrier
+   (evidence/replay-deployed2-20261027/RPx_HELPER_CHANGES.md).
+2. **Query bound.** L154, the adversary's issued-query budget
+   `issued ≤ Q0+Q1`, is classified as a parameter of the headline statement:
+   the Q in the bound `(Q+1)·2^-100` on `Q ≤ F3U_RangeEdges.maxQueries`. It is
+   no longer an open premise. This is a classification, not a discharge. The
+   statement still quantifies over every adversary and charges every issued
+   query, including duplicates and rejected prefixes. Campaigns of repeated
+   attempts are accounted for by the per-attempt bound exactly as in the
+   2026-10-21 contract.
+3. **D188 narrowed.** D188 (the pinned Charon/Aeneas translation is the
+   semantics of each translated shipped body, at trace fidelity) is narrowed
+   to bodies that pass both a static scan for the dropped-restoration pattern
+   and a native differential on inputs where their writes matter
+   (D188-PROVENANCE-FINDING-20261027.md, finding D188-P3). Any translated body
+   that fails, starting with `sampler::low_base_p_digits`, is treated as an
+   opaque leaf. It needs a native P6 bridge from the frozen Rust to the cohort
+   model the proofs use (owned reference, Kani, Lean model), exactly as the
+   existing twelve opaque leaves do. Bodies that write through a mutable borrow
+   obtained from an iterator or element accessor carry no D188 credit until
+   checked. This shrinks the trust surface and adds no trust item.
+4. **Client toolchain pin.** The native client build toolchain is pinned to
+   rustc/cargo 1.94.1 (rustc commit e408947bfd200af42db322daf0fadfe7e26d3bd1,
+   2026-03-25; cargo 29ea6fb6a, 2026-03-24), LLVM 21.1.8, host/target
+   x86_64-unknown-linux-gnu, with the recorded RUSTFLAGS and no target-cpu
+   change. It is to be recorded as a rust-toolchain file for the client build
+   and in the release ledger, and re-confirmed at prover candidate adoption
+   (LOG D270). The client release recipe's features and constant-time
+   private-input decoding (LOG D272) are NOT covered by this approval.
+
+Deployed 100-bit target: not yet established.

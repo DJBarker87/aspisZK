@@ -3055,3 +3055,47 @@ FJv_Deployed was therefore compiled in a cohort that differs from the pinned
 one at the Phase carrier. Its 83T/1P figure is a cached-composition result
 until it is reconciled and replayed. Deployed 100-bit target: not yet
 established.
+
+## Headline adopted and L146 removed; L154 reclassified; L187 booked for the headline (owner approval, 2026-10-27)
+
+The owner approved the lead's recommendations (contract section 'Owner-approved
+amendment, 2026-10-27 (second)').
+
+**Headline.** `AspisR1.RPx_Deployed.deployed`, whose kernel statement is
+byte-identical to the reviewed FJv_Deployed.deployed (SHA-256 8ae0107f...5523;
+lead check: cmp of evidence/replay-deployed2-20261027/RPx_Deployed.kernel.lean.txt
+against evidence/stack1-20261027/FJv_after_deployed.kernel.lean.txt reports
+identical). It specialises the configuration binder to the installed
+configuration. That removes both L146 rows (native L146, F3Y_G_L146), which
+ranged over the free terminal callback. Removal check: these were hypotheses
+of FJv_Top; the conclusion is unchanged; standard axioms only.
+
+**L187** (coherent frozen replay) is discharged for the headline. RPx_ replayed
+the repaired closure (37 source contexts) in the same pinned workspace as
+FJv_Top's replay:
+- 39 of 39 Lean attempts passed;
+- 105 fresh declarations use standard axioms only;
+- all 180 formatter records are unreachable from the root.
+
+**L154** (issued-query budget) is reclassified by owner decision as a parameter
+of the headline statement, the Q of the bound. It is not counted as an open P
+premise, and it is NOT a discharge. It is listed separately so the count stays
+transparent.
+
+| Root | Actual antecedent | Deployment-inclusive |
+|---|---|---|
+| ARX_Root.deployed (adopted statement before specialisation) | 83T/11P/13G | 89T/27P/13G |
+| FJv_Top.deployed (previous proved top) | 83T/3P/13G | 89T/18P/13G |
+| **RPx_Deployed.deployed (adopted headline)** | **83T/0P/13G + L154 as statement parameter** (83T/1P/13G if L154 is counted as P) | **89T/15P/13G** (89T/16P/13G with L154) |
+
+What remains is not P on the top theorem:
+- the 83 T rows: trust items, including D188, now narrowed by D188-P3, and the
+  twelve-plus opaque-leaf native bridges that D188 relies on;
+- the 13 G rows (game/runtime statement items);
+- the deployment-inclusive rows: S10 completeness, L188 (final trust and
+  dependency audit, source-to-ELF), and the joint real-byte non-vacuity
+  fixture.
+
+Deployed 100-bit target: NOT yet established. The actual-antecedent P count
+reaching zero is not a release claim. Non-vacuity, the D188 association
+rows A0-A8, the P6 leaf bridges and L188 remain open.
