@@ -1,0 +1,159 @@
+FJb_M31LoopStep.lean:27:117: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok s
+      | some lane => do
+        let q ← Array.index_usize s lane
+        let i ← Array.index_usize a lane
+        let m ← q.c0.a.add i
+        let (q1, index_mut_back) ← Array.index_mut_usize s lane
+        let q2 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).index_usize lane
+        let q3 ← state_only_poseidon.pow5 q2
+        let a_1 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).update lane q3
+        state_only_poseidon.full_round_m31_constants_loop iter1 a_1 a
+is not definitionally equal to the right-hand side
+  do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok s
+      | some i => do
+        let x ← Array.index_usize s i
+        let x_1 ← Array.index_usize a i
+        let x ← x.c0.a.add x_1
+        let x_2 ← Array.index_mut_usize s i
+        let next ←
+          let (x1, back) := x_2
+            do
+            let x2 ← (back { c0 := { a := x, b := x1.c0.b }, c1 := x1.c1 }).index_usize i
+            let r ← state_only_poseidon.pow5 x2
+            (back { c0 := { a := x, b := x1.c0.b }, c1 := x1.c1 }).update i r
+        state_only_poseidon.full_round_m31_constants_loop iter1 next a
+
+case false
+iter : Range
+a : Constants
+s : State
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok s
+        | some lane => do
+          let q ← Array.index_usize s lane
+          let i ← Array.index_usize a lane
+          let m ← q.c0.a.add i
+          let (q1, index_mut_back) ← Array.index_mut_usize s lane
+          let q2 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).index_usize lane
+          let q3 ← state_only_poseidon.pow5 q2
+          let a_1 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).update lane q3
+          state_only_poseidon.full_round_m31_constants_loop iter1 a_1 a) =
+    do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok s
+      | some i => do
+        let x ← Array.index_usize s i
+        let x_1 ← Array.index_usize a i
+        let x ← x.c0.a.add x_1
+        let x_2 ← Array.index_mut_usize s i
+        let next ←
+          let (x1, back) := x_2
+            do
+            let x2 ← (back { c0 := { a := x, b := x1.c0.b }, c1 := x1.c1 }).index_usize i
+            let r ← state_only_poseidon.pow5 x2
+            (back { c0 := { a := x, b := x1.c0.b }, c1 := x1.c1 }).update i r
+        state_only_poseidon.full_round_m31_constants_loop iter1 next a
+FJb_M31LoopStep.lean:31:117: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok s
+      | some lane => do
+        let q ← Array.index_usize s lane
+        let i ← Array.index_usize a lane
+        let m ← q.c0.a.add i
+        let (q1, index_mut_back) ← Array.index_mut_usize s lane
+        let q2 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).index_usize lane
+        let q3 ← state_only_poseidon.pow5 q2
+        let a_1 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).update lane q3
+        state_only_poseidon.full_round_m31_constants_packed_loop iter1 a_1 a
+is not definitionally equal to the right-hand side
+  do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok s
+      | some i => do
+        let x ← Array.index_usize s i
+        let x_1 ← Array.index_usize a i
+        let x ← x.c0.a.add x_1
+        let x_2 ← Array.index_mut_usize s i
+        let next ←
+          let (x1, back) := x_2
+            do
+            let x2 ← (back { c0 := { a := x, b := x1.c0.b }, c1 := x1.c1 }).index_usize i
+            let r ← state_only_poseidon.pow5 x2
+            (back { c0 := { a := x, b := x1.c0.b }, c1 := x1.c1 }).update i r
+        state_only_poseidon.full_round_m31_constants_packed_loop iter1 next a
+
+case true
+iter : Range
+a : Constants
+s : State
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok s
+        | some lane => do
+          let q ← Array.index_usize s lane
+          let i ← Array.index_usize a lane
+          let m ← q.c0.a.add i
+          let (q1, index_mut_back) ← Array.index_mut_usize s lane
+          let q2 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).index_usize lane
+          let q3 ← state_only_poseidon.pow5 q2
+          let a_1 ← (index_mut_back { c0 := { a := m, b := q1.c0.b }, c1 := q1.c1 }).update lane q3
+          state_only_poseidon.full_round_m31_constants_packed_loop iter1 a_1 a) =
+    do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok s
+      | some i => do
+        let x ← Array.index_usize s i
+        let x_1 ← Array.index_usize a i
+        let x ← x.c0.a.add x_1
+        let x_2 ← Array.index_mut_usize s i
+        let next ←
+          let (x1, back) := x_2
+            do
+            let x2 ← (back { c0 := { a := x, b := x1.c0.b }, c1 := x1.c1 }).index_usize i
+            let r ← state_only_poseidon.pow5 x2
+            (back { c0 := { a := x, b := x1.c0.b }, c1 := x1.c1 }).update i r
+        state_only_poseidon.full_round_m31_constants_packed_loop iter1 next a
+FJb_M31LoopStep.lean:27:54: warning: This simp argument is unused:
+  FJb_PairProjection.value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵J̵b̵_̵M̵3̵1̵S̵t̵e̵p̵.̵s̵t̵e̵p̵,̵F̵J̵b̵_̵M̵3̵1̵S̵c̵a̵l̵a̵r̵.̵u̵p̵d̵a̵t̵e̵d̵,̵F̵J̵b̵_̵P̵a̵i̵r̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵F̵J̵b̵_̵P̵a̵i̵r̵B̵i̵n̵d̵.̵v̵a̵l̵u̵e̵]̵[̲F̲J̲b̲_̲M̲3̲1̲S̲t̲e̲p̲.̲s̲t̲e̲p̲,̲ ̲F̲J̲b̲_̲M̲3̲1̲S̲c̲a̲l̲a̲r̲.̲u̲p̲d̲a̲t̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲F̲J̲b̲_̲P̲a̲i̲r̲B̲i̲n̲d̲.̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJb_M31LoopStep.lean:27:93: warning: This simp argument is unused:
+  FJb_PairBind.value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵J̵b̵_̵M̵3̵1̵S̵t̵e̵p̵.̵s̵t̵e̵p̵,̵F̵J̵b̵_̵M̵3̵1̵S̵c̵a̵l̵a̵r̵.̵u̵p̵d̵a̵t̵e̵d̵,̵F̵J̵b̵_̵P̵a̵i̵r̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵F̵J̵b̵_̵P̵a̵i̵r̵B̵i̵n̵d̵.̵v̵a̵l̵u̵e̵]̵[̲F̲J̲b̲_̲M̲3̲1̲S̲t̲e̲p̲.̲s̲t̲e̲p̲,̲ ̲F̲J̲b̲_̲M̲3̲1̲S̲c̲a̲l̲a̲r̲.̲u̲p̲d̲a̲t̲e̲d̲,̲ ̲F̲J̲b̲_̲P̲a̲i̲r̲P̲r̲o̲j̲e̲c̲t̲i̲o̲n̲.̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJb_M31LoopStep.lean:31:54: warning: This simp argument is unused:
+  FJb_PairProjection.value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵J̵b̵_̵M̵3̵1̵S̵t̵e̵p̵.̵s̵t̵e̵p̵,̵F̵J̵b̵_̵M̵3̵1̵S̵c̵a̵l̵a̵r̵.̵u̵p̵d̵a̵t̵e̵d̵,̵F̵J̵b̵_̵P̵a̵i̵r̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵F̵J̵b̵_̵P̵a̵i̵r̵B̵i̵n̵d̵.̵v̵a̵l̵u̵e̵]̵[̲F̲J̲b̲_̲M̲3̲1̲S̲t̲e̲p̲.̲s̲t̲e̲p̲,̲ ̲F̲J̲b̲_̲M̲3̲1̲S̲c̲a̲l̲a̲r̲.̲u̲p̲d̲a̲t̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲F̲J̲b̲_̲P̲a̲i̲r̲B̲i̲n̲d̲.̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJb_M31LoopStep.lean:31:93: warning: This simp argument is unused:
+  FJb_PairBind.value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵J̵b̵_̵M̵3̵1̵S̵t̵e̵p̵.̵s̵t̵e̵p̵,̵F̵J̵b̵_̵M̵3̵1̵S̵c̵a̵l̵a̵r̵.̵u̵p̵d̵a̵t̵e̵d̵,̵F̵J̵b̵_̵P̵a̵i̵r̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵F̵J̵b̵_̵P̵a̵i̵r̵B̵i̵n̵d̵.̵v̵a̵l̵u̵e̵]̵[̲F̲J̲b̲_̲M̲3̲1̲S̲t̲e̲p̲.̲s̲t̲e̲p̲,̲ ̲F̲J̲b̲_̲M̲3̲1̲S̲c̲a̲l̲a̲r̲.̲u̲p̲d̲a̲t̲e̲d̲,̲ ̲F̲J̲b̲_̲P̲a̲i̲r̲P̲r̲o̲j̲e̲c̲t̲i̲o̲n̲.̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJb_M31LoopStep.unfold_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

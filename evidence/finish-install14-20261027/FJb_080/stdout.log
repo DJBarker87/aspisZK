@@ -1,0 +1,24 @@
+FJb_ExternalModel.lean:73:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  sample (grouped v) (4 * ↑1 + ↑(lane j))
+in the target expression
+  groupRow v (group j) (lane j) +
+      (groupRow v 0 (lane j) + sample (grouped v) (4 + ↑(lane j)) + sample (grouped v) (8 + ↑(lane j)) +
+        sample (grouped v) (12 + ↑(lane j))) =
+    groupRow v (group j) (lane j) +
+      (0 + groupRow v 0 (lane j) + groupRow v 1 (lane j) + groupRow v 2 (lane j) + groupRow v 3 (lane j))
+
+v : Values
+j : Fin ↑16#usize
+h0 : sample (grouped v) (4 * ↑0 + ↑(lane j)) = groupRow v 0 (lane j)
+h1 : sample (grouped v) (4 * ↑1 + ↑(lane j)) = groupRow v 1 (lane j)
+h2 : sample (grouped v) (4 * ↑2 + ↑(lane j)) = groupRow v 2 (lane j)
+h3 : sample (grouped v) (4 * ↑3 + ↑(lane j)) = groupRow v 3 (lane j)
+h0' : sample (grouped v) ↑(lane j) = groupRow v 0 (lane j)
+⊢ groupRow v (group j) (lane j) +
+      (groupRow v 0 (lane j) + sample (grouped v) (4 + ↑(lane j)) + sample (grouped v) (8 + ↑(lane j)) +
+        sample (grouped v) (12 + ↑(lane j))) =
+    groupRow v (group j) (lane j) +
+      (0 + groupRow v 0 (lane j) + groupRow v 1 (lane j) + groupRow v 2 (lane j) + groupRow v 3 (lane j))
+'AspisR1.FJb_ExternalModel.sample_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJb_ExternalModel.at_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJb_ExternalModel.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,38 @@
+FJb_BuilderStable.lean:25:4: error: Type mismatch: After simplification, term
+  hn.right
+ has type
+  @Eq (List T) (id ↑out) (List.ofFn fun i => value ↑i)
+but is expected to have type
+  @Eq (List T) (↑out) (List.ofFn fun i => value ↑i)
+FJb_BuilderStable.lean:44:4: error: Type mismatch: After simplification, term
+  i.isLt
+ has type
+  @LT.lt ℕ instLTNat ↑i ↑N
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑(Usize.ofNatCore ↑i ⋯) ↑N
+FJb_BuilderStable.lean:49:34: error: unsolved goals
+T C : Type
+N : Usize
+copy : core.marker.Copy T
+f : core.ops.function.FnMut C Usize T
+dummy : T
+c : C
+stable : ∀ (i : Usize), ↑i < ↑N → ∃ x, f.call_mut c i = ok (x, c)
+out : Std.Array T N
+run : FIq_Native.array_from_fn_copy N copy f dummy c = ok out
+index : Fin ↑N → Usize := fun i => Usize.ofNatCore ↑i ⋯
+values : Fin ↑N → T
+hvalues : ∀ (i : Fin ↑N), f.call_mut c (index i) = ok (values i, c)
+value : ℕ → T := fun n => if h : n < ↑N then values ⟨n, h⟩ else dummy
+i : Usize
+hi : ↑i < ↑N
+⊢ ↑(Usize.ofNatCore ↑i ⋯) = ↑i
+FJb_BuilderStable.lean:51:21: warning: This simp argument is unused:
+  UScalar.ofNatCore_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [index,̵U̵S̵c̵a̵l̵a̵r̵.̵o̵f̵N̵a̵t̵C̵o̵r̵e̵_̵v̵a̵l̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJb_BuilderStable.transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJb_BuilderStable.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

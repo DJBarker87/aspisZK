@@ -1,0 +1,139 @@
+FJb_M31Step.lean:47:36: error: Type mismatch: After simplification, term
+  hi
+ has type
+  ↑i < ↑16#usize
+but is expected to have type
+  ↑i < ((↑s).set (↑i) u).length
+FJb_M31Step.lean:29:74: error: unsolved goals
+case this
+s out : State
+constants : Constants
+i : Usize
+hi : ↑i < ↑16#usize
+hs : canonical s
+hc : Bounded constants
+run✝³ :
+  (do
+      let x ← Array.index_usize s i
+      let c ← Array.index_usize constants i
+      let m ← x.c0.a.add c
+      let (x1, back) ← Array.index_mut_usize s i
+      have s1 : Std.Array NQ 16#usize := back (FJb_M31Scalar.updated x1 m)
+      let x2 ← s1.index_usize i
+      let r ← state_only_poseidon.pow5 x2
+      s1.update i r) =
+    ok out
+x : NQ
+hx : Array.index_usize s i = ok x
+run✝² :
+  (do
+      let c ← Array.index_usize constants i
+      let m ← x.c0.a.add c
+      let (x1, back) ← Array.index_mut_usize s i
+      have s1 : Std.Array NQ 16#usize := back (FJb_M31Scalar.updated x1 m)
+      let x2 ← s1.index_usize i
+      let r ← state_only_poseidon.pow5 x2
+      s1.update i r) =
+    ok out
+c : U32
+hc0 : Array.index_usize constants i = ok c
+run✝¹ :
+  (do
+      let m ← x.c0.a.add c
+      let (x1, back) ← Array.index_mut_usize s i
+      have s1 : Std.Array NQ 16#usize := back (FJb_M31Scalar.updated x1 m)
+      let x2 ← s1.index_usize i
+      let r ← state_only_poseidon.pow5 x2
+      s1.update i r) =
+    ok out
+m : field.M31
+hm : x.c0.a.add c = ok m
+hmut : Array.index_mut_usize s i = ok (x, fun z => Std.Array.set s i z)
+u : NQ := FJb_M31Scalar.updated x m
+s1 : Std.Array NQ 16#usize := Std.Array.set s i u
+run✝ :
+  (do
+      let r ← state_only_poseidon.pow5 u
+      s1.update i r) =
+    ok out
+readAgain : s1.index_usize i = ok u
+r : field.QM31
+hr : state_only_poseidon.pow5 u = ok r
+run : s1.update i r = ok out
+hc1 : Array.index_usize constants i = ok (cell constants ⟨↑i, hi⟩)
+ec : c = cell constants ⟨↑i, hi⟩
+cb : ↑c < FJb_M31Scalar.P
+source : FJb_M31Scalar.source x c = ok r
+vr : FIv_NativeValue.Canon r ∧ FIv_NativeValue.decode r = (FIv_NativeValue.decode x + ↑↑c) ^ 5
+next : Std.Array NQ 16#usize
+un : s1.update i r = ok (s1.set i r)
+uset : next = s1.set i r
+⊢ ?m.333
+
+s out : State
+constants : Constants
+i : Usize
+hi : ↑i < ↑16#usize
+hs : canonical s
+hc : Bounded constants
+run✝³ :
+  (do
+      let x ← Array.index_usize s i
+      let c ← Array.index_usize constants i
+      let m ← x.c0.a.add c
+      let (x1, back) ← Array.index_mut_usize s i
+      have s1 : Std.Array NQ 16#usize := back (FJb_M31Scalar.updated x1 m)
+      let x2 ← s1.index_usize i
+      let r ← state_only_poseidon.pow5 x2
+      s1.update i r) =
+    ok out
+x : NQ
+hx : Array.index_usize s i = ok x
+run✝² :
+  (do
+      let c ← Array.index_usize constants i
+      let m ← x.c0.a.add c
+      let (x1, back) ← Array.index_mut_usize s i
+      have s1 : Std.Array NQ 16#usize := back (FJb_M31Scalar.updated x1 m)
+      let x2 ← s1.index_usize i
+      let r ← state_only_poseidon.pow5 x2
+      s1.update i r) =
+    ok out
+c : U32
+hc0 : Array.index_usize constants i = ok c
+run✝¹ :
+  (do
+      let m ← x.c0.a.add c
+      let (x1, back) ← Array.index_mut_usize s i
+      have s1 : Std.Array NQ 16#usize := back (FJb_M31Scalar.updated x1 m)
+      let x2 ← s1.index_usize i
+      let r ← state_only_poseidon.pow5 x2
+      s1.update i r) =
+    ok out
+m : field.M31
+hm : x.c0.a.add c = ok m
+hmut : Array.index_mut_usize s i = ok (x, fun z => Std.Array.set s i z)
+u : NQ := FJb_M31Scalar.updated x m
+s1 : Std.Array NQ 16#usize := Std.Array.set s i u
+run✝ :
+  (do
+      let r ← state_only_poseidon.pow5 u
+      s1.update i r) =
+    ok out
+readAgain : s1.index_usize i = ok u
+r : field.QM31
+hr : state_only_poseidon.pow5 u = ok r
+run : s1.update i r = ok out
+hc1 : Array.index_usize constants i = ok (cell constants ⟨↑i, hi⟩)
+ec : c = cell constants ⟨↑i, hi⟩
+cb : ↑c < FJb_M31Scalar.P
+source : FJb_M31Scalar.source x c = ok r
+vr : FIv_NativeValue.Canon r ∧ FIv_NativeValue.decode r = (FIv_NativeValue.decode x + ↑↑c) ^ 5
+next : Std.Array NQ 16#usize
+un : s1.update i r = ok (s1.set i r)
+uset : next = s1.set i r
+this : ?m.333
+⊢ canonical out ∧
+    decoded out = Function.update (decoded s) ⟨↑i, hi⟩ ((decoded s ⟨↑i, hi⟩ + ↑↑(cell constants ⟨↑i, hi⟩)) ^ 5)
+FJb_M31Step.lean:62:7: error: unexpected token 'over'; expected command
+'AspisR1.FJb_M31Step.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

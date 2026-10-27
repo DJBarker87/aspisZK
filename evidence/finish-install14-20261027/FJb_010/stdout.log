@@ -1,0 +1,43 @@
+FJb_LeadingLoop.lean:48:6: error: Type mismatch: After simplification, term
+  hv
+ has type
+  decoded out ⟨↑iter.start, hl⟩ =
+    Function.update (decoded state) ⟨↑iter.start, hl⟩ (decoded state ⟨↑iter.start, hl⟩ + decoded a ⟨↑iter.start, hl⟩)
+      ⟨↑iter.start, hl⟩
+but is expected to have type
+  decoded out ⟨↑iter.start, hl⟩ = decoded state ⟨↑iter.start, hl⟩ + decoded a ⟨↑iter.start, hl⟩
+FJb_LeadingLoop.lean:51:64: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ g ≤ 15
+  f ≥ 0
+  0 ≤ e ≤ 15
+  e - f ≤ -1
+  e - g ≤ -1
+  d ≥ 0
+  1 ≤ c ≤ 16
+  c - d ≤ 0
+  c - e ≤ 0
+  b ≥ 0
+  0 ≤ b + c ≤ 16
+  b + c - e ≤ 0
+where
+ b := ↑n
+ c := ↑↑iter1.start
+ d := ↑Usize.max
+ e := ↑↑j
+ f := ↑↑iter1.end
+ g := ↑↑⟨↑iter.start, hl⟩
+FJb_LeadingLoop.lean:52:6: error: Type mismatch: After simplification, term
+  hv
+ has type
+  decoded out j =
+    if ↑iter.start ≤ ↑j ∧ ↑j < ↑iter.end then
+      Function.update (decoded state) ⟨↑iter.start, hl⟩ (decoded state ⟨↑iter.start, hl⟩ + decoded a ⟨↑iter.start, hl⟩)
+          j +
+        decoded a j
+    else
+      Function.update (decoded state) ⟨↑iter.start, hl⟩ (decoded state ⟨↑iter.start, hl⟩ + decoded a ⟨↑iter.start, hl⟩)
+        j
+but is expected to have type
+  decoded out j = if ↑iter.start ≤ ↑j ∧ ↑j < ↑iter.end then decoded state j + decoded a j else decoded state j
+'AspisR1.FJb_LeadingLoop.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
