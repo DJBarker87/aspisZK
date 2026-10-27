@@ -4,8 +4,8 @@ Worker candidate rows5→5; endpoint premises removed0. Target not established.
 
 |op|row|status|theorem|receipt|
 |---:|---|---|---|---|
-|258|V264|OPEN: owned reference extracted and compiled; full1024 native gate timed out|R1Z.PV_CB3_Op258Staged.op258_reference (reference only)|38711.json;38714.json;38745.json;kani-resume6-pole1024-001/collected-receipt.json|
-|253|V260|OPEN: zero-kind native correspondence passed; numeric branches timed out; extraction pending|—|kani-resume6-weight-zero-002/collected-receipt.json;kani-resume6-weight-extra-001/collected-receipt.json;kani-resume6-weight-mixed-001/collected-receipt.json|
+|258|V264|OPEN: owned reference extracted and compiled; full1024 native gate timed out|R1Z.PV_CB3_Op258Staged.op258_reference (reference only)|38711.json;38714.json;38745.json;38769.json;38770.json;kani-resume6-pole1024-001/collected-receipt.json|
+|253|V260|OPEN: zero-kind native correspondence passed; numeric branches timed out; borrowed extraction refused context join, owned successor queued|—|kani-resume6-weight-zero-002/collected-receipt.json;kani-resume6-weight-extra-001/collected-receipt.json;kani-resume6-weight-mixed-001/collected-receipt.json|
 |252|V259|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op252-001/collected-receipt.json|
 |251|V258|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op251-001/collected-receipt.json|
 |249|V256|OPEN: complete reference byte-rank/result proved; native eight-limb pass timed out|R1Z.PV_CB3_StagedGammaRank.source / rank (reference only)|38743.json; kani-resume6-pass-001/collected-receipt.json|

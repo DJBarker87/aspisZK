@@ -35,7 +35,7 @@ theorem row_bound (j : Nat) : row j < 1024 := by
 theorem digit_value (j d : Nat) : digit j d = PV_CB3_WeightsDomain.digit j d := by
   unfold digit PV_CB3_WeightsDomain.digit
   rw [Nat.shiftRight_eq_div_pow]
-  have hp : 2^(2*d) = 4^d := by rw [Nat.pow_mul]; rfl
+  have hp : 2^(2*d) = 4^d := by rw [Nat.pow_mul]
   rw [hp]
   exact Nat.and_two_pow_sub_one_eq_mod _ 2
 #print axioms digit_bound

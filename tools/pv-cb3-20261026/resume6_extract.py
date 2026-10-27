@@ -4,9 +4,14 @@ import subprocess,sys,json,shlex,time,datetime
 root=Path(__file__).resolve().parents[2];stage=sys.argv[1]; variant=sys.argv[2] if len(sys.argv)>2 else 'op223-built'
 assert stage in ('charon','aeneas')
 base='/home/dombarker/project-offloads/codex-pv-cb3-20261026';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy';pinned='/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools'
-assert variant in ('op223-built','op249-staged','op253-built','op34-hide-allocator','op34-method','op35-default','op258-reference','op253-source','op134-source','op79-source','op134-reference','op253-reference','op253-owned')
+assert variant in ('op223-built','op249-staged','op253-built','op34-hide-allocator','op34-method','op35-default','op258-reference','op253-source','op134-source','op79-source','op134-reference','op253-reference','op253-owned','op219-source','op216-source','op212-source','op133-source','op132-source')
 name=stage+'-source-'+variant+'-'+(sys.argv[3] if len(sys.argv)>3 else 'resume')
 entries={
+'op219-source':('digest::core_api::ct_variable::_::finalize_fixed_core','digest::core_api::ct_variable::*+generic_array::*','PV_CB3_Op219Source'),
+'op216-source':('digest::core_api::wrapper::_::update','digest::core_api::wrapper::*+block_buffer::*','PV_CB3_Op216Source'),
+'op212-source':('digest::digest::_::finalize','digest::digest::*+digest::_::finalize_fixed+generic_array::*','PV_CB3_Op212Source'),
+'op133-source':('aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_rows_v1','aspis_statement::pool_v1::pair_forest_hiding::*','PV_CB3_Op133Source'),
+'op132-source':('aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_relation_free_mask_cells_v1','aspis_statement::pool_v1::pair_forest_hiding::*','PV_CB3_Op132Source'),
 'op253-owned':('pv_cb3_source::resume6_weights::owned_raw','pv_cb3_source::resume6_weights::*','PV_CB3_Op253Owned'),
 'op253-reference':('pv_cb3_source::resume6_weights::raw','pv_cb3_source::resume6_weights::*','PV_CB3_Op253Reference'),
 'op134-reference':('pv_cb3_kani::resume6_mask_reference::masks','pv_cb3_kani::resume6_mask_reference::*','PV_CB3_Op134Reference'),
@@ -61,7 +66,7 @@ receipt=dict(target=args,source_revision=subprocess.check_output(['git','rev-par
 assert not (out/'target.json').exists();(out/'target.json').write_text(json.dumps(receipt,indent=2)+'\n')
 cmd=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',gate+'/barrier.py',base+'/'+name+'/admission-barrier.json','/usr/bin/time','-v','-o',base+'/'+name+'/time.log',*args]
 r=ssh(shlex.join(cmd)+f' > {base}/{name}/output.log 2>&1');(out/'transport.log').write_text(r.stdout+r.stderr)
-subprocess.run([sys.executable,str(root/'tools/pv-cb3-20261026/collect_native.py'),name,'source-proof/lib.rs','source-proof/Cargo.toml','kani-proof/lib.rs','kani-proof/reference.rs','kani-proof/Cargo.toml',namespace+'.llbc',variant+'-generated/Funs.lean',variant+'-generated/Types.lean'],check=True)
+subprocess.run([sys.executable,str(root/'tools/pv-cb3-20261026/collect_native.py'),name,'source-proof/lib.rs','source-proof/resume6_weights.rs','source-proof/Cargo.toml','kani-proof/lib.rs','kani-proof/reference.rs','kani-proof/Cargo.toml',namespace+'.llbc',variant+'-generated/Funs.lean',variant+'-generated/Types.lean'],check=True)
 p=out/'collected-receipt.json';r=json.loads(p.read_text());r.update(receipt);p.write_text(json.dumps(r,indent=2)+'\n')
 bar=r.get('admissions',{}).get('admission-barrier.json',{})
 if bar and not bar.get('allowed',True):

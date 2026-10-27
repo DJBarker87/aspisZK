@@ -26,7 +26,6 @@ theorem false_step
   obtain ⟨e3,he3⟩ := PV_CB3_Op258Equal.total chi d
   simp only [PV_CB3_Op258Ref.reference.all_slots_clear_loop.body,if_pos hrow,lift,bind_tc_ok,
     hm,hr,hl,hri,ha,hb,hc,hd,he0,he1,he2,he3,Bool.false_and]
-  rfl
 
 theorem step_frame
     (values : Slice (Array (Array aspis_core.field.QM31 2#usize) 2#usize))
