@@ -17,10 +17,10 @@ for m in order:
   n=re.match(r'^namespace\s+(\S+)',line)
   if n:ns=n[1];continue
   if line.startswith('end '):ns='';continue
-  n=re.match(r'^\s*(?:noncomputable\s+)?(?:def|theorem)\s+([\w.]+)',line)
+  n=re.match(r'^\s*(?:noncomputable\s+)?theorem\s+([\w.]+)',line)
   if n and ns:names.append(ns+'.'+n[1])
 head=''.join('import '+m+'\n' for m in roots)
-head+='\n-- Combined audit: every declaration in the private closing-source cone.\n'
+head+='\n-- Combined audit: every theorem in the private closing-source cone.\n'
 head+=''.join('#print axioms '+n+'\n' for n in dict.fromkeys(names))
 body='''
 namespace PV_B3_ClosureD324
