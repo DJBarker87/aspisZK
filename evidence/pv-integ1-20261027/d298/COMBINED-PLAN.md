@@ -21,6 +21,7 @@ ssh "$HOST" "mkdir -p $D/combined/baseline/source $D/combined/candidate/source"
 for side in baseline candidate; do
   rev=c57a344726745387efb38d1571d885c69ce829ee
   test "$side" = baseline || rev="$NEXT_REV"
+  ssh "$HOST" "python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/reservation.py $D/combined/upload-$side.json > $D/combined/upload-$side.log 2>&1 && python3 -c 'import json; assert json.load(open(\"$D/combined/upload-$side.json\"))[\"allowed\"]'" || exit $?
   git archive "$rev" Cargo.toml Cargo.lock .cargo crates programs audit xtask tools \
     docs/research/v8-r0-zk-20261009/refine \
     docs/research/v8-r0-zk-20261009/c3 \
