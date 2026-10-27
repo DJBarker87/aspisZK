@@ -1,0 +1,236 @@
+FJk_CopyFold.lean:12:17: error: failed to set `[local irreducible]`, `constants.COPY_LINKS` is currently `[irreducible]`, `[semireducible]` nor `[implicit_reducible]` expected
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+FJk_CopyFold.lean:34:77: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Type ?u.91) 136
+numerals are polymorphic in Lean, but the numeral `136` cannot be used in a context where the expected type is
+  Type ?u.91
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+FJk_CopyFold.lean:34:82: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.90
+FJk_CopyFold.lean:36:14: error: unsolved goals
+case this
+s : Selectors
+index : U64
+v : PoolV1PairForestCompiledVariantV1
+patterns : Std.Array field.QM31 14#usize
+a b c d : Std.Array field.QM31 2#usize
+hh : canonical s.high
+hl : canonical s.low
+hp : canonical patterns
+n : ℕ
+ih :
+  ∀ (i : Usize) (pv pw cv cw : Std.Array field.QM31 2#usize),
+    ↑i + n = 136 →
+      canonical pv →
+        canonical pw →
+          canonical cv →
+            canonical cw →
+              evaluate_with_selectors_loop s index v patterns pv pw cv cw i = ok (a, b, c, d) →
+                canonical a ∧
+                  canonical b ∧
+                    canonical c ∧
+                      canonical d ∧
+                        FJk_CopyStep.row a b c d =
+                          List.foldl
+                            (fun r l =>
+                              FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (decoded patterns) (↑index)
+                                (FJk_CopyDescriptor.variant v) r (FJk_CopyDescriptor.link l))
+                            (FJk_CopyStep.row pv pw cv cw) (List.drop ↑i ↑constants.COPY_LINKS)
+i : Usize
+pv pw cv cw : Std.Array field.QM31 2#usize
+span : ↑i + (n + 1) = 136
+hpv : canonical pv
+hpw : canonical pw
+hcv : canonical cv
+hcw : canonical cw
+run✝³ :
+  (do
+      let link ← constants.COPY_LINKS.index_usize i
+      let weight ← link_weight link index v
+      let (a4, a5) ← accumulate_endpoint pv pw link.producer link.tag weight patterns s
+      let (a6, a7) ← accumulate_endpoint cv cw link.consumer link.tag weight patterns s
+      let link_index1 ← i + 1#usize
+      evaluate_with_selectors_loop s index v patterns a4 a5 a6 a7 link_index1) =
+    ok (a, b, c, d)
+active : i < 136#usize
+l : CompiledPoolV1PairForestLink
+rl : constants.COPY_LINKS.index_usize i = ok l
+run✝² :
+  (do
+      let weight ← link_weight l index v
+      let (a4, a5) ← accumulate_endpoint pv pw l.producer l.tag weight patterns s
+      let (a6, a7) ← accumulate_endpoint cv cw l.consumer l.tag weight patterns s
+      let link_index1 ← i + 1#usize
+      evaluate_with_selectors_loop s index v patterns a4 a5 a6 a7 link_index1) =
+    ok (a, b, c, d)
+w : field.M31
+rwgt : link_weight l index v = ok w
+run✝¹ :
+  (do
+      let (a4, a5) ← accumulate_endpoint pv pw l.producer l.tag w patterns s
+      let (a6, a7) ← accumulate_endpoint cv cw l.consumer l.tag w patterns s
+      let link_index1 ← i + 1#usize
+      evaluate_with_selectors_loop s index v patterns a4 a5 a6 a7 link_index1) =
+    ok (a, b, c, d)
+pv' pw' : Std.Array field.QM31 2#usize
+rp : accumulate_endpoint pv pw l.producer l.tag w patterns s = ok (pv', pw')
+run✝ :
+  (let (a4, a5) := (pv', pw')
+    do
+    let (a6, a7) ← accumulate_endpoint cv cw l.consumer l.tag w patterns s
+    let link_index1 ← i + 1#usize
+    evaluate_with_selectors_loop s index v patterns a4 a5 a6 a7 link_index1) =
+    ok (a, b, c, d)
+cv' cw' : Std.Array field.QM31 2#usize
+rc : accumulate_endpoint cv cw l.consumer l.tag w patterns s = ok (cv', cw')
+run :
+  (let (a6, a7) := (cv', cw')
+    do
+    let link_index1 ← i + 1#usize
+    evaluate_with_selectors_loop s index v patterns pv' pw' a6 a7 link_index1) =
+    ok (a, b, c, d)
+i' : UScalar UScalarTy.Usize
+ri : i + 1#usize = ok i'
+tail : evaluate_with_selectors_loop s index v patterns pv' pw' cv' cw' i' = ok (a, b, c, d)
+hg : JGa_LinkBounds.Good l
+one :
+  canonical pv' ∧
+    canonical pw' ∧
+      canonical cv' ∧
+        canonical cw' ∧
+          FJk_CopyStep.row pv' pw' cv' cw' =
+            FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (decoded patterns) (↑index)
+              (FJk_CopyDescriptor.variant v) (FJk_CopyStep.row pv pw cv cw) (FJk_CopyDescriptor.link l)
+inc : ↑i' = ↑i + 1
+rest :
+  canonical a ∧
+    canonical b ∧
+      canonical c ∧
+        canonical d ∧
+          FJk_CopyStep.row a b c d =
+            List.foldl
+              (fun r l =>
+                FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (decoded patterns) (↑index)
+                  (FJk_CopyDescriptor.variant v) r (FJk_CopyDescriptor.link l))
+              (FJk_CopyStep.row pv' pw' cv' cw') (List.drop ↑i' ↑constants.COPY_LINKS)
+bound : ↑i < (↑constants.COPY_LINKS).length
+⊢ ?m.546
+
+case succ
+s : Selectors
+index : U64
+v : PoolV1PairForestCompiledVariantV1
+patterns : Std.Array field.QM31 14#usize
+a b c d : Std.Array field.QM31 2#usize
+hh : canonical s.high
+hl : canonical s.low
+hp : canonical patterns
+n : ℕ
+ih :
+  ∀ (i : Usize) (pv pw cv cw : Std.Array field.QM31 2#usize),
+    ↑i + n = 136 →
+      canonical pv →
+        canonical pw →
+          canonical cv →
+            canonical cw →
+              evaluate_with_selectors_loop s index v patterns pv pw cv cw i = ok (a, b, c, d) →
+                canonical a ∧
+                  canonical b ∧
+                    canonical c ∧
+                      canonical d ∧
+                        FJk_CopyStep.row a b c d =
+                          List.foldl
+                            (fun r l =>
+                              FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (decoded patterns) (↑index)
+                                (FJk_CopyDescriptor.variant v) r (FJk_CopyDescriptor.link l))
+                            (FJk_CopyStep.row pv pw cv cw) (List.drop ↑i ↑constants.COPY_LINKS)
+i : Usize
+pv pw cv cw : Std.Array field.QM31 2#usize
+span : ↑i + (n + 1) = 136
+hpv : canonical pv
+hpw : canonical pw
+hcv : canonical cv
+hcw : canonical cw
+run✝³ :
+  (do
+      let link ← constants.COPY_LINKS.index_usize i
+      let weight ← link_weight link index v
+      let (a4, a5) ← accumulate_endpoint pv pw link.producer link.tag weight patterns s
+      let (a6, a7) ← accumulate_endpoint cv cw link.consumer link.tag weight patterns s
+      let link_index1 ← i + 1#usize
+      evaluate_with_selectors_loop s index v patterns a4 a5 a6 a7 link_index1) =
+    ok (a, b, c, d)
+active : i < 136#usize
+l : CompiledPoolV1PairForestLink
+rl : constants.COPY_LINKS.index_usize i = ok l
+run✝² :
+  (do
+      let weight ← link_weight l index v
+      let (a4, a5) ← accumulate_endpoint pv pw l.producer l.tag weight patterns s
+      let (a6, a7) ← accumulate_endpoint cv cw l.consumer l.tag weight patterns s
+      let link_index1 ← i + 1#usize
+      evaluate_with_selectors_loop s index v patterns a4 a5 a6 a7 link_index1) =
+    ok (a, b, c, d)
+w : field.M31
+rwgt : link_weight l index v = ok w
+run✝¹ :
+  (do
+      let (a4, a5) ← accumulate_endpoint pv pw l.producer l.tag w patterns s
+      let (a6, a7) ← accumulate_endpoint cv cw l.consumer l.tag w patterns s
+      let link_index1 ← i + 1#usize
+      evaluate_with_selectors_loop s index v patterns a4 a5 a6 a7 link_index1) =
+    ok (a, b, c, d)
+pv' pw' : Std.Array field.QM31 2#usize
+rp : accumulate_endpoint pv pw l.producer l.tag w patterns s = ok (pv', pw')
+run✝ :
+  (let (a4, a5) := (pv', pw')
+    do
+    let (a6, a7) ← accumulate_endpoint cv cw l.consumer l.tag w patterns s
+    let link_index1 ← i + 1#usize
+    evaluate_with_selectors_loop s index v patterns a4 a5 a6 a7 link_index1) =
+    ok (a, b, c, d)
+cv' cw' : Std.Array field.QM31 2#usize
+rc : accumulate_endpoint cv cw l.consumer l.tag w patterns s = ok (cv', cw')
+run :
+  (let (a6, a7) := (cv', cw')
+    do
+    let link_index1 ← i + 1#usize
+    evaluate_with_selectors_loop s index v patterns pv' pw' a6 a7 link_index1) =
+    ok (a, b, c, d)
+i' : UScalar UScalarTy.Usize
+ri : i + 1#usize = ok i'
+tail : evaluate_with_selectors_loop s index v patterns pv' pw' cv' cw' i' = ok (a, b, c, d)
+hg : JGa_LinkBounds.Good l
+one :
+  canonical pv' ∧
+    canonical pw' ∧
+      canonical cv' ∧
+        canonical cw' ∧
+          FJk_CopyStep.row pv' pw' cv' cw' =
+            FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (decoded patterns) (↑index)
+              (FJk_CopyDescriptor.variant v) (FJk_CopyStep.row pv pw cv cw) (FJk_CopyDescriptor.link l)
+inc : ↑i' = ↑i + 1
+rest :
+  canonical a ∧
+    canonical b ∧
+      canonical c ∧
+        canonical d ∧
+          FJk_CopyStep.row a b c d =
+            List.foldl
+              (fun r l =>
+                FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (decoded patterns) (↑index)
+                  (FJk_CopyDescriptor.variant v) r (FJk_CopyDescriptor.link l))
+              (FJk_CopyStep.row pv' pw' cv' cw') (List.drop ↑i' ↑constants.COPY_LINKS)
+bound : ↑i < (↑constants.COPY_LINKS).length
+this : ?m.546
+⊢ FJk_CopyStep.row a b c d =
+    List.foldl
+      (fun r l =>
+        FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (decoded patterns) (↑index) (FJk_CopyDescriptor.variant v)
+          r (FJk_CopyDescriptor.link l))
+      (FJk_CopyStep.row pv pw cv cw) (List.drop ↑i ↑constants.COPY_LINKS)
+FJk_CopyFold.lean:51:9: error: unexpected token 'at'; expected command
+'AspisR1.FJk_CopyFold.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

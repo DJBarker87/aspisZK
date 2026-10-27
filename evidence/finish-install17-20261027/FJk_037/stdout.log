@@ -1,0 +1,80 @@
+FJk_CompositionWideOnRun.lean:52:39: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun j => embed (decoded sem j)
+in the target expression
+  (ExtractedMaskTerminalHorner.composeGroups (embed (decode theta)) (embed (decode copy.residual))
+      (fun i => embed (decoded sem i)) fun i => embed (decoded pos i)) =
+    ExtractedMaskTerminalHorner.composeGroups (embed (decode theta)) (embed (decode copy.residual))
+      (semantic pub { z := a, succ_z := a1, xor12_z := a2 } s) (poseidon pub { z := a, succ_z := a1, xor12_z := a2 } s)
+
+pub : SemPub
+claims : Std.Array field.QM31 84#usize
+point : Std.Array field.QM31 10#usize
+lambda chi theta comp g h active : field.QM31
+c1 : Std.Array field.QM31 16#usize
+mask : Std.Array field.QM31 10#usize
+hclaims : canonical claims
+hpoint : canonical point
+hlambda : Canon lambda
+hchi : Canon chi
+htheta : Canon theta
+bounds : FJa_PublicBounds.Bounds pub
+run : composition pub claims point lambda chi theta = ok (core.result.Result.Ok (comp, c1, mask, g, h, active))
+a a1 a2 : Std.Array field.QM31 16#usize
+s : pool_v1.pair_forest_copy_terminal.Selectors
+po : state_only_poseidon.StateOnlyPoseidonSelectors
+variant : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1
+sem : Std.Array field.QM31 24#usize
+pos : Std.Array field.QM31 4#usize
+copy : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledCopyTerminalV1
+same : c1 = a
+ca : canonical a
+ca1 : canonical a1
+ca2 : canonical a2
+rs : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = ok s
+rsp : pool_v1.pair_forest_semantic_terminal.poseidon_selectors s = ok po
+rsem : pool_v1.pair_forest_semantic_terminal.semantic_packed pub { z := a, succ_z := a1, xor12_z := a2 } s = ok sem
+rpo :
+  state_only_poseidon.evaluate_state_only_poseidon_oracle_projected { z := a, succ_z := a1, xor12_z := a2 } po = ok pos
+rv : pool_v1.pair_forest_semantic_terminal.copy_variant pub.variant = ok variant
+rc :
+  pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h s lambda chi
+      pub.transition.live_snapshot.next_pair_index variant =
+    ok copy
+ra : copy.active = active
+cr : Canon copy.residual
+act : Canon active
+cc : Canon comp
+cv : decode comp = FIv_CompositionValue.polynomial (decode theta) sem pos copy.residual
+sv :
+  canonical sem ∧
+    (fun j => embed (decoded sem j)) = fun j =>
+      R0P.pack4 ConcretePackBasis.basis fun i =>
+        R0P.SemSource.scalarLaneAt (SpendDataMap.mapPublic (⇑embed) (FIw_PublicModel.ofPublic pub))
+          (ValueFamilyFieldTransport.mapOpenings embed
+            (FIw_PublicModel.openings { z := a, succ_z := a1, xor12_z := a2 }))
+          (fun k => embed (FIw_PublicModel.selector s k)) (4 * ↑j + ↑i)
+pv :
+  canonical pos ∧
+    (fun g => embed (decoded pos g)) = fun g =>
+      ((R0P.poseidonPackedFamily ConcretePackBasis.basis).residuals
+            (SpendDataMap.mapPublic (⇑embed) (FIw_PublicModel.ofPublic pub))
+            (ValueFamilyFieldTransport.mapOpenings embed
+              (FIw_PublicModel.openings { z := a, succ_z := a1, xor12_z := a2 }))
+            fun i => embed (FIw_PublicModel.selector s i)).getD
+        (↑g) 0
+⊢ (ExtractedMaskTerminalHorner.composeGroups (embed (decode theta)) (embed (decode copy.residual))
+      (fun i => embed (decoded sem i)) fun i => embed (decoded pos i)) =
+    ExtractedMaskTerminalHorner.composeGroups (embed (decode theta)) (embed (decode copy.residual))
+      (semantic pub { z := a, succ_z := a1, xor12_z := a2 } s) (poseidon pub { z := a, succ_z := a1, xor12_z := a2 } s)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (24 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJk_CompositionWideOnRun.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
