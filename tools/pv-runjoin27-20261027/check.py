@@ -4,7 +4,7 @@ R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin27-2026102
 H='/home/dombarker/project-offloads/codex-pv-runjoin-20261026'; P=H+'/runjoin24-lean';host='dombarker@100.108.41.90'
 A=int(sys.argv[1]);M=sys.argv[2];assert 38141<=A<=38193
 # Enforce ruling (d) before consuming an ID; never depend on estimated wait time.
-prior_refusals=[dict(json.loads(p.read_text()),utc=json.loads(p.read_text()).get('utc',json.loads((E/('used-'+p.stem.split('-')[1]+'.json')).read_text())['utc'])) for p in E.glob('refusal-[0-9]*.json')]
+prior_refusals=[json.loads(p.read_text()) for p in E.glob('*refusal*.json')]
 if prior_refusals:
  last=max(datetime.datetime.fromisoformat(r['utc']) for r in prior_refusals)
  remaining=180-(datetime.datetime.now(datetime.timezone.utc)-last).total_seconds()

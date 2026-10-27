@@ -1,7 +1,14 @@
 """Read deterministic source fixture words with a capped optimized native probe."""
-import pathlib,subprocess,sys,json,shlex,hashlib
+import pathlib,subprocess,sys,json,shlex,hashlib,datetime
 R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin27-20261027';host='dombarker@100.108.41.90';H='/home/dombarker/project-offloads/codex-pv-runjoin-20261026'
 name=sys.argv[1];assert not (E/(name+'.json')).exists()
+prior_refusals=[json.loads(p.read_text()) for p in E.glob('*refusal*.json')]
+if prior_refusals:
+ last=max(datetime.datetime.fromisoformat(r['utc']) for r in prior_refusals)
+ remaining=180-(datetime.datetime.now(datetime.timezone.utc)-last).total_seconds()
+ if remaining>0:
+  print(f'WAIT: {remaining:.1f}s remain before another admission check; no launch',flush=True)
+  sys.exit(77)
 def ssh(s):return subprocess.run(['ssh',host,s],capture_output=True,text=True)
 # Read-only check of the exact native dependency source tree before execution.
 files=sorted(str(p.relative_to(R)) for crate in ['aspis-core','aspis-statement'] for p in (R/'crates'/crate/'src').rglob('*.rs'))
