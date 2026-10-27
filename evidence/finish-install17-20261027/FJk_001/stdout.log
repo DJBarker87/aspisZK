@@ -1,0 +1,18 @@
+FJk_ResidualLane.lean:19:108: error: unsolved goals
+o : Openings
+s : Selectors
+lane : Fin 16
+⊢ decode s.block *
+      (decoded s.local ⟨0, ⋯⟩ *
+            (decoded o.succ_z lane - R0P.poseidonLeadingPair (decoded o.z) (decoded o.xor12_z) lane) +
+          (decoded s.local ⟨1, ⋯⟩ + decoded s.local ⟨9, ⋯⟩ + decoded s.local ⟨10, ⋯⟩) *
+            (decoded o.succ_z lane - R0P.poseidonInterpolatedFullPair (decoded o.z) (decoded s.local) lane) +
+        List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => decoded s.local ⟨↑i + 2, ⋯⟩) *
+          (decoded o.succ_z lane - R0P.poseidonInterpolatedInternalPair (decoded o.z) (decoded s.local) lane)) =
+    decode s.block *
+      (decoded s.local 0 * (decoded o.succ_z lane - R0P.poseidonLeadingPair (decoded o.z) (decoded o.xor12_z) lane) +
+          (decoded s.local 1 + decoded s.local 9 + decoded s.local 10) *
+            (decoded o.succ_z lane - R0P.poseidonInterpolatedFullPair (decoded o.z) (decoded s.local) lane) +
+        List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => decoded s.local ⟨↑i + 2, ⋯⟩) *
+          (decoded o.succ_z lane - R0P.poseidonInterpolatedInternalPair (decoded o.z) (decoded s.local) lane))
+'AspisR1.FJk_ResidualLane.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
