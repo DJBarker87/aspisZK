@@ -1,0 +1,67 @@
+FJa_ClaimsRows.lean:30:39: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  row = row2 ∨ row ∈ []
+
+case Ok.Ok.Ok.inr.inr
+std : StdCalls
+r : AspisR1ClaimsUnrolledParent.Record
+row0 : Std.Array AspisR1ClaimsUnrolledParent.aspis_core.field.QM31 29#usize
+h0 : (external std).decode 29#usize r 0#usize = ok (core.result.Result.Ok row0)
+row1 : Std.Array AspisR1ClaimsUnrolledParent.aspis_core.field.QM31 29#usize
+h1 : (external std).decode 29#usize r 29#usize = ok (core.result.Result.Ok row1)
+row2 : Std.Array AspisR1ClaimsUnrolledParent.aspis_core.field.QM31 29#usize
+h2 : (external std).decode 29#usize r 58#usize = ok (core.result.Result.Ok row2)
+run✝² :
+  (do
+      let r0 ← (external std).decode 29#usize r 0#usize
+      match r0 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok row0 => do
+          let r1 ← (external std).decode 29#usize r 29#usize
+          match r1 with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok row1 => do
+              let r2 ← (external std).decode 29#usize r 58#usize
+              match r2 with
+                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                | core.result.Result.Ok row2 => ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)) =
+    ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)
+run✝¹ :
+  (match core.result.Result.Ok row0 with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok row0 => do
+      let r1 ← (external std).decode 29#usize r 29#usize
+      match r1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok row1 => do
+          let r2 ← (external std).decode 29#usize r 58#usize
+          match r2 with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok row2 => ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)) =
+    ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)
+run✝ :
+  (match core.result.Result.Ok row1 with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok row1 => do
+      let r2 ← (external std).decode 29#usize r 58#usize
+      match r2 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok row2 => ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)) =
+    ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)
+run :
+  (match core.result.Result.Ok row2 with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok row2 => ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)) =
+    ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)
+row : AspisR1ClaimsUnrolledParent.Row
+q : AspisR1ClaimsUnrolledParent.aspis_core.field.QM31
+hq : q ∈ ↑row
+h✝ : row = row2 ∨ row ∈ []
+⊢ FIp_SemanticValues.Canon (toMainQM q)
+FJa_ClaimsRows.lean:29:33: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_cons,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵] at member
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJa_ClaimsRows.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
