@@ -11453,3 +11453,21 @@ target-cpu change) as the client build, because it is the toolchain the candidat
 and L3 evidence were produced with, and pinning anything else would invalidate that evidence; record it
 as a rust-toolchain file for the client build and in the release ledger; the pin is re-confirmed at
 candidate adoption. Privacy target not yet established.
+
+## D271 (Stream B) 2026-10-27 10:30 UTC: V403 round merged (canonical producers proved; caller transport open); cb9 launched on extractable independent callback rows
+
+pv-canon (`codex/pv-canon-20261027`, research-based; 100/100 Lean = 74 passed / 26 rejected, 6/6 Kani =
+5 control/indexing passes / 1 CLI rejection; audits 44497-44499 standard axioms, ≤3.15 s / 4.30 GB / swap
+0; no crates/programs change; no forbidden tokens) merged into research (16191fd042), branch deleted.
+Proved: canonicality of every producer of op121's arguments and `op121_arguments` over the exact
+extracted interpolation/semantic/update/read prefix; `reached_canonical` composes it with the explicit,
+still-open `P_NativePrefixBinding`. The whole recursive caller transport failed kernel checks and is
+archived (not rerun unchanged). V403 OPEN on the recursive call-event/prefix transport and the binding to
+the installed RunJoin caller. op121's remaining source obligation, stated exactly: canonical inputs give a
+successful canonical output with degree-27 polynomial meaning, i.e. complete Result equality with the
+proved Horner reference; op121 is in the extraction-obstruction set, so its source link is a route (ii)
+question. Track paused on the RunJoin binding. Launched pv-cb9 (new branch from codex/pv-cb3-20261026
+in the reused pv-canon worktree; IDs 51500-51799, 100 Lean / 4 Kani control only) on the independent
+open callback rows NOT in the extraction-obstruction inventory: ops 226, 227, 228, 230, 250, 251, 252,
+254, 259, by direct extraction with the unchanged tool, recording any new refusal. Six slots: op223,
+cblib3, op134, runjoin13, l3dis3, cb9. Rows removed outright: 0. Privacy target not yet established.
