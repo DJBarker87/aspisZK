@@ -17,13 +17,19 @@ pub(crate) fn keep_clear(clear: bool, active: bool, chi: QM31, value: QM31) -> b
 
 pub(crate) fn all_slots_clear(values: &[[[QM31; 2]; 2]], masks: &[u16; 64], chi: QM31) -> bool {
     let mut clear = true;
-    for (row, sides) in values.iter().enumerate() {
+    let mut row = 0usize;
+    while row < values.len() {
         let active = masks[row >> 4] & (1 << (row & 15)) != 0;
-        for side in sides {
-            for value in side {
-                clear = keep_clear(clear, active, chi, *value);
+        let mut side = 0usize;
+        while side < 2 {
+            let mut slot = 0usize;
+            while slot < 2 {
+                clear = keep_clear(clear, active, chi, values[row][side][slot]);
+                slot += 1;
             }
+            side += 1;
         }
+        row += 1;
     }
     clear
 }

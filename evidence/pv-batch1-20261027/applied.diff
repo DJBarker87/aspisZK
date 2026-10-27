@@ -1,0 +1,94 @@
+diff --git a/crates/aspis-r1-cost-probe/src/ct_pole.rs b/crates/aspis-r1-cost-probe/src/ct_pole.rs
+index 8a26136d41..453ef316ca 100644
+--- a/crates/aspis-r1-cost-probe/src/ct_pole.rs
++++ b/crates/aspis-r1-cost-probe/src/ct_pole.rs
+@@ -17,13 +17,19 @@ pub(crate) fn keep_clear(clear: bool, active: bool, chi: QM31, value: QM31) -> b
+ 
+ pub(crate) fn all_slots_clear(values: &[[[QM31; 2]; 2]], masks: &[u16; 64], chi: QM31) -> bool {
+     let mut clear = true;
+-    for (row, sides) in values.iter().enumerate() {
++    let mut row = 0usize;
++    while row < values.len() {
+         let active = masks[row >> 4] & (1 << (row & 15)) != 0;
+-        for side in sides {
+-            for value in side {
+-                clear = keep_clear(clear, active, chi, *value);
++        let mut side = 0usize;
++        while side < 2 {
++            let mut slot = 0usize;
++            while slot < 2 {
++                clear = keep_clear(clear, active, chi, values[row][side][slot]);
++                slot += 1;
+             }
++            side += 1;
+         }
++        row += 1;
+     }
+     clear
+ }
+diff --git a/crates/aspis-r1-cost-probe/src/host_semantic.rs b/crates/aspis-r1-cost-probe/src/host_semantic.rs
+index 3dfe659b55..64941247ca 100644
+--- a/crates/aspis-r1-cost-probe/src/host_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/host_semantic.rs
+@@ -1,8 +1,9 @@
+ //! UNPROVED COST PROBE. Own D14 semantic prover; original prover unchanged.
++use crate::prover_helper_sum::state_only_copy_helper_sum;
+ use alloc::vec::Vec;
+ use aspis_core::{field::{WideExact, M31, QM31, P},Digest32,r0::{domain::Point,encoder::eval_message}};
+ use crate::host_wire::{self as wire,Challenges,Error,SemanticTranscript};
+-use aspis_statement::{multilinear_evaluate_qm31,state_only_copy_helper_sum,StateOnlyTraceFoundation,pool_v1::{pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1,pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1}};
++use aspis_statement::{multilinear_evaluate_qm31,StateOnlyTraceFoundation,pool_v1::{pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1,pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1}};
+     /// Backend errors abort. Inputs are borrowed only during each call;
+     /// no array of column loans survives the call boundary.
+     pub trait Commitments {
+diff --git a/crates/aspis-r1-cost-probe/src/lib.rs b/crates/aspis-r1-cost-probe/src/lib.rs
+index 8435a17a19..5e1ebea71d 100644
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -58,3 +58,6 @@ mod ct_pole;
+ // Fixed public-shape scheduling for the host CT adoption candidate.
+ #[cfg(feature="ct-host-prover")]
+ pub mod host_work;
++
++#[cfg(feature="prover")]
++mod prover_helper_sum;
+diff --git a/crates/aspis-r1-cost-probe/src/prover.rs b/crates/aspis-r1-cost-probe/src/prover.rs
+index 5f65899f50..d32ce66232 100644
+--- a/crates/aspis-r1-cost-probe/src/prover.rs
++++ b/crates/aspis-r1-cost-probe/src/prover.rs
+@@ -210,7 +210,7 @@ fn prove_masked_with_attempt(
+     test_hooks::observe_secrets(hash,reserved.mask_nonce(),&g,c1_salts.as_ref().unwrap().get(0));
+     let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts,c2_salts};
+     let sem=crate::host_semantic::build_with_material(public,compiled,&noised_c1,&applied.mask_only_c1,&d,&g,&h1_padding,&mut backend,LegacyHashFn(hash),variant).map_err(semantic_error)?;
+-    let h1_total_balanced=aspis_statement::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);
++    let h1_total_balanced=crate::prover_helper_sum::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);
+     if !h1_total_balanced { return Err(Error::Semantic); }
+     let audit=MaskedFixtureAudit{h1_total_balanced,..audit};
+     let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context))?;
+diff --git a/crates/aspis-r1-cost-probe/src/sim.rs b/crates/aspis-r1-cost-probe/src/sim.rs
+index b3a9565717..9e0100d2bc 100644
+--- a/crates/aspis-r1-cost-probe/src/sim.rs
++++ b/crates/aspis-r1-cost-probe/src/sim.rs
+@@ -196,7 +196,7 @@ fn tape(public_bytes:&[u8],variant:Variant,coins:&mut Coins)->Result<Tape,Error>
+     let mut h1=vec![K::ZERO;1024];
+     apply_pool_v1_pair_forest_h1_padding_mask_v1(&mut h1,&applied.h1_padding).map_err(|_|Error::Semantic)?;
+     if zero.c1.len()!=16||d.len()!=1024||applied.g.len()!=1024
+-        || aspis_statement::state_only_copy_helper_sum(&h1)!=Some(K::ZERO) {return Err(Error::Semantic);}
++        || crate::prover_helper_sum::state_only_copy_helper_sum(&h1)!=Some(K::ZERO) {return Err(Error::Semantic);}
+     let c1=core::array::from_fn(|i| if i<16 {zero.c1[i].clone()} else {applied.mask_only_c1[i-16].clone()});
+     Ok(Tape{c1,h1,g:applied.g.clone(),d})
+ }
+diff --git a/crates/aspis-r1-cost-probe/src/weights.rs b/crates/aspis-r1-cost-probe/src/weights.rs
+index ec753dfc47..c6e4bc9132 100644
+--- a/crates/aspis-r1-cost-probe/src/weights.rs
++++ b/crates/aspis-r1-cost-probe/src/weights.rs
+@@ -11,8 +11,7 @@ pub fn powers<const N:usize>(x:E)->[E;N]{
+  while i<N {
+   out[i]=p;
+   i+=1;
+-  if i==N { return out; }
+-  p=p.mul(x);
++  if i<N { p=p.mul(x); }
+  }
+  out
+ }

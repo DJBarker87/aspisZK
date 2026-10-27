@@ -196,7 +196,7 @@ fn tape(public_bytes:&[u8],variant:Variant,coins:&mut Coins)->Result<Tape,Error>
     let mut h1=vec![K::ZERO;1024];
     apply_pool_v1_pair_forest_h1_padding_mask_v1(&mut h1,&applied.h1_padding).map_err(|_|Error::Semantic)?;
     if zero.c1.len()!=16||d.len()!=1024||applied.g.len()!=1024
-        || aspis_statement::state_only_copy_helper_sum(&h1)!=Some(K::ZERO) {return Err(Error::Semantic);}
+        || crate::prover_helper_sum::state_only_copy_helper_sum(&h1)!=Some(K::ZERO) {return Err(Error::Semantic);}
     let c1=core::array::from_fn(|i| if i<16 {zero.c1[i].clone()} else {applied.mask_only_c1[i-16].clone()});
     Ok(Tape{c1,h1,g:applied.g.clone(),d})
 }
