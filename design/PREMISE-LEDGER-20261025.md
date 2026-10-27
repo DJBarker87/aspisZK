@@ -2962,3 +2962,30 @@ definitions and the weakening lemma directly.
 FJp_Top.deployed is a strengthening of the adopted ARX_Root.deployed (fewer
 hypotheses, same conclusion), so it is the current proved top; later
 removals must be stacked on it. Deployed 100-bit target: not yet established.
+
+## L144 and L145 discharged, 2026-10-27 (finish-chain1, FJu_), stacked on FJp_Top
+
+Native L144/L145 and global F3Y_G_L144/F3Y_G_L145 are REMOVED. New proved
+top: `AspisR1.FJu_Top.deployed`, identical to `FJp_Top.deployed` except
+`finishOwners : FJu_GlobalOwners.Owners` and the native `Outcome` chain ending
+at `FJu_Finish.Outcome`. In both places the semantic endpoint hypothesis
+`R3SemanticRemainingJoins.EquationEndpoint` (= `Equations claim terminal …`:
+first boundary = claim, the Fin 9 chain, last evaluation = terminal) is
+replaced by `FJu_Remaining.Endpoint`, which keeps ONLY the last-evaluation =
+terminal conjunct (L146). The dropped first-boundary and chain conjuncts are
+derived on the same accepted run; `FJu_Nonvacuity.equivalent` proves the old
+and new owner conditions are equivalent (`weaken` and `complete`). Both
+removals are from hypotheses; conclusion unchanged; kernel statement
+otherwise byte-identical (evidence/finish-chain1-20261027/
+FJu_statement-check.json); axioms propext/Classical.choice/Quot.sound. Lead
+review: verified the two endpoint definitions and the equivalence directly.
+
+| Root | Actual antecedent | Deployment-inclusive |
+|---|---|---|
+| ARX_Root.deployed (adopted) | 83T/11P/13G | 89T/27P/13G |
+| FJp_Top.deployed | 83T/9P/13G | 89T/25P/13G |
+| **FJu_Top.deployed (current proved top)** | **83T/5P/13G** | **89T/21P/13G** |
+
+Remaining actual P on FJu_Top: native L142, F3Y_G_L142, native L146,
+F3Y_G_L146, L154 (external query budget). Deployed 100-bit target: not yet
+established.
