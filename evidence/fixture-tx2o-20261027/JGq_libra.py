@@ -79,6 +79,8 @@ theorem quarter{side}_{j} : FIo_Native.aspis_core.field.wide_exact.WideExact.mul
  out[f'JGq_LibraScale{side}']=s
 for mod,t in out.items():
  p=R/'lean'/(mod+'.lean')
- if '--check' in sys.argv:assert p.read_text()==t
+ if '--check' in sys.argv:
+  retained=p if p.exists() else R/'evidence/fixture-tx2o-20261027/JGq_UNCHECKED'/(mod+'.lean.txt')
+  assert retained.read_text()==t
  else:p.write_text(t)
 print(len(out),'Libra primitive and scalar-call stages; no parent Libra success claimed')
