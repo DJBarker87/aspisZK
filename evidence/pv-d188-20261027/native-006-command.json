@@ -1,0 +1,23 @@
+{
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-d188-20261027/native-006-time.log",
+    "sh",
+    "-c",
+    "/home/dombarker/.cargo/bin/rustc --edition=2021 -O /home/dombarker/project-offloads/codex-pv-d188-20261027/native2-files/native5.rs -o /home/dombarker/project-offloads/codex-pv-d188-20261027/native && /home/dombarker/project-offloads/codex-pv-d188-20261027/native"
+  ],
+  "expected_time": "tiny optimized compilation and scalar/slice fixture execution; no elimination or proof generation"
+}

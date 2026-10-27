@@ -2,11 +2,12 @@
 from pathlib import Path
 import re,json,subprocess,hashlib
 out=Path('evidence/pv-d188-20261027')
-paths=subprocess.check_output(['git','ls-files','*.lean'],text=True).splitlines()
+BASE='b3d109c8ffa47e452b57c5e4a7fe71cfb98e7146'
+paths=[p for p in subprocess.check_output(['git','ls-tree','-r','--name-only',BASE],text=True).splitlines() if p.endswith('.lean')]
 # Primary authored modules, including private cohort sources committed as evidence.
 paths=[p for p in paths if not any(s in p for s in ['/snapshots/','/drafts/','/local-proof/','/lean-receipts/'])]
 texts={p:Path(p).read_text() for p in paths}
-pat=r'(PV_(CB_|CB3_|CBM_|CBL_|Op223_|Op134_|B1_|Ext_|R2_|Src_|RunJoin_)|ProverRw)'
+pat=r'(PV_|ProverRw)'
 roots=[p for p in paths if re.match(pat,Path(p).stem) and ('/evidence/' not in p) and ('before-' not in p) and ('/codex-' not in p)]
 pins=json.loads(Path('evidence/envj-rebuild-20261026/EJR_final-inventory.json').read_text())
 authority={e['module'].replace('/','.') : e['resolution']['path'] for e in pins['selected'] if e.get('resolution')}
@@ -46,7 +47,7 @@ for p in emissions:
   refs.append(dict(claim=name,emission_line=t.count('\n',0,m.start())+1,rust=src,rust_start=int(m[2]),rust_end=int(m[4])))
  hits=[]
  for n,line in enumerate(t.splitlines(),1):
-  if re.search(r'iter_mut|chunks_mut|get_mut|index_mut|next_back|\b\w*(?:back|restore)\w*\b|let\s*\([^\n]*,\s*_\)',line):
+  if re.search(r'iter_mut|chunks(?:_exact)?_mut|get_mut|index_mut|next_back|Array.update|Slice.update|Vec.update|\b\w*(?:back|restore)\w*\b|let\s*\([^\n]*,\s*_\)',line):
    prior=[r for r in refs if r['emission_line']<=n]
    hit=dict(file=p,line=n,text=line.strip(),source=prior[-1] if prior else None);hits.append(hit);matches.append(hit)
  inv.append(dict(file=p,sha256=hashlib.sha256(t.encode()).hexdigest(),sources=refs,scan_matches=len(hits)))
@@ -55,8 +56,8 @@ rustpaths=set(r['rust'] for e in inv for r in e['sources'] if r['rust'].startswi
 for p in sorted(rustpaths):
  if not Path(p).exists():continue
  for n,line in enumerate(Path(p).read_text().splitlines(),1):
-  if re.search(r'iter_mut|chunks_mut|get_mut|&mut\b|\*\w+\s*(?:[+*^|&-]?=)|\[[^\]]+\]\s*[+*^|&-]?=',line):rustwrites.append(dict(file=p,line=n,text=line.strip()))
-data=dict(revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),root_count=len(roots),closure_count=len(seen),emission_count=len(inv),roots=sorted(roots),emissions=inv,ambiguous_module_candidates=amb,authority_resolutions=resolved,unresolved_imports=sorted(missing))
+  if re.search(r'iter_mut|chunks(?:_exact)?_mut|get_mut|&mut\b|\*\w+\s*(?:[+*^|&-]?=)|\[[^\]]+\]\s*[+*^|&-]?=',line):rustwrites.append(dict(file=p,line=n,text=line.strip()))
+data=dict(revision=BASE,root_count=len(roots),closure_count=len(seen),emission_count=len(inv),roots=sorted(roots),emissions=inv,ambiguous_module_candidates=amb,authority_resolutions=resolved,unresolved_imports=sorted(missing))
 for name,obj in [('inventory',data),('static-matches',matches),('rust-mutable-sites',rustwrites),('import-edges',edges)]: (out/(name+'.json')).write_text(json.dumps(obj,indent=2)+'\n')
 print('roots',len(roots),'closure',len(seen),'emission modules',len(inv),'matches',len(matches),'ambiguities',len(amb),'unresolved',len(missing))
 for e in inv:

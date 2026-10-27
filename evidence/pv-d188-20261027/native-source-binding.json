@@ -1,0 +1,44 @@
+{
+  "files": {
+    "crates/aspis-core/src/field.rs": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+    "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0"
+  },
+  "fragments": [
+    {
+      "name": "M31::to_le_bytes",
+      "sha256": "9074bbacb269adfa097f06f2d4ef7cbb7d978be1d214981884228c94fdb6f94b",
+      "text": "    pub fn to_le_bytes(self) -> [u8; 4] {\n        self.0.to_le_bytes()\n    }"
+    },
+    {
+      "name": "CM31::write_le_bytes",
+      "sha256": "65efd94ceded0607804f281b1cb4b305fe50c51892ea190fae7236b493c44ec3",
+      "text": "    pub fn write_le_bytes(self, out: &mut [u8]) {\n        out[0..4].copy_from_slice(&self.a.to_le_bytes());\n        out[4..8].copy_from_slice(&self.b.to_le_bytes());\n    }"
+    },
+    {
+      "name": "QM31::write_le_bytes",
+      "sha256": "954369cea0ca8f769d5d767a53d88fdf26111b72bfd57385ccbcad7d47802f98",
+      "text": "    pub fn write_le_bytes(self, out: &mut [u8]) {\n        self.c0.write_le_bytes(&mut out[0..8]);\n        self.c1.write_le_bytes(&mut out[8..16]);\n    }"
+    },
+    {
+      "name": "qm31_div_pass",
+      "sha256": "6a456b5023e9bd0203adf36741a7abec7db9d6a080a9b5e47744cc29fab509e7",
+      "text": "fn qm31_div_pass(mut rank: [u32; 8]) -> ([u32; 8], u32) {\n    let mut remainder = 0u64;\n    let mut j = 8usize;\n    while j > 0 {\n        j -= 1;\n        let dividend = (remainder << 32) | u64::from(rank[j]);\n        rank[j] = (dividend / u64::from(P)) as u32;\n        remainder = dividend % u64::from(P);\n    }\n    (rank, remainder as u32)\n}"
+    },
+    {
+      "name": "qm31_digits",
+      "sha256": "cf859108cd32807a4ca39734bcb708036fbba0c10ee9711158d5279d8b6fd175",
+      "text": "fn qm31_digits(block: &[u8; 32]) -> [u32; 4] {\n    let mut rank = [0u32; 8];\n    let mut i = 0usize;\n    while i < 8 {\n        let start = 4 * i;\n        rank[i] = u32::from_le_bytes([\n            block[start],\n            block[start + 1],\n            block[start + 2],\n            block[start + 3],\n        ]);\n        i += 1;\n    }\n    let mut digits = [0u32; 4];\n    let mut i = 0usize;\n    while i < 4 {\n        let (quotient, digit) = qm31_div_pass(rank);\n        rank = quotient;\n        digits[i] = digit;\n        i += 1;\n    }\n    digits\n}"
+    },
+    {
+      "name": "low_base_p_digits",
+      "sha256": "b19407403728dfc678c04aa0182fd049de76fad92e958550e00af65ef210a1fc",
+      "text": "fn low_base_p_digits(block: &[u8; 32]) -> ([u32; 8], u32) {\n    let mut quotient: [u32; 8] =\n        core::array::from_fn(|i| u32::from_le_bytes(block[4 * i..4 * i + 4].try_into().unwrap()));\n    let digits = core::array::from_fn(|_| {\n        let mut remainder = 0u64;\n        for limb in quotient.iter_mut().rev() {\n            let dividend = (remainder << 32) | u64::from(*limb);\n            *limb = (dividend / u64::from(P)) as u32;\n            remainder = dividend % u64::from(P);\n        }\n        remainder as u32\n    });\n\n    // After eight divisions, the quotient is at most 256 and fits in u32.\n    debug_assert!(quotient[1..].iter().all(|&limb| limb == 0));\n    debug_assert!(quotient[0] <= 256);\n    (digits, quotient[0])\n}"
+    },
+    {
+      "name": "add_small_base_p",
+      "sha256": "0222e6cbafdd5d9d9335bc54e4de3db97af8e95e37997d8f863fa602f7bb4421",
+      "text": "fn add_small_base_p(digits: &mut [u32; 8], mut addend: u32) -> bool {\n    for digit in digits {\n        let sum = u64::from(*digit) + u64::from(addend);\n        *digit = (sum % u64::from(P)) as u32;\n        addend = (sum / u64::from(P)) as u32;\n    }\n    debug_assert!(addend <= 1);\n    addend != 0\n}"
+    }
+  ],
+  "scope": "Exact function text compiled with structural record declarations, native u32/u64, std slice operations; no replacement arithmetic/helper bodies."
+}
