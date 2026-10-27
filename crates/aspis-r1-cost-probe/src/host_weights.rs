@@ -69,23 +69,31 @@ pub fn new(variant:Variant,alpha:&[K;10],z:&[SecureCirclePoint;2])->Result<Weigh
 }
 
 // The loop carries owned fixed arrays, with no loan from the caller at its joins.
+type Powers7=(E,E,E,E,E,E,E);
+// Array loans end inside this adapter; only value coordinates reach the loop.
+fn powers7(x:E)->Powers7 {
+    let p=crate::prover_powers::powers::<7>(x);
+    (p[0],p[1],p[2],p[3],p[4],p[5],p[6])
+}
+fn materialize_cell(weights:Weights,k:Powers7,j:usize)->E {
+    let mut v=E::ZERO;
+    v=v.add(mul_qm31(k.0,raw_value(weights,0,j)));
+    v=v.add(mul_qm31(k.1,raw_value(weights,1,j)));
+    v=v.add(mul_qm31(k.2,raw_value(weights,2,j)));
+    v=v.add(mul_qm31(k.3,raw_value(weights,3,j)));
+    v=v.add(mul_qm31(k.4,raw_value(weights,4,j)));
+    v=v.add(mul_qm31(k.5,raw_value(weights,5,j)));
+    v=v.add(mul_qm31(k.6,raw_value(weights,6,j)));
+    v
+}
 fn materialize_values(weights:Weights,kappa:E,mut out:[E;1024])->[E;1024] {
-        let kp=crate::prover_powers::powers::<7>(kappa);
-        let k0=kp[0]; let k1=kp[1]; let k2=kp[2]; let k3=kp[3];
-        let k4=kp[4]; let k5=kp[5]; let k6=kp[6];
-        let mut j=0usize;
-        while j<1024 {
-            let mut v=E::ZERO;
-            v=v.add(mul_qm31(k0,raw_value(weights,0,j)));
-            v=v.add(mul_qm31(k1,raw_value(weights,1,j)));
-            v=v.add(mul_qm31(k2,raw_value(weights,2,j)));
-            v=v.add(mul_qm31(k3,raw_value(weights,3,j)));
-            v=v.add(mul_qm31(k4,raw_value(weights,4,j)));
-            v=v.add(mul_qm31(k5,raw_value(weights,5,j)));
-            v=v.add(mul_qm31(k6,raw_value(weights,6,j)));
-            out[j]=v; j+=1;
-        }
-        out
+    let k=powers7(kappa);
+    let mut j=0usize;
+    while j<1024 {
+        out[j]=materialize_cell(weights,k,j);
+        j+=1;
+    }
+    out
 }
 fn raw_value(weights:Weights,kind:usize,j:usize)->K {
         if kind==0 {

@@ -12,7 +12,9 @@ with tarfile.open(fileobj=sys.stdout.buffer,mode='w|') as t:
   for p in root.rglob('*'):
    if not p.is_file() or any(x in p.parts for x in ['artifacts','diagnostics']):continue
    if p.suffix not in ['.json','.log','.txt','.lean']:continue
-   t.add(p,arcname=str(p.relative_to(D)),recursive=False)
+   arc=str(p.relative_to(D))
+   if p.name=='FunsExternal_Template.lean':arc+='.txt'
+   t.add(p,arcname=arc,recursive=False)
 """.replace('DIR',repr(D))
 r=subprocess.run(['ssh',H,'python3 -'],input=code.encode(),capture_output=True,check=True)
 with tarfile.open(fileobj=io.BytesIO(r.stdout)) as t:t.extractall(E,filter='data')
