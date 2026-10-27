@@ -13,7 +13,7 @@ use aspis_core::state_only_hiding::{
     begin_state_only_hiding_precommit, STATE_ONLY_H1_PADDING_MASK_FREE_QM31,
 };
 use aspis_core::state_only_hiding::{
-    begin_state_only_masked_sumcheck, state_only_selected_mask_value, StateOnlyHidingContext,
+    begin_state_only_masked_sumcheck, StateOnlyHidingContext,
     StateOnlyHidingScheduleError, PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1,
     PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1,
     PINNED_POOL_V1_PAYMENT_RELATION_FREE_MASK_FINGERPRINT,
