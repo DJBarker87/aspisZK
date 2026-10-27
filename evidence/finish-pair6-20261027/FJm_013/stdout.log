@@ -1,0 +1,50 @@
+FJm_Filled.lean:18:8: error: unsolved goals
+case Ok.unit
+n : Usize
+⊢ ∃ a b,
+    FIo_Native.Allocation.reserve Global ⟨[], alloc.vec.Vec.new._proof_1⟩ n = ok (a, b) ∧
+      ∃ x,
+        (match a with
+            | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+            | core.result.Result.Err e => do
+              let t ←
+                FIo_Native.aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once
+                    { cloneInst := FIo_Native.aspis_core.field.QM31.Insts.CoreCloneClone } () e
+              ok (core.result.Result.Err t)) =
+            ok x ∧
+          ∃ x_1,
+            (match x with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+                ok x_1 ∧
+              (match x_1 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  ok
+                    (core.result.Result.Ok
+                      ⟨List.take ↑n ↑b ++ List.replicate (↑n - (↑b).length) FIo_Native.aspis_core.field.QM31.ZERO, ⋯⟩)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec NQ)
+                    (core.convert.FromSame FIo_Native.aspis_core.r0.Error) residual) =
+                ok (core.result.Result.Ok ⟨List.replicate (↑n) FIo_Native.aspis_core.field.QM31.ZERO, ⋯⟩)
+FJm_Filled.lean:20:52: warning: This simp argument is unused:
+  FIo_Install.allocation
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵I̵o̵_̵N̵a̵t̵i̵v̵e̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵r̵0̵.̵h̵e̵a̵p̵.̵f̵i̵l̵l̵e̵d̵,̵F̵I̵o̵_̵I̵n̵s̵t̵a̵l̵l̵.̵a̵l̵l̵o̵c̵a̵t̵i̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵F̵I̵o̵_̵N̵a̵t̵i̵v̵e̵.̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵t̵r̵y̵_̵r̵e̵s̵e̵r̵v̵e̵_̵e̵x̵a̵c̵t̵,̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵n̵e̵w̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵F̵I̵o̵_̵N̵a̵t̵i̵v̵e̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲F̲I̲o̲_̲N̲a̲t̲i̲v̲e̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲r̲0̲.̲h̲e̲a̲p̲.̲f̲i̲l̲l̲e̲d̲,̲ ̲F̲I̲o̲_̲N̲a̲t̲i̲v̲e̲.̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲t̲r̲y̲_̲r̲e̲s̲e̲r̲v̲e̲_̲e̲x̲a̲c̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲n̲e̲w̲,̲ ̲F̲I̲o̲_̲N̲a̲t̲i̲v̲e̲.̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJm_Filled.lean:22:44: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.r0.heap.filled, ̲FIo_Install.allocation,
+        FIo_Native.alloc.vec.Vec.try_reserve_exact, ̲alloc.vec.Vec.new,
+        FIo_Native.core.result.Result.map_err,b̵i̵n̵d̵_̵t̵ ̲c_̵ok̵,̵c̵o̵re.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJm_Filled.canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJm_Filled.contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

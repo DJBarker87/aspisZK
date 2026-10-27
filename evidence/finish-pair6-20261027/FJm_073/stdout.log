@@ -1,0 +1,125 @@
+FJm_LibraPowerValues.lean:38:73: error: Type mismatch
+  FJc_WeightConstants.one.left
+has type
+  FJc_WeightValues.Canon FIn_WeightsExtract.field.QM31.ONE
+but is expected to have type
+  FIo_QMValues.Canon FIo_Native.aspis_core.field.QM31.ONE
+FJm_LibraPowerValues.lean:39:70: error: Type mismatch
+  FJc_WeightConstants.one.right
+has type
+  FJc_WeightValues.decode FIn_WeightsExtract.field.QM31.ONE = 1
+but is expected to have type
+  decodeQM (qm FIo_Native.aspis_core.field.QM31.ONE) = 1
+FJm_LibraPowerValues.lean:54:22: error: Application type mismatch: The argument
+  run
+has type
+  (do
+      let q41 ← q2.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok (base, high, q4, q16)
+but is expected to have type
+  ok ?m.545 = ok ?m.546
+in the application
+  ok.inj run
+FJm_LibraPowerValues.lean:55:30: error: Application type mismatch: The argument
+  v4.left
+has type
+  FIo_QMValues.Canon four
+but is expected to have type
+  FIo_QMValues.Canon q4
+in the application
+  And.intro v4.left
+FJm_LibraPowerValues.lean:55:35: error: Application type mismatch: The argument
+  v16.left
+has type
+  FIo_QMValues.Canon sixteen
+but is expected to have type
+  FIo_QMValues.Canon q16
+in the application
+  And.intro v16.left
+FJm_LibraPowerValues.lean:55:41: error: Application type mismatch: The argument
+  p4
+has type
+  decodeQM (qm four) = decodeQM (qm q) ^ 4
+but is expected to have type
+  decodeQM (qm q4) = decodeQM (qm q) ^ 4
+in the application
+  And.intro p4
+FJm_LibraPowerValues.lean:57:4: error: 'change' tactic failed, pattern
+  x ∈ [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3]
+is not definitionally equal to target
+  x ∈ ↑base
+FJm_LibraPowerValues.lean:61:4: error: 'change' tactic failed, pattern
+  x ∈ [FIo_Native.aspis_core.field.QM31.ONE, four, eight, twelve]
+is not definitionally equal to target
+  x ∈ ↑high
+FJm_LibraPowerValues.lean:66:101: error: Type mismatch
+  p3
+has type
+  decodeQM (qm q3) = decodeQM (qm q) ^ 3
+but is expected to have type
+  (match (↑base)[0]? with
+    | some x => decodeQM (qm x)
+    | none => 0) =
+    1
+FJm_LibraPowerValues.lean:66:101: error: Type mismatch
+  p3
+has type
+  decodeQM (qm q3) = decodeQM (qm q) ^ 3
+but is expected to have type
+  (match (↑base)[1]? with
+    | some x => decodeQM (qm x)
+    | none => 0) =
+    decodeQM (qm q)
+FJm_LibraPowerValues.lean:66:101: error: Type mismatch
+  p3
+has type
+  decodeQM (qm q3) = decodeQM (qm q) ^ 3
+but is expected to have type
+  (match (↑base)[2]? with
+    | some x => decodeQM (qm x)
+    | none => 0) =
+    decodeQM (qm q) ^ 2
+FJm_LibraPowerValues.lean:66:101: error: Type mismatch
+  p3
+has type
+  decodeQM (qm q3) = decodeQM (qm q) ^ 3
+but is expected to have type
+  (match (↑base)[3]? with
+    | some x => decodeQM (qm x)
+    | none => 0) =
+    decodeQM (qm q) ^ 3
+FJm_LibraPowerValues.lean:69:101: error: Type mismatch
+  p12
+has type
+  decodeQM (qm twelve) = decodeQM (qm q) ^ 12
+but is expected to have type
+  (match (↑high)[0]? with
+    | some x => decodeQM (qm x)
+    | none => 0) =
+    decodeQM (qm q) ^ (4 * 0)
+FJm_LibraPowerValues.lean:69:101: error: Type mismatch
+  p12
+[Error pretty printing: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.(invalid MessageData.lazy, missing context)]
+FJm_LibraPowerValues.lean:69:101: error: Type mismatch
+  p12
+[Error pretty printing: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.(invalid MessageData.lazy, missing context)]
+FJm_LibraPowerValues.lean:69:101: error: Type mismatch
+  p12
+has type
+  decodeQM (qm twelve) = decodeQM (qm q) ^ 12
+but is expected to have type
+  (match (↑high)[3]? with
+    | some x => decodeQM (qm x)
+    | none => 0) =
+    decodeQM (qm q) ^ (4 * 3)
+'AspisR1.FJm_LibraPowerValues.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

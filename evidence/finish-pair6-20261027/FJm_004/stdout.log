@@ -1,0 +1,128 @@
+FJm_KindTwoArithmetic.lean:36:106: error: unsolved goals
+r : NP6_StdModel.Reservation
+semAlpha : Std.Array K 10#usize
+z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize
+w : FIo_Install.W
+hc : FJc_WeightArray.canonical (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ semAlpha)
+hw : FIn_WeightsInstall.newWeights transport.Variant.S2 semAlpha z = ok (core.result.Result.Ok w)
+alpha : Slice NE
+f : Slice U8
+a0 a1 : NE
+ap0 ap1 : Std.Array NE 4#usize
+ha0 : FIo_WideValues.Canon a0
+ha1 : FIo_WideValues.Canon a1
+hp0 : FIo_Native.weights.powers 4#usize a0 = ok ap0
+hp1 : FIo_Native.weights.powers 4#usize a1 = ok ap1
+scratch scratchOut : alloc.vec.Vec NQ
+before after : Std.Array NE 7#usize
+hs : FJj_QMSlice.canon scratch.deref
+run :
+  FIo_Native.weights.process_kind (FIo_Install.toWeights w) 2#usize alpha f 2#usize 64#usize ap0 ap1 scratch before =
+    ok (core.result.Result.Ok (), scratchOut, after)
+this : FIo_Native.Allocation := FIo_Install.allocation r
+w✝⁴ : Std.Array (Std.Array FIn_WeightsExtract.field.QM31 10#usize) 3#usize
+w✝³ w✝² : FIn_WeightsExtract.field.QM31
+w✝¹ w✝ : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize
+left✝⁴ :
+  FIn_WeightsExtract.state_only_prefix.r0.statement_points
+      (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ semAlpha) =
+    ok w✝⁴
+left✝³ : (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ semAlpha).index_usize 8#usize = ok w✝³
+left✝² : (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ semAlpha).index_usize 9#usize = ok w✝²
+left✝¹ :
+  FIn_WeightsExtract.weights_new_loop0 { start := 0#usize, «end» := 3#usize } w✝⁴
+      (Array.repeat 5#usize (Array.repeat 5#usize (Array.repeat 4#usize FIn_WeightsExtract.field.QM31.ZERO))) =
+    ok w✝¹
+left✝ :
+  FIn_WeightsExtract.weights_new_loop1 { start := 0#usize, «end» := 2#usize }
+      (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toPoint z) w✝¹ =
+    ok w✝
+variant : (FIo_Install.toWeights w).variant = FIo_Install.variant (FIn_WeightsInstall.variant transport.Variant.S2)
+right✝ :
+  (FIo_Install.toWeights w).points = FIn_WeightsInstall.mapArray (FIn_WeightsInstall.mapArray FIo_Install.toQ) w✝⁴ ∧
+    (FIo_Install.toWeights w).extra = FIn_WeightsInstall.mapArray FIo_Install.toQ (Array.make 2#usize [w✝³, w✝²] ⋯) ∧
+      (FIo_Install.toWeights w).factors =
+        FIn_WeightsInstall.mapArray (FIn_WeightsInstall.mapArray (FIn_WeightsInstall.mapArray FIo_Install.toQ)) w✝
+input tensor : Slice NQ
+back : Slice NQ → FJm_KindTwoTrace.Vec
+row : Std.Array (Std.Array NQ 4#usize) 5#usize
+low0 low1 : Std.Array NQ 4#usize
+s0 s1 scale dotValue nativeValue : NE
+dot dotOut : FIo_Native.fast_pairing.EbyKDot
+hderef : scratch.deref_mut = (input, back)
+htensor : (FIo_Install.toWeights w).tensor 1#usize 2#usize input = ok tensor
+hr : (FIo_Install.toWeights w).factors.index_usize 1#usize = ok row
+h0 : row.index_usize 0#usize = ok low0
+hs0 : FIo_Native.weights.Weights.scalar_factor low0 ap0 = ok s0
+h1 : row.index_usize 1#usize = ok low1
+hs1 : FIo_Native.weights.Weights.scalar_factor low1 ap1 = ok s1
+hm : FIo_Native.aspis_core.field.wide_exact.WideExact.mul s0 s1 = ok scale
+hback : scratchOut = back tensor
+hnew : FIo_Native.fast_pairing.EbyKDot.new = ok dot
+hpush : FIo_Native.weights.push_byte_products dot f tensor 64#usize = ok (core.result.Result.Ok (), dotOut)
+hfinish : dotOut.finish = ok dotValue
+hvalue : FIo_Native.aspis_core.field.wide_exact.WideExact.mul scale dotValue = ok nativeValue
+hwrite : before.update 2#usize nativeValue = ok after
+lens : input = scratch.deref ∧ alloc.vec.Vec.deref (back tensor) = tensor
+ci : FJj_QMSlice.canon input
+backValue : scratchOut.deref = tensor
+dv :
+  FIo_WideValues.Canon dotValue ∧
+    decodeWide (wide dotValue) =
+      ∑ i,
+        FJc_InactiveCoefficientsModel.field f ↑i *
+          FJg_TensorProduct.high
+            (fun d s =>
+              (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+                (FJj_SuccessorHigh.factors semAlpha d s))
+            i
+cp0 : FIo_ArrayCanon.Holds ap0
+cp1 : FIo_ArrayCanon.Holds ap1
+sv0 :
+  FIo_WideValues.Canon s0 ∧
+    decodeWide (wide s0) = decodeM FIo_Native.weights.QUARTER • FJg_ScalarCell.sumPrefix ap0 low0 4
+sv1 :
+  FIo_WideValues.Canon s1 ∧
+    decodeWide (wide s1) = decodeM FIo_Native.weights.QUARTER • FJg_ScalarCell.sumPrefix ap1 low1 4
+mv : FIo_WideValues.Canon scale ∧ decodeWide (wide scale) = decodeWide (wide s0) * decodeWide (wide s1)
+vv :
+  FIo_WideValues.Canon nativeValue ∧
+    decodeWide (wide nativeValue) = decodeWide (wide scale) * decodeWide (wide dotValue)
+sm0 :
+  decodeM FIo_Native.weights.QUARTER • FJg_ScalarCell.sumPrefix ap0 low0 4 =
+    FJg_DualTensor.low
+      (fun s =>
+        (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+          (FJj_SuccessorHigh.factors semAlpha ⟨↑0#usize, ⋯⟩ s))
+      (decodeWide (wide a0))
+sm1 :
+  decodeM FIo_Native.weights.QUARTER • FJg_ScalarCell.sumPrefix ap1 low1 4 =
+    FJg_DualTensor.low
+      (fun s =>
+        (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+          (FJj_SuccessorHigh.factors semAlpha ⟨↑1#usize, ⋯⟩ s))
+      (decodeWide (wide a1))
+⊢ FJg_DualTensor.low
+          (fun s =>
+            (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+              (FJj_SuccessorHigh.factors semAlpha ⟨↑0#usize, ⋯⟩ s))
+          (decodeWide (wide a0)) *
+        FJg_DualTensor.low
+          (fun s =>
+            (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+              (FJj_SuccessorHigh.factors semAlpha ⟨↑1#usize, ⋯⟩ s))
+          (decodeWide (wide a1)) *
+      ∑ i,
+        FJc_InactiveCoefficientsModel.field f ↑i *
+          FJg_TensorProduct.high
+            (fun d s =>
+              (algebraMap OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+                (FJj_SuccessorHigh.factors semAlpha d s))
+            i =
+    FJg_DualTensor.low (fun s => (algebraMap FK FE) (FJj_SuccessorHigh.factors semAlpha 0 s)) (decodeWide (wide a0)) *
+        FJg_DualTensor.low (fun s => (algebraMap FK FE) (FJj_SuccessorHigh.factors semAlpha 1 s))
+          (decodeWide (wide a1)) *
+      ∑ i,
+        FJc_InactiveCoefficientsModel.field f ↑i *
+          FJg_TensorProduct.high (fun d s => (algebraMap FK FE) (FJj_SuccessorHigh.factors semAlpha d s)) i
+'AspisR1.FJm_KindTwoArithmetic.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
