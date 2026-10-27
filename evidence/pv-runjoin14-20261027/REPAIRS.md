@@ -404,3 +404,41 @@ identical immutable local copies. PoolV1OutputNoteWitnessV1 derives Clone,
 Copy at payment_relation.rs:88; PoolV1PairLiveSnapshotV1 at
 pair_tree_profile.rs:403. No value, branch, raw call order, panic/abort,
 allocation, I/O, signature, type, or other function changes.
+
+9. D277, return recipient digests from the match before raw projection,
+verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index 32cc1f8ae3..57975db2a8 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -282,13 +282,12 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+     bits[23] = u32::from(input.super_root_directions[2]);
+     sibs[23] = raw(&input.super_root_siblings[2]);
+     let empty = pair_empty_roots();
+-    let (recipient_owner, recipient_salt, transfer) = match rec {
+-        Some(r) => {
+-            let r = *r;
+-            (raw(&r.owner_key), raw(&r.salt), true)
+-        },
+-        None => (ZERO8, ZERO8, false),
++    let (recipient_key, recipient_note_salt, transfer) = match rec {
++        Some(r) => (r.owner_key, r.salt, true),
++        None => ([M31(0); 8], [M31(0); 8], false),
+     };
++    let recipient_owner = raw(&recipient_key);
++    let recipient_salt = raw(&recipient_note_salt);
+     let w = RW {
+         input_value: pair.value,
+         output_value: out,
+```
+
+Repair 8 still fails on the Some branch raw borrow at records:287:20–22,
+InterpBorrowsCore.ml:629. Some(r) copies the same two digest values; raw
+then projects them in the same order after the branch. None supplies two
+all-zero M31 arrays, whose raw results are exactly ZERO8; its two added raw
+calls only read fixed in-bounds fields and cannot panic, abort, allocate,
+mutate or perform I/O. Thus the returned records and all observable behavior
+are unchanged. Digest elements are Copy via field.rs:22; note Copy derive
+is payment_relation.rs:88. No signature/type/other-function change.

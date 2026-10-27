@@ -282,13 +282,12 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
     bits[23] = u32::from(input.super_root_directions[2]);
     sibs[23] = raw(&input.super_root_siblings[2]);
     let empty = pair_empty_roots();
-    let (recipient_owner, recipient_salt, transfer) = match rec {
-        Some(r) => {
-            let r = *r;
-            (raw(&r.owner_key), raw(&r.salt), true)
-        },
-        None => (ZERO8, ZERO8, false),
+    let (recipient_key, recipient_note_salt, transfer) = match rec {
+        Some(r) => (r.owner_key, r.salt, true),
+        None => ([M31(0); 8], [M31(0); 8], false),
     };
+    let recipient_owner = raw(&recipient_key);
+    let recipient_salt = raw(&recipient_note_salt);
     let w = RW {
         input_value: pair.value,
         output_value: out,
