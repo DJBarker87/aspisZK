@@ -1,0 +1,9 @@
+# Mandatory obstruction review before process 67
+
+At 66/100 actual Lean processes (L004/L006 were dependency preflights with no Lean), A2 is checked and committed. XSf_Closed.prepare is the complete actual wide-view/narrowed-prepare to installed-prepare Result/scratch equation. All local canonicality conditions are derived from the producing execution. No A2 obstruction remains on that reached domain; arbitrary typed views remain a broader, explicitly unclaimed domain.
+
+A3 remains OPEN. Native prepared_claim P6 is LPs-owned and not merged. The retained conditional LPq native/model trace needs explicit semantic canonicality and expanded-y1 selected-byte provenance. XSf will not assume those as new headline premises or relabel the conditional result CLOSED. Installed arithmetic/weighted folds already pass; the current work imports and reuses them, deriving SAME gamma/kappa powers and their native carrier identification. The 57 missing unchanged LPq adapter dependencies are restored only into the owner-required persistent A2 cache. 50 have passed, with 7 remaining; no proof is reimplemented. The selected input-domain/trace construction will be compiled next, retaining the two caller obligations explicitly until LPs supplies its native closure.
+
+Actual deployed headline unchanged: inherited83T/0P/13G,L154 parameter; atomic-family/SAME-witness/shared-nonce/L185=L159 delta0/0/0/0, removed0/added0/changed0. Root source byte equality to job base and inherited before/after kernel statement hashes checked in XSf_HEADLINE_CHECK.json. No frozen D188 credit or joint deployed accepted-root witness is claimed.
+
+No timeout, memory kill, cap increase, unchanged actual compiler rerun or admission bypass. Serial admitted 6G/8G/swap0/tasks64 scopes, -j1-M7000. Remaining34 Lean attempts reserved for the 7 prerequisites, focused A3 adapters/non-vacuity and one final new-root axioms audit. Kani0/10; no shipped changes trigger native or ELF regressions.

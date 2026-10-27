@@ -1,0 +1,48 @@
+{"attempt": "XSf_L012", "exit_status": 1, "wall_seconds": 2.1305039830040187, "peak_rss_kib": "4762808", "swaps": "0", "print_axioms": ["'XSf_PrepareClaim.change_claim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSf_generated/XSf_PrepareClaim.lean:31:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  XRo_Join_PreparedBoundaries.cachedClaim D sem v.y1 v.inactive g kappa
+in the target expression
+  (let (kappa, t2) := (kappa, t2)
+    do
+    let (alpha0, t3) ←
+      AspisR1PublicPreparation.PreparedModel.scalar XRo_Join_Installed.actual.sampling D t2 29#u8 v.round0 false
+    let i ← v.variant.folds
+    if i = 2#usize then do
+        let i1 ← 32#usize + 224#usize
+        let a2 ← core.option.Option.unwrap v.folded_root
+        let s1 ← lift a2.to_slice
+        let bytes1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) s1
+        let byt
+...
+
+            let i1 ← 30#u8 + 1#u8
+            let s1 ← lift (Std.Array.empty U8).to_slice
+            let (rho, t5) ←
+              AspisR1PublicPreparation.PreparedModel.scalar_k XRo_Join_Installed.actual.sampling D t4 i1 s1
+            let r1 ← XRo_Join_Installed.actual.claim D sem v.y1 v.inactive g kappa
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 =>
+                ok
+                  (core.result.Result.Ok
+                      { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                        alpha :=
+                          Array.make 2#usize [alpha0, AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO] ⋯,
+                        rho := rho, queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1,
+                        state := t5.state },
+                    g)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r2 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      AspisR1PublicPreparation.verifier.Prepared
+                      (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+                ok (r2, g)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  AspisR1PublicPreparation.verifier.Prepared
+                  (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual
+            ok (r1, old)
+'XSf_PrepareClaim.change_claim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rcaf504aaf4774062986711617a346622.scope; invocation ID: aefa4ab06e5b422b987a69d3855de9dd
