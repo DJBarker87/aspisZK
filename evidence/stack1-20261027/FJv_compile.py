@@ -9,7 +9,7 @@ n=int(sys.argv[1]);mod=sys.argv[2]; assert 1<=n<=60
 attempt=f'FJv_{n:03}'
 assert not (P/attempt).exists(),attempt
 src=R/'lean'/f'{mod}.lean'
-if not mod.startswith('FJv_'):
+if not mod.startswith('FJv_') and not src.is_file():
  src=R/'docs/research/100bit-spend-path-20261013/lean'/f'{mod}.lean'
  assert src.is_file(), 'Only unchanged repository dependencies may be rebuilt'
 cfg=json.loads((R/'evidence/recount5-20261026/Rc5_001.json').read_text())
