@@ -1,0 +1,7 @@
+# Ruling (n) checks
+
+op230: source copy is an index read plus local accumulator assignment; no mutable iterator/element borrow writes. Original iterator is copied(), read-only. op258: shared iterators in predecessor, index reads in copy; no mutable borrow writes in either. No restoration continuation is dropped in either emitted body.
+
+op254: direct `out[i]=p` writes, no iterator. Aeneas powers_loop.body binds `(_, index_mut_back)`; `_` discards the OLD VALUE, not the restoration. Both branches call `index_mut_back p` and thread `out1` into cont. The original early-return representation calls the same continuation before returning. General emitted-to-finite and finite-to-original identities are checked by the inherited PowersControl and PowersBridge. New fidelity checks add a direct restoration identity and executable changed-output cases against native Rust (N=1,2, x=ZERO).
+
+Native harness under native/ includes the exact candidate bodies, predecessor powers function and pole module, and the exact original sum body. It uses the candidate CT arithmetic and preserves the complete Option/verdict/panic cases. Boundary oversized rows are caught, not restricted away. Differential samples are auxiliary evidence, not a universal proof. No crates/programs changes are involved. Native body execution is optimized; expected time is compilation followed by this named finite differential step.

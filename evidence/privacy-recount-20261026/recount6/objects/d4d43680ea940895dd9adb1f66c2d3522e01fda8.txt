@@ -1,0 +1,523 @@
+# D187 batch 2 — prover-local sampler and weights
+
+Base `73070ddd512bc4e79edfc0db714fb64dc74e87b8`, branch `codex/pv-batch2-20261027`.
+Target not yet established. No premise discharged: V256–V260 remain P obligations.
+T remains exactly entropy_law, entropy_kernel, observation.
+
+Applied copies: `host_sampler` (249/250, shared digit conversion once) and
+`host_weights` (251/252/253, shared powers/raw once). Both module declarations
+in `crates/aspis-r1-cost-probe/src/lib.rs` have `#[cfg(feature="prover")]`.
+The original ungated `pub mod sampler;` and `pub mod weights;` are unchanged.
+`programs/r1-cost-probe/Cargo.toml` selects optimized-terminal/program-build,
+not prover. Pool/verifier use core/statement, not these host modules.
+Only prover, simulator, dense host oracle and host transcript callers redirect.
+
+Weights construction uses the accepted unrolled fixed-storage shape. Materialize
+writes a caller-owned `[E;1024]`; its callers retain the original fallible
+`heap::filled(1024,E::ZERO)` and Error::Allocation mapping. The Box allocation
+is removed from the copied constructor. Universal observable/error equivalence,
+native allocation effects, and source/row bridges are obligations, not claims.
+The simulator's existing transcript binding is unchanged.
+
+Stage order: commit diff; rebuild three ELFs and compare pins; optimized timing
+pre-check vs base, five alternating pairs for both fixtures (stop above +3%);
+then extraction and complete Result/source/copy/row proofs; fixture-byte gate;
+audit. Combined differential and quiet timing adoption gates belong to the lead.
+
+Budget: 100 Lean, zero Kani. IDs 54900–54999 then 53326–53599, never reuse;
+53597–53599 reserved for audit. No IDs used yet. One capped scope at a time,
+6G high/8G max/swap0, TasksMax64 (shared Lean launcher128), Lean -M7000.
+No shared env-J sources will be written. Private source/object overlay only.
+
+## Gate (a)
+
+All three rebuilt ELFs byte-match their pins at applied revision `5b92d4aa18`.
+Default: exit0,37.285s,685408KiB RSS; devnet: exit0,37.613s,686164KiB;
+Pool: exit0,43.973s,676836KiB. All swap0 and 6G/8G/swap0/TasksMax64.
+Full pins, commands, source identity, reservation JSON and receipts are in
+`evidence/pv-batch2-20261027/ELF-GATE.json` and `candidate/build-*-001/`.
+No Lean run yet; axiom audit N/A. Generated SBF keys retained mode0600,
+public identities in key-retention.json; no transactions or key cleanup.
+Admission wrappers check both allowed:true and exit0 and quiet-window expiry.
+
+## Timing pre-check — STOP
+
+Five alternating optimized whole-prover pairs completed against exact base
+`73070ddd512bc4e79edfc0db714fb64dc74e87b8`. All ten runs generated proofs and
+passed their tx1/tx2 checks. This does not establish fixture byte equality.
+
+|Fixture|Control median seconds|Candidate median seconds|Change|
+|---|---:|---:|---:|
+|transfer|15.582113507|16.228639645|+4.1492% — STOP|
+|withdrawal|16.161496564|15.769175877|−2.4275%|
+
+The transfer result exceeds the explicit +3% pre-check threshold. The host was
+shared, with increasing load; this is still the stipulated stop, not a reason
+to discard it or rerun it. No extraction or proof work started. All 100 Lean
+attempts remain unspent under this explicit stop exception; no Env-J ID used;
+Kani0/0. No shared env-J source or object was written.
+
+Pre-check receipt: exit3 (threshold failure),318.784s,675672KiB peak RSS,swap0,
+applied source5b92d4aa18,6G/8G/swap0/TasksMax64; #print axioms N/A.
+`timing-precheck/comparison.json`, `runs.json`, per-run time logs and returned
+result records retain the full measurements. The two fixture binaries are
+separately hashed. The control and candidate were built sequentially in one
+archived workspace, switching only the pinned batch inputs and restoring the
+candidate. `SOURCE-IDENTITY.json` verifies all3115 archived files.
+
+### Per-function costs at the stop
+
+Finite optimized microbenchmark, one fixed input, inclusive costs; these are
+neither worst-case bounds nor an attribution of the whole-prover increase.
+The constructor's original Box allocation is included. Both materialization
+measurements include their fallible caller allocation. Raw uses kind2,row317.
+
+|Operation|Original µs/call|Copy µs/call|Calls each|
+|---|---:|---:|---:|
+|249 gamma_sample|0.056318|0.063945|100000|
+|250 ordinary_sample|0.030164|0.050238|100000|
+|251 materialize|584.538530|580.961700|100|
+|252 new|1.446369|1.539825|10000|
+|253 raw|0.072028|0.070920|100000|
+
+Probe source, manifest, lock, binary hash, build/run receipts and
+`function-cost-summary.json` are retained. The small timings are one finite
+sample and should not be read as precise slowdown estimates.
+
+### Remaining obligations and receipts
+
+V256(op249),V257(op250),V258(op251),V259(op252),V260(op253): source laws,
+complete Result, arbitrary-input copy equality, and original row bridges all
+remain OPEN and were NOT ATTEMPTED. Fixture-byte gate and formal axioms audit
+were NOT RUN because the pre-check stopped the ordered workflow. No theorem
+was added; #print axioms is N/A for every completed native target.
+
+Before/after endpoint and ledger statements are unchanged: removed0, added0,
+weakened0, transferred-to-T0. The candidate creates additional copy/effect
+proof work, not trust fields. T remains exactly entropy_law, entropy_kernel,
+observation. Native allocation/failure and L1/L2/L3 observation bindings remain
+substantive obligations; the Box removal is not native-effect equivalence.
+
+`evidence/pv-batch2-20261027/FINAL.json` contains every completed target, exit,
+wall,peak RSS,swap,source revision,axioms status, per-op status and next step.
+Eight completed capped scopes; three admission holds (two reservation, one
+quiet window). Holds launched no compiler and consumed no Lean budget. The
+inner barrier's raw exit1 with allowed:false is recorded as refusal78; own
+wrappers now enforce both allowed:true and exit0. The quiet-hold timestamp
+fallback was corrected in this job's retry wrapper; no shared infrastructure
+was changed. All retries waited three minutes and used fresh receipt labels.
+
+All task keys and raw fixture ledgers remain on the host; generated SBF keys
+are mode0600 with public identities recorded. No transactions, refunds or key
+cleanup. Pre-existing compiled caches were reused, not deleted; this job
+created no private target/ or Lean-object directory.
+
+Next concrete deliverable: lead review of this timing stop and per-function
+measurements. Any authorized revised candidate must pass the three ELF pins
+and the same timing pre-check before extraction and PV_B2_ source/copy/row
+proofs resume. The combined differential and quiet-window adoption gates
+remain the lead's. **Target not yet established.**
+
+## D296 resume: cost projection (stage 1)
+
+The lead reclassified the earlier +4.1492% transfer / −2.4275% withdrawal
+pre-check as **inconclusive**, based on package throttling and the quiet-window
+control14.38s. The historical measurements and stop are retained above.
+The combined candidate's quiet-window gate determines adoption. No unchanged
+pre-check rerun was made.
+
+Scratch-only atomic instrumentation counted calls during the complete retrying
+prover call, ending before verification. Both fixtures, coin100, completed one
+attempt with counts249=1,250=3,251=1,252=1,253=8192; all original-function
+counts were0 during that interval. Counts include nested raw calls. The tracked
+`crates/` sources were untouched; all six host scratch files were restored
+byte-for-byte in a finally block. Instrumented sources and hashes, binary hash,
+fixture results, restoration checks and calculation are in `call-counts/`.
+
+|op|calls/proof, both fixtures|copy−original µs/call|projected µs/proof|
+|---|---:|---:|---:|
+|249|1|0.00762664|0.00762664|
+|250|3|0.02007383|0.06022149|
+|251|1|−3.57683000|−3.57683000|
+|252|1|0.09345520|0.09345520|
+|253|8192|−0.00110851|−9.08091392|
+
+Requested sum=−12.49644059µs/proof=−0.0000869015% of14.38s on each fixture;
+below +0.2876s (+2%), so proceed to extraction/proofs. This uses the prior
+inclusive microbenchmark table: materialize includes raw, so summing both
+includes overlap; it is a finite projection, not a rigorous performance bound
+or an adoption result. One capped scope: exit0,35.709s,668964KiB peak RSS,
+swap0,6G/8G/swap0/TasksMax64; frozen input revision5b92d4aa18 plus SHA-pinned
+scratch instrumentation; axioms N/A. No Lean attempt or Env-J ID used.
+
+### Extraction/proof work in progress
+
+Exact applied sampler roots249/250 emitted complete closures under the unchanged
+pinned tools. Weights method-name selectors initially gave empty252/253 outputs
+(not counted as acceptance). Scratch-only free wrappers restored root coverage:
+252 emits24 declarations, no opaque function;251 fails structured-Drop preflight
+at a field normalization dependency;253 fails internally at
+InterpReduceCollapse.ml:1991. No extractor, tracked Rust source, or shared env-J
+source was changed. Per-root commands, outputs and receipts: EXTRACTION.json,
+extraction/, extraction-weights/. Exit0 alone is not a root-coverage check.
+
+All Lean work uses a private source/object overlay. Its R1Z directory contains
+links to retained env-J objects because Lean selects a namespace directory as
+a unit. Attempt54902 exposed this path issue; no shared object was changed.
+Attempts54903/54905 were preflight-only failures (no compiler). A retained
+OrdinarySource dependency was unavailable; its numeric recurrence was copied
+under a new PV_B2_ module, with no claim of native equality from that copy.
+A failed draft referenced a constructor absent from the selected shared object;
+that reference was removed rather than replacing the shared source/object.
+
+The first ByteBits proof emitted a native bv_decide axiom and is **REJECTED**.
+It is being replaced by kernel-checked bit-vector reflection; no downstream
+accepted result may depend on that object. Constructor raw emission has two
+31#i32/backend-U32 type errors; the compatibility version changes only those
+literal types to31#u32. Raw sources and failed receipts remain available.
+These are partial proof steps, not op249–253 source/row discharge.
+
+The installed bv_decide configuration has no kernel flag and uses a native
+reflection axiom by default. Both such drafts are rejected. ByteBits is now
+proved by symbolic bit-position rewrites (32 positions, arbitrary byte values),
+with only propext/Classical.choice/Quot.sound. No accepted theorem uses the
+native-reflection object. The draft that timed out was split into parser shape,
+machine expression and symbolic bit equality; no heartbeat cap was raised.
+Arithmetic totality work similarly uses named pure symbolic predecessors and
+complete Result equalities, so it does not normalize large field expressions.
+
+## Partial proof closure frozen for the reserved audit
+
+97 ordinary Lean attempts are charged, zero Kani. Regular IDs used54900–54999
+and53326–53328 (including uncharged preflight/admission failures); next regular
+unused53329. Audit IDs53597–53599 are reserved and will be used next. No shared
+env-J source or object was written. `ACCEPTED-PREFLIGHT.json` selects73 current
+accepted modules /169 printed declarations and archives22 rejected or unmeasured
+drafts under `drafts/`; none of those drafts enters the audit imports.
+`ACCEPTED-CHECK.json` verifies every selected source against its successful
+compile SHA, all73 direct dependency-object paths/hashes without drift, all24
+emitted constructor blocks (only the two static shift-type adaptations), and
+no Rust/program diff since5d8dfbebb2. It also checks accepted sources for the
+forbidden proof shortcuts. This is a partial-closure preflight, not a release
+manifest or a native source-association result.
+
+Established at the model/source-presentation level:
+
+- `PV_B2_ordinary_sample.op250_source`: for every32-byte block, the normalized
+  emission returns `ok` of exactly the assembled canonical base-P digits, whose
+  list is `ordinaryDigits(rank block)`. `PV_B2_RankDigits.source` additionally
+  gives the exact residue moduloP^8. No success hypothesis is assumed.
+- `PV_B2_GammaCarrier.source`: complete Result equality between the raw pinned
+  gamma emission and its native-carrier presentation, under the explicit
+  structural wide-field map, for every block. It preserves failure and
+  divergence; it is not the gamma rank theorem or original/copy equality.
+- Exact arbitrary-counter/array Result transports for byte loading, division,
+  digit loops and carry helpers; the release-only empty loop terminates.
+- The raw constructor and all24 normalized emitted declarations type-check;
+ 20 arithmetic leaves have exact Result=`ok`(shared symbolic value) laws on
+  arbitrary raw limbs. The double and three-statement-point helpers are total
+  on arbitrary typed inputs. No canonical-input restriction was added to these
+  helper laws.
+
+Constructor-wide totality was attempted by two different proof traversals:
+recursive simplification hit the default recursion limit; local bind traversal
+hit the default200000 heartbeat limit. Neither limit nor the6G/8G/swap0 caps
+was raised. Both source drafts and receipts are rejected/preserved. Next proof
+method: CPS/prefix cuts at the fixed factor-row boundaries, using the proved
+field/array totality leaves, before composing the constructor.
+
+Still OPEN: the gamma rank law, constructor factor/point value law, each
+original-shipped-function/copy equality including complete error behaviour,
+and every V256–V260 bridge.251 still has a structured-Drop dependency refusal;
+253 still has the internal loan-collapse failure. Allocation/OS-failure and
+L1/L2/L3/native observation bindings remain substantive P obligations. Removed0,
+added0, weakened0, transferred-to-T0; T is still exactly entropy_law,
+entropy_kernel, observation. No privacy endpoint or deployment condition changed.
+
+The ordered fixture-byte stage has not run because these source/copy/row gates
+are unfinished. The reserved audit checks only the accepted partial work; it
+cannot be described as D187 adoption or final endpoint establishment.
+
+Receipt-note correction: the pre-existing native wrapper's heuristic labelled
+Lean and extraction scopes as complete prover/P_R1 work. Exact commands and
+measurements were retained, and those scopes ran Lean or extraction as shown
+by their targets, not a prover gate. The heuristic is corrected for the audit;
+old receipts are not rewritten. All Rust producer commands used release
+optimization. The scratch count scope included optimized compilation and two
+complete prover calls. No unoptimized heavy arithmetic step ran.
+
+## Final budget audit and handoff
+
+**Budget exhausted:100/100 Lean,0/0 Kani.** Compiler exits77 passed/23 failed;
+one exit0 native-reflection result (54918) was rejected, giving76 accepted
+formal checks:73 accepted current modules plus the three reserved audits.
+All106 assigned IDs used are tallied;2 setup preflights and4 admission holds
+launched no compiler. No source+dependency-fingerprint pair was rerun unchanged.
+Next regular unused ID53329; audit IDs53597–53599 are consumed. No budget remains.
+
+All three partial audits passed at frozen proof revision
+`ac62b467cb2f16d4900aeb4bcf85864648ab44df`, standard axioms only:
+
+|Target|ID|exit|wall s|peak RSS KiB|swap|
+|---|---:|---:|---:|---:|---:|
+|PV_B2_AuditSampler|53597|0|1.450|3831400|0|
+|PV_B2_AuditWeights|53598|0|1.069|2624644|0|
+|PV_B2_AuditManifest|53599|0|1.410|3832580|0|
+
+These audit the169 printed declarations of the accepted partial closure, not
+V256–V260 installation or the full privacy/deployment manifest. The final
+source/dependency consistency check passed after the audit and before cache
+cleanup. Every charged compile has both admission JSONs allowed:true; the own
+wrapper required zero reservation exit as well. All100 scopes stayed6G high /
+8G max / swap0 / TasksMax64, Lean-M7000, with zero swaps. Detailed exact targets,
+exit/wall/RSS/swap/source revision/source SHA/dependency fingerprints and full
+multiline parsed axiom sets are in `LEAN-RECEIPTS.json`; raw compiler/time logs,
+source snapshots and admission records remain alongside them.
+
+No Rust or program source changed during this resume. The prior matching default,
+devnet and Pool ELF pins are reused, not advertised as fresh rebuilds. The
+historical timing pre-check remains inconclusive under D296, and the projected
+cost gate passed on both fixtures. The ordered fixture-byte gate was **not run**
+at this source-proof budget stop. There was no checked ROW counterexample, ELF
+mismatch or new timing pre-check. The combined quiet-window adoption gate remains
+the lead's; **target not yet established**.
+
+The job's key-free Charon target and private Lean-object scratch were removed
+after recording76 object hashes/sizes. Shared caches, source/IR/receipts,
+fixture/nonce ledgers, original task/SBF keys and retained fixture binaries were
+kept. All three recorded SBF key paths still exist mode0600. No transaction,
+refund, key cleanup, shared-source overwrite, protected soundness edit, or push.
+See `CACHE-CLEANUP.json`, `OUTPUT-OBJECT-PINS.json` and
+`key-retention-after-resume.json`.
+
+Next concrete deliverable: CPS/prefix-cut constructor proofs at fixed factor-row
+boundaries; gamma rank and original-iterator associations; a Drop-free complete
+materialize dependency closure and raw loan-collapse repair under the same pinned
+extractor; all arbitrary-input original/copy/error/row bridges; then the ordered
+fixture-byte gate and release/adoption audit. All five P rows remain OPEN. The
+endpoint and deployment statements, quantifiers, observer and simulator remain
+unchanged; no premise was removed, weakened, added or moved into T.
+
+## Batch2b / D303 resume — route (ii)
+
+Started from 1fc8463dac in the assigned unmoved worktree. The requested merge of
+codex/cx-prover-rw-20261023 fast-forwarded without conflicts to aa27e73f99;
+no conflict resolution was performed. The candidate already keeps op254
+prover_powers at both external call sites. Removed host_weights::powers and
+redirected its materialize caller to crate::prover_powers::powers (powers shared
+once). Only the prover-gated host_weights module is edited in this stage;
+lib.rs:71 gates it with feature prover, absent from the release program's
+optimized-terminal/program-build dependency selection.
+
+The prior op251 LLBC Drop is in canonical_qm31's FnOnce::call_once closure
+adapter. The new local mixed multiply uses four explicit reduce64 applications,
+QM31 coordinate products and the checked eight-limb constructor. Its complete
+Result/error association, including showing the added unwrap cannot fail, is
+an obligation. op253 now reads its factor/point arrays by value into separate
+index-loop helpers before branch joins. Every copy writes by direct index;
+no copy writes through a mutable iterator borrow. D188 fidelity must still be
+checked on the new emissions. The pinned extractor is unchanged.
+
+Fresh resume budget:100 Lean,0 Kani; assigned IDs52000–52499 exclusively,
+last three52497–52499 reserved for audit. Historical IDs/budget above belong
+to the previous run and will not be reused. No resumed compile yet. ELF gate
+must run on this source before extraction. V256–V260 and endpoint/deployment
+conditions remain unchanged; target not yet established.
+
+Batch2b ELF gate passed at6e3eb4449d: fresh default/devnet/Pool rebuilds all
+match their full release pins. One Pool admission refusal launched no compiler;
+the retry waited180seconds. Exact receipt measurements are in
+`evidence/pv-batch2-20261027/batch2b/ELF-GATE.json`. No Lean attempt yet.
+
+Batch2b extraction003: both Charon roots succeeded; pinned Aeneas now passes
+structured-Drop preflight but fails InterpBorrows.ml:2731 (shared loan at the
+five-factor loop / seven-kind loop). Neither root is accepted. Replaced the
+fixed five/ten factor and seven-kind traversals by explicit fixed steps, moving
+all seven powers-array reads before the1024-cell index loop. This removes the
+array shared loans at those joins; no extractor change. Full prior failure
+receipts retained under batch2b/batch2b-extraction. New ELF gate required.
+
+Extraction004 emitted op253 with its root, but exposed opaque inactive/table
+items (not accepted as a complete closure). op251 still failed the outer-loop
+loan collapse at InterpReduceCollapse.ml:1991. Next route(ii) refinement moves
+its fixed output array and weights snapshot by value through an owned loop,
+then writes the completed output back to the caller. Mutation-on-error equality
+now requires proving that the complete kernel is total for the admitted input
+carriers; it is not claimed. raw's inactive bit is read directly from the frozen
+mask table, avoiding the unreachable unwrap formatting dependency; its original
+error association requires the row-range law. Original shipped files untouched.
+
+Further extraction isolation: built-MIR/full-table and const-value routes failed
+inside the unchanged extractor, and are not accepted. The optimized isolated
+materialize_values diagnostic008 identifies that function as the failing body,
+not a field leaf or shared powers. A tuple adapter now ends powers-array read
+loans in a separate function, and a fixed cell helper contains the seven terms;
+the1024-cell loop carries values and has one indexed output write. The adapter
+calls the single shared prover_powers implementation. This is a new source shape,
+not an unchanged retry. Native receipt008's inherited expected-time heuristic
+mislabels the scope as prover work; its exact command is extraction/compilation,
+with no elimination. No Lean attempt has run yet.
+
+Full table-initializer extraction009 exposes another collapse failure. Source
+shape inspection gives a sparse closed form for D's fixed permutation:89 pads,
+390 complementary prefix entries, identity from479. The proposed host_row uses
+that form plus the original S digit permutation in an index loop; it retains
+D's j<1024 rejection boundary. All1024 cells match the frozen order algorithm
+in compile-free source validation (ROW-SHAPE.json). This is not a native or Lean
+source-equality claim. A native frozen-table comparison must pass before this
+copy is accepted; any disagreement is a stop, not a repair opportunity. This
+removes the initializer loan graph from the copied extraction closure.
+
+## D303 batch2b — checked counterexample stop
+
+**STOP: proposed op253 copy/original complete-Result equality is false.**
+For every copied weight with variant D, kind0/index1024 returns
+`fail Error.assertionFailure`. The frozen source first indexes the1024-element
+COEFFICIENT_TO_ROW table and returns `fail Error.arrayOutOfBounds`; every
+continuation preserves that error. The native boundary test also records the
+different panic messages. Both paths reject, but their complete errors differ.
+No valid-index restriction was added to the requested universal obligation.
+
+`PV_B2_ErrorCounterexample.op253_copy_error_counterexample` certifies the
+inequality for every table and continuation, so it assumes no particular table
+contents. Its four supporting lemmas and the counterexample all pass with only
+propext/Classical.choice/Quot.sound. Receipt52007: exit0,1.229s,2632616KiB RSS,
+swap0,6G/8G/swap0/TasksMax64,Lean-M7000. Compiler base revisionc5a03d97a9 and
+exact dirty proof-source SHA/snapshots are recorded; ACCEPTED-CHECK.json binds
+the current source bytes to the accepted inputs. **The candidate was not
+repaired after the checked counterexample. Target not yet established.**
+
+The requested merge fast-forwarded to aa27e73f99 without conflicts. The owned
+Rust diff is confined to the prover-gated host_weights.rs: powers is shared
+once through crate::prover_powers; field normalization, fixed folds, owned output
+state, tuple powers, and sparse D-row helpers made the new closures extractable.
+All five source revisions passed all three fresh ELF gates (15 capped builds):
+default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4,
+devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299,
+Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+Latest Rust revisionc5a03d97a9;2442 actual native/release source inputs match.
+Frozen weights.rs is unchanged from73070ddd51. The historical cost projection
+is retained; the current stopped candidate was not remeasured or adopted.
+
+Under the unchanged pinned tools, extraction010 emits full op251/op253 roots,
+57/39 functions, with no external template. Both raw type modules and op253's
+function module type-check. The adapter explicitly records three unsigned shift
+literals and one Usize-to-U32 shift-count cast; its full value association is
+not claimed. op251's uncompiled function module and five constructor-row proof
+drafts plus their private environment are archived in batch2b/drafts. No whole
+constructor reduction was run. The native finite gates passed all1024 D-table
+cells, valid copy outputs, malformed raw-limb examples and boundary-panics checks;
+the latter checked rejection, not exact error payloads.
+
+No copy writes through a mutable iterator borrow. The new emitted materialize
+loop carries its Array.update result and returns the updated array; shared
+powers uses its restoration in both branches. A full emission/native normal-value
+differential was not run at this stop, so full D188 fidelity credit is not claimed.
+
+Fresh budget:8/100 Lean charged,0/0 Kani; IDs52000–52007 only. Five checks passed,
+three failed. Failed input52002 was accidentally repeated at52003 after a generator
+assertion failed without stopping the shell; both are charged/rejected. The
+incident is retained, orchestration now checks command success, and the own Lean
+wrapper refuses previously charged source/dependency pairs. No failed recovery
+sorryAx object is accepted. The checked-counterexample exception ends the run
+with92 Lean attempts unspent. Audit IDs52497–52499 were already occupied in the
+host preflight and were never used by this job. The new theorem's own complete
+#print axioms audit passed; no adoption/frozen-manifest replay ran.
+
+No V256–V260 row, endpoint premise, deployment condition or L1/L2/L3 obligation
+was removed, weakened, added to the endpoint, or moved into T. Gamma rank,
+constructor value/totality, every original/copy equality and every row bridge
+remain open; the current op253 equality has this counterexample. The fixture-byte
+gate against73070ddd51 was not run. T remains exactly entropy_law,entropy_kernel,
+observation. All18 task/SBF keys remain mode0600; no transactions, refunds or key
+cleanup. Only key-free private Charon/Lean object scratch was removed after
+recording hashes; shared caches and env-J sources/objects were untouched.
+
+Canonical latest report: evidence/pv-batch2-20261027/FINAL.json, with detailed
+receipts, counterexample, source/diff checks and gates under batch2b/. The prior
+FINAL is preserved as FINAL-before-batch2b-D303.json. Next deliverable: lead
+review of this counterexample; any newly authorized candidate must preserve the
+frozen bounds-failure Result before source/copy/row and fixture/adoption work
+resumes. No repair or statement weakening was made in this stopped run.
+
+## D312 batch2c resume — authorized complete-error repair
+
+Resume at71e50eeab9, same unmoved worktree and branch;92 Lean attempts remain,
+Kani0. The lead classifies the retained op253 counterexample as a copy defect,
+not a ledger-row counterexample, and authorizes repair under D187(ii).
+`PV_B2_ErrorCounterexample` and its evidence are retained unchanged.
+
+At5b11c957a0 the prover-gated copy replaces the D assertion/formula with the
+exact frozen1024-element permutation in literal storage and the same fixed-array
+indexing/cast operation as Variant::row. op251 uses the repaired shared raw;
+op252 contains no added input assertions. Neither audit supplies its outstanding
+totality, allocation, mutation or universal equivalence proof. No copy writes
+through a mutable iterator borrow. The frozen sampler/weights/transport files
+remain byte-identical to73070ddd51.
+
+Before the first compile, every5673 object in research's coherent replay
+external-object-manifest was hashed on the host with zero mismatches, including
+the236 library modules required by h4. No library was rebuilt/substituted.
+Fresh default/devnet/Pool rebuilds all match their pins (30.803/30.370/31.181s,
+686552/686604/677392KiB peakRSS,swap0,6G/8G/swap0/TasksMax64). All2442 actual
+native/release source inputs match the committed repair. Receipts:batch2c/.
+
+Pinned unchanged extraction succeeds on both repaired roots:251 has58 functions,
+253 has40, no external template and no discarded tuple-tail restoration hits.
+The explicit compatibility adapter retains the prior unsigned shift literals
+and low-word shift-count cast. Two initial253 function checks failed on the flat
+1024-literal array-length proof; both are retained/rejected. The replacement
+factors literal storage into32 chunks with named length lemmas and a balanced
+append; the generator validates all ordered values against both raw emissions.
+No limit was raised. The factored table and op253 function module pass.
+
+`PV_B2_C_ErrorRepair.op253_counterexample_repaired` proves complete Result
+equality at D/kind0/index1024 for every typed copied weight, every frozen table
+and continuation. Supporting lemmas prove arrayOutOfBounds for every D index
+j≥1024, independently of contents. Attempt52015 passes with standard axioms
+only. This repairs the exhibited error discrepancy; it does not claim arbitrary
+valid-input copy equality or V260 closure. One reservation refusal52008 was
+uncharged, followed by the required three-minute cooldown and fresh52009.
+Current IDs are checked against shared sent.txt and other jobs' receipt paths;
+52497–52499 are occupied, so unused52397–52399 are reserved for the audit.
+
+The repaired op251 complete function module passes at52017, standard axioms.
+The new private constructor environment uses the exact raw generated252 types;
+it does not import an unpinned ProverRwFullTypes object or claim native-carrier
+transport. Environment52018 and fixed rows0/1/2 at52019/52020/52021 pass.
+Circle-row3's broad symbolic traversal hit the default200000-heartbeat limit
+at52022 and52023; deterministic CPS traversal at52024 passes. No arithmetic
+term was normalized wholesale and no resource/tactic limit was raised. Row4's
+52025 launch was refused/uncharged and awaits the three-minute cooldown.
+
+Five fixed row continuation lemmas now pass (52036–52040). All five source
+suffix stages pass their Result equations and success proofs (52045–52049).
+The rejected whole-expression constructor association at52050 is retained;
+its factored/staged success predecessor itself audits standard, but no source-wide
+success theorem depending on that rejected association is accepted. A replacement
+uses explicit monadic values and boundary cuts; it is not yet checked.
+
+52051 was refused by the own unchanged-input guard after a generator assertion
+failed: no compiler ran, so no repeated charged input. The generator now checks
+success before submission, and the guarded refusal is retained.52052 and52053
+both failed during SSH preflight before source upload or a capped launch, with
+connection reset/closed by100.108.41.90 port22. No compiler ran. A read-only
+recovery and renewed h4 verification passed5673 hashes at19:14:24Z, but52053's
+preflight then lost the connection again. Host launches are stopped while it is
+unstable; no launcher/host infrastructure repair or input rerun was attempted.
+Charged47/100, remaining53;Kani0. No budget-exhaustion or completed-work claim.
+
+The standalone sampler closure now avoids the unresolved native carriers and
+uses exact raw extracted types plus generic scalar facts. Its full external
+project import closure resolves95 source modules through EJR; every host source
+byte-matches research. Library modules use only the h4 manifest. Those new
+sampler/scalar proof drafts are uncompiled and unaccepted. The exact native
+carrier bridge remains withheld for R1Z.ProverRwFullTypes and
+R1Z.ProverRwSamplerArithmetic pending an authorized SHA-pinned source-freeze
+record; those shared modules were neither imported nor substituted.
+
+All partial sources currently selected by ACCEPTED-PROGRESS.json match their
+successful source SHA and standard axiom audits. V256–V260, every universal
+original/copy/error/effect association, gamma source rank, native allocation and
+L1/L2/L3 obligations remain open. T and endpoint/deployment statements unchanged.
+The ordered fixture-byte gate and final audit have not run; work is continuing.
