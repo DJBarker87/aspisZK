@@ -1,0 +1,157 @@
+import JGm_TX2_Level1_00
+import JGm_TX2_Level1_01
+import JGm_TX2_Level1_02
+import JGm_TX2_Level1_03
+import JGm_TX2_Level1_04
+import JGm_TX2_Level1_05
+import JGm_TX2_Level1_06
+import JGm_TX2_Level1_07
+import JGm_TX2_Level1_08
+import JGm_TX2_Level1_09
+import JGm_TX2_Level1_10
+import JGm_TX2_Level1_11
+import JGm_TX2_Level1_12
+import JGm_TX2_Level1_13
+import JGm_TX2_Level1_14
+import JGm_TX2_Level1_15
+import JGm_TX2_Level1_16
+import JGm_TX2_Level1_17
+import MultiproofConeLevelIteration
+import JGm_TX2_Initial1
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGm_TX2_Levels1
+open Aeneas Aeneas.Std Result MultiproofConeRef
+def s00 (s : reference.Scratch) := s
+def s01 (s : reference.Scratch) := JGm_TX2_Level1_00.output (s00 s)
+def s02 (s : reference.Scratch) := JGm_TX2_Level1_01.output (s01 s)
+def s03 (s : reference.Scratch) := JGm_TX2_Level1_02.output (s02 s)
+def s04 (s : reference.Scratch) := JGm_TX2_Level1_03.output (s03 s)
+def s05 (s : reference.Scratch) := JGm_TX2_Level1_04.output (s04 s)
+def s06 (s : reference.Scratch) := JGm_TX2_Level1_05.output (s05 s)
+def s07 (s : reference.Scratch) := JGm_TX2_Level1_06.output (s06 s)
+def s08 (s : reference.Scratch) := JGm_TX2_Level1_07.output (s07 s)
+def s09 (s : reference.Scratch) := JGm_TX2_Level1_08.output (s08 s)
+def s10 (s : reference.Scratch) := JGm_TX2_Level1_09.output (s09 s)
+def s11 (s : reference.Scratch) := JGm_TX2_Level1_10.output (s10 s)
+def s12 (s : reference.Scratch) := JGm_TX2_Level1_11.output (s11 s)
+def s13 (s : reference.Scratch) := JGm_TX2_Level1_12.output (s12 s)
+def s14 (s : reference.Scratch) := JGm_TX2_Level1_13.output (s13 s)
+def s15 (s : reference.Scratch) := JGm_TX2_Level1_14.output (s14 s)
+def s16 (s : reference.Scratch) := JGm_TX2_Level1_15.output (s15 s)
+def s17 (s : reference.Scratch) := JGm_TX2_Level1_16.output (s16 s)
+def s18 (s : reference.Scratch) := JGm_TX2_Level1_17.output (s17 s)
+theorem source {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (s : reference.Scratch)
+    (view : JGm_TX2_View.View s JGm_TX2_Level1_00.indices00 JGm_TX2_Level1_00.values00 0) :
+    reference.levels (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash s
+      JGm_TX2_Supplied.nodes1 18#u32=ok (.Done (s18 s)) ∧
+    JGm_TX2_View.View (s18 s) JGm_TX2_Level1_17.indicesOut JGm_TX2_Level1_17.valuesOut 5216 := by
+  obtain ⟨r00,v01⟩ := JGm_TX2_Level1_00.source D hash (s00 s) view
+  obtain ⟨r01,v02⟩ := JGm_TX2_Level1_01.source D hash (s01 s) v01
+  obtain ⟨r02,v03⟩ := JGm_TX2_Level1_02.source D hash (s02 s) v02
+  obtain ⟨r03,v04⟩ := JGm_TX2_Level1_03.source D hash (s03 s) v03
+  obtain ⟨r04,v05⟩ := JGm_TX2_Level1_04.source D hash (s04 s) v04
+  obtain ⟨r05,v06⟩ := JGm_TX2_Level1_05.source D hash (s05 s) v05
+  obtain ⟨r06,v07⟩ := JGm_TX2_Level1_06.source D hash (s06 s) v06
+  obtain ⟨r07,v08⟩ := JGm_TX2_Level1_07.source D hash (s07 s) v07
+  obtain ⟨r08,v09⟩ := JGm_TX2_Level1_08.source D hash (s08 s) v08
+  obtain ⟨r09,v10⟩ := JGm_TX2_Level1_09.source D hash (s09 s) v09
+  obtain ⟨r10,v11⟩ := JGm_TX2_Level1_10.source D hash (s10 s) v10
+  obtain ⟨r11,v12⟩ := JGm_TX2_Level1_11.source D hash (s11 s) v11
+  obtain ⟨r12,v13⟩ := JGm_TX2_Level1_12.source D hash (s12 s) v12
+  obtain ⟨r13,v14⟩ := JGm_TX2_Level1_13.source D hash (s13 s) v13
+  obtain ⟨r14,v15⟩ := JGm_TX2_Level1_14.source D hash (s14 s) v14
+  obtain ⟨r15,v16⟩ := JGm_TX2_Level1_15.source D hash (s15 s) v15
+  obtain ⟨r16,v17⟩ := JGm_TX2_Level1_16.source D hash (s16 s) v16
+  obtain ⟨r17,v18⟩ := JGm_TX2_Level1_17.source D hash (s17 s) v17
+  refine ⟨?_,v18⟩
+  rw [MultiproofConeLevelIteration.levels_eq_iteration _ _ _ _ (by decide)]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 18 (s00 s)=_
+  rw [MultiproofConeLevelIteration.iterate,r00]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 17 (s01 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r01]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 16 (s02 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r02]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 15 (s03 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r03]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 14 (s04 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r04]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 13 (s05 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r05]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 12 (s06 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r06]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 11 (s07 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r07]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 10 (s08 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r08]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 9 (s09 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r09]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 8 (s10 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r10]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 7 (s11 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r11]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 6 (s12 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r12]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 5 (s13 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r13]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 4 (s14 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r14]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 3 (s15 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r15]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 2 (s16 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r16]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 1 (s17 s)=ok (.Done (s18 s))
+  rw [MultiproofConeLevelIteration.iterate,r17]
+  change MultiproofConeLevelIteration.iterate
+    (fun state => reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash state
+      JGm_TX2_Supplied.nodes1 0#usize 0#usize) 0 (s18 s)=ok (.Done (s18 s))
+  rfl
+#print axioms source
+
+theorem on_scratch {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (s : reference.Scratch) :
+    reference.levels (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash
+      (JGk_TX2_Scratch1.s12 s) JGm_TX2_Supplied.nodes1 18#u32=
+        ok (.Done (s18 (JGk_TX2_Scratch1.s12 s))) ∧
+    JGm_TX2_View.View (s18 (JGk_TX2_Scratch1.s12 s)) JGm_TX2_Level1_17.indicesOut JGm_TX2_Level1_17.valuesOut 5216 :=
+  source D hash _ (JGm_TX2_Initial1.source s)
+#print axioms on_scratch
+end AspisR1.JGm_TX2_Levels1
+end

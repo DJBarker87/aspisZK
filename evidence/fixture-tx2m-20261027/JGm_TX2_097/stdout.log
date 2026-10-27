@@ -1,0 +1,131 @@
+JGm_TX2_Batch.lean:46:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+    (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+    (encodeState JGf_TX2_M0Root.retainedRoot) 1#usize 0#usize s0.idx s0.val hash
+in the target expression
+  (do
+      let (r, idx1, val1) ←
+        Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+            (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+            (encodeState JGf_TX2_M0Root.retainedRoot) 1#usize 0#usize (Array.repeat 16#usize 0#u32)
+            (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, idx2, val2) ←
+            Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+                (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+                (encodeState JGh_TX2_M1Root.retainedRoot) 1#usize 1#usize idx1 val1 hash
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, _, _) ←
+                Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+                    (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+                    (encodeState JGc_TX2_M2Root.retainedRoot) 1#usize 2#usize idx2 val2 hash
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame AspisR1Stage2.verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+root0 : JFo_Prepared.value.roots.index_usize 0#usize = ok (encodeState JGf_TX2_M0Root.retainedRoot)
+root1 : JFo_Prepared.value.roots.index_usize 1#usize = ok (encodeState JGh_TX2_M1Root.retainedRoot)
+folded : JGc_TX2_Obstruction70.folded = encodeState JGc_TX2_M2Root.retainedRoot
+r0 :
+  (Array.make 3#usize
+          [encodeState JGf_TX2_M0Root.retainedRoot, encodeState JGh_TX2_M1Root.retainedRoot,
+            encodeState JGc_TX2_M2Root.retainedRoot]
+          ⋯).index_usize
+      0#usize =
+    ok (encodeState JGf_TX2_M0Root.retainedRoot)
+r1 :
+  (Array.make 3#usize
+          [encodeState JGf_TX2_M0Root.retainedRoot, encodeState JGh_TX2_M1Root.retainedRoot,
+            encodeState JGc_TX2_M2Root.retainedRoot]
+          ⋯).index_usize
+      1#usize =
+    ok (encodeState JGh_TX2_M1Root.retainedRoot)
+r2 :
+  (Array.make 3#usize
+          [encodeState JGf_TX2_M0Root.retainedRoot, encodeState JGh_TX2_M1Root.retainedRoot,
+            encodeState JGc_TX2_M2Root.retainedRoot]
+          ⋯).index_usize
+      2#usize =
+    ok (encodeState JGc_TX2_M2Root.retainedRoot)
+t0 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+      (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+      (encodeState JGf_TX2_M0Root.retainedRoot) 1#usize 0#usize s0.idx s0.val hash =
+    ok (core.result.Result.Ok (), (JGm_TX2_Verify0.output D hash s0).idx, (JGm_TX2_Verify0.output D hash s0).val)
+t1 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+      (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+      (encodeState JGh_TX2_M1Root.retainedRoot) 1#usize 1#usize (s1 D hash).idx (s1 D hash).val hash =
+    ok
+      (core.result.Result.Ok (), (JGm_TX2_Verify1.output D hash (s1 D hash)).idx,
+        (JGm_TX2_Verify1.output D hash (s1 D hash)).val)
+t2 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+      (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+      (encodeState JGc_TX2_M2Root.retainedRoot) 1#usize 2#usize (s2 D hash).idx (s2 D hash).val hash =
+    ok
+      (core.result.Result.Ok (), (JGm_TX2_Verify2.output D hash (s2 D hash)).idx,
+        (JGm_TX2_Verify2.output D hash (s2 D hash)).val)
+⊢ (do
+      let (r, idx1, val1) ←
+        Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+            (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+            (encodeState JGf_TX2_M0Root.retainedRoot) 1#usize 0#usize (Array.repeat 16#usize 0#u32)
+            (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, idx2, val2) ←
+            Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+                (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+                (encodeState JGh_TX2_M1Root.retainedRoot) 1#usize 1#usize idx1 val1 hash
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, _, _) ←
+                Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+                    (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof JFo_Prepared.value.queries
+                    (encodeState JGc_TX2_M2Root.retainedRoot) 1#usize 2#usize idx2 val2 hash
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame AspisR1Stage2.verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGm_TX2_Batch.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGm_TX2_Batch.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

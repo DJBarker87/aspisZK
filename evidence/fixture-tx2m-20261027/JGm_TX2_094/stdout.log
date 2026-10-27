@@ -1,0 +1,375 @@
+JGm_TX2_Terminal.lean:44:51: error: unexpected token '('; expected ')', ',' or ':'
+JGm_TX2_Terminal.lean:44:12: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+JGm_TX2_Terminal.lean:19:114: error: unsolved goals
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+frontRead :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+      (JGk_TX2_Scratch0.s12 s).idx { «end» := 12#usize } =
+    ok (JGk_TX2_CountSource.front0 s)
+mul : Usize.wrapping_mul 32#usize 163#usize = 5216#usize
+drop :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) JGh_TX2_NodeViews.nodes0
+      { start := 5216#usize } =
+    ok JGm_TX2_PaddingCalls.padding0
+prefixRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) JGh_TX2_NodeViews.nodes0
+      { «end» := 5216#usize } =
+    ok JGm_TX2_Supplied.nodes0
+ce after : core.slice.iter.ChunksExact U8
+chunks : core.slice.Slice.chunks_exact JGm_TX2_PaddingCalls.padding0 8#usize = ok ce
+scan :
+  (Port3_BatchStd.install Port4B_Install.leaves).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+      (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+        (Port3_BatchStd.install Port4B_Install.leaves) (JGc_TX2_RealLeaves.dictionary D))
+      ce () =
+    ok (false, after)
+verify :
+  Port4B_Install.leaves.op10 (JGc_TX2_RealLeaves.dictionary D) hash Port3_NativeBatchBody.multiproof.Arity.Two
+      (encodeState JGf_TX2_M0Root.retainedRoot) (JGk_TX2_Scratch0.s12 s).idx (JGk_TX2_Scratch0.s12 s).val 12#usize
+      JGm_TX2_Supplied.nodes0 =
+    ok (true, (JGm_TX2_Verify0.output D hash s).idx, (JGm_TX2_Verify0.output D hash s).val)
+⊢ Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install Port4B_Install.leaves)
+      (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGf_TX2_M0Root.retainedRoot) 0#usize hash
+      10#usize 12#usize 3#usize (JGk_TX2_ScratchKeys.keys 0) (JGk_TX2_Scratch0.s12 s).idx (JGk_TX2_Scratch0.s12 s).val
+      12#usize 12#usize =
+    ok
+      (ControlFlow.done
+        ((JGm_TX2_Verify0.output D hash s).idx, (JGm_TX2_Verify0.output D hash s).val, some (core.result.Result.Ok ())))
+'AspisR1.JGm_TX2_Terminal0.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGm_TX2_Terminal.lean:86:2: error: No goals to be solved
+JGm_TX2_Terminal.lean:85:13: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵s̵o̵u̵r̵c̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲o̲u̲r̲c̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGm_TX2_Terminal.lean:85:39: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵s̵o̵u̵r̵c̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲s̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGm_TX2_Terminal0.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGm_TX2_Terminal.lean:97:29: error: Type mismatch: After simplification, term
+  (Port4B_Bounds.count 1#usize).left
+ has type
+  @Eq ℕ (↑(Usize.wrapping_sub 22#usize 10#usize)) 12
+but is expected to have type
+  @Eq ℕ ↑(Usize.wrapping_sub 22#usize 10#usize) ↑12#usize
+JGm_TX2_Terminal.lean:106:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port4B_Install.leaves.op4 JFo_Prepared.value.queries 10#usize 12#usize 0#usize
+in the target expression
+  (let (lo, hi) := (10#usize, 22#usize)
+    do
+    let a ←
+      (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries lo (Usize.wrapping_sub hi lo)
+          0#usize
+    let keys ← (Port3_BatchStd.install Port4B_Install.leaves).op5 a (Usize.wrapping_sub hi lo)
+    let (idx1, val1, pending_return) ←
+      Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port3_BatchStd.install Port4B_Install.leaves)
+          (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGf_TX2_M0Root.retainedRoot) 0#usize
+          s.idx s.val hash lo (Usize.wrapping_sub hi lo) 3#usize keys 0#usize 0#usize
+    match pending_return with
+      | none => fail Error.panic
+      | some r => ok (r, idx1, val1)) =
+    ok (core.result.Result.Ok (), (JGm_TX2_Verify0.output D hash s).idx, (JGm_TX2_Verify0.output D hash s).val)
+
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+splitCount : Usize.wrapping_sub 22#usize 10#usize = 12#usize
+slot : (Usize.wrapping_mul 3#usize 1#usize).wrapping_add 0#usize = 3#usize
+lo : (Port3_BatchStd.install Port4B_Install.leaves).op13 = ok 10#usize
+build : Port4B_Install.leaves.op4 JFo_Prepared.value.queries 10#usize 12#usize 0#usize = ok (JGf_TX2_Keys.raw ↑0#usize)
+sort : Port4B_Install.leaves.op5 (JGf_TX2_Keys.raw 0) 12#usize = ok (JGk_TX2_ScratchKeys.keys 0)
+⊢ (let (lo, hi) := (10#usize, 22#usize)
+    do
+    let a ←
+      (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries lo (Usize.wrapping_sub hi lo)
+          0#usize
+    let keys ← (Port3_BatchStd.install Port4B_Install.leaves).op5 a (Usize.wrapping_sub hi lo)
+    let (idx1, val1, pending_return) ←
+      Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port3_BatchStd.install Port4B_Install.leaves)
+          (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGf_TX2_M0Root.retainedRoot) 0#usize
+          s.idx s.val hash lo (Usize.wrapping_sub hi lo) 3#usize keys 0#usize 0#usize
+    match pending_return with
+      | none => fail Error.panic
+      | some r => ok (r, idx1, val1)) =
+    ok (core.result.Result.Ok (), (JGm_TX2_Verify0.output D hash s).idx, (JGm_TX2_Verify0.output D hash s).val)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGm_TX2_Terminal.lean:103:32: warning: This simp argument is unused:
+  splitCount
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵s̵p̵l̵i̵t̵C̵o̵u̵n̵t̵,̵s̵l̵o̵t̵]̵[̲l̲o̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲s̲l̲o̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGm_TX2_Terminal0.tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGm_TX2_Terminal.lean:156:51: error: unexpected token '('; expected ')', ',' or ':'
+JGm_TX2_Terminal.lean:156:12: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+JGm_TX2_Terminal.lean:131:114: error: unsolved goals
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+frontRead :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+      (JGk_TX2_Scratch1.s12 s).idx { «end» := 12#usize } =
+    ok (JGk_TX2_CountSource.front1 s)
+mul : Usize.wrapping_mul 32#usize 163#usize = 5216#usize
+drop :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) JGh_TX2_NodeViews.nodes1
+      { start := 5216#usize } =
+    ok JGm_TX2_PaddingCalls.padding1
+prefixRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) JGh_TX2_NodeViews.nodes1
+      { «end» := 5216#usize } =
+    ok JGm_TX2_Supplied.nodes1
+ce after : core.slice.iter.ChunksExact U8
+chunks : core.slice.Slice.chunks_exact JGm_TX2_PaddingCalls.padding1 8#usize = ok ce
+scan :
+  (Port3_BatchStd.install Port4B_Install.leaves).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+      (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+        (Port3_BatchStd.install Port4B_Install.leaves) (JGc_TX2_RealLeaves.dictionary D))
+      ce () =
+    ok (false, after)
+verify :
+  Port4B_Install.leaves.op10 (JGc_TX2_RealLeaves.dictionary D) hash Port3_NativeBatchBody.multiproof.Arity.Two
+      (encodeState JGh_TX2_M1Root.retainedRoot) (JGk_TX2_Scratch1.s12 s).idx (JGk_TX2_Scratch1.s12 s).val 12#usize
+      JGm_TX2_Supplied.nodes1 =
+    ok (true, (JGm_TX2_Verify1.output D hash s).idx, (JGm_TX2_Verify1.output D hash s).val)
+⊢ Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install Port4B_Install.leaves)
+      (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGh_TX2_M1Root.retainedRoot) 1#usize hash
+      10#usize 12#usize 4#usize (JGk_TX2_ScratchKeys.keys 1) (JGk_TX2_Scratch1.s12 s).idx (JGk_TX2_Scratch1.s12 s).val
+      12#usize 12#usize =
+    ok
+      (ControlFlow.done
+        ((JGm_TX2_Verify1.output D hash s).idx, (JGm_TX2_Verify1.output D hash s).val, some (core.result.Result.Ok ())))
+'AspisR1.JGm_TX2_Terminal1.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGm_TX2_Terminal.lean:198:2: error: No goals to be solved
+JGm_TX2_Terminal.lean:197:13: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵s̵o̵u̵r̵c̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲o̲u̲r̲c̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGm_TX2_Terminal.lean:197:39: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵s̵o̵u̵r̵c̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲s̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGm_TX2_Terminal1.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGm_TX2_Terminal.lean:209:29: error: Type mismatch: After simplification, term
+  (Port4B_Bounds.count 1#usize).left
+ has type
+  @Eq ℕ (↑(Usize.wrapping_sub 22#usize 10#usize)) 12
+but is expected to have type
+  @Eq ℕ ↑(Usize.wrapping_sub 22#usize 10#usize) ↑12#usize
+JGm_TX2_Terminal.lean:218:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port4B_Install.leaves.op4 JFo_Prepared.value.queries 10#usize 12#usize 1#usize
+in the target expression
+  (let (lo, hi) := (10#usize, 22#usize)
+    do
+    let a ←
+      (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries lo (Usize.wrapping_sub hi lo)
+          1#usize
+    let keys ← (Port3_BatchStd.install Port4B_Install.leaves).op5 a (Usize.wrapping_sub hi lo)
+    let (idx1, val1, pending_return) ←
+      Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port3_BatchStd.install Port4B_Install.leaves)
+          (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGh_TX2_M1Root.retainedRoot) 1#usize
+          s.idx s.val hash lo (Usize.wrapping_sub hi lo) 4#usize keys 0#usize 0#usize
+    match pending_return with
+      | none => fail Error.panic
+      | some r => ok (r, idx1, val1)) =
+    ok (core.result.Result.Ok (), (JGm_TX2_Verify1.output D hash s).idx, (JGm_TX2_Verify1.output D hash s).val)
+
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+splitCount : Usize.wrapping_sub 22#usize 10#usize = 12#usize
+slot : (Usize.wrapping_mul 3#usize 1#usize).wrapping_add 1#usize = 4#usize
+lo : (Port3_BatchStd.install Port4B_Install.leaves).op13 = ok 10#usize
+build : Port4B_Install.leaves.op4 JFo_Prepared.value.queries 10#usize 12#usize 1#usize = ok (JGf_TX2_Keys.raw ↑1#usize)
+sort : Port4B_Install.leaves.op5 (JGf_TX2_Keys.raw 1) 12#usize = ok (JGk_TX2_ScratchKeys.keys 1)
+⊢ (let (lo, hi) := (10#usize, 22#usize)
+    do
+    let a ←
+      (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries lo (Usize.wrapping_sub hi lo)
+          1#usize
+    let keys ← (Port3_BatchStd.install Port4B_Install.leaves).op5 a (Usize.wrapping_sub hi lo)
+    let (idx1, val1, pending_return) ←
+      Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port3_BatchStd.install Port4B_Install.leaves)
+          (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGh_TX2_M1Root.retainedRoot) 1#usize
+          s.idx s.val hash lo (Usize.wrapping_sub hi lo) 4#usize keys 0#usize 0#usize
+    match pending_return with
+      | none => fail Error.panic
+      | some r => ok (r, idx1, val1)) =
+    ok (core.result.Result.Ok (), (JGm_TX2_Verify1.output D hash s).idx, (JGm_TX2_Verify1.output D hash s).val)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGm_TX2_Terminal.lean:215:32: warning: This simp argument is unused:
+  splitCount
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵s̵p̵l̵i̵t̵C̵o̵u̵n̵t̵,̵s̵l̵o̵t̵]̵[̲l̲o̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲s̲l̲o̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGm_TX2_Terminal1.tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGm_TX2_Terminal.lean:268:51: error: unexpected token '('; expected ')', ',' or ':'
+JGm_TX2_Terminal.lean:268:12: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+JGm_TX2_Terminal.lean:243:114: error: unsolved goals
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+frontRead :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+      (JGk_TX2_Scratch2.s12 s).idx { «end» := 12#usize } =
+    ok (JGk_TX2_CountSource.front2 s)
+mul : Usize.wrapping_mul 32#usize 141#usize = 4512#usize
+drop :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) JGh_TX2_NodeViews.nodes2
+      { start := 4512#usize } =
+    ok JGm_TX2_PaddingCalls.padding2
+prefixRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) JGh_TX2_NodeViews.nodes2
+      { «end» := 4512#usize } =
+    ok JGm_TX2_Supplied.nodes2
+ce after : core.slice.iter.ChunksExact U8
+chunks : core.slice.Slice.chunks_exact JGm_TX2_PaddingCalls.padding2 8#usize = ok ce
+scan :
+  (Port3_BatchStd.install Port4B_Install.leaves).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+      (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+        (Port3_BatchStd.install Port4B_Install.leaves) (JGc_TX2_RealLeaves.dictionary D))
+      ce () =
+    ok (false, after)
+verify :
+  Port4B_Install.leaves.op10 (JGc_TX2_RealLeaves.dictionary D) hash Port3_NativeBatchBody.multiproof.Arity.Two
+      (encodeState JGc_TX2_M2Root.retainedRoot) (JGk_TX2_Scratch2.s12 s).idx (JGk_TX2_Scratch2.s12 s).val 12#usize
+      JGm_TX2_Supplied.nodes2 =
+    ok (true, (JGm_TX2_Verify2.output D hash s).idx, (JGm_TX2_Verify2.output D hash s).val)
+⊢ Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install Port4B_Install.leaves)
+      (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGc_TX2_M2Root.retainedRoot) 2#usize hash
+      10#usize 12#usize 5#usize (JGk_TX2_ScratchKeys.keys 2) (JGk_TX2_Scratch2.s12 s).idx (JGk_TX2_Scratch2.s12 s).val
+      12#usize 12#usize =
+    ok
+      (ControlFlow.done
+        ((JGm_TX2_Verify2.output D hash s).idx, (JGm_TX2_Verify2.output D hash s).val, some (core.result.Result.Ok ())))
+'AspisR1.JGm_TX2_Terminal2.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGm_TX2_Terminal.lean:310:2: error: No goals to be solved
+JGm_TX2_Terminal.lean:309:13: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵s̵o̵u̵r̵c̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲o̲u̲r̲c̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGm_TX2_Terminal.lean:309:39: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵s̵o̵u̵r̵c̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲s̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGm_TX2_Terminal2.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGm_TX2_Terminal.lean:321:29: error: Type mismatch: After simplification, term
+  (Port4B_Bounds.count 1#usize).left
+ has type
+  @Eq ℕ (↑(Usize.wrapping_sub 22#usize 10#usize)) 12
+but is expected to have type
+  @Eq ℕ ↑(Usize.wrapping_sub 22#usize 10#usize) ↑12#usize
+JGm_TX2_Terminal.lean:330:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port4B_Install.leaves.op4 JFo_Prepared.value.queries 10#usize 12#usize 2#usize
+in the target expression
+  (let (lo, hi) := (10#usize, 22#usize)
+    do
+    let a ←
+      (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries lo (Usize.wrapping_sub hi lo)
+          2#usize
+    let keys ← (Port3_BatchStd.install Port4B_Install.leaves).op5 a (Usize.wrapping_sub hi lo)
+    let (idx1, val1, pending_return) ←
+      Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port3_BatchStd.install Port4B_Install.leaves)
+          (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGc_TX2_M2Root.retainedRoot) 2#usize
+          s.idx s.val hash lo (Usize.wrapping_sub hi lo) 5#usize keys 0#usize 0#usize
+    match pending_return with
+      | none => fail Error.panic
+      | some r => ok (r, idx1, val1)) =
+    ok (core.result.Result.Ok (), (JGm_TX2_Verify2.output D hash s).idx, (JGm_TX2_Verify2.output D hash s).val)
+
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+splitCount : Usize.wrapping_sub 22#usize 10#usize = 12#usize
+slot : (Usize.wrapping_mul 3#usize 1#usize).wrapping_add 2#usize = 5#usize
+lo : (Port3_BatchStd.install Port4B_Install.leaves).op13 = ok 10#usize
+build : Port4B_Install.leaves.op4 JFo_Prepared.value.queries 10#usize 12#usize 2#usize = ok (JGf_TX2_Keys.raw ↑2#usize)
+sort : Port4B_Install.leaves.op5 (JGf_TX2_Keys.raw 2) 12#usize = ok (JGk_TX2_ScratchKeys.keys 2)
+⊢ (let (lo, hi) := (10#usize, 22#usize)
+    do
+    let a ←
+      (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries lo (Usize.wrapping_sub hi lo)
+          2#usize
+    let keys ← (Port3_BatchStd.install Port4B_Install.leaves).op5 a (Usize.wrapping_sub hi lo)
+    let (idx1, val1, pending_return) ←
+      Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port3_BatchStd.install Port4B_Install.leaves)
+          (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGc_TX2_M2Root.retainedRoot) 2#usize
+          s.idx s.val hash lo (Usize.wrapping_sub hi lo) 5#usize keys 0#usize 0#usize
+    match pending_return with
+      | none => fail Error.panic
+      | some r => ok (r, idx1, val1)) =
+    ok (core.result.Result.Ok (), (JGm_TX2_Verify2.output D hash s).idx, (JGm_TX2_Verify2.output D hash s).val)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGm_TX2_Terminal.lean:327:32: warning: This simp argument is unused:
+  splitCount
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵s̵p̵l̵i̵t̵C̵o̵u̵n̵t̵,̵s̵l̵o̵t̵]̵[̲l̲o̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲s̲l̲o̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGm_TX2_Terminal2.tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
