@@ -1,0 +1,66 @@
+import FJe_Sum3Value
+import FIv_SubMap
+import FIv_PreparedMul
+import FIw_ArrayReadValue
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJh_ProjectedAfter
+open Aeneas Aeneas.Std Result FIq_Native
+open FIv_NativeArithmetic (NQ qm)
+open FIv_NativeValue (Canon decode)
+open FIv_PreparedNew (NP prepared)
+open FIw_ArrayValue (canonical decoded)
+open ExtractedMaskPreparedState (PreparedFor)
+abbrev Packed := Array NQ 4#usize
+def source (target internal : NQ) (lead full : Packed) (p : Array NP 3#usize)
+    (block : NP) (g : Usize) : Result NQ := do
+  let l ← Array.index_usize lead g
+  let dl ← field.QM31.sub target l
+  let f ← Array.index_usize full g
+  let df ← field.QM31.sub target f
+  let di ← field.QM31.sub target internal
+  let sum ← field.qm31_sum_products3_prepared p (Array.make 3#usize [dl,df,di])
+  field.PreparedQm31Multiplier.mul block sum
+/-- Actual projected output arithmetic,on its SAME prepared weights and block.
+Only the separately supplied internal/target packs remain as input cuts. -/
+theorem value (target internal theta : NQ) (lead full : Packed)
+    (w : FJe_Sum3BridgeBase.Right) (p : Array NP 3#usize) (block : NP)
+    (g : Usize) (hg : g.val<(4#usize).val) (out : NQ)
+    (ct : Canon target) (ci : Canon internal) (cb : Canon theta)
+    (cl : canonical lead) (cf : canonical full) (cw : canonical w)
+    (hp : ∀i : Fin 3,PreparedFor (prepared (FJe_Sum3Value.cell p i)) (qm (FJe_Sum3Value.cell w i)))
+    (hb : PreparedFor (prepared block) (qm theta))
+    (run : source target internal lead full p block g=ok out) :
+    Canon out ∧ decode out=decode theta *
+      (decode (FJe_Sum3Value.cell w ⟨0,by decide⟩)*(decode target-decoded lead ⟨g.val,hg⟩)+
+       decode (FJe_Sum3Value.cell w ⟨1,by decide⟩)*(decode target-decoded full ⟨g.val,hg⟩)+
+       decode (FJe_Sum3Value.cell w ⟨2,by decide⟩)*(decode target-decode internal)) := by
+  unfold source at run
+  obtain ⟨l,rl,run⟩ := FIv_Map.bind_success _ _ _ run
+  obtain ⟨dl,rdl,run⟩ := FIv_Map.bind_success _ _ _ run
+  obtain ⟨f,rf,run⟩ := FIv_Map.bind_success _ _ _ run
+  obtain ⟨df,rdf,run⟩ := FIv_Map.bind_success _ _ _ run
+  obtain ⟨di,rdi,run⟩ := FIv_Map.bind_success _ _ _ run
+  obtain ⟨sum,rs,run⟩ := FIv_Map.bind_success _ _ _ run
+  have vl := FIv_SubMap.qm _ _ _ ct (FIv_NativeArray.canonical lead g l cl rl) rdl
+  have vf := FIv_SubMap.qm _ _ _ ct (FIv_NativeArray.canonical full g f cf rf) rdf
+  have vi := FIv_SubMap.qm _ _ _ ct ci rdi
+  have cr : canonical (Array.make 3#usize [dl,df,di]) := by
+    intro x hx
+    simp only [Array.make,List.mem_cons,List.not_mem_nil,or_false] at hx
+    rcases hx with rfl|rfl|rfl
+    · exact vl.1
+    · exact vf.1
+    · exact vi.1
+  have vs := FJe_Sum3Value.value p _ w sum cw cr hp rs
+  have vo := FIv_PreparedMul.value block theta sum out cb vs.1 hb run
+  refine ⟨vo.1,?_⟩
+  rw [vo.2,vs.2]
+  change decode theta*(decode (FJe_Sum3Value.cell w ⟨0,by decide⟩)*decode dl+
+    decode (FJe_Sum3Value.cell w ⟨1,by decide⟩)*decode df+
+    decode (FJe_Sum3Value.cell w ⟨2,by decide⟩)*decode di)=_
+  rw [vl.2,vf.2,vi.2,FIw_ArrayReadValue.read lead g hg l rl,
+    FIw_ArrayReadValue.read full g hg f rf]
+#print axioms value
+end AspisR1.FJh_ProjectedAfter
+end

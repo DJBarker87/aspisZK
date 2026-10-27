@@ -1,0 +1,124 @@
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+FJh_InternalRoundValue.lean:41:4: error: unsolved goals
+case pos
+s out : State
+c : QM
+hs : canonical s
+hc : Canonical c
+run✝³ :
+  (do
+      let q ← Array.index_usize s 0#usize
+      let q1 ← q.add c
+      let q2 ← state_only_poseidon.pow5 q1
+      let state1 ← Array.update s 0#usize q2
+      state_only_poseidon.internal_linear_lazy state1) =
+    ok out
+q : field.QM31
+rq : Array.index_usize s 0#usize = ok q
+run✝² :
+  (do
+      let q1 ← q.add c
+      let q2 ← state_only_poseidon.pow5 q1
+      let state1 ← Array.update s 0#usize q2
+      state_only_poseidon.internal_linear_lazy state1) =
+    ok out
+added : field.QM31
+ra : q.add c = ok added
+run✝¹ :
+  (do
+      let q2 ← state_only_poseidon.pow5 added
+      let state1 ← Array.update s 0#usize q2
+      state_only_poseidon.internal_linear_lazy state1) =
+    ok out
+powered : field.QM31
+rp : state_only_poseidon.pow5 added = ok powered
+run✝ :
+  (do
+      let state1 ← Array.update s 0#usize powered
+      state_only_poseidon.internal_linear_lazy state1) =
+    ok out
+next : Std.Array field.QM31 16#usize
+rn : Array.update s 0#usize powered = ok next
+run : state_only_poseidon.internal_linear_lazy next = ok out
+va : FIv_NativeValue.Canon added ∧ FIv_NativeValue.decode added = FIv_NativeValue.decode q + FIv_NativeValue.decode c
+vp : FIv_NativeValue.Canon powered ∧ FIv_NativeValue.decode powered = FIv_NativeValue.decode added ^ 5
+vn : canonical next ∧ decoded next = Function.update (decoded s) ⟨↑0#usize, ⋯⟩ (FIv_NativeValue.decode powered)
+hn : CanonicalState next
+re : state_only_poseidon.internal_linear_lazy next = ok out
+ce : CanonicalState out
+ve : ∀ (j : Fin 16), Decode (cell out j) = R0P.poseidonInternalLinear (fun i => Decode (cell next i)) j
+co : canonical out
+hv : decoded out = R0P.poseidonInternalLinear (decoded next)
+j : Fin ↑16#usize
+hj : j = 0
+⊢ decoded s ⟨0, ⋯⟩ * Decode c ^ 4 * 5 + decoded s ⟨0, ⋯⟩ ^ 2 * Decode c ^ 3 * 10 +
+            decoded s ⟨0, ⋯⟩ ^ 3 * Decode c ^ 2 * 10 +
+          decoded s ⟨0, ⋯⟩ ^ 4 * Decode c * 5 +
+        decoded s ⟨0, ⋯⟩ ^ 5 +
+      Decode c ^ 5 =
+    if j = 0 then
+      decoded s ⟨0, ⋯⟩ * Decode c ^ 4 * 5 + decoded s ⟨0, ⋯⟩ ^ 2 * Decode c ^ 3 * 10 +
+              decoded s ⟨0, ⋯⟩ ^ 3 * Decode c ^ 2 * 10 +
+            decoded s ⟨0, ⋯⟩ ^ 4 * Decode c * 5 +
+          decoded s ⟨0, ⋯⟩ ^ 5 +
+        Decode c ^ 5
+    else decoded s j
+FJh_InternalRoundValue.lean:42:4: error: unsolved goals
+case neg
+s out : State
+c : QM
+hs : canonical s
+hc : Canonical c
+run✝³ :
+  (do
+      let q ← Array.index_usize s 0#usize
+      let q1 ← q.add c
+      let q2 ← state_only_poseidon.pow5 q1
+      let state1 ← Array.update s 0#usize q2
+      state_only_poseidon.internal_linear_lazy state1) =
+    ok out
+q : field.QM31
+rq : Array.index_usize s 0#usize = ok q
+run✝² :
+  (do
+      let q1 ← q.add c
+      let q2 ← state_only_poseidon.pow5 q1
+      let state1 ← Array.update s 0#usize q2
+      state_only_poseidon.internal_linear_lazy state1) =
+    ok out
+added : field.QM31
+ra : q.add c = ok added
+run✝¹ :
+  (do
+      let q2 ← state_only_poseidon.pow5 added
+      let state1 ← Array.update s 0#usize q2
+      state_only_poseidon.internal_linear_lazy state1) =
+    ok out
+powered : field.QM31
+rp : state_only_poseidon.pow5 added = ok powered
+run✝ :
+  (do
+      let state1 ← Array.update s 0#usize powered
+      state_only_poseidon.internal_linear_lazy state1) =
+    ok out
+next : Std.Array field.QM31 16#usize
+rn : Array.update s 0#usize powered = ok next
+run : state_only_poseidon.internal_linear_lazy next = ok out
+va : FIv_NativeValue.Canon added ∧ FIv_NativeValue.decode added = FIv_NativeValue.decode q + FIv_NativeValue.decode c
+vp : FIv_NativeValue.Canon powered ∧ FIv_NativeValue.decode powered = FIv_NativeValue.decode added ^ 5
+vn : canonical next ∧ decoded next = Function.update (decoded s) ⟨↑0#usize, ⋯⟩ (FIv_NativeValue.decode powered)
+hn : CanonicalState next
+re : state_only_poseidon.internal_linear_lazy next = ok out
+ce : CanonicalState out
+ve : ∀ (j : Fin 16), Decode (cell out j) = R0P.poseidonInternalLinear (fun i => Decode (cell next i)) j
+co : canonical out
+hv : decoded out = R0P.poseidonInternalLinear (decoded next)
+j : Fin ↑16#usize
+hj : ¬j = 0
+⊢ decoded s j = if j = 0 then R0P.poseidonPow5 (decoded s ⟨0, ⋯⟩ + Decode c) else decoded s j
+'AspisR1.FJh_InternalRoundValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

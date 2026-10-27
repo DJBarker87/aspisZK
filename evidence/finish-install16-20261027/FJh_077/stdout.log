@@ -1,0 +1,61 @@
+FJh_SlicePackValue.lean:28:38: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+FJh_SlicePackValue.lean:51:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun j => FIv_NativeArithmetic.qm (FIw_ArrayValue.cells copied j)
+in the target expression
+  (ExtractedMaskQmPackBase4Arithmetic.mathematicalPack fun j =>
+      FIv_NativeArithmetic.qm (FIw_ArrayValue.cells copied j)) =
+    pack a ⟨↑g, hg⟩
+
+a : State
+start stop g : Usize
+out : QM
+hg : ↑g < 4
+hs : ↑start = 4 * ↑g
+he : ↑stop = ↑start + 4
+hb : ↑stop ≤ 16
+ca : canonical a
+hle : ↑start ≤ ↑stop
+src :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice QM)) a
+      { start := start, «end» := stop } =
+    ok (sliceAt a start stop)
+rs :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice QM)) a
+      { start := start, «end» := stop } =
+    ok (sliceAt a start stop)
+rp : field.qm31_pack_base4 (sliceAt a start stop) = ok out
+len : (sliceAt a start stop).length = 4
+can : ∀ x ∈ ↑(sliceAt a start stop), Canonical x
+copied : Std.Array FIv_NativeArithmetic.NQ 4#usize
+same : ↑copied = ↑(sliceAt a start stop)
+co : FIv_NativeValue.Canon out
+vo :
+  FIv_NativeValue.decode out =
+    ExtractedMaskQmPackBase4Arithmetic.mathematicalPack fun j => FIv_NativeArithmetic.qm (FIw_ArrayValue.cells copied j)
+cells :
+  (fun j => FIv_NativeArithmetic.qm (FIw_ArrayValue.cells copied j)) = fun j =>
+    FIv_NativeArithmetic.qm (inputAt a start stop he hb j)
+⊢ (ExtractedMaskQmPackBase4Arithmetic.mathematicalPack fun j =>
+      FIv_NativeArithmetic.qm (FIw_ArrayValue.cells copied j)) =
+    pack a ⟨↑g, hg⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FJh_SlicePackValue.lean:30:42: warning: This simp argument is unused:
+  hlen
+
+Hint: Omit it from the simp argument list.
+  simp [Array.to_slice, ̲Slice.length, ̲hle,h̵l̵e̵n̵,̵ ̲sliceAt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJh_SlicePackValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
