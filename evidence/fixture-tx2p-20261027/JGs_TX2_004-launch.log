@@ -1,0 +1,53 @@
+{"attempt": "JGs_TX2_004", "exit_status": 1, "wall_seconds": 3.049390027008485, "peak_rss_kib": "5944020", "swaps": "0", "print_axioms": ["'AspisR1.JGs_KindForward.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGs_KindForward.lean:36:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  w.tensor idx 2#usize input
+in the target expression
+  (if false = true then
+      if kind < 4#usize then do
+        let r ← w.dense_point_pair kind alpha f
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let parts1 ← before.update kind val
+            ok (core.result.Result.Ok (), scratch, parts1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual 
+...
+          let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame FIo_Native.verifier.Error) residual
+            ok (r1, scratch1, before)) =
+    ok (core.result.Result.Ok (), back tensor, after)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (7 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGs_KindForward.lean:35:69: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp only [variant, ̲FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq,
+      FIo_Native.transport.Variant.read_discriminant, ̲notD, ̲decide_false, ̲it̵e̵_̵f̵a̵l̵s̵e̵,̵i̵ndex, ̲lift, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲borrow]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGs_KindForward.lean:35:79: warning: This simp argument is unused:
+  index
+
+Hint: Omit it from the simp argument list.
+  simp only [variant, ̲FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq,
+      FIo_Native.transport.Variant.read_discriminant, ̲notD, ̲decide_false, ̲ite_false,i̵n̵d̵e̵x̵,̵ ̲lift, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲borrow]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGs_KindForward.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r55e38f2280ef436fb8e0fbf2ab5b7e73.scope; invocation ID: 9cc1d29b89bc41a8aa98d29595433fca

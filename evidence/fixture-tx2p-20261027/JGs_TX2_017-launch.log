@@ -1,0 +1,58 @@
+{"attempt": "JGs_TX2_017", "exit_status": 1, "wall_seconds": 3.989563041017391, "peak_rss_kib": "6000956", "swaps": "0", "print_axioms": ["'AspisR1.JGs_T1.inner2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGs_T1.outer2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGs_T1.inner3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGs_T1.outer3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGs_T1.inner4' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGs_T1.outer4' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGs_T1.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGs_T1.lean:24:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJa_ReverseStep.next (FJa_ReverseStep.cursor 0#usize)
+in the target expression
+  (do
+      let (o, iter1) ←
+        core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (states2 1).1
+      match o with
+        | none => ok (done (JGq_PairShape.w, (states2 1).2))
+        | some j => do
+          let x ← (states2 1).2.index_usize j
+          let a ← JGq_PairShape.w.factors.index_usize 1#usize
+          let a1 ← a.index_usize 2#usize
+          let q ← a1.index_usize 0#usize
+          let q1 ← x.mul q
+
+...
+  let s ← output3.update i7 q7
+          ok (cont (iter1, s))) =
+    ok (done (JGq_PairShape.w, s21))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGs_T1.inner4' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGs_T1.lean:130:8: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ContinuousAffineMap.cont`
+  [apply] `ContinuousAlgHom.cont`
+  [apply] `ContinuousLinearMap.cont`
+  [apply] `ContinuousMultilinearMap.cont`
+  [apply] `HasFTaylorSeriesUpTo.cont`
+  [apply] `HasFTaylorSeriesUpToOn.cont`
+  [apply] `FJf_CircleBody.cont`
+  [apply] `FJf_CircleOuterBody.cont`
+  [apply] `FJf_PointOuterBody.cont`
+  [apply] `cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+'AspisR1.JGs_T1.outer4' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGs_T1.lean:141:90: error: Tactic `rfl` failed: The left-hand side
+  input.update 0#usize FIo_Native.aspis_core.field.QM31.ONE
+is not definitionally equal to the right-hand side
+  ok s0
+
+⊢ input.update 0#usize FIo_Native.aspis_core.field.QM31.ONE = ok s0
+'AspisR1.JGs_T1.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb677646af9ff4474b7f334f52833a97e.scope; invocation ID: e47f2abe9aff43b9ba4e141e3916670e
