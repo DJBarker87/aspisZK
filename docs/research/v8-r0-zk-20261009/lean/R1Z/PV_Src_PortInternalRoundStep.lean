@@ -5,7 +5,7 @@ in the Result expression; the body alone is replaced by its proved copy. -/
 set_option autoImplicit false
 namespace R1Z.PV_Src_PortInternalRoundStep
 open Aeneas Aeneas.Std Result
-open BuilderForestAdmissionPort PV_Src_PortSboxStep
+open BuilderForestStdPort BuilderForestAdmissionPort PV_Src_PortSboxStep
 
 theorem source {F : Type}
     (callback : core.ops.function.FnMut F poseidon2.Poseidon2RoundTransition Unit)
