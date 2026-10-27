@@ -12848,7 +12848,7 @@ inputs" is false. Both fixtures satisfy every honesty guard.
 Lead assessment: D332's question was mis-framed. The consumers are generic over the source family;
 nothing in them needs restricting. What matters is the family at which the discharge route
 instantiates SourceIdentification. For privacy of an honest user the prover's inputs come from the
-compiler (the client receives  from its caller; the honest pipeline produces it; the
+compiler (the client receives the compiled payload from its caller; the honest pipeline produces it; the
 Selection is the honest prover's, D320), so the route instantiates at the honest-input family. The
 raw-family unsatisfiability (D332) stays recorded and does not apply to that family. runjoin27
 (remaining 64 attempts) states SourceIdentification at the honest family, proves its three fields
