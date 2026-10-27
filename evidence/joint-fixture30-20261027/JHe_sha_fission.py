@@ -89,7 +89,9 @@ for name,s in outputs.items():
  for line in s.splitlines():
   if line.startswith('import '):assert not seen_command,(name,'late import')
   elif line.strip():seen_command=True
- if check:assert (L/name).read_text()==s,name
+ if check:
+  retained=(L/name) if (L/name).exists() else P/'JHe_UNCHECKED'/(name+'.txt')
+  assert retained.read_text()==s,name
  else:(L/name).write_text(s)
 manifest=dict(source_inputs=inputs,outputs={n:hashlib.sha256(s.encode()).hexdigest() for n,s in outputs.items()},sha_equations=len(pairs),request_data={f'{t}_{n}':v for (t,n),v in request_data.items()},proof_hypothesis='AspisR1.JHe_SHARealization',scope='Exact batch mathematical SHA equations only; no acceptance field; original query/flush/writer proofs reused unchanged')
 (P/'JHe_SHA_FISSION.json').write_text(json.dumps(manifest,indent=2)+'\n')

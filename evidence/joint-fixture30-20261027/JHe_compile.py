@@ -33,6 +33,13 @@ cfg['env']['LEAN_PATH']=':'.join(search_paths)
 if mod=='JHe_HeadlineAudit':
  cfg['env']=json.loads((R/'evidence/joint-fixture28-20261027/JHa_JGz_TX2_097.json').read_text())['env']
 cfg['command'][-3:]=['-o',mod.replace('.','/')+'.olean',relative_source]
+if mod=='JHe_HeadlineAudit':
+ names=list(json.loads((P/'JHe_AENEAS_OBJECT_PINS.json').read_text())['objects'])
+ pin_code='from pathlib import Path\nimport hashlib,json\npaths='+repr(cfg['env']['LEAN_PATH'].split(':'))+'\nnames='+repr(names)+'\nobjects={}\nfor name in names:\n p=next((Path(root)/name for root in paths if (Path(root)/name).is_file()),None)\n assert p is not None,name\n objects[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)\nprint(json.dumps(dict(selection="first match in JHe headline audit LEAN_PATH",objects=objects),indent=2))'
+ pins=ssh('python3 -c '+shlex.quote(pin_code),capture_output=True,text=True)
+ assert pins.returncode==0,pins.stderr
+ json.loads(pins.stdout)
+ (P/'JHe_HEADLINE_AENEAS_OBJECT_PINS.json').write_text(pins.stdout)
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 retries=[]
 admissions=[]

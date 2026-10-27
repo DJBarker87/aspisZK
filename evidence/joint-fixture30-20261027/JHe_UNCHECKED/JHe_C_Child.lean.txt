@@ -1,0 +1,55 @@
+import JHe_C_TX1Candidate
+import JHe_NativeAssociation
+import JHe_ConfigDigest
+import JHe_TransportCall
+import JHe_OriginalCandidate
+import JHe_PreparedInventory
+import JHe_Natives
+import JGx_RealStatement
+import JFs_SourceProjection
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHe_C_Child
+open Aeneas Aeneas.Std Result AspisR1CurrentCaller
+open InstalledPreparation FirstComposition JGr_Geometry
+variable [sha : JHe_SHARealization]
+
+theorem source (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+    ∃ saved : alloc.vec.Vec U8,
+      AdapterRw.first_decoded (JHe_Natives.sdk base stage)
+        (S6N_Getters.publicValue JGx_RealStatement.value) JFx_NativeBytes.publicInput
+        JFx_NativeBytes.proof 10#usize=ok (.Ok saved) ∧ saved.val.length=1768 := by
+  obtain ⟨p,scratch,initial,out,pending,after,g,flushed,saved,
+    prepare,batch,query,flush,write,returned,length,variant,next,size⟩ := JHe_C_TX1Candidate.returns
+  have original := JHe_OriginalCandidate.source
+    (JGp_Allocation.base (Op5T_Concrete.current JGp_Seeds.base)) true
+    JHe_PreparedInventory.query JHe_PreparedInventory.geometry JGe_Boundaries.value
+    (NP6_StdModel.calls (.Ok ())) digest () (toCurrentPublic JFs_PublicSerialization.value)
+    JFx_NativeBytes.publicInput JFx_NativeBytes.proof saved
+    JHe_PreparedInventory.owner JHe_PreparedInventory.ports returned
+  have call := @JHe_TransportCall.source Unit
+    (DrvC_Installation.currentInstalled (JHe_Natives.configuration base stage))
+    {installed with op16:=Tx1Q_Install.writer}
+    (DrvC_Installation.currentDigest (JHe_Natives.configuration base stage)) digest
+    (JHe_NativeAssociation.source (JHe_SdkLeaves.install base) stage)
+    (JHe_ConfigDigest.source (JHe_SdkLeaves.install base) stage)
+    () (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.publicInput
+    JFx_NativeBytes.proof 10#usize saved original
+  have semantic : AspisS6CurrentVerifierCarrier.toPublic (S6N_Getters.publicValue JGx_RealStatement.value)=
+      toCurrentPublic JFs_PublicSerialization.value := by rfl
+  refine ⟨saved,?_,length⟩
+  unfold AdapterRw.first_decoded
+  rw [show AdapterRw.observer (JHe_Natives.sdk base stage)=ok none from rfl,bind_tc_ok]
+  change (do
+    let result ← AspisS6CurrentFirstInstallation.current
+      (DrvC_Installation.currentInstalled (JHe_Natives.configuration base stage))
+      (DrvC_Installation.digest (JHe_Natives.configuration base stage))
+      (S6N_Getters.publicValue JGx_RealStatement.value) JFx_NativeBytes.publicInput
+      JFx_NativeBytes.proof 10#usize () none
+    AdapterRw.core.result.Result.map_err _ result _)=_
+  unfold AspisS6CurrentFirstInstallation.current
+  rw [AspisS6CurrentFirstInstallation.observer_none,semantic,call]
+  rfl
+#print axioms source
+end AspisR1.JHe_C_Child
+end
