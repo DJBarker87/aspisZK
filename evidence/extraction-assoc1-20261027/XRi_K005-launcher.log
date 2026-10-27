@@ -1,0 +1,46 @@
+{"attempt": "XRi_K005", "exit_status": 1, "wall_seconds": 91.61019357800251, "peak_rss_kib": "3665620", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` an
+...
+s.rs:19:39
+   |
+19 | #[kani::proof] #[kani::unwind(36)] fn XRi_checkpoint_four(){let xs=[any_k(),any_k(),any_k(),any_k()];let mut a=Vec::new();let mut b=...
+   |                                       ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xri_checkpoint_four`
+
+warning: function `XRi_checkpoint_e_pair` should have a snake case name
+  --> XRi_harnesses.rs:20:39
+   |
+20 | #[kani::proof] #[kani::unwind(36)] fn XRi_checkpoint_e_pair(){let xs=[any_e(),any_e()];let prefix:[u8;8]=kani::any();let mut a=prefi...
+   |                                       ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xri_checkpoint_e_pair`
+
+warning: function `XRi_checkpoint_zero_weights` should have a snake case name
+  --> XRi_harnesses.rs:21:39
+   |
+21 | ...nwind(70)] fn XRi_checkpoint_zero_weights(){let mut a=vec![];for _ in 0..64 {XRi_shipped_put_k(&mut a,K::ZERO);}let i:usize=kani:...
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xri_checkpoint_zero_weights`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.41s
+Checking harness XRi_harnesses::XRi_prepared_zero...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - XRi_harnesses::XRi_prepared_zero
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rccc7cd15381a4f4087f6b06c73244e51.scope; invocation ID: a5bb17daf2a147e18907c4f67b76e883
