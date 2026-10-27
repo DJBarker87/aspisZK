@@ -1,0 +1,67 @@
+JGx_Tail.lean:20:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ops.op9 b a.weights.deref
+in the target expression
+  (do
+      let s4 ← ops.op9 b a.weights.deref_mut.1
+      let s7 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.proof
+            { start := 7527#usize, «end» := 7751#usize }
+      let i5 ← ops.op21
+      let s8 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.proof
+            { start := 7783#usize, «end» := i5 }
+      let i6 ← ops.op20
+      let s9 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.proof
+            { start := i5, «end» := i6 }
+      ops.op19
+          { variant := transport.Variant.S2, semantic := (Std.Array.empty U8).to_slice,
+            y1 := (Std.Array.empty U8).to_slice, inactive := inactive, round0 := s7, folded_root := none, round1 := s8,
+            final_message := s9, query_bytes := (Std.Array.empty U8).to_slice }
+          JFo_Prepared.value { weights := a.weights.deref_mut.2 s4, rhs := a.rhs, power := a.power, next := a.next }
+          none) =
+    ok (core.result.Result.Ok ())
+
+ops : VTop_Stages.Ops
+inactive : aspis_core.field.wide_exact.WideExact
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+flushed : Slice aspis_core.field.QM31
+flush : ops.op9 b a.weights.deref = ok flushed
+offset1 : ops.op21 = ok 8007#usize
+offset2 : ops.op20 = ok 10055#usize
+finish :
+  ops.op19 (JGo_TX2_FinishPrefix.view inactive) JFo_Prepared.value (JGx_Writeback.value a flushed) none =
+    ok (core.result.Result.Ok ())
+⊢ (do
+      let s4 ← ops.op9 b a.weights.deref_mut.1
+      let s7 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.proof
+            { start := 7527#usize, «end» := 7751#usize }
+      let i5 ← ops.op21
+      let s8 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.proof
+            { start := 7783#usize, «end» := i5 }
+      let i6 ← ops.op20
+      let s9 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.proof
+            { start := i5, «end» := i6 }
+      ops.op19
+          { variant := transport.Variant.S2, semantic := (Std.Array.empty U8).to_slice,
+            y1 := (Std.Array.empty U8).to_slice, inactive := inactive, round0 := s7, folded_root := none, round1 := s8,
+            final_message := s9, query_bytes := (Std.Array.empty U8).to_slice }
+          JFo_Prepared.value { weights := a.weights.deref_mut.2 s4, rhs := a.rhs, power := a.power, next := a.next }
+          none) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (7527 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGx_Tail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

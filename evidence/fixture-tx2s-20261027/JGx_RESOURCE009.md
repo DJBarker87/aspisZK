@@ -1,0 +1,1 @@
+009 JGx_Finish.lean exited134: Lean memory_exception at interpreter, wall4.867169613s,RSS7172196KiB,swap0. The combined rw/dot/simp continuation is retired, not rerun unchanged. Replacement: independent comparison (FinishCompare), dot bind (FinishDot), then exact application in Finish. No cap/heartbeat/depth increase.

@@ -1,0 +1,48 @@
+{"attempt": "JGx_TX2_046", "exit_status": 1, "wall_seconds": 1.4391887249657884, "peak_rss_kib": "2651872", "swaps": "0", "print_axioms": ["'AspisR1.JGx_ProofAccount.proof_length' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGx_ProofAccount.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGx_ProofAccount.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGx_ProofAccount.proof_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGx_ProofAccount.lean:17:88: error: unsolved goals
+headerBytes : Std.Array U8 688#usize
+⊢ ↑688#usize + 57607 = 58295
+'AspisR1.JGx_ProofAccount.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGx_ProofAccount.lean:34:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => List.take 57607 (List.drop _a (↑headerBytes ++ ↑JFx_NativeBytes.proof)) = ↑JFx_NativeBytes.proof
+Error: Application type mismatch: The argument
+  Eq.refl true
+has type
+  true = true
+but is expected to have type
+  decide (_a ≤ UScalar.cMax UScalarTy.Usize) = true
+in the application
+
+...
+at 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+headerBytes : Std.Array U8 688#usize
+out : Slice U8
+run :
+  core.slice.index.SliceIndexRangeUsizeSlice.index { start := 688#usize, «end» := 58295#usize } (value headerBytes) =
+    ok out
+contents :
+  ↑out =
+    List.slice ↑{ start := 688#usize, «end» := 58295#usize }.start ↑{ start := 688#usize, «end» := 58295#usize }.end
+      ↑(value headerBytes)
+size :
+  out.length = ↑{ start := 688#usize, «end» := 58295#usize }.end - ↑{ start := 688#usize, «end» := 58295#usize }.start
+hlen : (↑headerBytes).length = 688
+⊢ List.take 57607 (List.drop 688 (↑headerBytes ++ ↑JFx_NativeBytes.proof)) = ↑JFx_NativeBytes.proof
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (688 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGx_ProofAccount.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rdf0c65ec28f042e3a603b853da9013b2.scope; invocation ID: ab3106de1ee74049860f740161f0fba4

@@ -1,0 +1,48 @@
+{"attempt": "JGx_TX2_045", "exit_status": 1, "wall_seconds": 1.5022734249942005, "peak_rss_kib": "2642868", "swaps": "0", "print_axioms": ["'AspisR1.JGx_ProofAccount.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGx_ProofAccount.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGx_ProofAccount.lean:10:48: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JFx_NativeBytes.proofBytes.length
+in the target expression
+  ↑688#usize + (↑JFx_NativeBytes.proof).length ≤ Usize.max
+
+headerBytes : Std.Array U8 688#usize
+⊢ ↑688#usize + (↑JFx_NativeBytes.proof).length ≤ Usize.max
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  
+...
+plication
+    id (Eq.refl true)
+JGx_ProofAccount.lean:25:43: error: unsolved goals
+headerBytes : Std.Array U8 688#usize
+out : Slice U8
+run :
+  core.slice.index.SliceIndexRangeUsizeSlice.index { start := 688#usize, «end» := 58295#usize } (value headerBytes) =
+    ok out
+contents :
+  ↑out =
+    List.slice ↑{ start := 688#usize, «end» := 58295#usize }.start ↑{ start := 688#usize, «end» := 58295#usize }.end
+      ↑(value headerBytes)
+size :
+  out.length = ↑{ start := 688#usize, «end» := 58295#usize }.end - ↑{ start := 688#usize, «end» := 58295#usize }.start
+⊢ List.drop 688 ↑headerBytes ++ ↑JFx_NativeBytes.proof = ↑JFx_NativeBytes.proof
+JGx_ProofAccount.lean:30:62: warning: This simp argument is unused:
+  List.drop_eq_nil_of_le (by rw [headerBytes.property])
+
+Hint: Omit it from the simp argument list.
+  simp only [show (̵6̵8̵8̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵6̵8̵8̵(̲6̲8̲8̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲6̲8̲8̲ from r̵f̵l̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵e̵q̵_̵n̵i̵l̵_̵o̵f̵_̵l̵e̵ ̵(̵b̵y̵ ̵r̵w̵ ̵[̵h̵e̵a̵d̵e̵r̵B̵y̵t̵e̵s̵.̵p̵r̵o̵p̵e̵r̵t̵y̵]̵)̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵r̲f̲l̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGx_ProofAccount.lean:30:131: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [show (688#usize).val ̲= ̲688 from rfl, ̲Nat.sub_self,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲List.drop_eq_nil_of_le (by rw [headerBytes.property]), ̲List.drop_zero,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGx_ProofAccount.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9544c73ae020456b86a9e3fe9713b978.scope; invocation ID: 826dc265498a4a61aad8bcfbff8767d9
