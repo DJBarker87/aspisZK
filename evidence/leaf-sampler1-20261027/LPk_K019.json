@@ -1,0 +1,51 @@
+{
+  "attempt": "LPk_K019",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "5c3c16f21001663063e85114a3eedfb37b4e76f0",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "LPk_src/Cargo.toml",
+    "LPk_src/Cargo.lock",
+    "LPk_src/crates/aspis-r1-cost-probe/src/sampler.rs",
+    "LPk_src/crates/aspis-r1-cost-probe/src/LPk_harness.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-leaf-sampler1-20261027/LPk_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-leaf-sampler1-20261027/LPk_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "sampler::LPk_harness::LPk_reconstruction_chunk3",
+    "--output-format",
+    "terse"
+  ],
+  "deps_fingerprint": {
+    "release_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_manifest": "LPk_source-provenance.json",
+    "boundary": "scratch frozen source plus LPa and LPk cfg-only harness patches"
+  },
+  "expected_time": "optimized Kani compilation then bounded native stage sampler::LPk_harness::LPk_reconstruction_chunk3",
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  }
+}

@@ -1,0 +1,57 @@
+{"attempt": "LPk_K007", "exit_status": 1, "wall_seconds": 3.0272875250084326, "peak_rss_kib": "347048", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpk_step_relation`
+
+warning: function `LPk_inner_step` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPk_harness.rs:18:4
+   |
+18 | fn LPk_inner_step() {
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpk_inner_step`
+
+warning: function `LPk_reverse_writeback` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPk_harness.rs:33:4
+   |
+33 | fn LPk_reverse_writeback() {
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpk_reverse_writeback`
+
+warning: function `LPk_from_fn_order` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPk_harness.rs:60:4
+   |
+60 | fn LPk_from_fn_order() {
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpk_from_fn_order`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.94s
+Checking harness sampler::LPk_harness::LPk_from_fn_order...
+
+VERIFICATION RESULT:
+ ** 1 of 197 failed (196 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "<builtin-library-memcmp>", line 25, in memcmp
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 0.89953464s
+
+Manual Harness Summary:
+Verification failed for - sampler::LPk_harness::LPk_from_fn_order
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rd3bc88654941452f8986d69043f1c912.scope; invocation ID: 590ba8e821074fa5981b3b7b30d6c9a6
