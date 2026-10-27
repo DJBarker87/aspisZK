@@ -2,7 +2,7 @@
 
 Source `03905a52594fadc50a1c00ab3f240a79632e8ffd`; branch `codex/pv-integ4-20261027`. No implementation source edits. Target not yet established.
 
-Stopped at the literal fixture-record gate; differential0/1,000. Timing gate was expressly excluded from execution by the task. All native builds use serial capped scopes (6G/8G, swap0, TasksMax64), optimized -j4; preflight and in-scope admission require allowed:true and exit0. IDs39500–39599 reserved but no Lean compilation planned. Kani0.
+Resumed under the lead elapsed-time ruling; stage 3 PASS, differential pending. Timing gate was expressly excluded from execution by the task. All native builds use serial capped scopes (6G/8G, swap0, TasksMax64), optimized -j4; preflight and in-scope admission require allowed:true and exit0. IDs39500–39599 reserved but no Lean compilation planned. Kani0.
 
 ## Stage 1: verifier ELFs — PASS
 
@@ -23,11 +23,11 @@ Client SHA256 `3a1b03d0eb2bbffb59631631d065d7a0dda2a57e5ca3e36d782abe49540b2ffa`
 
 `client-route-summary.json` and `binary-route/route-symbols.json` retain resolved direct/GOT paths from main to generate_for_mask_nonce and to op223, batch1 helper_sum/powers, batch2 sampler/weights, and batch3 public/terminal/multilinear/copy/forest symbols. prover.rs:349 and sim.rs:341 retain batch1 prover_powers. ct_pole is inlined; its selected callsite is source-pinned, not claimed as a standalone symbol. Simulator callsites are source-inspected rather than reachable from this client main. Full disassembly remains host-side with its hash; selected disassembly and relocation evidence are committed. Static route association is not a universal source/model proof.
 
-## Stage 3: fixed-coin fixture gate — literal record disagreement; STOP
+## Stage 3: fixed-coin fixture gate — PASS (lead ruling on resume)
 
 Candidate fixed coin0/count1 completed (exit0,29.430s,653,212KiB RSS,swap0); tx1/tx2 both pass. Exact37e5e133f8 control outputs were reused read-only from D298, whose7,013-file source identity and binary pin are retained in inherited evidence. `fixture-control-pins.json` validates the control proof/public/raw-result/ledger hashes against that committed evidence before comparison. No unchanged successful control generation was repeated. Candidate harness build exit0,40.212s,566,980KiB RSS,swap0.
 
-Proof/public/ledger bytes and deterministic canonical result records match for both fixtures. **Raw result.json bytes differ in seconds only.** The task explicitly requested byte-identical result records; an asynchronous clarification about the inherited seconds exception received no reply before comparison, so the literal criterion was used. No comparator exclusion was silently adopted. This is a diagnostic elapsed-time disagreement, not a proof-byte or functional-result counterexample. No source or records were repaired.
+Proof/public/ledger bytes and deterministic canonical result records match for both fixtures. **Raw result.json bytes differ in seconds only.** The original task explicitly requested byte-identical result records; an asynchronous clarification about the inherited seconds exception received no reply before comparison, so the literal criterion was used. No comparator exclusion was silently adopted. This is a diagnostic elapsed-time disagreement, not a proof-byte or functional-result counterexample. No source or records were repaired. The resume ruling confirms elapsed seconds are wall-clock measurements excluded by D298: proofs, public bytes, ledger bytes and canonical result records (every field except elapsed seconds) are identical, so both fixtures PASS. The original comparator exit2 and raw-byte difference remain preserved.
 
 |Fixture|Control seconds|Candidate seconds|Proof SHA256|
 |---|---:|---:|---|
