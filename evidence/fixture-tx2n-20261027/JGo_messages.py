@@ -50,7 +50,10 @@ theorem native_field{i:02} : FIo_Native.weights.field (JFw_Frames.window 8007 20
       (by rw [JFw_Frames.window_length 8007 2048 (by decide)];decide)
       (by decide) selected{i:02}) native_parser{i:02}
 #print axioms native_field{i:02}
-theorem canonical{i:02} : Port4C_QueryArithmetic.CanonE value{i:02} := by decide
+theorem canonical{i:02} : Port4C_QueryArithmetic.CanonE value{i:02} := by
+  change ({' ∧ '.join(str(v)+'<2147483647' for v in w[:4])}) ∧
+    ({' ∧ '.join(str(v)+'<2147483647' for v in w[4:])})
+  omega
 #print axioms canonical{i:02}
 '''
  s+=f'end AspisR1.{ns}\nend\n'
