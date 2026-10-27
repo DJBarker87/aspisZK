@@ -1,0 +1,22 @@
+import JGp_TX1Geometry
+set_option autoImplicit false
+namespace AspisR1.JGp_FoldedOffsets
+open Aeneas Aeneas.Std Result AspisR1CurrentCaller
+
+theorem folded {C : Type} (base : Ops) (query : Port3_NativeQueryBody.Ops)
+    (err : C) (geo : Port3_NativeGeometryBody.Ops C) :
+    compact.OFF_FOLDED_ROOT (JGp_TX1Geometry.ops base query err geo)=ok 7751#usize := by
+  unfold compact.OFF_FOLDED_ROOT
+  change (do let i ← ok 7527#usize;i+224#usize)=ok 7751#usize
+  simp only [bind_tc_ok]
+  apply UsizeArithmetic.add_eq_ok <;> scalar_tac
+#print axioms folded
+
+theorem round1 {C : Type} (base : Ops) (query : Port3_NativeQueryBody.Ops)
+    (err : C) (geo : Port3_NativeGeometryBody.Ops C) :
+    compact.OFF_ROUND1 (JGp_TX1Geometry.ops base query err geo)=ok 7783#usize := by
+  unfold compact.OFF_ROUND1
+  rw [folded,bind_tc_ok]
+  apply UsizeArithmetic.add_eq_ok <;> scalar_tac
+#print axioms round1
+end AspisR1.JGp_FoldedOffsets

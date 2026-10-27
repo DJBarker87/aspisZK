@@ -1,0 +1,44 @@
+{"attempt": "JGp23_077", "exit_status": 0, "wall_seconds": 5.763533646008, "peak_rss_kib": "6272140", "swaps": "0", "print_axioms": ["'AspisR1.JGp_BatchInput.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.JGp_BatchInput.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1CurrentCaller.Tx1Reachability.afterPrepare : Ops →
+  {H : Type} →
+    aspis_core.digest.Digest32 H →
+      Slice U8 →
+        Slice U8 →
+          Usize →
+            H →
+              Option (verifier.Phase → Result Unit) →
+                verifier.Prepared →
+                  Std.Array aspis_core.field.wide_exact.WideExact 29#usize →
+                    Result (core.result.Result (alloc.vec.Vec U8) verifier.Error) :=
+fun ops {H} aspis_coredigestDigest32Inst public_bytes proof k hash obs val g1 => do
+  let r3 ← ops.op20 transport.Variant.S2
+  let cf3 ← core.result.Result.Insts.CoreOpsTry.br
+...
+           do
+                      let (s2, deref_mut_back) ← lift a.weights.deref_mut
+                      let s3 ← ops.op17 pending s2
+                      have v : alloc.vec.Vec aspis_core.field.QM31 := deref_mut_back s3
+                      let bytes ←
+                        ops.op16 aspis_coredigestDigest32Inst val
+                            { weights := v, rhs := a.rhs, power := a.power, next := a.next } proof public_bytes hash
+                      verifier.mark obs verifier.Phase.CheckpointWrite
+                      ok (core.result.Result.Ok bytes)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame verifier.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+        (core.convert.FromSame verifier.Error) residual
+
+Running as unit: run-r33d37fceff5b4988b8a3d216a384cfaf.scope; invocation ID: 7419d995475047649b0443590bf75495
+

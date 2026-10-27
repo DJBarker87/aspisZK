@@ -42,3 +42,10 @@ pending and complete geometry on one concrete Op5T/SAQ/WAdm installation.
 All terminal and query-identification guards are proved, no Prop premise.
 The remaining first source body is batch0 authentication, then all query
 arithmetic gates, flush, actual writer and returned writer Vec identity.
+
+Stage 2d: current roots, installed batch0 input normalization, all ten actual
+opening reads, three packed-key constructors and three physical node slots
+are checked. Folded-root range AND actual copy return are checked (098).
+JGp_PreBatchFixture.inhabited (099) is a CLOSED local call fixture; its
+Remaining definition lists the exact unconstructed native suffix/Vec identity.
+No accepted wrapper or complete/deployed fixture is asserted.
