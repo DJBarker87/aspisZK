@@ -1,0 +1,9 @@
+# Coherent project closure completed
+
+Research b90540e01c10a102535dcc0c0b0c50fb18880e0f: all **672** project modules resolved and supplied dependency first in the private namespace. **537 reused**, **135 successfully compiled**. Both roots are available; V2 is an ancestor of DeployedReal. No proof failure in the coherent pass. 41 earlier loader/environment failures retained; total charged Lean compiles **176/600**. No Kani, Rust, Mathlib or Aeneas build. No cap raised.
+
+`replay-plan.tsv` now contains fingerprints of the actual selected dependency object SHA256 pairs. Original recursive source/import fingerprints and all rebuild source resolutions remain in `replay-plan.json`. Each reuse in `receipts/results.jsonl` identifies its exact prior successful receipt, object hash and matching dependency hashes. Compile receipts 28000–28175 contain target, revision, source/dependency hashes, command, exit, wall, peak RSS, swaps, original printed axioms/errors and resource admission. Original source modules without a print directive are explicitly marked as awaiting the final closure audit, rather than given an invented axiom result.
+
+All 672 staged source hashes were checked against research. Private objects and sources remain on the host; local temporary source replicas are removed. Shared directories remain unwritten. The redundant full external namespace binding map stays on the host; final integrity evidence will record its SHA256 and size.
+
+Final diagnostic source `PV_ReplayAudit.lean` adds no theorem. It enumerates the actually loaded import DAG, then invokes `#print axioms` for every theorem in imported R1Z/PV modules and explicitly prints both headline alternatives. It reports any nonstandard axiom with its defining module and referring theorem. Audit pending; no final axioms or release claim is made at this stage. PREMISES.md records the unchanged endpoint and deployment conditions. Target not yet established.
