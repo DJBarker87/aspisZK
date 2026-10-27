@@ -2,7 +2,7 @@ from run import H,run
 from pathlib import Path
 import json,hashlib,sys
 P=H/'source/evidence/pv-batch3-20261027/extract-copies'
-roots={117:'crate::host_arithmetic::state_only_selected_mask_value',121:'crate::host_arithmetic::evaluate_state_only_polynomial',222:'crate::host_multilinear::multilinear_evaluate_qm31',224:'aspis_prover::host_forest::build_pool_v1_pair_forest_copy_helper_v1',226:'crate::host_public::public_bytes',227:'crate::host_public::terminal_qm31'}
+roots={117:'crate::host_arithmetic::state_only_selected_mask_value',121:'crate::host_arithmetic::evaluate_state_only_polynomial',222:'crate::host_multilinear::multilinear_evaluate_qm31',224:'crate::host_forest::build_pool_v1_pair_forest_copy_helper_v1',226:'crate::host_public::public_bytes',227:'crate::host_public::terminal_qm31'}
 tools={'/home/dombarker/project-offloads/codex-pv-extract-20261027/charon':'daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8','/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools/aeneas':'562e1f51ef9bea84f62793f21b4d6b48f9ae65c61ec72588170b2c3abdc37f19'}
 for p,h in tools.items():assert hashlib.sha256(Path(p).read_bytes()).hexdigest()==h
 op=int(sys.argv[1]);suffix=sys.argv[2];llbc=H/f'PV_B3_Copy_{op}_{suffix}.llbc';env={'RUSTUP_TOOLCHAIN':'nightly-2026-06-01','RUSTFLAGS':'--cfg pv_cb_extract','CARGO_TARGET_DIR':str(H/'charon-target')}

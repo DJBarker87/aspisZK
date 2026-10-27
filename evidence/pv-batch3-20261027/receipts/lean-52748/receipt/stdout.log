@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_PreparedComponent.lean:7:160: error: unsolved goals
+left : Std.Array U32 3#usize
+x : New.C
+⊢ (do
+      let x_1 ← left.index_usize 0#usize
+      let x_2 ← PV_B3_FieldScalar.O.mul x_1 x.a
+      let x_3 ← left.index_usize 1#usize
+      let x_4 ← PV_B3_FieldScalar.O.mul x_3 x.b
+      let x_5 ← left.index_usize 2#usize
+      let x ← PV_B3_FieldScalar.O.add x.a x.b
+      let x ← PV_B3_FieldScalar.O.mul x_5 x
+      let x_6 ← PV_B3_FieldScalar.O.sub x_2 x_4
+      let x ← PV_B3_FieldScalar.O.sub x x_2
+      let x ← PV_B3_FieldScalar.O.sub x x_4
+      ok { a := x_6, b := x }) =
+    let (left, right) := (left, { a := x.a, b := x.b })
+    do
+    let m ← left.index_usize 0#usize
+    let m0 ← m.mul right.a
+    let m1 ← left.index_usize 1#usize
+    let m11 ← m1.mul right.b
+    let m2 ← left.index_usize 2#usize
+    let m3 ← R1Z.ProverRwP7CurrentFieldSource.aspis_core.field.M31.add right.a right.b
+    let m21 ← m2.mul m3
+    let m4 ← m0.sub m11
+    let m5 ← m21.sub m0
+    let m6 ← m5.sub m11
+    ok { a := m4, b := m6 }
+'PV_B3_PreparedComponent.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,24 @@
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_PolynomialFinite.lean:29:80: error: unsolved goals
+poly : Std.Array Q 28#usize
+x : Q
+⊢ (do
+      let x2 ← aspis_core.field.QM31.square x
+      let x3 ← aspis_core.field.QM31.mul x x2
+      let x4 ← x2.square
+      let prepared_x4 ← host_arithmetic.PreparedQm31Multiplier.new x4
+      let accumulator ←
+        host_arithmetic.evaluate_state_only_polynomial.block_value poly (Array.make 3#usize [x, x2, x3] ⋯) 6#usize
+      PV_B3_BoundedLoop.bounded (body poly (Array.make 3#usize [x, x2, x3] ⋯) prepared_x4) ↑6#usize
+          (accumulator, 6#usize)) =
+    do
+    let x2 ← aspis_core.field.QM31.square x
+    let x3 ← aspis_core.field.QM31.mul x x2
+    let x4 ← x2.square
+    let p ← host_arithmetic.PreparedQm31Multiplier.new x4
+    let a ← host_arithmetic.evaluate_state_only_polynomial.block_value poly (Array.make 3#usize [x, x2, x3] ⋯) 6#usize
+    PV_B3_BoundedLoop.bounded (body poly (Array.make 3#usize [x, x2, x3] ⋯) p) 6 (a, 6#usize)
+'PV_B3_PolynomialFinite.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_PolynomialFinite.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_PolynomialFinite.loop_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_PolynomialFinite.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_PolynomialFinite.source_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

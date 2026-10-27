@@ -40,15 +40,14 @@ structure aspis_core.field.QM31 where
   c0 : aspis_core.field.CM31
   c1 : aspis_core.field.CM31
 
-/-- [aspis_prover::host_arithmetic::PreparedQm31Multiplier]
-    Source: '/home/dombarker/project-offloads/codex-pv-batch3-20261027/source/crates/aspis-prover/src/host_arithmetic.rs', lines 144:0-144:29
-    Name pattern: [aspis_prover::host_arithmetic::PreparedQm31Multiplier] -/
-@[rust_type "aspis_prover::host_arithmetic::PreparedQm31Multiplier"]
-structure aspis_prover.host_arithmetic.PreparedQm31Multiplier where
+/-- [pv_b3_copies_extraction::host_arithmetic::PreparedQm31Multiplier]
+    Source: '../../../crates/aspis-prover/src/host_arithmetic.rs', lines 197:0-199:1 -/
+structure host_arithmetic.PreparedQm31Multiplier where
   components : Array (Array aspis_core.field.M31 3#usize) 3#usize
+
 
 #print axioms aspis_core.field.M31
 #print axioms aspis_core.field.CM31
 #print axioms aspis_core.field.QM31
-#print axioms aspis_prover.host_arithmetic.PreparedQm31Multiplier
+#print axioms host_arithmetic.PreparedQm31Multiplier
 end PV_B3_Copy_117

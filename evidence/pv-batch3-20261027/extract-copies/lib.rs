@@ -9,3 +9,6 @@ mod host_terminal;
 mod host_copy_terminal;
 #[path="../../../crates/aspis-prover/src/host_arithmetic.rs"]
 pub mod host_arithmetic;
+
+#[path="../../../crates/aspis-prover/src/host_forest.rs"]
+pub mod host_forest;
