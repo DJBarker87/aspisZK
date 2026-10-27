@@ -4,7 +4,7 @@
 mod FJe_reference {
     use super::*;
 
-    fn local(input: [QM31; 4]) -> QM31 {
+    fn local_raw(input: [QM31; 4]) -> [u64;4] {
         let x = input.map(extension_limbs);
         let t: [[u64; 4]; 4] = core::array::from_fn(|r| core::array::from_fn(|l| {
             let [a,b,c,d] = [x[0][l],x[1][l],x[2][l],x[3][l]].map(u64::from);
@@ -12,13 +12,15 @@ mod FJe_reference {
                 2 => a+b+2*c+3*d, _ => 3*a+b+c+2*d }
         }));
         let b = 7*u64::from(P);
-        extension_from_raw_limbs([
+        [
             t[0][0]+5*b-t[1][1]+2*t[2][2]-t[2][3]-t[3][2]-2*t[3][3],
             t[0][1]+t[1][0]+t[2][2]+2*t[2][3]+2*t[3][2]+b-t[3][3],
             t[0][2]+2*b-t[1][3]+t[2][0]-t[3][1],
             t[0][3]+t[1][2]+t[2][1]+t[3][0],
-        ])
+        ]
     }
+
+    fn local(input: [QM31;4]) -> QM31 { extension_from_raw_limbs(local_raw(input)) }
 
     fn external(s: [QM31; 16]) -> [QM31; 4] {
         let p: [QM31; 4] = core::array::from_fn(|g|
@@ -55,6 +57,14 @@ mod FJe_reference {
         QM31 { c0: CM31::new(M31(x[0]),M31(x[1])), c1: CM31::new(M31(x[2]),M31(x[3])) }
     }
     fn any_state() -> [QM31;16] { core::array::from_fn(|_| any_q()) }
+
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn local_raw_value() {
+        let input: [QM31;4] = core::array::from_fn(|_| any_q());
+        assert_eq!(external_local_packed_raw(input),local_raw(input));
+        kani::cover!(true, "canonical local inputs inhabited");
+    }
 
     #[kani::proof]
     #[kani::unwind(18)]
