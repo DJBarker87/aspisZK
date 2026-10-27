@@ -4,7 +4,7 @@ import R1Z.PV_Src_PortInternalRounds
 trace callbacks are arbitrary Result-valued computations. -/
 set_option autoImplicit false
 namespace R1Z.PV_Src_PortTraceCanonical
-open Aeneas Aeneas.Std Result
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
 open BuilderForestAdmissionPort PV_Src_PortSboxStep PV_Src_PortTraceRounds
 
 theorem full {F : Type}
