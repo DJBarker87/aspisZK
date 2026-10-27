@@ -1,0 +1,46 @@
+LAUNCH 40957 R1Z/PV_RunJoin_ParentPermutation
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0827); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ParentPermutation.lean:41:2: error: 'change' tactic failed, pattern
+  (do
+      let p ← poseidon2.permute_optimized_with_trace_loop0 callback (sliceIter poseidon2.EXTERNAL_INITIAL) e () 0#u8 s
+      let q ←
+        poseidon2.permute_optimized_with_trace_loop1 callback (arrayIter poseidon2.INTERNAL) p.1 p.2.1 p.2.2.1 p.2.2.2
+      let r ←
+        poseidon2.permute_optimized_with_trace_loop2 callback (sliceIter poseidon2.EXTERNAL_FINAL) q.1 q.2.1 q.2.2.1
+            q.2.2.2
+      ok r.1) =
+    run s
+is not definitionally equal to target
+  (do
+      let __x ←
+        do
+          let s_1 ← lift poseidon2.EXTERNAL_INITIAL.to_slice
+          let i ← core.slice.Slice.iter s_1
+          let iter ←
+            core.iter.traits.iterator.Iterator.enumerate.trait_default
+                (core.iter.traits.iterator.IteratorSliceIter (Std.Array U32 16#usize)) i
+          let __x ← poseidon2.permute_optimized_with_trace_loop0 callback iter e () 0#u8 s
+          let ii ←
+            BuilderForestStdPort.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter poseidon2.INTERNAL
+          let iter1 ←
+            core.iter.traits.iterator.Iterator.enumerate.trait_default
+                (BuilderForestStdPort.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator U32 14#usize) ii
+          let __x ← poseidon2.permute_optimized_with_trace_loop1 callback iter1 __x.1 __x.2.1 __x.2.2.1 __x.2.2.2
+          let s1 ← lift poseidon2.EXTERNAL_FINAL.to_slice
+          let i1 ← core.slice.Slice.iter s1
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.enumerate.trait_default
+                (core.iter.traits.iterator.IteratorSliceIter (Std.Array U32 16#usize)) i1
+          poseidon2.permute_optimized_with_trace_loop2 callback iter2 __x.1 __x.2.1 __x.2.2.1 __x.2.2.2
+      ok __x.1) =
+    run s
+'R1Z.PV_RunJoin_ParentPermutation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.62
+	Maximum resident set size (kbytes): 4134540
+	Swaps: 0
+	Exit status: 1
+
+RECEIPT {"attempt": 40957, "target": "R1Z/PV_RunJoin_ParentPermutation", "exit": 1, "wall_seconds": 1.62, "peak_rss_bytes": 4233768960, "swaps": 0, "accepted": false}

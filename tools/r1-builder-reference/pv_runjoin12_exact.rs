@@ -159,3 +159,36 @@ fn withdrawal_pointwise_dynamic() {compare_pointwise(false,true);}
 #[kani::proof]
 #[kani::unwind(25)]
 fn withdrawal_pointwise_fixed() {compare_pointwise(false,false);}
+fn compare_control(transfer: bool) {
+ let (input,out,rec,chg,snap)=fixture(transfer);
+ let (w,p)=records(&input,out,rec.as_ref(),&chg,&snap,M31(77));
+ let expected_roots=EMPTY;
+ let (v,q)=super::super::records_reference::records_reference_with_roots(input,out,rec,chg,snap,M31(77),expected_roots);
+ assert_eq!(w.input_value,v.input_value);
+ assert_eq!(w.output_value,v.output_value);
+ assert_eq!(w.change_value,v.change_value);
+ assert_eq!(w.pair_occupied,v.pair_occupied);
+ assert_eq!(w.pair_inverse,v.pair_inverse);
+ for lane in 0..8 {assert_eq!(w.sk[lane],v.sk[lane]);}
+ for lane in 0..8 {assert_eq!(w.salt[lane],v.salt[lane]);}
+ for lane in 0..8 {assert_eq!(w.pair_first[lane],v.pair_first[lane]);}
+ for lane in 0..8 {assert_eq!(w.pair_second[lane],v.pair_second[lane]);}
+ for lane in 0..8 {assert_eq!(w.recipient_owner[lane],v.recipient_owner[lane]);}
+ for lane in 0..8 {assert_eq!(w.recipient_salt[lane],v.recipient_salt[lane]);}
+ for lane in 0..8 {assert_eq!(w.change_owner[lane],v.change_owner[lane]);}
+ for lane in 0..8 {assert_eq!(w.change_salt[lane],v.change_salt[lane]);}
+ for level in 0..24 {assert_eq!(w.bits[level],v.bits[level]);for lane in 0..8 {assert_eq!(w.sibs[level][lane],v.sibs[level][lane]);}}
+ assert_eq!(p.transfer,q.transfer);
+ assert_eq!(p.asset,q.asset);
+ assert_eq!(p.next_pair_index,q.next_pair_index);
+ for level in 0..20 {for lane in 0..8 {assert_eq!(p.frontier[level][lane],q.frontier[level][lane]);}}
+}
+#[kani::proof]
+#[kani::unwind(25)]
+fn transfer_control19() {compare_control(true);}
+#[kani::proof]
+#[kani::unwind(25)]
+fn withdrawal_control19() {compare_control(false);}
+#[kani::proof]
+#[kani::unwind(25)]
+fn both_control19() {compare_control(kani::any::<bool>()); }

@@ -57,10 +57,15 @@ print(json.dumps(dict(source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),i
 r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr
 deps=json.loads(r.stdout);assert deps['source_sha256']==sha
 command=[launcher,str(attempt),module,'J','7000','8',deps['fingerprint']]
+launcher_source=ssh('cat '+launcher)
+assert launcher_source.returncode==0,launcher_source.stderr
+active_lines='\n'.join(x for x in launcher_source.stdout.splitlines() if not x.lstrip().startswith('#'))
+tasks=int(re.findall(r'TasksMax=(\d+)',active_lines)[-1])
+launcher_pin=hashlib.sha256(launcher_source.stdout.encode()).hexdigest()
 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
 record=dict(attempt=attempt,target=module,source_revision=revision,source_sha256=sha,source_snapshot=snapshot,
  dependencies=deps['imports'],deps_fingerprint=deps['fingerprint'],command=command,reservation=admission,
- limits=dict(lean_memory_mb=7000,MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=128),
+ limits=dict(lean_memory_mb=7000,MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=tasks),launcher_sha256=launcher_pin,
  source_was_uncommitted=(subprocess.run(['git','show','HEAD:'+str(source.relative_to(root))],cwd=root,capture_output=True).stdout != source.read_bytes()),shared_backup=backup,utc=datetime.datetime.now(datetime.timezone.utc).isoformat())
 with (e/'launches.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
 print('LAUNCH '+str(attempt)+' '+module,flush=True)

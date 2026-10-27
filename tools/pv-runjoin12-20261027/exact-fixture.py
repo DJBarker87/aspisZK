@@ -71,6 +71,16 @@ text+='}\n'
 for variant in ['transfer','withdrawal']:
  for root_mode in ['dynamic','fixed']:
   text+=f'#[kani::proof]\n#[kani::unwind(25)]\nfn {variant}_pointwise_{root_mode}() {{compare_pointwise({str(variant=="transfer").lower()},{str(root_mode=="dynamic").lower()});}}\n'
+# Split out the19 root-independent fields. This is intentionally partial P6
+# evidence; it cannot establish full records equality or select R_shipped.
+control=text[text.index('fn compare_pointwise('):text.index('#[kani::proof]',text.index('fn compare_pointwise('))]
+control=control.replace('fn compare_pointwise(transfer: bool, dynamic_roots: bool)', 'fn compare_control(transfer: bool)')
+control=control.replace(' let expected_roots=if dynamic_roots {pair_empty_roots()}else{EMPTY};',' let expected_roots=EMPTY;')
+control=control.replace(' for level in 0..20 {for lane in 0..8 {assert_eq!(p.empty[level][lane],q.empty[level][lane]);}}\n','')
+text+=control
+for variant in ['transfer','withdrawal']:
+ text+=f'#[kani::proof]\n#[kani::unwind(25)]\nfn {variant}_control19() {{compare_control({str(variant=="transfer").lower()});}}\n'
+text+='#[kani::proof]\n#[kani::unwind(25)]\nfn both_control19() {compare_control(kani::any::<bool>()); }\n'
 dst=R/'tools/r1-builder-reference/pv_runjoin12_exact.rs'
 if '--check' in sys.argv:assert dst.read_text()==text
 else:dst.write_text(text)

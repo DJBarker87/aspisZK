@@ -35,9 +35,15 @@ if phase=='charon':
    if sys.argv[3] not in ['precise-poly','precise-real','shipped-owned','shipped-owned-force']:cmd[2:2]=['--monomorphize']
    if sys.argv[3]=='precise-all':cmd[2:2]=['--translate-all-methods']
    if sys.argv[3] in ['precise-real','shipped-owned','shipped-owned-force']:cmd[2:2]=['--rustc-arg=-Zmir-enable-passes=+Inline,+GVN,+CopyProp','--rustc-arg=-Zinline-mir=yes']
+ if len(sys.argv)>3 and sys.argv[3]=='shipped-owned-force':
+  cmd.remove('--rustc-arg=-Zmir-enable-passes=+Inline,+GVN,+CopyProp')
+  cmd[2:2]=['--opaque','crate::pool_v1::pair_forest_copy_builder::raw','--opaque','crate::pool_v1::pair_forest_copy_builder::records::_::call_once','--rustc-arg=-Zmir-enable-passes=+Inline,+GVN,+CopyProp,+DataflowConstProp,+SimplifyLocals-final,+SimplifyCfg-final']
  if len(sys.argv)>3 and sys.argv[3] in ['shipped-owned','shipped-owned-force']:
   cmd[cmd.index('crate::pool_v1::pair_forest_copy_builder::records')]='crate::pool_v1::pair_forest_copy_builder::records_reference::pv_runjoin12_shipped::records_owned'
   cmd[2:2]=['--rustc-arg=--cfg=aeneas_ref','--rustc-arg=-Zinline-mir-threshold='+('100000' if sys.argv[3]=='shipped-owned-force' else '1000')]
+ if len(sys.argv)>4:
+  old='crate::pool_v1::pair_forest_copy_builder::records_reference::pv_runjoin12_shipped::records_owned'
+  cmd[cmd.index(old)]=old.removesuffix('records_owned')+sys.argv[4]
 else:
  cmd=[aeneas,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','PV_RunJoin_Records','-dest',H+'/evidence/'+name+'-generated','-split-files','-emit-json',llbc]
 pins=ssh('python3 -c '+shlex.quote('import pathlib,hashlib,json;print(json.dumps({p:hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest() for p in '+repr([charon,charon+'-driver',aeneas,H+'/frozen/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs']+([llbc] if phase=='aeneas' else [])+([H+'/frozen/tools/r1-builder-reference/records_reference.rs',H+'/frozen/tools/r1-builder-reference/pv_runjoin12_shipped.rs'] if phase=='charon' and len(sys.argv)>3 and sys.argv[3] in ['shipped-owned','shipped-owned-force'] else []))+'}))'))

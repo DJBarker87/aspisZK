@@ -1,0 +1,75 @@
+{
+  "tool_and_mir_pins": {
+    "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc": {
+      "sha256": "162c2a2d2d89b94e5bc2ec6b179a49d12a7ea1527db9ff1df20b5d09c432924b",
+      "size": 646136
+    },
+    "/home/dombarker/project-offloads/s5-charon-selfid-repair-v1/charon-target/release/charon": {
+      "sha256": "ab6b8dca8e15969fb7caea6a8f7122a722225b58a5317639308aed57b7e8f744",
+      "size": 14137752
+    },
+    "/home/dombarker/project-offloads/s5-charon-selfid-repair-v1/charon-target/release/charon-driver": {
+      "sha256": "fe1da95c91cdc62d3868c00b226fa883c388dc0d6e31c1ee12b8a62722786169",
+      "size": 18339904
+    },
+    "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/target-charon/release/libaspis_statement.rlib": {
+      "sha256": "474eaf8077fa51e4945043039206788e31c728ab9056cd4cdc7bc4b7eedb104f",
+      "size": 38415510
+    }
+  },
+  "compiler_env": {
+    "RUSTUP_TOOLCHAIN": "nightly-2026-06-01",
+    "RUSTFLAGS": "-C opt-level=3 -Z mir-opt-level=4 -Z inline-mir=yes -Z inline-mir-threshold=100000 -Z inline-mir-forwarder-threshold=100000 -Z inline-mir-hint-threshold=100000 -Z always-encode-mir --cfg aeneas_ref -C link-arg=-Wl,--threads=4"
+  },
+  "target": [
+    "/home/dombarker/project-offloads/s5-charon-selfid-repair-v1/charon-target/release/charon",
+    "rustc",
+    "--monomorphize",
+    "--preset",
+    "aeneas",
+    "--extract-opaque-bodies",
+    "--include",
+    "aspis_statement",
+    "--opaque",
+    "core",
+    "--include",
+    "core::ops::function",
+    "--include",
+    "core::option::Option",
+    "--include",
+    "core::ops::control_flow::ControlFlow",
+    "--opaque",
+    "aspis_statement::pool_v1::pair_forest_copy_builder::raw",
+    "--mir",
+    "optimized",
+    "--sysroot",
+    "default",
+    "--precise-drops",
+    "--desugar-drops",
+    "--opaque",
+    "aspis_statement::pool_v1::pair_trace::pair_empty_roots",
+    "--include",
+    "aspis_core::field::*",
+    "--start-from",
+    "aspis_statement::pool_v1::pair_forest_copy_builder::records_reference::pv_runjoin12_shipped::records_owned",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/evidence/pv12-foreign-charon-09.llbc",
+    "--",
+    "--crate-name",
+    "pv_runjoin12_foreign",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/frozen/tools/pv-runjoin12-20261027/foreign-root.rs",
+    "--extern",
+    "aspis_statement=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/target-charon/release/libaspis_statement.rlib",
+    "-L",
+    "dependency=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/target-charon/release/deps"
+  ],
+  "worker_revision": "0a6a5428a8726c578f6076e8da9bdbdb4e8f1a8d",
+  "source_revision": "ed1c1cef71-pinned records leaf; cfg owned borrow adapter, normal rustc MIR4",
+  "expected_time": "optimized dependency compilation with all MIR retained, then foreign-root translation; no verification",
+  "source_sha256": {
+    "tools/pv-runjoin12-20261027/foreign-root.rs": "f63c276ec612008cd853f6697fe6799af1c62c2854023a33040f4cf533a29ad4"
+  }
+}
