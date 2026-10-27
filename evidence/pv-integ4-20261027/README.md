@@ -2,7 +2,7 @@
 
 Source `03905a52594fadc50a1c00ab3f240a79632e8ffd`; branch `codex/pv-integ4-20261027`. No implementation source edits. Target not yet established.
 
-Stages pending. Timing gate is expressly not authorized for this job. All native builds use serial capped scopes (6G/8G, swap0, TasksMax64), optimized -j4; preflight and in-scope admission require allowed:true and exit0. IDs39500–39599 reserved but no Lean compilation planned. Kani0.
+Stopped at the literal fixture-record gate; differential0/1,000. Timing gate was expressly excluded from execution by the task. All native builds use serial capped scopes (6G/8G, swap0, TasksMax64), optimized -j4; preflight and in-scope admission require allowed:true and exit0. IDs39500–39599 reserved but no Lean compilation planned. Kani0.
 
 ## Stage 1: verifier ELFs — PASS
 
@@ -32,3 +32,14 @@ Proof/public/ledger bytes and deterministic canonical result records match for b
 ## Stage 4: 1,000-pair differential — NOT RUN
 
 Stopped before differential submission under the requested fixture disagreement rule. No pair is claimed, and no failure is attributed to the differential harness. The inherited whole-prover command, seeds6000–6999, pinned shipped controlc57a344726 and required600 complete proof pairs are preserved in TIMING-PLAN.md for a follow-up after the record criterion is resolved.
+
+## Stage 5: recorded cost projection — PARTIAL; no timing run
+
+`cost-projection.json` and `tools/pv-integ4-20261027/project-cost.py` reconcile the committed tables only. Batch3 final mask-expanded table already includes its predecessor groups/successors; they must not be summed again. Batch2 adds−12.49644059us per fixture. The known batch2+batch3 subtotals are:
+
+|Fixture|Known delta seconds|Percent of14.38s|
+|---|---:|---:|
+|transfer|+0.235323388169|+1.636463061%|
+|withdrawal|+0.236111878519|+1.641946304%|
+
+Full op223+batch1+batch2+batch3 projection is **unknown**: no per-call timing table for op223 or batch1(230/254/258) is present in their inherited packets, route2 or design. Available per-call JSON tables in inherited evidence cover only batches2/3. Those missing terms are not assumed zero. Batch2 inclusive materialize/raw accounting overlaps; tables also use different fixture coins. The subtotal is a mixed-fixture projection, neither an independent whole-prover measurement nor a worst-case/formal cost bound. No new benchmark was launched.
