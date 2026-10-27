@@ -1,0 +1,72 @@
+import Lean
+import RPz8_Rc10_Top
+import RPz8_ARX_Root
+open Lean Elab Command
+#print axioms AspisR1.Rc10_Top.deployed
+#print axioms AspisR1.ARX_Root.deployed
+run_cmd do
+  let env := (← getEnv).setExporting false
+  let mut moduleImports : NameMap (Array Name) := {}
+  for i in [:env.header.modules.size] do
+    moduleImports := moduleImports.insert env.header.modules[i]!.module
+      (env.header.moduleData[i]!.imports.map (·.module))
+  let mut closureSets : Array NameSet := #[]
+  let mut reachSets : Array NameSet := #[]
+  for (mod, root) in #[( `RPz8_Rc10_Top, `AspisR1.Rc10_Top.deployed),
+                        ( `RPz8_ARX_Root, `AspisR1.ARX_Root.deployed)] do
+    let mut modules : NameSet := {}
+    let mut todo := #[mod]
+    while !todo.isEmpty do
+      let n := todo.back!
+      todo := todo.pop
+      if !modules.contains n then
+        modules := modules.insert n
+        let some imps := moduleImports.find? n | throwError "missing module {n}"
+        todo := todo ++ imps
+    closureSets := closureSets.push modules
+    let mut seen : NameSet := ({} : NameSet).insert root
+    let mut pending := #[root]
+    let mut axioms : Array String := #[]
+    while !pending.isEmpty do
+      let n := pending.back!
+      pending := pending.pop
+      let some c := env.checked.get.find? n | throwError "missing checked constant {n}"
+      if c.isAxiom then axioms := axioms.push n.toString
+      let values := ((c.value? true).map (fun e => e.getUsedConstants)).getD #[]
+      let constructors := match c with
+        | .inductInfo v => v.ctors.toArray
+        | _ => #[]
+      for refs in #[c.type.getUsedConstants, values, constructors] do
+        for dep in refs do
+          if !seen.contains dep then
+            seen := seen.insert dep
+            pending := pending.push dep
+    reachSets := reachSets.push seen
+    logInfo m!"L8A_ROOT {(Json.mkObj [("root", toJson root.toString), ("modules", toJson (modules.toArray.map Name.toString)), ("reachable_count", toJson seen.toArray.size), ("uncached_axioms", toJson axioms)]).compress}"
+  let trustRecords := #["S2TrustedSdkBorrow", "TrustedStd", "AeneasExtraction", "Allocator", "RuntimeEntrypointAdmission", "P1", "RuntimeSyscall", "CheckpointVersionBinding", "TwoTransactionLaw"]
+  let mut count := 0
+  let mut surfaceCount := 0
+  let mut structureCount := 0
+  for (n, c) in env.checked.get.toList do
+    let owner := match env.getModuleIdxFor? n with
+      | some i => env.header.modules[i.toNat]!.module
+      | none => Name.anonymous
+    let inRoots := closureSets.map (·.contains owner)
+    if inRoots.any id then
+      count := count + 1
+      let reachable := reachSets.map (·.contains n)
+      let opaqueDecl := match c with | .opaqueInfo _ => true | _ => false
+      let impl := Compiler.getImplementedBy? env n
+      let ext := getExternAttrData? env n
+      if c.isAxiom || opaqueDecl || c.isPartial || impl.isSome || ext.isSome then
+        surfaceCount := surfaceCount + 1
+        logInfo m!"L8A_SURFACE {(Json.mkObj [("name", toJson n.toString), ("owner", toJson owner.toString), ("import_roots", toJson inRoots), ("reachable_roots", toJson reachable), ("axiom", toJson c.isAxiom), ("opaque", toJson opaqueDecl), ("partial", toJson c.isPartial), ("unsafe", toJson c.isUnsafe), ("implemented_by", toJson (impl.map Name.toString)), ("extern", toJson (ext.map (fun e => (repr e).pretty))), ("kernel_type", toJson (repr c.type).pretty)]).compress}"
+      if let some info := getStructureInfo? env n then
+        structureCount := structureCount + 1
+        let isTrust := trustRecords.any (fun s => n.getString! == s)
+        let mut fields : Array Json := #[]
+        for field in info.fieldInfo do
+          let some fc := env.checked.get.find? field.projFn | throwError "missing projection {field.projFn}"
+          fields := fields.push (Json.mkObj [("name", toJson field.projFn.toString), ("kernel_type", toJson (if isTrust then (repr fc.type).pretty else "see checked declaration"))])
+        logInfo m!"L8A_STRUCTURE {(Json.mkObj [("name", toJson n.toString), ("owner", toJson owner.toString), ("import_roots", toJson inRoots), ("reachable_roots", toJson reachable), ("named_trust_record", toJson isTrust), ("fields", toJson fields)]).compress}"
+  logInfo m!"L8A_COMPLETE {(Json.mkObj [("constants", toJson count), ("surfaces", toJson surfaceCount), ("structures", toJson structureCount)]).compress}"
