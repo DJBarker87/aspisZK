@@ -10,11 +10,11 @@ theorem set {A B : Type} {N : Usize} (f : A → B) (a : Array A N) (i : Usize) (
  simp only [arr,Array.set]
  exact List.map_set
 
-theorem repeat {A B : Type} (f : A → B) (N : Usize) (x : A) :
+theorem repeated {A B : Type} (f : A → B) (N : Usize) (x : A) :
  arr f (Array.repeat N x) = Array.repeat N (f x) := by
  apply Subtype.ext
  simp only [arr,Array.repeat,List.map_replicate]
 
 #print axioms set
-#print axioms repeat
+#print axioms repeated
 end XRy_ArrayMap

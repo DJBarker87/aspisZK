@@ -1,0 +1,8 @@
+import XRy_PowersPublic
+open Aeneas Aeneas.Std Result
+#print AspisR1CurrentPreparedClaim.verifier.prepared_claim
+#print AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot
+#print AspisR1CurrentPreparedClaim.ClaimDotOps
+#print AspisR1S5ClaimDotConcreteAdapter.concreteOps
+#print AspisR1ClaimPreparedBridge.scalar_candidate_gamma_canonical
+#print AspisR1ClaimPreparedBridge.candidateGammaPublic

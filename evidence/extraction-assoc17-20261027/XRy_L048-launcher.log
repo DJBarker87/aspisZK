@@ -1,0 +1,58 @@
+{"attempt": "XRy_L048", "exit_status": 0, "wall_seconds": 1.6451885710121132, "peak_rss_kib": "4751920", "swaps": "0", "print_axioms": []}
+def AspisR1CurrentPreparedClaim.verifier.prepared_claim : {D : Type} →
+  AspisR1CurrentPreparedClaim.ClaimDotOps D →
+    {H : Type} →
+      AspisR1CurrentPreparedClaim.aspis_core.Digest32 H →
+        AspisR1CurrentPreparedClaim.r1_semantic.Verified H →
+          Slice U8 →
+            AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+              Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 29#usize →
+                AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+                  Result
+                    (core.result.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact
+                      AspisR1CurrentPreparedClaim.verifier.Error) :=
+fun {
+...
+mp
+        (congrFun'
+          (congrArg Eq
+            (congrFun'
+              (congrArg uncurry
+                (funext fun block =>
+                  funext fun self1 =>
+                    congrFun'
+                      (congrArg Bind.bind
+                        (ite_congr (eq_self true)
+                          (fun a => Eq.refl (AspisR1ClaimPreparedBridge.candidateGammaPublic block)) fun a =>
+                          Eq.refl (sampling.ordinary block)))
+                      fun out => do
+                      let i ← lift (UScalar.cast UScalarTy.Usize row)
+                      AspisR1PublicPreparation.trace.value 4#u16 i out
+                      ok (out, self1)))
+              (block, t)))
+          (ok (out, after)))
+        h)
+  let ⟨hvalue, h⟩ := h✝¹
+  let ⟨i, h✝²⟩ :=
+    AspisR1ClaimPreparedBridge.bind_success✝ (lift (UScalar.cast UScalarTy.Usize row))
+      (fun x => do
+        AspisR1PublicPreparation.trace.value 4#u16 x value
+        ok (value, t))
+      (out, after) h
+  let ⟨hi, h⟩ := h✝²
+  let ⟨u, h✝³⟩ :=
+    AspisR1ClaimPreparedBridge.bind_success✝ (AspisR1PublicPreparation.trace.value 4#u16 i value)
+      (fun x => ok (value, t)) (out, after) h
+  let ⟨htrace, h⟩ := h✝³
+  have he := congrArg Prod.fst (ok.inj h);
+  Eq.mpr
+    (id
+      (congrArg (fun _a => AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE _a))
+        (Eq.symm he)))
+    (AspisR1ClaimPreparedBridge.candidateGammaPublic_success_canonical block value hvalue)
+def AspisR1ClaimPreparedBridge.candidateGammaPublic : Std.Array U8 32#usize → Result AspisR1ClaimPreparedBridge.PE :=
+fun block => do
+  let out ← AspisR1GammaCaller.sampler.gamma_sample AspisR1GammaCaller.DigitsModel.candidateGammaHelpers block
+  ok (AspisR1ClaimPreparedBridge.gammaToPublic out)
+
+Running as unit: run-r3caac385e1e442e2bf46e92ac74ed627.scope; invocation ID: af7d1d7ffef24075b0eeb3d8a2fdf018
