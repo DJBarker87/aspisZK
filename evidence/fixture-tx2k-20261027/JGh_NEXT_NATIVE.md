@@ -1,0 +1,7 @@
+# Remaining native control boundary
+
+The model root certificate is not `reference.verify_owned` acceptance. The concrete forward direction must still construct the SAME physical scratch prefix produced by the actual sorted leaf loop, run the owned binary verifier (including each in-place parent update and final root/cursor guard), and continue through count/padding/terminal and the three-slot batch parent. Existing `Port4B_*accepted` and `Op5T_NativeAuth.accepted_batch` invert acceptance; they cannot manufacture it from a root equality.
+
+The prepared JGh leaf-iteration adapter instantiates `Port4B_NativeLeaf.step` using actual packed-key/opening/leaf returns. Its key read, active position and scratch room remain visible local hypotheses; it does not assume a successful slot, verifier or batch. Frontiers are proved sparsely by named occupied/unoccupied subtree applications. Physical-cell facts prove selected32 bytes, native decode, and native `readCell` equality; the final lookup-law bridge is separate. These are the intended inputs for the forward scratch/control proof.
+
+Never replace BatchGoal with a successful verifier/slot hypothesis and call accepted2 closed. Finish and accepted2 remain dependent on actual BatchGoal; TX1 wrapper acceptance and equality of its SAME saved checkpoint to the retained1768 bytes also remain to be proved. No uninhabitable real-byte premise has been found.

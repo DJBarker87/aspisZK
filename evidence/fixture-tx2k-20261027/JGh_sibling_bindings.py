@@ -24,7 +24,7 @@ for k in range(3):
   s+=f'  · simp only [{ro}.bases,List.mem_cons,List.not_mem_nil,or_false] at hb\n'
   s+='    rcases hb with '+ '|'.join('rfl' for _ in rows)+'\n'
   for b,cursor in sorted(rows):
-   s+=f'    · change JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes{k} {cursor}=_\n      exact JGh_TX2_Siblings{h:02}.k{k}c{cursor:03}_read\n'
+   s+=f'    · unfold native\n      rw [show JGh_TX2_Frontiers.stream{stream}.idxOf ({h},{b})={cursor} from rfl]\n      exact JGh_TX2_Siblings{h:02}.k{k}c{cursor:03}_read\n'
  s+=f'#print axioms source\nend AspisR1.{name}\nend\n'
  files[R/'lean'/(name+'.lean')]=s
 for f,s in files.items():

@@ -1,0 +1,1 @@
+057–068 PASS:12 paired modules prove all24 actual native tree0/1 leaf addresses and returns, using bounded32-byte windows and named compression applications. The first tree0 module uses38.456212188s and6042648KiB RSS,swap0. No source acceptance claim.069 is retained as rejected source;070 is the passing mandatory actual BatchGoal/top/guard review.
