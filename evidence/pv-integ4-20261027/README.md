@@ -36,9 +36,9 @@ Proof/public/ledger bytes and deterministic canonical result records match for b
 
 `fixture-comparison.json` retains every raw/deterministic hash,size,record and ledger file hash; comparison exits2. These uncoordinated single samples are not the quiet-window timing gate and establish no timing pass.
 
-## Stage 4: 1,000-pair differential — NOT RUN
+## Stage 4: 1,000-pair differential — RUNNING (resume)
 
-Stopped before differential submission under the requested fixture disagreement rule. No pair is claimed, and no failure is attributed to the differential harness. The inherited whole-prover command, seeds6000–6999, pinned shipped controlc57a344726 and required600 complete proof pairs are preserved in TIMING-PLAN.md for a follow-up after the record criterion is resolved.
+The original handoff stopped before differential submission. Following the resume ruling, fresh optimized baseline and candidate harnesses were built and source-verified (6,521/7,290 files, no disagreements). Seeds6000–6999 are now executing under the inherited command; no final differential result is claimed yet. The inherited whole-prover command, seeds6000–6999, pinned shipped controlc57a344726 and required600 complete proof pairs are preserved in TIMING-PLAN.md for a follow-up after the record criterion is resolved.
 
 ## Stage 5: recorded cost projection — PARTIAL; no timing run
 
