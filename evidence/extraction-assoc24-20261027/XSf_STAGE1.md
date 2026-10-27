@@ -1,0 +1,7 @@
+# Producing execution canonicality
+
+XSf_Reached.kappa derives eight limb bounds from the SAME successful installed ordinary scalar call (L002). XSf_Reached.parsed derives those bounds from the SAME raw byte decoder success, using checked XSa parser association and existing actual decoder canonicality (L002). XSf_View.inactive inverts the actual wide_view execution and derives canonicality of its returned SAME inactive field (L008). No free canonicality, successful prepare, independent view or output-equality premise enters these adapters.
+
+L001/L003/L005 were ordinary proof/elaboration errors, retained without credit; L004/L006 were missing dependency preflights, no compiler process. Missing unchanged XRk_ResultTools compiled once at L007 into the retained persistent cache, no shared object directory write and no source alteration. L002/L008 accepted top axioms are exactly [propext, Classical.choice, Quot.sound]; L007 existing prerequisite uses [propext]. Exact source, dependency/Lean binary hashes, revision, command, exit, wall, RSS, swap and cgroup fields are in per-attempt receipts. No timeout or memory kill occurred.
+
+This stage removes the local need to assume inactive/kappa canonicality at their actual producing calls. Whole prepare composition, complete A2/A3 rows and headline premise removal are not yet claimed. All 239 inherited resolved Aeneas objects/sidecars were pinned unchanged by XSf_AENEAS_START.json. No shipped file changed; native/ELF gates not triggered.
