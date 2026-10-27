@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0238); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+R1Z.ProverRw21WideCarrier.value (x : R1Z.ProverRw21WideCarrier.W) : R1Z.ProverRw21WideCarrier.E
+R1Z.ProverRw21WideCarrier.canonical (x : R1Z.ProverRw21WideCarrier.W) : Prop
+R1Z.ProverRw21WideCarrier.encode (x : R1Z.ProverRw21WideCarrier.E) : R1Z.ProverRw21WideCarrier.W
+R1Z.ProverRw21WideCarrier.value_encode (x : R1Z.ProverRw21WideCarrier.E) :
+  R1Z.ProverRw21WideCarrier.value (R1Z.ProverRw21WideCarrier.encode x) = x
+R1Z.ProverRw21WideCarrier.canonical_encode (x : R1Z.ProverRw21WideCarrier.E) :
+  R1Z.ProverRw21WideCarrier.canonical (R1Z.ProverRw21WideCarrier.encode x)
+R1Z.ProverRw21WideCarrier.encode_value (x : R1Z.ProverRw21WideCarrier.W) (h : R1Z.ProverRw21WideCarrier.canonical x) :
+  R1Z.ProverRw21WideCarrier.encode (R1Z.ProverRw21WideCarrier.value x) = x
+R1Z.ProverRw21WideCarrier.injective (x y : R1Z.ProverRw21WideCarrier.W) (hx : R1Z.ProverRw21WideCarrier.canonical x)
+  (hy : R1Z.ProverRw21WideCarrier.canonical y)
+  (h : R1Z.ProverRw21WideCarrier.value x = R1Z.ProverRw21WideCarrier.value y) : x = y
+R1Z.ProverRw21WideCarrier.source_cell (x : R1Z.ProverRw21WideCarrier.W) (h : R1Z.ProverRw21WideCarrier.canonical x) :
+  R1Z.ProverCommitWideBytes48.sourceCell (R1Z.ProverRw21WideCarrier.raw x) h =
+    R1Z.ProverCommitValueRange47.bytes (R1Z.ProverRw21WideCarrier.value x)
+R1Z.ProverRw21WideEncoded.image (x : R1Z.ProverRw21WideCarrier.E) :
+  List.map R1Z.ProverRw21ByteCarrier.decode (R1Z.ProverRw21FlatOutput.bytes (R1Z.ProverRw21WideCarrier.encode x)) =
+    R1Z.ProverRw21ProtocolOutput.wide x
+R1Z.ProverRw21WideEncoded.bytes (x : R1Z.ProverRw21WideCarrier.E) :
+  R1Z.ProverRw21FlatOutput.bytes (R1Z.ProverRw21WideCarrier.encode x) =
+    List.map R1Z.ProverRw19MathematicalAssembly.byte (R1Z.ProverRw21ProtocolOutput.wide x)
+R1Z.ProverRw21WideEncoded.output (x : R1Z.ProverRw21WideCarrier.E) : Aeneas.Std.Array Aeneas.Std.U8 32#usize
+R1Z.ProverRw21WideEncoded.source (x : R1Z.ProverRw21WideCarrier.E) :
+  R1Z.ProverRwP6FlatSource.wide_bytes_flat (R1Z.ProverRw21WideCarrier.encode x) =
+    Aeneas.Std.Result.ok (R1Z.ProverRw21WideEncoded.output x)
+R1Z.ProverRw21WideImage.split (x : R1Z.ProverRw21WideCarrier.W) :
+  R1Z.ProverRw21FlatOutput.bytes x = R1Z.ProverRw18QuarticBytes.bytes x.c0 ++ R1Z.ProverRw18QuarticBytes.bytes x.c1
+R1Z.ProverRw21WideImage.quarter_image (x : R1Z.ProverRw18FieldMeaning.Q) (h : R1Z.ProverRw18FullCarrier.canonical x) :
+  List.map R1Z.ProverRw21ByteCarrier.decode (R1Z.ProverRw18QuarticBytes.bytes x) =
+    List.ofFn fun i =>
+      UInt8.ofFin
+        (AspisR1.RetainedFieldByteCodec.encodeQM31LE
+          (R1Z.ProverCommitLimbBytes47.limbs (R1Z.ProverRw18FullCarrier.raw x) h) i)
+R1Z.ProverRw21WideImage.raw_image (x : R1Z.ProverRw21WideCarrier.W) (h : R1Z.ProverRw21WideCarrier.canonical x) :
+  List.map R1Z.ProverRw21ByteCarrier.decode (R1Z.ProverRw21FlatOutput.bytes x) =
+    List.ofFn (R1Z.ProverCommitWideBytes48.sourceCell (R1Z.ProverRw21WideCarrier.raw x) h)
+R1Z.ProverRw21WideImage.mathematical_image (x : R1Z.ProverRw21WideCarrier.W)
+  (h : R1Z.ProverRw21WideCarrier.canonical x) :
+  List.map R1Z.ProverRw21ByteCarrier.decode (R1Z.ProverRw21FlatOutput.bytes x) =
+    R1Z.ProverRw21ProtocolOutput.wide (R1Z.ProverRw21WideCarrier.value x)
+R1Z.ProverRw21WideImage.source_image (x : R1Z.ProverRw21WideCarrier.W) (h : R1Z.ProverRw21WideCarrier.canonical x) :
+  ∃ result,
+    R1Z.ProverRwP6FlatSource.wide_bytes_flat x = Aeneas.Std.Result.ok result ∧
+      List.map R1Z.ProverRw21ByteCarrier.decode ↑result =
+        R1Z.ProverRw21ProtocolOutput.wide (R1Z.ProverRw21WideCarrier.value x)
+R1Z.ProverRw21WordImage.ofFin_toFin (b : UInt8) : UInt8.ofFin b.toFin = b
+R1Z.ProverRw21WordImage.decoded (x : Aeneas.Std.U32) :
+  List.map R1Z.ProverRw21ByteCarrier.decode ↑(Aeneas.Std.core.num.U32.to_le_bytes x) =
+    List.map UInt8.ofFin
+      (List.ofFn (AspisR1.RetainedFieldByteCodec.encodeWordLE (R1Z.ProverCommitWordBytes47.rawWord x)))
+R1Z.ProverRw21WordImage.byte_mod (n : ℕ) : UInt8.ofFin ⟨n % 256, ⋯⟩ = UInt8.ofNat (n % 256)
+R1Z.ProverRw21WordImage.model_word (x : Aeneas.Std.U32) :
+  List.map UInt8.ofFin
+      (List.ofFn (AspisR1.RetainedFieldByteCodec.encodeWordLE (R1Z.ProverCommitWordBytes47.rawWord x))) =
+    R1Z.ProverRw21ProtocolOutput.word ↑x
+R1Z.ProverRw21WordImage.source_word (x : Aeneas.Std.U32) :
+  List.map R1Z.ProverRw21ByteCarrier.decode ↑(Aeneas.Std.core.num.U32.to_le_bytes x) =
+    R1Z.ProverRw21ProtocolOutput.word ↑x
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.91
+	Maximum resident set size (kbytes): 4307576
+	Swaps: 0
+	Exit status: 0
