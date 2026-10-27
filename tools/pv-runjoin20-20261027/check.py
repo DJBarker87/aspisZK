@@ -14,7 +14,7 @@ if prior_refusals:
 
 rows=[json.loads(p.read_text()) for p in E.glob('receipt-[0-9]*.json')];charged=sum(r.get('exit') is not None for r in rows)
 assert charged<100
-assert not (E/f'used-{A}.json').exists() or (A==37099 and not (E/f'receipt-{A}.json').exists()), 'ID retired'
+assert not (E/f'used-{A}.json').exists() or (A in [37081,37099] and not (E/f'receipt-{A}.json').exists() and not any(json.loads(l).get('attempt')==A for l in (E/'launches.jsonl').read_text().splitlines())), 'ID retired'
 # Read-only cross-job collision check before consuming each subsequent ID.
 id_code = r"""import pathlib,re,json
 root=pathlib.Path('/home/dombarker/project-offloads');hits=[]
@@ -66,6 +66,7 @@ if r.returncode==78:
  (E/f'refusal-{A}.json').write_text(json.dumps(dict(allowed=False,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),reason='scope launcher exit78 after initial admission; wait under lead rulings (d)/(e)/(m)'),indent=2)+'\n')
 for name in ['out','time']:
  q=ssh(f'cat {H}/evidence/pv20-{name}-{A}.log');(E/f'{name}-{A}.log').write_text(q.stdout+q.stderr)
+ if q.returncode != 0: raise RuntimeError('Receipt fetch failed; recover original log read-only before accepting or scheduling another compile: '+name)
 out=(E/f'out-{A}.log').read_text();tim=(E/f'time-{A}.log').read_text();print(out[-8500:],flush=True)
 m=re.search(r'Exit status: (\d+)',tim);record['exit']=int(m[1]) if m else None
 m=re.search(r'Maximum resident set size \(kbytes\): (\d+)',tim);record['peak_rss_bytes']=int(m[1])*1024 if m else None

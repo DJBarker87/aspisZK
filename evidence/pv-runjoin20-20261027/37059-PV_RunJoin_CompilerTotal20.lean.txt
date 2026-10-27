@@ -1,0 +1,31 @@
+import R1Z.PV_RunJoin_BankIdentification20
+import R1Z.PV_RunJoin_CompilerChecks17
+import R1Z.PV_RunJoin_LateAppend18
+import R1Z.PV_RunJoin_SelectedCheck16
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_CompilerTotal20
+open Aeneas Aeneas.Std Result BuilderForestAdmissionPort
+open BuilderForestAdmissionPort.pool_v1 pair_forest_copy_builder
+open PV_RunJoin_FixtureArguments PV_RunJoin_ReferenceFixtureResults
+local instance : ExternalLinear := PV_RunJoin_ShippedExternal.E_shipped
+local instance : Records := PV_RunJoin_CompilerDictionary16.shipped
+
+def transferCall := pair_forest_trace.compile_forest_from_copies witness 600#u32 (some recipient)
+  transferChange (PV_Src_NativeInput.forestPublic transferRequest) laneAnchor snapshot
+
+theorem transfer : ∃ compiled, transferCall = ok (.Ok compiled) := by
+  unfold transferCall pair_forest_trace.compile_forest_from_copies
+  rw [PV_RunJoin_FixtureReturns16.transfer_new]
+  simp only [bind_tc_ok]
+  rw [PV_RunJoin_SelectedCheck16.selected,PV_RunJoin_InputLeaf16.transfer]
+  simp only [bind_tc_ok]
+  rw [PV_RunJoin_SelectedCheck16.comparison]
+  simp only [bind_tc_ok,if_false]
+  rw [PV_RunJoin_PathChecks16.transfer_pair,PV_RunJoin_PairLeafCheck16.leaf]
+  simp only [bind_tc_ok,BuilderForestStdPort.core.result.Result.map_err,BuilderAdmissionStd.mapErr,
+    core.result.Result.Insts.CoreOpsTry.branch]
+  rw [PV_RunJoin_ZeroTree17.ne_self]
+  simp only [bind_tc_ok,if_false]
+#print axioms transfer
+end R1Z.PV_RunJoin_CompilerTotal20

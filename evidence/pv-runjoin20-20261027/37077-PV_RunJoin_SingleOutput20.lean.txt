@@ -1,0 +1,82 @@
+import R1Z.PV_RunJoin_OutputConstructor20
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_SingleOutput20
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1 BuilderAdmissionStd BuilderForestStdPort
+abbrev first := PV_RunJoin_RecordedWithdrawal.publicRecord.change_commitment
+def zero : Array U32 8#usize := Array.repeat 8#usize 0#u32
+def pair : pair_tree_profile.PoolV1PairLeafWitnessV1 := ⟨first,0#u32,zero,0#u32⟩
+abbrev predicate := pair_tree_profile.PoolV1PairLeafWitnessV1.validate.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+
+theorem first_canonical : Canon8 first := by intro i hi;interval_cases i <;> decide
+#print axioms first_canonical
+
+theorem zero_canonical : Canon8 zero := by intro i hi;interval_cases i <;> decide
+#print axioms zero_canonical
+
+theorem zero_call : predicate.call_mut 1#u32 0#u32 = ok (false,1#u32) := by
+  with_unfolding_all rfl
+#print axioms zero_call
+
+theorem zero_scan (n : Nat) : scan predicate true (List.replicate n 0#u32) 1#u32 = ok (false,n) := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    rw [List.replicate_succ,scan,zero_call]
+    simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+    rw [ih]
+    rfl
+#print axioms zero_scan
+
+theorem scan : core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any predicate
+    ⟨Array.to_slice zero,0⟩ 1#u32 = ok (false,⟨Array.to_slice zero,8⟩) := by
+  change iterScan predicate true ⟨Array.to_slice zero,0⟩ 1#u32 = _
+  unfold iterScan
+  simp only [Array.to_slice,List.drop_zero]
+  change (do let r ← BuilderAdmissionStd.scan predicate true (List.replicate 8 0#u32) 1#u32
+             ok (r.1,{slice := Array.to_slice zero,i := 0+r.2})) = _
+  rw [zero_scan]
+  rfl
+#print axioms scan
+
+theorem validate : pair_tree_profile.PoolV1PairLeafWitnessV1.validate pair = ok (.Ok ()) := by
+  rw [pair_tree_profile.PoolV1PairLeafWitnessV1.validate]
+  dsimp only [pair]
+  rw [PV_RunJoin_DigestCanonical16.tree_true first first_canonical]
+  simp only [bind_tc_ok,↓reduceIte]
+  rw [PV_RunJoin_DigestCanonical16.tree_true zero zero_canonical]
+  simp only [bind_tc_ok,↓reduceIte,aspis_core.field.P,aspis_core.field.M31.ONE,aspis_core.field.M31.ZERO]
+  rw [if_neg (by decide : ¬(0#u32 : U32) ≥ 2147483647#u32)]
+  rw [if_neg (by decide : ¬(0#u32 : U32) ≥ 2147483647#u32)]
+  have sub10 : aspis_core.field.M31.sub 1#u32 0#u32 = ok 1#u32 := by with_unfolding_all rfl
+  have sub01 : aspis_core.field.M31.sub 0#u32 1#u32 = ok 2147483646#u32 := by with_unfolding_all rfl
+  rw [sub10,sub01]
+  simp only [bind_tc_ok]
+  rw [PV_RunJoin_ValidationScalar16.mul_zero]
+  simp only [bind_tc_ok,core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,
+    aspis_core.field.M31.Insts.CoreCmpPartialEqM31,aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,↓reduceIte]
+  rw [pair_tree_profile.PoolV1PairLeafWitnessV1.second_sentinel,pair_tree_profile.POOL_V1_PAIR_SECOND_SENTINEL_LANE]
+  rw [index_ok zero 7#usize (by decide)]
+  simp only [bind_tc_ok,UScalar.ofNatCore_val_eq]
+  have hz : zero.val[7]! = 0#u32 := by rfl
+  rw [hz,PV_RunJoin_ValidationScalar16.mul_zero]
+  simp only [bind_tc_ok,core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,
+    aspis_core.field.M31.Insts.CoreCmpPartialEqM31,aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,↓reduceIte]
+  have mul10 : aspis_core.field.M31.mul 1#u32 0#u32 = ok 0#u32 := by with_unfolding_all rfl
+  rw [mul10]
+  simp only [bind_tc_ok,core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,
+    aspis_core.field.M31.Insts.CoreCmpPartialEqM31,aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,↓reduceIte,
+    lift,core.slice.Slice.iter]
+  rw [scan]
+  with_unfolding_all rfl
+#print axioms validate
+
+theorem source : pair_tree_profile.PoolV1PairLeafWitnessV1.single_output first = ok (.Ok pair) := by
+  rw [pair_tree_profile.PoolV1PairLeafWitnessV1.single_output]
+  have hv : pair_tree_profile.PoolV1PairLeafWitnessV1.validate
+      ⟨first,aspis_core.field.M31.ZERO,Array.repeat 8#usize aspis_core.field.M31.ZERO,aspis_core.field.M31.ZERO⟩ = ok (.Ok ()) := by
+    with_unfolding_all exact validate
+  rw [hv]
+  with_unfolding_all rfl
+#print axioms source
+end R1Z.PV_RunJoin_SingleOutput20

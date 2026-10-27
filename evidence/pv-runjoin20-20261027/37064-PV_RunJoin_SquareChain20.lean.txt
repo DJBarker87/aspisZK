@@ -1,0 +1,30 @@
+import R1Z.PV_RunJoin_InverseCells20
+import R1Z.PV_RunJoin_IndexedSbox19
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_SquareChain20
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort
+
+theorem loop (finish : Nat) (states : Nat → U32)
+    (hf : ∀ i, i < finish → aspis_core.field.M31.mul (states i) (states i) = ok (states (i+1))) :
+    ∀ (n : Nat) (iter : core.ops.range.Range Usize), iter.start.val+n=finish → iter.end.val=finish →
+      aspis_core.field.square_n_loop iter (states iter.start.val) = ok (states finish)
+  | 0, iter, hc, he => by
+    rw [aspis_core.field.square_n_loop,BuilderBankRange.next_none iter (by omega)]
+    simp only [bind_tc_ok]
+    have hi : iter.start.val=finish := by omega
+    rw [hi]
+  | n+1, iter, hc, he => by
+    obtain ⟨after,hn,ha,hend⟩ := BuilderBankRange.next_some iter (by omega)
+    rw [aspis_core.field.square_n_loop,hn]
+    simp only [bind_tc_ok]
+    rw [hf iter.start.val (by omega),← ha]
+    exact loop finish states hf n after (by omega) (by rw [hend];exact he)
+#print axioms loop
+
+theorem source (states : Nat → U32) (count : Usize)
+    (hf : ∀ i, i < count.val → aspis_core.field.M31.mul (states i) (states i) = ok (states (i+1))) :
+    aspis_core.field.square_n (states 0) count = ok (states count.val) := by
+  exact loop count.val states hf count.val ⟨0#usize,count⟩ (by simp) rfl
+#print axioms source
+end R1Z.PV_RunJoin_SquareChain20
