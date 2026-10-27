@@ -1,0 +1,164 @@
+JHe_ReplaceSuffix.lean:13:73: error: unsolved goals
+ops : Ops
+w : JHe_WriterCommutation.Writer
+H : Type
+D : aspis_core.digest.Digest32 H
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+hash : H
+input : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+⊢ (do
+      let i ← compact.LOGICAL_SEMANTIC ops
+      let i1 ← compact.LOGICAL_Y1
+      let i2 ← i + i1
+      let r ← ops.op1 core.marker.CopyU8 i2 0#u8
+      let r1 ←
+        core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s i
+          let i3 ← compact.OFF_SEMANTIC ops
+          let i4 ← compact.OFF_Y1 ops
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := i3, «end» := i4 }
+          let (r2, semantic1) ← ops.op10 s1 semantic
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i5 ←
+                compact.OFF_INACTIVE
+                    { op0 := ops.op0, op1 := @Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4,
+                      op5 := ops.op5, op6 := @Ops.op6 ops, op7 := ops.op7, op8 := @Ops.op8 ops, op9 := @Ops.op9 ops,
+                      op10 := ops.op10, op11 := ops.op11, op12 := ops.op12, op13 := ops.op13, op14 := ops.op14,
+                      op15 := ops.op15, op16 := fun {H} => w, op17 := ops.op17, op18 := ops.op18, op19 := ops.op19,
+                      op20 := ops.op20, op21 := ops.op21 }
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i4, «end» := i5 }
+              let (r3, y11) ← ops.op11 s2 y1
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let s4 ←
+                    alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                        (deref_mut_back (split_at_mut_back (semantic1, y11))) { «end» := i }
+                  let s5 ←
+                    alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                        (deref_mut_back (split_at_mut_back (semantic1, y11))) { start := i }
+                  let r4 ← ops.op5 proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ← ops.op9 D semantic v.semantic hash none
+                      let r6 ←
+                        core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark none verifier.Phase.Semantic
+                          ops.op8 D val2 v hash input
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, input)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r7, input)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+                  ok (r7, input)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+              ok (r7, input)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r7, input)) =
+    do
+    let i ← compact.LOGICAL_SEMANTIC ops
+    let i1 ← compact.LOGICAL_Y1
+    let i2 ← i + i1
+    let r ← ops.op1 core.marker.CopyU8 i2 0#u8
+    let r1 ←
+      core.result.Result.map_err (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (s, deref_mut_back) ← lift val.deref_mut
+        let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s i
+        let i3 ← compact.OFF_SEMANTIC ops
+        let i4 ← compact.OFF_Y1 ops
+        let s1 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := i3, «end» := i4 }
+        let (r2, semantic1) ← ops.op10 s1 semantic
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let i5 ← compact.OFF_INACTIVE ops
+            let s2 ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                  { start := i4, «end» := i5 }
+            let (r3, y11) ← ops.op11 s2 y1
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let s4 ←
+                  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                      (deref_mut_back (split_at_mut_back (semantic1, y11))) { «end» := i }
+                let s5 ←
+                  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                      (deref_mut_back (split_at_mut_back (semantic1, y11))) { start := i }
+                let r4 ← ops.op5 proof s4 s5
+                let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                match cf3 with
+                  | core.ops.control_flow.ControlFlow.Continue v => do
+                    let r5 ← ops.op9 D semantic v.semantic hash none
+                    let r6 ←
+                      core.result.Result.map_err
+                          (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ()
+                    let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                    match cf4 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                        verifier.mark none verifier.Phase.Semantic
+                        ops.op8 D val2 v hash input
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r7 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                        ok (r7, input)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r7 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r7, input)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r7 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+                ok (r7, input)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r7 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+            ok (r7, input)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r7 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (core.convert.FromSame verifier.Error) residual
+        ok (r7, input)
+'AspisR1.JHe_ReplaceSuffix.prepare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JHe_ReplaceSuffix.source' depends on axioms: [propext, Classical.choice, Quot.sound]

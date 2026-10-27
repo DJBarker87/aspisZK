@@ -1,0 +1,64 @@
+{"attempt": "JHe30_042", "exit_status": 1, "wall_seconds": 2.3512622339767404, "peak_rss_kib": "5377488", "swaps": "0", "print_axioms": ["'AspisR1.JHe_ZeroGate.loop_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JHe_ZeroGate.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHe_ZeroGate.lean:32:4: error: Type mismatch: After simplification, term
+  rest
+ has type
+  @Eq (Result (Option (core.result.Result Unit solana_program_error.ProgramError)))
+    (loop
+      (fun index1 =>
+        if index1 < bytes.len then do
+          let i1 ← bytes.index_usize index1
+          if (i1 != 0#u8) = true then
+              ok (done (some (core.result.Result.Err solana_program_error.ProgramError.AccountAlreadyInitialized)))
+            else do
+              let index1 ← lift (index1.wrapping_add 1#usize)
+              ok (cont index1)
+        else ok (done none))
+      (i.wrapping_add 1#usize))
+    (ok none)
+but is expected to have type
+  @Eq (Result (Option (core.result.Result 
+...
+ption (core.result.Result Unit solana_program_error.ProgramError)))
+    (loop
+      (fun index1 =>
+        if index1 < bytes.len then do
+          let i1 ← bytes.index_usize index1
+          if (i1 != 0#u8) = true then
+              ok (done (some (core.result.Result.Err solana_program_error.ProgramError.AccountAlreadyInitialized)))
+            else do
+              let index1 ← lift (index1.wrapping_add 1#usize)
+              ok (cont index1)
+        else ok (done none))
+      (i.wrapping_add 1#usize))
+    (ok none)
+but is expected to have type
+  @Eq (Result (Option (core.result.Result Unit solana_program_error.ProgramError)))
+    (loop
+      (fun index1 =>
+        if index1 < bytes.len then do
+          let i1 ← bytes.index_usize index1
+          if (i1 != 0#u8) = true then
+              ok (done (some (core.result.Result.Err solana_program_error.ProgramError.AccountAlreadyInitialized)))
+            else ok (cont (index1.wrapping_add 1#usize))
+        else ok (done none))
+      (i.wrapping_add 1#usize))
+    (ok none)
+JHe_ZeroGate.lean:18:84: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_pool_adapter.owned.require_zero_loop.body,
+        if_neg (show ¬i ̲< ̲Slice.len bytes from by change ¬i.val ̲< ̲bytes.val.length; ̲omega),̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHe_ZeroGate.loop_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JHe_ZeroGate.lean:38:62: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 1
+  0 ≤ e ≤ 4096
+where
+ e := ↑(↑bytes).length
+ f := ↑↑0#usize
+'AspisR1.JHe_ZeroGate.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r439aee030fe043138a17944b2f83886e.scope; invocation ID: 8f3cd8960aaa42768e3f9fa580cd5a79

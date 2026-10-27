@@ -1,0 +1,50 @@
+{"attempt": "JHe30_082", "exit_status": 1, "wall_seconds": 2.9488597720046528, "peak_rss_kib": "6363540", "swaps": "0", "print_axioms": ["'AspisR1.JHe_SdkCheckpoint.zero' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHe_SdkCheckpoint.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHe_SdkCheckpoint.lean:10:17: error: failed to set `[local irreducible]`, `e` is currently `[reducible]`, `[semireducible]` nor `[implicit_reducible]` expected
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+'AspisR1.JHe_SdkCheckpoint.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+JHe_SdkCheckpoint.lean:38:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (do
+      let r ←
+        core.result.Result.Insts.CoreCloneClone.clone core.clone.CloneUsize
+            (solana_program_error.ProgramError.Insts.CoreCloneClone (JHe_Natives.sdk base stage
+...
+sdk base stage))
+      CPH_Program.verifier CPH_Program.verifier =
+    ok false
+flags :
+  (e.snapshot 2 1768 1768).is_signer = false ∧
+    (e.snapshot 2 1768 1768).executable = false ∧ (e.snapshot 2 1768 1768).is_writable = true
+⊢ (do
+      let r ←
+        core.result.Result.Insts.CoreCloneClone.clone core.clone.CloneUsize
+            (solana_program_error.ProgramError.Insts.CoreCloneClone (JHe_Natives.sdk base stage))
+            (core.result.Result.Ok 1768#usize)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i ← (JHe_Natives.sdk base stage).op12 aspis_r1_cost_probe.transport.Variant.S2
+          if (val != i) = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+            else ok (core.result.Result.Ok ())
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1768 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JHe_SdkCheckpoint.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9bcc842782c54a518cd760254074dc80.scope; invocation ID: e71d9449843146cd90e6e74c9658b016

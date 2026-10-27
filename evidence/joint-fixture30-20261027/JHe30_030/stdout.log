@@ -1,0 +1,119 @@
+JHe_ReplaceSuffix.lean:14:2: error: Tactic `rfl` failed: The left-hand side
+  verifier.candidate.prepare
+    { op0 := ops.op0, op1 := @Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4, op5 := ops.op5,
+      op6 := @Ops.op6 ops, op7 := ops.op7, op8 := @Ops.op8 ops, op9 := @Ops.op9 ops, op10 := ops.op10, op11 := ops.op11,
+      op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15, op16 := fun {H} => w, op17 := ops.op17,
+      op18 := ops.op18, op19 := ops.op19, op20 := ops.op20, op21 := ops.op21 }
+    D semantic proof hash none input
+is not definitionally equal to the right-hand side
+  verifier.candidate.prepare ops D semantic proof hash none input
+
+ops : Ops
+w : JHe_WriterCommutation.Writer
+H : Type
+D : aspis_core.digest.Digest32 H
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+hash : H
+input : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+⊢ verifier.candidate.prepare
+      { op0 := ops.op0, op1 := @Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4, op5 := ops.op5,
+        op6 := @Ops.op6 ops, op7 := ops.op7, op8 := @Ops.op8 ops, op9 := @Ops.op9 ops, op10 := ops.op10,
+        op11 := ops.op11, op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15, op16 := fun {H} => w,
+        op17 := ops.op17, op18 := ops.op18, op19 := ops.op19, op20 := ops.op20, op21 := ops.op21 }
+      D semantic proof hash none input =
+    verifier.candidate.prepare ops D semantic proof hash none input
+'AspisR1.JHe_ReplaceSuffix.prepare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JHe_ReplaceSuffix.lean:34:2: error: Type mismatch
+  tail
+has type
+  (do
+      let i ← compact.OFF_FOLDED_ROOT ops
+      let i1 ← compact.OFF_ROUND1 ops
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof { start := i, «end» := i1 }
+      let r4 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+      let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4
+      let r5 ← ops.op6 D proof p folded_root 0#usize hash
+      let cf4 ←
+        match r5 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf4 with
+        | core.ops.control_flow.ControlFlow.Continue _ => do
+          let s3 ← ops.op17 after ⟨↑out.weights, ⋯⟩
+          let bytes ←
+            ops.op16 D p { weights := ⟨↑s3, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next } proof pub hash
+          ok (core.result.Result.Ok bytes)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok saved)
+but is expected to have type
+  (do
+      let i ←
+        compact.OFF_FOLDED_ROOT
+            { op0 := ops.op0, op1 := @Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4, op5 := ops.op5,
+              op6 := @Ops.op6 ops, op7 := ops.op7, op8 := @Ops.op8 ops, op9 := @Ops.op9 ops, op10 := ops.op10,
+              op11 := ops.op11, op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+              op16 := fun {H} => w, op17 := ops.op17, op18 := ops.op18, op19 := ops.op19, op20 := ops.op20,
+              op21 := ops.op21 }
+      let i1 ←
+        compact.OFF_ROUND1
+            { op0 := ops.op0, op1 := @Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4, op5 := ops.op5,
+              op6 := @Ops.op6 ops, op7 := ops.op7, op8 := @Ops.op8 ops, op9 := @Ops.op9 ops, op10 := ops.op10,
+              op11 := ops.op11, op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+              op16 := fun {H} => w, op17 := ops.op17, op18 := ops.op18, op19 := ops.op19, op20 := ops.op20,
+              op21 := ops.op21 }
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof { start := i, «end» := i1 }
+      let r4 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+      let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4
+      let r5 ← ops.op6 D proof p folded_root 0#usize hash
+      let cf4 ←
+        match r5 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf4 with
+        | core.ops.control_flow.ControlFlow.Continue _ => do
+          let s3 ← ops.op17 after ⟨↑out.weights, ⋯⟩
+          let bytes ← w D p { weights := ⟨↑s3, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next } proof pub hash
+          ok (core.result.Result.Ok bytes)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok saved)
+JHe_ReplaceSuffix.lean:31:62: warning: This simp argument is unused:
+  flush
+
+Hint: Omit it from the simp argument list.
+  simp only [Tx1Reachability.afterPrepare, ̲init, ̲geo, ̲pend, ̲query,f̵l̵u̵s̵h̵,̵ ̲old, ̲new,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲verifier.mark,
+  ̵  ̵ ̵ ̵alloc.vec.Vec.deref_mut, ̲lift,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry] at tail ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHe_ReplaceSuffix.lean:31:68: warning: This simp argument is unused:
+  old
+
+Hint: Omit it from the simp argument list.
+  simp only [Tx1Reachability.afterPrepare, ̲init, ̲geo, ̲pend, ̲query, ̲flush,o̵l̵d̵,̵ ̲new,
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲verifier.mark,
+  ̵  ̵ ̵ ̵alloc.vec.Vec.deref_mut, ̲lift,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry] at tail ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHe_ReplaceSuffix.lean:31:72: warning: This simp argument is unused:
+  new
+
+Hint: Omit it from the simp argument list.
+  simp only [Tx1Reachability.afterPrepare, ̲init, ̲geo, ̲pend, ̲query, ̲flush, ̲old,n̵e̵w̵,̵
+  ̵  ̵ ̵ ̵bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲verifier.mark,
+  ̵  ̵ ̵ ̵alloc.vec.Vec.deref_mut, ̲lift,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry] at tail ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHe_ReplaceSuffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
