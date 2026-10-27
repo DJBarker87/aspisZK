@@ -5,11 +5,42 @@ namespace R1Z.PV_RunJoin_UniversalLate22
 open Aeneas Aeneas.Std Result R0Z.WriterRefine
 open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
 
+theorem scalar_ne_self (x : U32) : core.cmp.PartialEq.ne.trait_default
+    aspis_core.field.M31.Insts.CoreCmpPartialEqM31 x x = ok false := by
+  simp only [core.cmp.PartialEq.ne.trait_default,
+    aspis_core.field.M31.Insts.CoreCmpPartialEqM31]
+  with_unfolding_all simp [core.cmp.PartialEq.ne.default,aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq]
+#print axioms scalar_ne_self
+
+def compare (p : U32 × U32) : Result Bool := do
+  let b ← aspis_core.field.M31.Insts.CoreCmpPartialEqM31.ne p.1 p.2
+  ok (decide (¬ b = true))
+
+theorem compare_self (x : U32) : compare (x,x) = ok true := by
+  change (do
+    let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 x x
+    ok (decide (¬ b = true))) = _
+  rw [scalar_ne_self]
+  rfl
+#print axioms compare_self
+
+theorem diagonal (xs : List U32) : List.allM compare (xs.zip xs) = ok true := by
+  induction xs with
+  | nil => rfl
+  | cons x xs ih => simp [List.allM,compare_self,ih]
+#print axioms diagonal
+
+theorem eq_self (d : Array U32 8#usize) : core.array.equality.PartialEqArray.eq
+    aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d d = ok true := by
+  rw [core.array.equality.PartialEqArray.eq,if_pos rfl]
+  exact diagonal d.val
+#print axioms eq_self
+
 /-- Array equality is a symbolic source fact for every word array. -/
 theorem ne_self (d : Array U32 8#usize) :
     core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d d = ok false := by
-  simp only [core.array.equality.PartialEqArray.ne]
-  with_unfolding_all simp [aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq]
+  rw [core.array.equality.PartialEqArray.ne,eq_self]
+  rfl
 #print axioms ne_self
 
 /-- Lift late_append's final join for arbitrary snapshots and arbitrary
