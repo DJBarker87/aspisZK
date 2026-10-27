@@ -77,3 +77,11 @@ row is canonical from its producing installed constructor (SuccessorRow078).
 Literal high-product transport is the next check. Same explicit local seed
 slice canonicality remains; the enclosing allocation/regular-call join has not
 been discharged. This does not complete part2 or remove either L142 family.
+
+SuccessorHigh081 / SuccessorTensor082 close the complete literal high-factor
+transport on the SAME native constructor/tensor operands. SuccessorScale084
+closes each actual successor low digit/powers scalar-sum transport, importing
+the checked ScalarCell/ScalarValue family. Its083 duplicate Fin-to-Usize proof
+construction was replaced by the actual Usize digit index and its bound.
+The first byte-dot cell085 is checked; the complete contraction and enclosing
+regular call/final continuation still need joining. No complete part2 meaning.
