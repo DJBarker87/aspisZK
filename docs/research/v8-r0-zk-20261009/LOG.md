@@ -12639,3 +12639,17 @@ native, fixture and cost gates, and revert crates/ to c97270adc2 if the repaired
 above +2%; then the op222 same-input differential, copy equality and row bridge, op134's native
 association and installation, and the op117/op121 equalities. No further extraction rewrites in this
 run. Rows removed outright: 0. Privacy target not yet established.
+
+## D324 (Stream B) 2026-10-27 21:54 UTC: second rejected repair; lead reverts batch 3's crates/ to c97270adc2; batch3e is proof-only
+
+batch3d's repair 1be0505afc expanded the append steps to 21 as well as the private-path steps,
+producing 129 links; the unchanged 127-link shape check rejected it and the native optimized gate
+exited 101 before timing (three ELF pins matched; both counterexample binaries retained; 85 attempts
+unspent). Two hand-expansions of the same unrolled loop have now failed, and the change being
+repaired was an optional extraction rewrite. The lead reverted crates/ and programs/ on
+codex/pv-batch3-20261027 to the last fully passing source c97270adc2 (commit 0a298ad4f6; empty diff
+under crates/ and programs/ against c97270adc2, whose three-ELF, native and +1.906% cost receipts
+apply). 0b048ee98d and 1be0505afc stay rejected and recorded. batch3e (85 attempts) may not change any
+source: op222's same-input differential, copy equality and row bridge; op134's native association
+and installation; the op117/op121 universal equalities and bridges (V217, V220); combined audit and
+focused replay. Rows removed outright: 0. Privacy target not yet established.
