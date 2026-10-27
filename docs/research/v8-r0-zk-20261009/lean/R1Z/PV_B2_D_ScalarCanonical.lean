@@ -20,6 +20,8 @@ theorem reduce_bound (x : U64) : reduce x < F := by
     show (31#32).toNat % 64 = 31 from rfl,
     show (2147483647#32).toNat = 2147483647 from rfl]
   have h := bitvec_bound x.bv
-  simpa only [reduced,word,fold64,BitVec.ule,decide_eq_true_eq,apply_ite] using h
+  norm_num only [reduced,word,fold64,BitVec.ule,decide_eq_true_eq,apply_ite,
+    HShiftRight.hShiftRight] at h ⊢
+  exact h
 #print axioms reduce_bound
 end PV_B2_D_ScalarCanonical
