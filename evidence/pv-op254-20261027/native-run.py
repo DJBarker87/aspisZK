@@ -12,7 +12,7 @@ assert all(x['match'] for x in checks),'candidate dependency bytes differ'
 with (R/'reservation.json').open('w') as log:
  a=subprocess.run(['python3',str(H/'Port13GATE_admission.py')],stdout=log,stderr=subprocess.STDOUT)
 assert a.returncode==0 and json.loads((R/'reservation.json').read_text()).get('allowed') is True,'refused before scope'
-cmd=['systemd-run','--user','--scope','--quiet','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',str(R/'time.log'),'taskset','--cpu-list','0-3','cargo','run','--release','--offline','--manifest-path',str(H/'native/Cargo.toml'),'--target-dir',str(H/'native-target'),'-j','4']
+cmd=['systemd-run','--user','--scope','--quiet','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',str(R/'time.log'),'taskset','--cpu-list','0-3','/home/dombarker/.cargo/bin/cargo','run','--release','--offline','--manifest-path',str(H/'native/Cargo.toml'),'--target-dir',str(H/'native-target'),'-j','4']
 start=time.monotonic()
 with (R/'out.log').open('w') as log:r=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT)
 tm=(R/'time.log').read_text();out=(R/'out.log').read_text()

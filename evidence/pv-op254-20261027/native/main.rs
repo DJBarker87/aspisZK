@@ -12,7 +12,7 @@ fn main(){
  std::panic::set_hook(Box::new(|_|{}));
  let mut seed=0x7100abcde1234567u64;
  let mut pc=0;let mut sc=0;let mut vc=0;let mut ec=0;
- for _ in 0..1024 {let x=W{c0:q(&mut seed),c1:q(&mut seed)};
+ for _ in 0..1024 {let x=W::new(q(&mut seed),q(&mut seed));
   powers::<0>(x);powers::<1>(x);powers::<2>(x);powers::<3>(x);powers::<16>(x);powers::<64>(x);pc+=6;
  }
  // A changed-output case: zero initial array must retain the write of ONE.
