@@ -186,12 +186,10 @@ fn add_preweighted_shared_selector<const N: usize>(
 }
 
 #[inline(always)]
-fn sum_high(selectors: &Selectors, ranges: &[core::ops::Range<usize>]) -> QM31 {
-    let mut sum = QM31::ZERO;
-    for range in ranges {
-        for block in range.clone() {
-            sum = sum.add(selectors.high[block]);
-        }
+fn sum_high_range(selectors: &Selectors, mut block: usize, end: usize, mut sum: QM31) -> QM31 {
+    while block < end {
+        sum = sum.add(selectors.high[block]);
+        block += 1;
     }
     sum
 }
@@ -247,7 +245,7 @@ fn validate_transition(
 
 fn poseidon_selectors(selectors: &Selectors) -> StateOnlyPoseidonSelectors {
     StateOnlyPoseidonSelectors {
-        block: sum_high(selectors, &[0..57]),
+        block: sum_high_range(selectors, 0, 57, QM31::ZERO),
         local: selectors.low,
     }
 }
@@ -280,7 +278,7 @@ fn semantic_initial_and_absorption(
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> ([QM31; 16], [QM31; 16]) {
-    let nodes = sum_high(selectors, &[4..25, 33..57]);
+    let nodes = sum_high_range(selectors, 33, 57, sum_high_range(selectors, 4, 25, QM31::ZERO));
     let first_common = selectors.high[0]
         .add(selectors.high[1])
         .add(selectors.high[25])
@@ -433,7 +431,7 @@ fn add_path_lanes(
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) {
-    let path_selector = sum_high(selectors, &[57..63]).mul(
+    let path_selector = sum_high_range(selectors, 57, 63, QM31::ZERO).mul(
         selectors.low[1]
             .add(selectors.low[5])
             .add(selectors.low[9])
@@ -541,8 +539,10 @@ fn add_value_lanes(
     range[32] = openings.xor12_z[10];
     #[cfg(not(feature = "optimized-terminal"))]
     {
-        for residual in &mut range {
-            *residual = range_selector.mul(*residual);
+        let mut index = 0usize;
+        while index < 33 {
+            range[index] = range_selector.mul(range[index]);
+            index += 1;
         }
         add_preweighted(packed, 49, &range);
     }

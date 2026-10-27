@@ -93,29 +93,17 @@ pub fn encode_owned(p: OwnedPublic) -> Result<([u8; 1455], usize), Error> {
 }
 
 pub fn project(public: Public<'_>) -> OwnedPublic {
-    let (withdrawal, anchor, nullifier, asset_id, recipient, change, withdrawal_amount, transition) =
-        match public {
-            Public::Transfer(p, t) => (
-                false,
-                p.anchor_root,
-                p.nullifier,
-                p.asset_id,
-                p.recipient_commitment,
-                p.change_commitment,
-                0,
-                *t,
-            ),
-            Public::Withdrawal(p, t) => (
-                true,
-                p.anchor_root,
-                p.nullifier,
-                p.asset_id,
-                [M31::ZERO; 8],
-                p.change_commitment,
-                p.amount,
-                *t,
-            ),
-        };
+    match public {
+        Public::Transfer(p, t) => project_parts(false, p.anchor_root, p.nullifier,
+            p.asset_id, p.recipient_commitment, p.change_commitment, 0, *t),
+        Public::Withdrawal(p, t) => project_parts(true, p.anchor_root, p.nullifier,
+            p.asset_id, [M31::ZERO; 8], p.change_commitment, p.amount, *t),
+    }
+}
+#[allow(clippy::too_many_arguments)]
+fn project_parts(withdrawal: bool, anchor: [M31; 8], nullifier: [M31; 8], asset_id: M31,
+    recipient: [M31; 8], change: [M31; 8], withdrawal_amount: u32,
+    transition: aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1) -> OwnedPublic {
     let mut out = OwnedPublic {
         withdrawal,
         anchor: [0; 8],
