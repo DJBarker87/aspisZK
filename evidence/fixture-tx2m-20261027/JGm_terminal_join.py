@@ -115,7 +115,7 @@ theorem tree {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
 end AspisR1.{ns}
 end
 '''
- out=R/f'lean/{ns}.lean'
+ out=Path(__file__).resolve().parent/'JGm_STAGE_PARTS'/f'{ns}.lean.txt'
  if '--check' in sys.argv: assert out.read_text()==s,ns
  else: out.write_text(s)
 print('Generated three native terminal/padding/leaf-loop joins')

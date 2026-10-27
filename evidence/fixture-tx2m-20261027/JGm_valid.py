@@ -45,7 +45,7 @@ open Aeneas Aeneas.Std Result MultiproofConeRef
 end AspisR1.{ns}
 end
 '''
- out=R/f'lean/{ns}.lean'
+ out=Path(__file__).resolve().parent/'JGm_STAGE_PARTS'/f'{ns}.lean.txt'
  if '--check' in sys.argv: assert out.read_text()==s,ns
  else: out.write_text(s)
 print('Generated three actual native index scans')

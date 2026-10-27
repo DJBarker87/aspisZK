@@ -40,7 +40,7 @@ open AspisV8R19.SqueezeOracleBridge
 end AspisR1.{ns}
 end
 '''
- out=R/f'lean/{ns}.lean'
+ out=Path(__file__).resolve().parent/'JGm_STAGE_PARTS'/f'{ns}.lean.txt'
  if '--check' in sys.argv: assert out.read_text()==s,ns
  else: out.write_text(s)
 print('Generated native initial prefix views')
