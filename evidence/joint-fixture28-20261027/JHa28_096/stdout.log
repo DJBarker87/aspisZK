@@ -1,0 +1,119 @@
+JHa_QueryLoop.lean:33:4: error: unsolved goals
+case zero.refine_1
+p : verifier.Prepared
+old : S8OwnedP6Finish.Weights
+queries : p.queries = JFq_Queries.value
+alpha : p.alpha = JFo_Prepared.value.alpha
+crho : Port3_FlushInstall.Canonical p.rho
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+sum : S7Kani3CallerTrace.Sum
+remaining : ↑a.next + 0 = 10
+size : (↑a.weights).length = 64
+crhs : Port4C_QueryArithmetic.CanonE a.rhs
+cpower : Port3_FlushInstall.Canonical a.power
+history : PushTrace old (Port3_RowsInstall.toBW b) sum
+phase : Progress (↑a.next) 0 (Port3_RowsInstall.toBW b)
+ending : ↑a.next = 10
+⊢ (match
+      let (a, pending) := (a, b)
+      if a.next ≥ 10#usize then ok (ControlFlow.done (core.result.Result.Ok (a, b)))
+      else do
+        let state1 ←
+          verifier.candidate.query_values ops JFx_NativeBytes.proof p a JFr_TX2_Powers.value none
+              (JGp_Geometry.value () JGp_Seeds.geometry) pending
+        ok (ControlFlow.cont state1) with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if a.next ≥ 10#usize then ok (ControlFlow.done state1)
+              else do
+                let state1 ←
+                  verifier.candidate.query_values ops JFx_NativeBytes.proof p a JFr_TX2_Powers.value none
+                      (JGp_Geometry.value () JGp_Seeds.geometry) pending
+                ok (ControlFlow.cont state1)
+            | core.result.Result.Err a => ok (ControlFlow.done state1))
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (a, b))
+JHa_QueryLoop.lean:53:6: error: Type mismatch
+  tail
+has type
+  Port3_NativeQueryBody.verifier.candidate.query_loop_loop ops (core.result.Result.Ok (middle, pending))
+      JFx_NativeBytes.proof p JFr_TX2_Powers.value none (JGp_Geometry.value () JGp_Seeds.geometry) 10#usize =
+    ok (core.result.Result.Ok (out, after))
+but is expected to have type
+  (match
+      let (a, pending) := (a, b)
+      if a.next ≥ 10#usize then ok (ControlFlow.done (core.result.Result.Ok (a, b)))
+      else do
+        let state1 ←
+          verifier.candidate.query_values ops JFx_NativeBytes.proof p a JFr_TX2_Powers.value none
+              (JGp_Geometry.value () JGp_Seeds.geometry) pending
+        ok (ControlFlow.cont state1) with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if a.next ≥ 10#usize then ok (ControlFlow.done state1)
+              else do
+                let state1 ←
+                  verifier.candidate.query_values ops JFx_NativeBytes.proof p a JFr_TX2_Powers.value none
+                      (JGp_Geometry.value () JGp_Seeds.geometry) pending
+                ok (ControlFlow.cont state1)
+            | core.result.Result.Err a => ok (ControlFlow.done state1))
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (out, after))
+JHa_QueryLoop.lean:35:79: warning: This simp argument is unused:
+  if_pos (show a.next ≥ 10#usize from by change a.next.val ≥ 10; omega)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵3̵_̵N̵a̵t̵i̵v̵e̵Q̵u̵e̵r̵y̵B̵o̵d̵y̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵q̵u̵e̵r̵y̵_̵l̵o̵o̵p̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵i̵f̵_̵p̵o̵s̵ ̵(̵s̵h̵o̵w̵ ̵a̵.̵n̵e̵x̵t̵≥̵1̵0̵#̵u̵s̵i̵z̵e̵ ̵f̵r̵o̵m̵ ̵b̵y̵ ̵c̵h̵a̵n̵g̵e̵ ̵a̵.̵n̵e̵x̵t̵.̵v̵a̵l̵≥̵1̵0̵;̵o̵m̵e̵g̵a̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲P̲o̲r̲t̲3̲_̲N̲a̲t̲i̲v̲e̲Q̲u̲e̲r̲y̲B̲o̲d̲y̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲q̲u̲e̲r̲y̲_̲l̲o̲o̲p̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHa_QueryLoop.lean:35:144: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_NativeQueryBody.verifier.candidate.query_loop_loop.body,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲if_pos (show a.next ̲≥ ̲10#usize from by change a.next.val ̲≥ ̲10; ̲omega),̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHa_QueryLoop.lean:52:8: warning: This simp argument is unused:
+  if_neg (show ¬a.next ≥ 10#usize from by change ¬a.next.val ≥ 10; omega)
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_NativeQueryBody.verifier.candidate.query_loop_loop.body, i̵f̵_̵n̵e̵g̵ ̵(̵s̵h̵o̵w̵ ̵¬̵a̵.̵n̵e̵x̵t̵≥̵1̵0̵#̵u̵s̵i̵z̵e̵ ̵f̵r̵o̵m̵ ̵b̵y̵ ̵c̵h̵a̵n̵g̵e̵ ̵¬̵a̵.̵n̵e̵x̵t̵.̵v̵a̵l̵≥̵1̵0̵;̵o̵m̵e̵g̵a̵)̵,̵s̵t̵e̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵s̲t̲e̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHa_QueryLoop.lean:52:75: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_NativeQueryBody.verifier.candidate.query_loop_loop.body,
+          if_neg (show ¬a.next ̲≥ ̲10#usize from by change ¬a.next.val ̲≥ ̲10; ̲omega),s̵t̵e̵p̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHa_QueryLoop.lean:52:80: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_NativeQueryBody.verifier.candidate.query_loop_loop.body,
+          if_neg (show ¬a.next ̲≥ ̲10#usize from by change ¬a.next.val ̲≥ ̲10; ̲omega), ̲step,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHa_QueryLoop.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

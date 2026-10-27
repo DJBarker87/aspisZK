@@ -1,0 +1,61 @@
+{"attempt": "JHa28_021", "exit_status": 1, "wall_seconds": 2.315584967029281, "peak_rss_kib": "5498204", "swaps": "0", "print_axioms": ["'AspisR1.JHa_DotTermMeaning.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHa_DotTermMeaning.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JFr_TX2_DotTerm.cursor ↑t ⋯
+in the target expression
+  FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body d.q JFr_TX2_FirstLane.native (↑d.slot)#usize
+      { start := JGw_DotTerm.cursor ↑t ⋯, «end» := iter.end } sums =
+    ok (cont (next, out))
+
+d : JHa_DotContext.Data
+iter : core.ops.range.Range Usize
+sums : Std.Array U64 8#usize
+n : ℕ
+hn : n < 4
+hs : JFs_TX2_ArrayEight.Bound sums n
+order : ↑iter.start < ↑iter.end
+stop : ↑iter.end ≤ 26
+t : Fin 26 := ⟨↑iter.start, ⋯⟩
+cursor : JFr_TX2_DotTerm.cursor ↑t ⋯ = iter.start
+next : core.ops.range.Range Usize
+inc : ↑next.start = ↑t + 1
+he : 
+...
+ay U64 8#usize
+n : ℕ
+hn : n < 4
+hs : JFs_TX2_ArrayEight.Bound sums n
+order : ↑iter.start < ↑iter.end
+stop : ↑iter.end ≤ 26
+t : Fin 26 := ⟨↑iter.start, ⋯⟩
+cursor : JFr_TX2_DotTerm.cursor ↑t ⋯ = iter.start
+next : core.ops.range.Range Usize
+inc : ↑next.start = ↑t + 1
+he : next.end = iter.end
+out : Std.Array U64 8#usize
+body :
+  FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body d.q JFr_TX2_FirstLane.native (↑d.slot)#usize
+      { start := JGw_DotTerm.cursor ↑t ⋯, «end» := iter.end } sums =
+    ok (cont (next, out))
+run : JFr_TX2_DotStep.update JFr_TX2_FirstLane.native (JFr_TX2_DotTerm.cursor ↑t ⋯) (d.scalars t) sums = ok out
+bound : JFs_TX2_ArrayEight.Bound out (n + 1)
+values : ∀ (j : Fin 8), ↑(cell out j) = ↑(cell sums j) + ↑(cell (JFr_TX2_FirstLane.limbs t) j) * ↑(d.scalars t)
+⊢ ∃ next out,
+    ↑next.start = ↑iter.start + 1 ∧
+      next.end = iter.end ∧
+        FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body d.q JFr_TX2_FirstLane.native (↑d.slot)#usize iter sums =
+            ok (cont (next, out)) ∧
+          JFs_TX2_ArrayEight.Bound out (n + 1) ∧ ∀ (j : Fin 8), ↑(cell out j) = ↑(cell sums j) + product d j ↑iter.start
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JHa_DotTermMeaning.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra5464c5256d64f14a3a6868861c42b4d.scope; invocation ID: 187b90930be7490fa73808e89d90a510

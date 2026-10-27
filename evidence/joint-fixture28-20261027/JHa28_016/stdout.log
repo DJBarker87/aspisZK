@@ -1,0 +1,136 @@
+JHa_RetainedFields.lean:86:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (a0, t3).1
+in the target expression
+  Array.make 2#usize [a0, a1] ⋯ =
+    Array.make 2#usize
+      [JHa_OrdinaryValue.fromNative JHa_Alpha0Sample.target, JHa_OrdinaryValue.fromNative JHa_Alpha1Sample.target] ⋯
+
+H : Type
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H
+hash : H
+sem : r1_semantic.Verified H
+view : verifier.View
+out : verifier.Prepared
+input scratch : Std.Array aspis_core.field.WideExact 29#usize
+state : sem.transcript.state = encodeState JFu_Q26Source.ratchet
+variant : view.variant = transport.Variant.S2
+y1 : view.y1 = JGg_Opening27.payload
+inactiveInput :
+  AspisR1CurrentCaller.OriginalSerializerInstallation.sourceBytes view.inactive = ok (Array.repeat 32#usize 0#u8)
+round0 : view.round0 = JGg_Opening29.payload
+folded : view.folded_root = some JGe_View.folded
+round1 : ↑JGe_View.folded ++ ↑view.round1 = ↑JGg_Opening30.payload
+finalMessage : view.final_message = JGg_Opening31.payload
+run :
+  PreparedScratchModel.prepare closedHashBoundaries
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) sem view hash input =
+    ok (core.result.Result.Ok out, scratch)
+D0 : aspis_core.Digest32 H := retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)
+reached : PreparedScratchReachability.Reachable closedHashBoundaries D0 sem view hash out scratch
+t1 t2 t3 t4 t5 t6 : transcript.Transcript H
+gamma kappa a0 a1 : aspis_core.field.WideExact
+rho : aspis_core.field.QM31
+queries : Std.Array U32 22#usize
+claim : aspis_core.field.WideExact
+a0Call :
+  PreparedModel.scalar closedHashBoundaries.sampling D0 { state := encodeState JGg_Opening28.next0, hash := hash } 29#u8
+      JGg_Opening29.payload false =
+    ok (a0, t3)
+query :
+  QueriesModel.queries closedHashQueries D0 { state := encodeState JGg_Opening30.next0, hash := hash } 31#u8
+      JGg_Opening31.payload =
+    ok (core.result.Result.Ok queries, t5)
+rhoCall :
+  PreparedModel.scalar_k closedHashBoundaries.sampling D0 t5 32#u8 PreparedScratchReachability.emptyPayload =
+    ok (rho, t6)
+powers : closedHashBoundaries.powers 29#usize gamma = ok scratch
+claimed : closedHashBoundaries.claim D0 sem view.y1 view.inactive scratch kappa = ok (core.result.Result.Ok claim)
+output :
+  out = PreparedScratchReachability.output sem view gamma kappa (Array.make 2#usize [a0, a1] ⋯) rho queries claim t6
+gc :
+  PreparedModel.scalar closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening27.before, hash := hash } 27#u8 JGg_Opening27.payload true =
+    ok (JHa_GammaSample.value, { state := encodeState JGg_Opening27.next0, hash := hash })
+kc :
+  PreparedModel.scalar closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening28.before, hash := hash } 28#u8 JGg_Opening28.payload false =
+    ok (JHa_OrdinaryValue.fromNative JHa_KappaSample.target, { state := encodeState JGg_Opening28.next0, hash := hash })
+b0c :
+  PreparedModel.scalar closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening29.before, hash := hash } 29#u8 JGg_Opening29.payload false =
+    ok
+      (JHa_OrdinaryValue.fromNative JHa_Alpha0Sample.target, { state := encodeState JGg_Opening29.next0, hash := hash })
+b1c :
+  PreparedModel.scalar closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening30.before, hash := hash } 30#u8 JGg_Opening30.payload false =
+    ok
+      (JHa_OrdinaryValue.fromNative JHa_Alpha1Sample.target, { state := encodeState JGg_Opening30.next0, hash := hash })
+seedCall :
+  have D0 := retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D);
+  transcript.Transcript.new D0 hash sem.transcript.state view.variant =
+    ok { state := encodeState JGe_OpeningInit.state, hash := hash }
+seed :
+  transcript.Transcript.new D0 hash sem.transcript.state view.variant =
+    ok { state := encodeState JGe_OpeningInit.state, hash := hash }
+gammaCall :
+  PreparedModel.scalar closedHashBoundaries.sampling D0 { state := encodeState JGe_OpeningInit.state, hash := hash }
+      27#u8 JGg_Opening27.payload true =
+    ok (gamma, t1)
+et1 : t1 = { state := encodeState JGg_Opening27.next0, hash := hash }
+serialized : closedHashBoundaries.sampling.toBytes view.inactive = ok (Array.repeat 32#usize 0#u8)
+kappaCall :
+  PreparedModel.scalar closedHashBoundaries.sampling D0 { state := encodeState JGg_Opening27.next0, hash := hash } 28#u8
+      (Array.repeat 32#usize 0#u8).to_slice false =
+    ok (kappa, t2)
+et2 : t2 = { state := encodeState JGg_Opening28.next0, hash := hash }
+et3 : t3 = { state := encodeState JGg_Opening29.next0, hash := hash }
+rootCall : core.option.Option.unwrap (some JGe_View.folded) = ok JGe_View.folded
+len1 : view.round1.length = 224
+buf1 buf2 : alloc.vec.Vec U8
+hfirst :
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 256#usize)
+      JGe_View.folded.to_slice =
+    ok buf1
+hsecond : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 buf1 view.round1 = ok buf2
+contents : ↑buf2.deref = ↑JGe_View.folded ++ ↑view.round1
+first :
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 256#usize)
+      JGe_View.folded.to_slice =
+    ok buf1
+a1Call :
+  PreparedModel.scalar closedHashBoundaries.sampling D0 { state := encodeState JGg_Opening29.next0, hash := hash } 30#u8
+      JGg_Opening30.payload false =
+    ok (a1, t4)
+second : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 buf1 view.round1 = ok buf2
+buffer : buf2.deref = JGg_Opening30.payload
+et4 : t4 = { state := encodeState JGg_Opening30.next0, hash := hash }
+qe : queries = JFq_Queries.value
+eg : (gamma, t1).1 = (JHa_GammaSample.value, { state := encodeState JGg_Opening27.next0, hash := hash }).1
+ek :
+  (kappa, t2).1 =
+    (JHa_OrdinaryValue.fromNative JHa_KappaSample.target, { state := encodeState JGg_Opening28.next0, hash := hash }).1
+ea0 :
+  (a0, t3).1 =
+    (JHa_OrdinaryValue.fromNative JHa_Alpha0Sample.target, { state := encodeState JGg_Opening29.next0, hash := hash }).1
+ea1 :
+  (a1, t4).1 =
+    (JHa_OrdinaryValue.fromNative JHa_Alpha1Sample.target, { state := encodeState JGg_Opening30.next0, hash := hash }).1
+⊢ Array.make 2#usize [a0, a1] ⋯ =
+    Array.make 2#usize
+      [JHa_OrdinaryValue.fromNative JHa_Alpha0Sample.target, JHa_OrdinaryValue.fromNative JHa_Alpha1Sample.target] ⋯
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JHa_RetainedFields.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

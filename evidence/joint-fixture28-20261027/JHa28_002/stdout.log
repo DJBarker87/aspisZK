@@ -1,0 +1,158 @@
+JHa_PreparedGamma.lean:38:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  view.y1
+in the target expression
+  AspisR1PublicPreparation.PreparedModel.scalar
+      (concreteBoundaries
+          (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+            AspisS1M31Embedding.Total.embed)).sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := AspisV8R19.SqueezeOracleBridge.encodeState JGe_OpeningInit.state, hash := hash } 27#u8
+      (retainedView view).y1 true =
+    ok (gamma, t1)
+
+C H : Type
+base : Ops
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops C
+D : aspis_core.digest.Digest32 H
+hash : H
+p : verifier.Prepared
+input scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+success :
+  verifier.candidate.prepare (JGp_PrepareLayout.installed base query geo)
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) (toCurrentPublic JFs_PublicSerialization.value)
+      JFx_NativeBytes.proof hash none input =
+    ok (core.result.Result.Ok p, scratch)
+initial expanded : Slice U8
+view : verifier.View
+sem : r1_semantic.Verified H
+expand :
+  AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues JFw_RealExpansion.stored
+      initial =
+    ok (core.result.Result.Ok (), expanded)
+wide : sourceView JFx_NativeBytes.proof expanded JGe_Payload27.value = ok (core.result.Result.Ok view)
+viewsem : view.semantic = expanded
+verify :
+  S1SemanticInstallation.verify AspisS1ExtractedRoundChildren.children JGe_Boundaries.value
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) (toCurrentPublic JFs_PublicSerialization.value) expanded
+      hash =
+    ok (core.result.Result.Ok sem)
+newCall :
+  originalNew (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) sem view hash input =
+    ok (core.result.Result.Ok p, scratch)
+semantic :
+  sem.roots = Array.make 2#usize [JFp_InitBytes.root, JFq_Root1.value] ⋯ ∧
+    sem.transcript.state = AspisV8R19.SqueezeOracleBridge.encodeState JFu_Q26Source.ratchet
+out : AspisR1PublicPreparation.verifier.Prepared
+rs : Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize
+reached :
+  AspisR1PublicPreparation.PreparedScratchReachability.Reachable
+    (concreteBoundaries
+      (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed))
+    (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) (retainedSem sem) (retainedView view) hash
+    out rs
+outEq : currentPrepared out = p
+scratchEq : mapArray currentE rs = scratch
+call : sourceView JFx_NativeBytes.proof expanded JGe_Payload27.value = ok (core.result.Result.Ok view)
+variant : view.variant = transport.Variant.S2
+y1 : view.y1 = JGg_Opening27.payload
+round0 : view.round0 = JGg_Opening29.payload
+folded : view.folded_root = some JGe_View.folded
+round1 : ↑JGe_View.folded ++ ↑view.round1 = ↑JGg_Opening30.payload
+finalMessage : view.final_message = JGg_Opening31.payload
+inactive✝ : sourceBytes (retainedView view).inactive = ok (Array.repeat 32#usize 0#u8)
+oldVariant : (retainedView view).variant = AspisR1PublicPreparation.transport.Variant.S2
+t1 t2 t3 t4 t5 t6 : AspisR1PublicPreparation.transcript.Transcript H
+inactive root : Std.Array U8 32#usize
+bytes1 bytes2 : alloc.vec.Vec U8
+gamma kappa a0 a1 : AspisR1PublicPreparation.aspis_core.field.WideExact
+rho : AspisR1PublicPreparation.aspis_core.field.QM31
+queries : Std.Array U32 22#usize
+claim : AspisR1PublicPreparation.aspis_core.field.WideExact
+serialized :
+  (concreteBoundaries
+            (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+              AspisS1M31Embedding.Total.embed)).sampling.toBytes
+      (retainedView view).inactive =
+    ok inactive
+kappaCall :
+  AspisR1PublicPreparation.PreparedModel.scalar
+      (concreteBoundaries
+          (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+            AspisS1M31Embedding.Total.embed)).sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) t1 28#u8 inactive.to_slice false =
+    ok (kappa, t2)
+a0Call :
+  AspisR1PublicPreparation.PreparedModel.scalar
+      (concreteBoundaries
+          (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+            AspisS1M31Embedding.Total.embed)).sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) t2 29#u8 (retainedView view).round0 false =
+    ok (a0, t3)
+rootCall : core.option.Option.unwrap (retainedView view).folded_root = ok root
+first :
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 256#usize) root.to_slice =
+    ok bytes1
+second : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 (retainedView view).round1 = ok bytes2
+a1Call :
+  AspisR1PublicPreparation.PreparedModel.scalar
+      (concreteBoundaries
+          (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+            AspisS1M31Embedding.Total.embed)).sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) t3 30#u8 bytes2.deref false =
+    ok (a1, t4)
+queryCall :
+  (concreteBoundaries
+            (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+              AspisS1M31Embedding.Total.embed)).sampling.queries
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) t4 31#u8
+      (retainedView view).final_message =
+    ok (core.result.Result.Ok queries, t5)
+rhoCall :
+  AspisR1PublicPreparation.PreparedModel.scalar_k
+      (concreteBoundaries
+          (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+            AspisS1M31Embedding.Total.embed)).sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) t5 32#u8
+      AspisR1PublicPreparation.PreparedScratchReachability.emptyPayload =
+    ok (rho, t6)
+powers :
+  (concreteBoundaries
+          (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+            AspisS1M31Embedding.Total.embed)).powers
+      29#usize gamma =
+    ok rs
+claimed :
+  (concreteBoundaries
+          (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+            AspisS1M31Embedding.Total.embed)).claim
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) (retainedSem sem) (retainedView view).y1
+      (retainedView view).inactive rs kappa =
+    ok (core.result.Result.Ok claim)
+output :
+  out =
+    AspisR1PublicPreparation.PreparedScratchReachability.output (retainedSem sem) (retainedView view) gamma kappa
+      (Array.make 2#usize [a0, a1] ⋯) rho queries claim t6
+seedCall :
+  have D0 := retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D);
+  AspisR1PublicPreparation.transcript.Transcript.new D0 hash (retainedSem sem).transcript.state
+      (retainedView view).variant =
+    ok { state := AspisV8R19.SqueezeOracleBridge.encodeState JGe_OpeningInit.state, hash := hash }
+seed :
+  AspisR1PublicPreparation.transcript.Transcript.new
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) hash (retainedSem sem).transcript.state
+      (retainedView view).variant =
+    ok { state := AspisV8R19.SqueezeOracleBridge.encodeState JGe_OpeningInit.state, hash := hash }
+gammaCall :
+  AspisR1PublicPreparation.PreparedModel.scalar
+      (concreteBoundaries
+          (InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+            AspisS1M31Embedding.Total.embed)).sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := AspisV8R19.SqueezeOracleBridge.encodeState JGe_OpeningInit.state, hash := hash } 27#u8
+      (retainedView view).y1 true =
+    ok (gamma, t1)
+⊢ p.gamma = currentE JHa_GammaSample.value ∧
+    ∃ rs, powersPublic 29#usize JHa_GammaSample.value = ok rs ∧ mapArray currentE rs = scratch
+'AspisR1.JHa_PreparedGamma.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,10 @@
+import JHa_PreparedGamma
+import JFr_TX2_Powers
+#print AspisR1ClaimPreparedBridge.powersPublic
+#print AspisR1ClaimPreparedBridge.toClaimE
+#print AspisR1ClaimPreparedBridge.fromClaimE
+#print AspisR1CurrentPreparedClaim.ClaimPowers.powers
+#print AspisR1CurrentCaller.BorrowedClaimPrepared.currentE
+#print AspisR1CurrentCaller.InstalledPreparation.currentE
+#print AspisR1.Tx1Q_Carriers.arr
+#print AspisR1.Tx1Q_Carriers.e

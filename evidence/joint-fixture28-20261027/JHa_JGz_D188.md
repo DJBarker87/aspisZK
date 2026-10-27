@@ -1,0 +1,7 @@
+# D188 narrowing
+
+The new SHA certificates prove the mathematical JFp_SHA256/JFp_SHADigest model only. They assert no Rust/syscall/ELF correspondence and create no D188 credit. No native differential was run.
+
+The inherited proposed full fixture uses sampler::low_base_p_digits, which writes through quotient.iter_mut().rev() (crates/aspis-r1-cost-probe/src/sampler.rs:61-65) and is explicitly opaque under the owner decision. The actual query/flush family also uses verifier::BatchedWeights::push at verifier.rs:217-219, passing &mut self.raw[index] to update_residue_row, and BatchedWeights::finish at verifier.rs:226, writing through weights.iter_mut().enumerate(). These bodies require the narrowed native restoration/differential evidence; this packet does not supply it. The inherited Weights::new/pair and helper array/vector writes (weights.rs:154-206 and268 onward) remain subject to the same element-accessor audit where applicable. Existing P6 certificates must be checked before assigning source credit; a Lean model return is insufficient. weights.rs:353 materialize contains another iterator write, but it is not claimed reached or required by this fixture's Pair path. No new native differential was run.
+
+Account-owner rejection imports documented pure key comparison. It does not depend on a mutable iterator's restoration. SHA recurrence certificates are pure functions on Nat/List/Reg.

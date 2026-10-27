@@ -1,0 +1,26 @@
+def AspisR1ClaimPreparedBridge.powersPublic : (N : Aeneas.Std.Usize) →
+  AspisR1ClaimPreparedBridge.PE → Aeneas.Std.Result (Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE N) :=
+fun N x => do
+  let ys ← AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x)
+  Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE ys)
+def AspisR1ClaimPreparedBridge.toClaimE : AspisR1ClaimPreparedBridge.PE → AspisR1ClaimPreparedBridge.CE :=
+fun x => { c0 := AspisR1ClaimPreparedBridge.toClaimQ x.c0, c1 := AspisR1ClaimPreparedBridge.toClaimQ x.c1 }
+def AspisR1ClaimPreparedBridge.fromClaimE : AspisR1ClaimPreparedBridge.CE → AspisR1ClaimPreparedBridge.PE :=
+fun x => { c0 := AspisR1ClaimPreparedBridge.fromClaimQ x.c0, c1 := AspisR1ClaimPreparedBridge.fromClaimQ x.c1 }
+def AspisR1CurrentPreparedClaim.ClaimPowers.powers : (N : Aeneas.Std.Usize) →
+  AspisR1CurrentPreparedClaim.Concrete.E →
+    Aeneas.Std.Result (Aeneas.Std.Array AspisR1CurrentPreparedClaim.Concrete.E N) :=
+fun N x => do
+  let out ← AspisR1LoopPowers.weights.early_powers N (AspisR1CurrentPreparedClaim.ClaimPowers.toPowers x)
+  Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimPowers.mapArray out)
+JHa_PowersInspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentCaller.BorrowedClaimPrepared.currentE`
+def AspisR1CurrentCaller.InstalledPreparation.currentE : AspisR1PublicPreparation.aspis_core.field.WideExact →
+  AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact :=
+fun x =>
+  { c0 := AspisR1CurrentCaller.InstalledPreparation.currentQ x.c0,
+    c1 := AspisR1CurrentCaller.InstalledPreparation.currentQ x.c1 }
+def AspisR1.Tx1Q_Carriers.arr : {A B : Type} →
+  {n : Aeneas.Std.Usize} → (A → B) → Aeneas.Std.Array A n → Aeneas.Std.Array B n :=
+fun {A B} {n} f x => ⟨List.map f ↑x, ⋯⟩
+def AspisR1.Tx1Q_Carriers.e : AspisR1.Tx1Q_Carriers.C.E → AspisR1.Tx1Q_Carriers.S.E :=
+fun x => { c0 := AspisR1.Tx1Q_Carriers.k x.c0, c1 := AspisR1.Tx1Q_Carriers.k x.c1 }

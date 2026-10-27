@@ -1,0 +1,1 @@
+No proof credit for these modules. Frontier failed memory at92; installed bridge failed at99 and100; NativeNonvacuity was never compiled. Parenthesized correction is proposed only and needs a new authorized budget. No101st Lean process was run.

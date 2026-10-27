@@ -1,0 +1,43 @@
+{"attempt": "JHa28_008", "exit_status": 0, "wall_seconds": 2.983770221006125, "peak_rss_kib": "6240356", "swaps": "0", "print_axioms": []}
+def AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+  Aeneas.Std.Result AspisR1Post25SamplerOrdinaryCallbackV2.PE :=
+fun block => do
+  let x ← AspisR1Post25Sampler.sampler.ordinary_sample block
+  Aeneas.Std.Result.ok (AspisR1Post25SamplerPreparedCarrier.candidateToPE x)
+theorem AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.ordinary_sample_candidate_eq_fieldRank : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  ∃ value,
+    AspisR1Post25Sampler.sampler.ordinary_sample block = Aeneas.Std.Result.ok value ∧
+      AspisR1.ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.candidateWideToExact value =
+        R0C.Mod
+...
+os) =
+                    _a)
+                hfield))
+            (Eq.refl
+              (R0C.ModuloField.digitsField
+                (AspisR1.SamplerRanking.canonicalDigits AspisR1.SamplerMachineBounds.P 8
+                  (AspisR1.SourceSamplerByteRank.rank block) AspisR1.SamplerMachineBounds.P_pos)))))⟩
+def AspisR1Post25SamplerPreparedCarrier.candidateToPE : AspisR1Post25SamplerPreparedCarrier.CandidateE →
+  AspisR1Post25SamplerPreparedCarrier.PE :=
+fun x =>
+  { c0 := { c0 := { a := x.c0.c0.a, b := x.c0.c0.b }, c1 := { a := x.c0.c1.a, b := x.c0.c1.b } },
+    c1 := { c0 := { a := x.c1.c0.a, b := x.c1.c0.b }, c1 := { a := x.c1.c1.a, b := x.c1.c1.b } } }
+def AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling : AspisR1PublicPreparation.PreparedModel.Boundaries :=
+{ toBytes := AspisR1CurrentCaller.OriginalSerializerInstallation.sourceBytes,
+  fromQm := AspisR1PublicPreparation.PreparedFromQmSourceBridge.fromQmSource,
+  ordinary := AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic,
+  gamma := AspisR1ClaimPreparedBridge.candidateGammaPublic,
+  queries := fun {H} digest transcript row payload =>
+    AspisR1PublicPreparation.QueriesModel.queries
+      (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+        AspisS1M31Embedding.Total.embed)
+      digest transcript row payload,
+  claim := fun {H} => AspisR1CurrentCaller.BorrowedClaimPrepared.legacyReference }
+def AspisR1ClaimPreparedBridge.candidateGammaPublic : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+  Aeneas.Std.Result AspisR1ClaimPreparedBridge.PE :=
+fun block => do
+  let out ← AspisR1GammaCaller.sampler.gamma_sample AspisR1GammaCaller.DigitsModel.candidateGammaHelpers block
+  Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.gammaToPublic out)
+
+Running as unit: run-r4d7ed2bb47b44047aa68d29801836d51.scope; invocation ID: 490cedf178234ef692bfcf17b28176bb

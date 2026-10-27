@@ -1,0 +1,51 @@
+{"attempt": "JHa28_099", "exit_status": 1, "wall_seconds": 3.0181169509887695, "peak_rss_kib": "6360676", "swaps": "0", "print_axioms": ["'AspisR1.JHa_InstalledQuery.flushNative' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHa_InstalledQuery.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JHa_InstalledQuery.flushNative' depends on axioms: [propext, Classical.choice, Quot.sound]
+JHa_InstalledQuery.lean:68:6: error: Tactic `rfl` failed: The left-hand side
+  List.map Tx1Q_Carriers.k ↑(alloc.vec.Vec.deref ⟨List.map Tx1Q_Carriers.unK ↑out.weights, ⋯⟩)
+is not definitionally equal to the right-hand side
+  ↑out.weights.deref
+
+p : verifier.Prepared
+input scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+initial : verifier.Accumulator
+pending : verifier.BatchedWeights
+g : verifier.QueryGeometry
+prepare :
+  verifier.candidate.prepare installed digest (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.proof ()
+      none input =
+    ok (core.result.
+...
+
+run :
+  Port3_NativeQueryBody.verifier.candidate.query_loop_loop JHa_QueryLoop.ops
+      (core.result.Result.Ok (Tx1Q_Carriers.accumulator initial, Tx1Q_Carriers.pending pending)) JFx_NativeBytes.proof
+      (Tx1Q_Carriers.prepared p) JFr_TX2_Powers.value none (JGp_Geometry.value () JGp_Seeds.geometry) 10#usize =
+    ok (core.result.Result.Ok (out, after))
+weights : out.weights = (Tx1Q_Carriers.accumulator initial).weights
+next : ↑out.next = 10
+cr : Port4C_QueryArithmetic.CanonE out.rhs
+cp : Port3_FlushInstall.Canonical out.power
+sum : S7Kani3CallerTrace.Sum
+trace :
+  PushTrace (Port3_PendingInstall.owned (Tx1Q_Carriers.accumulator initial).weights.deref)
+    (Port3_RowsInstall.toBW after) sum
+progress : S7JoinRowsTrace.Progress 10 0 (Port3_RowsInstall.toBW after)
+nativeQuery :
+  Port3_NativeQueryBody.verifier.candidate.query_loop JHa_QueryLoop.ops JFx_NativeBytes.proof (Tx1Q_Carriers.prepared p)
+      (Tx1Q_Carriers.accumulator initial) JFr_TX2_Powers.value none (JGp_Geometry.value () JGp_Seeds.geometry)
+      (Tx1Q_Carriers.pending pending) 10#usize =
+    ok (core.result.Result.Ok (out, after))
+outSize : (↑out.weights).length = 64
+flushed : Slice Port3_FlushInstall.K
+hflush : Port3_FlushInstall.flush after out.weights.deref = ok flushed
+⊢ List.map Tx1Q_Carriers.k ↑(alloc.vec.Vec.deref ⟨List.map Tx1Q_Carriers.unK ↑out.weights, ⋯⟩) = ↑out.weights.deref
+JHa_InstalledQuery.lean:67:83: warning: This simp argument is unused:
+  List.map_map
+
+Hint: Omit it from the simp argument list.
+  simp only [Tx1Q_Carriers.slice, ̲Tx1Q_Carriers.unAccumulator, ̲Tx1Q_Carriers.vec,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHa_InstalledQuery.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re514987691ed41489996c690871ccba8.scope; invocation ID: 243356f505774c519d7dc2755d4d21a4
