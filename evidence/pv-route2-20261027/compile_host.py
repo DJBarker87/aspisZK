@@ -7,7 +7,8 @@ for row in rows:
  module=row['module'];src=D/'lean'/(module+'.lean');dst=J/'sources'/(module+'.lean');assert not dst.exists(),str(dst);dst.write_bytes(src.read_bytes())
  deps={}
  for imp in re.findall(r'^import (\S+)',src.read_text(),re.M):
-  p=J/'objects'/(imp.replace('.','/')+'.olean')
+  search=[str(J/'objects')]+json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text())['LEAN_PATH'].split(':')
+  p=next((Path(root)/(imp.replace('.','/')+'.olean') for root in search if (Path(root)/(imp.replace('.','/')+'.olean')).exists()),J/'objects'/(imp+'.olean'))
   if p.exists():deps[imp]=hashlib.sha256(p.read_bytes()).hexdigest()
   else:deps[imp]='missing'
  fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest();a=nextid;nextid+=1;O=D/'lean-receipts'/str(a);O.mkdir(parents=True)
