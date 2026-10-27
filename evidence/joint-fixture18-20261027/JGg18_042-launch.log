@@ -1,0 +1,47 @@
+{"attempt": "JGg18_042", "exit_status": 1, "wall_seconds": 2.8963794269948266, "peak_rss_kib": "5861936", "swaps": "0", "print_axioms": ["'AspisR1.JGg_QueryDecode.pair_let' does not depend on any axioms", "'AspisR1.JGg_QueryDecode.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGg_QueryDecode.pair_let' does not depend on any axioms
+JGg_QueryDecode.lean:48:64: error: unsolved goals
+s1 : Query31ModelScanCall.QueryScan
+call1 :
+  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords
+      Query31ConcreteDriverTraceFacts.sourceDefaultState (encodeState JGg_Opening31.block0) =
+    ok (false, s1)
+valid1 : Query31ExplicitListLoop.validState s1
+state1 :
+  Query31ExplicitScanBody.q22StateOf s1 =
+    { accepted := [93499, 147529, 216823, 245899, 209371, 192317, 65593, 183859], draws := 8 }
+s2 : Query31ModelScanCall.QueryScan
+call2 :
+  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords s1
+      (encodeState J
+...
+          let a7 ← blocks.index_usize 7#usize
+                      let (_, scan8) ←
+                        Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords scan7 a7
+                      let r ← scan8.finish
+                      let cf ←
+                        match r with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val => do
+                          let a8 ← advances.index_usize 7#usize
+                          ok (core.result.Result.Ok (val, a8))
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (Std.Array U32 22#usize × Std.Array U8 32#usize)
+                            (core.convert.FromSame AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError)
+                            residual) =
+    ok (core.result.Result.Ok (s3.accepted, encodeState JGg_Opening31.next2))
+JGg_QueryDecode.lean:37:68: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish, ̲count,
+        AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_COUNT,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGg_QueryDecode.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-raed6ff41979f4ed496ca1009e46876f2.scope; invocation ID: 503992a8749b49eb8242dc3facc4f745

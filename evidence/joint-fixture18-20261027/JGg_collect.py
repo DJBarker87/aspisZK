@@ -22,5 +22,5 @@ for f in sorted((R/'lean').glob('JGg_*.lean')):
 (P/'JGg_VALIDATION.json').write_text(json.dumps(validated,indent=2)+'\n')
 (P/'JGg_ATTEMPTS.jsonl').write_text(''.join(json.dumps(r,sort_keys=True)+'\n' for r in rs))
 (P/'JGg_FAILURES.json').write_text(json.dumps(failed,indent=2)+'\n')
-s={'charged_lean_attempts':len(rs),'kani_runs':0,'accepted':sum(r['exit_status']==0 for r in rs),'rejected':len(failed),'validated_modules':len(validated),'pending_modules':pending,'total_wall_seconds':sum(r['wall_seconds'] for r in rs),'maximum_reported_peak_rss_kib':max(int(r['peak_rss_kib']) for r in rs),'swap':0,'hash_blocks':90,'scope':'focused coherent pinned cache; no release or package replay'}
+s={'charged_lean_attempts':len(rs),'kani_runs':0,'accepted':sum(r['exit_status']==0 for r in rs),'rejected':len(failed),'validated_modules':len(validated),'pending_modules':pending,'total_wall_seconds':sum(r['wall_seconds'] for r in rs),'maximum_reported_peak_rss_kib':max(int(r['peak_rss_kib']) for r in rs),'swap':0,'new_hash_blocks':0,'reused_hash_blocks':90,'scope':'focused coherent pinned cache; no release or package replay'}
 (P/'JGg_SUMMARY.json').write_text(json.dumps(s,indent=2)+'\n');print(json.dumps(s,indent=2))

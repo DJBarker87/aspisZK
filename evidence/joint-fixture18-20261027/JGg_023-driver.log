@@ -1,0 +1,42 @@
+{"attempt": "JGg18_023", "exit_status": 1, "wall_seconds": 2.762526714010164, "peak_rss_kib": "6007660", "swaps": "0", "print_axioms": []}
+theorem AspisR1Post25SamplerPreparedCarrier.ordinary_sample_success_CE_coordinate_bounds : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (out : AspisR1Post25SamplerPreparedCarrier.CandidateE),
+  AspisR1Post25Sampler.sampler.ordinary_sample block = Aeneas.Std.Result.ok out →
+    ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c0.c0.a < 2147483647 ∧
+      ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c0.c0.b < 2147483647 ∧
+        ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c0.c1.a < 2147483647 ∧
+          ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).c0.c1.b < 2147483647 ∧
+            ↑(AspisR1Post25SamplerPreparedCarrier.candidateToCE out).
+...
+dBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE ys)
+def AspisR1ClaimPreparedBridge.claimPublic : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_semantic.Verified H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1ClaimPreparedBridge.PE →
+          Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE 29#usize →
+            AspisR1ClaimPreparedBridge.PE →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1ClaimPreparedBridge.PE AspisR1PublicPreparation.verifier.Error) :=
+fun {H} D sem y1 inactive g kappa => do
+  let r ←
+    AspisR1CurrentPreparedClaim.verifier.prepared_claim
+        (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+        (AspisR1ClaimPreparedBridge.toClaimDigest D) (AspisR1ClaimPreparedBridge.toClaimSem sem) y1
+        (AspisR1ClaimPreparedBridge.toClaimE inactive)
+        (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE g)
+        (AspisR1ClaimPreparedBridge.toClaimE kappa)
+  Aeneas.Std.Result.ok
+      (match r with
+      | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok (AspisR1ClaimPreparedBridge.fromClaimE x)
+      | Aeneas.Std.core.result.Result.Err e =>
+        Aeneas.Std.core.result.Result.Err (AspisR1ClaimPreparedBridge.fromClaimError e))
+theorem AspisR1QueryScanUnrolled.r0_transcript.block_rank_word_from_le_bytes : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (j : ℕ) (hj : j < 8),
+  ↑(AspisR1QueryScanUnrolled.r0_transcript.wordAt✝ block j hj) =
+    (BitVec.fromLEBytes
+        (List.map Aeneas.Std.U8.bv ↑(AspisR1QueryScanUnrolled.r0_transcript.wordBytes✝ block j hj))).toNat :=
+fun block j hj => Eq.refl ↑(AspisR1QueryScanUnrolled.r0_transcript.wordAt✝ block j hj)
+
+Running as unit: run-r52f0bb0288254dd1a0809e0f31b7f94f.scope; invocation ID: 461f9ab4126b42dba1e012d38c47009b
+

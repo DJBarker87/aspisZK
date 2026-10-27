@@ -1,0 +1,21 @@
+JGg_QueryTrace.lean:9:40: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑q).length
+in the target expression
+  ↑i < q.length
+
+q : Std.Array U32 22#usize
+i : Usize
+bound : ↑i < 22
+⊢ ↑i < q.length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGg_QueryTrace.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
