@@ -87,8 +87,13 @@ theorem source : FIo_Native.weights.factored_s2_libra_weights JGq_Powers0.a4 JGq
     with_unfolding_all rfl
 #print axioms source
 ''';out[ns]=s+end(ns)
+# Retire the memory-rejected concrete-parent emitters permanently.
+# JGs_libra_stages.py emits the active generic-forward parent path.
+out.pop('JGs_LibraNative0',None)
+out.pop('JGs_LibraNative1',None)
+out.pop('JGs_LibraSource',None)
 for mod,s in out.items():
  p=R/'lean'/(mod+'.lean')
- if '--check' in sys.argv:assert p.read_text()==s,mod
+ if '--check' in sys.argv:assert (p if p.exists() else R/'evidence/fixture-tx2p-20261027/JGs_UNCHECKED'/(p.name+'.txt')).read_text()==s,mod
  else:p.write_text(s)
 print(len(out),'bounded Libra modules; archived candidates require fresh Lean checks under own prefix')

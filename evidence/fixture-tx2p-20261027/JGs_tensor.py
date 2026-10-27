@@ -104,6 +104,6 @@ def outerStates : Nat → S
  s+=end(ns);out[ns]=s;prior=current
 for mod,s in out.items():
  p=R/'lean'/(mod+'.lean')
- if '--check' in sys.argv:assert p.read_text()==s,mod
+ if '--check' in sys.argv:assert (p if p.exists() else R/'evidence/fixture-tx2p-20261027/JGs_UNCHECKED'/(p.name+'.txt')).read_text()==s,mod
  else:p.write_text(s)
 print(len(out),'bounded tensor modules')

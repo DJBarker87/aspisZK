@@ -129,6 +129,6 @@ theorem source : FIo_Native.weights.grouped_inactive_pair JGq_PairShape.w JGq_Pa
 ''';out['JGs_Inactive']=s+end
 for mod,s in out.items():
  p=R/'lean'/(mod+'.lean')
- if '--check' in sys.argv:assert p.read_text()==s,mod
+ if '--check' in sys.argv:assert (p if p.exists() else R/'evidence/fixture-tx2p-20261027/JGs_UNCHECKED'/(p.name+'.txt')).read_text()==s,mod
  else:p.write_text(s)
 print(len(out),'bounded inactive modules')

@@ -1,0 +1,45 @@
+import JGs_FinishAfterPair
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGs_FinishGate
+open Aeneas Aeneas.Std Result AspisR1Stage2 AspisR1Stage2.Stage2Finish
+/-- Exact residual acceptance gate, with the actual Result/error carriers. -/
+theorem remaining_iff (a : verifier.Accumulator) (next : a.next=22#usize) :
+    JGs_FinishAfterPair.remaining a=ok (.Ok ()) ↔
+      SAG_DotClosed.source (JFw_Frames.window 8007 2048) a.weights.deref=ok (.Ok a.rhs) := by
+  have check : (a.next != 22#usize)=false := by rw [next];decide
+  constructor
+  · intro run
+    unfold JGs_FinishAfterPair.remaining at run
+    obtain ⟨r,call,run⟩ := Port3_PushFrame.bind_success _ _ _ run
+    cases r with
+    | Err e =>
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame] at run
+      cases run
+    | Ok dot =>
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,check,Bool.false_eq_true,ite_false] at run
+      obtain ⟨b,hb,run⟩ := Port3_PushFrame.bind_success _ _ _ run
+      cases b with
+      | true => simp only [ite_true] at run;cases run
+      | false =>
+        have same := Port3_FinishStage.ne_false dot a.rhs hb
+        simpa only [same] using call
+  · intro dot
+    unfold JGs_FinishAfterPair.remaining
+    rw [dot,bind_tc_ok]
+    simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,check,Bool.false_eq_true,ite_false,
+      Port3_FinishStage.ne,ne_eq,eq_self,not_true_eq_false,decide_false]
+#print axioms remaining_iff
+
+theorem source (seed : FinishOps FIo_Install.W) (inactive : E) (a : verifier.Accumulator)
+    (next : a.next=22#usize) :
+    Port4D_FinishInstall.finish (FIo_Install.finishOps (.Ok ()) seed)
+      (JGo_TX2_FinishPrefix.view inactive) JFo_Prepared.value a none=ok (.Ok ()) ↔
+    SAG_DotClosed.source (JFw_Frames.window 8007 2048) a.weights.deref=ok (.Ok a.rhs) := by
+  rw [JGs_FinishAfterPair.source]
+  exact (Port3_QueryInstall.success_iff _ _).trans (remaining_iff a next)
+#print axioms source
+end AspisR1.JGs_FinishGate
+end

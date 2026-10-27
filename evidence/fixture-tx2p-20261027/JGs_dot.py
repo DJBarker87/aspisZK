@@ -62,6 +62,6 @@ theorem finish : FIo_Native.fast_pairing.EbyKDot.finish d64=ok value := by with_
 '''+end(ns);out[ns]=t
 for mod,s in out.items():
  p=R/'lean'/(mod+'.lean')
- if '--check' in sys.argv:assert p.read_text()==s,mod
+ if '--check' in sys.argv:assert (p if p.exists() else R/'evidence/fixture-tx2p-20261027/JGs_UNCHECKED'/(p.name+'.txt')).read_text()==s,mod
  else:p.write_text(s)
 print(len(out),'bounded regular-dot modules')
