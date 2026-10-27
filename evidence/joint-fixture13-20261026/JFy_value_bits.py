@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 R=Path(__file__).resolve().parents[2]
 for k,field in enumerate(['z','succ_z','xor12_z']):
  mod=f'JFy_ValueBits{k}';fn=f'add_value_lanes_loop{k}';off=10*k
@@ -44,4 +45,6 @@ theorem source (n : Nat) (i : Usize) (o : state_only_poseidon.StateOnlyPoseidonO
  if k:s+=',hj,bind_tc_ok'
  s+=',hu,bind_tc_ok,hi1,bind_tc_ok,tail]\n'
  s+=f'#print axioms source\nend AspisR1.{mod}\nend\n'
- (R/'lean'/f'{mod}.lean').write_text(s)
+ p=R/'lean'/f'{mod}.lean'
+ if '--check' in sys.argv: assert p.read_text()==s,p
+ else: p.write_text(s)

@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 R=Path(__file__).resolve().parents[2]
 s=(R/'lean/FIq_CopyPrefix.lean').read_text();s=s[s.index('  let q ← Array.index_usize row.producer_values'):s.index('\n\n\nend FIq_Native')]
 s=s.replace('row.','r.')
@@ -21,4 +22,5 @@ for line in lines:
   def c(x):return {'chi':'hc','helper':'hh'}.get(x,'canon_'+x)
   proof.append(f'  obtain ⟨{name},{call},{can},_⟩ := {fn} {x} {y} {c(x)} {c(y)}')
 proof+=['  refine ⟨out,?_,canon_out⟩','  unfold copy_residual','  rw ['+',bind_tc_ok,'.join(calls)+']']
-p=R/'lean/JFy_CopyResidual.lean';text=p.read_text();a=text.index('  have spec :');b=text.index('#print axioms source');text=text[:a]+'\n'.join(proof)+'\n'+text[b:];p.write_text(text)
+p=R/'lean/JFy_CopyResidual.lean';text=p.read_text();a=text.index('\n',text.index(' := by',text.index('theorem source')))+1;b=text.index('#print axioms source');text=text[:a]+'\n'.join(proof)+'\n'+text[b:];assert p.read_text()==text if '--check' in sys.argv else True
+if '--check' not in sys.argv:p.write_text(text)
