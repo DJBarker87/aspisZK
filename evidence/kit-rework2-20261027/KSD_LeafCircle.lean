@@ -1,0 +1,5 @@
+import LPp_Total
+namespace KSD_LeafSelection
+abbrev circle_closure := AspisR1CircleSampleWrapper.sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once
+#print axioms LPp.Total.circle_sample_exact
+end KSD_LeafSelection
