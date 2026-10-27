@@ -17,7 +17,7 @@ for p in sorted(C.glob('*.lean.txt')):
   rows.append({'module':'R1Z/'+n,'candidate':str(p.relative_to(R)),'source_sha256':hashlib.sha256(out.encode()).hexdigest(),'round_equations':23,'recurrence_depth':1,'next_consumer':'PV_RunJoin_OutputPairChecks17 / PV_RunJoin_AppendChecks17'})
   imports.append('import R1Z.'+n)
  n=p.name.removesuffix('.lean.txt').replace('16','17')
- out='\n'.join(imports)+'\n';dest=L/(n+'.lean')
+ out='\n'.join(imports)+'\n';dest=E/'candidate-certificates'/(n+'.lean.txt')
  if '--check' in sys.argv:assert dest.read_text()==out
  else:dest.write_text(out)
 assert len(rows)==42

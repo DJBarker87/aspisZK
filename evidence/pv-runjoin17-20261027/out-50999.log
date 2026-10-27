@@ -1,0 +1,32 @@
+'R1Z.PV_RunJoin_ZeroConstructor17.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ZeroConstructor17.capacity' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_ZeroConstructor17.lean:55:25: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑PV_Src_CanonicalRoots.table)[20]!
+in the target expression
+  (do
+      let b ←
+        core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 tree.root
+            (↑PV_Src_CanonicalRoots.table)[↑20#usize]!
+      if b = true then ok (core.result.Result.Ok ())
+        else ok (core.result.Result.Err incremental_merkle.PoolV1TreeError.RootMismatch)) =
+    ok (core.result.Result.Ok ())
+
+⊢ (do
+      let b ←
+        core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 tree.root
+            (↑PV_Src_CanonicalRoots.table)[↑20#usize]!
+      if b = true then ok (core.result.Result.Ok ())
+        else ok (core.result.Result.Err incremental_merkle.PoolV1TreeError.RootMismatch)) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_ZeroConstructor17.validate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

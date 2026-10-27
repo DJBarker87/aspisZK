@@ -5,3 +5,5 @@
 This closes the copy-record append-root source computation. It does NOT yet close pair_forest_trace.late_append: its OwnedTree constructor, carry/reconstruction and full returned afterstate/frontier remain distinct actual source calls. No compiler success or selected/public installation follows.
 
 Ledger V152–V154 remains REDUCED; endpoint premises0/0/0 changed; P={source public binding,trace},deployedP OPEN,records2/8/6 unchanged.
+
+Additional source inspection: out_pair_r/app_cur_r recurse through owned arrays and read-only siblings; bank row validation only reads Vec/Array cells and threads result; validate_owned_loop only reads frontier/empty and threads result. No mutable-iterator/borrowed-element restoration is discarded in these bodies. The production merkle parent restores both index_mut_back slice continuations before updating the tweak and calling the permutation; ParentValue17 consumes its previously checked source law. Unchanged D287 native fixture/root/output evidence is reused; no new native differential or release artifact claim is made.
