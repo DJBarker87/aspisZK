@@ -81,7 +81,7 @@ print('LAUNCH',A,M,flush=True);start=time.monotonic();r=subprocess.run(['ssh',ho
 if r.returncode==78:
  (E/f'refusal-{A}.json').write_text(json.dumps(dict(allowed=False,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),reason='scope launcher exit78 after initial admission; wait under lead rulings (d)/(e)/(m)'),indent=2)+'\n')
 for name in ['out','time']:
- q=ssh(f'cat {H}/evidence/pv24-{name}-{A}.log');(E/f'{name}-{A}.log').write_text(q.stdout+q.stderr)
+ q=ssh(f'cat {H}/evidence/pv25-{name}-{A}.log');(E/f'{name}-{A}.log').write_text(q.stdout+q.stderr)
  if q.returncode != 0: raise RuntimeError('Receipt fetch failed; recover original log read-only before accepting or scheduling another compile: '+name)
 out=(E/f'out-{A}.log').read_text();tim=(E/f'time-{A}.log').read_text();print(out[-8500:],flush=True)
 m=re.search(r'Exit status: (\d+)',tim);record['exit']=int(m[1]) if m else None
