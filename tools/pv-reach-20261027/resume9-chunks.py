@@ -82,6 +82,13 @@ cmd=['systemd-run','--user','--scope','--quiet',f'--unit=pvre-lean-{a}','-p','Me
 (E/f'launch-{a}.json').write_text(json.dumps(dict(command=cmd,plan=plan,reservation=admission),indent=2)+'\n')
 print('LAUNCH',a,idx,[r['module'] for r in selected],flush=True)
 r=ssh(shlex.join(cmd)+f' > {H}/evidence/resume9-out-{a}.log 2>&1',True)
+if r.returncode==255:
+ for recovery in range(11):
+  q=ssh('test -f '+shlex.quote(f'{H}/evidence/resume9-{a}/receipt.json'))
+  if q.returncode==0:break
+  with (E/'transport-retries.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,recovery=recovery,read_only=True,receipt_pending=True))+'\n')
+  if recovery<10:time.sleep(60)
+ else:sys.exit(255)
 for name,path in [('receipt',f'{H}/evidence/resume9-{a}/receipt.json'),('out',f'{H}/evidence/resume9-out-{a}.log'),('time',f'{H}/evidence/resume9-time-{a}.log')]:
  q=ssh('cat '+shlex.quote(path));(E/(f'{name}-{a}'+('.json' if name=='receipt' else '.log'))).write_text(q.stdout+q.stderr)
 print((E/f'out-{a}.log').read_text()[-4000:],flush=True)
