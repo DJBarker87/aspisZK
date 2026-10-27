@@ -13,8 +13,10 @@ native tree calls, not independently selected outputs.
 
 090 JGy_PreBatch.source / inhabited PASS:consume JGr_BatchInputs.batch_source
 on THAT actual successful preparation p,input,scratch. The closed fixture retains
-THAT p,scratch,initial,pending,g,actual roots/queries,geometry meaning and actual
-entry-afterPrepare equality, now with batch0 success. No separate preparation
+THAT p,scratch,initial,pending,g,queries and geometry meaning,now with batch0
+success. The underlying JGr construction also has roots and entry-afterPrepare
+facts;090 does not export those extra conjuncts. A stronger frontier packet
+will retain them explicitly. No separate preparation
 or batch-success hypothesis is added.090 wall3.768922988s,RSS7202624KiB,swap0;
 Lean exit0 under the unchanged limits. Exact source/dependency hashes,source
 revision,command,cgroup and complete standard-axiom lines are in receipts.

@@ -22,6 +22,7 @@ for f in sorted((R/'lean').glob('JGr_M*C*.lean')):
 # First affected module is checked independently before further generation.
 new,_=compact(R/'lean/JGr_M0C000.lean')
 f=R/'lean/JGy_CompactFirst.lean'
+if not f.exists() and (P/'JGy_DIAGNOSTICS/JGy_CompactFirst.lean.txt').exists():f=P/'JGy_DIAGNOSTICS/JGy_CompactFirst.lean.txt'
 if '--check' in sys.argv:
  assert f.read_text()==new
 else:f.write_text(new)
@@ -41,6 +42,7 @@ if '--groups' in sys.argv:
     text=re.sub(r' s64 word\d\d round\d\d',r' s64 (by rfl) (by rfl)',text)
     texts.append('\n'.join(l for l in text.splitlines() if not l.startswith('import '))+'\n')
    imports=['JGy_FoldStep']
+   if mod=='JGy_Certs0_00':imports.append('JFp_SHABlocks')
    mapping={f.stem:f'JGy_Certs{tree}_{j//2:02}' for j,f in enumerate(fs)}
    for original in fs[g:g+2]:
     for dependency in re.findall(r'^import (\w+)',original.read_text(),re.M):

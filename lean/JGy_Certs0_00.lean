@@ -1,4 +1,5 @@
 import JGy_FoldStep
+import JFp_SHABlocks
 set_option autoImplicit false
 namespace AspisR1.JGy_Gr_M0.Hash000
 open JFp_SHA256
