@@ -13,7 +13,7 @@ paths=[prefix+'/'+n for n in ['Cargo.toml','main.rs']]
 for p in paths:subprocess.run(['scp','-q',str(R/p),f'{host}:{H}/frozen/{p}'],check=True)
 subprocess.run(['scp','-q',str(R/'tools/pv-runjoin12-20261027/kani-receipt.py'),f'{host}:{H}/evidence/pv12-native-receipt.py'],check=True)
 cmd=['cargo','run','--release','--offline','--manifest-path',H+'/frozen/'+prefix+'/Cargo.toml','-j','4']
-record=dict(target=cmd,worker_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_revision='ed1c1cef71-pinned library/fixture bodies',expected_time='optimized library compilation then 25 source fixture hashes; raw data only, no formal gate',source_sha256={p:hashlib.sha256((R/p).read_bytes()).hexdigest() for p in paths})
+record=dict(target=cmd,worker_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_revision='ed1c1cef71-pinned library/fixture bodies',expected_time='optimized library compilation then the fixed input commitment and path parents; raw data only, no formal gate',source_sha256={p:hashlib.sha256((R/p).read_bytes()).hexdigest() for p in paths})
 (E/(name+'.json')).write_text(json.dumps(record,indent=2)+'\n')
 scope=['systemd-run','--user','--scope','--quiet','--unit='+name,'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','env','PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_TARGET_DIR='+H+'/target-charon','CARGO_BUILD_JOBS=4','RUSTFLAGS=-C opt-level=3 -C link-arg=-Wl,--threads=4','PV8_SOURCE_DIR='+H+'/frozen','python3',H+'/evidence/pv12-native-receipt.py',H+'/evidence/'+name,'timeout','240',*cmd]
 r=ssh(shlex.join(scope));(E/(name+'-scope.log')).write_text(r.stdout+r.stderr)
