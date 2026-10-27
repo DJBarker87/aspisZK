@@ -44,10 +44,11 @@ if phase=='charon':
  if len(sys.argv)>4:
   old='crate::pool_v1::pair_forest_copy_builder::records_reference::pv_runjoin12_shipped::records_owned'
   cmd[cmd.index(old)]=old.removesuffix('records_owned')+sys.argv[4]
- if len(sys.argv)>3 and sys.argv[3]=='precise-real-raw-opaque':
+ if len(sys.argv)>3 and sys.argv[3] in ['precise-real-raw-opaque','mono-raw-opaque']:
   cmd[cmd.index('built')]='optimized'
   start=cmd.index('--opaque');end=cmd.index('--start-from');cmd[start:end]=['--opaque','crate::pool_v1::pair_trace::pair_empty_roots','--opaque','crate::pool_v1::pair_forest_copy_builder::raw','--include','aspis_core::field::*']
   cmd[2:2]=['--precise-drops','--desugar-drops','--duplicate-defaulted-methods','--rustc-arg=-Zmir-enable-passes=+Inline,+GVN,+CopyProp,+DataflowConstProp,+SimplifyLocals-final,+SimplifyCfg-final','--rustc-arg=-Zinline-mir=yes']
+ if len(sys.argv)>3 and sys.argv[3]=='mono-raw-opaque':cmd[2:2]=['--monomorphize']
 else:
  cmd=[aeneas,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','PV_RunJoin_Records','-dest',H+'/evidence/'+name+'-generated','-split-files','-emit-json',llbc]
 if phase=='aeneas' and len(sys.argv)>4:
@@ -65,5 +66,9 @@ if phase=='charon':subprocess.run(['scp','-q',f'{host}:{llbc}',str(E/(name+'.llb
 else:subprocess.run(['scp','-qr',f'{host}:{H}/evidence/{name}-generated',str(E)],check=False)
 receipt=E/name/'receipt.json'
 d=json.loads(receipt.read_text());d.update(axioms='N/A: extraction, no Lean theorem',expected_time=record['expected_time'],source_revision=record['crate_revision'],worker_revision=record['worker_revision'],tool_source_pins=record['tool_source_pins']);receipt.write_text(json.dumps(d,indent=2)+'\n')
+generated=E/(name+'-generated')/'translation.json'
+if phase=='aeneas' and generated.exists():
+ data=json.loads(generated.read_text());roots=[f for f in data.get('functions',[]) if f.get('rust_name','').endswith('::records') and not f.get('is_opaque',True)]
+ (E/(name+'-acceptance.json')).write_text(json.dumps(dict(tool_exit=r.returncode,records_body_emitted=bool(roots),roots=roots,accepted_as_R_shipped=False,reason='kernel check and concrete helper links still required' if roots else 'no records definition emitted'),indent=2)+'\n')
 print((E/name/'out.log').read_text()[-5000:])
 sys.exit(r.returncode)

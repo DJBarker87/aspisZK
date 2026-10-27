@@ -3,7 +3,7 @@
 Run gates (b) and (c) once on the final candidate containing both the records rewrite from
 2910da23a3 and the lead-selected op223 change. Record the exact combined commit before
 building; do not substitute this records-only snapshot for that candidate. Compare against
-the frozen pre-rewrite research source, with an exhaustive crates/programs/lockfile diff.
+the pre-rewrite source at dd58cab6376dbd844f32ae764d88c4ca3d780e37 (the entry revision of this task), with an exhaustive crates/programs/lockfile diff. If integration uses a different control, record its exact revision and prove its shipped source content is identical to this control before counting the run.
 Retain the exact control and candidate revisions, source hashes, harness/comparator hashes,
 toolchains, feature lists, binary hashes and command/environment receipts. The lead supplies
 the final combined revision and host directory; these are deliberately not invented here.
@@ -13,7 +13,7 @@ compare-fixtures.py, corpus-pipeline.py (corrected v3) and design/PV-REBASE-2026
 Overlay the same diagnostic examples/tools into both private source snapshots without
 altering library implementation. Build each harness with cargo build --release --locked
 --offline -j 4 -p aspis-r1-cost-probe --example NAME --features
-optimized-terminal,r1p-check (plus ct-host-prover only where selected by the candidate).
+optimized-terminal,r1p-check,ct-host-prover for BOTH variants. This entry control already has ct-host-prover; the older rebase experiment's candidate-only selector must not introduce a feature mismatch into this two-rewrite comparison.
 NAME is prover_rw_gate for (b) and prover_rw_differential for (c). Pin the native toolchain
 and all optimization/linker flags identically across variants. Preserve a binary per variant.
 
