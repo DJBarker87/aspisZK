@@ -1,0 +1,50 @@
+import Lean
+import @@ROOT_MODULE@@
+open Lean Elab Command
+set_option pp.all true
+set_option pp.universes true
+set_option pp.fullNames true
+set_option pp.explicit true
+#check @@@ROOT_NAME@@
+#print axioms @@ROOT_NAME@@
+run_cmd do
+  let env := (← getEnv).setExporting false
+  let root : Name := `@@ROOT_NAME@@
+  let some info := env.checked.get.find? root | throwError "missing fresh root"
+  logInfo m!"RPZ8_KERNEL_STATEMENT {(Json.mkObj [("name", toJson info.name.toString), ("levelParamsRepr", toJson (repr info.levelParams).pretty), ("typeRepr", toJson (repr info.type).pretty)]).compress}"
+  let mut pending : Array Name := #[root]
+  let mut seen : NameSet := ({} : NameSet).insert root
+  let mut parents : NameMap Name := {}
+  while !pending.isEmpty do
+    let n := pending.back!
+    pending := pending.pop
+    let some c := env.checked.get.find? n | throwError "missing reachable kernel constant {n}"
+    let mut refs := c.type.getUsedConstants ++ (((c.value? true).map (fun e => e.getUsedConstants)).getD #[])
+    if let .inductInfo v := c then refs := refs ++ v.ctors.toArray
+    for dep in refs do
+      if !seen.contains dep then
+        seen := seen.insert dep
+        parents := parents.insert dep n
+        pending := pending.push dep
+  let owner (n : Name) : String := match env.getModuleIdxFor? n with
+    | some i => env.header.modules[i.toNat]!.module.toString
+    | none => "current-or-builtin"
+  let records : Array Name := @@FORMATTERS@@
+  for n in records do
+    let reachable := seen.contains n
+    let mut path : Array Name := #[]
+    if reachable then
+      let mut current := n
+      path := #[n]
+      while current != root do
+        let some parent := parents.find? current | throwError "missing dependency parent {current}"
+        path := path.push parent
+        current := parent
+      path := path.reverse
+    logInfo m!"RPZ8_FORMATTER {(Json.mkObj [("name", toJson n.toString), ("present", toJson (env.checked.get.find? n).isSome), ("reachable", toJson reachable), ("constant_path", toJson (path.map Name.toString)), ("owner_path", toJson (path.map owner))]).compress}"
+  logInfo m!"RPZ8_REACHABLE_CONSTANTS {toJson (seen.toArray.map Name.toString) |>.compress}"
+  for i in [:env.header.modules.size] do
+    let m := env.header.modules[i]!.module
+    let data := env.header.moduleData[i]!
+    logInfo m!"RPZ8_IMPORTS {(Json.mkObj [("module", toJson m.toString), ("imports", toJson (data.imports.map (·.module.toString)))]).compress}"
+  logInfo m!"RPZ8_ROOT_AUDIT_COMPLETE root={root} reachable={seen.toArray.size} formatters={records.size}"
