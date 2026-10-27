@@ -1,0 +1,59 @@
+{"attempt": "XRq_L086", "exit_status": 1, "wall_seconds": 1.8372115530073643, "peak_rss_kib": "4735652", "swaps": "0", "print_axioms": ["'XRq_GammaAssociation.gamma' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRq_generated/XRq_GammaAssociation.lean:36:1: error: 'change' tactic failed, pattern
+  (have __do_jp := fun digits2 => XRn_Join_Release.sampler.decode8 digits2;
+    if wrapped = true then do
+      let __x ← XRn_Join_Release.sampler.add_small_base_p digits1 1#u32
+      match __x with
+        | (fst, digits3) => do
+          let digits2 ← ok digits3
+          __do_jp digits2
+    else do
+      let digits2 ← ok digits1
+      __do_jp digits2) =
+    do
+    let digits2 ←
+      if wrapped = true then do
+          let (_, digits3) ← AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits1 1#u32
+          ok digits3
+        else ok digits1
+    mapR AspisR1ClaimPreparedBridge.gamma
+...
+XRq_generated/XRq_GammaAssociation.lean:36:1: error: 'change' tactic failed, pattern
+  (have __do_jp := fun digits2 => XRn_Join_Release.sampler.decode8 digits2;
+    if wrapped = true then do
+      let __x ← XRn_Join_Release.sampler.add_small_base_p digits1 1#u32
+      match __x with
+        | (fst, digits3) => do
+          let digits2 ← ok digits3
+          __do_jp digits2
+    else do
+      let digits2 ← ok digits1
+      __do_jp digits2) =
+    do
+    let digits2 ←
+      if wrapped = true then do
+          let (_, digits3) ← AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits1 1#u32
+          ok digits3
+        else ok digits1
+    mapR AspisR1ClaimPreparedBridge.gammaToPublic (AspisR1GammaCaller.DigitsModel.candidateGammaHelpers.decode digits2)
+is not definitionally equal to target
+  (let (wrapped, digits1) := (wrapped, digits1)
+    do
+    let digits2 ←
+      if wrapped = true then do
+          let (_, digits3) ← XRn_Join_Release.sampler.add_small_base_p digits1 1#u32
+          ok digits3
+        else ok digits1
+    XRn_Join_Release.sampler.decode8 digits2) =
+    mapR AspisR1ClaimPreparedBridge.gammaToPublic
+      (let (wrapped, digits1) := (wrapped, digits1)
+      do
+      let digits2 ←
+        if wrapped = true then do
+            let (_, digits3) ← AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits1 1#u32
+            ok digits3
+          else ok digits1
+      AspisR1GammaCaller.DigitsModel.candidateGammaHelpers.decode digits2)
+'XRq_GammaAssociation.gamma' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb1cfb589646a4073a8197f7a2594c138.scope; invocation ID: 39196cacec2b4dce87f429515f3e9f77

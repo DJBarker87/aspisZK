@@ -1,0 +1,28 @@
+XRq_generated/XRq_ScalarK.lean:16:1: error: 'change' tactic failed, pattern
+  (mapR (fun p => (cq p.1, ct p.2)) do
+      let q ← XRn_Join_Release.sampler.qm31_sample block
+      let _ ← lift (UScalar.cast UScalarTy.Usize row)
+      let _ ← aspis_core.field.wide_exact.WideExact.from_qm31 q
+      ok (q, after)) =
+    do
+    let q ← AspisR1PublicPreparation.sampler.qm31_sample block
+    let _ ← lift (UScalar.cast UScalarTy.Usize row)
+    let _ ← aspis_core.field.wide_exact.WideExact.from_qm31 (eq q)
+    ok (q, ct after)
+is not definitionally equal to target
+  mapR (fun p => (cq p.1, ct p.2))
+      (let (a, self1) := (block, after)
+      do
+      let out ← XRn_Join_Release.sampler.qm31_sample a
+      let i ← lift (UScalar.cast UScalarTy.Usize row)
+      let we ← aspis_core.field.wide_exact.WideExact.from_qm31 out
+      XRn_Join_Release.trace.value 4#u16 i we
+      ok (out, self1)) =
+    let (a, self1) := ((block, after).1, ct (block, after).2)
+    do
+    let out ← AspisR1PublicPreparation.sampler.qm31_sample a
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    let we ← XRo_Join_Installed.actual.sampling.fromQm out
+    AspisR1PublicPreparation.trace.value 4#u16 i we
+    ok (out, self1)
+'XRq_ScalarK.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

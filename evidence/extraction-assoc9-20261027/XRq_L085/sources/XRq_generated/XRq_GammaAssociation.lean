@@ -1,0 +1,43 @@
+import XRq_GammaDecode
+open Aeneas Aeneas.Std Result
+open XRo_Join_Carriers XRo_Join_ResultTransport
+set_option autoImplicit false
+noncomputable section
+namespace XRq_GammaAssociation
+/-- This precise adapter equality remains OPEN, not native trust or a fixture. -/
+def AddAssociation : Prop := ∀ (digits : Array U32 8#usize) (n : U32),
+ XRn_Join_Release.sampler.add_small_base_p digits n =
+ AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits n
+
+theorem gamma (add : AddAssociation) (block : Array U8 32#usize) :
+ XRq_SamplerInterface.gamma AspisR1Post25Sampler.sampler.low_base_p_digits block =
+ XRo_Join_Installed.actual.sampling.gamma block := by
+ change _ = AspisR1ClaimPreparedBridge.candidateGammaPublic block
+ unfold XRq_SamplerInterface.gamma AspisR1ClaimPreparedBridge.candidateGammaPublic
+   AspisR1GammaCaller.sampler.gamma_sample
+ change _ = mapR AspisR1ClaimPreparedBridge.gammaToPublic _
+ simp only [mapR_bind]
+ apply congrArg (fun k => AspisR1Post25Sampler.sampler.low_base_p_digits block >>= k)
+ funext p
+ change _ = mapR AspisR1ClaimPreparedBridge.gammaToPublic
+   (do let i ← p.2+1#u32
+       let (wrapped,digits1) ← AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p p.1 i
+       let digits2 ← if wrapped then do
+         let (_,digits3) ← AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits1 1#u32
+         ok digits3 else ok digits1
+       AspisR1GammaCaller.DigitsModel.candidateGammaHelpers.decode digits2)
+ simp only [mapR_bind]
+ apply congrArg (fun k => (p.2+1#u32) >>= k)
+ funext i
+ rw [add p.1 i]
+ apply congrArg (fun k => AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p p.1 i >>= k)
+ funext q
+ cases h : q.1 <;> simp only [h,Bool.false_eq_true,ite_false,ite_true,mapR_bind]
+ · exact (XRq_GammaDecode.decode q.2).symm
+ · rw [add q.2 1#u32]
+   simp only [mapR_bind,bind_map]
+   apply congrArg (fun k => AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p q.2 1#u32 >>= k)
+   funext r
+   exact (XRq_GammaDecode.decode r.2).symm
+#print axioms gamma
+end XRq_GammaAssociation

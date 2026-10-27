@@ -1,0 +1,21 @@
+{"attempt": "XRq_L094", "exit_status": 0, "wall_seconds": 1.6509349300176837, "peak_rss_kib": "4734588", "swaps": "0", "print_axioms": []}
+BitVec.getElem!_toLEBytes {w : ℕ} (b : BitVec w) (i j : ℕ) (h : j < 8) : b.toLEBytes[i]![j]! = b[8 * i + j]!
+BitVec.extractLsb'_toNat {n : ℕ} (s m : ℕ) (x : BitVec n) : (BitVec.extractLsb' s m x).toNat = x.toNat >>> s % 2 ^ m
+BitVec.toNat_setWidth {n : ℕ} (i : ℕ) (x : BitVec n) : (BitVec.setWidth i x).toNat = x.toNat % 2 ^ i
+theorem BitVec.toLEBytes.eq_1 : ∀ {w : ℕ} (b : BitVec w),
+  b.toLEBytes = if w > 0 then BitVec.setWidth 8 b :: (BitVec.setWidth (w - 8) (b >>> 8)).toLEBytes else [] :=
+fun {w} b =>
+  Eq.trans (BitVec.toLEBytes.eq_def b)
+    (Eq.refl (if w > 0 then BitVec.setWidth 8 b :: (BitVec.setWidth (w - 8) (b >>> 8)).toLEBytes else []))
+
+...
+BitVec.getElem!_toLEBytes {w : ℕ} (b : BitVec w) (i j : ℕ) (h : j < 8) : b.toLEBytes[i]![j]! = b[8 * i + j]!
+BitVec.extractLsb'_toNat {n : ℕ} (s m : ℕ) (x : BitVec n) : (BitVec.extractLsb' s m x).toNat = x.toNat >>> s % 2 ^ m
+BitVec.toNat_setWidth {n : ℕ} (i : ℕ) (x : BitVec n) : (BitVec.setWidth i x).toNat = x.toNat % 2 ^ i
+theorem BitVec.toLEBytes.eq_1 : ∀ {w : ℕ} (b : BitVec w),
+  b.toLEBytes = if w > 0 then BitVec.setWidth 8 b :: (BitVec.setWidth (w - 8) (b >>> 8)).toLEBytes else [] :=
+fun {w} b =>
+  Eq.trans (BitVec.toLEBytes.eq_def b)
+    (Eq.refl (if w > 0 then BitVec.setWidth 8 b :: (BitVec.setWidth (w - 8) (b >>> 8)).toLEBytes else []))
+
+Running as unit: run-rb1a93f7ea0c84910a2f7a2cf1de8a45c.scope; invocation ID: e7752cc9ad1f460582a03e4664bdbbdf

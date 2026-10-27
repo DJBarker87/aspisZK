@@ -1,0 +1,20 @@
+import SelectorArrayMapRuntimeSlice
+open Aeneas Aeneas.Std Result
+set_option autoImplicit false
+namespace XRq_MapSequence
+open AspisV8R19.TraversalRuntime
+/-- Exact sequencing and final capture for a stateless callback, including
+all failing or divergent prefixes. No result-success hypothesis is used. -/
+theorem state {T U : Type} (f : T → Result U) (xs : List T) :
+ mapState (fun (_ : Unit) x => do let y ← f x; ok (y,())) xs () =
+ (do let ys ← xs.mapM f; ok (ys,())) := by
+ induction xs with
+ | nil => rfl
+ | cons x xs ih =>
+   simp only [mapState,List.mapM_cons]
+   cases h : f x with
+   | fail e => simp only [h,bind_tc_fail]
+   | div => simp only [h,bind_tc_div]
+   | ok y => simp only [h,bind_tc_ok,ih]
+#print axioms state
+end XRq_MapSequence
