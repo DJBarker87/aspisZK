@@ -8,14 +8,14 @@ ORIGINAL_JENV=Path('/home/dombarker/project-offloads/r1-privacy-build-integratio
 JENV=H/'env-J-private.json'
 assert json.loads((H/'d324-external-verification.json').read_text())['mismatches']==[]
 assert json.loads((H/'d324-resolution-verification.json').read_text())['mismatches']==[]
-module=sys.argv[1];assert module.startswith('PV_B3_'),module
+module=sys.argv[1];assert module.startswith('PV_B3_') or module in json.loads((H/'d324-project-resolution.json').read_text())['modules'],module
 shared_env=json.loads(ORIGINAL_JENV.read_text())
 shared_env['LEAN_PATH']='/home/dombarker/project-offloads/aspis-joint-20261019/objects:'+shared_env['LEAN_PATH']
 if module.startswith('PV_B3_MaskRow') or module.startswith('PV_B3_ResumeAudit'):
  shared_env['LEAN_PATH']=str(H/'reference-objects')+':'+shared_env['LEAN_PATH']
 JENV.write_text(json.dumps(shared_env,indent=2)+'\n')
 DRIVER=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py')
-module=sys.argv[1];assert module.startswith('PV_B3_'),module
+module=sys.argv[1];assert module.startswith('PV_B3_') or module in json.loads((H/'d324-project-resolution.json').read_text())['modules'],module
 S=H/'lean';O=H/'lean-objects';S.mkdir(exist_ok=True);O.mkdir(exist_ok=True)
 p=S/(module.replace('.','/')+'.lean');assert p.exists(),p
 state=H/'TALLY-d324.json';t=json.loads(state.read_text())
@@ -56,6 +56,7 @@ state.write_text(json.dumps(t,indent=2)+'\n')
 label=f'lean-{a}';sub=dict(attempt=a,module=module,source_sha256=srcsha,dependency_objects=deps,deps_fingerprint=fp,source_revision=(H/'revision').read_text().strip(),source_revision_kind='Rust source freeze; Lean source is exact SHA snapshot in source.lean',environment='J',environment_sha256=hashlib.sha256(JENV.read_bytes()).hexdigest(),original_environment_sha256=hashlib.sha256(ORIGINAL_JENV.read_bytes()).hexdigest(),private_sources=str(S),private_objects=str(O),shared_sources_written=False)
 cmd=['timeout','900','python3',str(DRIVER),str(JENV),str(O),str(S),str(O/(module.replace('.','/')+'.olean')),str(p),'7000']
 status=run(label,cmd,'one focused Lean module via pinned run2.py, env J, -M7000; private source/object overlay')
+sub['source_authority_record']='d324-project-resolution.json / d324-private-source-authority.json, h5 own HEAD; external h4 verified'
 R=H/label;(R/'source.lean').write_bytes(p.read_bytes());(R/'submission.json').write_text(json.dumps(sub,indent=2)+'\n')
 charged=(R/'receipt/receipt.json').exists()
 if charged:

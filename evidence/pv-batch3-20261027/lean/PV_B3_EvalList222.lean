@@ -20,7 +20,9 @@ def steps (column : Slice Q) (weights : host_multilinear.SparseWeights) :
     steps column weights n (i+1) next
 
 theorem read_source (weights : host_multilinear.SparseWeights) (i : Usize) :
-    host_multilinear.sparse_weight_at weights i = read weights i.val := rfl
+    host_multilinear.sparse_weight_at weights i = read weights i.val := by
+  simp only [host_multilinear.sparse_weight_at, Array.index_usize, Array.getElem?_Usize_eq, read]
+  cases hx : weights.data.val[i.val]? <;> rfl
 
 theorem bounded (column : Slice Q) (weights : host_multilinear.SparseWeights) :
     ∀ n (sum : Q) (i : Usize), i.val ≤ weights.len.val →
@@ -41,29 +43,39 @@ theorem bounded (column : Slice Q) (weights : host_multilinear.SparseWeights) :
     simp only [PV_B3_BoundedLoop.bounded, PV_B3_EvalFinite222.body,
       host_multilinear.multilinear_evaluate_qm31_loop.body, if_pos go,
       lift, bind_tc_ok, read_source, steps]
-    cases hr : read weights i.val with
-    | fail e => rfl
-    | div => rfl
-    | ok pair =>
-      rcases pair with ⟨row,weight⟩
-      simp only [bind_tc_ok]
-      cases hq : Slice.index_usize column row with
+    have dispatch (r : Result (ControlFlow PV_B3_EvalCounter222.State Q)) :
+        (Result.casesOn r
+          (fun cf => ControlFlow.casesOn cf
+            (fun y => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y)
+            (fun y => ok y))
+          (fun e => fail e) div) =
+        (r >>= fun cf => match cf with
+        | .done y => .ok y
+        | .cont y => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y) := by
+      cases r with
       | fail e => rfl
       | div => rfl
-      | ok q =>
-        simp only [bind_tc_ok]
-        cases hp : aspis_core.field.QM31.mul weight q with
-        | fail e => rfl
-        | div => rfl
-        | ok product =>
-          simp only [bind_tc_ok]
-          cases hs : aspis_core.field.QM31.add sum product with
-          | fail e => rfl
-          | div => rfl
-          | ok next =>
-            simp only [bind_tc_ok]
-            rw [← inc]
-            exact ih next (Usize.wrapping_add i 1#usize) (by omega) (by omega)
+      | ok cf => cases cf <;> rfl
+    unfold PV_B3_BoundedLoop.bounded.match_1
+    rw [dispatch (do
+      let (row,weight) ← read weights i.val
+      let q ← Slice.index_usize column row
+      let product ← aspis_core.field.QM31.mul weight q
+      let next ← aspis_core.field.QM31.add sum product
+      ok (cont (next,Usize.wrapping_add i 1#usize)))]
+    simp only [PV_B3_Result.bind_assoc, bind_tc_ok]
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    rintro ⟨row,weight⟩ hr
+    dsimp only
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro q hq
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro product hp
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro next hs
+    simp only [bind_tc_ok]
+    rw [← inc]
+    exact ih next (Usize.wrapping_add i 1#usize) (by omega) (by omega)
 
 theorem source (column : Slice Q) (weights : host_multilinear.SparseWeights)
     (sum : Q) (i : Usize) (hi : i.val ≤ weights.len.val) :
