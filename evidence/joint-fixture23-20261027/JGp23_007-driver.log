@@ -1,0 +1,38 @@
+{"attempt": "JGp23_007", "exit_status": 1, "wall_seconds": 7.297250678006094, "peak_rss_kib": "6181976", "swaps": "0", "print_axioms": ["'AspisR1.JGp_PrepareReads.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGp_PrepareReads.y1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGp_PrepareReads.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGp_PrepareReads.lean:16:8: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR1.JGp_PrepareReads.y1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+def Aeneas.Std.alloc.vec.Vec.index : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → alloc.vec.Vec T → I → Result Output :=
+fun {T I Output} inst self i => inst.index i self
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index : {T : Type} →
+  core.ops.range.RangeTo Usize → S
+...
+'AspisR1.JGp_PrepareReads.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGp_PrepareReads.lean:16:8: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR1.JGp_PrepareReads.y1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+def Aeneas.Std.alloc.vec.Vec.index : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → alloc.vec.Vec T → I → Result Output :=
+fun {T I Output} inst self i => inst.index i self
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if ↑r.end ≤ s.length then ok ⟨List.slice 0 ↑r.end ↑s, ⋯⟩ else fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index : {T : Type} →
+  core.ops.range.RangeFrom Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if ↑r.start ≤ s.length then ok (s.drop r.start) else fail Error.undef
+AspisS1NativeCompactLengths.semantic_length (ops : AspisS1NativeCompact.Ops) (input out expanded : Slice U8)
+  (status : core.result.Result Unit AspisS1NativeCompact.compact.CodecError)
+  (success : AspisS1NativeCompact.compact.expand_semantic ops input out = ok (status, expanded)) :
+  expanded.length = out.length
+AspisR1CurrentCaller.InstalledPreparation.sourceView_semantic (proof semantic y1 : Slice U8)
+  (view : AspisR1CurrentCaller.verifier.View)
+  (accepted :
+    AspisR1CurrentCaller.InstalledPreparation.sourceView proof semantic y1 = ok (core.result.Result.Ok view)) :
+  view.semantic = semantic
+
+Running as unit: run-rdbb60a551b0e4d819c279dcb4ab3458d.scope; invocation ID: ceee874722d34fca87c690c9592c3397
+

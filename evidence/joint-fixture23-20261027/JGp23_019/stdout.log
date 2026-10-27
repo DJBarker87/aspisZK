@@ -1,0 +1,240 @@
+'AspisR1.JGp_Prepare.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGp_Prepare.lean:50:69: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (let (_x0, split_at_mut_back) := ((JFw_RealExpansion.initial, JFw_Y1.initial), JGn_PrepareBuffer.back)
+    do
+    let i3 ← ok 16#usize
+    let i4 ← compact.OFF_Y1 (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.proof
+          { start := i3, «end» := i4 }
+    let (r2, semantic1) ← (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo).op10 s1 _x0.1
+    let cf1 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let i5 ← compact.OFF_INACTIVE (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+        let s2 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.proof
+              { start := i4, «end» := i5 }
+        let (r3, y11) ← (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo).op11 s2 _x0.2
+        let cf2 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf2 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let s4 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                  ⟨↑(split_at_mut_back (semantic1, y11)), ⋯⟩ { «end» := 13831#usize }
+            let s5 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                  ⟨↑(split_at_mut_back (semantic1, y11)), ⋯⟩ { start := 13831#usize }
+            let r4 ← (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo).op5 JFx_NativeBytes.proof s4 s5
+            let cf3 ←
+              match r4 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf3 with
+              | core.ops.control_flow.ControlFlow.Continue v => do
+                let r5 ←
+                  (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo).op9
+                      (F3V_OracleDictionary.current JFp_SHADigest.digest D)
+                      (toCurrentPublic JFs_PublicSerialization.value) v.semantic hash none
+                let r6 ←
+                  match r5 with
+                    | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                    | core.result.Result.Err e => do
+                      let t ←
+                        verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+                            (F3V_OracleDictionary.current JFp_SHADigest.digest D) () e
+                      ok (core.result.Result.Err t)
+                let cf4 ←
+                  match r6 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf4 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    verifier.mark none verifier.Phase.Semantic
+                    (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo).op8
+                        (F3V_OracleDictionary.current JFp_SHADigest.digest D) val2 v hash input
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r7 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r7, input)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r7 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r7, input)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r7 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (verifier.Error.Insts.CoreConvertFromCodecError
+                    (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo))
+                  residual
+            ok (r7, input)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r7 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (verifier.Error.Insts.CoreConvertFromCodecError
+                (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo))
+              residual
+        ok (r7, input)) =
+    ok (core.result.Result.Ok out, scratch)
+
+C H : Type
+base : Ops
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops C
+D : aspis_core.digest.Digest32 H
+hash : H
+input : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+ops : Ops := JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo
+D0 : aspis_core.digest.Digest32 H := F3V_OracleDictionary.current JFp_SHADigest.digest D
+expanded : Slice U8
+pre : AspisR1PublicPreparation.r1_wire.Prefix
+view : verifier.View
+sem : r1_semantic.Verified H
+out : verifier.Prepared
+scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+expand :
+  AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues JFw_RealExpansion.stored
+      JFw_RealExpansion.initial =
+    ok (core.result.Result.Ok (), expanded)
+parse : AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded = ok (core.result.Result.Ok pre)
+yexpand :
+  AspisS1ValuesOwnedInstallation.expandValues JFw_Y1.stored JFw_Y1.initial =
+    ok (core.result.Result.Ok (), JGe_Payload27.value)
+wide : sourceView JFx_NativeBytes.proof expanded JGe_Payload27.value = ok (core.result.Result.Ok view)
+semantic :
+  S1SemanticInstallation.verify AspisS1ExtractedRoundChildren.children JGe_Boundaries.value
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) (toCurrentPublic JFs_PublicSerialization.value) expanded
+      hash =
+    ok (core.result.Result.Ok sem)
+prepared :
+  originalNew (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) sem view hash input =
+    ok (core.result.Result.Ok out, scratch)
+hs : expanded.length = 13831
+hy : JGe_Payload27.value.length = 928
+viewsem : view.semantic = expanded
+readSemantic :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+      (JGp_Recombine.vector expanded JGe_Payload27.value) { «end» := 13831#usize } =
+    ok expanded
+readY1 :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+      (JGp_Recombine.vector expanded JGe_Payload27.value) { start := 13831#usize } =
+    ok JGe_Payload27.value
+allocation : ops.op1 core.marker.CopyU8 14759#usize 0#u8 = ok (core.result.Result.Ok JGp_Allocation.buffer)
+expandCall : ops.op10 JFw_RealExpansion.stored JFw_RealExpansion.initial = ok (core.result.Result.Ok (), expanded)
+yCall : ops.op11 JFw_Y1.stored JFw_Y1.initial = ok (core.result.Result.Ok (), JGe_Payload27.value)
+viewCall : ops.op5 JFx_NativeBytes.proof expanded JGe_Payload27.value = ok (core.result.Result.Ok view)
+semCall :
+  ops.op9 D0 (toCurrentPublic JFs_PublicSerialization.value) view.semantic hash none = ok (core.result.Result.Ok sem)
+newCall : ops.op8 D0 sem view hash input = ok (core.result.Result.Ok out, scratch)
+⊢ (let (_x0, split_at_mut_back) := ((JFw_RealExpansion.initial, JFw_Y1.initial), JGn_PrepareBuffer.back)
+    do
+    let i3 ← ok 16#usize
+    let i4 ← compact.OFF_Y1 (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.proof
+          { start := i3, «end» := i4 }
+    let (r2, semantic1) ← (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo).op10 s1 _x0.1
+    let cf1 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let i5 ← compact.OFF_INACTIVE (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+        let s2 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JFx_NativeBytes.proof
+              { start := i4, «end» := i5 }
+        let (r3, y11) ← (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo).op11 s2 _x0.2
+        let cf2 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf2 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let s4 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                  ⟨↑(split_at_mut_back (semantic1, y11)), ⋯⟩ { «end» := 13831#usize }
+            let s5 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                  ⟨↑(split_at_mut_back (semantic1, y11)), ⋯⟩ { start := 13831#usize }
+            let r4 ← (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo).op5 JFx_NativeBytes.proof s4 s5
+            let cf3 ←
+              match r4 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf3 with
+              | core.ops.control_flow.ControlFlow.Continue v => do
+                let r5 ←
+                  (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo).op9
+                      (F3V_OracleDictionary.current JFp_SHADigest.digest D)
+                      (toCurrentPublic JFs_PublicSerialization.value) v.semantic hash none
+                let r6 ←
+                  match r5 with
+                    | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                    | core.result.Result.Err e => do
+                      let t ←
+                        verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+                            (F3V_OracleDictionary.current JFp_SHADigest.digest D) () e
+                      ok (core.result.Result.Err t)
+                let cf4 ←
+                  match r6 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf4 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    verifier.mark none verifier.Phase.Semantic
+                    (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo).op8
+                        (F3V_OracleDictionary.current JFp_SHADigest.digest D) val2 v hash input
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r7 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r7, input)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r7 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r7, input)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r7 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (verifier.Error.Insts.CoreConvertFromCodecError
+                    (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo))
+                  residual
+            ok (r7, input)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r7 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (verifier.Error.Insts.CoreConvertFromCodecError
+                (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo))
+              residual
+        ok (r7, input)) =
+    ok (core.result.Result.Ok out, scratch)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGp_Prepare.inhabited' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,57 @@
+{"attempt": "JGp23_012", "exit_status": 1, "wall_seconds": 6.83805433701491, "peak_rss_kib": "6176408", "swaps": "0", "print_axioms": ["'AspisR1.JGp_RecombinedReads.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGp_RecombinedReads.y1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGp_RecombinedReads.lean:15:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑13831#usize ≤ (↑(JGp_Recombine.vector semantic y1)).length then ?m.45 else ?m.46
+in the target expression
+  (if ↑{ «end» := 13831#usize }.end ≤ (JGp_Recombine.vector semantic y1).deref.length then
+      ok ⟨List.slice 0 ↑{ «end» := 13831#usize }.end ↑(JGp_Recombine.vector semantic y1).deref, ⋯⟩
+    else fail Error.panic) =
+    ok semantic
+
+semantic y1 : Slice U8
+hs : semantic.length = 13831
+hy : y1.length = 928
+bound : ↑13831#usize ≤ (↑(JGp_Recombine.vector semantic y1)).length
+⊢ (if ↑{ «end» := 13831#usize }.end ≤ (JGp_Recombine.vector semantic y1).deref.length then
+      ok ⟨List.
+...
+ error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (13831 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGp_RecombinedReads.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGp_RecombinedReads.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑13831#usize ≤ (↑(JGp_Recombine.vector semantic y1)).length then ?m.45 else ?m.46
+in the target expression
+  (if ↑{ start := 13831#usize }.start ≤ (JGp_Recombine.vector semantic y1).deref.length then
+      ok ((JGp_Recombine.vector semantic y1).deref.drop { start := 13831#usize }.start)
+    else fail Error.undef) =
+    ok y1
+
+semantic y1 : Slice U8
+hs : semantic.length = 13831
+hy : y1.length = 928
+bound : ↑13831#usize ≤ (↑(JGp_Recombine.vector semantic y1)).length
+⊢ (if ↑{ start := 13831#usize }.start ≤ (JGp_Recombine.vector semantic y1).deref.length then
+      ok ((JGp_Recombine.vector semantic y1).deref.drop { start := 13831#usize }.start)
+    else fail Error.undef) =
+    ok y1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (13831 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGp_RecombinedReads.y1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-refe265553676485ebdc802c9d76b5242.scope; invocation ID: a2241a0569504e77b1a3571f4a17a266
+

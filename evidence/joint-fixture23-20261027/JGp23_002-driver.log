@@ -1,0 +1,42 @@
+{"attempt": "JGp23_002", "exit_status": 0, "wall_seconds": 6.214548866031691, "peak_rss_kib": "6280472", "swaps": "0", "print_axioms": ["'AspisR1.FJp_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+structure AspisR1CurrentCaller.Ops : Type 1
+number of parameters: 0
+fields:
+  AspisR1CurrentCaller.Ops.op0 : Result aspis_core.field.QM31
+  AspisR1CurrentCaller.Ops.op1 : {T : Type} →
+      core.marker.Copy T → Usize → T → Result (core.result.Result (alloc.vec.Vec T) aspis_core.r0.Error)
+  AspisR1CurrentCaller.Ops.op2 : compact.CodecError → Result verifier.Error
+  AspisR1CurrentCaller.Ops.op3 : Slice U8 → Result (core.result.Result transport.Variant verifier.Error)
+  AspisR1CurrentCaller.Ops.op4 : Slice U8 → Result (core.result.Result Unit verifier.Error)
+  AspisR1CurrentCaller.Ops.op5 : Slice U8 →
+      Slice U8 → Slice U8 → Result (core.result.Result verifier.View verifier.Error)
+  AspisR1
+...
+s_core.field.wide_exact.WideExact.ZERO : Ops →
+  Result aspis_core.field.wide_exact.WideExact :=
+fun ops => do
+  let q ← ops.op0
+  ok { c0 := q, c1 := q }
+def AspisR1CurrentCaller.ConcreteConstants.withConstants : Ops → Ops :=
+fun ops =>
+  { op0 := ok { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }, op1 := @Ops.op1 ops,
+    op2 := fun x => ok verifier.Error.Parse, op3 := ops.op3, op4 := ops.op4, op5 := ops.op5, op6 := @Ops.op6 ops,
+    op7 := ops.op7, op8 := @Ops.op8 ops, op9 := @Ops.op9 ops, op10 := ops.op10, op11 := ops.op11, op12 := ok 16#usize,
+    op13 := ok 7015#usize, op14 := ok 464#usize, op15 := ok 13831#usize, op16 := @Ops.op16 ops, op17 := ops.op17,
+    op18 := ops.op18, op19 := ops.op19, op20 := ops.op20, op21 := ok 7527#usize }
+def AspisR1CurrentCaller.BorrowedClaimPrepared.install : Ops →
+  AspisR1PublicPreparation.PreparedModel.Boundaries →
+    (AspisR1PublicPreparation.aspis_core.field.M31 → Result AspisR1ClaimPreparedBridge.PE) → Ops :=
+fun ops sampling embed =>
+  have __src := ConcreteConstants.withConstants ops;
+  { op0 := __src.op0, op1 := @Ops.op1 __src, op2 := __src.op2, op3 := __src.op3, op4 := __src.op4, op5 := sourceView,
+    op6 := @Ops.op6 __src, op7 := __src.op7, op8 := fun {H} => originalNew sampling embed, op9 := @Ops.op9 __src,
+    op10 := __src.op10, op11 := __src.op11, op12 := __src.op12, op13 := __src.op13, op14 := __src.op14,
+    op15 := __src.op15, op16 := @Ops.op16 __src, op17 := __src.op17, op18 := __src.op18, op19 := __src.op19,
+    op20 := __src.op20, op21 := __src.op21 }
+def Aeneas.Std.alloc.vec.Vec.deref_mut : {T : Type} → alloc.vec.Vec T → Slice T × (Slice T → alloc.vec.Vec T) :=
+fun {T} v => (⟨↑v, ⋯⟩, fun s => ⟨↑s, ⋯⟩)
+'AspisR1.FJp_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rad2281ecde494d02920082aaf6db6b0d.scope; invocation ID: 53d311c9d1f24f709be904cc23e20b80
+
