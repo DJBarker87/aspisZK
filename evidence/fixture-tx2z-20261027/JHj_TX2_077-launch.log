@@ -1,0 +1,33 @@
+{"attempt": "JHj_TX2_077", "exit_status": 0, "wall_seconds": 5.543861237005331, "peak_rss_kib": "5432096", "swaps": "0", "print_axioms": ["'AspisR1.JHj_LaneReadStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_LanePrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_LanePdaStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.JHj_LaneReadStep.source : ∀ (base : AdapterRw.Ops) (slot : Aeneas.Std.U64),
+  (AspisR1.JHd_ReferenceSlots.install base).op50 AspisR1.JHb_DataLane.value =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JHg_AccountValues.lane) →
+    AspisR1.JHj_LaneRead.run (AspisR1.JHd_ReferenceSlots.install base) AspisR1.CPH_Program.verifier
+        AspisR1.JHb_Programs.pool 3#u8 slot (AspisR1.JHg_World.e2.snapshot 1 384 384)
+        (AspisR1.JHg_World.e2.snapshot 2 192 192) (AspisR1.JHg_World.e2.snapshot 3 768 768)
+        (AspisR1.JHg_World.e2.snapshot 4 128 256) (AspisR1.JHg_World.e2.snapshot 5 192 320)
+        AspisR1.JHg_AccountValues.master AspisR1.JHj_Seeds.key As
+...
+World.e2.snapshot 2 192 192).key AspisR1.JHg_AccountValues.lane =
+    AspisR1.JHj_LanePda.run (AspisR1.JHd_ReferenceSlots.install base) AspisR1.CPH_Program.verifier
+      AspisR1.JHb_Programs.pool 3#u8 slot (AspisR1.JHg_World.e2.snapshot 1 384 384)
+      (AspisR1.JHg_World.e2.snapshot 2 192 192) (AspisR1.JHg_World.e2.snapshot 3 768 768)
+      (AspisR1.JHg_World.e2.snapshot 4 128 256) (AspisR1.JHg_World.e2.snapshot 5 192 320)
+      AspisR1.JHg_AccountValues.master AspisR1.JHj_Seeds.key AspisR1.JHg_AccountValues.checkpoint
+      (AspisR1.JHg_World.e2.snapshot 2 192 192).key AspisR1.JHg_AccountValues.lane AspisR1.JHj_Seeds.lane :=
+⋯
+'AspisR1.JHj_LanePrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHj_LanePdaStep.source : ∀ (base : AdapterRw.Ops) (slot : Aeneas.Std.U64),
+  (AspisR1.JHd_ReferenceSlots.install base).op38 AspisR1.JHj_Seeds.lane AspisR1.JHb_Programs.pool =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (AspisR1.JHg_World.e2.snapshot 3 768 768).key) →
+    AspisR1.JHj_LanePda.run (AspisR1.JHd_ReferenceSlots.install base) AspisR1.CPH_Program.verifier
+        AspisR1.JHb_Programs.pool 3#u8 slot (AspisR1.JHg_World.e2.snapshot 1 384 384)
+        (AspisR1.JHg_World.e2.snapshot 2 192 192) (AspisR1.JHg_World.e2.snapshot 3 768 768)
+        (AspisR1.JHg_World.e2.snapshot 4 128 256) (AspisR1.JHg_World.e2.snapshot 5 192 320)
+        AspisR1.JHg_AccountValues.master AspisR1.JHj_Seeds.key AspisR1.JHg_AccountValues.checkpoint
+        (AspisR1.JHg_World.e2.snapshot 2 192 192).key AspisR1.JHg_AccountValues.lane AspisR1.JHj_Seeds.lane =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JHg_AccountValues.value) :=
+⋯
+'AspisR1.JHj_LanePdaStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4e5b801110b046a6b6ce12e98f136c4b.scope; invocation ID: 5b8d95d8b86a4cd7932aaadea2f7bb33

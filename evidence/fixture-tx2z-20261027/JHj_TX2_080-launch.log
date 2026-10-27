@@ -1,0 +1,35 @@
+{"attempt": "JHj_TX2_080", "exit_status": 0, "wall_seconds": 5.852402705990244, "peak_rss_kib": "5414364", "swaps": "0", "print_axioms": ["'AspisR1.JHj_RegistryPolicy.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryRead.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryDecoded.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryPda.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryProgramdata.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryChecks.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryStatus.run' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.JHj_RegistryPolicy.run : AdapterRw.Ops →
+  AdapterRw.solana_pubkey.Pubkey →
+    AdapterRw.solana_pubkey.Pubkey →
+      AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+        AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1 →
+          AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+              Aeneas.Std.U64 →
+                Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                  Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AdapterRw.solana_program_error.ProgramError) :=
+fun ops verifier_program pool_program master_account master registry_account entry_account current_slot a2 
+...
+lFlow.Break residual =>
+                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                    residual
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+    else
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+'AspisR1.JHj_RegistryStatus.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2c8c559a2e564354b1fe64554812d1fc.scope; invocation ID: 5ef21cbdd3af4a2cbc0dbf369cc2479a

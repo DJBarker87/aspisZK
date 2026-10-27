@@ -1,0 +1,580 @@
+JHj_RegistryPrefix.lean:26:2: error: 'change' tactic failed, pattern
+  ok (3#u8 &&& 1#u8) >>= ?m.110 = ?m.112
+is not definitionally equal to target
+  (do
+      let i1 ← lift (JHg_AccountValues.master.verifier_policy.flags &&& 1#u8)
+      if i1 = 0#u8 then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+        else do
+          let a2 ← (JHd_ReferenceSlots.install base).op46
+          let b1 ←
+            core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                JHg_AccountValues.master.verifier_policy.registry_program a2
+          if b1 = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+            else do
+              let b2 ←
+                core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                    JHg_AccountValues.master.verifier_policy.registry_authority (Array.repeat 32#usize 0#u8)
+              if b2 = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                else do
+                  let b3 ←
+                    core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                        JHg_AccountValues.master.verifier_policy.policy_binding r1_pool_adapter.AUDIT_POLICY_BINDING
+                  if b3 = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                    else do
+                      let r ← (JHd_ReferenceSlots.install base).op15 JHg_AccountValues.master.verifier_policy
+                      let r1 ←
+                        core.result.Result.map_err
+                            r1_pool_adapter.owned.authenticate_invariant_release_registry.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1FormatErrorProgramError
+                            r ()
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue a => do
+                          let registry_program ← (JHd_ReferenceSlots.install base).op37 a2
+                          let r2 ←
+                            r1_pool_adapter.owned.require_readonly_account (JHd_ReferenceSlots.install base)
+                                (e2.snapshot 4 128 256) registry_program
+                          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                          match cf1 with
+                            | core.ops.control_flow.ControlFlow.Continue a => do
+                              let i2 ← (JHd_ReferenceSlots.install base).op14
+                              let i3 ← lift (JHg_AccountValues.master.verifier_policy.flags &&& i2)
+                              if (i3 != 0#u8) = true then do
+                                  let loader ← (JHd_ReferenceSlots.install base).op41
+                                  let r3 ←
+                                    r1_pool_adapter.owned.OwnedAccount.data (JHd_ReferenceSlots.install base)
+                                        (e2.snapshot 4 128 256)
+                                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                  match cf2 with
+                                    | core.ops.control_flow.ControlFlow.Continue val => do
+                                      let r4 ← (JHd_ReferenceSlots.install base).op33 val
+                                      let r5 ←
+                                        core.result.Result.map_err
+                                            r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError
+                                            r4 ()
+                                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                      match cf3 with
+                                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                          let p ← r1_pool_adapter.owned.OwnedAccount.impl.key (e2.snapshot 1 384 384)
+                                          let s ← (JHd_ReferenceSlots.install base).op40 p
+                                          let s1 ← lift (Array.make 1#usize [val1.bump] ⋯).to_slice
+                                          let s2 ←
+                                            lift
+                                                (Array.make 3#usize [r1_pool_adapter.VERIFIER_REGISTRY_V2_SEED, s, s1]
+                                                    ⋯).to_slice
+                                          let r6 ← (JHd_ReferenceSlots.install base).op38 s2 registry_program
+                                          let r7 ←
+                                            core.result.Result.map_err
+                                                r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_2.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+                                                r6 ()
+                                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                                          match cf4 with
+                                            | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                              let p1 ←
+                                                r1_pool_adapter.owned.OwnedAccount.impl.key (e2.snapshot 4 128 256)
+                                              let b4 ←
+                                                core.cmp.impls.PartialEqShared.ne
+                                                    (solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey
+                                                      (JHd_ReferenceSlots.install base))
+                                                    p1 val2
+                                              if b4 = true then
+                                                  ok
+                                                    (core.result.Result.Err
+                                                      solana_program_error.ProgramError.InvalidAccountData)
+                                                else do
+                                                  let s3 ← (JHd_ReferenceSlots.install base).op40 registry_program
+                                                  let s4 ← lift (Array.make 1#usize [val1.programdata_bump] ⋯).to_slice
+                                                  let s5 ← lift (Array.make 2#usize [s3, s4] ⋯).to_slice
+                                                  let r8 ← (JHd_ReferenceSlots.install base).op38 s5 loader
+                                                  let r9 ←
+                                                    core.result.Result.map_err
+                                                        r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_3.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+                                                        r8 ()
+                                                  let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                                                  match cf5 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                      let a4 ← (JHd_ReferenceSlots.install base).op39 p
+                                                      let b5 ←
+                                                        core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                                                            val1.pool a4
+                                                      if b5 = true then
+                                                          ok
+                                                            (core.result.Result.Err
+                                                              solana_program_error.ProgramError.InvalidAccountData)
+                                                        else do
+                                                          let b6 ←
+                                                            core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                                                                val1.authority
+                                                                JHg_AccountValues.master.verifier_policy.registry_authority
+                                                          if b6 = true then
+                                                              ok
+                                                                (core.result.Result.Err
+                                                                  solana_program_error.ProgramError.InvalidAccountData)
+                                                            else do
+                                                              let b7 ←
+                                                                core.array.equality.PartialEqArray.ne
+                                                                    core.cmp.PartialEqU8 val1.policy_binding
+                                                                    JHg_AccountValues.master.verifier_policy.policy_binding
+                                                              if b7 = true then
+                                                                  ok
+                                                                    (core.result.Result.Err
+                                                                      solana_program_error.ProgramError.InvalidAccountData)
+                                                                else do
+                                                                  let a5 ←
+                                                                    (JHd_ReferenceSlots.install base).op39
+                                                                        registry_program
+                                                                  let b8 ←
+                                                                    core.array.equality.PartialEqArray.ne
+                                                                        core.cmp.PartialEqU8 val1.registry_program a5
+                                                                  if b8 = true then
+                                                                      ok
+                                                                        (core.result.Result.Err
+                                                                          solana_program_error.ProgramError.InvalidAccountData)
+                                                                    else do
+                                                                      let a6 ←
+                                                                        (JHd_ReferenceSlots.install base).op39 loader
+                                                                      let b9 ←
+                                                                        core.array.equality.PartialEqArray.ne
+                                                                            core.cmp.PartialEqU8 val1.loader_program a6
+                                                                      if b9 = true then
+                                                                          ok
+                                                                            (core.result.Result.Err
+                                                                              solana_program_error.ProgramError.InvalidAccountData)
+                                                                        else do
+                                                                          let a7 ←
+                                                                            (JHd_ReferenceSlots.install base).op39 val3
+                                                                          let b10 ←
+                                                                            core.array.equality.PartialEqArray.ne
+                                                                                core.cmp.PartialEqU8
+                                                                                val1.programdata_address a7
+                                                                          if b10 = true then
+                                                                              ok
+                                                                                (core.result.Result.Err
+                                                                                  solana_program_error.ProgramError.InvalidAccountData)
+                                                                            else do
+                                                                              let b11 ←
+                                                                                (JHd_ReferenceSlots.install base).op28
+                                                                                    val1
+                                                                              if b11 = true then do
+                                                                                  let b12 ←
+                                                                                    (JHd_ReferenceSlots.install
+                                                                                            base).op27
+                                                                                        val1
+                                                                                  if b12 = true then
+                                                                                      ok
+                                                                                        (core.result.Result.Err
+                                                                                          solana_program_error.ProgramError.InvalidAccountData)
+                                                                                    else do
+                                                                                      let r10 ←
+                                                                                        r1_pool_adapter.owned.require_readonly_account
+                                                                                            (JHd_ReferenceSlots.install
+                                                                                              base)
+                                                                                            (e2.snapshot 5 192 320)
+                                                                                            registry_program
+                                                                                      let cf6 ←
+                                                                                        core.result.Result.Insts.CoreOpsTry.branch
+                                                                                            r10
+                                                                                      match cf6 with
+                                                                                        |
+                                                                                        core.ops.control_flow.ControlFlow.Continue
+                                                                                            a =>
+                                                                                          do
+                                                                                          let r11 ←
+                                                                                            r1_pool_adapter.owned.OwnedAccount.data
+                                                                                                (JHd_ReferenceSlots.install
+                                                                                                  base)
+                                                                                                (e2.snapshot 5 192 320)
+                                                                                          let cf7 ←
+                                                                                            core.result.Result.Insts.CoreOpsTry.branch
+                                                                                                r11
+                                                                                          match cf7 with
+                                                                                            |
+                                                                                            core.ops.control_flow.ControlFlow.Continue
+                                                                                                val4 =>
+                                                                                              do
+                                                                                              let r12 ←
+                                                                                                (JHd_ReferenceSlots.install
+                                                                                                        base).op34
+                                                                                                    val4
+                                                                                              let r13 ←
+                                                                                                core.result.Result.map_err
+                                                                                                    r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_4.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError
+                                                                                                    r12 ()
+                                                                                              let cf8 ←
+                                                                                                core.result.Result.Insts.CoreOpsTry.branch
+                                                                                                    r13
+                                                                                              match cf8 with
+                                                                                                |
+                                                                                                core.ops.control_flow.ControlFlow.Continue
+                                                                                                    val5 =>
+                                                                                                  do
+                                                                                                  let s6 ←
+                                                                                                    (JHd_ReferenceSlots.install
+                                                                                                            base).op40
+                                                                                                        p
+                                                                                                  let s7 ←
+                                                                                                    lift
+                                                                                                        r1_pool_adapter.PROFILE_BINDING.to_slice
+                                                                                                  let s8 ←
+                                                                                                    lift
+                                                                                                        r1_pool_adapter.RELEASE_BINDING.to_slice
+                                                                                                  let s9 ←
+                                                                                                    lift
+                                                                                                        (Array.make
+                                                                                                            1#usize
+                                                                                                            [val5.bump]
+                                                                                                            ⋯).to_slice
+                                                                                                  let s10 ←
+                                                                                                    lift
+                                                                                                        (Array.make
+                                                                                                            5#usize
+                                                                                                            [r1_pool_adapter.VERIFIER_ENTRY_V2_SEED,
+                                                                                                              s6, s7,
+                                                                                                              s8, s9]
+                                                                                                            ⋯).to_slice
+                                                                                                  let r14 ←
+                                                                                                    (JHd_ReferenceSlots.install
+                                                                                                            base).op38
+                                                                                                        s10
+                                                                                                        registry_program
+                                                                                                  let r15 ←
+                                                                                                    core.result.Result.map_err
+                                                                                                        r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_5.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+                                                                                                        r14 ()
+                                                                                                  let cf9 ←
+                                                                                                    core.result.Result.Insts.CoreOpsTry.branch
+                                                                                                        r15
+                                                                                                  match cf9 with
+                                                                                                    |
+                                                                                                    core.ops.control_flow.ControlFlow.Continue
+                                                                                                        val6 =>
+                                                                                                      do
+                                                                                                      let p2 ←
+                                                                                                        r1_pool_adapter.owned.OwnedAccount.impl.key
+                                                                                                            (e2.snapshot
+                                                                                                              5 192 320)
+                                                                                                      let b13 ←
+                                                                                                        core.cmp.impls.PartialEqShared.ne
+                                                                                                            (solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey
+                                                                                                              (JHd_ReferenceSlots.install
+                                                                                                                base))
+                                                                                                            p2 val6
+                                                                                                      if b13 = true then
+                                                                                                          ok
+                                                                                                            (core.result.Result.Err
+                                                                                                              solana_program_error.ProgramError.InvalidAccountData)
+                                                                                                        else ⋯
+                                                                                                    |
+                                                                                                    core.ops.control_flow.ControlFlow.Break
+                                                                                                        residual =>
+                                                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                                        Unit
+                                                                                                        (core.convert.FromSame
+                                                                                                          solana_program_error.ProgramError)
+                                                                                                        residual
+                                                                                                |
+                                                                                                core.ops.control_flow.ControlFlow.Break
+                                                                                                    residual =>
+                                                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                                    Unit
+                                                                                                    (core.convert.FromSame
+                                                                                                      solana_program_error.ProgramError)
+                                                                                                    residual
+                                                                                            |
+                                                                                            core.ops.control_flow.ControlFlow.Break
+                                                                                                residual =>
+                                                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                                Unit
+                                                                                                (core.convert.FromSame
+                                                                                                  solana_program_error.ProgramError)
+                                                                                                residual
+                                                                                        |
+                                                                                        core.ops.control_flow.ControlFlow.Break
+                                                                                            residual =>
+                                                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                            Unit
+                                                                                            (core.convert.FromSame
+                                                                                              solana_program_error.ProgramError)
+                                                                                            residual
+                                                                                else
+                                                                                  ok
+                                                                                    (core.result.Result.Err
+                                                                                      solana_program_error.ProgramError.InvalidAccountData)
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        Unit (core.convert.FromSame solana_program_error.ProgramError)
+                                                        residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (core.convert.FromSame solana_program_error.ProgramError) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (core.convert.FromSame solana_program_error.ProgramError) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame solana_program_error.ProgramError) residual
+                                else do
+                                  let r3 ←
+                                    r1_pool_adapter.owned.OwnedAccount.data (JHd_ReferenceSlots.install base)
+                                        (e2.snapshot 4 128 256)
+                                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                  match cf2 with
+                                    | core.ops.control_flow.ControlFlow.Continue val => do
+                                      let r4 ← (JHd_ReferenceSlots.install base).op31 val
+                                      let r5 ←
+                                        core.result.Result.map_err
+                                            r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_7.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError
+                                            r4 ()
+                                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                      match cf3 with
+                                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                          let p ← r1_pool_adapter.owned.OwnedAccount.impl.key (e2.snapshot 1 384 384)
+                                          let s ← (JHd_ReferenceSlots.install base).op40 p
+                                          let s1 ← lift (Array.make 1#usize [val1.bump] ⋯).to_slice
+                                          let s2 ←
+                                            lift
+                                                (Array.make 3#usize [r1_pool_adapter.VERIFIER_REGISTRY_SEED, s, s1]
+                                                    ⋯).to_slice
+                                          let r6 ← (JHd_ReferenceSlots.install base).op38 s2 registry_program
+                                          let r7 ←
+                                            core.result.Result.map_err
+                                                r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_8.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+                                                r6 ()
+                                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                                          match cf4 with
+                                            | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                              let p1 ←
+                                                r1_pool_adapter.owned.OwnedAccount.impl.key (e2.snapshot 4 128 256)
+                                              let b4 ←
+                                                core.cmp.impls.PartialEqShared.ne
+                                                    (solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey
+                                                      (JHd_ReferenceSlots.install base))
+                                                    p1 val2
+                                              if b4 = true then
+                                                  ok
+                                                    (core.result.Result.Err
+                                                      solana_program_error.ProgramError.InvalidAccountData)
+                                                else do
+                                                  let a4 ← (JHd_ReferenceSlots.install base).op39 p
+                                                  let b5 ←
+                                                    core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 val1.pool
+                                                        a4
+                                                  if b5 = true then
+                                                      ok
+                                                        (core.result.Result.Err
+                                                          solana_program_error.ProgramError.InvalidAccountData)
+                                                    else do
+                                                      let b6 ←
+                                                        core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                                                            val1.authority
+                                                            JHg_AccountValues.master.verifier_policy.registry_authority
+                                                      if b6 = true then
+                                                          ok
+                                                            (core.result.Result.Err
+                                                              solana_program_error.ProgramError.InvalidAccountData)
+                                                        else do
+                                                          let b7 ←
+                                                            core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                                                                val1.policy_binding
+                                                                JHg_AccountValues.master.verifier_policy.policy_binding
+                                                          if b7 = true then
+                                                              ok
+                                                                (core.result.Result.Err
+                                                                  solana_program_error.ProgramError.InvalidAccountData)
+                                                            else do
+                                                              let b8 ← (JHd_ReferenceSlots.install base).op26 val1
+                                                              if b8 = true then do
+                                                                  let b9 ← (JHd_ReferenceSlots.install base).op25 val1
+                                                                  if b9 = true then
+                                                                      ok
+                                                                        (core.result.Result.Err
+                                                                          solana_program_error.ProgramError.InvalidAccountData)
+                                                                    else do
+                                                                      let r8 ←
+                                                                        r1_pool_adapter.owned.require_readonly_account
+                                                                            (JHd_ReferenceSlots.install base)
+                                                                            (e2.snapshot 5 192 320) registry_program
+                                                                      let cf5 ←
+                                                                        core.result.Result.Insts.CoreOpsTry.branch r8
+                                                                      match cf5 with
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Continue a =>
+                                                                          do
+                                                                          let r9 ←
+                                                                            r1_pool_adapter.owned.OwnedAccount.data
+                                                                                (JHd_ReferenceSlots.install base)
+                                                                                (e2.snapshot 5 192 320)
+                                                                          let cf6 ←
+                                                                            core.result.Result.Insts.CoreOpsTry.branch
+                                                                                r9
+                                                                          match cf6 with
+                                                                            |
+                                                                            core.ops.control_flow.ControlFlow.Continue
+                                                                                val3 =>
+                                                                              do
+                                                                              let r10 ←
+                                                                                (JHd_ReferenceSlots.install base).op32
+                                                                                    val3
+                                                                              let r11 ←
+                                                                                core.result.Result.map_err
+                                                                                    r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_9.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError
+                                                                                    r10 ()
+                                                                              let cf7 ←
+                                                                                core.result.Result.Insts.CoreOpsTry.branch
+                                                                                    r11
+                                                                              match cf7 with
+                                                                                |
+                                                                                core.ops.control_flow.ControlFlow.Continue
+                                                                                    val4 =>
+                                                                                  do
+                                                                                  let s3 ←
+                                                                                    (JHd_ReferenceSlots.install
+                                                                                            base).op40
+                                                                                        p
+                                                                                  let s4 ←
+                                                                                    lift
+                                                                                        r1_pool_adapter.PROFILE_BINDING.to_slice
+                                                                                  let s5 ←
+                                                                                    lift
+                                                                                        r1_pool_adapter.RELEASE_BINDING.to_slice
+                                                                                  let s6 ←
+                                                                                    lift
+                                                                                        (Array.make 1#usize [val4.bump]
+                                                                                            ⋯).to_slice
+                                                                                  let s7 ←
+                                                                                    lift
+                                                                                        (Array.make 5#usize
+                                                                                            [r1_pool_adapter.VERIFIER_ENTRY_SEED,
+                                                                                              s3, s4, s5, s6]
+                                                                                            ⋯).to_slice
+                                                                                  let r12 ←
+                                                                                    (JHd_ReferenceSlots.install
+                                                                                            base).op38
+                                                                                        s7 registry_program
+                                                                                  let r13 ←
+                                                                                    core.result.Result.map_err
+                                                                                        r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_10.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+                                                                                        r12 ()
+                                                                                  let cf8 ←
+                                                                                    core.result.Result.Insts.CoreOpsTry.branch
+                                                                                        r13
+                                                                                  match cf8 with
+                                                                                    |
+                                                                                    core.ops.control_flow.ControlFlow.Continue
+                                                                                        val5 =>
+                                                                                      do
+                                                                                      let p2 ←
+                                                                                        r1_pool_adapter.owned.OwnedAccount.impl.key
+                                                                                            (e2.snapshot 5 192 320)
+                                                                                      let b10 ←
+                                                                                        core.cmp.impls.PartialEqShared.ne
+                                                                                            (solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey
+                                                                                              (JHd_ReferenceSlots.install
+                                                                                                base))
+                                                                                            p2 val5
+                                                                                      if b10 = true then
+                                                                                          ok
+                                                                                            (core.result.Result.Err
+                                                                                              solana_program_error.ProgramError.InvalidAccountData)
+                                                                                        else do
+                                                                                          let a5 ←
+                                                                                            (JHd_ReferenceSlots.install
+                                                                                                    base).op39
+                                                                                                p
+                                                                                          let b11 ←
+                                                                                            core.array.equality.PartialEqArray.ne
+                                                                                                core.cmp.PartialEqU8
+                                                                                                val4.pool a5
+                                                                                          if b11 = true then
+                                                                                              ok
+                                                                                                (core.result.Result.Err
+                                                                                                  solana_program_error.ProgramError.InvalidAccountData)
+                                                                                            else do
+                                                                                              let b12 ←
+                                                                                                core.array.equality.PartialEqArray.ne
+                                                                                                    core.cmp.PartialEqU8
+                                                                                                    val4.policy_binding
+                                                                                                    r1_pool_adapter.AUDIT_POLICY_BINDING
+                                                                                              if b12 = true then
+                                                                                                  ok
+                                                                                                    (core.result.Result.Err
+                                                                                                      solana_program_error.ProgramError.InvalidAccountData)
+                                                                                                else do
+                                                                                                  let a6 ←
+                                                                                                    (JHd_ReferenceSlots.install
+                                                                                                            base).op39
+                                                                                                        CPH_Program.verifier
+                                                                                                  let b13 ←
+                                                                                                    core.array.equality.PartialEqArray.ne
+                                                                                                        core.cmp.PartialEqU8
+                                                                                                        val4.verifier_program
+                                                                                                        a6
+                                                                                                  if b13 = true then
+                                                                                                      ok
+                                                                                                        (core.result.Result.Err
+                                                                                                          solana_program_error.ProgramError.InvalidAccountData)
+                                                                                                    else do
+                                                                                                      let b14 ←
+                                                                                                        core.array.equality.PartialEqArray.ne
+                                                                                                            core.cmp.PartialEqU8
+                                                                                                            val4.profile_binding
+                                                                                                            r1_pool_adapter.PROFILE_BINDING
+                                                                                                      if b14 = true then
+                                                                                                          ok
+                                                                                                            (core.result.Result.Err
+                                                                                                              solana_program_error.ProgramError.InvalidAccountData)
+                                                                                                        else ⋯
+                                                                                    |
+                                                                                    core.ops.control_flow.ControlFlow.Break
+                                                                                        residual =>
+                                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                        Unit
+                                                                                        (core.convert.FromSame
+                                                                                          solana_program_error.ProgramError)
+                                                                                        residual
+                                                                                |
+                                                                                core.ops.control_flow.ControlFlow.Break
+                                                                                    residual =>
+                                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                    Unit
+                                                                                    (core.convert.FromSame
+                                                                                      solana_program_error.ProgramError)
+                                                                                    residual
+                                                                            |
+                                                                            core.ops.control_flow.ControlFlow.Break
+                                                                                residual =>
+                                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                Unit
+                                                                                (core.convert.FromSame
+                                                                                  solana_program_error.ProgramError)
+                                                                                residual
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Break
+                                                                            residual =>
+                                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            Unit
+                                                                            (core.convert.FromSame
+                                                                              solana_program_error.ProgramError)
+                                                                            residual
+                                                                else
+                                                                  ok
+                                                                    (core.result.Result.Err
+                                                                      solana_program_error.ProgramError.InvalidAccountData)
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (core.convert.FromSame solana_program_error.ProgramError) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (core.convert.FromSame solana_program_error.ProgramError) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame solana_program_error.ProgramError) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame solana_program_error.ProgramError) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    JHj_RegistryPolicy.run (JHd_ReferenceSlots.install base) CPH_Program.verifier JHb_Programs.pool
+      (e2.snapshot 1 384 384) JHg_AccountValues.master (e2.snapshot 4 128 256) (e2.snapshot 5 192 320) slot
+      JHb_Programs.registry
+'AspisR1.JHj_RegistryPrefix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

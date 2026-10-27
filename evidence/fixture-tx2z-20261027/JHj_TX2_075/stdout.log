@@ -1,0 +1,59 @@
+theorem AspisR1.JHj_MasterPrefix.source : ∀ (base : AdapterRw.Ops) (slot : Aeneas.Std.U64),
+  AspisR1.JHd_Authentication.afterMaster (AspisR1.JHd_ReferenceSlots.install base) AspisR1.CPH_Program.verifier
+      AspisR1.JHb_Programs.pool 3#u8 slot (AspisR1.JHg_World.e2.snapshot 1 384 384)
+      (AspisR1.JHg_World.e2.snapshot 2 192 192) (AspisR1.JHg_World.e2.snapshot 3 768 768)
+      (AspisR1.JHg_World.e2.snapshot 4 128 256) (AspisR1.JHg_World.e2.snapshot 5 192 320)
+      AspisR1.JHg_AccountValues.master =
+    AspisR1.JHj_MasterPda.run (AspisR1.JHd_ReferenceSlots.install base) AspisR1.CPH_Program.verifier
+      AspisR1.JHb_Programs.pool 3#u8 slot (AspisR1.JHg_World.e2.snapshot 1 384 384)
+      (AspisR1.JHg_World.e2.snapshot 2 192 192) (AspisR1.JHg_World.e2.snapshot 3 768 768)
+      (AspisR1.JHg_World.e2.snapshot 4 128 256) (AspisR1.JHg_World.e2.snapshot 5 192 320)
+      AspisR1.JHg_AccountValues.master AspisR1.JHj_Seeds.key AspisR1.JHj_Seeds.master :=
+⋯
+'AspisR1.JHj_MasterPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHj_DecodedMaster.source : ∀ (base : AdapterRw.Ops) (slot : Aeneas.Std.U64),
+  (AspisR1.JHd_ReferenceSlots.install base).op48 AspisR1.JHg_DataMaster.value =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JHg_AccountValues.master) →
+    AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts (AspisR1.JHd_ReferenceSlots.install base)
+        AspisR1.CPH_Program.verifier (AspisR1.JHg_World.e2.second AspisR1.S2W_D189Wrappers.secondSizes)
+        AspisR1.JHb_Programs.pool 3#u8 slot =
+      AspisR1.JHj_MasterPda.run (AspisR1.JHd_ReferenceSlots.install base) AspisR1.CPH_Program.verifier
+        AspisR1.JHb_Programs.pool 3#u8 slot (AspisR1.JHg_World.e2.snapshot 1 384 384)
+        (AspisR1.JHg_World.e2.snapshot 2 192 192) (AspisR1.JHg_World.e2.snapshot 3 768 768)
+        (AspisR1.JHg_World.e2.snapshot 4 128 256) (AspisR1.JHg_World.e2.snapshot 5 192 320)
+        AspisR1.JHg_AccountValues.master AspisR1.JHj_Seeds.key AspisR1.JHj_Seeds.master :=
+⋯
+'AspisR1.JHj_DecodedMaster.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHj_MasterPdaStep.source : ∀ (base : AdapterRw.Ops) (slot : Aeneas.Std.U64),
+  (AspisR1.JHd_ReferenceSlots.install base).op38 AspisR1.JHj_Seeds.master AspisR1.JHb_Programs.pool =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JHj_Seeds.key) →
+    AspisR1.JHj_MasterPda.run (AspisR1.JHd_ReferenceSlots.install base) AspisR1.CPH_Program.verifier
+        AspisR1.JHb_Programs.pool 3#u8 slot (AspisR1.JHg_World.e2.snapshot 1 384 384)
+        (AspisR1.JHg_World.e2.snapshot 2 192 192) (AspisR1.JHg_World.e2.snapshot 3 768 768)
+        (AspisR1.JHg_World.e2.snapshot 4 128 256) (AspisR1.JHg_World.e2.snapshot 5 192 320)
+        AspisR1.JHg_AccountValues.master AspisR1.JHj_Seeds.key AspisR1.JHj_Seeds.master =
+      AspisR1.JHj_MasterRegistry.run (AspisR1.JHd_ReferenceSlots.install base) AspisR1.CPH_Program.verifier
+        AspisR1.JHb_Programs.pool 3#u8 slot (AspisR1.JHg_World.e2.snapshot 1 384 384)
+        (AspisR1.JHg_World.e2.snapshot 2 192 192) (AspisR1.JHg_World.e2.snapshot 3 768 768)
+        (AspisR1.JHg_World.e2.snapshot 4 128 256) (AspisR1.JHg_World.e2.snapshot 5 192 320)
+        AspisR1.JHg_AccountValues.master AspisR1.JHj_Seeds.key :=
+⋯
+'AspisR1.JHj_MasterPdaStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHj_MasterRegistryStep.source : ∀ (base : AdapterRw.Ops) (slot : Aeneas.Std.U64),
+  AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry (AspisR1.JHd_ReferenceSlots.install base)
+        AspisR1.CPH_Program.verifier AspisR1.JHb_Programs.pool (AspisR1.JHg_World.e2.snapshot 1 384 384)
+        AspisR1.JHg_AccountValues.master (AspisR1.JHg_World.e2.snapshot 4 128 256)
+        (AspisR1.JHg_World.e2.snapshot 5 192 320) slot =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    AspisR1.JHj_MasterRegistry.run (AspisR1.JHd_ReferenceSlots.install base) AspisR1.CPH_Program.verifier
+        AspisR1.JHb_Programs.pool 3#u8 slot (AspisR1.JHg_World.e2.snapshot 1 384 384)
+        (AspisR1.JHg_World.e2.snapshot 2 192 192) (AspisR1.JHg_World.e2.snapshot 3 768 768)
+        (AspisR1.JHg_World.e2.snapshot 4 128 256) (AspisR1.JHg_World.e2.snapshot 5 192 320)
+        AspisR1.JHg_AccountValues.master AspisR1.JHj_Seeds.key =
+      AspisR1.JHj_CheckpointRead.run (AspisR1.JHd_ReferenceSlots.install base) AspisR1.CPH_Program.verifier
+        AspisR1.JHb_Programs.pool 3#u8 slot (AspisR1.JHg_World.e2.snapshot 1 384 384)
+        (AspisR1.JHg_World.e2.snapshot 2 192 192) (AspisR1.JHg_World.e2.snapshot 3 768 768)
+        (AspisR1.JHg_World.e2.snapshot 4 128 256) (AspisR1.JHg_World.e2.snapshot 5 192 320)
+        AspisR1.JHg_AccountValues.master AspisR1.JHj_Seeds.key :=
+⋯
+'AspisR1.JHj_MasterRegistryStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]

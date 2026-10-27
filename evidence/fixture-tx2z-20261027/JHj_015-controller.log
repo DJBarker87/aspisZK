@@ -1,0 +1,43 @@
+{"attempt": "JHj_TX2_015", "exit_status": 1, "wall_seconds": 5.186883729998954, "peak_rss_kib": "5428728", "swaps": "0", "print_axioms": ["'AspisR1.JHj_DecodedMaster.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHj_DecodedMaster.lean:25:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (JHd_ReferenceSlots.install base).op48 JHg_DataMaster.value
+in the target expression
+  (do
+      let decoded ← (JHd_KeyStd.install (JHd_ReferenceSlots.leaves base)).op48 JHg_DataMaster.value
+      match decoded with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok master =>
+          JHd_Authentication.afterMaster (JHd_KeyStd.install (JHd_ReferenceSlots.leaves base)) CPH_Program.verifier
+            JHb_Programs.pool 3#u8 slot (e2.snapshot 1 384 384) (e2.snapshot 2 192 192) (e2.snapshot 3 768 768)
+            (e2.snapshot 4 128 256) (e2.s
+...
+2.second secondSizes) JHb_Programs.pool 3#u8 slot =
+    JHi_Authentication.afterRead (JHd_KeyStd.install (JHd_ReferenceSlots.leaves base)) CPH_Program.verifier
+      JHb_Programs.pool 3#u8 slot (e2.snapshot 1 384 384) (e2.snapshot 2 192 192) (e2.snapshot 3 768 768)
+      (e2.snapshot 4 128 256) (e2.snapshot 5 192 320)
+⊢ (do
+      let decoded ← (JHd_KeyStd.install (JHd_ReferenceSlots.leaves base)).op48 JHg_DataMaster.value
+      match decoded with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok master =>
+          JHd_Authentication.afterMaster (JHd_KeyStd.install (JHd_ReferenceSlots.leaves base)) CPH_Program.verifier
+            JHb_Programs.pool 3#u8 slot (e2.snapshot 1 384 384) (e2.snapshot 2 192 192) (e2.snapshot 3 768 768)
+            (e2.snapshot 4 128 256) (e2.snapshot 5 192 320) master) =
+    JHj_MasterPda.run (JHd_ReferenceSlots.install base) CPH_Program.verifier JHb_Programs.pool 3#u8 slot
+      (e2.snapshot 1 384 384) (e2.snapshot 2 192 192) (e2.snapshot 3 768 768) (e2.snapshot 4 128 256)
+      (e2.snapshot 5 192 320) JHg_AccountValues.master JHj_Seeds.key JHj_Seeds.master
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JHj_DecodedMaster.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb507dbd9d6174c7dbfd6b05f327e1ca3.scope; invocation ID: f0cc1902d9274d69b2e99f34b0511ad3
+

@@ -1,0 +1,5 @@
+import JHi_AuthenticationPrefix
+import JHi_Validation
+#print axioms AspisR1.JHi_AuthenticationPrefix.source
+#print axioms AspisR1.JHi_Validation.source
+#print AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry

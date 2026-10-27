@@ -1,0 +1,42 @@
+{"attempt": "JHj_TX2_085", "exit_status": 0, "wall_seconds": 5.975336823030375, "peak_rss_kib": "5432000", "swaps": "0", "print_axioms": ["'AspisR1.JHj_RegistryValue.registry_pool_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryValue.entry_pool_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryValue.entry_verifier_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryFields.pool' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryFields.authority' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryFields.policy_binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryFields.registry_program' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryFields.loader_program' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistryFields.programdata_address' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryFields.pool' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryFields.policy_binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryFields.verifier_program' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryFields.profile_binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryFields.release_binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryFields.loader_program' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryFields.programdata_address' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryFields.expected_upgrade_authority' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistrySeeds.registry_count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistrySeeds.registry_programdata_count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistrySeeds.entry_count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_RegistrySeeds.verifier_programdata_count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_GuardNonVacuity.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.JHj_RegistryValue.registry_pool_bytes : List.take 32 (List.drop 8 AspisR1.JHb_DataRegistry.bytes) =
+  ↑AspisR1.JHj_RegistryValue.registry.pool :=
+AspisR1.JHg_BindingsRegistry.pool
+'AspisR1.JHj_RegistryValue.registry_pool_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHj_RegistryValue.entry_pool_bytes : List.take 32 (List.drop 8 AspisR1.JHb_DataEntry.bytes) =
+  ↑AspisR1.JHj_RegistryValue.entry.pool :=
+AspisR1.JHg_BindingsRegistry.entry_pool
+'AspisR1.JHj_RegistryValue.entry_pool_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHj_RegistryValue.entry_verifier_bytes : List.take 32 (List.drop 40 AspisR1.JHb_Data
+...
+.registryProgramdata).length =
+  2 :=
+⋯
+'AspisR1.JHj_RegistrySeeds.registry_programdata_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem AspisR1.JHj_RegistrySeeds.entry_count : (↑AspisR1.JHj_RegistrySeeds.entry).length = 5 :=
+⋯
+'AspisR1.JHj_RegistrySeeds.entry_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem AspisR1.JHj_RegistrySeeds.verifier_programdata_count : (↑AspisR1.JHj_RegistrySeeds.verifierProgramdata).length =
+  2 :=
+⋯
+'AspisR1.JHj_RegistrySeeds.verifier_programdata_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHj_GuardNonVacuity.source : Aeneas.Std.core.array.equality.PartialEqArray.ne
+      Aeneas.Std.core.cmp.PartialEqU8 AspisR1.JHg_AccountValues.master.identity.pool
+      (AspisR1.JHg_World.e2.snapshot 1 384 384).key =
+    Aeneas.Std.Result.ok false ∧
+  (AspisR1.JHg_AccountValues.master.initialized_lane_mask != 255#u8) = false ∧
+    Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8
+          AspisR1.JHg_AccountValues.checkpoint.master AspisR1.JHj_Seeds.key =
+        Aeneas.Std.Result.ok false ∧
+      Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8
+            AspisR1.JHg_AccountValues.checkpoint.deployment_domain
+            AspisR1.JHg_AccountValues.master.identity.deployment_domain =
+          Aeneas.Std.Result.ok false ∧
+        Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8
+              AspisR1.JHg_AccountValues.lane.master AspisR1.JHj_Seeds.key =
+            Aeneas.Std.Result.ok false ∧
+          (AspisR1.JHg_AccountValues.lane.lane_id != 3#u8) = false :=
+⋯
+'AspisR1.JHj_GuardNonVacuity.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r5421e1b09797417ab8a6f807a6819e16.scope; invocation ID: 8aca075b121146d6802ca3f75a8bb67d
