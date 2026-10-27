@@ -12471,3 +12471,23 @@ reach6 (65 attempts; remainder of 37300-37399; first whether the INSTALLED op84 
 on an admitted input, as a lemma or as a located finding); batch3c (100 attempts; IDs 37900-37999;
 the seven extraction rewrites first, capped at 40 attempts, then op134's native association and the
 op117/op121 equalities). Rows removed outright: 0. Privacy target not yet established.
+
+## D317 (Stream B) 2026-10-27 20:30 UTC: runjoin21 result: endpoint axiom audit passes; fixture compiler returns and transitions proved; runjoin22 launched
+
+runjoin21 used its 100-attempt budget (67 accepted, 33 rejected; IDs 37000-37099; peak 4.95 GB; no
+swap). Under ruling (h4) it verified all 5,673 external objects and 669 endpoint project objects
+before compiling, and the endpoint #print axioms audit passed with propext, Classical.choice and
+Quot.sound only. This is the first completed endpoint axiom audit in the runjoin line. It is a
+focused audit on verified cached objects, not the final closure replay.
+
+It identifies all 57 source blocks per fixture with the certified rows and validates both returned
+banks without the former cell-identification hypothesis (BankIdentification20); proves complete
+successful compiler returns with the shipped dictionaries (TransferPayload20, WithdrawalPayload20),
+the full recorded transitions (SourceTransition20) and the identification of actual semantic
+traces with admitted witnesses (AdmittedPayload20). SelectedPackage20 shows that, for an arbitrary
+index i under five fixture operational-field associations, the compiled-output association is
+equivalent to compiler return, transition, recorded public input and admitted trace. Open: those
+associations at the actual deployment-selected i, the installed PublicBinding, and P-and-
+hypothetical-T non-vacuity. Endpoint premises removed/added/weakened 0/0/0; recount 5 unchanged.
+Branch pushed (0ec90874e3). runjoin22 continues with exactly those three steps (IDs 38200-38299).
+Rows removed outright: 0. Privacy target not yet established.
