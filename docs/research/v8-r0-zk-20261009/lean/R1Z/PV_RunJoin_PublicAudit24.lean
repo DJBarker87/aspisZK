@@ -1,4 +1,4 @@
-import R1Z.PV_RunJoin_PremiseTruth24
+import R1Z.PV_RunJoin_CanonicalMapBoundary24
 #print R1Z.BuilderSource.SourceIdentification
 #print R1Z.BuilderSource.builder_refinement_D46_D51
 #print R1Z.PV_RunJoin_PremiseTruth24.bad_public_projection
@@ -10,3 +10,7 @@ import R1Z.PV_RunJoin_PremiseTruth24
 #print axioms R1Z.PV_RunJoin_PremiseTruth24.variant_build_eq
 #print axioms R1Z.PV_RunJoin_PremiseTruth24.variant_public_eq
 #print axioms R1Z.PV_RunJoin_PremiseTruth24.raw_transport_eq
+
+#print R1Z.PV_RunJoin_CanonicalMapBoundary24.bad_no_canonical_record
+#print axioms R1Z.PV_RunJoin_CanonicalMapBoundary24.bad_no_canonical_record
+#print axioms R1Z.PV_RunJoin_CanonicalMapBoundary24.no_raw_record_map

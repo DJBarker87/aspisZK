@@ -54,8 +54,9 @@ theorem bad_cell : (PV_RunJoin_PremiseTruth24.raw (K := K)).build bad 0 13 = 1 :
     ((BuilderRecordsArray.tabulate 16#usize (fun _ => ones)).val[0]!).val[13]! = (1 : K)
   rw [BuilderRecordsArray.tabulate_get _ _ _ (by decide)]
   change R0Z.WriterRefine.liftU (List.replicate 14 1#u32)[13]! = (1 : K)
-  simp only [List.getElem!_replicate,show 13 < 14 by decide,if_true]
-  rfl
+  simp only [List.getElem!_replicate,show 13 < 14 by decide]
+  change ((1 : Nat) : K) = 1
+  exact Nat.cast_one
 #print axioms bad_cell
 
 /-- V153 is false here for EVERY canonical target, regardless of map. -/
