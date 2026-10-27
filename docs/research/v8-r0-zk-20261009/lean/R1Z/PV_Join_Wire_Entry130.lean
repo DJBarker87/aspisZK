@@ -5,13 +5,11 @@ namespace R1Z.PV_Join_Wire_Entry130
 open Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op130Source
 /-- Source-normal form for exactly this callback, including all Result cases. -/
 def source (base : ProverRwFull.ExternalTypes) :
-    letI : ProverRwFull.ExternalTypes := PV_Join_Wire_Selection.native base
     ∀ {Z : Type} (ZeroizeInst : zeroize.Zeroize Z), (zeroize.Zeroizing Z) → Result (zeroize.Zeroizing Z) :=
-  letI : ProverRwFull.ExternalTypes := PV_Join_Wire_Selection.native base
   fun {Z} inst x => PV_CB_ShippedOp130.zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize inst x
 theorem equation (base : ProverRwFull.ExternalTypes)
     (ops : @ProverRwFull.ExternalFuns (PV_Join_Wire_Selection.native base)) :
-    @ProverRwFull.ExternalFuns.op130 _ (PV_Join_Wire_Selection.selected base ops) = source base := by
+    @ProverRwFull.ExternalFuns.op130 _ (PV_Join_Wire_Selection.selected base ops) = @source base := by
   letI : ProverRwFull.ExternalTypes := PV_Join_Wire_Selection.native base
   funext Z inst x
   exact R1Z.PV_Join_Wire_Op130.op130_source base ops inst x
