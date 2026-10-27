@@ -95,5 +95,7 @@ write('LanePdaStep',['JHj_LanePda','JHj_KeyComparison'],
     r1_pool_adapter.owned.OwnedAccount.impl.key]
   rw [JHj_KeyComparison.different,bind_tc_ok]
   simp only [Bool.false_eq_true,if_false]
-  change ok (.Ok _) = ok (.Ok JHg_AccountValues.value)
+  simp only [JHd_ReferenceSlots.install,JHd_KeyStd.install,JGx_MagicStd.install,
+    JHd_ReferenceSlots.leaves,bind_tc_ok]
+  unfold JHj_Seeds.key e2 JHg_AccountValues.value JHg_AccountValues.live
   rfl''')

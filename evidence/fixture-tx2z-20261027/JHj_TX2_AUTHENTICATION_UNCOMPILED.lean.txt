@@ -1,0 +1,22 @@
+import JHi_TX2
+import JHi_Validation
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHj_TX2
+open Aeneas Aeneas.Std Result DrvC_Installation S2W_D189Wrappers
+
+/-- The remaining authentication premise is explicit. This is deliberately
+not named accepted2: native authentication and emission association are open. -/
+theorem after_authentication {C : Type} (c : Configuration FIo_Install.W C) (err : C) (slot : U64)
+    (authentication : AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts
+      (sdk (JHi_Configuration.value c err)) CPH_Program.verifier
+      (JHg_World.e2.second secondSizes) JHb_Programs.pool 3#u8 slot=ok (.Ok JHg_AccountValues.value))
+    (sha : JHi_SHARealization.SHARealization) :
+    second (JGx_Natives.second (JGx_CallerSeed.value (JHi_TX2.seed (JHi_Configuration.base c))) err)
+      CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier JHb_DataRequest.value (.Ok slot) ()=
+      ok (.Ok (JHg_World.e2.heap,())) :=
+  JHi_TX2.after_validation (JHi_Configuration.base c) err slot
+    (JHi_Validation.source c err slot authentication) sha
+#print axioms after_authentication
+end AspisR1.JHj_TX2
+end

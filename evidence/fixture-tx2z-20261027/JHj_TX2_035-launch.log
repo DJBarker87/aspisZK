@@ -1,0 +1,46 @@
+{"attempt": "JHj_TX2_035", "exit_status": 1, "wall_seconds": 7.461163093976211, "peak_rss_kib": "5430552", "swaps": "0", "print_axioms": ["'AspisR1.JHj_LanePdaStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHj_LanePdaStep.lean:29:2: error: Tactic `rfl` failed: The left-hand side
+  ok
+    (core.result.Result.Ok
+      { master_account := (e2.snapshot 1 384 384).key,
+        checkpoint_account := ((CPG_Projection.entry observations true).snapshot 2 192 192).key,
+        selected_lane_account := ((CPG_Projection.entry observations true).snapshot 3 768 768).key,
+        master := JHg_AccountValues.master, checkpoint := JHg_AccountValues.checkpoint,
+        selected_lane := JHg_AccountValues.lane,
+        live_snapshot :=
+          { pool := (e2.snapshot 1 384 384).key,
+            deployment_domain := JHg_AccountValues.master.identity.deployment_domain,
+            sequence := JHg_AccountValues.lan
+...
+ master_account := JFs_Cell00.value, checkpoint_account := JFs_Cell01.value,
+        selected_lane_account := JFs_Cell02.value, master := JHg_AccountValues.master,
+        checkpoint := JHg_AccountValues.checkpoint, selected_lane := JHg_AccountValues.lane,
+        live_snapshot := JHg_AccountValues.live })
+
+base : Ops
+slot : U64
+pda :
+  (JHd_ReferenceSlots.install base).op38 JHj_Seeds.lane JHb_Programs.pool =
+    ok (core.result.Result.Ok (e2.snapshot 3 768 768).key)
+⊢ ok
+      (core.result.Result.Ok
+        { master_account := (e2.snapshot 1 384 384).key,
+          checkpoint_account := ((CPG_Projection.entry observations true).snapshot 2 192 192).key,
+          selected_lane_account := ((CPG_Projection.entry observations true).snapshot 3 768 768).key,
+          master := JHg_AccountValues.master, checkpoint := JHg_AccountValues.checkpoint,
+          selected_lane := JHg_AccountValues.lane,
+          live_snapshot :=
+            { pool := (e2.snapshot 1 384 384).key,
+              deployment_domain := JHg_AccountValues.master.identity.deployment_domain,
+              sequence := JHg_AccountValues.lane.tree.next_leaf_index,
+              next_pair_index := JHg_AccountValues.lane.tree.next_leaf_index,
+              current_root := JHg_AccountValues.lane.tree.root, frontier := JHg_AccountValues.lane.tree.frontier } }) =
+    ok
+      (core.result.Result.Ok
+        { master_account := JFs_Cell00.value, checkpoint_account := JFs_Cell01.value,
+          selected_lane_account := JFs_Cell02.value, master := JHg_AccountValues.master,
+          checkpoint := JHg_AccountValues.checkpoint, selected_lane := JHg_AccountValues.lane,
+          live_snapshot := JHg_AccountValues.live })
+'AspisR1.JHj_LanePdaStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7b96b7d518214b039a94567f5e12a98b.scope; invocation ID: df2690e106ad474092f5dc2e2ab9d760
