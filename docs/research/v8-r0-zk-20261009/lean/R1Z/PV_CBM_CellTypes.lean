@@ -1,0 +1,7 @@
+import R1Z.PV_CBM_ReferenceTypes
+import R1Z.ProverRwFullTypes
+namespace PV_CBM_CellsRaw
+abbrev aspis_statement.trace_v4.TraceCell := ProverRwFull.aspis_statement.trace_v4.TraceCell
+abbrev aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1 :=
+  PV_CBM_ReferenceRaw.aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1
+end PV_CBM_CellsRaw
