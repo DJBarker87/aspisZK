@@ -19,8 +19,9 @@ theorem admitted : PV_RunJoin_UniversalBuild22.Admission (K := K) counterexample
     PV_RunJoin_AdmittedCarrier23.transfer_admitted
 #print axioms admitted
 
-theorem checked : PV_Src_RecordReference.Checked counterexample :=
-  PV_RunJoin_AdmittedCarrier23.transfer_checked
+theorem checked : PV_Src_RecordReference.Checked counterexample := by
+  have h := PV_RunJoin_AdmittedCarrier23.transfer_checked
+  exact ⟨h.values,h.first,h.second,h.membership,h.superRoot⟩
 #print axioms checked
 
 theorem frontier (l : Fin 20) :
