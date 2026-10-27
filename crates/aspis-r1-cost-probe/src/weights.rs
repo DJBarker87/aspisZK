@@ -11,7 +11,8 @@ pub fn powers<const N:usize>(x:E)->[E;N]{
  while i<N {
   out[i]=p;
   i+=1;
-  if i<N { p=p.mul(x); }
+  if i==N { return out; }
+  p=p.mul(x);
  }
  out
 }

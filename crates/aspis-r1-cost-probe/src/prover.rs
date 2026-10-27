@@ -345,7 +345,7 @@ fn opening_claim_bytes(coefficients:&[Message<E>],z1:Point<E>)->Vec<u8> {
     bytes
 }
 fn opening_batch(coefficients:&[Message<E>],gamma:E)->Vec<E> {
-    let gp=crate::weights::powers::<29>(gamma);
+    let gp=crate::prover_powers::powers::<29>(gamma);
     let mut q=Vec::with_capacity(1024);let mut row=0;
     while row<1024 {let value=opening_row(coefficients,&gp,row);q.push(value);row+=1;}
     q

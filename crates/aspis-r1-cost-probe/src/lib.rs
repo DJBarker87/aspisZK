@@ -61,3 +61,6 @@ pub mod host_work;
 
 #[cfg(feature="prover")]
 mod prover_helper_sum;
+
+#[cfg(feature="prover")]
+mod prover_powers;

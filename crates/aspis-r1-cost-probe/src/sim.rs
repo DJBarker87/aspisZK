@@ -337,7 +337,7 @@ fn opening(columns:&[Vec<K>;29],tau:&Tape,d:&Drawn,variant:Variant)->Result<View
     let coefficients:Vec<Message<E>>=messages.iter().map(|m|variant.coefficients(m)).collect();
     let z1=Point{x:E::from_qm31(d.z[1].x),y:E::from_qm31(d.z[1].y)};
     let y1=encoded(coefficients.iter().map(|m|eval_message(m,z1)));
-    let gp=crate::weights::powers::<29>(d.gamma);
+    let gp=crate::prover_powers::powers::<29>(d.gamma);
     let q:Vec<E>=(0..1024).map(|j|(0..29).fold(E::ZERO,|s,l|s.add(gp[l].mul(coefficients[l][j])))).collect();
     let alpha:[K;10]=core::array::from_fn(|i|d.sem[15+i]);
     let w=Weights::new(variant,&alpha,&d.z)?;
