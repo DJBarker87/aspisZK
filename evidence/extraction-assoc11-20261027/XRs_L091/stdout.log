@@ -1,0 +1,83 @@
+XRs_generated/XRs_QueryScan.lean:22:22: error: Type mismatch: After simplification, term
+  ih
+ has type
+  @Eq (List U32 × ℕ × Bool) (List.foldl XRn_Join_scanWord (xs, d, true) words) (xs, d, true)
+but is expected to have type
+  @Eq (List U32 × ℕ × Bool)
+    (List.foldl XRn_Join_scanWord
+      (if True then (xs, d, true)
+      else if xs.length = 22 ∨ d = 64 then (xs, d, true) else (if x ∈ xs then xs else xs ++ [x], d + 1, false))
+      words)
+    (xs, d, true)
+XRs_generated/XRs_QueryScan.lean:31:3: error: unsolved goals
+case pos
+x : U32
+words : List U32
+ih :
+  ∀ (xs : List U32) (d : ℕ),
+    observe (List.foldl XRn_Join_scanWord (xs, d, false) words) =
+      AspisV8R19.Q22WordScan.scan { accepted := List.map UScalar.val xs, draws := d } (List.map UScalar.val words)
+xs : List U32
+d : ℕ
+h : xs.length = 22 ∨ d = 64
+⊢ ({
+        accepted :=
+          List.map UScalar.val
+            (List.foldl XRn_Join_scanWord (if false = true then (xs, d, false) else (xs, d, true)) words).1,
+        draws := (List.foldl XRn_Join_scanWord (if false = true then (xs, d, false) else (xs, d, true)) words).2.1 },
+      (List.foldl XRn_Join_scanWord (if false = true then (xs, d, false) else (xs, d, true)) words).2.2) =
+    ({ accepted := List.map UScalar.val xs, draws := d }, true)
+XRs_generated/XRs_QueryScan.lean:35:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  observe (List.foldl XRn_Join_scanWord (?xs, ?d, false) words)
+in the target expression
+  observe
+      (List.foldl XRn_Join_scanWord
+        (if false = true then (xs, d, false) else (if x ∈ xs then xs else xs ++ [x], d + 1, false)) words) =
+    AspisV8R19.Q22WordScan.scan { accepted := keep (List.map UScalar.val xs) ↑x, draws := d + 1 }
+      (List.map UScalar.val words)
+
+case neg
+x : U32
+words : List U32
+ih :
+  ∀ (xs : List U32) (d : ℕ),
+    observe (List.foldl XRn_Join_scanWord (xs, d, false) words) =
+      AspisV8R19.Q22WordScan.scan { accepted := List.map UScalar.val xs, draws := d } (List.map UScalar.val words)
+xs : List U32
+d : ℕ
+h : ¬(xs.length = 22 ∨ d = 64)
+⊢ observe
+      (List.foldl XRn_Join_scanWord
+        (if false = true then (xs, d, false) else (if x ∈ xs then xs else xs ++ [x], d + 1, false)) words) =
+    AspisV8R19.Q22WordScan.scan { accepted := keep (List.map UScalar.val xs) ↑x, draws := d + 1 }
+      (List.map UScalar.val words)
+XRs_generated/XRs_QueryScan.lean:31:61: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵,̵X̵R̵n̵_̵J̵o̵i̵n̵_̵s̵c̵a̵n̵W̵o̵r̵d̵,̵h̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵s̵t̵o̵p̵p̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵Q̵2̵2̵W̵o̵r̵d̵S̵c̵a̵n̵.̵s̵c̵a̵n̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵]̵[̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲c̲o̲n̲s̲,̲ ̲X̲R̲n̲_̲J̲o̲i̲n̲_̲s̲c̲a̲n̲W̲o̲r̲d̲,̲ ̲h̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲s̲t̲o̲p̲p̲e̲d̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲V̲8̲R̲1̲9̲.̲Q̲2̲2̲W̲o̲r̲d̲S̲c̲a̲n̲.̲s̲c̲a̲n̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_QueryScan.lean:31:71: warning: This simp argument is unused:
+  stopped
+
+Hint: Omit it from the simp argument list.
+  simp only [List.foldl_cons, ̲XRn_Join_scanWord, ̲h, ̲ite_true, ̲ite_false,s̵t̵o̵p̵p̵e̵d̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵observe, ̲List.map_cons,
+  ̲ ̲ ̲ ̲ ̲ ̲AspisV8R19.Q22WordScan.scan, ̲List.length_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_QueryScan.lean:33:52: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵,̵X̵R̵n̵_̵J̵o̵i̵n̵_̵s̵c̵a̵n̵W̵o̵r̵d̵,̵h̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵Q̵2̵2̵W̵o̵r̵d̵S̵c̵a̵n̵.̵s̵c̵a̵n̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵]̵[̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲c̲o̲n̲s̲,̲ ̲X̲R̲n̲_̲J̲o̲i̲n̲_̲s̲c̲a̲n̲W̲o̲r̲d̲,̲ ̲h̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲V̲8̲R̲1̲9̲.̲Q̲2̲2̲W̲o̲r̲d̲S̲c̲a̲n̲.̲s̲c̲a̲n̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRs_QueryScan.mem_val' depends on axioms: [propext, Quot.sound]
+'XRs_QueryScan.stopped' depends on axioms: [propext, sorryAx]
+'XRs_QueryScan.scan' depends on axioms: [propext, sorryAx, Quot.sound]

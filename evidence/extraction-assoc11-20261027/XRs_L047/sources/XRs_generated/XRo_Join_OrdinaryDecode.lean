@@ -1,0 +1,45 @@
+import XRo_Join_OrdinaryDigits
+import XRo_Join_Installed
+open Aeneas Aeneas.Std Result
+open XRo_Join_Carriers XRo_Join_ResultTransport
+set_option autoImplicit false
+namespace XRo_Join_OrdinaryDecode
+
+def q (x : AspisR1Post25Sampler.field.QM31) : E.Q :=
+ ⟨⟨x.c0.a,x.c0.b⟩,⟨x.c1.a,x.c1.b⟩⟩
+
+theorem canonical (x : AspisR1Post25Sampler.field.QM31) :
+ mapR q (AspisR1Post25Sampler.field.canonical_qm31 x) =
+ XRn_Join_FieldExternal.canon (q x) := by
+ unfold AspisR1Post25Sampler.field.canonical_qm31 XRn_Join_FieldExternal.canon
+ simp only [AspisR1Post25Sampler.field.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call,
+   AspisR1Post25Sampler.field.P,mapR_bind,map_ok]
+ rfl
+
+theorem wide_new (a b : AspisR1Post25Sampler.field.QM31) :
+ mapR AspisR1Post25SamplerPreparedCarrier.candidateToPE
+   (AspisR1Post25Sampler.field.WideExact.new a b) =
+ aspis_core.field.wide_exact.WideExact.new (q a) (q b) := by
+ unfold AspisR1Post25Sampler.field.WideExact.new aspis_core.field.wide_exact.WideExact.new
+ rw [←canonical a,←canonical b]
+ simp only [mapR_bind,bind_map,map_ok]
+ rfl
+
+theorem decode (digits : Array U32 8#usize) :
+ mapR AspisR1Post25SamplerPreparedCarrier.candidateToPE
+   (AspisR1Post25Sampler.sampler.decode8 digits) =
+ XRn_Join_Release.sampler.decode8 digits := by
+ unfold AspisR1Post25Sampler.sampler.decode8 XRn_Join_Release.sampler.decode8
+ simp only [AspisR1Post25Sampler.field.CM31.new,aspis_core.field.CM31.new,
+   bind_tc_ok,mapR_bind,wide_new]
+ rfl
+
+/-- Selection of the actual callback; no emitted low-digits equation is hidden. -/
+theorem ordinary_slot : XRo_Join_Installed.actual.sampling.ordinary =
+ AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic := rfl
+
+#print axioms canonical
+#print axioms wide_new
+#print axioms decode
+#print axioms ordinary_slot
+end XRo_Join_OrdinaryDecode
