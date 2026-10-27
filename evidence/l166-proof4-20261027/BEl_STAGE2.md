@@ -1,3 +1,5 @@
+Historical stage checkpoint; final outcomes are in BEl_KANI_RUNS.md and BEl_HANDOFF.md.
+
 # Recorder/leaf gates
 
 The full Rust recorder copied each part and concatenated address. K01 was an

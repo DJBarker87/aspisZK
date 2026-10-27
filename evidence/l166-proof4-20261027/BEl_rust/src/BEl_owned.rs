@@ -74,4 +74,3 @@ fn batch<H:Digest32>(proof:&[u8],queries:[u32;22],roots:[[u8;32];3],ordinal:usiz
     for slot in 0..3 {tree(proof,queries,roots[slot],ordinal,slot,&mut idx,&mut val,hash)?;}
     Ok(())
 }
-

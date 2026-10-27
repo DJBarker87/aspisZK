@@ -5,3 +5,7 @@ mod BEl_reference;
 
 #[cfg(test)]
 mod BEl_nativefixtures;
+
+// Extraction-only entry points for the same owned recorder; never shipped.
+#[cfg(BEl_extract)]
+mod BEl_extract;
