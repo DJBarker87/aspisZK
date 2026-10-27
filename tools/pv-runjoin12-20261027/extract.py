@@ -18,13 +18,14 @@ if phase=='aeneas' and (E/(pathlib.Path(llbc).name)).is_file():
  subprocess.run(['scp','-q',str(E/pathlib.Path(llbc).name),f'{host}:{llbc}'],check=True)
 if phase=='charon':
  cmd=[charon,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--opaque','crate','--include','crate::pool_v1::pair_forest_copy_builder::records','--include','crate::pool_v1::pair_forest_copy_builder::raw','--start-from','crate::pool_v1::pair_forest_copy_builder::records','--dest-file',llbc,'--','--manifest-path',H+'/frozen/crates/aspis-statement/Cargo.toml','--offline','--release','--lib','--jobs','4']
- if len(sys.argv)>3 and sys.argv[3] in ['optimized','precise','precise-all','precise-poly']:
+ if len(sys.argv)>3 and sys.argv[3] in ['optimized','precise','precise-all','precise-poly','precise-real']:
   cmd[cmd.index('built')]='optimized'
   start=cmd.index('--opaque');end=cmd.index('--start-from');cmd[start:end]=['--opaque','crate::pool_v1::pair_trace::pair_empty_roots','--include','aspis_core::field::*']
   if sys.argv[3].startswith('precise'):
    cmd[2:2]=['--precise-drops','--desugar-drops']
-   if sys.argv[3]!='precise-poly':cmd[2:2]=['--monomorphize']
+   if sys.argv[3] not in ['precise-poly','precise-real']:cmd[2:2]=['--monomorphize']
    if sys.argv[3]=='precise-all':cmd[2:2]=['--translate-all-methods']
+   if sys.argv[3]=='precise-real':cmd[2:2]=['--rustc-arg=-Zmir-enable-passes=+Inline,+GVN,+CopyProp','--rustc-arg=-Zinline-mir=yes']
 else:
  cmd=[aeneas,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','PV_RunJoin_Records','-dest',H+'/evidence/'+name+'-generated','-split-files','-emit-json',llbc]
 pins=ssh('python3 -c '+shlex.quote('import pathlib,hashlib,json;print(json.dumps({p:hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest() for p in '+repr([charon,charon+'-driver',aeneas,H+'/frozen/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs']+([llbc] if phase=='aeneas' else []))+'}))'))

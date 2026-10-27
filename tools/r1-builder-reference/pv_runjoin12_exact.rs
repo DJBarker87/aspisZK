@@ -23,7 +23,7 @@ const EMPTY: [Digest;21] = [
 [M31(1519171444), M31(1235587172), M31(1671492368), M31(1449613582), M31(547369941), M31(1621086153), M31(266860322), M31(450526803)],
 [M31(19381883), M31(1308966873), M31(251977766), M31(474343397), M31(2069732268), M31(1863820229), M31(152153379), M31(665567443)],
 [M31(1201428963), M31(1296676114), M31(441891487), M31(1910121140), M31(602621674), M31(1294160489), M31(1878016864), M31(855887413)]];
-fn compare(transfer: bool) {
+fn compare_mode(transfer: bool, dynamic_roots: bool) {
  let input=PoolV1PairForestInputNoteWitnessV1 {
   pair: PoolV1PairInputNoteWitnessV1 {
 nullifier_key:[M31(11), M31(28), M31(45), M31(62), M31(79), M31(96), M31(113), M31(130)],salt:[M31(101), M31(118), M31(135), M31(152), M31(169), M31(186), M31(203), M31(220)],value:1000,
@@ -76,7 +76,8 @@ selected_second:false,membership:PoolV1MembershipWitnessV1 {siblings:[
 [M31(19381883), M31(1308966873), M31(251977766), M31(474343397), M31(2069732268), M31(1863820229), M31(152153379), M31(665567443)]]};
  let out=if transfer {600}else{250};
  let (w,p)=records(&input,out,rec.as_ref(),&chg,&snap,M31(77));
- let (v,q)=super::super::records_reference::records_reference_with_roots(input,out,rec,chg,snap,M31(77),EMPTY);
+ let expected_roots=if dynamic_roots {pair_empty_roots()}else{EMPTY};
+ let (v,q)=super::super::records_reference::records_reference_with_roots(input,out,rec,chg,snap,M31(77),expected_roots);
  assert_eq!(w.input_value,v.input_value);
  assert_eq!(w.output_value,v.output_value);
  assert_eq!(w.change_value,v.change_value);
@@ -98,6 +99,7 @@ selected_second:false,membership:PoolV1MembershipWitnessV1 {siblings:[
  assert_eq!(p.frontier,q.frontier);
  assert_eq!(p.empty,q.empty);
 }
+fn compare(transfer: bool) {compare_mode(transfer,false);}
 #[kani::proof]
 #[kani::unwind(33)]
 fn transfer() {compare(true);}
@@ -110,3 +112,9 @@ fn transfer_tight() {compare(true);}
 #[kani::proof]
 #[kani::unwind(25)]
 fn withdrawal_tight() {compare(false);}
+#[kani::proof]
+#[kani::unwind(25)]
+fn transfer_dynamic() {compare_mode(true,true);}
+#[kani::proof]
+#[kani::unwind(25)]
+fn withdrawal_dynamic() {compare_mode(false,true);}
