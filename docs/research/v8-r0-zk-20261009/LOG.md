@@ -12618,3 +12618,24 @@ candidate module that needs declarations only in the tracked variant is reported
 inconsistency rather than resolved by switching. This keeps one privacy closure. pv-reach8 (IDs
 39400-39499) builds the installed-op84 cohort on that basis, then the exclusions, conditional native
 witnesses and minimal reached sets. Rows removed outright: 0. Privacy target not yet established.
+
+## D323 (Stream B) 2026-10-27 21:47 UTC: batch3c stopped on a native fixture disagreement in its own rewrite; repair authorized; batch3d launched
+
+batch3c (15 of 100 attempts; all 5,673 external objects verified first; 18 ELF pin checks matching
+across six source stages) extracted op222 with its backend checks, wrong-length law and bounded
+suffix-scan proof, and removed closures, reference joins and mutable row loans from the host
+traversals. Its sixth source stage, 0b048ee98d, failed the native optimized gate before any timing:
+copy::build_pool_v1_pair_forest_copy_row_schedule_v1() returned Err(Shape) because the rewrite
+expanded 20 legacy private-path levels where the frozen POOL_V1_PAIR_PRIVATE_DIRECTIONS is 21,
+dropping level 20's three links. The worker stopped as required, did not weaken the 127-link shape
+check, and retained the counterexample binary. 0b048ee98d is rejected and is at the branch head; it
+must not be merged into the candidate. The last fully passing source is c97270adc2, with a
+cumulative batch-3 per-call cost projection of +1.902% (transfer) and +1.906% (withdrawal) against
+the +2% stop. Ops 132, 133, 224, 226, 227 and 228 remain blocked by extractor context-join,
+SymbolicToPureAbs and escaping-reference failures. Rows closed 0.
+
+batch3d resumes with the remaining 85 attempts: restore the frozen 21-step bound, rerun the three-ELF,
+native, fixture and cost gates, and revert crates/ to c97270adc2 if the repaired source projects
+above +2%; then the op222 same-input differential, copy equality and row bridge, op134's native
+association and installation, and the op117/op121 equalities. No further extraction rewrites in this
+run. Rows removed outright: 0. Privacy target not yet established.
