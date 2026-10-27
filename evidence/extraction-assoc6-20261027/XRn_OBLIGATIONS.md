@@ -14,17 +14,30 @@ translated shipped body. Opaque bodies still require their P6 association.
 
 ## A2 PreparedScratchProjection — OPEN
 
-Required: on the SAME semantic/view/hash input and arbitrary initial scratch,
-mapResult toC (Prod.fst <$> E.verifier.Prepared.new D sem v hash old) equals
-C.PreparedModel.prepare C.actualBoundaries (toC D) (toC sem) (toC v) hash,
-with the cohort's concrete installed claim boundary, not a freely selected one.
-Success additionally identifies scratch = E.weights.powers 29 gamma for the
-SAME returned gamma; inner errors preserve old scratch until overwrite and
-otherwise return that powers array. Early outer fail/div are preserved. The
-claim boundary must identify its old gamma argument with the successful emitted
-powers array and the SAME kappa (A3). Existing XRk_ScratchProjection /
-XRk_RejectedScratch prove only the emitted scratch cuts; XRm_PowersCanonical
-adds canonicality. They do not yet prove the cross-cohort equality above.
+The selected current cohort consumer is
+`AspisR1PublicPreparation.PreparedScratchModel.prepare`, not its retired
+scratch-free `PreparedModel.prepare`. This was checked by printing the coherent
+object in L056. Its `sampling.claim` (gamma-taking legacy field) is unused;
+`XRn_PreparedBoundaries.legacy_claim_unused` proves that fact on all outcomes.
+
+Required equation, with B the ACTUAL adopted concreteBoundaries/installedBoundaries:
+`mapR (fun p => (inner cprepared ce p.1,p.2))
+ (XRk_Release.verifier.Prepared.new D sem v hash old) =
+ AspisR1PublicPreparation.PreparedScratchModel.prepare B
+ (cd D) (cs sem) (cview v) hash old`.
+It keeps arbitrary old scratch, inner errors and outer fail/div. Success must
+identify the SAME gamma/kappa and powers29 array; earlier errors keep old scratch.
+The scratch-free retired helper, if a downstream consumer uses it, needs a
+separate projection/transport; it is not substituted for this current consumer.
+
+Checked prerequisites: XRn_Carriers mutually inverse full semantic/View/Prepared/
+transcript/digest/error conversions, including nested Result roundtrip;
+XRn_Transcript.start and XRn_TranscriptBlock absorb/block commutation;
+XRn_QmSampler complete division/digit-loop and QM31 sample commutation.
+XRk/XRm accepted/error scratch cuts and canonical producer facts are retained.
+Missing: whole prepare commutation and the equality of the release-backed
+XRn_PreparedBoundaries.boundaries with the actual adopted installed dictionary
+(including cached claim); a freely chosen boundary does not close this row.
 
 ## A3 PreparedClaimPowersAssociation — OPEN
 
