@@ -63,3 +63,9 @@ QMSlice044 / QMSliceUpdate046 check canonicality, value and length across native
 slice reads/writes. TensorCell048 exposes the actual four products and writes;
 TensorCellValue050 composes their arithmetic into the exact four-lane update.
 These are local cells, not the complete tensor loop or part2 meaning.
+
+TensorInner057 / TensorInnerFull058 compile: complete descending tensor inner
+loop, SAME self, canonicality/length, and exact all-cell expansion. PairSizedTrace062
+also records n.val=message.length/32 in the accepted Pair witness. Its failed059
+context-wide scalar tactic hit recursion depth; SliceDivision061 replaces it
+with a symbolic BitVec division/length theorem, without raising any limit.

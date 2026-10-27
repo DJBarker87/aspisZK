@@ -1,0 +1,87 @@
+FJj_TensorBody.lean:19:26: error: Application type mismatch: The argument
+  run
+has type
+  (match input.index_usize j with
+    | ok v =>
+      (fun x => do
+          let a ← self.factors.index_usize k
+          let a1 ← a.index_usize d
+          let q ← a1.index_usize 0#usize
+          let q1 ← x.mul q
+          let i ← lift (Usize.wrapping_mul 0#usize n)
+          let i1 ← lift (j.wrapping_add i)
+          let output1 ← input.update i1 q1
+          let a2 ← a.index_usize d
+          let q2 ← a2.index_usize 1#usize
+          let q3 ← x.mul q2
+          let i2 ← lift (Usize.wrapping_mul 1#usize n)
+          let i3 ← lift (j.wrapping_add i2)
+          let output2 ← output1.update i3 q3
+          let a3 ← a.index_usize d
+          let q4 ← a3.index_usize 2#usize
+          let q5 ← x.mul q4
+          let i4 ← lift (Usize.wrapping_mul 2#usize n)
+          let i5 ← lift (j.wrapping_add i4)
+          let output3 ← output2.update i5 q5
+          let a4 ← a.index_usize d
+          let q6 ← a4.index_usize 3#usize
+          let q7 ← x.mul q6
+          let i6 ← lift (Usize.wrapping_mul 3#usize n)
+          let i7 ← lift (j.wrapping_add i6)
+          let s ← output3.update i7 q7
+          ok (ControlFlow.cont (cursor, s)))
+        v
+    | fail v => fail v
+    | div => div) =
+    ok r
+but is expected to have type
+  ok ?m.35 = ok ?m.36
+in the application
+  ok.inj run
+FJj_TensorBody.lean:13:45: error: unsolved goals
+self : FIo_Native.weights.Weights
+k n d j : Usize
+iter cursor : Rev
+input : Slice NQ
+hn :
+  core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter =
+    ok (some j, cursor)
+r : ControlFlow (Rev × Slice NQ) (FIo_Native.weights.Weights × Slice NQ)
+run :
+  (match input.index_usize j with
+    | ok v =>
+      (fun x => do
+          let a ← self.factors.index_usize k
+          let a1 ← a.index_usize d
+          let q ← a1.index_usize 0#usize
+          let q1 ← x.mul q
+          let i ← lift (Usize.wrapping_mul 0#usize n)
+          let i1 ← lift (j.wrapping_add i)
+          let output1 ← input.update i1 q1
+          let a2 ← a.index_usize d
+          let q2 ← a2.index_usize 1#usize
+          let q3 ← x.mul q2
+          let i2 ← lift (Usize.wrapping_mul 1#usize n)
+          let i3 ← lift (j.wrapping_add i2)
+          let output2 ← output1.update i3 q3
+          let a3 ← a.index_usize d
+          let q4 ← a3.index_usize 2#usize
+          let q5 ← x.mul q4
+          let i4 ← lift (Usize.wrapping_mul 2#usize n)
+          let i5 ← lift (j.wrapping_add i4)
+          let output3 ← output2.update i5 q5
+          let a4 ← a.index_usize d
+          let q6 ← a4.index_usize 3#usize
+          let q7 ← x.mul q6
+          let i6 ← lift (Usize.wrapping_mul 3#usize n)
+          let i7 ← lift (j.wrapping_add i6)
+          let s ← output3.update i7 q7
+          ok (ControlFlow.cont (cursor, s)))
+        v
+    | fail v => fail v
+    | div => div) =
+    ok r
+⊢ ∃ out, r = ControlFlow.cont (cursor, out)
+'AspisR1.FJj_TensorBody.cont' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJj_TensorBody.done' depends on axioms: [propext, Classical.choice, Quot.sound]
