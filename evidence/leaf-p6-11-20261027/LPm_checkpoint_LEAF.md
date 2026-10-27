@@ -118,3 +118,9 @@ All commits local; no push, merge, other-worker worktree/candidate edit or key
 operation. Next leaf is prepared_claim, still OPEN.
 
 Follow-up iterator association: K006 exit0/wall30.333s/RSS916340KiB/swap0; K007 exit0/wall21.577s/RSS622184KiB/swap0. Each503 checks and3 covers passes. Checkpoint packet now uses7 Kani runs (6 pass/1 excluded timeout); Lean remains19. This resolves the explicit native E-array ordering concern without another whole-body or unchanged regression.
+
+Final LPm_L080 audit also rechecks every checkpoint theorem root; exit0,
+wall1.854272304s, peakRSS5046144KiB, swap0; only permitted standard axioms.
+This combined axioms audit is not a new frozen manifest replay or headline
+premise-removal result. Final overall budget and open prepared_claim stages
+are in LPm_HANDOFF.md.

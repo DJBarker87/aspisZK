@@ -96,3 +96,9 @@ devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
 Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
 Pinned ABI/runtime/compiler/library/source-to-ELF admissions remain; no new
 cryptographic assumption, headline premise removal, or security closure.
+
+Final stop: L080 passed the combined73-root axioms audit. Budget80/80 Lean
+(60 pass/20 rejected),18/30 Kani (14 pass/4 excluded timeouts). The leaf remains
+OPEN at the five stages above. LPm_HANDOFF.md records exact resume scope and
+LPm_FINAL_AUDIT.json records complete per-attempt metrics. No full frozen
+manifest replay was run for this incomplete leaf.
