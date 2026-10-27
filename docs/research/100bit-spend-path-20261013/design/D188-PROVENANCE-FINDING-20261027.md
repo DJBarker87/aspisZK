@@ -70,3 +70,22 @@ then B. A only if C cannot place the boundary. Until B is done, the
 headline's "deployed" attribution is qualified at these five interfaces,
 and the ledger gains a deployment row for the association obligation at the
 next recount.
+
+## Update 2026-10-27 (XRc_/XRd_): route C exhausted at the pinned translator; route C' adopted
+
+- The original release LLBC (0814e4ec...) was produced with the historical
+  kit's opacity selectors and lacked the needed bodies. A second Charon run
+  on the identical source with the identical Charon binary and selector-only
+  changes produced LLBC 80465ea3... with every required body (approved by
+  the lead as within the D188 boundary: same tool, same source).
+- The pinned Aeneas cannot translate SIX release functions:
+  compact::check_values, verifier::echeck, compact::expand_values,
+  candidate::wide_view, checkpoint, prepared_claim (the last two newly
+  exposed by the complete LLBC).
+- Route C' (no translator change, no trust change): extract everything else
+  with those six as opaque leaves; model the six by the P6 route (owned
+  reference + Kani shipped == reference + Lean model with correspondence);
+  then prove the association items against the release definitions.
+  extraction-repro5 (XRe_) is running it.
+- Route A (translator fix and re-pin) remains the fallback and needs the
+  owner's approval; it is not recommended while C' is open.
