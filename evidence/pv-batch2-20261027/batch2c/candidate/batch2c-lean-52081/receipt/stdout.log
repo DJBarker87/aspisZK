@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaSource.lean:24:2: error: 'change' tactic failed, pattern
+  lift (q.wrapping_add 1#u32) >>= ?m.108 = q + 1#u32 >>= ?m.120
+is not definitionally equal to target
+  (do
+      let (digits, quotient) ← ok (ds, q)
+      let i ← lift (quotient.wrapping_add 1#u32)
+      let (wrapped, digits1) ← PV_B2_C_Sampler.host_sampler.add_small_base_p digits i
+      let digits2 ←
+        if wrapped = true then do
+            let (_, digits3) ← PV_B2_C_Sampler.host_sampler.add_small_base_p digits1 1#u32
+            ok digits3
+          else ok digits1
+      PV_B2_C_Sampler.host_sampler.decode8 digits2) =
+    do
+    let (digits, q) ← ok (ds, q)
+    let n ← q + 1#u32
+    let (wrapped, ds1) ← ops.add digits n
+    let ds2 ←
+      if wrapped = true then do
+          let (_, ds2) ← ops.add ds1 1#u32
+          ok ds2
+        else ok ds1
+    ops.decode ds2
+'PV_B2_C_GammaSource.normalized_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B2_C_GammaSource.canonical_array' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B2_C_GammaSource.normalized_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B2_C_GammaSource.carrier_identity' does not depend on any axioms
+'PV_B2_C_GammaSource.result_identity' depends on axioms: [propext]
+'PV_B2_C_GammaSource.raw_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B2_C_GammaSource.op249_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

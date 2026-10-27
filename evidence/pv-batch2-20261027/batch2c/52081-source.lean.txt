@@ -1,0 +1,85 @@
+import R1Z.PV_B2_C_GammaHelpers
+import R1Z.PV_B2_C_U32Arithmetic
+set_option autoImplicit false
+namespace PV_B2_C_GammaSource
+open Aeneas Aeneas.Std Result
+open AspisR1 AspisR1.SamplerNatModel AspisR1.SamplerMachineBounds
+open AspisR1.SamplerAddDigits AspisR1.SourceSamplerByteRank
+open PV_B2_C_GammaNumeric PV_B2_C_GammaHelpers
+
+/-- Checked and wrapping increments agree because the proved high quotient
+is at most 256; no input rank is evaluated concretely. -/
+theorem normalized_eq (b : Bytes32) :
+    PV_B2_C_Sampler.host_sampler.gamma_sample b = sample ops b := by
+  obtain ⟨ds,q,hlow,_,_⟩ := PV_B2_C_RankDigits.source b
+  have hq := (low_refines b ds q hlow).2
+  have hq256 : q.val ≤ 256 := by
+    rw [hq]
+    exact rank_div_P8_le_256 (rank_lt b)
+  have hi := PV_B2_C_U32Arithmetic.add_exact q 1#u32 (by scalar_tac)
+  unfold PV_B2_C_Sampler.host_sampler.gamma_sample sample
+  change (PV_B2_C_Sampler.host_sampler.low_base_p_digits b >>= _) =
+    (PV_B2_C_Sampler.host_sampler.low_base_p_digits b >>= _)
+  rw [hlow]
+  change (lift (U32.wrapping_add q 1#u32) >>= _) = ((q+1#u32 : Result U32) >>= _)
+  rw [hi]
+  change (PV_B2_C_Sampler.host_sampler.add_small_base_p ds (U32.wrapping_add q 1#u32) >>= _) =
+    (PV_B2_C_Sampler.host_sampler.add_small_base_p ds (U32.wrapping_add q 1#u32) >>= _)
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  rintro ⟨wrapped,ds1⟩ _
+  cases wrapped <;> rfl
+
+theorem canonical_array (ds : Digits) (hc : Canonical ds) : PV_B2_C_ArrayDigits.canonical ds := by
+  intro i
+  have hm : (PV_B2_C_ArrayDigits.limb ds i).val ∈ values ds := by
+    exact List.mem_map.mpr ⟨_,List.getElem_mem (by rw [ds.property];exact i.isLt),rfl⟩
+  exact hc _ hm
+
+/-- Complete Result success and exact nonzero rank formula for every block,
+on the exact raw extracted scalar structures. No success hypothesis. -/
+theorem normalized_source (b : Bytes32) :
+    ∃ ds : Digits,
+      PV_B2_C_Sampler.host_sampler.gamma_sample b = ok (PV_B2_C_ArrayDigits.raw ds) ∧
+      Canonical ds ∧ digitsValue P (values ds) = rank b % (P^8-1)+1 ∧
+      0 < digitsValue P (values ds) ∧ digitsValue P (values ds) < P^8 := by
+  obtain ⟨out,he⟩ := sample_total ops refine_source total_source b
+  obtain ⟨ds,hdecode,hcanon,hrank,hpos,hbound⟩ :=
+    gamma_rank_success ops refine_source b out he
+  have hd := PV_B2_C_ArrayDigits.decode ds (canonical_array ds hcanon)
+  have ho : out = PV_B2_C_ArrayDigits.raw ds := Result.ok.inj (hdecode.symm.trans hd)
+  subst out
+  exact ⟨ds,(normalized_eq b).trans he,hcanon,hrank,hpos,hbound⟩
+
+/-- The presentation's field reconstruction is identity on this raw carrier. -/
+theorem carrier_identity (v : E) : PV_B2_C_SamplerCarrier.toNative v = v := by
+  cases v
+  rfl
+
+theorem result_identity (r : Result E) :
+    PV_B2_C_SamplerCarrier.mapResult PV_B2_C_SamplerCarrier.toNative r = r := by
+  cases r <;> simp only [PV_B2_C_SamplerCarrier.mapResult,carrier_identity]
+
+theorem raw_eq (b : Bytes32) :
+    PV_B2_C_249.host_sampler.gamma_sample b = PV_B2_C_Sampler.host_sampler.gamma_sample b := by
+  have h := PV_B2_C_GammaCarrier.source b
+  rw [result_identity] at h
+  exact h
+
+/-- Unmodified raw emission: complete Result and gamma rank, all byte inputs.
+This is a copy-source law, not original/copy/native or V256 installation. -/
+theorem op249_source (b : Bytes32) :
+    ∃ ds : Digits,
+      PV_B2_C_249.host_sampler.gamma_sample b = ok (PV_B2_C_ArrayDigits.raw ds) ∧
+      Canonical ds ∧ digitsValue P (values ds) = rank b % (P^8-1)+1 ∧
+      0 < digitsValue P (values ds) ∧ digitsValue P (values ds) < P^8 := by
+  rw [raw_eq]
+  exact normalized_source b
+
+#print axioms normalized_eq
+#print axioms canonical_array
+#print axioms normalized_source
+#print axioms carrier_identity
+#print axioms result_identity
+#print axioms raw_eq
+#print axioms op249_source
+end PV_B2_C_GammaSource

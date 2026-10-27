@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_MutationLoop.lean:10:4: error: Type mismatch: After simplification, term
+  hj
+ has type
+  j < 1024#usize
+but is expected to have type
+  ↑j < ↑1024#usize
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_MutationLoop.lean:22:2: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.26 ?m.27 ?m.28).mpr`
+  ?m.26 >>= ?m.27 = ?m.26 >>= ?m.28
+with the goal
+  (match do
+      let x ← host_weights.materialize_cell w k j
+      let updated ← Array.update out j x
+      ok (cont (updated, j.wrapping_add 1#usize)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => host_weights.materialize_values_loop.body w k x.1 x.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let x ← host_weights.materialize_cell w k j
+    let updated ← Array.update out j x
+    loop (fun x => host_weights.materialize_values_loop.body w k x.1 x.2) (updated, j.wrapping_add 1#usize)
+
+Note: The full type of `(bind_eq_iff ?m.26 ?m.27 ?m.28).mpr` is
+  (∀ (v : ?m.24), ?m.26 = ok v → ?m.27 v = ?m.28 v) → ?m.26 >>= ?m.27 = ?m.26 >>= ?m.28
+
+w : host_weights.Weights
+k : Powers
+out : Out
+j : Usize
+hj : j < 1024#usize
+⊢ (match do
+      let x ← host_weights.materialize_cell w k j
+      let updated ← Array.update out j x
+      ok (cont (updated, j.wrapping_add 1#usize)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => host_weights.materialize_values_loop.body w k x.1 x.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let x ← host_weights.materialize_cell w k j
+    let updated ← Array.update out j x
+    loop (fun x => host_weights.materialize_values_loop.body w k x.1 x.2) (updated, j.wrapping_add 1#usize)
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_MutationLoop.lean:33:36: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [body_done w k out j hj,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B2_C_MutationLoop.update_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B2_C_MutationLoop.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B2_C_MutationLoop.done' depends on axioms: [propext, Classical.choice, Quot.sound]

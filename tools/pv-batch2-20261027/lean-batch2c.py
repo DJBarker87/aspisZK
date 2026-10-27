@@ -2,7 +2,11 @@ from pathlib import Path
 import hashlib,json,re,shlex,subprocess,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-batch2-20261027/batch2c';D='/home/dombarker/project-offloads/codex-pv-batch2-20261027';H='dombarker@100.108.41.90'
 n=int(sys.argv[1]);module=sys.argv[2];assert 52000<=n<=52499
-p=R/'docs/research/v8-r0-zk-20261009/lean'/(module+'.lean');assert p.name.startswith('PV_B2_')
+h5=json.loads((E/'H5-SOURCE-PINS.json').read_text()).get(module)
+if h5:
+ p=R/h5['path'];assert hashlib.sha256(subprocess.check_output(['git','show','HEAD:'+h5['path']])).hexdigest()==h5['sha256'];assert hashlib.sha256(p.read_bytes()).hexdigest()==h5['sha256']
+else:
+ p=R/'docs/research/v8-r0-zk-20261009/lean'/(module+'.lean');assert p.name.startswith('PV_B2_')
 tp=E/'TALLY.json';t=json.loads(tp.read_text());used=json.loads((E/'ID-PREFLIGHT.json').read_text())['used'];assert n not in used;assert n not in [a['id'] for a in t['attempts']]
 assert t['lean_charged']<100
 assert t['lean_charged']<97 or 'Audit' in module
@@ -33,12 +37,18 @@ for root in e['LEAN_PATH'].split(':'):
  for src in (Path(root)/'R1Z').rglob('*.olean'):
   dst=D/'lean-objects/R1Z'/src.relative_to(Path(root)/'R1Z');dst.parent.mkdir(parents=True,exist_ok=True)
   if src.exists() and not dst.exists() and not dst.is_symlink():dst.symlink_to(src)
+# A private h5 build must never write through an inherited object symlink.
+if H5MODULE:
+ dst=D/'lean-objects'/(H5MODULE+'.olean')
+ if dst.is_symlink():dst.unlink()
+ elif dst.exists():raise SystemExit('h5 output already exists; inspect instead of overwriting')
 (D/'lean-sources/R1Z').mkdir(parents=True,exist_ok=True);(D/'lean-objects/R1Z').mkdir(parents=True,exist_ok=True)
 print(json.dumps(r,sort_keys=True))
-'''.replace('DIR',repr(D)).replace('IMPORTS',repr(imports)).replace('ATTEMPT',str(n))
+'''.replace('DIR',repr(D)).replace('IMPORTS',repr(imports)).replace('ATTEMPT',str(n)).replace('H5MODULE',repr(module if h5 else None))
 r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True)
 if r.returncode:(E/f'{n}-preflight-error.txt').write_text(r.stderr+r.stdout);raise SystemExit(r.stderr+r.stdout)
 deps=json.loads(r.stdout);fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest();meta=dict(attempt=n,module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),worktree_source_dirty=bool(subprocess.check_output(['git','status','--porcelain','--',str(p)],text=True).strip()),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),deps_fingerprint=fp,dependency_objects=deps)
+if h5:meta['h5_source_pin']=h5
 # Refuse every previously charged identical source/dependency pair, including failures.
 charged_ids={a['id'] for a in t['attempts'] if a.get('charged')}
 for prior in list(E.glob('*-submission.json'))+list((E.parent/'batch2b').glob('*-submission.json')):

@@ -1,0 +1,71 @@
+import R1Z.PV_B2_C_GammaNumeric
+set_option autoImplicit false
+namespace PV_B2_C_GammaNumeric
+open Aeneas Aeneas.Std Result
+open AspisR1 AspisR1.SamplerNatModel AspisR1.SamplerMachineBounds
+open AspisR1.SamplerAddDigits AspisR1.SourceSamplerByteRank
+variable {α : Type}
+
+/-- Explicit local totality obligations, discharged for the copied source below;
+this structure is not a privacy trust item or an endpoint assumption. -/
+structure HelpersTotal (ops : GammaHelpers α) : Prop where
+  low : ∀ (block : Bytes32), ∃ (ds : Digits) (q : U32), ops.low block = ok (ds,q)
+  add : ∀ (ds : Digits) (n : U32), Canonical ds → n.val ≤ 257 →
+    ∃ wrapped out, ops.add ds n = ok (wrapped,out)
+  decode : ∀ (ds : Digits), Canonical ds → ∃ out, ops.decode ds = ok out
+
+theorem sample_total (ops : GammaHelpers α) (R : HelpersRefine ops)
+    (H : HelpersTotal ops) (block : Bytes32) : ∃ out, sample ops block = ok out := by
+  obtain ⟨ds,q,hlow⟩ := H.low block
+  obtain ⟨hd,hq⟩ := R.low block ds q hlow
+  have hq256 : q.val ≤ 256 := by
+    rw [hq]
+    exact rank_div_P8_le_256 (rank_lt block)
+  have hc : Canonical ds := by
+    unfold Canonical
+    rw [hd]
+    exact lowDigits_canonical P_pos 8 (rank block)
+  obtain ⟨n,hn,hv⟩ := WP.spec_imp_exists (U32.add_spec (x := q) (y := 1#u32) (by scalar_tac))
+  have hn257 : n.val ≤ 257 := by
+    have hnval : n.val = q.val + 1 := by simpa using hv
+    omega
+  obtain ⟨wrapped,ds1,hadd⟩ := H.add ds n hc hn257
+  obtain ⟨hfirst,_⟩ := R.add ds n wrapped ds1 hc hn257 hadd
+  have hc1 : Canonical ds1 := by
+    unfold Canonical
+    rw [hfirst]
+    exact addDigits_output_digits_lt P _ _ P_pos
+  cases wrapped with
+  | false =>
+    obtain ⟨out,hdecode⟩ := H.decode ds1 hc1
+    refine ⟨out,?_⟩
+    unfold sample
+    rw [hlow]
+    change ((q + 1#u32 : Result U32) >>= _) = ok out
+    rw [hn]
+    change (ops.add ds n >>= _) = ok out
+    rw [hadd]
+    change ops.decode ds1 = ok out
+    exact hdecode
+  | true =>
+    obtain ⟨wrapped2,ds2,hsecond⟩ := H.add ds1 1#u32 hc1 (by decide)
+    obtain ⟨hsecondValue,_⟩ := R.add ds1 1#u32 wrapped2 ds2 hc1 (by decide) hsecond
+    have hc2 : Canonical ds2 := by
+      unfold Canonical
+      rw [hsecondValue]
+      exact addDigits_output_digits_lt P _ _ P_pos
+    obtain ⟨out,hdecode⟩ := H.decode ds2 hc2
+    refine ⟨out,?_⟩
+    unfold sample
+    rw [hlow]
+    change ((q + 1#u32 : Result U32) >>= _) = ok out
+    rw [hn]
+    change (ops.add ds n >>= _) = ok out
+    rw [hadd]
+    change ((do let pair ← ops.add ds1 1#u32; ok pair.2) >>= ops.decode) = ok out
+    rw [hsecond]
+    change ops.decode ds2 = ok out
+    exact hdecode
+
+#print axioms sample_total
+end PV_B2_C_GammaNumeric

@@ -1,0 +1,35 @@
+theorem LawfulMonad.bind_assoc.{u, v} : ∀ {m : Type u → Type v} {inst : Monad m} [self : LawfulMonad m] {α β γ : Type u}
+  (x : m α) (f : α → m β) (g : β → m γ), x >>= f >>= g = x >>= fun x => f x >>= g :=
+fun m {inst} [self : LawfulMonad m] => self.5
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `bind_tc`
+theorem Aeneas.Std.bind_tc_ok.{u_1} : ∀ {α β : Type u_1} (x : α) (f : α → Result β),
+  (do
+      let y ← Result.ok x
+      f y) =
+    f x :=
+fun {α β} x f => of_eq_true (eq_self (f x))
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `bind_tc_assoc`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Result.bind`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Result.bind_assoc`
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+def Aeneas.Std.U64.wrapping_shr : U64 → U32 → U64 :=
+fun x s => UScalar.wrapping_shr x s
+def Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+def Aeneas.Std.UScalar.wrapping_add : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv + y.bv)#uscalar
+def Aeneas.Std.UScalar.val : {ty : UScalarTy} → UScalar ty → ℕ :=
+fun {ty} x => x.bv.toNat
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:14:7: error(lean.unknownIdentifier): Unknown constant `UScalar.land`
+Nat.mod_mod_of_dvd {c b : ℕ} (a : ℕ) (h : c ∣ b) : a % b % c = a % c
+Nat.and_le_right {n m : ℕ} : n &&& m ≤ m
+Nat.and_le_left {n m : ℕ} : n &&& m ≤ n
+Nat.shiftRight_eq_div_pow (m n : ℕ) : m >>> n = m / 2 ^ n
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:19:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.cast_val`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:20:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_cast`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:21:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.wrapping_add_val`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:22:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_wrapping_add`
+Aeneas.Std.UScalar.bv_toNat {ty : UScalarTy} (x : UScalar ty) : x.bv.toNat = ↑x
+Aeneas.Std.UScalar.size (ty : UScalarTy) : ℕ
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:25:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.size_pos`

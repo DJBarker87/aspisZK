@@ -1,0 +1,142 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:39:10: error: unsolved goals
+case false
+α : Type
+ops : GammaHelpers α
+R : HelpersRefine ops
+H : HelpersTotal ops
+block : Bytes32
+ds : Digits
+q : U32
+hlow : ops.low block = ok (ds, q)
+hd : values ds = ordinaryDigits (rank block)
+hq : ↑q = rank block / P ^ 8
+hq256 : ↑q ≤ 256
+hc : Canonical ds
+n : UScalar UScalarTy.U32
+hn : q + 1#u32 = ok n
+hv : ↑n = ↑q + ↑1#u32
+hn257 : ↑n ≤ 257
+ds1 : Std.Array U32 8#usize
+hfirst : values ds1 = (addDigits P (↑n) (values ds)).1
+hc1 : Canonical ds1
+hadd : ops.add ds n = ok (false, ds1)
+right✝ : false = false ↔ (addDigits P (↑n) (values ds)).2 = 0
+out : α
+hdecode : ops.decode ds1 = ok out
+⊢ (let (digits, q) := (ds, q)
+    do
+    let n ← q + 1#u32
+    let (wrapped, ds1) ← ops.add digits n
+    let ds2 ←
+      if wrapped = true then do
+          let (_, ds2) ← ops.add ds1 1#u32
+          ok ds2
+        else ok ds1
+    ops.decode ds2) =
+    ok out
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:43:9: error: unsolved goals
+case true
+α : Type
+ops : GammaHelpers α
+R : HelpersRefine ops
+H : HelpersTotal ops
+block : Bytes32
+ds : Digits
+q : U32
+hlow : ops.low block = ok (ds, q)
+hd : values ds = ordinaryDigits (rank block)
+hq : ↑q = rank block / P ^ 8
+hq256 : ↑q ≤ 256
+hc : Canonical ds
+n : UScalar UScalarTy.U32
+hn : q + 1#u32 = ok n
+hv : ↑n = ↑q + ↑1#u32
+hn257 : ↑n ≤ 257
+ds1 : Std.Array U32 8#usize
+hfirst : values ds1 = (addDigits P (↑n) (values ds)).1
+hc1 : Canonical ds1
+hadd : ops.add ds n = ok (true, ds1)
+right✝¹ : true = false ↔ (addDigits P (↑n) (values ds)).2 = 0
+wrapped2 : Bool
+ds2 : Std.Array U32 8#usize
+hsecond : ops.add ds1 1#u32 = ok (wrapped2, ds2)
+hsecondValue : values ds2 = (addDigits P (↑1#u32) (values ds1)).1
+right✝ : wrapped2 = false ↔ (addDigits P (↑1#u32) (values ds1)).2 = 0
+hc2 : Canonical ds2
+out : α
+hdecode : ops.decode ds2 = ok out
+⊢ (let (digits, q) := (ds, q)
+    do
+    let n ← q + 1#u32
+    let (wrapped, ds1) ← ops.add digits n
+    let ds2 ←
+      if wrapped = true then do
+          let (_, ds2) ← ops.add ds1 1#u32
+          ok ds2
+        else ok ds1
+    ops.decode ds2) =
+    ok out
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:42:46: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [sample, ̲hlow, ̲hn̵,̵h̵add, ̲bind_tc_ok, ̲if_false, ̲hdecode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:42:49: warning: This simp argument is unused:
+  hadd
+
+Hint: Omit it from the simp argument list.
+  simp only [sample, ̲hlow, ̲hn,h̵a̵d̵d̵,̵ ̲bind_tc_ok, ̲if_false, ̲hdecode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:42:65: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵a̵m̵p̵l̵e̵,̵h̵l̵o̵w̵,̵h̵n̵,̵h̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵h̵d̵e̵c̵o̵d̵e̵]̵[̲s̲a̲m̲p̲l̲e̲,̲ ̲h̲l̲o̲w̲,̲ ̲h̲n̲,̲ ̲h̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲d̲e̲c̲o̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:42:74: warning: This simp argument is unused:
+  hdecode
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵a̵m̵p̵l̵e̵,̵h̵l̵o̵w̵,̵h̵n̵,̵h̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵h̵d̵e̵c̵o̵d̵e̵]̵[̲s̲a̲m̲p̲l̲e̲,̲ ̲h̲l̲o̲w̲,̲ ̲h̲n̲,̲ ̲h̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:52:46: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [sample, ̲hlow, ̲hn̵,̵h̵add, ̲hsecond, ̲bind_tc_ok, ̲if_true, ̲hdecode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:52:49: warning: This simp argument is unused:
+  hadd
+
+Hint: Omit it from the simp argument list.
+  simp only [sample, ̲hlow, ̲hn, ̲ha̵d̵d̵,̵h̵second, ̲bind_tc_ok, ̲if_true, ̲hdecode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:52:54: warning: This simp argument is unused:
+  hsecond
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵a̵m̵p̵l̵e̵,̵h̵l̵o̵w̵,̵h̵n̵,̵h̵a̵d̵d̵,̵h̵s̵e̵c̵o̵n̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵t̵r̵u̵e̵,̵h̵d̵e̵c̵o̵d̵e̵]̵[̲s̲a̲m̲p̲l̲e̲,̲ ̲h̲l̲o̲w̲,̲ ̲h̲n̲,̲ ̲h̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲h̲d̲e̲c̲o̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:52:73: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵a̵m̵p̵l̵e̵,̵h̵l̵o̵w̵,̵h̵n̵,̵h̵a̵d̵d̵,̵h̵s̵e̵c̵o̵n̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵t̵r̵u̵e̵,̵h̵d̵e̵c̵o̵d̵e̵]̵[̲s̲a̲m̲p̲l̲e̲,̲ ̲h̲l̲o̲w̲,̲ ̲h̲n̲,̲ ̲h̲a̲d̲d̲,̲ ̲h̲s̲e̲c̲o̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲d̲e̲c̲o̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_GammaTotal.lean:52:81: warning: This simp argument is unused:
+  hdecode
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵a̵m̵p̵l̵e̵,̵h̵l̵o̵w̵,̵h̵n̵,̵h̵a̵d̵d̵,̵h̵s̵e̵c̵o̵n̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵t̵r̵u̵e̵,̵h̵d̵e̵c̵o̵d̵e̵]̵[̲s̲a̲m̲p̲l̲e̲,̲ ̲h̲l̲o̲w̲,̲ ̲h̲n̲,̲ ̲h̲a̲d̲d̲,̲ ̲h̲s̲e̲c̲o̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B2_C_GammaNumeric.sample_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

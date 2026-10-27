@@ -5,7 +5,7 @@ code="""from pathlib import Path
 import sys,tarfile
 D=Path('/home/dombarker/project-offloads/codex-pv-batch2-20261027')
 with tarfile.open(fileobj=sys.stdout.buffer,mode='w|') as t:
- for root in list((D/'candidate').glob('batch2c-*'))+list((D/'candidate').glob('batch2b-batch2c-*'))+list(D.glob('batch2c-extraction*')):
+ for root in list((D/'candidate').glob('batch2c-*'))+list((D/'candidate').glob('batch2b-batch2c-*'))+list(D.glob('batch2c-extraction*'))+list(D.glob('batch2c-rowcheck'))+list(D.glob('batch2c-d188-full*')):
   for p in root.rglob('*'):
    if p.is_file() and not any(x in p.parts for x in ['artifacts','diagnostics']) and p.suffix in ['.json','.log','.txt','.lean']:
     t.add(p,arcname=str(p.relative_to(D)),recursive=False)

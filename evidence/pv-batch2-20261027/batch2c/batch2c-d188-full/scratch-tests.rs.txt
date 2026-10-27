@@ -1,0 +1,28 @@
+
+#[cfg(test)]
+mod pv_b2_full_checks {
+ extern crate std;
+ use super::*;
+ use aspis_core::field::{CM31,M31,P};
+ #[test]
+ fn full_mutation_outputs() {
+  for variant in [Variant::S1,Variant::S2,Variant::D] {
+    let a=Weights::new(variant,&alpha,&z).unwrap();
+    let b=crate::weights::Weights::new(variant,&alpha,&z).unwrap();
+    assert_eq!(a.factors,b.factors);assert_eq!(a.points,b.points);assert_eq!(a.extra,b.extra);
+    for kind in 0..7 { for j in 0..1024 { assert_eq!(a.raw(kind,j),b.raw(kind,j),"raw {:?} {} {}",variant,kind,j); } }
+    let kappa=E::from_limbs([2,3,4,5,6,7,8,9]).unwrap();
+    let mut out=[E::ONE;1024];a.materialize(kappa,&mut out).unwrap();
+    let expected=b.materialize(kappa).unwrap();assert_eq!(out.as_slice(),expected.as_slice());
+   }
+  }
+  for variant in [Variant::S1,Variant::S2,Variant::D] {
+   let a=Weights{variant,factors:[[[K::ONE;4];5];5],points:[[K::ONE;10];3],extra:[K::ONE;2]};
+   let b=crate::weights::Weights{variant,factors:a.factors,points:a.points,extra:a.extra};
+   let mut out=[E::ZERO;1024];a.materialize(E::ONE,&mut out).unwrap();
+   assert_eq!(out.as_slice(),b.materialize(E::ONE).unwrap().as_slice());
+   let selected=out.map(|x|x.to_limbs());
+   std::println!("PV_B2_NATIVE_FULL_OK_{:?}={:?}",variant,selected);
+  }
+ }
+}
