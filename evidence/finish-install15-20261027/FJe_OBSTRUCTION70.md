@@ -72,3 +72,16 @@ pair-pattern versus projection-pattern normalization;077 hit the default
 200000-heartbeat isDefEq limit (15.4233s,3231024KiB,zero swap). No cap/heartbeat
 increase;the replacement isolates tuple reduction before recursive composition.
 K016 full first-word with actual-prefix bounds TIMEOUT180.2561s;receipt retained.
+
+Final update after100:all three packed VALUES are checked;098 complete native
+sum3 VALUE and099 actual evaluator leading/full packed cuts are checked.100
+final import/axioms/top/non-vacuity audit PASS2.610930623s,5582312KiB,zero swap.
+Only standard axioms. K017 complete local packed equality PASS;K018 external
+lowbit,K019 leading lowbit,K020 full lowbit all TIMEOUT180s on changed split
+scopes. Exact whole-function P6 bridges remain absent;no timeout was admitted.
+Native bounds4/8/16 remain known and unwind18 is used;the obstruction is finite
+solver arithmetic noncompletion,not evidence of an unbounded source loop.
+Step2 still lacks actual internal-pair VALUE and four selected output/slice/pack
+joins. No composition/link/active/masked-terminal/literal transport/top closure.
+Final both-ledger delta0T/0P/0G/0C. Full budgets100/20 exhausted;no more prover
+jobs. Uncompiled projected proposals are archived and excluded from imports.
