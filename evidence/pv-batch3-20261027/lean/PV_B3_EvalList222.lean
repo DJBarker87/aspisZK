@@ -86,7 +86,6 @@ theorem bounded (column : Slice Q) (weights : host_multilinear.SparseWeights) :
     intro product hp
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro next hs
-    simp only [bind_tc_ok]
     rw [← inc]
     exact ih next (Usize.wrapping_add i 1#usize) (by omega) (by omega)
 
