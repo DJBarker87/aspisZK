@@ -1,0 +1,53 @@
+{"attempt": "XRr_L045", "exit_status": 1, "wall_seconds": 1.1820907529909164, "peak_rss_kib": "2659604", "swaps": "0", "print_axioms": ["'XRr_Initial64.width' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRr_Initial64.filled' depends on axioms: [propext, Quot.sound]", "'XRr_Initial64.init' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRr_generated/XRr_Initial64.lean:11:44: error: Tactic `decide` failed for proposition
+  (1#isize = 0#isize) = False
+because its `Decidable` instance
+  instDecidableEqOfIff
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `decEq`, `instDecidableEqBool`, `instDecidableEqOfIff`, `instDecidableIff`, `Bool.decEq`, `Int.decEq`, `Int.instDecidableEq`, `Nat.decLe`, `Nat.decLt`, and `instDecidableEqIScalar_1`, reduction got stuck at the `Decidable` instance
+  match ↑1#isize, ↑0#isize with
+  | Int.ofNat a, Int.ofNat b =>
+    match decEq a b with
+    | isTrue h => isTrue ⋯
+    | isFalse h => isFalse ⋯
+  | Int.ofNat a, Int.negSucc a_1 => isFalse ⋯
+  | Int.negSucc a, Int.ofNat a_1 
+...
+ok 2#usize
+      let i1 ← 2#usize * i
+      1024#usize >>> i1) =
+    ok 64#usize
+
+hm : 2#usize * 2#usize = ok 4#usize
+⊢ (do
+      let i ← if decide (1#isize = 0#isize) = true then ok 1#usize else ok 2#usize
+      let i1 ← 2#usize * i
+      1024#usize >>> i1) =
+    ok 64#usize
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    instDecidableEqIScalar_1 IScalarTy.Isize transport.Variant.S2.read_discriminant
+      transport.Variant.S1.read_discriminant
+  has type
+    Decidable (transport.Variant.S2.read_discriminant = transport.Variant.S1.read_discriminant)
+  but is expected to have type
+    Decidable (1#isize = 0#isize)
+  in the application
+    @decide (1#isize = 0#isize)
+      (instDecidableEqIScalar_1 IScalarTy.Isize transport.Variant.S2.read_discriminant
+        transport.Variant.S1.read_discriminant)
+XRr_generated/XRr_Initial64.lean:11:51: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [show (̵1̵#̵i̵s̵i̵z̵e̵=̵0̵#̵i̵s̵i̵z̵e̵)̵=̵F̵a̵l̵s̵e̵(̲1̲#̲i̲s̲i̲z̲e̲ ̲=̲ ̲0̲#̲i̲s̲i̲z̲e̲)̲ ̲=̲ ̲F̲a̲l̲s̲e̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵d̲e̲c̲i̲d̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRr_Initial64.width' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRr_Initial64.filled' depends on axioms: [propext, Quot.sound]
+'XRr_Initial64.init' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb780bc12963944a492724b6cd553fb90.scope; invocation ID: a468636cf26242af8e8171f570d8dd8c
