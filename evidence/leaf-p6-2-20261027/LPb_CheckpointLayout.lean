@@ -1,4 +1,5 @@
 import XRk_CheckpointModel
+set_option autoImplicit false
 open Aeneas Aeneas.Std Result
 open XRk_Release XRk_FieldExternal
 namespace LPb_CheckpointLayout

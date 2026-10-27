@@ -1,0 +1,27 @@
+LPb_generated/LPb_PayloadWidth.lean:11:42: error: unsolved goals
+p : verifier.Prepared
+a : verifier.Accumulator
+ph uh : Std.Array U8 32#usize
+ws : List (Std.Array U8 32#usize)
+hw : ws.length = 6
+ha : (↑a.weights).length = 64
+hroots : (List.flatMap Subtype.val ↑p.roots).length = ↑32#usize * (↑p.roots).length
+hqueries : (List.flatMap XRk_wordBytes ↑p.queries).length = 4 * (↑p.queries).length
+hsem : (List.flatMap XRk_qBytes ↑p.semantic_alpha).length = 16 * (↑p.semantic_alpha).length
+hz : ∀ (z : aspis_core.circle.SecureCirclePoint), (XRk_qBytes z.x ++ XRk_qBytes z.y).length = 32
+hpoints : (List.flatMap (fun z => XRk_qBytes z.x ++ XRk_qBytes z.y) ↑p.z).length = 32 * (↑p.z).length
+hweights : (List.flatMap XRk_qBytes ↑a.weights).length = 16 * (↑a.weights).length
+hinitial : (List.flatMap Subtype.val (List.take 4 ws)).length = ↑32#usize * min 4 6
+hfinal : (List.flatMap Subtype.val (List.drop 4 ws)).length = ↑32#usize * (6 - 4)
+⊢ 0 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + (0 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1) + ↑32#usize + ↑32#usize + ↑32#usize +
+                      ↑32#usize * ↑2#usize +
+                    ↑32#usize * min 4 6 +
+                  16 +
+                4 * ↑22#usize +
+              16 * ↑10#usize +
+            32 * ↑2#usize +
+          ↑32#usize * (6 - 4) +
+        16 +
+      16 * 64 =
+    1736
+'LPb_PayloadWidth.payload_width' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

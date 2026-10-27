@@ -1,4 +1,5 @@
 import LPb_CheckpointLayout
+set_option autoImplicit false
 open Aeneas Aeneas.Std Result
 namespace LPb_Logged
 abbrev Query := List (Slice U8)

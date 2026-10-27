@@ -1,4 +1,5 @@
 import XRk_DotModel
+set_option autoImplicit false
 open Aeneas Aeneas.Std Result
 namespace LPb_FoldStages
 /-- The fold preserves the actual Result, including panic and divergence. -/

@@ -1,4 +1,5 @@
 import LPb_Logged
+set_option autoImplicit false
 open Aeneas Aeneas.Std Result
 open XRk_Release XRk_FieldExternal
 open LPb_CheckpointLayout
