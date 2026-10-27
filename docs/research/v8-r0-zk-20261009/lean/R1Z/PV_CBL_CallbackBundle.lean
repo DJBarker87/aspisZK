@@ -68,4 +68,34 @@ theorem op28_source (base : ExternalTypes) (ops : @ExternalFuns (StringTypes bas
     @ExternalFuns.op28 (StringTypes base) (selectedString base ops) s =
       PV_CBL_StringOwnedReference.string_owned_reference s := rfl
 #print axioms op28_source
+omit [ExternalTypes] in
+theorem op25_source_string (base : ExternalTypes) (ops : @ExternalFuns (StringTypes base))
+    (p : String) :
+    @ExternalFuns.op25 (StringTypes base) (selectedString base ops) p =
+      PV_CBL_PathOwnedReference.path_owned_reference (PV_CBL_StringViewTypes.base base) p := rfl
+#print axioms op25_source_string
+omit [ExternalTypes] in
+theorem op29_source_string (base : ExternalTypes) (ops : @ExternalFuns (StringTypes base))
+    (p : String) :
+    @ExternalFuns.op29 (StringTypes base) (selectedString base ops) p =
+      PV_CBL_PathOwnedReference.path_owned_reference (PV_CBL_StringViewTypes.base base) p := rfl
+#print axioms op29_source_string
+omit [ExternalTypes] in
+theorem op34_source_string (base : ExternalTypes) (ops : @ExternalFuns (StringTypes base))
+    {T : Type} (A : Type) (v : alloc.vec.Vec T) :
+    @ExternalFuns.op34 (StringTypes base) (selectedString base ops) T A v =
+      PV_CBL_Op34Reference.empty_reference v := rfl
+omit [ExternalTypes] in
+theorem op35_source_string (base : ExternalTypes) (ops : @ExternalFuns (StringTypes base))
+    (T : Type) :
+    @ExternalFuns.op35 (StringTypes base) (selectedString base ops) T =
+      PV_CBL_Op35Reference.default_reference T := rfl
+omit [ExternalTypes] in
+theorem op28_source_all (base : ExternalTypes) (ops : @ExternalFuns (StringTypes base))
+    (s : String) :
+    @ExternalFuns.op28 (StringTypes base) (selectedString base ops) s =
+      PV_CBL_StringOwnedReference.string_owned_reference s := rfl
+#print axioms op34_source_string
+#print axioms op35_source_string
+#print axioms op28_source_all
 end R1Z.PV_CBL_CallbackBundle

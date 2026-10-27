@@ -1,3 +1,5 @@
+import R1Z.PV_CBL_StringSelectionIdempotent
+import R1Z.PV_CBL_StringSelectionFrame
 import R1Z.PV_CBL_CallbackBundle
 open Aeneas Aeneas.Std Result
 noncomputable section
@@ -15,4 +17,9 @@ theorem all_idempotent (base : ExternalTypes)
       PV_CBL_CallbackBundle.selectedAll base ops := rfl
 #print axioms idempotent
 #print axioms all_idempotent
+#print axioms PV_CBL_StringSelectionIdempotent.installed
+#print axioms PV_CBL_StringSelectionFrame.op25
+#print axioms PV_CBL_StringSelectionFrame.op29
+#print axioms PV_CBL_StringSelectionFrame.op34
+#print axioms PV_CBL_StringSelectionFrame.op35
 end R1Z.PV_CBL_SelectionAudit

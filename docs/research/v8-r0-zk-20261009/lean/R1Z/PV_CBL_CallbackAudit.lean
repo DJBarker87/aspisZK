@@ -1,3 +1,4 @@
+import R1Z.PV_CBL_StringCallbackFamily
 import R1Z.PV_CBL_CallbackBundle
 open Aeneas Aeneas.Std Result
 noncomputable section
@@ -26,4 +27,11 @@ theorem supplied_family (base : ExternalTypes)
 #print axioms PV_CBL_CallbackBundle.op29_source
 #print axioms PV_CBL_CallbackBundle.op34_source_all
 #print axioms PV_CBL_CallbackBundle.op35_source_all
+#print axioms PV_CBL_CallbackBundle.op28_source
+#print axioms PV_CBL_CallbackBundle.op28_source_all
+#print axioms PV_CBL_CallbackBundle.op25_source_string
+#print axioms PV_CBL_CallbackBundle.op29_source_string
+#print axioms PV_CBL_CallbackBundle.op34_source_string
+#print axioms PV_CBL_CallbackBundle.op35_source_string
+#print axioms PV_CBL_StringCallbackFamily.supplied
 end R1Z.PV_CBL_CallbackAudit
