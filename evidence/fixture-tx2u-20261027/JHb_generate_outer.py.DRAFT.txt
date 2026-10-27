@@ -1,0 +1,18 @@
+from pathlib import Path
+import sys
+R=Path(__file__).resolve().parents[2]
+out=[f'import JHb_Distinct{i}' for i in range(7)]+['set_option autoImplicit false','noncomputable section','namespace AspisR1.JHb_Distinct','open Aeneas Aeneas.Std Result ControlFlow','open _root_.AdapterRw','open JHb_DistinctAccounts']
+for i in range(8):
+ result=f'cont {i+1}#usize' if i<7 else 'done none'
+ out += [f'theorem step{i} (base : Ops) :',f'    r1_pool_adapter.owned.require_distinct_accounts_loop0.body (JHb_KeyStd.install base) value {i}#usize=ok ({result}) := by']
+ if i==7:out += ['  rfl']
+ else:out += ['  unfold r1_pool_adapter.owned.require_distinct_accounts_loop0.body',f'  rw [if_pos (by decide),JHb_Distinct{i}.source,bind_tc_ok]','  rfl']
+ out += [f'#print axioms step{i}']
+out += ['theorem source (base : Ops) :','    r1_pool_adapter.owned.require_distinct_accounts (JHb_KeyStd.install base) value=ok (.Ok ()) := by','  unfold r1_pool_adapter.owned.require_distinct_accounts']
+out += ['  have run : r1_pool_adapter.owned.require_distinct_accounts_loop0 (JHb_KeyStd.install base) value 0#usize=ok none := by']
+for i in range(8):
+ out += ['    conv_lhs =>','      unfold r1_pool_adapter.owned.require_distinct_accounts_loop0','      rw [Aeneas.Std.loop.eq_def]',f'    simp only [step{i},bind_tc_ok]']
+out += ['  rw [run,bind_tc_ok]','#print axioms source','end AspisR1.JHb_Distinct','end']
+p=R/'lean/JHb_Distinct.lean';s='\n'.join(out)+'\n'
+if '--check' in sys.argv:assert p.read_text()==s
+else:p.write_text(s)

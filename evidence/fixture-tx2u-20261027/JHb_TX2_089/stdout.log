@@ -1,0 +1,65 @@
+JHb_Emit.lean:38:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement (ResultAdmission.value statement)
+in the target expression
+  (have result := ResultAdmission.value statement;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← syscall state ↑bytes
+                ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Ok (S2I.ReturnData.set state ↑(ResultPayload.bytes statement)))
+
+A E : Type
+syscall : S2I.ReturnData.State A E → List U8 → Result (S2I.ReturnData.State A E)
+runtime : S2I.ReturnData.RuntimePremise syscall
+state : S2I.ReturnData.State A E
+statement : StatementAdmission.Statement
+valid : validate_pool_v1_pair_forest_terminal_statement_v1 statement = ok (core.result.Result.Ok ())
+⊢ (have result := ResultAdmission.value statement;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← syscall state ↑bytes
+                ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Ok (S2I.ReturnData.set state ↑(ResultPayload.bytes statement)))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Std.Array U8 792#usize
+  but is expected to have type
+    { l // l.length = ↑792#usize }
+  in the application
+    ↑bytes
+'AspisR1.JHb_Emit.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JHb_Emit.real' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

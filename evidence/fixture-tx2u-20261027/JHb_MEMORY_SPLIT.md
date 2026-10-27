@@ -1,0 +1,5 @@
+# Memory failure and replacement
+
+Attempt021 combined corrected runtime/SDK suffix and JGz_Realizes. Lean terminated with memory_exception, exit134 under unchanged6G/8G/Swap0/Tasks64 and -M7000. No larger cap or unchanged rerun. Replacement022 removes imported SHA realization and exposes its exact named hypothesis; proof errors022/023 were alias/field transport errors and are repaired separately. New JHb_SHA modules compact the448 early compression blocks to paired tuple definitions instead of separate word/state definitions, removing29120 global intermediates. Input/start/result and all64 per-block equations are unchanged; no source in JGz or another prefix is edited. New hash aggregation and per64-byte native joins must be checked before a closed suffix can be attempted again. This is proof representation work, not a new cryptographic assumption or runtime SHA credit.
+
+Attempt024 used theorem-local tuple lets and rejected with recursion-depth errors (not memory pressure). The replacement uses the already-successful global paired-tuple shape from JGz_SHAP28..56. No limit was raised.
