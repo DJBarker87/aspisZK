@@ -7,7 +7,12 @@ assert sum(1 for p in E.glob('receipt-*.json') if json.loads(p.read_text()).get(
 assert str(R)=='/Users/dominic/ZK/.worktrees/pv-reach' and subprocess.check_output(['git','branch','--show-current'],text=True).strip()=='codex/pv-reach-20261027'
 assert not json.load(open(E/'h4-verification.json'))['mismatches']
 assert not (E/f'used-{a}.json').exists()
-rows=json.load(open(E/'project-closure.json'));mapping={r['module']:r for r in rows};need=json.load(open(E.parent/'resume8/prerequisites-before.json'));names={r['module'] for r in need}
+rows=json.load(open(E/'project-closure.json'));mapping={r['module']:r for r in rows}
+if '--native' in sys.argv:
+ for r in json.load(open(E/'native-project-closure.json')):
+  assert r['module'] not in mapping or mapping[r['module']]['sha256']==r['sha256']
+  mapping[r['module']]=r
+need=json.load(open(E.parent/'resume8/prerequisites-before.json'));names={r['module'] for r in need}
 ordered=[r for r in rows if r['module'] in names];assert len(ordered)==200
 assert all(d not in names or next(i for i,r in enumerate(ordered) if r['module']==d)<i for i,r in enumerate(ordered) for d in r['imports'])
 chunks=[ordered[i:i+30] for i in range(0,200,30)]
@@ -18,10 +23,16 @@ if single:
  data=subprocess.check_output(['git','show',rev+':'+path]);blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip()
  imports=re.findall(r'^import\s+(\S+)',data.decode(),re.M)
  row=dict(module=m,authority='h5',path=path,revision=rev,blob=blob,sha256=hashlib.sha256(data).hexdigest(),imports=imports)
- assert m not in mapping or mapping[m]['sha256']==row['sha256']
+ if m in mapping:
+  row=mapping[m]
  mapping[m]=row;selected=[row]
 
 def trans(m,s):
+ if m not in mapping and m.startswith('R1Z.PV_RE_'):
+  import re
+  path='docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean'
+  data=subprocess.check_output(['git','show',rev+':'+path]);blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip()
+  mapping[m]=dict(module=m,authority='h5',path=path,revision=rev,blob=blob,sha256=hashlib.sha256(data).hexdigest(),imports=re.findall(r'^import\s+(\S+)',data.decode(),re.M))
  for d in mapping.get(m,{}).get('imports',[]):
   if d not in s:s.add(d);trans(d,s)
 for row in selected:
