@@ -99,3 +99,28 @@ owner decision. The unchanged pinned extractor accepts representative
 Drop-free prover-local rewrites under the existing D187 route; equivalence,
 module gates and timing still require evidence. SHA wrappers remain with the
 SHA-NI item above. No translator re-pin is approved by this packet.
+
+## Decision: full withdrawals (zero change) and the honest-user domain (LOG D338, 2026-10-27)
+
+**Question.** The admitted spend relation (BuilderSpendRelation.RspendPlus) includes a withdrawal of
+a note's entire value with zero change; Lean proves such a spend admitted (PV_RunJoin_SpendDomain27,
+attempt 38144). The frozen native wrapper compile_pool_v1_pair_forest_withdrawal_merged_c1_v1
+rejects `witness.change.value == 0` with Err(Conservation) before compiling, so the shipped client
+cannot prepare it (native probe pv27-zero-change-03; a 250/750 withdrawal succeeds as control).
+Evidence: codex/pv-runjoin-20261026, evidence/pv-runjoin27-20261027/FINDING.md and REPORT.md.
+
+**Options.** (A) State the privacy claim's honest-user domain as spends whose preparation succeeds,
+which today means positive change, and record separately that users cannot withdraw a full balance
+through the shipped client (they must leave at least one unit as change). No implementation change.
+(B) Change the frozen compiler to accept zero change, which reopens the implementation freeze, the
+three ELF pins if the change reaches crates/ code compiled into release programs, and the affected
+proofs.
+
+**Lead recommendation.** (A) for the privacy claim now, because it changes no implementation and
+the zero-change guard rejects locally before any proof or transaction is produced; the functional
+limitation goes to the owner as a product question, independent of privacy. The privacy route's
+remaining step (successful preparation implies the honesty guards) is needed under either option and
+proceeds meanwhile.
+
+**Unblocks.** The exact honest-user domain in the privacy statement; the coverage half of the
+honest-family source identification (D337).
