@@ -1,4 +1,5 @@
 import R1Z.PV_Src_ReturnedSnapshot
+import R1Z.PV_Src_NativeInput
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_UniversalTransition22
 open Aeneas Aeneas.Std Result
