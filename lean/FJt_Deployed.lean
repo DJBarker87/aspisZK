@@ -1,4 +1,5 @@
 import FJt_GlobalOwners
+import FJt_NativeAccepted
 import IDa_Deployed
 import FIq_Install
 import S1SemanticRootCopyV1
@@ -92,7 +93,7 @@ theorem deployed {W A CoreError Tx : Type}
       SdkD_PairBatches.dictionary (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).adapter (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).currentBase (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).stageBase
         (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).finish (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).reserved (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).query (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).geometry
         (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).boundaries (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).std ∧
-    (FIs_Result.Outcome L e1 e2 w1 w2
+    (FJt_Result.Outcome L e1 e2 w1 w2
       (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).adapter (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).currentBase
       (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).reserved (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).query
       (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).geometry (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation).stageBase
@@ -125,13 +126,18 @@ theorem deployed {W A CoreError Tx : Type}
       CPH_Program.verifier H p t u saved ∧
     S6N_Installation.Facts (DrvC_Installation.sdk (FIp_Install.configuration indexError (deployedConfiguration missing indexError reservation) reservation))
  := by
-  exact IDa_Deployed.ARX_Deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
+  obtain ⟨p6,driver,sdkEq,oldNative,security,copyFacts,events,protection,trace,recorder,installation⟩ := IDa_Deployed.ARX_Deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
     missing indexError reservation
     native1 native2 hashv extraction sha256 H p1 syscall data1 data2 slot
     state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length
     prior words p t u actions game RuntimePersistence D a Q0 Q1 queries
     (FJt_GlobalOwners.complete missing indexError reservation _ finishOwners)
 
+  have native:=FJt_NativeAccepted.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
+    missing indexError reservation native1 native2 hashv extraction sha256 H p1 syscall data1 data2 slot
+    state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length
+    prior words p t u actions game RuntimePersistence D a Q0 Q1 queries
+  exact ⟨p6,driver,sdkEq,native,security,copyFacts,events,protection,trace,recorder,installation⟩
 
 #print axioms deployed
 end AspisR1.FJt_Deployed
