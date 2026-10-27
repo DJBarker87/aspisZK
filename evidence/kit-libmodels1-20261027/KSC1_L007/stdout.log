@@ -1,0 +1,46 @@
+KSC1_generated/KSC1_NeP7.lean:10:8: error: unsolved goals
+case nil
+T : Type
+f : T → Result Bool
+⊢ ok false = pure false
+KSC1_generated/KSC1_NeP7.lean:16:11: error: unsolved goals
+case cons.ok.true
+T : Type
+f : T → Result Bool
+x : T
+xs : List T
+ih :
+  (do
+      let b ←
+        List.allM
+            (fun x => do
+              let b ← f x
+              ok !b)
+            xs
+      ok !b) =
+    List.anyM f xs
+h : f x = ok true
+⊢ ok true = pure true
+KSC1_generated/KSC1_NeP7.lean:14:22: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+KSC1_generated/KSC1_NeP7.lean:15:19: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+KSC1_generated/KSC1_NeP7.lean:16:32: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵ ̵ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'KSC1.P7.any_not_all' depends on axioms: [propext, sorryAx]
+'KSC1.P7.slice_array_ne_p7' depends on axioms: [propext, sorryAx, Quot.sound]

@@ -1,0 +1,65 @@
+{"attempt": "KSC1_L004", "exit_status": 0, "wall_seconds": 1.9433857270050794, "peak_rss_kib": "2636520", "swaps": "0", "print_axioms": ["'KSC1.P7.slice_array_eq' depends on axioms: [propext, Quot.sound]", "'KSC1.P7.slice_array_ne' depends on axioms: [propext, Quot.sound]", "'KSC1.P7.next_projection' depends on axioms: [propext, Quot.sound]", "'KSC1.P7.restored_array' depends on axioms: [propext]"]}
+'KSC1.P7.slice_array_eq' depends on axioms: [propext, Quot.sound]
+'KSC1.P7.slice_array_ne' depends on axioms: [propext, Quot.sound]
+'KSC1.P7.next_projection' depends on axioms: [propext, Quot.sound]
+'KSC1.P7.restored_array' depends on axioms: [propext]
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+    
+...
+ds on axioms: [propext]
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          ok (decide ¬b = true))
+      ((↑s0).zip ↑s1)
+  else ok false
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.ne : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.anyM
+      (fun x =>
+        match x with
+        | (x, y) => partialEqInst.ne x y)
+      ((↑s0).zip ↑s1)
+  else ok true
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+def List.allM.{u, v} : {m : Type → Type u} → [Monad m] → {α : Type v} → (α → m Bool) → List α → m Bool :=
+fun {m} [Monad m] {α} p x => List.brecOn x (List.allM._f p)
+def List.anyM.{u, v} : {m : Type → Type u} → [Monad m] → {α : Type v} → (α → m Bool) → List α → m Bool :=
+fun {m} [Monad m] {α} p x => List.brecOn x (List.anyM._f p)
+
+Running as unit: run-r6c7cef34421841bab2105a9bee043de0.scope; invocation ID: 3cec2d49f95b475d889e36cf4eeec9cf

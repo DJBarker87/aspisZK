@@ -1,0 +1,40 @@
+warning: module `KSC1` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-libmodel1-cache-20261027/KSC1_native_test.rs:2:18
+  |
+2 | #[cfg(test)] mod KSC1 {
+  |                  ^^^^ help: convert the identifier to snake case (notice the capitalization): `ksc1`
+  |
+  = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: 1 warning emitted
+
+
+running 3 tests
+test KSC1::equality_empty_collect_fold_all ... 
+thread 'KSC1::equality_empty_collect_fold_all' (3832694) panicked at /home/dombarker/project-offloads/codex-cx-libmodel1-cache-20261027/KSC1_native_test.rs:39:116:
+predicate panic
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'KSC1::equality_empty_collect_fold_all' (3832694) panicked at /home/dombarker/project-offloads/codex-cx-libmodel1-cache-20261027/KSC1_native_test.rs:40:129:
+map panic
+eq/ne length/equal/mismatch; empty; collect/fold/all empty/continuation/short-circuit/panic passed
+ok
+test KSC1::from_fn_and_map_state_and_panic ... 
+thread 'KSC1::from_fn_and_map_state_and_panic' (3832695) panicked at /home/dombarker/project-offloads/codex-cx-libmodel1-cache-20261027/KSC1_native_test.rs:26:129:
+branch panic
+from_fn: empty/no callback, ascending state=[1,2,4,8]/final16, panic prefix=[0,1,2]/drops2; map state passed
+ok
+test KSC1::mixed_direction_and_restore ... singleton: native next=Some(7), next_back=None; kit next_back=Some(7)
+writeback: front/back/rev/enumerate/chunks_exact_mut/array_into_iter passed
+ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+rustc 1.94.1 (e408947bf 2026-03-25)
+binary: rustc
+commit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1
+commit-date: 2026-03-25
+host: x86_64-unknown-linux-gnu
+release: 1.94.1
+LLVM version: 21.1.8
+
