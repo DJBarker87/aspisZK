@@ -1,0 +1,52 @@
+{"attempt": "XRx_L094", "exit_status": 1, "wall_seconds": 1.3417905120295472, "peak_rss_kib": "2663920", "swaps": "0", "print_axioms": ["'XRx_RoundDriver.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRx_generated/XRx_RoundDriver.lean:11:24: warning: Variable name `D` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+XRx_generated/XRx_RoundDriver.lean:37:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch ?r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue s => ?k s
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual ?m.43
+          (core.convert.FromS
+...
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let s ←
+      match record with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok record => do
+          let r ← r1_wire.ValidatedRecord.decode_k 1#usize record 0#usize
+          match r with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok values => do
+              let running ← values.index_usize 0#usize
+              let q ← aspis_core.field.QM31.ZERO
+              ok (core.result.Result.Ok (running, Array.repeat 10#usize q, tr))
+    XRx_StageFold.unrolled (step D p) 0 10 s
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+XRx_generated/XRx_RoundDriver.lean:34:12: warning: This simp argument is unused:
+  XRx_TryChain.source
+
+Hint: Omit it from the simp argument list.
+  simp only [X̵R̵x̵_̵T̵r̵y̵C̵h̵a̵i̵n̵.̵s̵o̵u̵r̵c̵e̵,̵bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRx_RoundDriver.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6395f81739d24e9b8c78cd469fc2afb1.scope; invocation ID: fb80b3a7d5844cef9a987c4b003820a3

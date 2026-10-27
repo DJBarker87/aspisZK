@@ -20,7 +20,10 @@ theorem source (row : U8) (bytes : Slice U8) (early : row.val<14) :
  | some pair =>
   rcases pair with ⟨tag,size⟩
   simp only [core.option.Option.ok_or,AspisR1PrefixAggregateParser.core.option.Option.ok_or,
-   bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch,mapR_bind]
+   bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+  change mapR (inner id error) ((5#usize+size : Result Usize) >>= _) =
+    ((5#usize+size : Result Usize) >>= _)
+  rw [mapR_bind]
   congr 1
   funext full
   split

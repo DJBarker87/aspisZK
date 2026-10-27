@@ -1,0 +1,155 @@
+XRx_generated/XRx_RecordHeader.lean:25:2: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  mapR (inner id error)
+      (let (tag, size) := (tag, size)
+      do
+      let i1 ← 5#usize + size
+      if (bytes.len != i1) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+        else do
+          let i2 ← bytes.index_usize 0#usize
+          if (i2 != tag) = true then ok (core.result.Result.Err (r1_wire.Error.Tag row))
+            else do
+              let i3 ← bytes.index_usize 1#usize
+              let i4 ← bytes.index_usize 2#usize
+              let i5 ← bytes.index_usize 3#usize
+              let i6 ← bytes.index_usize 4#usize
+              let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+              let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+              if (i8 != size) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+                else do
+                  let payload ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                        { start := 5#usize }
+                  if row ≥ 14#u8 then do
+                      let r1 ← r1_wire.validate_record_fields row payload
+                      let cf1 ←
+                        match r1 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                            (core.convert.FromSame r1_wire.Error) residual
+                    else ok (core.result.Result.Ok payload)) =
+    let (tag, size) := (tag, size)
+    do
+    let i1 ← 5#usize + size
+    if (bytes.len != i1) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+      else do
+        let i2 ← bytes.index_usize 0#usize
+        if (i2 != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+          else do
+            let i3 ← bytes.index_usize 1#usize
+            let i4 ← bytes.index_usize 2#usize
+            let i5 ← bytes.index_usize 3#usize
+            let i6 ← bytes.index_usize 4#usize
+            let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+            let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+            if (i8 != size) = true then
+                ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                      { start := 5#usize }
+                if row ≥ 14#u8 then do
+                    let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields row payload
+                    let cf1 ←
+                      match r1 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                  else ok (core.result.Result.Ok payload)
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.21} {β : α → Sort ?u.20} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case e_a.some
+row : U8
+bytes : Slice U8
+early : ↑row < 14
+early' : ¬row ≥ 14#u8
+tag : U8
+size : Usize
+⊢ mapR (inner id error)
+      (let (tag, size) := (tag, size)
+      do
+      let i1 ← 5#usize + size
+      if (bytes.len != i1) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+        else do
+          let i2 ← bytes.index_usize 0#usize
+          if (i2 != tag) = true then ok (core.result.Result.Err (r1_wire.Error.Tag row))
+            else do
+              let i3 ← bytes.index_usize 1#usize
+              let i4 ← bytes.index_usize 2#usize
+              let i5 ← bytes.index_usize 3#usize
+              let i6 ← bytes.index_usize 4#usize
+              let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+              let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+              if (i8 != size) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+                else do
+                  let payload ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                        { start := 5#usize }
+                  if row ≥ 14#u8 then do
+                      let r1 ← r1_wire.validate_record_fields row payload
+                      let cf1 ←
+                        match r1 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                            (core.convert.FromSame r1_wire.Error) residual
+                    else ok (core.result.Result.Ok payload)) =
+    let (tag, size) := (tag, size)
+    do
+    let i1 ← 5#usize + size
+    if (bytes.len != i1) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+      else do
+        let i2 ← bytes.index_usize 0#usize
+        if (i2 != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+          else do
+            let i3 ← bytes.index_usize 1#usize
+            let i4 ← bytes.index_usize 2#usize
+            let i5 ← bytes.index_usize 3#usize
+            let i6 ← bytes.index_usize 4#usize
+            let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+            let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+            if (i8 != size) = true then
+                ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                      { start := 5#usize }
+                if row ≥ 14#u8 then do
+                    let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields row payload
+                    let cf1 ←
+                      match r1 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                  else ok (core.result.Result.Ok payload)
+XRx_generated/XRx_RecordHeader.lean:23:57: warning: This simp argument is unused:
+  mapR_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [core.option.Option.ok_or, ̲AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+      ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,̵m̵a̵p̵R̵_̵b̵i̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRx_RecordHeader.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -17,23 +17,14 @@ theorem body (b : verifier.BatchedWeights) (terms : Usize)
 theorem loop (b : verifier.BatchedWeights) (terms : Usize)
  (it : XRx_FinishStep.It) (back : XRx_FinishStep.Back) :
  verifier.BatchedWeights.finish_loop it back {b with terms:=terms}=
- verifier.BatchedWeights.finish_loop it back b := by
- unfold verifier.BatchedWeights.finish_loop
- congr 1
- funext state
- exact body b terms state.1 state.2
+ verifier.BatchedWeights.finish_loop it back b := rfl
 
 /-- Complete Result equality, including every failing or divergent suffix. -/
 theorem source (b : verifier.BatchedWeights) (terms : Usize)
  (weights : Slice aspis_core.field.QM31) :
  verifier.BatchedWeights.finish {b with terms:=terms} weights=
- verifier.BatchedWeights.finish b weights := by
- unfold verifier.BatchedWeights.finish
- congr 1
- funext im
- congr 1
- funext it
- rw [loop]
+ verifier.BatchedWeights.finish b weights := rfl
+
 #print axioms value
 #print axioms body
 #print axioms loop
