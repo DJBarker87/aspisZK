@@ -1,88 +1,76 @@
-# Option B continuation report
+# Option B D262 continuation
 
-Privacy target not yet established. D215's conditional adoption is not
-certified, and no admitted-source reached-failure counterexample is claimed.
-Stage 3 is unfulfilled. No shipped code, simulator, observer or trust field
-was changed. No endpoint premise was removed.
+Privacy target not yet established. The adopted off-bad condition is stated
+and generic/model/control results check; its full emitted/native instance
+and endogenous deployed B headline remain unproved. No step-(4) native
+counterexample was obtained. No endpoint premise was removed. No shipped
+code, simE, full observer or trust-list field changed.
 
-## Statement
+## Statement and proof status
 
-See STATEMENT-DIFF.md and the original/B prints in out-41801.log. The B
-headline has the same simE, complete observer map and numerical conjuncts.
-It adds an error carrier, failure-view decoder and common fixed public signal.
-It is a different theorem. It retains RustRealRefinement. Its fixed-signal
-proof cannot be advertised as a theorem about the actual endogenous failure
-signal without the missing source proof and joint experiment transport.
+`PV_OptB_Factorization.IndependentOffBad pub signal bad` is:
 
-## Proved and not proved
+```
+∀ w u, pub w = pub u → ∀ os coins,
+  ¬ bad w os coins → ¬ bad u os coins →
+  signal w os coins = signal u os coins
+```
 
-- Checked admitted same-public witness family with different pole sets and
-  opposite NoPole/VR1 verdicts at a common challenge. The chosen challenge is
-  not proved to pass P_R1 or to be realized by the frozen native oracle run.
-- Checked literal extracted retry/source control, first/second callback error
-  behavior, and full caller distinctions conditional on actual body outcomes.
-  No replacement body is installed; the body hypotheses remain unproved.
-- Checked first-draw failure independence and complete result observations on
-  named failed reservation prefixes. Later-prefix entry is not proved public.
-- Checked synchronization-to-signal independence for the exact
-  PV_RunJoin_Deployed.execute. Its per-step body synchronization is an explicit
-  P premise, with no concrete native instance. OS reply determinism only holds
-  once the same call and position are reached.
-- The earlier native malformed-compilation/programmed-oracle experiment is
-  measured diagnostic evidence, not a pair of admitted deployed witnesses.
+`w,u` range over admitted honest instances. `signal` must be the ACTUAL
+reached none/family/position/error observation; arbitrary erasure is not
+certified. `PV_OptB_Charged.fullUnion` names the existing poleBad, HitEv,
+CollEv, conservative lazy/mask/digest, scan-fresh/parser, seedGuess and fuel
+failure events on explicit coordinates, without a new event charge. Their
+common native coordinate association remains a source P obligation.
 
-Premises before/after: original RustRealRefinement retained; removed 0.
-OsAvailable was only in the preparatory A wrapper, not the original headline.
-The native/source outside-bad full-trace agreement on OS-error worlds remains
-open. T is still exactly entropy_law, entropy_kernel, observation. Added T: 0.
-Supporting conditional source theorems expose P obligations and are not
-premise-removal claims.
+Checked results (see offbad/receipts.jsonl):
 
-## Verification and resources
+- IndependentOffBad iff a public/world/coin decoder agrees on good runs.
+- Off poleBad, `P ∧ V(w) ↔ P`; firstGood and its failure schedule agree on
+  a common challenge tuple. Public P_R1 failures still retry.
+- The actual UnifiedRetry.attempt classifies the literal body and stops on
+  entropy/interpreter errors. Exact body-error/public-state synchronization
+  lifts to attempts, retry control and conditional deployed IndependentOffBad.
+- OS file/time/worker frame and cursor lemmas retain immutable tapes and all
+  reached cursors. Complete first-draw-failure results agree unconditionally
+  across witnesses on the already proved first-draw fault family.
+- Joint failure-aware overlay agreement off the SAME bad event preserves
+  its mass bound. The existing seed/fuel RunJoin accounting is reusable under
+  joint signal equality and agreement on no-failure executions.
 
-Every charged attempt is in receipts.jsonl, with raw out/time/source-SHA logs.
-Failed compiler outputs, including recovery-generated sorryAx diagnostics, are
-failure evidence, not accepted proofs. No source contains sorry/admit,
-native_decide, implemented_by or an axiom declaration. Memory failures were
-isolated and replaced by symbolic cardinality transport; caps were unchanged.
-No local Lean compile, SBF rebuild, full frozen-manifest replay or repeated
-unchanged regression was run. The three final audits inspect the own-module
-cached dependency closure; they are not a coherent full release replay.
+The body-step law is still a hypothesis, not a native instance. Common model
+challenge coordinates do not by themselves identify fixed native HOST_HASH
+and common raw coins. The projection and Bool-correlation diagnostics are
+logical interface examples, NOT admitted native counterexamples or option-A
+conclusions. Details: offbad/STAGE3.md and STATEMENT-DIFF.md.
 
-Budget and audit results are appended after the reserved audits. Historical
-native receipts are in native/receipts.jsonl. Task ledger directories on the
-host are retained. Only rebuildable Cargo target caches may be removed.
+## Endpoint premises before/after
+
+Original `RustRealRefinement` contains full runtime/source observation equality
+in `ProverCommitFuelJoin22.RunJoin.agreement` off its fixed exceptions.
+No `OsAvailable` binder occurs in the original deployed headline. A prospective
+endogenous B form would replace that equality on OS-error runs with common
+complete failure signals and no-failure agreement on a joint coupling, plus
+joint ideal-model privacy using unchanged simE. Those native laws remain open.
+Therefore original endpoint premises removed = 0; T additions = 0. T stays
+exactly entropy_law, entropy_kernel, observation. The historical fixed-public
+`privacy_headline_deployed_B` is not promoted to an endogenous theorem.
+
+## Verification boundary
+
+All continuation evidence is under offbad/. Historical 418xx receipts are
+unchanged. Host compiles use the existing run2.py and env-J read-only with
+private source/object roots, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
+TasksMax=64, Lean -M7000. No shared source/object/env or launcher is modified.
+No local compile, Kani arithmetic gate, SBF rebuild, concrete finite-function
+normalization, or full frozen-manifest replay was run. Final audits are focused
+cached-closure audits, not a coherent full release replay. Failed compiler
+recovery sorryAx output is retained only as failure evidence.
 
 ## Next deliverable
 
-Either prove public reachability and complete failure metadata for every
-getrandom/filesystem call of admitted deployed witnesses at fixed OS world
-and coins, or complete a checked counterexample by connecting the admitted
-opposite-VR1 pair to a common P_R1-accepted, native-oracle-realized execution
-with one body returning success/nonretry and the other Rejected before the
-same next OS fault. The raw control and malformed-input examples do not close
-that obligation. Then derive the endogenous B experiment under a proved joint
-signal transport and identify the precise changed trace premise. Until then,
-no OS-availability gap is removed.
-
-## Final budget and reserved audit receipts
-
-Lean 100/100: 52 passes and 48 failures. Kani 0/6.
-Stopped because the Lean budget is exhausted; no further compiler attempt was run.
-IDs 41813 and 41828 were preflight-only, retired, and uncharged.
-No IDs were reused. The last three charged attempts were the audits below.
-
-| Target | ID | Exit | Wall | Peak RSS KiB | Swap |
-|---|---:|---:|---|---:|---:|
-| R1Z/PV_OptB_AuditModel | 41899 | 0 | 0:04.40 | 4237124 | 0 |
-| R1Z/PV_OptB_AuditSource | 41900 | 0 | 0:03.71 | 4241040 | 0 |
-| R1Z/PV_OptB_AuditEndpoint | 41901 | 0 | 0:04.97 | 4266924 | 0 |
-
-All final audits use only a subset of propext, Classical.choice, Quot.sound.
-Exact axiom output, target, source SHA, wall, RSS, swap and exit are retained
-in receipts.jsonl and raw logs. Source revision for all three audits: `a7780f17aa9166b7bbd6739b1804924e7573ee67`. Caps: MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, Lean -M7000.
-
-Kani was not used for the chained-field source gap, per lead ruling (k).
-The old malformed native probe remains diagnostic evidence only. The native
-Cargo target cache (119 MiB) was removed after testing; all four task ledger
-directories were verified retained. No wallet/account key was removed.
+Prove native reachable-state body/public-verdict synchronization off exactly
+the named charged events at fixed HOST_HASH, OS world and raw coins; associate
+every reached entropy/file/time/worker observation with that proof; then build
+the joint real/ideal failure-aware coupling and instantiate the unchanged
+numerical headline. Target not yet established.

@@ -1,5 +1,8 @@
 # Witness-independence investigation
 
+The original all-world condition below is historical and superseded by D262.
+See the D262 continuation at the end and offbad/STAGE3.md for current status.
+
 The exact condition is `PV_OptB_Factorization.Independent`: for two admitted
 witnesses with equal public input, at the **same** OS world and coins, the
 reached failure observation (`none` or a call family/position/error) agrees.

@@ -1,0 +1,32 @@
+'R1Z.PV_OptB_WorldFrames.tapes' does not depend on any axioms
+'R1Z.PV_OptB_WorldFrames.cursors' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-optb-20261027/lean-private/R1Z/PV_OptB_WorldFrames.lean:23:36: error: No goals to be solved
+/home/dombarker/project-offloads/codex-pv-optb-20261027/lean-private/R1Z/PV_OptB_WorldFrames.lean:26:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  event.request = request ∧
+    event.reply = reply ∧
+      { entropy := w.entropy, entropyUsed := w.entropyUsed, files := w.files, fileUsed := w.fileUsed + 1,
+          time := w.time, timeUsed := w.timeUsed, workers := w.workers, workerUsed := w.workerUsed } =
+        next
+of `called`
+
+Hint: If you meant to destruct this conjunction, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case some
+E File Reply Time Worker : Type
+inst✝ : DecidableEq File
+w next : World E File Reply Time Worker
+request : Request File
+reply : Reply
+event : Event (Request File) Reply
+found : w.files[w.fileUsed]? = some event
+called :
+  event.request = request ∧
+    event.reply = reply ∧
+      { entropy := w.entropy, entropyUsed := w.entropyUsed, files := w.files, fileUsed := w.fileUsed + 1,
+          time := w.time, timeUsed := w.timeUsed, workers := w.workers, workerUsed := w.workerUsed } =
+        next
+⊢ tapes next = tapes w
+'R1Z.PV_OptB_WorldFrames.file_frame' depends on axioms: [propext, sorryAx]
+exit=1

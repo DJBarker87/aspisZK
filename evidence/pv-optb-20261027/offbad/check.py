@@ -9,6 +9,7 @@ def remote(s): return subprocess.run(['ssh',H,s],capture_output=True,text=True)
 def q(s): return shlex.quote(str(s))
 a=int(sys.argv[1]); module=sys.argv[2]
 assert 44600<=a<=44899
+assert not (P/'receipts.jsonl').exists() or len((P/'receipts.jsonl').read_text().splitlines()) < 100, 'Lean budget exhausted'
 src=pathlib.Path('docs/research/v8-r0-zk-20261009/lean')/(module+'.lean')
 assert module.startswith('R1Z/PV_OptB_')
 assert not (P/f'launch-{a}.json').exists()

@@ -120,3 +120,20 @@ named `union` / `AuxiliaryIndependent`; the complete named interface is
 hit/private-collision slots. Their parameters are the existing model coupling
 parameters; there is no fresh event predicate or new charge. The interface
 continues to expose coordinate association rather than assert native laws.
+
+## Endogenous transport status
+
+Checked `PV_OptB_JointTransport.until_bad_overlay`: on the same joint space,
+common signals off the old bad event and equality of successful branches
+there imply the same event-mass bound for complete failure-aware tests.
+No fresh availability event is charged. The native signal law and joint
+model/ideal privacy remain source P obligations; see offbad/STAGE3.md.
+
+The existing B endpoint remains a fixed-public-signal result, with the
+original RustRealRefinement retained. A prospective endogenous B theorem
+would replace RunJoin.agreement's exact successful-model equality on OS-error
+executions with common reached-signal equality and no-failure agreement on
+the same coupling. This turn has not discharged those native laws. Original
+endpoint premises removed: zero. `OsAvailable` was never an original binder.
+No new trust field, observer restriction, simulator change or numerical
+allowance was introduced.

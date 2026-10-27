@@ -117,4 +117,22 @@ abbrev HeadlineIndependent {Event : Type}
 #print fullUnion
 #print HeadlineIndependent
 #print axioms fullUnion
+theorem off_full_auxiliary (v : h.Instance) (world : World) (random : Coins)
+    (good : ¬ fullUnion h P V W Pr R N hN B outputs x ab adv c M q charged priv qry addr core v world random) :
+    ¬ union h P V W Pr R N hN B outputs x ab adv c v world random :=
+  fun event => good (Or.inl event)
+
+#print axioms off_full_auxiliary
+theorem off_full_hit (v : h.Instance) (world : World) (random : Coins)
+    (good : ¬ fullUnion h P V W Pr R N hN B outputs x ab adv c M q charged priv qry addr core v world random) :
+    ¬ R0Z.FsAbortBounds.HitEv M q charged qry addr (core v world random) :=
+  fun event => good (Or.inr (Or.inl event))
+
+#print axioms off_full_hit
+theorem off_full_collision (v : h.Instance) (world : World) (random : Coins)
+    (good : ¬ fullUnion h P V W Pr R N hN B outputs x ab adv c M q charged priv qry addr core v world random) :
+    ¬ R0Z.FsAbortBounds.CollEv M priv addr (core v world random) :=
+  fun event => good (Or.inr (Or.inr event))
+
+#print axioms off_full_collision
 end R1Z.PV_OptB_Charged

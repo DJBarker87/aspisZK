@@ -6,55 +6,53 @@ for name,body in [
     (request : Request File) (reply : Reply) (called : fileStep request w = some (reply,next)) :
     tapes next = tapes w := by
   unfold fileStep at called
-  cases at : w.files[w.fileUsed]? with
-  | none => simp only [at,Option.bind_none] at called; cases called
+  cases found : w.files[w.fileUsed]? with
+  | none => simp [found] at called
   | some event =>
-    simp only [at,Option.bind_some] at called
-    split at called
-    · cases called; rfl
-    · cases called
+    simp [found] at called
+    rcases called with ⟨_,_,rfl⟩
+    rfl
 '''),
 ('time_frame','''theorem time_frame (w next : World E File Reply Time Worker)
     (reply : Time) (called : timeStep w = some (reply,next)) : tapes next = tapes w := by
   unfold timeStep at called
-  cases at : w.time[w.timeUsed]? with
-  | none => simp only [at,Option.bind_none] at called; cases called
-  | some event => simp only [at,Option.bind_some] at called; cases called; rfl
+  cases found : w.time[w.timeUsed]? with
+  | none => simp [found] at called
+  | some event => simp [found] at called; rcases called with ⟨_,rfl⟩; rfl
 '''),
 ('worker_frame','''theorem worker_frame (w next : World E File Reply Time Worker)
     (reply : Worker) (called : workerStep w = some (reply,next)) : tapes next = tapes w := by
   unfold workerStep at called
-  cases at : w.workers[w.workerUsed]? with
-  | none => simp only [at,Option.bind_none] at called; cases called
-  | some event => simp only [at,Option.bind_some] at called; cases called; rfl
+  cases found : w.workers[w.workerUsed]? with
+  | none => simp [found] at called
+  | some event => simp [found] at called; rcases called with ⟨_,rfl⟩; rfl
 '''),
 ('file_cursor','''theorem file_cursor [DecidableEq File] (w next : World E File Reply Time Worker)
     (request : Request File) (reply : Reply) (called : fileStep request w = some (reply,next)) :
     cursors next = (w.entropyUsed,w.fileUsed+1,w.timeUsed,w.workerUsed) := by
   unfold fileStep at called
-  cases at : w.files[w.fileUsed]? with
-  | none => simp only [at,Option.bind_none] at called; cases called
+  cases found : w.files[w.fileUsed]? with
+  | none => simp [found] at called
   | some event =>
-    simp only [at,Option.bind_some] at called
-    split at called
-    · cases called; rfl
-    · cases called
+    simp [found] at called
+    rcases called with ⟨_,_,rfl⟩
+    rfl
 '''),
 ('time_cursor','''theorem time_cursor (w next : World E File Reply Time Worker)
     (reply : Time) (called : timeStep w = some (reply,next)) :
     cursors next = (w.entropyUsed,w.fileUsed,w.timeUsed+1,w.workerUsed) := by
   unfold timeStep at called
-  cases at : w.time[w.timeUsed]? with
-  | none => simp only [at,Option.bind_none] at called; cases called
-  | some event => simp only [at,Option.bind_some] at called; cases called; rfl
+  cases found : w.time[w.timeUsed]? with
+  | none => simp [found] at called
+  | some event => simp [found] at called; rcases called with ⟨_,rfl⟩; rfl
 '''),
 ('worker_cursor','''theorem worker_cursor (w next : World E File Reply Time Worker)
     (reply : Worker) (called : workerStep w = some (reply,next)) :
     cursors next = (w.entropyUsed,w.fileUsed,w.timeUsed,w.workerUsed+1) := by
   unfold workerStep at called
-  cases at : w.workers[w.workerUsed]? with
-  | none => simp only [at,Option.bind_none] at called; cases called
-  | some event => simp only [at,Option.bind_some] at called; cases called; rfl
+  cases found : w.workers[w.workerUsed]? with
+  | none => simp [found] at called
+  | some event => simp [found] at called; rcases called with ⟨_,rfl⟩; rfl
 '''),
 ('time_unique','''theorem time_unique (laws : Laws E File Reply Time Worker)
     (w a b : World E File Reply Time Worker) (left right : Time)
