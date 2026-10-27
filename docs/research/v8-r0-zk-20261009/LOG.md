@@ -12653,3 +12653,31 @@ apply). 0b048ee98d and 1be0505afc stay rejected and recorded. batch3e (85 attemp
 source: op222's same-input differential, copy equality and row bridge; op134's native association
 and installation; the op117/op121 universal equalities and bridges (V217, V220); combined audit and
 focused replay. Rows removed outright: 0. Privacy target not yet established.
+
+## D325 (Stream B) 2026-10-27 22:04 UTC: recount 6 merged (OPEN 93 -> 86); integration gate on the merged candidate launched
+
+Recount 6 (statement audit only; no Lean invocations, IDs or proofs) re-derived all 407 rows at
+immutable pins and independently confirmed the six candidate closures at their stated boundaries:
+V233 (bounded P6 link), V265 (structural route under ruling (k)), V184 (structural stdlib semantics
+plus bounded checks), and V261, V247, V264 (extracted-copy laws with structural original links and
+callback-carrier bridges). It also credits V178 / op26 from D285 (bounded P6).
+
+| Measure | Recount 5 | Recount 6 |
+|---|---:|---:|
+| OPEN | 93 | 86 |
+| CLOSED-ON-CANDIDATE | 37 | 44 |
+| Buckets a / b / c / d | 10 / 55 / 6 / 22 | 6 / 56 / 5 / 19 |
+
+REDUCED, EVIDENCED and CLOSED-ON-RESEARCH are unchanged (176 / 14 / 87). CORRECTIONS6 keeps D188's
+scoped dispositions, records op253's counterexample as repaired with universal equality still open,
+credits D317's endpoint audit as audit evidence only, and records D320's universal V152-V154
+obligations. The owner packet now marks the client toolchain pin and the D188 narrowing approved;
+release recipe features and constant-time decoding, N7 custody, SHA-NI, DOITM and client scope
+(including the caller-supplied Selection) stay open. Merged into research (7c2a2ab016); worktree and
+branch removed. Endpoint premises removed/added/weakened: 0/0/0.
+
+New job pv-integ4 (IDs 39500-39599; no source change): the three-ELF gate on the merged candidate
+03905a5259, devnet_spend built with the pinned 1.94.1 toolchain and the recommended features, the
+fixed-coin fixture-byte gate, the 1,000-pair whole-prover differential against c57a344726, the
+cumulative cost projection, and the exact quiet-window timing command, which is not run until a
+window is coordinated with Stream A. Privacy target not yet established.
