@@ -1,0 +1,79 @@
+{"attempt": "JGb15_089", "exit_status": 1, "wall_seconds": 2.600994237989653, "peak_rss_kib": "5445032", "swaps": "0", "print_axioms": ["'AspisR1.JGb_PoseidonCell.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGb_PoseidonCell.lean:19:112: error: unsolved goals
+o : state_only_poseidon.StateOnlyPoseidonOpenings
+internal : Std.Array field.QM31 16#usize
+block : NP
+weights : Std.Array NP 3#usize
+leading full : Std.Array field.QM31 4#usize
+j : Usize
+hj : ↑j < 4
+hs : canonical o.succ_z
+hi : canonical internal
+hl : canonical leading
+hf : canonical full
+hb : JFy_PreparedSteps.Valid block
+hw : ∀ p ∈ ↑weights, JFy_PreparedSteps.Valid p
+start : UScalar UScalarTy.Usize
+hstart : 4#usize * j = ok start
+hsv : ↑start = ↑4#usize * ↑j
+stop : UScalar UScalarTy.Usize
+hstop : start + 4#usize = ok stop
+hev : ↑stop = ↑start + ↑4#usize
+len : ↑start + 4 = ↑stop
+bound : ↑stop ≤ 16
+s0 : Slice field.QM31
+hs0 :
+  core.array.A
+...
+op = ↑start + ↑4#usize
+len : ↑start + 4 = ↑stop
+bound : ↑stop ≤ 16
+s0 : Slice field.QM31
+hs0 :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice field.QM31)) o.succ_z
+      { start := start, «end» := stop } =
+    ok s0
+len0 : s0.length = 4
+can0 : ∀ x ∈ ↑s0, Canon x
+s1 : Slice field.QM31
+hs1 :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice field.QM31)) internal
+      { start := start, «end» := stop } =
+    ok s1
+len1 : s1.length = 4
+can1 : ∀ x ∈ ↑s1, Canon x
+target : field.QM31
+ht : field.qm31_pack_base4 s0 = ok target
+htc : Canon target
+int : field.QM31
+hit : field.qm31_pack_base4 s1 = ok int
+hitc : Canon int
+l : FIv_NativeArithmetic.NQ
+hrl : leading.index_usize j = ok l
+lc : Canon l
+f : FIv_NativeArithmetic.NQ
+hrf : full.index_usize j = ok f
+fc : Canon f
+d0 : field.QM31
+hd0 : target.sub l = ok d0
+c0 : Canon d0
+right✝² : FIv_NativeValue.decode d0 = FIv_NativeValue.decode target - FIv_NativeValue.decode l
+d1 : field.QM31
+hd1 : target.sub f = ok d1
+c1 : Canon d1
+right✝¹ : FIv_NativeValue.decode d1 = FIv_NativeValue.decode target - FIv_NativeValue.decode f
+d2 : field.QM31
+hd2 : target.sub int = ok d2
+c2 : Canon d2
+right✝ : FIv_NativeValue.decode d2 = FIv_NativeValue.decode target - FIv_NativeValue.decode int
+cd : canonical (Array.make 3#usize [d0, d1, d2] ⋯)
+sum : field.QM31
+hsum : field.qm31_sum_products3_prepared weights (Array.make 3#usize [d0, d1, d2] ⋯) = ok sum
+cs : Canon sum
+out : field.QM31
+hout : field.PreparedQm31Multiplier.mul block sum = ok out
+co : Canon out
+⊢ ok (out, o, internal, block, weights, leading, full) = ok (out, o, internal, block, weights, leading, full)
+'AspisR1.JGb_PoseidonCell.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf60948a214094e1397aa02415d6ebfec.scope; invocation ID: d6b296564dc7422ea5682a83a11da340
