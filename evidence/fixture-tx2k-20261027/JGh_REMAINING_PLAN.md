@@ -1,0 +1,13 @@
+# Remaining budget plan after076
+
+Actual launched processes001–076:71 pass,5 reject (069 recursion-depth accidental raw view reduction;072 scalar/proof-length rewrites after opacity;073 trailing decide after goal closed;075 ambiguous frontier name;076 missing final reflexivity for empty coordinate aliases). All rejected raw sources/logs remain; none receives proof credit. No timeout or memory kill. Depth/caps unchanged.
+
+077: repaired FrontierBase.078: first combined FrontierHeight00 (physical native cells for all three slots + named sparse coordinate frontier for trees0/2). If green,079–095: heights01–17, then096: FrontierStream (also embeds the thin FrontierOrder component; no separate FrontierOrder object).097: LeafBinding.098/099: SiblingBinding0/1.100: final audit, with same-saved-checkpoint composition and two native-byte mathematical root applications inline if predecessors pass. NO101st Lean process. If errors spend attempts, narrow the delivered closure; do not count unchecked text.
+
+NativeRoots, Partial, NativeLeaves aggregate, LeafIteration, SiblingBinding2, AnyFalse/ZeroWindows/Padding0–2 are prepared drafts, NOT checked. The two root applications and reader composition may be embedded in100 rather than separately compiling their prepared modules. All actual native leaf returns are already checked individually in057–068; the aggregate is only convenience. SiblingBinding2 remains optional; all141 folded native cells and Count2/frontier identity are included in the18 height modules/stream irrespective of that aggregate.
+
+Source semantics still OPEN: actual owned leaf-loop scratch prefix, actual owned-verifier returns/parent writes/control, BatchGoal, installed finish, accepted2 and accepted pair. No desired success is added as a premise. Old JGe joined partial is read-only (source matches092), and its packed-pair returns/canonicalities and terminal identification, TX1 acceptance and SAME retained checkpoint equality remain. Actual top Rc10 unchanged;0 premise delta.
+
+Use GIT_OPTIONAL_LOCKS=0 when starting the existing local orchestration to avoid racing its read-only git status with stage commits. No host infrastructure was changed. Only new task orchestration/evidence and JGh_ Lean sources are owned.
+
+FINAL:100/100 spent. All18 heights passed;097–099 stream equalities rejected.100 passed with symbolic cardinality joins and reader/model-root composition. All unused assemblies are unchecked text; stop proof work.

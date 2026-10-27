@@ -1,0 +1,1 @@
+All35 retained eight-block windows013–047 PASS, attempts001–035. New280/280 blocks; tree1 complete384/384 with104 inherited blocks. Named SHA chaining, no full-buffer reduction. Standard-only axioms, swap0; per-target exact source/dependency/revision/caps/time/RSS evidence in receipts. No root/native verifier/batch/acceptance claim. Actual top premise delta0.
