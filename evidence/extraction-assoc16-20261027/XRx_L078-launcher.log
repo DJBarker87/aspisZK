@@ -1,0 +1,46 @@
+{"attempt": "XRx_L078", "exit_status": 0, "wall_seconds": 1.0808688619872555, "peak_rss_kib": "2643768", "swaps": "0", "print_axioms": []}
+def core.array.mapListFnMut : {T F U : Type} →
+  (fnMut : Aeneas.Std.core.ops.function.FnMut.{0, 0, 0} F T U) →
+    (values : List.{0} T) →
+      F →
+        Aeneas.Std.Result.{0}
+          (Prod.{0, 0}
+            (@Subtype.{1} (List.{0} U) fun (output : List.{0} U) =>
+              @Eq.{1} Nat (@List.length.{0} U output) (@List.length.{0} T values))
+            F) :=
+fun {T F U : Type} (fnMut : Aeneas.Std.core.ops.function.FnMut.{0, 0, 0} F T U) (x : List.{0} T) (x_1 : F) =>
+  @List.brecOn.{1, 0} T
+    (fun (x : List.{0} T) =>
+      F →
+        Aeneas.Std.Result.{0}
+          (Prod.{0, 0}
+            (@Subtype.{1} (List.{0} U) fun (output : List.{0} U) =>
+              @Eq.{1} Nat (@List.l
+...
+def core.array.mapListFnMut : {T F U : Type} →
+  (fnMut : Aeneas.Std.core.ops.function.FnMut.{0, 0, 0} F T U) →
+    (values : List.{0} T) →
+      F →
+        Aeneas.Std.Result.{0}
+          (Prod.{0, 0}
+            (@Subtype.{1} (List.{0} U) fun (output : List.{0} U) =>
+              @Eq.{1} Nat (@List.length.{0} U output) (@List.length.{0} T values))
+            F) :=
+fun {T F U : Type} (fnMut : Aeneas.Std.core.ops.function.FnMut.{0, 0, 0} F T U) (x : List.{0} T) (x_1 : F) =>
+  @List.brecOn.{1, 0} T
+    (fun (x : List.{0} T) =>
+      F →
+        Aeneas.Std.Result.{0}
+          (Prod.{0, 0}
+            (@Subtype.{1} (List.{0} U) fun (output : List.{0} U) =>
+              @Eq.{1} Nat (@List.length.{0} U output) (@List.length.{0} T x))
+            F))
+    x (@core.array.mapListFnMut._f T F U fnMut) x_1
+def core.array.Array.map : {T F U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.ops.function.FnMut F T U → Aeneas.Std.Array T N → F → Aeneas.Std.Result (Aeneas.Std.Array U N) :=
+fun {T F U} {N} fnMut values closure => do
+  let (mapped, _) ← core.array.mapListFnMut fnMut (↑values) closure
+  Aeneas.Std.Result.ok ⟨↑mapped, ⋯⟩
+
+Running as unit: run-r811c1d83a0834972a94b9cf0fdcecab8.scope; invocation ID: d1da27c0e7c24e4f853e13597f0f5a94

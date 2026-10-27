@@ -1,0 +1,92 @@
+{"attempt": "XRx_L084", "exit_status": 1, "wall_seconds": 1.5465508520137519, "peak_rss_kib": "3868132", "swaps": "0", "print_axioms": ["'XRx_FinishStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRx_generated/XRx_FinishStep.lean:25:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  b.value i
+in the target expression
+  (let (o, iter1, next_back) := (some (i, old), next, restore)
+    match o with
+    | none =>
+      ok
+        (done fun e =>
+          have e1 := next_back e none;
+          back e1)
+    | some p =>
+      let (i, _) := p
+      do
+      let w ← b.value i
+      ok
+          (cont
+            (iter1, fun e =>
+              have e1 := next_back e (some (i, w));
+              back e1))) =
+    ok
+      (cont
+        (next, fun target => back (restore target (some (i, { c0 := { a := w, b := x }, c1 := { a := y, b := z } })))))
+
+case refine_1
+b : ve
+...
+ind an occurrence of the pattern
+  b.value i
+in the target expression
+  (let (o, iter1, next_back) := (some (i, old), next, restore)
+    match o with
+    | none =>
+      ok
+        (done fun e =>
+          have e1 := next_back e none;
+          back e1)
+    | some p =>
+      let (i, _) := p
+      do
+      let w ← b.value i
+      ok
+          (cont
+            (iter1, fun e =>
+              have e1 := next_back e (some (i, w));
+              back e1))) =
+    ok
+      (cont
+        (next, fun target => back (restore target (some (i, { c0 := { a := w, b := x }, c1 := { a := y, b := z } })))))
+
+case refine_1
+b : verifier.BatchedWeights
+it : It
+back : Back
+i : Usize
+old : Q
+next : It
+restore : It → Option (Usize × Q) → It
+read :
+  XRn_Join_enumerateNext (core.slice.iter.IterMut.Insts.CoreIterTraitsIteratorIteratorMutAT Q) it =
+    ok (some (i, old), next, restore)
+bound : ↑i < b.raw.length
+a c d e : U64
+w x y z : U32
+left✝³ : (↑b.raw)[↑i] = Array.make 4#usize [a, c, d, e] ⋯
+value : b.value i = ok { c0 := { a := w, b := x }, c1 := { a := y, b := z } }
+left✝² : ↑w = ↑a % 2147483647
+left✝¹ : ↑x = ↑c % 2147483647
+left✝ : ↑y = ↑d % 2147483647
+right✝ : ↑z = ↑e % 2147483647
+⊢ (let (o, iter1, next_back) := (some (i, old), next, restore)
+    match o with
+    | none =>
+      ok
+        (done fun e =>
+          have e1 := next_back e none;
+          back e1)
+    | some p =>
+      let (i, _) := p
+      do
+      let w ← b.value i
+      ok
+          (cont
+            (iter1, fun e =>
+              have e1 := next_back e (some (i, w));
+              back e1))) =
+    ok
+      (cont
+        (next, fun target => back (restore target (some (i, { c0 := { a := w, b := x }, c1 := { a := y, b := z } })))))
+'XRx_FinishStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra79eefbf53944f86a0ccf556c4b7e590.scope; invocation ID: cd78d3d6444d408a8c92ebbc8818a50e

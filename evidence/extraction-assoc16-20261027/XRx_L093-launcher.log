@@ -1,0 +1,59 @@
+{"attempt": "XRx_L093", "exit_status": 1, "wall_seconds": 1.2519028370152228, "peak_rss_kib": "2661616", "swaps": "0", "print_axioms": ["'XRx_RoundDriver.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRx_generated/XRx_RoundDriver.lean:11:24: warning: Variable name `D` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+XRx_generated/XRx_RoundDriver.lean:38:9: error: unsolved goals
+case e_a.Err
+H : Type
+D : aspis_core.digest.Digest32 H
+p : r1_wire.Prefix
+tr : r1_wire.SemanticTranscript H
+e : r1_wire.Error
+⊢ (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err e)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue vr => do
+          let r1 ← r1_wire.ValidatedRecord.decode_k 1#usize vr 0#usize
+          l
+...
+ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Err e)
+XRx_generated/XRx_RoundDriver.lean:42:2: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.ValidatedRecord =
+    core.result.Result (Std.Array aspis_core.field.QM31 1#usize) r1_wire.Error
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.27} {β : α → Sort ?u.26} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case e_a.Ok.e_3
+H : Type
+D : aspis_core.digest.Digest32 H
+p : r1_wire.Prefix
+tr : r1_wire.SemanticTranscript H
+vr : r1_wire.ValidatedRecord
+⊢ core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.ValidatedRecord =
+    core.result.Result (Std.Array aspis_core.field.QM31 1#usize) r1_wire.Error
+XRx_generated/XRx_RoundDriver.lean:34:12: warning: This simp argument is unused:
+  XRx_TryChain.source
+
+Hint: Omit it from the simp argument list.
+  simp only [X̵R̵x̵_̵T̵r̵y̵C̵h̵a̵i̵n̵.̵s̵o̵u̵r̵c̵e̵,̵bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRx_generated/XRx_RoundDriver.lean:40:13: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRx_RoundDriver.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r851fa76fd591448986dc05c2e0e08438.scope; invocation ID: 69019b6410964b899ca95bec7faa39d0

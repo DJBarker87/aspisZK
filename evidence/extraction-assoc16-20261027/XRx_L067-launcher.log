@@ -1,0 +1,68 @@
+{"attempt": "XRx_L067", "exit_status": 1, "wall_seconds": 1.7317757889977656, "peak_rss_kib": "3872976", "swaps": "0", "print_axioms": ["'XRx_ValueRow.map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRx_ValueRow.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRx_generated/XRx_ValueRow.lean:17:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (mapped, _) ←
+      core.array.mapListFnMut
+          { FnOnceInst := BuiltinFnOnce U64 aspis_core.field.M31,
+            call_mut := fun f x =>
+              match f x with
+              | ok y => ok (y, f)
+              | fail e => fail e
+              | div => div }
+          (↑(Array.make 4#usize [a, b, c, d] ⋯)) aspis_core.field.M31.reduce_u64
+    ok ⟨↑mapped, ⋯⟩
+is not definitionally equal to the right-hand side
+  ok (Array.make 4#usize [w, x, y, z] ⋯)
+
+a b c d : U64
+w x y z : U32
+ha : aspis_core.field.M31.reduce_u64 a = ok w
+hb : aspis_core.field.M31.reduce_u64 b = ok x
+hc : aspis_core.fi
+...
+core.array.Array.map (BuiltinFnMut U64 aspis_core.field.M31) a aspis_core.field.M31.reduce_u64
+      let a2 ← a1.index_usize 0#usize
+      let b ← a1.index_usize 1#usize
+      let c ← a1.index_usize 2#usize
+      let d ← a1.index_usize 3#usize
+      ok { c0 := { a := a2, b := b }, c1 := { a := c, b := d } }) =
+    ok { c0 := { a := w, b := x }, c1 := { a := y, b := z } }
+
+case refine_2
+bw : verifier.BatchedWeights
+i : Usize
+bound : ↑i < bw.raw.length
+row : Std.Array U64 4#usize
+hread : bw.raw.index_usize i = ok row
+hval : row = (↑bw.raw)[↑i]
+a b c d : U64
+shape : row = Array.make 4#usize [a, b, c, d] ⋯
+w : XRn_Join_Field.field.M31
+hw : aspis_core.field.M31.reduce_u64 a = ok w
+hwm : ↑w = ↑a % 2147483647
+right✝³ : ↑w < 2147483647
+x : XRn_Join_Field.field.M31
+hx : aspis_core.field.M31.reduce_u64 b = ok x
+hxm : ↑x = ↑b % 2147483647
+right✝² : ↑x < 2147483647
+y : XRn_Join_Field.field.M31
+hy : aspis_core.field.M31.reduce_u64 c = ok y
+hym : ↑y = ↑c % 2147483647
+right✝¹ : ↑y < 2147483647
+z : XRn_Join_Field.field.M31
+hz : aspis_core.field.M31.reduce_u64 d = ok z
+hzm : ↑z = ↑d % 2147483647
+right✝ : ↑z < 2147483647
+⊢ (do
+      let a ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) bw.raw i
+      let a1 ← core.array.Array.map (BuiltinFnMut U64 aspis_core.field.M31) a aspis_core.field.M31.reduce_u64
+      let a2 ← a1.index_usize 0#usize
+      let b ← a1.index_usize 1#usize
+      let c ← a1.index_usize 2#usize
+      let d ← a1.index_usize 3#usize
+      ok { c0 := { a := a2, b := b }, c1 := { a := c, b := d } }) =
+    ok { c0 := { a := w, b := x }, c1 := { a := y, b := z } }
+'XRx_ValueRow.map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRx_ValueRow.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rddc002f402d24815874b2d56b797bd5b.scope; invocation ID: 4437975495294479af3c47d3d902c141

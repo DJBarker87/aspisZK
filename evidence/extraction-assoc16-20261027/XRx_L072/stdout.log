@@ -1,0 +1,126 @@
+XRx_generated/XRx_ValueRow.lean:19:2: error: Tactic `rfl` failed: The left-hand side
+  let (mapped, closureNext) := (w, aspis_core.field.M31.reduce_u64)
+  do
+  let (mappedRest, closureFinal) ←
+    do
+      let (mapped, closureNext) ←
+        match closureNext b with
+          | ok y => ok (y, closureNext)
+          | fail e => fail e
+          | div => div
+      let (mappedRest, closureFinal) ←
+        do
+          let (mapped, closureNext) ←
+            match closureNext c with
+              | ok y => ok (y, closureNext)
+              | fail e => fail e
+              | div => div
+          let (mappedRest, closureFinal) ←
+            do
+              let (mapped, closureNext) ←
+                match closureNext d with
+                  | ok y => ok (y, closureNext)
+                  | fail e => fail e
+                  | div => div
+              let (mappedRest, closureFinal) := (⟨[], ⋯⟩, closureNext)
+                ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+          ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+      ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+  ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+is not definitionally equal to the right-hand side
+  ok (⟨[w, x, y, z], ⋯⟩, aspis_core.field.M31.reduce_u64)
+
+a b c d : U64
+w x y z : U32
+ha : aspis_core.field.M31.reduce_u64 a = ok w
+hb : aspis_core.field.M31.reduce_u64 b = ok x
+hc : aspis_core.field.M31.reduce_u64 c = ok y
+hd : aspis_core.field.M31.reduce_u64 d = ok z
+⊢ (let (mapped, closureNext) := (w, aspis_core.field.M31.reduce_u64)
+    do
+    let (mappedRest, closureFinal) ←
+      do
+        let (mapped, closureNext) ←
+          match closureNext b with
+            | ok y => ok (y, closureNext)
+            | fail e => fail e
+            | div => div
+        let (mappedRest, closureFinal) ←
+          do
+            let (mapped, closureNext) ←
+              match closureNext c with
+                | ok y => ok (y, closureNext)
+                | fail e => fail e
+                | div => div
+            let (mappedRest, closureFinal) ←
+              do
+                let (mapped, closureNext) ←
+                  match closureNext d with
+                    | ok y => ok (y, closureNext)
+                    | fail e => fail e
+                    | div => div
+                let (mappedRest, closureFinal) := (⟨[], ⋯⟩, closureNext)
+                  ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+            ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+        ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+    ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)) =
+    ok (⟨[w, x, y, z], ⋯⟩, aspis_core.field.M31.reduce_u64)
+XRx_generated/XRx_ValueRow.lean:21:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.array.mapListFnMut (BuiltinFnMut U64 aspis_core.field.M31) [a, b, c, d] aspis_core.field.M31.reduce_u64
+in the target expression
+  (do
+      let (mapped, _) ←
+        core.array.mapListFnMut (BuiltinFnMut U64 aspis_core.field.M31) (↑(Array.make 4#usize [a, b, c, d] ⋯))
+            aspis_core.field.M31.reduce_u64
+      ok ⟨↑mapped, ⋯⟩) =
+    ok (Array.make 4#usize [w, x, y, z] ⋯)
+
+a b c d : U64
+w x y z : U32
+ha : aspis_core.field.M31.reduce_u64 a = ok w
+hb : aspis_core.field.M31.reduce_u64 b = ok x
+hc : aspis_core.field.M31.reduce_u64 c = ok y
+hd : aspis_core.field.M31.reduce_u64 d = ok z
+mapped :
+  core.array.mapListFnMut (BuiltinFnMut U64 aspis_core.field.M31) [a, b, c, d] aspis_core.field.M31.reduce_u64 =
+    ok (⟨[w, x, y, z], ⋯⟩, aspis_core.field.M31.reduce_u64)
+⊢ (do
+      let (mapped, _) ←
+        core.array.mapListFnMut (BuiltinFnMut U64 aspis_core.field.M31) (↑(Array.make 4#usize [a, b, c, d] ⋯))
+            aspis_core.field.M31.reduce_u64
+      ok ⟨↑mapped, ⋯⟩) =
+    ok (Array.make 4#usize [w, x, y, z] ⋯)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+XRx_generated/XRx_ValueRow.lean:18:59: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp +zeta only [core.array.mapListFnMut, ̲BuiltinFnMut, ̲ha, ̲hb̵,̵h̵c, ̲hd, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRx_generated/XRx_ValueRow.lean:18:62: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp +zeta only [core.array.mapListFnMut, ̲BuiltinFnMut, ̲ha, ̲hb, ̲hc̵,̵h̵d, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRx_generated/XRx_ValueRow.lean:18:65: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp +zeta only [core.array.mapListFnMut, ̲BuiltinFnMut, ̲ha, ̲hb, ̲hc,h̵d̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRx_ValueRow.map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRx_ValueRow.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
