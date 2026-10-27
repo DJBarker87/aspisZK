@@ -1,51 +1,30 @@
-# Active work state (not a completion report)
+# Final handoff — budget exhausted
 
-Branch codex/pv-cbmid-20261027; base237e135561; latest source stage7724872f2e.
-Rows0→0; endpoint premises unchanged; target not yet established.
-TALLY.json is authoritative. IDs40600-40899, never reuse; reserve charged98-100 for audits.
-Lean21/100 and Kani3/10 at this checkpoint. No local Lean and no subagents.
-Only own PV_CBM modules go into shared sources. ProverRw* remain read-only.
-Host setup reuses exact-hash cb3 source (no sibling writes); cb3/lean-objects absent.
+Branch codex/pv-cbmid-20261027; candidate base237e13556180d2ce0320a2760f89b35b5f4f02bb.
+Capacity relaunch1 reconciled receipts: prior97/100 Lean,10/10 Kani.
+Final audits40743,40744,40745 passed; now100/100 Lean and10/10 Kani.
+Do not launch another compile or Kani gate under this budget. Next unused ID40746;
+used IDs40600–40745 include uncharged refusals. No ID reused.
 
-Checked: InventoryShape, PathGeometry/Classification, ValueClassification,
-Padding/Path/Value bijections, InventoryCardinality.cardinal=3803,
-CellEnumeration, PushList generic append lemma, ReferenceTypes,
-MasksReference/Selection, CallbackBundle.op134_reference. All latest passed
-axioms standard. Earlier failed attempts and error-recovery sorryAx diagnostics
-are retained as failures, never accepted as proofs.
+Rows discharged0→0; privacy endpoint premises removed/added/changed0.
+Target not yet established. No checked ROW counterexample.
+Reference equations132/133/134 are published via PV_CBM_CallbackBundle.
+All87 live owned modules have passing source-hash receipts and accepted axioms.
+Inventory reference success/length3803/all-free and free-domain cardinality3803
+are distinct proved facts; uniqueness/completeness and shipped association remain open.
+Source-law labels must not replace reference labels.
 
-Kani: classifier source-prefix vs owned predicate PASS0/61, unwind25;
-complete masks180s TIMEOUT; ruling(i) allows one retry, masks900s TIMEOUT.
-Never a third identical mask gate. Same caps6G/8G/swap0/Tasks64/CPU0-3.
-Kani RSS failures: GNU time parent maximum is incomplete; physical snapshot
-near deadline retained separately, CBMC VmHWM6699344KiB, scope peak6873858048B.
-No ROW counterexample. Reference equations are not opN_source laws.
+See STATUS.md for op table and precise remaining obligations; RECEIPTS.md indexes
+all host receipts with targets,exit,wall,RSS,swap,revision,axioms. STATIC-AUDIT.json
+is a source/receipt check, not a replay. BundleManifest is the single final
+manifest import/axioms audit against retained objects, not a release rebuild.
 
-Pending next: admission cooldown from admission-state.json (180s after refusal),
-then run.py charon charon-op132ref-001 132ref (previous refusals uncharged;
-no actual target.json exists yet), then aeneas aeneas-op132ref-001 132ref.
-Owned reference has3803 literals in60 chunks of≤64 pushes, separately-owned
-functions with no iterator/deref interface. prepare_cells.py consumes its
-actual Aeneas output, emits exact chunks plus named PushList proof and free-cell
-classification applications; --check must pass. Compile generic ValueFree and
-CellTypes, then one chunk first, then remaining distinct chunks once, then bridge.
-All scopes strictly serial, one per job.
+Next concrete deliverable requires a new authorized budget: establish complete
+op132 native/reference association and inventory uniqueness/completeness; then
+op133/134 native associations. For op79/222 use Lean extraction/structural links
+and actual canonical QM31/WideExact caller invariants per rulings(j)/(k).
+No more chained-field Kani. No third identical mask gate.
 
-Also prepared indexed op79 reference preserving basis operation order. Need
-setup uploaded reference_encoder.rs at setup-encoder-002 (done), then extract
-79ref and133ref. Source op132/133/79 direct Aeneas graphs failed explicit
-escaping-reference/structured-Drop preflight. Optional222/224 exact source
-fragments pinned in FRAGMENT-PINS.json; fresh sibling check before those ops.
-No sibling op132/133/134/79/222/224_source found at latest checked branch heads
-95a7a8e2e1, e73d646b9b, 1b71b2650f.
-
-Further Kani candidates already in source-lib.rs: checks::rows_complete(unwind257),
-schedule_checks::schedule_success(unwind137), encoder_checks::eval_qm31_complete
-(unwind1025, fully arbitrary canonical1024 QM31 coefficients andpoint). Complete
-cells harness still to add. P6 op79 also needs WideExact and actual caller
-canonicality; base-field-only gates would not suffice.
-
-Use whole budget, no early stop on Aeneas/Kani failure. Source/receipt commits
-path-limited; no push/merge or crates/programs edits. Before final audit commit
-source; last3charged targets distinct focused reference audit, inventory audit,
-one final bundle/manifest audit. No unchanged full regression.
+Shipped crates/programs and ProverRw* unchanged, no pushes/merges. cb3 cache
+was absent (no copy claimed); provenance files pin reused sources and imports.
+Own host kani-target/charon-target removed; retained evidence and shared caches intact.
