@@ -1,0 +1,28 @@
+{"attempt": "LPn_L058", "exit_status": 1, "wall_seconds": 1.5036264859954827, "peak_rss_kib": "2636652", "swaps": "0", "cgroup_memory_peak_bytes": "301862912", "print_axioms": ["'LPn.Decode.native_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LPn.Decode.native_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LPn.Decode.row_error' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LPn.Decode.arithmetic_error' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LPn.Decode.range_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ : ↑off * 32 + ↑N * 32 > (List.drop 5 ↑r.framed).length
+⊢ ↑off * 32 + ↑N * 32 ≤ (↑r.framed).length - 5 →
+    (match
+        LPl_A.firstBad
+          (fun i => !((DecodeModel.values (List.drop 5 ↑r.framed) (↑off * 32) ↑N)[i]?.getD (true, qzero)).1) ↑N with
+      | some i =>
+        if h : ↑off + i ≤ UScalar.cMax UScalarTy.Usize then
+          ok (core.result.Result.Err (r1_wire.Error.NonCanonical r.row (UScalar.ofNat (↑off + i) h)))
+        else fail Error.panic
+      | none =>
+        if h : (DecodeModel.values (List.drop 5 ↑r.framed) (↑off * 32) ↑N).length = ↑N then
+          ok (core.result.Result.Ok ⟨List.map Prod.snd (DecodeModel.values (List.drop 5 ↑r.framed) (↑off * 32) ↑N), ⋯⟩)
+        else fail Error.panic) =
+      ok (core.result.Result.Err (r1_wire.Error.Length r.row))
+LPn_generated/LPn_DecodeResult.lean:58:70: warning: This simp argument is unused:
+  bad
+
+Hint: Omit it from the simp argument list.
+  simp [row, ̲arithmetic, ̲framed,̵b̵a̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'LPn.Decode.native_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LPn.Decode.native_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LPn.Decode.row_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPn.Decode.arithmetic_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPn.Decode.range_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

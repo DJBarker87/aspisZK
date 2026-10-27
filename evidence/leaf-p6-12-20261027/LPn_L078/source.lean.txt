@@ -1,0 +1,59 @@
+import LPn_DotJoin
+import LPn_DotPushFour
+open Aeneas Aeneas.Std Result LPl_Kit_Release
+set_option autoImplicit false
+namespace LPn.Dot
+
+def project (s : FIo_Native.fast_pairing.canonical.Dot) : fast_pairing.canonical.Dot := ⟨s.sums⟩
+
+theorem update_eq (before raw : U64) :
+    AspisR1.LPn_DotPushFour.update before raw =
+      LPn_Kit_u64 (before.val + LPn_Kit_partial raw.val) := by
+  apply UScalar.eq_of_val_eq
+  change (U64.wrapping_add before (AspisR1.FIo_ReduceBounds.fold raw)).val =
+    (before.val+LPn_Kit_partial raw.val)%18446744073709551616
+  rw [U64.wrapping_add_val_eq,AspisR1.LPn.Raw.size64,AspisR1.LPn.Raw.partial_nat]
+  rfl
+
+theorem packed_result (a b c d e f g h : U32) (s0 s1 s2 s3 : U64) :
+    ∃ out,
+      FIo_Native.fast_pairing.canonical.Dot.push ⟨Array.make 4#usize [s0,s1,s2,s3]⟩
+        (AspisR1.LPn_RawMap.pack a b c d) (AspisR1.LPn_RawMap.pack e f g h)=ok out ∧
+      fast_pairing.canonical.Dot.push ⟨Array.make 4#usize [s0,s1,s2,s3]⟩
+        (packed a b c d) (packed e f g h)=ok (project out) := by
+  let r0 := AspisR1.LPn_RawReference.raw0 a b c d e f g h
+  let r1 := AspisR1.LPn_RawReference.raw1 a b c d e f g h
+  let r2 := AspisR1.LPn_RawReference.raw2 a b c d e f g h
+  let r3 := AspisR1.LPn_RawReference.raw3 a b c d e f g h
+  have call := AspisR1.LPn_RawReference.source a b c d e f g h
+  obtain ⟨z,hz,words⟩ := raw_same a b c d e f g h
+  have eqz := Result.ok.inj (call.symm.trans hz)
+  rw [←eqz] at words
+  have wordlist : [r0.val,r1.val,r2.val,r3.val]=LPn_Kit_raw (packed a b c d) (packed e f g h) := words
+  have push := AspisR1.LPn_DotPushCut.source
+    (AspisR1.LPn_RawMap.pack a b c d) (AspisR1.LPn_RawMap.pack e f g h)
+    s0 s1 s2 s3 r0 r1 r2 r3 call
+  refine ⟨_,push,?_⟩
+  unfold fast_pairing.canonical.Dot.push
+  rw [←wordlist]
+  change ok (⟨Array.make 4#usize
+    [LPn_Kit_u64 (s0.val+LPn_Kit_partial r0.val),
+     LPn_Kit_u64 (s1.val+LPn_Kit_partial r1.val),
+     LPn_Kit_u64 (s2.val+LPn_Kit_partial r2.val),
+     LPn_Kit_u64 (s3.val+LPn_Kit_partial r3.val)]⟩ : fast_pairing.canonical.Dot) = _
+  simp only [project,update_eq]
+
+theorem native_result (self : FIo_Native.fast_pairing.canonical.Dot)
+    (a b : FIo_Native.fast_pairing.canonical.Q) :
+    ∃ out, FIo_Native.fast_pairing.canonical.Dot.push self a b=ok out ∧
+      fast_pairing.canonical.Dot.push (project self) a b=ok (project out) := by
+  rcases self with ⟨sums⟩
+  obtain ⟨s0,s1,s2,s3,rfl⟩ := AspisR1.LPn_RawMap.shape sums
+  obtain ⟨a0,a1,a2,a3,rfl⟩ := AspisR1.LPn_RawMap.shape a
+  obtain ⟨b0,b1,b2,b3,rfl⟩ := AspisR1.LPn_RawMap.shape b
+  exact packed_result a0 a1 a2 a3 b0 b1 b2 b3 s0 s1 s2 s3
+
+#print axioms update_eq
+#print axioms packed_result
+#print axioms native_result
+end LPn.Dot

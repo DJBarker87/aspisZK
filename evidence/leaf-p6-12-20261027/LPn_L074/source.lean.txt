@@ -1,0 +1,24 @@
+import LPn_RawNat
+import LPn_Kit_DotModel
+open Aeneas Aeneas.Std Result LPl_Kit_Release
+set_option autoImplicit false
+namespace LPn.Dot
+
+def packed (a b c d : U32) : fast_pairing.canonical.Q := Array.make 4#usize [a,b,c,d]
+
+theorem model_raw (a b c d e f g h : U32) :
+    LPn_Kit_raw (packed a b c d) (packed e f g h) =
+      AspisR1.LPn.RawSpec.rawNat a.val b.val c.val d.val e.val f.val g.val h.val := rfl
+
+/-- Joint native/cohort port in the formerly colliding import context.
+    Operand arrays use exactly the SAME eight words. -/
+theorem raw_same (a b c d e f g h : U32) :
+    ∃ z, AspisR1.FIo_Native.fast_pairing.canonical.Q.raw
+        (AspisR1.LPn_RawMap.pack a b c d) (AspisR1.LPn_RawMap.pack e f g h)=ok z ∧
+      z.val.map UScalar.val = LPn_Kit_raw (packed a b c d) (packed e f g h) := by
+  obtain ⟨z,call,words⟩ := AspisR1.LPn.Raw.raw_nat a b c d e f g h
+  exact ⟨z,call,words.trans (model_raw a b c d e f g h).symm⟩
+
+#print axioms model_raw
+#print axioms raw_same
+end LPn.Dot

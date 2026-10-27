@@ -1,0 +1,238 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPn_claims.rs
+@@ -0,0 +1,51 @@
++use super::*;
++fn eq_q(a:QM31,b:QM31){assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);}
++#[kani::proof] #[kani::unwind(6)]
++fn LPn_owned_step(){
++ // All bits are valid: only nested u32 products, no padding interpretation,
++ // pointers, references or enum discriminants are fabricated.
++ let raw:[u8;928]=kani::any();
++ let prior:[[QM31;29];2]=unsafe{core::mem::transmute(raw)};
++ let raw:[u8;464]=kani::any();let next:[QM31;29]=unsafe{core::mem::transmute(raw)};
++ let p:usize=kani::any();kani::assume(p<3);
++ let j:usize=kani::any();kani::assume(j<=p);
++ let lane:usize=kani::any();kani::assume(lane<29);
++ match aspis_core::r0::heap::uninit::<[[QM31;29];3]>(){
++  Err(e)=>assert_eq!(e,aspis_core::r0::Error::Allocation),
++  Ok(mut out)=>unsafe{
++   let base=out.as_mut_ptr();let dst=base.cast::<[QM31;29]>();
++   // Reachable prefix invariant. No uninitialized future slot is read.
++   if p>0{dst.write(prior[0]);}if p>1{dst.add(1).write(prior[1]);}
++   // Exactly one verbatim source iteration after the CLOSED decoder returns.
++   dst.add(p).write(next);
++   assert_eq!(out.as_mut_ptr(),base);
++   let got=(*dst.add(j))[lane];eq_q(got,if j==p{next[lane]}else{prior[j][lane]});
++   if p==2{
++    let initialized=out.assume_init();
++    assert_eq!(initialized.as_ptr(),dst);
++    eq_q(initialized[j][lane],if j==p{next[lane]}else{prior[j][lane]});
++    drop(initialized);
++   }else{drop(out);}
++  }
++ }
++}
++fn abort_after_prefix(p:usize,prior:[[QM31;29];2],row:u8,value:usize)->Result<(),Error>{
++ let mut out=aspis_core::r0::heap::uninit::<[[QM31;29];3]>().map_err(|_|Error::Allocation)?;
++ unsafe{
++  let dst=out.as_mut_ptr().cast::<[QM31;29]>();
++  if p>0{dst.write(prior[0]);}if p>1{dst.add(1).write(prior[1]);}
++  let child:Result<[QM31;29],Error>=Err(Error::NonCanonical{row,value});
++  dst.add(p).write(child?);
++ }
++ // Unreachable after the failing child; owned MaybeUninit drops on the ? arm.
++ panic!("rejecting child reached a later write")
++}
++#[kani::proof] #[kani::unwind(6)]
++fn LPn_abort(){
++ let raw:[u8;928]=kani::any();let prior:[[QM31;29];2]=unsafe{core::mem::transmute(raw)};
++ let p:usize=kani::any();kani::assume(p<3);let row:u8=kani::any();let value:usize=kani::any();kani::assume(value<116);
++ match abort_after_prefix(p,prior,row,value){
++  Err(Error::NonCanonical{row:r,value:v})=>{assert_eq!(r,row);assert_eq!(v,value);},
++  Err(Error::Allocation)=>(),_=>panic!("wrong error suffix")
++ }
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPn_decode.rs
+@@ -0,0 +1,96 @@
++use super::*;
++#[kani::proof] #[kani::unwind(10)]
++fn LPn_iterator(){
++ let b:[u8;3717]=kani::any();
++ let len:usize=kani::any();kani::assume(5<=len&&len<=3717);
++ let record=ValidatedRecord{row:25,framed:&b[..len]};
++ let n:usize=kani::any();kani::assume(n==1||n==28||n==29);
++ let off:usize=kani::any();kani::assume(off<=116&&32*(off+n)<=len-5);
++ let i:usize=kani::any();kani::assume(i<=n);
++ let payload=record.payload();assert!(core::ptr::eq(payload.as_ptr(),b[5..].as_ptr()));
++ let selected=&payload[32*off..32*(off+n)];
++ let mut it=selected.chunks_exact(32).enumerate();
++ if i>0 {let (j,_)=it.nth(i-1).unwrap();assert_eq!(j,i-1);}
++ assert_eq!(it.len(),n-i);
++ match it.next(){None=>assert_eq!(i,n),Some((value,part))=>{
++  assert!(i<n);assert_eq!(value,i);assert_eq!(part.len(),32);
++  assert!(core::ptr::eq(part.as_ptr(),b[5+32*(off+i)..].as_ptr()));
++  assert_eq!(it.len(),n-i-1);assert!(off+value<116);
++ }}
++}
++fn le(b:&[u8])->u64{u64::from(b[0])+256*(u64::from(b[1])+256*(u64::from(b[2])+256*u64::from(b[3])))}
++#[kani::proof] #[kani::unwind(10)]
++fn LPn_decoder(){
++ let b:[u8;32]=kani::any();let row:u8=kani::any();
++ let off:usize=kani::any();let i:usize=kani::any();kani::assume(off<=116&&i<29);kani::assume(off+i<116);
++ let actual=QM31::from_le_bytes(&b[..16]).ok_or(Error::NonCanonical{row,value:off+i});
++ let words=[le(&b[0..4]),le(&b[4..8]),le(&b[8..12]),le(&b[12..16])];
++ let good=words.iter().all(|w|*w<2147483647);
++ match actual { Ok(q)=>{assert!(good);assert_eq!(q.c0.a.0 as u64,words[0]);assert_eq!(q.c0.b.0 as u64,words[1]);assert_eq!(q.c1.a.0 as u64,words[2]);assert_eq!(q.c1.b.0 as u64,words[3]);},
++ Err(e)=>{assert!(!good);assert_eq!(e,Error::NonCanonical{row,value:off+i});}}
++}
++#[kani::proof] #[kani::unwind(10)]
++fn LPn_guard(){
++ let row:u8=kani::any();let off:usize=kani::any();
++ let b:[u8;37]=kani::any();
++ // This actual N29 call can only reject on this small carrier. It checks
++ // all offset overflow cases and row precedence without any source iteration.
++ let got=ValidatedRecord{row,framed:&b}.decode_k::<29>(off);
++ assert_eq!(got,Err(if row<14{Error::InvalidRow}else{Error::Length{row}}));
++}
++#[kani::proof] #[kani::unwind(10)]
++fn LPn_scalar(){
++ let b:[u8;3717]=kani::any();let len:usize=kani::any();kani::assume(5<=len&&len<=3717);
++ let row:u8=kani::any();let off:usize=kani::any();let n:usize=kani::any();kani::assume(n==1||n==28||n==29);
++ let native=(||->Result<(),Error>{
++  if row<14{return Err(Error::InvalidRow);}
++  let byte_offset=off.checked_mul(32).ok_or(Error::Length{row})?;
++  let byte_len=n.checked_mul(32).ok_or(Error::Length{row})?;
++  let end=byte_offset.checked_add(byte_len).ok_or(Error::Length{row})?;
++  let _bytes=ValidatedRecord{row,framed:&b[..len]}.payload().get(byte_offset..end).ok_or(Error::Length{row})?;
++  Ok(())
++ })();
++ let fit=(off as u128)*32+(n as u128)*32<=(len-5) as u128;
++ assert_eq!(native,if row<14{Err(Error::InvalidRow)}else if fit{Ok(())}else{Err(Error::Length{row})});
++}
++fn arbitrary_q()->QM31{
++ use aspis_core::field::{CM31,M31};
++ let a:u32=kani::any();let b:u32=kani::any();let c:u32=kani::any();let d:u32=kani::any();
++ // No canonicality restriction: only copying/storing the valid u32 representation.
++ QM31{c0:CM31{a:M31(a),b:M31(b)},c1:CM31{a:M31(c),b:M31(d)}}
++}
++#[kani::proof] #[kani::unwind(10)]
++fn LPn_typed_write(){
++ let b:[u8;37]=kani::any();let row:u8=kani::any();kani::assume(row>=14);
++ let mut out=[arbitrary_q(),arbitrary_q(),arbitrary_q()];
++ let j:usize=kani::any();kani::assume(j<3);let old=out[j];
++ let got=ValidatedRecord{row,framed:&b}.decode_k::<1>(0);
++ let expected=QM31::from_le_bytes(&b[5..21]);
++ match(got,expected){
++  (Ok([q]),Some(v))=>{out[1]=q;eq_q(q,v);eq_q(out[j],if j==1{v}else{old});},
++  (Err(e),None)=>{assert_eq!(e,Error::NonCanonical{row,value:0});eq_q(out[j],old);},
++  _=>panic!("typed write source decoder disagreement")
++ }
++}
++
++fn eq_q(a:QM31,b:QM31){assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);}
++
++#[kani::proof] #[kani::unwind(10)]
++fn LPn_token(){
++ let b:[u8;32]=kani::any();let row:u8=kani::any();
++ let records:[&[u8];27]=[&b[0..], &b[1..], &b[2..], &b[3..], &b[4..], &b[5..], &b[6..], &b[7..], &b[8..], &b[9..], &b[10..], &b[11..], &b[12..], &b[13..], &b[14..], &b[15..], &b[16..], &b[17..], &b[18..], &b[19..], &b[20..], &b[21..], &b[22..], &b[23..], &b[24..], &b[25..], &b[26..]];
++ let p=Prefix{c1_root:&[0u8;32],records};
++ match p.validated_record(row){
++  Err(e)=>{assert!(row>=27);assert_eq!(e,Error::InvalidRow);},
++  Ok(t)=>{assert!(row<27);assert_eq!(t.row(),row);assert_eq!(t.framed().len(),records[row as usize].len());assert!(core::ptr::eq(t.framed().as_ptr(),records[row as usize].as_ptr()));}
++ }
++}
++#[kani::proof] #[kani::unwind(10)]
++fn LPn_nonvacuity(){
++ let mut b=[0u8;37];let high:[u8;16]=kani::any();b[21..].copy_from_slice(&high);
++ let got=ValidatedRecord{row:25,framed:&b}.decode_k::<1>(0).unwrap();eq_q(got[0],QM31::ZERO);
++ b[5]=255;b[6]=255;b[7]=255;b[8]=127;
++ assert_eq!(ValidatedRecord{row:25,framed:&b}.decode_k::<1>(0),Err(Error::NonCanonical{row:25,value:0}));
++ assert_eq!(ValidatedRecord{row:0,framed:&b}.decode_k::<1>(usize::MAX),Err(Error::InvalidRow));
++ assert_eq!(ValidatedRecord{row:25,framed:&b}.decode_k::<1>(usize::MAX),Err(Error::Length{row:25}));
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPn_dot.rs
+@@ -0,0 +1,16 @@
++use super::*;
++#[kani::proof] #[kani::unwind(10)]
++fn LPn_producers(){
++ let words:[u32;4]=kani::any();
++ let good=words[0]<canonical::P&&words[1]<canonical::P&&words[2]<canonical::P&&words[3]<canonical::P;
++ match canonical::Q::from_limbs(words){None=>assert!(!good),Some(q)=>{
++  assert!(good);let got=q.limbs();for i in 0..4{assert_eq!(got[i],words[i]);assert!(got[i]<canonical::P);}
++ }}
++ let x=QM31{c0:CM31{a:aspis_core::field::M31(words[0]),b:aspis_core::field::M31(words[1])},c1:CM31{a:aspis_core::field::M31(words[2]),b:aspis_core::field::M31(words[3])}};
++ match checked_q(x){Err(())=>assert!(!good),Ok(q)=>{assert!(good);let got=q.limbs();for i in 0..4{assert_eq!(got[i],words[i]);}}}
++ let wide:[u32;8]=kani::any();
++ if let Some(e)=E::from_limbs(wide){
++  let pair=canonical::Q::from_wide(e);
++  for i in 0..4{assert_eq!(pair[0].limbs()[i],wide[i]);assert_eq!(pair[1].limbs()[i],wide[4+i]);assert!(pair[0].limbs()[i]<canonical::P);assert!(pair[1].limbs()[i]<canonical::P);}
++ }
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPn_expand.rs
+@@ -0,0 +1,31 @@
++use super::*;
++// One reached iteration. Prefix: 0/32/64; suffix: any length that fits96.
++// Initial bytes, source bytes and the observed frame byte are unconstrained.
++#[kani::proof]
++#[kani::unwind(18)]
++fn LPn_step_frame() {
++    let source: [u8;16] = kani::any();
++    let mut backing: [u8;96] = kani::any();
++    let slot: usize = kani::any(); kani::assume(slot < 3);
++    let at = 32 * slot;
++    let end: usize = kani::any(); kani::assume(at+32 <= end && end <= 96);
++    let j: usize = kani::any(); kani::assume(j < end);
++    let old = backing[j];
++    let base = backing.as_mut_ptr();
++    let window = &mut backing[..end][at..at+32];
++    assert!(core::ptr::eq(window.as_ptr(),base.wrapping_add(at)));
++    assert_eq!(window.len(),32);
++    assert_eq!(expand_values(&source,window),Ok(()));
++    assert_eq!(backing[j],if at<=j && j<at+16 { source[j-at] }
++        else if at+16<=j && j<at+32 { 0 } else { old });
++    assert!(core::ptr::eq(backing.as_ptr(),base));
++}
++// Scalar source guard only; no buffer loop, matching compact.rs:128.
++#[kani::proof]
++fn LPn_guard() {
++    let n: usize = kani::any(); let m: usize = kani::any();
++    kani::assume(n<=1856 && m<=3712);
++    let reject = n%16 != 0 || m != 2*n;
++    assert_eq!(reject, !(n%16==0 && m==2*n));
++    if !reject { assert_eq!(m/32,n/16); assert_eq!(m%32,0); assert!(n/16<=116); }
++}
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -213,3 +213,5 @@
+ #[cfg(kani)] mod LPl_check { include!("LPl_check.rs"); }
+ 
+ #[cfg(kani)] mod LPl_expand { include!("LPl_expand.rs"); }
++
++#[cfg(kani)] mod LPn_expand { include!("LPn_expand.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -227,3 +227,5 @@
+         E::new(ac.add(bd.mul(E::U)), ad.add(bc))
+     }
+ }
++
++#[cfg(kani)] mod LPn_dot { include!("LPn_dot.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -320,3 +320,5 @@
+ #[cfg(kani)]
+ #[path = "LPa_semantic.rs"]
+ mod LPa_semantic;
++
++#[cfg(kani)] mod LPn_claims { include!("LPn_claims.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -860,3 +860,5 @@
+ #[cfg(kani)] mod LPh_wire { include!("LPh_wire.rs"); }
+ 
+ #[cfg(kani)] mod LPl_validate { include!("LPl_validate.rs"); }
++
++#[cfg(kani)] mod LPn_decode { include!("LPn_decode.rs"); }
