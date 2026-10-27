@@ -1,0 +1,43 @@
+{"attempt": "NBB_L019", "exit_status": 0, "wall_seconds": 3.40196070499951, "peak_rss_kib": "4381508", "swaps": "0", "print_axioms": ["'NBB_Arithmetic.add' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Arithmetic.fold' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Finish.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Finish.unique' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Nonvacuity.row' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Nonvacuity.finish' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Phase.next' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Phase.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Phase.unique' depends on axioms: [propext]", "'NBB_Push.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Push.sweep' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_QueryTrace.unroll' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_QueryTrace.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_QueryWitness.construct' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_QueryWitness.direct' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Row.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Row.unique' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_RowTrace.frame_unique' depends on axioms: [propext, Quot.sound]", "'NBB_RowTrace.steps_result' depends on axioms: [propext, Quot.sound]", "'NBB_RowTrace.source_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_RowTrace.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_RowWitness.steps' depends on axioms: [propext]", "'NBB_RowWitness.construct' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Sweep.initial' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Sweep.update' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBB_Sweep.final' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NBB_Arithmetic.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBB_Arithmetic.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBB_Finish.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBB_Finish.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBB_Nonvacuity.row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBB_Nonvacuity.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBB_Phase.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBB_Phase.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBB_Phase.unique' depends on axioms: [propext]
+'NBB_Push.source
+...
+mb power j) * ↑basis) [0, 1, 2, 3]
+        (fun j => ↑(before j)) added ∧
+      (if decide (terms % 4 = 3) = true then
+          NBB_RowTrace.Steps (fun j row => AspisV8R17.RawReducer.foldBits (row j)) [0, 1, 2, 3] added fun j => ↑(out j)
+        else (fun j => ↑(out j)) = added) ∧
+        S7Kani2OwnedRow.residue_owned (S7Kani2OwnedRowRefinement.makeRow before) power basis (decide (terms % 4 = 3)) =
+          Aeneas.Std.Result.ok (S7Kani2OwnedRowRefinement.makeRow out)
+NBB_QueryWitness.direct (ops : AspisR1.Port3_NativeQueryBody.Ops) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared)
+  (g : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize)
+  (obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit)) (geo : AspisR1Stage2.verifier.QueryGeometry)
+  (end1 : Aeneas.Std.Usize) (a : NBB_QueryTrace.Acc) (b : NBB_QueryTrace.BW) :
+  ∃ out,
+    NBB_QueryTrace.Trace
+        (fun a b => AspisR1.Port3_NativeQueryBody.verifier.candidate.query_values ops proof p a g obs geo b) (↑end1)
+        (Aeneas.Std.core.result.Result.Ok (a, b)) out ∧
+      AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop ops proof p a g obs geo b end1 = out
+NBB_Finish.source (b : AspisR1.Port3_FlushInstall.BW) (old : Aeneas.Std.Slice AspisR1.Port3_FlushInstall.K)
+  (raw64 : (↑b.raw).length = 64) (old64 : (↑old).length = 64) :
+  ∃ out,
+    AspisR1.Port3_FlushInstall.flush b old = Aeneas.Std.Result.ok out ∧
+      (↑out).length = 64 ∧
+        ↑out =
+            List.map
+              (fun row =>
+                AspisR1.Port3_FlushInstall.fromMutable
+                  (S8Kani2FinishReferenceJoin.toFinish (S8OwnedP6Finish.modelValue row)))
+              (List.take 64 ↑b.raw) ∧
+          ∀ q ∈ ↑out, AspisR1.Port3_FlushInstall.Canonical q
+
+Running as unit: run-r4d8dcefc054a4f96a842f10eaabb2a96.scope; invocation ID: 5a2c78d63c9748b8b5023c7fc12a6cd6

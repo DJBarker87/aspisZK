@@ -131,3 +131,32 @@ Only NBB-prefixed modules/scripts and this evidence directory were edited.
 No session A/live worktree/other worker candidate, wallet/key, source adoption,
 cryptographic assumption, security metric, failure event or runtime trust item
 was changed. Local stage commits only; no push or merge.
+
+## Terminal audit and budget
+
+L019 final co-import audits all26 new theorems: exit0,wall3.401960705s,
+peakRSS4381508KiB,swap0,revision
+5d9dd64f6f93610d85ad3da58ff639afc118ce22 plus exact dirty-source SHA256.
+All prints contain only propext,Classical.choice,Quot.sound or a subset.
+
+Usage19/100 Lean (13pass,6rejected),6/30 Kani (4pass,2timeouts),6/6 metadata
+passes. Budgets were NOT exhausted. Aggregate Lean wall75.488415266s,
+peak4430000KiB; Kani wall232.643208092s,
+peak1488756KiB; all swaps0. No further prover is running.
+
+NBB_TERMINAL_SOURCE.json checks1234 frozen files, exact per-run patches and
+compiler/Kani pins; all219 actually resolved Aeneas library objects match the
+pins recorded throughout the compiles. Only the scratch NBB registration and
+harness differ from frozen. The final source/receipt checker reports zero errors.
+
+The persistent cache is retained:148 initial files unchanged,170 terminal files
+with every hash/size recorded in NBB_CACHE_START/END.json. No unchanged missing
+dependency rebuild was needed. No other private Lean object cache exists.
+Cleanup removed297143090bytes of owned Rust targets;
+private solver files are empty. Sources and receipts remain; no key cleanup.
+
+This is an incomplete deliverable: the native64-Vec context timed out in both
+retained shapes, and query_values/whole caller association was not completed.
+The next concrete deliverable is the generic native indexed-borrow/frame port,
+then one native query-values step and SAME caller-domain installation. The model
+driver/row/finish results above must not be booked as that composite closure.
