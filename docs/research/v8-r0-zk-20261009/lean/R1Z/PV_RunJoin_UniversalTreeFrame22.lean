@@ -32,8 +32,8 @@ theorem append [ExternalLinear] (tree next : incremental_merkle.tree_reference.O
       receipt.leaf_index = tree.inner.next_leaf_index ∧
       receipt.root_sequence = next.inner.next_leaf_index ∧ receipt.root = next.inner.root := by
   unfold incremental_merkle.tree_reference.OwnedTree.append_one at h
+  simp only [lift,bind_tc_ok] at h
   repeat' first
-    | (progress simp only [lift,bind_tc_ok] at h)
     | (pv_peel h with value hvalue)
     | exact False.elim (PV_Src_ResultControl.error_ne_ok _ _ h)
     | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
