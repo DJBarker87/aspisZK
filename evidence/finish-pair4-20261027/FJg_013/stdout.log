@@ -1,0 +1,41 @@
+FJg_DigitProvenance.lean:54:4: error: unsolved goals
+case refine_1.refine_1
+points : Points
+k : Usize
+iter cursor : FIo_RangeNext.Range
+factors : Factors
+di tau ia ib : Usize
+p : Std.Array SQ 10#usize
+a b : SQ
+row : Std.Array (Std.Array SQ 4#usize) 5#usize
+back : Std.Array (Std.Array SQ 4#usize) 5#usize → Factors
+updated : Std.Array (Std.Array SQ 4#usize) 5#usize
+f0 f1 f2 f3 : SQ
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some di, cursor)
+ht : FIn_WeightsExtract.TAU.index_usize di = ok tau
+hia : ia = Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize tau)
+hib : ib = Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize tau)
+hp : Array.index_usize points k = ok p
+ha : p.index_usize ia = ok a
+hb : p.index_usize ib = ok b
+href : FJd_SourceFactor.reference a b = ok [f0, f1, f2, f3]
+hrow : Array.index_mut_usize factors k = ok (row, back)
+hupdated : row.update di (Array.make 4#usize [f0, f1, f2, f3] ⋯) = ok updated
+readRow : Array.index_usize factors k = ok row
+eb : back = Std.Array.set factors k
+hi : ↑k < (↑factors).length
+pr : di = iter.start ∧ cursor.end = iter.end ∧ ↑cursor.start = ↑iter.start + 1 ∧ ↑iter.start < ↑iter.end
+ti : ↑di < 5 ∧ ↑tau ≤ 4 ∧ ↑tau = FJf_PointIndices.tau ↑di
+ci :
+  ↑(Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize tau)) = 9 - 2 * ↑tau ∧
+    ↑(Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize tau)) = 8 - 2 * ↑tau
+run :
+  FIn_WeightsExtract.weights_new_loop0_loop0.body points k iter factors =
+    ok (cont (cursor, Std.Array.set factors k updated))
+digit : Digit := ⟨[f0, f1, f2, f3], ⋯⟩
+slots :
+  ∀ (j d : ℕ),
+    cell (Std.Array.set factors k updated) j d =
+      if ↑k = j then if ↑di = d then some digit else (↑row)[d]? else cell factors j d
+⊢ some digit = some (Array.make 4#usize [f0, f1, f2, f3] ⋯)
+'AspisR1.FJg_DigitProvenance.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

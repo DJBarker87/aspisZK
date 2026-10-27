@@ -1,0 +1,35 @@
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Array T N → Aeneas.Std.Array U N → Aeneas.Std.Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Aeneas.Std.Result.ok (decide ¬b = true))
+      ((↑a0).zip ↑a1)
+  else Aeneas.Std.Result.ok false
+def FIo_Native.core.iter.traits.iterator.Iterator.fold.default_loop : {Self B F Clause0_Item : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator Self Clause0_Item →
+    Aeneas.Std.core.ops.function.FnMut F (B × Clause0_Item) B → Self → F → B → Aeneas.Std.Result B :=
+fun {Self B F Clause0_Item} IteratorInst opsfunctionFnMutFPairBInst self f accum =>
+  Aeneas.Std.loop
+    (fun x =>
+      match x with
+      | (self1, f1, accum1) =>
+        FIo_Native.core.iter.traits.iterator.Iterator.fold.default_loop.body IteratorInst opsfunctionFnMutFPairBInst
+          self1 f1 accum1)
+    (self, f, accum)
+def FIo_Native.core.iter.traits.iterator.Iterator.fold.default_loop.body : {Self B F Clause0_Item : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator Self Clause0_Item →
+    Aeneas.Std.core.ops.function.FnMut F (B × Clause0_Item) B →
+      Self → F → B → Aeneas.Std.Result (Aeneas.Std.ControlFlow (Self × F × B) B) :=
+fun {Self B F Clause0_Item} IteratorInst opsfunctionFnMutFPairBInst self f accum => do
+  let (o, self1) ← IteratorInst.next self
+  match o with
+    | none => Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done accum)
+    | some x => do
+      let (accum1, f1) ← opsfunctionFnMutFPairBInst.call_mut f (accum, x)
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (self1, f1, accum1))
