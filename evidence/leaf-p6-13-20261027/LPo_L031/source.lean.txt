@@ -1,0 +1,25 @@
+import LPo_CircleModel
+import LPo_Boundary
+open Aeneas Aeneas.Std Result LPl_Kit_Release LPl_Kit_FieldExternal
+set_option autoImplicit false
+namespace LPo.Circle
+/-- Inspection of n+1 uses predecessor n: at exponent2, the recursion and
+    parity branch return one, independently of the base. -/
+theorem exponent_two (x : aspis_core.field.QM31) : LPo_qpow x 2 = ok qone := by rfl
+
+def two : aspis_core.field.QM31 := ⟨⟨2#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩
+def four : aspis_core.field.QM31 := ⟨⟨4#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩
+theorem square_two : aspis_core.field.QM31.mul two two = ok four := by rfl
+
+theorem pow_square_law_false :
+    ¬ (∀ x : aspis_core.field.QM31, LPo_qpow x 2 = aspis_core.field.QM31.mul x x) := by
+  intro h
+  have e := (exponent_two two).symm.trans ((h two).trans square_two)
+  have bad : qone = four := Result.ok.inj e
+  have b := congrArg (fun q : aspis_core.field.QM31 => q.c0.a.val) bad
+  change 1 = 4 at b
+  omega
+#print axioms exponent_two
+#print axioms square_two
+#print axioms pow_square_law_false
+end LPo.Circle

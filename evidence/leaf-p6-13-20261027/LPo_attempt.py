@@ -33,6 +33,9 @@ else:raise SystemExit('STOP reservation retries')
 cfg=dict(attempt=a,kind=kind,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,reservation_retries=retry)
 if kind=='kani':
  cfg.update(sources=['LPo_src/Cargo.toml','LPo_src/Cargo.lock']+['LPo_src/'+p for p in json.loads((E/'LPo_sources.json').read_text())],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/LPo_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/LPo_target','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse'],deps_fingerprint={'release_revision':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','source_manifest':'LPo_source-provenance.json','boundary':'scratch frozen source plus ordered LPa/LPc/LPg/LPh/LPl then LPn cfg-only patches'},expected_time='optimized Kani compilation then bounded native stage '+target,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1','TMPDIR':B+'/LPo_tmp'})
+elif kind=='rust':
+ cfg.update(sources=['LPo_native_field.rs','LPo_circle_probe.rs','LPo_circle_probe.sh','LPo_src/crates/aspis-core/src/field.rs','LPo_src/crates/aspis-core/src/field/wide_exact.rs','LPo_src/crates/aspis-core/src/circle.rs'],command=['sh','LPo_circle_probe.sh'],deps_fingerprint={'release_revision':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','scope':'standalone rustc; frozen field/circle plus literal frozen fallback source; no Cargo dependencies'},expected_time='optimized rustc compilation then two fixed fallback evaluations; no elimination/proof generation',env={})
+ for file in ['LPo_native_field.rs','LPo_circle_probe.rs','LPo_circle_probe.sh']:subprocess.run(['scp','-q',str(E/file),H+':'+B+'/'+file],check=True)
 else:
  src='LPo_generated/'+target+'.lean';obj='LPo_objects/'+target+'.olean'
  cfg['kind']='lean'
@@ -65,14 +68,14 @@ if kind=='kani':
  import hashlib
  patch=E/(a+'-harness.patch')
  (E/(a+'-patch.json')).write_text(json.dumps({'sha256':hashlib.sha256(patch.read_bytes()).hexdigest(),'base':'read-only LPl_src final source tree'})+'\n')
-r=ssh(f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 {('S2W_run_host.py' if kind=='kani' else 'S2W_lean_host.py')} {a}.json')
+r=ssh(f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 {('S2W_run_host.py' if kind in ['kani','rust'] else 'S2W_lean_host.py')} {a}.json')
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 if kind=='kani':
  post=ssh(f'sha256sum {B}/LPo_src/Cargo.lock')
  (E/(a+'-lock-after.log')).write_text(post.stdout+post.stderr)
  if post.returncode or post.stdout.split()[0]!='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef':raise SystemExit('STOP lock drift')
 for f in ['receipt.json','stdout.log','time.log']:collect(a+'/'+f)
-if kind!='kani':
+if kind not in ['kani','rust']:
  local=Path(next(x['repository_source'] for x in json.loads((E/'LPo_inherited-plan.json').read_text()) if x['module']==target)) if kind=='inherited' else (Path('lean') if kind=='dependency' else Path('evidence/leaf-p6-10-20261027') if kind=='reuse' else E)/(target+'.lean')
  (E/a/'source.lean.txt').write_bytes(local.read_bytes())
 rc=json.loads((E/a/'receipt.json').read_text());print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','cgroup_memory_peak_bytes','print_axioms']}),flush=True)
