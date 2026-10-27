@@ -170,3 +170,37 @@ lockdown. This experiment cannot establish architectural data-independent
 latency. V374 remains OPEN/P pending qualified data and review; V371 and every
 other independent endpoint/deployment premise remain retained. No T item,
 formal axiom, simulator weakening or observer weakening is added.
+
+
+## PLAN AMENDMENT v2.1 (LOG D294), before the single authorized window
+
+Reason: attempt 2 drained correctly but its monitor aborted on
+thermal_zone6/temp = ENODATA (iwlwifi). The host currently idles under load at
+x86_pkg_temp ≈ 100 °C (TCPU 100.05 °C), at the thermal ceiling.
+
+The authorized monitoring amendment is recorded verbatim:
+
+> the thermal monitor reads ONLY x86_pkg_temp (thermal_zone5) and the coretemp hwmon package/core inputs; unreadable zones (iwlwifi) are excluded and listed; the host currently idles under load at x86_pkg_temp ≈ 100 °C (TCPU 100.05 °C), i.e. at the thermal ceiling, so after the drain the run must WAIT until the package temperature is below 80 °C (poll every 10 s, at most 5 minutes) before the first sample, and abort an experiment if the package exceeds 95 °C during sampling; record the temperature and the scaling_cur_freq of the pinned CPU at the start and end of every experiment; dry-test the amended monitor for 60 s OUTSIDE any window and commit
+
+Only monitoring changes. Classes, counts, kernels, crops and statistical
+thresholds remain frozen. The sampling thermal abort above supersedes the
+original ≥90 °C monitor check. No unreadable CPU sensor is silently ignored.
+Other thermal zones are excluded by sensor identity; thermal_zone6
+(iwlwifi_1) is explicitly excluded because its temp returns ENODATA.
+
+LOG D293/D294 lead authorization corrects window admission order: create the
+1500-second marker first (owner stream-b-pv-dudect, purpose V374 dudect), trap
+its removal, then poll already-running cx-*/pv-* scopes every 30 seconds for
+at most 5 minutes. On drain failure remove the marker and stop. After a
+successful drain perform the above cool-down, then the original pinned
+measurement under QUIET_WINDOW_OWNER=1. Never extend until. Remove the marker
+immediately when measurement ends, or on any abort/expiry. One window only in
+this job; an abort ends the job with retained evidence and no second window.
+The lead informs Stream A; this worker sends no messages. Stream A requires
+at least 30 minutes before a subsequent window.
+
+The evidence-only v2.1 monitor and wrapper are retained under dudect/d294/;
+no harness, kernel or shipped source is changed. CSV create/close notifications
+record experiment boundary sensor observations (before warm-up and after CSV
+flush respectively); observation epochs are retained. Any failed boundary
+capture invalidates the affected experiment rather than inventing a reading.
