@@ -32,8 +32,13 @@ theorem add (ops : ExternalFuns) :
 theorem mul (ops : ExternalFuns) :
     PV_Ext_IndexClosed.aspis_core.field.QM31.mul =
       (PV_CurrentScaleInstall.selected ops).op69 := by
-  change _ = ProverRwP7CurrentFieldSource.aspis_core.field.QM31.mul
-  exact PV_Op223_FieldBridge.QM31_mul
+  funext a b
+  calc
+    PV_Ext_IndexClosed.aspis_core.field.QM31.mul a b =
+        ProverRwP7CurrentFieldSource.aspis_core.field.QM31.mul a b :=
+      congrFun (congrFun PV_Op223_FieldBridge.QM31_mul a) b
+    _ = (PV_CurrentScaleInstall.selected ops).op69 a b :=
+      (PV_CurrentDictionary.mul_source ops a b).symm
 
 theorem scale (ops : ExternalFuns) :
     PV_Ext_IndexClosed.aspis_core.field.QM31.mul_m31 =

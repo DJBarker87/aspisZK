@@ -1,4 +1,4 @@
-"""Resume the exact original 1000 cases without re-executing a completed case.
+"""Fresh 1000-case cohort, coins 2000–2999; no copy of the earlier corpus.
 Same Rust harness and comparator. Bounded asynchronous process scheduling only.
 Maximum three prover processes total. Both source variants can use 16-worker
 P_R1 teams (some phases have 16 workers plus the calling thread). Three
@@ -9,6 +9,11 @@ from pathlib import Path
 import asyncio,json,hashlib,sys,time,os
 H=Path('/home/dombarker/project-offloads/codex-pv-op223-20261027');O=H/'corpus-2000'
 B={k:H/k/'bin/prover_rw_differential' for k in ['baseline','candidate']}
+assert not O.exists(), 'Never duplicate or silently resume an existing corpus'
+O.mkdir()
+assert hashlib.sha256(B['baseline'].read_bytes()).hexdigest()=='3c31fe5786de3197c66c4fae5a3897599a2c2e94b449780903fd18cb672a96c1'
+pin=json.loads((H/'build-differential/binary-pins.json').read_text())['prover_rw_differential']
+assert hashlib.sha256(B['candidate'].read_bytes()).hexdigest()==pin['sha256'] and B['candidate'].stat().st_size==pin['bytes']
 slots=asyncio.Semaphore(3)
 sems={k:slots for k in ['baseline','candidate']}
 active=set();results={};start=time.monotonic()

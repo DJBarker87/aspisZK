@@ -13,8 +13,8 @@ if status:sys.exit(status)
 if cmd[0]=='cargo':
  (W/'bin').mkdir(exist_ok=True)
  for name in [cmd[cmd.index('--example')+1]]:
-  src=H/'native-target/release/examples'/name;dst=W/'bin'/name
-  if src.exists():
-   import shutil
-   shutil.copy2(src,dst)
+  src=Path('/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/examples')/name;dst=W/'bin'/name
+  assert src.exists(),src
+  import shutil
+  shutil.copy2(src,dst)
  (out/'binary-pins.json').write_text(json.dumps({p.name:dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size) for p in (W/'bin').iterdir()},indent=2)+'\n')

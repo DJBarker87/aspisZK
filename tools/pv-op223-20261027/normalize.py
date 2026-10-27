@@ -25,6 +25,6 @@ prev='PV_Op223_FieldBridge_QM31_mul_m31';laws=[]
 for i,row in enumerate(rows[:23]):
  name=row['declaration'].removeprefix('PV_Op223_Applied.');tag=name.removeprefix('aspis_core.field.').replace('.','_');mod='PV_Op223_Agreement_'+tag
  lhs=row['declaration'];rhs='PV_Ext_IndexClosed.'+name
- proof='by\n  unfold '+lhs+' '+rhs+'\n  simp only ['+', '.join(laws)+']' if laws else 'by rfl'
+ proof='by\n  unfold '+lhs+' '+rhs+'\n  simp only ['+', '.join(laws)+']' if laws else 'by\n  unfold '+lhs+' '+rhs+'\n  rfl'
  s='import '+row['module'].replace('/','.')+'\nimport R1Z.'+prev+'\nopen Aeneas Aeneas.Std Result\nnamespace R1Z.PV_Op223_Agreement\ntheorem '+tag+' : '+lhs+' = '+rhs+' := '+proof+'\n#print axioms '+tag+'\nend R1Z.PV_Op223_Agreement\n'
  (P/(mod+'.lean')).write_text(s);laws.append('R1Z.PV_Op223_Agreement.'+tag);prev=mod
