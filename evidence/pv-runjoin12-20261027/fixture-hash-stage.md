@@ -7,3 +7,5 @@ An optimized Rust numeric generator produced six23-round permutations: owner-key
 Data40968 and the first affected round group40969 passed before its dependent bridge. Owner-key rounds40969–40972 and bridge40973, owner theorem40974 passed. Note permutation1:40975–40979; permutation2:40980–40984; permutation3 first groups40985–40987 passed. All accepted outputs show only standard axioms and zero swap.40988 was refused at09:22:01.675UTC before launch (aggregate reservation), uncharged; next ID40989 may be used only after09:25:01.675UTC. No scope was started during the wait.
 
 All remaining hash groups and consumer theorems are still drafts until their exact-source receipts pass. Source identity remains OPEN; these model/literal facts do not select R_shipped. Target not established.
+
+After the required wait,40989/40990 completed the final note permutation, and40991 proved input_commitment by named absorption/permutation equations. Nullifier groups40992/40993 passed.40994 was refused at09:27:09.992UTC, uncharged; next40995 not before09:30:09.992UTC. No source mapper or compiler equation is inferred.
