@@ -66,27 +66,41 @@ fn mask_power_26(value: QM31) -> QM31 {
     let x16 = x8.square();
     x16.mul(x8).mul(x2)
 }
-// Separate owned-array traversals prevent loop-local loans from crossing
-// a subsequent loop in the frozen symbolic extractor. Operation order is exact.
+// Fixed-domain traversals are expanded in their original order. This removes
+// unsupported loan joins in the frozen extractor; no input is specialized.
 #[inline(always)]
 fn selected_coefficients(c1: &[QM31; STATE_ONLY_HIDING_C1_COLUMNS]) -> [QM31; STATE_ONLY_HIDING_FACTOR_DEGREE + 1] {
     let mut coefficients = [QM31::ZERO; STATE_ONLY_HIDING_FACTOR_DEGREE + 1];
-    let mut column = 0usize;
-    while column < STATE_ONLY_HIDING_C1_COLUMNS {
-        coefficients[usize::from(FACTOR_EXPONENTS[column])] =
-            mul_tower_basis(c1[column], column & 3);
-        column += 1;
-    }
+    coefficients[FACTOR_EXPONENTS[0] as usize] = mul_tower_basis(c1[0], 0&3);
+    coefficients[FACTOR_EXPONENTS[1] as usize] = mul_tower_basis(c1[1], 1&3);
+    coefficients[FACTOR_EXPONENTS[2] as usize] = mul_tower_basis(c1[2], 2&3);
+    coefficients[FACTOR_EXPONENTS[3] as usize] = mul_tower_basis(c1[3], 3&3);
+    coefficients[FACTOR_EXPONENTS[4] as usize] = mul_tower_basis(c1[4], 4&3);
+    coefficients[FACTOR_EXPONENTS[5] as usize] = mul_tower_basis(c1[5], 5&3);
+    coefficients[FACTOR_EXPONENTS[6] as usize] = mul_tower_basis(c1[6], 6&3);
+    coefficients[FACTOR_EXPONENTS[7] as usize] = mul_tower_basis(c1[7], 7&3);
+    coefficients[FACTOR_EXPONENTS[8] as usize] = mul_tower_basis(c1[8], 8&3);
+    coefficients[FACTOR_EXPONENTS[9] as usize] = mul_tower_basis(c1[9], 9&3);
+    coefficients[FACTOR_EXPONENTS[10] as usize] = mul_tower_basis(c1[10], 10&3);
+    coefficients[FACTOR_EXPONENTS[11] as usize] = mul_tower_basis(c1[11], 11&3);
+    coefficients[FACTOR_EXPONENTS[12] as usize] = mul_tower_basis(c1[12], 12&3);
+    coefficients[FACTOR_EXPONENTS[13] as usize] = mul_tower_basis(c1[13], 13&3);
+    coefficients[FACTOR_EXPONENTS[14] as usize] = mul_tower_basis(c1[14], 14&3);
+    coefficients[FACTOR_EXPONENTS[15] as usize] = mul_tower_basis(c1[15], 15&3);
     coefficients
 }
 #[inline(always)]
 fn mask_only_coefficients(mut coefficients: [QM31; STATE_ONLY_HIDING_FACTOR_DEGREE + 1], mask_only_c1: &[QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS]) -> [QM31; STATE_ONLY_HIDING_FACTOR_DEGREE + 1] {
-    let mut column = 0usize;
-    while column < STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {
-        coefficients[usize::from(MASK_ONLY_FACTOR_EXPONENTS[column])] =
-            mul_tower_basis(mask_only_c1[column], column & 3);
-        column += 1;
-    }
+    coefficients[MASK_ONLY_FACTOR_EXPONENTS[0] as usize] = mul_tower_basis(mask_only_c1[0], 0&3);
+    coefficients[MASK_ONLY_FACTOR_EXPONENTS[1] as usize] = mul_tower_basis(mask_only_c1[1], 1&3);
+    coefficients[MASK_ONLY_FACTOR_EXPONENTS[2] as usize] = mul_tower_basis(mask_only_c1[2], 2&3);
+    coefficients[MASK_ONLY_FACTOR_EXPONENTS[3] as usize] = mul_tower_basis(mask_only_c1[3], 3&3);
+    coefficients[MASK_ONLY_FACTOR_EXPONENTS[4] as usize] = mul_tower_basis(mask_only_c1[4], 4&3);
+    coefficients[MASK_ONLY_FACTOR_EXPONENTS[5] as usize] = mul_tower_basis(mask_only_c1[5], 5&3);
+    coefficients[MASK_ONLY_FACTOR_EXPONENTS[6] as usize] = mul_tower_basis(mask_only_c1[6], 6&3);
+    coefficients[MASK_ONLY_FACTOR_EXPONENTS[7] as usize] = mul_tower_basis(mask_only_c1[7], 7&3);
+    coefficients[MASK_ONLY_FACTOR_EXPONENTS[8] as usize] = mul_tower_basis(mask_only_c1[8], 8&3);
+    coefficients[MASK_ONLY_FACTOR_EXPONENTS[9] as usize] = mul_tower_basis(mask_only_c1[9], 9&3);
     coefficients
 }
 #[inline(always)]
@@ -94,11 +108,32 @@ fn selected_horner(coefficients: [QM31; STATE_ONLY_HIDING_FACTOR_DEGREE + 1], li
 
     let prepared_linear = PreparedQm31Multiplier::new(linear);
     let mut shared = coefficients[STATE_ONLY_HIDING_FACTOR_DEGREE];
-    let mut exponent = STATE_ONLY_HIDING_FACTOR_DEGREE;
-    while exponent > 0 {
-        exponent -= 1;
-        shared = prepared_linear.mul(shared).add(coefficients[exponent]);
-    }
+    shared = prepared_linear.mul(shared).add(coefficients[25]);
+    shared = prepared_linear.mul(shared).add(coefficients[24]);
+    shared = prepared_linear.mul(shared).add(coefficients[23]);
+    shared = prepared_linear.mul(shared).add(coefficients[22]);
+    shared = prepared_linear.mul(shared).add(coefficients[21]);
+    shared = prepared_linear.mul(shared).add(coefficients[20]);
+    shared = prepared_linear.mul(shared).add(coefficients[19]);
+    shared = prepared_linear.mul(shared).add(coefficients[18]);
+    shared = prepared_linear.mul(shared).add(coefficients[17]);
+    shared = prepared_linear.mul(shared).add(coefficients[16]);
+    shared = prepared_linear.mul(shared).add(coefficients[15]);
+    shared = prepared_linear.mul(shared).add(coefficients[14]);
+    shared = prepared_linear.mul(shared).add(coefficients[13]);
+    shared = prepared_linear.mul(shared).add(coefficients[12]);
+    shared = prepared_linear.mul(shared).add(coefficients[11]);
+    shared = prepared_linear.mul(shared).add(coefficients[10]);
+    shared = prepared_linear.mul(shared).add(coefficients[9]);
+    shared = prepared_linear.mul(shared).add(coefficients[8]);
+    shared = prepared_linear.mul(shared).add(coefficients[7]);
+    shared = prepared_linear.mul(shared).add(coefficients[6]);
+    shared = prepared_linear.mul(shared).add(coefficients[5]);
+    shared = prepared_linear.mul(shared).add(coefficients[4]);
+    shared = prepared_linear.mul(shared).add(coefficients[3]);
+    shared = prepared_linear.mul(shared).add(coefficients[2]);
+    shared = prepared_linear.mul(shared).add(coefficients[1]);
+    shared = prepared_linear.mul(shared).add(coefficients[0]);
 
     shared
 }
