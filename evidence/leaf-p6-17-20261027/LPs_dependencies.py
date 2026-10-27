@@ -2,10 +2,14 @@
 from pathlib import Path
 import subprocess,json,sys,shlex,time
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-leaf-p6-17-20261027';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';X='/home/dombarker/project-offloads/codex-cx-assoc-a2-cache-20261027/XRw_objects'
-roots=[Path('lean'),Path('docs/research/100bit-spend-path-20261013/lean'),Path('evidence/leaf-p6-10-20261027'),Path('evidence/leaf-p6-12-20261027')];seen={}
+roots=[Path('lean'),Path('docs/research/100bit-spend-path-20261013/lean/bridge-selected-current-20261018'),Path('docs/research/100bit-spend-path-20261013/lean'),Path('evidence/leaf-p6-10-20261027'),Path('evidence/leaf-p6-12-20261027')];seen={}
 def visit(m):
  if m in seen:return
- rel=m.replace('.','/')+'.lean';p=next((r/rel for r in roots if (r/rel).is_file()),None);seen[m]=p
+ rel=m.replace('.','/')+'.lean';p=next((r/rel for r in roots if (r/rel).is_file()),None);
+ if p is None and m.startswith('AspisR1CircleSampleWrapper.'):
+  candidate=Path('docs/research/100bit-spend-path-20261013/lean-candidates/current-circle-wrapper-20261019')/(m.split('.')[-1]+'.lean')
+  if candidate.is_file():p=candidate
+ seen[m]=p
  if p:
   for line in p.read_text().splitlines():
    if line.startswith('import '):
@@ -20,13 +24,15 @@ for retry in range(11):
  time.sleep(60)
 objects=json.loads(r.stdout);order=[];done=set()
 def missing(m):
- if m in done or objects[m]:return
+ if m in done:return
  done.add(m);p=seen[m]
- if not p:raise SystemExit('STOP missing immutable source '+m)
+ if not p:
+  if objects[m]:return
+  raise SystemExit('STOP missing immutable source '+m)
  for line in p.read_text().splitlines():
   if line.startswith('import '):
    for d in line[7:].split():missing(d)
- order.append(dict(module=m,source=str(p)))
+ if not objects[m]:order.append(dict(module=m,source=str(p)))
 for m in sys.argv[1:]:missing(m)
 p=E/('LPs_DEPENDENCIES_'+sys.argv[1]+'.json');p.write_text(json.dumps(dict(targets=sys.argv[1:],missing=order,selected_existing={m:v for m,v in objects.items() if v}),indent=2)+'\n')
 print('Missing unchanged modules',len(order),flush=True)

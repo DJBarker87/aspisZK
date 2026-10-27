@@ -1,0 +1,33 @@
+LPs_generated/LPs_ClaimsDomain.lean:54:6: error: Type mismatch: After simplification, term
+  cell
+ has type
+  And (↑(↑values)[↑j].c0.a < ↑2147483647#u32)
+    (↑(↑values)[↑j].c0.b < ↑2147483647#u32 ∧
+      ↑(↑values)[↑j].c1.a < ↑2147483647#u32 ∧ ↑(↑values)[↑j].c1.b < ↑2147483647#u32)
+but is expected to have type
+  And (↑(↑values)[↑j].c0.a < 2147483647)
+    (↑(↑values)[↑j].c0.b < 2147483647 ∧ ↑(↑values)[↑j].c1.a < 2147483647 ∧ ↑(↑values)[↑j].c1.b < 2147483647)
+LPs_generated/LPs_ClaimsDomain.lean:67:50: error: Application type mismatch: The argument
+  success
+has type
+  (toMainStatus do
+      let record ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8
+      match record with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok vr =>
+          AspisR1ClaimsUnrolledParent.decodeRows (external (NP6_StdModel.calls (core.result.Result.Ok ()))) vr) =
+    ok (core.result.Result.Ok out)
+but is expected to have type
+  (toMainStatus do
+      let r ← ?m.31
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => ?m.32 a) =
+    ok (core.result.Result.Ok ?m.33)
+in the application
+  step_success ?m.31 ?m.32 ?m.33 success
+'_private.LPs_ClaimsDomain.0.AspisR1.LPs_ClaimsDomain.step_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LPs_ClaimsDomain.decoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPs_ClaimsDomain.claims' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
