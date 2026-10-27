@@ -1,0 +1,55 @@
+FJf_InstalledPointCell.lean:38:34: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJc_WeightArray.value sd ↑s
+in the target expression
+  (match some sd with
+    | some a => FJc_WeightArray.value a ↑s
+    | none => 0) =
+    FJf_PointCell.point (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ alpha) ↑d ⟨↑s, hs⟩
+
+v : transport.Variant
+alpha : Std.Array K 10#usize
+z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize
+w : FIo_Install.W
+hc : FJc_WeightArray.canonical (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ alpha)
+hw : FIn_WeightsInstall.newWeights v alpha z = ok (core.result.Result.Ok w)
+d s : Usize
+hd : ↑d < 5
+hs : ↑s < 4
+q : NQ
+sr : Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize
+hsr : w.factors.index_usize 0#usize = ok sr
+hr :
+  (FIo_Install.toWeights w).factors.index_usize 0#usize =
+    ok (FIn_WeightsInstall.mapArray (FIn_WeightsInstall.mapArray FIo_Install.toQ) sr)
+sd : Std.Array FIn_WeightsExtract.field.QM31 4#usize
+hsd : sr.index_usize d = ok sd
+hsi : (FIn_WeightsInstall.mapArray FIo_Install.toQ sd).index_usize s = ok q
+hdi :
+  (FIn_WeightsInstall.mapArray (FIn_WeightsInstall.mapArray FIo_Install.toQ) sr).index_usize d =
+    ok (FIn_WeightsInstall.mapArray FIo_Install.toQ sd)
+sq : FIn_WeightsExtract.field.QM31
+hsq : sd.index_usize s = ok sq
+eq : FIo_Install.toQ sq = q
+cr : FJf_FactorArray.rowCanon sr
+cd : FJc_WeightArray.canonical sd
+cq : FJc_WeightValues.Canon sq
+hv :
+  (match some sd with
+    | some a => FJc_WeightArray.value a ↑s
+    | none => 0) =
+    FJf_PointCell.point (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ alpha) ↑d ⟨↑s, hs⟩
+rv : FJf_FactorArray.value w.factors 0 ↑d ↑s = FJf_FactorArray.rowValue sr ↑d ↑s
+⊢ FIo_QMValues.Canon q ∧
+    decodeQM (qm q) = FJf_PointCell.point (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toQ alpha) ↑d ⟨↑s, hs⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJf_InstalledPointCell.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
