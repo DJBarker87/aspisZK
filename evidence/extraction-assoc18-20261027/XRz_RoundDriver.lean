@@ -57,10 +57,14 @@ theorem source {H : Type} (D : aspis_core.digest.Digest32 H) (p : r1_wire.Prefix
    funext running
    congr 1
    funext zero
-   conv_lhs => simp only [tuple]
-   change XRx_TryDriver.run (step D p) 0 10 (running,Array.repeat 10#usize zero,tr) =
-    XRx_StageFold.unrolled (step D p) 0 10 (.Ok (running,Array.repeat 10#usize zero,tr))
-   rw [XRx_TryDriver.source,←XRx_StageFold.source]
+   rw [XRx_StageFold.source,←XRx_TryDriver.source]
+   simp only [XRx_TryDriver.run,step,index,Nat.reduceAdd,Nat.reduceLT,
+    _root_.dite_true,Usize.ofNat,core.result.Result.Insts.CoreOpsTry.branch]
+   repeat' (first
+    | rfl
+    | (dsimp! only)
+    | (simp only [bind_tc_ok])
+    | (congr 1; funext out; cases out))
 
 #print axioms tuple
 #print axioms source
