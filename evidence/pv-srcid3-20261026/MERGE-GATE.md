@@ -14,6 +14,10 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 - `R0P.LogUpChain`: No accepted receipt binds current object SHA to expected source SHA; expected `a9b0e52dd73026f356c16237d4b29527a70a479fc14cb0d59c178e1d94ff1fb6`.
 - `R0P.SemRounds`: No accepted receipt binds current object SHA to expected source SHA; expected `564b9026233a36736f524407f357b44e173173139e52b9c4c6effbd88335bfd4`.
 
+## Resume 8 source check
+
+Research HEAD `9c04df450b311567731dcde8d43be7da558b70db`. All three authoritative sources still differ from shared sources. Ruling (h) STOP applies to each; no shared bytes or objects were overwritten, and no compile was charged. Exact authoritative/shared SHA-256 pairs: [resume8-shared-check.json](resume8-shared-check.json). Project gaps remain **3 → 3**. Changed-input dependent replay and a CLEAN gate cannot be claimed.
+
 ## Every imported object
 
 | Module | Kind | Object SHA-256 | Source hash or manifest pin |
