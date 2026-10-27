@@ -117,3 +117,13 @@ now bind the previous QM31 value adapter through a checked source theorem;
 actual native Clone, owned/error Vec, allocator and N=1024 success association
 remain. op32's native allocator-effect deferral is unchanged. All four new
 Kani gates pass, with no old pop/array timeout gate rerun.
+
+Final fourth-pass audits:52697/52698/52699 all exit0, wall1.26/1.45/1.98s,
+RSS2645960/2648020/2654076KiB, swap0, revision916e352608884f33ff8b4603783e765fb2950112,
+standard axioms only.100 Lean attempts and4 Kani runs exhausted; no checked
+ROW counterexample. Full receipts: RESUME9-RECEIPTS.json, TALLY-resume9.json,
+manifest9-source-pins.json and numbered raw logs. All314 own current modules
+have matching accepted receipts. Final own manifest313 imports/913 queries;
+no repository/deployed replay inferred. Canonical endpoint premises removed0;
+T unchanged. Next: borrowed native digest-wrapper loan/callback/Drop linkage,
+then actual pop payload and owned N=1024 array association. Target not established.

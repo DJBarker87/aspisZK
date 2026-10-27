@@ -1,3 +1,115 @@
+# Fourth library closure pass
+
+Branch `codex/pv-cblib-20261027`; resume base `4aaa5ae9a2`.
+**Target not yet established.** Both authorized budgets are exhausted.
+
+## Delivered claims
+
+Candidate callback laws **7 → 8**, adding **V178/op26** by P6. The additive
+publication is `PV_CBL_CallbackBundle` in `PV_CBL_CallbackPublication` plus
+`PV_CBL_Resume9CallbackAudit`. `selectedJoin` preserves all seven prior laws;
+`PV_CBL_Resume9SelectionAudit.preserved` checks coexistence on one dictionary.
+Generic AsRef calls and their full Result are preserved. The native link covers
+byte inputs of lengths 0–2 and every output coordinate. UTF-8/source image,
+allocation/world, unbounded and deployed association remain explicit limits.
+All prior publication names persist; OPS.md records routes and source pins.
+
+The complete **extracted owned soft SHA-256 reference** is proved on every
+sized byte Slice: default/constructor, exact byte update/fold, eager invariant,
+length expression, padding contents/order, canonical soft block compression
+and feed-forward, all 32 output bytes, retained buffer and reset position.
+`PV_CBL_DigestSoftSource.source` (52497) is the composed law. Public
+`soft_padding_source`, `soft_compress_source`, `soft_update_source`,
+`soft_finalize_source`, `soft_digest_source` expose the exact reference facts.
+The native BE load/store links cover all four bytes / all u32 words.
+
+**V231–V238 remain OPEN:** generic borrowed wrapper loans, callbacks, Drop,
+native runtime dispatch, compiler/toolchain/deployed association and native
+world/side channels are not discharged by an owned-reference theorem. No
+SHA-NI refinement, soft-feature adoption, timing gate or shipped edit occurred.
+
+Op33's Slice/caller-output reference extracts; marker independence and empty
+case are checked, and a new u8 length0–2 native link passes. The general prefix,
+actual Result<Word,Error> payload and native association remain open.
+Op36's full generic borrowed-Slice Result/identity-clone value law and the
+source bridge to the previous complete QM31 value adapter now check. Actual
+native Clone, owned/error Vec, allocation and N=1024 success association remain
+open. Op32's allocator-effect deferral is unchanged. The rejected old pop/array
+gates were not rerun; the changed resize attempts retain their loan refusals.
+
+## Premise accounting
+
+Before: op26 is an arbitrary callback field on the prior candidate dictionary.
+After: selectedJoin installs the extracted byte reference, checked String
+transport and supplied AsRef call, with the P6 limits above. Op33/op36 and
+native SHA callback fields receive no new row credit. **Canonical endpoint /
+deployment premises removed: 0.** T is unchanged and capped at entropy_law,
+entropy_kernel, observation. E1/E2, real RunJoin, L1/L2/L3, client, source-image,
+toolchain and coherent deployed closure remain retained. No model relation,
+observer, simulator, probability bound, frozen production or soundness file
+was changed.
+
+## Verification receipts
+
+**Lean 100/100:** 70 accepted,30 rejected; all rejected sources were changed
+before retrying. **Kani 4/4:** four passes, no stubs or chained field arithmetic.
+No checked ROW counterexample occurred. Eleven admission refusals are uncharged;
+111 unique IDs were used: 52400–52507 and 52697–52699. The last three charged
+attempts are the reserved audits. 52508–52696 remain unused, not a new budget.
+The tally's next_id 52700 follows the reserved allocation and is not an allowed
+next attempt. Six uncompiled alternatives were moved to evidence, without
+source/row credit. All 314 current own modules have accepted matching receipts.
+
+The final own manifest imports 313 modules and queries 913 declarations. It ran
+once after focused checks and generator --check preflight. Every accepted
+axiom set is a subset of propext, Classical.choice, Quot.sound. All accepted
+swaps are 0; largest accepted RSS 2,660,380KiB. This is an own-module import /
+axioms replay, not a repository-wide or uniquely deployed closure rebuild.
+
+Audit source freeze: `916e352608884f33ff8b4603783e765fb2950112`.
+Every row below exits 0, swap 0, and prints standard axioms only.
+
+| ID | target suffix (R1Z/PV_CBL_) | wall | peak RSS KiB |
+|---|---|---:|---:|
+|52697|Resume9CallbackAudit|0:01.26|2645960|
+|52698|Resume9SelectionAudit|0:01.45|2648020|
+|52699|Resume9Manifest|0:01.98|2654076|
+
+The exact launcher command, dependency fingerprint, source SHA/revision, raw
+#print axioms, exit/time/RSS/swap are in each numbered JSON/log and
+RESUME9-RECEIPTS.json. Native commands use the standing 6G/8G/swap0/tasks64
+scope, taskset 0–3, optimized profile and 180s limit. Native run revision is
+`9e58493e141f1917875000b9050b46df2e87707e`; snapshots pin later working harnesses.
+
+| Kani label | wall | peak RSS KiB | exit / swap |
+|---|---:|---:|---|
+|resume9-load-be4-r01|0:01.18|134472|0 /0|
+|resume9-store-be4-r01|0:00.83|135332|0 /0|
+|resume9-join-slices-two-r01|0:26.27|345420|0 /0|
+|resume9-pop-slices-u8-r01|0:05.72|285632|0 /0|
+
+Native #print axioms is N/A. The load run completed before a collector-label
+error; its original logs were copied under a valid alias and charged once,
+without rerunning. Source-upload and aggregate reservation refusals remain
+raw evidence. No host infrastructure or resource limit was changed.
+
+Own kani-target and charon-target caches were removed after verifying no active
+target processes. Pinned workspace, shared own-prefix Lean objects, sources and
+receipts are retained. No shared temporary-file sweep, wallet/key operation,
+production ELF rebuild, push or merge occurred.
+
+## Next concrete deliverable
+
+Bind V231–V238's borrowed library wrappers to the completed soft reference,
+including loan/callback/Drop semantics; then close the actual pop payload and
+owned N=1024 array associations. Integrate the eight candidate laws without
+dropping their native bounds or deployment limits. The SHA-NI decision remains
+with the owner. **Target not yet established.**
+
+---
+
+# Prior third-pass record (historical)
+
 # Third library closure pass
 
 Branch codex/pv-cblib-20261027, resume base 7aebfd030c. Target not yet established.

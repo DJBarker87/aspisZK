@@ -108,3 +108,14 @@ LATEST UPDATE (supersedes active-state details above):
 - Own manifest generator prepared resume9-manifest.py, requires proof_status
   all current sources accepted exceptnew3reserved audits. Move unused drafts
   into evidence before final manifest, keeping rejected snapshots intact.
+
+FINAL: Both budgets exhausted, do not launch any more compiles or Kani runs.
+100 Lean (70 accepted /30 rejected),4 Kani all pass. Audits52697–52699 pass,
+source freeze916e352608884f33ff8b4603783e765fb2950112, swaps0/standard axioms.
+Current314 own modules accepted; manifest313 imports/913 queries. Candidate
+laws7→8 with op26 P6; generic AsRef and failure preserved. SHA reference complete,
+V231–V238 still open. Array Slice/QM31 bridge and pop marker/empty pass. All
+uncompiled alternatives moved to evidence. Source publish/row metrics in latest
+RELEASE.md/OPS.md/RESUME9-RECEIPTS.json. Own Rust caches removed, no active
+processes; Lean objects/pinned workspace retained. Final docs/receipts commit
+pending at the moment this note was written. No more proof work authorized.
