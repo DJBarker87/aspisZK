@@ -152,3 +152,10 @@ with only propext/Classical.choice/Quot.sound. Failed35685 needed explicit
 ite_true/ite_false reduction after Boolean proposition simplification; no
 recurrence unfolding or larger resource cap was used. KernelInspect's failed
 print probe is retained as .lean.txt evidence and excluded from release imports.
+
+Final audit35701: exit0, wall1.55s, peak RSS4276564KiB, swap0,
+source revisionc4bd478b91864a68986c066737fd7effa73e03f0;78axiom checks use only standard axioms.
+Frozen39 validated:25already checked receipts reused,14missing targets passed
+once; combined audit imports68modules.100/100Lean charged (71passes).
+Kani2/15;13unspent due mandatory queue stop. No checked shipped-source
+counterexample; zero endpoint premises removed/added/changed. Target not established.

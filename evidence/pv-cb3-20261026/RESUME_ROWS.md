@@ -16,14 +16,14 @@ claimed. The observer and simulator are unchanged.
 |253|V260|OPEN: structured Drop guard in changed built-MIR graph|—|aeneas-source-op253-built-resume|
 |252|V259|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op252-001/collected-receipt.json|
 |251|V258|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op251-001/collected-receipt.json|
-|249|V256|OPEN: full staged owned reference extracted/total; native association absent|—|35620.json;35630.json;35652.json;35653.json|
-|246|V254|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op246_source|24766.json; final resumed audit pending|
+|249|V256|OPEN: staged reference source/typed kernel checked; native association absent|—|35620.json;35630.json;35681.json;35686.json;35701.json|
+|246|V254|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op246_source|35701.json; RESUME_FINAL_MANIFEST.json|
 |230|V247|OPEN: bounded copy-helper native gate timed out|—|kani-helper-sum1024-002/collected-receipt.json|
-|229|V246|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op229_source|24766.json; final resumed audit pending|
+|229|V246|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op229_source|35701.json; RESUME_FINAL_MANIFEST.json|
 |228|V245|OPEN: borrow-processing failure; P6 pending|—|aeneas-source-op228-001/collected-receipt.json|
 |227|V244|OPEN: builtin-copy extraction failure; P6 pending|—|aeneas-source-op227-001/collected-receipt.json|
 |226|V243|OPEN: branch-context extraction failure; P6 pending|—|aeneas-source-op226-004/collected-receipt.json|
-|225|V242|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op225_source|24766.json; final resumed audit pending|
+|225|V242|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op225_source|35701.json; RESUME_FINAL_MANIFEST.json|
 |224|V241|OPEN: sibling extraction failure reused; P6 pending|—|op224-reused-obstruction.json|
 |223|V240|OPEN: escaping-reference loan validation guard|—|aeneas-source-op223-built-resume|
 |222|V239|OPEN: sibling extraction failure reused; P6 pending|—|op222-reused-obstruction.json|
@@ -39,7 +39,7 @@ claimed. The observer and simulator are unchanged.
 |133|V229|OPEN|—|—|
 |132|V228|OPEN|—|—|
 |121|V220|OPEN: native whole/cell gates timed out; extraction refused structured Drop|—|aeneas-source-op121-001/collected-receipt.json|
-|120|V219|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op120_source|24766.json; final resumed audit pending|
+|120|V219|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op120_source|35701.json; RESUME_FINAL_MANIFEST.json|
 |79|V201|OPEN|—|—|
 |51|V195|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op51Arbitrary.op51_source|35603.json; kani-wide-arbitrary-001/collected-receipt.json|
 |36|V187|DEFERRED(native effects → pv-runjoin); source/value law remains OPEN|—|compile-free native-effect review|
