@@ -1,0 +1,86 @@
+{"attempt": "XSd_L009", "exit_status": 1, "wall_seconds": 1.086862149008084, "peak_rss_kib": "2648148", "swaps": "0", "print_axioms": ["'XSd_DotSequence.stateless' depends on axioms: [sorryAx]", "'XSd_DotSequence.four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSd_generated/XSd_DotSequence.lean:19:14: error: Tactic `rfl` failed: The left-hand side
+  do
+    let __x ←
+      do
+        let y ← fail e
+        ok (y, f)
+    match __x with
+      | (y, f') => do
+        let __x ← AspisV8R19.TraversalRuntime.mapState (BuiltinFnMut T U).call_mut xs f'
+        match __x with
+          | (ys, f'') => ok (y :: ys, f'')
+is not definitionally equal to the right-hand side
+  do
+    let ys ← List.mapM.loop f (x :: xs) []
+    ok (ys, f)
+
+case cons.fail
+T U : Type
+f : T → Result U
+x : T
+xs : List T
+ih :
+  AspisV8R19.TraversalRuntime.mapState (BuiltinFnMut T U).call_mut xs f = do
+    let ys ← List.mapM f xs
+    ok (ys, f)
+e : Error
+h : f x = fail e
+⊢ (do
+      let __
+...
+h :
+  AspisV8R19.TraversalRuntime.mapState (BuiltinFnMut T U).call_mut xs f = do
+    let ys ← List.mapM f xs
+    ok (ys, f)
+y : U
+h : f x = ok y
+⊢ (do
+      let __x ←
+        do
+          let ys ← div
+          ok (ys, f)
+      ok (y :: __x.1, __x.2)) =
+    do
+    let ys ← List.mapM.loop f (x :: xs) []
+    ok (ys, f)
+XSd_generated/XSd_DotSequence.lean:35:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisV8R19.TraversalRuntime.mapState (BuiltinFnMut ?m.35 ?m.36).call_mut ?xs ?f
+in the target expression
+  (do
+      let (mapped, _) ← core.array.mapListFnMut (BuiltinFnMut T U) (↑(Array.make 4#usize [a, b, c, d] ⋯)) f
+      ok ⟨↑mapped, ⋯⟩) =
+    do
+    let a' ← f a
+    let b' ← f b
+    let c' ← f c
+    let d' ← f d
+    ok (Array.make 4#usize [a', b', c', d'] ⋯)
+
+T U : Type
+f : T → Result U
+a b c d : T
+⊢ (do
+      let (mapped, _) ← core.array.mapListFnMut (BuiltinFnMut T U) (↑(Array.make 4#usize [a, b, c, d] ⋯)) f
+      ok ⟨↑mapped, ⋯⟩) =
+    do
+    let a' ← f a
+    let b' ← f b
+    let c' ← f c
+    let d' ← f d
+    ok (Array.make 4#usize [a', b', c', d'] ⋯)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XSd_DotSequence.stateless' depends on axioms: [sorryAx]
+'XSd_DotSequence.four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r83c5fd6c24684406a20912e96408562e.scope; invocation ID: 244a2bb07b0c4d0b9f26b9c86080def0

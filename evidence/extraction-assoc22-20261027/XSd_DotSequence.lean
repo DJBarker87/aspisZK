@@ -1,45 +1,35 @@
-import XRn_Join_Funs
+import XRx_ListMap
 import AspisR1CanonicalDotFinish.Funs
 open Aeneas Aeneas.Std Result
 set_option autoImplicit false
 namespace XSd_DotSequence
-/-- Generic stateless-callback association for the selected state-threaded
-map. Arbitrary Result failures and divergence retain their first-stop order. -/
-theorem stateless {T U : Type} (f : T → Result U) (xs : List T) :
- AspisV8R19.TraversalRuntime.mapState (BuiltinFnMut T U).call_mut xs f =
- (do let ys ← xs.mapM f; ok (ys,f)) := by
+/-- Generic projected first-stop sequence law for the actual selected map.
+All callback failures and divergence keep their original order. -/
+theorem sequence {T U : Type} (f : T → Result U) (xs : List T) :
+ (do let (ys,_) ← _root_.core.array.mapListFnMut (BuiltinFnMut T U) xs f
+     ok ys.val) = xs.mapM f := by
  induction xs with
  | nil => rfl
  | cons x xs ih =>
-  simp only [AspisV8R19.TraversalRuntime.mapState,List.mapM]
-  change (do let (y,f') ← (do let y ← f x; ok (y,f))
-             let (ys,f'') ← AspisV8R19.TraversalRuntime.mapState (BuiltinFnMut T U).call_mut xs f'
-             ok (y::ys,f'')) = _
-  cases h : f x with
-  | fail e => rfl
-  | div => rfl
-  | ok y =>
-   simp only [bind_tc_ok,ih]
-   cases xs.mapM f <;> rfl
+  rw [_root_.core.array.mapListFnMut,List.mapM_cons]
+  cases h : f x <;> simp [BuiltinFnMut,h,←ih]
+  intro a b last hp
+  rfl
 
-/-- Four symbolic cells instantiate the generic map association. No arithmetic
-recurrence or generated field term is unfolded. -/
-theorem four {T U : Type} (f : T → Result U) (a b c d : T) :
+/-- Four arbitrary successful callback results instantiate the existing
+all-list map theorem; the driver is not hand-unrolled. -/
+theorem four {T U : Type} (f : T → Result U) (a b c d : T) (w x y z : U)
+ (h0 : f a=ok w) (h1 : f b=ok x) (h2 : f c=ok y) (h3 : f d=ok z) :
  core.array.Array.map (BuiltinFnMut T U) (Array.make 4#usize [a,b,c,d]) f =
- (do let a' ← f a
-     let b' ← f b
-     let c' ← f c
-     let d' ← f d
-     ok (Array.make 4#usize [a',b',c',d'])) := by
+ ok (Array.make 4#usize [w,x,y,z]) := by
+ have h : List.Forall₂ (fun a b => f a=ok b) [a,b,c,d] [w,x,y,z] :=
+  .cons h0 (.cons h1 (.cons h2 (.cons h3 .nil)))
+ have hm := XRx_ListMap.source f [a,b,c,d] [w,x,y,z] h
  unfold core.array.Array.map
- rw [stateless]
- simp only [List.mapM]
- cases f a <;> simp only [bind_tc_ok,bind_tc_fail,bind_tc_div]
- case ok a' =>
-  cases f b <;> simp only [bind_tc_ok,bind_tc_fail,bind_tc_div]
-  case ok b' =>
-   cases f c <;> simp only [bind_tc_ok,bind_tc_fail,bind_tc_div]
-   case ok c' => cases f d <;> rfl
-#print axioms stateless
+ change (do let (mapped,_) ← _root_.core.array.mapListFnMut (BuiltinFnMut T U) [a,b,c,d] f
+            ok (⟨mapped.val,mapped.property⟩ : Array U 4#usize)) = _
+ rw [hm]
+ rfl
+#print axioms sequence
 #print axioms four
 end XSd_DotSequence

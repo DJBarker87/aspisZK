@@ -1,0 +1,33 @@
+XSd_generated/XSd_DotSequence.lean:13:16: error: unsolved goals
+case cons.ok
+T U : Type
+f : T → Result U
+x : T
+xs : List T
+ih :
+  (do
+      let (ys, _) ← core.array.mapListFnMut (BuiltinFnMut T U) xs f
+      ok ↑ys) =
+    List.mapM f xs
+v✝ : U
+h : f x = ok v✝
+⊢ ∀ (a : List U) (b : a.length = xs.length) (b_1 : T → Result U),
+    core.array.mapListFnMut
+          { FnOnceInst := BuiltinFnOnce T U,
+            call_mut := fun f x =>
+              match f x with
+              | ok y => ok (y, f)
+              | fail e => fail e
+              | div => div }
+          xs f =
+        ok (⟨a, b⟩, b_1) →
+      ok (v✝ :: a) = List.cons v✝ <$> ok a
+XSd_generated/XSd_DotSequence.lean:15:41: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp [̵B̵u̵i̵l̵t̵i̵n̵F̵n̵M̵u̵t̵,̵h̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵←̵i̵h̵]̵[̲B̲u̲i̲l̲t̲i̲n̲F̲n̲M̲u̲t̲,̲ ̲h̲,̲ ̲←̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx]
+'XSd_DotSequence.four' depends on axioms: [propext, Classical.choice, Quot.sound]

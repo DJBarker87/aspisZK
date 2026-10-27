@@ -1,0 +1,22 @@
+def core.array.Array.map : {T F U : Type} →
+  {N : Usize} → core.ops.function.FnMut F T U → Std.Array T N → F → Result (Std.Array U N) :=
+fun {T F U} {N} fnMut values closure => do
+  let (mapped, _) ← core.array.mapListFnMut fnMut (↑values) closure
+  ok ⟨↑mapped, ⋯⟩
+def Aeneas.Std.core.array.Array.map : {T F U : Type} →
+  {N : Usize} → core.ops.function.FnMut F T U → Std.Array T N → F → Result (Std.Array U N) :=
+fun {T F U} {N} callback self f =>
+  match h : AspisV8R19.TraversalRuntime.mapState callback.call_mut (↑self) f with
+  | ok (ys, _last) => ok ⟨ys, ⋯⟩
+  | fail e => fail e
+  | div => div
+XSd_generated/XSd_MapOwners.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.array.mapListFnMut`
+def core.array.mapListFnMut : {T F U : Type} →
+  core.ops.function.FnMut F T U → (values : List T) → F → Result ({ output // output.length = values.length } × F) :=
+fun {T F U} fnMut x x_1 =>
+  List.brecOn (motive := fun x => F → Result ({ output // output.length = x.length } × F)) x
+    (core.array.mapListFnMut._f fnMut) x_1
+def AspisV8R19.TraversalRuntime.mapState : {T U F : Type} →
+  (F → T → Result (U × F)) → List T → F → Result (List U × F) :=
+fun {T U F} call x x_1 =>
+  List.brecOn (motive := fun x => F → Result (List U × F)) x (AspisV8R19.TraversalRuntime.mapState._f call) x_1

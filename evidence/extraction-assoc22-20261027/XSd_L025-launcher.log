@@ -1,0 +1,52 @@
+{"attempt": "XSd_L025", "exit_status": 1, "wall_seconds": 1.7803112849942409, "peak_rss_kib": "4441824", "swaps": "0", "print_axioms": ["'XSd_DotFinish.four_words' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSd_generated/XSd_DotFinish.lean:23:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.array.Array.map (BuiltinFnMut U64 U32) (Array.make 4#usize [a, b, c, d] ⋯)
+    AspisR1CanonicalDotFinish.canonical.reduce
+in the target expression
+  (do
+      let i ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 0#usize
+      let i1 ← fast_pairing.canonical.reduce i
+      let i2 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 1#usize
+      let i3 ← fast_pairing.canonical.reduce i2
+      let i4 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 2#usize
+      let i5 ← fast_pairing.canonical.reduce i4
+      let i6 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 3#usize
+ 
+...
+nonical.reduce a
+hc1 : fast_pairing.canonical.reduce b = AspisR1CanonicalDotFinish.canonical.reduce b
+hc2 : fast_pairing.canonical.reduce c = AspisR1CanonicalDotFinish.canonical.reduce c
+hc3 : fast_pairing.canonical.reduce d = AspisR1CanonicalDotFinish.canonical.reduce d
+map :
+  core.array.Array.map (BuiltinFnMut U64 U32) (Array.make 4#usize [a, b, c, d] ⋯)
+      AspisR1CanonicalDotFinish.canonical.reduce =
+    ok (Array.make 4#usize [w, x, y, z] ⋯)
+⊢ (do
+      let i ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 0#usize
+      let i1 ← fast_pairing.canonical.reduce i
+      let i2 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 1#usize
+      let i3 ← fast_pairing.canonical.reduce i2
+      let i4 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 2#usize
+      let i5 ← fast_pairing.canonical.reduce i4
+      let i6 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 3#usize
+      let i7 ← fast_pairing.canonical.reduce i6
+      ok (Array.make 4#usize [i1, i3, i5, i7] ⋯)) =
+    do
+    let a ←
+      Std.core.array.Array.map (BuiltinFnMut U64 U32) (Array.make 4#usize [a, b, c, d] ⋯)
+          AspisR1CanonicalDotFinish.canonical.reduce
+    ok a
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XSd_DotFinish.four_words' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7454990a6c5b414ca9880d5fb327e563.scope; invocation ID: 563906fa30c049b18504efe1ba94547b

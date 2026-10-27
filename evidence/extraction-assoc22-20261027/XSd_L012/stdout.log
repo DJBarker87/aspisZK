@@ -1,0 +1,35 @@
+XSd_generated/XSd_DotSequence.lean:21:3: error: 'change' tactic failed, pattern
+  (do
+      let __x ← core.array.mapListFnMut (BuiltinFnMut T U) xs f
+      match __x with
+        | (ys, snd) => ok (y :: ↑ys)) =
+    do
+    let ys ← List.mapM f xs
+    ok (y :: ys)
+is not definitionally equal to target
+  (do
+      let (ys, _) ←
+        let (mapped, closureNext) := (y, f)
+          do
+          let (mappedRest, closureFinal) ←
+            core.array.mapListFnMut
+                { FnOnceInst := BuiltinFnOnce T U,
+                  call_mut := fun f x =>
+                    match f x with
+                    | ok y => ok (y, f)
+                    | fail e => fail e
+                    | div => div }
+                xs closureNext
+          ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+      ok ↑ys) =
+    do
+    let __do_lift ← List.mapM f xs
+    pure (y :: __do_lift)
+XSd_generated/XSd_DotSequence.lean:37:31: error: Type mismatch: After simplification, term
+  mapped.property
+ has type
+  @Eq ℕ (↑mapped).length (0 + 1 + 1 + 1 + 1)
+but is expected to have type
+  @Eq ℕ (↑mapped).length ↑4#usize
+'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx, Quot.sound]
+'XSd_DotSequence.four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

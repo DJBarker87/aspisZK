@@ -1,0 +1,48 @@
+{"attempt": "XSd_L010", "exit_status": 1, "wall_seconds": 1.723361064970959, "peak_rss_kib": "4760124", "swaps": "0", "print_axioms": []}
+def core.array.Array.map : {T F U : Type} →
+  {N : Usize} → core.ops.function.FnMut F T U → Std.Array T N → F → Result (Std.Array U N) :=
+fun {T F U} {N} fnMut values closure => do
+  let (mapped, _) ← core.array.mapListFnMut fnMut (↑values) closure
+  ok ⟨↑mapped, ⋯⟩
+def core.array.mapListFnMut : {T F U : Type} →
+  core.ops.function.FnMut F T U → (values : List T) → F → Result ({ output // output.length = values.length } × F) :=
+fun {T F U} fnMut x x_1 =>
+  List.brecOn (motive := fun x => F → Result ({ output // output.length = x.length } × F)) x
+    (core.array.mapListFnMut._f fnMut) x_1
+def Aeneas.Std.BuiltinFnMut.{u, v} : (Inputs : Type u) →
+  (Outputs : Type v) → core.ops.function.FnMut (
+...
+ ⟨↑mapped, ⋯⟩
+def core.array.mapListFnMut : {T F U : Type} →
+  core.ops.function.FnMut F T U → (values : List T) → F → Result ({ output // output.length = values.length } × F) :=
+fun {T F U} fnMut x x_1 =>
+  List.brecOn (motive := fun x => F → Result ({ output // output.length = x.length } × F)) x
+    (core.array.mapListFnMut._f fnMut) x_1
+def Aeneas.Std.BuiltinFnMut.{u, v} : (Inputs : Type u) →
+  (Outputs : Type v) → core.ops.function.FnMut (Inputs → Result Outputs) Inputs Outputs :=
+fun Inputs Outputs =>
+  { FnOnceInst := BuiltinFnOnce Inputs Outputs,
+    call_mut := fun f x =>
+      match f x with
+      | ok y => ok (y, f)
+      | fail e => fail e
+      | div => div }
+List.mapM_cons.{u_1, u_2, u_3} {m : Type u_1 → Type u_2} {α : Type u_3} {β : Type u_1} {a : α} {l : List α} [Monad m]
+  [LawfulMonad m] {f : α → m β} :
+  List.mapM f (a :: l) = do
+    let __do_lift ← f a
+    let __do_lift_1 ← List.mapM f l
+    pure (__do_lift :: __do_lift_1)
+List.mapM_nil.{u_1, u_2, u_3} {m : Type u_1 → Type u_2} {α : Type u_3} {β : Type u_1} [Monad m] {f : α → m β} :
+  List.mapM f [] = pure []
+LawfulMonad.bind_assoc.{u, v} {m : Type u → Type v} {inst✝ : Monad m} [self : LawfulMonad m] {α β γ : Type u} (x : m α)
+  (f : α → m β) (g : β → m γ) : x >>= f >>= g = x >>= fun x => f x >>= g
+XSd_generated/XSd_MapProbe.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_assoc`
+XSd_generated/XSd_MapProbe.lean:11:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_ok`
+def AspisR1CanonicalDotFinish.canonical.Dot.finish : AspisR1CanonicalDotFinish.canonical.Dot →
+  Result AspisR1CanonicalDotFinish.canonical.Q :=
+fun self => do
+  let a ← Std.core.array.Array.map (BuiltinFnMut U64 U32) self.sums AspisR1CanonicalDotFinish.canonical.reduce
+  ok a
+
+Running as unit: run-r2cccb6b3b0a54acf92cb2d85fc07cec9.scope; invocation ID: a184e7cc3d0c40d78ae82cd3b8803dd9

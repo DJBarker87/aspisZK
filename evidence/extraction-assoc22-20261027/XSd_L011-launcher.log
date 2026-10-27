@@ -1,0 +1,73 @@
+{"attempt": "XSd_L011", "exit_status": 1, "wall_seconds": 1.1486161940265447, "peak_rss_kib": "2648892", "swaps": "0", "print_axioms": ["'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx, Quot.sound]", "'XSd_DotSequence.four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSd_generated/XSd_DotSequence.lean:22:68: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (ys, _) ←
+      let (mapped, closureNext) := (y, f)
+        do
+        let (mappedRest, closureFinal) ←
+          core.array.mapListFnMut
+              { FnOnceInst := BuiltinFnOnce T U,
+                call_mut := fun f x =>
+                  match f x with
+                  | ok y => ok (y, f)
+                  | fail e => fail e
+                  | div => div }
+              xs closureNext
+        ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+    ok ↑ys
+is not definitionally equal to the right-hand side
+  do
+    let __do_lift ←
+      do
+        let (ys, _) ← ok v✝
+        ok ↑ys
+    pure 
+...
+l e
+                    | div => div }
+                xs closureNext
+          ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+      ok ↑ys) =
+    do
+    let __do_lift ←
+      do
+        let (ys, _) ← div
+        ok ↑ys
+    pure (y :: __do_lift)
+XSd_generated/XSd_DotSequence.lean:34:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.array.mapListFnMut (BuiltinFnMut T U) [a, b, c, d] f
+in the target expression
+  (do
+      let (mapped, _) ← core.array.mapListFnMut (BuiltinFnMut T U) (↑(Array.make 4#usize [a, b, c, d] ⋯)) f
+      ok ⟨↑mapped, ⋯⟩) =
+    ok (Array.make 4#usize [w, x, y, z] ⋯)
+
+T U : Type
+f : T → Result U
+a b c d : T
+w x y z : U
+h0 : f a = ok w
+h1 : f b = ok x
+h2 : f c = ok y
+h3 : f d = ok z
+h : List.Forall₂ (fun a b => f a = ok b) [a, b, c, d] [w, x, y, z]
+hm : core.array.mapListFnMut (BuiltinFnMut T U) [a, b, c, d] f = ok (⟨[w, x, y, z], ⋯⟩, f)
+⊢ (do
+      let (mapped, _) ← core.array.mapListFnMut (BuiltinFnMut T U) (↑(Array.make 4#usize [a, b, c, d] ⋯)) f
+      ok ⟨↑mapped, ⋯⟩) =
+    ok (Array.make 4#usize [w, x, y, z] ⋯)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx, Quot.sound]
+'XSd_DotSequence.four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re9e276adce9e40519433d07e38334d76.scope; invocation ID: cf897390446446f2adfc46f91caeaab1

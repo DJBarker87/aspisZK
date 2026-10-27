@@ -1,0 +1,36 @@
+XSd_generated/XSd_DotSequence.lean:22:3: error: 'change' tactic failed, pattern
+  (do
+      let __x ← core.array.mapListFnMut (BuiltinFnMut T U) xs f
+      match __x with
+        | (ys, snd) => ok (y :: ↑ys)) =
+    do
+    let ys ← List.mapM f xs
+    ok (y :: ys)
+is not definitionally equal to target
+  (do
+      let (ys, _) ←
+        let (mapped, closureNext) := (y, f)
+          do
+          let (mappedRest, closureFinal) ←
+            core.array.mapListFnMut
+                { FnOnceInst := BuiltinFnOnce T U,
+                  call_mut := fun f x =>
+                    match f x with
+                    | ok y => ok (y, f)
+                    | fail e => fail e
+                    | div => div }
+                xs closureNext
+          ok (⟨mapped :: ↑mappedRest, ⋯⟩, closureFinal)
+      ok ↑ys) =
+    do
+    let __do_lift ← List.mapM f xs
+    pure (y :: __do_lift)
+XSd_generated/XSd_DotSequence.lean:21:25: warning: This simp argument is unused:
+  bind_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSd_DotSequence.sequence' depends on axioms: [propext, sorryAx, Quot.sound]
+'XSd_DotSequence.four' depends on axioms: [propext, Classical.choice, Quot.sound]
