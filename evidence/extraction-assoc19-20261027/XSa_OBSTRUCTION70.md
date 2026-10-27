@@ -1,0 +1,13 @@
+# Obstruction review before attempt70
+
+Written after L066, before L067.66 actual Lean processes; Kani0/10. No timeout, memory kill or cap increase. Admission exit0 AND allowed:true; one scope per job. L001 transport/retry artifacts and L039 pre-start transport failure are separate from actual Lean counts. No infrastructure repair.
+
+Accepted: entire sixth y1 branch, all six SAME scalar selections; installed checked-Q/counter/rejection control; actual canonical QRaw and arbitrary wrapping four-sum port; both Dot pushes and arbitrary-state finish; full29-lane source loop for every point<6; generic absorbing-option fold, raw preparedPart factor and recursive/fold association. XSa_PartAssociation.part (L066) is the full raw preparedPart versus actual prepared_claim_dot Result equation on SAME sem,y1,g,point, for canonical g, without a successful-run premise. Native LPn Dot::push P6 is CLOSED and reused by citation; no new native leaf proof.
+
+Exact remaining A2 component: six-point list versus typed-parts array initialization/update/first rejection, seven SAME kappa powers (raw list versus actual typed array) and weighted-sum association; then substitution of cachedClaim by actual.claim at the SAME reached inputs in the narrowed prepare theorem. Canonicality must be derived on the reached domain, not added as a hidden whole-claim premise. A3 still needs installed/native prepared_claim P6 (LPm OPEN unless merged), in addition to this SAME-input association.
+
+The two wrapping-product expressions are kept symbolic: model state joins take raw representatives as variables, then compose named raw-result theorems. No broad recurrence/numeral normalization is used. Existing XRy arithmetic, powers, queries, complete driver, prepare callbacks and native CLOSED leaves are reused unchanged. No session A candidates/worktree or XSb rows A6-A8 touched.
+
+A0-A8 each OPEN. AspisR1.RPx_Deployed.deployed before/after identical,83T/0P/13G,L154 statement parameter; atomic-family/SAME-witness/shared-nonce/L185=L159 delta T0/P0/G0/C0,removed0/added0/changed0. No source/trust/quantifier/carrier/game/metric/failure event/pin change or frozen D188 credit. Local total operators and unconditional failure-aware lane equations give non-vacuity without a successful whole execution. Joint deployed accepted-root inhabitance OPEN.
+
+Continue concrete outer point/powers/sum composition within the remaining34 Lean attempts; do not replace it with an opaque whole-claim assumption. Persistent cache retained, no other cache or unchanged dependency rebuild. Exact end inventory and axioms coverage will be recorded at stop/exhaustion.
