@@ -1,0 +1,12 @@
+import RPu_FJj_RegularTrace
+set_option autoImplicit false
+namespace AspisR1.FJm_VecLens
+open Aeneas Aeneas.Std
+
+theorem value {T : Type} (v : alloc.vec.Vec T) (input : Slice T) (back : Slice T → alloc.vec.Vec T)
+    (h : alloc.vec.Vec.deref_mut v=(input,back)) (out : Slice T) :
+    input=alloc.vec.Vec.deref v ∧ alloc.vec.Vec.deref (back out)=out := by
+  cases h
+  exact ⟨rfl,rfl⟩
+#print axioms value
+end AspisR1.FJm_VecLens
