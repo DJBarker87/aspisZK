@@ -76,11 +76,18 @@ pub fn new(variant:Variant,alpha:&[K;10],z:&[SecureCirclePoint;2])->Result<Weigh
     /// The caller owns allocation and retains Error::Allocation before this kernel.
     pub fn materialize(&self,kappa:E,w:&mut [E;1024])->Result<(),Error> {
         let kp=crate::prover_powers::powers::<7>(kappa);
+        let k0=kp[0]; let k1=kp[1]; let k2=kp[2]; let k3=kp[3];
+        let k4=kp[4]; let k5=kp[5]; let k6=kp[6];
         let mut j=0usize;
         while j<1024 {
             let mut v=E::ZERO;
-            let mut kind=0usize;
-            while kind<7 { v=v.add(mul_qm31(kp[kind],self.raw(kind,j))); kind+=1; }
+            v=v.add(mul_qm31(k0,self.raw(0,j)));
+            v=v.add(mul_qm31(k1,self.raw(1,j)));
+            v=v.add(mul_qm31(k2,self.raw(2,j)));
+            v=v.add(mul_qm31(k3,self.raw(3,j)));
+            v=v.add(mul_qm31(k4,self.raw(4,j)));
+            v=v.add(mul_qm31(k5,self.raw(5,j)));
+            v=v.add(mul_qm31(k6,self.raw(6,j)));
             w[j]=v; j+=1;
         }
         Ok(())
@@ -88,25 +95,30 @@ pub fn new(variant:Variant,alpha:&[K;10],z:&[SecureCirclePoint;2])->Result<Weigh
 }
 
 // Copy values before branch joins: no mutable element loan or restoration.
+fn point_factor(point:K,r:usize,b:u32)->K {
+    if r&(1usize<<b)==0 {K::ONE.sub(point)}else{point}
+}
 fn point_raw(points:[K;10],r:usize)->K {
     let mut v=K::ONE;
-    let mut b=0usize;
-    while b<10 {
-        let point=points[9-b];
-        let factor=if r&(1usize<<(b as u32))==0 {K::ONE.sub(point)}else{point};
-        v=v.mul(factor);
-        b+=1;
-    }
+    v=v.mul(point_factor(points[9],r,0));
+    v=v.mul(point_factor(points[8],r,1));
+    v=v.mul(point_factor(points[7],r,2));
+    v=v.mul(point_factor(points[6],r,3));
+    v=v.mul(point_factor(points[5],r,4));
+    v=v.mul(point_factor(points[4],r,5));
+    v=v.mul(point_factor(points[3],r,6));
+    v=v.mul(point_factor(points[2],r,7));
+    v=v.mul(point_factor(points[1],r,8));
+    v=v.mul(point_factor(points[0],r,9));
     v
 }
 fn tensor_raw(factors:[[K;4];5],j:usize)->K {
     let mut v=K::ONE;
-    let mut d=0usize;
-    while d<5 {
-        let factor=factors[d][(j>>((2*d) as u32))&3];
-        v=v.mul(factor);
-        d+=1;
-    }
+    v=v.mul(factors[0][(j>>0u32)&3]);
+    v=v.mul(factors[1][(j>>2u32)&3]);
+    v=v.mul(factors[2][(j>>4u32)&3]);
+    v=v.mul(factors[3][(j>>6u32)&3]);
+    v=v.mul(factors[4][(j>>8u32)&3]);
     v
 }
 // Avoid canonical_qm31's FnOnce closure Drop in the extraction closure.
