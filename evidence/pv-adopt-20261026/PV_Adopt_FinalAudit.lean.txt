@@ -1,0 +1,60 @@
+import R1Z.PrivacyR1HeadlineDeployedReal
+import R1Z.ProverRwFullFuns
+import R1Z.ProverRwP6BodyData
+import R1Z.PV_RW_FrozenManifest
+import R1Z.PDict_Installed
+import R1Z.PDict_CarrierInstall
+import R1Z.PDict_RemainingDictionary231
+import R1Z.PDict_FormatterClosure262
+import R1Z.PV_RunJoin_Endpoint
+import R1Z.PV_RunJoin_SourceConstructor
+import R1Z.PV_RunJoin_InstalledTransport
+import R1Z.PV_RunJoin_OsFailureEndpoint
+import R1Z.PV_RunJoin_PublicFailureEndpoint
+import R1Z.PV_Src_NativeIdentification
+import R1Z.PV_Src_NativeConsumer
+import R1Z.PV_Src_NativePremises
+import R1Z.PV_CB3_Op225Source
+import R1Z.PV_CB3_Op229Source
+import R1Z.PV_CB3_Op246Source
+import R1Z.PV_CB3_SamplerWordSource
+import R1Z.PV_CB_Op100Source
+import R1Z.PV_CB_Op101Source
+import R1Z.PV_CB_Op105Source
+import R1Z.PV_CB_Op107Source
+import R1Z.PV_CB_Op109Source
+import R1Z.PV_CB_Op110Source
+import R1Z.PV_CB_Op111Source
+import R1Z.PV_CB_Op114Source
+import R1Z.PV_CB_Op118Source
+import R1Z.PV_CB_Op127Source
+import R1Z.PV_CB_Op128Source
+import R1Z.PV_CB_Op130Source
+import R1Z.PV_CB_Op131Source
+import R1Z.PV_CB_Op229Source
+import R1Z.PV_CB_Op71Source
+import R1Z.PV_CB_Op72Source
+import R1Z.PV_CB_Op77Source
+import R1Z.PV_CB_Op80Source
+import R1Z.PV_CB_Op81Source
+import R1Z.PV_CB_Op82Source
+import R1Z.PV_CB_Op83Source
+import R1Z.PV_CB_Op84Source
+import R1Z.PV_CB_Op86Source
+import R1Z.PV_CB_TakeSource
+import Lean
+open Lean Elab Command
+#print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
+#print axioms ProverRwFull.ExternalFuns
+#print axioms R1Z.ProverRwP6BodyData.refinement_of_data
+-- Proposed support-root audit only until final concrete endpoint is installed.
+run_cmd do
+  let env ← getEnv
+  for (n, _) in env.constants.toList do
+    if let some idx := env.getModuleIdxFor? n then
+      let owner := env.header.moduleNames[idx]!
+      let text := owner.toString
+      if text.startsWith "R1Z.PDict_" || text.startsWith "R1Z.ProverRw" ||
+          text.startsWith "R1Z.PV_" || text == "R1Z.PrivacyR1HeadlineDeployedReal" then
+        logInfo m!"OWNER|{owner}|{n}"
+        elabCommand (← `(command| #print axioms $(mkIdent n)))

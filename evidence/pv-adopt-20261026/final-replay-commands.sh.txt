@@ -1,0 +1,70 @@
+# PROPOSED command list, NOT EXECUTED. Host owner/lead first reserves env-J
+# 28000-29999 and prepares ONE pinned accepted integration tree + matching env-J
+# cache. Do not execute this against the candidate-first multi-revision support
+# inventory. Final native endpoint import/application must exist first.
+# Host paths below are the established J paths; evidence lives in private R.
+set -euo pipefail
+T=/home/dombarker/project-offloads/aspis-fs-generic-20261006
+H=/home/dombarker/project-offloads/r1-privacy-build-integration-20261019
+J=/home/dombarker/project-offloads/aspis-joint-20261019
+R=/home/dombarker/project-offloads/pv-adopt-final-20261026
+# Before this list: freeze final-replay.tsv from the FINAL endpoint's transitive
+# import DAG, dependency first, including the installed source/instance roots.
+# Columns: attempt<TAB>module/path<TAB>source_sha256<TAB>deps_fingerprint.
+# IDs must be the unused reserved env-J range; the final row is the final audit.
+# Materialize its hashed sources to J/sources only after snapshotting old shared
+# source/object files; pin external dependency objects + env/J.json + run2.py.
+# Do not cold-build mathlib/Aeneas; mismatch is a preflight STOP for the lead.
+# final-source-revision.txt and final-source-files.sha256 bind ONE integration SHA.
+cd "$R"
+sha256sum -c final-source-files.sha256
+sha256sum -c external-object-pins.sha256
+sha256sum -c env-and-runner-pins.sha256
+# Use the current lead-managed, quiet-window-aware reservation scanner; the
+# older native-entropy barrier.py asserts 5G/7G/64 and MUST NOT be used/patched.
+# This path must be verified by the lead against the active shared launcher.
+RESERVATION="$R/approved-reservation.py"
+python3 "$RESERVATION" "$R/admission-before.json" --requested-bytes 8589934592 > "$R/admission-before.log" 2>&1
+# If refused: retain ID/receipt, wait 180s, NEXT unused reserved ID, <=10 retries;
+# QUIET WINDOW HOLD follows ruling (e). No scope starts until allowed=true.
+# R/approved-reservation.py is a pinned copy of the lead's existing active
+# scanner, NOT new infrastructure to be implemented or a bypass of admission.
+systemd-run --user --scope --unit=pv-adopt-final-replay-20261026 \
+  -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
+  /usr/bin/time -v -o "$R/scope-time.log" bash -s -- "$T" "$H" "$J" "$R" <<'SCOPE'
+set -euo pipefail
+T=$1 H=$2 J=$3 R=$4
+cg="/sys/fs/cgroup$(sed -n 's/^0:://p' /proc/self/cgroup)"
+cp "$cg/memory.high" "$R/memory.high.before"
+cp "$cg/memory.max" "$R/memory.max.before"
+cp "$cg/memory.swap.max" "$R/memory.swap.max.before"
+test "$(cat "$cg/memory.high")" = 6442450944
+test "$(cat "$cg/memory.max")" = 8589934592
+test "$(cat "$cg/memory.swap.max")" = 0
+python3 "$R/approved-reservation.py" "$R/admission-inside.json" --requested-bytes 0 > "$R/admission-inside.log" 2>&1
+while IFS=$'\t' read -r attempt module source_sha deps_fingerprint; do
+  test "$attempt" -ge 28000 && test "$attempt" -le 29999
+  test ! -e "$R/out-$attempt.log"
+  test "$(sha256sum "$J/sources/$module.lean" | cut -d' ' -f1)" = "$source_sha"
+  mkdir -p "$J/objects/$(dirname "$module")"
+  printf '%s\n' "$module $source_sha $deps_fingerprint" > "$R/input-$attempt.txt"
+  # One module per Lean invocation; no nested systemd scope or launcher.
+  # deps_fingerprint must have been validated against actual predecessor outputs.
+  set +e
+  /usr/bin/time -v -o "$R/time-$attempt.log" \
+    python3 "$T/evidence/run2.py" "$H/env/J.json" "$J/objects" \
+      "$J/sources" "$J/objects/$module.olean" "$J/sources/$module.lean" 7000 \
+      > "$R/out-$attempt.log" 2>&1
+  status=$?
+  set -e
+  printf '%s\n' "$status" > "$R/exit-$attempt.txt"
+  test "$status" = 0 || exit "$status"
+done < "$R/final-replay.tsv"
+for metric in memory.peak memory.swap.peak memory.events pids.peak pids.events; do
+  test ! -f "$cg/$metric" || cp "$cg/$metric" "$R/$metric.final"
+done
+SCOPE
+# Preserve the exact standard-only #print axioms lines from the final audit log.
+# Parse/reject every nonstandard dependency (including Formatter or sorryAx),
+# require a report for the concrete adopted endpoint AND its instance, and bind
+# every receipt to final-source-revision.txt. No release claim from exit 0 alone.

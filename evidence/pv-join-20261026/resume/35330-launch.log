@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2239); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+          | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+              aspis_core.field.QM31 residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+          aspis_core.field.QM31 residual
+
+bytes : Slice U8
+⊢ (do
+      let value ←
+        do
+          let s ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 0#usize, «end» := 8#usize }
+          let o ← PV_CB_ShippedOp71.aspis_core.field.CM31.from_le_bytes s
+          let cf ← PV_CB_ShippedOp71.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s1 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                    { start := 8#usize, «end» := 16#usize }
+              let o1 ← PV_CB_ShippedOp71.aspis_core.field.CM31.from_le_bytes s1
+              let cf1 ← PV_CB_ShippedOp71.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  PV_CB_ShippedOp71.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                    PV_CB_ShippedOp71.aspis_core.field.QM31 residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              PV_CB_ShippedOp71.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                PV_CB_ShippedOp71.aspis_core.field.QM31 residual
+      ok (Option.map decode value)) =
+    do
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+          { start := 0#usize, «end» := 8#usize }
+    let o ← ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes s
+    let cf ← ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let s1 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+              { start := 8#usize, «end» := 16#usize }
+        let o1 ← ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes s1
+        let cf1 ← ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+              aspis_core.field.QM31 residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+          aspis_core.field.QM31 residual
+'R1Z.PV_Join_ParserTransport.bind_congr' does not depend on any axioms
+'R1Z.PV_Join_ParserTransport.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Join_ParserTransport.complex' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Join_ParserTransport.quartic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.33
+	Maximum resident set size (kbytes): 2626452
+	Swaps: 0
+	Exit status: 1

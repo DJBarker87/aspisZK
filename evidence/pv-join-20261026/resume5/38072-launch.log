@@ -1,0 +1,26 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0104); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_AccumulateLoopCanonical5.lean:17:27: error: Type mismatch
+  step ops basis scale ys i hys
+has type
+  Safe
+    (fun cf =>
+      match cf with
+      | ControlFlow.done ys => QArray ys
+      | ControlFlow.cont ys_1 => inv ys_1 ∧ rank ys_1 < rank (ys, i))
+    (host_sumcheck.interpolation_accumulate_loop.body basis scale ys i)
+but is expected to have type
+  Safe
+    (fun cf =>
+      match cf with
+      | ControlFlow.done y => QArray y
+      | ControlFlow.cont y => inv y ∧ rank y < rank (ys, i))
+    (host_sumcheck.interpolation_accumulate_loop.body basis scale (ys, i).1 (ys, i).2)
+'R1Z.PV_Join_AccumulateLoopCanonical5.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Join_AccumulateLoopCanonical5.accumulate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.64
+	Maximum resident set size (kbytes): 4291848
+	Swaps: 0
+	Exit status: 1

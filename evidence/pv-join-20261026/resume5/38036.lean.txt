@@ -1,0 +1,27 @@
+import R1Z.PV_Join_Canonical5
+set_option autoImplicit false
+namespace R1Z.PV_Join_CanonicalArray5
+open Aeneas Aeneas.Std ProverRwFull PV_Join_Canonical5
+
+theorem list_repeat (q : aspis_core.field.QM31) (hq : Q q) (n : Nat) :
+    ∀ x ∈ List.replicate n q, Q x := by
+  intro x hx
+  simpa only [List.eq_of_mem_replicate hx] using hq
+
+theorem repeat {n : Usize} (q : aspis_core.field.QM31) (hq : Q q) :
+    QArray (Array.repeat n q) := by
+  exact list_repeat q hq n.val
+
+theorem list_set (xs : List aspis_core.field.QM31)
+    (hxs : ∀ x ∈ xs, Q x) (i : Nat) (q : aspis_core.field.QM31) (hq : Q q) :
+    ∀ x ∈ xs.set i q, Q x := by
+  intro x hx
+  have hm := List.mem_set.mp hx
+  rcases hm with he | he
+  · subst x; exact hq
+  · exact hxs x he
+
+#print axioms list_repeat
+#print axioms repeat
+#print axioms list_set
+end R1Z.PV_Join_CanonicalArray5

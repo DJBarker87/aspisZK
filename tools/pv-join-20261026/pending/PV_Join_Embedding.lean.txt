@@ -1,0 +1,13 @@
+import R1Z.ProverRwP6BodyData
+import R1Z.PV_CB_Op110Source
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Join_Embedding
+open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes]
+theorem op110_source (ops : ExternalFuns) (x : aspis_core.field.M31) :
+    (ProverRwP6BodyStore.selected ops).op110 x =
+      PV_CB_ShippedOp110.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31 x := by
+  exact PV_CB_Op110Source.op110_source ops x
+#print axioms op110_source
+end R1Z.PV_Join_Embedding

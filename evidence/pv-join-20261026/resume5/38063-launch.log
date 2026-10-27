@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0058); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+        Aeneas.Std.WP.spec (body x) fun r =>
+          match r with
+          | Aeneas.Std.ControlFlow.done y => post y
+          | Aeneas.Std.ControlFlow.cont x' => inv x' ∧ measure x' < measure x) →
+    inv x → Aeneas.Std.WP.spec (Aeneas.Std.loop body x) post
+Aeneas.Std.loop.spec.match_1.congr_eq_2: ∀ {α : Type u_1} {β : Type u_2}
+  (motive : Aeneas.Std.ControlFlow α β → Sort u_3) (r : Aeneas.Std.ControlFlow α β)
+  (h_1 : (y : β) → motive (Aeneas.Std.ControlFlow.done y)) (h_2 : (x' : α) → motive (Aeneas.Std.ControlFlow.cont x'))
+  (x' : α),
+  r = Aeneas.Std.ControlFlow.cont x' →
+    (match r with
+      | Aeneas.Std.ControlFlow.done y => h_1 y
+      | Aeneas.Std.ControlFlow.cont x' => h_2 x') ≍
+      h_2 x'
+Aeneas.Std.loop.spec._proof_1_9: ∀ {α : Type u_3} {β : Type u_2} {γ : Type u_1} (measure : α → γ)
+  [wf : WellFoundedRelation γ] (inv : α → Prop) (post : β → Prop)
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        Aeneas.Std.WP.spec (body x) fun r =>
+          match r with
+          | Aeneas.Std.ControlFlow.done y => post y
+          | Aeneas.Std.ControlFlow.cont x' => inv x' ∧ WellFoundedRelation.rel (measure x') (measure x)) →
+    inv x →
+      ∀ (x_1 : γ),
+        (∀ (y : γ),
+            WellFoundedRelation.rel y x_1 →
+              ∀ (x : α), measure x = y → inv x → Aeneas.Std.WP.spec (Aeneas.Std.loop body x) post) →
+          ∀ (x_2 : α), measure x_2 = x_1 → inv x_2 → Aeneas.Std.WP.spec (Aeneas.Std.loop body x_2) post
+Aeneas.Std.loop._proof_1: ∀ {α : Type u_1} {β : Type u_2} (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)),
+  Order.monotone fun f x =>
+    match body x with
+    | Aeneas.Std.Result.ok r =>
+      match r with
+      | Aeneas.Std.ControlFlow.cont x => f x
+      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+Aeneas.Std.loop.spec: ∀ {α : Type u} {β : Type v} {γ : Type w} (measure : α → γ) [wf : WellFoundedRelation γ]
+  (inv : α → Prop) (post : β → Prop) (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        Aeneas.Std.WP.spec (body x) fun r =>
+          match r with
+          | Aeneas.Std.ControlFlow.done y => post y
+          | Aeneas.Std.ControlFlow.cont x' => inv x' ∧ WellFoundedRelation.rel (measure x') (measure x)) →
+    inv x → Aeneas.Std.WP.spec (Aeneas.Std.loop body x) post
+Aeneas.Std.loop: {α : Type u} →
+  {β : Type v} → (α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) → α → Aeneas.Std.Result β
+Aeneas.Std.loop.eq_def: ∀ {α : Type u} {β : Type v} (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  Aeneas.Std.loop body x =
+    match body x with
+    | Aeneas.Std.Result.ok r =>
+      match r with
+      | Aeneas.Std.ControlFlow.cont x => Aeneas.Std.loop body x
+      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.63
+	Maximum resident set size (kbytes): 2658140
+	Swaps: 0
+	Exit status: 0

@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0101); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+    (Safe fun cf =>
+      match cf with
+      | ControlFlow.done ys => QArray ys
+      | ControlFlow.cont ys => inv ys ∧ rank ys < rank (out, k))
+    (?m.111 value m)
+
+case isTrue.hf
+inst✝ : ExternalTypes
+ops : ExternalFuns
+basis : MA
+scale : aspis_core.field.QM31
+out : QA
+k : Usize
+hout : QArray out
+hk : k < 28#usize
+value : aspis_core.field.QM31
+hv : Q value
+m : U32
+delta : ProverRwDictionaryTower.Q
+hd : PV_Join_ScaleCanonical5.scale scale m = Result.ok delta
+hdelta : Q delta
+⊢ Safe
+    (Safe fun cf =>
+      match cf with
+      | ControlFlow.done ys => QArray ys
+      | ControlFlow.cont ys => inv ys ∧ rank ys < rank (out, k))
+    (?m.111 value m)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (28 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_AccumulateCanonical5.lean:22:2: error: unsolved goals
+case isTrue.a
+inst✝ : ExternalTypes
+ops : ExternalFuns
+basis : MA
+scale : aspis_core.field.QM31
+out : QA
+k : Usize
+hout : QArray out
+hk : k < 28#usize
+⊢ (Array.index_usize out k >>= fun value => ?m.110 value >>= ?m.111 value) =
+    Result.ok do
+      let value ← Array.index_usize out k
+      let m ← Array.index_usize basis k
+      let delta ← PV_Join_ScaleCanonical5.scale scale m
+      let next ← ProverRwDictionaryTower.qAdd value delta
+      let out1 ← Array.update out k next
+      let k1 ← lift (k.wrapping_add 1#usize)
+      Result.ok (ControlFlow.cont (out1, k1))
+'R1Z.PV_Join_AccumulateCanonical5.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.72
+	Maximum resident set size (kbytes): 4296436
+	Swaps: 0
+	Exit status: 1

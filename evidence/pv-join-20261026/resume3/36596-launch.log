@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2359); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+              (congrArg Aeneas.Std.Result.ok
+                (Decidable.decide.congr_simp (x = PV_CB_ShippedOp105.aspis_core.field.M31.ZERO) (x = 0#u32)
+                  (congrArg (Eq x) PV_CB_ShippedOp105.aspis_core.field.M31.ZERO.eq_1))))
+            (funext fun b =>
+              ite_congr (Eq.refl (b = true)) (fun a => Eq.refl (Aeneas.Std.Result.ok none)) fun a =>
+                congr
+                  (congrArg bind
+                    (congrArg Aeneas.Std.lift
+                      (congrFun' (congrArg Aeneas.Std.U32.wrapping_sub PV_CB_ShippedOp105.aspis_core.field.P.eq_1)
+                        2#u32)))
+                  (funext fun i =>
+                    congrArg (bind (Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i)))
+                      (funext fun i1 =>
+                        congrFun' (congrArg bind (R1Z.PV_Join_InvLoop.pow x i1)) fun m =>
+                          Aeneas.Std.Result.ok (some m))))))
+        (congr
+          (congrArg bind
+            (congrArg Aeneas.Std.Result.ok
+              (Decidable.decide.congr_simp (x = R1Z.ProverRwSuccessInverseSource.field.M31.ZERO) (x = 0#u32)
+                (congrArg (Eq x) AspisR1ProducerRelease47.field.M31.ZERO.eq_1))))
+          (funext fun b =>
+            ite_congr (Eq.refl (b = true)) (fun a => Eq.refl (Aeneas.Std.Result.ok none)) fun a =>
+              congrFun'
+                (congrArg bind
+                  (congrArg Aeneas.Std.lift
+                    (congrFun' (congrArg Aeneas.Std.U32.wrapping_sub AspisR1ProducerRelease47.field.P.eq_1) 2#u32)))
+                fun i => do
+                let i1 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i)
+                let m ← R1Z.ProverRwSuccessInverseSource.field.M31.pow x i1
+                Aeneas.Std.Result.ok (some m))))
+      (eq_self do
+        let b ← Aeneas.Std.Result.ok (decide (x = 0#u32))
+        if b = true then Aeneas.Std.Result.ok none
+          else do
+            let i ← Aeneas.Std.lift (Aeneas.Std.U32.wrapping_sub 2147483647#u32 2#u32)
+            let i1 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i)
+            let m ← R1Z.PV_Join_InvLoop.R.pow x i1
+            Aeneas.Std.Result.ok (some m)))
+'R1Z.PV_Join_InvSource.inverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_LedgerSource.body_source : ∀ [inst : ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns]
+  (base : ProverRwFull.ExternalTypes) {N C : Type}
+  (ops : R1Z.PV_Join_LedgerSource.World base N C → ProverRwFull.ExternalFuns)
+  (pub : R1Z.PV_Join_LedgerSource.World base N C → R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.PV_Join_LedgerSource.World base N C → R1Z.ProverRwRetryModel.Compiled)
+  (hash : R1Z.PV_Join_LedgerSource.World base N C → R1Z.ProverRwRetryModel.Hash)
+  (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address),
+  R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+    (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_Join_LedgerSource.inputs base ops pub compiled hash))
+    (R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+      (R1Z.PV_Join_LedgerSource.inputs base ops pub compiled hash)) :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] base {N C} ops pub compiled hash schedule unix
+    address =>
+  R1Z.PV_RunJoin_LedgerSourceBody.source_law schedule unix address
+    (R1Z.PV_Join_LedgerSource.inputs base ops pub compiled hash) fun s =>
+    Eq.refl
+      (@ProverRwFull.ExternalFuns.op12 (R1Z.PV_Join_PublicCaller.native base)
+        ((R1Z.PV_Join_LedgerSource.inputs base ops pub compiled hash).ops s))
+'R1Z.PV_Join_LedgerSource.body_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.77
+	Maximum resident set size (kbytes): 4319384
+	Swaps: 0
+	Exit status: 0
