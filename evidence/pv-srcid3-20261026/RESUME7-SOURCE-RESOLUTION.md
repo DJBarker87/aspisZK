@@ -15,16 +15,23 @@ selected module. No repair, clone, shared overwrite or new compilation was used.
 This supersedes every earlier ProjectionHEAD stale-object statement in this
 allocation's historical receipts and documents.
 
-Four associations remain BLOCKED: AspisFormal.V6PublishedTheoremInterfaces,
-R0P.SemRounds, R0P.LogUpAssembly, R0P.LogUpChain. Their shared sources differ
-from the authoritative path's research HEAD bytes. None was compiled or copied
-by allocation 7. Existing receipts bind the historical selected variants, not
-the authoritative current source. Even where an object hash happens to agree
-with a historical pin, no current-source compile receipt is inferred from that.
-Ruling h says STOP these modules and report both hashes; no shared replacement
-is attempted. Reconciliation by the owning integration process is required.
+Four shared source paths differ: AspisFormal.V6PublishedTheoremInterfaces,
+R0P.SemRounds, R0P.LogUpAssembly, R0P.LogUpChain. None was copied or compiled by
+allocation 7. Both hashes are recorded; ruling h stops replacement of all four.
 
-Thus the original 48 gaps close, but four source-association discrepancies are
-identified: the final aggregate is 48 -> 4, not a claimed clean gate. Projection
-is no longer the named exception. The final audit verifies the actual existing
-object closure and axioms; it does not close these source-association gaps.
+R0P.LogUpAssembly's authoritative historical table also binds source SHA
+ccd2282e2da4669ed9f7c48d8260e38fda2361b8af3e69592e4ffcc38ce20a24
+to object SHA 9639f23da5a09f5fde90dd41df72bee964d724b1f3f53d2c3c469733e6ca0da7,
+with exact source/cache comparison at revision 7c5ca8699. Both match the current
+HEAD source and current object. This closes its object provenance association
+without a new compile, while its shared source path drift remains untouched.
+The gate labels this evidence as a historical cache association, not a new run.
+
+The remaining THREE object associations are BLOCKED: V6PublishedTheoremInterfaces,
+SemRounds, LogUpChain. Their historical pins/receipts do not identify current
+objects with authoritative current source bytes. Integration-owner reconciliation
+is required. Exact dependent cones are in resume7-merge-gate-v2.json.
+
+All original 48 gaps close; three additional object associations are discovered:
+final aggregate 48 -> 3. Projection is no longer a named exception. The final
+audit verifies existing object closure and axioms, not the three missing links.

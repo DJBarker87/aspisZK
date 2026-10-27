@@ -101,9 +101,23 @@ Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scop
 | 40122 | R1Z/QueryScanIndependentHistory | 0 | standard | 0:01.91 | 4121784 | 0 | acf4eb76a7 | 6/6 |
 | 40123 | R1Z/QueryScanFirstStopHistory | 0 | standard | 0:02.09 | 4128092 | 0 | acf4eb76a7 | 5/5 |
 | 40124 | R1Z/QueryScanIdealHistory | 0 | standard | 0:01.95 | 4139796 | 0 | acf4eb76a7 | 7/7 |
+| 40125 | R1Z/PV_Src_FinalAudit7A | 0 | standard | 0:01.77 | 4237112 | 0 | 4b1c197965 | 220/220 |
+| 40126 | R1Z/PV_Src_FinalAudit7B | 0 | standard | 0:02.15 | 4236680 | 0 | 4b1c197965 | 219/219 |
+| 40127 | R1Z/PV_Src_FinalAudit7C | 0 | standard | 0:02.11 | 4269092 | 0 | 4b1c197965 | 219/219 |
 
-Charged Lean attempts: 97/100. Reservation refusals: 28, uncharged. Next unused ID: 40125.
+Charged Lean attempts: 100/100. Reservation refusals: 28, uncharged. Next unused ID: 40128.
 
 ## Shared replacements
 
 Each overwritten shared source/object has its preimage under the assigned host job snapshots/resume7-ID. Accepted own object copies are rebuildable caches; no binary is committed. All changed dependent outputs, or exact pending exception reasons, are recorded in the gate JSON.
+
+## Kani runs
+
+Optimized compilation then named CBMC step; 6G/8G/swap0/Tasks64, one scope at a time. Kani has no #print axioms (N/A); exact input hashes and metadata retained.
+
+| Target | Exit | Wall seconds | Peak RSS KiB | Cgroup peak bytes | Swap | Revision |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| ['timeout', '180', 'cargo', 'kani', '--no-assertion-reach-checks', '-Z', 'stubbing', '-Z', 'function-contracts', '-Z', 'unstable-options', '-p', 'aspis-statement', '--lib', '-j', '4', '--exact', '--harness', 'pool_v1::pair_forest_copy_builder::records_proofs::empty_roots::pv_srcid7_helper_prefix11', '--output-format', 'terse', '--cbmc-args', '--unwinding-assertions', '--slice-formula'] | 124 | 180.003077 | 15296 | 2860482560 | 0 | 0a8c5413f045ae8eac3260a13af834d126af072e |
+| ['timeout', '180', 'cargo', 'kani', '--no-assertion-reach-checks', '-Z', 'stubbing', '-Z', 'function-contracts', '-Z', 'unstable-options', '-p', 'aspis-statement', '--lib', '-j', '4', '--exact', '--harness', 'poseidon2::builder_reference::pv_srcid7_internal_linear_copy', '--output-format', 'terse', '--cbmc-args', '--unwinding-assertions', '--slice-formula'] | 0 | 84.360611 | 701172 | 758534144 | 0 | acf4eb76a7e43ab9d3b041716a98b38c6eeeeb06 |
+
+Prefix timeout GNUtime RSS is a wrapper proxy, not aggregate solver RSS; use its cgroup peak. No equality is inferred from timeout. Internal comparison passed 514 checks. Both harness metadata records show no stubs. See resume7-kani-source-audit.json (193/193 source inputs per run match its commit) and resume7-kani-metadata.json.

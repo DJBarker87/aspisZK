@@ -1,17 +1,16 @@
 # MERGE GATE v2: BLOCKED
 
-D241; research `8d24f3b9aea9a28803cfc7f571e92b908c8d92af`. PROJECT gaps: **48 → 4**; 859 project objects. EXTERNAL objects: 5640; manifest gaps: 0.
+D241; research `8d24f3b9aea9a28803cfc7f571e92b908c8d92af`. PROJECT gaps: **48 → 3**; 879 project objects. EXTERNAL objects: 5640; manifest gaps: 0.
 
 Every external object below is linked individually to the env-J toolchain and manifest package revision. Repository copies already selected by the source manifest remain PROJECT; R1FirstFold is also PROJECT (its repository filename is FirstFold.lean). Branch additions remain separately identified in each JSON source_kind field; their hash links bind the proposed branch bytes, and are not described as already present at research HEAD.
 
-Lead ruling (h) corrects the projection association: `lean/NaturalProjection.lean` is authoritative. Its source/object receipt 30200 matches current HEAD and current object; ProjectionHEAD is CLOSED without changing its source or object. The earlier two-goal failure concerned the wrong historical variant. Its dependency cone (167 modules) is retained as historical inventory, not a live exception. Four other module source paths differ from the authoritative pin table; their exact mismatches are recorded in resume7-source-resolution-correction.json and remain blocked, with no shared-source replacement.
+Lead ruling (h) corrects the projection association: `lean/NaturalProjection.lean` is authoritative. Its source/object receipt 30200 matches current HEAD and current object; ProjectionHEAD is CLOSED without changing its source or object. The earlier two-goal failure concerned the wrong historical variant. Its dependency cone (170 modules) is retained as historical inventory, not a live exception. Four other shared source paths differ from the authoritative pin table; all are stopped for replacement. R0P.LogUpAssembly has a matching exact historical source/cache pin, closing its object association without a new compile. The remaining three object associations are blocked. Both hashes and all four path mismatches are recorded in resume7-source-resolution-correction.json.
 
 Recompilation receipts retain exact import hashes. Historical changed-input replay flags are retained in JSON; a source hash link alone is not a claim of replaying every dependent.
 
 ## Remaining project gaps
 
 - `AspisFormal.V6PublishedTheoremInterfaces`: No accepted receipt binds current object SHA to expected source SHA; expected `904f5e5b9b6b38b7b3009cbe755ae90c692cb88c2aa303f1abf3c212a152a37c`.
-- `R0P.LogUpAssembly`: No accepted receipt binds current object SHA to expected source SHA; expected `ccd2282e2da4669ed9f7c48d8260e38fda2361b8af3e69592e4ffcc38ce20a24`.
 - `R0P.LogUpChain`: No accepted receipt binds current object SHA to expected source SHA; expected `a9b0e52dd73026f356c16237d4b29527a70a479fc14cb0d59c178e1d94ff1fb6`.
 - `R0P.SemRounds`: No accepted receipt binds current object SHA to expected source SHA; expected `564b9026233a36736f524407f357b44e173173139e52b9c4c6effbd88335bfd4`.
 
@@ -5419,7 +5418,7 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R0P.EmptyRoots` | PROJECT | `2030fc5602225d69b7daa93fc3df34e0582a4b9efdc5072753255f2b587828af` | 648c9aaccf1691b634b2a91f46348ecb1e2d7382a982dcbddff1dcc786b77cbc |
 | `R0P.Extraction` | PROJECT | `15e52da01df82969e9ce829430cbee3f4cac73841de398e04879dddc6ff80da7` | 7f7736179026639936fa5d7ad1647e9804676863cf328cb416ea8723d2b72804 |
 | `R0P.LaneMap` | PROJECT | `42ccbc59eb12c2feddd6e2345ae325c7da7b0f11673b7c9f37cdd9f10e4e0029` | 122aa0b15111da62ae6672051c43a1cfe792e6cd240974669af87732539f6e17 |
-| `R0P.LogUpAssembly` | PROJECT | `9639f23da5a09f5fde90dd41df72bee964d724b1f3f53d2c3c469733e6ca0da7` | GAP: No accepted receipt binds current object SHA to expected source SHA |
+| `R0P.LogUpAssembly` | PROJECT | `9639f23da5a09f5fde90dd41df72bee964d724b1f3f53d2c3c469733e6ca0da7` | ccd2282e2da4669ed9f7c48d8260e38fda2361b8af3e69592e4ffcc38ce20a24 |
 | `R0P.LogUpChain` | PROJECT | `14694e1faa7cff4cc06d1cbb6de82475fd838218ab627e9a1349727e8f7223a6` | GAP: No accepted receipt binds current object SHA to expected source SHA |
 | `R0P.LogUpCompress` | PROJECT | `8668db18f4a1a7f255215c9b3e8665a6884e11ea6eec7da6eb51e93f7dc384b7` | 2a8ee84dbbc341e899441847ef68ed4f91c1a25d308a2124966bf3c587a32c4e |
 | `R0P.LogUpFrac` | PROJECT | `e02d662debcba23f12e861d970de0a20b27fa946a1ecccb0d0d5b45ed1e5fcd6` | f4d1c635188c74aeb5e2150e94b8627c22439e0bf1a482a173c0a5b38566b0b2 |
@@ -5746,6 +5745,9 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.PV_Src_FinalAudit6A` | PROJECT | `a017d0f097dafb6cbce8488995fb5b16e4af7ae120ecbcd58d5819fae3b18c89` | 69f0fd4aa1e199084e0e7c0273dbaff1f086b11785f844d2cef04af54cd11b65 |
 | `R1Z.PV_Src_FinalAudit6B` | PROJECT | `a8f255344244b6e67721a1cc7afd9c40951d7e9b3acfb950a0738f790a9d5aef` | 900d4b38724efface201d67239757ca3f36986f99ab3a2b2d3d187797529e1bb |
 | `R1Z.PV_Src_FinalAudit6C` | PROJECT | `524845f9c5158c419d1a3744cd9e0cd34e069490eb316dba284ff92ed4e0b2ae` | f76c1852977a8cd8c93a9128c0041dcf4e2712364008d1c19853624c841c353a |
+| `R1Z.PV_Src_FinalAudit7A` | PROJECT | `34e6178b63a5491279009ac9c25d6b7b7bb4c0c033ab643c020388e33197ec5e` | a48ca626f07387e4a26f3f1bbb27c5e87f85f25cb2e0e8927990e0923a0bea12 |
+| `R1Z.PV_Src_FinalAudit7B` | PROJECT | `edf6385cef63403996e4969ba8e3b9cb4a2b100487953ba2acb3a57bf3da154d` | 8b69635e2f7c989302a987c96659785b3172c3119847e2a06af29bbef714a041 |
+| `R1Z.PV_Src_FinalAudit7C` | PROJECT | `6e6b37ab777322507983d71d0a9b9583fdec3442be871db58dc32a0fde877f1c` | b5e88f9de738f00db34fd65ca1a91b3336d2a272eeb9d2d5f2928b9c4276b9ce |
 | `R1Z.PV_Src_FixtureCheckedSource` | PROJECT | `e30f0dfe1337e6ec20b7c499cdc2ff37765525446e03a5aac31a3623b4898e84` | e8ee6e94e55760cdd233c0712a0a502da21dc74e0817f3388e4a7c1184bb787c |
 | `R1Z.PV_Src_FixtureCommonValidation` | PROJECT | `03e83c713a1f9df9e4b7b04b41e0b7c5e2d5c1cebc0b6b999a32e04707b8895a` | 32dba6b7777d6f82a403c6b234d8e0094681d03f0f06a972fb918767aaa6aa7d |
 | `R1Z.PV_Src_FixturePairValidation` | PROJECT | `27a9fa4c0f93d67a0771ddc46e055367106631ab67e3c2ca984b9354362d5d0f` | 74afd6083a12c0007b554f5ff82978e44851fca9717ee0f1de7a51d1ae978351 |
@@ -5803,6 +5805,8 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.PV_Src_FrozenStages` | PROJECT | `fc7d69b0ae7499d760a06a9264731b1ec6a5f28b5450722057dcf05dea86a365` | 768d494a7ec9a461862f7f9fe230ae112d06f7b31b54e09df876237c097d4b2f |
 | `R1Z.PV_Src_Identification` | PROJECT | `8aef5141167a3a47921dbcbedcfe5f6a036a424ee325a0b5cdb298369bacc836` | 491efaeeb3eb6c21f85284122e7e8102fa60a317e43d10a6b3ae0f1ad5067216 |
 | `R1Z.PV_Src_LowBits` | PROJECT | `1ae473dcef426d4d7ec96fb2e0e801beed7e48944e514997d2c564eeed8d2c23` | 547ba4b67d3b716ea125b0695651d3aa7a21258fa544f0e5d53b2d9cbcedff6a |
+| `R1Z.PV_Src_MapperBody` | PROJECT | `4b2e1999d9f6e5ca8269a3a080440a741eb6c449617d03ba12763130ff4955d6` | eaa54e0741768ad30f8449cece766455d4a64c32768abfb7d7e5f94d48eab102 |
+| `R1Z.PV_Src_MapperWords` | PROJECT | `fa209770d372df943dc50dc5ce24fd24aa1cd988acad33ed98b592b741f08dcd` | b36176a1e9617bf084245f642d423fa469a26be3ee22c4edc69acb2b77122106 |
 | `R1Z.PV_Src_NativeConsumer` | PROJECT | `8715f5818f115b76d04b7910dfff1be96e01d0ee13b890b45e6c8ae94beebd3f` | 8e6b5ac55b7f3f0fa21a91e4c2ce325bee07bd9636b344bff129dcbcaf98cbe4 |
 | `R1Z.PV_Src_NativeDirections` | PROJECT | `5e9bd3db5595968a2148a81f8caa8705f4122d90212b9703f1481d20e6b6b2fa` | 8512fcbf7e6d76c0bb54343585ac744b4428a42763ea4b30e400b8e198b476a5 |
 | `R1Z.PV_Src_NativeFamilyAudit` | PROJECT | `0c55e0deef9029cb7c3677b78a5c081b9cdc3d7088f60db1d0c5e771157b1f24` | a3b12d77fb80b5fb6140922dfd8acc57e7ccdf67e1d1b7d580e536bf8683dfcb |
@@ -5820,10 +5824,25 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.PV_Src_PathSiblings` | PROJECT | `eb577f6b5795914179931e2af28b1a0ee4ea4b23fd22a0b36eb7342a5eb4553d` | 2d4c30efa8a4de3c5951bf2e4fe9b95dfbb092a2d6bce14e237737beea7e8783 |
 | `R1Z.PV_Src_PortAddition` | PROJECT | `30187011a770da5b9c02d8fd96aa01152b1fa85c610d1ef8713d545e589c671b` | cef27e68bcc58707f0bd1ca18165607384c18636114f4bf38b5ad14bcc62056b |
 | `R1Z.PV_Src_PortField` | PROJECT | `fa74712cc9d52124c38c2f30870b20af4022da03c5c6e4ddd26df7755936c4dc` | 52e5056c65b1c70865e70827e54c0ed33950b0c749ccbb05e79a4cd746e2539f |
+| `R1Z.PV_Src_PortInternalBody` | PROJECT | `6c77002ee2541f910aaf6c4ad163404e91ef5458f043f6d49fe14ca254aa4dc8` | feba41f5374b6c52a75daa6640df6836575ddf61bfab2f1e7e508721517a08a0 |
+| `R1Z.PV_Src_PortInternalCanonical` | PROJECT | `6f3e31c53330345d420b0b816029332ea354a6f80eeaf54031d5506a98fe1ad1` | 4dddef554e9f2aef0fc2955f81b9880db1d418d45d86dcd9c0afad2f28e7547a |
+| `R1Z.PV_Src_PortInternalCells` | PROJECT | `fff3d12e44ecbd852757be94c3d98c6f77065dfec09f8a9ea171725c8e030b05` | 35fccccc58334a44b76faa54f04868fdc814cba6bdca14f75cd2be6c8f5161c3 |
+| `R1Z.PV_Src_PortInternalCopy` | PROJECT | `bd382e5892f64b4d3f9a7cee81120ac7417dd925a9beec82d6970c5f3e80a2b5` | cb1e2a0d0e62b7d744f848a7fffe15d88e6a6b7f1344502fe3916147fe3f4e36 |
+| `R1Z.PV_Src_PortInternalField` | PROJECT | `2532262ded1d3a96272d7517f5498bdcab1dd3fc57f2a75171cc8c70db0a542b` | bb0c1ff2400ca57b59b2712f1212a699e6f21d085c5c5de3a4999e700d2a056e |
+| `R1Z.PV_Src_PortInternalFullBound` | PROJECT | `28cea3bf322337c5a314e26b33a2369c20f59e8d583a3e0ed79f65ad367e24ac` | d994c538534df13609589a463f01d1b83bdbe19608dfa18202558458f50034f0 |
+| `R1Z.PV_Src_PortInternalLoop` | PROJECT | `b895655f8613c8d3329b2ae80853de71051949215eb4022416363fe304590ca0` | 80d5e932c737a818300906f7bbbc0d31fa9181a01ff0d91043c7538fa0f96768 |
+| `R1Z.PV_Src_PortInternalModel` | PROJECT | `200ba6e115813b8b2117282f1ac34baa06985dabb561dc5dd00b33d08a33eb10` | 188056ac36aae216ea606035038fbf1266439c8bb266d2c07ac51763326745d0 |
+| `R1Z.PV_Src_PortInternalStep` | PROJECT | `a476e4d5f76cd263c2fee913cd33d9abf9ae317d0fdd0a59a354570b30492568` | 8ebda28e12488c21d2010ac7356bc536671862cc258ac5ba6135a70814030503 |
+| `R1Z.PV_Src_PortInternalSumField` | PROJECT | `1166cb2e2a0889185f701aa6a8efdeac0c14ad313cb3d3bf80fe856007bd42f7` | 49fc6f8dff6ce1be8a43be9bbddc795111e878853a092291e6f8952318b28c88 |
+| `R1Z.PV_Src_PortInternalTotal` | PROJECT | `06bcf54a43c2285181e98c2c2a9f98b1e07968ff03b6d12740dc98b9309d1e87` | c9d271495e3cc5d3a6cee8dbf673f5984713e35867ac1ac2fe6e39ada3f0cb83 |
+| `R1Z.PV_Src_PortInternalZero` | PROJECT | `d2c4063fcf7c35c7ae42ede868e1b22985dfefadd9cb9a41d110a1f01e536194` | 7652fc09f99f63cba530d3c4c306d456e9cdde0f7300828ff723a7cd38d635c8 |
 | `R1Z.PV_Src_PortMultiply` | PROJECT | `78e9bee10faccb4d5a7d62c02c71dfddf0796613c66783c589483d5bf707583a` | beb9f4d52f899582ad52c26e748d9f8a288e89e58a9c550d7b6270a3ae499fc5 |
 | `R1Z.PV_Src_PortReduce` | PROJECT | `3727900fd4e4388b60b0efeac594aa565dde29cee5a56ccb0606dec128158cd8` | 0bceaea912ac1de78e286e4985183ab3c42ba42636357bd320ad6b51f22bbf65 |
 | `R1Z.PV_Src_PortSboxLoop` | PROJECT | `04f2e4d65ec714ab39daac14d6bdb4d8a4f390f6a693807244e4141e958ee7fa` | 1d64553c7908f75d674bd33704314637b3b760577483fc06e8fa43e410a01cff |
 | `R1Z.PV_Src_PortSboxStep` | PROJECT | `af4dbb4708cea54aca7b9a581bc87aa3a28da84f4d5b0682df76ee762c6949fc` | 4aebdd32c9307ae9832d6199fa2bd42819d395d0497978e8e06ae9c6fdfafaf4 |
+| `R1Z.PV_Src_PortSumAdapter` | PROJECT | `34e124407f2e04a861455e044c6137e167f97e9ff92aa25aa5578e7c5cca0859` | 104576ef63c6e3052711fd2be5a21a00bb76d5298fea0c5799829dad65b96af3 |
+| `R1Z.PV_Src_PortSumTotal` | PROJECT | `748fe0873d8bcf2807a5a131a7aea52ec4721e043bc5892892635dc05383ac57` | 6013e7dad9b27279a292a618a49e5e28be956533e74e3679e932c180f1621bb0 |
+| `R1Z.PV_Src_PortSumTrace` | PROJECT | `9547dcc61be771a64b18b27a17418f86c2df2d92331024e590e579852030cc68` | cbce4a36c5fe4ff1605a3d3f56a6921ec435414903700221b6d3a98aaf990582 |
 | `R1Z.PV_Src_PortTables` | PROJECT | `b0aa0f50036c6ce1c42e2c29a0821663a6101d63c658850802ee434ef91bbdca` | 89c92575e77811a6e45821a1968a6f20a459c2ae5a438fd2f89d80e5c01b6459 |
 | `R1Z.PV_Src_ProjectionProofs` | PROJECT | `9deb7c7e83eb869b11d1a63e3dc0ae77845d366fd756c4fc69524e673400a197` | 5808b45624ce3e28f0d9030e0b5114da2d294880373cf40130b357055af934ef |
 | `R1Z.PV_Src_Public` | PROJECT | `1ced78a65e8f8403b5560eae120885dffe41d7fb2440ff4210b19f31ee8cfdb5` | 1000d72620820e70c5958343c099fa9442b2c724b1660a04dc2011317d0efeb9 |

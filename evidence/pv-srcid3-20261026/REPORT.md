@@ -1,170 +1,170 @@
-# Source identification, resume allocation 6
+# Source identification: resume allocation 7
 
-Branch `codex/pv-srcid3-20261026`, base `92d3db0b2f`.
-**Target not yet established. MERGE GATE BLOCKED.** No push or merge.
+Branch `codex/pv-srcid3-20261026`, base `6f0741bb10`.
+**Target not established. MERGE GATE v2 remains BLOCKED.** No push or merge.
 
-All **100/100 Lean attempts** and **4/4 Kani runs** are exhausted. IDs were
-allocated monotonically in 37100–37265; refusals/holds consumed IDs but no Lean
-compile budget. Next unused ID: **37266**, within the user's 37100–37399 range.
-The last three charged attempts were the complete axiom audit, once, split
-into three disjoint report shards. No unchanged failed/killed scope was rerun.
+All **100/100 Lean attempts** and **2/2 Kani verification runs** are spent.
+There were 89 accepted Lean attempts and 11 rejected drafts; rejected reports
+are not accepted proof evidence. IDs 40000–40127 were consumed monotonically;
+28 reservation refusals consumed IDs but no compile budget. Next unused ID:
+**40128**, reserved user range 40000–40299. The final three charged attempts
+were the single frozen full audit. No unchanged regression or failed harness
+was rerun. Work stopped on allocation exhaustion, without a ROW counterexample.
 
-## Merge gate and exact provenance gaps
+## MERGE GATE v2 and authoritative source correction
 
-[MERGE-GATE.md](MERGE-GATE.md) enumerates **6,499 imported objects**, using the
-actual kernel import headers rather than only source import parsing. It records
-each object's SHA and accepted source/HEAD SHA association or exact gap.
-The companion resume6-final-merge-gate.json includes the full graph and lists.
-There are **810 source/object hash links**, **48 project source/object gaps**,
-and **5,641 external package/toolchain mapping or build-provenance gaps**.
-These are not claimed closed by a passing axiom audit.
+[MERGE-GATE.md](MERGE-GATE.md) and resume7-merge-gate-v2.json inventory
+**6,519 objects: 879 PROJECT and 5,640 EXTERNAL**. Every external object is
+individually linked to the env-J toolchain and package manifest revision.
+All 209 imported Aeneas objects exactly match the pinned port's object hashes.
+External manifest gaps: **0**. R1FirstFold is classified PROJECT, with its
+research FirstFold.lean source and accepted EJR receipt, rather than EXTERNAL.
 
-The actual research HEAD `R1NaturalProjection` source SHA is still
-`41db583fe5032f1d5ca0757d98da80d34f6949983599d369560eaa3574c5a368`.
-Its cached object was built from the materially different `add9c506…` source.
-Focused attempt 37102 failed at source lines 28 and 58. After rebuilding its
-direct dependency and changing its transitive inputs, the identically scoped
-HEAD source was reviewed again as 37260 and failed on the same two goals.
-Both failures and their rejected sorryAx reports are retained. No protected
-soundness source was edited. The existing old object remains, explicitly
-uncertified against HEAD; it is not silently attributed to research.
+PROJECT object gaps are **48 -> 3**. Forty-seven original gaps were recompiled from
+selected research bytes. The remaining original projection gap closes by the
+lead's new ruling (h), which identifies the authoritative source as
+`docs/research/100bit-spend-path-20261013/lean/NaturalProjection.lean`.
+Its accepted EJR receipt 30200 binds the exact current source and object SHA.
+The earlier reported two-goal failure belonged to the wrong historical
+remote-evidence source. **ProjectionHEAD is closed; no repair or clone was
+installed.** This correction supersedes the earlier projection claims in
+RESUME6-REPORT.md and historical allocation-7 stage artifacts.
 
-`PV_Src_ProjectionProofs` validates every HEAD projection statement with two
-proof-body repairs and standard axioms (37107). The exact **unapplied** repair
-is PROJECTION-REPAIR.patch. This new namespace does not repair the cached
-R1NaturalProjection. The final graph has **167 projection-tainted modules**.
-The broader changed-input cohort still has **1,851 unattested replays** under
-the gate's conservative complete-input test. They are named individually in
-the JSON and flagged in the table.
+Ruling (h)'s authoritative import-source pin table also exposes four shared
+source path discrepancies: `AspisFormal.V6PublishedTheoremInterfaces`,
+`R0P.SemRounds`, `R0P.LogUpAssembly`, `R0P.LogUpChain`. None was compiled or
+copied by allocation 7. Both paths and both hashes are in
+resume7-source-resolution-correction.json; observed shared source/object hashes
+are in resume7-resolution-shared-observation.json. Ruling (h) requires stopping
+these modules without replacing differing shared files.
 
-The pinned research revision was c16e7e7895b7…. Final comparison to
-b18ac2c1ea3f195d4ef14bf02061498108704fdc found **zero byte changes in all 775
-selected existing research sources**. Branch additions are separately pinned.
-See resume6-current-head-comparison.json.
+`R0P.LogUpAssembly` has an exact historical cache association in that same
+authoritative table: source SHA ccd2282e... equals current research bytes and
+object SHA 9639f23d... equals the current object. Its object provenance is
+therefore linked, explicitly as a historical source/cache pin, not a new compile
+receipt. The shared source path still differs and was left untouched. The other
+THREE object associations remain blocked. Exact dependent cones are enumerated
+in the gate JSON: V6PublishedTheoremInterfaces 483, SemRounds 394, LogUpChain 396.
+These are provenance blockers, not demonstrated theorem counterexamples.
 
-## Objects rebuilt and profile correction
+The source-pin correction closes all original 48 gaps but discovers three new
+object association gaps; the aggregate is not represented as a clean gate. The audit
+checks the actual object closure and axioms, not these missing source links.
+Branch additions are distinctly pinned reviewable candidate bytes, never
+misrepresented as already present at research HEAD. Final comparison of all
+776 existing selected sources, using authoritative paths where available,
+found no byte changes since the research pin. See
+resume7-current-head-comparison.json for exact revisions. Of the original
+99-module changed-sampler cone, 23 modules were replayed, including the seven
+outside the former projection cone. No full changed-input replay is claimed;
+pending modules and reasons are listed in resume7-sampler-dependent-status.json.
 
-resume6-recompiled-objects.json lists all **92 accepted outputs, 91 distinct
-modules**, with exact input/output hashes, revision and axiom reports. Full
-charged and rejected target receipts are in RESUME6-RECEIPTS.md and
-resume6-attempts.jsonl. Replacements preserved pre-existing shared source/object
-snapshots; new copies are in the existing job directory. No launcher, env/J,
-reservation script, resource cap or foreign worktree was edited.
+## Family status and deployed premises
 
-The missing-provenance pass respected every launcher duplicate-input refusal.
-The dependent cohort used actual complete transitive import-object hashes,
-with specific initial/current changed-input witnesses; no nonce was used.
-Byte-identical import-only modules do not conceal changed transitive inputs.
-The allocation cannot complete the whole dependency closure.
+The deployed `PV_Src_NativeIdentification.PV_Src_Premises` remains **5 -> 5**,
+byte-for-byte unchanged from the allocation base. No deployed premise was
+removed, added, renamed or weakened. All record predicates concern the same
+record returned by the actual constructor.
 
-One profile-selection mistake was caught and reversed. The older EJR Fmt pin
-26ac770d… contains the type axiom `core.fmt.Formatter`. Fmt 37136 is rejected,
-and sampler 37146 passed Lean but failed axiom validation. Both new shared/own
-outputs were quarantined; pre-existing objects were hash-checked and restored.
-The existing research repair daeafff8… defines Formatter as Unit. It rebuilt
-at 37205; the named 37209 carrier audit has **no axioms**. The client now
-quarantines kernel-success outputs that fail the axiom/report validation.
-Raw historical exits were not rewritten. See resume6-rejected-profiles.json
-and resume6-quarantine-restoration.json.
-
-## Proved source results and retained family interfaces
-
-The new pure call equations cover arbitrary input/output/recipient/change/
-snapshot/asset arguments and the **complete Result**. `PureCallEquation.call`
-specializes the extracted owned-reference dictionary to the pure external
-callback, preserving the actual root-helper Result. It neither assumes an
-effect law nor identifies the still opaque shipped `Records.call` leaf with
-that owned reference. No source-success claim is inferred from its name.
-
-RootRecurrence.loop and RootSourceEquation.{source,pure_source} prove the actual
-root helper is an initial parent call followed by twenty source loop steps.
-RootCertificate.source_eq composes exactly the initial zero-parent cell and
-all twenty adjacent target-parent cells into the actual `ok table` equation.
-Those **21 hash cells remain obligations**; they were not replaced by a table
-stub, global success assumption, axiom, or concrete recurrence reduction.
-
-PortReduce, PortMultiply, PortAddition and PortField prove actual source
-scalar equations, field meaning and canonical outputs. PortSboxStep and
-PortSboxLoop prove both actual nonlinear loops symbolically, preserving all
-untouched cells. PortTables proves exact frozen initial/internal/final table
-association. External/internal linear-layer, full permutation/parent, and the
-21 source hash-cell equations remain to be composed/proved.
-
-| Family | Final status and exact retained boundary |
+| Field | Exact retained interface / result |
 | --- | --- |
-| compile_call | OPEN: `∀ i, @PV_Src_NativeInput.run actualExternal actualRecords (inputs i) = ok (.Ok (inputs i).compiled)`. The pure owned-reference `Records.call` complete-Result equation is proved; shipped dictionary association and actual selected compiler success are not. |
-| publicCorr | REDUCED: `@pair_trace.pair_empty_roots PV_Src_ExternalReference.dictionary = ok PV_Src_CanonicalRoots.table`, plus the same selected compiler success, canonical snapshot frontier and deployed public/snapshot association. The new recurrence/cell composition does not discharge its 21 cells. |
-| words | REDUCED to full unstubbed shipped mapper equality with `PV_Src_RecordDynamic.dictionary`, plus the installed checked canonical selection. No new P6 equality is credited. |
-| admission | REDUCED to `PV_RunJoin_SourceSelectionContract.selectedRecord` and public binding, and `PV_RunJoin_SelectedAdmission.Remainder.admission` on those exact records. |
-| row_call | REDUCED to `PV_RunJoin_InstalledTransport.endpoint_row_call` at the same fixed endpoint, retaining `PV_RunJoin_NativeSelectedInputs.same_selected_compilation`; no concrete deployment selection was inferred. |
+| `compile_call` OPEN | For every installed input `i`, `@PV_Src_NativeInput.run actualExternal actualRecords (inputs i) = ok (.Ok (inputs i).compiled)`. Both error layers remain. RunJoin's payload transition does not supply compiler success or the actual dictionary association. |
+| `words` REDUCED | `newRecords (inputs i) = ok records -> WitnessOk (wordWitness records.w)`. `PV_Src_MapperBody.{witness_eq,public_eq,call_eq}` prove complete Result equality for the explicit manual field transcription against the owned dynamic reference. `PV_Src_MapperWords.dictionary_eq` and `.words` prove candidate dictionary equality and checked word admission. Actual deployed `Records.call` equality and installed `Checked` selection remain missing. This is not the requested full shipped mapper equality. |
+| `publicCorr` REDUCED | For the same successful `newRecords`, `PubCorr (wordPublic records.p) (mapPub (canonicalPublic (publicInput (inputs i))))`. `PV_Src_RootSourceEquation.{source,pure_source}` and `PV_Src_RootCertificate.source_eq` retain the actual root-helper equation and initial plus twenty adjacent parent equations at one dictionary. The 21 Lean cells, full external/permutation/parent correspondence and deployed snapshot/public association remain open. |
+| `admission` REDUCED | Same returned record must satisfy `BuilderSpendRelation.RspendPlus` for the canonical public and lifted canonical witness. `PV_RunJoin_SourceSelectionContract.selectedRecord` and `PV_RunJoin_SelectedAdmission.Remainder.admission` still require the installed source selection/public binding. |
+| `row_call` REDUCED | `forall j, transport j = PV_Src_Transport.row j`. `PV_RunJoin_InstalledTransport.endpoint_row_call` still requires the actual fixed endpoint and `PV_RunJoin_NativeSelectedInputs.same_selected_compilation`. |
 
-Late RunJoin pin 38dd26a1e85ad8ac16e048ed983a1afe2a9b71cc was read only.
-EndpointSelection.data is published, but still takes selected/publicRecord
-families and the fixed-endpoint binding. SelectedSourceReduction still takes
-actual dictionary equalities, selected canonical encoding equality,
-compile_call and admission. These are conditional constructors, not installed
-premise-free source instances. Exact sources/hashes are retained in
-resume6-runjoin-late-pin.json and resume6-late-readonly-*.lean.txt.
+The exact internal-layer completion is new:
+`PV_Src_PortInternalCopy.source state canonical` proves complete Result equality
+between actual extracted `poseidon2.internal_linear_lazy state` and
+`R0PoseidonCopy.internal_linear state INTERNAL_SHIFTS` for canonical inputs.
+The supporting 15-step symbolic recurrence, checked source-order sum,
+no-overflow bound, canonicality and all 16 field-model lanes are proved in the
+PortInternal/PortSum modules. There are 17 new accepted proof modules in total,
+plus the three audit shards. Symbolic shape lemmas avoid large recurrence
+normalization. This internal-layer result does not prove a full parent or
+instantiate any of the 21 helper cells.
 
-**Deployed PV_Src_Premises 5 → 5.** Zero fields removed, renamed, added or
-weakened. The prior fixed-root conditional Remainder stays 3; it is not a new
-deployed smaller instance. Both full successful compiler fixture fibres and
-the exact RunJoin installation remain open. L1/L2/L3, E1/E2, actual RunJoin,
-client proof-account route, simulator and observer requirements are retained.
+RunJoin's branch was consumed read-only, pinned through `07b86d...` (full pins
+and reports retained). RunJoin11 publishes literal transfer/withdrawal public
+records, transitions and public inputs, but no installed native Input/compiler
+return association. RunJoin12's actual extraction fails closed on structured
+Drop/destructor semantics; its adapter is uninstalled. Its 21/21 Rust parent
+leaf coverage belongs to its own recorded source/profile. Field candidate
+feature guards, the pair-trace addition and Cargo.lock differ from this build;
+no whole-corpus byte identity is inferred. See RESUME7-INSTALLED-INSTANCE.md,
+RESUME7-MAPPER-BOUNDARY.md, RESUME7-ROOT-STATUS.md and the source-boundary JSONs.
 
-## Full audit, Kani and resource receipts
+L1/L2/L3, E1/E2, actual RunJoin, proof-account client association, simE and the
+full observer remain unchanged. No privacy endpoint premise has been removed.
 
-The complete final audit covers **147 source modules**, plus the metadata/old
-and new audit roots, with **616/616 unique standard axiom reports**. Only
-{propext, Classical.choice, Quot.sound} occur. These passing imports/axioms do
-not establish an ordered coherent research-HEAD source rebuild.
+## Validation and resource receipts
 
-| ID | Exact target | Exit | Wall | Peak RSS KiB | Swap | Revision | Axioms |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 37263 | R1Z/PV_Src_FinalAudit6A | 0 | 1.80 s | 4234508 | 0 | 888aa93f5e | 206 standard |
-| 37264 | R1Z/PV_Src_FinalAudit6B | 0 | 1.83 s | 4234568 | 0 | 888aa93f5e | 205 standard |
-| 37265 | R1Z/PV_Src_FinalAudit6C | 0 | 2.01 s | 4266752 | 0 | 888aa93f5e | 205 standard |
+The frozen audit was compiled once, as charged attempts 98–100:
 
-All Lean scopes: -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
-TasksMax=64, one at a time. Maximum recorded RSS was 4,266,752 KiB; all recorded
-swaps were zero. The accepted source SHA and full printed lines are in the
-JSONL; failed reports remain rejected. No package-wide unrelated regression
-or frozen release artifact suite was rerun.
+| ID / target | Exit | Wall | Peak RSS KiB | Swap | Printed axiom reports |
+| --- | --- | --- | --- | --- | --- |
+| 40125 / PV_Src_FinalAudit7A | 0 | 1.77 s | 4,237,112 | 0 | 220 |
+| 40126 / PV_Src_FinalAudit7B | 0 | 2.15 s | 4,236,680 | 0 | 219 |
+| 40127 / PV_Src_FinalAudit7C | 0 | 2.11 s | 4,269,092 | 0 | 219 |
 
-The four new unstubbed full-mapper harnesses partition recipient present/
-absent × selected first/second. Each compares all 20 fields and executes the
-actual dynamic root helper on both sides. Every run timed out at 180 seconds:
-**no verification success and no checked ROW counterexample**. No earlier six
-timeouts were rerun unchanged. Metadata has stubs=[], verified_stubs=[],
-unwind33, with unwinding assertions enabled. Compiler fingerprints show
-opt-level=3 and mir-opt-level=4; all 142 Rust compilation inputs match branch
-bytes. Heavy time was CBMC after compilation. Full-scope cgroup memory peaked
-at 2,607,497,216 bytes; swaps zero. GNU-time's timeout-process RSS is not
-aggregate solver RSS. No aggregate RSS is invented. #print axioms is N/A for
-Kani, and no Lean equality was installed from these timeouts.
+Exact audit source revision: `4b1c1979659b12b796df9eb8de394feefb53ce5f`.
+All **164 proof modules / 658 unique reports** passed; every report uses only a
+subset of propext, Classical.choice, Quot.sound. Raw outputs and source/import
+hashes are retained. The generator's --check passed before the audit. Source
+checking found 20 new files (17 proof modules plus three audit shards), all
+accepted at their exact current hashes, no forbidden declarations/proof forms,
+and no changes to crates/ or programs/. The original deployed premises file is
+byte-equal. See resume7-new-source-check.json and resume7-final-summary.json.
 
-REFERENCE-GATING.md confirms the six files without in-file cfg attributes:
-drop.rs/drop_iterator.rs inherit cfg(kani) from reference src/lib.rs;
-records.rs inherits cfg(kani) from pair_forest_copy_builder.rs; glue_tree.rs
-and glue_append.rs inherit that parent; records_reference.rs is gated by
-cfg(any(kani,aeneas_ref)). None of those declarations uses cfg(test).
-No shipped crates/ or programs/ source changed. New Rust code is only inside
-the existing cfg(kani) harness module; no ELF rebuild/pin change is claimed.
+Both Kani runs were optimized, capped at 6G/8G/swap0/Tasks64 and sequential:
 
-All Kani scopes ended inactive. Own FD scans identified no solver /tmp files;
-no unrelated temp files were deleted. The own Rust cache was removed after
-metadata/input retention. All 91 remaining own Lean object copies matched the
-shared bytes before scratch cleanup. Sources, shared objects, pre-replacement
-snapshots and rejected-output quarantine remain. Neither cache had key filename
-candidates. No wallet key was created, deleted or destroyed.
+| Exact harness suffix | Result | Wall | Peak RSS KiB / cgroup bytes | Swap | Revision |
+| --- | --- | --- | --- | --- | --- |
+| empty_roots::pv_srcid7_helper_prefix11, unwind33 | TIMEOUT 124 | 180.003 s | 15,296 wrapper proxy / 2,860,482,560 | 0 | 0a8c5413f0 |
+| poseidon2::builder_reference::pv_srcid7_internal_linear_copy, unwind17 | PASS 0, 514 checks | 84.361 s | 701,172 / 758,534,144 | 0 | acf4eb76a7 |
 
-Stopping reason: **both allocations exhausted**, not a temporary resource
-refusal or a changed release target. Next deliverable: the lead applies/reviews
-the two protected projection proof repairs, rebuilds its entire dependent
-cohort and closes the remaining exact source/object attestations. Then finish
-the actual parent/hash-cell and shipped mapper associations and install the
-same selected RunJoin inputs/public/snapshot/admission with both full compiler
-fixture fibres inhabited. Target not yet established.
+Kani has no Lean #print axioms (receipt explicitly N/A). Metadata confirms no
+stubs or verified stubs. All 193 recorded source/build-input hashes in each run
+match its exact source commit; the metadata also retains optimized compiler
+flags. The prefix timeout proves no helper equality; after isolating a smaller
+internal obligation, that different harness passed. No mapper Kani run was used.
+The draft suffix harness remains published and unrun.
 
-Branch history for this allocation is appended to COMMITS.txt. The final
-path-limited handoff commit follows that captured history. No push or merge.
+[RESUME7-RECEIPTS.md](RESUME7-RECEIPTS.md) gives every Lean target, exit, wall,
+RSS, swap, revision and axiom result. JSONL retains full source and transitive
+import-object hashes. The final env-J and lake-manifest hashes match the
+retained environment (Lean 4.32.0, git 8c9756b28d64dab099da31a4c09229a9e6a2ef35).
+The 89 own cached Lean objects were hash-checked against shared copies and
+removed; the 401,457,484-byte own Kani target cache was removed after preserving
+metadata. Shared objects, source snapshots and preimages remain. No owned
+solver temporary path could be identified after termination; unrelated /tmp
+files were not deleted. No wallet or account keys were created or touched.
+See resume7-cache-cleanup.json.
+
+## Next concrete deliverable
+
+The integration owner must reconcile the four shared source path discrepancies and three object associations
+without overwriting differing shared sources, then rebuild the approved modules
+and affected dependent cones. The proof continuation is the actual deployed
+Records mapper equation (the manual transcription is still a candidate), then
+the full source external/permutation/parent correspondence and 21 symbolic
+helper cell instances. RunJoin must publish the same installed native inputs,
+dictionary equation and successful compiler-return/public/snapshot associations.
+Only those interfaces can discharge the existing five deployed fields.
+No privacy endpoint is claimed established.
+
+## Allocation commits
+
+```text
+4b1c197965 Freeze the final audit and correct authoritative source associations
+acf4eb76a7 Isolate the canonical internal source operation after helper comparison timeout
+0a8c5413f0 Refine the actual internal linear layer to exact canonical copy results
+e0d50b8a1e Partition unstubbed root helper comparisons by returned output region
+9a8f8137c3 Prove source internal loop cells and checked suffix summation
+9ed1987bc5 Pin new RunJoin records and retain the missing deployed compiler instance
+7b8b9b55c3 Prove complete mapper transcription and candidate word admission
+e75a239390 Close project source hash gaps under the D241 merge gate
+```
+
+The final evidence-only report commit follows these source/stage commits.

@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 import json,pathlib,subprocess,hashlib,io
 root=pathlib.Path(__file__).resolve().parents[2];e=root/'evidence/pv-srcid3-20261026';d=json.loads((e/'resume7-plan.json').read_text());rev=subprocess.check_output(['git','rev-parse','research'],text=True).strip();rows=[r for r in d['rows'] if r['research_source_exists']]
+# Keep the historical plan intact; compare the authoritative path at both pins.
+pins=json.loads(subprocess.check_output(['git','show','research:docs/research/100bit-spend-path-20261013/evidence/lean-semantic-prefix-agreement-20261015/import-source-pins.json']))['modules']
+for r in rows:
+ if r['module'] in pins:
+  r['research_source_path']=pins[r['module']]['source']
+  pinned=subprocess.check_output(['git','show',d['research_revision']+':'+r['research_source_path']])
+  r['research_source_sha256']=hashlib.sha256(pinned).hexdigest()
 query=''.join(rev+':'+r['research_source_path']+'\n' for r in rows)
 b=subprocess.check_output(['git','cat-file','--batch'],input=query.encode());s=io.BytesIO(b);out=[]
 for r in rows:
