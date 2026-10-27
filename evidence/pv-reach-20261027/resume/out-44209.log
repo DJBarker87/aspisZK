@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/sources/R1Z/PV_RE_Increment0.lean:10:2: error: 'change' tactic failed, pattern
+  0#?m.25 + 1#?m.25 = 1#?m.25
+is not definitionally equal to target
+  (Usize.wrapping_add 0#usize 1#usize).bv = 1#usize.bv
+def Aeneas.Std.Usize.wrapping_add : Usize → Usize → Usize :=
+fun x y => UScalar.wrapping_add x y
+def Aeneas.Std.UScalar.wrapping_add : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv + y.bv)#uscalar
+def Aeneas.Std.lift.{u} : {α : Type u} → α → Result α :=
+fun {α} x => ok x
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch : {T E : Type} →
+  core.result.Result T E →
+    Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible E) T) :=
+fun {T E} x =>
+  match x with
+  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual : (T : Type) →
+  {E F : Type} →
+    core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F) :=
+fun T {E F} convertFromInst r =>
+  match r with
+  | core.result.Result.Ok x => core.convert.Infallible.casesOn (fun x => Result (core.result.Result T F)) x
+  | core.result.Result.Err e => do
+    let v ← convertFromInst.from e
+    ok (core.result.Result.Err v)
+'R1Z.PV_RE_Increment0.increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RE_Increment0.active' depends on axioms: [propext, Classical.choice, Quot.sound]

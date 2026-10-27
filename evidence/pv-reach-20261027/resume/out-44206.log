@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/sources/R1Z/PV_RE_Increment0.lean:8:2: error: Tactic `rfl` failed: The left-hand side
+  lift (Usize.wrapping_add 0#usize 1#usize)
+is not definitionally equal to the right-hand side
+  ok 1#usize
+
+⊢ lift (Usize.wrapping_add 0#usize 1#usize) = ok 1#usize
+def Aeneas.Std.Usize.wrapping_add : Usize → Usize → Usize :=
+fun x y => UScalar.wrapping_add x y
+/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/sources/R1Z/PV_RE_Increment0.lean:13:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind`
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch : {T E : Type} →
+  core.result.Result T E →
+    Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible E) T) :=
+fun {T E} x =>
+  match x with
+  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual : (T : Type) →
+  {E F : Type} →
+    core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F) :=
+fun T {E F} convertFromInst r =>
+  match r with
+  | core.result.Result.Ok x => core.convert.Infallible.casesOn (fun x => Result (core.result.Result T F)) x
+  | core.result.Result.Err e => do
+    let v ← convertFromInst.from e
+    ok (core.result.Result.Err v)
+'R1Z.PV_RE_Increment0.increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RE_Increment0.active' depends on axioms: [propext, Classical.choice, Quot.sound]
