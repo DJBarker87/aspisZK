@@ -22,6 +22,8 @@ def path(start,dest):
 # Extract independently checked declaration closure, as distinct from imports.
 closures={}
 for f in sorted(e.glob('*-out.log')):
+ receipt=e/(f.name.replace('-out.log','-receipt.json'))
+ if not receipt.exists() or json.loads(receipt.read_text())['validation_exit']!=0:continue
  for m,names in re.findall(r'JOIN_CLOSURE (\S+):\s*\[([\s\S]*?)\]',f.read_text()):closures[m]=re.findall(r'R1Z\.[A-Za-z0-9_.]+',names)
 proof=closures.get(root+'.refinement_of_data',[]);before=closures.get('R1Z.PV_Join_AggregateCaller.refinement_of_data',[])
 results=[]

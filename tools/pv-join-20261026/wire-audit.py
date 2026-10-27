@@ -1,3 +1,6 @@
+# Historical partition generator; retired after attempt 39357.
+# The final exact coverage is pinned by wire/combined-audit-manifest.json and
+# the two committed final audit sources. Do not regenerate them from this draft.
 from pathlib import Path
 import re,json,hashlib
 r=Path(__file__).resolve().parents[2];p=r/'docs/research/v8-r0-zk-20261009/lean/R1Z';e=r/'evidence/pv-join-20261026/wire'
