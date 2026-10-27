@@ -64,6 +64,9 @@ else:
  assert tok(inner)==tok(body(c,'reconstruct_component'))
  old=(old[:a]+old[b:]).replace('reconstruct(', 'reconstruct_component(').replace('mul_by_r(', 'cm31_mul_r(')
  assert tok(old)==tok(body(c,'reconstruct_channels'))
+ assert tok(body(f,'qm31_sum_products3'))==tok('qm31_sum_products_small(left, right)')
+ assert tok(body(f,'qm31_sum_products_small'))==tok('debug_assert!(N >= 2 && N <= 4); let mut sums = [[0u64; 3]; 3]; let mut index = 0usize; while index < N { sums = qm31_accumulate_product_channels(sums, left[index], right[index]); index += 1; } qm31_from_karatsuba_channel_sums(sums)')
+ assert tok(body(c,'qm31_sum_products3'))==tok('let sums = accumulate_channels([[0u64; 3]; 3], left[0], right[0]); let sums = accumulate_channels(sums, left[1], right[1]); let sums = accumulate_channels(sums, left[2], right[2]); reconstruct_channels(sums)')
  # The only root change is closure lifting with explicit captured arguments.
  old=body(s,'evaluate_state_only_polynomial');new=body(c,'evaluate_state_only_polynomial')
  a=old.index('let block_value = |block: usize| {');b=old.index('};',a)+2
@@ -74,7 +77,7 @@ else:
  new=new[:a2]+new[i:]
  old=old[:a]+old[b:];old=old.replace('block_value(6)','block_value(polynomial, powers, 6)').replace('block_value(block)','block_value(polynomial, powers, block)')
  assert tok(old)==tok(new)
- proofs+=['PV_B3_AuditSourceD324.Poly121.source_complete']
+ proofs+=['PV_B3_StructuralArithmetic.three','PV_B3_StructuralArithmetic.append','PV_B3_StructuralArithmetic.lifted_capture','PV_B3_AuditSourceD324.Poly121.source_complete']
  differences=['block closure lifted with polynomial and powers explicit; body tokens equal','3x3 channel loops and arity-three aggregation unrolled in unchanged index order; no reassociation','prepared and reconstruction closures lifted; field operations identical','no replacement by naive Horner; raw overflow behavior and grouped product3 retained']
 out=dict(kind='STRUCTURAL source argument under ruling (k), not machine proof',op=op,row='V217'if op==117 else 'V220',files={p:sha((R/p).read_bytes())for p in [c,h,f,s]},reviewed_tokens_sha256=sha(pinfile.read_bytes()),exact_helper_normalizations=True,differences=differences,lean_transports=proofs,native_link_evidence_class='structural argument + complete-Result extraction',native_differential=('mask117-fidelity-comparison.json'if op==117 else 'polynomial-fidelity-comparison.json')+'; finite same-input validation including raw limbs',canonical_input_assumption_added=False,machine_native_equality_claimed=False,XR_imports=False)
 (D/f'STRUCTURAL{op}-D336.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))
