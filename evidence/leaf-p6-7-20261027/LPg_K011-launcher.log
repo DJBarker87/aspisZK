@@ -1,0 +1,55 @@
+{"attempt": "LPg_K011", "exit_status": 0, "wall_seconds": 3.2588531569927, "peak_rss_kib": "358464", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+/LPc_compact.rs:19:39
+   |
+19 | #[kani::proof] #[kani::unwind(32)] fn LPc_check464(){
+   |                                       ^^^^^^^^^^^^ help: convert the identifier to snake case: `lpc_check464`
+
+warning: function `LPg_check_step` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/LPg_compact.rs:2:38
+  |
+2 | #[kani::proof] #[kani::unwind(8)] fn LPg_check_step(){
+  |                                      ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpg_check_step`
+
+warning: function `LPg_expand_low` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPg_compact.rs:14:39
+   |
+14 | #[kani::proof] #[kani::unwind(18)] fn LPg_expand_low(){expansion::<0,16>()}
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpg_expand_low`
+
+warning: function `LPg_expand_high` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPg_compact.rs:15:39
+   |
+15 | #[kani::proof] #[kani::unwind(18)] fn LPg_expand_high(){expansion::<16,32>()}
+   |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpg_expand_high`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.37s
+Checking harness compact::LPg_compact::LPg_expand_low...
+
+VERIFICATION RESULT:
+ ** 0 of 246 failed (5 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.5349931s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r966a2d7c8f0343a38c879be188f6d9ce.scope; invocation ID: 1bed26d717644516b90e83ac5ae978cb
