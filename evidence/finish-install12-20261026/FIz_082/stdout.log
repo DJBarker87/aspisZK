@@ -1,0 +1,71 @@
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+FIz_ModelFamilies.lean:26:166: error: unsolved goals
+p : Public
+o : Openings
+s : Selectors
+j : Fin ↑24#usize
+hm : ∑ h, FIv_NativeArray.value s.high ↑h = 1
+lm : ∑ l, FIv_NativeArray.value s.low ↑l = 1
+h16 : ↑16#usize = 16
+h33 : ↑33#usize = 33
+schedule :
+  FIz_ContributionList.fromList
+      (R0P.scheduleFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+        (FIw_PublicModel.selector s))
+      0 ↑j =
+    FIz_ContributionList.fromList (List.ofFn fun i => FIx_ScheduleModel.initial p.variant s o (Fin.cast ⋯ i)) 0 ↑j +
+      FIz_ContributionList.fromList (List.ofFn fun i => FIx_ScheduleModel.absorption p.variant s o (Fin.cast ⋯ i)) 16 ↑j
+values :
+  FIz_ContributionList.fromList
+      (R0P.valueFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o) (FIw_PublicModel.selector s))
+      49 ↑j =
+    FIz_ContributionList.fromList (List.ofFn fun i => FIy_ValuePacked.rangeModel o s (Fin.cast ⋯ i)) 49 ↑j +
+      FIz_ContributionList.fromList (List.ofFn (FIy_ValuePacked.conservation o s)) 82 ↑j
+⊢ FIz_ContributionList.fromList (List.ofFn (FIx_ScheduleModel.initial p.variant s o)) 0 ↑j +
+                  FIz_ContributionList.fromList (List.ofFn (FIx_ScheduleModel.absorption p.variant s o)) 16 ↑j +
+                FIz_ContributionList.fromList
+                  (R0P.pathFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                    (FIw_PublicModel.selector s))
+                  32 ↑j +
+              FIz_ContributionList.fromList (List.ofFn (FIy_ValuePacked.rangeModel o s)) 49 ↑j +
+            FIz_ContributionList.fromList (List.ofFn (FIy_ValuePacked.conservation o s)) 82 ↑j +
+          FIz_ContributionList.fromList
+            (R0P.occupancyFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+              (FIw_PublicModel.selector s))
+            0 ↑j +
+        FIz_ContributionList.fromList
+          (R0P.digestFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+            (FIw_PublicModel.selector s))
+          84 ↑j +
+      FIz_ContributionList.fromList
+        (R0P.assetFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+          (FIw_PublicModel.selector s))
+        92 ↑j =
+    FIz_ContributionList.fromList
+                    (R0P.pathFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                      (FIw_PublicModel.selector s))
+                    32 ↑j +
+                  FIz_ContributionList.fromList (List.ofFn (FIy_ValuePacked.conservation o s)) 82 ↑j +
+                FIz_ContributionList.fromList
+                  (R0P.occupancyFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                    (FIw_PublicModel.selector s))
+                  0 ↑j +
+              FIz_ContributionList.fromList
+                (R0P.digestFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                  (FIw_PublicModel.selector s))
+                84 ↑j +
+            FIz_ContributionList.fromList
+              (R0P.assetFamily.residuals (FIw_PublicModel.ofPublic p) (FIw_PublicModel.openings o)
+                (FIw_PublicModel.selector s))
+              92 ↑j +
+          FIz_ContributionList.fromList (List.ofFn fun i => FIx_ScheduleModel.initial p.variant s o (Fin.cast ⋯ i)) 0
+            ↑j +
+        FIz_ContributionList.fromList (List.ofFn fun i => FIx_ScheduleModel.absorption p.variant s o (Fin.cast ⋯ i)) 16
+          ↑j +
+      FIz_ContributionList.fromList (List.ofFn fun i => FIy_ValuePacked.rangeModel o s (Fin.cast ⋯ i)) 49 ↑j
+'AspisR1.FIz_ModelFamilies.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

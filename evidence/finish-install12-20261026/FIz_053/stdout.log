@@ -1,0 +1,77 @@
+FIz_DigestFold.lean:28:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun j => old j + FIy_FrontierMeaning.increment p.transition.live_snapshot s o.z start ↑j
+in the target expression
+  List.foldl
+      (fun acc key =>
+        R0P.digestAddBinding acc (FIw_PublicModel.selector s (R0P.digestRow (FIw_PublicModel.ofPublic p) key))
+          (FIw_PublicModel.openings o).z (R0P.digestStart (FIw_PublicModel.ofPublic p) key)
+          (R0P.digestTarget (FIw_PublicModel.ofPublic p) key))
+      (fun j => old j + FIy_FrontierMeaning.increment p.transition.live_snapshot s o.z start ↑j)
+      (List.ofFn fun i => R0P.DigestKey.frontier ⟨start + 1 + ↑i, ⋯⟩) =
+    List.foldl
+      (fun acc key =>
+        R0P.digestAddBinding acc (FIw_PublicModel.selector s (R0P.digestRow (FIw_PublicModel.ofPublic p) key))
+          (FIw_PublicModel.openings o).z (R0P.digestStart (FIw_PublicModel.ofPublic p) key)
+          (R0P.digestTarget (FIw_PublicModel.ofPublic p) key))
+      (R0P.digestAddBinding old
+        (FIw_PublicModel.selector s
+          (R0P.digestRow (FIw_PublicModel.ofPublic p) (R0P.DigestKey.frontier ⟨start + ↑0, ⋯⟩)))
+        (FIw_PublicModel.openings o).z
+        (R0P.digestStart (FIw_PublicModel.ofPublic p) (R0P.DigestKey.frontier ⟨start + ↑0, ⋯⟩))
+        (R0P.digestTarget (FIw_PublicModel.ofPublic p) (R0P.DigestKey.frontier ⟨start + ↑0, ⋯⟩)))
+      (List.ofFn fun i => R0P.DigestKey.frontier ⟨start + ↑i.succ, ⋯⟩)
+
+case succ
+p : Public
+o : Openings
+s : Selectors
+n : ℕ
+ih :
+  ∀ (start : ℕ) (bound : start + n ≤ 20) (old : Fin 8 → K),
+    FIy_FrontierLoop.model p.transition.live_snapshot s o.z n start old =
+      List.foldl
+        (fun acc key =>
+          R0P.digestAddBinding acc (FIw_PublicModel.selector s (R0P.digestRow (FIw_PublicModel.ofPublic p) key))
+            (FIw_PublicModel.openings o).z (R0P.digestStart (FIw_PublicModel.ofPublic p) key)
+            (R0P.digestTarget (FIw_PublicModel.ofPublic p) key))
+        old (List.ofFn fun i => R0P.DigestKey.frontier ⟨start + ↑i, ⋯⟩)
+start : ℕ
+bound : start + (n + 1) ≤ 20
+old : Fin 8 → K
+step :
+  (fun j => old j + FIy_FrontierMeaning.increment p.transition.live_snapshot s o.z start ↑j) =
+    R0P.digestAddBinding old
+      (FIw_PublicModel.selector s (R0P.digestRow (FIw_PublicModel.ofPublic p) (R0P.DigestKey.frontier ⟨start, ⋯⟩)))
+      (FIw_PublicModel.openings o).z (R0P.digestStart (FIw_PublicModel.ofPublic p) (R0P.DigestKey.frontier ⟨start, ⋯⟩))
+      (R0P.digestTarget (FIw_PublicModel.ofPublic p) (R0P.DigestKey.frontier ⟨start, ⋯⟩))
+⊢ List.foldl
+      (fun acc key =>
+        R0P.digestAddBinding acc (FIw_PublicModel.selector s (R0P.digestRow (FIw_PublicModel.ofPublic p) key))
+          (FIw_PublicModel.openings o).z (R0P.digestStart (FIw_PublicModel.ofPublic p) key)
+          (R0P.digestTarget (FIw_PublicModel.ofPublic p) key))
+      (fun j => old j + FIy_FrontierMeaning.increment p.transition.live_snapshot s o.z start ↑j)
+      (List.ofFn fun i => R0P.DigestKey.frontier ⟨start + 1 + ↑i, ⋯⟩) =
+    List.foldl
+      (fun acc key =>
+        R0P.digestAddBinding acc (FIw_PublicModel.selector s (R0P.digestRow (FIw_PublicModel.ofPublic p) key))
+          (FIw_PublicModel.openings o).z (R0P.digestStart (FIw_PublicModel.ofPublic p) key)
+          (R0P.digestTarget (FIw_PublicModel.ofPublic p) key))
+      (R0P.digestAddBinding old
+        (FIw_PublicModel.selector s
+          (R0P.digestRow (FIw_PublicModel.ofPublic p) (R0P.DigestKey.frontier ⟨start + ↑0, ⋯⟩)))
+        (FIw_PublicModel.openings o).z
+        (R0P.digestStart (FIw_PublicModel.ofPublic p) (R0P.DigestKey.frontier ⟨start + ↑0, ⋯⟩))
+        (R0P.digestTarget (FIw_PublicModel.ofPublic p) (R0P.DigestKey.frontier ⟨start + ↑0, ⋯⟩)))
+      (List.ofFn fun i => R0P.DigestKey.frontier ⟨start + ↑i.succ, ⋯⟩)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FIz_DigestFold.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

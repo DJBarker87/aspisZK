@@ -1,0 +1,45 @@
+FIz_DigestPrefix.lean:17:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIy_PublicDigestStep.model s o.z ↑907 ?d ?old
+in the target expression
+  (have first := FIy_PublicDigestStep.model s o.z 907 p.anchor fun x => 0;
+    have second := FIy_PublicDigestStep.model s o.z 427 p.nullifier first;
+    have third :=
+      match (motive := Option (Aeneas.Std.Array FIq_Native.field.M31 8#usize) → Fin ↑8#usize → K) p.recipient with
+      | none => second
+      | some recipient => FIy_PublicDigestStep.model s o.z 475 recipient second;
+    FIy_PublicDigestStep.model s o.z 523 p.change third) =
+    List.foldl
+      (fun acc key =>
+        R0P.digestAddBinding acc (FIw_PublicModel.selector s (R0P.digestRow (FIw_PublicModel.ofPublic p) key))
+          (FIw_PublicModel.openings o).z (R0P.digestStart (FIw_PublicModel.ofPublic p) key)
+          (R0P.digestTarget (FIw_PublicModel.ofPublic p) key))
+      (fun x => 0) (keys (FIw_PublicModel.ofPublic p))
+
+p : Public
+o : Openings
+s : Selectors
+⊢ (have first := FIy_PublicDigestStep.model s o.z 907 p.anchor fun x => 0;
+    have second := FIy_PublicDigestStep.model s o.z 427 p.nullifier first;
+    have third :=
+      match (motive := Option (Aeneas.Std.Array FIq_Native.field.M31 8#usize) → Fin ↑8#usize → K) p.recipient with
+      | none => second
+      | some recipient => FIy_PublicDigestStep.model s o.z 475 recipient second;
+    FIy_PublicDigestStep.model s o.z 523 p.change third) =
+    List.foldl
+      (fun acc key =>
+        R0P.digestAddBinding acc (FIw_PublicModel.selector s (R0P.digestRow (FIw_PublicModel.ofPublic p) key))
+          (FIw_PublicModel.openings o).z (R0P.digestStart (FIw_PublicModel.ofPublic p) key)
+          (R0P.digestTarget (FIw_PublicModel.ofPublic p) key))
+      (fun x => 0) (keys (FIw_PublicModel.ofPublic p))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FIz_DigestPrefix.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

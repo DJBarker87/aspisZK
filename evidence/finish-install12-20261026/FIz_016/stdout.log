@@ -1,0 +1,102 @@
+FIz_ScheduleInitial.lean:27:6: error: Tactic `rfl` failed: The left-hand side
+  Function.update
+    (Function.update (FIx_ScheduleModel.initialRaw v s o) ⟨8, FIx_ScheduleModel.initial._proof_1⟩
+      (FIx_ScheduleModel.initialRaw v s o ⟨8, FIx_ScheduleModel.initial._proof_1⟩ -
+        FIx_ScheduleModel.low s 0 * FIx_ScheduleModel.domain v s))
+    ⟨9, FIx_ScheduleModel.initial._proof_2⟩
+    (FIx_ScheduleModel.initialRaw v s o ⟨9, FIx_ScheduleModel.initial._proof_2⟩ -
+      FIx_ScheduleModel.low s 0 * FIx_ScheduleModel.length v s)
+    j
+is not definitionally equal to the right-hand side
+  if ↑j < 8 then
+    (FIv_NativeArray.value s.low ↑0 *
+          (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                FIv_NativeArray.value s.high ↑30 +
+              (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                  (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1 +
+            (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                  (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) +
+        FIv_NativeArray.value s.low ↑0 * FIx_ScheduleModel.nodes s) *
+      (FIw_PublicModel.openings o).z j
+  else
+    FIv_NativeArray.value s.low ↑0 *
+        (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+              FIv_NativeArray.value s.high ↑30 +
+            (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1 +
+          (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) *
+      (FIw_PublicModel.openings o).z j
+
+case neg
+v : FIx_ScheduleModel.Variant
+s : Selectors
+o : Openings
+hm : ∑ h, FIv_NativeArray.value s.high ↑h = 1
+lm : ∑ l, FIv_NativeArray.value s.low ↑l = 1
+j : Fin 16
+h8 : ¬j = 8
+h9 : ¬j = 9
+⊢ Function.update
+      (Function.update (FIx_ScheduleModel.initialRaw v s o) ⟨8, FIx_ScheduleModel.initial._proof_1⟩
+        (FIx_ScheduleModel.initialRaw v s o ⟨8, FIx_ScheduleModel.initial._proof_1⟩ -
+          FIx_ScheduleModel.low s 0 * FIx_ScheduleModel.domain v s))
+      ⟨9, FIx_ScheduleModel.initial._proof_2⟩
+      (FIx_ScheduleModel.initialRaw v s o ⟨9, FIx_ScheduleModel.initial._proof_2⟩ -
+        FIx_ScheduleModel.low s 0 * FIx_ScheduleModel.length v s)
+      j =
+    if ↑j < 8 then
+      (FIv_NativeArray.value s.low ↑0 *
+            (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                  FIv_NativeArray.value s.high ↑30 +
+                (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                    (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1 +
+              (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                    (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) +
+          FIv_NativeArray.value s.low ↑0 * FIx_ScheduleModel.nodes s) *
+        (FIw_PublicModel.openings o).z j
+    else
+      FIv_NativeArray.value s.low ↑0 *
+          (FIv_NativeArray.value s.high ↑0 + FIv_NativeArray.value s.high ↑1 + FIv_NativeArray.value s.high ↑25 +
+                FIv_NativeArray.value s.high ↑30 +
+              (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                  (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).1 +
+            (R0P.scheduleVariantSelectors (FIw_CoefficientTransport.variant v) (FIv_NativeArray.value s.high ↑27)
+                  (FIv_NativeArray.value s.high ↑28) (FIv_NativeArray.value s.high ↑29)).2.1) *
+        (FIw_PublicModel.openings o).z j
+FIz_ScheduleInitial.lean:19:41: warning: This simp argument is unused:
+  Function.update_of_ne (by decide : (8 : Fin 16) ≠ 9)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵I̵x̵_̵S̵c̵h̵e̵d̵u̵l̵e̵M̵o̵d̵e̵l̵.̵i̵n̵i̵t̵i̵a̵l̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵o̵f̵_̵n̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵ ̵:̵ ̵(̵8̵ ̵:̵ ̵F̵i̵n̵ ̵1̵6̵)̵≠̵9̵)̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵s̵e̵l̵f̵]̵[̲F̲I̲x̲_̲S̲c̲h̲e̲d̲u̲l̲e̲M̲o̲d̲e̲l̲.̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲u̲p̲d̲a̲t̲e̲_̲s̲e̲l̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIz_ScheduleInitial.lean:19:92: warning: This simp argument is unused:
+  Function.update_self
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵I̵x̵_̵S̵c̵h̵e̵d̵u̵l̵e̵M̵o̵d̵e̵l̵.̵i̵n̵i̵t̵i̵a̵l̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵o̵f̵_̵n̵e̵[̲F̲I̲x̲_̲S̲c̲h̲e̲d̲u̲l̲e̲M̲o̲d̲e̲l̲.̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲u̲p̲d̲a̲t̲e̲_̲o̲f̲_̲n̲e̲ (by decide : (8 : Fin 1̵6̵)̵≠̵9̵)̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵s̵e̵l̵f̵]̵1̲6̲)̲ ̲≠̲ ̲9̲)̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIz_ScheduleInitial.lean:23:43: warning: This simp argument is unused:
+  Function.update_self
+
+Hint: Omit it from the simp argument list.
+  simp only [FIx_ScheduleModel.initial,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵s̵e̵l̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIz_ScheduleInitial.lean:25:43: warning: This simp argument is unused:
+  Function.update_of_ne h8
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵I̵x̵_̵S̵c̵h̵e̵d̵u̵l̵e̵M̵o̵d̵e̵l̵.̵i̵n̵i̵t̵i̵a̵l̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵o̵f̵_̵n̵e̵ ̵h̵8̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵o̵f̵_̵n̵e̵[̲F̲I̲x̲_̲S̲c̲h̲e̲d̲u̲l̲e̲M̲o̲d̲e̲l̲.̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲u̲p̲d̲a̲t̲e̲_̲o̲f̲_̲n̲e̲ h9, if_neg h̵8̵,̵i̵f̵_̵n̵e̵g̵h̲8̲,̲ ̲i̲f̲_̲n̲e̲g̲ h9]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIz_ScheduleInitial.lean:25:68: warning: This simp argument is unused:
+  Function.update_of_ne h9
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵I̵x̵_̵S̵c̵h̵e̵d̵u̵l̵e̵M̵o̵d̵e̵l̵.̵i̵n̵i̵t̵i̵a̵l̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵o̵f̵_̵n̵e̵ ̵h̵8̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵o̵f̵_̵n̵e̵ ̵h̵9̵,̵[̲F̲I̲x̲_̲S̲c̲h̲e̲d̲u̲l̲e̲M̲o̲d̲e̲l̲.̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲u̲p̲d̲a̲t̲e̲_̲o̲f̲_̲n̲e̲ ̲h̲8̲,̲ if_neg h̵8̵,̵i̵f̵_̵n̵e̵g̵h̲8̲,̲ ̲i̲f̲_̲n̲e̲g̲ h9]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIz_ScheduleInitial.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

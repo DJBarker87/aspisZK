@@ -1,0 +1,23 @@
+import FIz_ContributionAppend
+import FIz_ScheduleFamily
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FIz_SchedulePacking
+open Aeneas Aeneas.Std
+open FIv_NativeValue (K)
+open FIw_PublicModel (Public Openings Selectors)
+theorem value (p : Public) (o : Openings) (s : Selectors) (group : Nat)
+    (hm : (∑ h : Fin 64, FIv_NativeArray.value s.high h.val)=1)
+    (lm : (∑ l : Fin 16, FIv_NativeArray.value s.low l.val)=1) :
+    FIx_SelectedMeaning.contribution (FIx_ScheduleModel.initial p.variant s o) 0 group+
+      FIx_SelectedMeaning.contribution (FIx_ScheduleModel.absorption p.variant s o) 16 group=
+    FIz_ContributionList.fromList (R0P.scheduleFamily.residuals (FIw_PublicModel.ofPublic p)
+      (FIw_PublicModel.openings o) (FIw_PublicModel.selector s)) 0 group := by
+  rw [FIz_ContributionList.value,FIz_ContributionList.value]
+  have h := FIz_ContributionAppend.value (List.ofFn (FIx_ScheduleModel.initial p.variant s o))
+    (List.ofFn (FIx_ScheduleModel.absorption p.variant s o)) 0 group
+  rw [FIz_ScheduleFamily.value p o s hm lm] at h
+  exact h.symm
+#print axioms value
+end AspisR1.FIz_SchedulePacking
+end

@@ -1,0 +1,30 @@
+import FIq_Native14
+import FIv_Map
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FIz_BoxedOrigins
+open Aeneas Aeneas.Std Result FIq_Native
+abbrev Selectors := pool_v1.pair_forest_copy_terminal.Selectors
+/-- Invert the ORIGINAL boxed constructor on the SAME actual point. Bounds
+and canonicality of its two expansion results are not assumed here. -/
+theorem value (point : Array field.QM31 10#usize) (s : Selectors)
+    (success : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point=ok s) :
+    ∃ (hi lo : Slice field.QM31),
+      core.array.Array.index (core.ops.index.IndexSlice
+        (core.slice.index.SliceIndexRangeToUsizeSlice field.QM31)) point ⟨6#usize⟩=ok hi ∧
+      pool_v1.pair_forest_copy_terminal.Selectors.expand 64#usize hi=ok s.high ∧
+      core.array.Array.index (core.ops.index.IndexSlice
+        (core.slice.index.SliceIndexRangeFromUsizeSlice field.QM31)) point ⟨6#usize⟩=ok lo ∧
+      pool_v1.pair_forest_copy_terminal.Selectors.expand 16#usize lo=ok s.low := by
+  unfold pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point
+    pool_v1.pair_forest_copy_terminal.Selectors.at_point at success
+  obtain ⟨hi,hhi,success⟩ := FIv_Map.bind_success _ _ _ success
+  obtain ⟨high,hhigh,success⟩ := FIv_Map.bind_success _ _ _ success
+  obtain ⟨lo,hlo,success⟩ := FIv_Map.bind_success _ _ _ success
+  obtain ⟨low,hlow,success⟩ := FIv_Map.bind_success _ _ _ success
+  have eq : (⟨high,low⟩ : Selectors)=s := Result.ok.inj success
+  subst s
+  exact ⟨hi,lo,hhi,hhigh,hlo,hlow⟩
+#print axioms value
+end AspisR1.FIz_BoxedOrigins
+end
