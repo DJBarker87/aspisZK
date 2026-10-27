@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin16-lean/sources/R1Z/PV_RunJoin_InputLeaf16.lean:24:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  R0P.noteCommitment (R0P.ownerKey (PV_RunJoin_FixtureRecords.digest 10)) 1000 77 (PV_RunJoin_FixtureRecords.digest 100)
+in the target expression
+  DigestLift d
+    (R0P.noteCommitment (R0P.ownerKey (PV_RunJoin_FixtureRecords.digest 10)) (↑1000) 77
+      (PV_RunJoin_FixtureRecords.digest 100))
+
+W : RustWitness := PV_Src_Forest_PrimitiveArguments.wordWitness transferWitness
+P : RustPublic := PV_Src_Forest_PrimitiveArguments.wordPublic transferPublic
+d : Std.Array U32 8#usize
+hd : inputLeafR W P = ok d
+hl :
+  DigestLift d
+    (R0P.noteCommitment (R0P.ownerKey (PV_RunJoin_FixtureRecords.digest 10)) (↑1000) 77
+      (PV_RunJoin_FixtureRecords.digest 100))
+hc : Canon8 d
+sk : (toModel W).sk = PV_RunJoin_FixtureRecords.digest 10
+salt : (toModel W).salt = PV_RunJoin_FixtureRecords.digest 100
+value : ↑(toModel W).inputValue = 1000
+⊢ input_leaf_r transferWitness transferPublic = ok PV_RunJoin_FixtureArguments.witness.pair.pair_leaf.first_commitment
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin16-lean/sources/R1Z/PV_RunJoin_InputLeaf16.lean:52:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  R0P.noteCommitment (R0P.ownerKey (PV_RunJoin_FixtureRecords.digest 10)) 1000 77 (PV_RunJoin_FixtureRecords.digest 100)
+in the target expression
+  DigestLift d
+    (R0P.noteCommitment (R0P.ownerKey (PV_RunJoin_FixtureRecords.digest 10)) (↑1000) 77
+      (PV_RunJoin_FixtureRecords.digest 100))
+
+W : RustWitness := PV_Src_Forest_PrimitiveArguments.wordWitness withdrawalWitness
+P : RustPublic := PV_Src_Forest_PrimitiveArguments.wordPublic withdrawalPublic
+d : Std.Array U32 8#usize
+hd : inputLeafR W P = ok d
+hl :
+  DigestLift d
+    (R0P.noteCommitment (R0P.ownerKey (PV_RunJoin_FixtureRecords.digest 10)) (↑1000) 77
+      (PV_RunJoin_FixtureRecords.digest 100))
+hc : Canon8 d
+sk : (toModel W).sk = PV_RunJoin_FixtureRecords.digest 10
+salt : (toModel W).salt = PV_RunJoin_FixtureRecords.digest 100
+value : ↑(toModel W).inputValue = 1000
+⊢ input_leaf_r withdrawalWitness withdrawalPublic =
+    ok PV_RunJoin_FixtureArguments.witness.pair.pair_leaf.first_commitment
+'R1Z.PV_RunJoin_InputLeaf16.transfer_raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_InputLeaf16.transfer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_InputLeaf16.withdrawal_raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_InputLeaf16.withdrawal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
