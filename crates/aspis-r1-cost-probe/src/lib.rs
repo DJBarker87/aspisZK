@@ -67,3 +67,12 @@ pub use aspis_prover::host_forest;
 
 #[cfg(feature = "prover")]
 pub mod host_multilinear;
+
+#[cfg(feature="prover")]
+pub mod host_copy_terminal;
+
+#[cfg(feature="prover")]
+pub mod host_terminal;
+
+#[cfg(feature="prover")]
+pub mod host_public;

@@ -148,7 +148,7 @@ pub fn prove_masked_fixture(
     hash:HashFn,
     fixture_seed:&[u8;32],
 )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
-    let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
+    let public_bytes=crate::host_public::materialize_public_bytes(public).map_err(|_|Error::Semantic)?;
     let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),fixture_secret(hash,b"UNPROVED:R1:fixture-mask-nonce",fixture_seed,&public_bytes,variant)?);
     let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
     let attempt=StateOnlyAttemptSecrets::deterministic_spend_fixture(
@@ -172,7 +172,7 @@ pub fn prove_masked_attempt(
     attempt:StateOnlyAttemptSecrets,
     nonce_store:&mut DurableStateOnlyMaskNonceStore,
 )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
-    let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
+    let public_bytes=crate::host_public::materialize_public_bytes(public).map_err(|_|Error::Semantic)?;
     let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());
     let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
     prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store)

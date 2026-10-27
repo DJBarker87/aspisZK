@@ -1,0 +1,11 @@
+# Group 3 candidate: public226 / terminal227
+
+Every new Rust module is explicitly gated by prover in cost-probe lib.rs: host_public, host_terminal and host_copy_terminal. The two copied constant includes inherit these parent gates; their bytes equal the statement originals. No core/statement/program body is changed. The release feature graph is unchanged.
+
+Caller chains:
+- host_semantic/prover/sim public byte calls -> host_public::materialize_public_bytes -> owned 1,455-byte encoder -> byte_at/field_byte/canonical -> owned public projection. The encoder is the measured single-byte-loop Drop-free route-two variant; output length remains transfer1455 / withdrawal1427. The projection copies only fields serialized by the original; pool/domain/source-root remain ignored exactly as before. Raw limb checks and withdrawal amount rejection remain in the byte order of the original.
+- host_semantic/sim terminal calls -> host_public::terminal_qm31 -> copied r0::Public::terminal_qm31 -> copied terminal_parts/composition_parts -> copied private semantic helpers and copied private Copy terminal/Selectors. Selectors is now owned rather than boxed. The flattened 84 claims retain the original i/28,i%28 indexing (including original width-29 input behavior); no purported indexing fix is authorized. Complete public errors are retained.
+
+The original optimized-terminal feature enables nine statement audit kernels together. In the copied modules only, those exact nine cfg predicates map to the existing optimized-terminal feature. This selects the same frozen target kernels without adding release-enabled local features. Other audit kernels remain disabled in this target. This cfg mapping is part of the source-transport obligation. Prover builds with externally unified, independently selected statement audit kernels are not silently covered by the frozen-feature claim.
+
+The copied files are necessarily larger than the route-two leaf probes: they contain the private caller closure needed for op227. Unchanged tests are not copied. The public-byte allocation adapter remains outside the owned extraction root; copy/zeroing/allocation effects require the native-effect transport. Gates and cost projection pending. Previous cumulative projection: +1.68786%, with 44,885.86us headroom.

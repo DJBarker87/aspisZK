@@ -257,7 +257,7 @@ fn semantic(public:Public<'_>,tau:&Tape,d:&Drawn,c2_root:&[u8;32],variant:Varian
     let d28:&[K;1024]=columns[28].as_slice().try_into().unwrap();
     let dc=variant.coefficients(d28);
     let zero=[[K::ZERO;29];3];
-    let term0=|p:&[K;10]|public.terminal_qm31(&zero,p,&ch).map_err(|_|Error::Semantic);
+    let term0=|p:&[K;10]|crate::host_public::terminal_qm31(public,&zero,p,&ch).map_err(|_|Error::Semantic);
     let bits=|row:usize|->[K;10] {core::array::from_fn(|i| if (row>>(9-i))&1==0 {K::ZERO} else {K::ONE})};
     // Mask sum of τ (host_semantic's formula) and S₀.
     let mut mask_sum=K::ZERO;let mut s0=K::ZERO;
@@ -302,7 +302,7 @@ fn semantic(public:Public<'_>,tau:&Tape,d:&Drawn,c2_root:&[u8;32],variant:Varian
     // Claims, extras, the shift on round 9.
     let claims=point_claims(&columns,&alpha).map_err(|_|Error::Semantic)?;
     let extras:[K;29]=core::array::from_fn(|l|extra(&variant.coefficients(columns[l].as_slice().try_into().unwrap()),alpha[8],alpha[9]));
-    let original=ch.eta.mul(public.terminal_qm31(&claims,&alpha,&ch).map_err(|_|Error::Semantic)?);
+    let original=ch.eta.mul(crate::host_public::terminal_qm31(public,&claims,&alpha,&ch).map_err(|_|Error::Semantic)?);
     let half=K::from_cm31(CM31::from_m31(M31(2).inv()));
     let inv=alpha[9].sub(half).try_inv().ok_or(Error::Semantic)?;
     if ablation!=Ablation::NoShift {
@@ -398,7 +398,7 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
     let variant=Variant::S2;
     let start=std::time::Instant::now();
     let mut times=SimTimes::default();
-    let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
+    let public_bytes=crate::host_public::materialize_public_bytes(public).map_err(|_|Error::Semantic)?;
     for k in 0..ATTEMPT_CAP {
         // 1–2. Coins and the draw.
         let t=std::time::Instant::now();
@@ -507,7 +507,7 @@ pub fn verify_programmed(public:Public<'_>,proof:&[u8],table:Table)->(Result<(),
     install(table);
     let hash:HashFn=programmed_hash;
     let result=(|| {
-        let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
+        let public_bytes=crate::host_public::materialize_public_bytes(public).map_err(|_|Error::Semantic)?;
         let cp=crate::verifier::tx1(public,&public_bytes,proof,crate::verifier::SPLIT,LegacyHashFn(hash),None)?;
         crate::verifier::tx2(&public_bytes,proof,&cp,LegacyHashFn(hash),None)?;
         crate::dense::verify(public,proof,hash).map_err(|_|Error::Relation)

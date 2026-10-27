@@ -62,7 +62,7 @@ fn claims_at_point(columns:&[Vec<QM31>;29],point:&[QM31;10])->Result<[QM31;29],E
         // commitment representation. D is supplied before any challenge.
         check_semantic_columns(c1,d,g)?;
         let c1_root=commitments.c1(c1,d)?;
-        let mut transcript = SemanticTranscript::new(hash, &public.public_bytes().map_err(|_|Error::Public)?, &c1_root)?;
+        let mut transcript = SemanticTranscript::new(hash, &crate::host_public::materialize_public_bytes(public).map_err(|_|Error::Public)?, &c1_root)?;
         let mut bytes = c1_root.to_vec();
         let lambda = semantic_row(0, &[], &mut transcript, &mut bytes)?;
         let chi = semantic_row(1, &[], &mut transcript, &mut bytes)?;
@@ -137,7 +137,7 @@ struct SemanticOracle<'a,'p> {
 impl crate::host_sumcheck::Oracle for SemanticOracle<'_,'_> {
     fn evaluate(&self,point:&[QM31;10])->Result<QM31,Error> {
         let claims=point_claims(self.columns,point)?;
-        let terminal=self.public.terminal_qm31(&claims,point,self.challenges).map_err(|_|Error::Public)?;
+        let terminal=crate::host_public::terminal_qm31(self.public,&claims,point,self.challenges).map_err(|_|Error::Public)?;
         let mask=claim_mask_value(claims[0],point);
         Ok(mask.add(self.eta.mul(terminal)).add(extra(self.d,point[8],point[9])))
     }
