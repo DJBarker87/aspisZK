@@ -11535,3 +11535,24 @@ change could touch, and at most three gated batches with the rows each unblocks;
 Launched pv-cblib4 (same cblib branch, IDs 52400-52699): soft-backend SHA-2 rows (padding, byte
 compression, digest wrappers) and op26/33/36, no SHA-NI work pending the owner. Six slots: op223, op134,
 runjoin13, l3dis4, route2, cblib4. Rows removed outright: 0. Privacy target not yet established.
+
+## D274 (Stream B) 2026-10-27 10:50 UTC: records closure rewrite passes the ELF gate; next extraction blocker is a borrow; bounded borrow-to-copy authorization; runjoin14 launched
+
+pv-runjoin13 (`codex/pv-runjoin-20261026`, head 9128568ac0; 0/100 Lean, 0/2 Kani: stopped correctly for a
+ruling, not exhausted). Commit 2910da23a3 rewrites the two `Option::map(..).unwrap_or(ZERO8)` closures
+of `records` as `match` and the two `core::array::from_fn` closures as indexed `while` loops over 20
+entries (diff evidence/pv-runjoin13-20261027/shipped-records.diff, +20/−4, nothing else). Gate (a): all
+three ELFs rebuilt from that source MATCH their pins (default f8c0ec72…, devnet 63ad3e9c…, Pool 121f3e29…;
+gate-a.json): the on-chain programs are byte-identical. Extraction then stops at records:230
+(InterpAbs.ml:1955) on `let pair = &input.pair`. The worker proposed the one-line change
+`let pair = input.pair;` and stopped because the prompt authorised only closure replacements. Lead check:
+input.pair has type PoolV1PairInputNoteWitnessV1, which derives Clone, Copy (pair_trace.rs:71), and
+every later use reads fields, so the copy is the same value. LEAD AUTHORIZATION (bounded): inside
+`records` only, semantics-preserving repairs of two kinds: (i) a shared borrow of a Copy value replaced
+by a copy (with matching `&x` arguments), (ii) closure/combinator removal; each recorded with its Copy
+derive location; all three ELFs re-gated once after the last change; any blocker needing another kind of
+change stops that route with the exact blocker reported. The combined gates (b) fixture bytes and (c)
+1,000-run differential follow over op223 + records (GATE-PLAN.md). Launched pv-runjoin14 (same branch,
+IDs 50600-50899 unused so far): the repairs, gate (a), extraction, R_shipped, identification per fixture
+and generally, compiler-return, transition, deployed public binding, non-vacuity. Six slots: op223,
+op134, l3dis4, route2, cblib4, runjoin14. Rows removed outright: 0. Privacy target not yet established.
