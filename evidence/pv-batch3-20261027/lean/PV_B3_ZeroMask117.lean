@@ -144,57 +144,57 @@ theorem and3_14 : (14#usize &&& 3#usize) = 2#usize := by with_unfolding_all rfl
 #print axioms and3_14
 theorem and3_15 : (15#usize &&& 3#usize) = 3#usize := by with_unfolding_all rfl
 #print axioms and3_15
-theorem cast0 : UScalar.cast .Usize 0#u8 = 0#usize := by with_unfolding_all rfl
+theorem cast0 : UScalar.cast .Usize 0#u8 = 0#usize := by scalar_tac
 #print axioms cast0
-theorem cast1 : UScalar.cast .Usize 1#u8 = 1#usize := by with_unfolding_all rfl
+theorem cast1 : UScalar.cast .Usize 1#u8 = 1#usize := by scalar_tac
 #print axioms cast1
-theorem cast2 : UScalar.cast .Usize 2#u8 = 2#usize := by with_unfolding_all rfl
+theorem cast2 : UScalar.cast .Usize 2#u8 = 2#usize := by scalar_tac
 #print axioms cast2
-theorem cast3 : UScalar.cast .Usize 3#u8 = 3#usize := by with_unfolding_all rfl
+theorem cast3 : UScalar.cast .Usize 3#u8 = 3#usize := by scalar_tac
 #print axioms cast3
-theorem cast4 : UScalar.cast .Usize 4#u8 = 4#usize := by with_unfolding_all rfl
+theorem cast4 : UScalar.cast .Usize 4#u8 = 4#usize := by scalar_tac
 #print axioms cast4
-theorem cast5 : UScalar.cast .Usize 5#u8 = 5#usize := by with_unfolding_all rfl
+theorem cast5 : UScalar.cast .Usize 5#u8 = 5#usize := by scalar_tac
 #print axioms cast5
-theorem cast6 : UScalar.cast .Usize 6#u8 = 6#usize := by with_unfolding_all rfl
+theorem cast6 : UScalar.cast .Usize 6#u8 = 6#usize := by scalar_tac
 #print axioms cast6
-theorem cast7 : UScalar.cast .Usize 7#u8 = 7#usize := by with_unfolding_all rfl
+theorem cast7 : UScalar.cast .Usize 7#u8 = 7#usize := by scalar_tac
 #print axioms cast7
-theorem cast8 : UScalar.cast .Usize 8#u8 = 8#usize := by with_unfolding_all rfl
+theorem cast8 : UScalar.cast .Usize 8#u8 = 8#usize := by scalar_tac
 #print axioms cast8
-theorem cast9 : UScalar.cast .Usize 9#u8 = 9#usize := by with_unfolding_all rfl
+theorem cast9 : UScalar.cast .Usize 9#u8 = 9#usize := by scalar_tac
 #print axioms cast9
-theorem cast10 : UScalar.cast .Usize 10#u8 = 10#usize := by with_unfolding_all rfl
+theorem cast10 : UScalar.cast .Usize 10#u8 = 10#usize := by scalar_tac
 #print axioms cast10
-theorem cast11 : UScalar.cast .Usize 11#u8 = 11#usize := by with_unfolding_all rfl
+theorem cast11 : UScalar.cast .Usize 11#u8 = 11#usize := by scalar_tac
 #print axioms cast11
-theorem cast12 : UScalar.cast .Usize 12#u8 = 12#usize := by with_unfolding_all rfl
+theorem cast12 : UScalar.cast .Usize 12#u8 = 12#usize := by scalar_tac
 #print axioms cast12
-theorem cast13 : UScalar.cast .Usize 13#u8 = 13#usize := by with_unfolding_all rfl
+theorem cast13 : UScalar.cast .Usize 13#u8 = 13#usize := by scalar_tac
 #print axioms cast13
-theorem cast14 : UScalar.cast .Usize 14#u8 = 14#usize := by with_unfolding_all rfl
+theorem cast14 : UScalar.cast .Usize 14#u8 = 14#usize := by scalar_tac
 #print axioms cast14
-theorem cast15 : UScalar.cast .Usize 15#u8 = 15#usize := by with_unfolding_all rfl
+theorem cast15 : UScalar.cast .Usize 15#u8 = 15#usize := by scalar_tac
 #print axioms cast15
-theorem cast16 : UScalar.cast .Usize 16#u8 = 16#usize := by with_unfolding_all rfl
+theorem cast16 : UScalar.cast .Usize 16#u8 = 16#usize := by scalar_tac
 #print axioms cast16
-theorem cast17 : UScalar.cast .Usize 17#u8 = 17#usize := by with_unfolding_all rfl
+theorem cast17 : UScalar.cast .Usize 17#u8 = 17#usize := by scalar_tac
 #print axioms cast17
-theorem cast18 : UScalar.cast .Usize 18#u8 = 18#usize := by with_unfolding_all rfl
+theorem cast18 : UScalar.cast .Usize 18#u8 = 18#usize := by scalar_tac
 #print axioms cast18
-theorem cast19 : UScalar.cast .Usize 19#u8 = 19#usize := by with_unfolding_all rfl
+theorem cast19 : UScalar.cast .Usize 19#u8 = 19#usize := by scalar_tac
 #print axioms cast19
-theorem cast20 : UScalar.cast .Usize 20#u8 = 20#usize := by with_unfolding_all rfl
+theorem cast20 : UScalar.cast .Usize 20#u8 = 20#usize := by scalar_tac
 #print axioms cast20
-theorem cast21 : UScalar.cast .Usize 21#u8 = 21#usize := by with_unfolding_all rfl
+theorem cast21 : UScalar.cast .Usize 21#u8 = 21#usize := by scalar_tac
 #print axioms cast21
-theorem cast22 : UScalar.cast .Usize 22#u8 = 22#usize := by with_unfolding_all rfl
+theorem cast22 : UScalar.cast .Usize 22#u8 = 22#usize := by scalar_tac
 #print axioms cast22
-theorem cast24 : UScalar.cast .Usize 24#u8 = 24#usize := by with_unfolding_all rfl
+theorem cast24 : UScalar.cast .Usize 24#u8 = 24#usize := by scalar_tac
 #print axioms cast24
-theorem cast25 : UScalar.cast .Usize 25#u8 = 25#usize := by with_unfolding_all rfl
+theorem cast25 : UScalar.cast .Usize 25#u8 = 25#usize := by scalar_tac
 #print axioms cast25
-theorem cast26 : UScalar.cast .Usize 26#u8 = 26#usize := by with_unfolding_all rfl
+theorem cast26 : UScalar.cast .Usize 26#u8 = 26#usize := by scalar_tac
 #print axioms cast26
 theorem selected : host_arithmetic.selected_coefficients (Array.repeat 16#usize Z) =
     ok (Array.repeat 27#usize Z) := by
