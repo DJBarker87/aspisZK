@@ -1,0 +1,42 @@
+FJo_QueryInjective.lean:11:9: error: unsolved goals
+case none
+tr : RawCutTranscriptRun.ErasedPrefix
+q : Fin 22 → Fin 262144
+entry : tr.rounds[31]? = none
+read :
+  (do
+      let __x ← none
+      match __x.2.1 with
+        | TranscriptView.Value.queries (Except.ok bs) => LiteralQueryRead.decode bs
+        | x => none) =
+    some q
+⊢ Function.Injective q
+FJo_QueryInjective.lean:19:6: error: Invalid alternative name `err`: Expected `error`
+FJo_QueryInjective.lean:21:63: error: Type mismatch: After simplification, term
+  read
+ has type
+  @Eq (Option (Fin 22 → Fin 262144))
+    (do
+      let __x ← some (m, TranscriptView.Value.queries (Except.ok xs), state)
+      match __x.2.1 with
+        | TranscriptView.Value.queries (Except.ok bs) => LiteralQueryRead.decode bs
+        | x => none)
+    (some q)
+but is expected to have type
+  @Eq (Option (Fin 22 → Fin 262144)) (LiteralQueryRead.decode xs) (some q)
+FJo_QueryInjective.lean:18:6: error: Alternative `error` has not been provided
+FJo_QueryInjective.lean:11:29: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵n̵t̵r̵y̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵]̵[̲e̲n̲t̲r̲y̲,̲ ̲r̲e̲d̲u̲c̲e̲C̲t̲o̲r̲E̲q̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJo_QueryInjective.lean:11:46: warning: This simp argument is unused:
+  reduceCtorEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵n̵t̵r̵y̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵]̵[̲e̲n̲t̲r̲y̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲n̲o̲n̲e̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJo_QueryInjective.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

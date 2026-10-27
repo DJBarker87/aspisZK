@@ -1,0 +1,29 @@
+FJo_GammaPersistence.lean:21:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FoldedLeafCodec.decodeWide (FoldedLeafCodec.encodeWide ?x)
+in the target expression
+  FoldedLeafCodec.decodeWide (OraclePortCheckpointAbiC5.encodeE (CheckpointBytes5Output.ofE p0.gamma)) =
+    some (CheckpointBytes5Output.ofE p1.gamma)
+
+reserved : Bool
+Hash : Type
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+p0 p1 : verifier.Prepared
+a0 a1 : verifier.Accumulator
+checkpoint proof0 pub0 proof1 pub1 : Slice U8
+hash : Hash
+saved : alloc.vec.Vec U8
+canonical : CanonicalWide (CheckpointBytes3Namespaces.toE p0.gamma)
+write : Port3_CheckpointInstall.writer D p0 a0 proof0 pub0 hash = ok saved
+same : bytesOf ↑checkpoint = bytesOf ↑saved
+read :
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) (VTop_Checkpoint.digest D) checkpoint proof1 pub1
+      transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p1, a1))
+writer :
+  OraclePortCompactDraft.slice (bytesOf ↑saved) 176 32 =
+    OraclePortCheckpointAbiC5.encodeE (CheckpointBytes5Output.ofE p0.gamma)
+reader :
+  FoldedLeafCodec.decodeWide (OraclePortCheckpointAbiC5.encodeE (CheckpointBytes5Output.ofE p0.gamma)) =
+    some (CheckpointBytes5Output.ofE p1.gamma)
+⊢ CheckpointBytes5Output.ofE p1.gamma = CheckpointBytes5Output.ofE p0.gamma
+'AspisR1.FJo_GammaPersistence.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

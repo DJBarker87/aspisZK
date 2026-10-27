@@ -1,0 +1,35 @@
+FJo_WriterGamma.lean:26:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CheckpointBytes3Namespaces.fromE (CheckpointBytes3Namespaces.toE ?x)
+in the target expression
+  OraclePortCheckpointAbiC5.encodeE
+      (CheckpointBytes5Output.ofE (CheckpointBytes3Namespaces.fromE (CheckpointBytes3Namespaces.toPrepared p).gamma)) =
+    OraclePortCheckpointAbiC5.encodeE (CheckpointBytes5Output.ofE p.gamma)
+
+Hash : Type
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+p : AspisR1Stage2.verifier.Prepared
+a : AspisR1Stage2.verifier.Accumulator
+proof pub : Slice U8
+hash : Hash
+saved : alloc.vec.Vec U8
+canonical : CanonicalWide (CheckpointBytes3Namespaces.toE p.gamma)
+run : Port3_CheckpointInstall.writer D p a proof pub hash = ok saved
+hp hu hc : Std.Array U8 32#usize
+source :
+  ↑saved =
+    ↑(CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu hc)
+encoded :
+  bytesOf ↑saved =
+    CheckpointBytesDecodeC5.sourceBody (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu ++
+      AspisV8R19.SourceDuplexStep.bytes (CheckpointBytesDigest.stateOf hc)
+bodyLength :
+  List.length
+      (CheckpointBytesDecodeC5.sourceBody (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu) =
+    1736
+⊢ OraclePortCheckpointAbiC5.encodeE
+      (CheckpointBytes5Output.ofE (CheckpointBytes3Namespaces.fromE (CheckpointBytes3Namespaces.toPrepared p).gamma)) =
+    OraclePortCheckpointAbiC5.encodeE (CheckpointBytes5Output.ofE p.gamma)
+'AspisR1.FJo_WriterGamma.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
