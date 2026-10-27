@@ -2,7 +2,7 @@
 import pathlib,subprocess,time,json,sys
 root=pathlib.Path(__file__).resolve().parents[2];e=root/'evidence/pv-srcid3-20261026'
 for level in (sys.argv[1:] or ['prefix11','suffix10']):
- harness='pool_v1::pair_forest_copy_builder::records_proofs::empty_roots::pv_srcid7_helper_'+level
+ harness=('poseidon2::builder_reference::pv_srcid7_internal_linear_copy' if level=='internal' else 'pool_v1::pair_forest_copy_builder::records_proofs::empty_roots::pv_srcid7_helper_'+level)
  ledger=e/'resume7-kani-invocations.jsonl'
  prior=[json.loads(x) for x in ledger.read_text().splitlines()] if ledger.exists() else []
  if any(r['harness']==harness for r in prior):continue
