@@ -1,0 +1,15 @@
+JGi_FoldBuffers.lean:7:98: error: unsolved goals
+v : alloc.vec.Vec U8
+s : Slice U8
+fits : v.length + s.length ≤ Usize.max
+⊢ ∃ out,
+    (match h' : do
+          let s' ← List.clone (liftFun1 core.clone.impls.CloneU8.clone) ↑s
+          ok ⟨↑s', ⋯⟩ with
+        | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+        | fail e => fail e
+        | div => div) =
+        ok out ∧
+      ↑out = ↑v ++ ↑s
+'AspisR1.JGi_FoldBuffers.extend' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.JGi_FoldBuffers.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

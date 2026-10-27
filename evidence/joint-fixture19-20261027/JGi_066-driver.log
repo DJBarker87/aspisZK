@@ -1,0 +1,61 @@
+{"attempt": "JGi19_066", "exit_status": 1, "wall_seconds": 3.113511528004892, "peak_rss_kib": "6100884", "swaps": "0", "print_axioms": []}
+JGi_PreparedClaim.lean:21:16: error(lean.unknownIdentifier): Unknown identifier `AspisR1CurrentCaller.OriginalSerializerInstallation.sourceView`
+JGi_PreparedClaim.lean:21:134: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+JGi_PreparedClaim.lean:41:14: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => AspisR1CurrentPreparedClaim.Concrete.Canonical (↑_a)[↑l]
+Error: Application type mismatch: The argument
+  Eq.trans (List.length_map toClaimE)
+    (Eq.trans powers.property
+      (have this := rfl;
+      this))
+h
+...
+mE gamma) ^ ↑j
+same : actual = mapArray toClaimE powers
+l : Usize
+hl : ↑l < 29
+x : CE
+call : (mapArray toClaimE powers).index_usize l = ok x
+value : x = (↑(mapArray toClaimE powers))[↑l]
+⊢ AspisR1CurrentPreparedClaim.Concrete.Canonical (↑(mapArray toClaimE powers))[↑l]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGi_PreparedClaim.lean:46:37: error: Application type mismatch: The argument
+  reads
+has type
+  ∀ (point : Usize) (l : Usize),
+    ↑point < 6 →
+      ↑l < 29 →
+        ∃ q,
+          AspisR1CurrentPreparedClaim.ClaimScalar.read JGi_DotOps.ops (toClaimSem sem) JGe_Payload27.value point l =
+              ok q ∧
+            JGi_DotOps.CanonQ q
+but is expected to have type
+  ∀ (point : Usize),
+    ↑point < 6 →
+      ∀ (l : Usize),
+        ↑l < 29 →
+          ∃ q,
+            AspisR1CurrentPreparedClaim.ClaimScalar.read JGi_DotOps.ops (toClaimSem sem) JGe_Payload27.value point l =
+                ok q ∧
+              JGi_DotOps.CanonQ q
+in the application
+  JGi_ClaimTotal.source (toClaimDigest D) (toClaimSem sem) JGe_Payload27.value (mapArray toClaimE powers)
+    (toClaimE (AspisR1CurrentCaller.InstalledPreparation.retainedView view).inactive) (toClaimE kappa) inactive kcanon
+    reads
+JGi_PreparedClaim.lean:52:14: error(lean.unknownIdentifier): Unknown constant `source`
+
+Running as unit: run-r8d5343c42ac44e63bef63b1687af2a4c.scope; invocation ID: 0d2e4807b9bf4518bc28a12c47beee72
+

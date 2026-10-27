@@ -1,0 +1,44 @@
+'AspisR1.JGi_ClaimTotal.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGi_ClaimTotal.lean:58:25: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Array.repeat 7#usize aspis_core.field.WideExact.ZERO).update 0#usize inactive
+in the target expression
+  (have parts := Array.repeat 7#usize aspis_core.field.WideExact.ZERO;
+    do
+    let a ← parts.update 0#usize inactive
+    verifier.prepared_claim_loop ops D { start := 0#usize, «end» := 6#usize } sem y1 g k a) =
+    ok (core.result.Result.Ok out)
+
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+g : Std.Array E 29#usize
+inactive kappa : E
+hc : Canonical inactive
+hk : Canonical kappa
+read :
+  ∀ (point : Usize), ↑point < 6 → ∀ (l : Usize), ↑l < 29 → ∃ q, ClaimScalar.read ops sem y1 point l = ok q ∧ CanonQ q
+weights : ∀ (l : Usize), ↑l < 29 → ∃ x, g.index_usize l = ok x ∧ Canonical x
+k : Std.Array E 7#usize
+powers : ClaimPowers.powers 7#usize kappa = ok k
+canonical✝ : ∀ (j : Fin ↑7#usize), Canonical (↑k)[↑j] ∧ decode (↑k)[↑j] = decode kappa ^ ↑j
+powers' : ops.powers 7#usize kappa = ok k
+kc : CanonicalArray k
+parts : Std.Array E 7#usize
+write : (Array.repeat 7#usize aspis_core.field.WideExact.ZERO).update 0#usize inactive = ok parts
+pc : CanonicalArray parts
+dots :
+  ∀ (point : Usize),
+    ↑point < 6 →
+      ∃ out, verifier.prepared_claim_dot ops D sem y1 g point = ok (core.result.Result.Ok out) ∧ Canonical out
+out : aspis_core.field.WideExact
+call :
+  verifier.prepared_claim_loop ops D { start := 0#usize, «end» := 6#usize } sem y1 g k parts =
+    ok (core.result.Result.Ok out)
+canonical : Canonical out
+⊢ (have parts := Array.repeat 7#usize aspis_core.field.WideExact.ZERO;
+    do
+    let a ← parts.update 0#usize inactive
+    verifier.prepared_claim_loop ops D { start := 0#usize, «end» := 6#usize } sem y1 g k a) =
+    ok (core.result.Result.Ok out)
+'AspisR1.JGi_ClaimTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

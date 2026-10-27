@@ -1,0 +1,61 @@
+JGi_FoldBuffers.lean:8:8: error: unsolved goals
+case nil
+⊢ (match h : pure [] with
+    | ok v => ok ⟨v, ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok ⟨[], ⋯⟩
+JGi_FoldBuffers.lean:9:17: error: unsolved goals
+case cons
+x : U8
+xs : List U8
+ih : List.clone (liftFun1 core.clone.impls.CloneU8.clone) xs = ok ⟨xs, ⋯⟩
+⊢ (match h : List.mapM (liftFun1 core.clone.impls.CloneU8.clone) (x :: xs) with
+    | ok v => ok ⟨v, ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok ⟨x :: xs, ⋯⟩
+JGi_FoldBuffers.lean:9:37: warning: This simp argument is unused:
+  core.clone.impls.CloneU8.clone
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵c̵l̵o̵n̵e̵,̵c̵o̵r̵e̵.̵c̵l̵o̵n̵e̵.̵i̵m̵p̵l̵s̵.̵C̵l̵o̵n̵e̵U̵8̵.̵c̵l̵o̵n̵e̵,̵l̵i̵f̵t̵F̵u̵n̵1̵,̵i̵h̵]̵[̲L̲i̲s̲t̲.̲c̲l̲o̲n̲e̲,̲ ̲l̲i̲f̲t̲F̲u̲n̲1̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGi_FoldBuffers.lean:9:68: warning: This simp argument is unused:
+  liftFun1
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵c̵l̵o̵n̵e̵,̵c̵o̵r̵e̵.̵c̵l̵o̵n̵e̵.̵i̵m̵p̵l̵s̵.̵C̵l̵o̵n̵e̵U̵8̵.̵c̵l̵o̵n̵e̵,̵l̵i̵f̵t̵F̵u̵n̵1̵,̵i̵h̵]̵[̲L̲i̲s̲t̲.̲c̲l̲o̲n̲e̲,̲ ̲c̲o̲r̲e̲.̲c̲l̲o̲n̲e̲.̲i̲m̲p̲l̲s̲.̲C̲l̲o̲n̲e̲U̲8̲.̲c̲l̲o̲n̲e̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGi_FoldBuffers.lean:9:77: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [List.clone, ̲core.clone.impls.CloneU8.clone, ̲liftFun1,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGi_FoldBuffers.clone' depends on axioms: [propext, sorryAx, Quot.sound]
+JGi_FoldBuffers.lean:13:98: error: unsolved goals
+v : alloc.vec.Vec U8
+s : Slice U8
+fits : v.length + s.length ≤ Usize.max
+⊢ ∃ out,
+    (match h' : do
+          let s' ← List.clone (liftFun1 core.clone.impls.CloneU8.clone) ↑s
+          ok ⟨↑s', ⋯⟩ with
+        | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+        | fail e => fail e
+        | div => div) =
+        ok out ∧
+      ↑out = ↑v ++ ↑s
+JGi_FoldBuffers.lean:16:39: warning: This simp argument is unused:
+  clone
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.clone, ̲core.clone.CloneU8,̵c̵l̵o̵n̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGi_FoldBuffers.extend' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.JGi_FoldBuffers.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
