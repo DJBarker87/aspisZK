@@ -10959,3 +10959,23 @@ then a borrow-free cfg(aeneas_ref) shim as the extraction target if Aeneas still
 function, publishing `PV_CB_Op223Source.op223_source` under that stable name for rw22; fallback
 op117/op259/op258 under ruling (i). Six slots: cb7, cblib, srcid7, cbmid, runjoin12, cb8. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D247 (Stream B) 2026-10-27 05:00 UTC: srcid7 exhausted: merge gate v2 down to 3 project gaps, projection exception closed; srcid8 launched
+
+pv-srcid7 (`codex/pv-srcid3-20261026`, head e0d5c21c56; 100/100 Lean, 2/2 Kani (internal-linear
+comparison passed 514 checks; full-helper prefix comparison timed out, no equality inferred); no
+crates/programs change; no forbidden tokens in branch modules; full audit 164 modules / 658 unique
+standard-axiom reports). MERGE GATE v2 under D241: project gaps 48 → 3 (879 project objects), external
+objects 5,640 each linked to the env-J toolchain and Aeneas backend @ 220c7ff9 / manifest pins, 0
+manifest gaps; the R1NaturalProjection exception is CLOSED under ruling (h) with the pinned source
+(receipt 30200 matches current HEAD and the current object; nothing changed). Remaining gaps: no
+accepted receipt binds the current object to the expected HEAD source for
+AspisFormal.V6PublishedTheoremInterfaces (904f5e5b…), R0P.LogUpChain (a9b0e52d…), R0P.SemRounds
+(564b9026…). Proved: the complete candidate mapper transcription equality and the canonical
+internal-linear source/copy equality; new RunJoin records pinned. OPEN: deployed mapper identification,
+installed compiler association (both wait on runjoin12's records identification), the 21 Lean
+root-parent cells. PV_Src_Premises deployed 5 → 5. Launched pv-srcid8 (same branch, IDs 41500-41799, 60
+Lean / 2 Kani): the three gaps first (resolve via the pin table, compile from HEAD with dependents,
+full audit, MERGE-GATE "CLEAN" so the lead can merge), then the 21 cells, the deployed identification
+from runjoin12's publication, and the prefix comparison under ruling (i). Six slots: cb7, cblib, cbmid,
+runjoin12, cb8, srcid8. Rows removed outright: 0. Privacy target not yet established.
