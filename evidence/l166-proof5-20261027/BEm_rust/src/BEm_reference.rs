@@ -268,3 +268,42 @@ fn opening_geometry() {
     // Both slices borrow the SAME allocation; byte equality follows from
     // equal offset/extent. Avoid enumerating a symbolic57607-byte array.
 }
+
+// New physical step gate: full owned logs, arbitrary stateful replies, original
+// same-allocation opening and every live scratch coordinate. No helper stub.
+#[derive(Clone,Copy)]
+struct Stateful<'a> { replies:&'a [[u8;32];2], cursor:&'a std::cell::Cell<usize> }
+impl Digest32 for Stateful<'_> {
+    fn digest(&self,_:&[&[u8]])->[u8;32] {
+        let i=self.cursor.get();self.cursor.set(i+1); self.replies[i%2]
+    }
+}
+fn physical_step(tree:usize) {
+    let keys:[u64;16]=kani::any();let position:usize=kani::any();kani::assume(position<12);
+    let used:usize=kani::any();kani::assume(used<=position);
+    let lo:usize=kani::any();kani::assume(lo==0 || lo==10);
+    let q:[u8;832]=kani::any();let replies:[[u8;32];2]=kani::any();
+    let initial:usize=kani::any();kani::assume(initial<1024);
+    let ca=std::cell::Cell::new(initial);let cb=std::cell::Cell::new(initial);
+    let mut ia:[u32;16]=kani::any();let mut va:[[u8;32];16]=kani::any();let mut ib=ia;let mut vb=va;
+    let a=RefCell::new(Vec::new());let b=RefCell::new(Vec::new());
+    let ra=shipped::leaf_step(keys,position,lo,tree,&q,&mut ia,&mut va,used,Recording{backend:Stateful{replies:&replies,cursor:&ca},log:&a});
+    let rb=leaf_step(keys,position,lo,tree,&q,&mut ib,&mut vb,used,Recording{backend:Stateful{replies:&replies,cursor:&cb},log:&b});
+    let si:usize=kani::any();let sb:usize=kani::any();kani::assume(si<16 && sb<32);
+    assert_eq!(ra,rb);assert_eq!(ia[si],ib[si]);assert_eq!(va[si][sb],vb[si][sb]);assert_eq!(ca.get(),cb.get());
+    assert_eq!(a.borrow().len(),1);assert_eq!(b.borrow().len(),1);
+    let pa:usize=kani::any();let by:usize=kani::any();
+    {
+        let aa=a.borrow();let bb=b.borrow();
+        assert_eq!(aa[0].input.len(),bb[0].input.len());
+        assert_eq!(aa[0].input.get(pa).map(|x|x.len()),bb[0].input.get(pa).map(|x|x.len()));
+        assert_eq!(aa[0].input.get(pa).and_then(|x|x.get(by)),bb[0].input.get(pa).and_then(|x|x.get(by)));
+        assert_eq!(aa[0].address.len(),bb[0].address.len());
+        assert_eq!(aa[0].address.get(by),bb[0].address.get(by));
+        assert_eq!(aa[0].returned,bb[0].returned);
+    }
+    std::mem::forget(a);std::mem::forget(b);
+}
+#[kani::proof] #[kani::unwind(481)] fn physical_step_c1(){physical_step(0)}
+#[kani::proof] #[kani::unwind(129)] fn physical_step_c2(){physical_step(1)}
+#[kani::proof] #[kani::unwind(129)] fn physical_step_folded(){physical_step(2)}

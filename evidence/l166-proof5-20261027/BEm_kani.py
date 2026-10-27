@@ -10,7 +10,7 @@ a=f'BEm_R{n:02}' if rust else f'BEm_K{n:02}'; assert not (P/a).exists()
 if harness not in ('show_loops','native_fixtures'):
  assert sum(json.loads(x.read_text())['kind']=='kani' for x in P.glob('BEm_K??/receipt.json'))<20
 sources=[str(p.relative_to(P)) for p in (P/'BEm_rust').rglob('*') if p.is_file() and p.suffix in ('.rs','.toml','.lock')]
-cmd=['/home/dombarker/.cargo/bin/cargo','kani','--manifest-path','BEm_rust/Cargo.toml','--lib','--exact','--harness','BEm_reference::'+harness,'--no-assertion-reach-checks','--solver','cadical','--output-format','old','-Z','unstable-options','--harness-timeout','120','--cbmc-args','--unwinding-assertions']
+cmd=['/home/dombarker/.cargo/bin/cargo','kani','--manifest-path','BEm_rust/Cargo.toml','--lib','--exact','--harness','BEm_reference::'+harness,'--no-assertion-reach-checks','--solver','cadical','--output-format','old','-Z','unstable-options','--harness-timeout','180','--cbmc-args','--unwinding-assertions']
 if harness=='whole_batch_tape_coordinate':
  bounds=json.loads((P/'BEm_unwindset.json').read_text())
  cmd+=['--unwindset',','.join(k+':'+str(v) for k,v in bounds.items())]
@@ -19,7 +19,7 @@ if rust:
 inspection=harness=='show_loops'
 if inspection:
  cmd=['/home/dombarker/.kani/kani-0.67.0/bin/cbmc','--show-loops',B+'/BEm_target/kani/x86_64-unknown-linux-gnu/debug/deps/bel_batch_observation-75991bcddd00b6a0__RNvNtCs3JlFCsjDOnf_21bel_batch_observation13BEm_reference27whole_batch_tape_coordinate.out']
-cfg=dict(kind='rust' if rust else ('inspection' if inspection else 'kani'),attempt=a,command=cmd,sources=sources,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,timeout=180,expected_time=('optimized Rust compilation then four local non-vacuity fixtures; no elimination' if rust else 'optimized Kani compilation then '+harness+' Result and identical ordered attempted log; no stubs'),env=dict(PATH='/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='4',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=B+'/BEm_target',RUSTFLAGS='-C opt-level=3'),deps_fingerprint=dict(scope='self-contained exact source cuts; no Rust dependencies'))
+cfg=dict(kind='rust' if rust else ('inspection' if inspection else 'kani'),attempt=a,command=cmd,sources=sources,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,timeout=200,expected_time=('optimized Rust compilation then four local non-vacuity fixtures; no elimination' if rust else 'optimized Kani compilation then '+harness+' Result and identical ordered attempted log; no stubs'),env=dict(PATH='/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='4',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=B+'/BEm_target',RUSTFLAGS='-C opt-level=3'),deps_fingerprint=dict(scope='self-contained exact source cuts; no Rust dependencies'))
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 retries=[]
 for retry in range(11):

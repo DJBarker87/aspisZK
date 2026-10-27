@@ -71,6 +71,8 @@ fn tree<H:Digest32>(proof:&[u8],queries:[u32;22],root:[u8;32],batch:usize,
 }
 fn batch<H:Digest32>(proof:&[u8],queries:[u32;22],roots:[[u8;32];3],ordinal:usize,hash:H)->Result<(),Error> {
     let mut idx=[0u32;16]; let mut val=[[0u8;32];16];
-    for slot in 0..3 {tree(proof,queries,roots[slot],ordinal,slot,&mut idx,&mut val,hash)?;}
+    tree(proof,queries,roots[0],ordinal,0,&mut idx,&mut val,hash)?;
+    tree(proof,queries,roots[1],ordinal,1,&mut idx,&mut val,hash)?;
+    tree(proof,queries,roots[2],ordinal,2,&mut idx,&mut val,hash)?;
     Ok(())
 }
