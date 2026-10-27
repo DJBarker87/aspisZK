@@ -10808,3 +10808,15 @@ Lean): merge pv-cb and pv-cb3 heads into the join branch (git-only), wire every 
 closure into the aggregate caller's closure with per-op consumer theorems, write IMPORT-CHAIN.md for
 recount 4, combined audit. Six slots: srcid6, rw21, cb6, cb7, runjoin10, wire. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D240 (Stream B) 2026-10-27 02:05 UTC: wire job done: 26 of 27 candidate closures now consumed by the aggregate caller (organisation, not discharge)
+
+pv-wire (`codex/pv-join-20261026`, head c3b99bc9d9; 60/60 Lean, IDs 39300-39359, final audits standard
+axioms, swap 0; no crates/programs change vs the candidate; no forbidden tokens). pv-cb (ff8096896d) and
+pv-cb3 (29297acd5c) merged into the join branch without conflicts. Import reachability of the 27
+CLOSED-ON-CANDIDATE rows from the candidate consumer closure: 17 consumed / 10 unconsumed → 26 / 1; all 26
+closing source laws plus the arbitrary-carrier op51 law are applied by per-op consumer theorems; V270
+stays unreachable because its scoped Formatter diagnostic has no closing operation theorem.
+evidence/pv-join-20261026/wire/IMPORT-CHAIN.md gives every row's import path for recount 4. This is
+organisation of proved facts into the consumer closure, not premise discharge; the research headline
+imports none of it; no headline credit. Rows removed outright: 0. Privacy target not yet established.
