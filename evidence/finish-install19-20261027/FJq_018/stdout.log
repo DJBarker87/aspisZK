@@ -1,0 +1,69 @@
+FJq_PublicModel.lean:20:48: error: unsolved goals
+case transfer
+common✝ : PublicSourceRaw.Common
+recipient✝ : PublicSourceRaw.Digest
+h : PublicSourceRaw.Canonical (PublicSourceRaw.Public.transfer common✝ recipient✝)
+⊢ { variant := R0P.Variant.privateTransfer,
+      anchor := SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.anchor i) ⋯,
+      nullifier :=
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.nullifier i) ⋯,
+      assetId := ↑↑common✝.assetId,
+      recipient :=
+        some (SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (recipient✝ i) ⋯),
+      change := SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.change i) ⋯,
+      withdrawalAmount := none, nextPairIndex := ↑common✝.nextPairIndex,
+      snapshotFrontier := fun i =>
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i_1 =>
+          PublicSourceRaw.mapField (common✝.snapshotFrontier i i_1) ⋯,
+      nextRoot :=
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.nextRoot i) ⋯,
+      nextFrontier := fun i =>
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i_1 =>
+          PublicSourceRaw.mapField (common✝.nextFrontier i i_1) ⋯ } =
+    { variant := R0P.Variant.privateTransfer, anchor := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.anchor i),
+      nullifier := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.nullifier i), assetId := ↑↑common✝.assetId,
+      recipient := some (SpendDataMap.digest ⇑embed fun i => ↑↑(recipient✝ i)),
+      change := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.change i), withdrawalAmount := none,
+      nextPairIndex := ↑common✝.nextPairIndex,
+      snapshotFrontier := fun i => SpendDataMap.digest ⇑embed fun i_1 => ↑↑(common✝.snapshotFrontier i i_1),
+      nextRoot := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.nextRoot i),
+      nextFrontier := fun i => SpendDataMap.digest ⇑embed fun i_1 => ↑↑(common✝.nextFrontier i i_1) }
+
+case withdrawal
+common✝ : PublicSourceRaw.Common
+amount✝ : PublicSourceRaw.Word
+h : PublicSourceRaw.Canonical (PublicSourceRaw.Public.withdrawal common✝ amount✝)
+⊢ { variant := R0P.Variant.withdrawal,
+      anchor := SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.anchor i) ⋯,
+      nullifier :=
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.nullifier i) ⋯,
+      assetId := ↑↑common✝.assetId, recipient := none,
+      change := SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.change i) ⋯,
+      withdrawalAmount := some ↑↑amount✝, nextPairIndex := ↑common✝.nextPairIndex,
+      snapshotFrontier := fun i =>
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i_1 =>
+          PublicSourceRaw.mapField (common✝.snapshotFrontier i i_1) ⋯,
+      nextRoot :=
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i => PublicSourceRaw.mapField (common✝.nextRoot i) ⋯,
+      nextFrontier := fun i =>
+        SpendDataMap.digest ⇑ExactBaseProjection.embed fun i_1 =>
+          PublicSourceRaw.mapField (common✝.nextFrontier i i_1) ⋯ } =
+    { variant := R0P.Variant.withdrawal, anchor := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.anchor i),
+      nullifier := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.nullifier i), assetId := ↑↑common✝.assetId,
+      recipient := none, change := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.change i),
+      withdrawalAmount := some ↑↑amount✝, nextPairIndex := ↑common✝.nextPairIndex,
+      snapshotFrontier := fun i => SpendDataMap.digest ⇑embed fun i_1 => ↑↑(common✝.snapshotFrontier i i_1),
+      nextRoot := SpendDataMap.digest ⇑embed fun i => ↑↑(common✝.nextRoot i),
+      nextFrontier := fun i => SpendDataMap.digest ⇑embed fun i_1 => ↑↑(common✝.nextFrontier i i_1) }
+FJq_PublicModel.lean:23:36: warning: This simp argument is unused:
+  SpendDataMap.digest
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵u̵b̵l̵i̵c̵S̵o̵u̵r̵c̵e̵R̵a̵w̵.̵m̵a̵p̵P̵u̵b̵l̵i̵c̵,̵P̵u̵b̵l̵i̵c̵S̵o̵u̵r̵c̵e̵R̵a̵w̵.̵m̵a̵p̵C̵o̵m̵m̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵S̵e̵m̵a̵n̵t̵i̵c̵P̵u̵b̵l̵i̵c̵W̵i̵r̵e̵.̵t̵o̵P̵u̵b̵l̵i̵c̵,̵S̵p̵e̵n̵d̵D̵a̵t̵a̵M̵a̵p̵.̵m̵a̵p̵P̵u̵b̵l̵i̵c̵,̵m̵o̵d̵e̵l̵,̵c̵o̵m̵m̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵n̵o̵n̵e̵,̵S̵p̵e̵n̵d̵D̵a̵t̵a̵M̵a̵p̵.̵d̵i̵g̵e̵s̵t̵,̵F̵J̵q̵_̵P̵u̵b̵l̵i̵c̵F̵i̵e̵l̵d̵.̵v̵a̵l̵u̵e̵,̵m̵a̵p̵_̵n̵a̵t̵C̵a̵s̵t̵]̵[̲P̲u̲b̲l̲i̲c̲S̲o̲u̲r̲c̲e̲R̲a̲w̲.̲m̲a̲p̲P̲u̲b̲l̲i̲c̲,̲ ̲P̲u̲b̲l̲i̲c̲S̲o̲u̲r̲c̲e̲R̲a̲w̲.̲m̲a̲p̲C̲o̲m̲m̲o̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲S̲e̲m̲a̲n̲t̲i̲c̲P̲u̲b̲l̲i̲c̲W̲i̲r̲e̲.̲t̲o̲P̲u̲b̲l̲i̲c̲,̲ ̲S̲p̲e̲n̲d̲D̲a̲t̲a̲M̲a̲p̲.̲m̲a̲p̲P̲u̲b̲l̲i̲c̲,̲ ̲m̲o̲d̲e̲l̲,̲ ̲c̲o̲m̲m̲o̲n̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲n̲o̲n̲e̲,̲ ̲F̲J̲q̲_̲P̲u̲b̲l̲i̲c̲F̲i̲e̲l̲d̲.̲v̲a̲l̲u̲e̲,̲ ̲m̲a̲p̲_̲n̲a̲t̲C̲a̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJq_PublicModel.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

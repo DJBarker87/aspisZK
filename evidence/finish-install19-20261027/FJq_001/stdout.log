@@ -1,0 +1,80 @@
+@[defeq] theorem AspisR1.FJn_InstallationBoundary.adopted : ∀ {C : Type} (err : C)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (r : AspisR1.NP6_StdModel.Reservation),
+  (AspisR1.FIp_Install.configuration err c r).boundaries.terminal = c.boundaries.terminal :=
+fun {C} err c r => rfl
+@[defeq] theorem AspisR1.FJn_InstallationBoundary.fixed : ∀ {C : Type} (err : C)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (r : AspisR1.NP6_StdModel.Reservation),
+  (AspisR1.FIq_Install.configuration err c r).boundaries.terminal = AspisR1.FIq_Terminal.terminal :=
+fun {C} err c r => rfl
+@[defeq] theorem AspisR1.FJn_InstallationBoundary.arbitrary : ∀ {C : Type} (err : C)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (r : AspisR1.NP6_StdModel.Reservation)
+  (value : AspisR1.FIp_SemanticArithmetic.MQ)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (claims : Aeneas.Std.Array (Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 29#usize) 3#usize)
+  (alpha : Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 10#usize)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges),
+  have chosen :=
+    { adapter := c.adapter, currentBase := c.currentBase, stageBase := c.stageBase, finish := c.finish,
+      reserved := c.reserved, query := c.query, geometry := c.geometry,
+      boundaries :=
+        have __src := c.boundaries;
+        { fromFn := @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn __src, mask := __src.mask, add := __src.add,
+          mul := __src.mul,
+          terminal := fun x x_1 x_2 x_3 => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value),
+          circle := __src.circle, unwrapRoot := __src.unwrapRoot, claims := __src.claims },
+      std := c.std };
+  (AspisR1.FIp_Install.configuration err chosen r).boundaries.terminal pub claims alpha challenges =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value) :=
+fun {C} err c r value pub claims alpha challenges => rfl
+theorem AspisR1.FJn_InstallationSeparation.not_uniform : ∀ {C : Type} (err : C)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (r : AspisR1.NP6_StdModel.Reservation)
+  (pub : AspisR1.FIq_Carriers.Public)
+  (claims : Aeneas.Std.Array (Aeneas.Std.Array AspisR1.FJn_InstallationSeparation.MQ 29#usize) 3#usize)
+  (alpha : Aeneas.Std.Array AspisR1.FJn_InstallationSeparation.MQ 10#usize)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges),
+  ∃ chosen, (AspisR1.FIp_Install.configuration err chosen r).boundaries.terminal ≠ AspisR1.FIq_Terminal.terminal :=
+fun {C} err c r pub claims alpha challenges =>
+  let z := AspisR1PublicPreparation.aspis_core.field.QM31.ZERO;
+  let o := AspisR1.FJn_InstallationSeparation.one;
+  if hz :
+      AspisR1.FIq_Terminal.terminal pub claims alpha challenges =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z) then
+    Exists.intro
+      { adapter := c.adapter, currentBase := c.currentBase, stageBase := c.stageBase, finish := c.finish,
+        reserved := c.reserved, query := c.query, geometry := c.geometry,
+        boundaries :=
+          let __src := c.boundaries;
+          { fromFn := @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn __src, mask := __src.mask,
+            add := __src.add, mul := __src.mul,
+            terminal := fun x x_1 x_2 x_3 => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok o),
+            circle := __src.circle, unwrapRoot := __src.unwrapRoot, claims := __src.claims },
+        std := c.std }
+      fun same =>
+      have output := congrArg (fun f => f pub claims alpha challenges) same;
+      id
+        (fun output =>
+          AspisR1.FJn_InstallationSeparation.zero_ne_one
+            (Eq.symm
+              (Aeneas.Std.core.result.Result.Ok.inj
+                (Aeneas.Std.Result.ok.inj
+                  (Eq.mp (congrArg (fun _a => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok o) = _a) hz)
+                    output)))))
+        output
+  else
+    Exists.intro
+      { adapter := c.adapter, currentBase := c.currentBase, stageBase := c.stageBase, finish := c.finish,
+        reserved := c.reserved, query := c.query, geometry := c.geometry,
+        boundaries :=
+          let __src := c.boundaries;
+          { fromFn := @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn __src, mask := __src.mask,
+            add := __src.add, mul := __src.mul,
+            terminal := fun x x_1 x_2 x_3 => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z),
+            circle := __src.circle, unwrapRoot := __src.unwrapRoot, claims := __src.claims },
+        std := c.std }
+      fun same =>
+      have output := congrArg (fun f => f pub claims alpha challenges) same;
+      hz (Eq.symm output)
+'AspisR1.FJn_InstallationBoundary.adopted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJn_InstallationBoundary.fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJn_InstallationBoundary.arbitrary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJn_InstallationSeparation.not_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
