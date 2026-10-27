@@ -16,10 +16,10 @@ theorem length {T : Type} (src : List T) (zero : T) (n k : Nat)
 theorem finish {T : Type} (src : List T) (zero : T) :
     image src zero src.length src.length = src := by simp [image]
 
-/-- One copied cell extends the prefix without evaluating any concrete array. -/
-theorem write_head {T : Type} (prefix suffix : List T) (zero value : T) :
-    (prefix ++ zero::suffix).set prefix.length value = prefix ++ value::suffix := by
-  induction prefix with
+/-- One copied cell extends the copied without evaluating any concrete array. -/
+theorem write_head {T : Type} (copied suffix : List T) (zero value : T) :
+    (copied ++ zero::suffix).set copied.length value = copied ++ value::suffix := by
+  induction copied with
   | nil => rfl
   | cons head tail ih =>
     change head :: ((tail ++ zero::suffix).set tail.length value) =

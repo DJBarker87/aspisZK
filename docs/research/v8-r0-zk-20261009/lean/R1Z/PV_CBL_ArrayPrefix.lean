@@ -22,7 +22,7 @@ theorem advance {T : Type} [Inhabited T] {N : Usize} (out : Array T N) (v : Slic
   intro j hj hn
   rw [set_get _ _ _ _ hi]
   split
-  · next e => subst j; exact (List.getElem!_eq_getElem _ _ hv).symm
+  · next e => subst j; simp [List.getElem!_eq_getElem?_getD, List.getElem?_eq_getElem hv]
   · next e => exact h j (by omega) hn
 
 theorem initial {T : Type} [Inhabited T] {N : Usize} (out : Array T N) (v : Slice T) :

@@ -84,5 +84,22 @@ mod path_checks {
         let i:usize=kani::any();
         assert_eq!(native.as_os_str().as_bytes().len(),reference.len());
         assert_eq!(native.as_os_str().as_bytes().get(i).copied(),reference.get(i).copied());
+        // Same bounded byte inputs cover String->Path and append on valid UTF-8.
+        if let (Ok(mut a),Ok(b))=(String::from_utf8(p.as_os_str().as_bytes().to_vec()),
+                                  String::from_utf8(qpath.as_os_str().as_bytes().to_vec())) {
+            let path:&std::path::Path=a.as_ref();
+            assert_eq!(path.as_os_str().as_bytes().len(),a.as_bytes().len());
+            assert_eq!(path.as_os_str().as_bytes().get(i),a.as_bytes().get(i));
+            let before=a.as_bytes().to_vec();
+            a.push_str(&b);
+            assert_eq!(a.len(),before.len()+b.len());
+            let expected=if i<before.len() {before.get(i).copied()}
+                         else {b.as_bytes().get(i-before.len()).copied()};
+            assert_eq!(a.as_bytes().get(i).copied(),expected);
+            let capacity:usize=kani::any();kani::assume(capacity<=8);
+            let empty=String::with_capacity(capacity);
+            assert_eq!(empty.len(),0);
+            assert!(empty.capacity()>=capacity);
+        }
     }
 }

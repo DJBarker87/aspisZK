@@ -5,7 +5,7 @@ p='crates/aspis-r1-cost-probe/src/host_commitment.rs';before=subprocess.check_ou
 assert after.startswith(before) and after[len(before):].lstrip().startswith(b'#[cfg(kani)]\nmod pv_cblib_library_checks')
 tag=str(time.time_ns())
 r=subprocess.run(['ssh',host,f'python3 {gate}/reservation.py {base}/kani-upload-{tag}.json > {base}/kani-upload-{tag}.log 2>&1; cat {base}/kani-upload-{tag}.log'],text=True,capture_output=True);(out/f'kani-upload-{tag}.log').write_text(r.stdout+r.stderr)
-assert r.returncode==0 and json.loads(r.stdout)['allowed']
+if r.returncode or not json.loads(r.stdout)['allowed']:raise SystemExit(78)
 subprocess.run(['ssh',host,f'mkdir -p {base}/kani-proof'],check=True)
 for src,dest in [(root/p,base+'/source/'+p),(root/'tools/pv-cblib-20261027/kani-lib.rs',base+'/kani-proof/lib.rs'),(root/'tools/pv-cblib-20261027/kani-Cargo.toml',base+'/kani-proof/Cargo.toml')]:
  subprocess.run(['scp',str(src),host+':'+dest],check=True)

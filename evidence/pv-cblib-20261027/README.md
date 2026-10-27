@@ -123,3 +123,21 @@ as row discharge.
 ## Prepared array/split stage
 
 ArrayKernel/Image/Guard/Step/Unfold/Total/Prefix/Copied/Ext/ReferenceTotal and SplitBounds/Arithmetic/Model/Recompose were prepared after commit 6911addb1d. At this checkpoint they are **drafts, not accepted Lean proofs**; the first queue is awaiting host reservation (39656–39658 refused, zero charge). Op215 mono extraction and op36 borrowed full-Result extraction are rejected, with exact diagnostics in their native run directories. Neither is a new row law. See ARRAY-FRONTIER.md. Current accepted bundle remains four source callbacks.
+
+Read-only LLBC validity audit: op215 monomorphized Charon process exited zero but its JSON has `has_errors=true` (type/trait errors in its log). It is rejected, not a successful extraction. Other existing LLBC files have `has_errors=false`; this flag alone does not certify source closure. The extraction runner now checks it before launching Aeneas. No frontend/backend or shared launcher repair was made.
+
+## Pop and focused array continuation
+
+Native run `pop-owned-first-r01` exited 1 because the selector omitted `host_commitment::`; it is charged with no equivalence verdict. The corrected selector run `pop-owned-qualified-r01` timed out at 180.31 s (exit 124), without verdict/counterexample. Its GNU-time wrapper RSS excludes killed descendants; no aggregate solver-RSS claim is made. The post-timeout check confirms its own cgroup is gone. A changed coordinate assertion harness is prepared under the same input bounds/caps/180-s timeout. Kani budget is 8/10.
+
+Lean 39661 accepted the generic copy kernel. 39666 rejected the image helper because `prefix` was a reserved identifier; the source was corrected before retry. Lean budget is 38/100, with the final three still reserved for bundle audit. Current-source acceptance is tracked in proof-status.json; drafts are not certified by older green source snapshots.
+
+Own queue timing now samples the standing read-only inventory after the required refusal wait, then invokes all unchanged positive admission and in-scope gates. It reserves nothing, modifies no host infrastructure, and consumes a fresh Env-J ID for each actual Lean admission attempt. Source/body errors are never automatically retried.
+
+## Kani budget exhausted; Lean continues
+
+`pop-coordinate-r01` and `path-join-string-coordinates-r02` both timed out at 180 seconds with no verification verdict and no checked counterexample. Their post-timeout checks confirm their own cgroups are gone. Together with earlier runs this exhausts **10/10 Kani**, and the runner forbids further charged Kani work. Wrapper GNU-time RSS after killed descendants is incomplete and is not presented as solver peak RSS. The array Kani harness and sha2/block-buffer vendor harnesses remain proposed, never run.
+
+The owned direct-index array variant was rejected by Aeneas for reference-output loan validation and structured Drop/destructor semantics (`aeneas-source-op36-owned-opt-direct2-01`); it is not a source law. Manual LibraryShapes/LibraryShapeTypes/GenericArrayFlatten drafts describe byte-pinned Rust fields only; they are not Aeneas extraction or callback source-binding certificates. Additional source files are checked against Cargo.lock .crate archive checksums and matching archive member bytes in additional-library-sources.json.
+
+No new callback row is supplied in this continuation. The canonical endpoint/ledger is unchanged; Native/RunJoin, deployment, E1/E2, L1/L2/L3 and client-route conditions remain retained. The source/reference/toolchain association caveats remain explicit.

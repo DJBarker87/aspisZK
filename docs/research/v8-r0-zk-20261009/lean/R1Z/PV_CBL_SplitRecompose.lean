@@ -8,7 +8,7 @@ theorem one {T : Type} (src : List T) (size i : Nat) :
     PV_CBL_SplitModel.block src size i ++ src.drop ((i+1)*size) =
       src.drop (i*size) := by
   unfold PV_CBL_SplitModel.block
-  have h : (i+1)*size=i*size+size := by omega
+  have h : (i+1)*size=i*size+size := by rw [Nat.add_mul,Nat.one_mul]
   rw [h,←List.drop_drop]
   exact List.take_append_drop size (src.drop (i*size))
 

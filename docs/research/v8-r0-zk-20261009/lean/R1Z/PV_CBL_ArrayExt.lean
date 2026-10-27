@@ -12,7 +12,8 @@ theorem copied_unique {T : Type} [Inhabited T] {N : Usize} (a b : Array T N)
   · intro i hia hib
     have hn : i<N.val := by simpa [a.property] using hia
     have h := (ha i hn hn).trans (hb i hn hn).symm
-    simpa only [List.getElem!_eq_getElem _ _ hia,List.getElem!_eq_getElem _ _ hib] using h
+    simpa only [List.getElem!_eq_getElem?_getD,List.getElem?_eq_getElem hia,
+      List.getElem?_eq_getElem hib,Option.getD_some] using h
 
 #print axioms copied_unique
 end R1Z.PV_CBL_ArrayExt

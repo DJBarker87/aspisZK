@@ -8,6 +8,10 @@ def latest_refusal():
   try:r=json.loads(p.read_text())
   except ValueError:continue
   if not r.get('allowed',True):rows.append(r)
+ for p in out.glob('*-upload-*.log'):
+  try:r=json.loads(p.read_text())
+  except ValueError:continue
+  if not r.get('allowed',True):rows.append(r)
  for p in out.glob('*/collected-receipt.json'):
   r=json.loads(p.read_text()).get('admissions',{}).get('admission-barrier.json',{})
   if r and not r.get('allowed',True):rows.append(r)
@@ -24,9 +28,13 @@ def wait_refusal():
  until=datetime.datetime.fromisoformat(r['utc']).timestamp()+delay
  while time.time()<until:time.sleep(min(60,until-time.time()))
 if __name__ == "__main__":
- for stage in ['charon','aeneas']:
+ stages=sys.argv[3:] or ['charon','aeneas']
+ assert all(x in ('charon','aeneas') for x in stages)
+ for stage in stages:
   for i in range(1,11):
-   wait_refusal();tag=f'{label}-{i:02}'
+   wait_refusal()
+   subprocess.run([sys.executable,str(root/'tools/pv-cblib-20261027/wait_capacity.py')],check=True)
+   tag=f'{label}-{i:02}'
    p=subprocess.run([sys.executable,str(root/'tools/pv-cblib-20261027/extract.py'),stage,variant,tag])
    if p.returncode==0:break
    if p.returncode!=78:sys.exit(p.returncode)

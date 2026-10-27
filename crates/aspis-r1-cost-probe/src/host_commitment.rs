@@ -439,6 +439,36 @@ mod pv_cblib_library_checks {
     fn array_full_reference(v: Vec<QM31>) -> Result<[QM31;1024],Vec<QM31>> {
         match array_reference(&v) {Some(a)=>Ok(a),None=>Err(v)}
     }
+    // Safe field-wise reference over the exact private prover element type.
+    fn copy_result_reference(item: &Result<Word,Error>) -> Result<Word,Error> {
+        match item {
+            Ok(Word::Base(values)) => {
+                let mut out=Vec::new();let mut i=0;
+                while i<values.len() {out.push(M31(values[i].0));i+=1;}
+                Ok(Word::Base(out))
+            },
+            Ok(Word::Secure(values)) => {
+                let mut out=Vec::new();let mut i=0;
+                while i<values.len() {
+                    let q=values[i];
+                    out.push(QM31 {c0:aspis_core::field::CM31 {a:M31(q.c0.a.0),b:M31(q.c0.b.0)},
+                                   c1:aspis_core::field::CM31 {a:M31(q.c1.a.0),b:M31(q.c1.b.0)}});
+                    i+=1;
+                }
+                Ok(Word::Secure(out))
+            },
+            Err(e) => Err(*e),
+        }
+    }
+    fn pop_owned_reference(v: &Vec<Result<Word,Error>>) -> (Option<Result<Word,Error>>,Vec<Result<Word,Error>>) {
+        let mut out=Vec::new();let mut last=None;let mut i=0;
+        while i<v.len() {
+            let item=copy_result_reference(&v[i]);
+            if i+1==v.len() {last=Some(item);} else {out.push(item);}
+            i+=1;
+        }
+        (last,out)
+    }
     fn arbitrary_q() -> QM31 {
         QM31 {c0:aspis_core::field::CM31 {a:M31(kani::any()),b:M31(kani::any())},
               c1:aspis_core::field::CM31 {a:M31(kani::any()),b:M31(kani::any())}}
@@ -488,17 +518,35 @@ mod pv_cblib_library_checks {
         let (v,_) = paired_vectors();
         assert_eq!(v.is_empty(), empty_reference(&v));
     }
+    fn same_result_at(a: &Result<Word,Error>, b: &Result<Word,Error>, lane:usize) {
+        match (a,b) {
+            (Ok(Word::Base(x)),Ok(Word::Base(y))) => {
+                assert_eq!(x.len(),y.len());assert_eq!(x.get(lane),y.get(lane));
+            },
+            (Ok(Word::Secure(x)),Ok(Word::Secure(y))) => {
+                assert_eq!(x.len(),y.len());assert_eq!(x.get(lane),y.get(lane));
+            },
+            (Err(x),Err(y)) => assert_eq!(x,y),
+            _ => unreachable!(),
+        }
+    }
     #[kani::proof]
     #[kani::unwind(4)]
     fn op33_exact_word() {
-        let (mut v,mut w) = paired_vectors();
-        let a=v.pop(); let b=pop_reference(&mut w);
+        let (mut v,w) = paired_vectors();
+        let (b,w)=pop_owned_reference(&w);
+        let a=v.pop();
+        let lane:usize=kani::any();let index:usize=kani::any();
         match (a,b) {
             (None,None) => (),
-            (Some(x),Some(y)) => assert!(same_result(&x,&y)),
+            (Some(x),Some(y)) => same_result_at(&x,&y,lane),
             _ => unreachable!(),
         }
         assert_eq!(v.len(),w.len());
-        for i in 0..v.len() { assert!(same_result(&v[i],&w[i])); }
+        match (v.get(index),w.get(index)) {
+            (None,None) => (),
+            (Some(x),Some(y)) => same_result_at(x,y,lane),
+            _ => unreachable!(),
+        }
     }
 }

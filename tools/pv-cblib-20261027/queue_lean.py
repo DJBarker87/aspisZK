@@ -18,13 +18,14 @@ for path in out.glob('*/collected-receipt.json'):
  if data and not data.get('allowed',True):refused_admissions.append((datetime.datetime.fromisoformat(data['utc']).timestamp(),json.dumps(data)))
 if refused_admissions:
  instant,body=max(refused_admissions)
- delay=30 if 'FileNotFoundError' in body else 180
+ delay=30 if 'FileNotFoundError' in body else 209
  seconds=max(0,instant+delay-time.time())
  while seconds>0:
   step=min(60,seconds);time.sleep(step);seconds=max(0,instant+delay-time.time())
 for module in sys.argv[1:]:
  refused=0; transient_refusals=0
  while True:
+  subprocess.run([sys.executable,str(root/'tools/pv-cblib-20261027/wait_capacity.py')],check=True)
   start=json.loads((out/'TALLY.json').read_text())['next_id']
   p=subprocess.run([sys.executable,str(root/'tools/pv-cblib-20261027/lean.py'),module])
   if p.returncode==0:break
@@ -36,7 +37,7 @@ for module in sys.argv[1:]:
   if transient:
    transient_refusals+=1
    if transient_refusals>1:sys.exit(78)
-  seconds=30 if transient else 180
+  seconds=30 if transient else 180+19+(start%43)
   print('reservation refusal',start,'next unused ID after',seconds,'seconds',flush=True)
   with (out/'queue-waits.jsonl').open('a') as f:f.write(json.dumps({'attempt':start,'module':module,'seconds':seconds,'reason':record})+'\n')
   while seconds:

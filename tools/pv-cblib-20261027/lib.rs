@@ -90,5 +90,9 @@ pub fn array_full_reference(v: &Vec<aspis_core::field::QM31>) -> Result<[aspis_c
 }
 // Owned input preserves the complete error branch without a cloning callback.
 pub fn array_result_reference(v: Vec<aspis_core::field::QM31>) -> Result<[aspis_core::field::QM31;1024],Vec<aspis_core::field::QM31>> {
-    match array_qm31_reference(&v) {Some(a)=>Ok(a),None=>Err(v)}
+    if v.len()!=1024 {return Err(v);}
+    let z=aspis_core::field::QM31 {c0:aspis_core::field::CM31 {a:aspis_core::field::M31(0),b:aspis_core::field::M31(0)},c1:aspis_core::field::CM31 {a:aspis_core::field::M31(0),b:aspis_core::field::M31(0)}};
+    let mut out=[z;1024];let mut i=0;
+    while i<1024 {out[i]=v[i];i+=1;}
+    Ok(out)
 }

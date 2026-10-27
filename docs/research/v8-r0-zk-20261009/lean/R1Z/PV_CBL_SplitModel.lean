@@ -14,6 +14,8 @@ theorem block_length {T : Type} (src : List T) (size i : Nat)
     (hi : i<src.length/size) : (block src size i).length=size := by
   have h : (i+1)*size≤src.length := le_trans
     (Nat.mul_le_mul_right size (by omega)) (Nat.div_mul_le_self _ _)
+  have hsum : i*size+size≤src.length := by
+    simpa only [Nat.add_mul,Nat.one_mul] using h
   simp only [block,List.length_take,List.length_drop]
   rw [Nat.min_eq_left (by omega)]
 

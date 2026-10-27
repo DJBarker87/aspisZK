@@ -12,7 +12,7 @@ theorem exact_blocks (count size : Nat) (hs : 0<size) : (count*size)/size=count 
 theorem exact_tail (count size : Nat) : (count*size)%size=0 := by simp
 
 theorem block_count_step (len size : Nat) (hs : 0<size) :
-    (len+size)/size=len/size+1 := by omega
+    (len+size)/size=len/size+1 := Nat.add_div_right len hs
 
 #print axioms tail_lt
 #print axioms no_blocks

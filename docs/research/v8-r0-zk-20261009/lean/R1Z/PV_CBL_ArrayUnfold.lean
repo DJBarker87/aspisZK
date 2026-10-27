@@ -4,10 +4,11 @@ namespace R1Z.PV_CBL_ArrayUnfold
 set_option autoImplicit false
 
 theorem bind {A B : Type} (step : A → Result (ControlFlow A B)) (a : A) :
-    loop step a = (do let cf ← step a
-                     match cf with
-                     | .cont next => loop step next
-                     | .done out => .ok out) := by
+    loop step a = (do
+      let cf ← step a
+      match cf with
+      | .cont next => loop step next
+      | .done out => .ok out) := by
   rw [loop]
   cases step a <;> rfl
 
