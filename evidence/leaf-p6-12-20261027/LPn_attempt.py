@@ -45,7 +45,7 @@ else:
   local=Path(next(x['repository_source'] for x in json.loads((E/'LPn_inherited-plan.json').read_text()) if x['module']==target))
   r=ssh(f'mkdir -p {B}/LPn_inherited/'+str(Path(target.replace(".","/")).parent));assert r.returncode==0,r.stderr
   subprocess.run(['scp','-q',str(local),H+':'+B+'/'+src],check=True)
- if kind!='inherited':subprocess.run(['scp','-q',str((Path('evidence/leaf-p6-10-20261027') if kind=='reuse' else E)/(target+'.lean')),H+':'+B+'/'+src],check=True)
+ if kind!='inherited':subprocess.run(['scp','-q',str((Path('lean') if kind=='dependency' else Path('evidence/leaf-p6-10-20261027') if kind=='reuse' else E)/(target+'.lean')),H+':'+B+'/'+src],check=True)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 subprocess.run(['scp','-q',str(E/(a+'.json')),H+':'+B+'/'+a+'.json'],check=True)
 if kind=='kani' and (a=='LPn_K029' or a=='LPn_K030'):
@@ -70,7 +70,7 @@ if kind=='kani':
  if post.returncode or post.stdout.split()[0]!='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef':raise SystemExit('STOP lock drift')
 for f in ['receipt.json','stdout.log','time.log']:collect(a+'/'+f)
 if kind!='kani':
- local=Path(next(x['repository_source'] for x in json.loads((E/'LPn_inherited-plan.json').read_text()) if x['module']==target)) if kind=='inherited' else (Path('evidence/leaf-p6-10-20261027') if kind=='reuse' else E)/(target+'.lean')
+ local=Path(next(x['repository_source'] for x in json.loads((E/'LPn_inherited-plan.json').read_text()) if x['module']==target)) if kind=='inherited' else (Path('lean') if kind=='dependency' else Path('evidence/leaf-p6-10-20261027') if kind=='reuse' else E)/(target+'.lean')
  (E/a/'source.lean.txt').write_bytes(local.read_bytes())
 rc=json.loads((E/a/'receipt.json').read_text());print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','cgroup_memory_peak_bytes','print_axioms']}),flush=True)
 print((E/a/'stdout.log').read_text()[-1500:],flush=True)

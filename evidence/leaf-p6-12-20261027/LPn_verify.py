@@ -22,7 +22,7 @@ for kind,limit in [('L',80),('K',30)]:
      if 'depends on axioms:' in line:
       names=set(line.split('depends on axioms: [')[1].rstrip(']').split(', '));assert names<=allowed,(a,names)
      axes[line.split("'")[1]]=line
-   status='PASS' if r['exit_status']==0 else 'FAILED_PROOF'
+   status='PASS' if r['exit_status']==0 else 'MEMORY_LIMIT' if 'excessive memory consumption' in (p.parent/'stdout.log').read_text() else 'FAILED_PROOF'
   else:
    g=json.loads((E/(a+'-graph-check.json')).read_text())
    assert g['graph_matches_frozen'] and not g['new_package_tuples'] and not g['edge_errors'],a
@@ -73,6 +73,6 @@ summary={}
 for k in ['L','K']:
  rr=[r for r in rows if r['attempt'].startswith('LPn_'+k)]
  summary[k]={'attempts':len(rr),'statuses':{s:sum(r['status']==s for r in rr) for s in sorted({r['status'] for r in rr})},'wall_seconds':sum(r['wall_seconds'] for r in rr),'peak_rss_kib':max(r['peak_rss_kib'] for r in rr),'swaps':0}
-out={'errors':errors,'budget':{'lean_used':summary['L']['attempts'],'lean_limit':80,'kani_used':summary['K']['attempts'],'kani_limit':30,'exhausted':False},'summary':summary,'native_input_hashes_reconstructed':checked,'accepted_printed_names':len(axes),'axioms':axes,'scope_policy':{'limits':'6G high/8G max/swap0/tasks64; Lean-M7000; optimized offline Rust','one_scope_at_a_time':True,'launches':'sequential receipt collection; no shared infrastructure change'},'closed_leaves':['compact::expand_values (adopted bounded domain)','ValidatedRecord::decode_k (adopted N1/28/29)','r1_semantic::claims (explicit allocation partition; accepted cohort transport)'],'first_open_leaf':'canonical::Dot::push: raw/Dot carrier and state/Result/caller association','headline':'AspisR1.RPx_Deployed.deployed','headline_premises_removed':0,'rows':rows}
+out={'errors':errors,'budget':{'lean_used':summary['L']['attempts'],'lean_limit':80,'kani_used':summary['K']['attempts'],'kani_limit':30,'exhausted':summary['L']['attempts']>=80 or summary['K']['attempts']>=30},'summary':summary,'native_input_hashes_reconstructed':checked,'accepted_printed_names':len(axes),'axioms':axes,'scope_policy':{'limits':'6G high/8G max/swap0/tasks64; Lean-M7000; optimized offline Rust','one_scope_at_a_time':True,'launches':'sequential receipt collection; no shared infrastructure change'},'closed_leaves':['compact::expand_values (adopted bounded domain)','ValidatedRecord::decode_k (adopted N1/28/29)','r1_semantic::claims (explicit allocation partition; accepted cohort transport)','canonical::Dot::push (exact local state/Result and caller domain)'],'first_open_leaf':'candidate::wide_view: arbitrary carrier/range/lifetime/frame/native Slice/caller association','headline':'AspisR1.RPx_Deployed.deployed','headline_premises_removed':0,'rows':rows}
 (E/'LPn_VERIFICATION.json').write_text(json.dumps(out,indent=2)+'\n')
 print(json.dumps({k:v for k,v in out.items() if k not in ['rows','axioms']},indent=2))
