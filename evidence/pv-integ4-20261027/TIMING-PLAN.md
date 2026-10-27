@@ -32,9 +32,8 @@ Baseline first, then candidate; five fresh processes per side, matching coins100
 each process proves transfer and withdrawal. For each fixture require candidate median
 strictly <15s and <=1.10× shipped-control median. Retain all samples, complete result
 records, public/proof bytes and durable ledger comparisons, before/after quiet guards,
-load/scope inventory and binary pins. The established comparator excludes diagnostic
-seconds only from deterministic records; any literal-result requirement must be resolved
-before running this plan.
+load/scope inventory and binary pins. The lead resume ruling confirms that the comparator excludes diagnostic
+seconds only from deterministic records; every other field must match.
 
 One scope only: MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64. Admission requires
 allowed:true AND exit0 both before and inside scope. Never bypass holds or edit/remove
@@ -54,5 +53,5 @@ Install this job's `combined-corpus.py` as corpus.py: inherited coins6000–6999
 4 complete oracle-log pairs(6006,6007,6010,6011),maximum3 prover processes inside
 one capped scope. Stop on first discrepancy; task-limit/OOM events invalidate the cohort.
 Time is expected in complete retry-owner proof generation and P_R1 elimination;
-review after10min without a completed case. No differential or timing result is claimed
+review after10min without a completed case. The resumed differential execution is recorded in README.md; no timing result is claimed
 by this plan. Target not yet established.
