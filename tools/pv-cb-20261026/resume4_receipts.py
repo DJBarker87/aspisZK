@@ -12,7 +12,9 @@ for p in ev.glob('38*.json'):
 rs.sort(key=lambda r:r['attempt'])
 ks=[]
 for p in ev.glob('kani-resume4-*/collected-receipt.json'):
- r=json.loads(p.read_text());ks.append(dict(name=p.parent.name,**{k:r.get(k) for k in ['harness','exit','wall','peak_rss_kib','swap','source_revision']}))
+ r=json.loads(p.read_text())
+ if not r.get('attempt_charged'):continue
+ ks.append(dict(name=p.parent.name,**{k:r.get(k) for k in ['harness','exit','wall','peak_rss_kib','swap','source_revision']}))
 pending=[p.parent.name for p in ev.glob('kani-resume4-*/target.json') if not (p.parent/'collected-receipt.json').exists()]
 summary=dict(lean_used=len(rs),lean_budget=100,lean_passed=sum(r['exit']==0 for r in rs),lean_remaining=100-len(rs),next_unused_id=max(used,default=38299)+1,reserved_last3='Joint axioms audits, attempts98–100',kani_used=len(ks)+len(pending),kani_completed=len(ks),kani_running_or_admitted=pending,kani_budget=12,kani_runs=ks,rows_before=23,rows_after=23,endpoint_premises_removed=0,target='not yet established')
 (ev/'RESUME4-TALLY.json').write_text(json.dumps(summary,indent=2)+'\n')

@@ -1,0 +1,200 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CanonicalMaskRoot.lean:18:117: error: unsolved goals
+c1 : Std.Array Q 16#usize
+mask : Std.Array Q 10#usize
+g : Q
+point : Std.Array Q 10#usize
+vc1 : ValidArray c1
+vmask : ValidArray mask
+vg : Valid g
+vpoint : ValidArray point
+linear explicitLinear : ProverRwP7CurrentFieldSource.aspis_core.field.QM31
+hlinear : PV_CB_MaskSource.state_only_hiding.selected_mask_linears point = ok (linear, explicitLinear)
+vlinear : PV_CB_CanonicalLinears.Valid linear
+vexplicit : PV_CB_CanonicalLinears.Valid explicitLinear
+initial : Std.Array ProverRwP7CurrentFieldSource.aspis_core.field.QM31 27#usize :=
+  Array.repeat 27#usize ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO
+vinitial : ValidArray initial
+coeff1 : Std.Array ProverRwP7CurrentFieldSource.aspis_core.field.QM31 27#usize
+hcoeff1 :
+  PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop0 { start := 0#usize, «end» := 16#usize } c1
+      initial =
+    ok coeff1
+vcoeff1 : PV_CB_CanonicalFill.Valid coeff1
+coeff2 : Std.Array ProverRwP7CurrentFieldSource.aspis_core.field.QM31 27#usize
+hcoeff2 :
+  PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop1 { start := 0#usize, «end» := 10#usize } mask
+      coeff1 =
+    ok coeff2
+vcoeff2 : PV_CB_CanonicalFill.Valid coeff2
+prepared : ProverRwP7CurrentFieldSource.aspis_core.field.PreparedQm31Multiplier
+hprepared : ProverRwP7CurrentFieldSource.aspis_core.field.PreparedQm31Multiplier.new linear = ok prepared
+vprepared : PV_CB_CanonicalPreparedCtor.Valid prepared
+shared : PV_CB_CanonicalTower.Q
+hshared : coeff2.index_usize 26#usize = ok shared
+vshared : Valid shared
+horner : ProverRwP7CurrentFieldSource.aspis_core.field.QM31
+hhorner :
+  PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop2
+      { iter := { start := 0#usize, «end» := 26#usize } } coeff2 prepared shared =
+    ok horner
+vhorner : PV_CB_CanonicalTower.Valid horner
+power : ProverRwP7CurrentFieldSource.aspis_core.field.QM31
+hpower : PV_CB_MaskSource.state_only_hiding.mask_power_26 explicitLinear = ok power
+vpower : PV_CB_CanonicalTower.Valid power
+factor : ProverRwP7CurrentFieldSource.aspis_core.field.QM31
+hfactor : ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ONE.add power = ok factor
+vfactor : PV_CB_CanonicalTower.Valid factor
+product : ProverRwP7CurrentFieldSource.aspis_core.field.QM31
+hproduct : factor.mul g = ok product
+vproduct : PV_CB_CanonicalTower.Valid product
+out : ProverRwP7CurrentFieldSource.aspis_core.field.QM31
+hout : horner.add product = ok out
+vout : PV_CB_CanonicalTower.Valid out
+⊢ (let (linear, explicit_linear) := (linear, explicitLinear)
+    do
+    let coefficients1 ←
+      PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop0 { start := 0#usize, «end» := 16#usize } c1
+          (Array.repeat 27#usize ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ZERO)
+    let coefficients2 ←
+      PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop1 { start := 0#usize, «end» := 10#usize }
+          mask coefficients1
+    let prepared_linear ← ProverRwP7CurrentFieldSource.aspis_core.field.PreparedQm31Multiplier.new linear
+    let shared ← coefficients2.index_usize 26#usize
+    let shared1 ←
+      PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value_loop2
+          { iter := { start := 0#usize, «end» := 26#usize } } coefficients2 prepared_linear shared
+    let q ← PV_CB_MaskSource.state_only_hiding.mask_power_26 explicit_linear
+    let q1 ← ProverRwP7CurrentFieldSource.aspis_core.field.QM31.ONE.add q
+    let q2 ← q1.mul g
+    shared1.add q2) =
+    ok out
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CanonicalMaskRoot.lean:40:12: warning: This simp argument is unused:
+  hcoeff1
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,
+      core.iter.traits.iterator.Iterator.rev.default,
+      core.iter.traits.iterator.Iterator.rev.trait_default,
+  ̵  ̵ ̵ ̵hlinear, ̲hcoeff1̵,̵h̵c̵o̵e̵f̵f̵2, ̲hprepared, ̲hshared,
+  ̲ ̲ ̲ ̲ ̲hhorner, ̲hpower, ̲hfactor, ̲hproduct, ̲hout, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CanonicalMaskRoot.lean:40:20: warning: This simp argument is unused:
+  hcoeff2
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,
+      core.iter.traits.iterator.Iterator.rev.default,
+      core.iter.traits.iterator.Iterator.rev.trait_default,
+  ̵  ̵ ̵ ̵hlinear, ̲hcoeff1, ̲hc̵o̵e̵f̵f̵2̵,̵h̵prepared, ̲hshared,
+  ̲ ̲ ̲ ̲ ̲hhorner, ̲hpower, ̲hfactor, ̲hproduct, ̲hout, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CanonicalMaskRoot.lean:40:28: warning: This simp argument is unused:
+  hprepared
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,
+      core.iter.traits.iterator.Iterator.rev.default,
+      core.iter.traits.iterator.Iterator.rev.trait_default,
+  ̵  ̵ ̵ ̵hlinear, ̲hcoeff1, ̲hcoeff2, ̲hp̵r̵e̵p̵a̵r̵e̵d̵,̵h̵shared,
+  ̲ ̲ ̲ ̲ ̲hhorner, ̲hpower, ̲hfactor, ̲hproduct, ̲hout, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CanonicalMaskRoot.lean:40:38: warning: This simp argument is unused:
+  hshared
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,
+      core.iter.traits.iterator.Iterator.rev.default,
+      core.iter.traits.iterator.Iterator.rev.trait_default,
+  ̵  ̵ ̵ ̵hlinear, ̲hcoeff1, ̲hcoeff2, ̲hprepared,
+  ̲ ̲ ̲ ̲ ̲hs̵ha̵r̵e̵d̵,̵h̵h̵orner, ̲hpower, ̲hfactor, ̲hproduct, ̲hout, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CanonicalMaskRoot.lean:40:46: warning: This simp argument is unused:
+  hhorner
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,
+      core.iter.traits.iterator.Iterator.rev.default,
+      core.iter.traits.iterator.Iterator.rev.trait_default,
+  ̵  ̵ ̵ ̵hlinear, ̲hcoeff1, ̲hcoeff2, ̲hprepared,
+  ̲ ̲ ̲ ̲ ̲hshared, ̲hh̵o̵r̵n̵e̵r̵,̵h̵power, ̲hfactor, ̲hproduct, ̲hout, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CanonicalMaskRoot.lean:40:54: warning: This simp argument is unused:
+  hpower
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,
+      core.iter.traits.iterator.Iterator.rev.default,
+      core.iter.traits.iterator.Iterator.rev.trait_default,
+  ̵  ̵ ̵ ̵hlinear, ̲hcoeff1, ̲hcoeff2, ̲hprepared,
+  ̲ ̲ ̲ ̲ ̲hshared, ̲hhorner, ̲hp̵o̵w̵e̵r̵,̵h̵factor, ̲hproduct, ̲hout, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CanonicalMaskRoot.lean:40:61: warning: This simp argument is unused:
+  hfactor
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,
+      core.iter.traits.iterator.Iterator.rev.default,
+      core.iter.traits.iterator.Iterator.rev.trait_default,
+  ̵  ̵ ̵ ̵hlinear, ̲hcoeff1, ̲hcoeff2, ̲hprepared,
+  ̲ ̲ ̲ ̲ ̲hshared, ̲hhorner, ̲hpower, ̲hf̵a̵c̵t̵o̵r̵,̵h̵product, ̲hout, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CanonicalMaskRoot.lean:40:69: warning: This simp argument is unused:
+  hproduct
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,
+      core.iter.traits.iterator.Iterator.rev.default,
+      core.iter.traits.iterator.Iterator.rev.trait_default,
+  ̵  ̵ ̵ ̵hlinear, ̲hcoeff1, ̲hcoeff2, ̲hprepared,
+  ̲ ̲ ̲ ̲ ̲hshared, ̲hhorner, ̲hpower, ̲hfactor, ̲hp̵r̵od̵uc̵t,h̵o̵u̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CanonicalMaskRoot.lean:40:78: warning: This simp argument is unused:
+  hout
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CB_MaskSource.state_only_hiding.state_only_selected_mask_value,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
+      PV_CB_MaskSource.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE,
+      core.iter.traits.iterator.Iterator.rev.default,
+      core.iter.traits.iterator.Iterator.rev.trait_default,
+  ̵  ̵ ̵ ̵hlinear, ̲hcoeff1, ̲hcoeff2, ̲hprepared,
+  ̲ ̲ ̲ ̲ ̲hshared, ̲hhorner, ̲hpower, ̲hfactor, ̲hproduct,h̵o̵u̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB_CanonicalMaskRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_CanonicalMaskRoot.owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,68 @@
+38393 1 0:01.73
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0245); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+nextOut : ProverRwP7CurrentFieldSource.aspis_core.field.QM31
+hout : ProverRwP7CurrentFieldSource.aspis_core.field.QM31.add out scaled = ok nextOut
+vout : PV_CB_CanonicalTower.Valid nextOut
+nextPower : ProverRwP7CurrentFieldSource.aspis_core.field.QM31
+hpower : ProverRwP7CurrentFieldSource.aspis_core.field.QM31.mul power lambda = ok nextPower
+vpower : PV_CB_CanonicalTower.Valid nextPower
+advance : ↑(i.wrapping_add 1#usize) = ↑i + 1
+result : ProverRwP6CompressControl.Q
+hresult : ProverRwP6CompressControl.finite values lambda fuel nextOut nextPower (i.wrapping_add 1#usize) = ok result
+vresult : PV_CB_CanonicalTower.Valid result
+⊢ (do
+      let q ← ExternalFuns.op70 power m
+      let out1 ← ExternalFuns.op67 out q
+      let power1 ← ExternalFuns.op69 power lambda
+      ProverRwP6CompressControl.finite values lambda fuel out1 power1 (i.wrapping_add 1#usize)) =
+    ok result
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CompressCanonicalFinite.lean:36:32: warning: This simp argument is unused:
+  PV_CB_CompressCanonicalContext.selected
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵R̵w̵P̵6̵C̵o̵m̵p̵r̵e̵s̵s̵C̵o̵n̵t̵r̵o̵l̵.̵f̵i̵n̵i̵t̵e̵,̵P̵r̵o̵v̵e̵r̵R̵w̵P̵6̵C̵o̵m̵p̵r̵e̵s̵s̵C̵o̵n̵t̵r̵o̵l̵.̵d̵i̵s̵p̵a̵t̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵o̵r̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵Q̵M̵3̵1̵.̵m̵u̵l̵_̵m̵3̵1̵,̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵Q̵M̵3̵1̵.̵a̵d̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵Q̵M̵3̵1̵.̵m̵u̵l̵,̵P̵V̵_̵C̵B̵_̵C̵o̵m̵p̵r̵e̵s̵s̵C̵a̵n̵o̵n̵i̵c̵a̵l̵C̵o̵n̵t̵e̵x̵t̵.̵s̵e̵l̵e̵c̵t̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵C̵B̵_̵C̵u̵r̵r̵e̵n̵t̵Q̵u̵a̵r̵t̵i̵c̵.̵S̵.̵s̵c̵a̵l̵e̵,̵P̵V̵_̵C̵B̵_̵C̵u̵r̵r̵e̵n̵t̵Q̵u̵a̵r̵t̵i̵c̵.̵S̵.̵a̵d̵d̵,̵[̲P̲r̲o̲v̲e̲r̲R̲w̲P̲6̲C̲o̲m̲p̲r̲e̲s̲s̲C̲o̲n̲t̲r̲o̲l̲.̲f̲i̲n̲i̲t̲e̲,̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲P̲6̲C̲o̲m̲p̲r̲e̲s̲s̲C̲o̲n̲t̲r̲o̲l̲.̲d̲i̲s̲p̲a̲t̲c̲h̲,̲ ̲m̲o̲r̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲Q̲M̲3̲1̲.̲m̲u̲l̲_̲m̲3̲1̲,̲ ̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲Q̲M̲3̲1̲.̲a̲d̲d̲,̲ ̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲Q̲M̲3̲1̲.̲m̲u̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲C̲B̲_̲C̲u̲r̲r̲e̲n̲t̲Q̲u̲a̲r̲t̲i̲c̲.̲S̲.̲s̲c̲a̲l̲e̲,̲ ̲P̲V̲_̲C̲B̲_̲C̲u̲r̲r̲e̲n̲t̲Q̲u̲a̲r̲t̲i̲c̲.̲S̲.̲a̲d̲d̲,̲
+        PV_CB_CurrentQuartic.S.mul] at hscaled hout hpower ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CompressCanonicalFinite.lean:39:18: warning: This simp argument is unused:
+  hscaled
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵m̵,̵h̵s̵c̵a̵l̵e̵d̵,̵h̵o̵u̵t̵,̵h̵p̵o̵w̵e̵r̵,̵h̵r̵e̵s̵u̵l̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲m̲,̲ ̲h̲o̲u̲t̲,̲ ̲h̲p̲o̲w̲e̲r̲,̲ ̲h̲r̲e̲s̲u̲l̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CompressCanonicalFinite.lean:39:26: warning: This simp argument is unused:
+  hout
+
+Hint: Omit it from the simp argument list.
+  simp only [hm, ̲hscaled, ̲ho̵u̵t̵,̵h̵power, ̲hresult, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CompressCanonicalFinite.lean:39:31: warning: This simp argument is unused:
+  hpower
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵m̵,̵h̵s̵c̵a̵l̵e̵d̵,̵h̵o̵u̵t̵,̵h̵p̵o̵w̵e̵r̵,̵h̵r̵e̵s̵u̵l̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲m̲,̲ ̲h̲s̲c̲a̲l̲e̲d̲,̲ ̲h̲o̲u̲t̲,̲ ̲h̲r̲e̲s̲u̲l̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CompressCanonicalFinite.lean:39:38: warning: This simp argument is unused:
+  hresult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵m̵,̵h̵s̵c̵a̵l̵e̵d̵,̵h̵o̵u̵t̵,̵h̵p̵o̵w̵e̵r̵,̵h̵r̵e̵s̵u̵l̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲m̲,̲ ̲h̲s̲c̲a̲l̲e̲d̲,̲ ̲h̲o̲u̲t̲,̲ ̲h̲p̲o̲w̲e̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB_CompressCanonicalFinite.finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.73
+	Maximum resident set size (kbytes): 4284344
+	Swaps: 0
+	Exit status: 1
+

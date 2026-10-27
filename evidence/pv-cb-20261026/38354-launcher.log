@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0143); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+hl : PartValid left
+hr : PV_CB_CanonicalComplex.Valid right
+a : U32
+ha : Array.index_usize left 0#usize = ok a
+va : PV_CB_CanonicalM31.Valid a
+b : U32
+hb : Array.index_usize left 1#usize = ok b
+vb : PV_CB_CanonicalM31.Valid b
+s : U32
+hs : Array.index_usize left 2#usize = ok s
+vs : PV_CB_CanonicalM31.Valid s
+ac : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hac : ProverRwP7CurrentBaseBridge.S.mul a right.a = ok ac
+vac : PV_CB_CanonicalM31.Valid ac
+bd : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hbd : ProverRwP7CurrentBaseBridge.S.mul b right.b = ok bd
+vbd : PV_CB_CanonicalM31.Valid bd
+sum : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hsum : ProverRwP7CurrentBaseBridge.S.add right.a right.b = ok sum
+vsum : PV_CB_CanonicalM31.Valid sum
+product : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hproduct : ProverRwP7CurrentBaseBridge.S.mul s sum = ok product
+vproduct : PV_CB_CanonicalM31.Valid product
+real : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hreal : ProverRwP7CurrentBaseBridge.S.sub ac bd = ok real
+vreal : PV_CB_CanonicalM31.Valid real
+cross : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hcross : ProverRwP7CurrentBaseBridge.S.sub product ac = ok cross
+vcross : PV_CB_CanonicalM31.Valid cross
+imaginary : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+himaginary : ProverRwP7CurrentBaseBridge.S.sub cross bd = ok imaginary
+vimaginary : PV_CB_CanonicalM31.Valid imaginary
+⊢ (let (left, right) := (left, right)
+    do
+    let m ← left.index_usize 0#usize
+    let m0 ← m.mul right.a
+    let m1 ← left.index_usize 1#usize
+    let m11 ← m1.mul right.b
+    let m2 ← left.index_usize 2#usize
+    let m3 ← ProverRwP7CurrentFieldSource.aspis_core.field.M31.add right.a right.b
+    let m21 ← m2.mul m3
+    let m4 ← m0.sub m11
+    let m5 ← m21.sub m0
+    let m6 ← m5.sub m11
+    ok { a := m4, b := m6 }) =
+    ok { a := real, b := imaginary }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_CB_CanonicalPreparedPart.mul_part' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.75
+	Maximum resident set size (kbytes): 4279244
+	Swaps: 0
+	Exit status: 1

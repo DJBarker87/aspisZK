@@ -159,3 +159,12 @@ pub mod owned_circle;
 pub fn merkle_leaf(hash:aspis_core::HashFn,tag:u8,values:&[u8])->[u8;32] {
     aspis_core::r0::merkle::leaf(hash,tag,values)
 }
+
+// Exact constructor expression from pair_forest_trace.rs588 / pair_trace.rs1176.
+// Proof crate only; does not modify the shipped registry constructors.
+#[cfg(kani)]
+pub fn copy_tag(id: u16) -> aspis_core::field::M31 {
+    aspis_core::field::M31(
+        aspis_statement::pool_v1::pair_trace::POOL_V1_PAIR_COPY_TAG_BASE_V1 + u32::from(id)
+    )
+}

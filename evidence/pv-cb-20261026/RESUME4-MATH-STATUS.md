@@ -20,15 +20,21 @@ Source row count remains23/73; endpoint premises removed0.
   do not satisfy these hypotheses automatically.
 - Arrays.read/repeat_valid (38327) are generic element-invariant facts.
 
-Further Canonical*.lean files are PREPARED until their own passing receipt;
-no claim is made for an uncompiled draft. They target prepared multiplication,
-linears, coefficient updates/fills, Horner state and the retained reference
-root. They do not assert numerical canonicality of deployed producer inputs
-without proving those producers, or a missing fresh shipped-source association.
+The prepared constructors, prepared multiplication, finite Horner/power26,
+canonical constants/negation, coefficient updates, fill loops, linears and
+retained source/owned mask roots now have focused passing receipts38349–38388
+(with rejected intermediate attempts retained). CanonicalSampler.selected
+proves canonical sampler output for every32-byte block. These are numerical
+invariant results for the retained extracted/reference paths, not a new native
+source association. The complete Result mask source row remains open.
 
-No old published PV_CB theorem statement is changed. New local helper input
+Compressor constructors/context and canonical slice reads passed38390–38392.
+The generic finite compressor invariant is being repaired after38393; dependent
+CompressCanonical/Array16 drafts remain uncompiled until their own receipts.
+
+No old published PV_CB theorem statement is changed. New local input
 invariants and explicit callback-agreement hypotheses are not added to the
 privacy endpoint, nor counted as removal of an existing row. ProverRw sources
-are compared against the read-only candidate before exact missing-file
+were compared against the read-only candidate before exact missing-file
 staging; no candidate definition is edited. The replay restores missing
 objects after the host rebuild, not an unchanged complete regression.

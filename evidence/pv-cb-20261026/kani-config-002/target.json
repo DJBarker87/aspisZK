@@ -1,0 +1,34 @@
+{
+  "target": [
+    "timeout",
+    "120",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb-20261026/config-target",
+    "RUSTFLAGS=--cfg kani",
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb-20261026/config-probe/Cargo.toml",
+    "--lib",
+    "--harness",
+    "config_probe",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "terse",
+    "-j",
+    "4"
+  ],
+  "classification": "uncharged configuration diagnosis, within three-probe limit",
+  "expected_time": "cold dependency compilation under the historical Cargo graph, then trivial arbitrary-u8 identity; no dense arithmetic proof",
+  "profile": "config-probe profile.dev opt-level3",
+  "source_revision": "21fd275d99247ee891415db284c47f7955e775f8",
+  "affinity4": false,
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  }
+}
