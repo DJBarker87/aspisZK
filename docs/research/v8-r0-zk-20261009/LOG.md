@@ -12681,3 +12681,20 @@ New job pv-integ4 (IDs 39500-39599; no source change): the three-ELF gate on the
 fixed-coin fixture-byte gate, the 1,000-pair whole-prover differential against c57a344726, the
 cumulative cost projection, and the exact quiet-window timing command, which is not run until a
 window is coordinated with Stream A. Privacy target not yet established.
+
+## D326 (Stream B) 2026-10-27 22:16 UTC: batch2d result; op253 copy repaired; combined manifest blocked by a generated-instance collision; batch2e launched
+
+batch2d used its budget (all 5,673 external objects verified first; three ELF pins match after the
+repair; no sorry in its 71 committed Lean files). It repaired the op253 prover-local copy to keep the
+frozen D-row indexing failure (5b11c957a0) and proved equal Results at the retained counterexample,
+generalised to invalid-index continuations; proved op252's fixed-row factoring, complete constructor
+success and staged Result association; proved the gamma source rank and canonicality (op249) and the
+ordinary sampler source laws (op250); checked op251's full emission and proved powers totality and
+its mutation/error/divergence laws. A full native/emission mutation comparison passed for all three
+variants (1,024 x 8 limbs each); no copy writes through a mutable iterator borrow. The sampler-only
+audit passed (117 declarations, standard axioms). The combined manifest failed because generated
+carrier modules both define instDiscriminantErrorIsize. op251 per-cell totality and allocation
+transport, universal copy equality, the V256-V260 bridges and the fixture-byte gate remain open; no
+row moved. batch2e (fresh 100 attempts; IDs 39800-39899) fixes the collision in the generator, as
+research commit 317a687e34 did for the import unions, then continues in that order. Rows removed
+outright: 0. Privacy target not yet established.
