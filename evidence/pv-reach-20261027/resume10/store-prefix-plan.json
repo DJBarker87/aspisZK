@@ -1,0 +1,72 @@
+{
+  "steps": [
+    [
+      "path",
+      "std.path.PathBuf",
+      "aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path {store with last_error := none} nonce"
+    ],
+    [
+      "options",
+      "std.fs.OpenOptions",
+      "std.fs.OpenOptions.new"
+    ],
+    [
+      "written",
+      "std.fs.OpenOptions \u00d7 (std.fs.OpenOptions \u2192 std.fs.OpenOptions)",
+      "std.fs.OpenOptions.write options true"
+    ],
+    [
+      "created",
+      "std.fs.OpenOptions \u00d7 (std.fs.OpenOptions \u2192 std.fs.OpenOptions)",
+      "std.fs.OpenOptions.create_new written.1 true"
+    ],
+    [
+      "moded",
+      "std.fs.OpenOptions \u00d7 (std.fs.OpenOptions \u2192 std.fs.OpenOptions)",
+      "std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode (written.2 (created.2 created.1)) 384#u32"
+    ],
+    [
+      "file",
+      "std.fs.File",
+      "std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath (moded.2 moded.1) path"
+    ],
+    [
+      "file1",
+      "std.fs.File",
+      "std.fs.File.Insts.StdIoWrite.write_all file (Array.to_slice aspis_prover.state_only_entropy.RESERVATION_MAGIC)"
+    ],
+    [
+      "file2",
+      "std.fs.File",
+      "std.fs.File.Insts.StdIoWrite.write_all file1 (Array.to_slice statement)"
+    ],
+    [
+      "file3",
+      "std.fs.File",
+      "std.fs.File.Insts.StdIoWrite.write_all file2 (Array.to_slice nonce)"
+    ],
+    [
+      "synced",
+      "Unit",
+      "std.fs.File.sync_all file3"
+    ],
+    [
+      "directory",
+      "std.path.Path",
+      "std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref store.directory"
+    ],
+    [
+      "dirsync",
+      "Unit",
+      "aspis_prover.state_only_entropy.sync_directory directory"
+    ]
+  ],
+  "native_success_indices": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    11
+  ]
+}
