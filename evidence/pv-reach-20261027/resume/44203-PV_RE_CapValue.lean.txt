@@ -1,0 +1,23 @@
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RE_CapValue
+open Aeneas Aeneas.Std Result ProverRwFull
+
+theorem cap_value : prover.ATTEMPT_CAP = 8#usize := by
+  unfold prover.ATTEMPT_CAP
+  rfl
+
+theorem at_cap : (8#usize) >= prover.ATTEMPT_CAP := by
+  rw [cap_value]
+  change (8 : Nat) ≤ 8
+
+theorem below_cap : ¬ (0#usize) >= prover.ATTEMPT_CAP := by
+  rw [cap_value]
+  change ¬ (8 : Nat) ≤ 0
+  exact Nat.not_succ_le_zero 7
+
+#print axioms cap_value
+#print axioms at_cap
+#print axioms below_cap
+end R1Z.PV_RE_CapValue
