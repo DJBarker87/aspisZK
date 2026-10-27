@@ -1,0 +1,143 @@
+FJb_ColumnCell.lean:52:48: error: unexpected token '('; expected ')', ',' or ':'
+FJb_ColumnCell.lean:52:18: error: invalid `do` notation, expected type is not a monad application
+  Sort ?u.139
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+FJb_ColumnCell.lean:50:2: error: unsolved goals
+case hcall
+s : State
+c limb : Usize
+hc : ↑c < 4
+hi : ↑limb < ↑4#usize
+i1 i2 i3 : Usize
+r1 : 4#usize + c = ok i1
+v1 : ↑i1 = 4 + ↑c
+r2 : 8#usize + c = ok i2
+v2 : ↑i2 = 8 + ↑c
+r3 : 12#usize + c = ok i3
+v3 : ↑i3 = 12 + ↑c
+b0 : ↑c < ↑16#usize
+b1 : ↑i1 < ↑16#usize
+b2 : ↑i2 < ↑16#usize
+b3 : ↑i3 < ↑16#usize
+q0 : NQ := FIw_ArrayValue.cells s ⟨↑c, b0⟩
+q1 : NQ := FIw_ArrayValue.cells s ⟨↑i1, b1⟩
+q2 : NQ := FIw_ArrayValue.cells s ⟨↑i2, b2⟩
+q3 : NQ := FIw_ArrayValue.cells s ⟨↑i3, b3⟩
+h0 : Array.index_usize s c = ok q0
+h1 : Array.index_usize s i1 = ok q1
+h2 : Array.index_usize s i2 = ok q2
+h3 : Array.index_usize s i3 = ok q3
+e0 : state_only_poseidon.extension_limbs q0 = ok (FJb_LimbMap.words q0)
+e1 : state_only_poseidon.extension_limbs q1 = ok (FJb_LimbMap.words q1)
+e2 : state_only_poseidon.extension_limbs q2 = ok (FJb_LimbMap.words q2)
+e3 : state_only_poseidon.extension_limbs q3 = ok (FJb_LimbMap.words q3)
+l0 : (FJb_LimbMap.words q0).index_usize limb = ok (word q0 limb hi)
+l1 : (FJb_LimbMap.words q1).index_usize limb = ok (word q1 limb hi)
+l2 : (FJb_LimbMap.words q2).index_usize limb = ok (word q2 limb hi)
+l3 : (FJb_LimbMap.words q3).index_usize limb = ok (word q3 limb hi)
+out : U64
+hr : FJb_WideSum4.source (word q0 limb hi) (word q1 limb hi) (word q2 limb hi) (word q3 limb hi) = ok out
+hv : ↑out = ↑(word q0 limb hi) + ↑(word q1 limb hi) + ↑(word q2 limb hi) + ↑(word q3 limb hi)
+hb : ↑out < 2 ^ 34
+⊢ sorry
+
+case refine_1
+s : State
+c limb : Usize
+hc : ↑c < 4
+hi : ↑limb < ↑4#usize
+i1 i2 i3 : Usize
+r1 : 4#usize + c = ok i1
+v1 : ↑i1 = 4 + ↑c
+r2 : 8#usize + c = ok i2
+v2 : ↑i2 = 8 + ↑c
+r3 : 12#usize + c = ok i3
+v3 : ↑i3 = 12 + ↑c
+b0 : ↑c < ↑16#usize
+b1 : ↑i1 < ↑16#usize
+b2 : ↑i2 < ↑16#usize
+b3 : ↑i3 < ↑16#usize
+q0 : NQ := FIw_ArrayValue.cells s ⟨↑c, b0⟩
+q1 : NQ := FIw_ArrayValue.cells s ⟨↑i1, b1⟩
+q2 : NQ := FIw_ArrayValue.cells s ⟨↑i2, b2⟩
+q3 : NQ := FIw_ArrayValue.cells s ⟨↑i3, b3⟩
+h0 : Array.index_usize s c = ok q0
+h1 : Array.index_usize s i1 = ok q1
+h2 : Array.index_usize s i2 = ok q2
+h3 : Array.index_usize s i3 = ok q3
+e0 : state_only_poseidon.extension_limbs q0 = ok (FJb_LimbMap.words q0)
+e1 : state_only_poseidon.extension_limbs q1 = ok (FJb_LimbMap.words q1)
+e2 : state_only_poseidon.extension_limbs q2 = ok (FJb_LimbMap.words q2)
+e3 : state_only_poseidon.extension_limbs q3 = ok (FJb_LimbMap.words q3)
+l0 : (FJb_LimbMap.words q0).index_usize limb = ok (word q0 limb hi)
+l1 : (FJb_LimbMap.words q1).index_usize limb = ok (word q1 limb hi)
+l2 : (FJb_LimbMap.words q2).index_usize limb = ok (word q2 limb hi)
+l3 : (FJb_LimbMap.words q3).index_usize limb = ok (word q3 limb hi)
+out : U64
+hr : FJb_WideSum4.source (word q0 limb hi) (word q1 limb hi) (word q2 limb hi) (word q3 limb hi) = ok out
+hv : ↑out = ↑(word q0 limb hi) + ↑(word q1 limb hi) + ↑(word q2 limb hi) + ↑(word q3 limb hi)
+hb : ↑out < 2 ^ 34
+hcall : sorry
+⊢ (let (a, i) := (s, c)
+    do
+    let q ← a.index_usize i
+    let a1 ← state_only_poseidon.extension_limbs q
+    let i1 ← a1.index_usize limb
+    let i3 ← 4#usize + i
+    let q1 ← a.index_usize i3
+    let a2 ← state_only_poseidon.extension_limbs q1
+    let i4 ← a2.index_usize limb
+    let i6 ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from i4
+    let i7 ← 8#usize + i
+    let q2 ← a.index_usize i7
+    let a3 ← state_only_poseidon.extension_limbs q2
+    let i8 ← a3.index_usize limb
+    let i10 ← i6 + core.convert.num.FromU64U32.from i8
+    let i11 ← 12#usize + i
+    let q3 ← a.index_usize i11
+    let a4 ← state_only_poseidon.extension_limbs q3
+    let i12 ← a4.index_usize limb
+    let i14 ← i10 + core.convert.num.FromU64U32.from i12
+    ok (i14, s, c)) =
+    ok (out, s, c)
+FJb_ColumnCell.lean:21:24: error: unsolved goals
+case refine_2
+s : State
+c limb : Usize
+hc : ↑c < 4
+hi : ↑limb < ↑4#usize
+i1 i2 i3 : Usize
+r1 : 4#usize + c = ok i1
+v1 : ↑i1 = 4 + ↑c
+r2 : 8#usize + c = ok i2
+v2 : ↑i2 = 8 + ↑c
+r3 : 12#usize + c = ok i3
+v3 : ↑i3 = 12 + ↑c
+b0 : ↑c < ↑16#usize
+b1 : ↑i1 < ↑16#usize
+b2 : ↑i2 < ↑16#usize
+b3 : ↑i3 < ↑16#usize
+q0 : NQ := FIw_ArrayValue.cells s ⟨↑c, b0⟩
+q1 : NQ := FIw_ArrayValue.cells s ⟨↑i1, b1⟩
+q2 : NQ := FIw_ArrayValue.cells s ⟨↑i2, b2⟩
+q3 : NQ := FIw_ArrayValue.cells s ⟨↑i3, b3⟩
+h0 : Array.index_usize s c = ok q0
+h1 : Array.index_usize s i1 = ok q1
+h2 : Array.index_usize s i2 = ok q2
+h3 : Array.index_usize s i3 = ok q3
+e0 : state_only_poseidon.extension_limbs q0 = ok (FJb_LimbMap.words q0)
+e1 : state_only_poseidon.extension_limbs q1 = ok (FJb_LimbMap.words q1)
+e2 : state_only_poseidon.extension_limbs q2 = ok (FJb_LimbMap.words q2)
+e3 : state_only_poseidon.extension_limbs q3 = ok (FJb_LimbMap.words q3)
+l0 : (FJb_LimbMap.words q0).index_usize limb = ok (word q0 limb hi)
+l1 : (FJb_LimbMap.words q1).index_usize limb = ok (word q1 limb hi)
+l2 : (FJb_LimbMap.words q2).index_usize limb = ok (word q2 limb hi)
+l3 : (FJb_LimbMap.words q3).index_usize limb = ok (word q3 limb hi)
+out : U64
+hr : FJb_WideSum4.source (word q0 limb hi) (word q1 limb hi) (word q2 limb hi) (word q3 limb hi) = ok out
+hv : ↑out = ↑(word q0 limb hi) + ↑(word q1 limb hi) + ↑(word q2 limb hi) + ↑(word q3 limb hi)
+hb : ↑out < 2 ^ 34
+⊢ ↑out =
+    ↑(atWord s (↑c) limb hi) + ↑(atWord s (4 + ↑c) limb hi) + ↑(atWord s (8 + ↑c) limb hi) +
+      ↑(atWord s (12 + ↑c) limb hi)
+'AspisR1.FJb_ColumnCell.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

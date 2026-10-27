@@ -1,0 +1,55 @@
+FJb_MatrixBlock.lean:19:4: error: Ambiguous term
+  core.array.Array.map
+Possible interpretations:
+  FIq_Native.core.array.Array.map (BuiltinFnMut field.QM31 (Std.Array U32 4#usize))
+    (Array.make 4#usize [q, q1, q2, q3] ?m.62)
+    state_only_poseidon.extension_limbs : Result (Std.Array (Std.Array U32 4#usize) 4#usize)
+  
+  Std.core.array.Array.map (BuiltinFnMut field.QM31 (Std.Array U32 4#usize)) (Array.make 4#usize [q, q1, q2, q3] ?m.62)
+    state_only_poseidon.extension_limbs : Result (Std.Array (Std.Array U32 4#usize) 4#usize)
+FJb_MatrixBlock.lean:45:56: error: unsolved goals
+s : State
+g i0 i1 i2 i3 : Usize
+h0 : 4#usize * g = ok i0
+h1 : i0 + 1#usize = ok i1
+h2 : i0 + 2#usize = ok i2
+h3 : i0 + 3#usize = ok i3
+⊢ (do
+      let _ ← Array.index_usize s i0
+      let _ ← Array.index_usize s i1
+      let _ ← Array.index_usize s i2
+      let _ ← Array.index_usize s i3
+      let input ← sorry
+      let q4 ← state_only_poseidon.external_linear_lazy_row input 0#usize
+      let state1 ← Array.update s i0 q4
+      let q5 ← state_only_poseidon.external_linear_lazy_row input 1#usize
+      let state2 ← state1.update i1 q5
+      let q6 ← state_only_poseidon.external_linear_lazy_row input 2#usize
+      let state3 ← state2.update i2 q6
+      let q7 ← state_only_poseidon.external_linear_lazy_row input 3#usize
+      state3.update i3 q7) =
+    do
+    let x0 ← Array.index_usize s i0
+    let x1 ← Array.index_usize s i1
+    let x2 ← Array.index_usize s i2
+    let x3 ← Array.index_usize s i3
+    let raw ←
+      FIq_Native.core.array.Array.map (BuiltinFnMut FIv_NativeArithmetic.NQ (Std.Array U32 4#usize))
+          (Array.make 4#usize [x0, x1, x2, x3] ⋯) state_only_poseidon.extension_limbs
+    let y0 ← state_only_poseidon.external_linear_lazy_row raw 0#usize
+    let s0 ← Array.update s i0 y0
+    let y1 ← state_only_poseidon.external_linear_lazy_row raw 1#usize
+    let s1 ← s0.update i1 y1
+    let y2 ← state_only_poseidon.external_linear_lazy_row raw 2#usize
+    let s2 ← s1.update i2 y2
+    let y3 ← state_only_poseidon.external_linear_lazy_row raw 3#usize
+    s2.update i3 y3
+FJb_MatrixBlock.lean:46:13: warning: declaration uses `sorry`
+FJb_MatrixBlock.lean:52:66: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.FJb_MatrixBlock.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+FJb_MatrixBlock.lean:79:14: error(lean.unknownIdentifier): Unknown constant `unfold_loop`
+'AspisR1.FJb_MatrixBlock.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
