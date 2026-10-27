@@ -85,3 +85,10 @@ the checked ScalarCell/ScalarValue family. Its083 duplicate Fin-to-Usize proof
 construction was replaced by the actual Usize digit index and its bound.
 The first byte-dot cell085 is checked; the complete contraction and enclosing
 regular call/final continuation still need joining. No complete part2 meaning.
+
+ByteDotLoop088 / ByteDotFinal089 prove the complete64-term native byte-dot,
+count/bounds, actual finish canonicality and value. SuccessorDot090 composes
+THAT tensor slice with THAT byte-dot on the SAME message/constructor operands.
+LiteralPointTensor091 proves generic literal tensor/dualFold contraction;
+this is model algebra, not the enclosing kind2/final-Pair installation.
+The remaining budget targets the source kind2 call/write and final audits.
