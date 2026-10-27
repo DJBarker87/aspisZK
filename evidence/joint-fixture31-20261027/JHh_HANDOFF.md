@@ -1,6 +1,7 @@
 # JHh TX1 fixture31 handoff
 
-Status: IN PROGRESS. No release claim; actual top remains
+Status: **PARTIAL; 100/100 Lean budget exhausted, all statuses settled.**
+No attempt101 or push. No release claim; actual top remains
 `AspisR1.RPx_Deployed.deployed` (frozen3 / ARX_Root, installed headline).
 Branch `codex/cx-joint-fixture31-20261027`; commits local, no push.
 
@@ -19,15 +20,23 @@ Branch `codex/cx-joint-fixture31-20261027`; commits local, no push.
 - `JHh_ChildBridge.source` transports a SAME candidate output into the actual
   installed `AdapterRw.first_decoded`. This generic theorem alone is not
   the concrete SHA-only child success.
-- Tree consumers are being fissioned under the inherited 453-equation class.
-  Only targets in `JHh_SOURCES.json` with matching successful source hashes
-  are checked. Draft modules are not evidence of accepted1 or a joint pair.
+- `JHh_TX1.accepted1` and `JHh_C_Child.source` pass in096 under ONLY
+  `JHe_SHARealization` (453 equations). They export the SAME source-selected
+  return of the actual installed child/SDK wrapper on JHb_World.e1.
+  `JHh_C_ActualWitness.selected` links that EXACT chosen output to the actual
+  writer image and constructed-body checksum request. It does not identify
+  it with the retained checkpoint. Import `JHh_TX1Assembly`.
+- All six SHA field statements are proved unconditionally in separate modules
+  (007-009,097-099); none failed standalone memory. No combined class instance
+  or unconditional SDK assembly was checked. See JHh_STAGE3/4.md.
+- 47 active new modules have matching successful source hashes. Inlined
+  standalone drafts and unused audit scripts are archived, with status in
+  JHh_INLINING.json; their bodies are checked in the stated assemblies.
 
 ## Open deliverables
 
 Actual writer-body/retained-body identity (final rhs, power and flushed weights
-are not identified by canonicality/length). Concrete SHA-only child and parent
-assembly. A joint pair on JHg's corrected world and SAME SDK, with validation,
+are not identified by canonicality/length). A joint pair on JHg's corrected world and SAME SDK, with validation,
 magic, emission and runtime/game linkage. Complete headline hypothesis inhabitance.
 See JHh_BODY_OBSTRUCTION.md and JHh_JOINT_FRONTIER.md for exact expressions.
 
@@ -45,11 +54,41 @@ remain89T/15P/13G and89T/18P/13G respectively. No headline premise added/changed
 One admitted capped host scope at a time; -M7000, MemoryHigh6G/MemoryMax8G,
 MemorySwapMax0,TasksMax64. Exact receipts contain target, source revision/hash,
 direct dependency pins, exit, wall, RSS, swap and full printed axioms. Failed
-recovery sorryAx receives no credit. All successful audits so far are standard.
-Timeout057 and memory066 were replaced by changed smaller proof/import targets;
+recovery sorryAx receives no credit. All successful root audits use only propext, Classical.choice and Quot.sound.
+Timeout057 and memory066/080 were replaced by changed smaller proof/import targets;
 no cap/time limit raised or unchanged killed target rerun. Review070 passed.
+100 separate headline audit passed; its complete print is byte-identical to
+JHe30_099. Source and kernel comparisons are in JHh_STATEMENT_COMPARE.json.
+
+Budget:100 Lean (89 exit0,11 failed),0/10 Kani. Sum recorded Lean wall
+3213.903789858s; maximum RSS7186356KiB; swaps0. Every admission required
+allowed:true AND exit0. One timeout, two memory exceptions, eight ordinary
+elaboration failures; no failed/recovery sorryAx receives credit.
+All attempts, including42 missing unchanged JHe rebuilds in the private cache,
+are retained in JHh_ATTEMPTS.jsonl and JHh_GATE_TABLE.md. Coherent SInt2 objects
+were reused;219 primary/headline Aeneas pins match each other and prior cohort.
+This is focused proof validation, not a fresh coherent release replay.
 
 No Rust/Kani/SBF/extraction/frozen-manifest run; no shipped or cfg(kani) changes.
 ELF pins are inherited, not rebuilt: default f8c0ec72…, devnet63ad3e9c…,
 Pool121f3e29…. D188 mutable-write exclusions remain in JHh_D188.md; no new
 native/source-to-ELF clearance. Low-base-p native bridge remains LPk-owned.
+
+## Exact frontier and next deliverable
+
+For the actual chosen output, the missing substantial equation is the1736-byte
+constructed body = retained checkpoint.take1736. Length/header and three
+digest requests do not supply that equation. Canonicality and size do not
+identify final rhs/power/flushed weights or every remaining prepared field.
+Do not add body identity, acceptance or output equality to the SHA class.
+
+Then transfer to JHg's corrected support world and prove SAME SDK/native
+installation association, actual validate_asq8, magic/emission gates and
+accepted2 on that tuple. The final read-only JHg API remains conditional,
+unchanged from the first snapshot; exact remaining conjuncts are in
+JHh_JOINT_FRONTIER.md, latest source/object pins in JHh_HOST_FINAL_INVENTORY.json.
+No joint accepted pair or complete actual-headline hypothesis inhabitant is
+claimed. The 100-bit release target is **not yet established**.
+
+Own compiled scratch cleanup is recorded separately in JHh_CACHE_CLEANUP.json;
+no other prefix/cache/library, key or wallet is to be touched.

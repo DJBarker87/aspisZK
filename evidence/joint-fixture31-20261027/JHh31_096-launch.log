@@ -1,0 +1,37 @@
+{"attempt": "JHh31_096", "exit_status": 0, "wall_seconds": 8.311408984009176, "peak_rss_kib": "7175692", "swaps": "0", "print_axioms": ["'AspisR1.JHh_C_Child.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHh_TX1.saved_length' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHh_TX1.accepted1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHh_TX1.accepted1_exists' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHh_C_ActualWitness.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHh_C_ActualWitness.selected' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.JHh_C_Child.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHh_TX1.saved_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHh_TX1.accepted1' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.JHh_TX1.saved : [sha : JHe_SHARealization] → AdapterRw.Ops → VTop_Stages.Ops → alloc.vec.Vec U8 :=
+fun [JHe_SHARealization] base stage => Classical.choose ⋯
+@accepted1 : ∀ [sha : JHe_SHARealization] (base : AdapterRw.Ops) (stage : VTop_Stages.Ops),
+  S2W_D189Wrappers.first (JHe_Natives.first base stage) CPH_FixtureData.copy CPH_FixtureData.allocator JHb_World.e1
+      CPH_Program.verifier JHe_Natives.data1 () =
+    ok (
+...
+.sound]
+'AspisR1.JHh_TX1.accepted1' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.JHh_TX1.saved : [sha : JHe_SHARealization] → AdapterRw.Ops → VTop_Stages.Ops → alloc.vec.Vec U8 :=
+fun [JHe_SHARealization] base stage => Classical.choose ⋯
+@accepted1 : ∀ [sha : JHe_SHARealization] (base : AdapterRw.Ops) (stage : VTop_Stages.Ops),
+  S2W_D189Wrappers.first (JHe_Natives.first base stage) CPH_FixtureData.copy CPH_FixtureData.allocator JHb_World.e1
+      CPH_Program.verifier JHe_Natives.data1 () =
+    ok (core.result.Result.Ok (saved base stage, JHe_WrapperReady.post (saved base stage), ()))
+theorem AspisR1.JHh_TX1.accepted1 : ∀ [sha : JHe_SHARealization] (base : AdapterRw.Ops) (stage : VTop_Stages.Ops),
+  S2W_D189Wrappers.first (JHe_Natives.first base stage) CPH_FixtureData.copy CPH_FixtureData.allocator JHb_World.e1
+      CPH_Program.verifier JHe_Natives.data1 () =
+    ok (core.result.Result.Ok (saved base stage, JHe_WrapperReady.post (saved base stage), ())) :=
+fun [JHe_SHARealization] base stage =>
+  JHe_TX1Frontier.wrapper_of_child base stage (saved base stage) (saved_length base stage)
+    (Classical.choose_spec (JHh_C_Child.source base stage)).left
+'AspisR1.JHh_TX1.accepted1_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHh_C_ActualWitness.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHh_C_ActualWitness.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+@selected : ∀ [sha : JHe_SHARealization] (base : AdapterRw.Ops) (stage : VTop_Stages.Ops),
+  ∃ body hc,
+    (↑(JHh_TX1.saved base stage)).length = 1768 ∧
+      (↑body).length = 1736 ∧
+        dictionary.digest () (AspisR1Stage2.WireTx2.checksumParts body) = ok hc ∧
+          ↑(JHh_TX1.saved base stage) = ↑body ++ ↑hc
+
+Running as unit: run-r7292545d2ba948f78f0768f0ce44e94e.scope; invocation ID: 63db3a002533466fadf0be70c6526cdc
