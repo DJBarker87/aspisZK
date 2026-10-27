@@ -1,0 +1,55 @@
+FJe_Sum3Value.lean:33:8: error: 'change' tactic failed, pattern
+  PreparedFor (prepared (cell a i)) (qm (cell w i))
+is not definitionally equal to target
+  PreparedFor (AspisR1.PoseidonPreparedSum3ActualValue.leftAt✝ (left a) i) (qm (cell w i))
+FJe_Sum3Value.lean:37:8: error: 'change' tactic failed, pattern
+  Canon (cell b i)
+is not definitionally equal to target
+  ExtractedMaskQM31Exact.CurrentCanonicalQM (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (right b) i)
+FJe_Sum3Value.lean:43:53: error: Application type mismatch: The argument
+  hp ⟨0, ?m.202⟩
+has type
+  PreparedFor (prepared (cell a ⟨0, ?m.202⟩)) (qm (cell w ⟨0, ?m.202⟩))
+but is expected to have type
+  PreparedFor (AspisR1.PoseidonPreparedSum3ActualValue.leftAt✝ (left a) AspisR1.PoseidonPreparedSum3ActualValue.i0✝)
+    ?m.198
+in the application
+  FJe_PreparedInjective.prepared
+    (AspisR1.PoseidonPreparedSum3ActualValue.leftAt✝ (left a) AspisR1.PoseidonPreparedSum3ActualValue.i0✝) x0 ?m.198 p0
+    (hp ⟨0, ?m.202⟩)
+FJe_Sum3Value.lean:25:69: error: unsolved goals
+a : Left
+b w : Right
+out : NQ
+cw : FIw_ArrayValue.canonical w
+cb : FIw_ArrayValue.canonical b
+hp : ∀ (i : Fin 3), PreparedFor (prepared (cell a i)) (qm (cell w i))
+run : FIq_Native.field.qm31_sum_products3_prepared a b = ok out
+cmem : ∀ (i : Fin 3), Canon (cell w i)
+bmem : ∀ (i : Fin 3), Canon (cell b i)
+x0 x1 x2 : PoseidonPreparedSum3ActualValue.QM
+p0 :
+  PreparedFor (AspisR1.PoseidonPreparedSum3ActualValue.leftAt✝ (left a) AspisR1.PoseidonPreparedSum3ActualValue.i0✝) x0
+p1 :
+  PreparedFor (AspisR1.PoseidonPreparedSum3ActualValue.leftAt✝ (left a) AspisR1.PoseidonPreparedSum3ActualValue.i1✝) x1
+p2 :
+  PreparedFor (AspisR1.PoseidonPreparedSum3ActualValue.leftAt✝ (left a) AspisR1.PoseidonPreparedSum3ActualValue.i2✝) x2
+rv : AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared (left a) (right b) = ok (qm out)
+cv : PoseidonPreparedSum3ActualValue.CanonicalQM (qm out)
+vv :
+  AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ (qm out) =
+    AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x0 *
+          AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+            (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (right b) AspisR1.PoseidonPreparedSum3ActualValue.i0✝) +
+        AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x1 *
+          AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+            (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (right b) AspisR1.PoseidonPreparedSum3ActualValue.i1✝) +
+      AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x2 *
+        AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+          (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (right b) AspisR1.PoseidonPreparedSum3ActualValue.i2✝)
+same : ok (qm out) = ok (qm out)
+⊢ Canon out ∧
+    decode out =
+      decode (cell w ⟨0, ⋯⟩) * decode (cell b ⟨0, ⋯⟩) + decode (cell w ⟨1, ⋯⟩) * decode (cell b ⟨1, ⋯⟩) +
+        decode (cell w ⟨2, ⋯⟩) * decode (cell b ⟨2, ⋯⟩)
+'AspisR1.FJe_Sum3Value.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

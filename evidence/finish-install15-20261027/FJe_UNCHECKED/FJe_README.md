@@ -1,0 +1,1 @@
+Uncompiled proposals only. Excluded from active Lean imports and closure claims. The Lean budget was spent on packed values and the exact same-operands native sum3 VALUE. These two proposed projected-output proofs were never compiled;they are handoff sketches,not evidence.

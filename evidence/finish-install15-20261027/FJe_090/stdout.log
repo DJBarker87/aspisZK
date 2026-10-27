@@ -1,0 +1,65 @@
+FJe_Sum3IndexBridge.lean:20:14: error: unsolved goals
+case succ
+a : Left
+b : Right
+n : ℕ
+ih : ∀ (iter : Range) (s : Sums), ↑iter.start + n = ↑iter.end → native iter a b s = old iter (left a) (right b) s
+iter : Range
+s : Sums
+span : ↑iter.start + (n + 1) = ↑iter.end
+iter1 : OccupancyRangeTraversal.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+sp : ↑iter1.start + n = ↑iter1.end
+rest :
+  ∀ (s : Sums),
+    FIq_Native.field.qm31_sum_products3_prepared_loop0 iter1 a b s =
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0 iter1 (left a) (right b) s
+⊢ (do
+      let q ← Array.index_usize b iter.start
+      let right_sum ← q.c0.add q.c1
+      let m ← AspisR1SelectedMaskProbe.field.M31.add q.c0.a q.c0.b
+      let m1 ← AspisR1SelectedMaskProbe.field.M31.add q.c1.a q.c1.b
+      let m2 ← AspisR1SelectedMaskProbe.field.M31.add right_sum.a right_sum.b
+      let sums1 ←
+        FJe_Sum3ComponentBridge.old { start := 0#usize, «end» := 3#usize } (left a) s iter.start
+            (Array.make 3#usize
+              [Array.make 3#usize [q.c0.a, q.c0.b, m] ⋯, Array.make 3#usize [q.c1.a, q.c1.b, m1] ⋯,
+                Array.make 3#usize [right_sum.a, right_sum.b, m2] ⋯]
+              ⋯)
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0 iter1 (left a) (right b) sums1) =
+    do
+    let x ← Array.index_usize b iter.start
+    let x_1 ← x.c0.add x.c1
+    let m ← AspisR1SelectedMaskProbe.field.M31.add x.c0.a x.c0.b
+    let m1 ← AspisR1SelectedMaskProbe.field.M31.add x.c1.a x.c1.b
+    let m2 ← AspisR1SelectedMaskProbe.field.M31.add x_1.a x_1.b
+    let sums1 ←
+      AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0
+          { start := 0#usize, «end» := 3#usize } (left a) s iter.start
+          (Array.make 3#usize
+            [Array.make 3#usize [x.c0.a, x.c0.b, m] ⋯, Array.make 3#usize [x.c1.a, x.c1.b, m1] ⋯,
+              Array.make 3#usize [x_1.a, x_1.b, m2] ⋯]
+            ⋯)
+    AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0 iter1 (left a)
+        (FJb_ArrayTransport.array qm b) sums1
+FJe_Sum3IndexBridge.lean:28:15: warning: This simp argument is unused:
+  FJb_PairProjection.value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵J̵b̵_̵P̵a̵i̵r̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵i̵g̵h̵t̵,̵F̵J̵b̵_̵A̵r̵r̵a̵y̵T̵r̵a̵n̵s̵p̵o̵r̵t̵.̵i̵n̵d̵e̵x̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵q̵m̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵←̵F̵I̵v̵_̵N̵a̵t̵i̵v̵e̵C̵M̵.̵a̵d̵d̵,̵b̵i̵n̵d̵_̵m̵a̵p̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲i̲g̲h̲t̲,̲ ̲F̲J̲b̲_̲A̲r̲r̲a̲y̲T̲r̲a̲n̲s̲p̲o̲r̲t̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲,̲ ̲q̲m̲,̲ ̲←̲ ̲F̲I̲v̲_̲N̲a̲t̲i̲v̲e̲C̲M̲.̲a̲d̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJe_Sum3IndexBridge.lean:28:82: warning: This simp argument is unused:
+  bind_map
+
+Hint: Omit it from the simp argument list.
+  simp only [FJb_PairProjection.value, ̲bind_tc_ok, ̲right, ̲FJb_ArrayTransport.index,b̵i̵n̵d̵_̵m̵a̵p̵,̵ ̲qm,
+        ← ̲FIv_NativeCM.add, ̲bind_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJe_Sum3IndexBridge.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
