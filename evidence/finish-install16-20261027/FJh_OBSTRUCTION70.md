@@ -50,3 +50,24 @@ used admitted one-own-scope6G/8G/swap0/tasks64,Lean-M7000. Receipts retain
 command,target,status,wall,RSS,swap,revision,exact source/dependency hashes and
 full printed axiom/error output. No shipped/cfg(kani) file,SessionA worktree,
 other prefix,key or ELF changed. No ELF rebuild trigger.
+
+## Final update after100
+
+Steps1 and2 checked;095 COMPLETE actual Native07 arithmetic VALUE checked in
+explicit packed form. 096/097 Wide packing and098 SAME actual composition-run
+cut also pass. The R0P scalarResidual model join remains absent:091 generic
+identity passes;092 default-heartbeat failure was split by keeping round
+functions locally opaque;093/094 expose a type/instance-normalization mismatch
+between printed-equal expressions. These candidates are archived as .lean.txt,
+not imported or credited. No Aeneas/Kani equality is needed for the checked
+native values. FJe values were imported unchanged;0 Kani runs.
+
+Full SAME Wide public/Y/family and composition VALUE,link,active,masked terminal,
+literal transport and actual top removal remain. Both-ledger delta0T/0P/0G/0C.
+099 final combined import/axiom audit PASS3.161276361s,RSS5581984KiB,swap0.
+100 deployed statements/non-vacuity/owner prints PASS2.327086232s,
+RSS5589484KiB,swap0;standard axioms only. All active current FJh sources have
+passing exact-source-hash receipts. Budget100/100 charged,99 compiler starts;
+no further prover launch. No cap increase,OOM kill,unchanged timeout retry,
+package replay,shipped/cfg(kani)/ELF/other-prefix/SessionA/key change. Exact
+receipts,statements,recounts,validation and cleanup are retained in this packet.
