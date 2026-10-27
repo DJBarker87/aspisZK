@@ -1,0 +1,20 @@
+'AspisR1.F3T_ConditionalSum.zero_queries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3T_ConditionalSum.bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.F3T_ConditionalSum.bound : ∀ {A F C : Type} (c : DrvC_Installation.Configuration F C)
+  (D : LiteralByteProtocol.Decoder) (P : ByteProver) (Q : ℕ),
+  (∀ (H : Bytes → State), (eval H P).1.length ≤ Q) →
+    ∀ (hashv : SdkC_Source.Parts → Aeneas.Std.Result SdkC_Source.Digest) (runtime : Runtime),
+      AcceptedVerifierJoin c D (F3T_Installed.source c hashv) →
+        StoredCarrierBinding c D (F3T_Installed.source c hashv) P runtime →
+          ∀ (account : Program Bytes State A) (project : A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+            (select : A → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs),
+            (∀ (H : Bytes → State), firstReads emptyTable (eval H account).1 ≤ Q + 1921) →
+              F3T_RuntimeBound.failureModel runtime + F3T_AccountCharge.mass account project select Q ≤
+                F3T_Numeric.total Q :=
+fun {A F C} c D P Q queries hashv runtime raw binding account project select accountBudget =>
+  LE.le.trans_eq
+    (add_le_add
+      (F3T_RuntimeBound.failure_bound c D (F3T_Installed.source c hashv) (F3T_Installed.physical c hashv) raw P Q
+        queries runtime binding)
+      (F3T_AccountCharge.bound account project select Q accountBudget))
+    (F3T_Combined.arithmetic Q)

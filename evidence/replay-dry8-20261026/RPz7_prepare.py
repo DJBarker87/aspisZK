@@ -9,7 +9,7 @@ reuse={m:('RPz5_union_overlay' if us.get(m)=='passed' else 'RPz5_overlay') for m
 missing=[m for m in p['order'] if m not in reuse];mapping={m:'RPz7_'+m.replace('.','_') for m in missing}
 assert len(set(mapping.values()))==len(mapping)
 # Explicitly selected legacy Phase use sites; other verifier namespaces remain intact.
-legacy={'S1SemanticPrefixModelV1','S1SemanticFinishModelV1','S1SemanticFinishBoundsV1','S1SemanticVerifyReachabilityV1','S1SemanticFinishRootsV1','S1SemanticCodeFinishV1','S1SemanticCodeVerifyV1','S1SemanticCodeFinishExactV1','S1SemanticCodeVerifyExactV1','GExp_FinishAssociation','GExp_VerifyAssociation','S1SemanticBudgetV1'}
+legacy={'S1SemanticPrefixModelV1','S1SemanticFinishModelV1','S1SemanticFinishBoundsV1','S1SemanticVerifyReachabilityV1','S1SemanticFinishRootsV1','S1SemanticCodeFinishV1','S1SemanticCodeVerifyV1','S1SemanticCodeFinishExactV1','S1SemanticCodeVerifyExactV1','GExp_FinishAssociation','GExp_VerifyAssociation','S1SemanticBudgetV1','S1AcceptedSemanticNumericV1','S1AcceptedChallengesNumericV1','AuS1_Semantic3','F3V_SemanticFinish','F3V_SemanticVerify','RawJ_VerifyRead','RawK_VerifyHead','F3U_VerifyHead'}
 rows=[];uses=[]
 for m in missing:
  x=p['modules'][m];src=R/x['source'];t=src.read_text();assert hashlib.sha256(src.read_bytes()).hexdigest()==x['sha256']
@@ -17,6 +17,10 @@ for m in missing:
  else:
   for n,new in mapping.items():
    if n in x['imports']:t=re.sub(r'(?m)^(import\s+)'+re.escape(n)+r'\s*$',lambda z:z[1]+new,t)
+  if m=='ClaimsUnrolledFinish':
+   for i,l in enumerate(t.splitlines(),1):
+    if 'AspisR1PublicPreparation.verifier.Phase' in l:uses.append({'module':m,'line':i,'original':l,'replacement':l.replace('AspisR1PublicPreparation.verifier.Phase','RPz7_PhaseIso.Phase')})
+   t=t.replace('AspisR1PublicPreparation.verifier.Phase','RPz7_PhaseIso.Phase')
   if m in legacy:
    for i,l in enumerate(t.splitlines(),1):
     if 'verifier.Phase' in l:uses.append({'module':m,'line':i,'original':l,'replacement':l.replace('verifier.Phase','RPz7_PhaseIso.Phase')})

@@ -1,0 +1,36 @@
+{"attempt": "RPz7_926", "exit_status": 0, "wall_seconds": 2.173495947965421, "peak_rss_kib": "5370464", "swaps": "0", "print_axioms": ["'AspisR1.DrvC_SourceHeadline.deployed_headline_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.DrvC_SourceHeadline.deployed_headline_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.DrvC_SourceHeadline.deployed_headline_source : ∀ {F C : Type} (c : DrvC_Installation.Configuration F C)
+  (D : LiteralByteProtocol.Decoder) (P : ByteProver) (Q0 Q1 : ℕ),
+  (∀ (H : Bytes → State), (eval H P).1.length ≤ Q0 + Q1) →
+    ∀ (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (runtime : Runtime),
+      Port1_CanonicalJoin.AcceptedVerifierJoin D (DrvC_SourceEntry.source (DrvC_FirstConstants.configuration c) hashv) →
+        StoredCarrierBinding D (DrvC_SourceEntry.source (DrvC_FirstConstants.configuration c) hashv)
+            (Port1_StoredCarrier.lif
+...
+≤ Q0) →
+              (∀ (input : GExp_Experiment.FirstInputs) (saved : alloc.vec.Vec U8) (H : Bytes → State),
+                  (eval H (chooseSecond input saved)).1.length ≤ Q1) →
+                ∀ (project : GExp_Experiment.Outcome → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)),
+                  have r := DrvC_FirstConstants.configuration c;
+                  have source :=
+                    GExp_Experiment.program (GExp_FirstPair.base r.currentBase r.reserved r.query r.geometry)
+                      (DrvC_Installation.stage r) r.reserved r.boundaries r.std hashv
+                      (DrvC_Installation.currentDigest r) (DrvC_Installation.digest r) adversary chooseSecond;
+                  Claims D (Port1_StoredCarrier.lift P) (Q0 + Q1) runtime ∧
+                    failureModel runtime + EndP_AuthMass.mass source project ≤
+                        ↑(Q0 + Q1 + 34) * PerAttemptEnvelope.B +
+                              (6 * ↑(Q0 + Q1 + 1161) ^ 2 / 2 ^ 256 + 6 * ↑(Q0 + Q1 + 23625) ^ 2 / 2 ^ 256) +
+                            1 / 2 ^ 126 +
+                          1 / 2 ^ 454 ∧
+                      (Q0 + Q1 = 0 → failureModel runtime + EndP_AuthMass.mass source project ≤ 1 / 2 ^ 100) :=
+fun {F C} c D P Q0 Q1 hqueries hashv runtime raw binding adversary chooseSecond prefixBound choiceBound project =>
+  id
+    (have same := DrvC_SourceEntry.same_program c hashv;
+    DrvC_Headline.deployed_headline_installed (DrvC_FirstConstants.configuration c) D P Q0 Q1 hqueries runtime
+      (Eq.mpr (id (congrArg (Port1_CanonicalJoin.AcceptedVerifierJoin D) same)) raw)
+      (Eq.mpr (id (congrFun' (congrFun' (congrArg (StoredCarrierBinding D) same) (Port1_StoredCarrier.lift P)) runtime))
+        binding)
+      hashv adversary chooseSecond prefixBound choiceBound project)
+
+Running as unit: run-rbc85d96ddd1f4a539581537cbdf9fb58.scope; invocation ID: 13029382a68043f6818a5745aa3379c7

@@ -1,0 +1,43 @@
+{"attempt": "RPz7_791", "exit_status": 0, "wall_seconds": 2.4096254010219127, "peak_rss_kib": "5286124", "swaps": "0", "print_axioms": ["'AspisR1.WAdm_Execution.actual_slots' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.WAdm_Execution.accepted_generic' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.WAdm_Execution.actual_slots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_Execution.accepted_generic' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.WAdm_Execution.Run {CoreError H : Type} (installed : AspisR1CurrentCaller.Ops) (reserved : Bool)
+  (query : Port3_NativeQueryBody.Ops) (geo : Port3_NativeGeometryBody.Ops CoreError)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) (hash : H)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Slice U8) (split : Usize) (saved : alloc.vec.Vec U8) : Type
+number of parameters: 13
+fields:
+  AspisR1.WAdm_Execution.
+...
+Array C.E 29#usize) (initial : C.A) (root : Std.Array U8 32#usize) (geometry : C.G) (pending : C.B)
+    (out : C.A) (after : C.B) (flushed : Slice C.K) (split_eq : split = 10#usize)
+    (prepare_call :
+      AspisR1CurrentCaller.verifier.candidate.prepare installed D semantic proof hash none
+          (Array.repeat 29#usize zero) =
+        ok (core.result.Result.Ok p, scratch))
+    (initial_call :
+      Port3_Initial.constructor reserved AspisR1Stage2.transport.Variant.S2 =
+        ok (core.result.Result.Ok (accumulator initial)))
+    (batch_call : installed.op6 D proof p root 0#usize hash = ok (core.result.Result.Ok ()))
+    (geometry_call :
+      Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install geo) p.queries 0#usize 10#usize =
+        ok (core.result.Result.Ok (Tx1Q_Carriers.geometry geometry)))
+    (pending_call :
+      Port3_NativePendingInstall.source reserved (accumulator initial).weights.deref =
+        ok (core.result.Result.Ok (Tx1Q_Carriers.pending pending)))
+    (query_call :
+      Port3_NativeQueryBody.verifier.candidate.query_loop (Tx1Q_QueryBridge.leaves query) proof (prepared p)
+          (accumulator initial) (arr e scratch) none (Tx1Q_Carriers.geometry geometry) (Tx1Q_Carriers.pending pending)
+          10#usize =
+        ok (core.result.Result.Ok (accumulator out, Tx1Q_Carriers.pending after)))
+    (flush_call :
+      Port3_FlushInstall.flush (Tx1Q_Carriers.pending after) (accumulator out).weights.deref = ok (slice k flushed))
+    (writer_call :
+      WAdm_SourceWriter.writer (Tx1Q_Install.digest D) (prepared p)
+          (accumulator { weights := ⟨↑flushed, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next }) proof pub
+          hash =
+        ok saved) :
+    Run installed reserved query geo D hash semantic pub proof split saved
+
+Running as unit: run-r5ed3874d820541c6aaec7743e4646165.scope; invocation ID: aa37603060574c7da7f4325b5cd7a049

@@ -1,0 +1,40 @@
+{"attempt": "RPz7_767", "exit_status": 0, "wall_seconds": 2.176119612006005, "peak_rss_kib": "5273060", "swaps": "0", "print_axioms": ["'AspisR1.WAdm_Domain.on_run' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.WAdm_Domain.on_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.WAdm_Domain.SessionAPrepare (installed : AspisR1CurrentCaller.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.WAdm_Domain.SessionAPrepare.accepted : ∀ {H : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+      (hash : H) (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+      (proof : Slice U8) (zero : C.E) (p : C.P) (scratch : Std.Array C.E 29#usize),
+      AspisR1CurrentCaller.verifier.candidate.prepare installed D semantic proof hash none
+            (Array.repeat 29#usize zero) =
+          ok (core.result.Result.Ok p
+...
+Caller.verifier.candidate.prepare installed D semantic proof hash none
+              (Array.repeat 29#usize zero) =
+            ok (core.result.Result.Ok p, scratch) →
+          Port5Q2_Prepared.PreparedFields (prepared p)) :
+    SessionAPrepare installed
+structure AspisR1.WAdm_Domain.Admitted (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (proof pub : Slice U8) : Prop
+number of parameters: 4
+fields:
+  AspisR1.WAdm_Domain.Admitted.variant : p.variant = AspisR1Stage2.transport.Variant.S2
+  AspisR1.WAdm_Domain.Admitted.size : (↑a.weights).length = 64
+  AspisR1.WAdm_Domain.Admitted.next : ↑a.next = 10
+  AspisR1.WAdm_Domain.Admitted.gamma : Port4C_QueryArithmetic.CanonE p.gamma
+  AspisR1.WAdm_Domain.Admitted.kappa : Port4C_QueryArithmetic.CanonE p.kappa
+  AspisR1.WAdm_Domain.Admitted.alpha : ∀ x ∈ ↑p.alpha, Port4C_QueryArithmetic.CanonE x
+  AspisR1.WAdm_Domain.Admitted.claim : Port4C_QueryArithmetic.CanonE p.claim
+  AspisR1.WAdm_Domain.Admitted.rhs : Port4C_QueryArithmetic.CanonE a.rhs
+  AspisR1.WAdm_Domain.Admitted.proofLength : (↑proof).length = 57607
+  AspisR1.WAdm_Domain.Admitted.publicLength : (↑pub).length = 1880
+constructor:
+  AspisR1.WAdm_Domain.Admitted.mk {p : AspisR1Stage2.verifier.Prepared} {a : AspisR1Stage2.verifier.Accumulator}
+    {proof pub : Slice U8} (variant : p.variant = AspisR1Stage2.transport.Variant.S2) (size : (↑a.weights).length = 64)
+    (next : ↑a.next = 10) (gamma : Port4C_QueryArithmetic.CanonE p.gamma)
+    (kappa : Port4C_QueryArithmetic.CanonE p.kappa) (alpha : ∀ x ∈ ↑p.alpha, Port4C_QueryArithmetic.CanonE x)
+    (claim : Port4C_QueryArithmetic.CanonE p.claim) (rhs : Port4C_QueryArithmetic.CanonE a.rhs)
+    (proofLength : (↑proof).length = 57607) (publicLength : (↑pub).length = 1880) : Admitted p a proof pub
+
+Running as unit: run-rc9071b1b9329490eaae968fad8a24a31.scope; invocation ID: 4805b770eb5d4a73992d5791b266f845

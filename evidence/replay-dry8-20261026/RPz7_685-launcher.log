@@ -1,0 +1,50 @@
+{"attempt": "RPz7_685", "exit_status": 0, "wall_seconds": 2.4115887000225484, "peak_rss_kib": "5284512", "swaps": "0", "print_axioms": ["'AspisR1.Tx1Q_Accepted.accepted_pair_claims_tx1' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.Tx1Q_Accepted.accepted_pair_claims_tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Tx1Q_Accepted.accepted_pair_claims_tx1 : ∀ {W A E M Cv CoreError : Type} {N : ℕ}
+  (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : Ops) (reserved : Bool) (queryOps : Port3_NativeQueryBody.Ops)
+                (geoOps : Port3_NativeGeometryBody.Ops CoreError
+...
+      OraclePortCompactDraft.scan (bytesOf ↑f.proof)) ∧
+                                            (∃ run, ⋯) ∧ ⋯ ∧ ⋯ :=
+fun {W A E M Cv CoreError} {N} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops reserved
+    queryOps geoOps B claimsStd native1 native2 hashv extraction sha256 H p1 syscall program data1 data2 slot state1
+    state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length port firstMarks secondMarks =>
+  let ⟨f, h✝⟩ :=
+    Op4P_Accepted.accepted_pair_claims_op34 L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps
+      (Tx1Q_Execution.base ops reserved queryOps geoOps) B claimsStd native1 native2 hashv extraction sha256 H p1
+      syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length
+      port firstMarks secondMarks
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨outer, h✝²⟩ := h✝¹
+  let ⟨pre, h✝³⟩ := h✝²
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, h✝⁶⟩ := h✝⁵
+  let ⟨cuts, right✝⟩ := h✝⁶
+  let ⟨header, right✝¹⟩ := right✝
+  let ⟨scan, remaining⟩ := right✝¹
+  have proofLength :=
+    Eq.mp (congrFun' (congrArg Eq (List.length_map AspisV8R19.SqueezeOracleBridge.decodeByte)) 57607)
+      ((OraclePortHeader.accepts_iff (bytesOf ↑f.proof)).mp header.right.right.left).left;
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨header,
+                    ⟨scan,
+                      ⟨Tx1Q_Endpoint.reached adapterOps ops reserved queryOps geoOps B claimsStd e1.first
+                          (e2.second secondSizes) saved f s cuts proofLength,
+                        remaining⟩⟩⟩⟩))))))
+
+Running as unit: run-r6884e08a1cb940839ee80202048eda3c.scope; invocation ID: 966bc7004ad74250b39153d4dcb24d68

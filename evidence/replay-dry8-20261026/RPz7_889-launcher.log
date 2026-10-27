@@ -1,0 +1,40 @@
+{"attempt": "RPz7_889", "exit_status": 0, "wall_seconds": 2.172806426999159, "peak_rss_kib": "5357052", "swaps": "0", "print_axioms": ["'AspisR1.EndP_Headline.deployed_headline' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.EndP_Headline.deployed_headline' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.EndP_Headline.deployed_headline : ∀ (D : LiteralByteProtocol.Decoder) (P : ByteProver) (Q0 Q1 : ℕ),
+  (∀ (H : Bytes → State), (eval H P).1.length ≤ Q0 + Q1) →
+    ∀ (adapter : AdapterRw.Ops) (impl : VTop_OracleCode.Implementation) {Hash : Type}
+      (digest : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (runtime : Runtime),
+      Port1_CanonicalJoin.AcceptedVerifierJoin D (Port1_Driver.rust adapter (fun {A} => impl) digest hash) →
+        StoredCarrierBinding D (Port1_Driver.rust adapter (fun {A} => impl) digest hash) (Port1_StoredCarrier.lift P)
+            run
+...
+ → State),
+                  (eval H (chooseSecond input saved)).1.length ≤ Q1) →
+                ∀ (project : GExp_Experiment.Outcome → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)),
+                  have source :=
+                    GExp_Experiment.program current stage reserved B std hashv D1 D2 adversary chooseSecond;
+                  Claims D (Port1_StoredCarrier.lift P) (Q0 + Q1) runtime ∧
+                    failureModel runtime + EndP_AuthMass.mass source project ≤
+                        ↑(Q0 + Q1 + 34) * PerAttemptEnvelope.B +
+                              (6 * ↑(Q0 + Q1 + 1161) ^ 2 / 2 ^ 256 + 6 * ↑(Q0 + Q1 + 23625) ^ 2 / 2 ^ 256) +
+                            1 / 2 ^ 126 +
+                          1 / 2 ^ 454 ∧
+                      (Q0 + Q1 = 0 → failureModel runtime + EndP_AuthMass.mass source project ≤ 1 / 2 ^ 100) :=
+fun D P Q0 Q1 hqueries adapter impl {Hash} digest hash runtime raw binding current stage reserved B std hashv D1 D2
+    adversary chooseSecond prefixBound choiceBound project =>
+  id
+    (have claims :=
+      EndP_Endpoint.final_soundness D P (Q0 + Q1) hqueries adapter (fun {A} => impl) digest hash runtime raw binding;
+    have auth :=
+      EndP_AuthMass.bound (GExp_Experiment.program current stage reserved B std hashv D1 D2 adversary chooseSecond)
+        project (Q0 + Q1)
+        (GExp_CollisionBudget.first_reads current stage reserved B std hashv D1 D2 adversary chooseSecond Q0 Q1
+          prefixBound choiceBound);
+    have total :=
+      LE.le.trans_eq (add_le_add claims.right.right.right.left auth) (Eq.symm (EndP_Numeric.total_eq (Q0 + Q1)));
+    ⟨claims,
+      ⟨total, fun zero =>
+        LE.le.trans total
+          (Eq.mpr (id (congrArg (fun _a => EndP_Numeric.total _a ≤ 1 / 2 ^ 100) zero)) EndP_Numeric.zero_queries)⟩⟩)
+
+Running as unit: run-rb0a0690aedfd4443aee12e2b7e23ff9c.scope; invocation ID: 8b202a43259a4f529ffce4cc0b5ae59a

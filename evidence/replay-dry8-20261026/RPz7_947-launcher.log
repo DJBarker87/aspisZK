@@ -1,0 +1,51 @@
+{"attempt": "RPz7_947", "exit_status": 0, "wall_seconds": 2.3392981170327403, "peak_rss_kib": "5373364", "swaps": "0", "print_axioms": ["'AspisR1.Par_NativePair.accepted_pair' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+RPz7_sources/RPz7_Par_NativePair.lean:55:9: warning: Variable name `history` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+RPz7_sources/RPz7_Par_NativePair.lean:57:9: warning: Variable name `p2prime` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.Par_NativePair.accepted_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Par_NativePair.accepted_pair : ∀ {W A F CoreError : Type} 
+...
+                                          (DrvC_Implementation.driver
+                                                                        (DrvC_FirstConstants.configuration c) j)).2 =
+                                                                  false :=
+fun {W A F CoreError} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c native1 native2 prepareOwner
+    primitiveOwner hashv extraction sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1
+    post2 accepted1 accepted2 root length =>
+  let ⟨f, h✝⟩ :=
+    DrvC_NativePair.accepted_pair_driver L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c native1 native2
+      prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall program data1 data2 slot state1 state2 final1
+      final2 saved post1 post2 accepted1 accepted2 Par_Parameters.deployed root length
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨cuts, right✝⟩ := h✝¹
+  let ⟨decoded, accept⟩ := right✝
+  have size :=
+    DrvC_PublicCarrier.public_length (DrvC_FirstConstants.configuration c) e1.first (e2.second secondSizes) saved f s
+      cuts;
+  let i := Par_Public.input f.pub f.proof size;
+  let ⟨pubSize, fit⟩ :=
+    Par_Public.accepted_public_bound (DrvC_FirstConstants.configuration c) e1.first (e2.second secondSizes) saved f s
+      cuts
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro i
+        ⟨cuts,
+          ⟨decoded,
+            ⟨rfl,
+              ⟨rfl,
+                ⟨rfl,
+                  ⟨pubSize,
+                    ⟨fit, fun history p2prime =>
+                      have yes := accept history p2prime i rfl rfl;
+                      ⟨yes, fun rejects =>
+                        have bad := Eq.trans (Eq.symm (rejects i)) yes;
+                        let ⟨⟩ := true
+                        bad⟩⟩⟩⟩⟩⟩⟩⟩))
+
+Running as unit: run-r25bf4a15358c4711950876b9bbf42c83.scope; invocation ID: 3acd87b7cc0f4404a9ac76a23f0121b6
