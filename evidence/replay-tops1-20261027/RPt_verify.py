@@ -20,6 +20,9 @@ for r in p['rows']:
  if sha(R/r['original_source'])!=r['original_sha256']:errors.append({'original_changed':r['original']})
 for x in json.loads((E/'RPt_inherited-pins.json').read_text()):
  if sha(R/x['path'])!=x['sha256']:errors.append({'inherited_evidence_drift':x['path']})
+for x in json.loads((E/'RPt_toolchain-pins.json').read_text()):
+ if x['path'] in pins and pins[x['path']]['sha256']!=x['sha256']:errors.append({'toolchain_pin_conflict':x['path']})
+ pins[x['path']]={k:x[k] for k in ['path','sha256','bytes']}
 payload='''from pathlib import Path
 import hashlib,json,subprocess
 B=Path(%r);pins=json.loads(%r);errors=[]

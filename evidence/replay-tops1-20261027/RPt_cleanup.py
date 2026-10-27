@@ -23,4 +23,9 @@ for name in names:
 print(json.dumps({'removed_query_only_objects':removed,'retained':'All accepted source-context proof objects, sources and predecessor caches'}))
 '''%(B,json.dumps(names))
 r=ssh('python3 -',payload);assert r.returncode==0,r.stderr
-(E/'RPt_cleanup.json').write_text(json.dumps(json.loads(r.stdout),indent=2)+'\n');print(r.stdout)
+out=json.loads(r.stdout)
+(E/'RPt_cleanup.json').write_text(json.dumps(out,indent=2)+'\n')
+pins=json.loads((E/'RPt_final-object-pins.json').read_text())
+for row in out['removed_query_only_objects']:pins.pop(row['path'],None)
+(E/'RPt_retained-object-pins.json').write_text(json.dumps(pins,indent=2)+'\n')
+print(r.stdout)
