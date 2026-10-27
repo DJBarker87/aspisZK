@@ -1,0 +1,50 @@
+FJf_DotMeaning.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJf_RawTower.pack ?a ?b ?c ?d + FJf_RawTower.pack ?e ?f ?g ?h
+in the target expression
+  FJf_RawTower.pack ↑↑(FJf_U64Array.cell out.sums 0) ↑↑(FJf_U64Array.cell out.sums 1) ↑↑(FJf_U64Array.cell out.sums 2)
+      ↑↑(FJf_U64Array.cell out.sums 3) =
+    FJf_RawTower.pack ↑↑(FJf_U64Array.cell dot.sums 0) ↑↑(FJf_U64Array.cell dot.sums 1) ↑↑(FJf_U64Array.cell dot.sums 2)
+        ↑↑(FJf_U64Array.cell dot.sums 3) +
+      FJf_RawTower.pack ↑↑(FJf_U64Array.cell raw 0) ↑↑(FJf_U64Array.cell raw 1) ↑↑(FJf_U64Array.cell raw 2)
+        ↑↑(FJf_U64Array.cell raw 3)
+
+dot out : Dot
+a b : FIo_Native.fast_pairing.canonical.Q
+ha : JFs_TX2_DotFinish.Canon a
+hb : JFs_TX2_DotFinish.Canon b
+n : ℕ
+hn : n < 4096
+bound : FJf_DotBound.Bound dot n
+run : FIo_Native.fast_pairing.canonical.Dot.push dot a b = ok out
+raw : Std.Array U64 4#usize
+hr : a.raw b = ok raw
+hb' : FJf_DotBound.Bound out (n + 1)
+hv :
+  ∀ j < 4,
+    ↑(FJf_U64Array.cell out.sums j) =
+      ↑(FJf_U64Array.cell dot.sums j) + ↑(FIo_ReduceBounds.fold (FJf_U64Array.cell raw j))
+vv : ∀ j < 4, ↑↑(FJf_U64Array.cell out.sums j) = ↑↑(FJf_U64Array.cell dot.sums j) + ↑↑(FJf_U64Array.cell raw j)
+⊢ FJf_RawTower.pack ↑↑(FJf_U64Array.cell out.sums 0) ↑↑(FJf_U64Array.cell out.sums 1) ↑↑(FJf_U64Array.cell out.sums 2)
+      ↑↑(FJf_U64Array.cell out.sums 3) =
+    FJf_RawTower.pack ↑↑(FJf_U64Array.cell dot.sums 0) ↑↑(FJf_U64Array.cell dot.sums 1) ↑↑(FJf_U64Array.cell dot.sums 2)
+        ↑↑(FJf_U64Array.cell dot.sums 3) +
+      FJf_RawTower.pack ↑↑(FJf_U64Array.cell raw 0) ↑↑(FJf_U64Array.cell raw 1) ↑↑(FJf_U64Array.cell raw 2)
+        ↑↑(FJf_U64Array.cell raw 3)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    FJf_RawTower.pack ↑↑(FJf_U64Array.cell out.sums 0) ↑↑(FJf_U64Array.cell out.sums 1) ↑↑(FJf_U64Array.cell out.sums 2)
+      ↑↑(FJf_U64Array.cell out.sums 3)
+  has type
+    FJf_RawTower.Q
+  but is expected to have type
+    OraclePortCheckpointAbiC5.K
+  in the application
+    Eq
+      (FJf_RawTower.pack ↑↑(FJf_U64Array.cell out.sums 0) ↑↑(FJf_U64Array.cell out.sums 1)
+        ↑↑(FJf_U64Array.cell out.sums 2) ↑↑(FJf_U64Array.cell out.sums 3))
+'AspisR1.FJf_DotMeaning.pack_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_DotMeaning.folded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_DotMeaning.push' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJf_DotMeaning.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
