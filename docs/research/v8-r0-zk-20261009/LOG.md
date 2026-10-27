@@ -12080,3 +12080,24 @@ worktree; IDs 28000-28099 from the replay reserve): ELF pins, the recommended-re
 with route evidence, the fixture-byte gate against 37e5e133f8, the Lean re-check of the op223 and batch-1
 results, and the combined gate plan (op223 + batches 1-3 + records). Four live slots: runjoin17,
 batch2b, batch3, integ3. Rows removed outright: 0. Privacy target not yet established.
+
+## D299 (Stream B) 2026-10-27 15:25 UTC: integration gates pass after batch 1; candidate fast-forwarded to b3d109c8ff; dudect plan v2.2 preparation; two slots deliberately held
+
+pv-integ3 (evidence only; 0 Lean, 0 Kani; four cargo targets deleted): on 9ff5a4594e (candidate + batch 1 +
+the lead's lib.rs union) all three ELF pins match; devnet_spend with the recommended recipe sha256
+8a929b74d3246b71f05b631b7a386b22f179bf7ccafb254be21766c6edf86207, symbols confirm main →
+generate_for_mask_nonce and op223's prover_shared::compress_tagged_tuple; fixtures match 37e5e133f8 for
+proofs, public bytes, ledger records and deterministic results (raw result.json differs only in elapsed
+seconds); no imported Lean source changed, so the op223 and batch-1 proofs stand as audited; the combined
+1,000-pair differential and quiet timing plan is written, not run. The candidate was a strict ancestor
+and is fast-forwarded to b3d109c8ff. Process note: integ3's prompt was derived from integ1's and named
+.worktrees/pv-cb as its worktree; the worker moved its worktree from pv-cb3 to that path to match (branch
+and commits intact). From now on every derived prompt is checked against the actual worktree path, and
+prompts say "EXACTLY <path>; do not move it". The idle pv-cbmid worktree was removed (branch kept).
+Launched pv-dudect2 (`codex/pv-dudect2-20261027` in pv-cb): plan v2.2 with fresh-buffer preparation as the
+harness default and the D297 controls built in, rebuilt harness hash and instruction-equivalence against
+the current recommended build, a labelled dry run; no window. Two slots are deliberately HELD: every
+remaining obligation now waits on runjoin17 (the records identification and the native RunJoin
+interpretation), on batches 2-3, or on the owner decisions in design/PV-OWNER-PACKET-20261027.md; more
+jobs aimed at the same gaps would be wrappers (AGENTS.md §7). Four live slots: runjoin17, batch2b,
+batch3, dudect2. Rows removed outright: 0. Privacy target not yet established.
