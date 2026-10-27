@@ -1,6 +1,6 @@
 # Proposed ARX statement amendment — 27 October 2026
 
-**DRAFT ONLY — not approved, adopted, or applied to the security contract.**
+**APPROVED by the owner 2026-10-27 and incorporated into the binding contract (SECURITY-CONTRACT-20261021.md, "Owner-approved amendment, 2026-10-27"). The draft text below is retained verbatim; where it says "not adopted" or "candidate", the contract amendment controls. For the trust inventory, the TRACE-fidelity D188 column was selected.**
 
 This text describes the definition choice the owner would approve. The
 authoritative contract and premise ledger remain unchanged. ARX is a proved

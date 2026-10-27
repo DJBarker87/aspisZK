@@ -2890,3 +2890,30 @@ or frozen-manifest replay, Kani/Rust/SBF build or shipped/cfg(kani) change.
 Inherited ELF pins are unchanged and not freshly rebuilt. The S1–S10 map's
 Rc10 append records fresh #check evidence for every mathematical CLOSED
 claim. **The deployed 100-bit target is not yet established.**
+
+## Adopted root change, 2026-10-27 (owner approval)
+
+The owner approved the ARX statement amendment, the trace-fidelity reading of
+D188 and the trust inventory on 2026-10-27 (SECURITY-CONTRACT-20261021.md,
+"Owner-approved amendment, 2026-10-27"). From this entry on, the actual top
+for every recount is `AspisR1.ARX_Root.deployed`.
+
+Counts (mechanical recount evidence/recount12-20261027/Rc12_LEDGER.md, same
+method):
+
+| Root | Actual antecedent | Deployment-inclusive |
+|---|---|---|
+| Rc10_Top.deployed (superseded) | 83T/12P/13G/0C | 89T/30P/13G/0C |
+| **ARX_Root.deployed (adopted)** | **83T/11P/13G/0C** | **89T/28P/13G/0C** |
+
+Removed by adoption: L159 (with its deployment alias L185) and L181. Added:
+none. L154 is specialised to the adversary's induced issued queries (still
+the external Q budget, same row). The deployment-inclusive figure includes the
+fifteen association/leaf rows booked by Rc12 for finding D188-P2 and the
+cohort-scoped L187 closure.
+
+Trace-fidelity reading of D188: it changes no row count. L166 remains P and
+is now provable from the extracted program's attempted-call trace (owner-
+approved scope); its next job proves it.
+
+Status: the deployed 100-bit target is **not yet established**.

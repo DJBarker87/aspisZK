@@ -1,6 +1,6 @@
 # Trust inventory appendix — 27 October 2026
 
-**DRAFT — NOT APPROVED, ADOPTED OR APPLIED. F-CONTRACT reconciliation only.**
+**APPROVED by the owner 2026-10-27 and incorporated into the binding contract (SECURITY-CONTRACT-20261021.md, "Owner-approved amendment, 2026-10-27"). The draft text below is retained verbatim; where it says "not adopted" or "candidate", the contract amendment controls. For the trust inventory, the TRACE-fidelity D188 column was selected.**
 
 This appendix proposes a literal inventory for the binding security contract.
 It changes no proof, premise ledger, implementation, artifact or accepted trust.
