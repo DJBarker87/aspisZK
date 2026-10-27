@@ -1,0 +1,122 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -44,3 +44,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] mod LPi_contracts;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPi_contracts.rs
+@@ -0,0 +1,58 @@
++//! Lean-discharged byte stubs. Pairing: LPi_WriterValues.
++use aspis_core::field::{CM31,QM31,M31};
++fn word(x:M31)->[u8;4] { [x.0 as u8,(x.0>>8) as u8,(x.0>>16) as u8,(x.0>>24) as u8] }
++pub fn mbytes(x:M31)->[u8;4] {
++ let b:[u8;4]=kani::any();kani::assume(b==word(x));b
++}
++pub fn cbytes(x:CM31,out:&mut[u8]) {
++ assert!(out.len()==8);
++ let a=word(x.a);let b=word(x.b);let v:[u8;8]=kani::any();
++ kani::assume(v==[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3]]);
++ out.copy_from_slice(&v);
++}
++pub fn qbytes(x:QM31,out:&mut[u8]) {
++ assert!(out.len()==16);
++ let a=word(x.c0.a);let b=word(x.c0.b);let c=word(x.c1.a);let d=word(x.c1.b);
++ let v:[u8;16]=kani::any();
++ kani::assume(v==[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3],c[0],c[1],c[2],c[3],d[0],d[1],d[2],d[3]]);
++ out.copy_from_slice(&v);
++}
++fn q(x:[u32;4])->QM31 {QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn check_q<const N:usize,const AT:usize>() {
++ let x:[u32;4]=kani::any();let mut buf:[u8;N]=kani::any();let before=buf;
++ q(x).write_le_bytes(&mut buf[AT..AT+16]);
++ let j:usize=kani::any();kani::assume(j<N);
++ if j>=AT&&j<AT+16 {let k=j-AT;assert_eq!(buf[j],(x[k/4]>>((k%4)*8)) as u8);}
++ else {assert_eq!(buf[j],before[j]);}
++ kani::cover!(j==AT+15);kani::cover!(x[0]==u32::MAX);
++}
++macro_rules! qcase {($name:ident,$n:expr,$at:expr)=>{
++ #[kani::proof] #[kani::stub(CM31::write_le_bytes,cbytes)] #[kani::unwind(18)]
++ fn $name(){check_q::<$n,$at>();}
++}}
++qcase!(q_owned16,16,0);
++qcase!(q_parent32_left,32,0);
++qcase!(q_parent32_right,32,16);
++qcase!(q_parent32_middle,32,8);
++qcase!(q_parent48_middle,48,16);
++qcase!(q_parent48_right,48,32);
++fn check_c<const N:usize,const AT:usize>() {
++ let x:[u32;2]=kani::any();let mut buf:[u8;N]=kani::any();let before=buf;
++ CM31{a:M31(x[0]),b:M31(x[1])}.write_le_bytes(&mut buf[AT..AT+8]);
++ let j:usize=kani::any();kani::assume(j<N);
++ if j>=AT&&j<AT+8 {let k=j-AT;assert_eq!(buf[j],(x[k/4]>>((k%4)*8)) as u8);}
++ else {assert_eq!(buf[j],before[j]);}
++ kani::cover!(j==AT+7);kani::cover!(x[1]==u32::MAX);
++}
++macro_rules! ccase {($name:ident,$n:expr,$at:expr)=>{
++ #[kani::proof] #[kani::stub(M31::to_le_bytes,mbytes)] #[kani::unwind(10)]
++ fn $name(){check_c::<$n,$at>();}
++}}
++ccase!(c_parent16_left,16,0);
++ccase!(c_parent16_right,16,8);
++ccase!(c_parent32_middle,32,16);
++pub fn ebytes(x:aspis_core::field::WideExact)->[u8;32] {
++ let words=x.to_limbs();let bytes:[u8;32]=kani::any();
++ for i in 0..32 {kani::assume(bytes[i]==(words[i/4]>>((i%4)*8)) as u8);}
++ bytes
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPi_verifier.rs
+@@ -0,0 +1,41 @@
++//! Native private writer callers, one source iteration from arbitrary pre-state.
++use super::*;
++use aspis_core::field::CM31;
++fn any_k()->K {let w:[u32;4]=kani::any();K{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
++fn any_e()->E {let w:[u32;8]=kani::any();for x in w {kani::assume(x<0x7fff_ffff);}E::from_limbs(w).unwrap()}
++fn kwords(x:K)->[u32;4] {[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn check_k(len:usize) {
++ assert!(len<=1720);let x=any_k();let words=kwords(x);
++ let initial:[u8;1736]=kani::any();let mut out=initial[..len].to_vec();
++ put_k(&mut out,x);
++ assert_eq!(out.len(),len+16);
++ let at:usize=kani::any();kani::assume(at<out.len());
++ assert_eq!(out[at],if at<len{initial[at]}else{let j=at-len;(words[j/4]>>((j%4)*8)) as u8});
++ kani::cover!(at==len+15);
++}
++fn check_e(len:usize) {
++ assert!(len<=1704);let x=any_e();let words=x.to_limbs();
++ let initial:[u8;1736]=kani::any();let mut out=initial[..len].to_vec();
++ put(&mut out,x);
++ assert_eq!(out.len(),len+32);
++ let at:usize=kani::any();kani::assume(at<out.len());
++ assert_eq!(out[at],if at<len{initial[at]}else{let j=at-len;(words[j/4]>>((j%4)*8)) as u8});
++ kani::cover!(at==len+31);
++}
++macro_rules! kproof {($name:ident,$body:block)=>{
++ #[kani::proof] #[kani::stub(K::write_le_bytes,crate::LPi_contracts::qbytes)] #[kani::unwind(1740)]
++ fn $name() $body
++}}
++macro_rules! eproof {($name:ident,$body:block)=>{
++ #[kani::proof] #[kani::stub(E::to_le_bytes,crate::LPi_contracts::ebytes)] #[kani::unwind(1740)]
++ fn $name() $body
++}}
++kproof!(put_k_arbitrary_prefix,{let n:usize=kani::any();kani::assume(n<=1720);check_k(n);});
++eproof!(put_e_arbitrary_prefix,{let n:usize=kani::any();kani::assume(n<=1704);check_e(n);});
++kproof!(weight_iteration,{let i:usize=kani::any();kani::assume(i<64);check_k(712+16*i);});
++kproof!(semantic_iteration,{let i:usize=kani::any();kani::assume(i<10);check_k(408+16*i);});
++kproof!(z_iteration,{let i:usize=kani::any();kani::assume(i<4);check_k(568+16*i);});
++eproof!(prepared_fields_iteration,{let i:usize=kani::any();kani::assume(i<4);check_e(176+32*i);});
++eproof!(claim_rhs_iteration,{let i:usize=kani::any();kani::assume(i<2);check_e(632+32*i);});
++kproof!(rho_context,{check_k(304);});
++kproof!(power_context,{check_k(696);});
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,6 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++
++#[cfg(kani)] #[path="LPi_verifier.rs"] mod LPi_verifier;
