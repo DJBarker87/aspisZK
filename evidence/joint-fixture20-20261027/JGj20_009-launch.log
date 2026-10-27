@@ -1,0 +1,57 @@
+{"attempt": "JGj20_009", "exit_status": 1, "wall_seconds": 2.0561195089831017, "peak_rss_kib": "3849732", "swaps": "0", "print_axioms": ["'AspisR1.JGj_RawPackedTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGj_RawPackedTotal.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Std.core.array.Array.map (BuiltinFnMut NQ (Std.Array U32 4#usize)) input state_only_poseidon.extension_limbs
+in the target expression
+  (do
+      let mapped ←
+        FIq_Native.core.array.Array.map (BuiltinFnMut NQ (Std.Array U32 4#usize)) input
+            state_only_poseidon.extension_limbs
+      let table ← FJe_PackedRawTable.construct mapped
+      state_only_poseidon.external_local_packed_raw_loop0 table true 0#usize
+      let bound ← state_only_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND
+      FJe_PackedRawAfter.source table bound) =
+    ok out
+
+input : Std.Array NQ 4#usize
+hc : can
+...
+ 4#usize)) input state_only_poseidon.extension_limbs =
+    ok mapped
+right✝ : ∀ y ∈ ↑mapped, True
+em : mapped = FJb_ArrayTransport.array FJb_LimbMap.words input
+table : FJe_PackedRawTable.Table
+ht : FJe_PackedRawTable.construct mapped = ok table
+bound : U64
+hb : state_only_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND = ok bound
+vb : ↑bound = 7 * AspisV8R15.ExactTowerBase.P
+hw : 8 * ↑bound < 2 ^ 64
+vt :
+  ∀ (r j : Fin 4),
+    ↑(FJb_TailCell.cell (FJb_TailCell.cell table r) j) =
+      RawPoseidonExternalRows.rawRowNat (fun k => FJe_PackedRawRowValue.words mapped k j) r
+bounded : ∀ (r j : Fin 4), ↑(FJe_PackedRawAfter.words table r j) < ↑bound
+out : Std.Array U64 4#usize
+ho : FJe_PackedRawAfter.source table bound = ok out
+⊢ (do
+      let mapped ←
+        FIq_Native.core.array.Array.map (BuiltinFnMut NQ (Std.Array U32 4#usize)) input
+            state_only_poseidon.extension_limbs
+      let table ← FJe_PackedRawTable.construct mapped
+      state_only_poseidon.external_local_packed_raw_loop0 table true 0#usize
+      let bound ← state_only_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND
+      FJe_PackedRawAfter.source table bound) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGj_RawPackedTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r10b3c220ab6b47fbaa8ce6f2cde68e28.scope; invocation ID: 9fd4265a1e5442fb80ac5ba0e5db15d1

@@ -1,0 +1,49 @@
+JGj_InternalAccStep.lean:32:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+JGj_InternalAccStep.lean:33:13: error: unsolved goals
+a : Raw
+w : Words
+i : Usize
+n : ℕ
+hi : ↑i < ↑4#usize
+hn : n ≤ 80
+ha : Bound a (n * P)
+hw : Canonical w
+x : U32 := FJb_TailCell.cell w ⟨↑i, hi⟩
+y : U64 := FJb_TailCell.cell a ⟨↑i, hi⟩
+rx : Array.index_usize w i = ok x
+ry : Array.index_usize a i = ok y
+bx : ↑x < P
+by0 : ↑y < n * P
+limit : 81 * P < 2 ^ 64
+prod : n * P ≤ 80 * P
+safe : ↑y + ↑(FJb_WideSum4.wide x) < 2 ^ 64
+z : U64
+rz : UScalar.add y (FJb_WideSum4.wide x) = ok z
+vz : ↑z = ↑y + ↑x
+out : Std.Array U64 4#usize
+ro : Array.update a i z = ok out
+vo : out = Std.Array.set a i z
+bz : ↑z < (n + 1) * P
+ba : Bound a ((n + 1) * P)
+⊢ (do
+      let z ← y + FJb_WideSum4.wide x
+      Array.update a i z) =
+    ok out
+JGj_InternalAccStep.lean:33:38: warning: This simp argument is unused:
+  rz
+
+Hint: Omit it from the simp argument list.
+  simp only [step, ̲rx, ̲ry, ̲rz̵,̵r̵o, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGj_InternalAccStep.lean:33:41: warning: This simp argument is unused:
+  ro
+
+Hint: Omit it from the simp argument list.
+  simp only [step, ̲rx, ̲ry, ̲rz,r̵o̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGj_InternalAccStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGj_InternalAccStep.unfold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]

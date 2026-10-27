@@ -1,0 +1,52 @@
+JGj_M31StepTotal.lean:26:36: error: Type mismatch: After simplification, term
+  hi
+ has type
+  @LT.lt ℕ instLTNat (↑i) 16
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑i ↑16#usize
+JGj_M31StepTotal.lean:27:73: error: Type mismatch: After simplification, term
+  hi
+ has type
+  @LT.lt ℕ instLTNat (↑i) 16
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑i ↑16#usize
+JGj_M31StepTotal.lean:32:72: error: Type mismatch: After simplification, term
+  hi
+ has type
+  @LT.lt ℕ instLTNat (↑i) 16
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑i ↑16#usize
+JGj_M31StepTotal.lean:33:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  z
+in the target expression
+  Array.update s i q = ok out
+
+s : State
+a : Constants
+i : Usize
+hi : ↑i < 16
+hs : canonical s
+ha : Bounded a
+x : FIv_NativeArithmetic.NQ
+rx : Array.index_usize s i = ok x
+cx : FIv_NativeValue.Canon x
+c : U32 := FJb_TailCell.cell a ⟨↑i, hi⟩
+rc : Array.index_usize a i = ok c
+m : field.M31
+q : field.QM31
+rm : x.c0.a.add c = ok m
+rq : state_only_poseidon.pow5 (FJb_M31Scalar.updated x m) = ok q
+cq : FIv_NativeValue.Canon q
+hmut : Array.index_mut_usize s i = ok (x, fun z => Std.Array.set s i z)
+u : FIv_NativeArithmetic.NQ := FJb_M31Scalar.updated x m
+s1 : Std.Array FIv_NativeArithmetic.NQ 16#usize := Std.Array.set s i u
+again : s1.index_usize i = ok u
+out : Std.Array FIv_NativeArithmetic.NQ 16#usize
+ro : s1.update i q = ok out
+vo : out = s1.set i q
+overwrite : s1.set i q = Std.Array.set s i q
+z : Std.Array FIv_NativeArithmetic.NQ 16#usize
+rz : Array.update s i q = ok z
+vz : z = Std.Array.set s i q
+⊢ Array.update s i q = ok out
+'AspisR1.JGj_M31StepTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
