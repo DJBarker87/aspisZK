@@ -61,3 +61,21 @@ installed configuration: installed finish, boundaries and std; remaining
 implementation inputs universally quantified"). Alternative: keep FJv_Top
 as the headline and accept that L146 can never be removed from a statement
 quantified over arbitrary terminals.
+
+## Update, 2026-10-27 15:15 UTC: FJv_Deployed does not yet replay coherently
+
+The coherent replay (replay-tops3, RPv_) compiled FJv_Top.deployed's whole
+closure in the pinned cohort and booked L187 for it. FJv_Deployed did not
+replay. Its ancestor FIr_FinishComparison fails to elaborate because it states
+its observation over `verifier.Phase`, while the pinned cohort's retained
+finish model expects `RPz7_PhaseIso.Phase` (evidence/replay-tops3-20261027/
+RPv_0508-failure.json). That blocks 36 descendants, FJv_Deployed among them.
+
+The recommendation stands as a choice of statement, but adoption now has a
+precondition. FIr_FinishComparison must be reconciled to the pinned Phase
+carrier (a proof change in a lead candidate, not a statement or
+implementation change), and FJv_Deployed must then replay in the pinned cohort
+with its kernel statement byte-compared to the one reviewed here. Until then,
+its 83T/1P/13G is a cached-composition result and is not booked. The lead has
+launched that reconciliation (prefix RPw_). If it shows the statement itself
+must change, this packet will be revised before the owner is asked to decide.
