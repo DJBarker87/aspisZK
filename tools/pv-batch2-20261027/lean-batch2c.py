@@ -58,7 +58,7 @@ if res.returncode:
   rr=subprocess.run(['ssh',H,'cat '+D+'/candidate/'+label+'/'+name],text=True,capture_output=True)
   if rr.returncode==0:(E/f'{n}-{name}').write_text(rr.stdout)
  print('UNCHARGED refusal; preserve cooldown');sys.exit(a.returncode or 1)
-rec=json.loads(res.stdout);t=json.loads(tp.read_text());t['lean_charged']+=1;t['lean_attempts']=t['lean_charged'];t['used_ids']=[a['id'] for a in t['attempts']];t['next_id']=t['next_env_j_id'];t['attempts'][-1].update(charged=True,exit=rec['exit_status']);tp.write_text(json.dumps(t,indent=2)+'\n')
+rec=json.loads(res.stdout);t=json.loads(tp.read_text());t['lean_charged']+=1;t['remaining_lean_budget']=100-t['lean_charged'];t['lean_attempts']=t['lean_charged'];t['used_ids']=[a['id'] for a in t['attempts']];t['next_id']=t['next_env_j_id'];t['attempts'][-1].update(charged=True,exit=rec['exit_status']);tp.write_text(json.dumps(t,indent=2)+'\n')
 for name in ['stdout.log','stderr.log','time.log']:
  v=subprocess.check_output(['ssh',H,'cat '+D+'/candidate/'+label+'/receipt/'+name],text=True);(E/f'{n}-{name}').write_text(v)
  if name=='stdout.log':
