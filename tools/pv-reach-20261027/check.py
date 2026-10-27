@@ -35,7 +35,7 @@ r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr;deps=json
 assert not any(r.get('source_sha256')==sha and r.get('deps_fingerprint')==fp and r.get('exit') is not None for r in rows),'unchanged input already compiled'
 snapshot=f'{A}-{S.name}.txt';(E/snapshot).write_bytes(S.read_bytes());rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 cmd=['systemd-run','--user','--scope','--quiet','--unit=pvre-lean-'+str(A),'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+f'/evidence/pvre-time-{A}.log','timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',P+'/J.json',P+'/objects',P+'/sources',P+'/objects/'+M+'.olean',P+'/sources/'+M+'.lean','7000']
-record=dict(attempt=A,target=M,source_revision=rev,source_tree_dirty=bool(subprocess.check_output(['git','--no-optional-locks','status','--porcelain'])),source_sha256=sha,source_snapshot=snapshot,dependencies=deps,deps_fingerprint=fp,command=cmd,reservation=admission,shared_sources_written=False)
+record=dict(attempt=A,target=M,source_revision=rev,source_differs_from_revision=(subprocess.run(['git','show',rev+':'+str(S.relative_to(R))],capture_output=True).stdout != S.read_bytes()),source_sha256=sha,source_snapshot=snapshot,dependencies=deps,deps_fingerprint=fp,command=cmd,reservation=admission,shared_sources_written=False)
 with (E/'launches.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
 print('LAUNCH',A,M,flush=True);start=time.monotonic();r=ssh(shlex.join(cmd)+f' > {H}/evidence/pvre-out-{A}.log 2>&1');record.update(launcher_exit=r.returncode,wall_seconds=time.monotonic()-start)
 for name in ['out','time']:
